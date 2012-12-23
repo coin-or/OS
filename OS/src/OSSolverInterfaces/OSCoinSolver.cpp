@@ -7,8 +7,8 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -21,6 +21,7 @@
 #include "OSCoinSolver.h"
 #include "OSInstance.h"
 #include "OSFileUtil.h"
+#include "OSOutput.h"
 #include "CoinTime.hpp"
 #include "CglPreProcess.hpp"
 #include "CglGomory.hpp"
@@ -74,6 +75,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
+std::ostringstream outStr;
 
 
 CoinSolver::CoinSolver() :
@@ -91,8 +93,8 @@ CoinSolver::CoinSolver() :
 
 CoinSolver::~CoinSolver()
 {
-#ifdef DEBUG
-    cout << "inside CoinSolver destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "inside CoinSolver destructor\n");
 #endif
     if(m_osilreader != NULL) delete m_osilreader;
     m_osilreader = NULL;
@@ -116,8 +118,8 @@ CoinSolver::~CoinSolver()
         //delete[] cbc_argv;
         cbc_argv = NULL;
     }
-#ifdef DEBUG
-    cout << "leaving CoinSolver destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, "Leaving CoinSolver destructor\n");
 #endif
 }
 
@@ -232,7 +234,9 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
                                osinstance->getDenseObjectiveCoefficients()[0],
                                osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds()
                               );
+#ifndef NDEBUG
         //dataEchoCheck();
+#endif
         if( osinstance->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
         else osiSolver->setObjSense(-1.0);
         // set the integer variables
@@ -274,8 +278,8 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
 void CoinSolver::setSolverOptions() throw (ErrorClass)
 {
 
-#ifdef DEBUG
-    std::cout << "build solver options" << std::endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "build solver options\n");
 #endif
     this->bSetSolverOptions = true;
     // the osi maps
@@ -365,8 +369,11 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
         if(osoption != NULL)
         {
 
-#ifdef DEBUG
-            std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "number of solver options " << osoption->getNumberOfSolverOptions() << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             if( osoption->getNumberOfSolverOptions() <= 0) return;
             //this->bSetSolverOptions = true;
@@ -380,8 +387,12 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
 
             for(i = 0; i < num_osi_options; i++)
             {
-#ifdef DEBUG
-                std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "osi solver option  "  << optionsVector[ i]->name  << std::endl;
+                outStr << "osi solver value   "  << optionsVector[ i]->value << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
                 if (optionsVector[ i]->type == "OsiHintStrength" )
                 {
@@ -393,8 +404,12 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
             }
             for(i = 0; i < num_osi_options; i++)
             {
-#ifdef DEBUG
-                std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "osi solver option  "  << optionsVector[ i]->name  << std::endl;
+                outStr << "osi solver value   "  << optionsVector[ i]->value << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
                 if (optionsVector[ i]->type == "OsiHintParam" )
                 {
@@ -479,9 +494,12 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
 
                 for(i = 0; i < num_cbc_options; i++)
                 {
-#ifdef DEBUG
-                    std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
-                    std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
+                    outStr << "cbc solver value   "  << optionsVector[ i]->name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                     if(optionsVector[ i]->value.length() > 0 )
@@ -527,9 +545,12 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                 int num_sym_options = optionsVector.size();
                 for(i = 0; i < num_sym_options; i++)
                 {
-#ifdef DEBUG
-                    std::cout << "symphony solver option  "  << optionsVector[ i]->name << std::endl;
-                    std::cout << "symphony solver value  "  << optionsVector[ i]->value << std::endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "symphony solver option  "  << optionsVector[ i]->name << std::endl;
+                    outStr << "symphony solver value   "  << optionsVector[ i]->name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                     si->setSymParam(optionsVector[ i]->name,   optionsVector[ i]->value);
                 }
@@ -542,14 +563,17 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                 m = osoption->getNumberOfInitVarValues();
             else
                 m = 0;
-#ifdef DEBUG
-            cout << "number of variables initialed: " << m << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "number of variables initialed: " << m << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
             if (m > 0)
             {
-#ifdef DEBUG
-                cout << "get initial values " << endl;
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "get initial values\n");
 #endif
                 n = osinstance->getVariableNumber();
                 double* denseInitVarVector;
@@ -561,8 +585,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     initialed[k] = false;
 
                 InitVarValue**  initVarVector = osoption->getInitVarValuesSparse();
-#ifdef DEBUG
-                cout << "done " << endl;
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "done\n");
 #endif
 
                 double initval;
@@ -620,29 +644,32 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     denseInitVarVector[k] = default_initval;
                     denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->lb;
                 }
-#ifdef DEBUG
-                cout << "set initial values: " << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "set initial values: " << std::endl;
                 for (k=0; k < n; k++)
-                    cout << "  " << k << ": " << denseInitVarVector[k] << endl;
+                    outStr << "  " << k << ": " << denseInitVarVector[k] << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 osiSolver->setColSolution( denseInitVarVector);
                 delete[] denseInitVarVector;
                 delete[] initialed;
-#ifdef DEBUG
-                cout << "done " << endl;
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "done\n");
 #endif
 
             }  //  end if (m > 0)
         }// end of osoption if
 
-#ifdef DEBUG
-        std::cout << "solver options set" << std::endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "solver options set\n");
 #endif
     }//end of try
 
     catch(const ErrorClass& eclass)
     {
-        std::cout << "THERE IS AN ERROR" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "THERE IS AN ERROR\n");
         osresult = new OSResult();
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
@@ -808,14 +835,16 @@ void CoinSolver::solve() throw (ErrorClass)
                 }
                 int i;
 
-//#ifdef DEBUG
-                std::cout << "CALLING THE CBC SOLVER CBCMAIN1()" << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "CALLING THE CBC SOLVER  CBCMAIN1()\n"); 
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
                 for(i = 0; i < num_cbc_argv; i++)
                 {
-                    std::cout << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
+                    outStr << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
                 }
-//#endif
-
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
                 CbcMain1( num_cbc_argv, cbc_argv, model);
                 /*
                 coinMessages = model.messages();
@@ -950,6 +979,7 @@ std::string CoinSolver::getCoinSolverType(std::string lcl_osol)
     }
 } // end getCoinSolverType
 
+#ifndef NDEBUG
 void CoinSolver::dataEchoCheck()
 {
     int i;
@@ -996,7 +1026,7 @@ void CoinSolver::dataEchoCheck()
     // print out linear constraint data
     if(m_CoinPackedMatrix != NULL) m_CoinPackedMatrix->dumpMatrix();
 } // end dataEchoCheck
-
+#endif
 
 
 void CoinSolver::writeResult(OsiSolverInterface *solver)
@@ -1202,84 +1232,65 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
             for(vit = freeVars.begin(); vit < freeVars.end(); vit++)
             {
-
                 basisIdx[0][ kount++] = *vit;
-
-
             }
 
             osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
             delete[] basisIdx[ 0];
             freeVars.clear();
-
         }
 
 
 
         if(basicVars.size()  > 0)
         {
-
             kount = 0;
 
             basisIdx[ 1] = new int[ basicVars.size()];
 
             for(vit = basicVars.begin(); vit < basicVars.end(); vit++)
             {
-
                 basisIdx[1][ kount++] = *vit;
-
-
             }
 
             osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
             delete[] basisIdx[ 1];
             basicVars.clear();
-
         }
 
 
 
         if(nonBasicUpper.size()  > 0)
         {
-
             kount = 0;
 
             basisIdx[ 2] = new int[ nonBasicUpper.size()];
 
             for(vit = nonBasicUpper.begin(); vit < nonBasicUpper.end(); vit++)
             {
-
                 basisIdx[2][ kount++] = *vit;
-
-
             }
 
             osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
             delete[] basisIdx[ 2];
             nonBasicUpper.clear();
-
         }
 
 
         if(nonBasicLower.size()  > 0)
         {
-
             kount = 0;
 
             basisIdx[ 3] = new int[ nonBasicLower.size()];
 
             for(vit = nonBasicLower.begin(); vit < nonBasicLower.end(); vit++)
             {
-
                 basisIdx[3][ kount++] = *vit;
-
-
             }
 
             osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
             delete[] basisIdx[ 3];
             nonBasicLower.clear();
-
         }
         //end get basis information for variables
 
@@ -1345,35 +1356,26 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             osresult->setDualVariableValuesDense(solIdx, y);
 
 
-
-
             //now set basis information for variables
             if(freeVars.size()  > 0)
             {
-
                 kount = 0;
 
                 basisIdx[ 0] = new int[ freeVars.size()];
 
                 for(vit = freeVars.begin(); vit < freeVars.end(); vit++)
                 {
-
                     basisIdx[0][ kount++] = *vit;
-
-
                 }
 
                 osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
                 delete[] basisIdx[ 0];
                 freeVars.clear();
-
             }
-
 
 
             if(basicVars.size()  > 0)
             {
-
                 kount = 0;
 
                 basisIdx[ 1] = new int[ basicVars.size()];
@@ -1507,16 +1509,12 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
         if(solver->getNumRows() > 0)
         {
-
             delete[] y;
             y = NULL;
             if( (sSolverName.find( "vol") == std::string::npos) &&
                     (sSolverName.find( "symphony") == std::string::npos) &&
                     (sSolverName.find( "glpk") == std::string::npos) ) delete[] rbasis;
             rbasis = NULL;
-
-
-
         }
 
         delete[] z;
@@ -1549,6 +1547,7 @@ void CoinSolver::writeResult(CbcModel *model)
 {
     double *x = NULL;
     double *y = NULL;
+
     double *z = NULL;
     int *idx = NULL;
     std::string *rcost = NULL;

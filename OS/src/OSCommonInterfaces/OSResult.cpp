@@ -2844,7 +2844,7 @@ double OSResult::getOptimalObjValue(int objIdx, int solIdx)
             if ((this->optimization->solution[i]->objectives != NULL) && 
                 (this->optimization->solution[i]->objectives->values != NULL) && 
                 (this->optimization->solution[i]->objectives->values->obj != NULL) ) 
-                return this->optimization->solution[i]->objectives->values->obj[ (objIdx >= 0 ? objIdx : -objIdx)  -1 ]->value;
+                return this->optimization->solution[i]->objectives->values->obj[ (objIdx >= 0 ? objIdx : -objIdx -1) ]->value;
             else
             {
                 throw ErrorClass("There is no optimal solution");

@@ -5,7 +5,7 @@
  *
  * \remarks
  * Copyright (C) 2012, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, and the University of Chicago.
+ * and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -20,6 +20,7 @@
  */
 
 #include "OSOptionsStruc.h"
+#include "OSOutput.h"
 #include <string>
 
 osOptionsStruc::osOptionsStruc()
@@ -53,6 +54,9 @@ void osOptionsStruc::resetOptions()
     this->gamsControlFile = "";
     this->solverName = "";
     this->browser = "";
+    this->printLevel = DEFAULT_OUTPUT_LEVEL;
+    this->logFile = "";
+    this->filePrintLevel = DEFAULT_OUTPUT_LEVEL;
     this->jobID = "";
     this->invokeHelp = false;
     this->writeVersion = false;

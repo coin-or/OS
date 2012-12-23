@@ -231,7 +231,7 @@
 /* use to get lossless IO */
 #undef USE_DTOA
 
-/* use if OS is Cygwin and complier is gnu */
+/* use if OS is Cygwin and compiler is gnu */
 #undef USE_OLD_UNISTD
 
 /* Version number of package */

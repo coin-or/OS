@@ -60,7 +60,10 @@ using std::endl;
 #include <stdlib.h>
 #endif
 
-#define DEBUG_OSRL2AMPL
+#ifdef _DEBUG
+# define DEBUG_OSRL2AMPL
+#endif
+
 
 OSosrl2ampl::OSosrl2ampl()
 {
@@ -74,6 +77,18 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
 {
     OSrLReader *osrlreader = NULL;
     OSResult   *osresult;
+
+#ifdef _DEBUG
+std::cout << "_DEBUG is defined" << std::endl << std::endl;
+#else
+std::cout << "_DEBUG NOT defined" << std::endl << std::endl;
+#endif
+
+#ifdef DEBUG_OSRL2AMPL
+std::cout << "DEBUG_OSRL2AMPL is defined" << std::endl << std::endl;
+#else
+std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
+#endif
 
     if (osrl == "")
     {

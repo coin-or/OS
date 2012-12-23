@@ -95,7 +95,7 @@
 #include "OShL.h"
 #include "OSErrorClass.h"
 #include "CoinError.hpp"
-#include "OSOptionsStruc.h"
+#include "OSCommandLine.h"
 #include "OSRunSolver.h"
 #include <sstream>
 
@@ -125,7 +125,7 @@
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner );
 //void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
-void setyyextra(osOptionsStruc *osoptions, void* scanner);
+void setyyextra(OSCommandLine *oscommandline, void* scanner);
 int ossslex(void* scanner );
 int ossslex_init(void** ptr);
 int ossslex_destroy (void* scanner );
@@ -382,10 +382,8 @@ int main(int argc, char **argv)
 void getAmplClientOptions(char *amplclient_options, std::string *solverName,
                           std::string *solverOptions, std::string *serviceLocation)
 {
-    // initialize the OS options structure
-    osOptionsStruc *osoptions;
-
-    osoptions = new osOptionsStruc();
+    // initialize the OS command line structure
+    OSCommandLine *oscommandline = new OSCommandLine();
 
     void* scanner;
 
@@ -394,33 +392,17 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
         //cout << "Input String = "  << amplclient_options << endl;
         ossslex_init( &scanner);
         //std::cout << "Call Text Extra" << std::endl;
-        setyyextra( osoptions, scanner);
+        setyyextra( oscommandline, scanner);
         //std::cout << "Call scan string " << std::endl;
         osss_scan_string( amplclient_options, scanner);
         //std::cout << "call ossslex" << std::endl;
         ossslex( scanner);
         ossslex_destroy( scanner);
         //std::cout << "done with call to ossslex" << std::endl;
-//
-//		cout << "HERE ARE THE OPTION VALUES:" << endl;
-//		if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
-//		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
-//		if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
-//		if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
-//		//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
-//		if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
-//		if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
-//		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
-//		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
-//		if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
-//		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
-//		if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
-//		if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
-//
 
-        *solverName = osoptions->solverName;
-        *solverOptions = osoptions->osolFile;
-        *serviceLocation = osoptions->serviceLocation;
+        *solverName = oscommandline->solverName;
+        *solverOptions = oscommandline->osolFile;
+        *serviceLocation = oscommandline->serviceLocation;
 
     }//end try
     catch(const ErrorClass& eclass)

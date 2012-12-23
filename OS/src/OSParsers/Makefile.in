@@ -57,11 +57,10 @@ CONFIG_HEADER = $(top_builddir)/src/config.h \
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSParsers_la_LIBADD =
-am_libOSParsers_la_OBJECTS = OSOptionsStruc.lo OSParseosil.lo \
-	OSParseosil.tab.lo OSParseosol.lo OSParseosol.tab.lo \
-	OSParseosrl.lo OSParseosrl.tab.lo OSParseosss.lo \
-	OSgLParserData.lo OSiLParserData.lo OSrLParserData.lo \
-	OSoLParserData.lo
+am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
+	OSParseosol.lo OSParseosol.tab.lo OSParseosrl.lo \
+	OSParseosrl.tab.lo OSParseosss.lo OSgLParserData.lo \
+	OSiLParserData.lo OSrLParserData.lo OSoLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -398,8 +397,6 @@ noinst_LTLIBRARIES = libOSParsers.la
 
 # List all source files for this library, including headers
 libOSParsers_la_SOURCES = \
-		OSOptionsStruc.cpp \
-		OSOptionsStruc.h \
 		OSParseosil.cpp \
 		OSParseosil.tab.cpp \
 		OSParseosil.tab.hpp \
@@ -448,7 +445,6 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	OSOptionsStruc.h \
 	OSParseosil.tab.hpp \
 	OSParseosrl.tab.hpp \
         OSParseosol.tab.hpp \
@@ -508,7 +504,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSOptionsStruc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosil.tab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosol.Plo@am__quote@

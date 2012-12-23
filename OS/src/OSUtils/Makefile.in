@@ -58,7 +58,8 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSUtils_la_LIBADD =
 am_libOSUtils_la_OBJECTS = OSBase64.lo OSErrorClass.lo OSFileUtil.lo \
-	OSStringUtil.lo OSMathUtil.lo OSParameters.lo OSdtoa.lo
+	OSOutput.lo OSStringUtil.lo OSMathUtil.lo OSParameters.lo \
+	OSdtoa.lo
 libOSUtils_la_OBJECTS = $(am_libOSUtils_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -401,6 +402,10 @@ libOSUtils_la_SOURCES = \
 		OSErrorClass.h \
 		OSFileUtil.cpp \
 		OSFileUtil.h \
+		OSIpReferenced.hpp \
+		OSIpSmartPtr.hpp \
+		OSOutput.cpp \
+		OSOutput.h \
                 OSStringUtil.h\
                 OSStringUtil.cpp\
 		OSMathUtil.cpp \
@@ -441,6 +446,9 @@ includecoin_HEADERS = \
 	OSBase64.h \
 	OSErrorClass.h \
 	OSFileUtil.h \
+	OSIpReferenced.hpp \
+	OSIpSmartPtr.hpp \
+	OSOutput.h \
         OSStringUtil.h\
 	OSMathUtil.h \
 	OSDataStructures.h \
@@ -502,6 +510,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSErrorClass.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSFileUtil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSMathUtil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSOutput.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParameters.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSStringUtil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSdtoa.Plo@am__quote@

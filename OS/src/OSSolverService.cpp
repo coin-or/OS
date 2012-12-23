@@ -5,7 +5,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -77,6 +77,7 @@
 #include "OSOption.h"
 #include "OSoLWriter.h"
 #include "OSFileUtil.h"
+#include "OSOutput.h"
 #include "OSConfig.h"
 #include "OSDefaultSolver.h"
 #include "OSWSUtil.h"
@@ -103,10 +104,6 @@
 #include "OSgams2osil.hpp"
 #endif
 
-//#ifdef COIN_HAS_IPOPT
-//#include "OSIpoptSolver.h"
-//#endif
-
 #ifdef COIN_HAS_IPOPT
 #ifndef COIN_HAS_ASL
 #include "OSIpoptSolver.h"
@@ -124,11 +121,10 @@
 #include "OSCouenneSolver.h"
 #endif
 
-#include "OSOptionsStruc.h"
+#include "OSCommandLine.h"
 
 #include <stdio.h>
 #include <map>
-
 
 using std::cout;
 using std::endl;
@@ -136,15 +132,13 @@ using std::ostringstream;
 using std::string;
 using std::map;
 
-#define DEBUG_CL_INTERFACE
-
 
 #define MAXCHARS 5000
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner);
 //void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
-void setyyextra(osOptionsStruc *osoptions, void* scanner);
+void setyyextra(OSCommandLine *oscommandline, void* scanner);
 int ossslex(void* scanner);
 int ossslex_init(void** ptr);
 int ossslex_destroy(void* scanner);
@@ -154,48 +148,34 @@ void interactiveShell();
 std::string get_help();
 std::string get_version();
 std::string get_options();
+void list_options(OSCommandLine *oscommandline);
 
 // the serviceMethods
-void solve();
-void getJobID();
-void send();
-void kill();
-void retrieve();
-void knock();
+void    solve(OSCommandLine *oscommandline);
+void getJobID(OSCommandLine *oscommandline);
+void     send(OSCommandLine *oscommandline);
+void     kill(OSCommandLine *oscommandline);
+void retrieve(OSCommandLine *oscommandline);
+void    knock(OSCommandLine *oscommandline);
 
 // additional methods
-void getOSiLFromNl();
-void getOSiLFromMps();
-void getOSiLFromGams();
-//std::string buildSolver(std::string solverName, std::string osol,
-//                        OSInstance *osinstance);
-void listOptions(osOptionsStruc *osoptions);
-void doPrintModel(osOptionsStruc *osoptions);
+void getOSiLFromNl(  OSCommandLine *oscommandline);
+void getOSiLFromMps( OSCommandLine *oscommandline);
+void getOSiLFromGams(OSCommandLine *oscommandline);
+void doPrintModel(OSCommandLine *oscommandline);
 void doPrintModel(OSInstance *osinstance);
-void doPrintRow(osOptionsStruc *osoptions);
+void doPrintRow(OSCommandLine *oscommandline);
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 
-                           
-//options structure
-// this is the only global variable but
-// this is not a problem since this is a main routine
-osOptionsStruc *osoptions;
+extern const SmartPtr</*const*/ OSOutput> osoutput;
 
-inline void getServiceLocation()
-{
-    std::cout
-            << std::endl
-            << "A service location is required"
-            << std::endl;
-    std::cout
-            << "Please type the URL of the remote service: ";
-    getline(std::cin, osoptions->serviceLocation);
-}
-  
 int main(int argC, const char* argV[])
 {
     WindowsErrorPopupBlocker();
-    std::cout << OSgetVersionInfo();
+    std::ostringstream outStr;
+
+    std::string versionInfo = OSgetVersionInfo();
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, versionInfo);
 
     if (argC < 2)
     {
@@ -203,7 +183,7 @@ int main(int argC, const char* argV[])
         return 0;
     }
 
-	void* scanner;
+    void* scanner;
     FileUtil *fileUtil = NULL;
     FileUtil *inputFileUtil = NULL;
     char osss[MAXCHARS] = " ";
@@ -215,9 +195,10 @@ int main(int argC, const char* argV[])
 
     /** Parse the command line **/
      
-    // initialize the command line (osOptions) structure 
+    // initialize the command line structure 
 
-    osoptions = new osOptionsStruc();
+//    osoptions = new osOptionsStruc();
+	OSCommandLine *oscommandline = new OSCommandLine();
     bool scannerActive = false;
 		
     try
@@ -257,43 +238,66 @@ int main(int argC, const char* argV[])
             i++;
         }
 
-#ifdef DEBUG_CL_INTERFACE
-        cout << "Input String = " << osss << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "Input String = " << osss << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 
         scannerActive = true;
         ossslex_init(&scanner);
-        //std::cout << "Call Text Extra" << std::endl;
-        setyyextra(osoptions, scanner);
-        //std::cout << "Call scan string " << std::endl;
-        osss_scan_string(osss, scanner);
-#ifdef DEBUG_CL_INTERFACE
-        std::cout << "call ossslex" << std::endl;
+
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
 #endif
+
+        setyyextra(oscommandline, scanner);
+
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call scan string\n");
+#endif
+
+        osss_scan_string(osss, scanner);
+
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call ossslex\n");
+#endif
+
         ossslex(scanner);
         ossslex_destroy(scanner);
         scannerActive = false;
-#ifdef DEBUG_CL_INTERFACE
-        std::cout << "done with call to ossslex" << std::endl;
+
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Done with call to ossslex\n");
 #endif
+
         // if there is a config file, get those options
-        if (osoptions->configFile != "")
+        if (oscommandline->configFile != "")
         {
             scannerActive = true;
             ossslex_init(&scanner);
-            configFileName = osoptions->configFile;
-#ifdef DEBUG_CL_INTERFACE
-            cout << "configFileName = " << configFileName << endl;
+            configFileName = oscommandline->configFile;
+
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "configFileName = " << configFileName << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+
             std::string configFileOptions = fileUtil->getFileAsString(
                                               configFileName.c_str());
-#ifdef DEBUG_CL_INTERFACE
-            std::cout << "Call Text Extra" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
 #endif
-            setyyextra(osoptions, scanner);
-#ifdef DEBUG_CL_INTERFACE
-            std::cout << "Done with call Text Extra" << std::endl;
+
+            setyyextra(oscommandline, scanner);
+
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Done with call Text Extra\n");
 #endif
+
             osss_scan_string(configFileOptions.c_str(), scanner);
             ossslex(scanner);
             ossslex_destroy(scanner);
@@ -308,13 +312,23 @@ int main(int argC, const char* argV[])
             
             scannerActive = true;
             ossslex_init(&scanner);
-            //std::cout << "Call Text Extra" << std::endl;
-            setyyextra(osoptions, scanner);
-            //std::cout << "Call scan string " << std::endl;
+
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
+#endif
+
+            setyyextra(oscommandline, scanner);
+
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call scan string\n");
+#endif
+
             osss_scan_string(osss, scanner);
-    #ifdef DEBUG_CL_INTERFACE
-            std::cout << "call ossslex" << std::endl;
-    #endif
+
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "call ossslex\n");
+#endif
+
             ossslex(scanner);
             ossslex_destroy(scanner);
             scannerActive = false;           
@@ -325,8 +339,9 @@ int main(int argC, const char* argV[])
     }
     catch (const ErrorClass& eclass)
     {
-        //cout << eclass.errormsg <<  endl;
-        //cout << "try -h or --help for more information" <<  endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, eclass.errormsg);
+#endif
 
         //new stuff on April 17, 2010
         OSResult *osresult = NULL;
@@ -336,22 +351,23 @@ int main(int argC, const char* argV[])
         osresult->setGeneralMessage(eclass.errormsg);
         osresult->setGeneralStatusType("error");
         std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (osoptions->osrlFile != "")
+        if (oscommandline->osrlFile != "")
         {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
+            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+            if (oscommandline->browser != "")
             {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
+                std::string str = oscommandline->browser + "  "
+                                  + oscommandline->osrlFile;
                 const char *ch = &str[0];
                 std::system(ch);
             }
         }
         else
         {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, eclass.errormsg);
+#endif
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
         }
         //catch garbage collection
         delete osresult;
@@ -360,37 +376,102 @@ int main(int argC, const char* argV[])
         osrlwriter = NULL;
         // end new stuff
 
-//        if (scannerActive == true)
-//            ossslex_destroy(scanner);
         delete fileUtil;
-        delete osoptions;
+        delete oscommandline;
         return 1;
     }
 
-    /** Deal with action items: --help, --version **/
+    /** Deal with action items: -printLevel, -logFile, -filePrintLevel, --help, --version **/
 
     try
     {
-        if (osoptions->invokeHelp == true)
+        outStr.str("");
+        outStr.clear();
+        outStr << std::endl << "using print level " << oscommandline->printLevel << " for stdout" << std::endl;
+
+        if (oscommandline->printLevel != DEFAULT_OUTPUT_LEVEL)
         {
-			std::cout << std::endl << std::endl << get_help() << std::endl;
-            delete osoptions;
-            osoptions = NULL;
+            if (oscommandline->printLevel < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
+                osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)oscommandline->printLevel);
+            else
+                osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)( oscommandline->printLevel % 100),
+                                                  (ENUM_OUTPUT_AREA )((oscommandline->printLevel / 100) - 1));
+
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
+        }
+        else
+        {
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());            
+        }
+
+        if (oscommandline->logFile != "")
+        {
+            int status = osoutput->AddChannel(oscommandline->logFile);
+ 
+            switch(status)
+            {
+                case 0:
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug,
+                        "Added channel " + oscommandline->logFile);
+                    break;          
+                case 1:
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info,
+                        "Output channel " + oscommandline->logFile + " previously defined");
+                    break;
+                default:
+                    throw ErrorClass("Could not add output channel " + oscommandline->logFile);
+            }//end switch
+            
+
+            outStr.str("");
+            outStr.clear();
+            outStr << std::endl << "using print level " << oscommandline->filePrintLevel;
+            outStr << " for " << oscommandline->logFile << std::endl;
+
+            if (oscommandline->filePrintLevel != DEFAULT_OUTPUT_LEVEL)
+            {
+                if (oscommandline->printLevel < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
+                    osoutput->SetPrintLevel(oscommandline->logFile, (ENUM_OUTPUT_LEVEL)oscommandline->filePrintLevel);
+                else
+                    osoutput->SetPrintLevel(oscommandline->logFile,
+                                                (ENUM_OUTPUT_LEVEL)( oscommandline->filePrintLevel % 100),
+                                                (ENUM_OUTPUT_AREA )((oscommandline->filePrintLevel / 100) - 1));
+            }
+            else
+            {
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());            
+            }
+        }
+
+        if (oscommandline->invokeHelp == true)
+        {
+            outStr.str("");
+            outStr.clear();
+            outStr << std::endl << std::endl << get_help() << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, outStr.str());
+
+            delete oscommandline;
+            oscommandline = NULL;
             return 0;
         }
-        if (osoptions->writeVersion == true)
+
+        if (oscommandline->writeVersion == true)
         {
-			std::cout << std::endl << std::endl << OSgetVersionInfo() << std::endl;
-            delete osoptions;
-            osoptions = NULL;
+            outStr.str("");
+            outStr.clear();
+            outStr << std::endl << std::endl << OSgetVersionInfo() << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, outStr.str());
+
+            delete oscommandline;
+            oscommandline = NULL;
             return 0;
         }
     }
     catch (const ErrorClass& eclass)
     {
-        //cout << eclass.errormsg <<  endl;
-        //cout << "try -h or --help" <<  endl;
-
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, eclass.errormsg);
+#endif
 
         //new stuff on April 17, 2010
         OSResult *osresult = NULL;
@@ -400,22 +481,24 @@ int main(int argC, const char* argV[])
         osresult->setGeneralMessage(eclass.errormsg);
         osresult->setGeneralStatusType("error");
         std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (osoptions->osrlFile != "")
+        if (oscommandline->osrlFile != "")
         {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
+            //fileUtil->writeFileFromString(oscommandline->osrlFile,  eclass.errormsg);
+            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+            if (oscommandline->browser != "")
             {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
+                std::string str = oscommandline->browser + "  "
+                                  + oscommandline->osrlFile;
                 const char *ch = &str[0];
                 std::system(ch);
             }
         }
         else
         {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, eclass.errormsg);
+#endif
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
         }
         //catch garbage collection
         delete osresult;
@@ -425,77 +508,87 @@ int main(int argC, const char* argV[])
         // end new stuff
 
 
-        delete osoptions;
-        osoptions = NULL;
+        delete oscommandline;
+        oscommandline = NULL;
         delete inputFileUtil;
         inputFileUtil = NULL;
         return 1;
     }
 
-#ifdef DEBUG_CL_INTERFACE
-    cout << "HERE ARE THE OPTION VALUES:" << endl;
-    if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
-    if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
-    if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
-    if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
-    //if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
-    if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
-    if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
-    if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
-    if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
-    if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
-    if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
-    if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
-    if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
-    if(osoptions->printModel) cout << "print model prior to solve/send" << endl;
-    if(osoptions->printRowNumberAsString != "") cout << "print model row " << osoptions->printRowNumberAsString << " prior to solve/send" << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    
+    outStr << "HERE ARE THE OPTION VALUES:" << endl;
+    if(oscommandline->configFile != "") outStr << "Config file = " << oscommandline->configFile << endl;
+    if(oscommandline->osilFile != "") outStr << "OSiL file = " << oscommandline->osilFile << endl;
+    if(oscommandline->osolFile != "") outStr << "OSoL file = " << oscommandline->osolFile << endl;
+    if(oscommandline->osrlFile != "") outStr << "OSrL file = " << oscommandline->osrlFile << endl;
+    //if(oscommandline->insListFile != "") outStr << "Instruction List file = " << oscommandline->insListFile << endl;
+    if(oscommandline->osplInputFile != "") outStr << "OSpL Input file = " << oscommandline->osplInputFile << endl;
+    if(oscommandline->serviceMethod != "") outStr << "Service Method = " << oscommandline->serviceMethod << endl;
+    if(oscommandline->mpsFile != "") outStr << "MPS File Name = " << oscommandline->mpsFile << endl;
+    if(oscommandline->nlFile != "") outStr << "NL File Name = " << oscommandline->nlFile << endl;
+    if(oscommandline->gamsControlFile != "") outStr << "gams Control File Name = " << oscommandline->gamsControlFile << endl;
+    if(oscommandline->browser != "") outStr << "Browser Value = " << oscommandline->browser << endl;
+    if(oscommandline->solverName != "") outStr << "Selected Solver = " << oscommandline->solverName << endl;
+    if(oscommandline->serviceLocation != "") outStr << "Service Location = " << oscommandline->serviceLocation << endl;
+    if(oscommandline->printModel) outStr << "print model prior to solve/send" << endl;
+    if(oscommandline->printRowNumberAsString != "") outStr << "print model row " << oscommandline->printRowNumberAsString << " prior to solve/send" << endl;
+    outStr << "print level for stdout: " << oscommandline->printLevel << endl;
+    if(oscommandline->logFile != "") 
+    {
+        outStr << "also send output to " << oscommandline->logFile << endl;
+        outStr << "print level for file output: " << oscommandline->filePrintLevel << endl;
+    }
 
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     //convert solver name to lower case so there is no ambiguity
     unsigned int k;
-    for (k = 0; k < osoptions->solverName.length(); k++)
+    for (k = 0; k < oscommandline->solverName.length(); k++)
     {
-        osoptions->solverName[k] = (char)tolower(osoptions->solverName[k]);
+        oscommandline->solverName[k] = (char)tolower(oscommandline->solverName[k]);
     }
 
     // get the data from the files
     fileUtil = new FileUtil();
     try
     {
-        if (osoptions->osolFile != "")
+        if (oscommandline->osolFile != "")
         {
-
-            osoptions->osol = fileUtil->getFileAsString(
-                                  (osoptions->osolFile).c_str());
-
+            oscommandline->osol = fileUtil->getFileAsString(
+                                  (oscommandline->osolFile).c_str());
         }
 
-        if (osoptions->osilFile != "")
+        if (oscommandline->osilFile != "")
         {
             //this takes precedence over what is in the OSoL file
-            osoptions->osil = fileUtil->getFileAsString(
-                                  (osoptions->osilFile).c_str());
+            oscommandline->osil = fileUtil->getFileAsString(
+                                  (oscommandline->osilFile).c_str());
         }
         /*
          else{// we were not given an osil file
          // make sure we don't have a service URI in the file or are using mps or nl
          // if we have nl or mps assume a local solve
-         if( (osoptions->osol != "") && (osoptions->nlFile == "") && (osoptions->gamsControlFile == "") && (osoptions->mpsFile == "") && (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") )
-         osoptions->osil = fileUtil->getFileAsString( getInstanceLocation( osoptions->osol).c_str()  );
+         if( (oscommandline->osol != "") && (oscommandline->nlFile == "") && (oscommandline->gamsControlFile == "") && (oscommandline->mpsFile == "") && (oscommandline->serviceLocation == "")  &&  (getServiceURI( oscommandline->osol) == "") )
+         oscommandline->osil = fileUtil->getFileAsString( getInstanceLocation( oscommandline->osol).c_str()  );
          }
          */
 
-        if (osoptions->osplInputFile != "")
-            osoptions->osplInput = fileUtil->getFileAsString(
-                                       (osoptions->osplInputFile).c_str());
+        if (oscommandline->osplInputFile != "")
+            oscommandline->osplInput = fileUtil->getFileAsString(
+                                       (oscommandline->osplInputFile).c_str());
     }
     catch (const ErrorClass& eclass)
     {
-        //cout << eclass.errormsg <<  endl;
-        //cout << "could not open file properly" << endl;
-        //cout << "try -h or --help" <<  endl;
-
+        outStr.str("");
+        outStr.clear();
+        outStr << eclass.errormsg <<  endl;
+        outStr << "could not open file properly" << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, outStr.str());
+ 
 
         //new stuff on April 17, 2010
         OSResult *osresult = NULL;
@@ -506,22 +599,20 @@ int main(int argC, const char* argV[])
         osresult->setGeneralMessage(eclass.errormsg);
         osresult->setGeneralStatusType("error");
         std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (osoptions->osrlFile != "")
+        if (oscommandline->osrlFile != "")
         {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
+            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+            if (oscommandline->browser != "")
             {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
+                std::string str = oscommandline->browser + "  "
+                                  + oscommandline->osrlFile;
                 const char *ch = &str[0];
                 std::system(ch);
             }
         }
         else
         {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
         }
         //catch garbage collection
         delete osresult;
@@ -531,49 +622,49 @@ int main(int argC, const char* argV[])
         // end new stuff
 
 
-        delete osoptions;
-        osoptions = NULL;
+        delete oscommandline;
+        oscommandline = NULL;
         delete fileUtil;
         fileUtil = NULL;
         return 1;
     }
     // now call the correct serviceMethod
     // solve is the default
-    if (osoptions->serviceMethod == "") osoptions->serviceMethod = "solve";
-	if (osoptions->serviceMethod[0] == 's')
+    if (oscommandline->serviceMethod == "") oscommandline->serviceMethod = "solve";
+	if (oscommandline->serviceMethod[0] == 's')
     {
-        if (osoptions->printModel == true)
-            doPrintModel(osoptions);
-        else if (osoptions->printRowNumberAsString != "")
-            doPrintRow(osoptions);
-        if (osoptions->serviceMethod[1] == 'e')
-            send();
+        if (oscommandline->printModel == true)
+            doPrintModel(oscommandline);
+        else if (oscommandline->printRowNumberAsString != "")
+            doPrintRow(oscommandline);
+        if (oscommandline->serviceMethod[1] == 'e')
+            send(oscommandline);
         else
-            solve();
+            solve(oscommandline);
     }
     else
     {
-        switch (osoptions->serviceMethod[0])
+        switch (oscommandline->serviceMethod[0])
         {
         case 'g':
-            getJobID();
+            getJobID(oscommandline);
             break;
         case 'r':
-            retrieve();
+            retrieve(oscommandline);
             break;
         case 'k':
-            if (osoptions->serviceMethod[1] == 'i')
-                kill();
+            if (oscommandline->serviceMethod[1] == 'i')
+                kill(oscommandline);
             else
-                knock();
+                knock(oscommandline);
             break;
         default:
 
             break;
         }
     }
-    delete osoptions;
-    osoptions = NULL;
+    delete oscommandline;
+    oscommandline = NULL;
     delete fileUtil;
     fileUtil = NULL;
     return 0;
@@ -584,7 +675,7 @@ int main(int argC, const char* argV[])
  *  solve, send, retrieve, knock, kill, getJobID
  */
 
-void solve()
+void solve(OSCommandLine *oscommandline)
 {
     std::string osrl = "";
     OSiLReader *osilreader = NULL;
@@ -601,93 +692,90 @@ void solve()
     // now solve either remotely or locally
     try
     {
-        if (osoptions->serviceLocation != "")
+        if (oscommandline->serviceLocation != "")
         {
             // call a method here to get OSiL if we have an nl or mps file
-            if (osoptions->osil == "")
+            if (oscommandline->osil == "")
             {
                 //we better have an nl file present or mps file or osol file
-                if (osoptions->nlFile != "")
+                if (oscommandline->nlFile != "")
                 {
-                    getOSiLFromNl();
+                    getOSiLFromNl(oscommandline);
                 }
                 else
                 {
-                    if (osoptions->mpsFile != "")
+                    if (oscommandline->mpsFile != "")
                     {
-                        getOSiLFromMps();
+                        getOSiLFromMps(oscommandline);
                     }
                     else
                     {
-                        if (osoptions->gamsControlFile != "")
+                        if (oscommandline->gamsControlFile != "")
                         {
 
-                            getOSiLFromGams();
+                            getOSiLFromGams(oscommandline);
                         }
                         else    // send an empty osil string
                         {
-                            osoptions->osil = "";
+                            oscommandline->osil = "";
                         }
                     }
                 }
             }
 
-	    if (osoptions->printModel)
-		doPrintModel(osoptions);
-	    else if (osoptions->printRowNumberAsString != "")
-                doPrintRow(osoptions);
+	    if (oscommandline->printModel)
+		doPrintModel(oscommandline);
+	    else if (oscommandline->printRowNumberAsString != "")
+                doPrintRow(oscommandline);
 
             // place a remote call
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
+            osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
-            if (osoptions->osol == "")  // we have no osol string
+            if (oscommandline->osol == "")  // we have no osol string; create a dummy
             {
-
                 std::ostringstream outStr;
                 outStr
                         << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
                 outStr << OS_SCHEMA_VERSION;
                 outStr << "/OSoL.xsd\"></osol>";
-                osoptions->osol = outStr.str();
+                oscommandline->osol = outStr.str();
             }
-            osrl = osagent->solve(osoptions->osil, osoptions->osol);
-            if (osoptions->osrlFile != "")
+            osrl = osagent->solve(oscommandline->osil, oscommandline->osol);
+            if (oscommandline->osrlFile != "")
             {
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-                //const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-                if (osoptions->browser != "")
+                fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+                if (oscommandline->browser != "")
                 {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
+                    std::string str = oscommandline->browser + "  "
+                                      + oscommandline->osrlFile;
                     const char *ch = &str[0];
                     std::system(ch);
                 }
             }
             else
-                cout << osrl << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
             delete osagent;
             osagent = NULL;
-
         }
         else    // solve locally
         {
             OSInstance *osinstance;
             OSOption   *osoption = NULL;
-            if (osoptions->osil != "")
+            if (oscommandline->osil != "")
             {
                 osilreader = new OSiLReader();                
-                osinstance = osilreader->readOSiL(osoptions->osil);
+                osinstance = osilreader->readOSiL(oscommandline->osil);
             }
             else
             {
                 //we better have an nl file present or mps file or osol file
-                if (osoptions->nlFile != "")
+                if (oscommandline->nlFile != "")
                 {
 #ifdef COIN_HAS_ASL
-                    //nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+                    //nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
                     nl2os = new OSnl2OS();
-                    nl2os->readNl(osoptions->nlFile);
-                    nl2os->setOsol(osoptions->osol);
+                    nl2os->readNl(oscommandline->nlFile);
+                    nl2os->setOsol(oscommandline->osol);
                     nl2os->createOSObjects() ;
                     osinstance = nl2os->osinstance;
                     if (nl2os->osoption != NULL)
@@ -713,18 +801,18 @@ void solve()
                 }
                 else
                 {
-                    if (osoptions->mpsFile != "")
+                    if (oscommandline->mpsFile != "")
                     {
-                        mps2osil = new OSmps2osil(osoptions->mpsFile);
+                        mps2osil = new OSmps2osil(oscommandline->mpsFile);
                         mps2osil->createOSInstance();
                         osinstance = mps2osil->osinstance;
                     }
                     else
                     {
-                        if (osoptions->gamsControlFile != "")
+                        if (oscommandline->gamsControlFile != "")
                         {
 #ifdef COIN_HAS_GAMSUTILS
-                            gams2osil = new OSgams2osil( osoptions->gamsControlFile);
+                            gams2osil = new OSgams2osil( oscommandline->gamsControlFile);
                             gams2osil->createOSInstance();
                             osinstance = gams2osil->osinstance;
 #else
@@ -735,39 +823,34 @@ void solve()
                         }
                         else    // need an osol file with an instanceLocation specified
                         {
-                            //if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
                             throw ErrorClass(
-                                "Error: no osil, GAMS dat, AMPL nl, or mps file given for a local solve --- \n information in the osol file is ignored for local solves.");
-                            //}
+                                "Error: no osil, GAMS dat, AMPL nl, or mps file given for a local solve --- \n NOTE: information in the osol file is ignored for local solves.");
                         }
                     }
                 }
             }
-	    if (osoptions->printModel)
-                    doPrintModel(osinstance);
-	    else if (osoptions->printRowNumberAsString != "")
-	            doPrintRow(osinstance, osoptions->printRowNumberAsString);
+    	    if (oscommandline->printModel)
+                doPrintModel(osinstance);
+    	    else if (oscommandline->printRowNumberAsString != "")
+    	        doPrintRow(osinstance, oscommandline->printRowNumberAsString);
                 
-            osrl = runSolver(osoptions->solverName, osoptions->osol, osinstance);
-            
+            osrl = runSolver(oscommandline->solverName, oscommandline->osol, osinstance);            
 
-	    //delete fileUtil;
-            if (osoptions->osrlFile != "")
+            if (oscommandline->osrlFile != "")
             {
-
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+                fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
 
                 //const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-                if (osoptions->browser != "")
+                if (oscommandline->browser != "")
                 {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
+                    std::string str = oscommandline->browser + "  "
+                                      + oscommandline->osrlFile;
                     const char *ch = &str[0];
                     std::system(ch);
                 }
             }
             else
-                cout << osrl << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
 
         }//end of local solve
 
@@ -811,22 +894,21 @@ void solve()
         {
             osrl = eclass.errormsg;
         }
-        if (osoptions->osrlFile != "")
+        if (oscommandline->osrlFile != "")
         {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
+            //fileUtil->writeFileFromString(oscommandline->osrlFile,  eclass.errormsg);
+            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+            if (oscommandline->browser != "")
             {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
+                std::string str = oscommandline->browser + "  "
+                                  + oscommandline->osrlFile;
                 const char *ch = &str[0];
                 std::system(ch);
             }
         }
         else
         {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
         }
         //catch garbage collection
         if(osresult != NULL)
@@ -861,16 +943,16 @@ void solve()
 
 }//end solve 
 
-void getJobID()
+void getJobID(OSCommandLine *oscommandline)
 {
     OSSolverAgent* osagent = NULL;
     try
     {
-        if (osoptions->serviceLocation != "")
+        if (oscommandline->serviceLocation != "")
         {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-            osoptions->jobID = osagent->getJobID(osoptions->osol);
-            cout << osoptions->jobID << endl;
+            osagent = new OSSolverAgent(oscommandline->serviceLocation);
+            oscommandline->jobID = osagent->getJobID(oscommandline->osol);
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, oscommandline->jobID);
             delete osagent;
             osagent = NULL;
         }
@@ -926,7 +1008,7 @@ void getJobID()
 }//end getJobID
 
 
-void knock()
+void knock(OSCommandLine *oscommandline)
 {
     std::string osplOutput = "";
     OSSolverAgent* osagent = NULL;
@@ -934,22 +1016,22 @@ void knock()
     fileUtil = new FileUtil();
     try
     {
-        if (osoptions->serviceLocation != "")
+        if (oscommandline->serviceLocation != "")
         {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
+            osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
 
-            if (osoptions->osol == "")
+            if (oscommandline->osol == "")
             {
                 // we need to construct the OSoL
                 OSOption *osOption = NULL;
                 osOption = new OSOption();
                 //set the jobID if there is one
-                if(osoptions->jobID == "") osOption->setJobID( osoptions->jobID);
+                if(oscommandline->jobID == "") osOption->setJobID( oscommandline->jobID);
                 // now read the osOption object into a string
                 OSoLWriter *osolWriter = NULL;
                 osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
+                oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;
                 delete osolWriter;
@@ -957,12 +1039,12 @@ void knock()
             }
 
 
-            osplOutput = osagent->knock(osoptions->osplInput, osoptions->osol);
-            if (osoptions->osplOutputFile != "")
-                fileUtil->writeFileFromString(osoptions->osplOutputFile,
+            osplOutput = osagent->knock(oscommandline->osplInput, oscommandline->osol);
+            if (oscommandline->osplOutputFile != "")
+                fileUtil->writeFileFromString(oscommandline->osplOutputFile,
                                               osplOutput);
             else
-                cout << osplOutput << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osplOutput);
             delete osagent;
         }
         else
@@ -1005,13 +1087,14 @@ void knock()
             osrlwriter = NULL;
         }
 
+
         delete fileUtil;
         fileUtil = NULL;
     }
 }//end knock
 
 
-void send()
+void send(OSCommandLine *oscommandline)
 {
     bool bSend = false;
 
@@ -1020,55 +1103,55 @@ void send()
     try
     {
         // call a method here to get OSiL if we have an nl or mps file
-        if (osoptions->osil == "")
+        if (oscommandline->osil == "")
         {
             //we better have an nl file present or mps file
-            if (osoptions->nlFile != "")
+            if (oscommandline->nlFile != "")
             {
-                getOSiLFromNl();
+                getOSiLFromNl(oscommandline);
             }
             else
             {
-                if (osoptions->mpsFile != "")
+                if (oscommandline->mpsFile != "")
                 {
-                    getOSiLFromMps();
+                    getOSiLFromMps(oscommandline);
                 }
                 else    // send an empty osil string
                 {
-                    osoptions->osil = "";
+                    oscommandline->osil = "";
                 }
             }
         }
-        if (osoptions->serviceLocation != "")
+        if (oscommandline->serviceLocation != "")
         {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
+            osagent = new OSSolverAgent(oscommandline->serviceLocation);
             // check to see if there is an osol
-            if (osoptions->osol == "")
+            if (oscommandline->osol == "")
             {
                 // we need to construct the OSoL
                 OSOption *osOption = NULL;
                 osOption = new OSOption();
                 // get a jobId if necessary
-                if(osoptions->jobID == "") osoptions->jobID = osagent->getJobID("");
+                if(oscommandline->jobID == "") oscommandline->jobID = osagent->getJobID("");
                 //set the jobID
 
-                osOption->setJobID( osoptions->jobID);
+                osOption->setJobID( oscommandline->jobID);
                 // now read the osOption object into a string
                 OSoLWriter *osolWriter = NULL;
                 osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
+                oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;
                 delete osolWriter;
                 osolWriter = NULL;
             }
-            bSend = osagent->send(osoptions->osil, osoptions->osol);
-            if(bSend == true){
-            	 std::cout << "Successful send " << std::endl;
-            }else{
-            	 std::cout << "Send failed, check to make sure you sent a jobID not on the system.  " << std::endl;
-            }
-           
+            bSend = osagent->send(oscommandline->osil, oscommandline->osol);
+            if(bSend == true)
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, "Successful send");
+            else
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, 
+                    "Send failed, check to make sure you sent a jobID not on the system.");
+          
             delete osagent;
         }
         else
@@ -1101,10 +1184,10 @@ void send()
         }
 
 
-        if (osoptions->osrlFile != "")
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+        if (oscommandline->osrlFile != "")
+            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
         else
-            cout << osrl << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
 
         if(osresult != NULL)
         {
@@ -1121,7 +1204,7 @@ void send()
     }
 }//end send
 
-void retrieve()
+void retrieve(OSCommandLine *oscommandline)
 {
     FileUtil *fileUtil = NULL;
     fileUtil = new FileUtil();
@@ -1129,46 +1212,52 @@ void retrieve()
     OSSolverAgent* osagent = NULL;
     try
     {
-        if (osoptions->serviceLocation != "")
+        if (oscommandline->serviceLocation != "")
         {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
+            osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
 
-            if (osoptions->osol == "")
+            if (oscommandline->osol == "")
             {
                 // we need to construct the OSoL
                 OSOption *osOption = NULL;
                 osOption = new OSOption();
                 // get a jobId if necessary
-                if(osoptions->jobID == "")throw ErrorClass("there is no JobID");
+                if(oscommandline->jobID == "")throw ErrorClass("there is no JobID");
                 //set the jobID
-                osOption->setJobID( osoptions->jobID);
+                osOption->setJobID( oscommandline->jobID);
                 // now read the osOption object into a string
                 OSoLWriter *osolWriter = NULL;
                 osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
+                oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;
                 delete osolWriter;
                 osolWriter = NULL;
             }
 
-            osrl = osagent->retrieve(osoptions->osol);
+            osrl = osagent->retrieve(oscommandline->osol);
 
-            if (osoptions->osrlFile != "")
+            if (oscommandline->osrlFile != "")
             {
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-                cout << "Solver Result Written to File: " << osoptions->osrlFile << endl;
-                if (osoptions->browser != "")
+                fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+
+                std::ostringstream outStr;
+
+                outStr.str("");
+                outStr.clear();
+                outStr << "Solver Result Written to File: " << oscommandline->osrlFile << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
+                if (oscommandline->browser != "")
                 {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
+                    std::string str = oscommandline->browser + "  "
+                                      + oscommandline->osrlFile;
                     const char *ch = &str[0];
                     std::system(ch);
                 }
             }
             else
-                cout << osrl << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
             delete osagent;
             osagent = NULL;
         }
@@ -1220,7 +1309,7 @@ void retrieve()
     }
 }//end retrieve
 
-void kill()
+void kill(OSCommandLine *oscommandline)
 {
     FileUtil *fileUtil = NULL;
     fileUtil = new FileUtil();
@@ -1228,36 +1317,36 @@ void kill()
     OSSolverAgent* osagent = NULL;
     try
     {
-        if (osoptions->serviceLocation != "")
+        if (oscommandline->serviceLocation != "")
         {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
+            osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
-            if (osoptions->osol == "")
+            if (oscommandline->osol == "")
             {
                 // we need to construct the OSoL
                 OSOption *osOption = NULL;
                 osOption = new OSOption();
                 // get a jobId if necessary
-                if(osoptions->jobID == "")throw ErrorClass("there is no JobID");
+                if(oscommandline->jobID == "")throw ErrorClass("there is no JobID");
                 //set the jobID
-                osOption->setJobID( osoptions->jobID);
+                osOption->setJobID( oscommandline->jobID);
                 // now read the osOption object into a string
                 OSoLWriter *osolWriter = NULL;
                 osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
+                oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;
                 delete osolWriter;
                 osolWriter = NULL;
             }
 
-            osplOutput = osagent->kill(osoptions->osol);
+            osplOutput = osagent->kill(oscommandline->osol);
 
-            if (osoptions->osplOutputFile != "")
-                fileUtil->writeFileFromString(osoptions->osplOutputFile,
+            if (oscommandline->osplOutputFile != "")
+                fileUtil->writeFileFromString(oscommandline->osplOutputFile,
                                               osplOutput);
             else
-                cout << osplOutput << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_summary, osplOutput);
             delete osagent;
             osagent = NULL;
         }
@@ -1314,22 +1403,21 @@ void kill()
  *  .nl (from AMPL), GAMS, MPS format
  */
 
-void getOSiLFromNl()
+void getOSiLFromNl(OSCommandLine *oscommandline)
 {
     try
     {
 #ifdef COIN_HAS_ASL
         OSnl2OS *nl2os = NULL;
-//        nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
         nl2os = new OSnl2OS();
-        nl2os->readNl(osoptions->nlFile);
-        nl2os->setOsol(osoptions->osol);
+        nl2os->readNl(oscommandline->nlFile);
+        nl2os->setOsol(oscommandline->osol);
         nl2os->createOSObjects();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
         std::string osil;
         osil = osilwriter->writeOSiL( nl2os->osinstance);
-        osoptions->osil = osil;
+        oscommandline->osil = osil;
         delete nl2os;
         nl2os = NULL;
         delete osilwriter;
@@ -1341,25 +1429,25 @@ void getOSiLFromNl()
     }
     catch (const ErrorClass& eclass)
     {
-        std::cout << eclass.errormsg << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
         throw ErrorClass(eclass.errormsg);
     }
 }//getOSiLFromNl
 
 
-void getOSiLFromGams()
+void getOSiLFromGams(OSCommandLine *oscommandline)
 {
     try
     {
 #ifdef COIN_HAS_GAMSIO
         OSgams2osil *gams2osil = NULL;
-        gams2osil = new OSgams2osil( osoptions->gamsControlFile);
+        gams2osil = new OSgams2osil( oscommandline->gamsControlFile);
         gams2osil->createOSInstance();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
         std::string osil;
         osil = osilwriter->writeOSiL( gams2osil->osinstance);
-        osoptions->osil = osil;
+        oscommandline->osil = osil;
         delete gams2osil;
         gams2osil = NULL;
         delete osilwriter;
@@ -1371,24 +1459,24 @@ void getOSiLFromGams()
     }
     catch (const ErrorClass& eclass)
     {
-        std::cout << eclass.errormsg << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
         throw ErrorClass(eclass.errormsg);
     }
 }//getOSiLFromGams
 
 
-void getOSiLFromMps()
+void getOSiLFromMps(OSCommandLine *oscommandline)
 {
     try
     {
         OSmps2osil *mps2osil = NULL;
-        mps2osil = new OSmps2osil(osoptions->mpsFile);
+        mps2osil = new OSmps2osil(oscommandline->mpsFile);
         mps2osil->createOSInstance();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
         std::string osil;
         osil = osilwriter->writeOSiL(mps2osil->osinstance);
-        osoptions->osil = osil;
+        oscommandline->osil = osil;
         delete mps2osil;
         mps2osil = NULL;
         delete osilwriter;
@@ -1396,14 +1484,26 @@ void getOSiLFromMps()
     }
     catch (const ErrorClass& eclass)
     {
-        std::cout << eclass.errormsg << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
         throw ErrorClass(eclass.errormsg);
     }
 
 }//getOSiLFromMps
 
-/** Interactive shell **/
 
+/** ======================== Interactive shell ========================= **/
+
+inline void getServiceLocation(OSCommandLine *oscommandline)
+{
+    std::cout
+            << std::endl
+            << "A service location is required"
+            << std::endl;
+    std::cout
+            << "Please type the URL of the remote service: ";
+    getline(std::cin, oscommandline->serviceLocation);
+}
+  
 void interactiveShell()
 {
     void* scanner;
@@ -1412,13 +1512,13 @@ void interactiveShell()
     std::string configFileName = "";
 
 
-    osoptions = new osOptionsStruc();
+    OSCommandLine *oscommandline = new OSCommandLine();
     bool scannerActive = false;
 
     //this is the interactive shell
     scannerActive = true;
     ossslex_init(&scanner);
-    setyyextra(osoptions, scanner);
+    setyyextra(oscommandline, scanner);
     std::string lineText;
     //use a blank to separate words
     std::string wordSep = " ";
@@ -1429,28 +1529,25 @@ void interactiveShell()
     std::string::size_type indexEnd;
     unsigned int k;
 
+    const int nCommands = 14;
+    std::string commandArray[nCommands] = 
+        { "solve", "send", "getJobID", "retrieve", "kill", "knock",
+          "quit", "exit",  "reset", "list", "?", "help", "version", 
+          "printModel"
+        };
 
-    std::string commandArray[14] = { "solve", "send", "getJobID", "retrieve", "kill", "knock",
-                                     "quit", "exit",  "reset", "list", "?", "help", "version", 
-                                     "printModel"
-                                   };
-
-
-    std::string optionArray[11] = { "osil", "osrl", "osol", "mps", "nl", "dat",
-                                    "serviceLocation", "solver", "osplInput",  "osplOutput", 
-                                    "printRow"
-                                  };
-
-
-    size_t size_of_commandArray = (sizeof commandArray) / (sizeof commandArray[0]);
-    size_t size_of_optionArray  = (sizeof optionArray)  / (sizeof optionArray[0]);
-
+    const int nOptions = 14;
+    std::string optionArray[nOptions] = 
+        { "osil", "osrl", "osol", "mps", "nl", "dat",
+          "serviceLocation", "solver", "osplInput",  "osplOutput", 
+          "printRow", "printLevel", "logFile", "fileLogLevel"
+        };
 
     //fill in the command array into a map
 
     std::map<string, int> commandMap;
 
-    for(k = 0; k < size_of_commandArray; k++)
+    for(k = 0; k < nCommands; k++)
     {
         commandMap[ commandArray[ k] ] = k;
     }
@@ -1459,7 +1556,7 @@ void interactiveShell()
 
     std::map<string, int> optionMap;
 
-    for(k = 0; k < size_of_optionArray; k++)
+    for(k = 0; nOptions; k++)
     {
         optionMap[ optionArray[ k] ] = k;
     }
@@ -1469,7 +1566,7 @@ void interactiveShell()
     std::cout << "Type \"quit\" or \"exit\" to leave the application. \n";
     std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
 
-    while (osoptions->quit != true)
+    while (oscommandline->quit != true)
     {
         std::cout <<  "Please enter a command, or an option followed by an option value: ";
         getline(std::cin, lineText);
@@ -1535,7 +1632,7 @@ void interactiveShell()
 
                                 case 0: // solve command
 
-                                    if(osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+                                    if(oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
                                     {
                                         std::cout
                                                 << std::endl
@@ -1546,34 +1643,34 @@ void interactiveShell()
                                     }
                                     else
                                     {
-                                        solve();
-                                        if (osoptions->osrlFile != "")
-                                            std::cout <<  "\nSolve command executed. Please see " << osoptions->osrlFile  << " for results." << std::endl;
+                                        solve(oscommandline);
+                                        if (oscommandline->osrlFile != "")
+                                            std::cout <<  "\nSolve command executed. Please see " << oscommandline->osrlFile  << " for results." << std::endl;
                                     }
                                     break;
 
                                 case 1: // send command
 
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
-                                    send();
+                                    if(oscommandline->serviceLocation == "")
+                                        getServiceLocation(oscommandline);
+                                    send(oscommandline);
                                     break;
 
 
                                 case 2: // getJobID command
 
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
-                                    getJobID();
+                                    if(oscommandline->serviceLocation == "")
+                                        getServiceLocation(oscommandline);
+                                    getJobID(oscommandline);
                                     break;
 
 
                                 case 3: // retrieve command
 
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
+                                    if(oscommandline->serviceLocation == "")
+                                        getServiceLocation(oscommandline);
 
-                                    if( (osoptions->osolFile == "") && (osoptions->jobID == "") )
+                                    if( (oscommandline->osolFile == "") && (oscommandline->jobID == "") )
                                     {
                                         std::cout
                                                 << std::endl
@@ -1582,7 +1679,7 @@ void interactiveShell()
                                     }
                                     else
                                     {
-                                        retrieve();
+                                        retrieve(oscommandline);
                                     }
 
                                     break;
@@ -1590,10 +1687,10 @@ void interactiveShell()
                                 case 4: // kill command
 
 
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
+                                    if(oscommandline->serviceLocation == "")
+                                        getServiceLocation(oscommandline);
 
-									if( (osoptions->osolFile == "") && (osoptions->jobID == "") )
+									if( (oscommandline->osolFile == "") && (oscommandline->jobID == "") )
                                     {
                                         std::cout
                                                 << std::endl
@@ -1602,7 +1699,7 @@ void interactiveShell()
                                     }
                                     else
                                     {
-                                        kill();
+                                        kill(oscommandline);
                                     }
 
 
@@ -1614,10 +1711,10 @@ void interactiveShell()
                                     //note -- can have empty OSoL for knock
                                     //however we do need an OSpL file
 
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
+                                    if(oscommandline->serviceLocation == "")
+                                        getServiceLocation(oscommandline);
 
-                                    if( osoptions->osplInputFile == "")
+                                    if( oscommandline->osplInputFile == "")
                                     {
                                         std::cout
                                                 << std::endl
@@ -1626,7 +1723,7 @@ void interactiveShell()
                                     }
                                     else
                                     {
-                                        knock();
+                                        knock(oscommandline);
                                     }
 
                                     break;
@@ -1646,7 +1743,7 @@ void interactiveShell()
 
                                 case 8: // reset command
 
-                                    osoptions->resetOptions();
+                                    oscommandline->reset_options();
                                     std::cout << "\nAll options reset.\n";
                                     break;
 
@@ -1654,7 +1751,7 @@ void interactiveShell()
 
                                 case 9: // list command
 
-                                    listOptions( osoptions);
+                                    list_options(oscommandline);
                                     break;
 
 
@@ -1678,7 +1775,7 @@ void interactiveShell()
 									
 								case 13: // printModel
 
-                                    doPrintModel(osoptions);
+                                    doPrintModel(oscommandline);
                                     break;
 
 
@@ -1752,10 +1849,26 @@ void interactiveShell()
                                                     << "Please enter the name of an osplOutput file: ";
                                             break;
 
-
                                         case 10: //printRow
                                             std::cout
                                                     << "Please enter the number of a constraint (>=0) or objective (<0): ";
+                                            break;
+
+                                        case 11: //printLevel
+                                            std::cout
+                                                    << "Please enter the print level (0-" 
+                                                    << ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS << "): ";
+                                            break;
+
+                                        case 12: //logFile
+                                            std::cout
+                                                    << "Please enter the name of the log file: ";
+                                            break;
+
+                                        case 13: //filePrintLevel
+                                            std::cout
+                                                    << "Please enter the print level (0-" 
+                                                    << ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS << "): ";
                                             break;
 
 
@@ -1799,81 +1912,96 @@ void interactiveShell()
                             {
 
                                     case 0: //osil
-                                        osoptions->osilFile = optionValue;
-                                        osoptions->osil
+                                        oscommandline->osilFile = optionValue;
+                                        oscommandline->osil
                                             = fileUtil->getFileAsString(
-                                                  (osoptions->osilFile).c_str());
+                                                  (oscommandline->osilFile).c_str());
                                         break;
 
 
                                     case 1: //osrl
-                                        osoptions->osrlFile = optionValue;
+                                        oscommandline->osrlFile = optionValue;
                                         break;
 
                                     case 2: //osol
-                                        osoptions->osolFile = optionValue;
-                                        osoptions->osol
+                                        oscommandline->osolFile = optionValue;
+                                        oscommandline->osol
                                             = fileUtil->getFileAsString(
-                                                  (osoptions->osolFile).c_str());
+                                                  (oscommandline->osolFile).c_str());
                                         break;
 
                                     case 3: //mps
-                                        osoptions->mpsFile = optionValue;
-                                        osoptions->mps
+                                        oscommandline->mpsFile = optionValue;
+                                        oscommandline->mps
                                             = fileUtil->getFileAsString(
-                                                  (osoptions->mpsFile).c_str());
+                                                  (oscommandline->mpsFile).c_str());
                                         break;
 
                                     case 4: //nl
-                                        osoptions->nlFile = optionValue;
-                                        osoptions->nl
+                                        oscommandline->nlFile = optionValue;
+                                        oscommandline->nl
                                             = fileUtil->getFileAsString(
-                                                  (osoptions->nlFile).c_str());
+                                                  (oscommandline->nlFile).c_str());
                                         break;
 
                                     case 5: //dat
-                                        osoptions->datFile = optionValue;
-                                        osoptions->dat
+                                        oscommandline->datFile = optionValue;
+                                        oscommandline->dat
                                             = fileUtil->getFileAsString(
-                                                  (osoptions->datFile).c_str());
+                                                  (oscommandline->datFile).c_str());
                                         break;
 
                                     case 6: //service location
-                                        osoptions->serviceLocation = optionValue;
+                                        oscommandline->serviceLocation = optionValue;
                                         break;
 
                                     case 7: //solver
 
                                         //make solver name lower case 
                                         for (k = 0; k
-                                                < osoptions->solverName.length(); k++)
+                                                < oscommandline->solverName.length(); k++)
                                         {
-                                            osoptions->solverName[k] = 
-                                                (char)tolower(osoptions->solverName[k]);
+                                            oscommandline->solverName[k] = 
+                                                (char)tolower(oscommandline->solverName[k]);
                                         }
-                                        osoptions->solverName = optionValue;
+                                        oscommandline->solverName = optionValue;
                                         break;
 
                                     case 8: //osplInput
-                                        osoptions->osplInputFile = optionValue;
-                                        osoptions->osplInput
+                                        oscommandline->osplInputFile = optionValue;
+                                        oscommandline->osplInput
                                             = fileUtil->getFileAsString(
-                                                  (osoptions->osplInputFile).c_str());
+                                                  (oscommandline->osplInputFile).c_str());
                                         break;
 
                                     case 9: //osplOutput
-                                        osoptions->osplOutputFile = optionValue;
+                                        oscommandline->osplOutputFile = optionValue;
                                         break;
 
                                     case 10: //printRow
-                                        osoptions->printRowNumberAsString = optionValue;
-                    					doPrintRow(osoptions);
+                                        oscommandline->printRowNumberAsString = optionValue;
+                    					doPrintRow(oscommandline);
                                         break;
 
+                                    case 11: //printLevel
+                                        std::cout
+                                                << "Please enter the print level (0-" 
+                                                << ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS << "): ";
+                                        break;
 
+                                    case 12: //logFile
+                                        std::cout
+                                                << "Please enter the name of the log file: ";
+                                        break;
+
+                                    case 13: //filePrintLevel
+                                            std::cout
+                                                    << "Please enter the print level (0-" 
+                                                    << ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS << "): ";
+                                            break;
 
                             }// end switch
-                            listOptions( osoptions);
+                            list_options( oscommandline);
 
                         }// end if on finding an element in the optionMap
 
@@ -1890,15 +2018,14 @@ void interactiveShell()
     }//end while loop
     ossslex_destroy(scanner);
     scannerActive = false;
-    delete osoptions;
-    osoptions = NULL;
+    delete oscommandline;
+    oscommandline = NULL;
     delete fileUtil;
     fileUtil = NULL;
 } // end of interactiveShell
 
 std::string get_help()
 {
-
     std::ostringstream helpMsg;
 
     helpMsg << "************************* HELP *************************"
@@ -2193,7 +2320,31 @@ std::string get_options()
             << endl;
 	optionMsg
             << "   if nnn >= 0, prints a constraint, otherwise prints an objective row"
-            << endl << endl;
+            << endl;
+	optionMsg
+            << "printLevel nnn -- control the amount of output sent to stdout"
+            << endl;
+    optionMsg 
+            << "   valid values are 0..";
+#ifdef NDEBUG
+    optionMsg << ENUM_OUTPUT_LEVEL_info << endl; 
+#else
+    optionMsg << ENUM_OUTPUT_LEVEL_detailed_trace << endl; 
+#endif
+	optionMsg
+            << "logFile --- a secondary output device"
+            << endl;
+	optionMsg
+            << "filePrintLevel nnn -- control the amount of output sent to the secondary output device"
+            << endl;
+    optionMsg 
+            << "   valid values are 0..";
+#ifdef NDEBUG
+    optionMsg << ENUM_OUTPUT_LEVEL_info << endl; 
+#else
+    optionMsg << ENUM_OUTPUT_LEVEL_detailed_trace << endl; 
+#endif
+    optionMsg << endl;
 
     optionMsg
             << "*****************************************************************"
@@ -2216,84 +2367,84 @@ std::string get_options()
 }// get_options
 
 
-void listOptions(osOptionsStruc *osoptions)
+void list_options(OSCommandLine *oscommandline)
 {
     cout
             << "HERE ARE THE OPTION VALUES SO FAR:"
             << endl;
-    if (osoptions->configFile != "")
+    if (oscommandline->configFile != "")
         cout << "Config file = "
-             << osoptions->configFile
+             << oscommandline->configFile
              << endl;
-    if (osoptions->osilFile != "")
+    if (oscommandline->osilFile != "")
         cout << "OSiL file = "
-             << osoptions->osilFile
+             << oscommandline->osilFile
              << endl;
-    if (osoptions->osolFile != "")
+    if (oscommandline->osolFile != "")
         cout << "OSoL file = "
-             << osoptions->osolFile
+             << oscommandline->osolFile
              << endl;
-    if (osoptions->osrlFile != "")
+    if (oscommandline->osrlFile != "")
         cout << "OSrL file = "
-             << osoptions->osrlFile
+             << oscommandline->osrlFile
              << endl;
-//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
-    if (osoptions->osplInputFile != "")
+//if(oscommandline->insListFile != "") cout << "Instruction List file = " << oscommandline->insListFile << endl;
+    if (oscommandline->osplInputFile != "")
         cout << "OSpL Input file = "
-             << osoptions->osplInputFile
+             << oscommandline->osplInputFile
              << endl;
-    if (osoptions->serviceMethod != "")
+    if (oscommandline->serviceMethod != "")
         cout << "Service Method = "
-             << osoptions->serviceMethod
+             << oscommandline->serviceMethod
              << endl;
-    if (osoptions->mpsFile != "")
+    if (oscommandline->mpsFile != "")
         cout << "MPS File Name = "
-             << osoptions->mpsFile
+             << oscommandline->mpsFile
              << endl;
-    if (osoptions->nlFile != "")
+    if (oscommandline->nlFile != "")
         cout << "NL File Name = "
-             << osoptions->nlFile
+             << oscommandline->nlFile
              << endl;
-    if (osoptions->solverName != "")
+    if (oscommandline->solverName != "")
         cout << "Selected Solver = "
-             << osoptions->solverName
+             << oscommandline->solverName
              << endl;
-    if (osoptions->serviceLocation != "")
+    if (oscommandline->serviceLocation != "")
         cout << "Service Location = "
-             << osoptions->serviceLocation
+             << oscommandline->serviceLocation
              << endl;
 
-    if (osoptions->jobID != "")
+    if (oscommandline->jobID != "")
         cout << "Job ID = "
-             << osoptions->jobID
+             << oscommandline->jobID
              << endl;
-}// listOptions
+}// list_options
 
-void doPrintModel(osOptionsStruc *osoptions)
+void doPrintModel(OSCommandLine *oscommandline)
 {
-	if (osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+	if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
 	{
 		std::cout
 			<< "no instance defined; print command ignored" << std::endl;
 	}
 	else
 	{
-		if (osoptions->osil != "")
+		if (oscommandline->osil != "")
 		{
 			OSiLReader *osilreader;
 			osilreader = new OSiLReader();
-			std::cout << osilreader->readOSiL(osoptions->osil)->printModel() << std::endl;
+			std::cout << osilreader->readOSiL(oscommandline->osil)->printModel() << std::endl;
 			delete osilreader;
 			osilreader = NULL;
 		}
-		else if (osoptions->nl != "")
+		else if (oscommandline->nl != "")
 		{
 #ifdef COIN_HAS_ASL
 			OSnl2OS *nl2os;	
-//			nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+//			nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
 			nl2os = new OSnl2OS();
-            nl2os->readNl(osoptions->nlFile);
-            nl2os->setOsol(osoptions->osol);
+            nl2os->readNl(oscommandline->nlFile);
+            nl2os->setOsol(oscommandline->osol);
 			nl2os->createOSObjects();
 			std::cout << nl2os->osinstance->printModel() << std::endl;
 			delete nl2os;
@@ -2302,17 +2453,17 @@ void doPrintModel(osOptionsStruc *osoptions)
 			std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
 		}
-		else if (osoptions->mps != "")
+		else if (oscommandline->mps != "")
 		{
 			OSmps2osil *mps2osil;
-			mps2osil = new OSmps2osil(osoptions->mpsFile);
+			mps2osil = new OSmps2osil(oscommandline->mpsFile);
 			mps2osil->createOSInstance();
 			std::cout << mps2osil->osinstance->printModel() << std::endl;
 			delete mps2osil;
 			mps2osil = NULL;
 		}
 	}
-}// doPrintModel(osOptionsStruc *osoptions)
+}// doPrintModel(OSCommandLine *oscommandline)
 
 void doPrintModel(OSInstance *osinstance)
 {
@@ -2325,25 +2476,25 @@ void doPrintModel(OSInstance *osinstance)
 	{
 		std::cout << osinstance->printModel() << std::endl;
 	}
-}// doPrintModel(osOptionsStruc *osoptions)
+}// doPrintModel(OSInstance *osinstance)
 
-void doPrintRow(osOptionsStruc *osoptions)
+void doPrintRow(OSCommandLine *oscommandline)
 {
 	int rownumber;
-	if (osoptions->printRowNumberAsString == "")
+	if (oscommandline->printRowNumberAsString == "")
 		std::cout << "no line number given; print command ignored" << std::endl;
 	else
 	{
 		try
 		{
-			rownumber = atoi((osoptions->printRowNumberAsString).c_str());
+			rownumber = atoi((oscommandline->printRowNumberAsString).c_str());
 		}
 		catch  (const ErrorClass& eclass)
 		{
 	                std::cout << "invalid row number; print command ignored" << std::endl;
 		}
 
-		if (osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+		if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
                 {
                         std::cout
 	                        << "no instance defined; print command ignored" << std::endl;
@@ -2351,22 +2502,22 @@ void doPrintRow(osOptionsStruc *osoptions)
 		else
 		{
 			std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
-			if (osoptions->osil != "")
+			if (oscommandline->osil != "")
 			{
 				OSiLReader *osilreader;
 				osilreader = new OSiLReader();
-		    		std::cout << osilreader->readOSiL(osoptions->osil)->printModel(rownumber) << std::endl;
+		    		std::cout << osilreader->readOSiL(oscommandline->osil)->printModel(rownumber) << std::endl;
 				delete osilreader;
 				osilreader = NULL;
 			}
-			else if (osoptions->nl != "")
+			else if (oscommandline->nl != "")
 			{
 #ifdef COIN_HAS_ASL
 				OSnl2OS *nl2os;	
-//				nl2os = new OSnl2OS(osoptions->nlFile, osoptions->osol);
+//				nl2os = new OSnl2OS(oscommandline->nlFile, oscommandline->osol);
 				nl2os = new OSnl2OS();
-                nl2os->readNl(osoptions->nlFile);
-                nl2os->setOsol(osoptions->osol);
+                nl2os->readNl(oscommandline->nlFile);
+                nl2os->setOsol(oscommandline->osol);
 				nl2os->createOSObjects();
 				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
 				delete nl2os;
@@ -2375,10 +2526,10 @@ void doPrintRow(osOptionsStruc *osoptions)
 				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
 			}
-			else if (osoptions->mps != "")
+			else if (oscommandline->mps != "")
 			{
 				OSmps2osil *mps2osil;
-				mps2osil = new OSmps2osil(osoptions->mpsFile);
+				mps2osil = new OSmps2osil(oscommandline->mpsFile);
 				mps2osil->createOSInstance();
 				std::cout << mps2osil->osinstance->printModel(rownumber) << std::endl;
 				delete mps2osil;
@@ -2386,7 +2537,7 @@ void doPrintRow(osOptionsStruc *osoptions)
 			}
 		}
 	}
-}// doPrintRow(osOptionsStruc *osoptions)
+}// doPrintRow(OSCommandLine *oscommandline)
 
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 {

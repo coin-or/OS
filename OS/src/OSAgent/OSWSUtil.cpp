@@ -5,16 +5,16 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  */
 
-//#define DEBUG
 #include "OSConfig.h"
+
 #ifdef WIN_
 #ifndef _SYS_UNISTD_H
 #define _SYS_UNISTD_H
@@ -44,9 +44,9 @@
 #include "OSErrorClass.h"
 #include "OSResult.h"
 #include "OSrLWriter.h"
+#include "OSOutput.h"
 
 using std::string;
-using std::cout;
 using std::endl;
 using std::ostringstream;
 
@@ -67,7 +67,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
     {
         /* code taken from "TCP/IP Sockets in C" by Donahoo and Calvert */
         unsigned long ResolveName(char *name);
-        ostringstream ret_message;
+        ostringstream ret_message, outStr;
         int sock;
         struct sockaddr_in httpServAddr;
         unsigned short httpServPort = servicePortNumber;
@@ -75,6 +75,9 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
         char httpBuffer[RCVBUFSIZE] = "";
         int httpStringLen;
         char* message = &theSOAP[0];
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "Inside WSUtil::sendSOAPMessage\n");
+#endif
 #ifdef WIN_
         WSADATA wsaData;
         if( WSAStartup(MAKEWORD(2, 0), &wsaData) != 0 ) throw ErrorClass( "WSAStartup failed");
@@ -93,46 +96,47 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
             string errormsg = "failure connecting with remote socket at address: " + sipadd  ;
             throw ErrorClass( errormsg );
         }
-#ifdef DEBUG
-        cout << "Connection Established"  << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, "Connection Established\n");
 #endif
         httpStringLen = strlen( message);
-#ifdef DEBUG
-        cout << "HERE IS WHAT WE SEND" << endl;
-        cout << message << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, "HERE IS WHAT WE SEND\n");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, message);
 #endif
         /* Send the string to the server */
         if (send(sock, message, httpStringLen, 0) != httpStringLen)
             throw ErrorClass("send() sent a different number of bytes than expected");
-#ifdef DEBUG
-        cout << "OSiL sent to server" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, "OSiL sent to server\n");
 #endif
         int recvMsgSize = 1;
         int n;
-#ifdef DEBUG
+#ifndef NDEBUG
         int char_val;
 #endif
         httpBuffer[ RCVBUFSIZE - 1] = '\0';
         while (recvMsgSize > 0)
         {
-#ifdef DEBUG
-            cout << "start to receive" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, "start to receive\n");
 #endif
             if ((recvMsgSize = recv(sock, httpBuffer, RCVBUFSIZE-1, 0)) < 0)
                 throw ErrorClass( "socket error receiving data");
-#ifdef DEBUG
-            cout << "Message size =  " << recvMsgSize << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "Message size =  " << recvMsgSize << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
             printf("%s\n", httpBuffer);
             if(recvMsgSize < (RCVBUFSIZE - 1) )
             {
                 for(n = 0; n < recvMsgSize; n++)
                 {
                     char_val = httpBuffer[ n];
-                    //cout << "char_val = " << char_val << endl;
                 }
             }
 #endif
-            //httpBuffer[ recvMsgSize ] = '\0';
             ret_message << httpBuffer;
             // clear the buffer
             for(n = 0; n < RCVBUFSIZE; n++)
@@ -150,13 +154,6 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
     }
     catch(const ErrorClass& eclass)
     {
-//		OSResult osresult;
-//		OSrLWriter osrlwriter;
-//		string osrl;
-//		osresult.setGeneralMessage( eclass.errormsg);
-//		osresult.setGeneralStatusType( "error");
-//		osrl = osrlwriter.writeOSrL( &osresult);
-//		throw ErrorClass( osrl);
         throw ErrorClass( eclass.errormsg);
     }
 }
@@ -164,15 +161,17 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 std::string WSUtil::createSOAPMessage(int numInputs,  string solverAddress, string postURI, string smethod,
                                       string* msInputs, string* msInputNames, string sSoapAction)
 {
-    ostringstream request, body, msg;
+    ostringstream request, body, outStr;
     int i;
     string mynamespace = "xmlns:ns1=\"http://www.optimizationservices.org\"";
-#ifdef DEBUG
-    cout << "Solver address = " <<  solverAddress << endl;
-    cout << "SOAP action = " <<  sSoapAction << endl;
-    cout << "postURI = " <<  postURI << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "Solver address = " <<  solverAddress << endl;
+    outStr << "SOAP action = " <<  sSoapAction << endl;
+    outStr << "postURI = " <<  postURI << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-    //request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
     request << "POST "  <<  postURI << " HTTP/1.0" << endl ;
     request << "Content-Type: text/xml; charset=UTF-8" << endl;
     request << "Host: " ;
@@ -207,9 +206,14 @@ std::string WSUtil::createSOAPMessage(int numInputs,  string solverAddress, stri
 std::string WSUtil::createFormDataUpload(std::string solverAddress, std::string postURI,
         std::string fileName,  std::string theFile, std::string boundaryName)
 {
-    ostringstream request, body;
-    std::cout << "Solver address = " <<  solverAddress << std::endl;
-    std::cout << "postURI = " <<  postURI << std::endl;
+    ostringstream request, body, outStr;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "Solver address = " <<  solverAddress << endl;
+    outStr << "postURI = " <<  postURI << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
     request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r\n";
     request << "Host: " ;
     request << solverAddress << "\r\n";
@@ -238,23 +242,21 @@ std::string WSUtil::createFormDataUpload(std::string solverAddress, std::string 
     body << "--" ;
     body << "\r\n" ;
 
-
     request << "Content-Length: " << body.str().length();
     request << "\r\n";
     request << "\r\n";
     request << body.str();
     return request.str();
-    //return theFile;
 }// end createFromDataUpload
 
 
 string WSUtil::SOAPify(std::string inputstring, bool useCDATA)
 {
-    /* replace all occurances of "<" with "&lt;"  all
-    occurances of ">" with "&gt;" and all occurances of " or ' with &quote;
+    /* replace all occurrences of "<" with "&lt;"  all
+    occurrences of ">" with "&gt;" and all occurrences of " or ' with &quote;
     */
-#ifdef DEBUG
-    cout << "prepare the XML for a SOAP envelope" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, "prepare the XML for a SOAP envelope\n");
 #endif
     ostringstream body;
     int i = 0;
@@ -294,15 +296,15 @@ string WSUtil::SOAPify(std::string inputstring, bool useCDATA)
 
 string WSUtil::deSOAPify(std::string inputstring, bool useCDATA)
 {
-    /* replace all occurances of "&lt;" with "<"  all
-    occurances of "&gt;" with ">" and all occurances of "&quote;" with "
-    */
+    /** replace all occurances of "&lt;" with "<",
+     *  all occurances of "&gt;" with ">" 
+     *  and all occurances of "&quote;" with "
+     */
     ostringstream body;
     int i = 0;
     int loopsize = inputstring.length();
     if(useCDATA == true)
     {
-
         string::size_type pos1 = inputstring.find( "<![CDATA[" );
         string::size_type pos2 = inputstring.find( "]]>" );
         body << inputstring.substr( pos1 + 1, pos2 - pos1 - 1);
@@ -314,8 +316,6 @@ string WSUtil::deSOAPify(std::string inputstring, bool useCDATA)
     {
         while (i < loopsize)
         {
-            //i = inputstring.find('&', i);
-            //if (i == string::npos)  return ostringstream.str();
             if(inputstring[i] == '&')
             {
                 switch (inputstring[i+1])
@@ -376,24 +376,12 @@ unsigned long ResolveName(char *name)
     }
 }
 
-//void DieWithError(char *errorMessage)
-//{
-//	#ifdef DEBUG
-//    cout << errorMessage << endl;
-//	#endif
-//    exit(1);
-//}
-
 string WSUtil::getOSxL(string soapstring, string serviceMethod)
 {
     /*  get the string that starts with <osxl
      * inside the soap envelope
      */
-    //string start = "";
-    //string end = "";
     string result = "";
-    //start = "<" + serviceMethod + "Return";
-    //end = "</"+serviceMethod + "Return";
     // strip off the return header information
     // find start of XML information
     string::size_type startxml = soapstring.find(serviceMethod+"Return" , 1);
@@ -442,8 +430,6 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod)
         }
         else
         {
-            // get the > that ends </osxl
-            //endxml = soapstring.find(">", endxml - 1);
             // now get the substring
             startxml++;
             result = soapstring.substr(startxml, endxml - startxml);

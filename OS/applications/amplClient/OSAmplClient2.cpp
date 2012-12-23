@@ -124,9 +124,9 @@
 //AMPL includes must be last.
 #include <asl.h>
 
-
-//#define DEBUG_AMPL_CLIENT
-
+#ifdef _DEBUG
+#define DEBUG_AMPL_CLIENT
+#endif
 
 using std::cerr;
 using std::cout;

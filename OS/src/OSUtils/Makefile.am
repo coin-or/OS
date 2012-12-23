@@ -24,6 +24,10 @@ libOSUtils_la_SOURCES = \
 		OSErrorClass.h \
 		OSFileUtil.cpp \
 		OSFileUtil.h \
+		OSIpReferenced.hpp \
+		OSIpSmartPtr.hpp \
+		OSOutput.cpp \
+		OSOutput.h \
                 OSStringUtil.h\
                 OSStringUtil.cpp\
 		OSMathUtil.cpp \
@@ -63,6 +67,9 @@ includecoin_HEADERS = \
 	OSBase64.h \
 	OSErrorClass.h \
 	OSFileUtil.h \
+	OSIpReferenced.hpp \
+	OSIpSmartPtr.hpp \
+	OSOutput.h \
         OSStringUtil.h\
 	OSMathUtil.h \
 	OSDataStructures.h \

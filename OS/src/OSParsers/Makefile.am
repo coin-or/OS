@@ -18,8 +18,6 @@ noinst_LTLIBRARIES = libOSParsers.la
 
 # List all source files for this library, including headers
 libOSParsers_la_SOURCES = \
-		OSOptionsStruc.cpp \
-		OSOptionsStruc.h \
 		OSParseosil.cpp \
 		OSParseosil.tab.cpp \
 		OSParseosil.tab.hpp \
@@ -67,7 +65,6 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	OSOptionsStruc.h \
 	OSParseosil.tab.hpp \
 	OSParseosrl.tab.hpp \
         OSParseosol.tab.hpp \

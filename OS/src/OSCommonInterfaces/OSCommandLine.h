@@ -4,8 +4,8 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2011-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -36,7 +36,7 @@
 class OSCommandLine
 {
 public:
-	/** osinstance is a representation of the instance in OSInstance format
+    /** osinstance is a representation of the instance in OSInstance format
      *
      */
     OSInstance *osinstance;
@@ -56,12 +56,12 @@ public:
      */
     std::string serviceMethod;
 
-	/** the name of the solver to be invoked locally,
+    /** the name of the solver to be invoked locally,
      *  e.g -solver Ipopt
      */
     std::string solverName;
 
-	/** configFile is the name of the file that holds the configuration options
+    /** configFile is the name of the file that holds the configuration options
      *  if the OSSolverService reads its options from a file rather than command
      *  line inputs
      */
@@ -71,15 +71,15 @@ public:
      *  instance in OSiL format
      */
     std::string osilFile;
-	
+    
     /** osilOutputFile is the name of the file to which the instance can be
      *  written in OSiL format. This is especially useful for converting the
-	 *  instance from other representation formats such as AMPL nl format or MPS format.
-	 *  If this parameter is empty, the instance will not be saved.
+     *  instance from other representation formats such as AMPL nl format or MPS format.
+     *  If this parameter is empty, the instance will not be saved.
      */
     std::string osilOutputFile;
 
-	/** osil is the content of the osilFile 
+    /** osil is the content of the osilFile 
      */
     std::string osil;
 
@@ -151,6 +151,28 @@ public:
      */
     std::string browser;
 
+    /** this parameter controls the amount of output to print
+     *  the higher the number, the more output is generated
+     *  details about print levels can be found in OSOutput.h
+     */
+    int printLevel;
+
+    /** this optional parameter contains the path to a logfile
+     *  that can be used as an alternate output stream in addition
+     *  to the normal output to stdout
+     */
+    std::string logFile;
+
+    /** this parameter controls the amount of output to send
+     *  to the log file (if used)
+     *  the higher the number, the more output is generated
+     *  details about print levels can be found in OSOutput.h
+     */
+    int filePrintLevel;
+
+    /** the JobID */
+    std::string jobID;
+
     /** if this parameter is true we print the contents of the file
      *  help.txt and return
      */
@@ -165,7 +187,7 @@ public:
      *  of the OS project
      */
     bool writeVersion;
-	
+    
     /** if this parameter is true we print the current instance
      *  as read from an osil, nl or mps file
      */
@@ -190,23 +212,23 @@ public:
     /** destructor method */
     ~OSCommandLine();
 
-	/** a function to reset the command line to default values
-	 *  useful especially in the interactive shell
-	 */
-	void reset_options();
+    /** a function to reset the command line to default values
+     *  useful especially in the interactive shell
+     */
+    void reset_options();
 
-	/** a function to print the current command line option values
-	 */
-	std::string list_options();
+    /** a function to print the current command line option values
+     */
+    std::string list_options();
 
-	/** to avoid ambiguity it might be necessary to convert the
-	 *  solver name to lower case ...
-	 */
-	void convertSolverNametoLowerCase();
+    /** to avoid ambiguity it might be necessary to convert the
+     *  solver name to lower case ...
+     */
+    void convertSolverNameToLowerCase();
 
-	/** ... or to upper case
-	 */
-	void convertSolverNametoUpperCase();
+    /** ... or to upper case
+     */
+    void convertSolverNameToUpperCase();
 };
 
 #endif

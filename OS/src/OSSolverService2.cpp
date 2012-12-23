@@ -139,8 +139,6 @@ using std::ostringstream;
 using std::string;
 using std::map;
 
-//#define DEBUG_CL_INTERFACE
-
 void interactiveShell();
 
 std::string get_help();

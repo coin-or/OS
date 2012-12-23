@@ -165,7 +165,7 @@ AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[OSLib])
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
 		   case $CXX in
 		    g*)
-		      AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and complier is gnu]);;
+		      AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and compiler is gnu]);;
 		     *)
 		     AC_MSG_WARN("DONT HAVE GCC COMPILER WITH GYGWIN");;   
 		  esac   

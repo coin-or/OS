@@ -4,8 +4,8 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -15,7 +15,6 @@
 
 #ifndef OSOPTIONSSTRUC_H
 #define OSOPTIONSSTRUC_H
-
 
 #include <string>
 
@@ -136,6 +135,25 @@ struct osOptionsStruc
      *    -browser /Applications/Firefox.app/Contents/MacOS/firefox
      */
     std::string browser;
+
+    /** this parameter controls the amount of output to print
+     *  the higher the number, the more output is generated
+     *  details about print levels can be found in OSOutput.h
+     */
+    int printLevel;
+
+    /** this optional parameter contains the path to a logfile
+     *  that can be used as an alternate output stream in addition
+     *  to the normal output to stdout
+     */
+    std::string logFile;
+
+    /** this parameter controls the amount of output to send
+     *  to the log file (if used)
+     *  the higher the number, the more output is generated
+     *  details about print levels can be found in OSOutput.h
+     */
+    int filePrintLevel;
 
     /** the JobID */
     std::string jobID;

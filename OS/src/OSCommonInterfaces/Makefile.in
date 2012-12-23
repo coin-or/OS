@@ -57,10 +57,11 @@ CONFIG_HEADER = $(top_builddir)/src/config.h \
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSCommonInterfaces_la_LIBADD =
-am_libOSCommonInterfaces_la_OBJECTS = OSExpressionTree.lo OSGeneral.lo \
-	OSInstance.lo OSResult.lo OSgLWriter.lo OSiLReader.lo \
-	OSiLWriter.lo OSoLWriter.lo OSoLReader.lo OSOption.lo \
-	OSnLNode.lo OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo
+am_libOSCommonInterfaces_la_OBJECTS = OSCommandLine.lo \
+	OSExpressionTree.lo OSGeneral.lo OSInstance.lo OSResult.lo \
+	OSgLWriter.lo OSiLReader.lo OSiLWriter.lo OSoLWriter.lo \
+	OSoLReader.lo OSOption.lo OSnLNode.lo OSrLReader.lo \
+	OSrLWriter.lo OSDefaultSolver.lo
 libOSCommonInterfaces_la_OBJECTS =  \
 	$(am_libOSCommonInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -398,6 +399,8 @@ noinst_LTLIBRARIES = libOSCommonInterfaces.la
 
 # List all source files for this library, including headers
 libOSCommonInterfaces_la_SOURCES = \
+	OSCommandLine.cpp \
+	OSCommandLine.h \
 	OSExpressionTree.cpp \
 	OSExpressionTree.h \
 	OSGeneral.cpp \
@@ -453,6 +456,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
+	OSCommandLine.h \
 	OSExpressionTree.h \
         OSGeneral.h \
 	OSInstance.h \
@@ -519,6 +523,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCommandLine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSDefaultSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSExpressionTree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSGeneral.Plo@am__quote@
