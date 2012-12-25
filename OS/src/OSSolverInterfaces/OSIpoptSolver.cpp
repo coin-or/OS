@@ -4,10 +4,10 @@
  * \brief This file defines the IpoptSolver class.
  * \detail Read an OSInstance object and convert to Ipopt data structures
  *
- * @author  Horand Gassmann,  Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -15,13 +15,12 @@
  *
  */
 
-//#define DEBUG
-
 #include "OSIpoptSolver.h"
 #include "OSGeneral.h"
 #include "OSParameters.h"
 #include "OSMathUtil.h"
 #include "CoinFinite.hpp"
+#include "OSOutput.h"
 
 
 using std::cout;
@@ -41,8 +40,8 @@ IpoptSolver::IpoptSolver()
 
 IpoptSolver::~IpoptSolver()
 {
-#ifdef DEBUG
-    cout << "inside IpoptSolver destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "inside IpoptSolver destructor\n");
 #endif
     if(m_osilreader != NULL) delete m_osilreader;
     m_osilreader = NULL;
@@ -55,8 +54,8 @@ IpoptSolver::~IpoptSolver()
     //delete osinstance;
     //osinstance = NULL;
     delete ipoptErrorMsg;
-#ifdef DEBUG
-    cout << "leaving IpoptSolver destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, "Leaving IpoptSolver destructor\n");
 #endif
 }
 
@@ -64,6 +63,7 @@ IpoptSolver::~IpoptSolver()
 bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                                 Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
+    std::ostringstream outStr;
     try
     {
         //if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
@@ -73,9 +73,12 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
         n = osinstance->getVariableNumber();
         // number of constraints
         m = osinstance->getConstraintNumber();
-#ifdef DEBUG
-        cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
-        cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
+        outStr << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         try
         {
@@ -83,15 +86,15 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
         }
         catch(const ErrorClass& eclass)
         {
-#ifdef DEBUG
-            cout << "error in OSIpoptSolver, line 78:\n" << eclass.errormsg << endl;
-#endif
+            outStr.str("");
+            outStr.clear();
+            outStr << "error in OSIpoptSolver, line 78:\n" << eclass.errormsg << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, outStr.str());
             *ipoptErrorMsg = eclass.errormsg;
             throw;
         }
         // use the OS Expression tree for function evaluations instead of CppAD
         osinstance->bUseExpTreeForFunEval = true;
-        //std::cout << "Call sparse jacobian" << std::endl;
         SparseJacobianMatrix *sparseJacobian = NULL;
         try
         {
@@ -99,13 +102,13 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
         }
         catch(const ErrorClass& eclass)
         {
-#ifdef DEBUG
-            cout << "error in OSIpoptSolver, line 91:\n" << eclass.errormsg << endl;
-#endif
+            outStr.str("");
+            outStr.clear();
+            outStr << "error in OSIpoptSolver, line 91:\n" << eclass.errormsg << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, outStr.str());
             *ipoptErrorMsg = eclass.errormsg;
             throw;
         }
-        //std::cout << "Done calling sparse jacobian" << std::endl;
         if (sparseJacobian != NULL)
         {
             nnz_jac_g = sparseJacobian->valueSize;
@@ -115,15 +118,18 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
             nnz_jac_g = 0;
         }
 
-#ifdef DEBUG
-        cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         // nonzeros in upper hessian
 
         if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) )
         {
-#ifdef DEBUG
-            cout << "This is a linear program"  << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "This is a linear program\n");
 #endif
             nnz_h_lag = 0;
         }
@@ -141,15 +147,21 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                 nnz_h_lag = 0;
             }
         }
-#ifdef DEBUG
-        cout << "print nnz_h_lag (OSIpoptSolver.cpp)" << endl;
-        cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;
-        cout << "set index_style (OSIpoptSolver.cpp)" << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "print nnz_h_lag (OSIpoptSolver.cpp)" << endl;
+        outStr << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;
+        outStr << "set index_style (OSIpoptSolver.cpp)" << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         // use the C style indexing (0-based)
         index_style = TNLP::C_STYLE;
-#ifdef DEBUG
-        cout << "return from get_nlp_info (OSIpoptSolver.cpp)" << nnz_h_lag << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "return from get_nlp_info (OSIpoptSolver.cpp)" << nnz_h_lag << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
         /////
@@ -208,6 +220,8 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
                                       bool init_z, Number* z_L, Number* z_U, Index m, bool init_lambda,
                                       Number* lambda)
 {
+    std::ostringstream outStr;
+
     // Here, we assume we only have starting values for x, if you code
     // your own NLP, you can provide starting values for the dual variables
     // if you wish
@@ -216,28 +230,34 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
     assert(init_lambda == false);
     int i, m1, n1;
 
-#ifdef DEBUG
-    cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 #endif
 
     //now set initial values
-#ifdef DEBUG
-    cout << "get number of initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "get number of initial values !!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 #endif
     int k;
     if (osoption != NULL)
         m1 = osoption->getNumberOfInitVarValues();
     else
         m1 = 0;
-#ifdef DEBUG
-    cout << "number of variables initialed: " << m1 << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "number of variables initialed: " << m1 << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     n1 = osinstance->getVariableNumber();
     bool* initialed;
     initialed = new bool[n1];
-#ifdef DEBUG
-    cout << "number of variables in total: " << n1 << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "number of variables in total: " << n1 << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     for(k = 0; k < n1; k++)
@@ -245,13 +265,13 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 
     if (m1 > 0)
     {
-#ifdef DEBUG
-        cout << "get initial values " << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "get initial values\n");
 #endif
 
         InitVarValue**  initVarVector = osoption->getInitVarValuesSparse();
-#ifdef DEBUG
-        cout << "done " << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "done\n");
 #endif
         try
         {
@@ -286,8 +306,8 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
         }
         catch(const ErrorClass& eclass)
         {
-            cout << "Error in IpoptProblem::get_starting_point (OSIpoptSolver.cpp, line 247)";
-            cout << endl << endl << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, 
+                "Error in IpoptProblem::get_starting_point (OSIpoptSolver.cpp, line 247)\n\n\n");
         }
     }  //  end if (m1 > 0)
 
@@ -298,6 +318,7 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
     for(k = 0; k < n1; k++)
     {
         if (!initialed[k])
+        {
             if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
                 if (osinstance->instanceData->variables->var[k]->lb <= default_initval)
                     x[k] = default_initval;
@@ -315,13 +336,17 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
                 x[k] = osinstance->instanceData->variables->var[k]->lb;
             else
                 x[k] = osinstance->instanceData->variables->var[k]->ub;
+        }
     }
 
-#ifdef DEBUG
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
     for(i = 0; i < n1; i++)
     {
-        std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
+        outStr << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
     }
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     //make sure objvalue is initialized
     osinstance->calculateAllObjectiveFunctionValues( x, true);
@@ -358,6 +383,7 @@ bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_valu
 
 bool IpoptProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
 {
+    std::ostringstream outStr;
     int i;
     double *objGrad = NULL;
     if(osinstance->getObjectiveNumber() > 0)
@@ -369,8 +395,11 @@ bool IpoptProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gra
         }
         catch(const ErrorClass& eclass)
         {
-#ifdef DEBUG
-            cout << "error in OSIpoptSolver, line 314:\n" << eclass.errormsg << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "error in OSIpoptSolver, line 314:\n" << eclass.errormsg << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             *ipoptErrorMsg = eclass.errormsg;
             throw;
@@ -386,6 +415,7 @@ bool IpoptProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gra
 // return the value of the constraints: g(x)
 bool IpoptProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
 {
+    std::ostringstream outStr;
     try
     {
         double *conVals = osinstance->calculateAllConstraintFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 );
@@ -399,8 +429,11 @@ bool IpoptProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number*
     }
     catch(const ErrorClass& eclass)
     {
-#ifdef DEBUG
-        cout << "error in OSIpoptSolver, line 338:\n" << eclass.errormsg << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "error in OSIpoptSolver, line 338:\n" << eclass.errormsg << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         *ipoptErrorMsg = eclass.errormsg;
         throw;
@@ -413,6 +446,7 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
                               Index m, Index nele_jac, Index* iRow, Index *jCol,
                               Number* values)
 {
+    std::ostringstream outStr;
     SparseJacobianMatrix *sparseJacobian;
     if (values == NULL)
     {
@@ -427,8 +461,11 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
         }
         catch(const ErrorClass& eclass)
         {
-#ifdef DEBUG
-            cout << "error in OSIpoptSolver, line 362:\n" << eclass.errormsg << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "error in OSIpoptSolver, line 362:\n" << eclass.errormsg << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             *ipoptErrorMsg =  eclass.errormsg;
             throw;
@@ -456,8 +493,11 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
         }
         catch(const ErrorClass& eclass)
         {
-#ifdef DEBUG
-            cout << "error in OSIpoptSolver, line 386:\n" << eclass.errormsg << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "error in OSIpoptSolver, line 386:\n" << eclass.errormsg << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             *ipoptErrorMsg = eclass.errormsg;
             throw;
@@ -480,6 +520,7 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
                           bool new_lambda, Index nele_hess, Index* iRow,
                           Index* jCol, Number* values)
 {
+    std::ostringstream outStr;
 
 //////
     SparseHessianMatrix *sparseHessian;
@@ -499,7 +540,7 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
             *ipoptErrorMsg = eclass.errormsg;
             throw;
         }
-//		cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
+//        cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
         for(i = 0; i < nele_hess; i++)
         {
             iRow[i] = *(sparseHessian->hessColIdx + i);
@@ -521,8 +562,11 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
         }
         catch(const ErrorClass& eclass)
         {
-#ifdef DEBUG
-            cout << "error in OSIpoptSolver, line 444:\n" << eclass.errormsg << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "error in OSIpoptSolver, line 444:\n" << eclass.errormsg << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             *ipoptErrorMsg = eclass.errormsg;
             delete[]  objMultipliers;
@@ -615,7 +659,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             throw ErrorClass("OSResult error: setInstanceName");
 
         //if(osresult->setJobID( osoption->jobID) != true)
-        //	throw ErrorClass("OSResult error: setJobID");
+        //    throw ErrorClass("OSResult error: setJobID");
 
         // set basic problem parameters
         if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
@@ -677,7 +721,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             /*
             for (Index i = 0; i < n; i++) {
                 rcost[ i] =  os_dtoa_format( z_L[i]);
-            	idx[ i] = i;
+                idx[ i] = i;
              }
             otherIdx = 0;
             osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "varL", "", "Lagrange Multiplier on the Variable Lower Bound",  idx,  rcost,  osinstance->getVariableNumber() );
@@ -781,8 +825,11 @@ void IpoptProblem::finalize_solution(SolverReturn status,
     }
     catch(const ErrorClass& eclass)
     {
-#ifdef DEBUG
-        cout << "error in OSIpoptSolver, line 636:\n" << eclass.errormsg << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "error in OSIpoptSolver, line 636:\n" << eclass.errormsg << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
@@ -838,7 +885,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
 
         if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 )
         {
-//			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
+//            std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
             std::vector<SolverOption*> optionsVector;
             optionsVector = osoption->getSolverOptions( "ipopt",true);
             char *pEnd;
@@ -846,20 +893,20 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             int num_ipopt_options = optionsVector.size();
             for(i = 0; i < num_ipopt_options; i++)
             {
-//				std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
+//                std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
                 if(optionsVector[ i]->type == "numeric" )
                 {
-//					std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+//                    std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
                     app->Options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
                 }
                 else if(optionsVector[ i]->type == "integer" )
                 {
-//					std::cout << "FOUND AN INTEGER OPTION  "  << atoi( optionsVector[ i]->value.c_str() ) << std::endl;
+//                    std::cout << "FOUND AN INTEGER OPTION  "  << atoi( optionsVector[ i]->value.c_str() ) << std::endl;
                     app->Options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
                 }
                 else if(optionsVector[ i]->type == "string" )
                 {
-//					std::cout << "FOUND A STRING OPTION  "  <<  optionsVector[ i]->value.c_str() << std::endl;
+//                    std::cout << "FOUND A STRING OPTION  "  <<  optionsVector[ i]->value.c_str() << std::endl;
                     app->Options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
                 }
             }
@@ -867,7 +914,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        std::cout << "THERE IS AN ERROR" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "THERE IS AN ERROR\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -879,6 +926,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
 
 void IpoptSolver::buildSolverInstance() throw (ErrorClass)
 {
+    std::ostringstream outStr;
     try
     {
 
@@ -889,9 +937,9 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass)
             osinstance = m_osilreader->readOSiL( osil);
         }
 
-	// Can't handle multiobjective problems properly --- especially nonlinear ones
-	if (osinstance->getObjectiveNumber() > 1)
-    		throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
+    // Can't handle multiobjective problems properly --- especially nonlinear ones
+    if (osinstance->getObjectiveNumber() > 1)
+            throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
 
         // Create a new instance of your nlp
         nlp = new IpoptProblem( osinstance, osoption, osresult, ipoptErrorMsg);
@@ -900,10 +948,12 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-#ifdef DEBUG
-        cout << "error in OSIpoptSolver, line 722:\n" << eclass.errormsg << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "error in OSIpoptSolver, line 722:\n" << eclass.errormsg << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-        std::cout << "THERE IS AN ERROR" << std::endl;
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -915,6 +965,8 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass)
 
 void IpoptSolver::solve() throw (ErrorClass)
 {
+    std::ostringstream outStr;
+
     if( this->bCallbuildSolverInstance == false) buildSolverInstance();
     if( this->bSetSolverOptions == false) setSolverOptions();
     try
@@ -933,16 +985,16 @@ void IpoptSolver::solve() throw (ErrorClass)
         // see if we have a linear program
         //if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
         // Intialize the IpoptApplication and process the options
-//		std::cout << "Call Ipopt Initialize" << std::endl;
+//        std::cout << "Call Ipopt Initialize" << std::endl;
         app->Initialize();
-//		std::cout << "Finished Ipopt Initialize" << std::endl;
+//        std::cout << "Finished Ipopt Initialize" << std::endl;
         //nlp->osinstance = this->osinstance;
         // Ask Ipopt to solve the problem
-//		std::cout << "Call Ipopt Optimize" << std::endl;
+//        std::cout << "Call Ipopt Optimize" << std::endl;
         ApplicationReturnStatus status = app->OptimizeTNLP( nlp);
-//		std::cout << "Finish Ipopt Optimize" << std::endl;
+//        std::cout << "Finish Ipopt Optimize" << std::endl;
         osrl = osrlwriter->writeOSrL( osresult);
-//		std::cout << "Finish writing the osrl" << std::endl;
+//        std::cout << "Finish writing the osrl" << std::endl;
         //if (status != Solve_Succeeded) {
         if (status < -2)
         {
@@ -951,8 +1003,11 @@ void IpoptSolver::solve() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-#ifdef DEBUG
-        cout << "error in OSIpoptSolver, line 775:\n" << eclass.errormsg << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "error in OSIpoptSolver, line 775:\n" << eclass.errormsg << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");

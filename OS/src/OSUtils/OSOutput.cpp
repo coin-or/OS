@@ -66,7 +66,7 @@ bool OSOutputChannel::setPrintLevel(ENUM_OUTPUT_AREA area, ENUM_OUTPUT_LEVEL lev
 {
 #ifdef NDEBUG
     if (level > ENUM_OUTPUT_LEVEL_debug)
-        throw Errorclass("Encountered print level not supported in production code.\n Recompile with debug enabled."); 
+        throw ErrorClass("Encountered print level not supported in production code.\n Recompile with debug enabled."); 
 #endif
     printLevel[area] = level;
     return true;
@@ -97,7 +97,7 @@ bool OSOutputChannel::setAllPrintLevels(ENUM_OUTPUT_LEVEL* level, int dim)
     for (int i=0; i < n; i++)
     {
 #ifdef NDEBUG
-        if (level > ENUM_OUTPUT_LEVEL_debug)
+        if (level[i] > ENUM_OUTPUT_LEVEL_debug)
             throw ErrorClass("Encountered print level not supported in production code.\n Recompile with debug enabled."); 
 #endif
         printLevel[i] = level[i];

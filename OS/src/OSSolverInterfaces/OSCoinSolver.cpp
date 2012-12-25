@@ -16,8 +16,6 @@
  */
 
 
-//#define DEBUG
-
 #include "OSCoinSolver.h"
 #include "OSInstance.h"
 #include "OSFileUtil.h"
@@ -59,7 +57,7 @@
 #include "OSParameters.h"
 #include "OSMathUtil.h"
 
-#include<map>
+#include <map>
 
 #include <iostream>
 #ifdef HAVE_CTIME
@@ -71,11 +69,11 @@
 #  error "don't have header file for time"
 # endif
 #endif
+
 using std::cout;
 using std::endl;
 using std::ostringstream;
 
-std::ostringstream outStr;
 
 
 CoinSolver::CoinSolver() :
@@ -141,61 +139,61 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         finish = clock();
         duration = (double) (finish - start) / CLOCKS_PER_SEC;
 
-	// Can't handle multiobjective problems properly --- especially nonlinear ones
-	if (osinstance->getObjectiveNumber() > 1)
-    		throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
+    // Can't handle multiobjective problems properly --- especially nonlinear ones
+    if (osinstance->getObjectiveNumber() > 1)
+            throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
 
        // get the type of solver requested from OSoL string
-		if (sSolverName == "clp")
+        if (sSolverName == "clp")
             osiSolver = new OsiClpSolverInterface();
 
         else if (sSolverName == "cbc")
             osiSolver = new OsiClpSolverInterface();
 
         else if (sSolverName == "vol")
-			#ifdef COIN_HAS_VOL
+            #ifdef COIN_HAS_VOL
                 osiSolver = new OsiVolSolverInterface();
             #else
-			    throw ErrorClass("This OSSolverService was built without solver vol");
+                throw ErrorClass("This OSSolverService was built without solver vol");
             #endif
 
-		else if (sSolverName == "cplex")
+        else if (sSolverName == "cplex")
             #ifdef COIN_HAS_CPX
                 osiSolver = new OsiCpxSolverInterface();
             #else
-    			throw ErrorClass("This OSSolverService was built without solver cplex");
+                throw ErrorClass("This OSSolverService was built without solver cplex");
             #endif
 
-		else if (sSolverName == "glpk")
+        else if (sSolverName == "glpk")
             #ifdef COIN_HAS_GLPK
                 osiSolver = new OsiGlpkSolverInterface();
             #else
-			    throw ErrorClass("This OSSolverService was built without solver glpk");
+                throw ErrorClass("This OSSolverService was built without solver glpk");
             #endif
 
-		else if (sSolverName == "dylp")
+        else if (sSolverName == "dylp")
             #ifdef COIN_HAS_DYLP
                 osiSolver = new OsiDylpSolverInterface();
             #else
-			    throw ErrorClass("This OSSolverService was built without solver dylp");
+                throw ErrorClass("This OSSolverService was built without solver dylp");
             #endif
 
-		else if (sSolverName == "symphony")
+        else if (sSolverName == "symphony")
             #ifdef COIN_HAS_SYMPHONY
                 osiSolver = new OsiSymSolverInterface();
             #else
-			    throw ErrorClass("This OSSolverService was built without solver symphony");
+                throw ErrorClass("This OSSolverService was built without solver symphony");
             #endif
 
-		else if (sSolverName == "")
+        else if (sSolverName == "")
         {       // default solver is Clp in continuous case,
                 // Cbc for an integer program
                 if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ||
-                                      sSolverName.find( "cbc") != std::string::npos	) sSolverName = "cbc";
+                                      sSolverName.find( "cbc") != std::string::npos    ) sSolverName = "cbc";
                 else sSolverName = "clp";
                 osiSolver = new OsiClpSolverInterface();
-		}
-		else
+        }
+        else
                   throw ErrorClass("Solver selected is not supported by this version of OSSolverService");
 
         // first check the various solvers and see if they are of the proper problem type
@@ -258,7 +256,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
             }
             osiSolver->setInteger( intIndex,  numOfIntVars);
 
-			delete[] intIndex;
+            delete[] intIndex;
             intIndex = NULL;
         }
         bCallbuildSolverInstance = true;
@@ -277,6 +275,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
 
 void CoinSolver::setSolverOptions() throw (ErrorClass)
 {
+    std::ostringstream outStr;
 
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "build solver options\n");
@@ -351,7 +350,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
         //set default verbosity to -2
         si->setSymParam("verbosity",   -2);
     }
-#endif	   //symphony end	
+#endif       //symphony end    
     /*
      * end default settings
      *
@@ -475,7 +474,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                 //std::vector<SolverOption*>::iterator optit;
                 //for(optit = optionsVector.begin();  optit != optionsVector.end(); optit++){
 
-                //	if( (*optit)->name == "solve" ) optionsVector.erase( optit);
+                //    if( (*optit)->name == "solve" ) optionsVector.erase( optit);
                 //}
 
 
@@ -555,7 +554,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     si->setSymParam(optionsVector[ i]->name,   optionsVector[ i]->value);
                 }
             }
-#endif	   //symphony end			
+#endif       //symphony end            
 
             //now set initial values
             int n,m,k;
@@ -728,6 +727,7 @@ bool CoinSolver::setCoinPackedMatrix()
 
 void CoinSolver::solve() throw (ErrorClass)
 {
+    std::ostringstream outStr;
     if(osresult != NULL) delete osresult;
     osresult = new OSResult();
     try
@@ -748,9 +748,9 @@ void CoinSolver::solve() throw (ErrorClass)
     if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
         throw ErrorClass("OSResult error: setInstanceName");
     //if(osresult->setJobID( osresultdata->jobID) != true)
-    //	throw ErrorClass("OSResult error: setJobID");
+    //    throw ErrorClass("OSResult error: setJobID");
     //if(osresult->setGeneralMessage( osresultdata->message) != true)
-    //	throw ErrorClass("OSResult error: setGeneralMessage");
+    //    throw ErrorClass("OSResult error: setGeneralMessage");
     // set basic problem parameters
 
     if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
@@ -786,8 +786,8 @@ void CoinSolver::solve() throw (ErrorClass)
                 coinMessages = model.messages();
                 numberOfMessages = coinMessages.numberMessages_;
                 for(int i = 0; i < numberOfMessages - 1; i++){
-                	oneMessage = coinMessages.message_[ i] ;
-                //	std::cout << "ONE MESSAGE = " << oneMessage->message() << std::endl;
+                    oneMessage = coinMessages.message_[ i] ;
+                //    std::cout << "ONE MESSAGE = " << oneMessage->message() << std::endl;
                 }
 
                 generalMessageHandler = model.messageHandler();
@@ -850,8 +850,8 @@ void CoinSolver::solve() throw (ErrorClass)
                 coinMessages = model.messages();
                 numberOfMessages = coinMessages.numberMessages_;
                 for(int i = 0; i < 5; i++){
-                	oneMessage = coinMessages.message_[ i] ;
-                	std::cout << "ONE MESSAGE = " << oneMessage->message() << std::endl;
+                    oneMessage = coinMessages.message_[ i] ;
+                    std::cout << "ONE MESSAGE = " << oneMessage->message() << std::endl;
                 }
                 numberOfMessages = coinMessages.numberMessages_;
                 generalMessageHandler = model.messageHandler();
@@ -1405,32 +1405,24 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
                 for(vit = nonBasicUpper.begin(); vit < nonBasicUpper.end(); vit++)
                 {
-
                     basisIdx[2][ kount++] = *vit;
-
-
                 }
 
                 osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
                 delete[] basisIdx[ 2];
                 nonBasicUpper.clear();
-
             }
 
 
             if(nonBasicLower.size()  > 0)
             {
-
                 kount = 0;
 
                 basisIdx[ 3] = new int[ nonBasicLower.size()];
 
                 for(vit = nonBasicLower.begin(); vit < nonBasicLower.end(); vit++)
                 {
-
                     basisIdx[3][ kount++] = *vit;
-
-
                 }
 
                 osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
@@ -1467,16 +1459,12 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
         if(solver->getNumRows() > 0)
         {
-
             delete[] y;
             y = NULL;
             if( (sSolverName.find( "vol") == std::string::npos) &&
                     (sSolverName.find( "symphony") == std::string::npos) &&
                     (sSolverName.find( "glpk") == std::string::npos) ) delete[] rbasis;
             rbasis = NULL;
-
-
-
         }
 
         delete[] z;
@@ -1505,8 +1493,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
     catch(const ErrorClass& eclass)
     {
-
-
         if(solver->getNumRows() > 0)
         {
             delete[] y;

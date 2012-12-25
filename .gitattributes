@@ -662,7 +662,6 @@ OS/src/OSUtils/OSFileUtil.cpp -text
 OS/src/OSUtils/OSFileUtil.h -text
 OS/src/OSUtils/OSIpReferenced.hpp -text
 OS/src/OSUtils/OSIpSmartPtr.hpp -text
-OS/src/OSUtils/OSIpTypes.hpp -text
 OS/src/OSUtils/OSMathUtil.cpp -text
 OS/src/OSUtils/OSMathUtil.h -text
 OS/src/OSUtils/OSOutput.cpp -text

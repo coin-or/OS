@@ -12,8 +12,7 @@
 #ifndef OSIPREFERENCED_HPP
 #define OSIPREFERENCED_HPP
 
-#include "OSIpTypes.hpp"
-//#include "IpDebug.hpp"
+//#include "OSIpTypes.hpp"
 
 #include <list>
 #include <assert.h>
@@ -177,14 +176,14 @@
       assert(reference_count_ == 0);
     }
 
-    Index ReferenceCount() const;
+    int ReferenceCount() const;
 
     void AddRef(const Referencer* referencer) const;
 
     void ReleaseRef(const Referencer* referencer) const;
 
   private:
-    mutable Index reference_count_;
+    mutable int reference_count_;
 
 #     ifdef REF_DEBUG
 
@@ -195,7 +194,7 @@
 
   /* inline methods */
   inline
-  Index ReferencedObject::ReferenceCount() const
+  int ReferencedObject::ReferenceCount() const
   {
     return reference_count_;
   }
