@@ -178,6 +178,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSCommandLine.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSBase64.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSdtoa.cpp" />
@@ -208,10 +209,12 @@
     <ClCompile Include="..\..\..\src\OSParsers\OSrLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSrLReader.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSrLWriter.cpp" />
+    <ClCompile Include="..\..\..\src\OSUtils\OSOutput.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSParameters.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSStringUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSCommandLine.h" />
     <ClInclude Include="..\..\..\src\OSUtils\OSBase64.h" />
     <ClInclude Include="..\..\..\src\OSConfig.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.h" />
@@ -227,6 +230,8 @@
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSiLReader.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSiLWriter.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSInstance.h" />
+    <ClInclude Include="..\..\..\src\OSUtils\OSIpReferenced.hpp" />
+    <ClInclude Include="..\..\..\src\OSUtils\OSIpSmartPtr.hpp" />
     <ClInclude Include="..\..\..\src\OSUtils\OSMathUtil.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSnLNode.h" />
     <ClInclude Include="..\..\..\src\OSParsers\OSoLParserData.h" />
@@ -240,6 +245,7 @@
     <ClInclude Include="..\..\..\src\OSParsers\OSrLParserData.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSrLReader.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSrLWriter.h" />
+    <ClInclude Include="..\..\..\src\OSUtils\OSOutput.h" />
     <ClInclude Include="..\..\..\src\OSUtils\OSStringUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
