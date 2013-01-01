@@ -5,7 +5,7 @@
  *
  * \remarks
  * Copyright (C) 2012, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -25,6 +25,7 @@
 #include "OSoLReader.h"
 #include "OSnl2OS.h"
 #include "OSOption.h"
+#include "OSOutput.h"
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 
@@ -68,7 +69,7 @@ using std::endl;
 #include <stdlib.h>
 #endif
 
-#define AMPLDEBUG
+
 OSnl2OS::OSnl2OS()
     : osolreader (NULL), osinstance(NULL), osoption(NULL), stub("")
 {
@@ -104,6 +105,8 @@ void OSnl2OS::setOsol(std::string osol)
 
 bool OSnl2OS::readNl(std::string stub)
 {
+    std::ostringstream outStr;
+
     try
     {
         efunc *r_ops_int[N_OPS];
@@ -128,13 +131,16 @@ bool OSnl2OS::readNl(std::string stub)
         pi0 = new real[n_con];
         havepi0 = new char[n_con];
 
-#ifdef AMPLDEBUG
-        cout << "number of nonzeros    = " << nzc     << endl;
-        cout << "number of variables   = " << n_var   << endl;
-        cout << "number of constraints = " << n_con   << endl;
-        cout << "number of objectives  = " << n_obj   << endl;
-        cout << "number of ranges      = " << nranges << endl;
-        cout << "number of equations   = " << n_eqn   << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "number of nonzeros    = " << nzc     << endl;
+        outStr << "number of variables   = " << n_var   << endl;
+        outStr << "number of constraints = " << n_con   << endl;
+        outStr << "number of objectives  = " << n_obj   << endl;
+        outStr << "number of ranges      = " << nranges << endl;
+        outStr << "number of equations   = " << n_eqn   << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         if(N_OPS > 0)
         {
@@ -501,8 +507,10 @@ bool OSnl2OS::createOSObjects()
     int *A_rowstarts = NULL;
     int *A_colptr = NULL;
     double *A_nzelem = NULL;
-    osinstance = new OSInstance();
     int i, j;
+    std::ostringstream outStr;
+
+    osinstance = new OSInstance();
 
     // put in instanceHeader information
     //
@@ -523,9 +531,12 @@ bool OSnl2OS::createOSObjects()
     int upper;
     lower = 0;
     upper = nlvb - nlvbi;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //continuous in an objective and in a constraint
     {
@@ -539,9 +550,12 @@ bool OSnl2OS::createOSObjects()
     lower = nlvb - nlvbi;
     upper = (nlvb - nlvbi) + nlvbi;
     upper = nlvb;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //integer in an objective and in a constraint
     {
@@ -555,9 +569,12 @@ bool OSnl2OS::createOSObjects()
     lower = nlvb;
     upper = nlvb + (nlvc - (nlvb + nlvci)) ;
     upper = nlvc - nlvci;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //continuous just in constraints
     {
@@ -572,9 +589,12 @@ bool OSnl2OS::createOSObjects()
     lower = nlvc - nlvci;
     upper = nlvc - nlvci + nlvci;
     upper = nlvc;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //integer just in constraints
     {
@@ -588,9 +608,12 @@ bool OSnl2OS::createOSObjects()
     lower = nlvc;
     upper = nlvc + ( nlvo - (nlvc + nlvoi) );
     upper = nlvo - nlvoi;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //continuous just in objectives
     {
@@ -604,9 +627,12 @@ bool OSnl2OS::createOSObjects()
     lower = nlvo - nlvoi;
     upper = nlvo - nlvoi + nlvoi;
     upper = nlvo ;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //integer just in objectives
     {
@@ -622,9 +648,12 @@ bool OSnl2OS::createOSObjects()
 
     lower = CoinMax(nlvc, nlvo);
     upper = CoinMax(nlvc, nlvo) + nwv;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //linear arc variables
     {
@@ -639,9 +668,12 @@ bool OSnl2OS::createOSObjects()
     lower = CoinMax(nlvc, nlvo) + nwv;
     upper = CoinMax(nlvc, nlvo) + nwv + (n_var - (CoinMax(nlvc, nlvo) + niv + nbv + nwv) );
     upper = n_var -  niv - nbv;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //other linear
     {
@@ -656,9 +688,12 @@ bool OSnl2OS::createOSObjects()
     lower = n_var -  niv - nbv;
     upper = n_var -  niv - nbv + nbv;
     upper = n_var -  niv ;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //linear binary
     {
@@ -674,9 +709,12 @@ bool OSnl2OS::createOSObjects()
     lower = n_var -  niv;
     upper = n_var -  niv  + niv;
     upper =   n_var;
-#ifdef AMPLDEBUG
-    std::cout << "LOWER = " << lower << std::endl;
-    std::cout << "UPPER = " << upper << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     for(i = lower; i < upper; i++)  //linear integer
     {
@@ -935,19 +973,22 @@ bool OSnl2OS::createOSObjects()
         }
 
 
-#ifdef AMPLDEBUG
-        cout << "A-matrix elements: ";
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "A-matrix elements: ";
         for (int i = 0; i < A_rowstarts[ n_con]; i++)
-            cout << A_nzelem[i] << " ";
-        cout << endl;
-        cout << "A-matrix col index: ";
+            outStr << A_nzelem[i] << " ";
+        outStr << endl;
+        outStr << "A-matrix col index: ";
         for (int i = 0; i < A_rowstarts[ n_con]; i++)
-            cout << A_colptr[i] << " ";
-        cout << endl;
-        cout << "A-matrix rowstart: ";
+            outStr << A_colptr[i] << " ";
+        outStr << endl;
+        outStr << "A-matrix rowstart: ";
         for (int i = 0; i <= n_con; i++)
-            cout << A_rowstarts[i] << " ";
-        cout << endl;
+            outStr << A_rowstarts[i] << " ";
+        outStr << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     }
 
@@ -957,19 +998,22 @@ bool OSnl2OS::createOSObjects()
         int colStart, colEnd, nCoefSqueezed;
         nCoefSqueezed = 0;
     
-#ifdef AMPLDEBUG
-        cout << "A-matrix elements: ";
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "A-matrix elements: ";
         for (int i = 0; i < A_colstarts[ n_var]; i++)
-            cout << A_vals[i] << " ";
-        cout << endl;
-        cout << "A-matrix rowinfo: ";
+            outStr << A_vals[i] << " ";
+        outStr << endl;
+        outStr << "A-matrix rowinfo: ";
         for (int i = 0; i < A_colstarts[ n_var]; i++)
-            cout << A_rownos[i] << " ";
-        cout << endl;
-        cout << "A-matrix colstart: ";
+            outStr << A_rownos[i] << " ";
+        outStr << endl;
+        outStr << "A-matrix colstart: ";
         for (int i = 0; i <= n_var; i++)
-            cout << A_colstarts[i] << " ";
-        cout << endl;
+            outStr << A_colstarts[i] << " ";
+        outStr << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
         colEnd = 0;
@@ -977,8 +1021,11 @@ bool OSnl2OS::createOSObjects()
         {
             colStart = colEnd;
             colEnd   = A_colstarts[i+1];
-#ifdef AMPLDEBUG
-            cout << "col " << i << " from " << colStart << " to " << colEnd - 1 << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "col " << i << " from " << colStart << " to " << colEnd - 1 << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             for (j = colStart; j < colEnd; j++)
             {
@@ -989,8 +1036,11 @@ bool OSnl2OS::createOSObjects()
                 }
                 else
                 {
-#ifdef AMPLDEBUG
-                    cout << "squeeze out element " << j << endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "squeeze out element " << j << endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                     nCoefSqueezed++;
                 }
@@ -998,20 +1048,23 @@ bool OSnl2OS::createOSObjects()
             A_colstarts[i+1] = A_colstarts[i+1] - nCoefSqueezed;
         }
 
-#ifdef AMPLDEBUG
-        cout << "A-matrix elements: ";
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "A-matrix elements: ";
         for (i = 0; i < A_colstarts[ n_var]; i++)
-            cout << A_vals[i] << " ";
-        cout << endl;
-        cout << "A-matrix rowinfo: ";
+            outStr << A_vals[i] << " ";
+        outStr << endl;
+        outStr << "A-matrix rowinfo: ";
         for (i = 0; i < A_colstarts[ n_var]; i++)
-            cout << A_rownos[i] << " ";
-        cout << endl;
-        cout << "A-matrix colstart: ";
+            outStr << A_rownos[i] << " ";
+        outStr << endl;
+        outStr << "A-matrix colstart: ";
         for (i = 0; i <= n_var; i++)
-            cout << A_colstarts[i] << " ";
-        cout << endl;
-        cout << "A-matrix nonzeroes: " << A_colstarts[ n_var] << "; nsqueezed: " << nCoefSqueezed << endl;
+            outStr << A_colstarts[i] << " ";
+        outStr << endl;
+        outStr << "A-matrix nonzeroes: " << A_colstarts[ n_var] << "; nsqueezed: " << nCoefSqueezed << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
         if(A_colstarts[ n_var] > 0)
@@ -1098,8 +1151,11 @@ bool OSnl2OS::createOSObjects()
             OtherVariableOption* varopt;
             for (d=asl->i.suffixes[suffixType]; d; d=d->next)
             {
-#ifdef AMPLDEBUG
-                std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 // Deal with special cases: basis information, special ordered sets (?) and branching weights (?)
@@ -1126,11 +1182,14 @@ bool OSnl2OS::createOSObjects()
                     // allocate space
                     int* IBS;
 
-#ifdef AMPLDEBUG
-                    std::cout << "Original basis (in AMPL codes):";
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "Original basis (in AMPL codes):";
                     for (int k=0; k<n_var; k++)
-                        std::cout << "  " << d->u.i[k];
-                    std::cout << std::endl;
+                        outStr << "  " << d->u.i[k];
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
  
                     // if OSoL file has a basis, merge values by overwriting .nl file info 
@@ -1152,19 +1211,25 @@ bool OSnl2OS::createOSObjects()
                                     d->u.i[IBS[k]] = i;
                                 delete[] IBS;
                             }
-#ifdef AMPLDEBUG
-                            std::cout << "After processing state " << i << ":";
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "After processing state " << i << ":";
                             for (int k=0; k<n_var; k++)
-                                std::cout << "  " << d->u.i[k];
-                            std::cout << std::endl;
+                                outStr << "  " << d->u.i[k];
+                            outStr << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                         }
                     }
-#ifdef AMPLDEBUG
-                    std::cout << "Merged basis (in AMPL codes):";
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "Merged basis (in AMPL codes):";
                     for (int k=0; k<n_var; k++)
-                        std::cout << "  " << d->u.i[k];
-                    std::cout << std::endl;
+                        outStr << "  " << d->u.i[k];
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                     // count the number of entries
@@ -1325,8 +1390,11 @@ bool OSnl2OS::createOSObjects()
             OtherConstraintOption* conopt;
             for (d=asl->i.suffixes[suffixType]; d; d=d->next)
             {
-#ifdef AMPLDEBUG
-                std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 // Deal with special cases first: basis information and branching weights
                 if (strcmp(d->sufname,"sstatus") == 0) //(d->sufname == "sstatus")
@@ -1353,11 +1421,14 @@ bool OSnl2OS::createOSObjects()
                     // allocate space
                     int* IBS;
  
-#ifdef AMPLDEBUG
-                    std::cout << "Original basis (in AMPL codes):";
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "Original basis (in AMPL codes):";
                     for (int k=0; k<n_con; k++)
-                        std::cout << "  " << d->u.i[k];
-                    std::cout << std::endl;
+                        outStr << "  " << d->u.i[k];
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                     // if OSoL file has a basis, merge values by overwriting .nl file info 
                     if (osoption != NULL &&
@@ -1379,19 +1450,25 @@ bool OSnl2OS::createOSObjects()
                                     d->u.i[IBS[k]] = i;
                                 delete[] IBS;
                             }
-#ifdef AMPLDEBUG
-                            std::cout << "After processing state " << i << ":";
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "After processing state " << i << ":";
                             for (int k=0; k<n_con; k++)
-                                std::cout << "  " << d->u.i[k];
-                            std::cout << std::endl;
+                                outStr << "  " << d->u.i[k];
+                            outStr << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                         }
                     }
-#ifdef AMPLDEBUG
-                    std::cout << "Merged basis (in AMPL codes):";
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "Merged basis (in AMPL codes):";
                     for (int k=0; k<n_con; k++)
-                        std::cout << "  " << d->u.i[k];
-                    std::cout << std::endl;
+                        outStr << "  " << d->u.i[k];
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                     // count the number of entries
@@ -1552,8 +1629,11 @@ bool OSnl2OS::createOSObjects()
             OtherObjectiveOption* objopt;
             for (d=asl->i.suffixes[suffixType]; d; d=d->next)
             {
-#ifdef AMPLDEBUG
-                std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 // allocate space
@@ -1580,8 +1660,8 @@ bool OSnl2OS::createOSObjects()
                 {
                     OtherObjectiveOption* otherOption;
                     otherOption = osoption->getOtherObjectiveOption(iopt);
-#ifdef AMPLDEBUG
-                    std::cout << "Merge data " << std::endl;
+#ifndef NDEBUG
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, "Merge data\n");
 #endif
                     for (int i=0; i < otherOption->numberOfObj; i++)
                     {
@@ -1667,8 +1747,11 @@ bool OSnl2OS::createOSObjects()
             optdesc = "transferred from .nl file";
             for (d=asl->i.suffixes[suffixType]; d; d=d->next)
             {
-#ifdef AMPLDEBUG
-                std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 if (d->kind & 4) // bit-wise mask to distinguish real from integer
@@ -1788,8 +1871,8 @@ bool OSnl2OS::createOSObjects()
     //special ordered sets, branching weights, branching group weights
     //initial objective values: .val
 
-#ifdef AMPLDEBUG
-    std::cout << "At end of OSnl2OS" << std::endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "At end of OSnl2OS\n");
 #endif
     }// end try
 
@@ -1798,20 +1881,19 @@ bool OSnl2OS::createOSObjects()
         // garbage collection etc.
     }
 
-#ifdef AMPLDEBUG
+#ifndef NDEBUG
     OSiLWriter osilwriter;
-    std::cout << "WRITE THE INSTANCE" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "WRITE THE INSTANCE\n");
     osilwriter.m_bWhiteSpace = true;
-    std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
-    std::cout << "DONE WRITE THE INSTANCE" << std::endl;
-
-    std::cout << osinstance->printModel() << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osilwriter.writeOSiL( osinstance));
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "DONE WRITING THE INSTANCE\n");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osinstance->printModel());
 
     OSoLWriter osolwriter;
-    std::cout << "WRITE THE OPTIONS" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "WRITE THE OPTIONS\n");
  //    osilwriter.m_bWhiteSpace = true;
-    std::cout << osolwriter.writeOSoL( osoption) << std::endl;
-    std::cout << "DONE WRITE THE OPTIONS" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osolwriter.writeOSoL( osoption));
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "DONE WRITING THE OPTIONS\n");
 #endif
    
     return true;

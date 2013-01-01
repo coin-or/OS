@@ -4,7 +4,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in OS root directory for terms.
@@ -70,6 +70,7 @@
 #include "OSInstance.h"
 #include "OSOption.h"
 #include "OSResult.h"
+#include "OSOutput.h"
 
 #include "OSDefaultSolver.h"
 #include "OSCoinSolver.h"
@@ -141,12 +142,11 @@ void getAmplClientOptions(char *options, std::string *solverName,
 
 
 
-
-
 int main(int argc, char **argv)
 {
     WindowsErrorPopupBlocker();
     char *stub;
+    std::ostringstream outStr;
 
     /*	Parse the options (passed through ASL as the string OSAmplClient_options)
      *
@@ -167,16 +167,24 @@ int main(int argc, char **argv)
     std::string serviceLocation = "";
     std::string nlfile = "";
 
-//    cout << "Here is the command line:";
-//    for (int i=0; i<argc; i++) cout << " " << argv[i];
-//    cout << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "Here is the command line:";
+    for (int i=0; i<argc; i++) outStr << " " << argv[i];
+    outStr << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
 
     stub = argv[1];
 
     amplclient_options = getenv("OSAmplClient_options");
     if( amplclient_options != NULL)
     {
-        cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
+        outStr.str("");
+        outStr.clear();
+        outStr << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
         getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
     }
 
@@ -223,7 +231,10 @@ int main(int argc, char **argv)
     }
     catch(const ErrorClass& eclass)
     {
-        std::cout << eclass.errormsg << std::endl;
+        outStr.str("");
+        outStr.clear();
+        outStr << "Error detected: " << eclass.errormsg << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, outStr.str());
         return 0;
     }
     //std::cout << " return from  nl2OS" << std::endl;
@@ -298,8 +309,11 @@ int main(int argc, char **argv)
             ///
             // we should be pointing to the start of the address
             osagent = new OSSolverAgent( serviceLocation);
-            cout << "Place remote synchronous call: " + serviceLocation << endl << endl << endl;
-            //cout << osol << endl;
+            outStr.str("");
+            outStr.clear();
+            outStr << "Place remote synchronous call: " << serviceLocation << endl << endl << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
+
             osrl = osagent->solve(osil, osol);
             if (osrl.size() == 0) throw ErrorClass("Nothing was returned from the server, please check service address");
             delete osilwriter;
@@ -312,7 +326,7 @@ int main(int argc, char **argv)
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
-        std::cout  << osrl << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
 //        osrl = " ";
 //        write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
 
@@ -348,13 +362,16 @@ int main(int argc, char **argv)
         }
         else // there was an error
         {
-            std::cout  << osrl << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
             writeOK = solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
         }
     }
     catch(const ErrorClass& eclass)
     {
-        cout << "There was an error parsing the OSrL string" << endl << eclass.errormsg << endl << endl;
+        outStr.str("");
+        outStr.clear();
+        outStr << "There was an error parsing the OSrL string" << endl << eclass.errormsg << endl << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());
     }
 
     if (solverType != NULL)
@@ -382,6 +399,8 @@ int main(int argc, char **argv)
 void getAmplClientOptions(char *amplclient_options, std::string *solverName,
                           std::string *solverOptions, std::string *serviceLocation)
 {
+    std::ostringstream outStr;
+
     // initialize the OS command line structure
     OSCommandLine *oscommandline = new OSCommandLine();
 
@@ -407,7 +426,10 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
     }//end try
     catch(const ErrorClass& eclass)
     {
-        cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
+        outStr.str("");
+        outStr.clear();
+        outStr << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());
         throw ErrorClass( eclass.errormsg) ;
     }
 }//getAmplClientOptions

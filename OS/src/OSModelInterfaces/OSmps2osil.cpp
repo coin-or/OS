@@ -4,8 +4,8 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -14,6 +14,7 @@
 
 
 #include "OSmps2osil.h"
+#include "OSOutput.h"
 #include <iostream>
 
 
@@ -30,6 +31,9 @@ OSmps2osil::OSmps2osil( std::string mpsfilename)
 
 OSmps2osil::~OSmps2osil()
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, "now delete m_MpsData\n");
+#endif
     delete m_MpsData;
     m_MpsData = NULL;
     delete m_CoinPackedMatrix;
@@ -40,9 +44,6 @@ OSmps2osil::~OSmps2osil()
     osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = NULL;
     delete osinstance;
     osinstance = NULL;
-#ifdef DEBUG
-    cout << "now delete m_MpsData" << endl;
-#endif
     //delete m_MpsData;
 
 } // end destructor

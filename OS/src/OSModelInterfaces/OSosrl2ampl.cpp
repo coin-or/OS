@@ -5,7 +5,7 @@
  *
  * \remarks
  * Copyright (C) 2012, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, and the University of Chicago.
+ * and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -26,6 +26,7 @@
 #include "OSResult.h"
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
+#include "OSOutput.h"
 
 #include "CoinHelperFunctions.hpp"
 
@@ -60,10 +61,6 @@ using std::endl;
 #include <stdlib.h>
 #endif
 
-#ifdef _DEBUG
-# define DEBUG_OSRL2AMPL
-#endif
-
 
 OSosrl2ampl::OSosrl2ampl()
 {
@@ -77,18 +74,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
 {
     OSrLReader *osrlreader = NULL;
     OSResult   *osresult;
-
-#ifdef _DEBUG
-std::cout << "_DEBUG is defined" << std::endl << std::endl;
-#else
-std::cout << "_DEBUG NOT defined" << std::endl << std::endl;
-#endif
-
-#ifdef DEBUG_OSRL2AMPL
-std::cout << "DEBUG_OSRL2AMPL is defined" << std::endl << std::endl;
-#else
-std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
-#endif
+    std::ostringstream outStr;
 
     if (osrl == "")
     {
@@ -97,7 +83,12 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
     }
     else
     {
-        std::cout << std::endl << osrl << std::endl << std::endl << std::endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << std::endl << osrl << std::endl << std::endl << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
 
         double *x;
         double *y;
@@ -205,8 +196,11 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                 s.copy(suftab[k].name, s.size(), 0);
                 suftab[k].name[s.size()] = '\0';
 
-#ifdef DEBUG_OSRL2AMPL
-                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 suftab[k].table  = NULL;
@@ -220,8 +214,11 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                 s.copy(suftab[k].name, s.size(), 0);
                 suftab[k].name[s.size()] = '\0';
 
-#ifdef DEBUG_OSRL2AMPL
-                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 suftab[k].table  = NULL;
@@ -235,8 +232,11 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                 s.copy(suftab[k].name, s.size(), 0);
                 suftab[k].name[s.size()] = '\0';
 
-#ifdef DEBUG_OSRL2AMPL
-                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 suftab[k].table  = NULL;
@@ -250,8 +250,11 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                 s.copy(suftab[k].name, s.size(), 0);
                 suftab[k].name[s.size()] = '\0';
 
-#ifdef DEBUG_OSRL2AMPL
-                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 suftab[k].table  = NULL;
@@ -266,8 +269,11 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                 s.copy(suftab[k].name, s.size(), 0);
                 suftab[k].name[s.size()] = '\0';
 
-#ifdef DEBUG_OSRL2AMPL
-                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 suftab[k].table  = NULL;
@@ -275,9 +281,12 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                 suftab[k].nextra = 1;
             }
 
-#ifdef DEBUG_OSRL2AMPL
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
             for (i=0; i < nSuffixes; i++)
-                std::cout << i << ": suffix " << suftab[i].name << " of kind " << suftab[i].kind << std::endl; 
+                outStr << i << ": suffix " << suftab[i].name << " of kind " << suftab[i].kind << std::endl; 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
             // make sure to inform AMPL of the suffixes you want to send back
@@ -314,9 +323,12 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                     else if (n > 0)
                     {
 
-#ifdef DEBUG_OSRL2AMPL
-                        std::cout << "found variable suffix " << osresult->getOtherVariableResultName(0, i) 
-                                  << " of type " << osresult->getOtherVariableResultArrayType(0, i) << std::endl;
+#ifndef NDEBUG
+                        outStr.str("");
+                        outStr.clear();
+                        outStr << "found variable suffix " << osresult->getOtherVariableResultName(0, i) 
+                               << " of type " << osresult->getOtherVariableResultArrayType(0, i) << std::endl;
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                         if ( (osresult->getOtherVariableResultArrayType(0, i) == "real")    || 
@@ -326,11 +338,14 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                             rData[iSuf] = new double[n];
                             for (int k=0; k<n; k++)
                                 rData[iSuf][k] = os_strtod(otherVar[k].c_str(), NULL);
-#ifdef DEBUG_OSRL2AMPL
-                            std::cout << "values (real): ";
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "values (real): ";
                             for (int k=0; k < n; k++)
-                                std::cout << rData[iSuf][k] << " ";
-                            std::cout << std::endl << std::endl;
+                                outStr << rData[iSuf][k] << " ";
+                            outStr << std::endl << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
 
                             suf_rput((osresult->getOtherVariableResultName(0, i)).c_str(), ASL_Sufkind_var, rData[iSuf]);
@@ -340,11 +355,14 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                             iData[iSuf] = new int[n];
                             for (int k=0; k<n; k++)
                                 iData[iSuf][k] = atoi(otherVar[k].c_str());
-#ifdef DEBUG_OSRL2AMPL
-                            std::cout << "values (integer): ";
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "values (integer): ";
                             for (int k=0; k < n; k++)
-                                std::cout << iData[iSuf][k] << " ";
-                            std::cout << std::endl << std::endl;
+                                outStr << iData[iSuf][k] << " ";
+                            outStr << std::endl << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                             suf_iput((osresult->getOtherVariableResultName(0, i)).c_str(), ASL_Sufkind_var, iData[iSuf]);
 //                            delete[] ivalues; ivalues = NULL;                            
@@ -367,13 +385,16 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                         throw ErrorClass("unspecified error in routine getOtherObjectiveResultArrayDense()");
                     else if (n > 0)
                     {
-#ifdef DEBUG_OSRL2AMPL
-                        std::cout << "found objective suffix " << osresult->getOtherObjectiveResultName(0, i) 
-                                  << " of type " << osresult->getOtherObjectiveResultArrayType(0, i) << std::endl;
-                        std::cout << "retrieved these values:";
+#ifndef NDEBUG
+                        outStr.str("");
+                        outStr.clear();
+                        outStr << "found objective suffix " << osresult->getOtherObjectiveResultName(0, i) 
+                               << " of type " << osresult->getOtherObjectiveResultArrayType(0, i) << std::endl;
+                        outStr << "retrieved these values:";
                         for (int k=0; k<n; k++)
-                            std::cout << " " << otherObj[k];
-                        std::cout << std::endl; 
+                            outStr << " " << otherObj[k];
+                        outStr << std::endl; 
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                         if ( (osresult->getOtherObjectiveResultArrayType(0, i) == "real")    || 
@@ -383,11 +404,14 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                             rData[iSuf] = new double[n];
                             for (int k=0; k<n; k++)
                                 rData[iSuf][k] = os_strtod(otherObj[k].c_str(), NULL);
-#ifdef DEBUG_OSRL2AMPL
-                            std::cout << "values (real): ";
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "values (real): ";
                             for (int k=0; k < n; k++)
-                                std::cout << rData[iSuf][k] << " ";
-                            std::cout << std::endl << std::endl;
+                                outStr << rData[iSuf][k] << " ";
+                            outStr << std::endl << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                             suf_rput((osresult->getOtherObjectiveResultName(0, i)).c_str(), ASL_Sufkind_obj, rData[iSuf]);
 //                            delete[] rvalues; rvalues = NULL;                            
@@ -397,11 +421,14 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                             iData[iSuf] = new int[n];
                             for (int k=0; k<n; k++)
                                 iData[iSuf][k] = atoi(otherObj[k].c_str());
-#ifdef DEBUG_OSRL2AMPL
-                            std::cout << "values (integer): ";
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "values (integer): ";
                             for (int k=0; k < n; k++)
-                                std::cout << iData[iSuf][k] << " ";
-                            std::cout << std::endl << std::endl;
+                                outStr << iData[iSuf][k] << " ";
+                            outStr << std::endl << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                             suf_iput((osresult->getOtherObjectiveResultName(0, i)).c_str(), ASL_Sufkind_obj, iData[iSuf]);
 //                            delete[] ivalues; ivalues = NULL;                            
@@ -424,9 +451,12 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                         throw ErrorClass("unspecified error in routine getOtherConstraintResultArrayDense()");
                     else if (n > 0)
                     {
-#ifdef DEBUG_OSRL2AMPL
-                        std::cout << "found constraint suffix " << osresult->getOtherConstraintResultName(0, i)
-                                  << " of type " << osresult->getOtherConstraintResultArrayType(0, i) << std::endl;
+#ifndef NDEBUG
+                        outStr.str("");
+                        outStr.clear();
+                        outStr << "found constraint suffix " << osresult->getOtherConstraintResultName(0, i)
+                               << " of type " << osresult->getOtherConstraintResultArrayType(0, i) << std::endl;
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                         if ( (osresult->getOtherConstraintResultArrayType(0, i) == "real")    || 
                              (osresult->getOtherConstraintResultArrayType(0, i) == "double")  || 
@@ -435,11 +465,14 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                             rData[iSuf] = new double[n];
                             for (int k=0; k<n; k++)
                                 rData[iSuf][k] = os_strtod(otherCon[k].c_str(), NULL);
-#ifdef DEBUG_OSRL2AMPL
-                            std::cout << "values (real): ";
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "values (real): ";
                             for (int k=0; k < n; k++)
-                                std::cout << rData[iSuf][k] << " ";
-                            std::cout << std::endl << std::endl;
+                                outStr << rData[iSuf][k] << " ";
+                            outStr << std::endl << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                             suf_rput((osresult->getOtherConstraintResultName(0, i)).c_str(), ASL_Sufkind_con, rData[iSuf]);
 //                            delete[] rvalues; rvalues = NULL;                            
@@ -449,11 +482,14 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                             iData[iSuf] = new int[n];
                             for (int k=0; k<n; k++)
                                 iData[iSuf][k] = atoi(otherCon[k].c_str());
-#ifdef DEBUG_OSRL2AMPL
-                            std::cout << "values (integer): ";
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "values (integer): ";
                             for (int k=0; k < n; k++)
-                                std::cout << iData[iSuf][k] << " ";
-                            std::cout << std::endl << std::endl;
+                                outStr << iData[iSuf][k] << " ";
+                            outStr << std::endl << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                             suf_iput((osresult->getOtherConstraintResultName(0, i)).c_str(), ASL_Sufkind_con, iData[iSuf]);
 //                            delete[] ivalues; ivalues = NULL;                            
@@ -487,11 +523,14 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                 {
                     for (i=0; i<numVars; i++)
                         iData[iSuf][i] = basCode[iData[iSuf][i]];
-#ifdef DEBUG_OSRL2AMPL
-                            std::cout << "primal basic: ";
-                            for (int k=0; k < numVars; k++)
-                                std::cout << iData[iSuf][k] << " ";
-                            std::cout << std::endl << std::endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "primal basic: ";
+                    for (int k=0; k < numVars; k++)
+                        outStr << iData[iSuf][k] << " ";
+                    outStr << std::endl << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                     suf_iput("sstatus", ASL_Sufkind_var, iData[iSuf]);
                 }
@@ -507,11 +546,14 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
                 {
                     for (i=0; i<numCons; i++)
                         iData[iSuf][i] = basCode[iData[iSuf][i]];
-#ifdef DEBUG_OSRL2AMPL
-                            std::cout << "dual basic: ";
-                            for (int k=0; k < numCons; k++)
-                                std::cout << iData[iSuf][k] << " ";
-                            std::cout << std::endl << std::endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "dual basic: ";
+                    for (int k=0; k < numCons; k++)
+                        outStr << iData[iSuf][k] << " ";
+                    outStr << std::endl << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                     suf_iput("sstatus", ASL_Sufkind_con, iData[iSuf]);
                 }
@@ -646,7 +688,10 @@ std::cout << "DEBUG_OSRL2AMPL NOT defined" << std::endl << std::endl;
         }
         catch(const ErrorClass& eclass)
         {
-            std::cout << "There was an error: " + eclass.errormsg << std::endl;
+            outStr.str("");
+            outStr.clear();
+            outStr << "There was an error: " + eclass.errormsg << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_error, outStr.str());
             if (x != NULL) delete [] x; x = NULL;
             if (y != NULL) delete [] y; y = NULL;
             if (otherVar != NULL) delete [] otherVar; otherVar = NULL;

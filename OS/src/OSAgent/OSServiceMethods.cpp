@@ -79,28 +79,27 @@ using std::ostringstream;
 using std::string;
 using std::map;
 
-#define DEBUG_CL_INTERFACE
 
 OSServiceMethods::OSServiceMethods(): resultString("")
 {
-#ifdef DEBUG_OSSERVICEMETHODS
-    cout << "Inside the OSServiceMethods Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, "Inside the OSServiceMethods Constructor");
 #endif
 }//end default OSServiceMethods constructor
 
 
 OSServiceMethods::~OSServiceMethods()
 {
-#ifdef DEBUG_OSSERVICEMETHODS
-    cout << "Inside the OSServiceMethods Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, "Inside the OSServiceMethods Destructor");
 #endif
 }// end OSServiceMethods destructor
 
 
 OSServiceMethods::OSServiceMethods(OSCommandLine *oscommandline): resultString("") 
 {
-#ifdef DEBUG_OSSERVICEMETHODS
-    cout << "Inside the OSServiceMethods Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, "Inside the OSServiceMethods Constructor");
 #endif
 
     FileUtil   *fileUtil   = NULL;
@@ -437,6 +436,7 @@ void getOSiLFromNl(OSCommandLine *oscommandline)
 
 void getOSiLFromGams(OSCommandLine *oscommandline)
 {
+    std::ostringstream outStr;
     try
     {
 #ifdef COIN_HAS_GAMSIO
@@ -465,7 +465,10 @@ void getOSiLFromGams(OSCommandLine *oscommandline)
     }
     catch (const ErrorClass& eclass)
     {
-        std::cout << eclass.errormsg << std::endl;
+        outStr.str("");
+        outStr.clear();
+        outStr << eclass.errormsg << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_error, outStr.str());
         throw ErrorClass(eclass.errormsg);
     }
 }//getOSiLFromGams
@@ -473,6 +476,7 @@ void getOSiLFromGams(OSCommandLine *oscommandline)
 
 void getOSiLFromMps(OSCommandLine *oscommandline)
 {
+    std::ostringstream outStr;
     try
     {
         OSmps2osil *mps2osil = NULL;
@@ -488,7 +492,10 @@ void getOSiLFromMps(OSCommandLine *oscommandline)
     }
     catch (const ErrorClass& eclass)
     {
-        std::cout << eclass.errormsg << std::endl;
+        outStr.str("");
+        outStr.clear();
+        outStr << eclass.errormsg << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_error, outStr.str());
         throw ErrorClass(eclass.errormsg);
     }
 
