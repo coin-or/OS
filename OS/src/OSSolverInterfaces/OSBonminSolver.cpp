@@ -15,13 +15,11 @@
  *
  */
 
-//#define DEBUG
-
 #include <iostream>
-
 
 #include "OSBonminSolver.h"
 #include "OSGeneral.h"
+#include "OSOutput.h"
 #include "OSParameters.h"
 #include "OSMathUtil.h"
 #include "CoinFinite.hpp"
@@ -47,8 +45,8 @@ BonminSolver::BonminSolver()
 
 BonminSolver::~BonminSolver()
 {
-#ifdef DEBUG
-    cout << "inside BonminSolver destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "inside BonminSolver destructor\n");
 #endif
     if(m_osilreader != NULL) delete m_osilreader;
     m_osilreader = NULL;
@@ -63,11 +61,10 @@ BonminSolver::~BonminSolver()
         osresult = NULL;
         //cout << "DELETING OS RESULT" << endl;
     }
-#ifdef DEBUG
-    cout << "leaving BonminSolver destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "leaving BonminSolver destructor\n");
 #endif
 }
-
 
 
 bool BonminProblem::get_variables_types(Index n, VariableType* var_types)
@@ -107,7 +104,8 @@ bool BonminProblem::get_variables_types(Index n, VariableType* var_types)
 
 bool BonminProblem::get_variables_linearity(Index n, Ipopt::TNLP::LinearityType* var_types)
 {
-    std::cout << "Initialize Nonlinear Structures" << std::endl;
+    std::ostringstream outStr;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "Initialize Nonlinear Structures\n");
     try
     {
         osinstance->initForAlgDiff( );
@@ -137,19 +135,22 @@ bool BonminProblem::get_variables_linearity(Index n, Ipopt::TNLP::LinearityType*
      * iterate through and get an index of all variables that
      * are in <nonlinearExpressions> element
      */
+    outStr.str("");
+    outStr.clear();
     for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap != varIndexMap.end(); ++posVarIndexMap)
     {
-        std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
+        outStr <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
         var_types[ posVarIndexMap->first] = Ipopt::TNLP::NON_LINEAR;
     }
-    std::cout << "Number of nonlinear variables =  " << varIndexMap.size() << std::endl;
+    outStr << "Number of nonlinear variables =  " << varIndexMap.size() << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
 
     return true;
 }
 
 bool BonminProblem::get_constraints_linearity(Index m, Ipopt::TNLP::LinearityType* const_types)
 {
-
+    std::ostringstream outStr;
     int i;
 
     for(i  = 0; i < m; i++)
@@ -157,21 +158,19 @@ bool BonminProblem::get_constraints_linearity(Index m, Ipopt::TNLP::LinearityTyp
         const_types[ i] = Ipopt::TNLP::LINEAR;
     }
 
-
     int mm = osinstance->getNumberOfNonlinearExpressionTreeModIndexes();
 
-
-
+    outStr.str("");
+    outStr.clear();
     for(i = 0; i < mm; i++)
     {
         if(osinstance->getNonlinearExpressionTreeModIndexes()[ i] >= 0)
         {
-            std::cout << osinstance->getNonlinearExpressionTreeModIndexes()[ i] << std::endl;
+            outStr << osinstance->getNonlinearExpressionTreeModIndexes()[ i] << std::endl;
             const_types[ osinstance->getNonlinearExpressionTreeModIndexes()[ i] ] = Ipopt::TNLP::NON_LINEAR;
-
         }
-
     }
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
 
     return true;
 }
@@ -180,14 +179,18 @@ bool BonminProblem::get_constraints_linearity(Index m, Ipopt::TNLP::LinearityTyp
 bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                                  Index& nnz_h_lag, TNLP::IndexStyleEnum& index_style)
 {
+    std::ostringstream outStr;
     //if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");
     // number of variables
     n = osinstance->getVariableNumber();
     // number of constraints
     m = osinstance->getConstraintNumber();
-#ifdef DEBUG
-    cout << "Bonmin number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
-    cout << "Bonmin number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "Bonmin number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
+    outStr << "Bonmin number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     try
     {
@@ -214,14 +217,17 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
     }
     //std::cout << "Done calling sparse jacobian" << std::endl;
     nnz_jac_g = sparseJacobian->valueSize;
-#ifdef DEBUG
-    cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     // nonzeros in upper hessian
 
     if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) )
     {
-        cout << "This is a linear program"  << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_warning, "This is a linear program\n");
         nnz_h_lag = 0;
     }
     else
@@ -231,8 +237,11 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
         //std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
         nnz_h_lag = sparseHessian->hessDimension;
     }
-#ifdef DEBUG
-    cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     // use the C style indexing (0-based)
     index_style = TNLP::C_STYLE;
@@ -244,6 +253,7 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
                                      Index m, Number* g_l, Number* g_u)
 {
+    std::ostringstream outStr;
     int i;
 
     double * mdVarLB = osinstance->getVariableLowerBounds();
@@ -255,9 +265,12 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
     {
         x_l[ i] = mdVarLB[ i];
         x_u[ i] = mdVarUB[ i];
-#ifdef DEBUG
-        cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
-        cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
+        outStr << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     }
     // Bonmin interprets any number greater than nlp_upper_bound_inf as
@@ -274,9 +287,12 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
     {
         g_l[ i] = mdConLB[ i];
         g_u[ i] = mdConUB[ i];
-#ifdef DEBUG
-        cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
-        cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
+        outStr << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
     }
     return true;
@@ -288,6 +304,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
                                        bool init_z, Number* z_L, Number* z_U, Index m, bool init_lambda,
                                        Number* lambda)
 {
+    std::ostringstream outStr;
     // Here, we assume we only have starting values for x, if you code
     // your own NLP, you can provide starting values for the dual variables
     // if you wish
@@ -297,28 +314,36 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
     int i, m1, n1;
 
 
-#ifdef DEBUG
-    cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, 
+            "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 #endif
 
     //now set initial values
-#ifdef DEBUG
-    cout << "get number of initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, 
+            "get number of initial values !!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 #endif
     int k;
     if (osoption != NULL)
         m1 = osoption->getNumberOfInitVarValues();
     else
         m1 = 0;
-#ifdef DEBUG
-    cout << "number of variables initialed: " << m1 << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "number of variables initialed: " << m1 << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     n1 = osinstance->getVariableNumber();
     bool* initialed;
     initialed = new bool[n1];
-#ifdef DEBUG
-    cout << "number of variables in total: " << n1 << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "number of variables in total: " << n1 << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
 
@@ -327,13 +352,13 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 
     if (m1 > 0)
     {
-#ifdef DEBUG
-        cout << "get initial values " << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "get initial values\n");
 #endif
 
         InitVarValue**  initVarVector = osoption->getInitVarValuesSparse();
-#ifdef DEBUG
-        cout << "done " << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "done\n");
 #endif
 
         double initval;
@@ -369,8 +394,8 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
         }
         catch(const ErrorClass& eclass)
         {
-            cout << "Error in BonminProblem::get_starting_point (OSBonminSolver.cpp)";
-            cout << endl << endl << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, 
+                "Error in BonminProblem::get_starting_point (OSBonminSolver.cpp)\n\n\n");
         }
     }  //  end if (m1 > 0)
 
@@ -399,12 +424,16 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
             else
                 x[k] = osinstance->instanceData->variables->var[k]->ub;
     }
+
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
     for(i = 0; i < n1; i++)
     {
-#ifdef DEBUG
-        std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
-#endif
+        outStr << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
     }
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
 
     osinstance->calculateAllObjectiveFunctionValues( x, true);
     delete[] initialed;
@@ -640,22 +669,23 @@ bool BonminProblem::get_scaling_parameters(Number& obj_scaling,
 void BonminProblem::finalize_solution(TMINLP::SolverReturn status_,
                                       Index n, const Number* x, Number obj_value)
 {
+    std::ostringstream outStr;
 
     status = status_;
-#ifdef DEBUG
-    std::cout << "FINALIZE OBJ SOLUTION VALUE = " << obj_value << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "FINALIZE OBJ SOLUTION VALUE = " << obj_value << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
 }
-
-
 
 
 void BonminSolver::buildSolverInstance() throw (ErrorClass)
 {
     try
     {
-
         if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
         if(osinstance == NULL)
         {
@@ -675,7 +705,7 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        std::cout << "THERE IS AN ERROR" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "THERE IS AN ERROR\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -687,6 +717,7 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass)
 
 void BonminSolver::setSolverOptions() throw (ErrorClass)
 {
+    std::ostringstream outStr;
     try
     {
         this->bSetSolverOptions = true;
@@ -748,7 +779,12 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
             {
                 if(optionsVector[ i]->type == "numeric" )
                 {
-                    std::cout << "FOUND A  NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+                    outStr.str("");
+                    outStr.clear();
+                    outStr  << "FOUND A  NUMERIC OPTION  "  
+                            << os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) 
+                            << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
                     if(optionsVector[ i]->category == "ipopt")
                     {
                         bonminSetup.options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
@@ -767,7 +803,10 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
                 }
                 else if(optionsVector[ i]->type == "integer" )
                 {
-                    std::cout << "FOUND AN INTEGER OPTION  "  <<optionsVector[ i]->name << std::endl;
+                    outStr.str("");
+                    outStr.clear();
+                    outStr  << "FOUND AN INTEGER OPTION  " << optionsVector[ i]->name << std::endl;  
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
                     if(optionsVector[ i]->category == "ipopt")
                     {
                         bonminSetup.options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
@@ -776,7 +815,8 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
                     {
                         if(optionsVector[ i]->category == "cbc" )
                         {
-                            std::cout << "SETTING INTEGER CBC OPTION" << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, 
+                                    "SETTING INTEGER CBC OPTION\n");
                             bonminSetup.options()->SetIntegerValue("milp_solver."+optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ));
                         }
                         else
@@ -787,7 +827,10 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
                 }
                 else if(optionsVector[ i]->type == "string" )
                 {
-                    std::cout << "FOUND A STRING OPTION  "  <<optionsVector[ i]->name << std::endl;
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "FOUND A STRING OPTION  " << optionsVector[ i]->name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
                     if(optionsVector[ i]->category == "ipopt")
                     {
                         bonminSetup.options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value );
@@ -803,16 +846,14 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
                             bonminSetup.options()->SetStringValue("bonmin."+optionsVector[ i]->name, optionsVector[ i]->value);
                         }
                     }
-
                 }
             }
         }
-
     }
 
     catch(const ErrorClass& eclass)
     {
-        std::cout << "THERE IS AN ERROR" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "THERE IS AN ERROR\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -931,8 +972,6 @@ void BonminSolver::solve() throw (ErrorClass)
         throw ErrorClass( osrl) ;
     }
 }//solve
-
-
 
 
 void BonminSolver::writeResult()
@@ -1065,43 +1104,42 @@ void BonminSolver::writeResult()
         osrl = osrlwriter->writeOSrL( osresult);
         throw ErrorClass( osrl) ;
     }
-
-
 }// end writeResult()
 
 
 void BonminSolver::dataEchoCheck()
 {
+    std::ostringstream outStr;
 
     int i;
 
     // print out problem parameters
-    cout << "This is problem:  " << osinstance->getInstanceName() << endl;
-    cout << "The problem source is:  " << osinstance->getInstanceSource() << endl;
-    cout << "The problem description is:  " << osinstance->getInstanceDescription() << endl;
-    cout << "number of variables = " << osinstance->getVariableNumber() << endl;
-    cout << "number of Rows = " << osinstance->getConstraintNumber() << endl;
+    outStr << "This is problem:  " << osinstance->getInstanceName() << endl;
+    outStr << "The problem source is:  " << osinstance->getInstanceSource() << endl;
+    outStr << "The problem description is:  " << osinstance->getInstanceDescription() << endl;
+    outStr << "number of variables = " << osinstance->getVariableNumber() << endl;
+    outStr << "number of Rows = " << osinstance->getConstraintNumber() << endl;
 
     // print out the variable information
     if(osinstance->getVariableNumber() > 0)
     {
         for(i = 0; i < osinstance->getVariableNumber(); i++)
         {
-            if(osinstance->getVariableNames() != NULL) cout << "variable Names  " << osinstance->getVariableNames()[ i]  << endl;
-            if(osinstance->getVariableTypes() != NULL) cout << "variable Types  " << osinstance->getVariableTypes()[ i]  << endl;
-            if(osinstance->getVariableLowerBounds() != NULL) cout << "variable Lower Bounds  " << osinstance->getVariableLowerBounds()[ i]  << endl;
-            if(osinstance->getVariableUpperBounds() != NULL) cout << "variable Upper Bounds  " <<  osinstance->getVariableUpperBounds()[i] << endl;
+            if(osinstance->getVariableNames() != NULL) outStr << "variable Names  " << osinstance->getVariableNames()[ i]  << endl;
+            if(osinstance->getVariableTypes() != NULL) outStr << "variable Types  " << osinstance->getVariableTypes()[ i]  << endl;
+            if(osinstance->getVariableLowerBounds() != NULL) outStr << "variable Lower Bounds  " << osinstance->getVariableLowerBounds()[ i]  << endl;
+            if(osinstance->getVariableUpperBounds() != NULL) outStr << "variable Upper Bounds  " <<  osinstance->getVariableUpperBounds()[i] << endl;
         }
     }
 
     // print out objective function information
     if(osinstance->getVariableNumber() > 0 || osinstance->instanceData->objectives->obj != NULL || osinstance->instanceData->objectives->numberOfObjectives > 0)
     {
-        if( osinstance->getObjectiveMaxOrMins()[0] == "min")  cout <<  "problem is a minimization" << endl;
-        else cout <<  "problem is a maximization" << endl;
+        if( osinstance->getObjectiveMaxOrMins()[0] == "min")  outStr <<  "problem is a minimization" << endl;
+        else outStr <<  "problem is a maximization" << endl;
         for(i = 0; i < osinstance->getVariableNumber(); i++)
         {
-            cout << "OBJ COEFFICIENT =  " <<  osinstance->getDenseObjectiveCoefficients()[0][i] << endl;
+            outStr << "OBJ COEFFICIENT =  " <<  osinstance->getDenseObjectiveCoefficients()[0][i] << endl;
         }
     }
     // print out constraint information
@@ -1109,34 +1147,35 @@ void BonminSolver::dataEchoCheck()
     {
         for(i = 0; i < osinstance->getConstraintNumber(); i++)
         {
-            if(osinstance->getConstraintNames() != NULL) cout << "row name = " << osinstance->getConstraintNames()[i] <<  endl;
-            if(osinstance->getConstraintLowerBounds() != NULL) cout << "row lower bound = " << osinstance->getConstraintLowerBounds()[i] <<  endl;
-            if(osinstance->getConstraintUpperBounds() != NULL) cout << "row upper bound = " << osinstance->getConstraintUpperBounds()[i] <<  endl;
+            if(osinstance->getConstraintNames() != NULL) outStr << "row name = " << osinstance->getConstraintNames()[i] <<  endl;
+            if(osinstance->getConstraintLowerBounds() != NULL) outStr << "row lower bound = " << osinstance->getConstraintLowerBounds()[i] <<  endl;
+            if(osinstance->getConstraintUpperBounds() != NULL) outStr << "row upper bound = " << osinstance->getConstraintUpperBounds()[i] <<  endl;
         }
     }
 
     // print out linear constraint data
-    cout << endl;
-    cout << "number of nonzeros =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
+    outStr << endl;
+    outStr << "number of nonzeros =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
     for(i = 0; i <= osinstance->getVariableNumber(); i++)
     {
-        cout << "Start Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[ i] << endl;
+        outStr << "Start Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[ i] << endl;
     }
-    cout << endl;
+    outStr << endl;
     for(i = 0; i < osinstance->getLinearConstraintCoefficientNumber(); i++)
     {
-        cout << "Index Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes[i] << endl;
-        cout << "Nonzero Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->values[i] << endl;
+        outStr << "Index Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes[i] << endl;
+        outStr << "Nonzero Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->values[i] << endl;
     }
 
     // print out quadratic data
-    cout << "number of qterms =  " <<  osinstance->getNumberOfQuadraticTerms() << endl;
+    outStr << "number of qterms =  " <<  osinstance->getNumberOfQuadraticTerms() << endl;
     for(int i = 0; i <  osinstance->getNumberOfQuadraticTerms(); i++)
     {
-        cout << "Row Index = " <<  osinstance->getQuadraticTerms()->rowIndexes[i] << endl;
-        cout << "Var Index 1 = " << osinstance->getQuadraticTerms()->varOneIndexes[ i] << endl;
-        cout << "Var Index 2 = " << osinstance->getQuadraticTerms()->varTwoIndexes[ i] << endl;
-        cout << "Coefficient = " << osinstance->getQuadraticTerms()->coefficients[ i] << endl;
+        outStr << "Row Index = " <<  osinstance->getQuadraticTerms()->rowIndexes[i] << endl;
+        outStr << "Var Index 1 = " << osinstance->getQuadraticTerms()->varOneIndexes[ i] << endl;
+        outStr << "Var Index 2 = " << osinstance->getQuadraticTerms()->varTwoIndexes[ i] << endl;
+        outStr << "Coefficient = " << osinstance->getQuadraticTerms()->coefficients[ i] << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
     }
 } // end dataEchoCheck
 

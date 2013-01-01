@@ -21,6 +21,7 @@
 #include "OSDataStructures.h"
 #include "OSParameters.h"
 #include "OSMathUtil.h"
+#include "OSOutput.h"
 #include "OSCouenneSolver.h"
 #include "BonBonminSetup.hpp"
 # include <cppad/cppad.hpp>
@@ -109,8 +110,8 @@ CouenneSolver::CouenneSolver()
 
 CouenneSolver::~CouenneSolver()
 {
-#ifdef DEBUG
-    cout << "inside CouenneSolver destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "inside CouenneSolver destructor\n");
 #endif
 
     if(couenne != NULL)
@@ -142,8 +143,8 @@ CouenneSolver::~CouenneSolver()
     osrlwriter = NULL;
     //delete osinstance;
     //osinstance = NULL;
-#ifdef DEBUG
-    cout << "leaving CouenneSolver destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "leaving CouenneSolver destructor\n");
 #endif
 
 }
@@ -157,10 +158,8 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
         this->bCallbuildSolverInstance = true;
         // do some initialization
 
-
-
-
         int i, j;
+        std::ostringstream outStr;
 
         if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
         if(osinstance == NULL)
@@ -168,8 +167,6 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
             m_osilreader = new OSiLReader();
             osinstance = m_osilreader->readOSiL( osil);
         }
-
-
 
         //osinstance->initializeNonLinearStructures( );
         osinstance->initForAlgDiff( );
@@ -179,8 +176,11 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
         couenne = new CouenneProblem(NULL, NULL, NULL);
         int n_allvars = osinstance->getVariableNumber();
         if( n_allvars < 0 )throw ErrorClass("Couenne solver Cannot have a negatiave number of Variables");
-#ifdef DEBUG
-        std::cout << "NUMBER OF VARIABLES = " <<  n_allvars <<  std::endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "NUMBER OF VARIABLES = " <<  n_allvars <<  std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         if(n_allvars > 0)
         {
@@ -203,9 +203,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
                 }
                 else
                 {
-
                     couenne->addVariable(false, couenne->domain() );
-
                 }
 
                 x_[i] = 0.;     //HIG: This sets initial values?
@@ -328,7 +326,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        std::cout << "THERE IS AN ERROR" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "THERE IS AN ERROR\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -341,6 +339,8 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node)
 {
     //std::cout << "NODE NUMBER =  " << node->inodeInt  << std::endl;
     unsigned int i;
+    std::ostringstream outStr;
+
     switch (node->inodeInt)
     {
     case OS_PLUS :
@@ -462,7 +462,10 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node)
         return new exprMul(new exprConst(varnode->coef), new exprClone(couenne->Variables()[varnode->idx]));
     }
     default:
-        cout << node->getTokenName() << " NOT IMPLEMENTED!!" << endl;
+        outStr.str("");
+        outStr.clear();
+        outStr << node->getTokenName() << " NOT IMPLEMENTED!!" << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
         break;
     }
 
@@ -472,9 +475,10 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node)
 
 void CouenneSolver::setSolverOptions() throw (ErrorClass)
 {
+    std::ostringstream outStr;
+
     try
     {
-
         char *pEnd;
         bSetSolverOptions = true;
         couenneSetup.initializeOptionsAndJournalist();
@@ -489,7 +493,6 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass)
 
         if(osoption != NULL && osoption->getNumberOfSolverOptions() > 0 )
         {
-
             int i;
             std::vector<SolverOption*> optionsVector;
             optionsVector = osoption->getSolverOptions( "couenne",true);
@@ -514,7 +517,10 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass)
                     }
                 }
 
-                std::cout << "found option " << optionName << " of type " << optionsVector[ i]->type << std::endl;
+                outStr.str("");
+                outStr.clear();
+                outStr << "found option " << optionName << " of type " << optionsVector[ i]->type << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
 
                 if(optionsVector[ i]->type == "numeric" )
                 {
@@ -537,7 +543,7 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass)
 
     catch(const ErrorClass& eclass)
     {
-        std::cout << "THERE IS AN ERROR" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "THERE IS AN ERROR\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -640,7 +646,7 @@ void CouenneSolver::solve() throw (ErrorClass)
 
         }
 
-        std::cout << std::endl << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, " \n\n");
         // see if we have an unbounded solution
         // if we are not infeasible and not optimal and have no integer variables we are probably unbounded
         if(( ci->isProvenPrimalInfeasible() == false) && (ci -> isProvenOptimal () == false)
@@ -681,7 +687,7 @@ void CouenneSolver::solve() throw (ErrorClass)
 
 
 
-        std::cout.precision (10);
+        //std::cout.precision (10);
 
         CouenneCutGenerator *cg = NULL;
 
@@ -824,7 +830,6 @@ void CouenneSolver::writeResult()
                 }
                 osresult->setPrimalVariableValuesDense(solIdx, x);
             }
-
 
             break;
 

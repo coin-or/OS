@@ -17,6 +17,7 @@
 #include "OSiLReader.h"
 #include "OSInstance.h"
 #include "OSFileUtil.h"
+#include "OSOutput.h"
 #include "OSErrorClass.h"
 
 #include "OSDataStructures.h"
@@ -103,16 +104,16 @@ LindoSolver::LindoSolver():
     cpuTime( 0)
 
 {
-#ifdef DEBUG
-    cout << "Lindo constructor called" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "Lindo constructor called\n");
 #endif
     osrlwriter = new OSrLWriter();
 }
 
 LindoSolver::~LindoSolver()
 {
-#ifdef DEBUG
-    cout << "Lindo destructor called" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "Lindo destructor called\n");
 #endif
     //delete[] m_mdRhsValue ;
     //delete[] m_mdVarLB ;
@@ -125,8 +126,8 @@ LindoSolver::~LindoSolver()
     m_mcVarType = NULL;
     m_mcRowType = NULL;
     m_msConName = NULL;
-#ifdef DEBUG
-    cout << "Delete LSdelete" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "Delete LSdelete\n");
 #endif
     LSdeleteEnv(&pEnv_);
     delete[] m_miSlackIdx;
@@ -139,7 +140,8 @@ LindoSolver::~LindoSolver()
     osresult = NULL;
     if(m_osilreader != NULL) delete m_osilreader;
     m_osilreader = NULL;
-    cout << "Lindo Solver garbage collection done" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "Lindo Solver garbage collection done\n");
+
 }
 
 
@@ -163,22 +165,42 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass)
 
         if (osinstance->instanceData->constraints->numberOfConstraints <= 0)
         {
-            std::cout << "HERE I AM 1 !!!!!!!!!!!!!!!!!!!" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
+                "HERE I AM 1 !!!!!!!!!!!!!!!!!!!\n");
+#endif
             osinstance->setConstraintNumber(1);
             osinstance->addConstraint(0, "dummyConstraint", 0, 0, 0);
-            std::cout << "HERE I AM 2 !!!!!!!!!!!!!!!!!!!" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
+                "HERE I AM 2 !!!!!!!!!!!!!!!!!!!\n");
+#endif
         }
         //cout << osilwriter.writeOSiL( osinstance) << endl;
         if(osinstance->getVariableNumber() <  0)throw ErrorClass("Cannot have a negative number of decision variables");
-        std::cout << "Start process variables !!!!!!!!!" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
+                "Start process variables !!!!!!!!!\n");
+#endif
         if( !processVariables() ) throw ErrorClass("failed processing variables");
-        std::cout << "Finish process variables!!!!!!" << std::endl;
-        std::cout << "Start process constraints" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
+                "Finish process variables !!!!!!!!!\n");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
+                "Start process constraints !!!!!!!!!\n");
+#endif
         if( !processConstraints() ) throw ErrorClass("failed processing constraints");
-        std::cout << "Finish process constraints !!!!!!!!!" << std::endl;
-        std::cout << "Start generateLindoModel()  !!!!!!!!!" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
+                "Finish process constraints !!!!!!!!!\n");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
+                "Start generateLindoModel() !!!!!!!!!\n");
+#endif
         if( !generateLindoModel()) throw ErrorClass("failed generating Lindo model");
-        std::cout << "Finish generateLindoModel()  !!!!!!!!!" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
+                "Finish generateLindoModel() !!!!!!!!!\n");
+#endif
         if(m_iNumberNewSlacks > 0 && !addSlackVars()) throw ErrorClass("failed adding slack variables");
         if( (osinstance->getNumberOfNonlinearExpressions() > 0 || osinstance->getNumberOfQuadraticTerms() > 0)
                 && !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
@@ -187,7 +209,7 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        std::cout << "THERE IS AN ERROR" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "THERE IS AN ERROR\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -205,7 +227,7 @@ void LindoSolver::setSolverOptions() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        std::cout << "THERE IS AN ERROR" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "THERE IS AN ERROR\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -291,6 +313,8 @@ bool LindoSolver::processConstraints()
 //
 bool LindoSolver::addSlackVars()
 {
+    std::ostringstream outStr;
+
     /* the following is LINDO specific -- make up
     for the fact that lindo does not like upper and lower bounds on consraints
     this is not needed in the COIN Interface
@@ -332,12 +356,15 @@ bool LindoSolver::addSlackVars()
         if(padU[ i]  - padC[i]< 0) return false;
     }
     paiAcols[ m_iNumberNewSlacks] = m_iNumberNewSlacks;
-#ifdef DEBUG
-    cout << "The number of new slack variables is: " << m_iNumberNewSlacks << endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "The number of new slack variables is: " << m_iNumberNewSlacks << endl;
     for(i = 0; i < m_iNumberNewSlacks; i++)
     {
-        cout<< paszVarnames[ i] << endl;
+        outStr << paszVarnames[ i] << endl;
     }
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     if(!LSaddVariables(pModel_, m_iNumberNewSlacks, pachVartypes, paszVarnames, paiAcols,
@@ -414,6 +441,8 @@ bool LindoSolver::processVariables()
 
 bool LindoSolver::generateLindoModel()
 {
+    std::ostringstream outStr;
+
     // Generate the LINDO model
     /* declare an instance of the LINDO environment object */
     /* >>> Step 1 <<< Create a LINDO environment. Note:
@@ -450,7 +479,10 @@ bool LindoSolver::generateLindoModel()
         // Kipp: this is a kludge -- fix later
         if(osinstance->getLinearConstraintCoefficientNumber()  <=  0)
         {
-            cout << "LinearConstraintCoefficientNumber =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
+            outStr.str("");
+            outStr.clear();
+            outStr << "LinearConstraintCoefficientNumber =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
             //
             int iNumFakeNonz = 1;
             // fake index array
@@ -550,15 +582,16 @@ bool LindoSolver::optimize()
         if( isNonlinear == true )
         {
             //m_iLindoErrorCode = LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
-            std::cout << "We are using the LINDO Global Optimizer" << std::endl;
-            std::cout << "We are using the LINDO Global Optimizer 222" << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, 
+                "We are using the LINDO Global Optimizer\n");
             m_iLindoErrorCode = LSsolveGOP(pModel_,  &nSolStatus) ;
             lindoAPIErrorCheck("There was an ERROR in the call to the Optimizer solver");
             LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
         }
         else
         {
-            std::cout << "We are using the LINDO LSsolveMIP Optimizer" << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, 
+                "We are using the LINDO LSsolveMIP Optimizer\n");
             m_iLindoErrorCode = LSsolveMIP( pModel_,  &nSolStatus);
             lindoAPIErrorCheck("There was an ERROR in the call to the MIP solver");
         }
@@ -578,7 +611,11 @@ bool LindoSolver::optimize()
             throw ErrorClass("OSResult error: setConstraintNumber");
         if(osresult->setSolutionNumber(  1) != true)
             throw ErrorClass("OSResult error: setSolutionNumer");
-        cout << "Solution Status  = " <<  nSolStatus << endl;
+        outStr.str("");
+        outStr.clear();
+        outStr << "Solution Status  = " <<  nSolStatus << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+
         osresult->setGeneralStatusType("normal");
         osresult->setSolutionStatus(solIdx, "optimal", description);
         x = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
@@ -595,12 +632,12 @@ bool LindoSolver::optimize()
         {
         case 1:
             // an optimal solution is found
-            cout << "case 1" << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "case 1\n");
         case 8:
             // a local optimal solution is found
-            cout << "case 8" << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "case 8\n");
         case 2:
-            cout << "case 2" << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "case 2\n");
             // an optimal basic  solution is also found
             // get the primal result
             if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 )
@@ -699,7 +736,8 @@ bool LindoSolver::optimize()
 bool LindoSolver::processQuadraticTerms()
 {
     int nQCnnz = osinstance->getNumberOfQuadraticTerms();
-    cout << "WE ARE PROCESSING QUADRATIC TERMS" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, 
+        "WE ARE PROCESSING QUADRATIC TERMS\n");
     try
     {
         if(nQCnnz  <= 0)return false;
@@ -798,12 +836,19 @@ bool LindoSolver::processQuadraticTerms()
 
 bool LindoSolver::processNonlinearExpressions()
 {
+    std::ostringstream outStr;
 
-    cout <<  "PROCESS NONLINEAR TERMS" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, 
+        "PROCESS NONLINEAR TERMS\n");
     osinstance->initializeNonLinearStructures( );
     //osinstance->addQTermsToExpressionTree();
-    cout << "The number of objectives with nonlinear terms is:  " << osinstance->getNumberOfNonlinearObjectives() << endl;
-    cout << "The number of constraints with nonlinear terms is:  " << osinstance->getNumberOfNonlinearConstraints() << endl << endl << endl;
+    outStr.str("");
+    outStr.clear();
+    outStr  << "The number of objectives with nonlinear terms is:  " 
+            << osinstance->getNumberOfNonlinearObjectives() << endl;
+    outStr  << "The number of constraints with nonlinear terms is:  " 
+            << osinstance->getNumberOfNonlinearConstraints() << endl << endl << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
     // first convert OS numbering of operators to Lindo numbering of operators.
     // this is done by the method setnlNodeIdxLindo()
     // execute the Macro that does the conversion between LINDO and OS op codes
@@ -942,7 +987,10 @@ bool LindoSolver::processNonlinearExpressions()
         // now use an iterator to loop over all the expression trees
         for(posTree = allExpTrees.begin(); posTree != allExpTrees.end(); ++posTree)
         {
-            cout << "HERE IS EXPRESSION TREE " << posTree->first << endl;
+            outStr.str("");
+            outStr.clear();
+            outStr << "HERE IS EXPRESSION TREE " << posTree->first << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
             // get the expression tree and put it into a postfix vector of OSnLNodes
             postFixVec = posTree->second->m_treeRoot->getPostfixFromExpressionTree();
             int iVecSize = postFixVec.size();
@@ -957,12 +1005,12 @@ bool LindoSolver::processNonlinearExpressions()
                     case OS_SUM:  // the sum token
                         insList.push_back( nlNodeIdxLindo[ OS_SUM] );
                         insList.push_back( postFixVec[i]->inumberOfChildren);
-                        cout <<  "PUSH BACK A SUM" << endl;
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "PUSH BACK A SUM\n");
                         break;
                     case OS_MAX:  // the sum token
                         insList.push_back( nlNodeIdxLindo[ OS_MAX] );
                         insList.push_back( postFixVec[i]->inumberOfChildren);
-                        cout <<  "PUSH BACK A MAX" << endl;
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "PUSH BACK A MAX\n");
                         break;
                     case OS_PRODUCT:  // the product token
                         throw ErrorClass("Error: OS_PRODUCT operator not supported by Lindo");
@@ -974,7 +1022,10 @@ bool LindoSolver::processNonlinearExpressions()
                         pos = mapNewNumber.find( numNode->value);
                         if(pos == mapNewNumber.end() )
                         {
-                            cout << "FOUND A NEW NUMBER  " << numNode->value << endl;
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "FOUND A NEW NUMBER  " << numNode->value << endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
                             insList.push_back( iNumNonlinearNonz);
                             mapNewNumber[ numNode->value] =  iNumNonlinearNonz++;
                         }
@@ -994,7 +1045,10 @@ bool LindoSolver::processNonlinearExpressions()
                             pos = mapNewNumber.find( varNode->coef);
                             if(pos == mapNewNumber.end() )
                             {
-                                cout << "FOUND A NEW NUMBER  " << varNode->coef << endl;
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "FOUND A NEW NUMBER  " << varNode->coef << endl;
+                                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
                                 insList.push_back( iNumNonlinearNonz);
                                 mapNewNumber[ varNode->coef] =  iNumNonlinearNonz++;
                             }
@@ -1023,7 +1077,10 @@ bool LindoSolver::processNonlinearExpressions()
                     paiConsBegin[ iCountCons] = iInstListLength;
                     paiConsLength[ iCountCons] = insList.size() - iInstListLength;
                     paiNonlinearConIndex[ iCountCons] = posTree->first;
-                    cout << "CONSTRAINT ILIST LENGTH =  " << iInstListLength << endl;
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "CONSTRAINT ILIST LENGTH =  " << iInstListLength << endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
                     iInstListLength = insList.size();
                     iCountCons++;
                 }
@@ -1032,11 +1089,14 @@ bool LindoSolver::processNonlinearExpressions()
         }//end for loop over the expression trees
         /* Number of real number constants */
         padNonlinearNonz = new double[ iNumNonlinearNonz];
+        outStr.str("");
+        outStr.clear();
         for(pos = mapNewNumber.begin(); pos != mapNewNumber.end(); ++pos)
         {
             padNonlinearNonz[ pos->second] = pos->first;
-            cout << "INDEX = " << pos->second  << " NUMBER = " << pos->first << endl;
+            outStr << "INDEX = " << pos->second  << " NUMBER = " << pos->first << endl;
         }
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
         // read instructions into a Lindo pointer
         paiInsList = new int[ iInstListLength];
         copy(insList.begin(), insList.end(), paiInsList);
@@ -1058,50 +1118,53 @@ bool LindoSolver::processNonlinearExpressions()
         m_iLindoErrorCode = LSsetModelIntParameter (pModel_,
                             LS_IPARAM_NLP_AUTODERIV, nAutoDeriv);
         lindoAPIErrorCheck("Error trying to set the LS_IPARAM_NLP_AUTODERIV parameter");
-#ifdef DEBUG
-        std::cout << "iNumberOfNonlinearConstraints=  " << iNumberOfNonlinearConstraints << std::endl;
-        std::cout << "iNumberOfNonlinearObjectives=  " << iNumberOfNonlinearObjectives << std::endl;
-        std::cout << "iNumberOfNewVariables = " << iNumberOfNewVariables << std::endl;
-        std::cout << "iNumNonlinearNonz =  " << iNumNonlinearNonz << std::endl;
-        std::cout << "piObjSense =  " << "NULL" << std::endl ;
-        std::cout << "pachConType =  " << "NULL" << std::endl ;
-        std::cout << "pachVarType =  " << "NULL" << std::endl ;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "iNumberOfNonlinearConstraints=  " << iNumberOfNonlinearConstraints << std::endl;
+        outStr << "iNumberOfNonlinearObjectives=  " << iNumberOfNonlinearObjectives << std::endl;
+        outStr << "iNumberOfNewVariables = " << iNumberOfNewVariables << std::endl;
+        outStr << "iNumNonlinearNonz =  " << iNumNonlinearNonz << std::endl;
+        outStr << "piObjSense =  " << "NULL" << std::endl ;
+        outStr << "pachConType =  " << "NULL" << std::endl ;
+        outStr << "pachVarType =  " << "NULL" << std::endl ;
         int kl;
-        std::cout << "Here is the instruction list" << std::endl;
+        outStr << "Here is the instruction list" << std::endl;
         for(kl = 0; kl < iInstListLength; kl++)
         {
-            cout << "instruction list num  " << paiInsList[ kl] << endl;
+            outStr << "instruction list num  " << paiInsList[ kl] << endl;
         }
-        std::cout << "Number of terms in instruction list " << iInstListLength << std::endl;
-        std::cout << "Here are the constraint indices " << std::endl;
+        outStr << "Number of terms in instruction list " << iInstListLength << std::endl;
+        outStr << "Here are the constraint indices " << std::endl;
         for(kl = 0; kl < iNumberOfNonlinearConstraints; kl++)
         {
-            cout << "con idx  " << paiNonlinearConIndex[ kl] << endl;
+            outStr << "con idx  " << paiNonlinearConIndex[ kl] << endl;
         }
-        std::cout << "Here come the nonlinear nonzeros " <<  std::endl;
+        outStr << "Here come the nonlinear nonzeros " <<  std::endl;
         for(kl = 0; kl < iNumNonlinearNonz; kl++)
         {
-            cout << "nonz value  =   " << padNonlinearNonz[ kl] << endl;
+            outStr << "nonz value  =   " << padNonlinearNonz[ kl] << endl;
         }
-        std::cout << "padVarval =  " << "NULL" << std::endl ;
+        outStr << "padVarval =  " << "NULL" << std::endl ;
         for(kl = 0; kl < iNumberOfNonlinearObjectives; kl++)
         {
-            cout << "obj inst begin  =   " << paiObjsBegin[ kl] << endl;
+            outStr << "obj inst begin  =   " << paiObjsBegin[ kl] << endl;
         }
         for(kl = 0; kl < iNumberOfNonlinearObjectives; kl++)
         {
-            cout << "obj inst list length  =   " << paiObjsLength[ kl] << endl;
+            outStr << "obj inst list length  =   " << paiObjsLength[ kl] << endl;
         }
         for(kl = 0; kl < iNumberOfNonlinearConstraints; kl++)
         {
-            cout << "constraint inst begin  =   " << paiConsBegin[ kl] << endl;
+            outStr << "constraint inst begin  =   " << paiConsBegin[ kl] << endl;
         }
         for(kl = 0; kl < iNumberOfNonlinearConstraints; kl++)
         {
-            cout << "constraints inst list length  =   " << paiConsLength[ kl] << endl;
+            outStr << "constraints inst list length  =   " << paiConsLength[ kl] << endl;
         }
-        std::cout << "padVarLowerBounds =  " << "NULL" << std::endl ;
-        std::cout << "padUpperBounds =  " << "NULL" << std::endl ;
+        outStr << "padVarLowerBounds =  " << "NULL" << std::endl ;
+        outStr << "padUpperBounds =  " << "NULL" << std::endl ;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         m_iLindoErrorCode = LSaddInstruct (pModel_, iNumberOfNonlinearConstraints,
                                            iNumberOfNonlinearObjectives, iNumberOfNewVariables, iNumNonlinearNonz,
@@ -1114,8 +1177,8 @@ bool LindoSolver::processNonlinearExpressions()
         //mapNewNumber.~map();
         if( iNumberOfNonlinearConstraints > 0) delete[] paiConsBegin;
         if( iNumberOfNonlinearConstraints > 0) delete[] paiConsLength;
-        if( iNumberOfNonlinearObjectives > 0) delete[] paiObjsBegin;
-        if( iNumberOfNonlinearObjectives > 0) delete[] paiObjsLength;
+        if( iNumberOfNonlinearObjectives  > 0) delete[] paiObjsBegin;
+        if( iNumberOfNonlinearObjectives  > 0) delete[] paiObjsLength;
         if( iNumberOfNonlinearConstraints > 0) delete[] paiNonlinearConIndex;
         if( iNumNonlinearNonz > 0) delete[] padNonlinearNonz;
         if(  iInstListLength > 0) delete[] paiInsList;
@@ -1143,34 +1206,35 @@ bool LindoSolver::processNonlinearExpressions()
 void LindoSolver::dataEchoCheck()
 {
     int i;
+    std::ostringstream outStr;
 
     // print out problem parameters
-    cout << "This is problem:  " << osinstance->getInstanceName() << endl;
-    cout << "The problem source is:  " << osinstance->getInstanceSource() << endl;
-    cout << "The problem description is:  " << osinstance->getInstanceDescription() << endl;
-    cout << "number of variables = " << osinstance->getVariableNumber() << endl;
-    cout << "number of Rows = " << osinstance->getConstraintNumber() << endl;
+    outStr << "This is problem:  " << osinstance->getInstanceName() << endl;
+    outStr << "The problem source is:  " << osinstance->getInstanceSource() << endl;
+    outStr << "The problem description is:  " << osinstance->getInstanceDescription() << endl;
+    outStr << "number of variables = " << osinstance->getVariableNumber() << endl;
+    outStr << "number of Rows = " << osinstance->getConstraintNumber() << endl;
 
     // print out the variable information
     if(osinstance->getVariableNumber() > 0)
     {
         for(i = 0; i < osinstance->getVariableNumber(); i++)
         {
-            if(osinstance->getVariableNames() != NULL) cout << "variable Names  " << osinstance->getVariableNames()[ i]  << endl;
-            if(osinstance->getVariableTypes() != NULL) cout << "variable Types  " << osinstance->getVariableTypes()[ i]  << endl;
-            if(osinstance->getVariableLowerBounds() != NULL) cout << "variable Lower Bounds  " << osinstance->getVariableLowerBounds()[ i]  << endl;
-            if(osinstance->getVariableUpperBounds() != NULL) cout << "variable Upper Bounds  " <<  osinstance->getVariableUpperBounds()[i] << endl;
+            if(osinstance->getVariableNames() != NULL) outStr << "variable Names  " << osinstance->getVariableNames()[ i]  << endl;
+            if(osinstance->getVariableTypes() != NULL) outStr << "variable Types  " << osinstance->getVariableTypes()[ i]  << endl;
+            if(osinstance->getVariableLowerBounds() != NULL) outStr << "variable Lower Bounds  " << osinstance->getVariableLowerBounds()[ i]  << endl;
+            if(osinstance->getVariableUpperBounds() != NULL) outStr << "variable Upper Bounds  " <<  osinstance->getVariableUpperBounds()[i] << endl;
         }
     }
 
     // print out objective function information
     if(osinstance->getVariableNumber() > 0 || osinstance->instanceData->objectives->obj != NULL || osinstance->instanceData->objectives->numberOfObjectives > 0)
     {
-        if( osinstance->getObjectiveMaxOrMins()[0] == "min")  cout <<  "problem is a minimization" << endl;
-        else cout <<  "problem is a maximization" << endl;
+        if( osinstance->getObjectiveMaxOrMins()[0] == "min")  outStr <<  "problem is a minimization" << endl;
+        else outStr <<  "problem is a maximization" << endl;
         for(i = 0; i < osinstance->getVariableNumber(); i++)
         {
-            cout << "OBJ COEFFICIENT =  " <<  osinstance->getDenseObjectiveCoefficients()[0][i] << endl;
+            outStr << "OBJ COEFFICIENT =  " <<  osinstance->getDenseObjectiveCoefficients()[0][i] << endl;
         }
     }
     // print out constraint information
@@ -1178,37 +1242,38 @@ void LindoSolver::dataEchoCheck()
     {
         for(i = 0; i < osinstance->getConstraintNumber(); i++)
         {
-            if(osinstance->getConstraintNames() != NULL) cout << "row name = " << osinstance->getConstraintNames()[i] <<  endl;
-            if(osinstance->getConstraintLowerBounds() != NULL) cout << "row lower bound = " << osinstance->getConstraintLowerBounds()[i] <<  endl;
-            if(osinstance->getConstraintUpperBounds() != NULL) cout << "row upper bound = " << osinstance->getConstraintUpperBounds()[i] <<  endl;
+            if(osinstance->getConstraintNames() != NULL) outStr << "row name = " << osinstance->getConstraintNames()[i] <<  endl;
+            if(osinstance->getConstraintLowerBounds() != NULL) outStr << "row lower bound = " << osinstance->getConstraintLowerBounds()[i] <<  endl;
+            if(osinstance->getConstraintUpperBounds() != NULL) outStr << "row upper bound = " << osinstance->getConstraintUpperBounds()[i] <<  endl;
         }
     }
 
     // print out linear constraint data
-    cout << endl;
-    cout << "number of nonzeros =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
+    outStr << endl;
+    outStr << "number of nonzeros =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
     if(osinstance->getLinearConstraintCoefficientNumber() > 0)
     {
         for(i = 0; i <= osinstance->getVariableNumber(); i++)
         {
-            cout << "Start Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[ i] << endl;
+            outStr << "Start Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[ i] << endl;
         }
-        cout << endl;
+        outStr << endl;
         for(i = 0; i < osinstance->getLinearConstraintCoefficientNumber(); i++)
         {
-            cout << "Index Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes[i] << endl;
-            cout << "Nonzero Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->values[i] << endl;
+            outStr << "Index Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes[i] << endl;
+            outStr << "Nonzero Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->values[i] << endl;
         }
     }
     // print out quadratic data
-    cout << "number of qterms =  " <<  osinstance->getNumberOfQuadraticTerms() << endl;
+    outStr << "number of qterms =  " <<  osinstance->getNumberOfQuadraticTerms() << endl;
     for(int i = 0; i <  osinstance->getNumberOfQuadraticTerms(); i++)
     {
-        cout << "Row Index = " <<  osinstance->getQuadraticTerms()->rowIndexes[i] << endl;
-        cout << "Var Index 1 = " << osinstance->getQuadraticTerms()->varOneIndexes[ i] << endl;
-        cout << "Var Index 2 = " << osinstance->getQuadraticTerms()->varTwoIndexes[ i] << endl;
-        cout << "Coefficient = " << osinstance->getQuadraticTerms()->coefficients[ i] << endl;
+        outStr << "Row Index = " <<  osinstance->getQuadraticTerms()->rowIndexes[i] << endl;
+        outStr << "Var Index 1 = " << osinstance->getQuadraticTerms()->varOneIndexes[ i] << endl;
+        outStr << "Var Index 2 = " << osinstance->getQuadraticTerms()->varTwoIndexes[ i] << endl;
+        outStr << "Coefficient = " << osinstance->getQuadraticTerms()->coefficients[ i] << endl;
     }
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 
 } // end dataEchoCheck
 

@@ -18,6 +18,8 @@
 #include <cstring>
 #include "OSFileUtil.h"
 #include "OSErrorClass.h"
+#include "OSOutput.h"
+
 using std::cout;
 using std::endl;
 
@@ -80,7 +82,6 @@ char* FileUtil::getFileAsChar(const  char* fname)
 {
     try
     {
-
         std::ostringstream fileName;
         fileName << fname << std::endl;
         std::filebuf *pbuf;
@@ -88,7 +89,7 @@ char* FileUtil::getFileAsChar(const  char* fname)
         char *xml;
         char ch;
         std::ifstream inFile;
-        std::cout << fname << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSUtils, ENUM_OUTPUT_LEVEL_info, fileName.str());
         inFile.open( fname);
         if(!inFile)
         {
