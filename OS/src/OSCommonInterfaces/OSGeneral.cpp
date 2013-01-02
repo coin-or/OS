@@ -17,16 +17,13 @@
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 #include "OSBase64.h"
+#include "OSOutput.h"
 
 #include <iostream>
 #include <sstream>
 
-//#define DEBUG
-//#define DEBUG_OSGENERAL
-//#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
-using std::cout;
 using std::endl;
 
 GeneralFileHeader::GeneralFileHeader():
@@ -40,15 +37,17 @@ GeneralFileHeader::GeneralFileHeader():
 
 GeneralFileHeader::~GeneralFileHeader()
 {
-#ifdef DEBUG
-    cout << "inside sparseVector destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside file header destructor");
 #endif
 }// end GeneralFileHeader destructor
 
 bool GeneralFileHeader::IsEqual(GeneralFileHeader *that)
 {
-#ifdef DEBUG_OSGENERAL
-    cout << "Start comparing in GeneralFileHeader" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in GeneralFileHeader");
 #endif
     if (this == NULL)
     {
@@ -56,8 +55,8 @@ bool GeneralFileHeader::IsEqual(GeneralFileHeader *that)
             return true;
         else
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -66,25 +65,29 @@ bool GeneralFileHeader::IsEqual(GeneralFileHeader *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
         else
         {
-            if ((this->name        != that->name)         ||
-                    (this->source      != that->source)      ||
-                    (this->description != that->description) ||
-                    (this->fileCreator != that->fileCreator) ||
-                    (this->licence     != that->licence))
+            if ((this->name        != that->name)        ||
+                (this->source      != that->source)      ||
+                (this->description != that->description) ||
+                (this->fileCreator != that->fileCreator) ||
+                (this->licence     != that->licence))
             {
-#ifdef DEBUG_OSGENERAL
-                cout << "name: "        << this->name        << " vs. " << that->name        << endl;
-                cout << "source: "      << this->source      << " vs. " << that->source      << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
-                cout << "fileCreator: " << this->fileCreator << " vs. " << that->fileCreator << endl;
-                cout << "licence: "     << this->licence     << " vs. " << that->licence     << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "source: "      << this->source      << " vs. " << that->source      << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "fileCreator: " << this->fileCreator << " vs. " << that->fileCreator << endl;
+                outStr << "licence: "     << this->licence     << " vs. " << that->licence     << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+
 #endif
                 return false;
             }
@@ -142,13 +145,13 @@ SparseVector::SparseVector( ):
 
 SparseVector::~SparseVector()
 {
-#ifdef DEBUG
-    cout << "inside sparseVector destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside sparseVector destructor");
 #endif
     if(	bDeleteArrays == true)
     {
-#ifdef DEBUG
-        cout << "delete[] indexes and arrays" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "delete[] indexes and arrays");
 #endif
         delete[] indexes;
         delete[] values;
@@ -185,8 +188,8 @@ SparseMatrix::SparseMatrix(bool isColumnMajor_, int startSize_, int valueSize_):
 
 SparseMatrix::~SparseMatrix()
 {
-#ifdef DEBUG
-    cout << "inside SparseMatrix destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside SparseMatrix destructor");
 #endif
     if( bDeleteArrays == true)
     {
@@ -277,13 +280,13 @@ SparseJacobianMatrix::SparseJacobianMatrix(int startSize_, int valueSize_):
 
 SparseJacobianMatrix::~SparseJacobianMatrix()
 {
-#ifdef DEBUG
-    cout << "inside SparseJacobianMatrix destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside SparseJacobianMatrix destructor");
 #endif
     if(bDeleteArrays == true)
     {
-#ifdef DEBUG
-        cout << "delete SparseJacobianArrays" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "delete SparseJacobianArrays");
 #endif
         delete[] starts;
         delete[] conVals;
@@ -310,8 +313,8 @@ SparseHessianMatrix::SparseHessianMatrix():
 
 SparseHessianMatrix::~SparseHessianMatrix()
 {
-#ifdef DEBUG
-    cout << "inside SparseHessianMatrix destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside SparseHessianMatrix destructor");
 #endif
     if(bDeleteArrays == true)
     {
@@ -336,8 +339,8 @@ QuadraticTerms::QuadraticTerms():
 
 QuadraticTerms::~QuadraticTerms()
 {
-#ifdef DEBUG
-    cout << "inside Quadratic Terms destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside QuadraticTerms destructor");
 #endif
     delete[] rowIndexes;
     rowIndexes = NULL;
@@ -355,8 +358,8 @@ IntVector::IntVector():
     numberOfEl(0),
     el(NULL)
 {
-#ifdef DEBUG
-    cout << "Inside the IntVector Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside IntVector Constructor");
 #endif
 }
 
@@ -364,8 +367,8 @@ IntVector::IntVector():
 IntVector::IntVector(int n):
     bDeleteArrays(true)
 {
-#ifdef DEBUG
-    cout << "Inside the IntVector Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside alternate IntVector Constructor");
 #endif
 
     numberOfEl = n;
@@ -374,8 +377,8 @@ IntVector::IntVector(int n):
 
 IntVector::~IntVector()
 {
-#ifdef DEBUG
-    cout << "Inside the IntVector Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside IntVector destructor");
 #endif
     if(	bDeleteArrays == true)
     {
@@ -444,8 +447,10 @@ bool IntVector::getEl(int* i)
 
 bool IntVector::IsEqual(IntVector *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in IntVector" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in IntVector");
 #endif
     if (this == NULL)
     {
@@ -453,8 +458,8 @@ bool IntVector::IsEqual(IntVector *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -463,8 +468,8 @@ bool IntVector::IsEqual(IntVector *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -472,8 +477,11 @@ bool IntVector::IsEqual(IntVector *that)
         {
             if (this->numberOfEl != that->numberOfEl)
             {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-                cout << "numberOfEl: " << this->numberOfEl << " vs. " << that->numberOfEl << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEl: " << this->numberOfEl << " vs. " << that->numberOfEl << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -482,8 +490,11 @@ bool IntVector::IsEqual(IntVector *that)
                 if (this->el[i] != that->el[i])
                 {
 
-#ifdef DEBUG_ISEQUAL_ROUTINES
-                    cout << "El[" << i << "]: " << this->el[i] << " vs. " << that->el[i] << endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "El[" << i << "]: " << this->el[i] << " vs. " << that->el[i] << endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                     return false;
                 }
@@ -495,8 +506,8 @@ bool IntVector::IsEqual(IntVector *that)
 
 bool IntVector::setRandom(double density, bool conformant, int iMin, int iMax)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Set random IntVector" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Set random IntVector");
 #endif
     this->numberOfEl = (int)(4*OSRand());
 
@@ -517,8 +528,9 @@ OtherOptionEnumeration::OtherOptionEnumeration():
     value(""),
     description("")
 {
-#ifdef DEBUG
-    cout << "Inside the OtherOptionEnumeration Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherOptionEnumeration Constructor");
 #endif
 }
 
@@ -527,15 +539,17 @@ OtherOptionEnumeration::OtherOptionEnumeration(int n):
     value(""),
     description("")
 {
-#ifdef DEBUG
-    cout << "Inside the OtherOptionEnumeration Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the alternate OtherOptionEnumeration Constructor");
 #endif
 }
 
 OtherOptionEnumeration::~OtherOptionEnumeration()
 {
-#ifdef DEBUG
-    cout << "Inside the OtherOptionEnumeration Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherOptionEnumeration Destructor");
 #endif
 }
 
@@ -560,8 +574,10 @@ std::string OtherOptionEnumeration::getDescription()
 
 bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in OtherOptionEnumeration" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOptionEnumeration");
 #endif
     if (this == NULL)
     {
@@ -569,8 +585,8 @@ bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -579,8 +595,8 @@ bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -588,9 +604,12 @@ bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
         {
             if (this->value != that->value || this->description != that->description)
             {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-                cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -602,8 +621,8 @@ bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
 
 bool OtherOptionEnumeration::setRandom(double density, bool conformant, int iMin, int iMax)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Set random OtherOptionEnumeration" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Set random OtherOptionEnumeration");
 #endif
     if (OSRand() <= density) this->value       = "random string";
     if (OSRand() <= density) this->description = "random string";
@@ -618,8 +637,8 @@ DoubleVector::DoubleVector():
     bDeleteArrays(true),
     el(NULL)
 {
-#ifdef DEBUG
-    cout << "Inside the DoubleVector Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Inside the DoubleVector Constructor");
 #endif
 
 }
@@ -627,8 +646,8 @@ DoubleVector::DoubleVector():
 
 DoubleVector::~DoubleVector()
 {
-#ifdef DEBUG
-    cout << "Inside the DoubleVector Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Inside the DoubleVector Destructor");
 #endif
     if(	bDeleteArrays == true)
     {
@@ -640,8 +659,10 @@ DoubleVector::~DoubleVector()
 
 bool DoubleVector::IsEqual(DoubleVector *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in DoubleVector" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in DoubleVector");
 #endif
     if (this == NULL)
     {
@@ -649,8 +670,8 @@ bool DoubleVector::IsEqual(DoubleVector *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -659,8 +680,8 @@ bool DoubleVector::IsEqual(DoubleVector *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -668,8 +689,11 @@ bool DoubleVector::IsEqual(DoubleVector *that)
         {
             if (this->numberOfEl != that->numberOfEl)
             {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-                cout << "numberOfEl: " << this->numberOfEl << " vs. " << that->numberOfEl << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEl: " << this->numberOfEl << " vs. " << that->numberOfEl << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -678,8 +702,11 @@ bool DoubleVector::IsEqual(DoubleVector *that)
                 if (!isEqual(this->el[i], that->el[i]))
                 {
 
-#ifdef DEBUG_ISEQUAL_ROUTINES
-                    cout << "El[" << i << "]: " << this->el[i] << " vs. " << that->el[i] << endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "El[" << i << "]: " << this->el[i] << " vs. " << that->el[i] << endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                     return false;
                 }
@@ -699,16 +726,16 @@ BasisStatus::BasisStatus():
     superbasic(NULL),
     unknown(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the BasisStatus Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Inside the BasisStatus Constructor");
 #endif
 }//end BasisStatus constructor
 
 
 BasisStatus::~BasisStatus()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the BasisStatus Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Inside the BasisStatus Destructor");
 #endif
     if (basic != NULL)
     {
@@ -1109,8 +1136,10 @@ int BasisStatus::getBasisDense(int *resultArray, int dim, bool flipIdx)
 
 bool BasisStatus::IsEqual(BasisStatus *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in BasisStatus" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in BasisStatus");
 #endif
     if (this == NULL)
     {
@@ -1118,8 +1147,8 @@ bool BasisStatus::IsEqual(BasisStatus *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -1129,8 +1158,8 @@ bool BasisStatus::IsEqual(BasisStatus *that)
         if (that == NULL)
         {
 
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -1151,8 +1180,8 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 
 bool BasisStatus::setRandom(double density, bool conformant, int iMin, int iMax)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Set random BasisStatus" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Set random BasisStatus");
 #endif
     if (OSRand() <= density)
     {
@@ -1203,21 +1232,26 @@ StorageCapacity::StorageCapacity():
 
 StorageCapacity::~StorageCapacity()
 {
-#ifdef DEBUG
-    cout << "inside StorageCapacity destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside StorageCapacity destructor");
 #endif
 }// end StorageCapacity destructor
 
 bool StorageCapacity::IsEqual(StorageCapacity *that)
 {
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in StorageCapacity");
+#endif
     if (this == NULL)
     {
         if (that == NULL)
             return true;
         else
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -1226,21 +1260,24 @@ bool StorageCapacity::IsEqual(StorageCapacity *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
         else
         {
             if ( (this->unit        != that->unit)        ||
-                    (this->description != that->description) ||
-                    !isEqual(this->value, that->value))
+                 (this->description != that->description) ||
+                 !isEqual(this->value, that->value))
             {
-#ifdef DEBUG_OSGENERAL
-                cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
-                cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -1280,21 +1317,26 @@ CPUSpeed::CPUSpeed():
 
 CPUSpeed::~CPUSpeed()
 {
-#ifdef DEBUG
-    cout << "inside CPUSpeed destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside CPUSpeed destructor");
 #endif
 }// end CPUSpeed destructor
 
 bool CPUSpeed::IsEqual(CPUSpeed *that)
 {
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in CPUSpeed");
+#endif
     if (this == NULL)
     {
         if (that == NULL)
             return true;
         else
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -1303,21 +1345,24 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
 #endif
             return false;
         }
         else
         {
             if ((this->unit        != that->unit)        ||
-                    (this->description != that->description) ||
-                    !isEqual(this->value, that->value))
+                (this->description != that->description) ||
+                !isEqual(this->value, that->value))
             {
-#ifdef DEBUG_OSGENERAL
-                cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
-                cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -1356,21 +1401,26 @@ CPUNumber::CPUNumber():
 
 CPUNumber::~CPUNumber()
 {
-#ifdef DEBUG
-    cout << "inside CPUNumber destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside CPUNumber destructor");
 #endif
 }// end CPUNumber destructor
 
 bool CPUNumber::IsEqual(CPUNumber *that)
 {
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in CPUNumber");
+#endif
     if (this == NULL)
     {
         if (that == NULL)
             return true;
         else
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -1379,8 +1429,8 @@ bool CPUNumber::IsEqual(CPUNumber *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -1390,9 +1440,12 @@ bool CPUNumber::IsEqual(CPUNumber *that)
             if ((this->description != that->description) ||
                     (this->value       != that->value))
             {
-#ifdef DEBUG_OSGENERAL
-                cout << "description: " << this->description << " vs. " << that->description << endl;
-                cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -1417,21 +1470,26 @@ TimeSpan::TimeSpan():
 
 TimeSpan::~TimeSpan()
 {
-#ifdef DEBUG
-    cout << "inside TimeSpan destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside TimeSpan destructor");
 #endif
 }// end TimeSpan destructor
 
 bool TimeSpan::IsEqual(TimeSpan *that)
 {
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in TimeSpan");
+#endif
     if (this == NULL)
     {
         if (that == NULL)
             return true;
         else
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -1440,8 +1498,8 @@ bool TimeSpan::IsEqual(TimeSpan *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_OSGENERAL
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -1451,9 +1509,12 @@ bool TimeSpan::IsEqual(TimeSpan *that)
                     this->unit != that->unit )
 
             {
-#ifdef DEBUG_OSGENERAL
-                cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
-                cout << "value: " << this->value << " vs. " << that->value << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+                outStr << "value: " << this->value << " vs. " << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }

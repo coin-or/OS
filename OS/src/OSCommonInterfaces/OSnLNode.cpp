@@ -13,12 +13,11 @@
  *
  */
 
-//#define DEBUGOSNLNODE
-
 #include "OSnLNode.h"
 #include "OSErrorClass.h"
 #include "OSParameters.h"
 #include "OSMathUtil.h"
+#include "OSOutput.h"
 
 #include <string>
 #include <cstdlib>
@@ -163,8 +162,8 @@ OSnLNode::OSnLNode():
 
 OSnLNode::~OSnLNode()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNode destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNode destructor");
 #endif
 }//end ~OSnLNode
 
@@ -398,11 +397,12 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
 
 std::string OSnLNode::getNonlinearExpressionInXML()
 {
-    ostringstream outStr;
+    ostringstream outStr, logStr;
     outStr << "<" ;
     outStr << this->getTokenName();
-#ifdef DEBUGOSNLNODE
-    cout << "nonlinear node " << this->getTokenName() << endl;
+#ifndef NDEBUG
+    logStr << "nonlinear node " << this->getTokenName() << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, logStr.str());
 #endif
     if(inumberOfChildren > 0)
     {
@@ -445,8 +445,8 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
 
 bool OSnLNode::IsEqual(OSnLNode *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in OSnLNode" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLNode");
 #endif
     if (this == NULL)
     {
@@ -454,8 +454,9 @@ bool OSnLNode::IsEqual(OSnLNode *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -464,8 +465,9 @@ bool OSnLNode::IsEqual(OSnLNode *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -503,8 +505,8 @@ OSnLNodePlus::OSnLNodePlus()
 
 OSnLNodePlus::~OSnLNodePlus()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodePlus destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePlus destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -553,8 +555,8 @@ OSnLNodeSum::OSnLNodeSum()
 
 OSnLNodeSum::~OSnLNodeSum()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeSum destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSum destructor");
 #endif
     if(inumberOfChildren > 0)
     {
@@ -618,8 +620,8 @@ OSnLNodeAllDiff::OSnLNodeAllDiff()
 
 OSnLNodeAllDiff::~OSnLNodeAllDiff()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeAllDiff destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeAllDiff destructor");
 #endif
     if(inumberOfChildren > 0)
     {
@@ -695,8 +697,8 @@ OSnLNodeMax::OSnLNodeMax()
 
 OSnLNodeMax::~OSnLNodeMax()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeMax destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMax destructor");
 #endif
     if(inumberOfChildren > 0)
     {
@@ -766,8 +768,8 @@ OSnLNodeMin::OSnLNodeMin()
 
 OSnLNodeMin::~OSnLNodeMin()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeMin destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMin destructor");
 #endif
     if(inumberOfChildren > 0)
     {
@@ -842,8 +844,8 @@ OSnLNodeMinus::OSnLNodeMinus()
 
 OSnLNodeMinus::~OSnLNodeMinus()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeMinus destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMinus destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -898,8 +900,8 @@ OSnLNodeNegate::OSnLNodeNegate()
 
 OSnLNodeNegate::~OSnLNodeNegate()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeNegate destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeNegate destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -951,8 +953,8 @@ OSnLNodeTimes::OSnLNodeTimes()
 
 OSnLNodeTimes::~OSnLNodeTimes()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeTimes destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeTimes destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1004,8 +1006,8 @@ OSnLNodeDivide::OSnLNodeDivide()
 
 OSnLNodeDivide::~OSnLNodeDivide()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeDivide destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeDivide destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1059,8 +1061,8 @@ OSnLNodePower::OSnLNodePower()
 
 OSnLNodePower::~OSnLNodePower()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodePower destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePower destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1137,8 +1139,8 @@ OSnLNodeProduct::OSnLNodeProduct()
 
 OSnLNodeProduct::~OSnLNodeProduct()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeProduct destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeProduct destructor");
 #endif
     if(inumberOfChildren > 0)
     {
@@ -1206,8 +1208,8 @@ OSnLNodeLn::OSnLNodeLn()
 
 OSnLNodeLn::~OSnLNodeLn()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeLn destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeLn destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1261,8 +1263,8 @@ OSnLNodeSqrt::OSnLNodeSqrt()
 
 OSnLNodeSqrt::~OSnLNodeSqrt()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeSqrt destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSqrt destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1315,8 +1317,8 @@ OSnLNodeSquare::OSnLNodeSquare()
 
 OSnLNodeSquare::~OSnLNodeSquare()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeSquare destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSquare destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1367,8 +1369,8 @@ OSnLNodeSin::OSnLNodeSin()
 
 OSnLNodeSin::~OSnLNodeSin()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeSin destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSin destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1420,8 +1422,8 @@ OSnLNodeCos::OSnLNodeCos()
 
 OSnLNodeCos::~OSnLNodeCos()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeCos destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeCos destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1475,8 +1477,8 @@ OSnLNodeExp::OSnLNodeExp()
 
 OSnLNodeExp::~OSnLNodeExp()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeExp destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeExp destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1530,8 +1532,8 @@ OSnLNodeAbs::OSnLNodeAbs()
 
 OSnLNodeAbs::~OSnLNodeAbs()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeAbs destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeAbs destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1586,8 +1588,8 @@ OSnLNodeErf::OSnLNodeErf()
 
 OSnLNodeErf::~OSnLNodeErf()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeErf destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeErf destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1662,8 +1664,8 @@ OSnLNodeIf::OSnLNodeIf()
 
 OSnLNodeIf::~OSnLNodeIf()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeIf destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeIf destructor");
 #endif
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
@@ -1725,8 +1727,8 @@ OSnLNodeNumber::OSnLNodeNumber()
 
 OSnLNodeNumber::~OSnLNodeNumber()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeNumber destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeNumber destructor");
 #endif
     m_mChildren = NULL;
 }//end ~OSnLNodeNumber
@@ -1813,8 +1815,8 @@ OSnLNodeE::OSnLNodeE()
 
 OSnLNodeE::~OSnLNodeE()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeE destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeE destructor");
 #endif
     m_mChildren = NULL;
 }//end ~OSnLNodeE
@@ -1883,8 +1885,8 @@ OSnLNodePI::OSnLNodePI()
 
 OSnLNodePI::~OSnLNodePI()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodePI destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePI destructor");
 #endif
     m_mChildren = NULL;
 }//end ~OSnLNodePI
@@ -1981,9 +1983,11 @@ OSnLNodeVariable::OSnLNodeVariable()
 
 OSnLNodeVariable::~OSnLNodeVariable()
 {
-#ifdef DEBUGOSNLNODE
-    cout << "inside OSnLNodeVariable destructor" << endl;
-    cout << "number kids = " <<  inumberOfChildren << endl;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLNodeVariable destructor" << endl;
+    outStr << "number kids = " <<  inumberOfChildren << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     if(inumberOfChildren > 0)
     {
