@@ -7,7 +7,7 @@
  *
  * \remarks
  * Copyright (C) 2010-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -82,7 +82,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream; 
 
-#define MY_DEBUG
+//#define MY_DEBUG
 
 bool interactiveShell(std::string *schema, std::string *testFileName, std::string *outFileName,
 					  bool *compress, bool *addWhiteSpace, bool *verifyObjects, bool *useRandomObjects,

@@ -6,7 +6,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -9766,6 +9766,7 @@ bool ServiceOption::IsEqual(ServiceOption *that)
         if (that == NULL)
             return true;
         else
+
         {
 #ifdef DEBUG_OSOPTION
             cout << "First object is NULL, second is not" << endl;
@@ -11792,6 +11793,7 @@ bool OtherConOption::IsEqual(OtherConOption *that)
 #endif
             return false;
         }
+
         else
         {
             if ((this->idx     != that->idx)     || this->name != that->name || (this->value   != that->value) ||

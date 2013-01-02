@@ -6,16 +6,16 @@
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  */
 
-//#define DEBUG
+#include "OSOutput.h"
 #include "OSExpressionTree.h"
-#include<vector>
+#include <vector>
 
 using std::cout;
 using std::endl;
@@ -32,8 +32,9 @@ OSExpressionTree::OSExpressionTree():
 
 OSExpressionTree::~OSExpressionTree()
 {
-#ifdef DEBUG
-    cout << "Inside the OSExpressionTree Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+        "Inside the OSExpressionTree Destructor");
 #endif
     if( bDestroyNlNodes == true)
     {
@@ -98,8 +99,8 @@ std::map<int, int> *OSExpressionTree::getVariableIndicesMap()
 
 bool OSExpressionTree::IsEqual(OSExpressionTree *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in OSExpressionTree" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSExpressionTree");
 #endif
     if (this == NULL)
     {
@@ -107,8 +108,8 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -117,8 +118,8 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
 #endif
             return false;
         }

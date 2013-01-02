@@ -6,19 +6,20 @@
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  */
 
-//#define OSOL_READER_DEBUG
-#ifdef OSOL_READER_DEBUG
+
+#ifndef NDEBUG
 #include <cstdio>
 #endif
 
 #include "OSoLReader.h"
+#include "OSOutput.h"
 
 
 //bison function
@@ -31,26 +32,26 @@ void osolset_extra (OSoLParserData* parserData , void* yyscanner );
 
 OSoLReader::OSoLReader( )
 {
-#ifdef OSOL_READER_DEBUG
-    std::cout << "new OSOption()" << std::endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoL_parser, ENUM_OUTPUT_LEVEL_trace, "new OSOption()");
 #endif
     m_osoption = new OSOption();
-#ifdef OSOL_READER_DEBUG
-    std::cout << "new OSoLParserData()" << std::endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoL_parser, ENUM_OUTPUT_LEVEL_trace, "new OSoLParserData()");
 #endif
     m_parserData = new OSoLParserData();
-#ifdef OSOL_READER_DEBUG
-    std::cout << "new OSgLParserData()" << std::endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoL_parser, ENUM_OUTPUT_LEVEL_trace, "new OSgLParserData()");
 #endif
     m_osglData = new OSgLParserData();
     // initialize the lexer and set yyextra
-#ifdef OSOL_READER_DEBUG
-    std::cout << "initialize the lexer" << std::endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoL_parser, ENUM_OUTPUT_LEVEL_trace, "initialize the lexer");
 #endif
     osollex_init( &(m_parserData->scanner) );
     osolset_extra (m_parserData ,   m_parserData->scanner);
-#ifdef OSOL_READER_DEBUG
-    std::cout << "done" << std::endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoL_parser, ENUM_OUTPUT_LEVEL_trace, "done");
 #endif
 }
 

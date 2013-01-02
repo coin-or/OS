@@ -3,7 +3,7 @@
  * 
  * \remarks
  * Copyright (C) 2005-2008, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University,  Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -23,11 +23,11 @@
 #include "OSCoinSolver.h"
 #include "OSBearcatSolverXij.h"
 #include "OSDecompParam.h"
-#include  "OSDecompFactoryInitializer.h"
+#include "OSDecompFactoryInitializer.h"
 
 #include "OSNode.h"
 
-#include<vector>
+#include <vector>
 
 // --------------------------------------------------------------------- //
 /*!

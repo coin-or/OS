@@ -6,7 +6,7 @@
  *
  * \remarks
  * Copyright (C) 2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -17,6 +17,7 @@
 #include "OSCommandLine.h"
 #include "OSFileUtil.h"
 #include "OSConfig.h"
+#include "OSOutput.h"
 
 
 
@@ -37,19 +38,21 @@ OSCommandLine* OSCommandLineReader::readCommandLine(const std::string& osss) thr
 {
 	void* scanner;
 	bool scannerActive;
+    std::ostringstream outStr;
+
 	// scan the command line once
         scannerActive = true;
         ossslex_init(&scanner);
         setyyextra(m_oscommandline, scanner);
         osss_scan_string(osss.c_str(), scanner);
-#ifdef DEBUG_CL_INTERFACE
-        std::cout << "call ossslex" << std::endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_Command_line_parser, ENUM_OUTPUT_LEVEL_trace, "call ossslex");
 #endif
         ossslex(scanner);
         ossslex_destroy(scanner);
         scannerActive = false;
-#ifdef DEBUG_CL_INTERFACE
-        std::cout << "done with call to ossslex" << std::endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_Command_line_parser, ENUM_OUTPUT_LEVEL_trace, "done with call to ossslex");
 #endif
 
         // if there is a config file, get those options
@@ -58,17 +61,18 @@ OSCommandLine* OSCommandLineReader::readCommandLine(const std::string& osss) thr
 		    FileUtil *fileUtil = NULL;
             scannerActive = true;
             ossslex_init(&scanner);
-#ifdef DEBUG_CL_INTERFACE
-            cout << "configFileName = " << configFileName << endl;
+#ifndef NDEBUG
+            outStr << "configFileName = " << configFileName << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_Command_line_parser, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             std::string configFileOptions = fileUtil->getFileAsString(
                              m_oscommandline->configFile.c_str());
-#ifdef DEBUG_CL_INTERFACE
-            std::cout << "Call Text Extra" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_Command_line_parser, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra");
 #endif
             setyyextra(m_oscommandline, scanner);
-#ifdef DEBUG_CL_INTERFACE
-            std::cout << "Done with call Text Extra" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_Command_line_parser, ENUM_OUTPUT_LEVEL_trace, "Done with call Text Extra");
 #endif
             osss_scan_string(configFileOptions.c_str(), scanner);
             ossslex(scanner);
@@ -78,12 +82,16 @@ OSCommandLine* OSCommandLineReader::readCommandLine(const std::string& osss) thr
             ossslex_init(&scanner);
             setyyextra(m_oscommandline, scanner);
             osss_scan_string(osss.c_str(), scanner);
-    #ifdef DEBUG_CL_INTERFACE
-            std::cout << "call ossslex" << std::endl;
-    #endif
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_Command_line_parser, ENUM_OUTPUT_LEVEL_trace, "call ossslex");
+#endif
             ossslex(scanner);
             ossslex_destroy(scanner);
             scannerActive = false;           
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_Command_line_parser, ENUM_OUTPUT_LEVEL_trace, "done with call to ossslex");
+
+#endif
         }
 
 

@@ -1,9 +1,9 @@
-/* $Id: OSNodeApp.h 3038 2009-11-07 11:43:44Z kmartin $ */
-/** @file OSNodeApp.h
+/* $Id: OSNode.h 3038 2009-11-07 11:43:44Z kmartin $ */
+/** @file OSNode.h
  *
  * \remarks
  * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -12,8 +12,9 @@
 
 #ifndef OSNODE_H
 #define OSNODE_H
-#include<vector>
-#include<set>
+
+#include <vector>
+#include <set>
 
 // --------------------------------------------------------------------- //
 /*!

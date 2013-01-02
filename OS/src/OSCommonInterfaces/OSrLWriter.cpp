@@ -6,14 +6,13 @@
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  */
 
-//#define DEBUG
 
 #include "OSrLWriter.h"
 #include "OSResult.h"
@@ -22,13 +21,13 @@
 #include "OSStringUtil.h"
 #include "OSParameters.h"
 #include "OSConfig.h"
+#include "OSOutput.h"
 #include "OSBase64.h"
 #include "OSMathUtil.h"
 #include <sstream>
 #include <iostream>
 #include <stdio.h>
 
-using std::cout;
 using std::endl;
 using std::ostringstream;
 
@@ -74,8 +73,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     bool systemTagPrinted;
     bool serviceTagPrinted;
     bool jobTagPrinted;
-#ifdef DEBUG
-    cout << "in OSrLWriter" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "in OSrLWriter");
 #endif
 
     if(m_OSResult == NULL)  return outStr.str();
@@ -90,8 +89,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     outStr << "/OSrL.xsd\" >" ;
     outStr << endl;
 
-#ifdef DEBUG
-    cout << "output <resultHeader>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <resultHeader>");
 #endif
     if(m_OSResult->resultHeader != NULL)
     {
@@ -108,8 +107,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     }
 
 
-#ifdef DEBUG
-    cout << "output <general>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <general>");
 #endif
     if(m_OSResult->general != NULL)
     {
@@ -264,8 +263,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     }
 
 
-#ifdef DEBUG
-    cout << "output <system>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <system>");
 #endif
     if(m_OSResult->system != NULL)
     {
@@ -410,8 +409,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     }
 
 
-#ifdef DEBUG
-    cout << "output <service>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <service>");
 #endif
     if(m_OSResult->service != NULL)
     {
@@ -502,8 +501,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     }
 
 
-#ifdef DEBUG
-    cout << "output <job>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <job>");
 #endif
     if(m_OSResult->job != NULL)
     {
@@ -712,8 +711,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     }
 
 
-#ifdef DEBUG
-    cout << "output <optimization>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <optimization>");
 #endif
     if(m_OSResult->optimization != NULL)
     {
@@ -811,8 +810,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                     outStr << ">" << endl;
                     if(m_OSResult->optimization->solution[i]->variables->values != NULL)
                     {
-#ifdef DEBUG
-                        cout << "output <variables> <values>" << endl;
+#ifndef NDEBUG
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, 
+                            "output <variables> <values>");
 #endif
                         outStr << "<values numberOfVar=\"" << m_OSResult->optimization->solution[i]->variables->values->numberOfVar << "\">" << endl;
                         for(j = 0; j < m_OSResult->optimization->solution[i]->variables->values->numberOfVar; j++)
@@ -835,8 +835,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
 
                     if(m_OSResult->optimization->solution[i]->variables->valuesString != NULL)
                     {
-#ifdef DEBUG
-                        cout << "output <variables> <valuesString>" << endl;
+#ifndef NDEBUG
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, 
+                            "output <variables> <valuesString>");
 #endif
                         outStr << "<valuesString numberOfVar=\"" << m_OSResult->optimization->solution[i]->variables->valuesString->numberOfVar << "\">" << endl;
                         for(j = 0; j < m_OSResult->optimization->solution[i]->variables->valuesString->numberOfVar; j++)
@@ -859,16 +860,17 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
 
                     if(m_OSResult->optimization->solution[i]->variables->basisStatus != NULL)
                     {
-#ifdef DEBUG
-                        cout << "output <variables> <basisStatus>" << endl;
+#ifndef NDEBUG
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace,
+                            "output <variables> <basisStatus>");
 #endif
                         outStr << "<basisStatus>" << endl;
                         outStr << writeBasisStatus(m_OSResult->optimization->solution[i]->variables->basisStatus, m_bWhiteSpace, m_bWriteBase64);
                         outStr << "</basisStatus>" << endl;
                     }
 
-#ifdef DEBUG
-                    cout << "output <variables> <other>" << endl;
+#ifndef NDEBUG
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <variables> <other>");
 #endif
                     if(m_OSResult->optimization->solution[i]->variables->other != NULL)
                     {
@@ -956,8 +958,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                     if (m_OSResult->optimization->solution[i]->objectives->numberOfOtherObjectiveResults > 0)
                         outStr << "numberOfOtherObjectiveResults=\"" << m_OSResult->optimization->solution[i]->objectives->numberOfOtherObjectiveResults << "\"";
                     outStr << ">" << endl;
-#ifdef DEBUG
-                    cout << "output <objectives> <values>" << endl;
+#ifndef NDEBUG
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, 
+                        "output <objectives> <values>");
 #endif
                     if(m_OSResult->optimization->solution[i]->objectives->values != NULL)
                     {
@@ -983,16 +986,18 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
 
                     if(m_OSResult->optimization->solution[i]->objectives->basisStatus != NULL)
                     {
-#ifdef DEBUG
-                        cout << "output <objectives> <basisStatus>" << endl;
+#ifndef NDEBUG
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace,
+                            "output <objectives> <basisStatus>");
 #endif
                         outStr << "<basisStatus>" << endl;
                         outStr << writeBasisStatus(m_OSResult->optimization->solution[i]->objectives->basisStatus, m_bWhiteSpace, m_bWriteBase64);
                         outStr << "</basisStatus>" << endl;
                     }
 
-#ifdef DEBUG
-                    cout << "output <objectives> <other>" << endl;
+#ifndef NDEBUG
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, 
+                        "output <objectives> <other>");
 #endif
                     if(m_OSResult->optimization->solution[i]->objectives->other != NULL)
                     {
@@ -1085,8 +1090,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                     if (m_OSResult->optimization->solution[i]->constraints->numberOfOtherConstraintResults > 0)
                         outStr << "numberOfOtherConstraintResults=\"" << m_OSResult->optimization->solution[i]->constraints->numberOfOtherConstraintResults << "\"";
                     outStr << ">" << endl;
-#ifdef DEBUG
-                    cout << "output <constraints> <dualValues>" << endl;
+#ifndef NDEBUG
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, 
+                        "output <constraints> <dualValues>");
 #endif
                     if(m_OSResult->optimization->solution[i]->constraints->dualValues != NULL)
                     {
@@ -1111,16 +1117,18 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
 
                     if(m_OSResult->optimization->solution[i]->constraints->basisStatus != NULL)
                     {
-#ifdef DEBUG
-                        cout << "output <constraints> <basisStatus>" << endl;
+#ifndef NDEBUG
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace,
+                            "output <constraints> <basisStatus>");
 #endif
                         outStr << "<basisStatus>" << endl;
                         outStr << writeBasisStatus(m_OSResult->optimization->solution[i]->constraints->basisStatus, m_bWhiteSpace, m_bWriteBase64);
                         outStr << "</basisStatus>" << endl;
                     }
 
-#ifdef DEBUG
-                    cout << "output <constraints> <other>" << endl;
+#ifndef NDEBUG
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace,
+                        "output <constraints> <other>");
 #endif
                     if(m_OSResult->optimization->solution[i]->constraints->other != NULL)
                     {
@@ -1128,7 +1136,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                         {
                             for(int k = 0; k < m_OSResult->optimization->solution[i]->constraints->numberOfOtherConstraintResults; k++)
                             {
-                                outStr << "<other" ;
+                                outStr << "<other";
                                 if (m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon > 0)
                                 {
                                     outStr << " numberOfCon=\"";
@@ -1139,7 +1147,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                 {
                                     outStr << " numberOfEnumerations=\"";
                                     outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfEnumerations;
-                                    outStr << "\"" ;
+                                    outStr << "\"";
                                 }
                                 outStr << " name=";
                                 \
@@ -1156,6 +1164,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                     outStr << " type=\"";
                                     outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->type;
                                     outStr << "\"" ;
+
                                 }
                                 if (m_OSResult->optimization->solution[i]->constraints->other[k]->description != "")
                                 {
@@ -1206,8 +1215,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                 }
 
 
-#ifdef DEBUG
-                cout << "output <otherSolutionResults>" << endl;
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <otherSolutionResults>");
 #endif
                 if (m_OSResult->optimization->solution[i]->otherSolutionResults != NULL)
                 {
@@ -1238,8 +1247,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
         } // end for loop(i=0..numberOfSolutions)
 
 
-#ifdef DEBUG
-        cout << "output <otherSolverOutput>" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <otherSolverOutput>");
 #endif
         if (m_OSResult->optimization->otherSolverOutput != NULL)
 //			if (m_OSResult->optimization->otherSolverOutput->numberOfSolverOutputs > 0)
@@ -1273,8 +1282,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
         outStr << "</optimization>" << endl;
     } // end if (optimization != NULL)
     outStr << "</osrl>" << endl ;
-#ifdef DEBUG
-    cout << "done" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "done");
 #endif
     return outStr.str();
 }// end writeOSrL

@@ -5,7 +5,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -3128,7 +3128,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 				kountChar++;
 			}
 			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = dbuf.dble;
-			std::cout << dbuf.dble << std::endl;
+			//std::cout << dbuf.dble << std::endl;
 			kount++;
 		}
 		delete [] b64string;

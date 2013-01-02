@@ -5,18 +5,19 @@
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  */
 
-
+#include "OSOutput.h"
 #include "OSErrorClass.h"
 #include "OSDefaultSolver.h"
 
 #include<iostream>
+
 using std::cout;
 using std::endl;
 
@@ -38,10 +39,9 @@ DefaultSolver::DefaultSolver():
 
 DefaultSolver::~DefaultSolver()
 {
-#ifdef DEBUG
-    cout << "Default Solver destructor called" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "Default Solver destructor called");
 #endif
-    //cout << "Start Default Solver Destructor" << endl;
     /* we do not delete osinstance since it is not newed in any
      * of the solvers, it is newed elesewhere and deleted elsewhere
      */

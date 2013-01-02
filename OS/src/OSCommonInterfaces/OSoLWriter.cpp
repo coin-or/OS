@@ -6,14 +6,13 @@
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  */
 
-//#define DEBUG
 
 #include "OSoLWriter.h"
 #include "OSOption.h"
@@ -24,6 +23,7 @@
 #include "OSConfig.h"
 #include "OSBase64.h"
 #include "OSMathUtil.h"
+#include "OSOutput.h"
 #include <sstream>
 #include <iostream>
 #include <stdio.h>
@@ -56,7 +56,7 @@ OSoLWriter::~OSoLWriter()
 std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 {
     m_OSOption = theosoption;
-    std::ostringstream outStr;
+    std::ostringstream osolStr, outStr;
 #ifdef WIN_
     const char	dirsep='\\';
 #else
@@ -69,34 +69,34 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
     xsltDir = "http://www.coin-or.org/OS/stylesheets/";
 
     bool generalTagPrinted;
-#ifdef DEBUG
-    cout << "in OSoLWriter" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "in OSoLWriter");
 #endif
 
-    if(m_OSOption == NULL)  return outStr.str();
-    outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ;
-    outStr << "<?xml-stylesheet type=\"text/xsl\" href=\"";
-    outStr << xsltDir;
-    outStr << "OSoL.xslt\"?>";
-    outStr << endl;
-    outStr << "<osol xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
-    outStr << "xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
-    outStr << OS_SCHEMA_VERSION;
-    outStr << "/OSoL.xsd\" >" ;
-    outStr << endl;
+    if(m_OSOption == NULL)  return osolStr.str();
+    osolStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ;
+    osolStr << "<?xml-stylesheet type=\"text/xsl\" href=\"";
+    osolStr << xsltDir;
+    osolStr << "OSoL.xslt\"?>";
+    osolStr << endl;
+    osolStr << "<osol xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+    osolStr << "xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
+    osolStr << OS_SCHEMA_VERSION;
+    osolStr << "/OSoL.xsd\" >" ;
+    osolStr << endl;
 
-#ifdef DEBUG
-    cout << "output <optionHeader>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "output <optionHeader>");
 #endif
     if(m_OSOption->optionHeader != NULL)
     {
-        outStr << "<optionHeader>" << endl;
-        outStr << writeGeneralFileHeader(m_OSOption->optionHeader, true);
-        outStr << "</optionHeader>" << endl;
+        osolStr << "<optionHeader>" << endl;
+        osolStr << writeGeneralFileHeader(m_OSOption->optionHeader, true);
+        osolStr << "</optionHeader>" << endl;
     }
 
-#ifdef DEBUG
-    cout << "output <general>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "output <general>");
 #endif
     if(m_OSOption->general != NULL)
     {
@@ -105,134 +105,134 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<serviceURI>" << m_OSOption->general->serviceURI << "</serviceURI>" << endl;
+            osolStr << "<serviceURI>" << m_OSOption->general->serviceURI << "</serviceURI>" << endl;
         }
         if (m_OSOption->general->serviceName != "")
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<serviceName>" << m_OSOption->general->serviceName << "</serviceName>" << endl;
+            osolStr << "<serviceName>" << m_OSOption->general->serviceName << "</serviceName>" << endl;
         }
         if (m_OSOption->general->instanceName != "")
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<instanceName>" << m_OSOption->general->instanceName << "</instanceName>" << endl;
+            osolStr << "<instanceName>" << m_OSOption->general->instanceName << "</instanceName>" << endl;
         }
         if (m_OSOption->general->instanceLocation != NULL)
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
             if (m_OSOption->general->instanceLocation->locationType == "")
             {
-                outStr << "<instanceLocation>";
+                osolStr << "<instanceLocation>";
             }
             else
             {
-                outStr << "<instanceLocation locationType=\"" << m_OSOption->general->instanceLocation->locationType << "\">";
+                osolStr << "<instanceLocation locationType=\"" << m_OSOption->general->instanceLocation->locationType << "\">";
             };
-            outStr << m_OSOption->general->instanceLocation->value << "</instanceLocation>" << endl;
+            osolStr << m_OSOption->general->instanceLocation->value << "</instanceLocation>" << endl;
         }
         if (m_OSOption->general->jobID != "")
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<jobID>" << m_OSOption->general->jobID << "</jobID>" << endl;
+            osolStr << "<jobID>" << m_OSOption->general->jobID << "</jobID>" << endl;
         }
         if (m_OSOption->general->solverToInvoke != "")
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<solverToInvoke>" << m_OSOption->general->solverToInvoke << "</solverToInvoke>" << endl;
+            osolStr << "<solverToInvoke>" << m_OSOption->general->solverToInvoke << "</solverToInvoke>" << endl;
         }
         if (m_OSOption->general->license != "")
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<license>" << m_OSOption->general->license << "</license>" << endl;
+            osolStr << "<license>" << m_OSOption->general->license << "</license>" << endl;
         }
         if (m_OSOption->general->userName != "")
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<userName>" << m_OSOption->general->userName << "</userName>" << endl;
+            osolStr << "<userName>" << m_OSOption->general->userName << "</userName>" << endl;
         }
         if (m_OSOption->general->password != "")
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<password>" << m_OSOption->general->password << "</password>" << endl;
+            osolStr << "<password>" << m_OSOption->general->password << "</password>" << endl;
         }
         if (m_OSOption->general->contact != NULL)
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
             if (m_OSOption->general->contact->transportType == "")
             {
-                outStr << "<contact>";
+                osolStr << "<contact>";
             }
             else
             {
-                outStr << "<contact transportType=\"" << m_OSOption->general->contact->transportType << "\">";
+                osolStr << "<contact transportType=\"" << m_OSOption->general->contact->transportType << "\">";
             };
-            outStr << m_OSOption->general->contact->value << "</contact>" << endl;
+            osolStr << m_OSOption->general->contact->value << "</contact>" << endl;
         }
         if (m_OSOption->general->otherOptions != NULL)
         {
             if (generalTagPrinted == false)
             {
-                outStr << "<general>" << endl;
+                osolStr << "<general>" << endl;
                 generalTagPrinted = true;
             }
-            outStr << "<otherOptions numberOfOtherOptions=\"";
-            outStr << m_OSOption->general->otherOptions->numberOfOtherOptions << "\">" << endl;
+            osolStr << "<otherOptions numberOfOtherOptions=\"";
+            osolStr << m_OSOption->general->otherOptions->numberOfOtherOptions << "\">" << endl;
             for (int i=0; i < m_OSOption->general->otherOptions->numberOfOtherOptions; i++)
             {
-                outStr << "<other name=\"" << m_OSOption->general->otherOptions->other[i]->name << "\"";
+                osolStr << "<other name=\"" << m_OSOption->general->otherOptions->other[i]->name << "\"";
                 if (m_OSOption->general->otherOptions->other[i]->value != "")
-                    outStr << " value=\"" << m_OSOption->general->otherOptions->other[i]->value << "\"";
+                    osolStr << " value=\"" << m_OSOption->general->otherOptions->other[i]->value << "\"";
                 if (m_OSOption->general->otherOptions->other[i]->description != "")
-                    outStr << " description=" << writeStringData(m_OSOption->general->otherOptions->other[i]->description);
-                outStr << "/>" << endl;
+                    osolStr << " description=" << writeStringData(m_OSOption->general->otherOptions->other[i]->description);
+                osolStr << "/>" << endl;
             }
-            outStr << "</otherOptions>" << endl;
+            osolStr << "</otherOptions>" << endl;
         }
         if (generalTagPrinted == false)
-            outStr << "<general>" << endl;
+            osolStr << "<general>" << endl;
 
-        outStr << "</general>" << endl;
-#ifdef DEBUG
-        cout << "Done with <general> element" << endl;
+        osolStr << "</general>" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "Done with <general> element");
 #endif
     };
 
@@ -241,75 +241,76 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
      */
     if(m_OSOption->system != NULL)
     {
-        outStr << "<system>" << endl;
+
+        osolStr << "<system>" << endl;
         if (m_OSOption->system->minDiskSpace != NULL)
         {
-            outStr << "<minDiskSpace";
+            osolStr << "<minDiskSpace";
             if (m_OSOption->system->minDiskSpace->unit != "byte")
-                outStr << " unit=\"" << m_OSOption->system->minDiskSpace->unit << "\"";
+                osolStr << " unit=\"" << m_OSOption->system->minDiskSpace->unit << "\"";
             if (m_OSOption->system->minDiskSpace->description != "")
-                outStr << " description=" << writeStringData(m_OSOption->system->minDiskSpace->description);
-            outStr << ">";
+                osolStr << " description=" << writeStringData(m_OSOption->system->minDiskSpace->description);
+            osolStr << ">";
             if (!OSIsnan(m_OSOption->system->minDiskSpace->value))
-                outStr << os_dtoa_format(m_OSOption->system->minDiskSpace->value);
+                osolStr << os_dtoa_format(m_OSOption->system->minDiskSpace->value);
             else
-                outStr << "NaN";
-            outStr << "</minDiskSpace>" << endl;
+                osolStr << "NaN";
+            osolStr << "</minDiskSpace>" << endl;
         }
         if (m_OSOption->system->minMemorySize != NULL)
         {
-            outStr << "<minMemorySize";
+            osolStr << "<minMemorySize";
             if (m_OSOption->system->minMemorySize->unit != "byte")
-                outStr << " unit=\"" << m_OSOption->system->minMemorySize->unit << "\"";
+                osolStr << " unit=\"" << m_OSOption->system->minMemorySize->unit << "\"";
             if (m_OSOption->system->minMemorySize->description != "")
-                outStr << " description=" << writeStringData(m_OSOption->system->minMemorySize->description);
-            outStr << ">";
+                osolStr << " description=" << writeStringData(m_OSOption->system->minMemorySize->description);
+            osolStr << ">";
             if (!OSIsnan(m_OSOption->system->minMemorySize->value))
-                outStr << os_dtoa_format(m_OSOption->system->minMemorySize->value);
+                osolStr << os_dtoa_format(m_OSOption->system->minMemorySize->value);
             else
-                outStr << "NaN";
-            outStr << "</minMemorySize>" << endl;
+                osolStr << "NaN";
+            osolStr << "</minMemorySize>" << endl;
         }
         if (m_OSOption->system->minCPUSpeed != NULL)
         {
-            outStr << "<minCPUSpeed";
+            osolStr << "<minCPUSpeed";
             if (m_OSOption->system->minCPUSpeed->unit != "hertz")
-                outStr << " unit=\"" << m_OSOption->system->minCPUSpeed->unit << "\"";
+                osolStr << " unit=\"" << m_OSOption->system->minCPUSpeed->unit << "\"";
             if (m_OSOption->system->minCPUSpeed->description != "")
-                outStr << " description=" << writeStringData(m_OSOption->system->minCPUSpeed->description);
-            outStr << ">";
+                osolStr << " description=" << writeStringData(m_OSOption->system->minCPUSpeed->description);
+            osolStr << ">";
             if (!OSIsnan(m_OSOption->system->minCPUSpeed->value))
-                outStr << os_dtoa_format(m_OSOption->system->minCPUSpeed->value);
+                osolStr << os_dtoa_format(m_OSOption->system->minCPUSpeed->value);
             else
-                outStr << "NaN";
-            outStr << "</minCPUSpeed>" << endl;
+                osolStr << "NaN";
+            osolStr << "</minCPUSpeed>" << endl;
         }
         if (m_OSOption->system->minCPUNumber != NULL)
         {
-            outStr << "<minCPUNumber";
+            osolStr << "<minCPUNumber";
             if (m_OSOption->system->minCPUNumber->description != "")
-                outStr << " description=" << writeStringData(m_OSOption->system->minCPUNumber->description);
-            outStr << ">";
-            outStr << m_OSOption->system->minCPUNumber->value << "</minCPUNumber>" << endl;
+                osolStr << " description=" << writeStringData(m_OSOption->system->minCPUNumber->description);
+            osolStr << ">";
+            osolStr << m_OSOption->system->minCPUNumber->value << "</minCPUNumber>" << endl;
         };
         if (m_OSOption->system->otherOptions != NULL)
         {
-            outStr << "<otherOptions numberOfOtherOptions=\"";
-            outStr << m_OSOption->system->otherOptions->numberOfOtherOptions << "\">" << endl;
+            osolStr << "<otherOptions numberOfOtherOptions=\"";
+            osolStr << m_OSOption->system->otherOptions->numberOfOtherOptions << "\">" << endl;
             for (int i=0; i < m_OSOption->system->otherOptions->numberOfOtherOptions; i++)
             {
-                outStr << "<other name=\"" << m_OSOption->system->otherOptions->other[i]->name << "\"";
+                osolStr << "<other name=\"" << m_OSOption->system->otherOptions->other[i]->name << "\"";
                 if (m_OSOption->system->otherOptions->other[i]->value != "")
-                    outStr << " value=\"" << m_OSOption->system->otherOptions->other[i]->value << "\"";
+                    osolStr << " value=\"" << m_OSOption->system->otherOptions->other[i]->value << "\"";
                 if (m_OSOption->system->otherOptions->other[i]->description != "")
-                    outStr << " description=" << writeStringData(m_OSOption->system->otherOptions->other[i]->description);
-                outStr << "/>" << endl;
+                    osolStr << " description=" << writeStringData(m_OSOption->system->otherOptions->other[i]->description);
+                osolStr << "/>" << endl;
             }
-            outStr << "</otherOptions>" << endl;
+            osolStr << "</otherOptions>" << endl;
         }
-        outStr << "</system>" << endl;
-#ifdef DEBUG
-        cout << "Done with <system> element" << endl;
+        osolStr << "</system>" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "Done with <system> element");
 #endif
     }
 
@@ -318,29 +319,29 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
      */
     if(m_OSOption->service != NULL)
     {
-        outStr << "<service>" << endl;
+        osolStr << "<service>" << endl;
         if (m_OSOption->service->type != "")
         {
-            outStr << "<type>" << m_OSOption->service->type << "</type>" << endl;
+            osolStr << "<type>" << m_OSOption->service->type << "</type>" << endl;
         }
         if (m_OSOption->service->otherOptions != NULL)
         {
-            outStr << "<otherOptions numberOfOtherOptions=\"";
-            outStr << m_OSOption->service->otherOptions->numberOfOtherOptions << "\">" << endl;
+            osolStr << "<otherOptions numberOfOtherOptions=\"";
+            osolStr << m_OSOption->service->otherOptions->numberOfOtherOptions << "\">" << endl;
             for (int i=0; i < m_OSOption->service->otherOptions->numberOfOtherOptions; i++)
             {
-                outStr << "<other name=\"" << m_OSOption->service->otherOptions->other[i]->name << "\"";
+                osolStr << "<other name=\"" << m_OSOption->service->otherOptions->other[i]->name << "\"";
                 if (m_OSOption->service->otherOptions->other[i]->value != "")
-                    outStr << " value=\"" << m_OSOption->service->otherOptions->other[i]->value << "\"";
+                    osolStr << " value=\"" << m_OSOption->service->otherOptions->other[i]->value << "\"";
                 if (m_OSOption->service->otherOptions->other[i]->description != "")
-                    outStr << " description=" << writeStringData(m_OSOption->service->otherOptions->other[i]->description);
-                outStr << "/>" << endl;
+                    osolStr << " description=" << writeStringData(m_OSOption->service->otherOptions->other[i]->description);
+                osolStr << "/>" << endl;
             }
-            outStr << "</otherOptions>" << endl;
+            osolStr << "</otherOptions>" << endl;
         }
-        outStr << "</service>" << endl;
-#ifdef DEBUG
-        cout << "Done with <service> element" << endl;
+        osolStr << "</service>" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "Done with <service> element");
 #endif
     };
 
@@ -349,162 +350,162 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
      */
     if(m_OSOption->job != NULL)
     {
-        outStr << "<job>" << endl;
+        osolStr << "<job>" << endl;
         if (m_OSOption->job->maxTime != NULL)
         {
             if (m_OSOption->job->maxTime->unit == "")
                 m_OSOption->job->maxTime->unit = "second";
-            outStr << "<maxTime unit=\"" << m_OSOption->job->maxTime->unit << "\">";
+            osolStr << "<maxTime unit=\"" << m_OSOption->job->maxTime->unit << "\">";
             if (!OSIsnan(m_OSOption->job->maxTime->value))
-                outStr << os_dtoa_format(m_OSOption->job->maxTime->value);
+                osolStr << os_dtoa_format(m_OSOption->job->maxTime->value);
             else
-                outStr << "NaN";
-            outStr << "</maxTime>" << endl;
+                osolStr << "NaN";
+            osolStr << "</maxTime>" << endl;
         }
         if (m_OSOption->job->requestedStartTime != "")
-            outStr << "<requestedStartTime>" << m_OSOption->job->requestedStartTime << "</requestedStartTime>" << endl;
+            osolStr << "<requestedStartTime>" << m_OSOption->job->requestedStartTime << "</requestedStartTime>" << endl;
         if (m_OSOption->job->dependencies != NULL)
         {
-            outStr << "<dependencies numberOfJobIDs=\"";
-            outStr << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl;
+            osolStr << "<dependencies numberOfJobIDs=\"";
+            osolStr << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl;
             for (int i=0; i < m_OSOption->job->dependencies->numberOfJobIDs; i++)
-                outStr << "<jobID>" << m_OSOption->job->dependencies->jobID[i] << "</jobID>" << endl;
-            outStr << "</dependencies>" << endl;
+                osolStr << "<jobID>" << m_OSOption->job->dependencies->jobID[i] << "</jobID>" << endl;
+            osolStr << "</dependencies>" << endl;
         }
         if (m_OSOption->job->requiredDirectories != NULL)
         {
-            outStr << "<requiredDirectories numberOfPaths=\"";
-            outStr << m_OSOption->job->requiredDirectories->numberOfPaths << "\">" << endl;
+            osolStr << "<requiredDirectories numberOfPaths=\"";
+            osolStr << m_OSOption->job->requiredDirectories->numberOfPaths << "\">" << endl;
             for (int i=0; i < m_OSOption->job->requiredDirectories->numberOfPaths; i++)
-                outStr << "<path>" << m_OSOption->job->requiredDirectories->path[i] << "</path>" << endl;
-            outStr << "</requiredDirectories>" << endl;
+                osolStr << "<path>" << m_OSOption->job->requiredDirectories->path[i] << "</path>" << endl;
+            osolStr << "</requiredDirectories>" << endl;
         }
         if (m_OSOption->job->requiredFiles != NULL)
         {
-            outStr << "<requiredFiles numberOfPaths=\"";
-            outStr << m_OSOption->job->requiredFiles->numberOfPaths << "\">" << endl;
+            osolStr << "<requiredFiles numberOfPaths=\"";
+            osolStr << m_OSOption->job->requiredFiles->numberOfPaths << "\">" << endl;
             for (int i=0; i < m_OSOption->job->requiredFiles->numberOfPaths; i++)
-                outStr << "<path>" << m_OSOption->job->requiredFiles->path[i] << "</path>" << endl;
-            outStr << "</requiredFiles>" << endl;
+                osolStr << "<path>" << m_OSOption->job->requiredFiles->path[i] << "</path>" << endl;
+            osolStr << "</requiredFiles>" << endl;
         }
         if (m_OSOption->job->directoriesToMake != NULL)
         {
-            outStr << "<directoriesToMake numberOfPaths=\"";
-            outStr << m_OSOption->job->directoriesToMake->numberOfPaths << "\">" << endl;
+            osolStr << "<directoriesToMake numberOfPaths=\"";
+            osolStr << m_OSOption->job->directoriesToMake->numberOfPaths << "\">" << endl;
             for (int i=0; i < m_OSOption->job->directoriesToMake->numberOfPaths; i++)
-                outStr << "<path>" << m_OSOption->job->directoriesToMake->path[i] << "</path>" << endl;
-            outStr << "</directoriesToMake>" << endl;
+                osolStr << "<path>" << m_OSOption->job->directoriesToMake->path[i] << "</path>" << endl;
+            osolStr << "</directoriesToMake>" << endl;
         }
         if (m_OSOption->job->filesToMake != NULL)
         {
-            outStr << "<filesToMake numberOfPaths=\"";
-            outStr << m_OSOption->job->filesToMake->numberOfPaths << "\">" << endl;
+            osolStr << "<filesToMake numberOfPaths=\"";
+            osolStr << m_OSOption->job->filesToMake->numberOfPaths << "\">" << endl;
             for (int i=0; i < m_OSOption->job->filesToMake->numberOfPaths; i++)
-                outStr << "<path>" << m_OSOption->job->filesToMake->path[i] << "</path>" << endl;
-            outStr << "</filesToMake>" << endl;
+                osolStr << "<path>" << m_OSOption->job->filesToMake->path[i] << "</path>" << endl;
+            osolStr << "</filesToMake>" << endl;
         }
         if (m_OSOption->job->inputDirectoriesToMove != NULL)
         {
-            outStr << "<inputDirectoriesToMove numberOfPathPairs=\"";
-            outStr << m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs << "\">" << endl;
+            osolStr << "<inputDirectoriesToMove numberOfPathPairs=\"";
+            osolStr << m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs << "\">" << endl;
             for (int i=0; i < m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs; i++)
             {
-                outStr << "<pathPair";
-                outStr << " from=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->from << "\"";
-                outStr << " to=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->to << "\"";
+                osolStr << "<pathPair";
+                osolStr << " from=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->from << "\"";
+                osolStr << " to=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->to << "\"";
                 if (m_OSOption->job->inputDirectoriesToMove->pathPair[i]->makeCopy)
-                    outStr << " makeCopy=\"true\"";
-                outStr << "/>" << endl;
+                    osolStr << " makeCopy=\"true\"";
+                osolStr << "/>" << endl;
             }
-            outStr << "</inputDirectoriesToMove>" << endl;
+            osolStr << "</inputDirectoriesToMove>" << endl;
         }
         if (m_OSOption->job->inputFilesToMove != NULL)
         {
-            outStr << "<inputFilesToMove numberOfPathPairs=\"";
-            outStr << m_OSOption->job->inputFilesToMove->numberOfPathPairs << "\">" << endl;
+            osolStr << "<inputFilesToMove numberOfPathPairs=\"";
+            osolStr << m_OSOption->job->inputFilesToMove->numberOfPathPairs << "\">" << endl;
             for (int i=0; i < m_OSOption->job->inputFilesToMove->numberOfPathPairs; i++)
             {
-                outStr << "<pathPair";
-                outStr << " from=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->from << "\"";
-                outStr << " to=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->to << "\"";
+                osolStr << "<pathPair";
+                osolStr << " from=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->from << "\"";
+                osolStr << " to=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->to << "\"";
                 if (m_OSOption->job->inputFilesToMove->pathPair[i]->makeCopy)
-                    outStr << " makeCopy=\"true\"";
-                outStr << "/>" << endl;
+                    osolStr << " makeCopy=\"true\"";
+                osolStr << "/>" << endl;
             }
-            outStr << "</inputFilesToMove>" << endl;
+            osolStr << "</inputFilesToMove>" << endl;
         }
         if (m_OSOption->job->outputFilesToMove != NULL)
         {
-            outStr << "<outputFilesToMove numberOfPathPairs=\"";
-            outStr << m_OSOption->job->outputFilesToMove->numberOfPathPairs << "\">" << endl;
+            osolStr << "<outputFilesToMove numberOfPathPairs=\"";
+            osolStr << m_OSOption->job->outputFilesToMove->numberOfPathPairs << "\">" << endl;
             for (int i=0; i < m_OSOption->job->outputFilesToMove->numberOfPathPairs; i++)
             {
-                outStr << "<pathPair";
-                outStr << " from=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->from << "\"";
-                outStr << " to=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->to << "\"";
+                osolStr << "<pathPair";
+                osolStr << " from=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->from << "\"";
+                osolStr << " to=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->to << "\"";
                 if (m_OSOption->job->outputFilesToMove->pathPair[i]->makeCopy)
-                    outStr << " makeCopy=\"true\"";
-                outStr << "/>" << endl;
+                    osolStr << " makeCopy=\"true\"";
+                osolStr << "/>" << endl;
             }
-            outStr << "</outputFilesToMove>" << endl;
+            osolStr << "</outputFilesToMove>" << endl;
         }
         if (m_OSOption->job->outputDirectoriesToMove != NULL)
         {
-            outStr << "<outputDirectoriesToMove numberOfPathPairs=\"";
-            outStr << m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs << "\">" << endl;
+            osolStr << "<outputDirectoriesToMove numberOfPathPairs=\"";
+            osolStr << m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs << "\">" << endl;
             for (int i=0; i < m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs; i++)
             {
-                outStr << "<pathPair";
-                outStr << " from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from << "\"";
-                outStr << " to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to << "\"";
+                osolStr << "<pathPair";
+                osolStr << " from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from << "\"";
+                osolStr << " to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to << "\"";
                 if (m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy)
-                    outStr << " makeCopy=\"true\"";
-                outStr << "/>" << endl;
+                    osolStr << " makeCopy=\"true\"";
+                osolStr << "/>" << endl;
             }
-            outStr << "</outputDirectoriesToMove>" << endl;
+            osolStr << "</outputDirectoriesToMove>" << endl;
         }
         if (m_OSOption->job->filesToDelete != NULL)
         {
-            outStr << "<filesToDelete numberOfPaths=\"";
-            outStr << m_OSOption->job->filesToDelete->numberOfPaths << "\">" << endl;
+            osolStr << "<filesToDelete numberOfPaths=\"";
+            osolStr << m_OSOption->job->filesToDelete->numberOfPaths << "\">" << endl;
             for (int i=0; i < m_OSOption->job->filesToDelete->numberOfPaths; i++)
-                outStr << "<path>" << m_OSOption->job->filesToDelete->path[i] << "</path>" << endl;
-            outStr << "</filesToDelete>" << endl;
+                osolStr << "<path>" << m_OSOption->job->filesToDelete->path[i] << "</path>" << endl;
+            osolStr << "</filesToDelete>" << endl;
         }
         if (m_OSOption->job->directoriesToDelete != NULL)
         {
-            outStr << "<directoriesToDelete numberOfPaths=\"";
-            outStr << m_OSOption->job->directoriesToDelete->numberOfPaths << "\">" << endl;
+            osolStr << "<directoriesToDelete numberOfPaths=\"";
+            osolStr << m_OSOption->job->directoriesToDelete->numberOfPaths << "\">" << endl;
             for (int i=0; i < m_OSOption->job->directoriesToDelete->numberOfPaths; i++)
-                outStr << "<path>" << m_OSOption->job->directoriesToDelete->path[i] << "</path>" << endl;
-            outStr << "</directoriesToDelete>" << endl;
+                osolStr << "<path>" << m_OSOption->job->directoriesToDelete->path[i] << "</path>" << endl;
+            osolStr << "</directoriesToDelete>" << endl;
         }
         if (m_OSOption->job->processesToKill != NULL)
         {
-            outStr << "<processesToKill numberOfProcesses=\"";
-            outStr << m_OSOption->job->processesToKill->numberOfProcesses << "\">" << endl;
+            osolStr << "<processesToKill numberOfProcesses=\"";
+            osolStr << m_OSOption->job->processesToKill->numberOfProcesses << "\">" << endl;
             for (int i=0; i < m_OSOption->job->processesToKill->numberOfProcesses; i++)
-                outStr << "<process>" << m_OSOption->job->processesToKill->process[i] << "</process>" << endl;
-            outStr << "</processesToKill>" << endl;
+                osolStr << "<process>" << m_OSOption->job->processesToKill->process[i] << "</process>" << endl;
+            osolStr << "</processesToKill>" << endl;
         }
         if (m_OSOption->job->otherOptions != NULL)
         {
-            outStr << "<otherOptions numberOfOtherOptions=\"";
-            outStr << m_OSOption->job->otherOptions->numberOfOtherOptions << "\">" << endl;
+            osolStr << "<otherOptions numberOfOtherOptions=\"";
+            osolStr << m_OSOption->job->otherOptions->numberOfOtherOptions << "\">" << endl;
             for (int i=0; i < m_OSOption->job->otherOptions->numberOfOtherOptions; i++)
             {
-                outStr << "<other name=\"" << m_OSOption->job->otherOptions->other[i]->name << "\"";
+                osolStr << "<other name=\"" << m_OSOption->job->otherOptions->other[i]->name << "\"";
                 if (m_OSOption->job->otherOptions->other[i]->value != "")
-                    outStr << " value=\"" << m_OSOption->job->otherOptions->other[i]->value << "\"";
+                    osolStr << " value=\"" << m_OSOption->job->otherOptions->other[i]->value << "\"";
                 if (m_OSOption->job->otherOptions->other[i]->description != "")
-                    outStr << " description=" << writeStringData(m_OSOption->job->otherOptions->other[i]->description);
-                outStr << "/>" << endl;
+                    osolStr << " description=" << writeStringData(m_OSOption->job->otherOptions->other[i]->description);
+                osolStr << "/>" << endl;
             }
-            outStr << "</otherOptions>" << endl;
+            osolStr << "</otherOptions>" << endl;
         }
-        outStr << "</job>" << endl;
-#ifdef DEBUG
-        cout << "Done with <job> element" << endl;
+        osolStr << "</job>" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "Done with <job> element");
 #endif
     };
 
@@ -513,455 +514,493 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
      */
     if (m_OSOption->optimization != NULL)
     {
-        outStr << "<optimization";
+        osolStr << "<optimization";
         if (m_OSOption->optimization->numberOfVariables >= 0)
-            outStr << " numberOfVariables=\"" << m_OSOption->optimization->numberOfVariables << "\" ";
+            osolStr << " numberOfVariables=\"" << m_OSOption->optimization->numberOfVariables << "\" ";
         if (m_OSOption->optimization->numberOfObjectives >= 0)
-            outStr << " numberOfObjectives=\"" << m_OSOption->optimization->numberOfObjectives << "\" ";
+            osolStr << " numberOfObjectives=\"" << m_OSOption->optimization->numberOfObjectives << "\" ";
         if (m_OSOption->optimization->numberOfConstraints >= 0)
-            outStr << " numberOfConstraints=\"" << m_OSOption->optimization->numberOfConstraints << "\" ";
-        outStr << ">" << endl;
+            osolStr << " numberOfConstraints=\"" << m_OSOption->optimization->numberOfConstraints << "\" ";
+        osolStr << ">" << endl;
         if (m_OSOption->optimization->variables != NULL)
         {
-            outStr << "<variables";
+            osolStr << "<variables";
             if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
-                outStr << " numberOfOtherVariableOptions=\"" << m_OSOption->optimization->variables->numberOfOtherVariableOptions << "\"";
-            outStr << ">" << endl;
-#ifdef DEBUG
-            cout << "initialVariableValues: " << (m_OSOption->optimization->variables->initialVariableValues != NULL) << endl;
+                osolStr << " numberOfOtherVariableOptions=\"" << m_OSOption->optimization->variables->numberOfOtherVariableOptions << "\"";
+            osolStr << ">" << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "initialVariableValues: " 
+                   << (m_OSOption->optimization->variables->initialVariableValues != NULL) << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
             if (m_OSOption->optimization->variables->initialVariableValues != NULL)
             {
-                outStr << "<initialVariableValues numberOfVar=\"";
-                outStr << m_OSOption->optimization->variables->initialVariableValues->numberOfVar << "\">" << endl;
+                osolStr << "<initialVariableValues numberOfVar=\"";
+                osolStr << m_OSOption->optimization->variables->initialVariableValues->numberOfVar << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->variables->initialVariableValues->numberOfVar; i++)
                 {
-                    outStr << "<var";
-                    outStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->idx << "\"";
+                    osolStr << "<var";
+                    osolStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->idx << "\"";
                     if (m_OSOption->optimization->variables->initialVariableValues->var[i]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->variables->initialVariableValues->var[i]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->variables->initialVariableValues->var[i]->name);
                     if (!OSIsnan(m_OSOption->optimization->variables->initialVariableValues->var[i]->value))
                     {
-                        outStr << " value=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->variables->initialVariableValues->var[i]->value);
-                        outStr << "\"";
+                        osolStr << " value=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->variables->initialVariableValues->var[i]->value);
+                        osolStr << "\"";
                     }
-                    outStr << "/>" << endl;
+                    osolStr << "/>" << endl;
                 }
-                outStr << "</initialVariableValues>" << endl;
+                osolStr << "</initialVariableValues>" << endl;
             }
-#ifdef DEBUG
-            cout << "initialVariableValuesString: " << (m_OSOption->optimization->variables->initialVariableValuesString != NULL) << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "initialVariableValuesString: " 
+                   << (m_OSOption->optimization->variables->initialVariableValuesString != NULL) << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "in OSoLWriter");
 #endif
             if (m_OSOption->optimization->variables->initialVariableValuesString != NULL)
             {
-                outStr << "<initialVariableValuesString numberOfVar=\"";
-                outStr << m_OSOption->optimization->variables->initialVariableValuesString->numberOfVar << "\">" << endl;
+                osolStr << "<initialVariableValuesString numberOfVar=\"";
+                osolStr << m_OSOption->optimization->variables->initialVariableValuesString->numberOfVar << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->variables->initialVariableValuesString->numberOfVar; i++)
                 {
-                    outStr << "<var";
-                    outStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->idx << "\"";
+                    osolStr << "<var";
+                    osolStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->idx << "\"";
                     if (m_OSOption->optimization->variables->initialVariableValuesString->var[i]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->variables->initialVariableValuesString->var[i]->name);
-                    outStr << " value=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->value << "\"";
-                    outStr << "/>" << endl;
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->variables->initialVariableValuesString->var[i]->name);
+                    osolStr << " value=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->value << "\"";
+                    osolStr << "/>" << endl;
                 }
-                outStr << "</initialVariableValuesString>" << endl;
+                osolStr << "</initialVariableValuesString>" << endl;
             }
 
             if (m_OSOption->optimization->variables->initialBasisStatus != NULL)
             {
-#ifdef DEBUG
-                cout << "output <variables> <basisStatus>" << endl;
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, 
+                    "output <variables> <basisStatus>");
 #endif
-                outStr << "<initialBasisStatus>" << endl;
-                outStr << writeBasisStatus(m_OSOption->optimization->variables->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
-                outStr << "</initialBasisStatus>" << endl;
+                osolStr << "<initialBasisStatus>" << endl;
+                osolStr << writeBasisStatus(m_OSOption->optimization->variables->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
+                osolStr << "</initialBasisStatus>" << endl;
             }
 
-#ifdef DEBUG
-            cout << "integerVariableBranchingWeights: " << (m_OSOption->optimization->variables->integerVariableBranchingWeights != NULL) << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "integerVariableBranchingWeights: " 
+                   << (m_OSOption->optimization->variables->integerVariableBranchingWeights != NULL) << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
             if (m_OSOption->optimization->variables->integerVariableBranchingWeights != NULL)
             {
-                outStr << "<integerVariableBranchingWeights numberOfVar=\"";
-                outStr << m_OSOption->optimization->variables->integerVariableBranchingWeights->numberOfVar << "\">" << endl;
+                osolStr << "<integerVariableBranchingWeights numberOfVar=\"";
+                osolStr << m_OSOption->optimization->variables->integerVariableBranchingWeights->numberOfVar << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->variables->integerVariableBranchingWeights->numberOfVar; i++)
                 {
-                    outStr << "<var";
-                    outStr << " idx=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->idx << "\"";
+                    osolStr << "<var";
+                    osolStr << " idx=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->idx << "\"";
                     if (m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->name);
                     if (!OSIsnan(m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value))
                     {
-                        outStr << " value=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value);
-                        outStr << "\"";
+                        osolStr << " value=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value);
+                        osolStr << "\"";
                     }
-                    outStr << "/>" << endl;
+                    osolStr << "/>" << endl;
                 }
-                outStr << "</integerVariableBranchingWeights>" << endl;
+                osolStr << "</integerVariableBranchingWeights>" << endl;
             }
-#ifdef DEBUG
-            cout << "sosVariableBranchingWeights: " << (m_OSOption->optimization->variables->sosVariableBranchingWeights != NULL) << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "sosVariableBranchingWeights: "
+                   << (m_OSOption->optimization->variables->sosVariableBranchingWeights != NULL) << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
             if (m_OSOption->optimization->variables->sosVariableBranchingWeights != NULL)
             {
-                outStr << "<sosVariableBranchingWeights numberOfSOS=\"";
-#ifdef DEBUG
-                cout << "start: numberOfSOS" << endl;
+                osolStr << "<sosVariableBranchingWeights numberOfSOS=\"";
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "start: numberOfSOS");
 #endif
-                outStr << m_OSOption->optimization->variables->sosVariableBranchingWeights->numberOfSOS << "\">" << endl;
+                osolStr << m_OSOption->optimization->variables->sosVariableBranchingWeights->numberOfSOS << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->variables->sosVariableBranchingWeights->numberOfSOS; i++)
                 {
-                    outStr << "<sos";
-#ifdef DEBUG
-                    cout << "sosIdx - nvar: " << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar << endl;
+                    osolStr << "<sos";
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "sosIdx - nvar: " 
+                           << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar
+                           << endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-                    outStr << " sosIdx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->sosIdx << "\"";
-                    outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar << "\"";
+                    osolStr << " sosIdx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->sosIdx << "\"";
+                    osolStr << " numberOfVar=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar << "\"";
                     if (!OSIsnan(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->groupWeight))
                     {
-                        outStr << " groupWeight=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->groupWeight);
-                        outStr << "\">" << endl;
+                        osolStr << " groupWeight=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->groupWeight);
+                        osolStr << "\">" << endl;
                     }
                     for (int j=0; j < m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar; j++)
                     {
-                        outStr << "<var";
-#ifdef DEBUG
-                        cout << "idx" << endl;
+                        osolStr << "<var";
+#ifndef NDEBUG
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_detailed_trace, "idx");
 #endif
-                        outStr << " idx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->idx << "\"";
+                        osolStr << " idx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->idx << "\"";
                         if (m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->name != "")
-                            outStr << " name=" << writeStringData(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->name);
+                            osolStr << " name=" << writeStringData(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->name);
                         if (!OSIsnan(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value))
                         {
-                            outStr << " value=\"";
-                            outStr << os_dtoa_format(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value);
-                            outStr << "\"";
+                            osolStr << " value=\"";
+                            osolStr << os_dtoa_format(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value);
+                            osolStr << "\"";
                         }
-                        outStr << "/>" << endl;
+                        osolStr << "/>" << endl;
                     }
-                    outStr << "</sos>" << endl;
+                    osolStr << "</sos>" << endl;
                 }
-                outStr << "</sosVariableBranchingWeights>" << endl;
+                osolStr << "</sosVariableBranchingWeights>" << endl;
             }
-#ifdef DEBUG
-            printf("\n%s%d\n","Number of other variable options: ",m_OSOption->optimization->variables->numberOfOtherVariableOptions);
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "Number of other variable options: " 
+                   << m_OSOption->optimization->variables->numberOfOtherVariableOptions 
+                   << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 //			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
             for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
             {
-                outStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
+                osolStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
 //					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
-                outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\"";
+                osolStr << " numberOfVar=\"" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\"";
 //					if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
-                outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->variables->other[i]->numberOfEnumerations << "\"";
+                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->variables->other[i]->numberOfEnumerations << "\"";
                 if (m_OSOption->optimization->variables->other[i]->value != "")
-                    outStr << " value=\"" << m_OSOption->optimization->variables->other[i]->value << "\"";
+                    osolStr << " value=\"" << m_OSOption->optimization->variables->other[i]->value << "\"";
                 if (m_OSOption->optimization->variables->other[i]->solver != "")
-                    outStr << " solver=\"" << m_OSOption->optimization->variables->other[i]->solver << "\"";
+                    osolStr << " solver=\"" << m_OSOption->optimization->variables->other[i]->solver << "\"";
                 if (m_OSOption->optimization->variables->other[i]->category != "")
-                    outStr << " category=\"" << m_OSOption->optimization->variables->other[i]->category << "\"";
+                    osolStr << " category=\"" << m_OSOption->optimization->variables->other[i]->category << "\"";
                 if (m_OSOption->optimization->variables->other[i]->type != "")
-                    outStr << " type=\"" << m_OSOption->optimization->variables->other[i]->type << "\"";
+                    osolStr << " type=\"" << m_OSOption->optimization->variables->other[i]->type << "\"";
                 if (m_OSOption->optimization->variables->other[i]->description != "")
-                    outStr << " description=" << writeStringData(m_OSOption->optimization->variables->other[i]->description);
+                    osolStr << " description=" << writeStringData(m_OSOption->optimization->variables->other[i]->description);
                 if (m_OSOption->optimization->variables->other[i]->varType != "")
-                    outStr << " varType=\"" << m_OSOption->optimization->variables->other[i]->varType << "\"";
+                    osolStr << " varType=\"" << m_OSOption->optimization->variables->other[i]->varType << "\"";
                 if (m_OSOption->optimization->variables->other[i]->enumType != "")
-                    outStr << " enumType=\"" << m_OSOption->optimization->variables->other[i]->enumType << "\"";
-                outStr << ">" << endl;
+                    osolStr << " enumType=\"" << m_OSOption->optimization->variables->other[i]->enumType << "\"";
+                osolStr << ">" << endl;
 //					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
                 for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfVar; j++)
                 {
-                    outStr << "<var idx=\"" << m_OSOption->optimization->variables->other[i]->var[j]->idx << "\"";
+                    osolStr << "<var idx=\"" << m_OSOption->optimization->variables->other[i]->var[j]->idx << "\"";
                     if (m_OSOption->optimization->variables->other[i]->var[j]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->variables->other[i]->var[j]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->variables->other[i]->var[j]->name);
                     if (m_OSOption->optimization->variables->other[i]->var[j]->value != "")
-                        outStr << " value=\"" << m_OSOption->optimization->variables->other[i]->var[j]->value << "\"";
+                        osolStr << " value=\"" << m_OSOption->optimization->variables->other[i]->var[j]->value << "\"";
                     if (m_OSOption->optimization->variables->other[i]->var[j]->lbValue != "")
-                        outStr << " lbValue=\"" << m_OSOption->optimization->variables->other[i]->var[j]->lbValue << "\"";
+                        osolStr << " lbValue=\"" << m_OSOption->optimization->variables->other[i]->var[j]->lbValue << "\"";
                     if (m_OSOption->optimization->variables->other[i]->var[j]->ubValue != "")
-                        outStr << " ubValue=\"" << m_OSOption->optimization->variables->other[i]->var[j]->ubValue << "\"";
-                    outStr << "/>" << endl;
+                        osolStr << " ubValue=\"" << m_OSOption->optimization->variables->other[i]->var[j]->ubValue << "\"";
+                    osolStr << "/>" << endl;
                 }
 //					else
                 {
 //						if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
                     for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfEnumerations; j++)
-                        outStr << writeOtherOptionEnumeration(m_OSOption->optimization->variables->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+                        osolStr << writeOtherOptionEnumeration(m_OSOption->optimization->variables->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
                 }
-                outStr << "</other>" << endl;
+                osolStr << "</other>" << endl;
             }
-            outStr << "</variables>" << endl;
+            osolStr << "</variables>" << endl;
         }
         if (m_OSOption->optimization->objectives != NULL)
         {
-            outStr << "<objectives";
+            osolStr << "<objectives";
 //			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
-            outStr << " numberOfOtherObjectiveOptions=\"" << m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions << "\"";
-            outStr << ">" << endl;
+            osolStr << " numberOfOtherObjectiveOptions=\"" << m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions << "\"";
+            osolStr << ">" << endl;
             if (m_OSOption->optimization->objectives->initialObjectiveValues != NULL)
             {
-                outStr << "<initialObjectiveValues numberOfObj=\"";
-                outStr << m_OSOption->optimization->objectives->initialObjectiveValues->numberOfObj << "\">" << endl;
+                osolStr << "<initialObjectiveValues numberOfObj=\"";
+                osolStr << m_OSOption->optimization->objectives->initialObjectiveValues->numberOfObj << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->objectives->initialObjectiveValues->numberOfObj; i++)
                 {
-                    outStr << "<obj";
-                    outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->idx << "\"";
+                    osolStr << "<obj";
+                    osolStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->idx << "\"";
                     if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->name);
                     if (!OSIsnan(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value))
                     {
-                        outStr << " value=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value);
-                        outStr << "\"";
+                        osolStr << " value=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value);
+                        osolStr << "\"";
                     }
-                    outStr << "/>" << endl;
+                    osolStr << "/>" << endl;
                 }
-                outStr << "</initialObjectiveValues>" << endl;
+                osolStr << "</initialObjectiveValues>" << endl;
             }
             if (m_OSOption->optimization->objectives->initialObjectiveBounds != NULL)
             {
-                outStr << "<initialObjectiveBounds numberOfObj=\"";
-                outStr << m_OSOption->optimization->objectives->initialObjectiveBounds->numberOfObj << "\">" << endl;
+                osolStr << "<initialObjectiveBounds numberOfObj=\"";
+                osolStr << m_OSOption->optimization->objectives->initialObjectiveBounds->numberOfObj << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->objectives->initialObjectiveBounds->numberOfObj; i++)
                 {
-                    outStr << "<obj";
-                    outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->idx << "\"";
+                    osolStr << "<obj";
+                    osolStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->idx << "\"";
                     if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->name);
                     if (!OSIsnan(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue))
                     {
-                        outStr << " lbValue=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue);
-                        outStr << "\"";
+                        osolStr << " lbValue=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue);
+                        osolStr << "\"";
                     }
                     if (!OSIsnan(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue))
                     {
-                        outStr << " ubValue=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue);
-                        outStr << "\"";
+                        osolStr << " ubValue=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue);
+                        osolStr << "\"";
                     }
-                    outStr << "/>" << endl;
+                    osolStr << "/>" << endl;
                 }
-                outStr << "</initialObjectiveBounds>" << endl;
+                osolStr << "</initialObjectiveBounds>" << endl;
             }
 
             if (m_OSOption->optimization->objectives->initialBasisStatus != NULL)
             {
-#ifdef DEBUG
-                cout << "output <objectives> <basisStatus>" << endl;
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace,
+                    "output <objectives> <basisStatus>");
 #endif
-                outStr << "<initialBasisStatus>" << endl;
-                outStr << writeBasisStatus(m_OSOption->optimization->objectives->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
-                outStr << "</initialBasisStatus>" << endl;
+                osolStr << "<initialBasisStatus>" << endl;
+                osolStr << writeBasisStatus(m_OSOption->optimization->objectives->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
+                osolStr << "</initialBasisStatus>" << endl;
             }
 
-#ifdef DEBUG
-            printf("\n%s%d\n","Number of other objective options: ",m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions);
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "Number of other objective options: " 
+                   << m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 //			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
             for (int i=0; i < m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
             {
-                outStr << "<other name=\"" << m_OSOption->optimization->objectives->other[i]->name << "\"";
+                osolStr << "<other name=\"" << m_OSOption->optimization->objectives->other[i]->name << "\"";
 //					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
-                outStr << " numberOfObj=\"" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\"";
+                osolStr << " numberOfObj=\"" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\"";
 //					if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
-                outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->objectives->other[i]->numberOfEnumerations << "\"";
+                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->objectives->other[i]->numberOfEnumerations << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->value != "")
-                    outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->value << "\"";
+                    osolStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->value << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->solver != "")
-                    outStr << " solver=\"" << m_OSOption->optimization->objectives->other[i]->solver << "\"";
+                    osolStr << " solver=\"" << m_OSOption->optimization->objectives->other[i]->solver << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->category != "")
-                    outStr << " category=\"" << m_OSOption->optimization->objectives->other[i]->category << "\"";
+                    osolStr << " category=\"" << m_OSOption->optimization->objectives->other[i]->category << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->type != "")
-                    outStr << " type=\"" << m_OSOption->optimization->objectives->other[i]->type << "\"";
+                    osolStr << " type=\"" << m_OSOption->optimization->objectives->other[i]->type << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->description != "")
-                    outStr << " description=" << writeStringData(m_OSOption->optimization->objectives->other[i]->description);
+                    osolStr << " description=" << writeStringData(m_OSOption->optimization->objectives->other[i]->description);
                 if (m_OSOption->optimization->objectives->other[i]->objType != "")
-                    outStr << " objType=\"" << m_OSOption->optimization->objectives->other[i]->objType << "\"";
+                    osolStr << " objType=\"" << m_OSOption->optimization->objectives->other[i]->objType << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->enumType != "")
-                    outStr << " enumType=\"" << m_OSOption->optimization->objectives->other[i]->enumType << "\"";
-                outStr << ">" << endl;
+                    osolStr << " enumType=\"" << m_OSOption->optimization->objectives->other[i]->enumType << "\"";
+                osolStr << ">" << endl;
 //					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
                 for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfObj; j++)
                 {
-                    outStr << "<obj idx=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->idx << "\"";
+                    osolStr << "<obj idx=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->idx << "\"";
                     if (m_OSOption->optimization->objectives->other[i]->obj[j]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->objectives->other[i]->obj[j]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->objectives->other[i]->obj[j]->name);
                     if (m_OSOption->optimization->objectives->other[i]->obj[j]->value != "")
-                        outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->value << "\"";
-                    outStr << "/>" << endl;
+                        osolStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->value << "\"";
+                    osolStr << "/>" << endl;
                 }
 //					else if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
                 for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfEnumerations; j++)
-                    outStr << writeOtherOptionEnumeration(m_OSOption->optimization->objectives->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+                    osolStr << writeOtherOptionEnumeration(m_OSOption->optimization->objectives->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 
-                outStr << "</other>" << endl;
+                osolStr << "</other>" << endl;
             }
-            outStr << "</objectives>" << endl;
+            osolStr << "</objectives>" << endl;
         }
-#ifdef DEBUG
-        cout << "Done with <objectives> element" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "Done with <objectives> element");
 #endif
         if (m_OSOption->optimization->constraints != NULL)
         {
-            outStr << "<constraints";
+            osolStr << "<constraints";
 //			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
-            outStr << " numberOfOtherConstraintOptions=\"" << m_OSOption->optimization->constraints->numberOfOtherConstraintOptions << "\"";
-            outStr << ">" << endl;
+            osolStr << " numberOfOtherConstraintOptions=\"" << m_OSOption->optimization->constraints->numberOfOtherConstraintOptions << "\"";
+            osolStr << ">" << endl;
             if (m_OSOption->optimization->constraints->initialConstraintValues != NULL)
             {
-                outStr << "<initialConstraintValues numberOfCon=\"";
-                outStr << m_OSOption->optimization->constraints->initialConstraintValues->numberOfCon << "\">" << endl;
+                osolStr << "<initialConstraintValues numberOfCon=\"";
+                osolStr << m_OSOption->optimization->constraints->initialConstraintValues->numberOfCon << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->constraints->initialConstraintValues->numberOfCon; i++)
                 {
-                    outStr << "<con";
-                    outStr << " idx=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->idx << "\"";
+                    osolStr << "<con";
+                    osolStr << " idx=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->idx << "\"";
                     if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->constraints->initialConstraintValues->con[i]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->constraints->initialConstraintValues->con[i]->name);
                     if (!OSIsnan(m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value))
                     {
-                        outStr << " value=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value);
-                        outStr << "\"";
+                        osolStr << " value=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value);
+                        osolStr << "\"";
                     }
-                    outStr << "/>" << endl;
+                    osolStr << "/>" << endl;
                 }
-                outStr << "</initialConstraintValues>" << endl;
+                osolStr << "</initialConstraintValues>" << endl;
             }
 
             if (m_OSOption->optimization->constraints->initialDualValues != NULL)
             {
-                outStr << "<initialDualValues numberOfCon=\"";
-                outStr << m_OSOption->optimization->constraints->initialDualValues->numberOfCon << "\">" << endl;
+                osolStr << "<initialDualValues numberOfCon=\"";
+                osolStr << m_OSOption->optimization->constraints->initialDualValues->numberOfCon << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->constraints->initialDualValues->numberOfCon; i++)
                 {
-                    outStr << "<con";
-                    outStr << " idx=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->idx << "\"";
+                    osolStr << "<con";
+                    osolStr << " idx=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->idx << "\"";
                     if (m_OSOption->optimization->constraints->initialDualValues->con[i]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->constraints->initialDualValues->con[i]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->constraints->initialDualValues->con[i]->name);
                     if (!OSIsnan(m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue))
                     {
-                        outStr << " lbDualValue=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue);
-                        outStr << "\"";
+                        osolStr << " lbDualValue=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue);
+                        osolStr << "\"";
                     }
                     if (!OSIsnan(m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue))
                     {
-                        outStr << " ubDualValue=\"";
-                        outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue);
-                        outStr << "\"";
+                        osolStr << " ubDualValue=\"";
+                        osolStr << os_dtoa_format(m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue);
+                        osolStr << "\"";
                     }
-                    outStr << "/>" << endl;
+                    osolStr << "/>" << endl;
                 }
-                outStr << "</initialDualValues>" << endl;
+                osolStr << "</initialDualValues>" << endl;
             }
 
             if (m_OSOption->optimization->constraints->initialBasisStatus != NULL)
             {
-#ifdef DEBUG
-                cout << "output <constraints> <basisStatus>" << endl;
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace,
+                    "output <constraints> <basisStatus>");
 #endif
-                outStr << "<initialBasisStatus>" << endl;
-                outStr << writeBasisStatus(m_OSOption->optimization->constraints->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
-                outStr << "</initialBasisStatus>" << endl;
+                osolStr << "<initialBasisStatus>" << endl;
+                osolStr << writeBasisStatus(m_OSOption->optimization->constraints->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
+                osolStr << "</initialBasisStatus>" << endl;
             }
 
-#ifdef DEBUG
-            printf("\n%s%d\n","Number of other constraint options: ",m_OSOption->optimization->constraints->numberOfOtherConstraintOptions);
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "Number of other constraint options: "
+                   << m_OSOption->optimization->constraints->numberOfOtherConstraintOptions
+                   << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 //			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
             for (int i=0; i < m_OSOption->optimization->constraints->numberOfOtherConstraintOptions; i++)
             {
-                outStr << "<other name=\"" << m_OSOption->optimization->constraints->other[i]->name << "\"";
+                osolStr << "<other name=\"" << m_OSOption->optimization->constraints->other[i]->name << "\"";
 
 //					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
-                outStr << " numberOfCon=\"" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\"";
+                osolStr << " numberOfCon=\"" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\"";
 //					if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
-                outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->constraints->other[i]->numberOfEnumerations << "\"";
+                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->constraints->other[i]->numberOfEnumerations << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->value != "")
-                    outStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->value << "\"";
+                    osolStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->value << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->solver != "")
-                    outStr << " solver=\"" << m_OSOption->optimization->constraints->other[i]->solver << "\"";
+                    osolStr << " solver=\"" << m_OSOption->optimization->constraints->other[i]->solver << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->category != "")
-                    outStr << " category=\"" << m_OSOption->optimization->constraints->other[i]->category << "\"";
+                    osolStr << " category=\"" << m_OSOption->optimization->constraints->other[i]->category << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->type != "")
-                    outStr << " type=\"" << m_OSOption->optimization->constraints->other[i]->type << "\"";
+                    osolStr << " type=\"" << m_OSOption->optimization->constraints->other[i]->type << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->description != "")
-                    outStr << " description=" << writeStringData(m_OSOption->optimization->constraints->other[i]->description);
+                    osolStr << " description=" << writeStringData(m_OSOption->optimization->constraints->other[i]->description);
                 if (m_OSOption->optimization->constraints->other[i]->conType != "")
-                    outStr << " conType=\"" << m_OSOption->optimization->constraints->other[i]->conType << "\"";
+                    osolStr << " conType=\"" << m_OSOption->optimization->constraints->other[i]->conType << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->enumType != "")
-                    outStr << " enumType=\"" << m_OSOption->optimization->constraints->other[i]->enumType << "\"";
-                outStr << ">" << endl;
+                    osolStr << " enumType=\"" << m_OSOption->optimization->constraints->other[i]->enumType << "\"";
+                osolStr << ">" << endl;
 //					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
                 for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfCon; j++)
                 {
-                    outStr << "<con idx=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->idx << "\"";
+                    osolStr << "<con idx=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->idx << "\"";
                     if (m_OSOption->optimization->constraints->other[i]->con[j]->name != "")
-                        outStr << " name=" << writeStringData(m_OSOption->optimization->constraints->other[i]->con[j]->name);
+                        osolStr << " name=" << writeStringData(m_OSOption->optimization->constraints->other[i]->con[j]->name);
                     if (m_OSOption->optimization->constraints->other[i]->con[j]->value != "")
-                        outStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->value << "\"";
+                        osolStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->value << "\"";
                     if (m_OSOption->optimization->constraints->other[i]->con[j]->lbValue != "")
-                        outStr << " lbValue=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->lbValue << "\"";
+                        osolStr << " lbValue=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->lbValue << "\"";
                     if (m_OSOption->optimization->constraints->other[i]->con[j]->ubValue != "")
-                        outStr << " ubValue=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->ubValue << "\"";
-                    outStr << "/>" << endl;
+                        osolStr << " ubValue=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->ubValue << "\"";
+                    osolStr << "/>" << endl;
                 }
 //					else if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
                 for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfEnumerations; j++)
-                    outStr << writeOtherOptionEnumeration(m_OSOption->optimization->constraints->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+                    osolStr << writeOtherOptionEnumeration(m_OSOption->optimization->constraints->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 
-                outStr << "</other>" << endl;
+                osolStr << "</other>" << endl;
             }
-            outStr << "</constraints>" << endl;
+            osolStr << "</constraints>" << endl;
         }
-#ifdef DEBUG
-        cout << "Done with <constraint> element" << endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "Done with <constraint> element");
 #endif
         if (m_OSOption->optimization->solverOptions != NULL)
         {
 //			if (m_OSOption->optimization->solverOptions->numberOfSolverOptions > 0)
             {
-                outStr << "<solverOptions numberOfSolverOptions=\"";
-                outStr << m_OSOption->optimization->solverOptions->numberOfSolverOptions << "\">" << endl;
+                osolStr << "<solverOptions numberOfSolverOptions=\"";
+                osolStr << m_OSOption->optimization->solverOptions->numberOfSolverOptions << "\">" << endl;
                 for (int i=0; i < m_OSOption->optimization->solverOptions->numberOfSolverOptions; i++)
                 {
-                    outStr << "<solverOption name=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->name << "\"";
+                    osolStr << "<solverOption name=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->name << "\"";
                     if (m_OSOption->optimization->solverOptions->solverOption[i]->value != "")
-                        outStr << " value=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->value << "\"";
+                        osolStr << " value=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->value << "\"";
                     if (m_OSOption->optimization->solverOptions->solverOption[i]->solver != "")
-                        outStr << " solver=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->solver << "\"";
+                        osolStr << " solver=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->solver << "\"";
                     if (m_OSOption->optimization->solverOptions->solverOption[i]->category != "")
-                        outStr << " category=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->category << "\"";
+                        osolStr << " category=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->category << "\"";
                     if (m_OSOption->optimization->solverOptions->solverOption[i]->type != "")
-                        outStr << " type=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->type << "\"";
+                        osolStr << " type=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->type << "\"";
                     if (m_OSOption->optimization->solverOptions->solverOption[i]->description != "")
-                        outStr << " description=" << writeStringData(m_OSOption->optimization->solverOptions->solverOption[i]->description);
+                        osolStr << " description=" << writeStringData(m_OSOption->optimization->solverOptions->solverOption[i]->description);
                     if (m_OSOption->optimization->solverOptions->solverOption[i]->numberOfItems == 0)
-                        outStr << "/>" << endl;
+                        osolStr << "/>" << endl;
                     else
                     {
-                        outStr << " numberOfItems=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->numberOfItems << "\">";
+                        osolStr << " numberOfItems=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->numberOfItems << "\">";
                         for (int k=0; k<m_OSOption->optimization->solverOptions->solverOption[i]->numberOfItems; k++)
-                            outStr << "<item>" << m_OSOption->optimization->solverOptions->solverOption[i]->item[k] << "</item>" << endl;
-                        outStr << "</solverOption>" << endl;
+                            osolStr << "<item>" << m_OSOption->optimization->solverOptions->solverOption[i]->item[k] << "</item>" << endl;
+                        osolStr << "</solverOption>" << endl;
                     }
                 }
-                outStr << "</solverOptions>" << endl;
+                osolStr << "</solverOptions>" << endl;
             }
         }
-        outStr << "</optimization>" << endl;
+        osolStr << "</optimization>" << endl;
     };
-    outStr << "</osol>" << endl;
-#ifdef DEBUG
-    cout << "Done with <optimization> element" << endl;
+    osolStr << "</osol>" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, "Done with <optimization> element");
 #endif
-    return outStr.str();
+    return osolStr.str();
 }// end writeOSoL
 
 

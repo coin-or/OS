@@ -6,7 +6,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in the root directory for terms.
@@ -21,10 +21,10 @@
 #include "OSErrorClass.h"
 #include "OSParameters.h"
 
-#include<cstdlib>
-#include<stack>
-#include<iostream>
-#include<sstream>
+#include <cstdlib>
+#include <stack>
+#include <iostream>
+#include <sstream>
 
 //#define DEBUG
 //#define DEBUG_ISEQUAL_ROUTINES
@@ -1842,6 +1842,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx)
     //	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
     //}
 
+
     // if we are rowIdx has no nonlinear terms so return a null
     //return NULL;
 }// getNonlinearExpressionTree for a specific index
@@ -2027,6 +2028,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "-"+ tmp1 );
+
 
                         break;
 

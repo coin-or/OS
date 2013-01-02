@@ -7,7 +7,7 @@
 # Author: Horand Gassmann, Jun Ma and Kipp Martin
 #
 # Copyright 2011 Horand Gassmann, Jun Ma, Kipp Martin,
-#    Dalhousie University, and the University of Chicago
+#    Northwestern University, and the University of Chicago
 # 
 # ---------------------------------------------
 

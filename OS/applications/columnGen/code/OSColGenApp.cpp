@@ -3,7 +3,7 @@
  * 
  * \remarks
  * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University,  Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -23,9 +23,8 @@
 #include "OSrLReader.h"          
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
-#include "OSFileUtil.h"  
-
-#include  "OSDecompSolverFactory.h"
+#include "OSFileUtil.h"
+#include "OSDecompSolverFactory.h"
 
 
 
@@ -40,10 +39,10 @@
 
 
 
-#include<vector>
-
-#include<map>
+#include <vector>
+#include <map>
 #include <sstream>
+
 using std::ostringstream;
 
 
