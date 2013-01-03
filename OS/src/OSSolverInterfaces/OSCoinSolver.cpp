@@ -384,6 +384,10 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
             char *pEnd;
             bool yesNo;
 
+/**
+ *  In this first pass through the options just see if the hintStrength was set
+ *
+ */
             for(i = 0; i < num_osi_options; i++)
             {
 #ifndef NDEBUG
@@ -401,6 +405,10 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     }
                 }
             }
+
+/**
+ *  If the hintStrength was set, use it when processing the other options
+ */
             for(i = 0; i < num_osi_options; i++)
             {
 #ifndef NDEBUG
