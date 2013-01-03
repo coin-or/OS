@@ -20,14 +20,13 @@
 #include "OSMathUtil.h"
 #include "OSErrorClass.h"
 #include "OSParameters.h"
+#include "OSOutput.h"
 
 #include <cstdlib>
 #include <stack>
 #include <iostream>
 #include <sstream>
 
-//#define DEBUG
-//#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
 using std::ostringstream;
@@ -138,8 +137,8 @@ OSInstance::OSInstance():
     bUseExpTreeForFunEval( false)
 
 {
-#ifdef DEBUG
-    cout << "Inside OSInstance Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside OSInstance Constructor");
 #endif
     this->instanceHeader = new GeneralFileHeader();
     this->instanceData = new InstanceData();
@@ -147,11 +146,13 @@ OSInstance::OSInstance():
 
 OSInstance::~OSInstance()
 {
-#ifdef DEBUG
-    cout << "OSInstance Destructor Called" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "OSInstance Destructor Called");
 #endif
     std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-    // delete  the temporary arrays
+    // delete the temporary arrays
 
     if(this->instanceData->variables->numberOfVariables > 0 && m_bProcessVariables == true)
     {
@@ -187,18 +188,21 @@ OSInstance::~OSInstance()
     {
         for(i = 0; i < instanceData->objectives->numberOfObjectives; i++)
         {
-#ifdef DEBUG
-            std::cout <<  "Delete m_mObjectiveCoefficients[i]" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Delete m_mObjectiveCoefficients[i]");
 #endif
             delete m_mObjectiveCoefficients[i];
             m_mObjectiveCoefficients[i] = NULL;
         }
-#ifdef DEBUG
-        std::cout <<  "Delete m_msObjectiveNames" << std::endl;
-        std::cout <<  "Delete m_msMaxOrMins" << std::endl;
-        std::cout <<  "Delete m_miNumberOfObjCoef" << std::endl;
-        std::cout <<  "Delete m_mdObjectiveConstants" << std::endl;
-        std::cout <<  "Delete m_mdObjectiveWeights" << std::endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr <<  "Delete m_msObjectiveNames" << std::endl;
+        outStr <<  "Delete m_msMaxOrMins" << std::endl;
+        outStr <<  "Delete m_miNumberOfObjCoef" << std::endl;
+        outStr <<  "Delete m_mdObjectiveConstants" << std::endl;
+        outStr <<  "Delete m_mdObjectiveWeights" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
         delete[] m_msObjectiveNames;
         m_msObjectiveNames = NULL;
@@ -219,8 +223,8 @@ OSInstance::~OSInstance()
         for(i = 0; i < instanceData->objectives->numberOfObjectives; i++)
         {
             //delete m_mmdDenseObjectiveCoefficients[i];
-#ifdef DEBUG
-            std::cout <<  "delete m_mmdDenseObjectiveCoefficients[i]" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "delete m_mmdDenseObjectiveCoefficients[i]");
 #endif
             delete[] m_mmdDenseObjectiveCoefficients[i];
             m_mmdDenseObjectiveCoefficients[i] = NULL;
@@ -245,13 +249,19 @@ OSInstance::~OSInstance()
         if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL)
         {
 
-#ifdef DEBUG
-            std::cout <<  "The number of objectives =  " << instanceData->objectives->numberOfObjectives << std::endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "The number of objectives =  " << instanceData->objectives->numberOfObjectives << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
             for(i = 0; i < instanceData->objectives->numberOfObjectives; i++)
             {
-#ifdef DEBUG
-                std::cout << "deleting Objective function gradient " << i << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "deleting Objective function gradient " << i << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
                 delete[] m_mmdObjGradient[i];
 
@@ -314,7 +324,12 @@ OSInstance::~OSInstance()
     {
         for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree)
         {
-            std::cout << "Deleting an expression tree from the map for row  " << posMapExpTree->first  << std::endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "Deleting an expression tree from the map for row  " << posMapExpTree->first  << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
             delete m_mapExpressionTrees[ posMapExpTree->first ];
         }
     }
@@ -322,8 +337,8 @@ OSInstance::~OSInstance()
     {
         for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
         {
-#ifdef DEBUG
-            std::cout << "Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Deleting an expression tree from m_mapExpressionTreesMod");
 #endif
             delete m_mapExpressionTreesMod[ posMapExpTree->first ];
         }
@@ -332,16 +347,24 @@ OSInstance::~OSInstance()
     ///
     if( (m_bNonlinearExpressionTreeIndexesProcessed == true) && (m_mapExpressionTrees.size() > 0) )
     {
-        std::cout << "Deleting  m_miNonlinearExpressionTreeIndexes" << std::endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Deleting  m_miNonlinearExpressionTreeIndexes");
+#endif
         delete[] m_miNonlinearExpressionTreeIndexes;
-        std::cout << "Done Deleting  m_miNonlinearExpressionTreeIndexes" << std::endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Done Deleting  m_miNonlinearExpressionTreeIndexes");
+#endif
         m_miNonlinearExpressionTreeIndexes = NULL;
     }
     if( (m_bNonlinearExpressionTreeModIndexesProcessed == true) && (m_mapExpressionTreesMod.size() > 0) )
     {
-        std::cout << "Deleting  m_miNonlinearExpressionTreeModIndexes" << std::endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Deleting  m_miNonlinearExpressionTreeModIndexes");
+#endif
         delete[] m_miNonlinearExpressionTreeModIndexes;
-        std::cout << "Done Deleting  m_miNonlinearExpressionTreeModIndexes" << std::endl;
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Done Deleting  m_miNonlinearExpressionTreeModIndexes");
+#endif
         m_miNonlinearExpressionTreeModIndexes = NULL;
     }
     if(m_bOSADFunIsCreated == true)
@@ -431,22 +454,22 @@ Variable::Variable():
     name("")
     //initString("") deprecated
 {
-#ifdef DEBUG
-    cout << "Inside the Variable Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Variable Constructor");
 #endif
 }
 
 Variable::~Variable()
 {
-#ifdef DEBUG
-    cout << "Inside the Variable Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Variable Destructor");
 #endif
 }
 
 Variables::Variables()
 {
-#ifdef DEBUG
-    cout << "Inside the Variables Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Variables Constructor");
 #endif
     numberOfVariables = 0;
     var = NULL;
@@ -454,16 +477,16 @@ Variables::Variables()
 
 Variables::~Variables()
 {
-#ifdef DEBUG
-    cout << "Inside the Variables Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Variables Destructor");
 #endif
     int i;
     if(numberOfVariables > 0 && var != NULL)
     {
         for(i = 0; i < numberOfVariables; i++)
         {
-#ifdef DEBUG
-            cout << "Deleting var[ i]" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Deleting var[ i]");
 #endif
             delete var[i];
             var[i] = NULL;
@@ -478,15 +501,15 @@ ObjCoef::ObjCoef():
     idx(-1),
     value(0.0)
 {
-#ifdef DEBUG
-    cout << "Inside the Coef Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjCoef Constructor");
 #endif
 }
 
 ObjCoef::~ObjCoef()
 {
-#ifdef DEBUG
-    cout << "Inside the ObjCoef Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjCoef Destructor");
 #endif
 }
 
@@ -499,15 +522,15 @@ Objective::Objective():
     coef(NULL)
 {
 
-#ifdef DEBUG
-    cout << "Inside the Objective Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Objective Constructor");
 #endif
 }
 
 Objective::~Objective()
 {
-#ifdef DEBUG
-    cout << "Inside the Objective Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Objective Destructor");
 #endif
     int i;
     if(numberOfObjCoef > 0 && coef != NULL)
@@ -525,8 +548,8 @@ Objective::~Objective()
 
 Objectives::Objectives()
 {
-#ifdef DEBUG
-    cout << "Inside the Objectives Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Objectives Constructor");
 #endif
     numberOfObjectives = 0;
     obj = NULL;
@@ -534,8 +557,8 @@ Objectives::Objectives()
 
 Objectives::~Objectives()
 {
-#ifdef DEBUG
-    cout << "Inside the Objectives Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Objectives Destructor");
 #endif
     int i;
     if(numberOfObjectives > 0 && obj != NULL)
@@ -558,15 +581,15 @@ Constraint::Constraint():
     ub(OSDBL_MAX)
 
 {
-#ifdef DEBUG
-    cout << "Inside the Constraint Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Constraint Constructor");
 #endif
 }
 
 Constraint::~Constraint()
 {
-#ifdef DEBUG
-    cout << "Inside the Constraint Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Constraint Destructor");
 #endif
 }
 
@@ -574,15 +597,15 @@ Constraints::Constraints():
     numberOfConstraints(0),
     con(NULL)
 {
-#ifdef DEBUG
-    cout << "Inside the Constraints Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Constraints Constructor");
 #endif
 }
 
 Constraints::~Constraints()
 {
-#ifdef DEBUG
-    cout << "Inside the Constraints Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Constraints Destructor");
 #endif
     int i;
     if(numberOfConstraints > 0 && con != NULL)
@@ -604,21 +627,20 @@ LinearConstraintCoefficients::LinearConstraintCoefficients():
     numberOfValues(0) ,
     iNumberOfStartElements( 0)
 {
-#ifdef DEBUG
-    cout << "Inside the LinearConstraintCoefficients Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearConstraintCoefficients Constructor");
 #endif
     start  = new IntVector();
     rowIdx = new IntVector();
     colIdx = new IntVector();
     value  = new DoubleVector();
-
 }
 
 
 LinearConstraintCoefficients::~LinearConstraintCoefficients()
 {
-#ifdef DEBUG
-    cout << "Inside the LinearConstraintCoefficients Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearConstraintCoefficients Destructor");
 #endif
     delete start;
     start = NULL;
@@ -638,16 +660,16 @@ QuadraticTerm::QuadraticTerm():
     coef(0.0)
 
 {
-#ifdef DEBUG
-    cout << "Inside the QuadraticTerm Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the QuadraticTerm Constructor");
 #endif
 }
 
 
 QuadraticTerm::~QuadraticTerm()
 {
-#ifdef DEBUG
-    cout << "Inside the QuadraticTerm Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the QuadraticTerm Destructor");
 #endif
 }
 
@@ -657,16 +679,16 @@ QuadraticCoefficients::QuadraticCoefficients():
     numberOfQuadraticTerms(0),
     qTerm(NULL)
 {
-#ifdef DEBUG
-    cout << "Inside the QuadraticCoefficients Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the QuadraticCoefficients Constructor");
 #endif
 }//end QuadraticCoefficients()
 
 
 QuadraticCoefficients::~QuadraticCoefficients()
 {
-#ifdef DEBUG
-    cout << "Inside the QuadraticCoefficients Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the QuadraticCoefficients Destructor");
 #endif
     int i;
     if(numberOfQuadraticTerms > 0 && qTerm != NULL)
@@ -685,6 +707,9 @@ QuadraticCoefficients::~QuadraticCoefficients()
 
 Nl::Nl()
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Nl Constructor");
+#endif
     idx = 0;
     osExpressionTree = NULL;
     m_bDeleteExpressionTree = true;
@@ -693,8 +718,8 @@ Nl::Nl()
 
 Nl::~Nl()
 {
-#ifdef DEBUG
-    cout << "Inside the Nl Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Nl Destructor");
 #endif
     // don't delete the expression tree if we created a map of the expression
     // trees, otherwise we would destroy twice
@@ -711,24 +736,32 @@ NonlinearExpressions::NonlinearExpressions():
     numberOfNonlinearExpressions(0) ,
     nl(NULL)
 {
-#ifdef DEBUG
-    cout << "Inside the NonlinearExpressions Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the NonlinearExpressions Constructor");
 #endif
 }//end NonlinearExpressions()
 
 NonlinearExpressions::~NonlinearExpressions()
 {
-#ifdef DEBUG
-    cout << "Inside the NonlinearExpressions Destructor" << endl;
-    cout << "NUMBER OF NONLINEAR EXPRESSIONS = " << numberOfNonlinearExpressions << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the NonlinearExpressions Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF NONLINEAR EXPRESSIONS = " << numberOfNonlinearExpressions << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     int i;
     if(numberOfNonlinearExpressions > 0 && nl != NULL)
     {
         for( i = 0; i < numberOfNonlinearExpressions; i++)
         {
-#ifdef DEBUG
-            cout << "DESTROYING EXPRESSION " << nl[ i]->idx << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING EXPRESSION " << nl[ i]->idx << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
             if(nl != NULL)
             {
@@ -751,16 +784,16 @@ NonlinearExpressions::~NonlinearExpressions()
 TimeDomainStageVar::TimeDomainStageVar():
     idx(0)
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Objectives Var Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageVar Constructor");
 #endif
 } // end TimeDomainStageVar
 
 
 TimeDomainStageVar::~TimeDomainStageVar()
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Objectives Var Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageVar Destructor");
 #endif
 } // end ~TimeDomainStageVar
 
@@ -769,16 +802,16 @@ TimeDomainStageVariables::TimeDomainStageVariables():
     numberOfVariables(0),
     startIdx(-1)
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Variables Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageVariables Constructor");
 #endif
     var = NULL;
 } // end TimeDomainStageVariables
 
 TimeDomainStageVariables::~TimeDomainStageVariables()
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Variables Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageVariables Destructor");
 #endif
     if (numberOfVariables > 0 && var != NULL)
     {
@@ -796,16 +829,16 @@ TimeDomainStageVariables::~TimeDomainStageVariables()
 TimeDomainStageCon::TimeDomainStageCon():
     idx(0)
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Objectives Con Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageCon Constructor");
 #endif
 } // end TimeDomainStageCon
 
 
 TimeDomainStageCon::~TimeDomainStageCon()
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Objectives Con Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageCon Destructor");
 #endif
 } // end ~TimeDomainStageCon
 
@@ -814,16 +847,16 @@ TimeDomainStageConstraints::TimeDomainStageConstraints():
     numberOfConstraints(0),
     startIdx(-1)
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Constraints Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageConstraints Constructor");
 #endif
     con = NULL;
 } // end TimeDomainStageConstraints
 
 TimeDomainStageConstraints::~TimeDomainStageConstraints()
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Constraints Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageConstraints Destructor");
 #endif
     if (numberOfConstraints > 0 && con != NULL)
     {
@@ -841,16 +874,16 @@ TimeDomainStageConstraints::~TimeDomainStageConstraints()
 TimeDomainStageObj::TimeDomainStageObj():
     idx(0)
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Objectives Obj Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageObj Constructor");
 #endif
 } // end TimeDomainStageObj
 
 
 TimeDomainStageObj::~TimeDomainStageObj()
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Objectives Obj Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageObj Destructor");
 #endif
 } // end ~TimeDomainStageObj
 
@@ -859,16 +892,16 @@ TimeDomainStageObjectives::TimeDomainStageObjectives():
     numberOfObjectives(0),
     startIdx(-1)
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Objectives Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageObjectives Constructor");
 #endif
     obj = NULL;
 } // end TimeDomainStageObjectives
 
 TimeDomainStageObjectives::~TimeDomainStageObjectives()
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Objectives Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStageObjectives Destructor");
 #endif
     if (numberOfObjectives > 0 && obj != NULL)
     {
@@ -886,8 +919,8 @@ TimeDomainStageObjectives::~TimeDomainStageObjectives()
 TimeDomainStage::TimeDomainStage():
     name("")
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStage Constructor");
 #endif
     variables   = NULL;
     constraints = NULL;
@@ -897,8 +930,8 @@ TimeDomainStage::TimeDomainStage():
 
 TimeDomainStage::~TimeDomainStage()
 {
-#ifdef DEBUG
-    cout << "Inside the Stage Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStage Destructor");
 #endif
     if (variables != NULL)
     {
@@ -922,16 +955,16 @@ TimeDomainStages::TimeDomainStages():
     numberOfStages(0),
     stage(NULL)
 {
-#ifdef DEBUG
-    cout << "Inside the Stages Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStages Constructor");
 #endif
 }
 
 
 TimeDomainStages::~TimeDomainStages()
 {
-#ifdef DEBUG
-    cout << "Inside the Stages Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainStages Destructor");
 #endif
     int i;
     if(numberOfStages > 0 && stage != NULL)
@@ -951,23 +984,23 @@ TimeDomainInterval::TimeDomainInterval():
     start(0.0),
     horizon(0.0)
 {
-#ifdef DEBUG
-    cout << "Inside the Interval Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainInterval Constructor");
 #endif
 }
 
 
 TimeDomainInterval::~TimeDomainInterval()
 {
-#ifdef DEBUG
-    cout << "Inside the Interval Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomainInterval Constructor");
 #endif
 }
 
 TimeDomain::TimeDomain()
 {
-#ifdef DEBUG
-    cout << "Inside the TimeDomain Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomain Constructor");
 #endif
     stages = NULL;
     interval = NULL;
@@ -975,8 +1008,8 @@ TimeDomain::TimeDomain()
 
 TimeDomain::~TimeDomain()
 {
-#ifdef DEBUG
-    cout << "Inside the TimeDomain Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeDomain Constructor");
 #endif
     if (stages != NULL)
     {
@@ -993,8 +1026,8 @@ TimeDomain::~TimeDomain()
 
 InstanceData::InstanceData()
 {
-#ifdef DEBUG
-    cout << "Inside the InstanceData Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the InstanceData Constructor");
 #endif
     variables = new Variables();
     objectives = new Objectives();
@@ -1007,8 +1040,8 @@ InstanceData::InstanceData()
 
 InstanceData::~InstanceData()
 {
-#ifdef DEBUG
-    cout << "Inside the InstanceData Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the InstanceData Destructor");
 #endif
     if (variables != NULL)
     {
@@ -3352,6 +3385,7 @@ bool OSInstance::addQTermsToExressionTree() // obsolescent --- replaced by addQT
 
 bool OSInstance::addQTermsToExpressionTree()
 {
+    std::ostringstream outStr;
     int i, k, idx;
     // get the number of qTerms
     int numQTerms = instanceData->quadraticCoefficients->numberOfQuadraticTerms;
@@ -3384,8 +3418,11 @@ bool OSInstance::addQTermsToExpressionTree()
                 // add to map
                 k = (*expTree->mapVarIdx).size();
                 (*expTree->mapVarIdx)[ nlNodeVariableOne->idx] =  k + 1;
-#ifdef DEBUG
-                std::cout << "ADDED THE FOLLOWING VARIABLE TO THE MAP" <<  nlNodeVariableOne->idx << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "ADDED THE FOLLOWING VARIABLE TO THE MAP" <<  nlNodeVariableOne->idx << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
             }
             nlNodeVariableOne->coef = m_quadraticTerms->coefficients[ i];
@@ -3398,8 +3435,11 @@ bool OSInstance::addQTermsToExpressionTree()
                 // add to map
                 k = (*expTree->mapVarIdx).size();
                 (*expTree->mapVarIdx)[ nlNodeVariableTwo->idx] =  k + 1;
-#ifdef DEBUG
-                std::cout << "ADDED THE FOLLOWING VARIABLE TO THE MAP" <<  nlNodeVariableTwo->idx << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "ADDED THE FOLLOWING VARIABLE TO THE MAP" <<  nlNodeVariableTwo->idx << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
             }
             nlNodeVariableTwo->coef = 1.;
@@ -3452,9 +3492,12 @@ bool OSInstance::addQTermsToExpressionTree()
                 m_iConstraintNumberNonlinear++;
                 m_bProcessExpressionTrees = true;
             }
-#ifdef DEBUG
-            std::cout << "NUMBER OF EXPRESSION TREES = "  << m_mapExpressionTreesMod.size() <<std::endl;
-            std::cout << "NUMBER OF NONLINEAR OBJECTIVES = "  << getNumberOfNonlinearObjectives() <<std::endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "NUMBER OF EXPRESSION TREES = "  << m_mapExpressionTreesMod.size() <<std::endl;
+            outStr << "NUMBER OF NONLINEAR OBJECTIVES = "  << getNumberOfNonlinearObjectives() <<std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
         }
         // if there were no nonlinear terms make this the expression tree
@@ -3805,6 +3848,7 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
         bool new_x, int highestOrder)
 {
     try
+
     {
         if(highestOrder < 1 ) throw ErrorClass("When calling calculateAllConstraintFunctionGradients highestOrder should be 1 or 2");
         if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  )
@@ -4092,7 +4136,9 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
 
 bool OSInstance::getSparseJacobianFromColumnMajor( )
 {
-    // we assume column major matrix
+    std::ostringstream outStr;
+
+	// we assume column major matrix
     if( m_bColumnMajor == false) return false;
     int iNumRowStarts = getConstraintNumber() + 1;
     int i,j, iTemp;
@@ -4100,7 +4146,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
     int *start = NULL;
     int *index = NULL;
     double *value = NULL;
-    if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
+
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
     {
         start = this->instanceData->linearConstraintCoefficients->start->el;
         index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
@@ -4231,32 +4278,35 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
             }
         }
     }
-#ifdef DEBUG
-    std::cout << "HERE ARE ROW STARTS:" << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "HERE ARE ROW STARTS:" << std::endl;
     for (i = 0; i < iNumRowStarts; i++ )
     {
-        std::cout <<  m_miJacStart[ i] << "  ";
+        outStr <<  m_miJacStart[ i] << "  ";
     }
-    std::cout << std::endl << std::endl;
-    std::cout << "HERE ARE VARIABLE INDICES:" << std::endl;
+    outStr << std::endl << std::endl;
+    outStr << "HERE ARE VARIABLE INDICES:" << std::endl;
     for (i = 0; i < m_miJacStart[ iNumRowStarts - 1]; i++ )
     {
-        std::cout <<  m_miJacIndex[ i] << "  ";
+        outStr <<  m_miJacIndex[ i] << "  ";
     }
-    std::cout << std::endl << std::endl;
-    std::cout << "HERE ARE VALUES:" << std::endl;
+    outStr << std::endl << std::endl;
+    outStr << "HERE ARE VALUES:" << std::endl;
     for (i = 0; i < m_miJacStart[ iNumRowStarts - 1]; i++ )
     {
-        std::cout <<  m_mdJacValue[ i] << "  ";
+        outStr <<  m_mdJacValue[ i] << "  ";
     }
-    std::cout << std::endl << std::endl;
+    outStr << std::endl << std::endl;
 
-    std::cout << "HERE ARE NUMBER OF CONSTANT TERMS:" << std::endl;
+    outStr << "HERE ARE NUMBER OF CONSTANT TERMS:" << std::endl;
     for (i = 0; i < iNumRowStarts - 1; i++ )
     {
-        std::cout <<  m_miJacNumConTerms[ i ] << "  ";
+        outStr <<  m_miJacNumConTerms[ i ] << "  ";
     }
-    std::cout << std::endl << std::endl;
+    outStr << std::endl << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     return true;
 }//getSparseJacobianFromColumnMajor
@@ -4265,6 +4315,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
 
 bool OSInstance::getSparseJacobianFromRowMajor( )
 {
+    std::ostringstream outStr;
+
     // we assume row major matrix
     if( m_bColumnMajor == true) return false;
     int iNumJacRowStarts = getConstraintNumber() + 1;
@@ -4273,7 +4325,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
     int *start = NULL;
     int *index = NULL;
     double *value = NULL;
-    if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
+
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
     {
         start = this->instanceData->linearConstraintCoefficients->start->el;
         index = this->instanceData->linearConstraintCoefficients->colIdx->el;
@@ -4392,32 +4445,35 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
             }
         }
     }
-#ifdef DEBUG
-    std::cout << "HERE ARE ROW STARTS:" << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "HERE ARE ROW STARTS:" << std::endl;
     for (i = 0; i < iNumJacRowStarts; i++ )
     {
-        std::cout <<  m_miJacStart[ i] << "  ";
+        outStr <<  m_miJacStart[ i] << "  ";
     }
-    std::cout << std::endl << std::endl;
-    std::cout << "HERE ARE VARIABLE INDICES:" << std::endl;
+    outStr << std::endl << std::endl;
+    outStr << "HERE ARE VARIABLE INDICES:" << std::endl;
     for (i = 0; i < m_miJacStart[ iNumJacRowStarts - 1]; i++ )
     {
-        std::cout <<  m_miJacIndex[ i] << "  ";
+        outStr <<  m_miJacIndex[ i] << "  ";
     }
-    std::cout << std::endl << std::endl;
-    std::cout << "HERE ARE VALUES:" << std::endl;
+    outStr << std::endl << std::endl;
+    outStr << "HERE ARE VALUES:" << std::endl;
     for (i = 0; i < m_miJacStart[ iNumJacRowStarts - 1]; i++ )
     {
-        std::cout <<  m_mdJacValue[ i] << "  ";
+        outStr <<  m_mdJacValue[ i] << "  ";
     }
-    std::cout << std::endl << std::endl;
+    outStr << std::endl << std::endl;
 
-    std::cout << "HERE ARE NUMBER OF CONSTANT TERMS:" << std::endl;
+    outStr << "HERE ARE NUMBER OF CONSTANT TERMS:" << std::endl;
     for (i = 0; i < iNumJacRowStarts - 1; i++ )
     {
-        std::cout <<  m_miJacNumConTerms[ i ] << "  ";
+        outStr <<  m_miJacNumConTerms[ i ] << "  ";
     }
-    std::cout << std::endl << std::endl;
+    outStr << std::endl << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     return true;
 }//getSparseJacobianFromRowMajor
@@ -4480,6 +4536,8 @@ OSExpressionTree* OSInstance::getLagrangianExpTree( )
 
 std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( )
 {
+    std::ostringstream outStr;
+
     if(m_bAllNonlinearVariablesIndex == true) return m_mapAllNonlinearVariablesIndex;
     //loop over the map of expression tree and get a unique listing of all variables
     // put these in the map m_mapAllNonlinearVariablesIndex
@@ -4509,9 +4567,12 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( )
         posVarIdx->second = kount;
         m_miNonLinearVarsReverseMap[ kount] = posVarIdx->first;
         kount++;
-#ifdef DEBUG
-        std::cout <<  "POSITION FIRST =  "  << posVarIdx->first ;
-        std::cout <<  "   POSITION SECOND = "  << posVarIdx->second << std::endl;
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr <<  "POSITION FIRST =  "  << posVarIdx->first ;
+        outStr <<  "   POSITION SECOND = "  << posVarIdx->second << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     }
     m_iNumberOfNonlinearVariables = kount;
@@ -4522,6 +4583,8 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( )
 
 SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
 {
+    std::ostringstream outStr;
+
     // fill in the nonzeros in the sparse Hessian
     if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
     if( m_iNumberOfNonlinearVariables == 0) return NULL;
@@ -4607,14 +4670,17 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
         }
         i++;
     }
-#ifdef DEBUG
-    std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "HESSIAN SPARSITY PATTERN" << std::endl;
     int kj;
     for(kj = 0; kj < m_LagrangianSparseHessian->hessDimension; kj++)
     {
-        std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + kj) << std::endl;
-        std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + kj) << std::endl;
+        outStr <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + kj) << std::endl;
+        outStr <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + kj) << std::endl;
     }
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     //
     m_bLagrangianSparseHessianCreated = true;
@@ -4720,6 +4786,8 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 
 bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMultipliers)
 {
+    std::ostringstream outStr;
+
     try
     {
         // initialize everything
@@ -4747,8 +4815,11 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
             }
             // add in the constraint function constant
             m_mdConstraintFunctionValues[ rowNum] += m_mdConstraintConstants[ rowNum ];
-#ifdef DEBUG
-            std::cout << "Constraint " <<  rowNum << " function value =  " << m_mdConstraintFunctionValues[ rowNum ] << std::endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "Constraint " <<  rowNum << " function value =  " << m_mdConstraintFunctionValues[ rowNum ] << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
         }
         // now get the objective function values from the forward result
@@ -4763,8 +4834,11 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
             {
                 m_mdObjectiveFunctionValues[ objNum] += m_mmdDenseObjectiveCoefficients[ objNum][i]*x[ i];
             }
-#ifdef DEBUG
-            std::cout << "Objective " << objNum << " function value =  " << m_mdObjectiveFunctionValues[ objNum] << std::endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "Objective " << objNum << " function value =  " << m_mdObjectiveFunctionValues[ objNum] << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
         }
         return true;
@@ -4779,6 +4853,8 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 
 bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conMultipliers)
 {
+    std::ostringstream outStr;
+
     try
     {
         // initialize everything
@@ -4882,17 +4958,20 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                 m_vdDomainUnitVec[i] = 0.;
             }
         }
-#ifdef DEBUG
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
         int k;
-        std::cout  << "JACOBIAN DATA " << std::endl;
+        outStr  << "JACOBIAN DATA " << std::endl;
         for(idx = 0; idx < m_iConstraintNumber; idx++)
         {
             for(k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++)
             {
-                std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
+                outStr << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
                           << " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
             }
         }
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
         return true;
     }//end try
@@ -4905,6 +4984,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 
 bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *conMultipliers)
 {
+    std::ostringstream outStr;
+
     try
     {
         // initialize everything
@@ -4978,8 +5059,11 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
                 if( m_vbLagHessNonz[i*m_iNumberOfNonlinearVariables + j] == true)
                 {
                     m_LagrangianSparseHessian->hessValues[ hessValuesIdx] =  m_vdw[  j*2 + 1];
-#ifdef DEBUG
-                    std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ hessValuesIdx] << std::endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ hessValuesIdx] << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
                     hessValuesIdx++;
                 }
@@ -4988,17 +5072,20 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
             //
             m_vdDomainUnitVec[i] = 0.;
         }
-#ifdef DEBUG
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
         int k;
-        std::cout  << "JACOBIAN DATA " << std::endl;
+        outStr  << "JACOBIAN DATA " << std::endl;
         for(idx = 0; idx < m_iConstraintNumber; idx++)
         {
             for(k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++)
             {
-                std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
+                outStr << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
                           << " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
             }
         }
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
         return true;
     }//end try
@@ -5010,6 +5097,8 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 
 bool OSInstance::initForAlgDiff()
 {
+    std::ostringstream outStr;
+
     if( m_binitForAlgDiff == true ) return true;
     initializeNonLinearStructures( );
     initObjGradients();
@@ -5023,8 +5112,9 @@ bool OSInstance::initForAlgDiff()
         if(posMapExpTree->second->bADMustReTape == true) m_bCppADMustReTape = true;
     }
 
-#ifdef DEBUG
-    std::cout << "RETAPE ==  " << m_bCppADMustReTape << std::endl;
+#ifndef NDEBUG
+    outStr << "RETAPE ==  " << m_bCppADMustReTape << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     unsigned int i;
     for(i = 0; i < m_iNumberOfNonlinearVariables; i++)
@@ -5043,6 +5133,8 @@ bool OSInstance::initForAlgDiff()
 
 bool OSInstance::initObjGradients()
 {
+    std::ostringstream outStr;
+
     int i, j;
     int m, n;
     m = getObjectiveNumber();
@@ -5060,8 +5152,9 @@ bool OSInstance::initObjGradients()
         for(j = 0; j < n; j++)
         {
             m_mmdObjGradient[i][j] =  m_mmdDenseObjectiveCoefficients[ i][j];
-#ifdef DEBUG
-            std::cout << "m_mmdObjGradient[i][j] = " << m_mmdObjGradient[i][j]  << std::endl;
+#ifndef NDEBUG
+            outStr << "m_mmdObjGradient[i][j] = " << m_mmdObjGradient[i][j]  << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
         }
     }
@@ -5724,8 +5817,8 @@ int  OSInstance::getADSparsityHessian()
  ***************************************************/
 bool OSInstance::IsEqual(OSInstance *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in OSInstance" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSInstance");
 #endif
     if (this == NULL)
     {
@@ -5733,8 +5826,9 @@ bool OSInstance::IsEqual(OSInstance *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -5743,8 +5837,9 @@ bool OSInstance::IsEqual(OSInstance *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -5763,8 +5858,8 @@ bool OSInstance::IsEqual(OSInstance *that)
 
 bool InstanceData::IsEqual(InstanceData *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in InstanceData" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InstanceData");
 #endif
     if (this == NULL)
     {
@@ -5772,8 +5867,9 @@ bool InstanceData::IsEqual(InstanceData *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -5782,8 +5878,9 @@ bool InstanceData::IsEqual(InstanceData *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -5809,8 +5906,8 @@ bool InstanceData::IsEqual(InstanceData *that)
 
 bool Variables::IsEqual(Variables *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in Variables" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Variables");
 #endif
     if (this == NULL)
     {
@@ -5818,8 +5915,9 @@ bool Variables::IsEqual(Variables *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -5828,8 +5926,9 @@ bool Variables::IsEqual(Variables *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -5848,8 +5947,8 @@ bool Variables::IsEqual(Variables *that)
 
 bool Variable::IsEqual(Variable *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in Variable" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Variable");
 #endif
     if (this == NULL)
     {
@@ -5857,8 +5956,9 @@ bool Variable::IsEqual(Variable *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -5867,8 +5967,9 @@ bool Variable::IsEqual(Variable *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -5890,8 +5991,8 @@ bool Variable::IsEqual(Variable *that)
 
 bool Objectives::IsEqual(Objectives *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in Objectives" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Objectives");
 #endif
     if (this == NULL)
     {
@@ -5899,8 +6000,9 @@ bool Objectives::IsEqual(Objectives *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -5909,8 +6011,9 @@ bool Objectives::IsEqual(Objectives *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -5929,8 +6032,8 @@ bool Objectives::IsEqual(Objectives *that)
 
 bool Objective::IsEqual(Objective *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in Objective" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Objective");
 #endif
     if (this == NULL)
     {
@@ -5938,8 +6041,9 @@ bool Objective::IsEqual(Objective *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -5948,8 +6052,9 @@ bool Objective::IsEqual(Objective *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -5977,8 +6082,8 @@ bool Objective::IsEqual(Objective *that)
 
 bool ObjCoef::IsEqual(ObjCoef *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in ObjCoef" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ObjCoef");
 #endif
     if (this == NULL)
     {
@@ -5986,8 +6091,9 @@ bool ObjCoef::IsEqual(ObjCoef *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -5996,8 +6102,9 @@ bool ObjCoef::IsEqual(ObjCoef *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6015,8 +6122,8 @@ bool ObjCoef::IsEqual(ObjCoef *that)
 
 bool Constraints::IsEqual(Constraints *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in Constraints" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Constraints");
 #endif
     if (this == NULL)
     {
@@ -6024,8 +6131,9 @@ bool Constraints::IsEqual(Constraints *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6034,8 +6142,9 @@ bool Constraints::IsEqual(Constraints *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6054,8 +6163,8 @@ bool Constraints::IsEqual(Constraints *that)
 
 bool Constraint::IsEqual(Constraint *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in Constraint" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Constraint");
 #endif
     if (this == NULL)
     {
@@ -6063,8 +6172,9 @@ bool Constraint::IsEqual(Constraint *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6073,8 +6183,9 @@ bool Constraint::IsEqual(Constraint *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6096,8 +6207,8 @@ bool Constraint::IsEqual(Constraint *that)
 
 bool LinearConstraintCoefficients::IsEqual(LinearConstraintCoefficients *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in LinearConstraintCoefficients" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in LinearConstraintCoefficients");
 #endif
     if (this == NULL)
     {
@@ -6105,8 +6216,9 @@ bool LinearConstraintCoefficients::IsEqual(LinearConstraintCoefficients *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6115,8 +6227,9 @@ bool LinearConstraintCoefficients::IsEqual(LinearConstraintCoefficients *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6141,8 +6254,8 @@ bool LinearConstraintCoefficients::IsEqual(LinearConstraintCoefficients *that)
 
 bool QuadraticCoefficients::IsEqual(QuadraticCoefficients *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in QuadraticCoefficients" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in QuadraticCoefficients");
 #endif
     if (this == NULL)
     {
@@ -6150,8 +6263,9 @@ bool QuadraticCoefficients::IsEqual(QuadraticCoefficients *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6160,8 +6274,9 @@ bool QuadraticCoefficients::IsEqual(QuadraticCoefficients *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6181,8 +6296,8 @@ bool QuadraticCoefficients::IsEqual(QuadraticCoefficients *that)
 
 bool QuadraticTerm::IsEqual(QuadraticTerm *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in QuadraticTerm" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in QuadraticTerm");
 #endif
     if (this == NULL)
     {
@@ -6190,8 +6305,9 @@ bool QuadraticTerm::IsEqual(QuadraticTerm *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6200,8 +6316,9 @@ bool QuadraticTerm::IsEqual(QuadraticTerm *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6223,8 +6340,8 @@ bool QuadraticTerm::IsEqual(QuadraticTerm *that)
 
 bool NonlinearExpressions::IsEqual(NonlinearExpressions *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in NonlinearExpressions" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in NonlinearExpressions");
 #endif
     if (this == NULL)
     {
@@ -6232,8 +6349,9 @@ bool NonlinearExpressions::IsEqual(NonlinearExpressions *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6242,8 +6360,9 @@ bool NonlinearExpressions::IsEqual(NonlinearExpressions *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6265,8 +6384,8 @@ bool NonlinearExpressions::IsEqual(NonlinearExpressions *that)
 
 bool Nl::IsEqual(Nl *that)
 {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in Nl" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Nl");
 #endif
     if (this == NULL)
     {
@@ -6274,8 +6393,9 @@ bool Nl::IsEqual(Nl *that)
             return true;
         else
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6284,8 +6404,9 @@ bool Nl::IsEqual(Nl *that)
     {
         if (that == NULL)
         {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
 #endif
             return false;
         }
