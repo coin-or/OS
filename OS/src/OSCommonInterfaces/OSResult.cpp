@@ -5,7 +5,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -19,14 +19,10 @@
 #include "OSGeneral.h"
 #include "OSParameters.h"
 #include "OSMathUtil.h"
+#include "OSOutput.h"
 
 #include<iostream>
 #include<sstream>
-
-//#define DEBUG_OSRESULT
-#define DEBUG_ISEQUAL_ROUTINES 0 // No output
-//#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
-//#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
 
 using namespace std;
 
@@ -39,15 +35,15 @@ GeneralSubstatus::GeneralSubstatus():
     name( ""),
     description( "")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the GeneralSubstatus Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralSubstatus Constructor");
 #endif
 }// end GeneralSubstatus constructor
 
 GeneralSubstatus::~GeneralSubstatus()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the GeneralSubstatus Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralSubstatus Destructor");
 #endif
 }//end GeneralSubstatus destructor
 
@@ -58,15 +54,15 @@ GeneralStatus::GeneralStatus():
     description( ""),
     substatus (NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the GeneralStatus Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralStatus Constructor");
 #endif
 }// end GeneralStatus constructor
 
 GeneralStatus::~GeneralStatus()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the GeneralStatus Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralStatus Destructor");
 #endif
     if (substatus != NULL)
     {
@@ -86,15 +82,15 @@ OtherResult::OtherResult():
     value( ""),
     description( "")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherResult Constructor");
 #endif
 }// end OtherResult constructor
 
 OtherResult::~OtherResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherResult Destructor");
 #endif
 }// end OtherResult destructor
 
@@ -103,15 +99,15 @@ OtherResults::OtherResults():
     numberOfOtherResults( 0),
     other( NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherResults Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherResults Constructor");
 #endif
 }// end OtherResults constructor
 
 OtherResults::~OtherResults()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherResults Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherResults Destructor");
 #endif
     if (other != NULL)
     {
@@ -137,16 +133,16 @@ GeneralResult::GeneralResult():
     timeStamp(""),
     otherResults(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the GeneralResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralResult Constructor");
 #endif
 }//end GeneralResult constructor
 
 
 GeneralResult::~GeneralResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "GeneralResult Destructor Called" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralResult Destructor");
 #endif
     if (generalStatus != NULL)
     {
@@ -168,16 +164,16 @@ SystemResult::SystemResult():
     availableCPUNumber(NULL),
     otherResults(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the SystemResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the SystemResult Constructor");
 #endif
 }//end SystemResult constructor
 
 
 SystemResult::~SystemResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "SystemResult Destructor Called" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the SystemResult Destructor");
 #endif
     if (availableDiskSpace != NULL)
     {
@@ -215,16 +211,16 @@ ServiceResult::ServiceResult():
     serviceUtilization(-1.0),
     otherResults(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ServiceResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ServiceResult Constructor");
 #endif
 }//end ServiceResult constructor
 
 
 ServiceResult::~ServiceResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "ServiceResult Destructor Called" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ServiceResult Destructor");
 #endif
     if (otherResults != NULL)
     {
@@ -241,16 +237,16 @@ Time::Time():
     description(""),
     value(0.0)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the Time Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the Time Constructor");
 #endif
 }//end Time constructor
 
 
 Time::~Time()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the Time Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the Time Destructor");
 #endif
 
 }// end Time destructor
@@ -262,16 +258,16 @@ TimeMeasurement::TimeMeasurement():
     category("total"),
     description("")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the TimeMeasurement Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeMeasurement Constructor");
 #endif
 }//end TimeMeasurement constructor
 
 
 TimeMeasurement::~TimeMeasurement()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the TimeMeasurement Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the TimeMeasurement Destructor");
 #endif
 
 }// end TimeMeasurement destructor
@@ -280,16 +276,16 @@ TimingInformation::TimingInformation():
     numberOfTimes(0),
     time(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the TimingInformation Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the TimingInformation Constructor");
 #endif
 }//end TimingInformation constructor
 
 
 TimingInformation::~TimingInformation()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the TimingInformation Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the TimingInformation Destructor");
 #endif
     if (time != NULL)
     {
@@ -316,8 +312,8 @@ JobResult::JobResult():
     usedCPUNumber(NULL),
     otherResults(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the JobResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the JobResult Constructor");
 #endif
     timingInformation = NULL;
 }//end JobResult constructor
@@ -325,8 +321,8 @@ JobResult::JobResult():
 
 JobResult::~JobResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the JobResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the JobResult Destructor");
 #endif
     if (timingInformation != NULL)
     {
@@ -365,16 +361,16 @@ OptimizationSolutionSubstatus::OptimizationSolutionSubstatus():
     type(""),
     description("")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OptimizationSolutionSubstatus Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationSolutionSubstatus Constructor");
 #endif
 }//end OptimizationSolutionSubstatus constructor
 
 
 OptimizationSolutionSubstatus::~OptimizationSolutionSubstatus()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OptimizationSolutionSubstatus Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationSolutionSubstatus Destructor");
 #endif
 }// end OptimizationSolutionSubstatus destructor
 
@@ -385,16 +381,16 @@ OptimizationSolutionStatus::OptimizationSolutionStatus():
     description(""),
     substatus(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OptimizationSolutionStatus Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationSolutionStatus Constructor");
 #endif
 }//end OptimizationSolutionStatus constructor
 
 
 OptimizationSolutionStatus::~OptimizationSolutionStatus()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OptimizationSolutionStatus Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationSolutionStatus Destructor");
 #endif
     if (substatus != NULL)
     {
@@ -414,16 +410,16 @@ VarValue::VarValue():
     name(""),
     value( 0)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VarValue Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VarValue Constructor");
 #endif
 }//end VarValue constructor
 
 
 VarValue::~VarValue()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VarValue Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VarValue Destructor");
 #endif
 }// end VarValue destructor
 
@@ -433,16 +429,16 @@ VariableValues::VariableValues():
     numberOfVar(0),
     var(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VariableValues Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VariableValues Constructor");
 #endif
 }//end VariableValues constructor
 
 
 VariableValues::~VariableValues()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VariableValues Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VariableValues Destructor");
 #endif
     if(var != NULL)
     {
@@ -462,16 +458,16 @@ VarValueString::VarValueString():
     name(""),
     value( "")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VarValueString Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VarValueString Constructor");
 #endif
 }//end VarValueString constructor
 
 
 VarValueString::~VarValueString()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VarValueString Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VarValueString Destructor");
 #endif
 }// end VarValueString destructor
 
@@ -481,16 +477,16 @@ VariableValuesString::VariableValuesString():
     numberOfVar(0),
     var(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VariableValuesString Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VariableValuesString Constructor");
 #endif
 }//end VariableValuesString constructor
 
 
 VariableValuesString::~VariableValuesString()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VariableValuesString Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VariableValuesString Destructor");
 #endif
     if(var != NULL)
     {
@@ -510,16 +506,16 @@ OtherVarResult::OtherVarResult():
     name(""),
     value( "")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherVarResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherVarResult Constructor");
 #endif
 }//end OtherVarResult constructor
 
 
 OtherVarResult::~OtherVarResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherVarResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherVarResult Destructor");
 #endif
 }// end OtherVarResult destructor
 
@@ -537,8 +533,8 @@ OtherVariableResult::OtherVariableResult():
     enumeration(NULL),
     enumType("")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherVariableResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherVariableResult Constructor");
 #endif
 
 }//end OtherVariableResult constructor
@@ -546,8 +542,8 @@ OtherVariableResult::OtherVariableResult():
 
 OtherVariableResult::~OtherVariableResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherVariableResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherVariableResult Destructor");
 #endif
     if (var != NULL)
     {
@@ -569,9 +565,6 @@ OtherVariableResult::~OtherVariableResult()
         delete[] enumeration;
         enumeration = NULL;
     }
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherVariableResult Destructor - Done" << endl;
-#endif
 }// end OtherVariableResult destructor
 
 
@@ -582,16 +575,16 @@ VariableSolution::VariableSolution():
     basisStatus(NULL),
     other( NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VariableSolution Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VariableSolution Constructor");
 #endif
 }//end VariableSolution constructor
 
 
 VariableSolution::~VariableSolution()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the VariableSolution Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the VariableSolution Destructor");
 #endif
     if (values != NULL)
     {
@@ -628,15 +621,15 @@ ObjValue::ObjValue():
     value(0.0)
 //	value( OSNaN())
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ObjValue Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjValue Constructor");
 #endif
 }//end ObjValue constructor
 
 ObjValue::~ObjValue()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ObjValue Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjValue Destructor");
 #endif
 }// end ObjValue destructor
 
@@ -646,8 +639,8 @@ ObjectiveValues::ObjectiveValues():
     numberOfObj(0),
     obj(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ObjectiveValues Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjectiveValues Constructor");
 #endif
 
 }//end ObjectiveValues constructor
@@ -655,8 +648,8 @@ ObjectiveValues::ObjectiveValues():
 
 ObjectiveValues::~ObjectiveValues()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ObjectiveValues Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjectiveValues Destructor");
 #endif
     if((obj != NULL) && (numberOfObj > 0) )
     {
@@ -676,16 +669,16 @@ OtherObjResult::OtherObjResult():
     name(""),
     value( "")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherObjResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherObjResult Constructor");
 #endif
 }//end OtherObjResult constructor
 
 
 OtherObjResult::~OtherObjResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherObjResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherObjResult Destructor");
 #endif
 }//end OtherObjResult destructor
 
@@ -702,16 +695,16 @@ OtherObjectiveResult::OtherObjectiveResult():
     enumeration(NULL),
     enumType("")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherObjectiveResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherObjectiveResult Constructor");
 #endif
 }//end OtherObjectiveResult constructor
 
 
 OtherObjectiveResult::~OtherObjectiveResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherObjectiveResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherObjectiveResult Destructor");
 #endif
     if(obj != NULL)
     {
@@ -742,16 +735,16 @@ ObjectiveSolution::ObjectiveSolution():
     basisStatus(NULL),
     other( NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ObjectiveSolution Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjectiveSolution Constructor");
 #endif
 }//end ObjectiveSolution constructor
 
 
 ObjectiveSolution::~ObjectiveSolution()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ObjectiveSolution Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjectiveSolution Destructor");
 #endif
     if (values != NULL)
     {
@@ -783,16 +776,16 @@ DualVarValue::DualVarValue():
     //ubValue( 0),
     value( 0)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the DualVarValue Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the DualVarValue Constructor");
 #endif
 }//end DualVarValue constructor
 
 
 DualVarValue::~DualVarValue()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the DualVarValue Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the DualVarValue Destructor");
 #endif
 }// end DualVarValue destructor
 
@@ -801,8 +794,8 @@ DualVariableValues::DualVariableValues():
     numberOfCon(0),
     con(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the DualVariableValues Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the DualVariableValues Constructor");
 #endif
 
 }//end DualVariableValues constructor
@@ -810,8 +803,8 @@ DualVariableValues::DualVariableValues():
 
 DualVariableValues::~DualVariableValues()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the DualVariableValues Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the DualVariableValues Destructor");
 #endif
     if (con != NULL)
     {
@@ -831,16 +824,16 @@ OtherConResult::OtherConResult():
     name(""),
     value( "")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherConResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherConResult Constructor");
 #endif
 }//end OtherConResult constructor
 
 
 OtherConResult::~OtherConResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherConResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherConResult Destructor");
 #endif
 }//end OtherConResult destructor
 
@@ -858,16 +851,16 @@ OtherConstraintResult::OtherConstraintResult():
     enumeration(NULL),
     enumType("")
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherConstraintResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherConstraintResult Constructor");
 #endif
 }//end OtherConstraintResult constructor
 
 
 OtherConstraintResult::~OtherConstraintResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherConstraintResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherConstraintResult Destructor");
 #endif
     if (con != NULL)
     {
@@ -899,16 +892,16 @@ ConstraintSolution::ConstraintSolution():
     basisStatus(NULL),
     other( NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ConstraintSolution Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ConstraintSolution Constructor");
 #endif
 }//end ConstraintSolution constructor
 
 
 ConstraintSolution::~ConstraintSolution()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the ConstraintSolution Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the ConstraintSolution Destructor");
 #endif
     if (dualValues != NULL)
     {
@@ -941,16 +934,16 @@ OtherSolutionResult::OtherSolutionResult():
     numberOfItems (0),
     item( NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherSolutionResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherSolutionResult Constructor");
 #endif
 }//end OtherSolutionResult constructor
 
 
 OtherSolutionResult::~OtherSolutionResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherSolutionResult Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherSolutionResult Destructor");
 #endif
     if (item != NULL)
     {
@@ -969,16 +962,16 @@ OtherSolutionResults::OtherSolutionResults():
     numberOfOtherSolutionResults( 0),
     otherSolutionResult( NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherSolutionResults Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherSolutionResults Constructor");
 #endif
 }//end OtherSolutionResults constructor
 
 
 OtherSolutionResults::~OtherSolutionResults()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherSolutionResults Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherSolutionResults Destructor");
 #endif
     if(numberOfOtherSolutionResults > 0 && otherSolutionResult != NULL)
     {
@@ -1006,16 +999,16 @@ OptimizationSolution::OptimizationSolution():
     otherSolutionResults( NULL)
     //other(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OptimizationSolution Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationSolution Constructor");
 #endif
 }//end OptimizationSolution constructor
 
 
 OptimizationSolution::~OptimizationSolution()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OptimzationSolution Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationSolution Destructor");
 #endif
     if(status != NULL)
     {
@@ -1052,16 +1045,16 @@ SolverOutput::SolverOutput():
     numberOfItems (0),
     item( NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the SolverOutput Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the SolverOutput Constructor");
 #endif
 }//end SolverOutput constructor
 
 
 SolverOutput::~SolverOutput()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the SolverOutput Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the SolverOutput Destructor");
 #endif
     if (item != NULL)
     {
@@ -1080,8 +1073,8 @@ OtherSolverOutput::OtherSolverOutput():
     numberOfSolverOutputs(0),
     solverOutput(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherSolverOutput Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherSolverOutput Constructor");
 #endif
 
 }//end OtherSolverOutput constructor
@@ -1089,8 +1082,8 @@ OtherSolverOutput::OtherSolverOutput():
 
 OtherSolverOutput::~OtherSolverOutput()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OtherSolverOutput Destructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherSolverOutput Destructor");
 #endif
     if (solverOutput != NULL)
     {
@@ -1114,16 +1107,18 @@ OptimizationResult::OptimizationResult():
     solution(NULL),
     otherSolverOutput(NULL)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OptimizationResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationResult Constructor");
 #endif
 }//end OptimizationResult constructor
 
 
 OptimizationResult::~OptimizationResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "OptimizationResult Destructor Called" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationResult Destructor");
 #endif
     if( solution != NULL)
     {
@@ -1131,8 +1126,11 @@ OptimizationResult::~OptimizationResult()
         {
             delete solution[i];
             solution[i] = NULL;
-#ifdef DEBUG_OSRESULT
-            cout << "Deleting Solution: " << i << endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "Deleting Solution: " << i << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
         }
         delete[] solution;
@@ -1155,8 +1153,8 @@ OSResult::OSResult():
     m_mdDualValues( NULL)
 
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Inside the OSResult Constructor" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OSResult Constructor");
 #endif
     resultHeader = NULL;
     general = NULL;
@@ -1168,8 +1166,8 @@ OSResult::OSResult():
 
 OSResult::~OSResult()
 {
-#ifdef DEBUG_OSRESULT
-    cout << "OSResult Destructor Called" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OSResult Destructor");
 #endif
     // delete the children of OSResult
     // delete resultHeader object
@@ -1815,7 +1813,7 @@ OptimizationSolutionStatus* OSResult::getSolutionStatus( int solIdx)
     return optimization->solution[solIdx]->status;
 }//getSolutionStatus
 
-std::string OSResult::getSolutionStatusType(int solIdx)
+string OSResult::getSolutionStatusType(int solIdx)
 {
     if (optimization == NULL || optimization->solution == NULL)
         throw ErrorClass("No solution defined");
@@ -2143,9 +2141,9 @@ int OSResult::getBasisInformationDense(int solIdx, int object, int* resultArray,
     if (optimization == NULL || optimization->solution == NULL)
         throw ErrorClass("No solution defined");
     if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
-        throw ErrorClass("solIdx is outside of range in routine getBasisStatusEl()");
+        throw ErrorClass("solIdx is outside of range in routine getBasisInformationDense()");
     if (optimization->solution[solIdx] == NULL)
-        throw ErrorClass("solution never defined in routine getBasisStatusEl()");
+        throw ErrorClass("solution never defined in routine getBasisInformationDense()");
 
     for (int i=0; i<dim; i++)
         resultArray[i] = 0;
@@ -2155,29 +2153,29 @@ int OSResult::getBasisInformationDense(int solIdx, int object, int* resultArray,
     case ENUM_PROBLEM_COMPONENT_variables:
     {
         if (optimization->solution[solIdx]->variables == NULL)
-            throw ErrorClass("variables result never defined in routine getBasisStatusEl()");
+            throw ErrorClass("variables result never defined in routine getBasisInformationDense()");
         if (optimization->solution[solIdx]->variables->basisStatus == NULL)
-            throw ErrorClass("basis status never defined in routine getBasisStatusEl()");
+            throw ErrorClass("basis status never defined in routine getBasisInformationDense()");
         return optimization->solution[solIdx]->variables->basisStatus->getBasisDense(resultArray, dim, false);
     }
     case ENUM_PROBLEM_COMPONENT_objectives:
     {
         if (optimization->solution[solIdx]->objectives == NULL)
-            throw ErrorClass("objectives result never defined in routine getBasisStatusEl()");
+            throw ErrorClass("objectives result never defined in routine getBasisInformationDense()");
         if (optimization->solution[solIdx]->objectives->basisStatus == NULL)
-            throw ErrorClass("basis status never defined in routine getBasisStatusEl()");
+            throw ErrorClass("basis status never defined in routine getBasisInformationDense()");
         return optimization->solution[solIdx]->objectives->basisStatus->getBasisDense(resultArray, dim, true);
     }
     case ENUM_PROBLEM_COMPONENT_constraints:
     {
         if (optimization->solution[solIdx]->constraints == NULL)
-            throw ErrorClass("constraints result never defined in routine getBasisStatusEl()");
+            throw ErrorClass("constraints result never defined in routine getBasisInformationDense()");
         if (optimization->solution[solIdx]->constraints->basisStatus == NULL)
-            throw ErrorClass("basis status never defined in routine getBasisStatusEl()");
+            throw ErrorClass("basis status never defined in routine getBasisInformationDense()");
         return optimization->solution[solIdx]->constraints->basisStatus->getBasisDense(resultArray, dim, false);
     }
     default:
-        throw ErrorClass("target object not implemented in getBasisStatusEl");
+        throw ErrorClass("target object not implemented in getBasisInformationDense");
     }
 }//getBasisInformationDense
 
@@ -6487,8 +6485,8 @@ bool OSResult::setSolverOutputItem(int otherIdx, int itemIdx, std::string item)
  ***************************************************/
 bool OSResult::IsEqual(OSResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OSResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSResult");
 #endif
     if (this == NULL)
     {
@@ -6496,9 +6494,9 @@ bool OSResult::IsEqual(OSResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OSResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OSResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6507,9 +6505,9 @@ bool OSResult::IsEqual(OSResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OSResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OSResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6533,8 +6531,10 @@ bool OSResult::IsEqual(OSResult *that)
 
 bool GeneralResult::IsEqual(GeneralResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in GeneralResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralResult");
 #endif
     if (this == NULL)
     {
@@ -6542,9 +6542,9 @@ bool GeneralResult::IsEqual(GeneralResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in GeneralResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in GeneralResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6553,31 +6553,34 @@ bool GeneralResult::IsEqual(GeneralResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in GeneralResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in GeneralResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
         else
         {
             if (this->message       != that->message       ||
-                    this->serviceURI    != that->serviceURI    ||
-                    this->serviceName   != that->serviceName   ||
-                    this->instanceName  != that->instanceName  ||
-                    this->jobID         != that->jobID         ||
-                    this->solverInvoked != that->solverInvoked ||
-                    this->timeStamp     != that->timeStamp )
+                this->serviceURI    != that->serviceURI    ||
+                this->serviceName   != that->serviceName   ||
+                this->instanceName  != that->instanceName  ||
+                this->jobID         != that->jobID         ||
+                this->solverInvoked != that->solverInvoked ||
+                this->timeStamp     != that->timeStamp )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in GeneralResult" << endl;
-                cout << "message:       " << this->message       << " vs. " << that->message       << endl;
-                cout << "serviceURI:    " << this->serviceURI    << " vs. " << that->serviceURI    << endl;
-                cout << "serviceName:   " << this->serviceName   << " vs. " << that->serviceName   << endl;
-                cout << "instanceName:  " << this->instanceName  << " vs. " << that->instanceName  << endl;
-                cout << "jobID:         " << this->jobID         << " vs. " << that->jobID         << endl;
-                cout << "solverInvoked: " << this->solverInvoked << " vs. " << that->solverInvoked << endl;
-                cout << "timeStamp:     " << this->timeStamp     << " vs. " << that->timeStamp     << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in GeneralResult" << endl;
+                outStr << "message:       " << this->message       << " vs. " << that->message       << endl;
+                outStr << "serviceURI:    " << this->serviceURI    << " vs. " << that->serviceURI    << endl;
+                outStr << "serviceName:   " << this->serviceName   << " vs. " << that->serviceName   << endl;
+                outStr << "instanceName:  " << this->instanceName  << " vs. " << that->instanceName  << endl;
+                outStr << "jobID:         " << this->jobID         << " vs. " << that->jobID         << endl;
+                outStr << "solverInvoked: " << this->solverInvoked << " vs. " << that->solverInvoked << endl;
+                outStr << "timeStamp:     " << this->timeStamp     << " vs. " << that->timeStamp     << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -6594,8 +6597,10 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 
 bool GeneralStatus::IsEqual(GeneralStatus *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in GeneralStatus" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralStatus");
 #endif
     if (this == NULL)
     {
@@ -6603,9 +6608,9 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in GeneralStatus" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in GeneralStatus");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6614,10 +6619,11 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in GeneralStatus" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in GeneralStatus");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
+
             return false;
         }
         else
@@ -6626,11 +6632,14 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
                     this->type                != that->type                ||
                     this->description         != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in GeneralStatus" << endl;
-                cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
-                cout << "type:                " << this->type                << " vs. " << that->type                << endl;
-                cout << "description:         " << this->description         << " vs. " << that->description         << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in GeneralStatus" << endl;
+                outStr << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
+                outStr << "type:                " << this->type                << " vs. " << that->type                << endl;
+                outStr << "description:         " << this->description         << " vs. " << that->description         << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -6645,8 +6654,10 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 
 bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in GeneralSubstatus" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralSubstatus");
 #endif
     if (this == NULL)
     {
@@ -6654,9 +6665,9 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in GeneralSubstatus" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in GeneralSubstatus");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6665,9 +6676,9 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in GeneralSubstatus" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in GeneralSubstatus");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6676,10 +6687,13 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
             if (this->name        != that->name          ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in GeneralSubstatus" << endl;
-                cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in GeneralSubstatus" << endl;
+                outStr << "name:        " << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -6691,8 +6705,10 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 
 bool OtherResults::IsEqual(OtherResults *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherResults" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherResults");
 #endif
     if (this == NULL)
     {
@@ -6700,9 +6716,9 @@ bool OtherResults::IsEqual(OtherResults *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherResults" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherResults");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6711,9 +6727,9 @@ bool OtherResults::IsEqual(OtherResults *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherResults" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherResults");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6721,9 +6737,12 @@ bool OtherResults::IsEqual(OtherResults *that)
         {
             if (this->numberOfOtherResults != that->numberOfOtherResults)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherResults" << endl;
-                cout << "numberOfOtherResults: " << this->numberOfOtherResults << " vs. " << that->numberOfOtherResults << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherResults" << endl;
+                outStr << "numberOfOtherResults: " << this->numberOfOtherResults << " vs. " << that->numberOfOtherResults << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -6740,8 +6759,10 @@ bool OtherResults::IsEqual(OtherResults *that)
 
 bool OtherResult::IsEqual(OtherResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherResult");
 #endif
     if (this == NULL)
     {
@@ -6749,9 +6770,9 @@ bool OtherResult::IsEqual(OtherResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6760,9 +6781,9 @@ bool OtherResult::IsEqual(OtherResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6772,11 +6793,14 @@ bool OtherResult::IsEqual(OtherResult *that)
                     this->value       != that->value         ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherResult" << endl;
-                cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-                cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherResult" << endl;
+                outStr << "name:        " << this->name        << " vs. " << that->name        << endl;
+                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -6788,8 +6812,10 @@ bool OtherResult::IsEqual(OtherResult *that)
 
 bool SystemResult::IsEqual(SystemResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in SystemResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in SystemResult");
 #endif
     if (this == NULL)
     {
@@ -6797,9 +6823,9 @@ bool SystemResult::IsEqual(SystemResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in SystemResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in SystemResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6808,9 +6834,9 @@ bool SystemResult::IsEqual(SystemResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in SystemResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in SystemResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6818,9 +6844,12 @@ bool SystemResult::IsEqual(SystemResult *that)
         {
             if (this->systemInformation != that->systemInformation)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in SystemResult" << endl;
-                cout << "systemInformation: " << this->systemInformation << " vs. " << that->systemInformation << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in SystemResult" << endl;
+                outStr << "systemInformation: " << this->systemInformation << " vs. " << that->systemInformation << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -6845,8 +6874,10 @@ bool SystemResult::IsEqual(SystemResult *that)
 
 bool ServiceResult::IsEqual(ServiceResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in ServiceResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ServiceResult");
 #endif
     if (this == NULL)
     {
@@ -6854,9 +6885,9 @@ bool ServiceResult::IsEqual(ServiceResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ServiceResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ServiceResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6865,9 +6896,9 @@ bool ServiceResult::IsEqual(ServiceResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ServiceResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ServiceResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6879,13 +6910,16 @@ bool ServiceResult::IsEqual(ServiceResult *that)
                     this->timeServiceStarted != that->timeServiceStarted ||
                     !isEqual(this->serviceUtilization, that->serviceUtilization) )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in ServiceResult" << endl;
-                cout << "currentState:       " << this->currentState       << " vs. " << that->currentState       << endl;
-                cout << "currentJobCount:    " << this->currentJobCount    << " vs. " << that->currentJobCount    << endl;
-                cout << "totalJobsSoFar:     " << this->totalJobsSoFar     << " vs. " << that->totalJobsSoFar     << endl;
-                cout << "timeServiceStarted: " << this->timeServiceStarted << " vs. " << that->timeServiceStarted << endl;
-                cout << "serviceUtilization: " << this->serviceUtilization << " vs. " << that->serviceUtilization << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in ServiceResult" << endl;
+                outStr << "currentState:       " << this->currentState       << " vs. " << that->currentState       << endl;
+                outStr << "currentJobCount:    " << this->currentJobCount    << " vs. " << that->currentJobCount    << endl;
+                outStr << "totalJobsSoFar:     " << this->totalJobsSoFar     << " vs. " << that->totalJobsSoFar     << endl;
+                outStr << "timeServiceStarted: " << this->timeServiceStarted << " vs. " << that->timeServiceStarted << endl;
+                outStr << "serviceUtilization: " << this->serviceUtilization << " vs. " << that->serviceUtilization << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -6900,8 +6934,10 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 
 bool JobResult::IsEqual(JobResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in JobResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in JobResult");
 #endif
     if (this == NULL)
     {
@@ -6909,9 +6945,9 @@ bool JobResult::IsEqual(JobResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in JobResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in JobResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6920,9 +6956,9 @@ bool JobResult::IsEqual(JobResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in JobResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in JobResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6934,13 +6970,16 @@ bool JobResult::IsEqual(JobResult *that)
                     this->actualStartTime    != that->actualStartTime    ||
                     this->endTime            != that->endTime          )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in JobResult" << endl;
-                cout << "status:             " << this->status             << " vs. " << that->status             << endl;
-                cout << "submitTime:         " << this->submitTime         << " vs. " << that->submitTime         << endl;
-                cout << "scheduledStartTime: " << this->scheduledStartTime << " vs. " << that->scheduledStartTime << endl;
-                cout << "actualStartTime:    " << this->actualStartTime    << " vs. " << that->actualStartTime    << endl;
-                cout << "endTime:            " << this->endTime            << " vs. " << that->endTime            << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in JobResult" << endl;
+                outStr << "status:             " << this->status             << " vs. " << that->status             << endl;
+                outStr << "submitTime:         " << this->submitTime         << " vs. " << that->submitTime         << endl;
+                outStr << "scheduledStartTime: " << this->scheduledStartTime << " vs. " << that->scheduledStartTime << endl;
+                outStr << "actualStartTime:    " << this->actualStartTime    << " vs. " << that->actualStartTime    << endl;
+                outStr << "endTime:            " << this->endTime            << " vs. " << that->endTime            << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -6966,8 +7005,10 @@ bool JobResult::IsEqual(JobResult *that)
 
 bool TimingInformation::IsEqual(TimingInformation *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in TimingInformation" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in TimingInformation");
 #endif
     if (this == NULL)
     {
@@ -6975,9 +7016,9 @@ bool TimingInformation::IsEqual(TimingInformation *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in TimingInformation" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in TimingInformation");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -6986,9 +7027,9 @@ bool TimingInformation::IsEqual(TimingInformation *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in TimingInformation" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in TimingInformation");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -6996,9 +7037,12 @@ bool TimingInformation::IsEqual(TimingInformation *that)
         {
             if (this->numberOfTimes != that->numberOfTimes)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in TimingInformation" << endl;
-                cout << "numberOfTimes: " << this->numberOfTimes << " vs. " << that->numberOfTimes << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in TimingInformation" << endl;
+                outStr << "numberOfTimes: " << this->numberOfTimes << " vs. " << that->numberOfTimes << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7015,8 +7059,10 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 #if 0
 bool Time::IsEqual(Time *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in Time" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in Time");
 #endif
     if (this == NULL)
     {
@@ -7024,9 +7070,9 @@ bool Time::IsEqual(Time *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in Time" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in Time");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7035,9 +7081,9 @@ bool Time::IsEqual(Time *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in Time" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in Time");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7049,13 +7095,16 @@ bool Time::IsEqual(Time *that)
                     this->category    != that->category  ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in Time" << endl;
-                cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-                cout << "type:        " << this->type        << " vs. " << that->type        << endl;
-                cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-                cout << "category:    " << this->category    << " vs. " << that->category    << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in Time" << endl;
+                outStr << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
+                outStr << "type:        " << this->type        << " vs. " << that->type        << endl;
+                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
+                outStr << "category:    " << this->category    << " vs. " << that->category    << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7069,8 +7118,10 @@ bool Time::IsEqual(Time *that)
 
 bool TimeMeasurement::IsEqual(TimeMeasurement *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in TimeMeasurement" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in TimeMeasurement");
 #endif
     if (this == NULL)
     {
@@ -7078,9 +7129,9 @@ bool TimeMeasurement::IsEqual(TimeMeasurement *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in Time" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in TimeMeasurement");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7089,9 +7140,9 @@ bool TimeMeasurement::IsEqual(TimeMeasurement *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in Time" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in TimeMeasurement");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7101,11 +7152,14 @@ bool TimeMeasurement::IsEqual(TimeMeasurement *that)
                     this->category    != that->category  ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in TimeMeasurement" << endl;
-                cout << "type:        " << this->type        << " vs. " << that->type        << endl;
-                cout << "category:    " << this->category    << " vs. " << that->category    << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in TimeMeasurement" << endl;
+                outStr << "type:        " << this->type        << " vs. " << that->type        << endl;
+                outStr << "category:    " << this->category    << " vs. " << that->category    << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7117,8 +7171,10 @@ bool TimeMeasurement::IsEqual(TimeMeasurement *that)
 
 bool OptimizationResult::IsEqual(OptimizationResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OptimizationResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OptimizationResult");
 #endif
     if (this == NULL)
     {
@@ -7126,9 +7182,9 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OptimizationResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OptimizationResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7137,9 +7193,9 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OptimizationResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OptimizationResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7150,12 +7206,15 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
                     this->numberOfObjectives  != that->numberOfObjectives  ||
                     this->numberOfConstraints != that->numberOfConstraints  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OptimizationResult" << endl;
-                cout << "numberOfSolutions:   " << this->numberOfSolutions   << " vs. " << that->numberOfSolutions   << endl;
-                cout << "numberOfVariables:   " << this->numberOfVariables   << " vs. " << that->numberOfVariables   << endl;
-                cout << "numberOfObjectives:  " << this->numberOfObjectives  << " vs. " << that->numberOfObjectives  << endl;
-                cout << "numberOfConstraints: " << this->numberOfConstraints << " vs. " << that->numberOfConstraints << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OptimizationResult" << endl;
+                outStr << "numberOfSolutions:   " << this->numberOfSolutions   << " vs. " << that->numberOfSolutions   << endl;
+                outStr << "numberOfVariables:   " << this->numberOfVariables   << " vs. " << that->numberOfVariables   << endl;
+                outStr << "numberOfObjectives:  " << this->numberOfObjectives  << " vs. " << that->numberOfObjectives  << endl;
+                outStr << "numberOfConstraints: " << this->numberOfConstraints << " vs. " << that->numberOfConstraints << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7175,8 +7234,10 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 
 bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OptimizationSolution " << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OptimizationSolution");
 #endif
     if (this == NULL)
     {
@@ -7184,9 +7245,9 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OptimizationSolution" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OptimizationSolution");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7195,9 +7256,9 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OptimizationSolution" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OptimizationSolution");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7205,36 +7266,48 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
         {
             if (this->targetObjectiveIdx != that->targetObjectiveIdx)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OptimizationSolution" << endl;
-                cout << "targetObjectiveIdx: " << this->targetObjectiveIdx << " vs. " << that->targetObjectiveIdx << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OptimizationSolution" << endl;
+                outStr << "targetObjectiveIdx: " << this->targetObjectiveIdx << " vs. " << that->targetObjectiveIdx << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->targetObjectiveName != that->targetObjectiveName)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OptimizationSolution" << endl;
-                cout << "targetObjectiveName: " << this->targetObjectiveName << " vs. " << that->targetObjectiveName << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OptimizationSolution" << endl;
+                outStr << "targetObjectiveName: " << this->targetObjectiveName << " vs. " << that->targetObjectiveName << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->weightedObjectives != that->weightedObjectives)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OptimizationSolution" << endl;
-                cout << "weightedObjectives: " << this->weightedObjectives << " vs. " << that->weightedObjectives << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OptimizationSolution" << endl;
+                outStr << "weightedObjectives: " << this->weightedObjectives << " vs. " << that->weightedObjectives << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->message != that->message)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OptimizationSolution" << endl;
-                cout << "message: \'" << this->message << "\' vs. \'" << that->message << "\'" << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OptimizationSolution" << endl;
+                outStr << "message: \'" << this->message << "\' vs. \'" << that->message << "\'" << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7258,8 +7331,10 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 
 bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OptimizationSolutionStatus" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OptimizationSolutionStatus");
 #endif
     if (this == NULL)
     {
@@ -7267,9 +7342,9 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OptimizationSolutionStatus" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OptimizationSolutionStatus");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7278,9 +7353,9 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OptimizationSolutionStatus" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OptimizationSolutionStatus");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7289,19 +7364,25 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
             if (this->type        != that->type          ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OptimizationSolutionStatus" << endl;
-                cout << "type:        " << this->type        << " vs. " << that->type        << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OptimizationSolutionStatus" << endl;
+                outStr << "type:        " << this->type        << " vs. " << that->type        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->numberOfSubstatuses != that->numberOfSubstatuses)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OptimizationSolutionStatus" << endl;
-                cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OptimizationSolutionStatus" << endl;
+                outStr << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7319,8 +7400,10 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 
 bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OptimizationSolutionSubstatus" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OptimizationSolutionSubstatus");
 #endif
     if (this == NULL)
     {
@@ -7328,9 +7411,9 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OptimizationSolutionSubstatus" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OptimizationSolutionSubstatus");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7339,9 +7422,9 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OptimizationSolutionSubstatus" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OptimizationSolutionSubstatus");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7350,10 +7433,13 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
             if (this->type        != that->type          ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OptimizationSolutionSubstatus" << endl;
-                cout << "type:        " << this->type        << " vs. " << that->type        << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OptimizationSolutionSubstatus" << endl;
+                outStr << "type:        " << this->type        << " vs. " << that->type        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7366,8 +7452,10 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 
 bool VariableSolution::IsEqual(VariableSolution *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in VariableSolution" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VariableSolution");
 #endif
     if (this == NULL)
     {
@@ -7375,9 +7463,9 @@ bool VariableSolution::IsEqual(VariableSolution *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VariableSolution" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VariableSolution");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7386,9 +7474,9 @@ bool VariableSolution::IsEqual(VariableSolution *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VariableSolution" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VariableSolution");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7396,9 +7484,12 @@ bool VariableSolution::IsEqual(VariableSolution *that)
         {
             if (this->numberOfOtherVariableResults != that->numberOfOtherVariableResults)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in VariableSolution" << endl;
-                cout << "numberOfOtherVariableResults: " << this->numberOfOtherVariableResults << " vs. " << that->numberOfOtherVariableResults << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in VariableSolution" << endl;
+                outStr << "numberOfOtherVariableResults: " << this->numberOfOtherVariableResults << " vs. " << that->numberOfOtherVariableResults << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7422,8 +7513,10 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 
 bool VariableValues::IsEqual(VariableValues *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in VariableValues" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VariableValues");
 #endif
     if (this == NULL)
     {
@@ -7431,9 +7524,9 @@ bool VariableValues::IsEqual(VariableValues *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VariableValues" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VariableValues");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7442,9 +7535,9 @@ bool VariableValues::IsEqual(VariableValues *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VariableValues" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VariableValues");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7452,9 +7545,12 @@ bool VariableValues::IsEqual(VariableValues *that)
         {
             if (this->numberOfVar != that->numberOfVar)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in VariableValues" << endl;
-                cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in VariableValues" << endl;
+                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7472,8 +7568,10 @@ bool VariableValues::IsEqual(VariableValues *that)
 
 bool VarValue::IsEqual(VarValue *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in VarValue" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VarValue");
 #endif
     if (this == NULL)
     {
@@ -7481,9 +7579,9 @@ bool VarValue::IsEqual(VarValue *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VarValue" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VarValue");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7492,9 +7590,9 @@ bool VarValue::IsEqual(VarValue *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VarValue" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VarValue");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7503,11 +7601,14 @@ bool VarValue::IsEqual(VarValue *that)
             if (this->idx != that->idx || this->name != that->name ||
                     !isEqual(this->value, that->value) )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in VarValue" << endl;
-                cout << "idx:   " << this->idx   <<  " vs.  " << that->idx   << endl;
-                cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
-                cout << "value: " << this->value <<  " vs.  " << that->value << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in VarValue" << endl;
+                outStr << "idx:   " << this->idx   <<  " vs.  " << that->idx   << endl;
+                outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+                outStr << "value: " << this->value <<  " vs.  " << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7520,9 +7621,10 @@ bool VarValue::IsEqual(VarValue *that)
 
 bool VariableValuesString::IsEqual(VariableValuesString *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in VariableValuesString" << endl;
+    std::ostringstream outStr;
 
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VariableValuesString");
 #endif
     if (this == NULL)
     {
@@ -7530,9 +7632,9 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VariableValuesString" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VariableValuesString");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7541,9 +7643,9 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VariableValuesString" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VariableValuesString");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7551,9 +7653,12 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
         {
             if (this->numberOfVar != that->numberOfVar)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in VariableValuesString" << endl;
-                cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in VariableValuesString" << endl;
+                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7571,8 +7676,10 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 
 bool VarValueString::IsEqual(VarValueString *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in VarValueString" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VarValueString");
 #endif
     if (this == NULL)
     {
@@ -7580,9 +7687,9 @@ bool VarValueString::IsEqual(VarValueString *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VarValueString" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VarValueString");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7591,9 +7698,9 @@ bool VarValueString::IsEqual(VarValueString *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in VarValueString" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in VarValueString");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7602,11 +7709,14 @@ bool VarValueString::IsEqual(VarValueString *that)
             if (this->idx   != that->idx  || this->name != that->name ||
                     this->value != that->value )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in VarValueString" << endl;
-                cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
-                cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
-                cout << "value: " << this->value <<  " vs. "  << that->value << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in VarValueString" << endl;
+                outStr << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+                outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+                outStr << "value: " << this->value <<  " vs. "  << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7619,8 +7729,10 @@ bool VarValueString::IsEqual(VarValueString *that)
 
 bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherVariableResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherVariableResult");
 #endif
     if (this == NULL)
     {
@@ -7628,9 +7740,9 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherVariableResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherVariableResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7639,9 +7751,9 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherVariableResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherVariableResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7651,19 +7763,25 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
                     this->value       != that->value         ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherVariableResult" << endl;
-                cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-                cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherVariableResult" << endl;
+                outStr << "name:        " << this->name        << " vs. " << that->name        << endl;
+                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->numberOfVar != that->numberOfVar)
             {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-                cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7675,9 +7793,12 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 
             if (this->numberOfEnumerations != that->numberOfEnumerations)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherVariableResult" << endl;
-                cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherVariableResult" << endl;
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7695,8 +7816,10 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 
 bool OtherVarResult::IsEqual(OtherVarResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherVarResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherVarResult");
 #endif
     if (this == NULL)
     {
@@ -7704,9 +7827,9 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherVarResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherVarResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7715,9 +7838,9 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherVarResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherVarResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7726,11 +7849,14 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
             if (this->idx   != that->idx  || this->name != that->name ||
                     this->value != that->value )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherVarResult" << endl;
-                cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
-                cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
-                cout << "value: " << this->value <<  " vs. "  << that->value << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherVarResult" << endl;
+                outStr << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+                outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+                outStr << "value: " << this->value <<  " vs. "  << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7743,8 +7869,10 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 
 bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in ObjectiveSolution" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ObjectiveSolution");
 #endif
     if (this == NULL)
     {
@@ -7752,9 +7880,9 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ObjectiveSolution" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ObjectiveSolution");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7763,9 +7891,9 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ObjectiveSolution" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ObjectiveSolution");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7773,10 +7901,12 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
         {
             if (this->numberOfOtherObjectiveResults != that->numberOfOtherObjectiveResults)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in ObjectiveSolution" << endl;
-
-                cout << "numberOfOtherObjectiveResults: " << this->numberOfOtherObjectiveResults << " vs. " << that->numberOfOtherObjectiveResults << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in ObjectiveSolution" << endl;
+                outStr << "numberOfOtherObjectiveResults: " << this->numberOfOtherObjectiveResults << " vs. " << that->numberOfOtherObjectiveResults << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7799,8 +7929,10 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 
 bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in ObjectiveValues" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ObjectiveValues");
 #endif
     if (this == NULL)
     {
@@ -7808,9 +7940,9 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ObjectiveValues" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ObjectiveValues");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7819,9 +7951,9 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ObjectiveValues" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ObjectiveValues");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7829,9 +7961,12 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
         {
             if (this->numberOfObj != that->numberOfObj)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in ObjectiveValues" << endl;
-                cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in ObjectiveValues" << endl;
+                outStr << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7849,8 +7984,10 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 
 bool ObjValue::IsEqual(ObjValue *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in ObjValue" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ObjValue");
 #endif
     if (this == NULL)
     {
@@ -7858,9 +7995,9 @@ bool ObjValue::IsEqual(ObjValue *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ObjValue" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ObjValue");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7869,9 +8006,9 @@ bool ObjValue::IsEqual(ObjValue *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ObjValue" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ObjValue");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7880,11 +8017,14 @@ bool ObjValue::IsEqual(ObjValue *that)
             if (this->idx   != that->idx  || this->name != that->name ||
                     this->value != that->value )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in ObjValue" << endl;
-                cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
-                cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
-                cout << "value: " << this->value <<  " vs. "  << that->value << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in ObjValue" << endl;
+                outStr << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+                outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+                outStr << "value: " << this->value <<  " vs. "  << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -7897,8 +8037,10 @@ bool ObjValue::IsEqual(ObjValue *that)
 
 bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherObjectiveResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherObjectiveResult");
 #endif
     if (this == NULL)
     {
@@ -7906,9 +8048,9 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherObjectiveResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherObjectiveResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7917,9 +8059,9 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherObjectiveResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherObjectiveResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -7929,20 +8071,26 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
                     this->name        != that->name    ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherObjectiveResult" << endl;
-                cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-                cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherObjectiveResult" << endl;
+                outStr << "name:        " << this->name        << " vs. " << that->name        << endl;
+                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->numberOfObj != that->numberOfObj)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherObjectiveResult" << endl;
-                cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherObjectiveResult" << endl;
+                outStr << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7954,9 +8102,12 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 
             if (this->numberOfEnumerations != that->numberOfEnumerations)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherObjectiveResult" << endl;
-                cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherObjectiveResult" << endl;
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -7974,8 +8125,10 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 
 bool OtherObjResult::IsEqual(OtherObjResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherObjResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherObjResult");
 #endif
     if (this == NULL)
     {
@@ -7983,9 +8136,9 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherObjResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherObjResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -7994,9 +8147,9 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherObjResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherObjResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8005,11 +8158,14 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
             if (this->idx   != that->idx  || this->name != that->name ||
                     this->value != that->value )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherObjResult" << endl;
-                cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
-                cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
-                cout << "value: " << this->value <<  " vs. "  << that->value << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherObjResult" << endl;
+                outStr << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+                outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+                outStr << "value: " << this->value <<  " vs. "  << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -8022,8 +8178,10 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 
 bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in ConstraintSolution" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ConstraintSolution");
 #endif
     if (this == NULL)
     {
@@ -8031,9 +8189,9 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ConstraintSolution" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ConstraintSolution");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8042,9 +8200,9 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in ConstraintSolution" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in ConstraintSolution");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8052,9 +8210,12 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
         {
             if (this->numberOfOtherConstraintResults != that->numberOfOtherConstraintResults)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in ConstraintSolution" << endl;
-                cout << "numberOfOtherConstraintResults: " << this->numberOfOtherConstraintResults << " vs. " << that->numberOfOtherConstraintResults << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in ConstraintSolution" << endl;
+                outStr << "numberOfOtherConstraintResults: " << this->numberOfOtherConstraintResults << " vs. " << that->numberOfOtherConstraintResults << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -8069,7 +8230,6 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
             if (!this->basisStatus->IsEqual(that->basisStatus))
                 return false;
 
-
             return true;
         }
     }
@@ -8078,8 +8238,10 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 
 bool DualVariableValues::IsEqual(DualVariableValues *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in DualVariableValues" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in DualVariableValues");
 #endif
     if (this == NULL)
     {
@@ -8087,9 +8249,9 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in DualVariableValues" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in DualVariableValues");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8098,20 +8260,22 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in DualVariableValues" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in DualVariableValues");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
         else
         {
             if (this->numberOfCon != that->numberOfCon)
-
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in DualVariableValues" << endl;
-                cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in DualVariableValues" << endl;
+                outStr << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -8128,8 +8292,10 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 
 bool DualVarValue::IsEqual(DualVarValue *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in DualVarValue" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in DualVarValue");
 #endif
     if (this == NULL)
     {
@@ -8137,9 +8303,9 @@ bool DualVarValue::IsEqual(DualVarValue *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in DualVarValue" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in DualVarValue");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8148,9 +8314,9 @@ bool DualVarValue::IsEqual(DualVarValue *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in DualVarValue" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in DualVarValue");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8159,11 +8325,14 @@ bool DualVarValue::IsEqual(DualVarValue *that)
             if (this->idx != that->idx  || this->name != that->name ||
                     !isEqual(this->value, that->value) )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in DualVarValue" << endl;
-                cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
-                cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
-                cout << "value: " << this->value <<  " vs. "  << that->value << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in DualVarValue" << endl;
+                outStr << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+                outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+                outStr << "value: " << this->value <<  " vs. "  << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -8175,8 +8344,10 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 
 bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherConstraintResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherConstraintResult");
 #endif
     if (this == NULL)
     {
@@ -8184,9 +8355,9 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherConstraintResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherConstraintResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8195,9 +8366,9 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherConstraintResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherConstraintResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8207,20 +8378,26 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
                     this->value       != that->value         ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherConstraintResult" << endl;
-                cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-                cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherConstraintResult" << endl;
+                outStr << "name:        " << this->name        << " vs. " << that->name        << endl;
+                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->numberOfCon != that->numberOfCon)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherConstraintResult" << endl;
-                cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherConstraintResult" << endl;
+                outStr << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -8232,9 +8409,12 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 
             if (this->numberOfEnumerations != that->numberOfEnumerations)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherConstraintResult" << endl;
-                cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherConstraintResult" << endl;
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -8252,8 +8432,10 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 
 bool OtherConResult::IsEqual(OtherConResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherConResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherConResult");
 #endif
     if (this == NULL)
     {
@@ -8261,9 +8443,9 @@ bool OtherConResult::IsEqual(OtherConResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherConResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherConResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8272,9 +8454,9 @@ bool OtherConResult::IsEqual(OtherConResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherConResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherConResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8283,11 +8465,14 @@ bool OtherConResult::IsEqual(OtherConResult *that)
             if (this->idx   != that->idx  || this->name != that->name ||
                     this->value != that->value )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherConResult" << endl;
-                cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
-                cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
-                cout << "value: " << this->value <<  " vs. "  << that->value << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherConResult" << endl;
+                outStr << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+                outStr << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+                outStr << "value: " << this->value <<  " vs. "  << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
@@ -8300,8 +8485,10 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 
 bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherSolutionResults" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherSolutionResults");
 #endif
     if (this == NULL)
     {
@@ -8309,9 +8496,9 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherSolutionResults" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherSolutionResults");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8320,9 +8507,9 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherSolutionResults" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherSolutionResults");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8330,9 +8517,12 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
         {
             if (this->numberOfOtherSolutionResults != that->numberOfOtherSolutionResults)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherSolutionResults" << endl;
-                cout << "numberOfOtherSolutionResults: " << this->numberOfOtherSolutionResults << " vs. " << that->numberOfOtherSolutionResults << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherSolutionResults" << endl;
+                outStr << "numberOfOtherSolutionResults: " << this->numberOfOtherSolutionResults << " vs. " << that->numberOfOtherSolutionResults << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -8349,8 +8539,10 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 
 bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherSolutionResult" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherSolutionResult");
 #endif
     if (this == NULL)
     {
@@ -8358,9 +8550,9 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherSolutionResult" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherSolutionResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8369,9 +8561,9 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherSolutionResult" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherSolutionResult");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8382,20 +8574,26 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
                     this->category    != that->category      ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherSolutionResult" << endl;
-                cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-                cout << "category:    " << this->category    << " vs. " << that->category    << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherSolutionResult" << endl;
+                outStr << "name:        " << this->name        << " vs. " << that->name        << endl;
+                outStr << "category:    " << this->category    << " vs. " << that->category    << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->numberOfItems != that->numberOfItems)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherSolutionResult" << endl;
-                cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherSolutionResult" << endl;
+                outStr << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -8404,9 +8602,12 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
             for (int i = 0; i < numberOfItems; i++)
                 if (this->item[i] != that->item[i])
                 {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                    cout << "Differences in OtherSolutionResult" << endl;
-                    cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "Differences in OtherSolutionResult" << endl;
+                    outStr << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                     return false;
                 }
@@ -8419,8 +8620,10 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 
 bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in OtherSolverOutput" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OtherSolverOutput");
 #endif
     if (this == NULL)
     {
@@ -8428,9 +8631,9 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherSolverOutput" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherSolverOutput");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8439,9 +8642,9 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in OtherSolverOutput" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in OtherSolverOutput");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8449,9 +8652,12 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
         {
             if (this->numberOfSolverOutputs != that->numberOfSolverOutputs)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in OtherSolverOutput" << endl;
-                cout << "numberOfSolverOutputs: " << this->numberOfSolverOutputs << " vs. " << that->numberOfSolverOutputs << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in OtherSolverOutput" << endl;
+                outStr << "numberOfSolverOutputs: " << this->numberOfSolverOutputs << " vs. " << that->numberOfSolverOutputs << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                 return false;
@@ -8469,8 +8675,10 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 
 bool SolverOutput::IsEqual(SolverOutput *that)
 {
-#if DEBUG_ISEQUAL_ROUTINES == 2
-    cout << "Start comparing in SolverOutput" << endl;
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in SolverOutput");
 #endif
     if (this == NULL)
     {
@@ -8478,9 +8686,9 @@ bool SolverOutput::IsEqual(SolverOutput *that)
             return true;
         else
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in SolverOutput" << endl;
-            cout << "First object is NULL, second is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in SolverOutput");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -8489,9 +8697,9 @@ bool SolverOutput::IsEqual(SolverOutput *that)
     {
         if (that == NULL)
         {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-            cout << "Differences in SolverOutput" << endl;
-            cout << "Second object is NULL, first is not" << endl;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in SolverOutput");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -8501,31 +8709,39 @@ bool SolverOutput::IsEqual(SolverOutput *that)
                     this->category    != that->category      ||
                     this->description != that->description  )
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in SolverOutput" << endl;
-                cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-                cout << "category:    " << this->category    << " vs. " << that->category    << endl;
-                cout << "description: " << this->description << " vs. " << that->description << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in SolverOutput" << endl;
+                outStr << "name:        " << this->name        << " vs. " << that->name        << endl;
+                outStr << "category:    " << this->category    << " vs. " << that->category    << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
 
             if (this->numberOfItems != that->numberOfItems)
             {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                cout << "Differences in SolverOutput" << endl;
-                cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Differences in SolverOutput" << endl;
+                outStr << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-
                 return false;
             }
 
             for (int i = 0; i < numberOfItems; i++)
                 if (this->item[i] != that->item[i])
                 {
-#if DEBUG_ISEQUAL_ROUTINES > 0
-                    cout << "Differences in SolverOutput" << endl;
-                    cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "Differences in SolverOutput" << endl;
+                    outStr << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                     return false;
                 }
@@ -8541,8 +8757,8 @@ bool SolverOutput::IsEqual(SolverOutput *that)
  ******************************************************/
 bool OSResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OSResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OSResult");
 #endif
     if (OSRand() <= density)
     {
@@ -8580,8 +8796,8 @@ bool OSResult::setRandom(double density, bool conformant)
 
 bool GeneralResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random GeneralResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random GeneralResult");
 #endif
     if (OSRand() <= density) this->message        = "random string";
     if (OSRand() <= density) this->serviceURI     = "random string";
@@ -8594,7 +8810,6 @@ bool GeneralResult::setRandom(double density, bool conformant)
     if (OSRand() <= density)
     {
         generalStatus = new GeneralStatus();
-
 
 
         generalStatus->setRandom(density, conformant);
@@ -8610,8 +8825,8 @@ bool GeneralResult::setRandom(double density, bool conformant)
 
 bool GeneralStatus::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random GeneralStatus" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random GeneralStatus");
 #endif
     int n;
 
@@ -8636,8 +8851,8 @@ bool GeneralStatus::setRandom(double density, bool conformant)
 
 bool GeneralSubstatus::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random GeneralSubstatus" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random GeneralSubstatus");
 #endif
     name = "substatus name";
     if (OSRand() <= density) description = "random string";
@@ -8647,8 +8862,8 @@ bool GeneralSubstatus::setRandom(double density, bool conformant)
 
 bool OtherResults::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherResults" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherResults");
 #endif
     int n;
 
@@ -8671,8 +8886,8 @@ bool OtherResults::setRandom(double density, bool conformant)
 
 bool OtherResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherResult");
 #endif
     name        = "other result";
     value       = "random string";
@@ -8683,8 +8898,8 @@ bool OtherResult::setRandom(double density, bool conformant)
 
 bool SystemResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random SystemResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random SystemResult");
 #endif
     if (OSRand() <= density) systemInformation = "random string";
 
@@ -8721,8 +8936,8 @@ bool SystemResult::setRandom(double density, bool conformant)
 
 bool ServiceResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random ServiceResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random ServiceResult");
 #endif
     if (OSRand() <= density)
     {
@@ -8760,8 +8975,8 @@ bool ServiceResult::setRandom(double density, bool conformant)
 
 bool JobResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random SystemResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random JobResult");
 #endif
     if (OSRand() <= density)
     {
@@ -8820,8 +9035,8 @@ bool JobResult::setRandom(double density, bool conformant)
 
 bool TimingInformation::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random TimingInformation" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random TimingInformation");
 #endif
     int n;
 
@@ -8844,8 +9059,8 @@ bool TimingInformation::setRandom(double density, bool conformant)
 #if 0
 bool Time::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random TimingInformation" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random Time");
 #endif
     if (OSRand() <= density)
         this->description = "random string";
@@ -8895,8 +9110,8 @@ bool Time::setRandom(double density, bool conformant)
 
 bool TimeMeasurement::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random TimeMeasurement" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random TimeMeasurement");
 #endif
     if (OSRand() <= density)
         this->description = "random string";
@@ -8930,8 +9145,8 @@ bool TimeMeasurement::setRandom(double density, bool conformant)
 
 bool OptimizationResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OptimizationResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OptimizationResult");
 #endif
     numberOfSolutions = (int)(1+4*OSRand());
 
@@ -8957,8 +9172,8 @@ bool OptimizationResult::setRandom(double density, bool conformant)
 
 bool OptimizationSolution::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OptimizationSolution" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OptimizationSolution");
 #endif
     if (OSRand() <= density)
     {
@@ -9004,8 +9219,8 @@ bool OptimizationSolution::setRandom(double density, bool conformant)
 
 bool OptimizationSolutionStatus::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OptimizationSolutionStatus" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OptimizationSolutionStatus");
 #endif
     double temp = OSRand();
     if (conformant) temp = 0.5*temp;
@@ -9041,8 +9256,8 @@ bool OptimizationSolutionStatus::setRandom(double density, bool conformant)
 
 bool OptimizationSolutionSubstatus::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OptimizationSolutionSubstatus" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OptimizationSolutionSubstatus");
 #endif
     double temp = OSRand();
     if (conformant) temp = 0.5*temp;
@@ -9060,8 +9275,8 @@ bool OptimizationSolutionSubstatus::setRandom(double density, bool conformant)
 
 bool VariableSolution::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random VariableSolution" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random VariableSolution");
 #endif
     if (OSRand() <= density)
     {
@@ -9104,8 +9319,8 @@ bool VariableSolution::setRandom(double density, bool conformant)
 
 bool VariableValues::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random VariableValues" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random VariableValues");
 #endif
     int n;
 
@@ -9128,8 +9343,8 @@ bool VariableValues::setRandom(double density, bool conformant)
 
 bool VarValue::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random VarValue" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random VarValue");
 #endif
     this->idx = (int)(10*OSRand());
     if (OSRand() <= 0.5) this->value = 3.14156;
@@ -9143,8 +9358,8 @@ bool VarValue::setRandom(double density, bool conformant)
 
 bool VariableValuesString::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random VariableValuesString" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random VariableValuesString");
 #endif
     int n;
 
@@ -9167,8 +9382,8 @@ bool VariableValuesString::setRandom(double density, bool conformant)
 
 bool VarValueString::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random VarValueString" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random VarValueString");
 #endif
     this->idx = (int)(10*OSRand());
     if (OSRand() <= 0.5) this->value = "random string";
@@ -9182,8 +9397,8 @@ bool VarValueString::setRandom(double density, bool conformant)
 
 bool OtherVariableResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherVariableResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherVariableResult");
 #endif
     this->name = "random string";
     if (OSRand() <= density) this->value       = "random string";
@@ -9233,8 +9448,8 @@ bool OtherVariableResult::setRandom(double density, bool conformant)
 
 bool OtherVarResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherVarResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherVarResult");
 #endif
     this->idx = (int)(10*OSRand());
     if (OSRand() <= 0.5) this->value = "random string";
@@ -9246,11 +9461,10 @@ bool OtherVarResult::setRandom(double density, bool conformant)
 }//OtherVarResult::setRandom
 
 
-
 bool ObjectiveSolution::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random ObjectiveSolution" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random ObjectiveSolution");
 #endif
     if (OSRand() <= density)
     {
@@ -9289,8 +9503,8 @@ bool ObjectiveSolution::setRandom(double density, bool conformant)
 
 bool ObjectiveValues::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random ObjectiveValues" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random ObjectiveValues");
 #endif
     int n;
 
@@ -9313,8 +9527,8 @@ bool ObjectiveValues::setRandom(double density, bool conformant)
 
 bool ObjValue::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random ObjValue" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random ObjValue");
 #endif
     if (OSRand() <= 0.5) this->idx = -1;
     else                 this->idx = -2;
@@ -9330,8 +9544,8 @@ bool ObjValue::setRandom(double density, bool conformant)
 
 bool OtherObjectiveResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherObjectiveResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherObjectiveResult");
 #endif
     this->name = "random string";
     if (OSRand() <= density) this->value       = "random string";
@@ -9381,8 +9595,8 @@ bool OtherObjectiveResult::setRandom(double density, bool conformant)
 
 bool OtherObjResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherObjResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherObjResult");
 #endif
     if (OSRand() <= 0.5) this->idx = -1;
     else                 this->idx = -2;
@@ -9398,8 +9612,8 @@ bool OtherObjResult::setRandom(double density, bool conformant)
 
 bool ConstraintSolution::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random ConstraintSolution" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random ConstraintSolution");
 #endif
     if (OSRand() <= density)
     {
@@ -9437,8 +9651,8 @@ bool ConstraintSolution::setRandom(double density, bool conformant)
 
 bool DualVariableValues::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random DualVariableValues" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random DualVariableValues");
 #endif
     int n;
 
@@ -9460,8 +9674,8 @@ bool DualVariableValues::setRandom(double density, bool conformant)
 
 bool DualVarValue::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random DualVarValue" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random DualVarValue");
 #endif
     this->idx = (int)(5*OSRand());
     if (OSRand() <= 0.5) this->value = 3.14156;
@@ -9474,8 +9688,8 @@ bool DualVarValue::setRandom(double density, bool conformant)
 
 bool OtherConstraintResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherConstraintResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherConstraintResult");
 #endif
     this->name = "random string";
     if (OSRand() <= density) this->value       = "random string";
@@ -9526,8 +9740,8 @@ bool OtherConstraintResult::setRandom(double density, bool conformant)
 
 bool OtherConResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherConResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherConResult");
 #endif
     this->idx = (int)(5*OSRand());
     if (OSRand() <= 0.5) this->value = "random string";
@@ -9541,8 +9755,8 @@ bool OtherConResult::setRandom(double density, bool conformant)
 
 bool OtherSolutionResults::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherSolutionResults" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherSolutionResults");
 #endif
     numberOfOtherSolutionResults = (int)(4*OSRand());
 
@@ -9564,8 +9778,8 @@ bool OtherSolutionResults::setRandom(double density, bool conformant)
 
 bool OtherSolutionResult::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherSolutionResult" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherSolutionResult");
 #endif
     name = "random string";
     numberOfItems = (int) (4*OSRand());
@@ -9592,8 +9806,8 @@ bool OtherSolutionResult::setRandom(double density, bool conformant)
 
 bool OtherSolverOutput::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random OtherSolverOutput" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random OtherSolverOutput");
 #endif
     int n;
 
@@ -9616,8 +9830,8 @@ bool OtherSolverOutput::setRandom(double density, bool conformant)
 
 bool SolverOutput::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT
-    cout << "Set random SolverOutput" << endl;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Set random SolverOutput");
 #endif
     name = "random string";
     numberOfItems = (int) (4*OSRand());
