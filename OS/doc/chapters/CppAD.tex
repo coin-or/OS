@@ -27,19 +27,33 @@ of~$f$.
  
 First express the input vector as a function of~$t$ by
 \begin{eqnarray}
-X(t) = x^{(0)} +  x^{(1)} t +  x^{(2)} t^{2}
+X(t) = x^{(0)} +  x^{(1)} t +  x^{(2)} t^{2} \label{eq:xParametrization}
 \end{eqnarray}
-where $ x^{(0)},$ $x^{(1)},$ and $x^{(2)}$ are vectors in $ \mathbb{R}^{n}$  and $t$ is a scalar.  By judiciously choosing $x^{(0)}, x^{(1)},$ and $x^{(2)}$ we will be able to derive many different expressions of interest.  Note first that
+where $ x^{(0)},$ $x^{(1)},$ and $x^{(2)}$ are vectors in $ \mathbb{R}^{n}$  and $t$ is a scalar.  By judiciously choosing $x^{(0)}, x^{(1)},$ and $x^{(2)}$ we will be able to derive many different expressions of interest.  
+
+Note first that we can choose
+%\begin{eqnarray*}
+%X(0) &=& x^{(0)}, \\
+%X^{\prime}(0) &=& x^{(1)}, \\
+%X^{\prime \prime }(0) &=& 2 x^{(2)}.
+%\end{eqnarray*}
+%In general,  $x^{(k)}$ corresponds to the $k^{\rm th}$ order Taylor coefficient, i.e.,
+%\begin{eqnarray}
+%x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:xTaylorCoeff}
+%\end{eqnarray}
+%
 \begin{eqnarray*}
-X(0) &=& x^{(0)}, \\
-X^{\prime}(0) &=& x^{(1)}, \\
-X^{\prime \prime }(0) &=& 2 x^{(2)}.
+ x^{(0)} &=& X(0), \\
+ x^{(1)} &=& X^{\prime}(0) , \\
+ x^{(2)} &=& X^{\prime \prime }(0) / 2.
 \end{eqnarray*}
 In general,  $x^{(k)}$ corresponds to the $k^{\rm th}$ order Taylor coefficient, i.e.,
 \begin{eqnarray}
 x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:xTaylorCoeff}
 \end{eqnarray}
-Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{1}$ to $ \mathbb{R}^{m}$ and is expressed in terms of its Taylor series expansion as
+%Then 
+Regardless of the choice of $x^{(1)}$ and $x^{(2)}$ (note that $x^{(0)} = X(0)$  is forced by equation~\ref{eq:xParametrization}),
+$Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{1}$ to $ \mathbb{R}^{m}$ and is expressed in terms of its Taylor series expansion as
 \begin{eqnarray}
 Y(t)  = y^{(0)} +  y^{(1)} t +  y^{(2)} t^{2} + o(t^{3}),
 \end{eqnarray}
@@ -54,8 +68,9 @@ The following are shown in Bell~\cite{bell2007}.
 \begin{eqnarray}
 y^{(0)} = f(x^{(0)}). \label{eq:forward0Result}
 \end{eqnarray}
+
 Let $e^{(i)}$ denote the $i^{\rm th}$ unit vector.  If $x^{(1)} = e^{(i)}$ then $y^{(1)}$ is equal to the
-$i^{\rm th}$ column of the Jacobian matrix of $f(x)$ evaluated at $x^{(0)}.$ That is
+$i^{\rm th}$ column of the Jacobian matrix of $f(x)$ evaluated at $x^{(0)}.$ That is,
 \begin{eqnarray}
 y^{(1)} = \D{f}{x_{i}}(x^{(0)}).  \label{eq:forward1Result}
 \end{eqnarray}

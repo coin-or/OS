@@ -61,7 +61,8 @@ option solver OSAmplClient;
 \end{verbatim}
 \ifbible
 %
-This form of the command assumes that the {\tt OSAmplClient} executable is on the search path. If this is not the case, an explicit path to the executable can be given instead, for instance
+This form of the command assumes that the {\tt OSAmplClient} executable is on the search path. 
+If this is not the case, an explicit path to the executable can be given instead, for instance
 
 \begin{verbatim}
 option solver "./OSAmplClient";
@@ -115,7 +116,7 @@ OSAmplClient parincQuadratic
 \fi
 
 
-\subsubdivision{Using OSAmplClient to Invoke an OS Solver Server}\label{section:remoteampl}
+\subsubdivision{Using OSAmplClient to Invoke an OS Solver Server remotely}\label{section:remoteampl}
 
 Next, assume that you have a large problem you want to solve on a remote solver. It is necessary 
 to specify the location of the server solver as an option to OSAmplClient. 
@@ -147,12 +148,11 @@ option OSAmplClient_options "serviceLocation
 solve;
 \end{verbatim}
 will result in the default solver being called. 
-
 If the intent is to use the SYMPHONY solver at the remote location, the option must be declared
 as follows:
 
 \begin{verbatim}
-option OSAmplClient_options "solver symphony 
+option OSAmplClient_options "solver symphony                                         \
     serviceLocation http://xxx/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
@@ -171,8 +171,8 @@ Finally, the user may wish to pass options to the individual solver. This is don
 provided with this distribution).  The name of the options file is the value of the {\tt osol} option.
 The string of options to {\tt OSAmplClient\_options} is now
 \begin{verbatim}
-serviceLocation http://xxx/OSServer/services/OSSolverService
-osol solveroptions.osol
+serviceLocation http://xxx/OSServer/services/OSSolverService              \
+    osol solveroptions.osol
 \end{verbatim}
 This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt}, 
 and one for {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}.
@@ -313,6 +313,7 @@ Since the solver is named {\tt CoinOS}, the options file pointed to by the last 
 {\ldots}
 
 {\tt optfile=99} corresponds to {\tt CoinOS.o99}
+
 \medskip
 It is important to distinguish between the option files for GAMS just mentioned and the  option file (in OSoL format) passed to the OS solver server (see below).
 We now explain the valid options that can go into a GAMS option file when using the CoinOS solver. 
@@ -550,7 +551,7 @@ gams.exe eastborne.gms MIP=coinos
 \end{verbatim}
 will also work.  In addition, if
 \begin{verbatim}
-Option MIP = CoinOS ;
+Option MIP = CoinOS;
 \end{verbatim}
 is present in the GAMS file, then writing {\tt MIP=CoinOS} on the command line is unnecessary.
 Since {\tt Option MIP = CoinOS;} is present in the GAMS model file {\tt eastborne.gms}, 
@@ -574,12 +575,13 @@ and the command line call is
 gams.exe eastborne.gms optfile 1
 \end{verbatim}
 Calling multiple GAMS options files uses the convention
-\begin{verbatim}
-optfile=1 corresponds to CoinOS.opt
-optfile=2 corresponds to CoinOS.op2
-...
-optfile=99 corresponds to CoinOS.o99
-\end{verbatim}
+
+%\begin{verbatim}
+{\tt optfile=1} corresponds to {\tt CoinOS.opt}  \\
+{\tt optfile=2} corresponds to {\tt CoinOS.op2}  \\
+{\tt ...} \\
+{\tt optfile=99} corresponds to {\tt CoinOS.o99} \\
+%\end{verbatim}
 
 We now explain the valid options that can go into a GAMS option file when using the {\tt CoinOS} solver.  They are:
 
@@ -849,7 +851,7 @@ numVar = 2;
 % variable types
 VarType='CC';
 % constraint types
-A = [.7  1; .5  5/6; 1   2/3  ; .1   .25];
+A = [.7  1; .5  5/6; 1   2/3; .1   .25];
 BU = [630 600  708  135];
 BL = [];
 OBJ = [10  9];

@@ -197,7 +197,7 @@ following code
 solver->osinstance->bObjectivesModified = true;
 \end{verbatim}
 
-in the {\tt OSModificationDemo.cpp} file (lines 177 and 187).
+\noindent in the {\tt OSModificationDemo.cpp} file (lines 177 and 187).
 This line is critical, since otherwise changes made to the OSInstance object
 will not be passed to the solver.
 
@@ -229,15 +229,15 @@ Corresponding to each string there is an in-memory object data member, namely
 
 \begin{itemize}
 \item {\tt osinstance --}  an in-memory {\tt OSInstance} object containing the model instance
-and get() and set() methods to access various parts of the model.
+and {\tt get()} and {\tt set()} methods to access various parts of the model.
 
 
 \item {\tt osoption --} an in-memory {\tt OSOption} object; solver options can be accessed or 
-set using get() and set() methods.
+set using  {\tt get()} and {\tt set()} methods.
 
 
 \item {\tt osresult --}  an in-memory {\tt OSResult} object; various parts of the model solution  
-are accessible through get() and set() methods.
+are accessible through  {\tt get()} and {\tt set()} methods.
 \end{itemize}
 
 
