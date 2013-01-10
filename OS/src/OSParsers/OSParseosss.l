@@ -65,9 +65,9 @@ using std::ostringstream;
 #endif
 
 
-#define YY_EXTRA_TYPE struct OSCommandLine*
+#define YY_EXTRA_TYPE class OSCommandLine* 
 
-void setyyextra(OSCommandLine *oscommandline, void* scanner);
+void setyyextra( OSCommandLine* oscommandline, void* scanner);
 
  /**
  * INPUTS:
@@ -784,5 +784,5 @@ browserState (on|off)
 %%
 
 void setyyextra(OSCommandLine *oscommandline, void* scanner){
-    osssset_extra(oscommandline, scanner);
+	osssset_extra(oscommandline, scanner);
 }
