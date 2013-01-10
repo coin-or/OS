@@ -83,19 +83,19 @@ string OSSolverAgent::solve(string osil, string osol)
     string smethod = "solve";
     string msInputs[2];
     // package up the inputs
-    // first run them through SAOPify, e.g. replace < with &lt; etc.
+    // first run them through SAOPify, i.e. replace < with &lt; etc.
 
-#ifndef NDEBUG	
+#ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "SOAPify OSiL \n");
 #endif
     msInputs[0] = WSUtil::SOAPify( osil, useCDATA) ;
 
-#ifndef NDEBUG	
+#ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, msInputs[0]);
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "SOAPify OSoL \n");
 #endif
     msInputs[1] = WSUtil::SOAPify( osol, useCDATA) ;
-#ifndef NDEBUG	
+#ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, msInputs[1]);
 #endif
     string msInputNames[2] = {"osil", "osol"};
@@ -172,7 +172,7 @@ bool OSSolverAgent::send(string osil, string osol)
     string smethod = "send";
     string msInputs[2];
     // package up the inputs
-    // first run them through SAOPify, e.g. replace < with &lt; etc.
+    // first run them through SAOPify, i.e. replace < with &lt; etc.
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "SOAPIFY OSIL\n");
 #endif
@@ -240,7 +240,7 @@ string OSSolverAgent::getJobID(string osol)
     string msInputs[1];
     // package up the inputs
 
-    // first run them through SAOPify, e.g. replace < with &lt; etc.
+    // first run them through SAOPify, i.e. replace < with &lt; etc.
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "SOAPIFY OSOL\n");
 #endif
@@ -297,7 +297,7 @@ string OSSolverAgent::retrieve(string osol)
     string smethod = "retrieve";
     string msInputs[1];
     // package up the inputs
-    // first run them through SAOPify, e.g. replace < with &lt; etc.
+    // first run them through SAOPify, i.e. replace < with &lt; etc.
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "SOAPIFY OSoL\n");
 #endif
@@ -359,12 +359,12 @@ string OSSolverAgent::kill(string osol)
     string smethod = "kill";
     string msInputs[1];
     // package up the inputs
-    // first run them through SAOPify, e.g. replace < with &lt; etc.
-#ifndef NDEBUG	
+    // first run them through SAOPify, i.e. replace < with &lt; etc.
+#ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "SOAPify OSoL \n");
 #endif
     msInputs[0] = WSUtil::SOAPify( osol, useCDATA) ;
-#ifndef NDEBUG	
+#ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, msInputs[0]);
 #endif
     string msInputNames[1] = {"osol"};
@@ -414,17 +414,17 @@ string OSSolverAgent::knock(string ospl, string osol)
     string smethod = "knock";
     string msInputs[2];
     // package up the inputs
-    // first run them through SAOPify, e.g. replace < with &lt; etc.
+    // first run them through SAOPify, i.e. replace < with &lt; etc.
 #ifndef NDEBUG	
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "SOAPify OSpL \n");
 #endif
     msInputs[0] = WSUtil::SOAPify( ospl, useCDATA) ;
-#ifndef NDEBUG	
+#ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, msInputs[0]);
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "SOAPify OSoL \n");
 #endif
     msInputs[1] = WSUtil::SOAPify( osol, useCDATA) ;
-#ifndef NDEBUG	
+#ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, msInputs[1]);
 #endif
 
