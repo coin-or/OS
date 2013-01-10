@@ -1718,7 +1718,7 @@ void interactiveShell()
                                     {
                                         std::cout
                                                 << std::endl
-                                                << "Cannot knock -- no OSplInputFile specificed"
+                                                << "Cannot knock -- no OSplInputFile specified"
                                                 << std::endl;
                                     }
                                     else
