@@ -28,13 +28,19 @@
 \developtrue   % we build a manual for folks who want to actively develop code
 \bibletrue     % in addition we include stuff that should only be of interest to project managers
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % we can print this bible in regular format (with each chapter starting on a right-hand page)
-% or in condensed format, two pages side-by-side on a landscape sheet
+% or in condensed format (with each chapter starting on a new page, either left or right)
+% In the first case, chapters can be printed in isolation and placed into a folder;
+% in the second case it is best to print two pages side-by-side on a landscape sheet
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 \newif\iftwoup
 \twoupfalse % regular format --- each chapter starts on a right-hand page 
 %\twouptrue % two pages side-by-side in landscape format (paper-conserving) 
 
-\newcommand{\throwpage}{\iftwoup\cleardoublepage\else\clearpage\fi}
+\newcommand{\throwpage}{\iftwoup\clearpage\else\cleardoublepage\fi}
 
 %Some cross-referencing index entries (to be expanded as needed)
 \index{AMPL Solver Library |see{Third-party software, ASL}}
@@ -44,7 +50,6 @@
 \index{HSL|see{Third-party software, HSL}}
 \index{Lapack|see{Third-party software, Lapack}}
 \index{Mumps|see{Third-party software, Mumps}}
-
 \index{Bonmin@{\tt Bonmin}|see{COIN-OR projects, {\tt Bonmin}}}
 \index{BuildTools@{\tt BuildTools}|see{COIN-OR projects, {\tt BuildTools}}}
 \index{Cbc@{\tt Cbc}|see{COIN-OR projects, {\tt Cbc}}}
@@ -95,6 +100,9 @@ more information.
 \tableofcontents
 \listoffigures
 \listoftables
+
+\throwpage
+
 \hyphenation{com-plex-Type}
 \hyphenation{GAMS-links}
 
