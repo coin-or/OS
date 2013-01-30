@@ -25,20 +25,17 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v90</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -87,10 +84,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/Application-fileUpload.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <UndefinePreprocessorDefinitions>HAVE_CONFIG_H;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
     </ClCompile>
@@ -120,10 +113,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/Application-fileUpload.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <UndefinePreprocessorDefinitions>HAVE_CONFIG_H;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
     </ClCompile>
@@ -141,7 +130,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalOptions>-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H %(AdditionalOptions)</AdditionalOptions>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Vol\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
@@ -150,10 +138,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/Application-fileUpload.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <CompileAs>Default</CompileAs>
@@ -178,19 +162,12 @@
     </Midl>
     <ClCompile>
       <AdditionalOptions>-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H %(AdditionalOptions)</AdditionalOptions>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Vol\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/Application-fileUpload.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <CompileAs>Default</CompileAs>

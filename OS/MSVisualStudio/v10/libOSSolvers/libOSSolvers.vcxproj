@@ -26,19 +26,16 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v90</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -78,18 +75,11 @@
       <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>
       </PrecompiledHeaderOutputFile>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
@@ -106,18 +96,11 @@
       <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>
       </PrecompiledHeaderOutputFile>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
@@ -131,18 +114,11 @@
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
-      <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AssemblerOutput>NoListing</AssemblerOutput>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -157,20 +133,11 @@
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdlib;..\..\..\..\Dylp\src\OsiDylp;..\..\..\..\Osi\src;..\..\..\..\Osi\src\Osi;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Vol\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
-      <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AssemblerOutput>NoListing</AssemblerOutput>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
