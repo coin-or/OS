@@ -73,6 +73,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InstanceLocationOption *that);
 }; //InstanceLocationOption
 
 
@@ -122,6 +129,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ContactOption *that);
 }; //ContactOption
 
 
@@ -174,6 +188,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherOption *that);
 }; //OtherOption
 
 
@@ -223,6 +244,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherOptions *that);
 
     /**
      *
@@ -317,6 +345,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(GeneralOption *that);
 };//GeneralOption
 
 /*! \class MinDiskSpace
@@ -552,6 +587,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(SystemOption *that);
 }; //SystemOption
 
 
@@ -601,6 +643,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ServiceOption *that);
 }; //ServiceOption
 
 
@@ -695,6 +744,13 @@ public:
     bool setRandom(double density, bool conformant);
 
     /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(JobDependencies *that);
+
+    /**
      *
      * A function to set an array of <jobID> elements
      * @param numberOfJobIDs: number of <jobID> elements to be set
@@ -757,6 +813,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(DirectoriesAndFiles *that);
 
     /**
      *
@@ -824,6 +887,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(PathPair *that);
 }; //PathPair
 
 
@@ -873,6 +943,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(PathPairs *that);
 
     /**
      *
@@ -949,6 +1026,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(Processes *that);
 
     /**
      *
@@ -1052,6 +1136,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(JobOption *that);
 }; //JobOption
 
 
@@ -1104,6 +1195,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitVarValue *that);
 }; //InitVarValue
 
 
@@ -1153,6 +1251,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitVariableValues *that);
 
     /**
      *
@@ -1251,6 +1356,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitVarValueString *that);
 }; //InitVarValueString
 
 
@@ -1300,6 +1412,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitVariableValuesString *that);
 
     /**
      *
@@ -1396,6 +1515,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitBasStatus *that);
 }; //InitBasStatus
 
 
@@ -1447,6 +1573,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitialBasisStatus *that);
 
     /**
      *
@@ -1514,6 +1647,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(BranchingWeight *that);
 }; //BranchingWeight
 
 
@@ -1564,6 +1704,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(IntegerVariableBranchingWeights *that);
 
     /**
      *
@@ -1669,6 +1816,13 @@ public:
     bool setRandom(double density, bool conformant);
 
     /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(SOSWeights *that);
+
+    /**
      *
      * A function to set an array of <var> elements
      * @param numberOfVar: number of <var> elements to be set
@@ -1732,6 +1886,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(SOSVariableBranchingWeights *that);
 
     /**
      *
@@ -1808,6 +1969,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherVarOption *that);
 }; //OtherVarOption
 
 
@@ -1887,6 +2055,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherVariableOption *that);
 
     /**
      *
@@ -1971,6 +2146,13 @@ public:
     bool setRandom(double density, bool conformant);
 
     /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(VariableOption *that);
+
+    /**
      *
      * A function to set an array of <other> elements
      * @param numberOfOptions: number of <other> elements to be set
@@ -2036,6 +2218,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitObjValue *that);
 }; //InitObjValue
 
 
@@ -2085,6 +2274,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitObjectiveValues *that);
 
     /**
      *
@@ -2186,6 +2382,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitObjBound *that);
 }; //InitObjBound
 
 
@@ -2235,6 +2438,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitObjectiveBounds *that);
 
     /**
      *
@@ -2341,6 +2551,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherObjOption *that);
 }; //OtherObjOption
 
 
@@ -2425,6 +2642,13 @@ public:
     bool setRandom(double density, bool conformant);
 
     /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherObjectiveOption *that);
+
+    /**
      *
      * A function to set an array of <obj> elements
      * @param numberOfObj: number of <obj> elements to be set
@@ -2501,6 +2725,13 @@ public:
     bool setRandom(double density, bool conformant);
 
     /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ObjectiveOption *that);
+
+    /**
      *
      * A function to set an array of <other> elements
      * @param numberOfOptions: number of <other> elements to be set
@@ -2566,6 +2797,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitConValue *that);
 }; //InitConValue
 
 
@@ -2615,6 +2853,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitConstraintValues *that);
 
     /**
      *
@@ -2717,6 +2962,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitDualVarValue *that);
 }; //InitDualVarValue
 
 
@@ -2766,6 +3018,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitDualVariableValues *that);
 
     /**
      *
@@ -2872,6 +3131,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherConOption *that);
 }; //OtherConOption
 
 
@@ -2956,6 +3222,13 @@ public:
     bool setRandom(double density, bool conformant);
 
     /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherConstraintOption *that);
+
+    /**
      *
      * A function to set an array of <con> elements
      * @param numberOfCon: number of <con> elements to be set
@@ -3030,6 +3303,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ConstraintOption *that);
 
     /**
      *
@@ -3112,6 +3392,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(SolverOption *that);
 }; //SolverOption
 
 
@@ -3161,6 +3448,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(SolverOptions *that);
 
     /**
      *
@@ -3245,6 +3539,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OptimizationOption *that);
 }; //OptimizationOption
 
 
@@ -3370,19 +3671,24 @@ private:
 
 public:
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(OSOption *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an OSOption object
+     * @param that: the OSOption object from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OSOption *that);
 
 public:
 
@@ -3795,6 +4101,7 @@ public:
      * associated with the element whose name matches elementName
      */
     OtherOption** getOtherOptions(std::string elementName);
+
 
     /**
      * Get the array of all other options associated with the

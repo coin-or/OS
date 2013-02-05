@@ -383,10 +383,10 @@ OSInstance::~OSInstance()
             throw ErrorClass( eclass.errormsg);
         }
     }
-//	if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
-//		delete m_Stages;
-//		m_Stages = NULL;
-//	}
+//    if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
+//        delete m_Stages;
+//        m_Stages = NULL;
+//    }
 
     if (m_msTimeDomainStageNames != NULL)
     {
@@ -1744,7 +1744,7 @@ int* OSInstance::getQuadraticRowIndexes()
         }
         // now put the term into an array
         m_iNumberOfQuadraticRowIndexes = foundIdx.size();
-        m_miQuadRowIndexes = new int[ m_iNumberOfQuadraticRowIndexes ]	;
+        m_miQuadRowIndexes = new int[ m_iNumberOfQuadraticRowIndexes ]    ;
         i = 0;
         for(pos = foundIdx.begin(); pos != foundIdx.end(); ++pos)
         {
@@ -1773,12 +1773,12 @@ int OSInstance::getNumberOfNonlinearExpressions()
 
 Nl** OSInstance::getNonlinearExpressions()
 {
-	Nl** root = new Nl*[getNumberOfNonlinearExpressions()];
-	for (int i=0; i < getNumberOfNonlinearExpressions(); i++)
-	{
-		root[i] = instanceData->nonlinearExpressions->nl[i];
-	}
-	return root;
+    Nl** root = new Nl*[getNumberOfNonlinearExpressions()];
+    for (int i=0; i < getNumberOfNonlinearExpressions(); i++)
+    {
+        root[i] = instanceData->nonlinearExpressions->nl[i];
+    }
+    return root;
 }//getNonlinearExpressions
 
 
@@ -1799,7 +1799,7 @@ int* OSInstance::getNonlinearExpressionTreeIndexes()
     {
         // now put the term into an array
         m_iNumberOfNonlinearExpressionTreeIndexes = expTrees.size();
-        m_miNonlinearExpressionTreeIndexes = new int[ m_iNumberOfNonlinearExpressionTreeIndexes ]	;
+        m_miNonlinearExpressionTreeIndexes = new int[ m_iNumberOfNonlinearExpressionTreeIndexes ]    ;
         int i = 0;
         for(pos = expTrees.begin(); pos != expTrees.end(); ++pos)
         {
@@ -1831,7 +1831,7 @@ int* OSInstance::getNonlinearExpressionTreeModIndexes()
     {
         // now put the term into an array
         m_iNumberOfNonlinearExpressionTreeModIndexes = expTrees.size();
-        m_miNonlinearExpressionTreeModIndexes = new int[ m_iNumberOfNonlinearExpressionTreeModIndexes ]	;
+        m_miNonlinearExpressionTreeModIndexes = new int[ m_iNumberOfNonlinearExpressionTreeModIndexes ]    ;
         int i = 0;
         for(pos = expTrees.begin(); pos != expTrees.end(); ++pos)
         {
@@ -1872,7 +1872,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx)
     /** define an iterator for the expression trees map allExpTrees */
     //std::map<int, OSExpressionTree*>::iterator pos;
     ///for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
-    //	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
+    //    if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
     //}
 
 
@@ -1892,7 +1892,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx)
     /** define an iterator for the expression trees map allExpTrees */
     //std::map<int, OSExpressionTree*>::iterator pos;
     ///for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
-    //	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
+    //    if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
     //}
     // if we are rowIdx has no nonlinear terms so return a null
     //return NULL;
@@ -2691,8 +2691,8 @@ bool OSInstance::setVariableNumber(int number)
     // this method assume osinstance->instanceData->variables is not null
     if(number < 0) return false;
     //if(instanceData->variables->numberOfVariables != -1  && instanceData->variables->numberOfVariables != number){
-    //	delete[] instanceData->variables->var;
-    //	instanceData->variables->var = NULL;
+    //    delete[] instanceData->variables->var;
+    //    instanceData->variables->var = NULL;
     //}
     if(instanceData->variables == NULL) instanceData->variables = new Variables();
     instanceData->variables->numberOfVariables = number;
@@ -2767,10 +2767,10 @@ bool OSInstance::setVariables(int number, string *names, double *lowerBounds,
         }
         /*
         if(inits != NULL){
-        	for(i = 0; i < number; i++) instanceData->variables->var[i]->init = inits[i];
+            for(i = 0; i < number; i++) instanceData->variables->var[i]->init = inits[i];
         }
         if(initsString != NULL){
-        	for(i = 0; i < number; i++) instanceData->variables->var[i]->initString = initsString[i];
+            for(i = 0; i < number; i++) instanceData->variables->var[i]->initString = initsString[i];
         }
         */
         return true;
@@ -3006,9 +3006,9 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
     //starts
     if (instanceData->linearConstraintCoefficients->start == NULL) 
         instanceData->linearConstraintCoefficients->start = new IntVector();
-	else
-		if (instanceData->linearConstraintCoefficients->start->el != NULL)
-			delete [] instanceData->linearConstraintCoefficients->start->el;
+    else
+        if (instanceData->linearConstraintCoefficients->start->el != NULL)
+            delete [] instanceData->linearConstraintCoefficients->start->el;
 
 /*
     if (startsBegin == 0)
@@ -3080,8 +3080,8 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
         }
         instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = k;
 */
-	    instanceData->linearConstraintCoefficients->rowIdx->el = (indexes+indexesBegin);
-	    instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = numberOfValues;
+        instanceData->linearConstraintCoefficients->rowIdx->el = (indexes+indexesBegin);
+        instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = numberOfValues;
     }
     else
     {
@@ -3101,8 +3101,8 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
         }
         instanceData->linearConstraintCoefficients->colIdx->numberOfEl = k;
 */
-	    instanceData->linearConstraintCoefficients->colIdx->el = (indexes+indexesBegin);
-	    instanceData->linearConstraintCoefficients->colIdx->numberOfEl = numberOfValues;
+        instanceData->linearConstraintCoefficients->colIdx->el = (indexes+indexesBegin);
+        instanceData->linearConstraintCoefficients->colIdx->numberOfEl = numberOfValues;
     }
     return true;
 }//setLinearConstraintCoefficients
@@ -3130,8 +3130,8 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
     //starts
     if (instanceData->linearConstraintCoefficients->start == NULL) 
         instanceData->linearConstraintCoefficients->start = new IntVector();
-	else 
-		delete [] instanceData->linearConstraintCoefficients->start->el;
+    else 
+        delete [] instanceData->linearConstraintCoefficients->start->el;
 
     instanceData->linearConstraintCoefficients->start->el = new int[startsEnd - startsBegin + 1];
     k = 0;
@@ -3146,8 +3146,8 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
     //values
     if (instanceData->linearConstraintCoefficients->value == NULL) 
         instanceData->linearConstraintCoefficients->value = new DoubleVector();
-	else 
-		delete [] instanceData->linearConstraintCoefficients->value->el;
+    else 
+        delete [] instanceData->linearConstraintCoefficients->value->el;
 
     instanceData->linearConstraintCoefficients->value->el = new double[numberOfValues];
     k = 0;
@@ -3163,8 +3163,8 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
     {
         if (instanceData->linearConstraintCoefficients->rowIdx == NULL) 
             instanceData->linearConstraintCoefficients->rowIdx = new IntVector();
-		else 
-			delete [] instanceData->linearConstraintCoefficients->rowIdx->el;
+        else 
+            delete [] instanceData->linearConstraintCoefficients->rowIdx->el;
 
         instanceData->linearConstraintCoefficients->rowIdx->el = new int[numberOfValues];
         k = 0;
@@ -3179,8 +3179,8 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
     {
         if (instanceData->linearConstraintCoefficients->colIdx == NULL) 
             instanceData->linearConstraintCoefficients->colIdx = new IntVector();
-		else 
-			delete [] instanceData->linearConstraintCoefficients->colIdx->el;
+        else 
+            delete [] instanceData->linearConstraintCoefficients->colIdx->el;
 
         instanceData->linearConstraintCoefficients->colIdx->el = new int[numberOfValues];
         k = 0;
@@ -3213,14 +3213,14 @@ bool OSInstance::setQuadraticTerms(int number,
             (varOneIndexes == 0) ||
             (varTwoIndexes == 0) ||
             (coefficients == 0) ) return false;
-	if (instanceData->quadraticCoefficients == NULL)
-	    instanceData->quadraticCoefficients = new QuadraticCoefficients();
+    if (instanceData->quadraticCoefficients == NULL)
+        instanceData->quadraticCoefficients = new QuadraticCoefficients();
 
-	instanceData->quadraticCoefficients->numberOfQuadraticTerms = number;
+    instanceData->quadraticCoefficients->numberOfQuadraticTerms = number;
     int i = 0;
 
-	if (instanceData->quadraticCoefficients->qTerm != NULL)
-		delete [] instanceData->quadraticCoefficients->qTerm;
+    if (instanceData->quadraticCoefficients->qTerm != NULL)
+        delete [] instanceData->quadraticCoefficients->qTerm;
 
     instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[number];
     for(i = 0; i < number; i++) instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();
@@ -3284,17 +3284,17 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
         return true;
     }
 
-//	instanceData->nonlinearExpressions = new NonlinearExpressions(); 
-	instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nexpr;
-	instanceData->nonlinearExpressions->nl = new Nl*[nexpr];
+//    instanceData->nonlinearExpressions = new NonlinearExpressions(); 
+    instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nexpr;
+    instanceData->nonlinearExpressions->nl = new Nl*[nexpr];
 
-	for (int i=0; i < nexpr; i++)
-	{
-		instanceData->nonlinearExpressions->nl[i] = new Nl();
-		instanceData->nonlinearExpressions->nl[i]->idx = root[i]->idx;
-		instanceData->nonlinearExpressions->nl[i]->osExpressionTree = new OSExpressionTree();
-		instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot	= root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
-	}
+    for (int i=0; i < nexpr; i++)
+    {
+        instanceData->nonlinearExpressions->nl[i] = new Nl();
+        instanceData->nonlinearExpressions->nl[i]->idx = root[i]->idx;
+        instanceData->nonlinearExpressions->nl[i]->osExpressionTree = new OSExpressionTree();
+        instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot    = root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
+    }
     return true;
 }//setQuadraticTerms
 
@@ -3369,7 +3369,7 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( )
     // we point to memory already created so don't
     // destroy during garbage collection
     m_sparseJacMatrix->bDeleteArrays = false;
-    m_sparseJacMatrix->valueSize = 	m_iJacValueSize;
+    m_sparseJacMatrix->valueSize =     m_iJacValueSize;
     m_sparseJacMatrix->starts = m_miJacStart;
     m_sparseJacMatrix->conVals = m_miJacNumConTerms;
     m_sparseJacMatrix->indexes = m_miJacIndex;
@@ -3380,7 +3380,7 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( )
 
 bool OSInstance::addQTermsToExressionTree() // obsolescent --- replaced by addQTermsToExpressionTree
 {
-	return addQTermsToExpressionTree();
+    return addQTermsToExpressionTree();
 }
 
 bool OSInstance::addQTermsToExpressionTree()
@@ -3567,9 +3567,9 @@ std::string OSInstance::printModel( )
     // matrix stored by row
 
     //if( this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
-    //	if(m_bColumnMajor == true){// we now have a duplication
-    //		delete m_linearConstraintCoefficientsInRowMajor;
-    //	}
+    //    if(m_bColumnMajor == true){// we now have a duplication
+    //        delete m_linearConstraintCoefficientsInRowMajor;
+    //    }
     //}
     return outStr.str() ;
 }//printModel( )
@@ -4117,10 +4117,11 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
         {
             conLambda[ idx] = 1.0;
         }
+
         if( new_x == true || (2 > m_iHighestOrderEvaluated)  )
         {
             getIterateResults(x, objLambda, conLambda, new_x,  2);
-//			std::cout  << "CALL getIterateResults() FROM calculateHessian" << std::endl;
+//            std::cout  << "CALL getIterateResults() FROM calculateHessian" << std::endl;
         }
         delete[] objLambda;
         delete[] conLambda;
@@ -4138,7 +4139,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
 {
     std::ostringstream outStr;
 
-	// we assume column major matrix
+    // we assume column major matrix
     if( m_bColumnMajor == false) return false;
     int iNumRowStarts = getConstraintNumber() + 1;
     int i,j, iTemp;
@@ -4147,7 +4148,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
     int *index = NULL;
     double *value = NULL;
 
-	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
+    if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
     {
         start = this->instanceData->linearConstraintCoefficients->start->el;
         index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
@@ -4233,7 +4234,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         }
     }
     // dimension miIndex and mdValue here
-    m_iJacValueSize = 	m_miJacStart[ iNumRowStarts - 1];
+    m_iJacValueSize =     m_miJacStart[ iNumRowStarts - 1];
     m_miJacIndex = new int[  m_iJacValueSize];
     m_mdJacValue = new double[ m_iJacValueSize ];
     // now get the values of the constant terms if there are any
@@ -4326,7 +4327,7 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
     int *index = NULL;
     double *value = NULL;
 
-	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
+    if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
     {
         start = this->instanceData->linearConstraintCoefficients->start->el;
         index = this->instanceData->linearConstraintCoefficients->colIdx->el;
@@ -4407,7 +4408,7 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
     }
     // we know how many constant terms and size of arrays
     // dimension miIndex and mdValue here
-    m_iJacValueSize = 	m_miJacStart[ iNumJacRowStarts - 1];
+    m_iJacValueSize =     m_miJacStart[ iNumJacRowStarts - 1];
     m_miJacIndex = new int[  m_iJacValueSize];
     m_mdJacValue = new double[ m_iJacValueSize ];
     // now loop again and put in values and indices
@@ -4612,9 +4613,9 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
     std::vector<bool> r(m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables);
     unsigned int j;
     for(i = 0; i < m_iNumberOfNonlinearVariables; i++) {
-    	for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
-    		r[ i * m_iNumberOfNonlinearVariables + j ] = false;
-    		r[ i * m_iNumberOfNonlinearVariables + i] = true;
+        for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
+            r[ i * m_iNumberOfNonlinearVariables + j ] = false;
+            r[ i * m_iNumberOfNonlinearVariables + i] = true;
     }
     // compute sparsity pattern for J(x) = F^{(1)} (x)
     (*Fad).ForSparseJac(m_iNumberOfNonlinearVariables, r);
@@ -4628,12 +4629,12 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
     //m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
     m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
     for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-    	//std::cout << "Row " << i << "  of Hessian " << std::endl;
-    	for(j = i; j < m_iNumberOfNonlinearVariables; j++){
-    		if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j]  == true) numNonz++;
-    		//std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
-    	}
-    	//std::cout << std::endl;
+        //std::cout << "Row " << i << "  of Hessian " << std::endl;
+        for(j = i; j < m_iNumberOfNonlinearVariables; j++){
+            if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j]  == true) numNonz++;
+            //std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
+        }
+        //std::cout << std::endl;
     }
 
     */
@@ -5678,9 +5679,9 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
             }
         }
         //create the function and stop recording
-//		std::cout << "create the function and stop recording"  << std::endl;
+//        std::cout << "create the function and stop recording"  << std::endl;
         Fad = new CppAD::ADFun<double>(vdaX, m_vFG);
-//		std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
+//        std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
         // no forward sweeps done yet
         m_iHighestTaylorCoeffOrder = -1;
         m_bOSADFunIsCreated = true;
@@ -5737,7 +5738,7 @@ std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda)
         if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw
             ErrorClass( "trying to calculate a p order reverse when p-1 Taylor coefficient not available");
         //for(int i  = 0; i < vdlambda.size(); i++){
-        //	std::cout << "ReverseAD Multiplier " << i   << " " << vdlambda[ i] << std::endl;
+        //    std::cout << "ReverseAD Multiplier " << i   << " " << vdlambda[ i] << std::endl;
         //}
         m_iHighestOrderEvaluated = p;
 #ifdef COIN_HAS_CPPAD
@@ -5783,7 +5784,7 @@ int  OSInstance::getADSparsityHessian()
         std::vector<bool> e( m);
         //Vector s(m);
         for(i = 0; i < m; i++) e[i] = true;
-//		std::cout << "Computing Sparse Hessian" << std::endl;
+//        std::cout << "Computing Sparse Hessian" << std::endl;
         //m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
 #ifdef COIN_HAS_CPPAD
         m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);

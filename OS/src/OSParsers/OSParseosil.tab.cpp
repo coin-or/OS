@@ -5453,7 +5453,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 				kountChar++;
 			}
 			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = dbuf.dble;
-			std::cout << dbuf.dble << std::endl;
+			//std::cout << dbuf.dble << std::endl;
 			kount++;
 		}
 		delete [] b64string;

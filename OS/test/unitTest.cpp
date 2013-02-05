@@ -1330,6 +1330,7 @@ if (PARSER_TESTS){
          * 8) read the string back again into a third OSOption object
          * 9) compare to the original OSOption object
          *10) read two more OSoL strings from different files
+         *11) test the deep copy
          */
         cout << endl << "TEST " << ++nOfTest << ": OSoL parser" << endl << endl;
 
@@ -2173,6 +2174,7 @@ if (PARSER_TESTS){
 #ifdef DEBUG
         if (!ok)
             throw ErrorClass(" error in get/set OtherConstraintOptions");
+
 #endif
 
         SolverOption** SO;
@@ -2451,6 +2453,52 @@ if (PARSER_TESTS){
         fileUtil = NULL;
     }
 
+    // Now test the deep copy of an OSOption object
+
+    OSOption *osoption2 = NULL;
+
+    try{ 
+        cout << endl << "TEST " << ++nOfTest << ": Test deep copy of OSOption object" << endl << endl;
+
+        fileUtil = new FileUtil();
+        osolreader = new OSoLReader();
+
+        osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
+        std::string osol = fileUtil->getFileAsString( osolFileName.c_str() );
+        osoption = osolreader->readOSoL( osol);
+        osoption2 = new OSOption();
+        osoption2->deepCopyFrom(osoption);
+        ok = (osoption->IsEqual(osoption2));
+
+        delete osolreader;
+        osolreader = NULL;
+        delete osoption2;
+        osoption2 = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+
+        if (ok)
+        {
+            unitTestResult << "TEST " << nOfTest << ": Successful test of OSOption deep copy methods" << std::endl;
+            cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+        }
+        else
+            unitTestResultFailure << "OSOption deep copy method is not working" << endl;
+    }    
+    
+    catch(const ErrorClass& eclass)
+    {
+
+        if(osolreader != NULL) 
+            delete osolreader;
+        osolreader = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+        if(osoption2 != NULL) 
+            delete osoption2;
+        osoption2 = NULL;
+    }
 
 
 
@@ -2758,6 +2806,7 @@ if (PARSER_TESTS){
         if (!ok) 
             throw ErrorClass("Error during setAvailableMemoryUnit!");
         ok &= (osresult1->IsEqual(osresult2));
+
         if (!ok) 
             throw ErrorClass("setAvailableMemoryUnit: osresult objects falsely compare unequal!");
 
@@ -6072,6 +6121,7 @@ if (SOLVER_TESTS){
         if (ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033.osil");
         delete solver;
         solver = NULL;
+
         delete osilreader;
         osilreader = NULL;
         delete osolreader;
@@ -8423,7 +8473,7 @@ if (OTHER_TESTS){
 
         OSnl2OS *nl2osil = new OSnl2OS(cw, rw, asl);
 
-        nl2osil->readNl(nlFileName) ;
+        nl2osil->readNl(nlFileName);
 
         fileUtil = new FileUtil();
         osolFileName = dataDir  + "osolFiles" + dirsep + "suffixTest.osol";

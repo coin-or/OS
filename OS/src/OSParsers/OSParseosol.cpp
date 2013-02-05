@@ -1951,7 +1951,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[279] =
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.

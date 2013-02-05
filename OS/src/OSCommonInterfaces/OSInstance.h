@@ -2265,7 +2265,6 @@ public:
      */
     std::string printModel( );
 
-
     /**
      * Print the infix representation of the row (which could be an
      * an objective function row) indexed by rowIdx.

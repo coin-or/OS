@@ -6535,6 +6535,7 @@ bool InitObjectiveBounds::addObj(int numberOfObj, InitObjBound **obj)
 /**
  *
 
+
  * A function to set an array of <obj> elements
  * @param numberOfObj: number of <obj> elements to be set
  * @param obj: the array of <obj> elements that are to be set
@@ -6767,6 +6768,7 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
         return false;
     }
 }//addOther
+
 
 
 /**
@@ -12810,12 +12812,11 @@ bool OtherVariableOption::setRandom( double density, bool conformant )
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Set random OtherVariableOption");
 #endif
     this->name = "random string";
-    if (OSRand() <= density) this->name        = "randon string";
-    if (OSRand() <= density) this->value       = "randon string";
-    if (OSRand() <= density) this->solver      = "randon string";
-    if (OSRand() <= density) this->category    = "randon string";
-    if (OSRand() <= density) this->type        = "randon string";
-    if (OSRand() <= density) this->description = "randon string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->description = "random string";
 
     if (OSRand() <= density)
     {
@@ -12996,12 +12997,11 @@ bool OtherObjectiveOption::setRandom( double density, bool conformant )
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Set random OtherObjectiveOption");
 #endif
     this->name = "random string";
-    if (OSRand() <= density) this->name        = "randon string";
-    if (OSRand() <= density) this->value       = "randon string";
-    if (OSRand() <= density) this->solver      = "randon string";
-    if (OSRand() <= density) this->category    = "randon string";
-    if (OSRand() <= density) this->type        = "randon string";
-    if (OSRand() <= density) this->description = "randon string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->description = "random string";
 
     if (OSRand() <= density)
     {
@@ -13181,12 +13181,11 @@ bool OtherConstraintOption::setRandom( double density, bool conformant )
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Set random OtherConstraintOption");
 #endif
     this->name = "random string";
-    if (OSRand() <= density) this->name        = "randon string";
-    if (OSRand() <= density) this->value       = "randon string";
-    if (OSRand() <= density) this->solver      = "randon string";
-    if (OSRand() <= density) this->category    = "randon string";
-    if (OSRand() <= density) this->type        = "randon string";
-    if (OSRand() <= density) this->description = "randon string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->description = "random string";
 
     if (OSRand() <= density)
     {
@@ -13289,3 +13288,1066 @@ bool SolverOption::setRandom( double density, bool conformant )
     }
     return true;
 }//SolverOption::setRandom
+
+
+/***********************************************************************
+ *
+ * Methods that allow deep copies of an OSOption object.
+ *
+ * These methods call each other recursively.
+ *
+ ***********************************************************************/
+
+bool OSOption::deepCopyFrom(OSOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OSOption");
+#endif
+    if (that->optionHeader != NULL)
+    {
+        this->optionHeader = new GeneralFileHeader();
+        if (!this->optionHeader->deepCopyFrom(that->optionHeader))
+            return false;
+    }
+    if (that->general != NULL)
+    {
+        this->general = new GeneralOption();
+        if (!this->general->deepCopyFrom(that->general))
+            return false;
+    }
+    if (that->system != NULL)
+    {
+        this->system = new SystemOption();
+        if (!this->system->deepCopyFrom(that->system))
+            return false;
+    }
+    if (that->service != NULL)
+    {
+        this->service = new ServiceOption();
+        if (!this->service->deepCopyFrom(that->service))
+            return false;
+    }
+    if (that->job != NULL)
+    {
+        this->job = new JobOption();
+        if (!this->job->deepCopyFrom(that->job))
+            return false;
+    }
+    if (that->optimization != NULL)
+    {
+        this->optimization = new OptimizationOption();
+        if (!this->optimization->deepCopyFrom(that->optimization))
+            return false;
+    }
+    return true;
+}//OSOption::deepCopyFrom
+
+
+bool GeneralOption::deepCopyFrom(GeneralOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of GeneralOption");
+#endif
+    this->serviceURI     = that->serviceURI;
+    this->serviceName    = that->serviceName;
+    this->instanceName   = that->instanceName;
+    this->jobID          = that->jobID;
+    this->solverToInvoke = that->solverToInvoke;
+    this->license        = that->license;
+    this->userName       = that->userName;
+    this->password       = that->password;
+
+    if (that->instanceLocation != NULL)
+    {
+        this->instanceLocation = new InstanceLocationOption();
+        if (!this->instanceLocation->deepCopyFrom(that->instanceLocation))
+            return false;
+    }
+    if (that->contact != NULL)
+    {
+        this->contact = new ContactOption();
+        if (!this->contact->deepCopyFrom(that->contact))
+            return false;
+    }
+    if (that->otherOptions != NULL)
+    {
+        this->otherOptions = new OtherOptions();
+        if (!this->otherOptions->deepCopyFrom(that->otherOptions))
+            return false;
+    }
+    return true;
+}//GeneralOption::deepCopyFrom
+
+
+bool SystemOption::deepCopyFrom(SystemOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of SystemOption");
+#endif
+    if (that->minDiskSpace != NULL)
+    {
+        this->minDiskSpace = new StorageCapacity();
+        if (!this->minDiskSpace->deepCopyFrom(that->minDiskSpace))
+            return false;
+    }
+    if (that->minMemorySize != NULL)
+    {
+        this->minMemorySize = new StorageCapacity();
+        if (!this->minMemorySize->deepCopyFrom(that->minMemorySize))
+            return false;
+    }
+    if (that->minCPUSpeed != NULL)
+    {
+        this->minCPUSpeed = new CPUSpeed();
+        if (!this->minCPUSpeed->deepCopyFrom(that->minCPUSpeed))
+            return false;
+    }
+    if (that->minCPUNumber != NULL)
+    {
+        this->minCPUNumber = new CPUNumber();
+        if (!this->minCPUNumber->deepCopyFrom(that->minCPUNumber))
+            return false;
+    }
+    if (that->otherOptions != NULL)
+    {
+        this->otherOptions = new OtherOptions();
+        if (!this->otherOptions->deepCopyFrom(that->otherOptions))
+            return false;
+    }
+    return true;
+}//SystemOption::deepCopyFrom
+
+
+bool ServiceOption::deepCopyFrom(ServiceOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of ServiceOption");
+#endif
+        this->type = that->type;
+
+    if (that->otherOptions != NULL)
+    {
+        otherOptions = new OtherOptions();
+        if (!otherOptions->deepCopyFrom(that->otherOptions))
+            return false;
+    }
+
+    return true;
+}//ServiceOption::deepCopyFrom
+
+
+bool JobOption::deepCopyFrom(JobOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of JobOption");
+#endif
+    this->requestedStartTime = that->requestedStartTime;
+
+    if (that->maxTime != NULL)
+    {
+        maxTime = new TimeSpan();
+        if (!maxTime->deepCopyFrom(that->maxTime))
+            return false;
+    }
+    if (that->dependencies != NULL)
+    {
+        dependencies = new JobDependencies();
+        if (!dependencies->deepCopyFrom(that->dependencies))
+            return false;
+    }
+    if (that->requiredDirectories != NULL)
+    {
+        requiredDirectories = new DirectoriesAndFiles();
+        if (!requiredDirectories->deepCopyFrom(that->requiredDirectories))
+            return false;
+    }
+    if (that->requiredFiles != NULL)
+    {
+        requiredFiles = new DirectoriesAndFiles();
+        if (!requiredFiles->deepCopyFrom(that->requiredFiles))
+            return false;
+    }
+    if (that->directoriesToMake != NULL)
+    {
+        directoriesToMake = new DirectoriesAndFiles();
+        if (!directoriesToMake->deepCopyFrom(that->directoriesToMake))
+            return false;
+    }
+    if (that->filesToMake != NULL)
+    {
+        filesToMake = new DirectoriesAndFiles();
+        if (!filesToMake->deepCopyFrom(that->filesToMake))
+            return false;
+    }
+    if (that->inputDirectoriesToMove != NULL)
+    {
+        inputDirectoriesToMove = new PathPairs();
+        if (!inputDirectoriesToMove->deepCopyFrom(that->inputDirectoriesToMove))
+            return false;
+    }
+    if (that->inputFilesToMove != NULL)
+    {
+        inputFilesToMove = new PathPairs();
+        if (!inputFilesToMove->deepCopyFrom(that->inputFilesToMove))
+            return false;
+    }
+    if (that->outputFilesToMove != NULL)
+    {
+        outputFilesToMove = new PathPairs();
+        if (!outputFilesToMove->deepCopyFrom(that->outputFilesToMove))
+            return false;
+    }
+    if (that->outputDirectoriesToMove != NULL)
+    {
+        outputDirectoriesToMove = new PathPairs();
+        if (!outputDirectoriesToMove->deepCopyFrom(that->outputDirectoriesToMove))
+            return false;
+    }
+    if (that->filesToDelete != NULL)
+    {
+        filesToDelete = new DirectoriesAndFiles();
+        if (!filesToDelete->deepCopyFrom(that->filesToDelete))
+            return false;
+    }
+    if (that->directoriesToDelete != NULL)
+    {
+        directoriesToDelete = new DirectoriesAndFiles();
+        if (!directoriesToDelete->deepCopyFrom(that->directoriesToDelete))
+            return false;
+    }
+    if (that->processesToKill != NULL)
+    {
+        processesToKill = new Processes();
+        if (!processesToKill->deepCopyFrom(that->processesToKill))
+            return false;
+    }
+    if (that->otherOptions != NULL)
+    {
+        otherOptions = new OtherOptions();
+        if (!otherOptions->deepCopyFrom(that->otherOptions))
+            return false;
+    }
+    return true;
+}//JobOption::deepCopyFrom
+
+bool OptimizationOption::deepCopyFrom(OptimizationOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OptimizationOption");
+#endif
+    this->numberOfVariables   = that->numberOfVariables;
+    this->numberOfObjectives  = that->numberOfObjectives;
+    this->numberOfConstraints = that->numberOfConstraints;
+
+    if (that->variables != NULL)
+    {
+        variables = new VariableOption();
+        if (!variables->deepCopyFrom(that->variables))
+            return false;
+    }
+    if (that->objectives != NULL)
+    {
+        objectives = new ObjectiveOption();
+        if (!objectives->deepCopyFrom(that->objectives))
+            return false;
+    }
+    if (that->constraints != NULL)
+    {
+        constraints = new ConstraintOption();
+        if (!constraints->deepCopyFrom(that->constraints))
+            return false;
+    }
+    if (that->solverOptions != NULL)
+    {
+        solverOptions = new SolverOptions();
+        if (!solverOptions->deepCopyFrom(that->solverOptions))
+            return false;
+    }
+
+    return true;
+}//OptimizationOption::deepCopyFrom
+
+bool InstanceLocationOption::deepCopyFrom(InstanceLocationOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InstanceLocationOption");
+#endif
+    this->value        = that->value;
+    this->locationType = that->locationType;
+    return true;
+}//InstanceLocationOption::deepCopyFrom
+
+bool ContactOption::deepCopyFrom(ContactOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of ContactOption");
+#endif
+    this->value         = that->value;
+    this->transportType = that->transportType;
+    return true;
+}//ContactOption::deepCopyFrom
+
+bool OtherOptions::deepCopyFrom(OtherOptions *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherOptions");
+#endif
+    int n;
+
+    n = that->numberOfOtherOptions;
+    this->numberOfOtherOptions = n;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->other = new OtherOption*[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        this->other[i] = new OtherOption();
+        if (!this->other[i]->deepCopyFrom(that->other[i]))
+            return false;
+    }
+
+    return true;
+}//OtherOptions::deepCopyFrom
+
+bool OtherOption::deepCopyFrom(OtherOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherOption");
+#endif
+    this->name        = that->name;
+    this->value       = that->value;
+    this->description = that->description;
+    return true;
+}//OtherOption::deepCopyFrom
+
+
+bool JobDependencies::deepCopyFrom(JobDependencies *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of JobDependencies");
+#endif
+    int n;
+
+    this->numberOfJobIDs = that->numberOfJobIDs;
+    n = this->numberOfJobIDs;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->jobID = new std::string[n];
+    for (int i = 0; i < n; i++)
+        this->jobID[i] = that->jobID[i];
+
+    return true;
+}//JobDependencies::deepCopyFrom
+
+bool DirectoriesAndFiles::deepCopyFrom(DirectoriesAndFiles *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of DirectoriesAndFiles");
+#endif
+    int n;
+
+    this->numberOfPaths = that->numberOfPaths;
+    n = this->numberOfPaths;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->path = new std::string[n];
+    for (int i = 0; i < n; i++)
+        this->path[i] = that->path[i];
+
+    return true;
+}//DirectoriesAndFiles::deepCopyFrom
+
+bool PathPairs::deepCopyFrom(PathPairs *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of PathPairs");
+#endif
+    int n;
+
+    this->numberOfPathPairs = that->numberOfPathPairs;
+    n = this->numberOfPathPairs;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    pathPair = new PathPair*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->pathPair[i] = new PathPair();
+        if (!this->pathPair[i]->deepCopyFrom(that->pathPair[i]))
+            return false;
+    }
+
+    return true;
+}//PathPairs::deepCopyFrom
+
+bool PathPair::deepCopyFrom(PathPair *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of PathPair");
+#endif
+    this->from     = that->from;
+    this->to       = that->to;
+    this->makeCopy = that->makeCopy;
+    return true;
+}//PathPair::deepCopyFrom
+
+bool Processes::deepCopyFrom(Processes *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of Processes");
+#endif
+    int n;
+
+    this->numberOfProcesses = that->numberOfProcesses;
+    n = this->numberOfProcesses;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    process = new std::string[n];
+    for (int i = 0; i < n; i++)
+        this->process[i] = that->process[i];
+
+    return true;
+}//Processes::deepCopyFrom
+
+
+bool VariableOption::deepCopyFrom(VariableOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of VariableOption");
+#endif
+    if (that->initialVariableValues != NULL)
+    {
+        this->initialVariableValues = new InitVariableValues();
+        if (!this->initialVariableValues->deepCopyFrom(that->initialVariableValues))
+            return false;
+    }
+    if (that->initialVariableValuesString != NULL)
+    {
+        this->initialVariableValuesString = new InitVariableValuesString();
+        if (!this->initialVariableValuesString->deepCopyFrom(that->initialVariableValuesString))
+            return false;
+    }
+    if (that->initialBasisStatus != NULL)
+    {
+        this->initialBasisStatus = new BasisStatus();
+        if (!this->initialBasisStatus->deepCopyFrom(that->initialBasisStatus))
+            return false;
+    }
+    if (that->integerVariableBranchingWeights != NULL)
+    {
+        this->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
+        if (!this->integerVariableBranchingWeights->deepCopyFrom(that->integerVariableBranchingWeights))
+            return false;
+    }
+    if (that->sosVariableBranchingWeights != NULL)
+    {
+        this->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
+        if (!this->sosVariableBranchingWeights->deepCopyFrom(that->sosVariableBranchingWeights))
+            return false;
+    }
+
+    this->numberOfOtherVariableOptions = that->numberOfOtherVariableOptions;
+    int n = this->numberOfOtherVariableOptions;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->other = new OtherVariableOption*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->other[i] = new OtherVariableOption();
+        if (!this->other[i]->deepCopyFrom(that->other[i]))
+            return false;
+    }
+    return true;
+}//VariableOption::deepCopyFrom
+
+bool InitVariableValues::deepCopyFrom(InitVariableValues *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitVariableValues");
+#endif
+    this->numberOfVar = that->numberOfVar;
+
+    int n = this->numberOfVar;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->var = new InitVarValue*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->var[i] = new InitVarValue();
+        if (!this->var[i]->deepCopyFrom(that->var[i]))
+            return false;
+    }
+    return true;
+}//InitVariableValues::deepCopyFrom
+
+bool InitVarValue::deepCopyFrom(InitVarValue *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitVarValue");
+#endif
+    this->idx   = that->idx;
+    this->name  = that->name;
+    this->value = that->value;
+    return true;
+}//InitVarValue::deepCopyFrom
+
+
+bool InitVariableValuesString::deepCopyFrom(InitVariableValuesString *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitVariableValuesString");
+#endif
+    this->numberOfVar = that->numberOfVar;
+    int n = this->numberOfVar;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->var = new InitVarValueString*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->var[i] = new InitVarValueString();
+        if (!this->var[i]->deepCopyFrom(that->var[i]))
+            return false;
+    }
+    return true;
+}//InitVariableValuesString::deepCopyFrom
+
+bool InitVarValueString::deepCopyFrom(InitVarValueString *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitVarValueString");
+#endif
+    this->idx   = that->idx;
+    this->name  = that->name;
+    this->value = that->value;
+    return true;
+}//InitVarValueString::deepCopyFrom
+
+
+bool IntegerVariableBranchingWeights::deepCopyFrom(IntegerVariableBranchingWeights *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of IntegerVariableBranchingWeights");
+#endif
+    this->numberOfVar = that->numberOfVar;
+    int n = this->numberOfVar;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->var = new BranchingWeight*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->var[i] = new BranchingWeight();
+        if (!this->var[i]->deepCopyFrom(that->var[i]))
+            return false;
+    }
+    return true;
+}//IntegerVariableBranchingWeights::deepCopyFrom
+
+bool SOSVariableBranchingWeights::deepCopyFrom(SOSVariableBranchingWeights *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of SOSVariableBranchingWeights");
+#endif
+    this->numberOfSOS = that->numberOfSOS;
+    int n = this->numberOfSOS;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->sos = new SOSWeights*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->sos[i] = new SOSWeights();
+        if (!this->sos[i]->deepCopyFrom(that->sos[i]))
+            return false;
+    }
+    return true;
+}//SOSVariableBranchingWeights::deepCopyFrom
+
+
+bool SOSWeights::deepCopyFrom(SOSWeights *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of SOSWeights");
+#endif
+    this->sosIdx      = that->sosIdx;
+    this->groupWeight = that->groupWeight;
+
+    this->numberOfVar = that->numberOfVar;
+    int n = this->numberOfVar;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->var = new BranchingWeight*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->var[i] = new BranchingWeight();
+        if (!this->var[i]->deepCopyFrom(that->var[i]))
+            return false;
+    }
+    return true;
+}//SOSWeights::deepCopyFrom
+
+
+bool BranchingWeight::deepCopyFrom(BranchingWeight *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of BranchingWeight");
+#endif
+    this->idx   = that->idx;
+    this->name  = that->name;
+    this->value = that->value;
+    return true;
+}//BranchingWeight::deepCopyFrom
+
+bool OtherVariableOption::deepCopyFrom(OtherVariableOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherVariableOption");
+#endif
+    this->name        = that->name;
+    this->value       = that->value;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->type        = that->type;
+    this->description = that->description;
+
+    int n;
+    this->numberOfVar = that->numberOfVar;
+    n = this->numberOfVar;
+
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->var = new OtherVarOption*[n];
+        for (int i = 0; i < n; i++)
+        {
+            this->var[i] = new OtherVarOption();
+            if (!this->var[i]->deepCopyFrom(that->var[i]))
+                return false;
+        }
+    }
+
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->enumeration = new OtherOptionEnumeration*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherVariableOption::deepCopyFrom
+
+bool OtherVarOption::deepCopyFrom(OtherVarOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherVarOption");
+#endif
+    this->idx     = that->idx;
+    this->name    = that->name;
+    this->value   = that->value;
+    this->lbValue = that->lbValue;
+    this->ubValue = that->ubValue;
+    return true;
+}//OtherVarOption::deepCopyFrom
+
+bool ObjectiveOption::deepCopyFrom(ObjectiveOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of ObjectiveOption");
+#endif
+    if (that->initialObjectiveValues != NULL)
+    {
+        this->initialObjectiveValues = new InitObjectiveValues();
+        if (!this->initialObjectiveValues->deepCopyFrom(that->initialObjectiveValues))
+            return false;
+    }
+    if (that->initialObjectiveBounds != NULL)
+    {
+        this->initialObjectiveBounds = new InitObjectiveBounds();
+        if (!this->initialObjectiveBounds->deepCopyFrom(that->initialObjectiveBounds))
+            return false;
+    }
+    if (that->initialBasisStatus != NULL)
+    {
+        this->initialBasisStatus = new BasisStatus();
+        if (!this->initialBasisStatus->deepCopyFrom(that->initialBasisStatus))
+            return false;
+    }
+
+    this->numberOfOtherObjectiveOptions = that->numberOfOtherObjectiveOptions;
+    int n = this->numberOfOtherObjectiveOptions;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->other = new OtherObjectiveOption*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->other[i] = new OtherObjectiveOption();
+        if (!this->other[i]->deepCopyFrom(that->other[i]))
+            return false;
+    }
+    return true;
+}//ObjectiveOption::deepCopyFrom
+
+bool InitObjectiveValues::deepCopyFrom(InitObjectiveValues *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitObjectiveValues");
+#endif
+    this->numberOfObj = that->numberOfObj;
+    int n = this->numberOfObj;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->obj = new InitObjValue*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->obj[i] = new InitObjValue();
+        if (!this->obj[i]->deepCopyFrom(that->obj[i]))
+            return false;
+    }
+    return true;
+}//InitObjectiveValues::deepCopyFrom
+
+bool InitObjValue::deepCopyFrom(InitObjValue *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitObjValue");
+#endif
+    this->idx   = that->idx;
+    this->name  = that->name;
+    this->value = that->value;
+    return true;
+}//InitObjValue::deepCopyFrom
+
+bool InitObjectiveBounds::deepCopyFrom(InitObjectiveBounds *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitObjectiveBounds");
+#endif
+    this->numberOfObj = that->numberOfObj;
+    int n = this->numberOfObj;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->obj = new InitObjBound*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->obj[i] = new InitObjBound();
+        if (!this->obj[i]->deepCopyFrom(that->obj[i]))
+            return false;
+    }
+    return true;
+}//InitObjectiveBounds::deepCopyFrom
+
+bool InitObjBound::deepCopyFrom(InitObjBound *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitObjBound");
+#endif
+    this->idx     = that->idx;
+    this->name    = that->name;
+    this->lbValue = that->lbValue;
+    this->ubValue = that->ubValue;
+    return true;
+}//InitObjBound::deepCopyFrom
+
+bool OtherObjectiveOption::deepCopyFrom(OtherObjectiveOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherObjectiveOption");
+#endif
+    this->name        = that->name;
+    this->value       = that->value;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->type        = that->type;
+    this->description = that->description;
+
+    int n;
+
+    this->numberOfObj = that->numberOfObj;
+
+    n = this->numberOfObj;
+
+    if (n < 0) return false;
+    if (n > 0)
+    {
+        this->obj = new OtherObjOption*[n];
+        for (int i = 0; i < n; i++)
+        {
+            this->obj[i] = new OtherObjOption();
+            if (!this->obj[i]->deepCopyFrom(that->obj[i]))
+                return false;
+        }
+    }
+
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+
+    if (n < 0) return false;
+    if (n > 0)
+    {
+        this->enumeration = new OtherOptionEnumeration*[n];
+        for (int i = 0; i < n; i++)
+        {
+            this->enumeration[i] = new OtherOptionEnumeration();
+            if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+                return false;
+        }
+    }
+    return true;
+}//OtherObjectiveOption::deepCopyFrom
+
+bool OtherObjOption::deepCopyFrom(OtherObjOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherObjOption");
+#endif
+    this->idx     = that->idx;
+    this->name    = that->name;
+    this->value   = that->value;
+    this->lbValue = that->lbValue;
+    this->ubValue = that->ubValue;
+    return true;
+}//OtherObjOption::deepCopyFrom
+
+bool ConstraintOption::deepCopyFrom(ConstraintOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of ConstraintOption");
+#endif
+    if (that->initialConstraintValues != NULL)
+    {
+        this->initialConstraintValues = new InitConstraintValues();
+        if (!this->initialConstraintValues->deepCopyFrom(that->initialConstraintValues))
+            return false;
+    }
+    if (that->initialDualValues != NULL)
+    {
+        this->initialDualValues = new InitDualVariableValues();
+        if (!this->initialDualValues->deepCopyFrom(that->initialDualValues))
+            return false;
+    }
+    if (that->initialBasisStatus != NULL)
+    {
+        this->initialBasisStatus = new BasisStatus();
+        if (!this->initialBasisStatus->deepCopyFrom(that->initialBasisStatus))
+            return false;
+    }
+
+    this->numberOfOtherConstraintOptions = that->numberOfOtherConstraintOptions;
+    int n = this->numberOfOtherConstraintOptions;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->other = new OtherConstraintOption*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->other[i] = new OtherConstraintOption();
+        if (!this->other[i]->deepCopyFrom(that->other[i]))
+            return false;
+    }
+    return true;
+}//ConstraintOption::deepCopyFrom
+
+bool InitConstraintValues::deepCopyFrom(InitConstraintValues *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitConstraintValues");
+#endif
+    this->numberOfCon = that->numberOfCon;
+    int n = this->numberOfCon;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->con = new InitConValue*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->con[i] = new InitConValue();
+        if (!this->con[i]->deepCopyFrom(that->con[i]))
+            return false;
+    }
+    return true;
+}//InitConstraintValues::deepCopyFrom
+
+bool InitConValue::deepCopyFrom(InitConValue *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitConValue");
+#endif
+    this->idx   = that->idx;
+    this->name  = that->name;
+    this->value = that->value;
+    return true;
+}//InitConValue::deepCopyFrom
+
+bool InitDualVariableValues::deepCopyFrom(InitDualVariableValues *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitDualVariableValues");
+#endif
+    this->numberOfCon = that->numberOfCon;
+    int n = this->numberOfCon;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->con = new InitDualVarValue*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->con[i] = new InitDualVarValue();
+        if (!this->con[i]->deepCopyFrom(that->con[i]))
+            return false;
+    }
+    return true;
+}//InitDualVariableValues::deepCopyFrom
+
+bool InitDualVarValue::deepCopyFrom(InitDualVarValue *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitDualVarValue");
+#endif
+    this->idx         = that->idx;
+    this->name        = that->name;
+    this->lbDualValue = that->lbDualValue;
+    this->ubDualValue = that->ubDualValue;
+    return true;
+}//InitDualVarValue::deepCopyFrom
+
+bool OtherConstraintOption::deepCopyFrom(OtherConstraintOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherConstraintOption");
+#endif
+    this->name        = that->name;
+    this->value       = that->value;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->type        = that->type;
+    this->description = that->description;
+
+    int n;
+
+    this->numberOfCon = that->numberOfCon;
+    n = this->numberOfCon;
+
+    if (n < 0) return false;
+    if (n > 0)
+    {
+        this->con = new OtherConOption*[n];
+        for (int i = 0; i < n; i++)
+        {
+            this->con[i] = new OtherConOption();
+            if (!this->con[i]->deepCopyFrom(that->con[i]))
+                return false;
+        }
+    }
+
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+
+    if (n < 0) return false;
+    if (n > 0)
+    {
+        this->enumeration = new OtherOptionEnumeration*[n];
+        for (int i = 0; i < n; i++)
+        {
+            this->enumeration[i] = new OtherOptionEnumeration();
+            if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+                return false;
+        }
+    }
+    return true;
+}//OtherConstraintOption::deepCopyFrom
+
+bool OtherConOption::deepCopyFrom(OtherConOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherConOption");
+#endif
+    this->idx     = that->idx;
+    this->name    = that->name;
+    this->value   = that->value;
+    this->lbValue = that->lbValue;
+    this->ubValue = that->ubValue;
+    return true;
+}//OtherConOption::deepCopyFrom
+
+
+bool SolverOptions::deepCopyFrom(SolverOptions *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of SolverOptions");
+#endif
+    this->numberOfSolverOptions = that->numberOfSolverOptions;
+    int n = this->numberOfSolverOptions;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->solverOption = new SolverOption*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->solverOption[i] = new SolverOption();
+        if (!this->solverOption[i]->deepCopyFrom(that->solverOption[i]))
+            return false;
+    }
+    return true;
+}//SolverOptions::deepCopyFrom
+
+bool SolverOption::deepCopyFrom(SolverOption *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of SolverOption");
+#endif
+    this->name        = that->name;
+    this->value       = that->value;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->type        = that->type;
+    this->description = that->description;
+
+    this->numberOfItems = that->numberOfItems;
+    int n = this->numberOfItems;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->item = new std::string[n];
+    for (int i = 0; i < n; i++)
+        this->item[i] = that->item[i];
+
+    return true;
+}//SolverOption::deepCopyFrom
+

@@ -4,7 +4,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -15,6 +15,7 @@
 
 #include "OSmps2osil.h"
 #include "OSOutput.h"
+#include "OSErrorClass.h"
 #include <iostream>
 
 
@@ -25,7 +26,10 @@ using std::endl;
 OSmps2osil::OSmps2osil( std::string mpsfilename)
 {
     m_MpsData = new CoinMpsIO();
-    m_MpsData->readMps( &mpsfilename[ 0] );
+    int status = m_MpsData->readMps( &mpsfilename[ 0] );
+    if (status < 0) 
+        throw ErrorClass("Error trying to read MPS file");
+
     m_CoinPackedMatrix  =  new CoinPackedMatrix( *(m_MpsData->getMatrixByCol()));
 }// end constructor
 

@@ -1167,9 +1167,9 @@ static yyconst flex_int32_t yy_rule_can_match_eol[118] =
 #include "OSInstance.h"
 
 
-//#define PARSERDEBUG
+//#define OSILPARSERDEBUG
 
-#ifdef PARSERDEBUG
+#ifdef OSILPARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
 	#define YY_PRINT ;

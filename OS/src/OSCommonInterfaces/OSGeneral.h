@@ -85,6 +85,13 @@ public:
     bool setRandom(double density, bool conformant);
 
     /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(GeneralFileHeader *that);
+
+    /**
      *
      * A function to retrieve a data item contained in this class
      * @param item: the type of information sought (name, source, description, fileCreator, licence)
@@ -341,11 +348,6 @@ public:
     int* hessColIdx;
 
     /**
-
-
-
-
-
      * hessValues is a double array of the Hessian values.
      */
     double* hessValues;
@@ -448,6 +450,13 @@ public:
     bool setRandom(double density, bool conformant, int iMin, int iMax);
 
     /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(IntVector *that);
+
+    /**
      *  set values into an IntVector
      *  @param ni contains the dimension of the IntVector
      *  @param i contains the array of values
@@ -516,6 +525,13 @@ public:
      * @param iMax: greatest value (inclusive) that an entry in this vector can take
      */
     bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherOptionEnumeration *that);
 
     /**
      *  Set the indices for a particular level in an enumeration
@@ -611,6 +627,13 @@ public:
      * @param iMax: greatest index value (inclusive) that an entry in this basis can take
      */
     bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(BasisStatus *that);
 
     /**
      *  Set the indices for a particular status
@@ -721,6 +744,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(StorageCapacity *that);
 }; //StorageCapacity
 
 /*! \class CPUSpeed
@@ -772,6 +802,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(CPUSpeed *that);
 }; //CPUSpeed
 
 /*! \class CPUNumber
@@ -820,6 +857,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(CPUNumber *that);
 }; //CPUNumber
 
 /*! \class TimeSpan
@@ -866,6 +910,13 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(TimeSpan *that);
 }; //TimeSpan
 
 

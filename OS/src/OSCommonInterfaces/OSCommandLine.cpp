@@ -43,10 +43,11 @@ void OSCommandLine::reset_options()
     solverName = "";
     configFile = "";
     osilFile = "";
-    osilOutputFile = "";
     osil = "";
+    osilOutputFile = "";
     osolFile = "";
     osol = "";
+    osolOutputFile = "";
     osrlFile = "";
     insListFile = "";
     insList = "";
@@ -149,6 +150,10 @@ std::string OSCommandLine::list_options()
         outStr << "OSoL file = "
                << osolFile
                << std::endl;
+    if (osolOutputFile != "")
+        outStr << "OSoL output file = "
+               << osolOutputFile
+               << std::endl;
     if (osrlFile != "")
         outStr << "OSrL file = "
                << osrlFile
@@ -186,7 +191,7 @@ std::string OSCommandLine::list_options()
         outStr << "Result browser = "
                << browser
                << std::endl;
-    outStr     << "Print level for stdout: " 
+        outStr << "Print level for stdout: " 
                << printLevel
                << std::endl;
 
@@ -194,7 +199,7 @@ std::string OSCommandLine::list_options()
         outStr << "Secondary log to "
                << logFile 
                << std::endl;
-    outStr     << "Print level for " << logFile << ": " 
+        outStr << "Print level for " << logFile << ": " 
                << printLevel
                << std::endl;
 

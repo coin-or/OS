@@ -3,7 +3,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -17,7 +17,6 @@
  * model hs71.mod;  <br />
  * option solver OSAmplClient; <br />
  * option OSAmplClient_options "-solver bonmin"; <br />
- * write gtestfile; <br />
  * solve; <br />
  * display x1; <br />
  * you should get:
@@ -33,7 +32,7 @@
  * as another example, if you wanted to solve hs71.mod on a remote server you would do:
  * model hs71.mod;  <br />
  * option solver OSAmplClient; <br />
- * option OSAmplClient_options "-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws"; <br />
+ * option OSAmplClient_options "-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService"; <br />
  *
  *
  * \item there are three possible options to specify:
@@ -53,8 +52,8 @@
  * if no options are specified using {\bf OSAmplClient\_options},   by default,for continuous
  * linear models  clp is used. For continuous nonlinear models ipopt is used.
  * For mixed-integer linear models (MIP), cbc is used. For mixed-integer nonlinear models
- * bonmin is used.  All solvers are invoked locally. See the Users Manual in the doc folder
- * for more information
+ * bonmin is used.  All solvers can be invoked locally or remotely. 
+ * See the Users Manual in the doc folder for more information.
  *
  */
 
@@ -240,40 +239,45 @@ int main(int argc, char **argv)
     //std::cout << " return from  nl2OS" << std::endl;
 
     // create OS objects
-    OSInstance *osinstance;
-    OSOption   *osoption;
+    //OSInstance *osinstance;
+    //OSOption   *osoption;
 
-    osinstance = nl2OS->osinstance;
+    //osinstance = nl2OS->osinstance;
     //std::cout << " osinstance created" << std::endl;
 
     //write out the instance
+#ifndef NDEBUG
     OSiLWriter *osilwriter = NULL;
     osilwriter = new OSiLWriter();
     osilwriter->m_bWhiteSpace = true;
     std::string sModelInstanceName = "modelInstance.osil";
     FileUtil *fileUtil;
     fileUtil = new FileUtil();
-    fileUtil->writeFileFromString(sModelInstanceName,  osilwriter->writeOSiL( osinstance) );
+    fileUtil->writeFileFromString(sModelInstanceName,  osilwriter->writeOSiL(nl2OS->osinstance) );
     delete fileUtil;
     fileUtil = NULL;
     delete  osilwriter;
     osilwriter = NULL;
-    //
+#endif
+    
 
     if (nl2OS->osoption != NULL)
     {
-        osoption   = nl2OS->osoption;
+        //osoption   = nl2OS->osoption;
+
         //write out the options
+#ifndef NDEBUG
         OSoLWriter *osolwriter = NULL;
         osolwriter = new OSoLWriter();
         //osolwriter->m_bWhiteSpace = true;
         std::string sModelOptionName = "modelOptions.osol";
         fileUtil = new FileUtil();
-        fileUtil->writeFileFromString(sModelOptionName,  osolwriter->writeOSoL( osoption) );
+        fileUtil->writeFileFromString(sModelOptionName,  osolwriter->writeOSoL(nl2OS->osoption) );
         delete fileUtil;
         fileUtil = NULL;
         delete  osolwriter;
         osolwriter = NULL;
+#endif
     }
 
     OSrLReader *osrlreader = NULL;
@@ -290,7 +294,10 @@ int main(int argc, char **argv)
         if(serviceLocation.size() == 0 )
         {
             //determine the solver and do a local solve
-            osrl = runSolver(sSolverName, osol, osinstance);
+            if (nl2OS->osoption == NULL)
+                osrl = runSolver(sSolverName, osol, nl2OS->osinstance);
+            else
+                osrl = runSolver(sSolverName, nl2OS->osoption, nl2OS->osinstance);
         }// end if serviceLocation.size() == 0
 
         /* ------------------------------------------------------- */
@@ -299,7 +306,7 @@ int main(int argc, char **argv)
             OSSolverAgent* osagent = NULL;
             OSiLWriter *osilwriter = NULL;
             osilwriter = new OSiLWriter();
-            std::string  osil = osilwriter->writeOSiL( osinstance);
+            std::string  osil = osilwriter->writeOSiL(nl2OS->osinstance);
             ////
 
             //agent_address = strstr(solver_option, "service");

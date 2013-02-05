@@ -106,6 +106,19 @@ bool GeneralFileHeader::setRandom(double density, bool conformant)
     return true;
 }// end of GeneralFileHeader::setRandom
 
+bool GeneralFileHeader::deepCopyFrom(GeneralFileHeader *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of GeneralFileHeader");
+#endif
+    this->name        = that->name;
+    this->source      = that->source;
+    this->description = that->description;
+    this->fileCreator = that->fileCreator;
+    this->licence     = that->licence;
+    return true;
+}// end of GeneralFileHeader::deepCopyFrom
+
 std::string GeneralFileHeader::getHeaderItem(std::string item)
 {
 	if (item == "name")        return name;
@@ -196,7 +209,6 @@ SparseMatrix::~SparseMatrix()
         delete[] starts;
         delete[] indexes;
         delete[] values;
-
     }
     starts = NULL;
     indexes = NULL;
@@ -209,10 +221,8 @@ bool SparseMatrix::display(int secondaryDim)
     int i, j, k;
     for ( i = 0; i < startSize - 1; i++)
     {
-
         if (starts[i] == starts[i + 1])
         {
-
             for ( k = 0; k < secondaryDim; k++)
             {
                 //System.out.print("0,");
@@ -227,7 +237,6 @@ bool SparseMatrix::display(int secondaryDim)
 
             for ( j = starts[ i ]; j < starts[i + 1]; j++)
             {
-
                 //System.out.print (values[j] + ",");
 
                 if ( j < starts[i + 1] - 1)
@@ -239,7 +248,6 @@ bool SparseMatrix::display(int secondaryDim)
                 }
                 else
                 {
-
                     for ( k = indexes [j] + 1; k < secondaryDim; k++)
                     {
                         //System.out.print("0,");
@@ -519,9 +527,27 @@ bool IntVector::setRandom(double density, bool conformant, int iMin, int iMax)
     el = new int[n];
     for (int i = 0; i < n; i++)
         el[i] = (int)OSiRand(iMin, iMax);
+
     return true;
 }//IntVector::setRandom
 
+bool IntVector::deepCopyFrom(IntVector *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of IntVector");
+#endif
+    this->numberOfEl = that->numberOfEl;
+    int n = this->numberOfEl;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->el = new int[n];
+    for (int i = 0; i < n; i++)
+        this->el[i] = that->el[i];
+
+    return true;
+}//IntVector::deepCopyFrom
 
 OtherOptionEnumeration::OtherOptionEnumeration():
     IntVector(),
@@ -569,7 +595,6 @@ std::string OtherOptionEnumeration::getDescription()
 {
     return this->description;
 }
-
 
 
 bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
@@ -631,6 +656,19 @@ bool OtherOptionEnumeration::setRandom(double density, bool conformant, int iMin
     return true;
 }//OtherOptionEnumeration::setRandom
 
+bool OtherOptionEnumeration::deepCopyFrom(OtherOptionEnumeration *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherOptionEnumeration");
+#endif
+    this->value       = that->value;
+    this->description = that->description;
+
+    if (!this->IntVector::deepCopyFrom(that))
+        return false;
+
+    return true;
+}//OtherOptionEnumeration::deepCopyFrom
 
 
 DoubleVector::DoubleVector():
@@ -1222,6 +1260,56 @@ bool BasisStatus::setRandom(double density, bool conformant, int iMin, int iMax)
     return true;
 }//BasisStatus::setRandom
 
+bool BasisStatus::deepCopyFrom(BasisStatus *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of BasisStatus");
+#endif
+    if (that->basic != NULL)
+    {
+        this->basic = new IntVector();
+        if (!this->basic->deepCopyFrom(that->basic))
+            return false;
+    }
+    if (that->atLower != NULL)
+    {
+        this->atLower = new IntVector();
+        if (!this->atLower->deepCopyFrom(that->atLower))
+            return false;
+    }
+    if (that->atUpper != NULL)
+    {
+        this->atUpper = new IntVector();
+        if (!this->atUpper->deepCopyFrom(that->atUpper))
+            return false;
+    }
+    if (that->atEquality != NULL)
+    {
+        this->atEquality = new IntVector();
+        if (!this->atEquality->deepCopyFrom(that->atEquality))
+            return false;
+    }
+    if (that->isFree != NULL)
+    {
+        this->isFree = new IntVector();
+        if (!this->isFree->deepCopyFrom(that->isFree))
+            return false;
+    }
+    if (that->superbasic != NULL)
+    {
+        this->superbasic = new IntVector();
+        if (!this->superbasic->deepCopyFrom(that->superbasic))
+            return false;
+    }
+    if (that->unknown != NULL)
+    {
+        this->unknown = new IntVector();
+        if (!this->unknown->deepCopyFrom(that->unknown))
+            return false;
+    }
+
+    return true;
+}//BasisStatus::deepCopyFrom
 
 StorageCapacity::StorageCapacity():
     unit("byte"),
@@ -1307,6 +1395,16 @@ bool StorageCapacity::setRandom(double density, bool conformant)
     return true;
 }// end of StorageCapacity::setRandom
 
+bool StorageCapacity::deepCopyFrom(StorageCapacity *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of StorageCapacity");
+#endif
+    this->unit        = that->unit;
+    this->description = that->description;
+    this->value       = that->value;
+    return true;
+}// end of StorageCapacity::deepCopyFrom
 
 CPUSpeed::CPUSpeed():
     unit("hertz"),
@@ -1392,6 +1490,16 @@ bool CPUSpeed::setRandom(double density, bool conformant)
     return true;
 }// end of CPUSpeed::setRandom
 
+bool CPUSpeed::deepCopyFrom(CPUSpeed *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of CPUSpeed");
+#endif
+    this->unit        = that->unit;
+    this->description = that->description;
+    this->value       = that->value;
+    return true;
+}// end of CPUSpeed::deepCopyFrom
 
 CPUNumber::CPUNumber():
     description(""),
@@ -1460,6 +1568,16 @@ bool CPUNumber::setRandom(double density, bool conformant)
     if (OSRand() <= density) this->value = (int)(4*OSRand());
     return true;
 }// end of CPUNumber::setRandom
+
+bool CPUNumber::deepCopyFrom(CPUNumber *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of CPUNumber");
+#endif
+    this->description = that->description;
+    this->value       = that->value;
+    return true;
+}// end of CPUNumber::deepCopyFrom
 
 
 TimeSpan::TimeSpan():
@@ -1543,4 +1661,13 @@ bool TimeSpan::setRandom(double density, bool conformant)
     return true;
 }// end of TimeSpan::setRandom
 
+bool TimeSpan::deepCopyFrom(TimeSpan *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of TimeSpan");
+#endif
+    this->unit        = that->unit;
+    this->value       = that->value;
+    return true;
+}// end of TimeSpan::deepCopyFrom
 

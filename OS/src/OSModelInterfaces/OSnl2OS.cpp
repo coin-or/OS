@@ -1076,6 +1076,10 @@ bool OSnl2OS::createOSObjects()
             osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
             osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
             osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
+// We are doing a shallow copy, so we decouple the A matrix from the AMPL data structure
+            A_vals = NULL;
+            A_rownos = NULL;
+            A_colstarts = NULL; 
         }
     }
 
@@ -1117,13 +1121,26 @@ bool OSnl2OS::createOSObjects()
             }
         }
 
+        //OSOption* osoption = NULL; 
+
         if ((asl->i.suffixes[ASL_Sufkind_var]  != NULL) ||
             (asl->i.suffixes[ASL_Sufkind_con]  != NULL) || 
             (asl->i.suffixes[ASL_Sufkind_obj]  != NULL) ||
             (asl->i.suffixes[ASL_Sufkind_prob] != NULL) ||
             ( have_primal ) || ( have_dual ) )               
-        {    
-            osoption = osolreader->readOSoL(osol);
+        {   
+            OSOption* tmpoption = new OSOption(); 
+            tmpoption = osolreader->readOSoL(osol);
+/**
+ *  osolreader maintains a private pointer to tmpoption, which will cause the OSOption object
+ *  to be destroyed when osolreader is deleted. The solution is to do a deep copy of tmpoption. 
+ *  This is not as bad as it looks because the information read from the OSoL file 
+ *  is likely to be much smaller than the array-valued information in the .nl file,
+ *  which triggered the merge of the .nl options with the .osol options in the first place.
+ *                                  (28/Jan/2013)
+ */
+            osoption = new OSOption(); 
+            osoption->deepCopyFrom(tmpoption);
         }
 
         bool found;
@@ -1351,7 +1368,7 @@ bool OSnl2OS::createOSObjects()
                         // here we just replace the <var> element and update the numberOfVar
                         for (int k=0; k < osoption->optimization->variables->other[iopt]->numberOfVar; k++)
                             delete osoption->optimization->variables->other[iopt]->var[k];
-                        delete [] osoption->optimization->variables->other[iopt]->var;
+                        delete []  osoption->optimization->variables->other[iopt]->var;
                         osoption->optimization->variables->other[iopt]->var = varopt->var;
                         osoption->optimization->variables->other[iopt]->numberOfVar = nOtherIdx;
                         varopt->var = NULL;
@@ -1873,6 +1890,13 @@ bool OSnl2OS::createOSObjects()
 
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "At end of OSnl2OS\n");
+        OSiLWriter* osilwriter = new OSiLWriter(); 
+        std::string tmposil = osilwriter->writeOSiL(osinstance);
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, tmposil);
+
+        delete osilwriter;
+        osilwriter = NULL;
+
 #endif
     }// end try
 
@@ -1882,18 +1906,21 @@ bool OSnl2OS::createOSObjects()
     }
 
 #ifndef NDEBUG
-    OSiLWriter osilwriter;
+    OSiLWriter *osilwriter = new OSiLWriter();
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "WRITE THE INSTANCE\n");
-    osilwriter.m_bWhiteSpace = true;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osilwriter.writeOSiL( osinstance));
+    osilwriter->m_bWhiteSpace = true;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osilwriter->writeOSiL( osinstance));
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "DONE WRITING THE INSTANCE\n");
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osinstance->printModel());
+    delete osilwriter;
+    osilwriter = NULL;
 
-    OSoLWriter osolwriter;
+    OSoLWriter *osolwriter = new OSoLWriter();
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "WRITE THE OPTIONS\n");
- //    osilwriter.m_bWhiteSpace = true;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osolwriter.writeOSoL( osoption));
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osolwriter->writeOSoL( osoption));
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "DONE WRITING THE OPTIONS\n");
+    delete osolwriter;
+    osolwriter = NULL;
 #endif
    
     return true;

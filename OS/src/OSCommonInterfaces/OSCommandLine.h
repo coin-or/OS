@@ -72,16 +72,16 @@ public:
      */
     std::string osilFile;
     
+    /** osil is the content of the osilFile 
+     */
+    std::string osil;
+
     /** osilOutputFile is the name of the file to which the instance can be
      *  written in OSiL format. This is especially useful for converting the
      *  instance from other representation formats such as AMPL nl format or MPS format.
      *  If this parameter is empty, the instance will not be saved.
      */
     std::string osilOutputFile;
-
-    /** osil is the content of the osilFile 
-     */
-    std::string osil;
 
     /** osolFile is the name of the file that holds the solver options
      *  in OSoL format
@@ -91,6 +91,14 @@ public:
     /** osol is the content of the osolFile
      */
     std::string osol;
+    
+    /** osolOutputFile is the name of the file to which the solver options can be
+     *  written in OSoL format. This is especially useful when an instance represented
+     *  in another representation format such as AMPL nl format or MPS format
+     *  contains array-valued options such as initial values or basis information.
+     *  If this parameter is empty, the solver options will not be saved.
+     */
+    std::string osolOutputFile;
 
     /** osrlFile is the name of the file where the solver should write
      *  the result (in OSrL format)

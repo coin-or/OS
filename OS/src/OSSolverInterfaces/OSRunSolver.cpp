@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -12,25 +12,15 @@
  *
  */
 
+#include "OSRunSolver.h"
 #include "OSCoinSolver.h"
 #include "OSResult.h"
-#include "OSiLReader.h"
-#include "OSiLWriter.h"
-#include "OSoLReader.h"
-#include "OSrLReader.h"
 #include "OSrLWriter.h"
 #include "OSInstance.h"
 #include "OSOption.h"
-#include "OSoLWriter.h"
-#include "OSFileUtil.h"
 #include "OSConfig.h"
 #include "OSDefaultSolver.h"
-#include "OSWSUtil.h"
-#include "OSSolverAgent.h"
-#include "OShL.h"
 #include "OSErrorClass.h"
-//#include "OSmps2osil.h"
-#include "OSBase64.h"
 
 #ifdef COIN_HAS_KNITRO
 #include "OSKnitroSolver.h"
@@ -39,18 +29,6 @@
 #ifdef COIN_HAS_LINDO
 #include "OSLindoSolver.h"
 #endif
-
-#ifdef COIN_HAS_ASL
-//#include "OSnl2osil.h"
-#endif
-
-#ifdef COIN_HAS_GAMSUTILS
-#include "OSgams2osil.hpp"
-#endif
-
-//#ifdef COIN_HAS_IPOPT
-//#include "OSIpoptSolver.h"
-//#endif
 
 #ifdef COIN_HAS_IPOPT
 #ifndef COIN_HAS_ASL
@@ -69,9 +47,7 @@
 #include "OSCouenneSolver.h"
 #endif
 
-#include "OSOptionsStruc.h"
-
-#include<stdio.h>
+#include <stdio.h>
 #include <map>
 
 
@@ -86,7 +62,111 @@ std::string runSolver(std::string solverName, std::string osol,
                         OSInstance *osinstance)
 {
     DefaultSolver *solverType = NULL;
+    solverType = selectSolver(solverName, osinstance);
+    if (solverType == NULL)  
+        throw ErrorClass("No appropriate solver found");
     //std::cout << "SOLVER NAME = " << solverName << std::endl;
+
+    solverType->osinstance = osinstance;
+    solverType->osol = osol;
+    solverType->buildSolverInstance();
+    solverType->setSolverOptions();
+    solverType->solve();
+    std::string resultString = solverType->osrl;
+    if (solverType != NULL)
+        delete solverType;
+    solverType = NULL;
+    return resultString;
+} //runSolver (osinstance, osol)      
+
+
+std::string runSolver(std::string solverName, OSOption* osoption,
+                        OSInstance *osinstance)
+{
+    DefaultSolver *solverType = NULL;
+    solverType = selectSolver(solverName, osinstance);
+    if (solverType == NULL)  
+        throw ErrorClass("No appropriate solver found");
+    //std::cout << "SOLVER NAME = " << solverName << std::endl;
+
+    solverType->osinstance = osinstance;
+    solverType->osoption = osoption;
+    solverType->buildSolverInstance();
+    solverType->setSolverOptions();
+    solverType->solve();
+    std::string resultString = solverType->osrl;
+    if (solverType != NULL)
+        delete solverType;
+    solverType = NULL;
+    return resultString;
+} //runSolver (osinstance, osoption)
+
+
+
+std::string runSolver(std::string solverName, std::string osol,
+                        std::string osil)
+{
+    OSInstance* osinstance = new OSInstance();
+    OSiLReader* osilreader = new OSiLReader();
+
+    DefaultSolver *solverType = NULL;
+
+    osinstance = osilreader->readOSiL(osil);
+
+    solverType = selectSolver(solverName, osinstance);
+    if (solverType == NULL)  
+        throw ErrorClass("No appropriate solver found");
+    //std::cout << "SOLVER NAME = " << solverName << std::endl;
+
+    solverType->osinstance = osinstance;
+    solverType->osol = osol;
+    solverType->buildSolverInstance();
+    solverType->setSolverOptions();
+    solverType->solve();
+    std::string resultString = solverType->osrl;
+    if (solverType != NULL)
+        delete solverType;
+    solverType = NULL;
+    delete osilreader;
+    osilreader = NULL;
+    return resultString;
+} //runSolver (osil, osol)      
+
+
+std::string runSolver(std::string solverName, OSOption* osoption,
+                        std::string osil)
+{
+    OSInstance* osinstance = new OSInstance();
+    OSiLReader* osilreader = new OSiLReader();
+
+    DefaultSolver *solverType = NULL;
+
+    osinstance = osilreader->readOSiL(osil);
+
+    solverType = selectSolver(solverName, osinstance);
+    if (solverType == NULL)  
+        throw ErrorClass("No appropriate solver found");
+    //std::cout << "SOLVER NAME = " << solverName << std::endl;
+
+    solverType->osinstance = osinstance;
+    solverType->osoption = osoption;
+    solverType->buildSolverInstance();
+    solverType->setSolverOptions();
+    solverType->solve();
+    std::string resultString = solverType->osrl;
+    if (solverType != NULL)
+        delete solverType;
+    solverType = NULL;
+    delete osilreader;
+    osilreader = NULL;
+    return resultString;
+} //runSolver (osil, osoption)
+
+
+
+DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
+{
+    DefaultSolver *solverType = NULL;
     try
     {
         if (solverName == "")  // must determine the default solver
@@ -282,30 +362,18 @@ std::string runSolver(std::string solverName, std::string osol,
             }
         }
 
-        //std::cout << "SET SOLVER INSTANCE " << std::endl;
-        
-        
-        solverType->osinstance = osinstance;
-        solverType->osol = osol;
-        solverType->buildSolverInstance();
-        solverType->setSolverOptions();
-        solverType->solve();
-        std::string resultString = solverType->osrl;
-        if (solverType != NULL)
-            delete solverType;
-        solverType = NULL;
-        return resultString;
-        
-
+        return solverType;
     }
+
     catch (const ErrorClass& eclass)
     {
         if (solverType != NULL)
             delete solverType;
         solverType = NULL;
         throw eclass;
+        return NULL;
     }
 
-}//runSolver
+}//selectSolver
 
 
