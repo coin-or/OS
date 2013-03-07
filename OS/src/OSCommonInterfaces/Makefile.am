@@ -20,6 +20,8 @@ noinst_LTLIBRARIES = libOSCommonInterfaces.la
 libOSCommonInterfaces_la_SOURCES = \
 	OSCommandLine.cpp \
 	OSCommandLine.h \
+	OSCommandLineReader.cpp \
+	OSCommandLineReader.h \
 	OSExpressionTree.cpp \
 	OSExpressionTree.h \
 	OSGeneral.cpp \
@@ -80,6 +82,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSCommandLine.h \
+	OSCommandLineReader.h \
 	OSExpressionTree.h \
         OSGeneral.h \
 	OSInstance.h \

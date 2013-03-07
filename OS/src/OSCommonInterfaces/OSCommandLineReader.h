@@ -5,7 +5,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2011-2013, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -62,8 +62,20 @@ public:
      *
      * @param osss a command line string.
      * @return the OSCommandLine object corresponding to the command line string.
+     * @remark Calls method parseString once and if a configFile item is found
+     *         calls method parseString two more times (with the config file contents
+     *         and again with the original command line) 
      */
     OSCommandLine *readCommandLine(const std::string& osss) throw(ErrorClass);
+
+
+    /**
+     * Parse a string and store it into an OSCommandLine object
+     *
+     * @param osss a command line string.
+     * @return the OSCommandLine object corresponding to the command line string.
+     */
+    OSCommandLine *parseString(const std::string& osss) throw(ErrorClass);
 
 private:
     /** m_oscommandline is the OSCommandLine object returned by

@@ -4,7 +4,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License. 
@@ -684,7 +684,7 @@ browserState (on|off)
         else
             yyextra->solverName = str;
 }
-             
+
 (-browser{xmlwhitespace}+{optionValue}) {
         YY_PRINT  
         //char *ch = strdup(yytext);
@@ -803,6 +803,28 @@ browserState (on|off)
         else
             temp = str;
         yyextra->filePrintLevel = atoi(temp.c_str());
+}
+
+(-jobID{xmlwhitespace}+{optionValue}) {
+        YY_PRINT  
+        //char *ch = strdup(yytext);
+        char *ch = yytext;
+        // move past -browser
+        ch+=6;
+        for(; isspace(*ch); ch++);
+        std::string str(  ch);
+        yyextra->jobID = str;
+}
+
+(jobID{xmlwhitespace}+{optionValue}) {
+        YY_PRINT  
+        //char *ch = strdup(yytext);
+        char *ch = yytext;
+        // move past -browser
+        ch+=5;
+        for(; isspace(*ch); ch++);
+        std::string str(  ch);
+        yyextra->jobID = str;
 }
 
 . {

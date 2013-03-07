@@ -100,7 +100,12 @@ ASL* OSnl2OS::getASL(std::string name)
 
 void OSnl2OS::setOsol(std::string osol)
 {
-    this->osol = osol;
+    this->osol  = osol;
+}
+
+void OSnl2OS::setJobID(std::string jobID)
+{
+    this->jobID = jobID;
 }
 
 bool OSnl2OS::readNl(std::string stub)
@@ -501,6 +506,48 @@ static inline char integerOrBinary(real upper, real lower)
     return 'I';
 }
 
+void OSnl2OS::setVar(OSInstance *osinstance, int lower, int upper, char vartype)
+{
+    std::ostringstream outStr;
+    int i;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+    for(i = lower; i < upper; i++) 
+    {
+        osinstance->addVariable(i, var_name(i),
+                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
+                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
+                                vartype);
+    }
+}
+
+void OSnl2OS::setIBVar(OSInstance *osinstance, int lower, int upper)
+{
+    std::ostringstream outStr;
+    int i;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "LOWER = " << lower << std::endl;
+    outStr << "UPPER = " << upper << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+    for(i = lower; i < upper; i++) 
+    {
+        if (LUv[2*i] > -1.0 + OS_EPS && LUv[2*i+1] < 2.0 - OS_EPS)
+            osinstance->addVariable(i, var_name(i),0,1,'B');
+	    else
+            osinstance->addVariable(i, var_name(i),
+                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
+                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
+                                'I');
+    }
+}
 
 bool OSnl2OS::createOSObjects()
 {
@@ -521,215 +568,25 @@ bool OSnl2OS::createOSObjects()
     // get the variable information
     //
     std::string colName;
-    char vartype = 'C';
-    osinstance->setVariableNumber( n_var);
+//    char vartype = 'C';
+    osinstance->setVariableNumber(n_var);
 
     //first the nonlinear variables
-    //welcome to the world of the ASL API
+    setVar(osinstance,0,nlvb - nlvbi,'C');       // continuous in an objective and in a constraint
+    setIBVar(osinstance,nlvb - nlvbi,nlvb);      // integer or binary in an objective and in a constraint
+    setVar(osinstance,nlvb,nlvc - nlvci,'C');    // continuous just in constraints
+    setIBVar(osinstance,nlvc - nlvci,nlvc);      // integer or binary just in constraints
+    setVar(osinstance,nlvc,nlvo - nlvoi,'C');    // continuous just in objectives
+    setIBVar(osinstance,nlvo - nlvoi,nlvo);      // integer or binary just in objectives
 
-    int lower;
-    int upper;
-    lower = 0;
-    upper = nlvb - nlvbi;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //continuous in an objective and in a constraint
-    {
-        vartype = 'C';
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-    lower = nlvb - nlvbi;
-    upper = (nlvb - nlvbi) + nlvbi;
-    upper = nlvb;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //integer in an objective and in a constraint
-    {
-        vartype = integerOrBinary(LUv[2*i], LUv[2*i+1]); // AMPL doesn't make the distinction for nonlinear variables
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-    lower = nlvb;
-    upper = nlvb + (nlvc - (nlvb + nlvci)) ;
-    upper = nlvc - nlvci;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //continuous just in constraints
-    {
-        vartype = 'C';
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
+	//now the other variables
+    setVar(osinstance,CoinMax(nlvc, nlvo),CoinMax(nlvc, nlvo) + nwv,'C');  // linear arc variables
+    setVar(osinstance,CoinMax(nlvc, nlvo) + nwv,n_var - niv - nbv, 'C');   // other linear
+    setVar(osinstance,n_var - niv - nbv, n_var - niv, 'B') ;               // linear binary
+    setVar(osinstance,n_var - niv, n_var, 'I');                            // linear integer
 
 
-    lower = nlvc - nlvci;
-    upper = nlvc - nlvci + nlvci;
-    upper = nlvc;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //integer just in constraints
-    {
-        vartype =  integerOrBinary(LUv[2*i], LUv[2*i+1]); // AMPL doesn't make the distinction for nonlinear variables
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-    lower = nlvc;
-    upper = nlvc + ( nlvo - (nlvc + nlvoi) );
-    upper = nlvo - nlvoi;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //continuous just in objectives
-    {
-        vartype = 'C';
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-    lower = nlvo - nlvoi;
-    upper = nlvo - nlvoi + nlvoi;
-    upper = nlvo ;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //integer just in objectives
-    {
-        vartype = integerOrBinary(LUv[2*i], LUv[2*i+1]); // AMPL doesn't make the distinction for nonlinear variables
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-
-    //now the other variables
-
-    lower = CoinMax(nlvc, nlvo);
-    upper = CoinMax(nlvc, nlvo) + nwv;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //linear arc variables
-    {
-        vartype = 'C';
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-
-    lower = CoinMax(nlvc, nlvo) + nwv;
-    upper = CoinMax(nlvc, nlvo) + nwv + (n_var - (CoinMax(nlvc, nlvo) + niv + nbv + nwv) );
-    upper = n_var -  niv - nbv;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //other linear
-    {
-        vartype = 'C';
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-
-    lower = n_var -  niv - nbv;
-    upper = n_var -  niv - nbv + nbv;
-    upper = n_var -  niv ;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //linear binary
-    {
-        vartype = 'B';
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-
-
-    lower = n_var -  niv;
-    upper = n_var -  niv  + niv;
-    upper =   n_var;
-#ifndef NDEBUG
-    outStr.str("");
-    outStr.clear();
-    outStr << "LOWER = " << lower << std::endl;
-    outStr << "UPPER = " << upper << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-    for(i = lower; i < upper; i++)  //linear integer
-    {
-        vartype = 'I';
-        osinstance->addVariable(i, var_name(i),
-                                LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
-                                LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
-                                vartype);
-    }
-
-
-    // end of variables -- thank goodness!!!
-
-
-/** Before we can process the rest of the instance, we check for QP
+/** Before we can process the rest of the instance, we check for QP (using the row-wise representation)
  *  This needs to be done here because of the possibility of expressions like (1 - x[0])^2
  *  which may modify the A matrix as well as the right-hand sides.
  *  If the A-matrix is modified, the column-wise representation
@@ -743,69 +600,22 @@ bool OSnl2OS::createOSObjects()
     fint* rowqp;
     int osNLIdx; // OS n.l. function index
     int aNLIdx; // AMPL n.l. function index
-
-    //Switch to row-wise format.
-    asl = rw;
-
-    // Iterate from -nlo to nlc-1 so that the qterms are sorted by idx
-
-    // Process the objectives first, for which fill-in does not matter 
-    for (osNLIdx = -nlo, aNLIdx = nlo-1; osNLIdx < 0; osNLIdx++, aNLIdx--)
-    {
-        if (nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp) > 0) // quadratic
-        {
-            for (int v1 = 0; v1 < n_var; v1++)
-            {
-                for (int* psV2 = &rowqp[colqp[v1]]; psV2 < &rowqp[colqp[v1+1]]; psV2++, delsqp++)
-                {
-                    if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
-                    {
-                        fidxs.push_back(osNLIdx);
-                        v1idxs.push_back(v1);
-                        v2idxs.push_back(*psV2);
-                        coeffs.push_back(0.5 * *delsqp);
-                    }
-                }
-            }
-        }
-        else // Nonlinear or error in nqpcheck
-        {
-            Nl nl;
-            expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
-            nl.idx = osNLIdx;
-            nl.osExpressionTree = new OSExpressionTree();
-            nl.osExpressionTree->m_treeRoot = walkTree (e);
-            nl.m_bDeleteExpressionTree = false;
-            /*
-             * Note: If the copy operation of the Nl class is changed from shallow
-             * to deep, we will want to manage memory differently here.
-             */
-            nlExprs.push_back(nl);
-        }
-    }
+    cgrad *cg;
 
     bool isQP = true;
     bool fill_in = false;
-    int nqpchk;
-    cgrad *cg;
 
-    double* A_row_temp = new double[n_var];
-
-    for (osNLIdx = 0, aNLIdx = -1; osNLIdx < nlc; osNLIdx++, aNLIdx--)
+    if (nlvc > 0 || nlvo > 0)
     {
-        if (isQP)  // No need to continue looking for quadratic terms once we have found a non-quadratic term
-        {
-            // check the nonzeroes before and after 
-            if (!fill_in) // once we know there will be fill-in we can stop counting
-            {
-                for(cg = Cgrad[osNLIdx]; cg; cg = cg->next)
-                {
-                    if (cg->coef != 0) A_row_temp[cg->varno] = cg->coef;
-                }
-            }
+        //Switch to row-wise format.
+        asl = rw;
 
-            nqpchk = nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp);
-            if (nqpchk > 0) // there is a quadratic part
+        // Iterate from -nlo to nlc-1 so that the qterms are sorted by idx
+
+        // Process the objectives first, for which fill-in does not matter 
+        for (osNLIdx = -nlo, aNLIdx = nlo-1; osNLIdx < 0; osNLIdx++, aNLIdx--)
+        {
+            if (nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp) > 0) // quadratic
             {
                 for (int v1 = 0; v1 < n_var; v1++)
                 {
@@ -820,60 +630,112 @@ bool OSnl2OS::createOSObjects()
                         }
                     }
                 }
-                if (!fill_in) // once we know there will be fill-in we can stop counting
+            }
+            else // Nonlinear or error in nqpcheck
+            {
+                Nl nl;
+                expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
+                nl.idx = osNLIdx;
+                nl.osExpressionTree = new OSExpressionTree();
+                nl.osExpressionTree->m_treeRoot = walkTree (e);
+                nl.m_bDeleteExpressionTree = false;
+                /*
+                 * Note: If the copy operation of the Nl class is changed from shallow
+                 * to deep, we will want to manage memory differently here.
+                 */
+                nlExprs.push_back(nl);
+            }
+        }
+
+        int nqpchk;
+//        cgrad *cg;
+
+        double* A_row_temp = new double[n_var];
+
+        for (osNLIdx = 0, aNLIdx = -1; osNLIdx < nlc; osNLIdx++, aNLIdx--)
+        {
+            if (isQP)  // No need to continue looking for quadratic terms once we have found a non-quadratic term
+            {
+                // check the nonzeroes before and after 
+                if (!fill_in) // once we know there will be fill-in, we can stop counting
                 {
                     for(cg = Cgrad[osNLIdx]; cg; cg = cg->next)
                     {
-                        if (cg->coef != 0) 
-                            if (cg->coef != A_row_temp[cg->varno]) 
-                            {
-                                fill_in = true;
-                                break;
-                            }
+                        if (cg->coef != 0) A_row_temp[cg->varno] = cg->coef;
                     }
                 }
-                continue;
+
+                nqpchk = nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp);
+                if (nqpchk > 0) // there is a quadratic part
+                {
+                    for (int v1 = 0; v1 < n_var; v1++)
+                    {
+                        for (int* psV2 = &rowqp[colqp[v1]]; psV2 < &rowqp[colqp[v1+1]]; psV2++, delsqp++)
+                        {
+                            if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
+                            {
+                                fidxs.push_back(osNLIdx);
+                                v1idxs.push_back(v1);
+                                v2idxs.push_back(*psV2);
+                                coeffs.push_back(0.5 * *delsqp);
+                            }
+                        }
+                    }
+                    if (!fill_in) // once we know there will be fill-in we can stop counting
+                    {
+                        for(cg = Cgrad[osNLIdx]; cg; cg = cg->next)
+                        {
+                            if (cg->coef != 0) 
+                                if (cg->coef != A_row_temp[cg->varno]) 
+                                {
+                                    fill_in = true;
+                                    break;
+                                }
+                        }
+                    }
+                    continue;
+                }
+                if (nqpchk < 0) isQP = false;
             }
-            if (nqpchk < 0) isQP = false;
-        }
 
 // Nonlinear or error in nqpcheck
-        {
-            Nl nl;
-            expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
-            nl.idx = osNLIdx;
-            nl.osExpressionTree = new OSExpressionTree();
-            nl.osExpressionTree->m_treeRoot = walkTree (e);
-            nl.m_bDeleteExpressionTree = false;
-            /*
-             * Note: If the copy operation of the Nl class is changed from shallow
-             * to deep, we will want to manage memory differently here.
-             */
-            nlExprs.push_back(nl);
+            {
+                Nl nl;
+                expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
+                nl.idx = osNLIdx;
+                nl.osExpressionTree = new OSExpressionTree();
+                nl.osExpressionTree->m_treeRoot = walkTree (e);
+                nl.m_bDeleteExpressionTree = false;
+                /*
+                 * Note: If the copy operation of the Nl class is changed from shallow
+                 * to deep, we will want to manage memory differently here.
+                 */
+                nlExprs.push_back(nl);
+            }
         }
-    }
-    delete [] A_row_temp;
-
-    if (nlExprs.size())
-    {
-        Nl** ppsNl = new Nl*[ nlExprs.size() ];
-        for (i = 0; i < nlExprs.size(); i++)
+        delete [] A_row_temp;
+    
+        if (nlExprs.size())
         {
-            ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
-            ppsNl[i]->m_bDeleteExpressionTree = true;
+            Nl** ppsNl = new Nl*[ nlExprs.size() ];
+            for (i = 0; i < nlExprs.size(); i++)
+            {
+                ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
+                ppsNl[i]->m_bDeleteExpressionTree = true;
+            }
+            osinstance->instanceData->nonlinearExpressions->nl = ppsNl;
         }
-        osinstance->instanceData->nonlinearExpressions->nl = ppsNl;
-    }
-    osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
-    if (fidxs.size())
-    {
-        osinstance->setQuadraticTerms((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);
-    }
+        osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
+        if (fidxs.size())
+        {
+            osinstance->setQuadraticTerms((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);
+        }
     // Note: if we intended to call objval, conval etc with asl == rw later we must call qp_opify here.
 
     //
     // end loop of nonlinear rows
     //
+    }
 
 
 
@@ -921,10 +783,11 @@ bool OSnl2OS::createOSObjects()
     for(i = 0; i < n_con; i++)
     {
         osinstance->addConstraint(i, con_name(i),
-                                  LUrhs[2*i] > -OSDBL_MAX ? LUrhs[2*i] : -OSDBL_MAX,
-                                  LUrhs[2*i+1] < OSDBL_MAX ? LUrhs[2*i+1] : OSDBL_MAX,
+                                  LUrhs[2*i]   > -OSDBL_MAX ? LUrhs[2*i]   : -OSDBL_MAX,
+                                  LUrhs[2*i+1] <  OSDBL_MAX ? LUrhs[2*i+1] :  OSDBL_MAX,
                                   constant);
     }
+
     //
     // Now the A-matrix
     // The treatment depends on whether there was fill-in during the QP check or not
@@ -1076,7 +939,7 @@ bool OSnl2OS::createOSObjects()
             osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
             osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
             osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
-// We are doing a shallow copy, so we decouple the A matrix from the AMPL data structure
+// We are doing a shallow copy, so we must decouple the A matrix from the AMPL data structure
             A_vals = NULL;
             A_rownos = NULL;
             A_colstarts = NULL; 
@@ -1137,10 +1000,13 @@ bool OSnl2OS::createOSObjects()
  *  This is not as bad as it looks because the information read from the OSoL file 
  *  is likely to be much smaller than the array-valued information in the .nl file,
  *  which triggered the merge of the .nl options with the .osol options in the first place.
- *                                  (28/Jan/2013)
+ *                                  (HIG - 28/Jan/2013)
  */
             osoption = new OSOption(); 
             osoption->deepCopyFrom(tmpoption);
+
+            //make sure to copy the jobID if it was set (from the command line)
+            if (jobID != "") osoption->setJobID(jobID);
         }
 
         bool found;
@@ -1236,7 +1102,6 @@ bool OSnl2OS::createOSObjects()
                                 outStr << "  " << d->u.i[k];
                             outStr << std::endl;
                             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
                         }
                     }
 #ifndef NDEBUG
@@ -1284,6 +1149,7 @@ bool OSnl2OS::createOSObjects()
                     for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         delete [] IBS2[i];
                     delete [] IBS2;
+#endif
                 }
                 
                 else       // not one of the special cases
@@ -1475,7 +1341,6 @@ bool OSnl2OS::createOSObjects()
                                 outStr << "  " << d->u.i[k];
                             outStr << std::endl;
                             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
                         }
                     }
 #ifndef NDEBUG
@@ -1523,6 +1388,7 @@ bool OSnl2OS::createOSObjects()
                     for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         delete [] IBS2[i];
                     delete [] IBS2;
+#endif
                 }
                 
                 else  // not one of the special cases
@@ -1925,3 +1791,5 @@ bool OSnl2OS::createOSObjects()
    
     return true;
 }
+
+

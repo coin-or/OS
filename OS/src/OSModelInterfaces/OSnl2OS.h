@@ -80,46 +80,49 @@ class OSnl2OS
 public:
     /** the OSnl2OS class constructor */
     //OSnl2OS( std::string nlfilename, std::string osol);
-	OSnl2OS();
+    OSnl2OS();
 
-	/** alternate constructor which does not allocate the ASL structs 
-	 *
-	 *  &param cw  a pointer to a (previously allocated) struct used for column-wise representation 
-	 *  &param rw  a pointer to a (previously allocated) struct used for row-wise representation
-	 *  &param asl an extra pointer that can be used to switch between rw and cw
-	 */
-	OSnl2OS(ASL *cw, ASL *rw, ASL *asl);
+    /** alternate constructor which does not allocate the ASL structs 
+     *
+     *  &param cw  a pointer to a (previously allocated) struct used for column-wise representation 
+     *  &param rw  a pointer to a (previously allocated) struct used for row-wise representation
+     *  &param asl an extra pointer that can be used to switch between rw and cw
+     */
+    OSnl2OS(ASL *cw, ASL *rw, ASL *asl);
  
     /** the OSnl2OS class destructor */
     ~OSnl2OS();
     
     /**
      * return a pointer to an ASL object
-	 * @param name carries the name of the ASL object
-	 * (there are three of them: asl, rw, cw)
-	 * @return the pointer to the object named
+     * @param name carries the name of the ASL object
+     * (there are three of them: asl, rw, cw)
+     * @return the pointer to the object named
      */
     ASL* getASL(std::string name);
 
-	/**
-	 * read the nl file
-	 * @param stub is the (relevant part of the) file name
-	 * @return whether the read was successful
-	 */
-	bool readNl(std::string stub);
+    /**
+     * read the nl file
+     * @param stub is the (relevant part of the) file name
+     * @return whether the read was successful
+     */
+    bool readNl(std::string stub);
 
-	/** set the osol string */
-	void setOsol(std::string osol);
+    /** set the osol string */
+    void setOsol(std::string osol);
 
-	/**
-	 * set the pointers to the three ASL objects
-	 * @param asl carries a pointer to the object named "asl"
-	 * @param rw  carries a pointer to the object named "rw"
-	 * @param cw  carries a pointer to the object named "cw"
-	 * (asl should point to the same location as either rw or cw)
-	 * @return whether the operation was successful
-	 */
-	bool setASL(ASL *asl, ASL *rw, ASL *cw);
+    /** set the job ID */
+    void setJobID(std::string jobID);
+
+    /**
+     * set the pointers to the three ASL objects
+     * @param asl carries a pointer to the object named "asl"
+     * @param rw  carries a pointer to the object named "rw"
+     * @param cw  carries a pointer to the object named "cw"
+     * (asl should point to the same location as either rw or cw)
+     * @return whether the operation was successful
+     */
+    bool setASL(ASL *asl, ASL *rw, ASL *cw);
 
     /**
      * create an OSInstance and OSOption representation from the AMPL nl content 
@@ -130,6 +133,25 @@ public:
      * @return whether the OS objects were created successfully.
      */
     bool createOSObjects(); 
+
+    /**
+     * store a number of variables into an OSInstance object 
+     * @param osinstance: a pointer to the OSInstance object
+     * @param lower: index of the first variable to be set in this call
+     * @param upper: set all variables from lower...upper-1
+     * @param vartype: the type of the variable (in AMPL this is 'C', 'B' or 'I')
+     */
+    void setVar(OSInstance *osinstance, int lower, int upper, char vartype);
+
+    /**
+     * special version of the previous method because AMPL makes no distinction
+     * between integer and binary variables that occur in nonlinear expressions.
+     * The actual type ('B' or 'I') must be inferred from the variable bounds. 
+     * @param osinstance: a pointer to the OSInstance object
+     * @param lower: index of the first variable to be set in this call
+     * @param upper: set all variables from lower...upper-1
+     */
+    void setIBVar(OSInstance *osinstance, int lower, int upper);
 
     /**
      * we may need to parse an OSoL file if there is suffix information 
@@ -159,6 +181,12 @@ public:
      *  If osoption is NULL, the option information is found in osol.
      */
     std::string osol;
+
+    /** jobID is a string containing a jobID that may have been supplied
+     *  on the command line (it may be empty). 
+     *  If osoption is not NULL, the jobID has been duplicated to osoption.
+     */
+    std::string jobID;
     
     std::vector<std::string> op_type;
     std::vector<double> operand;

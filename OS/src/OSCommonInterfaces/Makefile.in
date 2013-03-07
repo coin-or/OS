@@ -58,10 +58,10 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSCommonInterfaces_la_LIBADD =
 am_libOSCommonInterfaces_la_OBJECTS = OSCommandLine.lo \
-	OSExpressionTree.lo OSGeneral.lo OSInstance.lo OSResult.lo \
-	OSgLWriter.lo OSiLReader.lo OSiLWriter.lo OSoLWriter.lo \
-	OSoLReader.lo OSOption.lo OSnLNode.lo OSrLReader.lo \
-	OSrLWriter.lo OSDefaultSolver.lo
+	OSCommandLineReader.lo OSExpressionTree.lo OSGeneral.lo \
+	OSInstance.lo OSResult.lo OSgLWriter.lo OSiLReader.lo \
+	OSiLWriter.lo OSoLWriter.lo OSoLReader.lo OSOption.lo \
+	OSnLNode.lo OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo
 libOSCommonInterfaces_la_OBJECTS =  \
 	$(am_libOSCommonInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -401,6 +401,8 @@ noinst_LTLIBRARIES = libOSCommonInterfaces.la
 libOSCommonInterfaces_la_SOURCES = \
 	OSCommandLine.cpp \
 	OSCommandLine.h \
+	OSCommandLineReader.cpp \
+	OSCommandLineReader.h \
 	OSExpressionTree.cpp \
 	OSExpressionTree.h \
 	OSGeneral.cpp \
@@ -457,6 +459,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSCommandLine.h \
+	OSCommandLineReader.h \
 	OSExpressionTree.h \
         OSGeneral.h \
 	OSInstance.h \
@@ -524,6 +527,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCommandLine.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCommandLineReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSDefaultSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSExpressionTree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSGeneral.Plo@am__quote@

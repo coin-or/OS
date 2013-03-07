@@ -130,6 +130,7 @@
 #endif
 
 #include "OSCommandLine.h"
+#include "OSCommandLineReader.h"
 
 #include <stdio.h>
 #include <map>
@@ -154,7 +155,6 @@ int ossslex_destroy(void* scanner);
 void interactiveShell();
 
 std::string get_help();
-std::string get_version();
 std::string get_options();
 void list_options(OSCommandLine *oscommandline);
 
@@ -209,12 +209,15 @@ int main(int argC, const char* argV[])
 
 //    osoptions = new osOptionsStruc();
     OSCommandLine *oscommandline = new OSCommandLine();
+    OSCommandLineReader *oscommandlinereader = new OSCommandLineReader();
     bool scannerActive = false;
+    ostringstream echo_cl;
         
     try
     {
         
-    // make sure we do not exceed max allowed characters in command line
+        // Assemble the command line arguments into a single string
+        std::ostringstream osssStr;
         bool addQuotes;
         for (i=1; i < argC; i++)
         {
@@ -228,124 +231,31 @@ int main(int argC, const char* argV[])
                         break;
                     }
                 }
-            if (addQuotes)
-            {
-                if (strlen(osss) + strlen(argV[i]) + 3 > MAXCHARS)
-                    throw ErrorClass("The command line exceeds allocated storage. Increase parameter MAXCHARS.");
-                strcat(osss, quote);
-                strcat(osss, argV[i]);
-                strcat(osss, quote);
-                strcat(osss, space);
-            }
-            else
-            {
-                if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
-                    throw ErrorClass("The command line exceeds allocated storage. Increase parameter MAXCHARS.");
-                strcat(osss, argV[i]);
-                strcat(osss, space);
-            }
+            if (addQuotes) 
+                osssStr << '\"';
+            osssStr << argV[i];
+            if (addQuotes) 
+                osssStr << '\"';
+            osssStr << " ";
         }
 
+        // this output must be held in abeyance until the command line
+        // has been processed and printLevel has been set
 #ifndef NDEBUG
-        outStr.str("");
-        outStr.clear();
-        outStr << "Input String = " << osss << std::endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+        echo_cl.str("");
+        echo_cl.clear();
+        echo_cl << "Command line = " << osssStr.str() << std::endl;
 #endif
 
-        scannerActive = true;
-        ossslex_init(&scanner);
-
-#ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
-#endif
-
-        setyyextra(oscommandline, scanner);
-
-#ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call scan string\n");
-#endif
-
-        osss_scan_string(osss, scanner);
-
-#ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call ossslex\n");
-#endif
-
-        ossslex(scanner);
-        ossslex_destroy(scanner);
-        scannerActive = false;
-
-#ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Done with call to ossslex\n");
-#endif
-
-        // if there is a config file, get those options
-        if (oscommandline->configFile != "")
-        {
-            scannerActive = true;
-            ossslex_init(&scanner);
-            configFileName = oscommandline->configFile;
-
-#ifndef NDEBUG
-            outStr.str("");
-            outStr.clear();
-            outStr << "configFileName = " << configFileName << std::endl;
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-
-            std::string configFileOptions = fileUtil->getFileAsString(
-                                              configFileName.c_str());
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
-#endif
-
-            setyyextra(oscommandline, scanner);
-
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Done with call Text Extra\n");
-#endif
-
-            osss_scan_string(configFileOptions.c_str(), scanner);
-            ossslex(scanner);
-            ossslex_destroy(scanner);
-
-            /** 
-             * If we are here, then the command line had a configure file.
-             * Command line options should override the config file so go
-             * back and get these options again
-             */
-            
-            ossslex_init(&scanner);
-
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
-#endif
-
-            setyyextra(oscommandline, scanner);
-
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call scan string\n");
-#endif
-
-            osss_scan_string(osss, scanner);
-
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "call ossslex\n");
-#endif
-
-            ossslex(scanner);
-            ossslex_destroy(scanner);
-            scannerActive = false;           
-        }
+        oscommandline = oscommandlinereader->readCommandLine((osssStr.str()).c_str());
     }
     catch (const ErrorClass& eclass)
     {
-		reportErrors(oscommandline, eclass.errormsg);
+        reportErrors(oscommandline, eclass.errormsg);
         delete fileUtil;
         fileUtil = NULL;
-        delete oscommandline;
-        oscommandline = NULL;
+        delete oscommandlinereader;
+        oscommandlinereader = NULL;
         return 1;
     }
 
@@ -365,12 +275,18 @@ int main(int argC, const char* argV[])
                 osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)( oscommandline->printLevel % 100),
                                                   (ENUM_OUTPUT_AREA )((oscommandline->printLevel / 100) - 1));
 
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, echo_cl.str());
+#endif
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
         }
+#ifndef NDEBUG
         else
         {
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, echo_cl.str());
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());            
         }
+#endif
 
         if (oscommandline->logFile != "")
         {
@@ -418,8 +334,8 @@ int main(int argC, const char* argV[])
             outStr << std::endl << std::endl << get_help() << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, outStr.str());
 
-            delete oscommandline;
-            oscommandline = NULL;
+            delete oscommandlinereader;
+            oscommandlinereader = NULL;
             return 0;
         }
 
@@ -430,16 +346,16 @@ int main(int argC, const char* argV[])
             outStr << std::endl << std::endl << OSgetVersionInfo() << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, outStr.str());
 
-            delete oscommandline;
-            oscommandline = NULL;
+            delete oscommandlinereader;
+            oscommandlinereader = NULL;
             return 0;
         }
     }
     catch (const ErrorClass& eclass)
     {
-		reportErrors(oscommandline, eclass.errormsg);
-        delete oscommandline;
-        oscommandline = NULL;
+        reportErrors(oscommandline, eclass.errormsg);
+        delete oscommandlinereader;
+        oscommandlinereader = NULL;
         return 1;
     }
 
@@ -461,6 +377,7 @@ int main(int argC, const char* argV[])
     if(oscommandline->browser != "") outStr << "Browser Value = " << oscommandline->browser << endl;
     if(oscommandline->solverName != "") outStr << "Selected Solver = " << oscommandline->solverName << endl;
     if(oscommandline->serviceLocation != "") outStr << "Service Location = " << oscommandline->serviceLocation << endl;
+    if(oscommandline->jobID != "") outStr << "Job ID = " << oscommandline->jobID << endl;
     if(oscommandline->printModel) outStr << "print model prior to solve/send" << endl;
     if(oscommandline->printRowNumberAsString != "") outStr << "print model row " << oscommandline->printRowNumberAsString << " prior to solve/send" << endl;
     outStr << "print level for stdout: " << oscommandline->printLevel << endl;
@@ -473,6 +390,7 @@ int main(int argC, const char* argV[])
     osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
+
     //convert solver name to lower case so there is no ambiguity
     unsigned int k;
     for (k = 0; k < oscommandline->solverName.length(); k++)
@@ -480,7 +398,7 @@ int main(int argC, const char* argV[])
         oscommandline->solverName[k] = (char)tolower(oscommandline->solverName[k]);
     }
 
-    // get the data from the schema files
+    // read the data from the schema files
     fileUtil = new FileUtil();
     try
     {
@@ -507,10 +425,10 @@ int main(int argC, const char* argV[])
         outStr.clear();
         outStr << eclass.errormsg <<  endl;
         outStr << "could not open file properly" << endl;
-		reportErrors(oscommandline, outStr.str());
+        reportErrors(oscommandline, outStr.str());
 
-        delete oscommandline;
-        oscommandline = NULL;
+        delete oscommandlinereader;
+        oscommandlinereader = NULL;
         delete fileUtil;
         fileUtil = NULL;
         return 1;
@@ -528,8 +446,7 @@ int main(int argC, const char* argV[])
 
     OSiLReader* osilreader = new OSiLReader(); 
 
-    // now call the correct serviceMethod
-    // solve is the default
+    // the default serviceMethod is solve
     if (oscommandline->serviceMethod == "") oscommandline->serviceMethod = "solve";
 
     try
@@ -539,6 +456,7 @@ int main(int argC, const char* argV[])
             if (oscommandline->serviceMethod != "solve") 
                 throw ErrorClass("No serviceLocation given. Only \'solve\' is available locally.");
 
+        // now call the correct serviceMethod
         if (oscommandline->serviceMethod[0] == 's')
         {
             // for solve or send commands we must have an instance
@@ -611,20 +529,19 @@ int main(int argC, const char* argV[])
                     if (oscommandline->osoption != NULL)
                         osrl = runSolver(oscommandline->solverName, oscommandline->osoption, oscommandline->osinstance);
                     else
-{
-                        osrl = runSolver(oscommandline->solverName, oscommandline->osol, oscommandline->osinstance);
-}                else
+                        osrl = runSolver(oscommandline->solverName, oscommandline->osol,     oscommandline->osinstance);
+                else
                     if (oscommandline->osoption != NULL)
                         osrl = runSolver(oscommandline->solverName, oscommandline->osoption, oscommandline->osil);
                     else
-                        osrl = runSolver(oscommandline->solverName, oscommandline->osol, oscommandline->osil);
+                        osrl = runSolver(oscommandline->solverName, oscommandline->osol,     oscommandline->osil);
                 reportResults(oscommandline, osrl);
             }
     
             // remote solve or send
             else
             {
-                makeStrings(oscommandline);
+                //makeStrings(oscommandline);
                 if (oscommandline->serviceMethod[1] == 'e')
                     send(oscommandline);
                 else
@@ -654,12 +571,17 @@ int main(int argC, const char* argV[])
         }
 
         // garbage collection
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Initiate garbage collection in main()"); 
+#endif
         if (osilreader != NULL)
+        {
             delete osilreader;
             oscommandline->osinstance = NULL;
+        }
         osilreader = NULL;
-        delete oscommandline;
-        oscommandline = NULL;
+        delete oscommandlinereader;
+        oscommandlinereader = NULL;
         delete fileUtil;
         fileUtil = NULL;
         if (mps != NULL)
@@ -676,18 +598,21 @@ int main(int argC, const char* argV[])
             delete gams;
         gams = NULL;
 #endif
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Garbage collection in main() completed"); 
+#endif
         return 0;
     }
 
     catch (const ErrorClass& eclass)
     {
-		reportErrors(oscommandline, eclass.errormsg);
+        reportErrors(oscommandline, eclass.errormsg);
         if (osilreader != NULL)
             delete osilreader;
             oscommandline->osinstance = NULL;
         osilreader = NULL;
-        delete oscommandline;
-        oscommandline = NULL;
+        delete oscommandlinereader;
+        oscommandlinereader = NULL;
         delete fileUtil;
         fileUtil = NULL;
         if (mps != NULL)
@@ -725,8 +650,8 @@ bool findInstance(OSCommandLine *oscommandline, MPS_PTR *mps2osil, AMPL_PTR *nl2
     fileUtil = new FileUtil();
 
 /**
- *  OSiL files are simply read into oscommandline->osil in the calling program
- *  other file formats (MPS, AMPL .nl, GAMS .dat files) will be processed here 
+ *  OSiL files are simply read into oscommandline->osil in the calling program.
+ *  Other file formats (MPS, AMPL .nl, GAMS .dat files) will be processed here 
  *  and parsed into an osinstance object.
  */
     try
@@ -750,6 +675,7 @@ bool findInstance(OSCommandLine *oscommandline, MPS_PTR *mps2osil, AMPL_PTR *nl2
             if (!nl2os->readNl(oscommandline->nlFile))
                 throw ErrorClass("Error reading .nl file.");
             nl2os->setOsol(oscommandline->osol);
+            nl2os->setJobID(oscommandline->jobID);
             nl2os->createOSObjects() ;
             oscommandline->osinstance = nl2os->osinstance;
 #else
@@ -805,8 +731,27 @@ void makeStrings(OSCommandLine *oscommandline)
         delete osilwriter;
         osilwriter = NULL; 
     }
-    if (oscommandline->osoption != NULL)
+
+/** With the options we need to be a little more careful:
+ *  Options can be in osol and jobID strings (either can be missing)
+ *  or in an osoption object (which would include both of the above)
+ *  or missing entirely (in which case a dummy string needs to be created)
+ */
+    OSoLReader *osolreader = NULL;
+    if (oscommandline->osoption != NULL || oscommandline->jobID != "" || oscommandline->osol == "")
     {
+        if (oscommandline->osoption == NULL)
+        {
+            oscommandline->osoption = new OSOption();
+            if (oscommandline->osol != "")
+            { 
+                osolreader = new OSoLReader();
+                oscommandline->osoption = osolreader->readOSoL(oscommandline->osol);
+            }
+            if (oscommandline->jobID != "")
+                oscommandline->osoption->setJobID(oscommandline->jobID);
+        }
+
         OSoLWriter *osolwriter = new OSoLWriter();
         oscommandline->osol = osolwriter->writeOSoL(oscommandline->osoption);
 #ifndef NDEBUG
@@ -815,6 +760,12 @@ void makeStrings(OSCommandLine *oscommandline)
         delete osolwriter;
         osolwriter = NULL;
     }
+    if (osolreader != NULL)
+    {
+        delete osolreader;
+        oscommandline->osoption = NULL;
+    }
+    osolreader = NULL;
 }
 
 /** Next we have implementations of the six remote service methods
@@ -834,15 +785,10 @@ void solve(OSCommandLine *oscommandline)
         // place a remote call
         osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
-        if (oscommandline->osol == "")  // we have no osol string; create a dummy
-        {
-            std::ostringstream outStr;
-            outStr
-                << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
-            outStr << OS_SCHEMA_VERSION;
-            outStr << "/OSoL.xsd\"></osol>";
-            oscommandline->osol = outStr.str();
-        }
+        //no need to worry about jobID, but make sure we have strings
+        oscommandline->jobID = "";
+        makeStrings(oscommandline);
+
         osrl = osagent->solve(oscommandline->osil, oscommandline->osol);
         delete osagent;
         osagent = NULL;
@@ -871,66 +817,55 @@ void send(OSCommandLine *oscommandline)
     bool bSend = false;
     OSSolverAgent* osagent = NULL;
     ostringstream outStr;
-    OSoLReader *osolreader = NULL;
 
     try
     {
         osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
-        // check to see if there is an osol and get a jobId if necessary
-        if (oscommandline->osoption == NULL)
-        {
-            oscommandline->osoption = new OSOption();
-            if (oscommandline->osol == "")
-            {
-                OSoLReader *osolreader = new OSoLReader();
-                oscommandline->osoption = osolreader->readOSoL(oscommandline->osol);
-            }
-        }
-        bool modifiedOSoL = false;
 
-        // get a jobId if necessary
-        if (oscommandline->osoption->getJobID() == "")
+        // get a job ID if necessary
+        if (oscommandline->jobID == "NEW")
         {
             oscommandline->jobID = osagent->getJobID("");
-            oscommandline->osoption->setJobID(oscommandline->jobID);
-            modifiedOSoL = true;
-        }    
-        if (modifiedOSoL || oscommandline->osol == "")
-        {
-            // now write the osOption object into a string
-            OSoLWriter *osolWriter = NULL;
-            osolWriter = new OSoLWriter();
-            oscommandline->osol = osolWriter->writeOSoL(oscommandline->osoption);
-            delete osolWriter;
-            osolWriter = NULL;
+            if (oscommandline->osoption != NULL)
+                oscommandline->osoption->setJobID(oscommandline->jobID);
         }
+
+        makeStrings(oscommandline);
+
+        outStr.str("");
+        outStr.clear();
+        outStr << "Submitting Job " << oscommandline->jobID << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
+
         bSend = osagent->send(oscommandline->osil, oscommandline->osol);
+
+        outStr.str("");
+        outStr.clear();
+        outStr << "Job " << oscommandline->jobID;
+
         if (bSend == true)
         {
-            outStr << "Job " << oscommandline->jobID << " successfully submitted." << std::endl;
+            outStr << " successfully submitted." << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
         }
         else
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, 
-                "Send failed, check to make sure you sent a jobID not on the system.");
+        {
+            outStr << ": send failed." << std::endl;
+            outStr << "Check to make sure you sent a jobID not on the system." << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, outStr.str());
+        }
           
         delete osagent;
         osagent = NULL;
-        if (osolreader != NULL)
-            delete osolreader;
-        osolreader = NULL;
     }
 
     catch (const ErrorClass& eclass)
     {
-		reportErrors(oscommandline, eclass.errormsg);
+        reportErrors(oscommandline, eclass.errormsg);
         if (osagent != NULL)
             delete osagent;
         osagent = NULL;
-        if (osolreader != NULL)
-            delete osolreader;
-        osolreader = NULL;
     }
 }//end send
 
@@ -957,7 +892,7 @@ void getJobID(OSCommandLine *oscommandline)
 
     catch (const ErrorClass& eclass)
     {
-		reportErrors(oscommandline, eclass.errormsg);
+        reportErrors(oscommandline, eclass.errormsg);
         if (osagent != NULL)
             delete osagent;
         osagent = NULL;
@@ -1012,9 +947,10 @@ void knock(OSCommandLine *oscommandline)
     }
     catch (const ErrorClass& eclass)
     {
- 		reportErrors(oscommandline, eclass.errormsg);
+         reportErrors(oscommandline, eclass.errormsg);
         if (osagent != NULL)
             delete osagent;
+
         osagent = NULL;
 
         delete fileUtil;
@@ -1054,7 +990,7 @@ void retrieve(OSCommandLine *oscommandline)
             }
 
             osrl = osagent->retrieve(oscommandline->osol);
-			reportResults(oscommandline, osrl);
+            reportResults(oscommandline, osrl);
             delete osagent;
             osagent = NULL;
         }
@@ -1069,7 +1005,7 @@ void retrieve(OSCommandLine *oscommandline)
     }
     catch (const ErrorClass& eclass)
     {
-		reportErrors(oscommandline, eclass.errormsg);
+        reportErrors(oscommandline, eclass.errormsg);
         if (osagent != NULL)
             delete osagent;
         osagent = NULL;
@@ -1130,7 +1066,7 @@ void kill(OSCommandLine *oscommandline)
     }
     catch (const ErrorClass& eclass)
     {
-		reportErrors(oscommandline, eclass.errormsg);
+        reportErrors(oscommandline, eclass.errormsg);
         if (osagent != NULL)
             delete osagent;
         osagent = NULL;
@@ -1204,6 +1140,7 @@ void getOSiLFromNl(OSCommandLine *oscommandline)
         nl2os = new OSnl2OS();
         nl2os->readNl(oscommandline->nlFile);
         nl2os->setOsol(oscommandline->osol);
+        nl2os->setJobID(oscommandline->jobID);
         nl2os->createOSObjects();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
@@ -1265,6 +1202,7 @@ void getOSiLFromMps(OSCommandLine *oscommandline)
         mps2osil = new OSmps2osil(oscommandline->mpsFile);
         mps2osil->createOSInstance();
         OSiLWriter *osilwriter = NULL;
+
         osilwriter = new OSiLWriter();
         std::string osil;
         osil = osilwriter->writeOSiL(mps2osil->osinstance);
@@ -1471,7 +1409,7 @@ void interactiveShell()
                                     }
                                     else
                                     {
-                                        makeStrings(oscommandline);
+                                        //makeStrings(oscommandline);
                                         solve(oscommandline);
                                     }
                                     if (oscommandline->osrlFile != "")
@@ -1497,7 +1435,7 @@ void interactiveShell()
                                             break;
                                         }
                                     }
-                                    makeStrings(oscommandline);
+                                    //makeStrings(oscommandline);
                                     send(oscommandline);
                                     if (oscommandline->osrlFile != "")
                                         std::cout << "\nSolve command executed. Please see " 
@@ -1650,10 +1588,12 @@ void interactiveShell()
                                     throw ErrorClass("we don't have a valid command");
 
 
+
                         } //end switch
 
                     }
                     else     // now in the case where we require option values
+
                     {
 
                         if (optionValue == "")
@@ -1953,6 +1893,7 @@ void interactiveShell()
         if (mps != NULL)
             delete mps;
         mps = NULL;
+
 #ifdef COIN_HAS_ASL
         if (ampl != NULL)
             delete ampl;
@@ -2158,17 +2099,6 @@ std::string get_help()
     return helpMsg.str();
 }// get help
 
-
-std::string get_version()
-{
-    std::ostringstream versionMsg;
-    versionMsg << "In order to find the version of this project " << endl;
-    versionMsg << "connect to the directory where you downloaded " << endl;
-    versionMsg << "and do: " << endl;
-    versionMsg << "svn info " << endl;
-
-    return versionMsg.str();
-}// get version
 
 std::string get_options()
 {
