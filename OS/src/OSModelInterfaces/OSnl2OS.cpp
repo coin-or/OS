@@ -965,7 +965,7 @@ bool OSnl2OS::createOSObjects()
 
         // check if there are any suffixes to deal with and read options if necessary
         bool have_primal = false;
-        for (int i=0; i < n_var; i++)
+        for (i=0; i < n_var; i++)
         {
             if (havex0[i] != 0) 
             {
@@ -975,7 +975,7 @@ bool OSnl2OS::createOSObjects()
         }
 
         bool have_dual = false;
-        for (int i=0; i < n_con; i++)
+        for (i=0; i < n_con; i++)
         {
             if (havepi0[i] != 0) 
             {
@@ -1101,7 +1101,8 @@ bool OSnl2OS::createOSObjects()
                             for (int k=0; k<n_var; k++)
                                 outStr << "  " << d->u.i[k];
                             outStr << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                         }
                     }
 #ifndef NDEBUG
@@ -1149,7 +1150,6 @@ bool OSnl2OS::createOSObjects()
                     for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         delete [] IBS2[i];
                     delete [] IBS2;
-#endif
                 }
                 
                 else       // not one of the special cases
@@ -1340,7 +1340,8 @@ bool OSnl2OS::createOSObjects()
                             for (int k=0; k<n_con; k++)
                                 outStr << "  " << d->u.i[k];
                             outStr << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                         }
                     }
 #ifndef NDEBUG
@@ -1388,7 +1389,6 @@ bool OSnl2OS::createOSObjects()
                     for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         delete [] IBS2[i];
                     delete [] IBS2;
-#endif
                 }
                 
                 else  // not one of the special cases
