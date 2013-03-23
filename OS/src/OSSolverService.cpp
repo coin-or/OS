@@ -391,18 +391,15 @@ int main(int argC, const char* argV[])
 
         if (oscommandline->printLevel != DEFAULT_OUTPUT_LEVEL)
         {
-            if (oscommandline->printLevel < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
-                osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)oscommandline->printLevel);
-            else
-                osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)( oscommandline->printLevel % 100),
-                                                  (ENUM_OUTPUT_AREA )((oscommandline->printLevel / 100) - 1));
-
+            osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)oscommandline->printLevel);
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
         }
+#ifndef NDEBUG
         else
         {
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());            
         }
+#endif
 
         if (oscommandline->logFile != "")
         {
@@ -430,12 +427,7 @@ int main(int argC, const char* argV[])
 
             if (oscommandline->filePrintLevel != DEFAULT_OUTPUT_LEVEL)
             {
-                if (oscommandline->printLevel < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
-                    osoutput->SetPrintLevel(oscommandline->logFile, (ENUM_OUTPUT_LEVEL)oscommandline->filePrintLevel);
-                else
-                    osoutput->SetPrintLevel(oscommandline->logFile,
-                                                (ENUM_OUTPUT_LEVEL)( oscommandline->filePrintLevel % 100),
-                                                (ENUM_OUTPUT_AREA )((oscommandline->filePrintLevel / 100) - 1));
+                osoutput->SetPrintLevel(oscommandline->logFile, (ENUM_OUTPUT_LEVEL)oscommandline->filePrintLevel);
             }
             else
             {

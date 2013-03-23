@@ -270,8 +270,9 @@ int main(int argC, const char* argV[])
 
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, echo_cl.str());
-#endif
+#else
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
+#endif
         }
 #ifndef NDEBUG
         else
@@ -308,11 +309,14 @@ int main(int argC, const char* argV[])
             if (oscommandline->filePrintLevel != DEFAULT_OUTPUT_LEVEL)
             {
                 osoutput->SetPrintLevel(oscommandline->logFile, (ENUM_OUTPUT_LEVEL)oscommandline->filePrintLevel);
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
             }
+#ifndef NDEBUG
             else
             {
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());            
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());
             }
+#endif
         }
 
         if (oscommandline->invokeHelp == true)
