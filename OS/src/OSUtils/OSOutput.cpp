@@ -197,23 +197,38 @@ bool OSOutput::SetPrintLevel(std::string name, ENUM_OUTPUT_LEVEL* level, int dim
     int k = FindChannel(name);
     if (k < 0)
         throw ErrorClass("Device was not defined before");
+    for (int i=1; i<dim; i++)
+    {
+        if (level[i] < 0)
+            throw ErrorClass("printLevel must be nonnegative");
+        else if (level[i] >= ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
+            throw ErrorClass("illegal printLevel specified");
+    }
     return (outputChannel[k]->setAllPrintLevels(level, dim));
-}
-
-bool OSOutput::SetPrintLevel(std::string name, ENUM_OUTPUT_LEVEL level, ENUM_OUTPUT_AREA area)
-{
-    int k = FindChannel(name);
-    if (k < 0)
-        throw ErrorClass("Device was not defined before");
-    return (outputChannel[k]->setPrintLevel(area,level));
 }
 
 bool OSOutput::SetPrintLevel(std::string name, ENUM_OUTPUT_LEVEL level)
 {
+    int aLevel, area;
     int k = FindChannel(name);
     if (k < 0)
         throw ErrorClass("Device was not defined before");
-    return (outputChannel[k]->setAllPrintLevels(level));
+    if (level < 0)
+        throw ErrorClass("printLevel must be nonnegative");
+    if (level < 100)
+        if (level >= ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
+            throw ErrorClass("illegal printLevel specified");
+        else
+            return (outputChannel[k]->setAllPrintLevels((ENUM_OUTPUT_LEVEL)level));
+    else
+    {
+        aLevel = level % 100;
+        area =  (level / 100) - 1;
+        if (aLevel >= ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS || area >= ENUM_OUTPUT_AREA_NUMBER_OF_AREAS)
+            throw ErrorClass("illegal printLevel specified");
+        else
+            return (outputChannel[k]->setPrintLevel((ENUM_OUTPUT_AREA)area,level));
+    }
 }
 
 int OSOutput::AddChannel(std::string name)

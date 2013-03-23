@@ -3377,7 +3377,7 @@ OtherVariableOption* OSOption::getOtherVariableOption(int optionNumber)
     }
     else
         throw ErrorClass("<optimization> object must be defined before getting the data");
-}//getOtherVariableOptions
+}//getOtherVariableOption
 
 /**
  * get the list of initial objective values in sparse form
@@ -6534,6 +6534,7 @@ bool InitObjectiveBounds::addObj(int numberOfObj, InitObjBound **obj)
 
 /**
  *
+
 
 
  * A function to set an array of <obj> elements
@@ -10528,6 +10529,7 @@ bool PathPair::IsEqual(PathPair *that)
     {
         if (that == NULL)
             return true;
+
         else
         {
 #ifndef NDEBUG
@@ -13928,6 +13930,8 @@ bool OtherVariableOption::deepCopyFrom(OtherVariableOption *that)
     this->solver      = that->solver;
     this->category    = that->category;
     this->type        = that->type;
+    this->varType     = that->varType;
+    this->enumType    = that->enumType;
     this->description = that->description;
 
     int n;
@@ -14090,6 +14094,8 @@ bool OtherObjectiveOption::deepCopyFrom(OtherObjectiveOption *that)
     this->solver      = that->solver;
     this->category    = that->category;
     this->type        = that->type;
+    this->objType     = that->objType;
+    this->enumType    = that->enumType;
     this->description = that->description;
 
     int n;
@@ -14255,6 +14261,8 @@ bool OtherConstraintOption::deepCopyFrom(OtherConstraintOption *that)
     this->solver      = that->solver;
     this->category    = that->category;
     this->type        = that->type;
+    this->conType     = that->conType;
+    this->enumType    = that->enumType;
     this->description = that->description;
 
     int n;

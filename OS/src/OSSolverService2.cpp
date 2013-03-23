@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -167,11 +167,8 @@ void retrieve(OSCommandLine *oscommandline);
 void    knock(OSCommandLine *oscommandline);
 
 // additional methods
-bool findInstance(   OSCommandLine *oscommandline, MPS_PTR *mps2osil, AMPL_PTR *osnl2os, GAMS_PTR *gams2osil);
-void makeStrings(    OSCommandLine *oscommandline);
-void getOSiLFromNl(  OSCommandLine *oscommandline);
-void getOSiLFromMps( OSCommandLine *oscommandline);
-void getOSiLFromGams(OSCommandLine *oscommandline);
+bool findInstance(OSCommandLine *oscommandline, MPS_PTR *mps2osil, AMPL_PTR *osnl2os, GAMS_PTR *gams2osil);
+void makeStrings( OSCommandLine *oscommandline);
 void doPrintModel(OSCommandLine *oscommandline);
 void doPrintModel(OSInstance *osinstance);
 void doPrintRow(OSCommandLine *oscommandline);
@@ -269,11 +266,7 @@ int main(int argC, const char* argV[])
 
         if (oscommandline->printLevel != DEFAULT_OUTPUT_LEVEL)
         {
-            if (oscommandline->printLevel < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
-                osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)oscommandline->printLevel);
-            else
-                osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)( oscommandline->printLevel % 100),
-                                                  (ENUM_OUTPUT_AREA )((oscommandline->printLevel / 100) - 1));
+            osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)oscommandline->printLevel);
 
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, echo_cl.str());
@@ -314,12 +307,7 @@ int main(int argC, const char* argV[])
 
             if (oscommandline->filePrintLevel != DEFAULT_OUTPUT_LEVEL)
             {
-                if (oscommandline->printLevel < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
-                    osoutput->SetPrintLevel(oscommandline->logFile, (ENUM_OUTPUT_LEVEL)oscommandline->filePrintLevel);
-                else
-                    osoutput->SetPrintLevel(oscommandline->logFile,
-                                                (ENUM_OUTPUT_LEVEL)( oscommandline->filePrintLevel % 100),
-                                                (ENUM_OUTPUT_AREA )((oscommandline->filePrintLevel / 100) - 1));
+                osoutput->SetPrintLevel(oscommandline->logFile, (ENUM_OUTPUT_LEVEL)oscommandline->filePrintLevel);
             }
             else
             {
@@ -541,7 +529,6 @@ int main(int argC, const char* argV[])
             // remote solve or send
             else
             {
-                //makeStrings(oscommandline);
                 if (oscommandline->serviceMethod[1] == 'e')
                     send(oscommandline);
                 else
@@ -763,7 +750,7 @@ void makeStrings(OSCommandLine *oscommandline)
     if (osolreader != NULL)
     {
         delete osolreader;
-        oscommandline->osoption = NULL;
+        oscommandline->osoption = NULL; // no longer needed, and memory may have just been freed 
     }
     osolreader = NULL;
 }
@@ -815,6 +802,7 @@ void solve(OSCommandLine *oscommandline)
 void send(OSCommandLine *oscommandline)
 {
     bool bSend = false;
+    bool always_print = false;
     OSSolverAgent* osagent = NULL;
     ostringstream outStr;
 
@@ -822,10 +810,10 @@ void send(OSCommandLine *oscommandline)
     {
         osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
-
         // get a job ID if necessary
         if (oscommandline->jobID == "NEW")
         {
+            always_print = true;
             oscommandline->jobID = osagent->getJobID("");
             if (oscommandline->osoption != NULL)
                 oscommandline->osoption->setJobID(oscommandline->jobID);
@@ -847,7 +835,10 @@ void send(OSCommandLine *oscommandline)
         if (bSend == true)
         {
             outStr << " successfully submitted." << std::endl;
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
+            if (always_print)
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, outStr.str());
+            else
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info,   outStr.str());
         }
         else
         {
@@ -1127,98 +1118,6 @@ void reportErrors(OSCommandLine *oscommandline, std::string errormsg)
         reportResults(oscommandline, osrl);
 }// reportErrors
 
-/** Some wrappers around routines that allow getting problem instances in other formats:
- *  .nl (from AMPL), GAMS, MPS format
- */
-
-void getOSiLFromNl(OSCommandLine *oscommandline)
-{
-    try
-    {
-#ifdef COIN_HAS_ASL
-        OSnl2OS *nl2os = NULL;
-        nl2os = new OSnl2OS();
-        nl2os->readNl(oscommandline->nlFile);
-        nl2os->setOsol(oscommandline->osol);
-        nl2os->setJobID(oscommandline->jobID);
-        nl2os->createOSObjects();
-        OSiLWriter *osilwriter = NULL;
-        osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL( nl2os->osinstance);
-        oscommandline->osil = osil;
-        delete nl2os;
-        nl2os = NULL;
-        delete osilwriter;
-        osilwriter = NULL;
-#else
-        throw ErrorClass(
-            "trying to convert nl to osil without AMPL ASL configured");
-#endif
-    }
-    catch (const ErrorClass& eclass)
-    {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
-        throw ErrorClass(eclass.errormsg);
-    }
-}//getOSiLFromNl
-
-
-void getOSiLFromGams(OSCommandLine *oscommandline)
-{
-    try
-    {
-#ifdef COIN_HAS_GAMSUTILS
-        OSgams2osil *gams2osil = NULL;
-        gams2osil = new OSgams2osil( oscommandline->gamsControlFile);
-        gams2osil->createOSInstance();
-        OSiLWriter *osilwriter = NULL;
-        osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL( gams2osil->osinstance);
-        oscommandline->osil = osil;
-        delete gams2osil;
-        gams2osil = NULL;
-        delete osilwriter;
-        osilwriter = NULL;
-#else
-        throw ErrorClass(
-            "trying to convert Gams control file to osil without GAMSUTILS configured");
-#endif
-    }
-    catch (const ErrorClass& eclass)
-    {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
-        throw ErrorClass(eclass.errormsg);
-    }
-}//getOSiLFromGams
-
-
-void getOSiLFromMps(OSCommandLine *oscommandline)
-{
-    try
-    {
-        OSmps2osil *mps2osil = NULL;
-        mps2osil = new OSmps2osil(oscommandline->mpsFile);
-        mps2osil->createOSInstance();
-        OSiLWriter *osilwriter = NULL;
-
-        osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL(mps2osil->osinstance);
-        oscommandline->osil = osil;
-        delete mps2osil;
-        mps2osil = NULL;
-        delete osilwriter;
-        osilwriter = NULL;
-    }
-    catch (const ErrorClass& eclass)
-    {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
-        throw ErrorClass(eclass.errormsg);
-    }
-
-}//getOSiLFromMps
 
 
 /** ======================== Interactive shell ========================= **/
@@ -1817,13 +1716,8 @@ void interactiveShell()
                                     case 11: //printLevel
                                         if (oscommandline->printLevel != DEFAULT_OUTPUT_LEVEL)
                                         {
-                                            if (oscommandline->printLevel < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
-                                                osoutput->SetPrintLevel("stdout", 
+                                            osoutput->SetPrintLevel("stdout", 
                                                     (ENUM_OUTPUT_LEVEL)oscommandline->printLevel);
-                                            else
-                                                osoutput->SetPrintLevel("stdout", 
-                                                    (ENUM_OUTPUT_LEVEL)( oscommandline->printLevel % 100),
-                                                    (ENUM_OUTPUT_AREA )((oscommandline->printLevel / 100) - 1));
                                         }
                                         break;
 
@@ -1850,13 +1744,8 @@ void interactiveShell()
                                     case 13: //filePrintLevel
                                         if (oscommandline->filePrintLevel != DEFAULT_OUTPUT_LEVEL)
                                         {
-                                            if (oscommandline->printLevel < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS)
-                                                osoutput->SetPrintLevel(oscommandline->logFile,
+                                            osoutput->SetPrintLevel(oscommandline->logFile,
                                                     (ENUM_OUTPUT_LEVEL)oscommandline->filePrintLevel);
-                                            else
-                                                osoutput->SetPrintLevel(oscommandline->logFile,
-                                                    (ENUM_OUTPUT_LEVEL)( oscommandline->filePrintLevel % 100),
-                                                    (ENUM_OUTPUT_AREA )((oscommandline->filePrintLevel / 100) - 1));
                                         }
                                         break;
 

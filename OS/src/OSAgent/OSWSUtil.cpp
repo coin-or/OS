@@ -127,15 +127,16 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
             outStr.str("");
             outStr.clear();
             outStr << "Message size =  " << recvMsgSize << endl;
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
-            printf("%s\n", httpBuffer);
-            if(recvMsgSize < (RCVBUFSIZE - 1) )
-            {
-                for(n = 0; n < recvMsgSize; n++)
-                {
-                    char_val = httpBuffer[ n];
-                }
-            }
+            outStr << httpBuffer << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+//            printf("%s\n", httpBuffer);
+//            if(recvMsgSize < (RCVBUFSIZE - 1) )
+//            {
+//                for(n = 0; n < recvMsgSize; n++)
+//                {
+//                    char_val = httpBuffer[ n];
+//                }
+//            }
 #endif
             ret_message << httpBuffer;
             // clear the buffer

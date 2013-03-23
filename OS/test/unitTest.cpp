@@ -2175,6 +2175,7 @@ if (PARSER_TESTS){
         if (!ok)
             throw ErrorClass(" error in get/set OtherConstraintOptions");
 
+
 #endif
 
         SolverOption** SO;
@@ -8995,7 +8996,7 @@ if (OTHER_TESTS){
         delete osresult;
         osresult = NULL;
 
-// compare suffixtest.sol to suffixtest.check
+// compare suffixtest.sol to suffixtest.cmp
 
         std::cout << std::endl << "compare results" << std::endl << std::endl;
 

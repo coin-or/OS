@@ -5,7 +5,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2012-2013, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -230,17 +230,11 @@ public:
      */
     bool SetPrintLevel(std::string name, ENUM_OUTPUT_LEVEL* level, int dim);
 
-    /** Modify one particular print level associated with a channel
-     *  @param name:  The name of the channel ("stdout" and "stderr" are reserved names)
-     *  @param level: The print level to be used for the output to this channel
-     *  @param area:  The area of the code to which this print level applies
-     *  @return whether the operation was successful
-     */
-    bool SetPrintLevel(std::string name, ENUM_OUTPUT_LEVEL level, ENUM_OUTPUT_AREA area);
-
-    /** set all print levels associated with a channel to the same value
+    /** set the print level associated with a channel
      *  @param name: The name of the channel ("stdout" and "stderr" are reserved names)
-     *  @param level: The global print level used for the output to this channel
+     *  @param level: The print level used for the output to this channel
+     *      if < ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS, set the (same) print level in all areas
+     *      otherwise set the print level only in one particular area
      *  @return whether the operation was successful
      */
     bool SetPrintLevel(std::string name, ENUM_OUTPUT_LEVEL level);
