@@ -70,7 +70,7 @@ OSosrl2ampl::~OSosrl2ampl()
 {
 }
 
-bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
+bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
 {
     OSrLReader *osrlreader = NULL;
     OSResult   *osresult;
@@ -121,33 +121,45 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
             dualValPair = osresult->getOptimalDualVariableValues( 0);
             primalValPair = osresult->getOptimalPrimalVariableValues( 0);
 
-            for( i = 0; i < numVars; i++)
+            for (i = 0; i < numVars; i++)
             {
-                x[ i] = 0.0;
+                x[i] = 0.0;
             }
             vecSize = primalValPair.size();
             for (i = 0; i < vecSize; i++)
             {
                 x[ primalValPair[i]->idx ] = primalValPair[i]->value;
-                //std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
-                //std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "index =  " << primalValPair[i]->idx   << std::endl;
+                outStr << "value =  " << primalValPair[i]->value << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
             }
 
             for (i = 0; i < numCons; i++)
             {
-                y[ i] = 0.0;
+                y[i] = 0.0;
             }
             vecSize = dualValPair.size();
             for (i = 0; i < vecSize; i++)
             {
                 y[ dualValPair[i]->idx ] = dualValPair[i]->value;
-                //std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
-                //std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "index =  " << dualValPair[i]->idx   << std::endl;
+                outStr << "value =  " << dualValPair[i]->value << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
             }
 
             // return all solution results that are indexed over variables, objectives or constraints as suffixes
 
             int n;
+            double **rData = NULL;
+            int    **iData = NULL;
             double* rvalues = NULL;
             int*    ivalues = NULL;
             int     nSuffixes = 0;
@@ -181,117 +193,119 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 nSuffixes++;
             }
 
-            // Create a suffix table
-
-            int k = 0;
-            suftab = new SufDecl[nSuffixes];
-            SufDecl temp;
-            std::string s;
-            char* p;
-
-            for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++, k++)
+            if (nSuffixes > 0)
             {
-                s = osresult->getOtherVariableResultName(0, i);
-                suftab[k].name = new char[s.size()+1];
-                s.copy(suftab[k].name, s.size(), 0);
-                suftab[k].name[s.size()] = '\0';
+                // Create a suffix table
+
+                int k = 0;
+                suftab = new SufDecl[nSuffixes];
+                SufDecl temp;
+                std::string s;
+                char* p;
+    
+                for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++, k++)
+                {
+                    s = osresult->getOtherVariableResultName(0, i);
+                    suftab[k].name = new char[s.size()+1];
+                    s.copy(suftab[k].name, s.size(), 0);
+                    suftab[k].name[s.size()] = '\0';
+
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+    
+                    suftab[k].table  = NULL;
+                    suftab[k].kind   = ASL_Sufkind_var;
+                    suftab[k].nextra = 1;
+                }
+                for (i=0; i < osresult->getNumberOfOtherObjectiveResults(0); i++, k++)
+                {
+                    s = osresult->getOtherObjectiveResultName(0, i);
+                    suftab[k].name = new char[s.size()+1];
+                    s.copy(suftab[k].name, s.size(), 0);
+                    suftab[k].name[s.size()] = '\0';
+
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+
+                    suftab[k].table  = NULL;
+                    suftab[k].kind   = ASL_Sufkind_obj;
+                    suftab[k].nextra = 1;
+                }
+                for (i=0; i < osresult->getNumberOfOtherConstraintResults(0); i++, k++)
+                {
+                    s = osresult->getOtherConstraintResultName(0, i);
+                    suftab[k].name = new char[s.size()+1];
+                    s.copy(suftab[k].name, s.size(), 0);
+                    suftab[k].name[s.size()] = '\0';
+
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+
+                    suftab[k].table  = NULL;
+                    suftab[k].kind   = ASL_Sufkind_con;
+                    suftab[k].nextra = 1;
+                }
+                if (have_basic_var)
+                {
+                    s = "sstatus";
+                    suftab[k].name = new char[s.size()+1];
+                    s.copy(suftab[k].name, s.size(), 0);
+                    suftab[k].name[s.size()] = '\0';
+
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+
+                    suftab[k].table  = NULL;
+                    suftab[k].kind   = ASL_Sufkind_var;
+                    suftab[k].nextra = 1;
+                    k++;
+                }
+                if (have_basic_con)
+                {
+                    s = "sstatus";
+                    suftab[k].name = new char[s.size()+1];
+                    s.copy(suftab[k].name, s.size(), 0);
+                    suftab[k].name[s.size()] = '\0';
+
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+
+                    suftab[k].table  = NULL;
+                    suftab[k].kind   = ASL_Sufkind_con;
+                    suftab[k].nextra = 1;
+                }
 
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
-                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+                for (i=0; i < nSuffixes; i++)
+                    outStr << i << ": suffix " << suftab[i].name << " of kind " << suftab[i].kind << std::endl; 
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
-                suftab[k].table  = NULL;
-                suftab[k].kind   = ASL_Sufkind_var;
-                suftab[k].nextra = 1;
-            }
-            for (i=0; i < osresult->getNumberOfOtherObjectiveResults(0); i++, k++)
-            {
-                s = osresult->getOtherObjectiveResultName(0, i);
-                suftab[k].name = new char[s.size()+1];
-                s.copy(suftab[k].name, s.size(), 0);
-                suftab[k].name[s.size()] = '\0';
+                // make sure to inform AMPL of the suffixes you want to send back
 
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-
-                suftab[k].table  = NULL;
-                suftab[k].kind   = ASL_Sufkind_obj;
-                suftab[k].nextra = 1;
-            }
-            for (i=0; i < osresult->getNumberOfOtherConstraintResults(0); i++, k++)
-            {
-                s = osresult->getOtherConstraintResultName(0, i);
-                suftab[k].name = new char[s.size()+1];
-                s.copy(suftab[k].name, s.size(), 0);
-                suftab[k].name[s.size()] = '\0';
-
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-
-                suftab[k].table  = NULL;
-                suftab[k].kind   = ASL_Sufkind_con;
-                suftab[k].nextra = 1;
-            }
-            if (have_basic_var)
-            {
-                s = "sstatus";
-                suftab[k].name = new char[s.size()+1];
-                s.copy(suftab[k].name, s.size(), 0);
-                suftab[k].name[s.size()] = '\0';
-
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-
-                suftab[k].table  = NULL;
-                suftab[k].kind   = ASL_Sufkind_var;
-                suftab[k].nextra = 1;
-                k++;
-            }
-            if (have_basic_con)
-            {
-                s = "sstatus";
-                suftab[k].name = new char[s.size()+1];
-                s.copy(suftab[k].name, s.size(), 0);
-                suftab[k].name[s.size()] = '\0';
-
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-
-                suftab[k].table  = NULL;
-                suftab[k].kind   = ASL_Sufkind_con;
-                suftab[k].nextra = 1;
-            }
-
-#ifndef NDEBUG
-            outStr.str("");
-            outStr.clear();
-            for (i=0; i < nSuffixes; i++)
-                outStr << i << ": suffix " << suftab[i].name << " of kind " << suftab[i].kind << std::endl; 
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-
-            // make sure to inform AMPL of the suffixes you want to send back
-
-            suf_declare(suftab, nSuffixes);
+                suf_declare(suftab, nSuffixes);
 
 /*          Now go through the suffixes again and prepare the data for writing
  *
@@ -301,297 +315,293 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
  *          *all* the array-indexed results. Since ASL only handles real and integer
  *          values, this is done in two pointer arrays.
  */
-            double **rData = new double*[nSuffixes];
-            int    **iData = new    int*[nSuffixes];
+                rData = new double*[nSuffixes];
+                iData = new    int*[nSuffixes];
 
-            std::string resultType;
-            std::string resultName;
+                std::string resultType;
+                std::string resultName;
 
-            for (int i=0; i<nSuffixes; i++)
-            {
-                rData[i] = NULL;
-                iData[i] = NULL;
-            }
-
-            int iSuf = 0;
-
-            for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++, iSuf++)
-            {
-                if ( (osresult->optimization->solution[0]->variables->other[i]->var != NULL) || 
-                     (osresult->optimization->solution[0]->variables->other[i]->enumeration != NULL) )
+                for (i=0; i<nSuffixes; i++)
                 {
-                    n = osresult->getOtherVariableResultArrayDense(0, i, otherVar, numVars);
-                    if (n < 0) 
-                        throw ErrorClass("unspecified error in routine getOtherVariableResultArrayDense()");
-                    else if (n > 0)
-                    {
-                        resultType = osresult->getOtherVariableResultArrayType(0, i);
-                        resultName = osresult->getOtherVariableResultName(0, i);
-
-#ifndef NDEBUG
-                        outStr.str("");
-                        outStr.clear();
-                        outStr << "found variable suffix " << resultName 
-                               << " of type " << resultType << std::endl;
-                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-
-                        outStr.str("");
-                        outStr.clear();
-                        outStr << "retrieved these values:";
-                        for (int m=0; m<n; m++)
-                            outStr << " " << otherVar[m];
-                        outStr << std::endl;
-                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-
-                        if (    (resultType == "real")     
-                             || (resultType == "double")   
-                             || (resultType == "numeric") 
-//                             || (resultType == "")        // some versions of OSSolverService may not return a type
-                           )
-                        {
-                            rData[iSuf] = new double[n];
-                            for (int m=0; m<n; m++)
-                                rData[iSuf][m] = os_strtod(otherVar[m].c_str(), NULL);
-#ifndef NDEBUG
-                            outStr.str("");
-                            outStr.clear();
-                            outStr << "values (real): ";
-                            for (int m=0; m<n; m++)
-                                outStr << rData[iSuf][m] << " ";
-                            outStr << std::endl << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif 
-
-                            suf_rput(resultName.c_str(), ASL_Sufkind_var, rData[iSuf]);
-                        }
-                        else if (resultType == "integer")
-                        {
-                            iData[iSuf] = new int[n];
-                            for (int m=0; m<n; m++)
-                                iData[iSuf][m] = atoi(otherVar[m].c_str());
-#ifndef NDEBUG
-                            outStr.str("");
-                            outStr.clear();
-                            outStr << "values (integer): ";
-                            for (int m=0; m<n; m++)
-                                outStr << iData[iSuf][m] << " ";
-                            outStr << std::endl << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif 
-                            suf_iput(resultName.c_str(), ASL_Sufkind_var, iData[iSuf]);
-//                            delete[] ivalues; ivalues = NULL;                            
-                        }
-                        else
-                            throw ErrorClass("otherVariableResult has unsupported type in OSosrl2ampl()");
-                    } 
+                    rData[i] = NULL;
+                    iData[i] = NULL;
                 }
-            }
 
-            // Suffixes associated with the objectives
-
-            for (i=0; i < osresult->getNumberOfOtherObjectiveResults(0); i++, k++)
-            {
-                if ( (osresult->optimization->solution[0]->objectives->other[i]->obj != NULL) || 
-                     (osresult->optimization->solution[0]->objectives->other[i]->enumeration != NULL) )
+                int iSuf = 0;
+    
+                for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++, iSuf++)
                 {
-                    n = osresult->getOtherObjectiveResultArrayDense(0, i, otherObj, numObjs);
-                    if (n < 0) 
-                        throw ErrorClass("unspecified error in routine getOtherObjectiveResultArrayDense()");
-                    else if (n > 0)
+                    if ( (osresult->optimization->solution[0]->variables->other[i]->var != NULL) || 
+                         (osresult->optimization->solution[0]->variables->other[i]->enumeration != NULL) )
                     {
-                        resultType = osresult->getOtherObjectiveResultArrayType(0, i);
-                        resultName = osresult->getOtherObjectiveResultName(0, i);
-#ifndef NDEBUG
-                        outStr.str("");
-                        outStr.clear();
-                        outStr << "found objective suffix " << resultName 
-                               << " of type " << resultType << std::endl;
-                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                        n = osresult->getOtherVariableResultArrayDense(0, i, otherVar, numVars);
+                        if (n < 0) 
+                            throw ErrorClass("unspecified error in routine getOtherVariableResultArrayDense()");
+                        else if (n > 0)
+                        {
+                            resultType = osresult->getOtherVariableResultArrayType(0, i);
+                            resultName = osresult->getOtherVariableResultName(0, i);
 
-                        outStr.str("");
-                        outStr.clear();
-                        outStr << "retrieved these values:";
-                        for (int m=0; m<n; m++)
-                            outStr << " " << otherObj[m];
-                        outStr << std::endl;
-                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "found variable suffix " << resultName 
+                                   << " of type " << resultType << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "retrieved these values:";
+                            for (int m=0; m<n; m++)
+                                outStr << " " << otherVar[m];
+                            outStr << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 
-                        if (    (resultType == "real")     
-                             || (resultType == "double")   
-                             || (resultType == "numeric") 
+                            if (    (resultType == "real")     
+                                 || (resultType == "double")   
+                                 || (resultType == "numeric") 
 //                             || (resultType == "")        // some versions of OSSolverService may not return a type
-                           )
-                        {
-                            rData[iSuf] = new double[n];
-                            for (int m=0; m<n; m++)
-                                rData[iSuf][m] = os_strtod(otherObj[m].c_str(), NULL);
+                               )
+                            {
+                                rData[iSuf] = new double[n];
+                                for (int m=0; m<n; m++)
+                                    rData[iSuf][m] = os_strtod(otherVar[m].c_str(), NULL);
 #ifndef NDEBUG
-                            outStr.str("");
-                            outStr.clear();
-                            outStr << "values (real): ";
-                            for (int m=0; m<n; m++)
-                                outStr << rData[iSuf][m] << " ";
-                            outStr << std::endl << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "values (real): ";
+                                for (int m=0; m<n; m++)
+                                    outStr << rData[iSuf][m] << " ";
+                                outStr << std::endl << std::endl;
+                                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
-                            suf_rput(resultName.c_str(), ASL_Sufkind_obj, rData[iSuf]);
-//                            delete[] rvalues; rvalues = NULL;                            
-                        }
-                        else if (resultType == "integer")
-                        {
-                            iData[iSuf] = new int[n];
-                            for (int m=0; m<n; m++)
-                                iData[iSuf][m] = atoi(otherObj[m].c_str());
+
+                                suf_rput(resultName.c_str(), ASL_Sufkind_var, rData[iSuf]);
+                            }
+                            else if (resultType == "integer")
+                            {
+                                iData[iSuf] = new int[n];
+                                for (int m=0; m<n; m++)
+                                    iData[iSuf][m] = atoi(otherVar[m].c_str());
 #ifndef NDEBUG
-                            outStr.str("");
-                            outStr.clear();
-                            outStr << "values (integer): ";
-                            for (int m=0; m<n; m++)
-                                outStr << iData[iSuf][m] << " ";
-                            outStr << std::endl << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "values (integer): ";
+                                for (int m=0; m<n; m++)
+                                    outStr << iData[iSuf][m] << " ";
+                                outStr << std::endl << std::endl;
+                                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
-                            suf_iput(resultName.c_str(), ASL_Sufkind_obj, iData[iSuf]);
-//                            delete[] ivalues; ivalues = NULL;                            
-                        }
-                        else
-                            throw ErrorClass("otherObjectiveResult has unsupported type in OSosrl2ampl()");
+                                suf_iput(resultName.c_str(), ASL_Sufkind_var, iData[iSuf]);
+                            }
+                            else
+                                throw ErrorClass("otherVariableResult has unsupported type in OSosrl2ampl()");
+                        } 
                     }
                 }
-            }
 
-            // Suffixes associated with constraints
+                // Suffixes associated with the objectives
 
-            for (i=0; i < osresult->getNumberOfOtherConstraintResults(0); i++, k++)
-            {
-                if ( (osresult->optimization->solution[0]->constraints->other[i]->con != NULL) || 
-                     (osresult->optimization->solution[0]->constraints->other[i]->enumeration != NULL) )
+                for (i=0; i < osresult->getNumberOfOtherObjectiveResults(0); i++, k++)
                 {
-                    n = osresult->getOtherConstraintResultArrayDense(0, i, otherCon, numCons);
-                    if (n < 0) 
-                        throw ErrorClass("unspecified error in routine getOtherConstraintResultArrayDense()");
-                    else if (n > 0)
+                    if ( (osresult->optimization->solution[0]->objectives->other[i]->obj != NULL) || 
+                         (osresult->optimization->solution[0]->objectives->other[i]->enumeration != NULL) )
                     {
-                        resultType = osresult->getOtherConstraintResultArrayType(0, i);
-                        resultName = osresult->getOtherConstraintResultName(0, i);
+                        n = osresult->getOtherObjectiveResultArrayDense(0, i, otherObj, numObjs);
+                        if (n < 0) 
+                            throw ErrorClass("unspecified error in routine getOtherObjectiveResultArrayDense()");
+                        else if (n > 0)
+                        {
+                            resultType = osresult->getOtherObjectiveResultArrayType(0, i);
+                            resultName = osresult->getOtherObjectiveResultName(0, i);
 #ifndef NDEBUG
-                        outStr.str("");
-                        outStr.clear();
-                        outStr << "found constraint suffix " << resultName
-                               << " of type " << resultType << std::endl;
-                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "found objective suffix " << resultName 
+                                   << " of type " << resultType << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 
-                        outStr.str("");
-                        outStr.clear();
-                        outStr << "retrieved these values:";
-                        for (int m=0; m<n; m++)
-                            outStr << " " << otherCon[m];
-                        outStr << std::endl;
-                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "retrieved these values:";
+                            for (int m=0; m<n; m++)
+                                outStr << " " << otherObj[m];
+                            outStr << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 
-                        if (    (resultType == "real")     
-                             || (resultType == "double")   
-                             || (resultType == "numeric") 
+                            if (    (resultType == "real")     
+                                 || (resultType == "double")   
+                                 || (resultType == "numeric") 
 //                             || (resultType == "")        // some versions of OSSolverService may not return a type
-                           )
-                        {
-                            rData[iSuf] = new double[n];
-                            for (int m=0; m<n; m++)
-                                rData[iSuf][m] = os_strtod(otherCon[m].c_str(), NULL);
+                               )
+                            {
+                                rData[iSuf] = new double[n];
+                                for (int m=0; m<n; m++)
+                                    rData[iSuf][m] = os_strtod(otherObj[m].c_str(), NULL);
 #ifndef NDEBUG
-                            outStr.str("");
-                            outStr.clear();
-                            outStr << "values (real): ";
-                            for (int m=0; m < n; m++)
-                                outStr << rData[iSuf][m] << " ";
-                            outStr << std::endl << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "values (real): ";
+                                for (int m=0; m<n; m++)
+                                    outStr << rData[iSuf][m] << " ";
+                                outStr << std::endl << std::endl;
+                                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
-                            suf_rput(resultName.c_str(), ASL_Sufkind_con, rData[iSuf]);
-//                            delete[] rvalues; rvalues = NULL;                            
-                        }
-                        else if (resultType == "integer")
-                        {
-                            iData[iSuf] = new int[n];
-                            for (int m=0; m<n; m++)
-                                iData[iSuf][m] = atoi(otherCon[m].c_str());
+                                suf_rput(resultName.c_str(), ASL_Sufkind_obj, rData[iSuf]);
+                            }
+                            else if (resultType == "integer")
+                            {
+                                iData[iSuf] = new int[n];
+                                for (int m=0; m<n; m++)
+                                    iData[iSuf][m] = atoi(otherObj[m].c_str());
 #ifndef NDEBUG
-                            outStr.str("");
-                            outStr.clear();
-                            outStr << "values (integer): ";
-                            for (int m=0; m < n; m++)
-                                outStr << iData[iSuf][m] << " ";
-                            outStr << std::endl << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "values (integer): ";
+                                for (int m=0; m<n; m++)
+                                    outStr << iData[iSuf][m] << " ";
+                                outStr << std::endl << std::endl;
+                                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
-                            suf_iput(resultName.c_str(), ASL_Sufkind_con, iData[iSuf]);
-//                            delete[] ivalues; ivalues = NULL;                            
+                                suf_iput(resultName.c_str(), ASL_Sufkind_obj, iData[iSuf]);
+                            }
+                            else
+                                throw ErrorClass("otherObjectiveResult has unsupported type in OSosrl2ampl()");
                         }
-                        else
-                            throw ErrorClass("otherConstraintResult has unsupported type in OSosrl2ampl()");
                     }
                 }
-            }
 
-            // Basis information associated with the variables
+                // Suffixes associated with constraints
 
-
-            // note that AMPL uses different numeric values for representing basis status:
-            // 1 = basic                                    = ENUM_BASIS_STATUS_basic
-            // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
-            // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
-            // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
-            // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
-            // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
-            // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
-
-            int  basCode[ENUM_BASIS_STATUS_NUMBER_OF_STATES] = {1,3,4,5,6,2,0};
-            if (have_basic_var)
-            {
-                iData[iSuf] = new int[numVars];
-                n = osresult->getBasisInformationDense(0, ENUM_PROBLEM_COMPONENT_variables, iData[iSuf], numVars);
-                if (n < 0) 
-                    throw ErrorClass("unspecified error in routine getBasisInformationDense()");
-                else if (n > 0)
+                for (i=0; i < osresult->getNumberOfOtherConstraintResults(0); i++, k++)
                 {
-                    for (i=0; i<numVars; i++)
-                        iData[iSuf][i] = basCode[iData[iSuf][i]];
+                    if ( (osresult->optimization->solution[0]->constraints->other[i]->con != NULL) || 
+                         (osresult->optimization->solution[0]->constraints->other[i]->enumeration != NULL) )
+                    {
+                        n = osresult->getOtherConstraintResultArrayDense(0, i, otherCon, numCons);
+                        if (n < 0) 
+                            throw ErrorClass("unspecified error in routine getOtherConstraintResultArrayDense()");
+                        else if (n > 0)
+                        {
+                            resultType = osresult->getOtherConstraintResultArrayType(0, i);
+                            resultName = osresult->getOtherConstraintResultName(0, i);
 #ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "primal basic: ";
-                    for (int k=0; k < numVars; k++)
-                        outStr << iData[iSuf][k] << " ";
-                    outStr << std::endl << std::endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "found constraint suffix " << resultName
+                                   << " of type " << resultType << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+    
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "retrieved these values:";
+                            for (int m=0; m<n; m++)
+                                outStr << " " << otherCon[m];
+                            outStr << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+                            if (    (resultType == "real")     
+                                 || (resultType == "double")   
+                                 || (resultType == "numeric") 
+//                             || (resultType == "")        // some versions of OSSolverService may not return a type
+                               )
+                            {
+                                rData[iSuf] = new double[n];
+                                for (int m=0; m<n; m++)
+                                    rData[iSuf][m] = os_strtod(otherCon[m].c_str(), NULL);
+#ifndef NDEBUG
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "values (real): ";
+                                for (int m=0; m < n; m++)
+                                    outStr << rData[iSuf][m] << " ";
+                                outStr << std::endl << std::endl;
+                                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
-                    suf_iput("sstatus", ASL_Sufkind_var, iData[iSuf]);
+                                suf_rput(resultName.c_str(), ASL_Sufkind_con, rData[iSuf]);
+                            }
+                            else if (resultType == "integer")
+                            {
+                                iData[iSuf] = new int[n];
+                                for (int m=0; m<n; m++)
+                                    iData[iSuf][m] = atoi(otherCon[m].c_str());
+#ifndef NDEBUG
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "values (integer): ";
+                                for (int m=0; m < n; m++)
+                                    outStr << iData[iSuf][m] << " ";
+                                outStr << std::endl << std::endl;
+                                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif 
+                                suf_iput(resultName.c_str(), ASL_Sufkind_con, iData[iSuf]);
+                            }
+                            else
+                                throw ErrorClass("otherConstraintResult has unsupported type in OSosrl2ampl()");
+                        }
+                    }
                 }
-                iSuf++;
-            }
-            if (have_basic_con)
-            {
-                iData[iSuf] = new int[numCons];
-                n = osresult->getBasisInformationDense(0, ENUM_PROBLEM_COMPONENT_constraints, iData[iSuf], numCons);
-                if (n < 0) 
-                    throw ErrorClass("unspecified error in routine getBasisInformationDense()");
-                else if (n > 0)
+
+                // Basis information associated with the variables
+
+
+                // note that AMPL uses different numeric values for representing basis status:
+                // 1 = basic                                    = ENUM_BASIS_STATUS_basic
+                // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
+                // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
+                // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
+                // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
+                // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
+                // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
+    
+                int  basCode[ENUM_BASIS_STATUS_NUMBER_OF_STATES] = {1,3,4,5,6,2,0};
+                if (have_basic_var)
                 {
-                    for (i=0; i<numCons; i++)
-                        iData[iSuf][i] = basCode[iData[iSuf][i]];
+                    iData[iSuf] = new int[numVars];
+                    n = osresult->getBasisInformationDense(0, ENUM_PROBLEM_COMPONENT_variables, iData[iSuf], numVars);
+                    if (n < 0) 
+                        throw ErrorClass("unspecified error in routine getBasisInformationDense()");
+                    else if (n > 0)
+                    {
+                        for (i=0; i<numVars; i++)
+                            iData[iSuf][i] = basCode[iData[iSuf][i]];
 #ifndef NDEBUG
-                    outStr.str("");
-                    outStr.clear();
-                    outStr << "dual basic: ";
-                    for (int k=0; k < numCons; k++)
-                        outStr << iData[iSuf][k] << " ";
-                    outStr << std::endl << std::endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                        outStr.str("");
+                        outStr.clear();
+                        outStr << "primal basic: ";
+                        for (int k=0; k < numVars; k++)
+                            outStr << iData[iSuf][k] << " ";
+                        outStr << std::endl << std::endl;
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
-                    suf_iput("sstatus", ASL_Sufkind_con, iData[iSuf]);
+                        suf_iput("sstatus", ASL_Sufkind_var, iData[iSuf]);
+                    }
+                    iSuf++;
+                }
+                if (have_basic_con)
+                {
+                    iData[iSuf] = new int[numCons];
+                    n = osresult->getBasisInformationDense(0, ENUM_PROBLEM_COMPONENT_constraints, iData[iSuf], numCons);
+                    if (n < 0) 
+                        throw ErrorClass("unspecified error in routine getBasisInformationDense()");
+                    else if (n > 0)
+                    {
+                        for (i=0; i<numCons; i++)
+                            iData[iSuf][i] = basCode[iData[iSuf][i]];
+#ifndef NDEBUG
+                        outStr.str("");
+                        outStr.clear();
+                        outStr << "dual basic: ";
+                        for (int k=0; k < numCons; k++)
+                            outStr << iData[iSuf][k] << " ";
+                        outStr << std::endl << std::endl;
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif 
+                        suf_iput("sstatus", ASL_Sufkind_con, iData[iSuf]);
+                    }
                 }
             }
 
@@ -703,8 +713,23 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
     Option_Info *oi; 
  */
 
-            write_sol(const_cast<char*>(solMsg.c_str()),  x, y , NULL);
+            try
+            {
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, "Calling ASL");
+#endif 
+                write_solf_ASL(asl, const_cast<char*>(solMsg.c_str()),  x, y , NULL, solfile.c_str());
 
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, "Returned from ASL");
+#endif 
+            }
+            catch(const ErrorClass& eclass)
+            {
+#ifndef NDEBUG
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, "Error in ASL");
+#endif 
+            }
             // garbage collection
             if (osrlreader != NULL) delete osrlreader;
             osrlreader = NULL;

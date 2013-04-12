@@ -54,10 +54,12 @@ public:
      * Convert the solution to AMPL .sol format 
      *
      * @param osrl is a string containing the result information
+     * @param  asl is a pointer to an ASL data structure
+     * @param filename is the name of the output file
      * (e.g., as returned from the solver). 
      * @return whether the .sol file was created successfully. 
      */
-    bool writeSolFile(std::string osrl, ASL *asl); 
+    bool writeSolFile(std::string osrl, ASL *asl, std::string filename); 
 
 private:
     
