@@ -152,12 +152,6 @@ void    knock(OSCommandLine *oscommandline, OSnl2OS *osnl2os);
 // additional methods
 bool findInstance(   OSCommandLine *oscommandline, OSnl2OS *osnl2os);
 void makeStrings(    OSCommandLine *oscommandline);
-void getOSiLFromNl(  OSCommandLine *oscommandline);
-void getOSiLFromMps( OSCommandLine *oscommandline);
-void getOSiLFromGams(OSCommandLine *oscommandline);
-void doPrintModel(OSCommandLine *oscommandline);
-void doPrintModel(OSInstance *osinstance);
-void doPrintRow(OSCommandLine *oscommandline);
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 void reportResults(OSCommandLine *oscommandline, std::string osrl,  OSnl2OS *osnl2OS);
 void reportErrors(OSCommandLine *oscommandline, std::string errMsg, OSnl2OS *osnl2OS);
@@ -180,7 +174,8 @@ int main(int argc, char **argv)
     OSCommandLineReader *oscommandlinereader = new OSCommandLineReader();
 
     DefaultSolver *solverType  = NULL;
-    char* stub = argv[1];
+    char* stub = NULL;
+    if (argc > 0) stub = argv[1];
 
     // getting the OSAmplClient_options into a std::string is a bit of a pain...
     char* temp = getenv("OSAmplClient_options");
@@ -193,13 +188,13 @@ int main(int argc, char **argv)
         std::cout << amplclient_options << std::endl;
     }
     else
-        amplclient_options = "serviceMethod retrieve serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService jobID gus-22-mar-2013-002 printLevel 4";
+//        amplclient_options = "";
+        amplclient_options = "serviceMethod retrieve serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService printLevel 4 jobID gus-10-apr-2013-0001";
 
     // this output must be held in abeyance  until the command line
     // has been processed and printLevel has been set...
 #ifndef NDEBUG
     echo_cl << "HERE ARE THE AMPLCLIENT OPTIONS ";
-//    echo_cl << temp;
     echo_cl << amplclient_options;
     echo_cl << endl << endl;
 
@@ -222,7 +217,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    oscommandline->nlFile = stub;
+    if (stub) oscommandline->nlFile = stub;
 
 
     /** Deal with action items: -printLevel, -logFile, -filePrintLevel, --help, --version **/
@@ -354,104 +349,6 @@ int main(int argc, char **argv)
     {
         oscommandline->solverName[k] = (char)tolower(oscommandline->solverName[k]);
     }
-
-#if 0
-    /* If an OSoL file was given, read it into a string (don't parse)  */
-    std::string osol = "";
-    if(oscommandline->osolFile != "")
-    {
-        FileUtil *fileUtil;
-        fileUtil = new FileUtil();
-        osol = fileUtil->getFileAsString((oscommandline->osolFile).c_str() );
-        delete fileUtil;
-    }
-    //std::cout << " solver Options = " << osol << std::endl;
-
-    // set AMPL structures: cw for column-wise representation, rw for row-wise; asl to switch between them
-    ASL *cw, *rw, *asl;
-    cw = ASL_alloc(ASL_read_fg);
-    rw = ASL_alloc(ASL_read_fg);
-    asl = cw;
-
-    jac0dim((char*)stub, (fint)strlen(stub));
-
-    OSnl2OS *nl2OS = new OSnl2OS(cw, rw, asl);
-    //std::cout << " call nl2OS" << std::endl;
-
-
-    /** Read and parse the .nl file and the osol string
-     *  to create an in-memory representation
-     *  in form of an OSInstance and an OSOption object
-     */
-    try
-    {
-        nl2OS->readNl(stub);
-        nl2OS->setOsol(osol);
-        nl2OS->createOSObjects() ;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        outStr.str("");
-        outStr.clear();
-        outStr << "Error detected: " << eclass.errormsg << std::endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, outStr.str());
-        return 0;
-    }
-    //std::cout << " return from  nl2OS" << std::endl;
-
-    // create OS objects
-    //OSInstance *osinstance;
-    //OSOption   *osoption;
-
-    //osinstance = nl2OS->osinstance;
-    //std::cout << " osinstance created" << std::endl;
-
-    //write out the instance
-#ifndef NDEBUG
-    OSiLWriter *osilwriter = NULL;
-    osilwriter = new OSiLWriter();
-    osilwriter->m_bWhiteSpace = true;
-    std::string sModelInstanceName = "modelInstance.osil";
-    FileUtil *fileUtil;
-    fileUtil = new FileUtil();
-    fileUtil->writeFileFromString(sModelInstanceName,  osilwriter->writeOSiL(nl2OS->osinstance) );
-    delete fileUtil;
-    fileUtil = NULL;
-    delete  osilwriter;
-    osilwriter = NULL;
-#endif
-    
-
-    if (nl2OS->osoption != NULL)
-    {
-        //write out the options
-#ifndef NDEBUG
-        OSoLWriter *osolwriter = NULL;
-        osolwriter = new OSoLWriter();
-        //osolwriter->m_bWhiteSpace = true;
-        std::string sModelOptionName = "modelOptions.osol";
-        fileUtil = new FileUtil();
-        fileUtil->writeFileFromString(sModelOptionName,  osolwriter->writeOSoL(nl2OS->osoption) );
-        delete fileUtil;
-        fileUtil = NULL;
-        delete  osolwriter;
-        osolwriter = NULL;
-#endif
-    }
-
-//    OSrLReader *osrlreader = NULL;
-//    OSrLWriter *osrlwriter;
-//    osrlwriter = new OSrLWriter();
-//    OSResult *osresult = NULL;
-//    std::string osrl = "";
-
-//    bool writeOK;
-//    OSosrl2ampl *solWriter = new OSosrl2ampl();
-
-//-========================
-#endif
-
-
 
     // now call the correct serviceMethod
     // solve is the default
@@ -611,122 +508,6 @@ int main(int argc, char **argv)
         return 1;
     }
 }// end of main()
-
-//========================
-#if 0
-    try
-    {
-        if(serviceLocation.size() == 0 )
-        {
-            //determine the solver and do a local solve
-            if (nl2OS->osoption == NULL)
-                osrl = runSolver(sSolverName, osol, nl2OS->osinstance);
-            else
-                osrl = runSolver(sSolverName, nl2OS->osoption, nl2OS->osinstance);
-        }// end if serviceLocation.size() == 0
-
-        /* ------------------------------------------------------- */
-        else // do a remote solve
-        {
-            OSSolverAgent* osagent = NULL;
-            OSiLWriter *osilwriter = NULL;
-            osilwriter = new OSiLWriter();
-            std::string  osil = osilwriter->writeOSiL(nl2OS->osinstance);
-            ////
-
-            //agent_address = strstr(solver_option, "service");
-            //agent_address += 7;
-            //URL = strtok( agent_address, delims );
-            //std::string sURL = URL;
-            ///
-            // we should be pointing to the start of the address
-            osagent = new OSSolverAgent( serviceLocation);
-            outStr.str("");
-            outStr.clear();
-            outStr << "Place remote synchronous call: " << serviceLocation << endl << endl << endl;
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
-
-            osrl = osagent->solve(osil, osol);
-            if (osrl.size() == 0) throw ErrorClass("Nothing was returned from the server, please check service address");
-            delete osilwriter;
-            delete osagent;
-        }
-    }//end try
-    catch(const ErrorClass& eclass)
-    {
-        osresult = new OSResult();
-        osresult->setGeneralMessage( eclass.errormsg);
-        osresult->setGeneralStatusType( "error");
-        osrl = osrlwriter->writeOSrL( osresult);
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
-//        osrl = " ";
-//        write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
-
-        writeOK = solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
-
-        delete solWriter;
-        solWriter = NULL;
-
-        delete osresult;
-        osresult = NULL;
-        return 0;
-    }
-
-    try  // now put solution back to ampl
-    {
-        //need_nl = 0;
-        std::string sResultFileName = "solutionResult.osrl";
-        FileUtil *fileUtil;
-        fileUtil = new FileUtil();
-        fileUtil->writeFileFromString(sResultFileName, osrl);
-        delete fileUtil;
-        std::string::size_type pos1 = osrl.find( "error");
-        if(pos1 == std::string::npos)
-        {
-            std::string sReport = "model was solved";
-            osrlreader = new OSrLReader();
-            osresult = osrlreader->readOSrL( osrl);
-
-            writeOK = solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
-
-            delete osrlreader;
-            osrlreader = NULL;
-        }
-        else // there was an error
-        {
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
-            writeOK = solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
-        }
-    }
-    catch(const ErrorClass& eclass)
-    {
-        outStr.str("");
-        outStr.clear();
-        outStr << "There was an error parsing the OSrL string" << endl << eclass.errormsg << endl << endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-    }
-
-    if (solverType != NULL)
-    {
-        //cout << "TRY TO DELETE solverType" <<endl;
-        delete solverType;
-        //cout << "solverType JUST DELETED" <<endl;
-        solverType = NULL;
-    }
-    delete osrlwriter;
-    //cout << "osrlwriter JUST DELETED" <<endl;
-    osrlwriter = NULL;
-    delete nl2OS;
-    //cout << "nl2OS JUST DELETED" <<endl;
-    nl2OS = NULL;
-//    ASL_free(&asl);
-    if (solWriter != NULL) delete solWriter;
-    solWriter = NULL;
-    return 0;
-} // end main
-#endif
-
-
 
 
 /** This method tries to find the instance by reading the .nl file.
@@ -1009,10 +790,14 @@ void retrieve(OSCommandLine *oscommandline, OSnl2OS *nl2OS)
     fileUtil = new FileUtil();
     std::string osrl = "";
     OSSolverAgent* osagent = NULL;
+
     try
     {
         if (oscommandline->serviceLocation != "")
         {
+            if (!nl2OS->readNl(oscommandline->nlFile))
+                throw ErrorClass("Error reading .nl file.");
+
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
             if (oscommandline->osol == "")
@@ -1156,7 +941,7 @@ std::cout << osrl << std::endl << std::endl;
         {
             OSrLReader *osrlreader = new OSrLReader();
             OSResult *osresult = osrlreader->readOSrL( osrl);
-            solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
+            solWriter->writeSolFile(osrl, nl2OS->getASL("asl"), oscommandline->nlFile + ".sol");
 
             delete osrlreader;
             osrlreader = NULL;
@@ -1164,7 +949,7 @@ std::cout << osrl << std::endl << std::endl;
         else // there was an error
         {
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
-            solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
+            solWriter->writeSolFile(osrl, nl2OS->getASL("asl"), oscommandline->nlFile + ".sol");
         }
         if (fileUtil != NULL)
             delete fileUtil;
@@ -1207,35 +992,6 @@ void reportErrors(OSCommandLine *oscommandline, std::string errormsg, OSnl2OS* n
         }
         reportResults(oscommandline, osrl, nl2OS);
 }// reportErrors
-
-void doPrintModel(std::string osil)
-{
-    if (osil == "")
-        std::cout << "no instance defined; print command ignored" << std::endl;
-    else
-    {
-        OSiLReader *osilreader;
-        osilreader = new OSiLReader();
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
-            osilreader->readOSiL(osil)->printModel());
-        delete osilreader;
-        osilreader = NULL;
-    }
-}// doPrintModel(std::string osil)
-
-void doPrintModel(OSInstance *osinstance)
-{
-    if (osinstance == NULL)
-    {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
-            "no instance defined; print command ignored");
-    }
-    else
-    {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
-            osinstance->printModel());
-    }
-}// doPrintModel(OSInstance *osinstance)
 
 
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
