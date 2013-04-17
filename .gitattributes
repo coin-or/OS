@@ -550,8 +550,6 @@ OS/src/Makefile.am -text
 OS/src/Makefile.in -text
 OS/src/OSAgent/Makefile.am -text
 OS/src/OSAgent/Makefile.in -text
-OS/src/OSAgent/OSServiceMethods.cpp -text
-OS/src/OSAgent/OSServiceMethods.h -text
 OS/src/OSAgent/OSSolverAgent.cpp -text
 OS/src/OSAgent/OSSolverAgent.h -text
 OS/src/OSAgent/OSWSUtil.cpp -text
