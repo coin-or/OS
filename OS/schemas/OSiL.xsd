@@ -94,17 +94,22 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="timeDomain" type="TimeDomain" minOccurs="0">
+			<xs:element name="decomposition" type="TimeDomainStages" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="robustOptimization" type="RobustOptimization" minOccurs="0">
+			<xs:element name="parameters" type="Parameters" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0">
+			<xs:element name="uncertaintySets" type="UncertaintySets" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticData" type="StochasticData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -1274,7 +1279,7 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0">
+			<xs:element name="uncertaintySets" type="UncertaintySets" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -1284,7 +1289,7 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0">
+			<xs:element name="stochasticData" type="StochasticData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -1328,10 +1333,49 @@
 		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<!--Parameters: proposal-->
-	<xs:complexType name="Parameters">
+	<xs:complexType name="ParametricData">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="constraints" type="Constraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cones" type="Cones" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="disjunctiveInformation" type="ParamDisjunctiveInformation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Parameters">
 		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the param child elements must agree with numberOfParameters</xs:documentation>
@@ -1356,12 +1400,21 @@
 			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm"/>
 			<xs:element name="nlNumber" type="StochasticNumberNonlinearExpressionsNumber"/>
 			<xs:element name="coneVar" type="StochasticNumberConeVar"/>
+			<xs:element name="genericParam" type="StochasticNumberGeneric"/>
 		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="GeneralEnumerationVarType" use="optional" default="C"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 		<xs:attribute name="nominalValue" type="xs:double" use="optional"/>
+		<xs:attribute name="incr">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="INF"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ParamSetRowInCore">
 		<xs:annotation>
@@ -1449,7 +1502,21 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="ParameterSets">
+	<xs:complexType name="UncertaintySets">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="uncertaintySet" type="UncertaintySet" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfUncertaintySets" use="required"/>
+	</xs:complexType>
+	<!-- -->
+	<xs:complexType name="UncertaintySet">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -1491,6 +1558,7 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
+	<!-- -->
 	<!--RealTimeData: recommendation-->
 	<xs:complexType name="RealTimeData">
 		<xs:annotation>
@@ -1821,18 +1889,13 @@
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:choice minOccurs="0">
-			<xs:element name="stages" type="TimeDomainStages">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="interval">
 				<xs:annotation>
 					<xs:documentation>experimental</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
-					<xs:attribute name="horizon" type="xs:double" use="optional" default="INF"/>
 					<xs:attribute name="start" type="xs:double" use="optional" default="0"/>
+					<xs:attribute name="horizon" type="xs:double" use="optional" default="INF"/>
 				</xs:complexType>
 			</xs:element>
 		</xs:choice>
@@ -1843,32 +1906,43 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of the stage child elements must agree with numberOfStages</xs:documentation>
+				<xs:documentation>Number of the component elements must agree with numberOfComponents</xs:documentation>
 			</xs:annotation>
-			<xs:element name="stage" type="TimeDomainStage" maxOccurs="unbounded">
+			<xs:element name="component" type="TimeDomainStage" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation> </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfStages" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfComponents" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="decisionEventSequence">
+			<xs:annotation>
+				<xs:documentation>used for time-staged decomposition</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="decisionBeforeEvent"/>
+					<xs:enumeration value="decisionAfterEvent"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStage">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="variables" type="TimeDomainStageVariables" minOccurs="0">
+			<xs:element name="variables" type="TimeDomainStageVariables">
 				<xs:annotation>
 					<xs:documentation>If missing, assume numberOfVariables=0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="constraints" type="TimeDomainStageConstraints" minOccurs="0">
+			<xs:element name="constraints" type="TimeDomainStageConstraints">
 				<xs:annotation>
 					<xs:documentation>If missing, assume numberOfConstraints=0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="objectives" type="TimeDomainStageObjectives" minOccurs="0">
+			<xs:element name="objectives" type="TimeDomainStageObjectives">
 				<xs:annotation>
 					<xs:documentation>If missing, assume ALL objectives are included</xs:documentation>
 				</xs:annotation>
@@ -1947,15 +2021,10 @@
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="parameters" type="Parameters" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="uncertaintySets" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="uncertaintySet" type="ParameterSets" minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="uncertaintySet" type="UncertaintySets" minOccurs="0" maxOccurs="unbounded">
 							<xs:annotation>
 								<xs:documentation>proposal</xs:documentation>
 							</xs:annotation>
@@ -1967,7 +2036,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<!--StochasticInformation: proposal-->
-	<xs:complexType name="StochasticInformation">
+	<xs:complexType name="StochasticData">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -1983,14 +2052,6 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="decisionEventSequence" use="required">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="decisionBeforeEvent"/>
-					<xs:enumeration value="decisionAfterEvent"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="StochasticEventTree">
 		<xs:annotation>
@@ -2095,23 +2156,6 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="rowModifiers" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experimental</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="StochasticRowModifers">
-							<xs:sequence>
-								<xs:annotation>
-									<xs:documentation>Number of row child elements must match numberOfRows</xs:documentation>
-								</xs:annotation>
-								<xs:element name="row" type="StochasticRowModifier" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
 			<xs:element name="linearTransformation" type="StochasticLinearTransformation" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -2133,6 +2177,12 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of row child elements must match numberOfRows</xs:documentation>
+			</xs:annotation>
+			<xs:element name="row" type="StochasticRowModifier" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticRowModifier">
@@ -2327,15 +2377,10 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="distributionParameter">
+			<xs:element name="genericParameter" type="StochasticElementDistributionParam">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="StochasticElementDistributionParam"/>
-					</xs:complexContent>
-				</xs:complexType>
 			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
@@ -2457,7 +2502,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="basevalue" type="xs:double" default="0.0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticLinearTransformationMatrixCoefficients">
@@ -2539,11 +2584,11 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>number must match numberOfValues</xs:documentation>
+				<xs:documentation>number must match numberOfParam</xs:documentation>
 			</xs:annotation>
 			<xs:element name="param" type="StochasticNumberParam" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumberParam">
 		<xs:annotation>
@@ -2759,6 +2804,18 @@
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberGeneric">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
+				<xs:attribute name="documentation" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
