@@ -83,7 +83,7 @@
   \indexspace
 
   \item {\tt kill}, 7, 8, 11, 19--21
-  \item {\tt knock}, 7, 8, 11, 17--19, 21
+  \item {\tt knock}, 7, 8, 11, 17--20
 
   \indexspace
 
@@ -136,7 +136,7 @@
   \indexspace
 
   \item {\tt remoteSolve1.osol}, 14
-  \item {\tt retrieve}, 7, 8, 11, 17--18, 21
+  \item {\tt retrieve}, 7, 8, 11, 17, 21
   \item {\it Rosenbrock, H.H.}, 39
 
   \indexspace

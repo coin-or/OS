@@ -115,7 +115,6 @@ OSAmplClient parincQuadratic
 \noindent (note that the file extension ({\tt .nl}) is omitted; this information is added by the ASL interface.)
 \fi
 
-
 \subsubdivision{Using OSAmplClient to Invoke an OS Solver Server remotely}\label{section:remoteampl}
 
 Next, assume that you have a large problem you want to solve on a remote solver. It is necessary 
@@ -126,7 +125,7 @@ In this case, the string of options for {\tt OSAmplClient\_options} is:
 \begin{verbatim}
 serviceLocation  http://xxx/OSServer/services/OSSolverService
 \end{verbatim}
-where {\tt xxx} is the URL for the server.  This string is used to replace the string `{\tt solver symphony}' in the previous example. 
+where {\tt xxx} is the IP Address for the server. (For instance, Kipp Martin maintains a server that is reachable  at {\tt 74.94.100.129:8080} This string is used to replace the string `{\tt solver symphony}' in the previous example. 
 The {\tt serviceLocation} option will send the problem to the %solver server at 
 location {\tt http://xxx} and, assuming the remote executable is indeed found 
 in the indicated folder, will start the executable.  
@@ -205,6 +204,61 @@ serviceLocation http://xxx/OSServer/services/OSSolverService
 osol solveroptions.osol
 \end{verbatim}
 then in our reference implementation the remote solver service will parse the file {\tt solveroptions.osol}, find the {\tt <solverToInvoke>} tag and then pass the {\tt symphony} solver option to the {\tt OSSolverService} on the remote server.
+
+
+\ifbible
+
+\subsubdivision{Using OSAmplClient for asynchronous operations}\label{section:amplclient_async}
+
+It is possible to use {\tt OSAmplClient} for asynchronous calls to a remote server, but some additional cautionary remarks are necessary. First, AMPL implements the
+
+\begin{verbatim}
+solve;
+\end{verbatim}
+
+\noindent command as a sequence of simpler commands, as follows:
+
+\begin{verbatim}
+write ('b' & $TMPDIR & '/foo');
+shell 'foobar foo -AMPL';
+solution foo.sol;
+remove foo.nl, foo.sol;
+\end{verbatim}
+
+\noindent where {\tt foo} is substituted for a unique name and {\tt foobar} is the name of the solver. The solver options declared in
+
+\begin{verbatim}
+option OSAmplClient_options "..."
+\end{verbatim}
+
+\noindent are written to an environment variable of the operating system and can be read by the solver program by calling appropriate system routines.
+
+This allows the user to access asynchronous methods as follows.
+
+For an asynchronous {\tt send} command one would specify
+
+\begin{verbatim}
+option OSAmplClient_options "-serviceMethod send -serviceLocation ..."
+write bfoo; # or gfoo if a text version of the .nl file is desired
+shell 'OSAmplClient foo -AMPL';
+\end{verbatim}
+
+\noindent omitting the {\tt solution} command, which would cause an AMPL error, since no solution file is returned on a {\tt send} command.
+
+A {\tt retrieve} command could then be invoked by
+
+\begin{verbatim}
+option OSAmplClient_options "-serviceMethod retrieve -serviceLocation ..."
+shell 'OSAmplClient foo -AMPL';
+solution foo.sol;
+\end{verbatim}
+ 
+
+According to David Gay~\cite{dmg-25Sep2012}, ``[f]or the {\tt solution} command to succeed,
+such conditions as the numbers of unfixed variables and undropped constraints
+and objectives must be the same as when the .nl file behind the .sol file
+was written.''
+\fi
 
 \subsubdivision{AMPL Summary}
 

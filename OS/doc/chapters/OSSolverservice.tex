@@ -26,8 +26,8 @@ discussed next. The command line arguments are also valid for the interactive sh
 
 \subdivision{OSSolverService Input Parameters}\label{section:OSSolverServiceInputParameters}
 
-At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
-Not all the parameters are required. 
+At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant, 
+and not all the parameters are required. 
 %However, if the {\tt solve}\index{solve@{\tt solve}} or {\tt send}\index{send@{\tt send}} service    
 %methods  (see Section~\ref{section:servicemethods} ) are invoked a problem instance location must be specified.
 
@@ -51,14 +51,14 @@ It is not necessary to specify this parameter.
 \item[] {\tt osrl xxx.osrl}\ \ This is the path information and name of the file to which the solver 
 solution will be written upon return. A valid file path must be given on the machine that is running {\tt OSSolverService}. 
 It is not necessary to specify this parameter.
-If this parameter is not specified then the solver solution is displayed to the screen.
+If this parameter is not specified, then the solver solution is displayed to the screen.
 
 
 \item[] {\tt osplInput xxx.ospl}\ \  The name of an input file in the  OS Process Language (OSpL); 
-this is used as input  to the {\tt knock} method. If {\tt serviceMethod knock} is specified, this parameter is also needed.
+this is used as input  to the {\tt knock} method. If {\tt serviceMethod knock} is specified, this parameter must also be present.
 
 \item[] {\tt osplOutput xxx.ospl}\ \  The name of an output file in the  OS Process Language (OSpL); 
-this is the  output  string from the {\tt knock}  and {\tt kill} method. If not present, the ouput is displayed to the terminal screen.
+this is the  output  string from the {\tt knock}  and {\tt kill} method. If not present, the output is displayed to the terminal screen.
 
 \item[] {\tt serviceLocation url}\ \ This is the URL of the solver service.
 It is not required, and if not specified it is assumed that the problem
@@ -83,9 +83,22 @@ is in MPS format\index{MPS format}. It is assumed that this file is available on
 is in AMPL nl format\index{AMPL nl format}. It is assumed that this file is available on the machine that is running
 {\tt OSSolverService}. The default file format is OSiL\index{OSiL} so this option is not required.
 
-\item[] {\tt solver  solverName}\ \ {\bf Note that this option only has effect for local calls.} 
-For a remote solve or send, put the solver name into the field {\tt <solverToInvoke>} in an
-OSoL file and specify this file with {\tt osol ...}.
+\ifbible
+%these commands may help with debugging
+\item[] {\tt printModel}\ \ This command prints a snapshot of the current problem instance as represented in the {\tt OSInstance} object. 
+
+\item[] {\tt printRow nnn}\ \ This command prints a snapshot of row {\tt nnn} of the current problem instance as represented in the {\tt OSInstance} object. 
+If {\tt nnn} is nonnegative, the command prints a constraint row, otherwise it prints an objective row.
+
+\item[] {\tt osilOutput xxx}\ \ This command prints an OSiL file of the current problem instance as represented in the {\tt OSInstance} object. 
+This is particularly useful if the problem was read in a format other than OSiL (e.g., MPS or AMPL format).
+
+\item[] {\tt osolOutput xxx}\ \ This command prints an OSoL file associated with the current problem instance. 
+This is particularly useful if the problem was read in AMPL format and the AMPL file contained array-valued options 
+(such as initial variable values, initial basis information or the like).
+\fi
+
+\item[] {\tt solver  solverName}\ \ 
 %Possible values for default OS installation are {\tt clp} (COIN-OR Clp),
 %{\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY).
 Possible values of this parameter depend on the installation. The default configurations can be read off from
@@ -102,7 +115,9 @@ for the (local) {\tt solve}\index{solve@{\tt solve}} %or {\tt send}\index{send@{
 method.
 The default solver depends on the problem type and can be read off from 
 table~\ref{table:defaultsolvers}.\index{default solver}
-
+{\bf Note that this option only has effect for local calls.} 
+For a remote solve or send, put the solver name into the field {\tt <solverToInvoke>} in an
+OSoL file and specify this file with {\tt osol ...}.
 
 \begin{table}
 \caption{Solver configurations}
@@ -149,7 +164,7 @@ Nonlinear, integer   & Bonmin \\ \hline
 Currently the integer {\tt nnn} can be any number between 0 and 8 inclusive, with higher numbers corresponding to more voluminous output. 
 The three highest output levels are available only if the executable was compiled in debug mode; they are mainly useful as a debugging tool.
 
-\item[] {\tt logFile xxx}\ \ This parameter specifies a secondary output deviceto which output can be directed in addition to {\tt stdout}. 
+\item[] {\tt logFile xxx}\ \ This parameter specifies a secondary output device to which output can be directed in addition to {\tt stdout}. 
 
 \item[] {\tt filePrintLevel nnn}\ \ This parameter controls the amount of output sent to the secondary output device selected by {\tt logFile}.
 In conjunction these three command line parameters are extremely useful to manage large jobs. For instance, minimal output can be sent to 
@@ -162,7 +177,8 @@ using XSLT into HTML and displayed in the browser.
 
 \item[] {\tt config xxx.config}\ \ This optional parameter specifies a path on the local machine 
 to a text file containing values for the input parameters. This is convenient for the user not wishing 
-to constantly retype parameter values.
+to constantly retype parameter values. A config file can be used instead of or in copnjunction with command line options.
+In case of conflicting information,  command line options take precedence over entries in the config file.
 
 \item[] {\tt --help}\ \  This parameter prints out the list of available options (in essence, this list).
 Synonyms for {\tt --help} are {\tt -h} and {\tt -?}.
@@ -626,7 +642,7 @@ where the {\tt testremoteSend.config} file is
 \begin{verbatim}
 -nl $DATA/amplFiles/hs71.nl
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
-serviceMethod send
+serviceMethod send   osol $DATA/osolFiles/sendWithJobID.osol
 \end{verbatim}
 \else
 \begin{verbatim}
@@ -636,7 +652,7 @@ where the {\tt testremoteSend.config} file is
 \begin{verbatim}
 -nl ../examples/data/amplFiles/hs71.nl
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
-serviceMethod send
+serviceMethod send  osol ../examples/osolFiles/sendWithJobID.osol
 \end{verbatim}
 \fi
 %
@@ -654,40 +670,56 @@ to the server. More information on the {\tt getJobID} service method is provided
 The {\tt OSSolverService} prints the OSoL file to standard output before termination.
 This is illustrated below,
 
-\begin{verbatim}
-<?xml version="1.0" encoding="UTF-8"?>
-<osol xmlns="os.optimizationservices.org"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="os.optimizationservices.org
-      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
-    <general>
-        <jobID>
-            gsbrkm4__127.0.0.1__2007-06-16T15.46.46.075-05.00149771253
-        </jobID>
-        <solverToInvoke>ipopt</solverToInvoke>      
-    </general>
-</osol>
-\end{verbatim}
-
-The {\tt JobID} is one that is randomly generated by the server and passed back to the {\tt OSSolverService}.
-The user can also provide a {\tt JobID} in their OSoL file. For example, below is a user-provided OSoL file that could
-be specified in a configuration file or on the command line.
 
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="os.optimizationservices.org
-      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+      http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
     <general>
-        <jobID>123456abcd</jobID>
+        <jobID>1234567890abcd</jobID>
         <solverToInvoke>ipopt</solverToInvoke>      
     </general>
 </osol>
 \end{verbatim}
 
-The same {\tt JobID} cannot be used twice, so if {\tt 123456abcd} was used earlier, 
-the result of {\tt send} will be an error condition\index{JobID@{\tt JobID}|)}.
+Any string can be used as a job ID, but in order to be accepted, the job ID must not have been used before. 
+If {\tt 1234567890abcd} was used earlier, 
+the result of the {\tt send} will be an error condition\index{JobID@{\tt JobID}|)}. 
+When a user creates their own job ID, there is therefore a danger that it will be rejected by the remote system.
+It is probably easiest to  request a job ID that is guaranteed to work, by first invoking the  {\tt getJobID} service method
+to get a {\tt JobID}. More information on the {\tt getJobID} service method is provided in Section~\ref{section:getjobid}.
+
+%The {\tt OSSolverService} prints the OSoL file to standard output before termination.
+%This is illustrated below.
+%
+%\begin{verbatim}
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osol xmlns="os.optimizationservices.org"
+%      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   %   xsi:schemaLocation="os.optimizationservices.org
+ %     http://www.optimizationservices.org/schemas/2.0/OsoL.xsd">
+ %   <general>
+ %       <jobID>
+ %           gsbrkm4__127.0.0.1__2007-06-16T15.46.46.075-05.00149771253
+ %       </jobID>
+ %       <solverToInvoke>ipopt</solverToInvoke>      
+ %   </general>
+%</osol>
+%\end{verbatim}
+%
+%The {\tt JobID} is one that is randomly generated by the server and passed back to the {\tt OSSolverService}.
+%The user can also provide a {\tt JobID} in their OSoL file. For example, below is a user-provided OSoL file that could
+%be specified in a configuration file or on the command line.
+%
+%The same {\tt JobID} cannot be used twice.
+
+In this example the COIN-OR {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} solver is specified in the OSoL file. 
+The input file {\tt hs71.nl} is in AMPL nl format\index{AMPL nl format|(}.
+Before sending this to the remote solver service the {\tt OSSolverService} executable converts  
+the nl format\index{AMPL nl format|)} into the OSiL\index{OSiL} XML format and packages this 
+into the SOAP\index{SOAP protocol} envelope used by Web Services.
 
 In order to be of any use, it is necessary to get the result of the optimization. This is described in
 Section~\ref{section:retrieve}. Before proceeding to this section, we describe two ways for knowing when
@@ -786,7 +818,7 @@ serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod getJobID
 \end{verbatim}
 Note that no OSoL\index{OSoL} input file is specified. In this case, the {\tt OSSolverService} sends an empty string.
-A string is returned with the {\tt JobID}. This {\tt JobID} can then be put into a {\tt <jobID>} element in an
+A string is sent to the standard output device with the {\tt JobID}.  This {\tt JobID} can then be put into a {\tt <jobID>} element in an
 OSoL string that would be used by the {\tt send}\index{send@{\tt send}} method.
 \index{getJobID@{\tt getJobID}|)}
 
