@@ -48,30 +48,15 @@
 \index{SYMPHONY@{\tt SYMPHONY}|see{COIN-OR projects, {\tt SYMPHONY}}}
 \index{Vol@{\tt Vol}|see{COIN-OR projects, {\tt Vol}}}
 
-\title{Using the CoinAll binaries and libraries (stable version \OSstable )}
+\title{Using the CoinAll Binaries and Libraries}
 \vskip 2in
 \author{Horand Gassmann, Jun Ma,  Kipp Martin}
 \maketitle
 
 \begin{abstract}
-This manual explains how to obtain and use the binary distribution of the CoinAll software, which consists of
-the OSSolverService along with several COIN solvers. Through OSSolverService the user can access these solvers 
-both on a local machine as well as over the internet. The manual explains how to use the binaries as well as the C++ libraries. 
-The latter can be linked again in user-written code. 
-\iffalse
-provide a
-general framework consisting of a set of standards for representing optimization instances, results,
-solver options, and communication between clients and solvers in a distributed environment using Web Services.
-This COIN-OR\index{COIN-OR} project provides C++ and Java source code for libraries and executable programs that 
-implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear,
-nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line
-executable {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}  for reading problem instances 
-(OSiL format\index{OSiL}, nl format\index{AMPL nl format}, MPS format\index{MPS format}) and
-calling a solver either locally or on a remote server.  Finally,  both Java\index{Java} source code and a Java {\tt war} 
-file are provided for users who wish to set up a solver service on a server running Apache Tomcat\index{Apache Tomcat}.
-See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page\index{Trac system} {\tt\UrlTrac} for 
-more information.
-\fi
+This document describes how to obtain and use the binary distribution of the CoinAll software, which consists of
+several executables and numerous solver libraries. It explains how the CoinAll binaries can be used in stand-alone mode and also 
+how the solver libraries can be linked against user-written code.
 \end{abstract}
 
 
@@ -112,8 +97,6 @@ more information.
 \input{chapters/OSDip.tex}
 
 \input{chapters/oslibrary.tex}
-
-\input{chapters/OSInstanceAPI.tex}
 
 \input{chapters/CppAD.tex}
 
