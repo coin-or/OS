@@ -1548,7 +1548,7 @@ void interactiveShell()
 
     std::map<string, int> optionMap;
 
-    for(k = 0; nOptions; k++)
+    for(k = 0; k < nOptions; k++)
     {
         optionMap[ optionArray[ k] ] = k;
     }
