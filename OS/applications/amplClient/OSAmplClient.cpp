@@ -188,8 +188,7 @@ int main(int argc, char **argv)
         std::cout << amplclient_options << std::endl;
     }
     else
-//        amplclient_options = "";
-        amplclient_options = "serviceMethod retrieve serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService printLevel 4 jobID gus-10-apr-2013-0001";
+        amplclient_options = "";
 
     // this output must be held in abeyance  until the command line
     // has been processed and printLevel has been set...
@@ -934,8 +933,6 @@ void reportResults(OSCommandLine *oscommandline, std::string osrl, OSnl2OS* nl2O
 
     try
     {
-std::cout << osrl << std::endl << std::endl;
-//        fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
         std::string::size_type pos1 = osrl.find( "error");
         if(pos1 == std::string::npos)
         {

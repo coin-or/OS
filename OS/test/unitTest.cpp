@@ -2176,6 +2176,7 @@ if (PARSER_TESTS){
             throw ErrorClass(" error in get/set OtherConstraintOptions");
 
 
+
 #endif
 
         SolverOption** SO;
@@ -8988,7 +8989,7 @@ if (OTHER_TESTS){
 
         std::cout << std::endl << "write AMPL solution file" << std::endl << std::endl;
 
-        writeOK = solWriter->writeSolFile(osrl, nl2osil->getASL("asl"));
+        writeOK = solWriter->writeSolFile(osrl, nl2osil->getASL("asl"), dataDir +  "amplFiles" + dirsep + "suffixTest.sol");
 
         delete solWriter;
         solWriter = NULL;
