@@ -62,7 +62,7 @@ using std::endl;
 
 struct cgrad;
 
-//#define AMPLDEBUG
+#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename)
     : osinstance(0), stub(nlfilename)
