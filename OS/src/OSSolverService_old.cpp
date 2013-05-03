@@ -816,7 +816,7 @@ void solve(OSCommandLine *oscommandline)
                         else    // need an osol file with an instanceLocation specified
                         {
                             throw ErrorClass(
-                                "Error: no osil, GAMS dat, AMPL nl, or mps file given for a local solve --- \n NOTE: information in the osol file is ignored for local solves.");
+                                "Error: no osil, GAMSS dat, AMPL nl, or mps file given for a local solve --- \n NOTE: information in the osol file is ignored for local solves.");
                         }
                     }
                 }
