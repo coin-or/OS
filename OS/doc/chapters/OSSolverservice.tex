@@ -578,8 +578,8 @@ where the {\tt remoteSolve1.osol} file is
       xsi:schemaLocation="os.optimizationservices.org
       http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
     <general>
-        <instanceLocation locationType="local">c:\parincLinear.osil</instanceLocation>
-        <contact transportType="smtp">kipp.martin@chicagobooth.edu</contact>
+        <instanceLocation locationType="local">xxx/parincLinear.osil</instanceLocation>
+        <contact transportType="smtp">xxxxx</contact>
         <solverToInvoke>ipopt</solverToInvoke>      
     </general>
 </osol>
@@ -591,9 +591,9 @@ could specify the instance location on yet another machine. This is illustrated 
 The scenario is depicted in Figure~\ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver
 service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to
 {\tt http}.  In this case, the text of the {\tt <instanceLocation>} element contains the URL of a third machine which
-has the problem instance {\tt parincLinear.osil}.  The solver service will contact the machine with URL
-{\tt\UrlParinclinear} and download this test problem. So the {\tt OSSolverService} is
-running on the server {\tt kipp.chicagobooth.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
+has the problem instance {\tt p0033.osil}.  The solver service will contact the machine with URL
+{\tt http://www.coin-or.org/OS/p0033.osil} and download this test problem. So the {\tt OSSolverService} is
+running on the server {\tt http://74.94.100.129:8080/} which contacts the server {\tt www.coin-or.org} for the model instance.
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org"
@@ -602,9 +602,9 @@ running on the server {\tt kipp.chicagobooth.edu} which contacts the server {\tt
       http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
     <general>
         <instanceLocation locationType="http">
-            http://www.coin-or.org/OS/parincLinear.osil
+            http://www.coin-or.org/OS/p0033.osil
         </instanceLocation>
-        <solverToInvoke>ipopt</solverToInvoke>      
+        <solverToInvoke>symphony</solverToInvoke>      
     </general>
 </osol>
 \end{verbatim}
