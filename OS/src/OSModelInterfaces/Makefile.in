@@ -44,8 +44,6 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @COIN_HAS_ASL_TRUE@am__append_1 = \
-@COIN_HAS_ASL_TRUE@	OSnl2osil.cpp \
-@COIN_HAS_ASL_TRUE@	OSnl2osil.h \
 @COIN_HAS_ASL_TRUE@	OSnl2OS.cpp \
 @COIN_HAS_ASL_TRUE@	OSnl2OS.h \
 @COIN_HAS_ASL_TRUE@	OSosrl2ampl.cpp \
@@ -65,10 +63,8 @@ CONFIG_HEADER = $(top_builddir)/src/config.h \
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 am__libOSModelInterfaces_la_SOURCES_DIST = OSmps2osil.cpp OSmps2osil.h \
-	OSnl2osil.cpp OSnl2osil.h OSnl2OS.cpp OSnl2OS.h \
-	OSosrl2ampl.cpp OSosrl2ampl.h
-@COIN_HAS_ASL_TRUE@am__objects_1 = OSnl2osil.lo OSnl2OS.lo \
-@COIN_HAS_ASL_TRUE@	OSosrl2ampl.lo
+	OSnl2OS.cpp OSnl2OS.h OSosrl2ampl.cpp OSosrl2ampl.h
+@COIN_HAS_ASL_TRUE@am__objects_1 = OSnl2OS.lo OSosrl2ampl.lo
 am_libOSModelInterfaces_la_OBJECTS = OSmps2osil.lo $(am__objects_1)
 libOSModelInterfaces_la_OBJECTS =  \
 	$(am_libOSModelInterfaces_la_OBJECTS)
@@ -451,7 +447,6 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSmps2osil.h \
-	OSnl2osil.h \
 	OSnl2OS.h \
 	OSosrl2ampl.h
 
@@ -508,7 +503,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSmps2osil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSnl2OS.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSnl2osil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSosrl2ampl.Plo@am__quote@
 
 .cpp.o:

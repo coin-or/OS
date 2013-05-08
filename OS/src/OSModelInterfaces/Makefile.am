@@ -27,8 +27,6 @@ libOSModelInterfaces_la_SOURCES = \
 
 if COIN_HAS_ASL
 libOSModelInterfaces_la_SOURCES += \
-	OSnl2osil.cpp \
-	OSnl2osil.h \
 	OSnl2OS.cpp \
 	OSnl2OS.h \
 	OSosrl2ampl.cpp \
@@ -73,6 +71,5 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSmps2osil.h \
-	OSnl2osil.h \
 	OSnl2OS.h \
 	OSosrl2ampl.h
