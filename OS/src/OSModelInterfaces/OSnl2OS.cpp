@@ -619,7 +619,7 @@ bool OSnl2OS::createOSObjects()
             {
                 for (int v1 = 0; v1 < n_var; v1++)
                 {
-                    for (int* psV2 = &rowqp[colqp[v1]]; psV2 < &rowqp[colqp[v1+1]]; psV2++, delsqp++)
+                    for (int* psV2 = (int*)&rowqp[colqp[v1]]; psV2 < (int*)&rowqp[colqp[v1+1]]; psV2++, delsqp++)
                     {
                         if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
                         {
@@ -670,7 +670,7 @@ bool OSnl2OS::createOSObjects()
                 {
                     for (int v1 = 0; v1 < n_var; v1++)
                     {
-                        for (int* psV2 = &rowqp[colqp[v1]]; psV2 < &rowqp[colqp[v1+1]]; psV2++, delsqp++)
+                        for (int* psV2 = (int*)&rowqp[colqp[v1]]; psV2 < (int*)&rowqp[colqp[v1+1]]; psV2++, delsqp++)
                         {
                             if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
                             {
