@@ -130,6 +130,7 @@ Time (Wallclock seconds):       0.05
 
 Total time (CPU seconds):       0.04   (Wallclock seconds):       0.05
 </other>
+</otherResults>
 </job>
 <optimization numberOfSolutions="1" numberOfVariables="33" numberOfConstraints="16" numberOfObjectives="1">
 <solution targetObjectiveIdx="-1">
