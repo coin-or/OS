@@ -225,7 +225,7 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherResults" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="OtherResult">
+	<xs:complexType name="OtherResult" mixed="true">
 		<xs:attribute name="name" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
