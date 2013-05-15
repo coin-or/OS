@@ -3,7 +3,12 @@
 If you want to:
 
 \begin{itemize}
-\item Download the OS binaries  (executables and libraries) -- see Section~\ref{section:obtainingbinaries}.
+\item Download the 
+\ifruncode CoinAll
+   \ifuselibs CoinAll
+   \else OS \fi
+\fi
+binaries  (executables and libraries) -- see Section~\ref{section:obtainingbinaries}.
 
 \ifdevelop
 \item Download the OS source code -- see Section~\ref{section:downloadsource}.
@@ -35,7 +40,9 @@ and call a solver either remotely or locally -- see Section~\ref{section:usingma
 \item Use the OS library for algorithmic differentiation\index{Algorithmic differentiation} (in conjunction with 
 COIN-OR CppAD)\index{COIN-OR projects!CppAD@{\tt CppAD}} -- see Section~\ref{section:ad}.
 
-\item Build the OS project from the source code -- see Section~\ref{section:build}.
+\item 
+\ifuselibs\else Build the OS project from the source code -- see Section~\ref{section:build}.
+\fi
 \fi
 
 \ifdevelop
