@@ -415,7 +415,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node)
     case OS_COS :
         return new exprCos(createCouenneExpression(node->m_mChildren[0]));
     case OS_MIN :
-        switch (node->inumberOfChildren==0)
+        switch (node->inumberOfChildren)
         {
         case 0:
             return new exprConst(0.);
@@ -430,7 +430,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node)
             return base;
         }
     case OS_MAX :
-        switch (node->inumberOfChildren==0)
+        switch (node->inumberOfChildren)
         {
         case 0:
             return new exprConst(0.);

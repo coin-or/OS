@@ -307,7 +307,7 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
         catch(const ErrorClass& eclass)
         {
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, 
-                "Error in IpoptProblem::get_starting_point (OSIpoptSolver.cpp, line 247)\n\n\n");
+                "Error in IpoptProblem::get_starting_point (see OSIpoptSolver.cpp)\n"+eclass.errormsg+"\n\n");
         }
     }  //  end if (m1 > 0)
 
@@ -398,7 +398,7 @@ bool IpoptProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gra
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
-            outStr << "error in OSIpoptSolver, line 314:\n" << eclass.errormsg << endl;
+            outStr << "error in IpoptProblem::eval_grad_f (see OSIpoptSolver.cpp)\n" << eclass.errormsg << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             *ipoptErrorMsg = eclass.errormsg;
@@ -432,7 +432,7 @@ bool IpoptProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number*
 #ifndef NDEBUG
         outStr.str("");
         outStr.clear();
-        outStr << "error in OSIpoptSolver, line 338:\n" << eclass.errormsg << endl;
+        outStr << "error in IpoptProblem::eval_grad_g (see OSIpoptSolver.cpp)\n" << eclass.errormsg << endl;
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         *ipoptErrorMsg = eclass.errormsg;
@@ -464,7 +464,7 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
-            outStr << "error in OSIpoptSolver, line 362:\n" << eclass.errormsg << endl;
+            outStr << "error in IpoptProblem::eval_jac_g (see OSIpoptSolver.cpp)\n" << eclass.errormsg << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             *ipoptErrorMsg =  eclass.errormsg;
@@ -496,7 +496,7 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
-            outStr << "error in OSIpoptSolver, line 386:\n" << eclass.errormsg << endl;
+            outStr << "error in IpoptProblem::eval_jac_g (see OSIpoptSolver.cpp)\n" << eclass.errormsg << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
             *ipoptErrorMsg = eclass.errormsg;
@@ -672,6 +672,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             throw ErrorClass("OSResult error: setSolutionNumer");
 
 
+
         if(osresult->setGeneralMessage( message) != true)
             throw ErrorClass("OSResult error: setGeneralMessage");
 
@@ -808,6 +809,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             solutionDescription = "INTERNAL_ERROR[IPOPT]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
             osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
             if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
+
             break;
         default:
             solutionDescription = "OTHER[IPOPT]: other unknown solution status from Ipopt solver";
