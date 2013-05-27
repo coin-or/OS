@@ -144,6 +144,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSCommandLine.cpp" />
+    <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSCommandLineReader.cpp" />
+
     <ClCompile Include="..\..\..\src\OSUtils\OSBase64.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSdtoa.cpp" />
@@ -180,6 +182,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSCommandLine.h" />
+    <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSCommandLineReader.h" />
+
     <ClInclude Include="..\..\..\src\OSUtils\OSBase64.h" />
     <ClInclude Include="..\..\..\src\OSConfig.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.h" />
@@ -211,6 +215,8 @@
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSrLReader.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSrLWriter.h" />
     <ClInclude Include="..\..\..\src\OSUtils\OSOutput.h" />
+    <ClInclude Include="..\..\..\src\OSUtils\OSReferenced.hpp" />
+    <ClInclude Include="..\..\..\src\OSUtils\OSSmartPtr.hpp" />
     <ClInclude Include="..\..\..\src\OSUtils\OSStringUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

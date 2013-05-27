@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCbc", "..\..\..\Cbc\MSVisualStudio\v9\libCbc\libCbc.vcproj", "{363BA154-FEC9-4E1E-BC23-93CEC58AB785}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCgl", "..\..\..\Cgl\MSVisualStudio\v9\libCgl\libCgl.vcproj", "{DBEA3904-F0B8-408A-9E1A-6497FEBE8C42}"
@@ -61,13 +61,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSTest", "OSTest\OSTest.vcp
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOSCommon", "libOSCommon\libOSCommon.vcproj", "{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSFileUpload", "OSFileUpload\OSFileUpload.vcproj", "{963AE46B-8C67-4C69-B9DF-5845B65806A9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C4867F15-438D-4FF8-8388-62FBAAA9786C} = {C4867F15-438D-4FF8-8388-62FBAAA9786C}
-		{9B5C2549-3D21-497E-A9CB-83D9DEB594BB} = {9B5C2549-3D21-497E-A9CB-83D9DEB594BB}
-		{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD} = {9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSymphony", "..\..\..\SYMPHONY\MSVisualStudio\v9\libSymphony.vcproj", "{BB170874-0B55-4DF6-B0FE-5398CC668B28}"
 EndProject
@@ -196,14 +189,6 @@ Global
 		{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}.Release|Win32.Build.0 = Release|Win32
 		{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}.Release|x64.ActiveCfg = Release|x64
 		{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}.Release|x64.Build.0 = Release|x64
-		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Debug|Win32.Build.0 = Debug|Win32
-		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Debug|x64.ActiveCfg = Debug|x64
-		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Debug|x64.Build.0 = Debug|x64
-		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Release|Win32.ActiveCfg = Release|Win32
-		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Release|Win32.Build.0 = Release|Win32
-		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Release|x64.ActiveCfg = Release|x64
-		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Release|x64.Build.0 = Release|x64
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Debug|Win32.ActiveCfg = Debug|Win32
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Debug|Win32.Build.0 = Debug|Win32
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Debug|x64.ActiveCfg = Debug|x64

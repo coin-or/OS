@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSBonminSolver.h" />
     <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSCouenneSolver.h" />
+    <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSRunSolver.h" />
     <ClInclude Include="..\..\..\src\OSUtils\OSBase64.h" />
     <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSCoinSolver.h" />
     <ClInclude Include="..\..\..\src\OSUtils\OSCommonUtil.h" />

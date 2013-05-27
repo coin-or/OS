@@ -328,6 +328,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSCommandLine.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSCommandLineReader.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.cpp"
 				>
 			</File>
@@ -400,6 +408,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\OSUtils\OSOutput.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\OSUtils\OSParameters.cpp"
 				>
 			</File>
@@ -459,6 +471,14 @@
 			>
 			<File
 				RelativePath="..\..\..\src\OSUtils\OSBase64.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSCommandLine.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSCommandLineReader.h"
 				>
 			</File>
 			<File
@@ -542,6 +562,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\OSUtils\OSOutput.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\OSParsers\OSParseosil.tab.hpp"
 				>
 			</File>
@@ -551,6 +575,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\OSParsers\OSParseosrl.tab.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSReferenced.hpp"
 				>
 			</File>
 			<File
@@ -567,6 +595,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLWriter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSSmartPtr.hpp"
 				>
 			</File>
 			<File
