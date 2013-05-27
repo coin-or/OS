@@ -36,7 +36,7 @@ using std::ostringstream;
 using std::cout;
 using std::endl;
 
-extern const SmartPtr</*const*/ OSOutput> osoutput;
+extern const OSSmartPtr<OSOutput> osoutput;
 
 OSSolverAgent::OSSolverAgent(string solverURI) : OShL()
 {

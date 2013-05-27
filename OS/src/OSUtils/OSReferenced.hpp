@@ -9,10 +9,8 @@
 // copied from IpReferenced.hpp so as to allow OS to be compiled
 // stand-alone (without the Fortran implications inherent in Ipopt)
 
-#ifndef OSIPREFERENCED_HPP
-#define OSIPREFERENCED_HPP
-
-//#include "OSIpTypes.hpp"
+#ifndef OSREFERENCED_HPP
+#define OSREFERENCED_HPP
 
 #include <list>
 #include <assert.h>
@@ -20,7 +18,7 @@
   /** Pseudo-class, from which everything has to inherit that wants to
    *  use be registered as a Referencer for a ReferencedObject.
    */
-  class Referencer
+  class OSReferencer
     {}
   ;
 
@@ -28,9 +26,9 @@
    * This is part of the implementation of an intrusive smart pointer 
    * design. This class stores the reference count of all the smart
    * pointers that currently reference it. See the documentation for
-   * the SmartPtr class for more details.
+   * the OSSmartPtr class for more details.
    * 
-   * A SmartPtr behaves much like a raw pointer, but manages the lifetime 
+   * A OSSmartPtr behaves much like a raw pointer, but manages the lifetime 
    * of an object, deleting the object automatically. This class implements
    * a reference-counting, intrusive smart pointer design, where all
    * objects pointed to must inherit off of ReferencedObject, which
@@ -40,32 +38,28 @@
    * these issues follows after the usage information.
    * 
    * Usage Example:
-   * Note: to use the SmartPtr, all objects to which you point MUST
-   * inherit off of ReferencedObject.
+   * Note: to use the OSSmartPtr, all objects to which you point MUST
+   * inherit from ReferencedObject.
    * 
    * \verbatim
    * 
    * In MyClass.hpp...
    * 
-   * #include "IpReferenced.hpp"
+   * #include "OSReferenced.hpp"
 
-   * namespace Ipopt {
-   * 
    *  class MyClass : public ReferencedObject // must derive from ReferencedObject
    *    {
    *      ...
    *    }
-   * } // namespace Ipopt
-   * 
    * 
    * In my_usage.cpp...
    * 
-   * #include "IpSmartPtr.hpp"
+   * #include "OSSmartPtr.hpp"
    * #include "MyClass.hpp"
    * 
    * void func(AnyObject& obj)
    *  {
-   *    SmartPtr<MyClass> ptr_to_myclass = new MyClass(...);
+   *    OSSmartPtr<MyClass> ptr_to_myclass = new MyClass(...);
    *    // ptr_to_myclass now points to a new MyClass,
    *    // and the reference count is 1
    *  
@@ -73,9 +67,9 @@
    * 
    *    obj.SetMyClass(ptr_to_myclass);
    *    // Here, let's assume that AnyObject uses a
-   *    // SmartPtr<MyClass> internally here.
+   *    // OSSmartPtr<MyClass> internally here.
    *    // Now, both ptr_to_myclass and the internal
-   *    // SmartPtr in obj point to the same MyClass object
+   *    // OSSmartPtr in obj point to the same MyClass object
    *    // and its reference count is 2.
    * 
    *    ...
@@ -89,20 +83,20 @@
    * \endverbatim
    * 
    * Other Notes:
-   *  The SmartPtr implements both dereference operators -> & *.
-   *  The SmartPtr does NOT implement a conversion operator to
+   *  The OSSmartPtr implements both dereference operators -> & *.
+   *  The OSSmartPtr does NOT implement a conversion operator to
    *    the raw pointer. Use the GetRawPtr() method when this
    *    is necessary. Make sure that the raw pointer is NOT
    *    deleted. 
-   *  The SmartPtr implements the comparison operators == & !=
+   *  The OSSmartPtr implements the comparison operators == & !=
    *    for a variety of types. Use these instead of
    *    \verbatim
    *    if (GetRawPtr(smrt_ptr) == ptr) // Don't use this
    *    \endverbatim
-   * SmartPtr's, as currently implemented, do NOT handle circular references.
-   *    For example: consider a higher level object using SmartPtrs to point to 
-   *    A and B, but A and B also point to each other (i.e. A has a SmartPtr 
-   *    to B and B has a SmartPtr to A). In this scenario, when the higher
+   * OSSmartPtr's, as currently implemented, do NOT handle circular references.
+   *    For example: consider a higher level object using OSSmartPtrs to point to 
+   *    A and B, but A and B also point to each other (i.e. A has an OSSmartPtr 
+   *    to B and B has an OSSmartPtr to A). In this scenario, when the higher
    *    level object is finished with A and B, their reference counts will 
    *    never drop to zero (since they reference each other) and they
    *    will not be deleted. This can be detected by memory leak tools like
@@ -110,7 +104,7 @@
    *    overcome by a number of techniques:
    *  
    *    1) A and B can have a method that "releases" each other, that is
-   *        they set their internal SmartPtrs to NULL.
+   *        they set their internal OSSmartPtrs to NULL.
    *        \verbatim
    *        void AClass::ReleaseCircularReferences()
    *          {
@@ -127,16 +121,16 @@
    *        dangerous, in many situations, this type of referencing
    *        is very controlled and this is reasonably safe.
    * 
-   *    3) This SmartPtr class could be redesigned with the Weak/Strong
-   *        design concept. Here, the SmartPtr is identified as being
+   *    3) This OSSmartPtr class could be redesigned with the Weak/Strong
+   *        design concept. Here, the OSSmartPtr is identified as being
    *        Strong (controls lifetime of the object) or Weak (merely
-   *        referencing the object). The Strong SmartPtr increments 
+   *        referencing the object). The Strong OSSmartPtr increments 
    *        (and decrements) the reference count in ReferencedObject
-   *        but the Weak SmartPtr does not. In the example above,
-   *        the higher level object would have Strong SmartPtrs to
-   *        A and B, but A and B would have Weak SmartPtrs to each
+   *        but the Weak OSSmartPtr does not. In the example above,
+   *        the higher level object would have Strong OSSmartPtrs to
+   *        A and B, but A and B would have Weak OSSmartPtrs to each
    *        other. Then, when the higher level object was done with
-   *        A and B, they would be deleted. The Weak SmartPtrs in A
+   *        A and B, they would be deleted. The Weak OSSmartPtrs in A
    *        and B would not decrement the reference count and would,
    *        of course, not delete the object. This idea is very similar
    *        to item (2), where it is implied that the sequence of events 
@@ -145,7 +139,7 @@
    *        their destructors!). This is somehow safer, however, because
    *        code can be written (however expensive) to perform run-time 
    *        detection of this situation. For example, the ReferencedObject
-   *        could store pointers to all Weak SmartPtrs that are referencing
+   *        could store pointers to all Weak OSSmartPtrs that are referencing
    *        it and, in its destructor, tell these pointers that it is
    *        dying. They could then set themselves to NULL, or set an
    *        internal flag to detect usage past this point.
@@ -163,80 +157,46 @@
    * technique where the reference count is stored in the object being
    * referenced. 
    */
-  class ReferencedObject
+  class OSReferencedObject
   {
   public:
-    ReferencedObject()
+    OSReferencedObject()
         :
         reference_count_(0)
     {}
 
-    virtual ~ReferencedObject()
+    virtual ~OSReferencedObject()
     {
       assert(reference_count_ == 0);
     }
 
     int ReferenceCount() const;
 
-    void AddRef(const Referencer* referencer) const;
+    void AddRef(const OSReferencer* referencer) const;
 
-    void ReleaseRef(const Referencer* referencer) const;
+    void ReleaseRef(const OSReferencer* referencer) const;
 
   private:
     mutable int reference_count_;
-
-#     ifdef REF_DEBUG
-
-    mutable std::list<const Referencer*> referencers_;
-#     endif
-
   };
 
   /* inline methods */
   inline
-  int ReferencedObject::ReferenceCount() const
+  int OSReferencedObject::ReferenceCount() const
   {
     return reference_count_;
   }
 
   inline
-  void ReferencedObject::AddRef(const Referencer* referencer) const
+  void OSReferencedObject::AddRef(const OSReferencer* referencer) const
   {
     reference_count_++;
-#     ifdef REF_DEBUG
-
-    referencers_.push_back(referencer);
-#     endif
-
   }
 
   inline
-  void ReferencedObject::ReleaseRef(const Referencer* referencer) const
+  void OSReferencedObject::ReleaseRef(const OSReferencer* referencer) const
   {
-    //    DBG_START_METH("ReferencedObject::ReleaseRef(const Referencer* referencer)",
-    //                   0);
     reference_count_--;
-    //    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
-
-#     ifdef REF_DEBUG
-
-    bool found = false;
-    std::list<const Referencer*>::iterator iter;
-    for (iter = referencers_.begin(); iter != referencers_.end(); iter++) {
-      if ((*iter) == referencer) {
-        found = true;
-        break;
-      }
-    }
-
-    // cannot call release on a reference that was never added...
-    DBG_ASSERT(found);
-
-    if (found) {
-      referencers_.erase(iter);
-    }
-#     endif
-
   }
 
 #endif

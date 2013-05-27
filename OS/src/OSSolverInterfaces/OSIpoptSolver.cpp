@@ -7,7 +7,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -451,6 +451,7 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
     if (values == NULL)
     {
         // return the values of the jacobian of the constraints
+
         //cout << "n: " << n << endl;
         //cout << "m: " << m << endl;
         //cout << "nele_jac: " <<  nele_jac << endl;

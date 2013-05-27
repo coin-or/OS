@@ -20,3 +20,7 @@ cutanddye         .7    1.0
 sewing            .5    .8333
 finishing         1.0   .6667
 inspectandpack    0.1   .25  ;
+
+# put in a starting basis
+let {i in PROD} x[i].sstatus := "bas";
+let {j in DEP} hours_available[j].sstatus := "none";

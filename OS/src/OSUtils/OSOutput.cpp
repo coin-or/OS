@@ -36,7 +36,7 @@
 
 // define the osoutput instance that takes care of all output (see ticket 14)
 // It is declared here as a global variable so as to minimize the changes to the API
-const SmartPtr</*const*/ OSOutput> osoutput = new OSOutput();
+const OSSmartPtr</*const*/ OSOutput> osoutput = new OSOutput();
 
 
 OSOutputChannel::OSOutputChannel(std::string name)

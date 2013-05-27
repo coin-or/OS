@@ -406,6 +406,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
     for(k = 0; k < n1; k++)
     {
         if (!initialed[k])
+        {
             if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
                 if (osinstance->instanceData->variables->var[k]->lb <= default_initval)
                     x[k] = default_initval;
@@ -423,6 +424,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
                 x[k] = osinstance->instanceData->variables->var[k]->lb;
             else
                 x[k] = osinstance->instanceData->variables->var[k]->ub;
+        }
     }
 
 #ifndef NDEBUG

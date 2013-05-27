@@ -658,14 +658,14 @@ OS/src/OSUtils/OSErrorClass.cpp -text
 OS/src/OSUtils/OSErrorClass.h -text
 OS/src/OSUtils/OSFileUtil.cpp -text
 OS/src/OSUtils/OSFileUtil.h -text
-OS/src/OSUtils/OSIpReferenced.hpp -text
-OS/src/OSUtils/OSIpSmartPtr.hpp -text
 OS/src/OSUtils/OSMathUtil.cpp -text
 OS/src/OSUtils/OSMathUtil.h -text
 OS/src/OSUtils/OSOutput.cpp -text
 OS/src/OSUtils/OSOutput.h -text
 OS/src/OSUtils/OSParameters.cpp -text
 OS/src/OSUtils/OSParameters.h -text
+OS/src/OSUtils/OSReferenced.hpp -text
+OS/src/OSUtils/OSSmartPtr.hpp -text
 OS/src/OSUtils/OSStringUtil.cpp -text
 OS/src/OSUtils/OSStringUtil.h -text
 OS/src/OSUtils/OSdtoa.cpp -text

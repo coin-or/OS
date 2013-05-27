@@ -156,7 +156,7 @@ void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 void reportResults(OSCommandLine *oscommandline, std::string osrl,  OSnl2OS *osnl2OS);
 void reportErrors(OSCommandLine *oscommandline, std::string errMsg, OSnl2OS *osnl2OS);
 
-extern const SmartPtr</*const*/ OSOutput> osoutput;
+extern const OSSmartPtr<OSOutput> osoutput;
 
 
 int main(int argc, char **argv)
@@ -170,10 +170,10 @@ int main(int argc, char **argv)
 
     // initialize the command line structure 
 
-    OSCommandLine *oscommandline;// = new OSCommandLine();
+    OSCommandLine *oscommandline = NULL; // = new OSCommandLine();
     OSCommandLineReader *oscommandlinereader = new OSCommandLineReader();
 
-    DefaultSolver *solverType  = NULL;
+//    DefaultSolver *solverType  = NULL;
     char* stub = NULL;
     if (argc > 0) stub = argv[1];
 
@@ -936,12 +936,12 @@ void reportResults(OSCommandLine *oscommandline, std::string osrl, OSnl2OS* nl2O
         std::string::size_type pos1 = osrl.find( "error");
         if(pos1 == std::string::npos)
         {
-            OSrLReader *osrlreader = new OSrLReader();
-            OSResult *osresult = osrlreader->readOSrL( osrl);
+//            OSrLReader *osrlreader = new OSrLReader();
+//            OSResult *osresult = osrlreader->readOSrL( osrl);
             solWriter->writeSolFile(osrl, nl2OS->getASL("asl"), oscommandline->nlFile + ".sol");
 
-            delete osrlreader;
-            osrlreader = NULL;
+//            delete osrlreader;
+//            osrlreader = NULL;
         }
         else // there was an error
         {

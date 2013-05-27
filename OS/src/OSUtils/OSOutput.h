@@ -17,8 +17,8 @@
 
 #include "OSConfig.h"
 #include "OSParameters.h"
-#include "OSIpReferenced.hpp"
-#include "OSIpSmartPtr.hpp"
+#include "OSReferenced.hpp"
+#include "OSSmartPtr.hpp"
 
 #include <string>
 #include <vector>
@@ -190,7 +190,7 @@ public:
  *  private methods must be defined in the header but must *never*
  *  be implemented: a copy constructor, and an equality operator.
  */
-class OSOutput : public ReferencedObject
+class OSOutput : public OSReferencedObject
 {
 private:
     OSOutput(const OSOutput&);
@@ -280,6 +280,6 @@ private:
 // It is declared here as a global variable 
 // so as to minimize the changes to the API
 
-extern const SmartPtr</*const*/ OSOutput> osoutput;
+extern const OSSmartPtr<OSOutput> osoutput;
 
 #endif

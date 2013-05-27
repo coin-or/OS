@@ -27,7 +27,7 @@
 
 using std::string;
 
-extern const SmartPtr</*const*/ OSOutput> osoutput;
+extern const OSSmartPtr<OSOutput> osoutput;
 
 void OSCommandLine::reset_options()
 {
