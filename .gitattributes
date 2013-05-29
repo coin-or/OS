@@ -110,6 +110,14 @@ OS/data/amplFiles/LP_infeasible.mod -text
 OS/data/amplFiles/LP_infeasible.nl -text
 OS/data/amplFiles/LP_unbounded.mod -text
 OS/data/amplFiles/LP_unbounded.nl -text
+OS/data/amplFiles/NLP_unbounded1.mod -text
+OS/data/amplFiles/NLP_unbounded1.nl -text
+OS/data/amplFiles/NLP_unbounded1_discrete.mod -text
+OS/data/amplFiles/NLP_unbounded1_discrete.nl -text
+OS/data/amplFiles/NLP_unbounded2.mod -text
+OS/data/amplFiles/NLP_unbounded2.nl -text
+OS/data/amplFiles/NLP_unbounded2_discrete.mod -text
+OS/data/amplFiles/NLP_unbounded2_discrete.nl -text
 OS/data/amplFiles/Pietros-test.nl -text
 OS/data/amplFiles/blpmpec.dat -text
 OS/data/amplFiles/blpmpec.mod -text

@@ -185,7 +185,6 @@ int main(int argc, char **argv)
     {
         temp2 << temp; 
         amplclient_options = temp2.str();
-        std::cout << amplclient_options << std::endl;
     }
     else
         amplclient_options = "";

@@ -186,7 +186,7 @@ int main(int argC, const char* argV[])
     void* scanner;
     FileUtil *fileUtil = NULL;
     FileUtil *inputFileUtil = NULL;
-    char osss[MAXCHARS] = " ";
+    std::ostringstream osss;
     const char *space = " ";
     const char *quote = "\"";
     //char *config = "-config";
@@ -203,11 +203,12 @@ int main(int argC, const char* argV[])
 		
     try
     {
-		
-    // make sure we do not exceed max allowed characters in command line
-        i = 1;
+
+	// put the command line arguments into a string for parsing		
         bool addQuotes;
-        while (i < argC)
+		osss << space; // needed to avoid segfault in case command line is empty
+
+        for (i = 1; i < argC; i++)
         {
             addQuotes = false;
             if (argV[i][0] != '\"')
@@ -221,27 +222,22 @@ int main(int argC, const char* argV[])
                 }
             if (addQuotes)
             {
-                if (strlen(osss) + strlen(argV[i]) + 3 > MAXCHARS)
-                    throw ErrorClass("The command line exceeds allocated storage. Increase parameter MAXCHARS.");
-                strcat(osss, quote);
-                strcat(osss, argV[i]);
-                strcat(osss, quote);
-                strcat(osss, space);
+                osss << quote;
+                osss << argV[i];
+                osss << quote;
+                osss << space;
             }
             else
             {
-                if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
-                    throw ErrorClass("The command line exceeds allocated storage. Increase parameter MAXCHARS.");
-                strcat(osss, argV[i]);
-                strcat(osss, space);
+                osss << argV[i];
+                osss << space;
             }
-            i++;
         }
 
 #ifndef NDEBUG
         outStr.str("");
         outStr.clear();
-        outStr << "Input String = " << osss << std::endl;
+        outStr << "Input String = " << osss.str() << std::endl;
         osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 
@@ -258,7 +254,7 @@ int main(int argC, const char* argV[])
         osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call scan string\n");
 #endif
 
-        osss_scan_string(osss, scanner);
+        osss_scan_string((osss.str()).c_str(), scanner);
 
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call ossslex\n");
@@ -323,7 +319,7 @@ int main(int argC, const char* argV[])
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call scan string\n");
 #endif
 
-            osss_scan_string(osss, scanner);
+            osss_scan_string((osss.str()).c_str(), scanner);
 
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "call ossslex\n");
@@ -684,7 +680,7 @@ void solve(OSCommandLine *oscommandline)
     // now solve either remotely or locally
     try
     {
-        if (oscommandline->serviceLocation != "")
+        if (oscommandline->serviceLocation != "") // remote call
         {
             // call a method here to get OSiL if we have an nl or mps file
             if (oscommandline->osil == "")
@@ -715,9 +711,9 @@ void solve(OSCommandLine *oscommandline)
                 }
             }
 
-	    if (oscommandline->printModel)
-		doPrintModel(oscommandline);
-	    else if (oscommandline->printRowNumberAsString != "")
+	        if (oscommandline->printModel)
+		        doPrintModel(oscommandline);
+	        else if (oscommandline->printRowNumberAsString != "")
                 doPrintRow(oscommandline);
 
             // place a remote call

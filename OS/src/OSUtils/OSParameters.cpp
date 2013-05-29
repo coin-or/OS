@@ -14,10 +14,10 @@
  */
 
 
-
-
 #include "OSConfig.h"
 #include "OSParameters.h"
+
+#include <cstdlib>
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -78,17 +78,27 @@ std::string OSgetVersionInfo()
     versionInfo << std::endl;
     versionInfo << "Distributed under the Eclipse Public License" ;
     versionInfo << std::endl;
-    versionInfo << "OS Version: ";
-    versionInfo << OS_VERSION;
-    versionInfo << std::endl;
-    versionInfo << "Build Date: ";
-    versionInfo << __DATE__;
+
+//  OS_VERSION is not an environment variable, so to inspect it requires a bit of care
+    ostringstream temp_version;
+    temp_version << OS_VERSION;
+
+    versionInfo << "OS Version:  ";
+    if (temp_version.str() == "trunk")
+    {
+        versionInfo << "trunk";
+#ifdef OS_SVN_REV
+        versionInfo << std::endl;
+        versionInfo << "SVN Version: ";
+        versionInfo << OS_SVN_REV;
+#endif
+    }
+    else
+        versionInfo << OS_VERSION;
     versionInfo << std::endl;
 
-#ifdef OS_SVN_REV
-    versionInfo << "SVN Version: ";
-    versionInfo << OS_SVN_REV;
-#endif
+    versionInfo << "Build Date: ";
+    versionInfo << __DATE__;
 
     versionInfo << std::endl << std::endl;
     return versionInfo.str() ;
