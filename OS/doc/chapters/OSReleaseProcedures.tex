@@ -1,5 +1,18 @@
 \division{OS Release Procedure}\label{section:ReleaseProcedure} 
 
+\subdivision{Preparing the release}\label{section:ReleasePrep}
+
+There are four scripts 
+
+\subsubdivision{version numbers}{\label{section:VersionNumbering}
+
+The version number is defined in the file {\tt configure.ac}. There are actually two versions of this file,
+in the root directory as well as the top OS directory. Each of them contains a call to {\tt AC_INIT}, 
+in which the second parameter is the version number. Change this number appropriately as follows:
+For trunk versions, use {\bf trunk}, so that {\tt OSgetVersionNumber()} can print the correct svn revision number in the header of the output; for stable and release versions use the proper number ({\tt n.n} for stable versions, {\tt n.n.n} for releases).
+
+\subdivision{Release testing}\label{section:ReleaseTesting}
+
 \begin{itemize}
 
 \item[1.] Run the {\bf nightlyBuild.py} script.

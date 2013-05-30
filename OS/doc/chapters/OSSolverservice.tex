@@ -101,7 +101,9 @@ This is particularly useful if the problem was read in AMPL format and the AMPL 
 \item[] {\tt solver  solverName}\ \ 
 %Possible values for default OS installation are {\tt clp} (COIN-OR Clp),
 %{\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY).
-Possible values of this parameter depend on the installation. The default configurations can be read off from
+Possible values of this parameter depend on the installation. 
+\ifdevelop
+The default configurations can be read off from
 Table~\ref{table:configurations}.
 Other solvers supported (if the necessary libraries are present) are 
 {\tt cplex} (Cplex through COIN-OR Osi)\index{cplex@{\tt cplex}}\index{COIN-OR projects!Osi@{\tt Osi}|(},
@@ -109,6 +111,10 @@ Other solvers supported (if the necessary libraries are present) are
 %, {\tt ipopt} (COIN-OR Ipopt)
 \ifknitro, {\tt knitro} (Knitro)\index{Knitro@{\tt Knitro}}\fi
 and {\tt lindo} (LINDO)\index{LINDO}.
+\else
+The OS executable in the CoinAll binary collection supports the following solvers: {\tt Clp}, {\tt Cbc},
+{\tt DyLP}, {\tt SYMPHONY}, {\tt Ipopt}, {\tt Bonmin}, {\tt Couenne}.
+\endif
 If no value is specified for this parameter, then a default solver is used 
 %then {\tt cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default value of this parameter 
 for the (local) {\tt solve}\index{solve@{\tt solve}} %or {\tt send}\index{send@{\tt send}} service
@@ -117,8 +123,9 @@ The default solver depends on the problem type and can be read off from
 table~\ref{table:defaultsolvers}.\index{default solver}
 {\bf Note that this option only has effect for local calls.} 
 For a remote solve or send, put the solver name into the field {\tt <solverToInvoke>} in an
-OSoL file and specify this file with {\tt osol ...}.
+OSoL file and specify this file with {\tt osol xxx.osol}.
 
+\ifdevelop
 \begin{table}
 \caption{Solver configurations}
 \centering
@@ -145,6 +152,7 @@ $\qquad{}^1$Requires third-party software to be downloaded\\
 $\qquad{}^2$Requires Fortran compiler \ifdevelop(see Section~\ref{section:ipopt})\fi
 \end{tabular}
 \end{table}\index{supported solvers}
+\fi
 
 \begin{table}
 \caption{Default solvers}

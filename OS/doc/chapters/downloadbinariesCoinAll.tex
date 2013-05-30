@@ -6,19 +6,18 @@ The CoinAll project is actually a meta-project consisting of most of the COIN-OR
 Most users will only be interested in obtaining the binaries, which we describe  next.
 %in Section~\ref{section:obtainingbinaries}. The remaining sections of this chapter deal with obtaining 
 %the source code for the project, which will be of interest mostly to developers.
-It is also possible to obtain the source code for the project, which will be of interest mostly to developers. 
+It is also possible to obtain the source code for the projects, which will be of interest mostly to developers. 
 \ifdevelop
 Details can be found in  Section~\ref{section:downloadsource}.
 \else
 If binaries are not provided for a particular operating system, it may be possible to build them from the source.
 For details it is best to start reading the wiki page for the individual project or projects of interest.
-%OS web page at~{\tt\UrlOsWiki} or the comprehensive OS User's Manual, which can be accessed at that web site.
 \fi
 
 
 %If the user does not wish to compile source code, the OS library, OSSolverService executable
 %and Tomcat server software configuration are available in binary format for some operating systems.     
-The repositoryof the binaries is at {\tt\UrlOsBinaries}\index{Downloading!binaries}.
+The repository of the binaries is at {\tt\UrlCoinAllDownload}\index{Downloading!binaries}.
 %
 \ifdevelop
  Unlike the source code described in Section~\ref{section:downloadwithsvn}, the binary files 
@@ -28,16 +27,18 @@ are not subject to version control and can be downloaded using an ordinary brows
 %this requires svn. (See Sections \ref{section:svn}, \ref{section:downloadwithsvn} and~\ref{section:build}.)
 \fi
 
-The binary distribution for the OS library and executables follows the following naming convention:
+The binary distribution for the CoinAll library and executables follows the following naming convention:
 
 
 \begin{verbatim}
-OS-version_number-platform-compiler-build_options.tgz (zip)
+CoinAll-version_number-platform-compiler-build_options.tgz (zip)
 \end{verbatim}
-For example, OS  Release 2.1.0 compiled with the Intel 9.1 compiler on an Intel 32-bit Linux system is:
+For example, CoinAll  Release 1.6.0 compiled with the Intel 11.1 compiler on a 64 bit Windows system is:
 \begin{verbatim}
-OS-2.1.0-linux-x86-icc9.1.tgz
+CoinAll-1.6.0-win64-intel11.1.zip
 \end{verbatim}
+
+
 
 For more detail on the naming convention and examples see:
 
@@ -48,45 +49,18 @@ For more detail on the naming convention and examples see:
 After unpacking the {\tt tgz} or {\tt zip} archives, the following folders are available.
 \begin{itemize}
 
-\item[] {\bf bin --} this directory has the executables {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}} 
-and {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}.
+\item[] {\bf bin --} this directory contains all the executables.
 
-\item[]  {\bf include --} the header files that are necessary in order to link against the OS library.
+\item[] {\bf examples --} this directory contains several examples that illustrate working with 
+the libraries. Some data files for working with the examples are also included.
 
-\item[] {\bf lib --} the libraries that are necessary for creating applications that use the OS library.
+\item[]  {\bf include --} the header files that are necessary in order to link against the various libraries.
 
-\item[] {\bf  share --} license and author information for all the projects used by the OS project.
+\item[] {\bf lib --} the libraries that are necessary for creating applications that use the  libraries.
+
+\item[] {\bf  share --} license and author information for all the projects used by the CoinAll project as well as a number of further data files of linear and integer programming problems.
 \end{itemize}
 
 
 
-Files are also provided for an Apache Tomcat\index{Apache Tomcat} Web server along with the associated Web service
-that can
-read SOAP \index{SOAP protocol} envelopes with model instances in OSiL\index{OSiL} format and/or options in 
-OSoL\index{OSoL} format, call the {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}},
-and return the optimization result in OSrL\index{OSrL} format.
-The naming convention\index{file naming conventions} for the server binary is
-\begin{verbatim}
-OS-server-version_number.tgz (.zip)
-\end{verbatim}
-For example, the files associated with  OS server release 2.0.0 are in the binary distribution
-\begin{verbatim}
-OS-server-2.0.0.tgz
-\end{verbatim}
-There is no platform information given since the server and related binaries were written in Java\index{Java}.
-The details and use of this distribution are described in Section~\ref{section:tomcat}.
 
-
-
-Finally for Windows users we provide Visual Studio \index{Microsoft Visual Studio} project files 
-(and supporting libraries and header files) for building projects based on the OS library and libraries 
-used by the OS project. The binary for this is named
-\begin{verbatim}
-OS-version_number-VisualStudio.zip
-\end{verbatim}
-For example, the necessary files associated with  OS  stable\index{OS project!stable release} 2.4 
-are in the binary distribution
-\begin{verbatim}
-OS-2.4-VisualStudio.zip
-\end{verbatim}
-The binaries provided are based on Visual Studio Express 2008.  See Section \ref{section:vsexamples} for more detail.
