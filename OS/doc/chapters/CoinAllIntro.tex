@@ -1,0 +1,60 @@
+\division{The CoinEasy Project and CoinAll}
+
+(Much of the material in this section is taken from the CoinEasy web page at\\
+{\tt\UrlCoinEasy}.)
+
+
+As the name implies, the CoinEasy project is designed to make it easy to use COIN-OR projects. It addresses the needs of two groups of users:
+
+\begin{enumerate}
+
+\item Users who want to access COIN-OR solvers to solve optimization problems without having to compile code.
+
+\item Users who want to write applications that use pre-built COIN-OR libraries. 
+\end{enumerate}
+
+Users who want to build COIN-OR projects from source code are directed to the home pages of the respective projects for more information.
+
+
+\ifruncode
+This document is aimed specifically at the first group of users. An enlarged document that also includes material for group 2 users can be found at\\
+{\tt\UrlCoinAllLibsPdf}.
+\else
+This document addresses the need of both groups of users. A slimmed-down version that does not include material on the CoinAll libraries can be found at\\
+{\tt\UrlCoinAllBinaryPdf}.
+\fi
+
+In the information below, we mention the CoinAll and ​CoinBinary  ​ projects.  
+CoinAll is  a meta project that consists of most of the solver and utility projects in COIN-OR. 
+As such it currently does not have its own web page. 
+CoinBinary is a project that provides compiled executable programs and libraries for the projects in CoinAll as well as some other COIN-OR projects. 
+Its web page is at {\tt\UrlCoinBinary}. The binary distribution of the CoinAll executables and libraries can be found at {\tt\UrlCoinAllDownload}.
+
+Like other COIN-OR projects, CoinAll has a versioning system that ensures end users some degree of stability 
+and a stable upgrade path as project development continues. The current  version of the CoinAll binaries is 1.6.2.
+
+The CoinAll binary distribution includes the following projects
+
+\begin{itemize}
+\item{\tt clp - } an open-source linear programming solver \ifuselibs written in C++\fi.
+
+\item{\tt cbc - } an open-source mixed integer programming solver \ifuselibs written in C++\fi.
+
+\item{\tt symphony - } an open-source solver for mixed-integer linear programs (MILPs) \ifuselibs written in C\fi. It supports parallel computations.
+
+\item{\tt ipopt - } a software package designed to find (local) solutions for large-scale ​nonlinear optimization problems.
+
+\item{\tt bonmin - } an experimental open-source C++ code for solving general MINLP (Mixed Integer NonLinear Programming) problems.
+
+\item{\tt couenne - } an exact solver for nonconvex MINLPs.
+
+\item{\tt blis - } a high-performance parallel search implementation for mixed integer linear programs.
+
+\item{\tt OSSolverService - } an integrative framework that allows the other solvers to be called both locally and remotely.
+
+\end{itemize}
+
+OSSolverService is a harness around the other programs, calling any one of them as directed by the user, or as determined by characteristics of the problem.
+This document is written mostly from the point of view of explaining and supporting OSSolverService; for information on using the individual solvers in stand-alone form, consult their respective wiki pages.
+
+

@@ -73,7 +73,8 @@ The options are
 {\tt getJobID}\index{getJobID@{\tt getJobID}}, and 
 {\tt retrieve}\index{retrieve@{\tt retrieve}}.
 The use of these options is illustrated in the examples below. This parameter is not required, 
-and the default value is {\tt solve}\index{solve@{\tt solve}|)}.
+and it has no effect for problems solved locally.
+The default value is {\tt solve}\index{solve@{\tt solve}|)}. 
 
 \item[] {\tt mps  xxx.mps}\ \ This is the path information and name of the MPS file if the problem instance 
 is in MPS format\index{MPS format}. It is assumed that this file is available on the machine that is running 
@@ -114,7 +115,7 @@ and {\tt lindo} (LINDO)\index{LINDO}.
 \else
 The OS executable in the CoinAll binary collection supports the following solvers: {\tt Clp}, {\tt Cbc},
 {\tt DyLP}, {\tt SYMPHONY}, {\tt Ipopt}, {\tt Bonmin}, {\tt Couenne}.
-\endif
+\fi
 If no value is specified for this parameter, then a default solver is used 
 %then {\tt cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default value of this parameter 
 for the (local) {\tt solve}\index{solve@{\tt solve}} %or {\tt send}\index{send@{\tt send}} service
@@ -185,7 +186,7 @@ using XSLT into HTML and displayed in the browser.
 
 \item[] {\tt config xxx.config}\ \ This optional parameter specifies a path on the local machine 
 to a text file containing values for the input parameters. This is convenient for the user not wishing 
-to constantly retype parameter values. A config file can be used instead of or in copnjunction with command line options.
+to constantly retype parameter values. A config file can be used instead of or in conjunction with command line options.
 In case of conflicting information,  command line options take precedence over entries in the config file.
 
 \item[] {\tt --help}\ \  This parameter prints out the list of available options (in essence, this list).
@@ -247,6 +248,10 @@ to execute {\tt OSSolverService} from the {\tt bin} directory so that all that f
 \end{verbatim}
 \fi
 
+{\bf Windows users} should {\bf note} that the folder separator is always 
+the forward slash (`/') instead of the customary backslash (`$\backslash$').
+
+\medskip
 Alternatively, these parameters can be put into a configuration file.
 Assume that the configuration file of interest is {\tt testlocalclp.config}.
 It would contain the two lines of information
@@ -274,32 +279,31 @@ Then the command line is
 ./OSSolverService config ../examples/data/configFiles/testlocalclp.config
 \end{verbatim}
 \fi
-{\bf Windows users} should {\bf note} that the folder separator is always 
-the forward slash (`/') instead of the customary backslash (`$\backslash$').
 
 
-Parameters specified in the configure file are overridden by parameters specified at the command line.
+Parameters specified in the configure file can be overridden by parameters specified at the command line.
 This is convenient if a user has a base configure file and wishes to override only a few options. For example,
 %
 \ifdevelop
 \begin{verbatim}
-./OSSolverService config $DATA/configFiles/testlocalclp.config solver lindo
+./OSSolverService config $DATA/configFiles/testlocalclp.config solver dylp
 \end{verbatim}
 or
 \begin{verbatim}
-./OSSolverService solver lindo config $DATA/configFiles/testlocalclp.config
+./OSSolverService solver dylp config $DATA/configFiles/testlocalclp.config
 \end{verbatim}
 \else
 \begin{verbatim}
-./OSSolverService config ../examples/data/configFiles/testlocalclp.config solver lindo
+./OSSolverService config ../examples/data/configFiles/testlocalclp.config solver dylp
 \end{verbatim}
 or
 \begin{verbatim}
-./OSSolverService solver lindo config ../examples/data/configFiles/testlocalclp.config
+./OSSolverService solver dylp config ../examples/data/configFiles/testlocalclp.config
 \end{verbatim}
 \fi
 %
-will result in the LINDO\index{LINDO} solver being used even though {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} is specified in the
+will result in the DyLP\index{COIN-OR projects!DyLP@{\tt DyLP}} solver being used 
+even though {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} is specified in the
 {\tt testlocalclp} configure file.
 
 Some things to note:
@@ -366,8 +370,9 @@ the command line option {\tt solver}  has no effect.
 
 \subdivision{Solving Problems Locally}
 
-Generally, when solving a problem locally the user will use the {\tt solve}\index{solve@{\tt solve}} service 
-method. The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  
+%Generally, when solving a problem locally the user will use the {\tt solve}\index{solve@{\tt solve}} service method. The {\tt solve} method 
+When solving a problem locally, the {\tt OSSolverService} executable
+is invoked synchronously and waits for the solver to return the result.  
 This is illustrated in Figure~\ref{figure:ossolverservicelocal}. As illustrated, the {\tt OSSolverService} 
 reads a file on the hard drive with the optimization instance, usually in OSiL\index{OSiL} format. 
 The optimization instance is parsed into a string which is passed to the {\tt OSLibrary}\index{OSLibrary@{\tt OSLibrary}} 
@@ -398,17 +403,15 @@ to invoke {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} locally using th
 \begin{verbatim}
 osil $DATA/osilFiles/parincQuadratic.osil
 solver ipopt
-serviceMethod solve
-browser /Applications/Firefox.app/Contents/MacOS/firefox
-osrl /Users/kmartin/temp/test.osrl
+browser /usr/lib/firefox/firefox.sh
+osrl /tmp/OS/test.osrl
 \end{verbatim}
 \else
 \begin{verbatim}
 osil ../examples/data/osilFiles/parincQuadratic.osil
 solver ipopt
-serviceMethod solve
-browser /Applications/Firefox.app/Contents/MacOS/firefox
-osrl /Users/kmartin/temp/test.osrl
+browser /usr/lib/firefox/firefox.sh
+osrl /tmp/OS/test.osrl
 \end{verbatim}
 \fi
 
@@ -417,9 +420,7 @@ The first line of {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.c
 of the OSiL file,
 {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter,
 {\tt solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt.
-The third parameter {\tt serviceMethod solve} is not really needed, since the default solver service 
-is {\tt solve}. It is included only for illustration. 
-The fourth parameter is the location of the browser on the local machine. 
+The third parameter is the location of the browser on the local machine. 
 The fifth parameter is  {\tt osrl}. The value of this parameter, {\tt /Users/kmartin/temp/test.osrl}, 
 specifies the location on the local machine where the OSrL\index{OSrL} result file will get written.
 
@@ -540,6 +541,9 @@ osil ../examples/data/osilFiles/parincLinear.osil
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \fi
+
+The third parameter {\tt serviceMethod solve} is not really needed, since the default solver service 
+is {\tt solve}. It is included only for illustration. 
 
 No solver is specified and by default the  {\tt Clp} solver  is used by the {\tt OSSolverService}, 
 since the problem is a continuous linear program.
