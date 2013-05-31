@@ -77,8 +77,9 @@ public class CommonUtil{
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		int i;
+		int i; 
 		int iNumberIPAddress = (mIPAddress == null)?0:mIPAddress.length;
+		iNumberIPAddress = iNumberIPAddress==0?0:1;
 		for(i = 0; i < iNumberIPAddress; i++){
 			sJobID += mIPAddress[i].getHostAddress();
 			if(i != iNumberIPAddress -1) sJobID+="_";
