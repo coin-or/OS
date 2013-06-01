@@ -12,8 +12,7 @@ AUTOMAKE_OPTIONS = foreign
 #                             libOSParsers                         #
 ########################################################################
 
-# Name of the library compiled in this directory.  We want it to be installed
-# in the 'lib' directory
+# Name of the library compiled in this directory.  We do not want it to be installed.
 noinst_LTLIBRARIES = libOSParsers.la
 
 # List all source files for this library, including headers
@@ -34,11 +33,27 @@ libOSParsers_la_SOURCES = \
 		OSiLParserData.cpp \
 		OSrLParserData.h \
 		OSrLParserData.cpp \
-                OSoLParserData.h \
-                OSoLParserData.cpp
-		
+		OSoLParserData.h \
+		OSoLParserData.cpp
 
-# This is for libtool (on Windows)
+$(srcdir)/OSParseosrl.tab.cpp : $(srcdir)/OSParseosrl.y
+	$(YACC) -ldv -p osrl -o $@ $<
+	
+$(srcdir)/OSParseosrl.cpp : $(srcdir)/OSParseosrl.l
+	$(LEX) -Posrl -o$@ $<
+
+$(srcdir)/OSParseosil.tab.cpp : $(srcdir)/OSParseosil.y
+	$(YACC) -ldv -p osil -o $@ $<
+	
+$(srcdir)/OSParseosil.cpp : $(srcdir)/OSParseosil.l
+	$(LEX) -Posil -o$@ $<
+
+$(srcdir)/OSParseosol.cpp : $(srcdir)/OSParseosol.l
+	$(LEX) -Posol -o$@ $<
+
+$(srcdir)/OSParseosss.cpp : $(srcdir)/OSParseosss.l
+	$(LEX) -Posss -o$@ $<
+
 libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
@@ -67,8 +82,8 @@ includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSParseosil.tab.hpp \
 	OSParseosrl.tab.hpp \
-        OSParseosol.tab.hpp \
+	OSParseosol.tab.hpp \
 	OSgLParserData.h \
 	OSiLParserData.h \
 	OSrLParserData.h \
-        OSoLParserData.h
+	OSoLParserData.h

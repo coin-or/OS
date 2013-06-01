@@ -298,6 +298,7 @@ AM_CONDITIONAL(USEMULTIPLYDEFINED, test x$mac_osx = xyes)
 #############################################################################
 
 AC_PROG_YACC
+AM_PROG_LEX
 
 #############################################################################
 # Define the root of the OS project                                         #
