@@ -182,7 +182,7 @@ to send additional information to a file, to be analyzed once the job has finish
 
 \item[] {\tt browser  browserName}\ \ This parameter is a path to the browser on the local machine. 
 If this optional parameter is specified then the solver result in OSrL\index{OSrL} format is transformed 
-using XSLT into HTML and displayed in the browser.
+using XSLT into HTML and displayed in the browser. This parameter can only be used in conjunction with the {\tt osrl} parameter. In addition, some browsers require that the stylesheet OSrL.xslt is found in the same directory as the result file.
 
 \item[] {\tt config xxx.config}\ \ This optional parameter specifies a path on the local machine 
 to a text file containing values for the input parameters. This is convenient for the user not wishing 
@@ -396,7 +396,7 @@ The result of the optimization is passed back to the {\tt OSSolverService} as a 
 
 
 
-Here is an example of using a configure file,  {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|(},
+Here is an example that uses a configure file,  {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|(},
 to invoke {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} locally using the {\tt solve}\index{solve@{\tt solve}} command.
 
 \ifdevelop
@@ -421,9 +421,15 @@ of the OSiL file,
 {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter,
 {\tt solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt.
 The third parameter is the location of the browser on the local machine. 
-The fifth parameter is  {\tt osrl}. The value of this parameter, {\tt /Users/kmartin/temp/test.osrl}, 
+The fourth parameter is  {\tt osrl}. The value of this parameter, {\tt /tmp/OS/test.osrl}, 
 specifies the location on the local machine where the OSrL\index{OSrL} result file will get written.
-
+In order for the browser to find the stylesheet used it is necessary to copy the file
+\ifdevelop
+{\tt \$ OS/stylesheets//OSrL.xslt}
+\else
+{\tt ../examples/data/OSrL.xslt}
+\fi
+into the {\tt /tmp/OS} directory before invoking {\tt OSSolverService}.
 
 %Parameters may also be contained in an XML-file in OSoL\index{OSoL} format. In the configuration %file
 %{\tt testlocalosol.config} we illustrate specifying the instance location in an OSoL file.
@@ -454,12 +460,17 @@ In many cases the client machine may be a ``weak client'' and  using a more powe
 hard optimization instance is required. Indeed, one of the major purposes of Optimization Services is to
 facilitate optimization in a distributed environment.   We now provide examples that illustrate using the
 {\tt OSSolverService} executable to call a remote solver service.   By remote solver service we mean a
-solver service that is called using Web Services.  The OS implementation  of the solver service
+solver service that is called using Web Services.  
+One such solver service is maintained at
+\begin{verbatim}
+http://74.94.100.129:8080/OSServer/services/OSSolverService
+\end{verbatim}
+The implementation  of this solver service
 uses Apache Tomcat\index{Apache Tomcat}. See \url{tomcat.apache.org}. The Web Service running on the server
 is a Java program based on Apache Axis\index{Apache Axis}. See \url{ws.apache.org/axis}. 
 This is described in greater detail in \ifdevelop Section~\ref{section:tomcat}\else the OS User's Manual\fi.
 This Web Service is called {\tt OSSolverService.jws}\index{OSSolverService.jws@{\tt OSSolverService.jws}}.
-It is not necessary to use the Tomcat/Axis combination.
+Other servers may become available, and there is no requirement to use the Tomcat/Axis combination.
 
 
 
@@ -539,6 +550,7 @@ where the {\tt testremote.config} file is
 \begin{verbatim}
 osil ../examples/data/osilFiles/parincLinear.osil
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceMethod solve
 \end{verbatim}
 \fi
 
@@ -567,6 +579,7 @@ to the  {\tt testremote.config} file\index{testremote.config@{\tt testremote.con
 \index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}
 When solver information is given both on the command line and in the config file, the command line information supercedes the config file.
 
+\iffalse
 \index{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}
 Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually residing
 on the remote machine that is hosting the {\tt OSSolverService} and not on the client machine.
@@ -597,9 +610,11 @@ where the {\tt remoteSolve1.osol} file is
 </osol>
 \end{verbatim}
 \index{remoteSolve1.osol@{\tt remoteSolve1.osol}|)}
+\fi
 
-If we were to change the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we
-could specify the instance location on yet another machine. This is illustrated below  for {\tt remoteSolve2.osol}.
+%If we were to change the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we
+By adding the {\tt <instanceLocation>} element and setting the {\tt locationType} attribute to {\tt http}  we
+could specify the instance location on yet another machine. This is illustrated below  using {\tt remoteSolve2.osol}.
 The scenario is depicted in Figure~\ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver
 service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to
 {\tt http}.  In this case, the text of the {\tt <instanceLocation>} element contains the URL of a third machine which
