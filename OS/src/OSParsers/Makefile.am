@@ -48,6 +48,9 @@ $(srcdir)/OSParseosil.tab.cpp : $(srcdir)/OSParseosil.y
 $(srcdir)/OSParseosil.cpp : $(srcdir)/OSParseosil.l
 	$(LEX) -Posil -o$@ $<
 
+$(srcdir)/OSParseosol.tab.cpp : $(srcdir)/OSParseosol.y
+	$(YACC) -ldv -p osol -o $@ $<
+	
 $(srcdir)/OSParseosol.cpp : $(srcdir)/OSParseosol.l
 	$(LEX) -Posol -o$@ $<
 
