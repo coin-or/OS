@@ -397,8 +397,20 @@ The result of the optimization is passed back to the {\tt OSSolverService} as a 
 
 
 Here is an example that uses a configure file,  {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|(},
-to invoke {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} locally using the {\tt solve}\index{solve@{\tt solve}} command.
-
+to invoke {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} locally using the {\tt solve}\index{solve@{\tt solve}} command. The example is invoked by specifying
+%
+\ifdevelop
+\begin{verbatim}
+./OSSolverService config $DATA/configFiles/testLocal.config 
+\end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testLocal.config
+\end{verbatim}
+\fi
+%
+where the content of the file {\tt testLocal.config} is
+%
 \ifdevelop
 \begin{verbatim}
 osil $DATA/osilFiles/parincQuadratic.osil
@@ -416,14 +428,15 @@ osrl /tmp/OS/test.osrl
 \fi
 
 
-The first line of {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|)} gives the local location
+The first line of {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|)} gives the location
 of the OSiL file,
 {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter,
 {\tt solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt.
 The third parameter is the location of the browser on the local machine. 
 The fourth parameter is  {\tt osrl}. The value of this parameter, {\tt /tmp/OS/test.osrl}, 
 specifies the location on the local machine where the OSrL\index{OSrL} result file will get written.
-In order for the browser to find the stylesheet used it is necessary to copy the file
+
+Due to security concerns when working with stylesheets, some browsers require copying  the file
 \ifdevelop
 {\tt \$ OS/stylesheets//OSrL.xslt}
 \else
@@ -531,22 +544,23 @@ In the following sections we illustrate each of the six service methods.
 
 \index{solve@{\tt solve}|(}
 First we illustrate a simple call to  {\tt OSSolverService}.  The call on the client machine is
-\index{testremote.config@{\tt testremote.config}|(}
+\index{testRemote1.config@{\tt testRemote1.config}|(}
 %
 \ifdevelop
 \begin{verbatim}
-./OSSolverService config $DATA/configFiles/testremote.config
+./OSSolverService config $DATA/configFiles/testRemote1.config
 \end{verbatim}
-where the {\tt testremote.config} file is
+where the {\tt testRemote1.config} file is
 \begin{verbatim}
 osil $DATA/osilFiles/parincLinear.osil
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceMethod solve
 \end{verbatim}
 \else
 \begin{verbatim}
-./OSSolverService config ../examples/data/configFiles/testremote.config
+./OSSolverService config ../examples/data/configFiles/testRemote1.config
 \end{verbatim}
-where the {\tt testremote.config} file is
+where the {\tt testRemote1.config} file is
 \begin{verbatim}
 osil ../examples/data/osilFiles/parincLinear.osil
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
@@ -556,28 +570,35 @@ serviceMethod solve
 
 The third parameter {\tt serviceMethod solve} is not really needed, since the default solver service 
 is {\tt solve}. It is included only for illustration. 
+\index{testRemote1.config@{\tt testRemote1.config}|)}
 
-No solver is specified and by default the  {\tt Clp} solver  is used by the {\tt OSSolverService}, 
-since the problem is a continuous linear program.
+The only way to specify a solver for the remote call is by using an OSoL file that contains the element  {\tt <solverToInvoke>}. Since no OSol file was given, the remote {\tt OSSolverService} on the server side will use the {\tt Clp} solver by default. (The problem, {\tt parincLinear.osil}, is a continuous linear program.)
+
 If, for example, the user wished to solve the problem with the 
-{\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(} solver then this is accomplished
-either by using the  {\tt solver} option on the command line
+{\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}} solver instead,
+then this is accomplished by specifying the OSoL file either on the command line or in the config file
+using the parameter
 \ifdevelop
 \begin{verbatim}
-./OSSolverService config $DATA/configFiles/testremote.config solver symphony
+{\tt osol $DATA/data/osolFiles/remoteSolve1.osol}
 \end{verbatim}
 \else
 \begin{verbatim}
-./OSSolverService config ../examples/data/configFiles/testremote.config solver symphony
+{\tt osol ../examples/data/osolFiles/remoteSolve1.osol}
 \end{verbatim}
 \fi
-or by  adding  the line
+
+The content of {\tt remoteSolve1.osol} is
 \begin{verbatim}
- solver symphony
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+    <general>
+	<solverToInvoke>symphony</solverToInvoke>      
+   </general>
+</osol>
 \end{verbatim}
-to the  {\tt testremote.config} file\index{testremote.config@{\tt testremote.config}|)}.
-\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}
-When solver information is given both on the command line and in the config file, the command line information supercedes the config file.
 
 \iffalse
 \index{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}
@@ -613,14 +634,28 @@ where the {\tt remoteSolve1.osol} file is
 \fi
 
 %If we were to change the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we
-By adding the {\tt <instanceLocation>} element and setting the {\tt locationType} attribute to {\tt http}  we
-could specify the instance location on yet another machine. This is illustrated below  using {\tt remoteSolve2.osol}.
+By adding the {\tt <instanceLocation>} element and setting the {\tt locationType} attribute to 
+{\tt http}  we could specify the instance location on yet another machine. 
 The scenario is depicted in Figure~\ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver
-service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to
-{\tt http}.  In this case, the text of the {\tt <instanceLocation>} element contains the URL of a third machine which
+service is empty.  However,  the text of the {\tt <instanceLocation>} element contains the URL of a third machine (the COIN-OR web server at {\tt http://www.coin-or.org}), which 
 has the problem instance {\tt p0033.osil}.  The solver service will contact the machine with URL
-{\tt http://www.coin-or.org/OS/p0033.osil} and download this test problem. So the {\tt OSSolverService} is
-running on the server {\tt http://74.94.100.129:8080/} which contacts the server {\tt www.coin-or.org} for the model instance.
+{\tt http://www.coin-or.org/OS/p0033.osil} and download this test problem. 
+%So the {\tt OSSolverService} is running on the server {\tt http://74.94.100.129:8080/} 
+%which contacts the server {\tt www.coin-or.org} for the model instance.
+The command line to accomplish this is
+\ifdevelop
+\begin{verbatim}
+./OSSolverService osol $DATA/osolFiles/remoteSolve2.osol \
+     serviceLocation  http://74.94.100.129:8080/OSServer/services/OSSolverService
+\end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService osol ../examples/data/osolFiles/remoteSolve2.osol \
+     serviceLocation  http://74.94.100.129:8080/OSServer/services/OSSolverService
+\end{verbatim}
+\fi
+%
+where {\tt remoteSolve2.osol} contains
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org"
@@ -667,7 +702,7 @@ method is used, the instance is communicated to the remote service and the
 \end{verbatim}
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
--nl $DATA/amplFiles/hs71.nl
+nl $DATA/amplFiles/hs71.nl
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod send   osol $DATA/osolFiles/sendWithJobID.osol
 \end{verbatim}
@@ -677,7 +712,7 @@ serviceMethod send   osol $DATA/osolFiles/sendWithJobID.osol
 \end{verbatim}
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
--nl ../examples/data/amplFiles/hs71.nl
+nl ../examples/data/amplFiles/hs71.nl
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod send  osol ../examples/osolFiles/sendWithJobID.osol
 \end{verbatim}
@@ -690,12 +725,8 @@ the nl format\index{AMPL nl format|)} into the OSiL\index{OSiL} XML format and p
 into the SOAP\index{SOAP protocol} envelope used by Web Services.
 
 Since the {\tt send} method involves asynchronous communication the remote solver service must keep track of jobs.
-The {\tt send} method requires a {\tt JobID}\index{JobID@{\tt JobID}|(}. In the above example no {\tt JobID} was specified.
-When no {\tt JobID} is specified the {\tt OSSolverService} method first invokes the {\tt getJobID} service method
-to get a {\tt JobID}, puts this information into an OSoL\index{OSoL|(} file it creates, and sends the information
-to the server. More information on the {\tt getJobID} service method is provided in Section~\ref{section:getjobid}.
-The {\tt OSSolverService} prints the OSoL file to standard output before termination.
-This is illustrated below,
+The {\tt send} method requires a {\tt JobID}\index{JobID@{\tt JobID}|(}. In the above example 
+the {\tt <jobID>} element in the osol file provides such a job ID: 
 
 
 \begin{verbatim}
@@ -704,19 +735,30 @@ This is illustrated below,
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="os.optimizationservices.org
       http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
-    <general>
-        <jobID>1234567890abcd</jobID>
-        <solverToInvoke>ipopt</solverToInvoke>      
-    </general>
+ 	<general>  
+ 		<jobID>xyz1234-03Jun13-10AM</jobID>
+ 		<contact transportType="smtp">
+ 			your.name@address.domain
+ 		</contact> 
+ 		<solverToInvoke>ipopt</solverToInvoke>      
+	</general>
 </osol>
 \end{verbatim}
 
+The {\tt <contact>} element can be used to trigger an email message once the job has finished. Another way to determine the status of a job uses th {\tt knock} method (see Section~\ref{section:knock}.)
+ 
 Any string can be used as a job ID, but in order to be accepted, the job ID must not have been used before. 
-If {\tt 1234567890abcd} was used earlier, 
+If {\tt xyz1234-03Jun13-10AM} was used earlier on the remote system, either by you or somebody else,
 the result of the {\tt send} will be an error condition\index{JobID@{\tt JobID}|)}. 
 When a user creates their own job ID, there is therefore a danger that it will be rejected by the remote system.
 It is probably easiest to  request a job ID that is guaranteed to work, by first invoking the  {\tt getJobID} service method
 to get a {\tt JobID}. More information on the {\tt getJobID} service method is provided in Section~\ref{section:getjobid}.
+
+When no {\tt JobID} is specified the {\tt OSSolverService} method first invokes the {\tt getJobID} service method
+to get a {\tt JobID}, puts this information into an OSoL\index{OSoL} file it creates, and sends the information to the server. 
+The {\tt OSSolverService} prints the OSoL file to standard output before termination. The printout
+includes the generated job ID, which is essential to retrieve the results of the execution later (see Section~\ref{section:retrieve}). 
+
 
 %The {\tt OSSolverService} prints the OSoL file to standard output before termination.
 %This is illustrated below.
@@ -742,17 +784,18 @@ to get a {\tt JobID}. More information on the {\tt getJobID} service method is p
 %
 %The same {\tt JobID} cannot be used twice.
 
-In this example the COIN-OR {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} solver is specified in the OSoL file. 
-The input file {\tt hs71.nl} is in AMPL nl format\index{AMPL nl format|(}.
-Before sending this to the remote solver service the {\tt OSSolverService} executable converts  
-the nl format\index{AMPL nl format|)} into the OSiL\index{OSiL} XML format and packages this 
-into the SOAP\index{SOAP protocol} envelope used by Web Services.
+%In this example the COIN-OR {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} solver is specified in the OSoL file. 
+%The input file {\tt hs71.nl} is in AMPL nl format\index{AMPL nl format|(}.
+%Before sending this to the remote solver service the {\tt OSSolverService} executable converts  
+%the nl format\index{AMPL nl format|)} into the OSiL\index{OSiL} XML format and packages this 
+%into the SOAP\index{SOAP protocol} envelope used by Web Services.
 
-In order to be of any use, it is necessary to get the result of the optimization. This is described in
-Section~\ref{section:retrieve}. Before proceeding to this section, we describe two ways for knowing when
-the optimization is complete. One feature of the standard OS remote SolverService is the ability to send an
-email when the job is complete. Below is an example of the {\tt OSoL} that uses the email feature\index{OSoL|)}.
+%In order to be of any use, it is necessary to get the result of the optimization. This is described in
+%Section~\ref{section:retrieve}. Before proceeding to this section, we describe two ways for knowing when
+%the optimization is complete. One feature of the standard OS remote SolverService is the ability to send an
+%email when the job is complete. Below is an example of the {\tt OSoL} that uses the email feature\index{OSoL|)}.
 
+\iffalse
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org"
@@ -772,10 +815,11 @@ email when the job is complete. Below is an example of the {\tt OSoL} that uses 
 The remote Solver Service will send an email to the above address when the job is complete. A second option for
 knowing when a job is complete is to use the {\tt knock}\index{knock@{\tt knock}} method.
 (See Section~\ref{section:knock}.)
+\fi
 
-Note that in all of these examples we provided a value for the {\tt <solverToInvoke>} element.
+Note that in  this examples we provided a value for the {\tt <solverToInvoke>} element.
 %The remote solver service will use {\tt Cbc} if another solver is not specified.%
-A default solver is used (see Table~\ref{table:defaultsolvers}\index{default solver}) if another solver is not specified.%
+A default solver is used (see Table~\ref{table:defaultsolvers}\index{default solver}) if no solver is  specified.%
 \index{send@{\tt send}|)}
 
 
@@ -1160,7 +1204,8 @@ Osi interface, which are
 {\tt clp}\index{COIN-OR projects!Clp@{\tt Clp}},
  {\tt DyLP}\index{COIN-OR projects!DyLP@{\tt DyLP}}, 
 {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}} and 
-{\tt Vol}\index{COIN-OR projects!Vol@{\tt Vol}}, in addition to 
+{\tt Vol}%\index{COIN-OR projects!Vol@{\tt Vol}}
+, in addition to 
 {\tt Glpk}\index{Third-party software, {\tt GLPK}} and 
 {\tt Cplex}\index{cplex@{\tt cplex}}, 
 if the latter are included in the particular build of OSSolverService.
