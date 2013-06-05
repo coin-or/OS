@@ -810,7 +810,7 @@ includes the generated job ID, which is essential to retrieve the results of the
       xsi:schemaLocation="os.optimizationservices.org
       http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
     <general>
-        <jobID>123456abcd</jobID>
+        <jobID>xyz1234-03Jun13-10AM</jobID>
         <contact transportType="smtp">
             kipp.martin@chicagobooth.edu
         </contact>
@@ -872,7 +872,7 @@ and the {\tt retrieve.osol} file is
       xsi:schemaLocation="os.optimizationservices.org
       http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
     <general>
-        <jobID>123456abcd</jobID>
+        <jobID>xyz1234-03Jun13-10AM</jobID>
     </general>
 </osol>
 \end{verbatim}
@@ -917,7 +917,7 @@ with {\tt JobID 123456abcd}\index{JobID@{\tt JobID}} has completed. A user would
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
-osplInput $DATA/osolFiles/demo.ospl
+osplInput $DATA/osolFiles/knock.ospl
 osol $DATA/osolFiles/retrieve.osol
 serviceMethod knock
 \end{verbatim}
