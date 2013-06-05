@@ -890,7 +890,7 @@ where the result file is stored. By using the {\tt browser} parameter one could 
 
 \index{getJobID@{\tt getJobID}|(}
 Before  submitting a job with the {\tt send}\index{send@{\tt send}} method a {\tt JobID}\index{JobID@{\tt JobID}}
-is required. The {\tt OSSolverService} can get a {\tt JobID} with the following options.
+is required. The {\tt OSSolverService} can get a {\tt JobID} with the following command line options.
 \begin{verbatim}
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod getJobID
@@ -928,12 +928,12 @@ serviceMethod knock
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
-osplInput ../examples/data/osolFiles/demo.ospl
+osplInput ../examples/data/osolFiles/knock.ospl
 osol ../examples/data/osolFiles/retrieve.osol
 serviceMethod knock
 \end{verbatim}
 \fi
-the {\tt demo.ospl} file is
+the {\tt knock.ospl} file is
 
 % header to be temporarily hidden...
 % <ospl xmlns="os.optimizationservices.org">

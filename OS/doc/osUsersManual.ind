@@ -2,11 +2,11 @@
 
   \item Algorithmic differentiation, 8, 46--47, 78--79
   \item AMPL, 7, 8, 27--30, 109
-  \item AMPL nl format, 1, 7, 8, 10, 11, 18--19, 71--72
+  \item AMPL nl format, 1, 7, 8, 10, 11, 19, 71--72
   \item AMPL Solver Library , \see{Third-party software, ASL}{1}
   \item {\tt amplFiles}, 27
-  \item Apache Axis, 8, 15
-  \item Apache Tomcat, 1, 8, 9, 15, 92, 111--114
+  \item Apache Axis, 8, 16
+  \item Apache Tomcat, 1, 8, 9, 16, 92, 111--114
   \item ASL, \see{Third-party software, ASL}{1}
 
   \indexspace
@@ -36,11 +36,11 @@
     \subitem {\tt Couenne}, 24, 95, 99, 102--104, 109
     \subitem {\tt CppAD}, 7, 8, 78--79, 104, 109
     \subitem {\tt DyLP}, 13, 24, 104, 109
-    \subitem {\tt Ipopt}, 14, 18, 19, 24, 73, 75, 85, 90, 93, 95, 99, 
+    \subitem {\tt Ipopt}, 14, 19, 24, 73, 75, 85, 90, 93, 95, 99, 
 		102--104, 109
     \subitem {\tt Osi}, 11, 24, 104, 109
-    \subitem {\tt SYMPHONY}, 17, 24, 28--29, 95, 104, 109
-    \subitem {\tt Vol}, 24, 104, 109
+    \subitem {\tt SYMPHONY}, 16, 24, 28--29, 95, 104, 109
+    \subitem {\tt Vol}, 104, 109
   \item COIN-OR projects, {\tt Osi}, 74, 93
   \item {\tt COIN\_HAS\_XXXXX}, 104--105
   \item {\tt COIN\_SKIP\_PROJECTS}, 93, 95, 99, 102, 104
@@ -75,7 +75,7 @@
   \indexspace
 
   \item {\tt f2c}, 90, 99, 103
-  \item file locations, 12
+  \item file locations, 13
   \item file naming conventions, 9, 97
   \item {\tt flex}, 72, 90, 101
   \item Fortran, 90, 93, 99, 102--104
@@ -84,7 +84,7 @@
 
   \item GAMS, 8, 27, 30--35
   \item gcc, 89
-  \item {\tt getJobID}, 10, 11, 13, 20, 23
+  \item {\tt getJobID}, 10, 11, 14, 20, 23
   \item {\tt GLPK}, \see{Third-party software, {\tt GLPK}}{1}
   \item GNU General Public Licence (GPL), 105
   \item {\it Griewank, A.}, 78
@@ -102,12 +102,13 @@
   \indexspace
 
   \item Java, 1, 10, 52--53, 92
-  \item {\tt JobID}, 18--20, 23
+  \item {\tt JobID}, 19--20, 23
+  \item jobID, 11
 
   \indexspace
 
-  \item {\tt kill}, 10, 11, 13, 22--23
-  \item {\tt knock}, 10, 11, 13, 19--23
+  \item {\tt kill}, 10, 11, 14, 22--23
+  \item {\tt knock}, 10, 11, 14, 20--23
 
   \indexspace
 
@@ -157,21 +158,20 @@
   \item {\tt OSExpressionTree}, 69
   \item {\tt OSFileUpload}, 114--115
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 7--11, 14, 16, 18, 19, 23, 40--42, 66, 69, 71--73, 114, 
+  \item OSiL, 1, 7--11, 14, 16, 19, 23, 40--42, 66, 69, 71--73, 114, 
 		116--119
   \item {\tt OSInstance}, 7, 46, 66--72, 75, 81
   \item {\tt OSLibrary}, 14, 65--75
   \item {\tt OSmps2osil}, 71--72
   \item OSnL, 42--43
   \item {\tt OSnl2osil}, 71, 105
-  \item OSoL, 7, 9, 14, 16, 18--20, 23, 44, 72
+  \item OSoL, 7, 9, 14, 16, 19, 20, 23, 44, 72
   \item {\tt OSOption}, 71--72
   \item OSpL, 21--23, 44
   \item {\tt OSResult}, 71--72
   \item OSrL, 7, 9, 12, 14, 15, 23, 43--44, 72
   \item {\tt OSSolverAgent}, 65
   \item {\tt OSSolverService}, 1, 7, 9--23, 93, 95, 109
-  \item {\tt OSSolverService.jws}, 15
   \item {\tt OSSolverService.vcproj}, 97
   \item {\tt OSTest.vcproj}, 97
 
@@ -184,15 +184,15 @@
 
   \item Remote server
     \subitem Connection problems, 16
-  \item {\tt retrieve}, 10, 11, 13, 19--20, 23
+  \item {\tt retrieve}, 10, 11, 14, 19--20, 23
   \item {\it Rosenbrock, H.H.}, 40
 
   \indexspace
 
-  \item {\tt send}, 10, 11, 13, 14, 18--20, 114
-  \item {\tt serviceLocation}, 13
-  \item SOAP protocol, 7, 9, 16, 18, 19, 114
-  \item {\tt solve}, 10--11, 14--17, 23, 114
+  \item {\tt send}, 10, 11, 14, 18--20, 114
+  \item {\tt serviceLocation}, 14
+  \item SOAP protocol, 7, 9, 16, 19, 114
+  \item {\tt solve}, 10--11, 14, 16--18, 23, 114
   \item {\tt solveroptions.osol}, 29
   \item Subversion, 89
   \item supported solvers, 11
@@ -202,7 +202,7 @@
   \indexspace
 
   \item {\tt testlocal.config}, 14--15
-  \item {\tt testremote.config}, 16--17
+  \item {\tt testRemote1.config}, 16
   \item Third-party software, 96, 103--105
     \subitem ASL, 96, 105
     \subitem Blas, 90, 93, 102

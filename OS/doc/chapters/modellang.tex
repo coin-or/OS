@@ -1,4 +1,8 @@
+\ifdevelop
 \division{OS Support for Modeling Languages, Spreadsheets and Numerical Computing Software}\label{section:modellang}
+\else
+\division{OS Support for AMPL and GAMS}\label{section:modellang}
+\fi
 
 Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
 We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt CoinOS} for GAMS\index{GAMS} (version 23.8 and above).
@@ -13,8 +17,13 @@ We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt
 
 
 %This section is based on the assumption that the user has installed  AMPL  on his or her machine.   
-It is possible to call all of the COIN-OR solvers listed in %Section~\ref{section:overview} 
+It is possible to call all of the COIN-OR solvers 
+\ifdevelop
+listed in %Section~\ref{section:overview} 
 Table~\ref{table:configurations}~(p.\pageref{table:configurations})
+\else
+that are contained in the CoinAll distribution
+\fi
 directly from the  AMPL (see {\tt http://www.ampl.com}) modeling language.  In this discussion we assume 
 the user has already obtained and installed AMPL.
 \ifdevelop  
@@ -27,7 +36,12 @@ contains
 \fi
 %In  the download described in Section~\ref{section:binary} there is 
 an executable, {\tt OSAmplClient.exe},
-that is linked to all of the COIN-OR solvers  listed in Table~\ref{table:configurations}. %Section~\ref{section:overview}.   
+that is linked to all of the COIN-OR solvers 
+\ifdevelop
+all of the COIN-OR solvers listed in Table~\ref{table:configurations}. %Section~\ref{section:overview}.   
+\else
+the same solvers as {\tt OSSolverService} described in Section~\ref{section:ossolverservice}.
+\fi
 From the  perspective of AMPL, the   {\tt OSAmplClient} acts like an AMPL ``solver''.    
 The {\tt OSAmplClient.exe}   can be used to solve problems either locally or remotely.   
 
@@ -151,7 +165,7 @@ If the intent is to use the SYMPHONY solver at the remote location, the option m
 as follows:
 
 \begin{verbatim}
-option OSAmplClient_options "solver symphony                                         \
+option OSAmplClient_options "solver symphony                             \
     serviceLocation http://xxx/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
