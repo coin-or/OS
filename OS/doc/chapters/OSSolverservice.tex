@@ -76,6 +76,10 @@ The use of these options is illustrated in the examples below. This parameter is
 and it has no effect for problems solved locally.
 The default value is {\tt solve}\index{solve@{\tt solve}|)}. 
 
+\item[] {\tt jobID string}\ \ In order to use the asynchronous methods {\tt send} (Section~\ref{section:send}), {\tt retrieve} (Section~\ref{section:retrieve}) and 
+{\tt kill} (Section~\ref{section:kill}) it is essential to identify the relevant job by a unique jobID\index{jobID}. 
+(See also Section~\ref{section:getJobID}.)
+
 \item[] {\tt mps  xxx.mps}\ \ This is the path information and name of the MPS file if the problem instance 
 is in MPS format\index{MPS format}. It is assumed that this file is available on the machine that is running 
 {\tt OSSolverService}. The default file format is OSiL\index{OSiL} so this option is not required.
@@ -182,7 +186,7 @@ to send additional information to a file, to be analyzed once the job has finish
 
 \item[] {\tt browser  browserName}\ \ This parameter is a path to the browser on the local machine. 
 If this optional parameter is specified then the solver result in OSrL\index{OSrL} format is transformed 
-using XSLT into HTML and displayed in the browser. This parameter can only be used in conjunction with the {\tt osrl} parameter. In addition, some browsers require that the stylesheet OSrL.xslt is found in the same directory as the result file.
+into HTML using a stylesheet in XSLT format and is then displayed in the browser. This parameter can only be used in conjunction with the {\tt osrl} parameter. In addition, some browsers require that the stylesheet OSrL.xslt is found in the same directory as the result file. If necessary, this stylesheet must be moved or copied prior to starting up the OSSolverService executable.
 
 \item[] {\tt config xxx.config}\ \ This optional parameter specifies a path on the local machine 
 to a text file containing values for the input parameters. This is convenient for the user not wishing 
@@ -303,6 +307,7 @@ or
 \fi
 %
 will result in the DyLP\index{COIN-OR projects!DyLP@{\tt DyLP}} solver being used 
+to solve the problem {\tt parincLinear.osil}
 even though {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} is specified in the
 {\tt testlocalclp} configure file.
 
@@ -335,7 +340,7 @@ If no osil file is specified, an MPS file, AMPL .nl file, or GAMS .dat file is s
 \subdivision{The Command Line Parser}\label{section:commandlineparser}
 
 The top layer of the local OSSolverService is a command line parser that parses the command line and
-the config file (if one is specified) and passes the information on to a local solver or a remote solver service,
+the config file (if one is specified) and passes the information  to a local solver or a remote solver service,
 depending on whether a {\tt serviceLocation} was specified. If a 
 {\tt serviceLocation} is specified a call is made to a remote solver service, otherwise a local solver is called.
 
@@ -482,13 +487,13 @@ The implementation  of this solver service
 uses Apache Tomcat\index{Apache Tomcat}. See \url{tomcat.apache.org}. The Web Service running on the server
 is a Java program based on Apache Axis\index{Apache Axis}. See \url{ws.apache.org/axis}. 
 This is described in greater detail in \ifdevelop Section~\ref{section:tomcat}\else the OS User's Manual\fi.
-This Web Service is called {\tt OSSolverService.jws}\index{OSSolverService.jws@{\tt OSSolverService.jws}}.
+%This Web Service is called {\tt OSSolverService.jws}\index{OSSolverService.jws@{\tt OSSolverService.jws}}.
 Other servers may become available, and there is no requirement to use the Tomcat/Axis combination.
 
 
 
 See Figure~\ref{figure:ossolverservice} for an illustration of this process.
-The client machine uses {\tt OSSolverService} executable to call one of the
+The client machine uses the {\tt OSSolverService} executable to call one of the
 six service methods, e.g., {\tt solve}\index{solve@{\tt solve}}. 
 The  information such as the problem
 instance in OSiL\index{OSiL} format and solver options in OSoL\index{OSoL} format are packaged into
@@ -500,17 +505,17 @@ problem must be solved. The Java solver service solves the optimization instance
 by  calling the  {\tt OSSolverService} on the server. So there is an {\tt OSSolverService}
 on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn
 calls  the executable {\tt OSSolverService} on the server.
-The Java solver service passes options to the server's {\tt OSSolverService}
+The Java solver service passes information to the server's {\tt OSSolverService}
 %such as where the OSiL file is located and where to write the solution result.
-in form of two strings, an osil string representing the instance and an osol string
+in form of two strings, an osil string representing the optimization instance and an osol string
 representing the options (if any). 
 
 
 For remote calls the instance location can be specified either as a command parameter 
-(on the command line or in a config file)
-or through the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
+(on the command line or in a config file), if the instance resides on the client machine,
+or through the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file, if it does not.
 OSiL files specified in the {\tt <instanceLocation>} element must be converted to an osil string
-by the solver service.
+by the remote solver service.
 If two instance files
 are specified in this way --- one through the local command interface, the other in an options file --- 
 the information on the command line takes precedent.
@@ -572,7 +577,7 @@ The third parameter {\tt serviceMethod solve} is not really needed, since the de
 is {\tt solve}. It is included only for illustration. 
 \index{testRemote1.config@{\tt testRemote1.config}|)}
 
-The only way to specify a solver for the remote call is by using an OSoL file that contains the element  {\tt <solverToInvoke>}. Since no OSol file was given, the remote {\tt OSSolverService} on the server side will use the {\tt Clp} solver by default. (The problem, {\tt parincLinear.osil}, is a continuous linear program.)
+The only way to specify a solver for the remote call is by using an OSoL file that contains the element  {\tt <solverToInvoke>}. Since no OSol file was given, the remote {\tt OSSolverService} on the server side will use the {\tt Clp} solver by default. (The problem {\tt parincLinear.osil} is a continuous linear program.)
 
 If, for example, the user wished to solve the problem with the 
 {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}} solver instead,
@@ -580,11 +585,11 @@ then this is accomplished by specifying the OSoL file either on the command line
 using the parameter
 \ifdevelop
 \begin{verbatim}
-{\tt osol $DATA/data/osolFiles/remoteSolve1.osol}
+osol $DATA/data/osolFiles/remoteSolve1.osol
 \end{verbatim}
 \else
 \begin{verbatim}
-{\tt osol ../examples/data/osolFiles/remoteSolve1.osol}
+osol ../examples/data/osolFiles/remoteSolve1.osol
 \end{verbatim}
 \fi
 
@@ -592,11 +597,13 @@ The content of {\tt remoteSolve1.osol} is
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+      xmlns:xs="http://www.w3.org/2001/XMLSchema"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="os.optimizationservices.org   
+      http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
     <general>
-	<solverToInvoke>symphony</solverToInvoke>      
-   </general>
+        <solverToInvoke>symphony</solverToInvoke>      
+    </general>
 </osol>
 \end{verbatim}
 
@@ -693,12 +700,12 @@ method should be used when asynchronous communication is desired.\index{solve@{\
 When the {\tt solve} service method is used, then the {\tt OSSolverService} does not
 finish execution until the solution is returned from the remote solver service.
  When the {\tt send}
-method is used, the instance is communicated to the remote service and the
+method is used, the instance is communicated to the remote service, and the local
 {\tt OSSolverService} terminates after submission. An example of this is
 %
 \ifdevelop
 \begin{verbatim}
-./OSSolverService config $DATA/configFiles/testremoteSend.config
+./OSSolverService config $DATA/configFiles/testRemoteSend.config
 \end{verbatim}
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
@@ -708,7 +715,7 @@ serviceMethod send   osol $DATA/osolFiles/sendWithJobID.osol
 \end{verbatim}
 \else
 \begin{verbatim}
-./OSSolverService config ../examples/data/configFiles/testremoteSend.config
+./OSSolverService config ../examples/data/configFiles/testRemoteSend.config
 \end{verbatim}
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
@@ -831,25 +838,29 @@ The {\tt retrieve} method is used to get information about the instance solution
 %
 \ifdevelop
 \begin{verbatim}
-./OSSolverService config $DATA/configFiles/testremoteRetrieve.config
+./OSSolverService config $DATA/configFiles/testRemoteRetrieve.config
 \end{verbatim}
-The {\tt testremoteRetrieve.config} file is
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testRemoteRetrieve.config
+\end{verbatim}
+\fi
+%
+The {\tt testRemoteRetrieve.config} file is
+%
+\ifdevelop
 \begin{verbatim}
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 osol $DATA/osolFiles/retrieve.osol
 serviceMethod retrieve
-osrl /home/kmartin/temp/test.osrl
+osrl ./test.osrl
 \end{verbatim}
 \else
-\begin{verbatim}
-./OSSolverService config ../examples/data/configFiles/testremoteRetrieve.config
-\end{verbatim}
-The {\tt testremoteRetrieve.config} file is
 \begin{verbatim}
 serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 osol ../examples/data/osolFiles/retrieve.osol
 serviceMethod retrieve
-osrl /home/kmartin/temp/test.osrl
+osrl ./test.osrl
 \end{verbatim}
 \fi
 and the {\tt retrieve.osol} file is
@@ -870,13 +881,9 @@ The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communica
 the remote service. The remote service locates the result and returns it as a string.
 The {\tt <jobID>}\index{JobID@{\tt JobID}} should reflect a {\tt <jobID>} that was previously submitted
 using a {\tt send()} command.
-The result is returned as a string in OSrL format.  The user must modify the line
-\begin{verbatim}
-osrl /home/kmartin/temp/test.osrl
-\end{verbatim}
-to reflect a valid path for their own machine.  (It is also possible to delete the line
-in which case the result will be displayed on the screen instead of being saved to the
-file indicated in the {\tt osrl} option.)\index{retrieve@{\tt retrieve}|)}
+The result is returned as a string in OSrL format.  The {\tt osrl} parameter specifies a location
+where the result file is stored. By using the {\tt browser} parameter one could further display the results in a web browser. If no {\tt osrl} parameter is given,
+ the result will be displayed on the screen instead.\index{retrieve@{\tt retrieve}|)}
 
 
 \subsubdivision{The  {\tt getJobID} Service Method}\label{section:getjobid}
@@ -902,7 +909,7 @@ it is necessary to know when the job is completed on the remote server. One way 
 address in the  {\tt <contact>}  element with the attribute {\tt transportType} set to {\tt smtp}.
 This was illustrated in Section~\ref{section:solve}.  A second way to check on the status of a job is
 to use the {\tt knock} service method.  For example, assume a user   wants to know if  the job
-with {\tt JobID 123456abcd}\index{JobID@{\tt JobID}}  is complete. A user would make the request
+with {\tt JobID 123456abcd}\index{JobID@{\tt JobID}} has completed. A user would make the request
 \ifdevelop
 \begin{verbatim}
 ./OSSolverService config $DATA/configFiles/testRemoteKnock.config
@@ -959,7 +966,7 @@ as in Section~\ref{section:retrieve}.
 
 The result of this request is a string in OSpL\index{OSpL|(} format, with the data contained in its
 {\tt processData} section.  The result is displayed on the screen; if the user desires it
-to be redirected to a file, a command should be added to the {\tt testRemoteKnock.config}
+to be redirected to a file, a {\tt osplOutput} command should be added to the {\tt testRemoteKnock.config}
 file with a valid path name on the local system, e.g.,
 
 \begin{verbatim}
@@ -1014,8 +1021,13 @@ The current default setting is~100. In a large-scale or commercial implementatio
 problem results and statistics in a database. Also, there are values other than {\tt getAll} (i.e., get all
 process information related to the jobs) for the OSpL {\tt action} attribute in the {\tt <request>} tag.
 For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants
-to check if the remote solver service is up and running. For details, check the OSpL schema\index{OSpL|)}
-in the folder {\tt OS/schemas} which is part of the distribution. All schemas can also be downloaded from
+to check if the remote solver service is up and running. For details, check the OSpL schema\index{OSpL|)} in the folder {\tt OS/schemas} 
+\ifdevelop
+which is part of the distribution. 
+\else
+at {\tt http://www.coin-or.org/OS/OSpL.html}.
+\fi
+All schemas can also be downloaded from
 \url{http://www.coin-or.org/OS/downloads/OSSchemas-2.0.zip}.
 \index{knock@{\tt knock}|)}
 
@@ -1077,8 +1089,8 @@ A test program illustrating the use of the methods is described in Section~\ref{
 
 \begin{itemize}
 
-\item Inputs: a string with the instance in OSiL\index{OSiL} format and a (possibly empty) string with the solver options
-in OSoL\index{OSoL} format
+\item Inputs: a string with the instance in OSiL\index{OSiL} format and a (possibly empty) string 
+with the solver options in OSoL\index{OSoL} format
 
 \item Returns: a string with the solver solution in OSrL\index{OSrL} format
 
@@ -1177,9 +1189,12 @@ Either or both strings can be  empty.
 
 The OSoL (Optimization Services option Language) protocol is used to pass options to solvers.   
 When using the {\tt OSSolverService} executable this will typically be done through an OSoL XML file 
-by specifying the {\tt osol} option followed by the location of the file.  However, it is also possible 
-to write a custom application that links to the OS library and to build an OSOption object in memory 
-and then pass this to a solver. We next describe the  features of the OSoL protocol that will be the most 
+by specifying the {\tt osol} option followed by the location of the file.  
+\ifruncode\else
+However, it is also possible to write a custom application that links to the OS library 
+and to build an OSOption object in memory and then pass this to a solver. 
+\fi
+We next describe the  features of the OSoL protocol that will be the most 
 useful to the typical user.
 
 In the OSoL protocol there is an element {\tt <solverOptions>} that can have any number of {\tt <solverOption>} 
@@ -1232,16 +1247,20 @@ as in the following hypothetical example.
       type="string" value="illustration"/>
 \end{verbatim}
 
-\item {\bf description:} a description of the option; typically this would not get passed to the solver.
+\item {\bf description:} a description of the option; typically this would not get passed to the solver
+but could be useful for documentation purposes.
 
 \end{itemize}
 
+\ifruncode\else
 As of trunk version 2164\index{OS project!trunk version} the reading of an
 OSoL file is implemented in the {\tt OSCoinSolver}, {\tt OSBonmin} and
 {\tt OSIpopt} solver interfaces.   The  {\tt OSBonmin}, and {\tt OSIpopt}
 solvers have particularly easy interfaces. They have methods for integer,
 string, and numeric data types and then take options in form of
-{\tt (name, value)} pairs. Below is an example of options for {\tt Ipopt}.
+{\tt (name, value)} pairs. 
+\fi
+Below is an example of options for {\tt Ipopt}.
 
 
 \begin{verbatim}
@@ -1255,8 +1274,13 @@ string, and numeric data types and then take options in form of
      type="integer" value="2000"/>
 \end{verbatim}
 
-We have also implemented the {\tt OSOption} class for the {\tt OSCoinSolver} interface. This can be done in two ways. 
-First, options can be set through the Osi Solver interface (the OSCoinSolver interface wraps around the Osi Solver interface).    
+\ifruncode\else
+We have also implemented the {\tt OSOption} class for the {\tt OSCoinSolver} interface. 
+\fi    
+Options for the Osi solvers (Clp, Cbc, SYMPHONY, DyLP, Vol, GLPK, Cplex) 
+can be set through the Osi solver interface. 
+%This can be done in two ways. 
+%First, options can be set through the Osi Solver interface (the OSCoinSolver interface wraps around the Osi Solver interface).
 We have implemented all of the options listed in {\tt OsiSolverParameters.hpp} in {\tt Osi} trunk version 1316.  
 In the Osi solver interface, in addition to string, double, and integer types  there is a type called {\tt HintParam}
 and a type called {\tt OsiHintParam}. The value of the {\tt OsiHintParam} is an {\tt OsiHintStrength} type, 
@@ -1266,7 +1290,7 @@ which may be confusing. For example, to have the following Osi method called
 setHintParam(OsiDoReducePrint, true, hintStrength);
 \end{verbatim}
 
-
+\noindent
 the user should set the following {\tt <solverOption>} tags:
 \begin{verbatim}
 <solverOption name="OsiDoReducePrint" solver="osi" 
@@ -1353,7 +1377,7 @@ initial values for variables with an index of 0, 1, and~3.
 As of trunk version 2164\index{OS project!trunk version} the initial values for variables can be passed
 to the {\tt Bonmin} and {\tt Ipopt} solvers.
 
-
+\ifruncode\else
 When implementing solver options in-memory, the typical calling sequence is:
 
 \begin{verbatim}
@@ -1361,6 +1385,6 @@ solver->buildSolverInstance();
 solver->setSolverOptions();
 solver->solve();
 \end{verbatim}
-
+\fi
 
 
