@@ -535,6 +535,7 @@ public class XMLUtil {
 	 * @return the text value of the first descendant element. If none found, a null value is returned.
 	 */
 	public static String getElementValueByName(Element rootElement, String descendantName){
+		if(rootElement == null) return null;
 		String sValue = null;
 		NodeList nodeList = rootElement.getElementsByTagName(descendantName);
 		if(nodeList.getLength() == 0){

@@ -148,7 +148,7 @@ public class StandardOSSolver extends DefaultSolver{
 			try {
 				String sCommand = sSolverPath + " " + sArguments;
 				if(sStdOutFile != null && sStdOutFile.length() > 0){
-					sCommand = sCommand + " > \""+sStdOutFile+"\"";
+					sCommand = sCommand + "\n"+sStdOutFile;
 				}
 				ProcessUtil.launchAndWaitForFinish(sCommand);
 				super.osrl = IOUtil.readStringFromFile(sResultFile);				
@@ -173,7 +173,7 @@ public class StandardOSSolver extends DefaultSolver{
 				OSServiceUtil.processsHashTable.put(sJobID, vProcess);
 				BufferedReader br = new BufferedReader (new InputStreamReader(process.getInputStream ()));
 				boolean bCont = true;
-				String sProcessOutput = "";
+				String sProcessOutput = sSolverPath + " " + sArguments +"\n";
 				String sTemp;
 				while (bCont){
 					sTemp = br.readLine(); 
