@@ -675,9 +675,11 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
  * Otherwise, initial the basis to isFree, then pull basic and atUpper/atLower and overwrite (those only)
  */
                 {
-                    int nsBas,naBas,nsUpp,naUpp,nsLow,naLow,nsFre,naFre,nvar,ncon;
+                    int nsBas,naBas,nsUpp,naUpp,nsLow,naLow,nvar,ncon;
                     int* tmpBas = NULL;
                     CoinWarmStartBasis* warmstart = new CoinWarmStartBasis();
+                    nvar = osinstance->getVariableNumber();
+                    ncon = osinstance->getConstraintNumber();
                     warmstart->setSize(nvar, ncon);
 
                     if ( osoption->optimization->variables != NULL &&
@@ -1354,6 +1356,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
             for(vit = basicVars.begin(); vit < basicVars.end(); vit++)
             {
+
                 basisIdx[1][ kount++] = *vit;
             }
 
