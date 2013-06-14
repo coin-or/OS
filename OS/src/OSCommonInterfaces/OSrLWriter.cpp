@@ -62,11 +62,16 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     const char	dirsep='/';
 #endif
     // Set directory containing stylesheet files.
-    std::string xsltDir;
-    xsltDir = dirsep == '/' ? "../stylesheets/" : "..\\stylesheets\\";
+    // std::string xsltDir;
+    // xsltDir = dirsep == '/' ? "../stylesheets/" : "..\\stylesheets\\";
     // always go with '/' -- it is a hypertext reference
     // xsltDir = "../stylesheets/";
-    xsltDir = "http://www.coin-or.org/OS/stylesheets/";
+    // xsltDir = "http://www.coin-or.org/OS/stylesheets/";
+
+    // 31 May 2013 --- HIG
+    // some browsers consider it a security risk to allow remote stylesheets
+    // or even relative addresses containing "../", So we must make sure that
+    // the stylesheet is located in the same directory as the OSrL file 
 
     int i, j;
     bool generalTagPrinted;
@@ -80,7 +85,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
     if(m_OSResult == NULL)  return outStr.str();
     outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ;
     outStr << "<?xml-stylesheet type=\"text/xsl\" href=\"";
-    outStr << xsltDir;
+    // outStr << xsltDir;
     outStr << "OSrL.xslt\"?>";
     outStr << endl;
     outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";

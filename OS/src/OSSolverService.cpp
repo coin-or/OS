@@ -357,6 +357,9 @@ int main(int argC, const char* argV[])
                 const char *ch = &str[0];
                 std::system(ch);
             }
+            else
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                    "Results written to file " + oscommandline->osrlFile);
         }
         else
         {
@@ -480,6 +483,9 @@ int main(int argC, const char* argV[])
                 const char *ch = &str[0];
                 std::system(ch);
             }
+            else
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                    "Results written to file " + oscommandline->osrlFile);
         }
         else
         {
@@ -597,6 +603,9 @@ int main(int argC, const char* argV[])
                 const char *ch = &str[0];
                 std::system(ch);
             }
+            else
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                    "Results written to file " + oscommandline->osrlFile);
         }
         else
         {
@@ -739,6 +748,9 @@ void solve(OSCommandLine *oscommandline)
                     const char *ch = &str[0];
                     std::system(ch);
                 }
+                else
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                        "Results written to file " + oscommandline->osrlFile);
             }
             else
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
@@ -836,6 +848,9 @@ void solve(OSCommandLine *oscommandline)
                     const char *ch = &str[0];
                     std::system(ch);
                 }
+                else
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                        "Results written to file " + oscommandline->osrlFile);
             }
             else
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
@@ -882,22 +897,9 @@ void solve(OSCommandLine *oscommandline)
         {
             osrl = eclass.errormsg;
         }
-        if (oscommandline->osrlFile != "")
-        {
-            //fileUtil->writeFileFromString(oscommandline->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
-            if (oscommandline->browser != "")
-            {
-                std::string str = oscommandline->browser + "  "
-                                  + oscommandline->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
-        }
+
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
+
         //catch garbage collection
         if(osresult != NULL)
         {
@@ -940,7 +942,8 @@ void getJobID(OSCommandLine *oscommandline)
         {
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
             oscommandline->jobID = osagent->getJobID(oscommandline->osol);
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, oscommandline->jobID);
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                "JobID:\n\n" + oscommandline->jobID);
             delete osagent;
             osagent = NULL;
         }
@@ -1007,6 +1010,24 @@ void knock(OSCommandLine *oscommandline)
         if (oscommandline->serviceLocation != "")
         {
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
+
+            // if no OSpL file was given, make a default one
+            if (oscommandline->osplInput == "")
+            {
+                std::ostringstream temp;
+                temp << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" << 
+                    "<ospl xmlns=\"os.optimizationservices.org\"\n" <<
+                    "        xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n" <<
+                    "        xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" <<
+                    "        xsi:schemaLocation=\"os.optimizationservices.org\n" <<
+                    "        http://www.optimizationservices.org/schemas/OSpL.xsd\">\n"<<
+                    "     <processHeader>\n" <<
+                    "          <request action=\"getAll\"/>\n" <<
+                    "     </processHeader>\n" <<
+                    "     <processData/>\n" <<
+                    "</ospl>\n";              
+                oscommandline->osplInput = temp.str();
+            }
 
 
             if (oscommandline->osol == "")
@@ -1173,7 +1194,11 @@ void send(OSCommandLine *oscommandline)
 
 
         if (oscommandline->osrlFile != "")
+        {
             fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                "Results written to file " + oscommandline->osrlFile);
+        }
         else
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
 
@@ -1243,6 +1268,9 @@ void retrieve(OSCommandLine *oscommandline)
                     const char *ch = &str[0];
                     std::system(ch);
                 }
+                else
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                        "Results written to file " + oscommandline->osrlFile);
             }
             else
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
@@ -1331,10 +1359,16 @@ void kill(OSCommandLine *oscommandline)
             osplOutput = osagent->kill(oscommandline->osol);
 
             if (oscommandline->osplOutputFile != "")
-                fileUtil->writeFileFromString(oscommandline->osplOutputFile,
-                                              osplOutput);
+            {
+                fileUtil->writeFileFromString(oscommandline->osplOutputFile, osplOutput);
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                    "Results written to file " + oscommandline->osplOutputFile);
+            }
             else
+            {
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, "kill command executed\n");
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_summary, osplOutput);
+            }
             delete osagent;
             osagent = NULL;
         }
