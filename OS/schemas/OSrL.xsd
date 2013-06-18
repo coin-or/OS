@@ -550,7 +550,6 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -558,7 +557,9 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 </xs:schema>
