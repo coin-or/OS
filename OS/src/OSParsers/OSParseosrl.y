@@ -3481,18 +3481,20 @@ otherSolutionResultStart: OTHERSOLUTIONRESULTSTART
 		osrlerror(NULL, NULL, parserData, osglData, "more <otherSolutionResult> elements than specified");
 	parserData->numberOfItemsPresent = false; 
 	parserData->nameAttributePresent = false;
+	parserData->valueAttributePresent = false;
 	parserData->categoryAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
 	parserData->categoryAttribute = "";
 	parserData->descriptionAttribute = "";
+	parserData->numberOfItems = 0;
 };
 
 otherSolutionResultAttributes: otherSolutionResultAttList 
 {
 	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have name attribute");
-	if (!parserData->numberOfItemsPresent)
-		osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have numberOfItems attribute");
+	//if (!parserData->numberOfItemsPresent)
+	//	osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have numberOfItems attribute");
 };	
 
 otherSolutionResultAttList: | otherSolutionResultAttList otherSolutionResultAtt;
@@ -3503,6 +3505,12 @@ otherSolutionResultAtt:
 		if (osresult->setOtherSolutionResultName(parserData->solutionIdx, parserData->iOther,
 												 parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultName failed");
+	} 
+  | valueAttribute 
+    {	
+		if (osresult->setOtherSolutionResultValue(parserData->solutionIdx, parserData->iOther,
+												 parserData->valueAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultValuee failed");
 	} 
   | categoryAttribute 
 	{	

@@ -1233,6 +1233,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                         outStr << "<otherSolutionResult";
                         outStr << " name=";
                         outStr << writeStringData(m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->name);
+                        outStr << " value=";
+                        outStr << writeStringData(m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->value);
                         outStr << " numberOfItems=\"";
                         outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems;
                         outStr << "\"";

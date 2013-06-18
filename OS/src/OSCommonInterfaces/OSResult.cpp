@@ -928,7 +928,8 @@ ConstraintSolution::~ConstraintSolution()
 
 
 OtherSolutionResult::OtherSolutionResult():
-    name( ""),
+    name(""),
+    value(""),
     category (""),
     description (""),
     numberOfItems (0),
@@ -3675,6 +3676,21 @@ string OSResult::getOtherSolutionResultName(int solIdx, int otherIdx)
     return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->name;
 }//getOtherSolutionResultName
 
+string OSResult::getOtherSolutionResultValue(int solIdx, int otherIdx)
+{
+    if (optimization == NULL || optimization->solution == NULL)
+        throw ErrorClass("No solution defined");
+    int iSolutions = this->getSolutionNumber();
+    if (solIdx < 0 || solIdx >= iSolutions)
+        throw ErrorClass("solIdx is outside of range in routine getOtherSolutionResultName()");
+    if (optimization->solution[solIdx] == NULL) return "";
+    if (optimization->solution[solIdx]->otherSolutionResults == NULL) return "";
+    if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults)
+        throw ErrorClass("otherIdx is outside of range in routine getOtherSolutionResultValue()");
+    if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return "";
+    return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->value;
+}//getOtherSolutionResultName
+
 string OSResult::getOtherSolutionResultCategory(int solIdx, int otherIdx)
 {
     if (optimization == NULL || optimization->solution == NULL)
@@ -6340,6 +6356,20 @@ bool OSResult::setOtherSolutionResultName(int solIdx, int otherIdx, std::string 
     return true;
 }//setOtherSolutionResultName
 
+bool OSResult::setOtherSolutionResultValue(int solIdx, int otherIdx, std::string value)
+{
+    int nSols = this->getSolutionNumber();
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->otherSolutionResults == NULL) return false;
+    if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->value = value;
+    return true;
+}//setOtherSolutionResultValue
+
 bool OSResult::setOtherSolutionResultCategory(int solIdx, int otherIdx, std::string category)
 {
     int nSols = this->getSolutionNumber();
@@ -6403,6 +6433,71 @@ bool OSResult::setOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx,
     optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item[itemIdx] = item;
     return true;
 }//setOtherSolutionResultItem
+
+//----------------- start hard-hat area
+//#if 0
+
+bool OSResult::setAnOtherSolutionResult(int solIdx, std::string name, std::string value, 
+	std::string category, std::string description, int numberOfItems, std::string* item)
+{
+    if (name == "") return false;
+    int inumberOfItems = numberOfItems;
+    if(inumberOfItems <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if(nSols <= 0) return false;
+    if(optimization == NULL) return false;
+    if(optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if(optimization->solution[solIdx] == NULL) return false;
+
+    try
+    {
+        if (optimization->solution[solIdx]->otherSolutionResults == NULL) 
+            optimization->solution[solIdx]->otherSolutionResults = new OtherSolutionResults();
+
+        int nres = optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults;
+        int i;
+
+        OtherSolutionResult** temp = new OtherSolutionResult*[nres+1];  //Allocate the new pointers
+        for (i = 0; i < nres; i++)
+            temp[i] = optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[i];  //copy the pointers
+
+        delete[] optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult; //delete old pointers
+
+//	add in the new element
+        temp[ nres] = new OtherSolutionResult();
+
+
+        temp[ nres]->name = name;
+        temp[ nres]->value = value;
+        temp[ nres]->category = category;
+        temp[ nres]->description = description;
+        temp[ nres]->numberOfItems = numberOfItems;
+
+        // if there was an item array, we do a hard copy
+        if (item != NULL)
+        {
+            temp[nres]->item = new std::string[numberOfItems];
+            for (i=0; i<numberOfItems; i++)
+                temp[nres]->item[i] = item[i];
+        }
+
+    //hook the new pointers into the data structure
+        optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult = temp;   
+        optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults = ++nres;
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
+        return false;
+    }
+}//setAnOtherSolutionResult
+
+
+//#endif
+//+++++++++++++++++ end hard-hat area
 
 bool OSResult::setNumberOfSolverOutputs(int num)
 {

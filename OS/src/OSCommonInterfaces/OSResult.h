@@ -1910,6 +1910,9 @@ public:
     /** the name of the result the user is defining */
     std::string name;
 
+    /** the value associated with the result the user is defining */
+    std::string value;
+
     /** this element allows a specific category to be associated with this
         particular type of result
      */
@@ -2798,7 +2801,7 @@ public:
      *  for some solution
      *  @param solIdx is the solution index
      *  @param object describes the kind of indices to be retrieved
-     *	 (legal values are described in ENUM_BASIS_STATUS --- see OSGeneral.h)
+     *	 (legal values are described in ENUM_PROBLEM_COMPONENT --- see OSGeneral.h)
      *  @param resultArray is the array that returns the basis information
      *  @param dim is the dimension of the resultArray
      *
@@ -3102,6 +3105,8 @@ public:
     int getNumberOfOtherSolutionResults(int solIdx);
     /* */
     std::string getOtherSolutionResultName(int solIdx, int otherIdx);
+    /* */
+    std::string getOtherSolutionResultValue(int solIdx, int otherIdx);
     /* */
     std::string getOtherSolutionResultCategory(int solIdx, int otherIdx);
     /* */
@@ -3939,6 +3944,7 @@ public:
      * @param status holds the status which is to be used
      *     (legal values are taken from the ENUM_BASIS_STATUS enumeration --- see OSGeneral.h)
      * @param i holds the integer array whose values are to be transferred.
+
      *     (NOTE WELL: This method does not handle individual variables --- the entire basis must be processed at once.)
      * @param ni holds the number of elements of i
      *
@@ -4785,6 +4791,18 @@ public:
     bool setOtherSolutionResultName(int solIdx, int otherIdx, std::string name);
 
     /**
+
+     * Set the value associated with the [j]th other solution result of solution [i].
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index to set the constraint values.
+     * @param otherIdx holds the index of the otherSolutionResult
+     * @param value holds the value of the otherSolutionResult
+     *
+     * @return whether the other solution result was set successfully or not.
+     */
+    bool setOtherSolutionResultValue(int solIdx, int otherIdx, std::string value);
+
+    /**
      * Set the category associated with the [j]th other solution result of solution [i].
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
      * @param solIdx holds the solution index to set the constraint values.
@@ -4828,6 +4846,21 @@ public:
      * @return whether the other solution result item was set successfully or not.
      */
     bool setOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx, std::string item);
+
+    /**
+     * Set another solution result of solution [i].
+     * @param solIdx holds the solution index i.
+     * @param name holds the name of the other solution result
+     * @param value holds the value of the other solution result
+     * @param category holds the category of the result
+     * @param description holds a description of the result
+     * @param numberOfItems holds the number of items
+     * @param item holds a pointer to the array of items (can be NULL if numberOfItems is 0)
+     *
+     * @return whether the other solution result was set successfully or not.
+     */
+    bool setAnOtherSolutionResult(int solIdx, std::string name, std::string value, std::string category, 
+        std::string description, int numberOfItems, std::string* item);
 
     /**
      * Set the number of other solver outputs

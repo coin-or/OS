@@ -1489,16 +1489,12 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
                 for(vit = basicVars.begin(); vit < basicVars.end(); vit++)
                 {
-
                     basisIdx[1][ kount++] = *vit;
-
-
                 }
 
                 osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
                 delete[] basisIdx[ 1];
                 basicVars.clear();
-
             }
 
 
@@ -1560,6 +1556,10 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             }
         }
 
+        ostringstream temp;
+        temp << solver->getIterationCount();
+        if (!osresult->setAnOtherSolutionResult(0,"iterations",temp.str(),"","",0,NULL))
+           throw ErrorClass("error setting iteration count");
 
         osrl = osrlwriter->writeOSrL( osresult);
 
