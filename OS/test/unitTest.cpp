@@ -153,6 +153,7 @@
 #include <CoinPackedMatrix.hpp>
 #include "CoinError.hpp"
 #include "CoinHelperFunctions.hpp"
+#include "OsiSolverInterface.hpp"
 
 
 
@@ -220,6 +221,7 @@
 #ifdef COIN_HAS_ASL
 #include <asl.h>
 #endif
+
 
 using std::cout;   
 using std::endl;
@@ -2177,6 +2179,7 @@ if (PARSER_TESTS){
 
 
 
+
 #endif
 
         SolverOption** SO;
@@ -3886,6 +3889,7 @@ if (PARSER_TESTS){
             intArray[0] = 1000*i + 1130 + 10*k + 1;
             intArray[1] = 1000*i + 1130 + 10*k + 2;
             intArray[2] = 1000*i + 1130 + 10*k + 3;
+
 
                 ok &= osresult1->setOtherOptionEnumeration(i,2,ENUM_PROBLEM_COMPONENT_variables,k,"value","description",intArray,3);
                 if (!ok) 
@@ -6068,7 +6072,7 @@ if (SOLVER_TESTS){
         osilreader = NULL;    
         if (osolreader != NULL)
             delete osolreader;
-        osolreader = NULL;    
+        osolreader = NULL;   
         if (solver != NULL)
             delete solver;
         solver = NULL;
@@ -6082,6 +6086,322 @@ if (SOLVER_TESTS){
             delete fileUtil;
         fileUtil = NULL;
     }
+
+    CoinSolver *cSolver = new CoinSolver();
+    try
+    {
+        cout << endl << "TEST " << ++nOfTest << ": Clp warmstart tests with parincLinear.osil" << endl << endl;
+
+/* we test
+ * 1. simply sizing the warmstart
+ * 2. putting a complete advanced basis
+ * 3. putting a partial basis
+ * 4. giving unusual statuses
+ * 5. over-saturating the basis
+ * 6. retrieving the optimal basis and using it as a start
+ */
+        fileUtil = new FileUtil();
+        int* bv;
+        int* bc;
+
+        ok = true; 
+
+
+
+        std::cout << "simply size the warmstart" << std::endl;
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
+
+        cSolver->sSolverName = "clp";
+        cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
+        cSolver->osoption = new OSOption();
+        cSolver->osoption->optimization = new OptimizationOption();
+        cSolver->osoption->optimization->variables = new VariableOption();
+        cSolver->osoption->optimization->variables->initialBasisStatus = new BasisStatus();
+        cSolver->osoption->optimization->constraints = new ConstraintOption();
+        cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
+//        cSolver->setAlgorithm(1);
+//        cSolver->osiSolver->enableSimplexInterface(true);
+        ok &= cSolver->osoption->setAnotherSolverOption("primalSimplex", "true", "osi", "", "bool", "");
+
+        std::cout << "call the COIN - clp Solver for parincLinear" << std::endl;
+        cSolver->solve();
+        std::cout << "returned from solver" << std::endl;
+        check = 7668;
+        ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        if (ok)
+        {    
+            cout << "COIN clp solver interface passes initial warmstart test." << endl;        
+        }
+        else
+        {
+            cout << "COIN clp solver interface warmstart error:" << endl;
+            cout << cSolver->osrl << endl;
+        }
+        cout << cSolver->osrl << endl;
+
+        if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
+        delete cSolver;
+
+
+
+        std::cout << "put a complete advanced basis" << std::endl;
+        cSolver = new CoinSolver();
+        cSolver->sSolverName = "clp";
+        cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
+        cSolver->osoption = new OSOption();
+        cSolver->osoption->optimization = new OptimizationOption();
+        cSolver->osoption->optimization->variables = new VariableOption();
+        cSolver->osoption->optimization->variables->initialBasisStatus = new BasisStatus();
+        cSolver->osoption->optimization->constraints = new ConstraintOption();
+        cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
+
+
+        bv = new int[2];
+        bv[0] = 0;
+        bv[1] = 1;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,  ENUM_BASIS_STATUS_basic, bv, 2); 
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic, bv, 2); 
+        delete [] bv;
+
+        bc = new int[1];
+        bc[0] = 2;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper, bc, 1); 
+        bc[0] = 3;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atLower, bc, 1); 
+        delete [] bc;
+
+        if(ok == false) throw ErrorClass(" Fail setting warmstart advanced basis for clp");
+
+        std::cout << "call the COIN - clp Solver" << std::endl;
+        cSolver->solve();
+        std::cout << "returned from solver" << std::endl;
+        check = 7668;
+        ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+
+        if (ok)
+        {    
+            cout << "COIN clp solver interface passes complete basis warmstart test." << endl;        
+        }
+        else
+        {
+            cout << "COIN clp solver interface warmstart error:" << endl;
+            cout << cSolver->osrl << endl;
+        }
+        cout << cSolver->osrl << endl;
+
+        if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
+        delete cSolver;
+
+
+
+        std::cout << "put a partial basis" << std::endl;
+        cSolver = new CoinSolver();
+        cSolver->sSolverName = "clp";
+        cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
+        cSolver->osoption = new OSOption();
+        cSolver->osoption->optimization = new OptimizationOption();
+        cSolver->osoption->optimization->variables = new VariableOption();
+        cSolver->osoption->optimization->variables->initialBasisStatus = new BasisStatus();
+        cSolver->osoption->optimization->constraints = new ConstraintOption();
+        cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
+
+        bv = new int[1];
+        bv[0] = 1;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,  ENUM_BASIS_STATUS_basic, bv, 1); 
+        bv[0] = 2;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic, bv, 1); 
+        delete [] bv;
+
+        if(ok == false) throw ErrorClass(" Fail setting warmstart partial basis for clp");
+        std::cout << "call the COIN - clp Solver" << std::endl;
+        cSolver->solve();
+        std::cout << "returned from solver" << std::endl;
+        check = 7668;
+        ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        if (ok)
+        {    
+            cout << "COIN clp solver interface passes partial basis warmstart test." << endl;        
+        }
+        else
+        {
+            cout << "COIN clp solver interface warmstart error:" << endl;
+            cout << cSolver->osrl << endl;
+        }
+        cout << cSolver->osrl << endl;
+        if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
+        delete cSolver;
+
+
+
+        std::cout << "test unusual basis statuses" << std::endl;
+        cSolver = new CoinSolver();
+        cSolver->sSolverName = "clp";
+        cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
+        cSolver->osoption = new OSOption();
+        cSolver->osoption->optimization = new OptimizationOption();
+        cSolver->osoption->optimization->variables = new VariableOption();
+        cSolver->osoption->optimization->variables->initialBasisStatus = new BasisStatus();
+        cSolver->osoption->optimization->constraints = new ConstraintOption();
+        cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
+
+        bv = new int[2];
+        bv[0] = 0;
+        bv[1] = 1;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,  ENUM_BASIS_STATUS_superbasic, bv, 2); 
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_superbasic, bv, 2); 
+        delete [] bv;
+
+        bc = new int[1];
+        bc[0] = 2;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality, bc, 1); 
+        bc[0] = 3;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_unknown, bc, 1); 
+        delete [] bc;
+
+        if(ok == false) throw ErrorClass(" Fail setting unusual basis statuses for clp");
+        std::cout << "call the COIN - clp Solver" << std::endl;
+        cSolver->solve();
+        std::cout << "returned from solver" << std::endl;
+        check = 7668;
+        ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        if (ok)
+        {    
+            cout << "COIN clp solver interface passes unusual basis warmstart test." << endl;        
+        }
+        else
+        {
+            cout << "COIN clp solver interface warmstart error:" << endl;
+            cout << cSolver->osrl << endl;
+        }
+        cout << cSolver->osrl << endl;
+        if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
+        delete cSolver;
+
+
+
+        std::cout << "test over-saturated basis" << std::endl;
+        cSolver = new CoinSolver();
+        cSolver->sSolverName = "clp";
+        cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
+        cSolver->osoption = new OSOption();
+        cSolver->osoption->optimization = new OptimizationOption();
+        cSolver->osoption->optimization->variables = new VariableOption();
+        cSolver->osoption->optimization->variables->initialBasisStatus = new BasisStatus();
+        cSolver->osoption->optimization->constraints = new ConstraintOption();
+        cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
+
+        bv = new int[2];
+        bv[0] = 0;
+        bv[1] = 1;
+        bc = new int[4];
+        bc[0] = 3;
+        bc[1] = 1;
+        bc[2] = 0;
+        bc[3] = 2;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,  ENUM_BASIS_STATUS_basic, bv, 2); 
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic, bc, 4); 
+        delete [] bv;
+        delete [] bc;
+
+        if(ok == false) throw ErrorClass(" Fail setting over-saturated basis for clp");
+        std::cout << "call the COIN - clp Solver" << std::endl;
+        cSolver->solve();
+        std::cout << "returned from solver" << std::endl;
+        check = 7668;
+        ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        if (ok)
+        {    
+            cout << "COIN clp solver interface passes over-saturated basis warmstart test." << endl;        
+        }
+        else
+        {
+            cout << "COIN clp solver interface warmstart error:" << endl;
+            cout << cSolver->osrl << endl;
+        }
+        cout << cSolver->osrl << endl;
+        if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
+        delete cSolver;
+
+
+
+        std::cout << "test using optimal basis" << std::endl;
+        cSolver = new CoinSolver();
+        cSolver->sSolverName = "clp";
+        cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
+        cSolver->osoption = new OSOption();
+        cSolver->osoption->optimization = new OptimizationOption();
+        cSolver->osoption->optimization->variables = new VariableOption();
+        cSolver->osoption->optimization->variables->initialBasisStatus = new BasisStatus();
+        cSolver->osoption->optimization->constraints = new ConstraintOption();
+        cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
+
+        int* vbasis;
+        int retCode;
+
+        bv = new int[2];
+        bv[0] = 0;
+        bv[1] = 1;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,  ENUM_BASIS_STATUS_basic, bv, 2); 
+        bv[0] = 1;
+        bv[1] = 3;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic, bv, 2); 
+        bv[0] = 0;
+        bv[1] = 2;
+        ok &= cSolver->osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atLower, bv, 2); 
+        delete [] bv;
+
+        double* iv = new double[2];
+        iv[0] = 539.9999999999999;
+        iv[1] = 252.0000000000001;
+        ok &= cSolver->osoption->setInitVarValuesDense(2,iv);
+        if (!ok) throw ErrorClass(" Fail setting starting values during warmstart tests");
+        delete [] iv;
+
+        std::cout << "call the COIN - clp Solver" << std::endl;
+        cSolver->solve();
+        std::cout << "returned from solver" << std::endl;
+        check = 7668;
+        ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+
+        if (ok)
+        {    
+            cout << "COIN clp solver interface passes warmstart from optimal basis." << endl;        
+        }
+        else
+        {
+            cout << "COIN clp solver interface warmstart error:" << endl;
+            cout << cSolver->osrl << endl;
+        }
+
+        cout << cSolver->osrl << endl;
+        if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
+
+
+
+
+
+        delete cSolver;
+        cSolver = NULL;
+#ifdef DEBUG
+        cout << "solver successfully deleted" << endl;
+#endif
+        delete fileUtil;
+        fileUtil = NULL;
+
+        unitTestResult << "TEST " << nOfTest << ": Warmstarts for problem parincLinear.osil with Clp" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing Clp Solver Warmstarts:"  + eclass.errormsg<< endl;
+
+        if (cSolver != NULL)
+            delete cSolver;
+        cSolver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+
 
     // now solve another problem -- try an integer program
     try{
@@ -9222,6 +9542,32 @@ double getObjVal( std::string osrl){
     }
     return OSNaN();
 }
+
+#if 0
+int getItCount( std::string osrl){
+    std::string sObjVal;
+    int dObjVal;
+    string::size_type pos2;
+    string::size_type pos1 = osrl.find( "<obj ");
+    if(pos1 != std::string::npos){
+        // get the end of the obj start tag
+        pos1 = osrl.find(">", pos1 + 1);
+        if(pos1 != std::string::npos){
+            // get the start of obj end tag
+
+            pos2 = osrl.find( "</obj", pos1 + 1);
+            if( pos2 != std::string::npos){
+                // get the substring
+                sObjVal = osrl.substr( pos1 + 1, pos2 - pos1 - 1);
+                //std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
+                // return dObjVal = strtod(sObjVal.c_str(), NULL);
+                return dObjVal = os_strtod(sObjVal.c_str(), NULL); 
+            }
+        }
+    }
+    return -1;
+}
+#endif
 
 
 void tempPrintArrays(OSResult* os)

@@ -458,6 +458,14 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                             osiSolver->setIntParam( intParamMap[ optionsVector[ i]->name] , atoi( optionsVector[ i]->value.c_str() ) );
                         }
                     }
+                    else if (optionsVector[ i]->type == "bool" )
+                    {
+                        if( optionsVector[ i]->name == "primalSimplex" )
+                        {
+                            if (optionsVector[ i]->value != "false")
+                            osiSolver->enableSimplexInterface((optionsVector[ i]->value != "false"));
+                        }
+                    }
                 }
 
                 // treat Cbc separately to take advantage of CbcMain1()
@@ -612,6 +620,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                 for(k = 0; k < n; k++)
                 {
                     if (!initialed[k])
+                    {
                         if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
                             if (osinstance->instanceData->variables->var[k]->lb <= default_initval)
                                 denseInitVarVector[k] = default_initval;
@@ -621,7 +630,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                             if (osinstance->instanceData->variables->var[k]->ub >= default_initval)
                                 denseInitVarVector[k] = default_initval;
                             else
-                                denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->ub;
+                               denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->ub;
                         else if ((osinstance->instanceData->variables->var[k]->lb <= default_initval) &&
                                  (osinstance->instanceData->variables->var[k]->ub >= default_initval))
                             denseInitVarVector[k] = default_initval;
@@ -629,8 +638,9 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                             denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->lb;
                         else
                             denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->ub;
-                    denseInitVarVector[k] = default_initval;
-                    denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->lb;
+                    }
+//                    denseInitVarVector[k] = default_initval;
+//                    denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->lb;
                 }
 #ifndef NDEBUG
                 outStr.str("");
@@ -647,7 +657,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "done\n");
 #endif
 
-            }  //  end if (m > 0)
+            }  //  end set initial variable values
+
 
             // add starting basis --- only supported by Clp
 
@@ -660,28 +671,26 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                      (osoption->optimization->constraints != NULL &&
                       osoption->optimization->constraints->initialBasisStatus != NULL)) ) 
 
-/* Only the following statuses are recognized:
- *
- *   enum Status {
- *       isFree = 0x00,	            ///< Nonbasic free variable
- *       basic = 0x01,    	        ///< Basic variable
- *       atUpperBound = 0x02,       ///< Nonbasic at upper bound
- *       atLowerBound = 0x03        ///< Nonbasic at lower bound
- *   }
- *
- * Any others, or any missing statuses, are set to isFree; let Clp deal with it.
- * We count the number of variables basic, atBound, free
- * If there is a full contingent of these four types, use it. 
- * Otherwise, initial the basis to isFree, then pull basic and atUpper/atLower and overwrite (those only)
- */
+                /* Only the following statuses are recognized:
+                 *
+                 *   enum Status {
+                 *       isFree = 0x00,	            ///< Nonbasic free variable
+                 *       basic = 0x01,    	        ///< Basic variable
+                 *       atUpperBound = 0x02,       ///< Nonbasic at upper bound
+                 *       atLowerBound = 0x03        ///< Nonbasic at lower bound
+                 *   }
+                 *
+                 * Any others, or any missing statuses, are set to isFree; let Clp deal with it.
+                 */
                 {
                     int nsBas,naBas,nsUpp,naUpp,nsLow,naLow,nvar,ncon;
                     int* tmpBas = NULL;
                     CoinWarmStartBasis* warmstart = new CoinWarmStartBasis();
                     nvar = osinstance->getVariableNumber();
                     ncon = osinstance->getConstraintNumber();
-                    warmstart->setSize(nvar, ncon);
+                    warmstart->setSize(nvar, ncon); // this initials everything to isFree
 
+                    // pull the number of basis elements of each type
                     if ( osoption->optimization->variables != NULL &&
                          osoption->optimization->variables->initialBasisStatus != NULL )
                     {
@@ -709,6 +718,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                         naLow = 0;
                     }
 
+                    // get the elements and store them into the Clp warm start object
                     if (nsBas > 0)
                     {
                         tmpBas = new int[nsBas];
