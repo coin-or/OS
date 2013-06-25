@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="http://www.coin-or.org/OS/stylesheets/OSoL.xslt"?>
+<osol xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd" >
+<optimization>
+<variables numberOfOtherVariableOptions="1">
+<initialVariableValues numberOfVar="2">
+<var idx="0" value="1.73205"/>
+<var idx="1" value="1.73205"/>
+</initialVariableValues>
+</optimization>
+</osol>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+	<general>
+	<solverToInvoke>clp</solverToInvoke>
+	</general>
+	<optimization>
+		<variables numberOfOtherVariableOptions="0">
+			<initialVariableValues numberOfVar="0">
+			</initialVariableValues>
+			<initialBasisStatus>
+				<basic numberOfEl="0"></basic>
+			</initialBasisStatus>
+		</variables>	
+		<solverOptions numberOfSolverOptions="0">
+		</solverOptions>
+	</optimization>
+</osol>

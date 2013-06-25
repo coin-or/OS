@@ -119,6 +119,8 @@ OS/data/amplFiles/NLP_unbounded2.nl -text
 OS/data/amplFiles/NLP_unbounded2_discrete.mod -text
 OS/data/amplFiles/NLP_unbounded2_discrete.nl -text
 OS/data/amplFiles/Pietros-test.nl -text
+OS/data/amplFiles/aggplan.dat -text
+OS/data/amplFiles/aggplan.mod -text
 OS/data/amplFiles/blpmpec.dat -text
 OS/data/amplFiles/blpmpec.mod -text
 OS/data/amplFiles/blpmpec.nl.zip -text
@@ -159,6 +161,9 @@ OS/data/amplFiles/qptest4.nl -text
 OS/data/amplFiles/qptest5.mod -text
 OS/data/amplFiles/qptest5.nl -text
 OS/data/amplFiles/qptest6.nl -text
+OS/data/amplFiles/rbrock.mod -text
+OS/data/amplFiles/rbrock.nl -text
+OS/data/amplFiles/rbrock.sol -text
 OS/data/amplFiles/rbrockmod.mod -text
 OS/data/amplFiles/rbrockmod_basisStatus.mod -text
 OS/data/amplFiles/rbrockmod_basisStatus.nl -text
@@ -181,6 +186,7 @@ OS/data/configFiles/testLocal.config -text
 OS/data/configFiles/testLocalMPS.config -text
 OS/data/configFiles/testLocalNL.config -text
 OS/data/configFiles/testRemote.config -text
+OS/data/configFiles/testRemote1.config -text
 OS/data/configFiles/testRemoteBIG.config -text
 OS/data/configFiles/testRemoteKnock.config -text
 OS/data/configFiles/testRemoteMPS.config -text
@@ -262,6 +268,8 @@ OS/data/osilFiles/parincLinearByRow.osil -text
 OS/data/osilFiles/parincLinearEmpty.osil -text
 OS/data/osilFiles/parincLinearZeroVar.osil -text
 OS/data/osilFiles/parincQuadratic.osil -text
+OS/data/osilFiles/qptest.osil -text
+OS/data/osilFiles/qptest2.osil -text
 OS/data/osilFiles/reallyEmpty.osil -text
 OS/data/osilFiles/rosenbrockmod.osil -text
 OS/data/osilFiles/rosenbrockorig.osil -text
@@ -298,6 +306,7 @@ OS/data/osolFiles/p0033_sym.osol -text
 OS/data/osolFiles/p0201_cbc.osol -text
 OS/data/osolFiles/parincInteger_cbc.osol -text
 OS/data/osolFiles/parincLinearByRow_clp.osol -text
+OS/data/osolFiles/parincLinear_clp.osol -text
 OS/data/osolFiles/parincLinear_dylp.osol -text
 OS/data/osolFiles/parincLinear_ipopt.osol -text
 OS/data/osolFiles/parincQuadratic_ipopt.osol -text
@@ -308,6 +317,7 @@ OS/data/osolFiles/parsertest2.osol -text
 OS/data/osolFiles/parsertest3.osol -text
 OS/data/osolFiles/parsertestWithErrors.osol -text
 OS/data/osolFiles/parsertestWithErrors.result -text
+OS/data/osolFiles/rbrock.osol -text
 OS/data/osolFiles/remoteSolve1.osol -text
 OS/data/osolFiles/remoteSolve2.osol -text
 OS/data/osolFiles/remotegsbkip.osol -text

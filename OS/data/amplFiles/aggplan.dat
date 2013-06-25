@@ -1,0 +1,32 @@
+data;
+
+param wage_rate := 4000;
+param overtime_premium := 1.5;
+param max_overtime := 0.25;
+param start_inv := 50;
+param end_inv := 50;
+param output_rate := 10;
+param start_work_force := 40;
+param safety_stock  := 50;
+param inv_unit_cost := 100;
+param hiring_cost := 6000;
+param firing_cost := 4000;
+
+set periods := jan feb mar apr may jun jul aug sep oct nov dec
+;
+
+param demand :=
+jan 300
+feb 300
+mar 350
+apr 400
+may 450
+jun 500
+jul 650
+aug 600
+sep 475
+oct 475
+nov 450
+dec 450
+;
+
