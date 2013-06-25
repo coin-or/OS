@@ -236,6 +236,7 @@ int main(int argC, char* argV[])
 //#endif 
     WindowsErrorPopupBlocker();
     double getObjVal(std::string osrl);
+    int   getItCount(std::string osrl);
     void tempPrintArrays(OSResult* os); //  OSrl parser development only
     //using CppAD::NearEqual;
     bool ok;
@@ -6119,8 +6120,6 @@ if (SOLVER_TESTS){
         cSolver->osoption->optimization->variables->initialBasisStatus = new BasisStatus();
         cSolver->osoption->optimization->constraints = new ConstraintOption();
         cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
-//        cSolver->setAlgorithm(1);
-//        cSolver->osiSolver->enableSimplexInterface(true);
         ok &= cSolver->osoption->setAnotherSolverOption("primalSimplex", "true", "osi", "", "bool", "");
 
         std::cout << "call the COIN - clp Solver for parincLinear" << std::endl;
@@ -6128,6 +6127,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        ok &= ( getItCount(cSolver->osrl) == 3);
         if (ok)
         {    
             cout << "COIN clp solver interface passes initial warmstart test." << endl;        
@@ -6137,7 +6137,6 @@ if (SOLVER_TESTS){
             cout << "COIN clp solver interface warmstart error:" << endl;
             cout << cSolver->osrl << endl;
         }
-        cout << cSolver->osrl << endl;
 
         if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
         delete cSolver;
@@ -6177,6 +6176,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        ok &= ( getItCount(cSolver->osrl) == 3);
 
         if (ok)
         {    
@@ -6187,7 +6187,6 @@ if (SOLVER_TESTS){
             cout << "COIN clp solver interface warmstart error:" << endl;
             cout << cSolver->osrl << endl;
         }
-        cout << cSolver->osrl << endl;
 
         if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
         delete cSolver;
@@ -6218,6 +6217,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        ok &= ( getItCount(cSolver->osrl) == 4);
         if (ok)
         {    
             cout << "COIN clp solver interface passes partial basis warmstart test." << endl;        
@@ -6227,7 +6227,7 @@ if (SOLVER_TESTS){
             cout << "COIN clp solver interface warmstart error:" << endl;
             cout << cSolver->osrl << endl;
         }
-        cout << cSolver->osrl << endl;
+
         if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
         delete cSolver;
 
@@ -6264,6 +6264,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        ok &= ( getItCount(cSolver->osrl) == 3);
         if (ok)
         {    
             cout << "COIN clp solver interface passes unusual basis warmstart test." << endl;        
@@ -6273,7 +6274,7 @@ if (SOLVER_TESTS){
             cout << "COIN clp solver interface warmstart error:" << endl;
             cout << cSolver->osrl << endl;
         }
-        cout << cSolver->osrl << endl;
+
         if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
         delete cSolver;
 
@@ -6309,6 +6310,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        ok &= ( getItCount(cSolver->osrl) == 3);
         if (ok)
         {    
             cout << "COIN clp solver interface passes over-saturated basis warmstart test." << endl;        
@@ -6362,6 +6364,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        ok &= ( getItCount(cSolver->osrl) == 0);
 
         if (ok)
         {    
@@ -9543,31 +9546,32 @@ double getObjVal( std::string osrl){
     return OSNaN();
 }
 
-#if 0
-int getItCount( std::string osrl){
-    std::string sObjVal;
-    int dObjVal;
-    string::size_type pos2;
-    string::size_type pos1 = osrl.find( "<obj ");
-    if(pos1 != std::string::npos){
-        // get the end of the obj start tag
-        pos1 = osrl.find(">", pos1 + 1);
-        if(pos1 != std::string::npos){
-            // get the start of obj end tag
+//#if 0
+int getItCount( std::string osrl)
+{
+    OSrLReader *osrlreader = NULL;
+    try
+    {
+        OSResult *osresult = NULL;
+        osrlreader = new OSrLReader();
+        osresult =  osrlreader->readOSrL(osrl);
+        int nIter;
 
-            pos2 = osrl.find( "</obj", pos1 + 1);
-            if( pos2 != std::string::npos){
-                // get the substring
-                sObjVal = osrl.substr( pos1 + 1, pos2 - pos1 - 1);
-                //std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
-                // return dObjVal = strtod(sObjVal.c_str(), NULL);
-                return dObjVal = os_strtod(sObjVal.c_str(), NULL); 
-            }
-        }
+        std::string temp = osresult->getOtherSolutionResultValue(0, 0);
+
+        nIter = atoi(temp.c_str());
+        if (osrlreader != NULL) delete osrlreader;
+        osrlreader = NULL;
+        return nIter; 
     }
-    return -1;
+    catch(const ErrorClass& eclass)
+    {
+        if (osrlreader != NULL) delete osrlreader;
+        osrlreader = NULL;
+        return -1;
+    }
 }
-#endif
+//#endif
 
 
 void tempPrintArrays(OSResult* os)
