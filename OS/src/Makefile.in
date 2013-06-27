@@ -914,9 +914,11 @@ uninstall-info: uninstall-info-recursive
 ########################################################################
 
 install-exec-hook:
-	test -s OSSolverService.exe.manifest && \
-	mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
-	cp OSSolverService.exe $(bindir)/OSSolverService.exe
+	if COIN_CXX_IS_CL
+		test -s OSSolverService.exe.manifest && \
+		mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
+		cp OSSolverService.exe $(bindir)/OSSolverService.exe
+	endif
 
 install-exec-local:
 	$(install_sh_DATA) config_os.h $(DESTDIR)$(includecoindir)/OSConfig.h

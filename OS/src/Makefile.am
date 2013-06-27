@@ -81,9 +81,11 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 ########################################################################
 
 install-exec-hook:
-	test -s OSSolverService.exe.manifest && \
-	mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
-	cp OSSolverService.exe $(bindir)/OSSolverService.exe
+	if COIN_CXX_IS_CL
+		test -s OSSolverService.exe.manifest && \
+		mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
+		cp OSSolverService.exe $(bindir)/OSSolverService.exe
+	endif
 
 ########################################################################
 #                Headers that need to be installed                     #

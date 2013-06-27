@@ -22419,7 +22419,7 @@ fi
     _pkg_min_version=0.16.0
     echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
 echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6
-    if "$PKG_CONFIG" --atleast-pkgconfig-version $_pkg_min_version; then
+    if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
       echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
@@ -22431,7 +22431,7 @@ echo "${ECHO_T}no" >&6
 
   # check if pkg-config supports the short-errors flag
   if test -n "$PKG_CONFIG" && \
-    "$PKG_CONFIG" --atleast-pkgconfig-version 0.20; then
+    $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
     pkg_short_errors=" --short-errors "
   else
     pkg_short_errors=""
@@ -22645,9 +22645,9 @@ if test $coin_has_coinutils = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "coinutils"; then
-    COINUTILS_VERSIONS=`"$PKG_CONFIG" --modversion "coinutils" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "coinutils" 2>/dev/null`
+  if $PKG_CONFIG --exists "coinutils"; then
+    COINUTILS_VERSIONS=`$PKG_CONFIG --modversion "coinutils" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "coinutils" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -22656,8 +22656,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     COINUTILS_CFLAGS="$cflags"
-    COINUTILS_LIBS=`"$PKG_CONFIG" --libs "coinutils" 2>/dev/null`
-    COINUTILS_DATA=`"$PKG_CONFIG" --variable=datadir "coinutils" 2>/dev/null`
+    COINUTILS_LIBS=`$PKG_CONFIG --libs "coinutils" 2>/dev/null`
+    COINUTILS_DATA=`$PKG_CONFIG --variable=datadir "coinutils" 2>/dev/null`
      coin_has_coinutils=yes
         echo "$as_me:$LINENO: result: yes: $COINUTILS_VERSIONS" >&5
 echo "${ECHO_T}yes: $COINUTILS_VERSIONS" >&6
@@ -22679,7 +22679,7 @@ echo "${ECHO_T}yes: $COINUTILS_VERSIONS" >&6
 
 
   else
-    COINUTILS_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "coinutils"`
+    COINUTILS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinutils"`
       coin_has_coinutils=notGiven
         echo "$as_me:$LINENO: result: not given: $COINUTILS_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $COINUTILS_PKG_ERRORS" >&6
@@ -22725,8 +22725,6 @@ projtoprocess="coinutils"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -23163,9 +23161,9 @@ if test $coin_has_ipopt = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "ipopt cppad"; then
-    IPOPT_VERSIONS=`"$PKG_CONFIG" --modversion "ipopt cppad" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "ipopt cppad" 2>/dev/null`
+  if $PKG_CONFIG --exists "ipopt cppad"; then
+    IPOPT_VERSIONS=`$PKG_CONFIG --modversion "ipopt cppad" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "ipopt cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -23174,8 +23172,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     IPOPT_CFLAGS="$cflags"
-    IPOPT_LIBS=`"$PKG_CONFIG" --libs "ipopt cppad" 2>/dev/null`
-    IPOPT_DATA=`"$PKG_CONFIG" --variable=datadir "ipopt cppad" 2>/dev/null`
+    IPOPT_LIBS=`$PKG_CONFIG --libs "ipopt cppad" 2>/dev/null`
+    IPOPT_DATA=`$PKG_CONFIG --variable=datadir "ipopt cppad" 2>/dev/null`
      coin_has_ipopt=yes
         echo "$as_me:$LINENO: result: yes: $IPOPT_VERSIONS" >&5
 echo "${ECHO_T}yes: $IPOPT_VERSIONS" >&6
@@ -23197,7 +23195,7 @@ echo "${ECHO_T}yes: $IPOPT_VERSIONS" >&6
 
 
   else
-    IPOPT_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "ipopt cppad"`
+    IPOPT_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "ipopt cppad"`
       coin_has_ipopt=notGiven
         echo "$as_me:$LINENO: result: not given: $IPOPT_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $IPOPT_PKG_ERRORS" >&6
@@ -23243,8 +23241,6 @@ projtoprocess="ipopt cppad"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -23676,9 +23672,9 @@ if test $coin_has_clp = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "osi-clp"; then
-    CLP_VERSIONS=`"$PKG_CONFIG" --modversion "osi-clp" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "osi-clp" 2>/dev/null`
+  if $PKG_CONFIG --exists "osi-clp"; then
+    CLP_VERSIONS=`$PKG_CONFIG --modversion "osi-clp" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "osi-clp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -23687,8 +23683,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     CLP_CFLAGS="$cflags"
-    CLP_LIBS=`"$PKG_CONFIG" --libs "osi-clp" 2>/dev/null`
-    CLP_DATA=`"$PKG_CONFIG" --variable=datadir "osi-clp" 2>/dev/null`
+    CLP_LIBS=`$PKG_CONFIG --libs "osi-clp" 2>/dev/null`
+    CLP_DATA=`$PKG_CONFIG --variable=datadir "osi-clp" 2>/dev/null`
      coin_has_clp=yes
         echo "$as_me:$LINENO: result: yes: $CLP_VERSIONS" >&5
 echo "${ECHO_T}yes: $CLP_VERSIONS" >&6
@@ -23710,7 +23706,7 @@ echo "${ECHO_T}yes: $CLP_VERSIONS" >&6
 
 
   else
-    CLP_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "osi-clp"`
+    CLP_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "osi-clp"`
       coin_has_clp=notGiven
         echo "$as_me:$LINENO: result: not given: $CLP_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $CLP_PKG_ERRORS" >&6
@@ -23756,8 +23752,6 @@ projtoprocess="osi-clp"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -24189,9 +24183,9 @@ if test $coin_has_dylp = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "osi-dylp"; then
-    DYLP_VERSIONS=`"$PKG_CONFIG" --modversion "osi-dylp" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "osi-dylp" 2>/dev/null`
+  if $PKG_CONFIG --exists "osi-dylp"; then
+    DYLP_VERSIONS=`$PKG_CONFIG --modversion "osi-dylp" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "osi-dylp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -24200,8 +24194,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     DYLP_CFLAGS="$cflags"
-    DYLP_LIBS=`"$PKG_CONFIG" --libs "osi-dylp" 2>/dev/null`
-    DYLP_DATA=`"$PKG_CONFIG" --variable=datadir "osi-dylp" 2>/dev/null`
+    DYLP_LIBS=`$PKG_CONFIG --libs "osi-dylp" 2>/dev/null`
+    DYLP_DATA=`$PKG_CONFIG --variable=datadir "osi-dylp" 2>/dev/null`
      coin_has_dylp=yes
         echo "$as_me:$LINENO: result: yes: $DYLP_VERSIONS" >&5
 echo "${ECHO_T}yes: $DYLP_VERSIONS" >&6
@@ -24223,7 +24217,7 @@ echo "${ECHO_T}yes: $DYLP_VERSIONS" >&6
 
 
   else
-    DYLP_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "osi-dylp"`
+    DYLP_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "osi-dylp"`
       coin_has_dylp=notGiven
         echo "$as_me:$LINENO: result: not given: $DYLP_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $DYLP_PKG_ERRORS" >&6
@@ -24269,8 +24263,6 @@ projtoprocess="osi-dylp"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -24702,9 +24694,9 @@ if test $coin_has_vol = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "osi-vol"; then
-    VOL_VERSIONS=`"$PKG_CONFIG" --modversion "osi-vol" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "osi-vol" 2>/dev/null`
+  if $PKG_CONFIG --exists "osi-vol"; then
+    VOL_VERSIONS=`$PKG_CONFIG --modversion "osi-vol" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "osi-vol" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -24713,8 +24705,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     VOL_CFLAGS="$cflags"
-    VOL_LIBS=`"$PKG_CONFIG" --libs "osi-vol" 2>/dev/null`
-    VOL_DATA=`"$PKG_CONFIG" --variable=datadir "osi-vol" 2>/dev/null`
+    VOL_LIBS=`$PKG_CONFIG --libs "osi-vol" 2>/dev/null`
+    VOL_DATA=`$PKG_CONFIG --variable=datadir "osi-vol" 2>/dev/null`
      coin_has_vol=yes
         echo "$as_me:$LINENO: result: yes: $VOL_VERSIONS" >&5
 echo "${ECHO_T}yes: $VOL_VERSIONS" >&6
@@ -24736,7 +24728,7 @@ echo "${ECHO_T}yes: $VOL_VERSIONS" >&6
 
 
   else
-    VOL_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "osi-vol"`
+    VOL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "osi-vol"`
       coin_has_vol=notGiven
         echo "$as_me:$LINENO: result: not given: $VOL_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $VOL_PKG_ERRORS" >&6
@@ -24782,8 +24774,6 @@ projtoprocess="osi-vol"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -25215,9 +25205,9 @@ if test $coin_has_symphony = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "osi-sym"; then
-    SYMPHONY_VERSIONS=`"$PKG_CONFIG" --modversion "osi-sym" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "osi-sym" 2>/dev/null`
+  if $PKG_CONFIG --exists "osi-sym"; then
+    SYMPHONY_VERSIONS=`$PKG_CONFIG --modversion "osi-sym" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "osi-sym" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -25226,8 +25216,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     SYMPHONY_CFLAGS="$cflags"
-    SYMPHONY_LIBS=`"$PKG_CONFIG" --libs "osi-sym" 2>/dev/null`
-    SYMPHONY_DATA=`"$PKG_CONFIG" --variable=datadir "osi-sym" 2>/dev/null`
+    SYMPHONY_LIBS=`$PKG_CONFIG --libs "osi-sym" 2>/dev/null`
+    SYMPHONY_DATA=`$PKG_CONFIG --variable=datadir "osi-sym" 2>/dev/null`
      coin_has_symphony=yes
         echo "$as_me:$LINENO: result: yes: $SYMPHONY_VERSIONS" >&5
 echo "${ECHO_T}yes: $SYMPHONY_VERSIONS" >&6
@@ -25249,7 +25239,7 @@ echo "${ECHO_T}yes: $SYMPHONY_VERSIONS" >&6
 
 
   else
-    SYMPHONY_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "osi-sym"`
+    SYMPHONY_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "osi-sym"`
       coin_has_symphony=notGiven
         echo "$as_me:$LINENO: result: not given: $SYMPHONY_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $SYMPHONY_PKG_ERRORS" >&6
@@ -25295,8 +25285,6 @@ projtoprocess="osi-sym"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -25728,9 +25716,9 @@ if test $coin_has_cpx = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "osi-cplex"; then
-    CPX_VERSIONS=`"$PKG_CONFIG" --modversion "osi-cplex" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "osi-cplex" 2>/dev/null`
+  if $PKG_CONFIG --exists "osi-cplex"; then
+    CPX_VERSIONS=`$PKG_CONFIG --modversion "osi-cplex" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "osi-cplex" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -25739,8 +25727,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     CPX_CFLAGS="$cflags"
-    CPX_LIBS=`"$PKG_CONFIG" --libs "osi-cplex" 2>/dev/null`
-    CPX_DATA=`"$PKG_CONFIG" --variable=datadir "osi-cplex" 2>/dev/null`
+    CPX_LIBS=`$PKG_CONFIG --libs "osi-cplex" 2>/dev/null`
+    CPX_DATA=`$PKG_CONFIG --variable=datadir "osi-cplex" 2>/dev/null`
      coin_has_cpx=yes
         echo "$as_me:$LINENO: result: yes: $CPX_VERSIONS" >&5
 echo "${ECHO_T}yes: $CPX_VERSIONS" >&6
@@ -25762,7 +25750,7 @@ echo "${ECHO_T}yes: $CPX_VERSIONS" >&6
 
 
   else
-    CPX_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "osi-cplex"`
+    CPX_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "osi-cplex"`
       coin_has_cpx=notGiven
         echo "$as_me:$LINENO: result: not given: $CPX_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $CPX_PKG_ERRORS" >&6
@@ -25808,8 +25796,6 @@ projtoprocess="osi-cplex"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -26241,9 +26227,9 @@ if test $coin_has_glpk = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "osi-glpk"; then
-    GLPK_VERSIONS=`"$PKG_CONFIG" --modversion "osi-glpk" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "osi-glpk" 2>/dev/null`
+  if $PKG_CONFIG --exists "osi-glpk"; then
+    GLPK_VERSIONS=`$PKG_CONFIG --modversion "osi-glpk" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "osi-glpk" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -26252,8 +26238,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     GLPK_CFLAGS="$cflags"
-    GLPK_LIBS=`"$PKG_CONFIG" --libs "osi-glpk" 2>/dev/null`
-    GLPK_DATA=`"$PKG_CONFIG" --variable=datadir "osi-glpk" 2>/dev/null`
+    GLPK_LIBS=`$PKG_CONFIG --libs "osi-glpk" 2>/dev/null`
+    GLPK_DATA=`$PKG_CONFIG --variable=datadir "osi-glpk" 2>/dev/null`
      coin_has_glpk=yes
         echo "$as_me:$LINENO: result: yes: $GLPK_VERSIONS" >&5
 echo "${ECHO_T}yes: $GLPK_VERSIONS" >&6
@@ -26275,7 +26261,7 @@ echo "${ECHO_T}yes: $GLPK_VERSIONS" >&6
 
 
   else
-    GLPK_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "osi-glpk"`
+    GLPK_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "osi-glpk"`
       coin_has_glpk=notGiven
         echo "$as_me:$LINENO: result: not given: $GLPK_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $GLPK_PKG_ERRORS" >&6
@@ -26321,8 +26307,6 @@ projtoprocess="osi-glpk"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -26754,9 +26738,9 @@ if test $coin_has_cbc = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "cbc"; then
-    CBC_VERSIONS=`"$PKG_CONFIG" --modversion "cbc" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "cbc" 2>/dev/null`
+  if $PKG_CONFIG --exists "cbc"; then
+    CBC_VERSIONS=`$PKG_CONFIG --modversion "cbc" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "cbc" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -26765,8 +26749,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     CBC_CFLAGS="$cflags"
-    CBC_LIBS=`"$PKG_CONFIG" --libs "cbc" 2>/dev/null`
-    CBC_DATA=`"$PKG_CONFIG" --variable=datadir "cbc" 2>/dev/null`
+    CBC_LIBS=`$PKG_CONFIG --libs "cbc" 2>/dev/null`
+    CBC_DATA=`$PKG_CONFIG --variable=datadir "cbc" 2>/dev/null`
      coin_has_cbc=yes
         echo "$as_me:$LINENO: result: yes: $CBC_VERSIONS" >&5
 echo "${ECHO_T}yes: $CBC_VERSIONS" >&6
@@ -26788,7 +26772,7 @@ echo "${ECHO_T}yes: $CBC_VERSIONS" >&6
 
 
   else
-    CBC_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "cbc"`
+    CBC_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "cbc"`
       coin_has_cbc=notGiven
         echo "$as_me:$LINENO: result: not given: $CBC_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $CBC_PKG_ERRORS" >&6
@@ -26834,8 +26818,6 @@ projtoprocess="cbc"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -27267,9 +27249,9 @@ if test $coin_has_bonmin = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "bonmin cppad"; then
-    BONMIN_VERSIONS=`"$PKG_CONFIG" --modversion "bonmin cppad" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "bonmin cppad" 2>/dev/null`
+  if $PKG_CONFIG --exists "bonmin cppad"; then
+    BONMIN_VERSIONS=`$PKG_CONFIG --modversion "bonmin cppad" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "bonmin cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -27278,8 +27260,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     BONMIN_CFLAGS="$cflags"
-    BONMIN_LIBS=`"$PKG_CONFIG" --libs "bonmin cppad" 2>/dev/null`
-    BONMIN_DATA=`"$PKG_CONFIG" --variable=datadir "bonmin cppad" 2>/dev/null`
+    BONMIN_LIBS=`$PKG_CONFIG --libs "bonmin cppad" 2>/dev/null`
+    BONMIN_DATA=`$PKG_CONFIG --variable=datadir "bonmin cppad" 2>/dev/null`
      coin_has_bonmin=yes
         echo "$as_me:$LINENO: result: yes: $BONMIN_VERSIONS" >&5
 echo "${ECHO_T}yes: $BONMIN_VERSIONS" >&6
@@ -27301,7 +27283,7 @@ echo "${ECHO_T}yes: $BONMIN_VERSIONS" >&6
 
 
   else
-    BONMIN_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "bonmin cppad"`
+    BONMIN_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "bonmin cppad"`
       coin_has_bonmin=notGiven
         echo "$as_me:$LINENO: result: not given: $BONMIN_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $BONMIN_PKG_ERRORS" >&6
@@ -27347,8 +27329,6 @@ projtoprocess="bonmin cppad"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -27780,9 +27760,9 @@ if test $coin_has_couenne = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "couenne cppad"; then
-    COUENNE_VERSIONS=`"$PKG_CONFIG" --modversion "couenne cppad" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "couenne cppad" 2>/dev/null`
+  if $PKG_CONFIG --exists "couenne cppad"; then
+    COUENNE_VERSIONS=`$PKG_CONFIG --modversion "couenne cppad" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "couenne cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -27791,8 +27771,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     COUENNE_CFLAGS="$cflags"
-    COUENNE_LIBS=`"$PKG_CONFIG" --libs "couenne cppad" 2>/dev/null`
-    COUENNE_DATA=`"$PKG_CONFIG" --variable=datadir "couenne cppad" 2>/dev/null`
+    COUENNE_LIBS=`$PKG_CONFIG --libs "couenne cppad" 2>/dev/null`
+    COUENNE_DATA=`$PKG_CONFIG --variable=datadir "couenne cppad" 2>/dev/null`
      coin_has_couenne=yes
         echo "$as_me:$LINENO: result: yes: $COUENNE_VERSIONS" >&5
 echo "${ECHO_T}yes: $COUENNE_VERSIONS" >&6
@@ -27814,7 +27794,7 @@ echo "${ECHO_T}yes: $COUENNE_VERSIONS" >&6
 
 
   else
-    COUENNE_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "couenne cppad"`
+    COUENNE_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "couenne cppad"`
       coin_has_couenne=notGiven
         echo "$as_me:$LINENO: result: not given: $COUENNE_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $COUENNE_PKG_ERRORS" >&6
@@ -27860,8 +27840,6 @@ projtoprocess="couenne cppad"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -28293,9 +28271,9 @@ if test $coin_has_bcp = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "bcp"; then
-    BCP_VERSIONS=`"$PKG_CONFIG" --modversion "bcp" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "bcp" 2>/dev/null`
+  if $PKG_CONFIG --exists "bcp"; then
+    BCP_VERSIONS=`$PKG_CONFIG --modversion "bcp" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "bcp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -28304,8 +28282,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     BCP_CFLAGS="$cflags"
-    BCP_LIBS=`"$PKG_CONFIG" --libs "bcp" 2>/dev/null`
-    BCP_DATA=`"$PKG_CONFIG" --variable=datadir "bcp" 2>/dev/null`
+    BCP_LIBS=`$PKG_CONFIG --libs "bcp" 2>/dev/null`
+    BCP_DATA=`$PKG_CONFIG --variable=datadir "bcp" 2>/dev/null`
      coin_has_bcp=yes
         echo "$as_me:$LINENO: result: yes: $BCP_VERSIONS" >&5
 echo "${ECHO_T}yes: $BCP_VERSIONS" >&6
@@ -28327,7 +28305,7 @@ echo "${ECHO_T}yes: $BCP_VERSIONS" >&6
 
 
   else
-    BCP_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "bcp"`
+    BCP_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "bcp"`
       coin_has_bcp=notGiven
         echo "$as_me:$LINENO: result: not given: $BCP_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $BCP_PKG_ERRORS" >&6
@@ -28373,8 +28351,6 @@ projtoprocess="bcp"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -28806,9 +28782,9 @@ if test $coin_has_asl = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "coinasl"; then
-    ASL_VERSIONS=`"$PKG_CONFIG" --modversion "coinasl" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "coinasl" 2>/dev/null`
+  if $PKG_CONFIG --exists "coinasl"; then
+    ASL_VERSIONS=`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -28817,8 +28793,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     ASL_CFLAGS="$cflags"
-    ASL_LIBS=`"$PKG_CONFIG" --libs "coinasl" 2>/dev/null`
-    ASL_DATA=`"$PKG_CONFIG" --variable=datadir "coinasl" 2>/dev/null`
+    ASL_LIBS=`$PKG_CONFIG --libs "coinasl" 2>/dev/null`
+    ASL_DATA=`$PKG_CONFIG --variable=datadir "coinasl" 2>/dev/null`
      coin_has_asl=yes
         echo "$as_me:$LINENO: result: yes: $ASL_VERSIONS" >&5
 echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
@@ -28840,7 +28816,7 @@ echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
 
 
   else
-    ASL_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "coinasl"`
+    ASL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinasl"`
       coin_has_asl=notGiven
         echo "$as_me:$LINENO: result: not given: $ASL_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $ASL_PKG_ERRORS" >&6
@@ -28886,8 +28862,6 @@ projtoprocess="coinasl"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do
@@ -29319,9 +29293,9 @@ if test $coin_has_cppad = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if "$PKG_CONFIG" --exists "cppad"; then
-    CPPAD_VERSIONS=`"$PKG_CONFIG" --modversion "cppad" 2>/dev/null | tr '\n' ' '`
-     cflags=`"$PKG_CONFIG" --cflags "cppad" 2>/dev/null`
+  if $PKG_CONFIG --exists "cppad"; then
+    CPPAD_VERSIONS=`$PKG_CONFIG --modversion "cppad" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -29330,8 +29304,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     CPPAD_CFLAGS="$cflags"
-    CPPAD_LIBS=`"$PKG_CONFIG" --libs "cppad" 2>/dev/null`
-    CPPAD_DATA=`"$PKG_CONFIG" --variable=datadir "cppad" 2>/dev/null`
+    CPPAD_LIBS=`$PKG_CONFIG --libs "cppad" 2>/dev/null`
+    CPPAD_DATA=`$PKG_CONFIG --variable=datadir "cppad" 2>/dev/null`
      coin_has_cppad=yes
         echo "$as_me:$LINENO: result: yes: $CPPAD_VERSIONS" >&5
 echo "${ECHO_T}yes: $CPPAD_VERSIONS" >&6
@@ -29353,7 +29327,7 @@ echo "${ECHO_T}yes: $CPPAD_VERSIONS" >&6
 
 
   else
-    CPPAD_PKG_ERRORS=`"$PKG_CONFIG" $pkg_short_errors --errors-to-stdout --print-errors "cppad"`
+    CPPAD_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "cppad"`
       coin_has_cppad=notGiven
         echo "$as_me:$LINENO: result: not given: $CPPAD_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $CPPAD_PKG_ERRORS" >&6
@@ -29399,8 +29373,6 @@ projtoprocess="cppad"
 allproj=""
 allpcfiles=""
 allpcifiles=""
-echo "$as_me:$LINENO: checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects" >&5
-echo $ECHO_N "checking in directories $COIN_PKG_CONFIG_PATH_UNINSTALLED for projects... $ECHO_C" >&6
 while test "x$projtoprocess" != x ; do
 
   for proj in $projtoprocess ; do

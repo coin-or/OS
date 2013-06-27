@@ -47,7 +47,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src
 ########################################################################
 
 install-exec-hook:
-	test -s OSAmplClient.exe.manifest && \
-	mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
-	cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
-
+	if COIN_CXX_IS_CL
+		test -s OSAmplClient.exe.manifest && \
+		mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
+		cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
+	endif

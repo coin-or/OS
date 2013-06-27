@@ -675,9 +675,11 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 ########################################################################
 
 install-exec-hook:
-	test -s OSAmplClient.exe.manifest && \
-	mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
-	cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
+	if COIN_CXX_IS_CL
+		test -s OSAmplClient.exe.manifest && \
+		mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
+		cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
+	endif
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
