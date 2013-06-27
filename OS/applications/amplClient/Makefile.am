@@ -41,3 +41,13 @@ AM_CPPFLAGS = \
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src
+
+########################################################################
+#                     Installing manifest (MSVC++)                     #
+########################################################################
+
+install-exec-hook:
+	test -s OSAmplClient.exe.manifest && \
+	mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
+	cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
+

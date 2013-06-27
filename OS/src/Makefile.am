@@ -38,7 +38,7 @@ libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSModelInterfaces/libOSModelInterfaces.la \
 		./OSParsers/libOSParsers.la \
 		./OSSolverInterfaces/libOSSolverInterfaces.la 
-		
+
 ########################################################################
 #                    OSSolverService program                           #
 ########################################################################
@@ -75,6 +75,15 @@ AM_CPPFLAGS = \
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 
+
+########################################################################
+#                     Installing manifest (MSVC++)                     #
+########################################################################
+
+install-exec-hook:
+	test -s OSSolverService.exe.manifest && \
+	mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
+	cp OSSolverService.exe $(bindir)/OSSolverService.exe
 
 ########################################################################
 #                Headers that need to be installed                     #
