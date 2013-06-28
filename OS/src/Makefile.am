@@ -80,12 +80,12 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 #                     Installing manifest (MSVC++)                     #
 ########################################################################
 
+if COIN_CXX_IS_CL
 install-exec-hook:
-	if COIN_CXX_IS_CL
-		test -s OSSolverService.exe.manifest && \
-		mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
-		cp OSSolverService.exe $(bindir)/OSSolverService.exe
-	endif
+	test -s OSSolverService.exe.manifest && \
+	mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
+	cp OSSolverService.exe $(bindir)/OSSolverService.exe
+endif
 
 ########################################################################
 #                Headers that need to be installed                     #

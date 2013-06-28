@@ -46,9 +46,9 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src
 #                     Installing manifest (MSVC++)                     #
 ########################################################################
 
+if COIN_CXX_IS_CL
 install-exec-hook:
-	if COIN_CXX_IS_CL
-		test -s OSAmplClient.exe.manifest && \
-		mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
-		cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
-	endif
+	test -s OSAmplClient.exe.manifest && \
+	mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
+	cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
+endif

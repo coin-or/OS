@@ -605,6 +605,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@COIN_CXX_IS_CL_FALSE@install-exec-hook:
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
@@ -674,12 +675,10 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 #                     Installing manifest (MSVC++)                     #
 ########################################################################
 
-install-exec-hook:
-	if COIN_CXX_IS_CL
-		test -s OSAmplClient.exe.manifest && \
-		mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
-		cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
-	endif
+@COIN_CXX_IS_CL_TRUE@install-exec-hook:
+@COIN_CXX_IS_CL_TRUE@	test -s OSAmplClient.exe.manifest && \
+@COIN_CXX_IS_CL_TRUE@	mt -manifest OSAmplClient.exe.manifest -outputresource:OSAmplClient.exe;\
+@COIN_CXX_IS_CL_TRUE@	cp OSAmplClient.exe $(bindir)/OSAmplClient.exe
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

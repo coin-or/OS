@@ -833,6 +833,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@COIN_CXX_IS_CL_FALSE@install-exec-hook:
 clean: clean-recursive
 
 clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
@@ -913,12 +914,10 @@ uninstall-info: uninstall-info-recursive
 #                     Installing manifest (MSVC++)                     #
 ########################################################################
 
-install-exec-hook:
-	if COIN_CXX_IS_CL
-		test -s OSSolverService.exe.manifest && \
-		mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
-		cp OSSolverService.exe $(bindir)/OSSolverService.exe
-	endif
+@COIN_CXX_IS_CL_TRUE@install-exec-hook:
+@COIN_CXX_IS_CL_TRUE@	test -s OSSolverService.exe.manifest && \
+@COIN_CXX_IS_CL_TRUE@	mt -manifest OSSolverService.exe.manifest -outputresource:OSSolverService.exe;\
+@COIN_CXX_IS_CL_TRUE@	cp OSSolverService.exe $(bindir)/OSSolverService.exe
 
 install-exec-local:
 	$(install_sh_DATA) config_os.h $(DESTDIR)$(includecoindir)/OSConfig.h
