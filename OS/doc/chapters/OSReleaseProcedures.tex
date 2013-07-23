@@ -2,12 +2,81 @@
 
 \subdivision{Preparing the release}\label{section:ReleasePrep}
 
-There are four scripts 
+There are four scripts in the {\tt BuildTools} directory that help with the release, namely
 
-\subsubdivision{version numbers}{\label{section:VersionNumbering}
+\begin{verbatim}
+prepare_new_stable
+commit_new_stable
+prepare_new_release
+commit_new_release
+\end{verbatim}
+
+\medskip
+
+The first of these, {\tt prepare\_new\_stable}, prepares a new stable version. The simplest form of invoking it is
+
+\begin{verbatim}
+($BUILDTOOLSDIR)/prepare_new_stable <loc>
+\end{verbatim}
+
+where {\tt loc} is the location that forms the basis of the new stable version, e.g., {\tt OS/trunk}.
+{\tt prepare\_new\_stable} uses svn to check out the code, but it locates the latest stable versions of all the dependencies instead of the trunk versions.
+
+Some command line options (from comments in the script):
+
+\begin{description}
+  \item[\tt -p]			Suppress checkout (useful for testing)
+  \item[\tt -m] 		Bump the major version number.
+\end{description}
+
+This script will do the following:
+
+\begin{itemize}
+  \item Set the new stable version number as the next minor version number in
+    the current major version number. Use the -m flag to bump the major
+    version number.
+
+  \item Convert externals from trunk to the top stable branch. Externals which
+    are currently stable or release are left untouched. Use -t to suppress
+    the change from trunk to stable. Set\_externals is then invoked to set
+    release externals where available.
+
+  \item Check out externals. The BuildTools version used by externals (if any)
+    is checked, and the script issues a warning if it doesn't match the
+    version used by the source URL.
+
+ \item Run the scripts to download any ThirdParty code.
+
+  \item Run {\tt run\_autotools} to rebuild configure and make files.
+
+  \item Run configure, make, and make test
+
+  \item Tweak the externals to upgrade trunk  dependencies to stable.
+\end{itemize}
+
+If there is any error during these tasks the script will stop and you should
+examine the output.
+   
+\medskip
+
+The script {\tt commit\_new\_stable} commits the new stable revision. It should be run only after 
+{\tt prepare\_new\_stable} has been processed correctly.  
+
+The simplest form of invoking it is
+
+\begin{verbatim}
+($BUILDTOOLSDIR)/commit_new_stable <loc>
+\end{verbatim}
+
+\noindent
+where {\tt loc} is the location that forms the basis of the new stable version, e.g., {\tt OS/trunk}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter -c to do the commit.
+
+{\tt prepare\_new\_release} and {\tt commit\_new\_release} are the corresponding scripts to prepare and commit releases (which are based on stable versions).
+
+\subsubdivision{Version numbers}{\label{section:VersionNumbering}
 
 The version number is defined in the file {\tt configure.ac}. There are actually two versions of this file,
-in the root directory as well as the top OS directory. Each of them contains a call to {\tt AC_INIT}, 
+in the root directory as well as the top OS directory. Each of them contains a call to {\tt AC\_INIT}, 
 in which the second parameter is the version number. Change this number appropriately as follows:
 For trunk versions, use {\bf trunk}, so that {\tt OSgetVersionNumber()} can print the correct svn revision number in the header of the output; for stable and release versions use the proper number ({\tt n.n} for stable versions, {\tt n.n.n} for releases).
 
