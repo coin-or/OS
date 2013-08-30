@@ -85,19 +85,23 @@ AC_COIN_CHECK_PACKAGE(CoinUtils,[coinutils],[OSLib])
 if test $coin_has_coinutils != yes ; then
   AC_MSG_ERROR([Required package CoinUtils not available.])
 fi
-AC_COIN_CHECK_PACKAGE(Ipopt,    [ipopt cppad], [OSLib])
-AC_COIN_CHECK_PACKAGE(Clp,      [osi-clp],  [OSLib])
-AC_COIN_CHECK_PACKAGE(DyLP,     [osi-dylp], [OSLib])
-AC_COIN_CHECK_PACKAGE(Vol,      [osi-vol],  [OSLib])
-AC_COIN_CHECK_PACKAGE(SYMPHONY, [osi-sym],  [OSLib])
-AC_COIN_CHECK_PACKAGE(Cpx,      [osi-cplex],[OSLib])
-AC_COIN_CHECK_PACKAGE(Glpk,     [osi-glpk], [OSLib])
-AC_COIN_CHECK_PACKAGE(Cbc,      [cbc],      [OSLib])
+AC_COIN_CHECK_PACKAGE(Ipopt,    [ipopt cppad],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Clp,      [osi-clp],      [OSLib])
+AC_COIN_CHECK_PACKAGE(DyLP,     [osi-dylp],     [OSLib])
+AC_COIN_CHECK_PACKAGE(Vol,      [osi-vol],      [OSLib])
+AC_COIN_CHECK_PACKAGE(SYMPHONY, [osi-sym],      [OSLib])
+AC_COIN_CHECK_PACKAGE(Cpx,      [osi-cplex],    [OSLib])
+AC_COIN_CHECK_PACKAGE(Glpk,     [osi-glpk],     [OSLib])
+AC_COIN_CHECK_PACKAGE(Grb,      [osi-gurobi],   [OSLib])
+AC_COIN_CHECK_PACKAGE(Msk,      [osi-mosek],    [OSLib])
+AC_COIN_CHECK_PACKAGE(Spx,      [osi-soplex],   [OSLib])
+AC_COIN_CHECK_PACKAGE(Xpr,      [osi-xpress],   [OSLib])
+AC_COIN_CHECK_PACKAGE(Cbc,      [cbc],          [OSLib])
 AC_COIN_CHECK_PACKAGE(Bonmin,   [bonmin cppad], [OSLib])
 AC_COIN_CHECK_PACKAGE(Couenne,  [couenne cppad],[OSLib])
-AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],      [OSLib])
-AC_COIN_CHECK_PACKAGE(ASL,      [coinasl],  [OSLib])
-AC_COIN_CHECK_PACKAGE(cppad,    [cppad],    [OSLib])
+AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],          [OSLib])
+AC_COIN_CHECK_PACKAGE(ASL,      [coinasl],      [OSLib])
+AC_COIN_CHECK_PACKAGE(cppad,    [cppad],        [OSLib])
 
 # The COIN_HAS_CPPAD symbol should not go into the public configuration
 # header file (config_os.h).
@@ -111,7 +115,6 @@ fi
 if test $coin_has_ipopt = yes ; then
   AC_DEFINE(OS_HAS_IPOPT, [1], [Define to 1 if OS uses Ipopt])
 fi
-
 
 # Bonmin is available or not, so we define an additional symbol.
 if test $coin_has_bonmin = yes ; then

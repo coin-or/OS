@@ -7,7 +7,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -54,6 +54,22 @@
 #include "OsiCpxSolverInterface.hpp"
 #endif
 
+#ifdef COIN_HAS_GRB
+#include "OsiGrbSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_MSK
+#include "OsiMskSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_SOPLEX
+#include "OsiSpxSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_XPR
+#include "OsiXprSolverInterface.hpp"
+#endif
+
 #include "OSGeneral.h"
 #include "OSParameters.h"
 #include "OSMathUtil.h"
@@ -85,7 +101,6 @@ CoinSolver::CoinSolver() :
     cbc_argv( NULL),
     num_cbc_argv( 0),
     cpuTime( 0)
-
 {
     osrlwriter = new OSrLWriter();
 }
@@ -109,12 +124,14 @@ CoinSolver::~CoinSolver()
     osresult = NULL;
     if(num_cbc_argv > 0)
     {
+/* ----- 
         int i;
         for(i = 0; i < num_cbc_argv; i++)
         {
-            //delete cbc_argv[ i];
+            delete cbc_argv[ i];
         }
-        //delete[] cbc_argv;
+        delete[] cbc_argv;
+  ----- */
         cbc_argv = NULL;
     }
 #ifndef NDEBUG
@@ -127,7 +144,6 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
 {
     try
     {
-        //osresult = new OSResult();
         if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
         clock_t start, finish;
         double duration;
@@ -144,7 +160,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
     if (osinstance->getObjectiveNumber() > 1)
             throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
 
-       // get the type of solver requested from OSoL string
+        // get the type of solver requested from OSoL string
         if (sSolverName == "clp")
             osiSolver = new OsiClpSolverInterface();
 
@@ -163,6 +179,34 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
                 osiSolver = new OsiCpxSolverInterface();
             #else
                 throw ErrorClass("This OSSolverService was built without solver cplex");
+            #endif
+
+        else if (sSolverName == "gurobi")
+            #ifdef COIN_HAS_GRB
+                osiSolver = new OsiGrbSolverInterface();
+            #else
+                throw ErrorClass("This OSSolverService was built without solver gurobi");
+            #endif
+
+        else if (sSolverName == "mosek")
+            #ifdef COIN_HAS_MSK
+                osiSolver = new OsiMskSolverInterface();
+            #else
+                throw ErrorClass("This OSSolverService was built without solver mosek");
+            #endif
+
+        else if (sSolverName == "soplex")
+            #ifdef COIN_HAS_SOPLEX
+                osiSolver = new OsiSpxSolverInterface();
+            #else
+                throw ErrorClass("This OSSolverService was built without solver soplex");
+            #endif
+
+        else if (sSolverName == "xpress")
+            #ifdef COIN_HAS_XPR
+                osiSolver = new OsiXprSolverInterface();
+            #else
+                throw ErrorClass("This OSSolverService was built without solver xpress");
             #endif
 
         else if (sSolverName == "glpk")
@@ -209,7 +253,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
             if( sSolverName.find("clp") != std::string::npos) throw ErrorClass( "Clp cannot do integer programming");
             if( sSolverName.find("vol") != std::string::npos) throw ErrorClass( "Vol cannot do integer programming");
             if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do integer programming");
-            //if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do integer programming");
+            if( sSolverName.find("soplex") != std::string::npos) throw ErrorClass( "SoPlex cannot do integer programming");
         }
         // throw an exception if we have a solver that cannot handle semi-continuous or semi-integer variables
         if( osinstance->getNumberOfSemiIntegerVariables() + osinstance->getNumberOfSemiContinuousVariables() > 0)
@@ -218,7 +262,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
             //if( sSolverName.find("clp") != std::string::npos) throw ErrorClass( "Clp cannot do semi-integer variables");
             //if( sSolverName.find("vol") != std::string::npos) throw ErrorClass( "Vol cannot do semi-integer variables");
             //if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do semi-integer variables");
-            //if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do semi-integer variables");
+            //if( sSolverName.find("soplex") != std::string::npos) throw ErrorClass( "SoPlex cannot do semi-integer variables");
         }
         // check other trivial solver limitations
         //if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver:" + sSolverName +" cannot handle unconstrained problems");
@@ -1022,9 +1066,8 @@ void CoinSolver::solve() throw (ErrorClass)
 
                 writeResult( osiSolver);
             }
-
-
         }
+
         catch(CoinError e)
         {
             std::string errmsg;
@@ -1032,8 +1075,8 @@ void CoinSolver::solve() throw (ErrorClass)
                      + e.methodName() + " in class " + e.className();
             throw ErrorClass( errmsg );
         }
-
     }
+
     catch(const ErrorClass& eclass)
     {
         std::string::size_type  pos1 = eclass.errormsg.find( "<osrl");
@@ -1047,9 +1090,6 @@ void CoinSolver::solve() throw (ErrorClass)
         {
             osrl = eclass.errormsg;
         }
-
-
-
         throw ErrorClass( osrl);
     }
 } // end solve
@@ -1147,7 +1187,6 @@ void CoinSolver::dataEchoCheck()
 
 void CoinSolver::writeResult(OsiSolverInterface *solver)
 {
-
     double *x = NULL;
     double *y = NULL;
     double *z = NULL;
@@ -1155,7 +1194,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
     int *rbasis = NULL;  //row basis information
     int *idx = NULL;
     int kount;
-
 
     //vectors to hold the basis information
     std::vector<int> freeVars;
@@ -1167,32 +1205,31 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
     basisIdx = new int*[ 4];
     //end of vectors
 
-    int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
-    std::string *rcost = NULL;
-    if( solver->getNumCols() > 0 ) x = new double[solver->getNumCols() ];
-
-
-
-
-    if( (solver->getNumCols() > 0)  && (sSolverName.find( "vol") == std::string::npos)
-            && (sSolverName.find( "symphony") == std::string::npos) &&
-            (sSolverName.find( "dylp") == std::string::npos) &&
-            (sSolverName.find( "glpk") == std::string::npos) )
-        cbasis = new int[solver->getNumCols() ];
-
-    if( (osinstance->getConstraintNumber() > 0) && (sSolverName.find( "vol") == std::string::npos)
-            && (sSolverName.find( "symphony") == std::string::npos)  &&
-            (sSolverName.find( "dylp") == std::string::npos) &&
-            (sSolverName.find( "glpk") == std::string::npos) )
-        rbasis = new int[solver->getNumRows() ];
-
-
-    if( solver->getNumRows() > 0 ) y = new double[solver->getNumRows() ];
-    if( solver->getNumCols() > 0 ) idx = new int[ solver->getNumCols() ];
-    z = new double[1];
-    if( solver->getNumCols() > 0 ) rcost = new std::string[ solver->getNumCols()];
     int numberOfVar = solver->getNumCols();
     int numberOfCon = solver->getNumRows();
+    int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
+    std::string *rcost = NULL;
+    if ( numberOfVar > 0 ) x = new double[numberOfVar];
+    if ( numberOfCon > 0 ) y = new double[numberOfCon ];
+    if ( numberOfVar > 0 ) idx = new int[ numberOfVar];
+    if ( numberOfVar > 0 ) rcost = new std::string[numberOfVar];
+    z = new double[1];
+
+    //allocate basis if solver supports it (Clp, Cbc, Cplex, Gurobi
+    bool supportsBasis = false;
+    if ( (sSolverName.find( "clp") != std::string::npos) 
+           || (sSolverName.find( "cbc") != std::string::npos) 
+           || (sSolverName.find( "cplex") != std::string::npos) 
+           || (sSolverName.find( "gurobi") != std::string::npos) ) 
+    {
+        if (numOfIntVars == 0) // basis information is meaningless for (M)IP
+        {
+            if (numberOfVar > 0) cbasis = new int[numberOfVar];
+            if (numberOfCon > 0) rbasis = new int[numberOfCon];
+            supportsBasis = true;
+        }
+    }
+
     int solIdx = 0;
     int i = 0;
     int numberOfOtherVariableResults = 1;
@@ -1201,7 +1238,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
     try
     {
-
         osresult->setGeneralStatusType("normal");
         osresult->setTime(cpuTime);
         osresult->setServiceName( OSgetVersionInfo() );
@@ -1209,10 +1245,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
         if (solver->isProvenOptimal() == true)
         {
             osresult->setSolutionStatus(solIdx, "optimal", description);
-            if( (sSolverName.find( "vol") == std::string::npos) &&
-                    (sSolverName.find( "symphony") == std::string::npos) &&
-                    (sSolverName.find( "dylp") == std::string::npos) &&
-                    (sSolverName.find( "glpk") == std::string::npos) ) //vol, symphony and glpk do not support this -- DyLP causes memory leak
+            if ( supportsBasis ) 
             {
                 solver->getBasisStatus( cbasis, rbasis);
             }
@@ -1231,10 +1264,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                     if(solver->isPrimalObjectiveLimitReached() == true)
                     {
                         osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");
-                        if( (sSolverName.find( "vol") == std::string::npos) &&
-                                (sSolverName.find( "symphony") == std::string::npos) &&
-                                (sSolverName.find( "dylp") == std::string::npos) &&
-                                (sSolverName.find( "glpk") == std::string::npos) ) //vol glpk, and symphony do not support this
+                        if ( supportsBasis ) 
                         {
                             solver->getBasisStatus( cbasis, rbasis);
                         }
@@ -1244,10 +1274,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                         if(solver->isDualObjectiveLimitReached() == true)
                         {
                             osresult->setSolutionStatus(solIdx, "other", "dual objective limit reached");
-                            if( (sSolverName.find( "vol") == std::string::npos) &&
-                                    (sSolverName.find( "symphony") == std::string::npos) &&
-                                    (sSolverName.find( "dylp") == std::string::npos) &&
-                                    (sSolverName.find( "glpk") == std::string::npos) ) //vol and symphony do not support this
+                            if ( supportsBasis ) 
                             {
                                 solver->getBasisStatus( cbasis, rbasis);
                             }
@@ -1257,10 +1284,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                             if(solver->isIterationLimitReached() == true)
                             {
                                 osresult->setSolutionStatus(solIdx, "other", "iteration limit reached");
-                                if( (sSolverName.find( "vol") == std::string::npos) &&
-                                        (sSolverName.find( "symphony") == std::string::npos) &&
-                                        (sSolverName.find( "dylp") == std::string::npos) &&
-                                        (sSolverName.find( "glpk") == std::string::npos) ) //vol and symphony do not support this
+                                if ( supportsBasis ) 
                                 {
                                     solver->getBasisStatus( cbasis, rbasis);
                                 }
@@ -1269,9 +1293,10 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                             {
                                 if(solver->isAbandoned() == true)
                                     osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
-                                if( solver->getNumCols() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
                                 else
-                                    osresult->setSolutionStatus(solIdx, "other", description);
+                                    if( solver->getNumCols() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
+                                    else
+                                        osresult->setSolutionStatus(solIdx, "other", description);
                             }
                         }
                     }
@@ -1279,27 +1304,20 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             }
         }
 
-
-
         /* Retrieve the solution */
         //
         *(z + 0)  =  solver->getObjValue();
 
         osresult->setObjectiveValuesDense(solIdx, z);
 
-
-
         for(i=0; i < numberOfVar; i++)
         {
-
             *(x + i) = solver->getColSolution()[i];
             *(idx + i) = i;
 
-            // get basis information
+            // sort basis information for variables into four categories
             if( (cbasis != NULL) && (solver->isProvenOptimal() == true) )
             {
-
-
                 switch (cbasis[ i] )
                 {
                 case 0:
@@ -1338,10 +1356,9 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
         }// end for on number of variables
 
-        //now set basis information for variables
+        //now store basis information for variables
         if(freeVars.size()  > 0)
         {
-
             kount = 0;
 
             basisIdx[ 0] = new int[ freeVars.size()];
@@ -1356,8 +1373,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             freeVars.clear();
         }
 
-
-
         if(basicVars.size()  > 0)
         {
             kount = 0;
@@ -1366,7 +1381,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
             for(vit = basicVars.begin(); vit < basicVars.end(); vit++)
             {
-
                 basisIdx[1][ kount++] = *vit;
             }
 
@@ -1374,8 +1388,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             delete[] basisIdx[ 1];
             basicVars.clear();
         }
-
-
 
         if(nonBasicUpper.size()  > 0)
         {
@@ -1415,17 +1427,9 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
         // Symphony does not get dual prices
         if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0)
         {
-            //assert(solver->getNumRows() >= solver->getNumRows());
-            //assert(solver->getRowPrice() != NULL);
-
-
-
             for(i = 0; i <  numberOfCon; i++)
             {
-
                 *(y + i) = solver->getRowPrice()[ i];
-
-                //std::cout << "------ ROW BASIS STATUS ----- " << rbasis[ i]  << std::endl;
 
                 // get basis information
                 if((rbasis != NULL) && (solver->isProvenOptimal() == true) )
@@ -1440,7 +1444,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                     }
 
                     case 1:
-
                     {
                         //a basic variable
                         basicVars.push_back( i);
@@ -1490,7 +1493,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                 freeVars.clear();
             }
 
-
             if(basicVars.size()  > 0)
             {
                 kount = 0;
@@ -1506,8 +1508,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                 delete[] basisIdx[ 1];
                 basicVars.clear();
             }
-
-
 
             if(nonBasicUpper.size()  > 0)
             {
@@ -1525,7 +1525,6 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                 delete[] basisIdx[ 2];
                 nonBasicUpper.clear();
             }
-
 
             if(nonBasicLower.size()  > 0)
             {
@@ -1573,14 +1572,15 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
         osrl = osrlwriter->writeOSrL( osresult);
 
-
-        if(solver->getNumRows() > 0)
+        if (y != NULL)
         {
             delete[] y;
             y = NULL;
-            if( (sSolverName.find( "vol") == std::string::npos) &&
-                    (sSolverName.find( "symphony") == std::string::npos) &&
-                    (sSolverName.find( "glpk") == std::string::npos) ) delete[] rbasis;
+        }
+
+        if (rbasis != NULL)
+        {
+            delete[] rbasis;
             rbasis = NULL;
         }
 
@@ -1590,50 +1590,71 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
         delete[] basisIdx;
         basisIdx = NULL;
 
-        if(solver->getNumCols() > 0)
+        if (x != NULL)
         {
-
-            if( (sSolverName.find( "vol") == std::string::npos) &&
-                    (sSolverName.find( "symphony") == std::string::npos) &&
-                    (sSolverName.find( "glpk") == std::string::npos) ) delete[] cbasis;
-            cbasis = NULL;
-
             delete[] x;
             x = NULL;
+        }
+
+        if (cbasis != NULL)
+        {
+            delete[] cbasis;
+            cbasis = NULL;
+        }
+
+        if (rcost != NULL)
+        {
             delete[] rcost;
             rcost = NULL;
+        }
+
+        if (idx != NULL)
+        {
             delete[] idx;
             idx = NULL;
         }
-
     }
 
     catch(const ErrorClass& eclass)
     {
-        if(solver->getNumRows() > 0)
+        if (y != NULL)
         {
             delete[] y;
             y = NULL;
-            if( (sSolverName.find( "vol") == std::string::npos) &&
-                    (sSolverName.find( "symphony") == std::string::npos) &&
-                    (sSolverName.find( "glpk") == std::string::npos) ) delete[] rbasis;
+        }
+
+        if (rbasis != NULL)
+        {
+            delete[] rbasis;
             rbasis = NULL;
         }
 
         delete[] z;
         z = NULL;
 
-        if(solver->getNumCols() > 0)
-        {
-            if( (sSolverName.find( "vol") == std::string::npos) &&
-                    (sSolverName.find( "symphony") == std::string::npos) &&
-                    (sSolverName.find( "glpk") == std::string::npos) ) delete[] cbasis;
-            cbasis = NULL;
+        delete[] basisIdx;
+        basisIdx = NULL;
 
+        if (x != NULL)
+        {
             delete[] x;
             x = NULL;
+        }
+
+        if (cbasis != NULL)
+        {
+            delete[] cbasis;
+            cbasis = NULL;
+        }
+
+        if (rcost != NULL)
+        {
             delete[] rcost;
             rcost = NULL;
+        }
+
+        if (idx != NULL)
+        {
             delete[] idx;
             idx = NULL;
         }

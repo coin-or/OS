@@ -57,6 +57,14 @@
  * 
  *   Cplex tested on p0033.osil
  * 
+ *   Gurobi tested on p0033.osil
+ * 
+ *   Mosek tested on p0033.osil
+ * 
+ *   Soplex tested on p0033.osil
+ * 
+ *   Xpress tested on p0033.osil
+ * 
  *   COIN-Ipopt tested on:
  *   <ol>
  *   <li> avion2.osil  </li>
@@ -181,6 +189,26 @@
 #ifdef COIN_HAS_BONMIN    
 #include "OSBonminSolver.h"
 #endif 
+
+#ifdef COIN_HAS_CPX
+#include "OsiCpxSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_GRB
+#include "OsiGrbSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_MSK
+#include "OsiMskSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_SOPLEX
+#include "OsiSpxSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_XPR
+#include "OsiXprSolverInterface.hpp"
+#endif
 
 #ifdef COIN_HAS_GAMSUTILS
 #include "OSgams2osil.hpp"
@@ -6868,10 +6896,10 @@ if( THOROUGH == true){
 #ifdef DEBUG
             cout << solver->osrl << endl;
 #endif
-            cout << "COIN Vol solver solution for parincLinear checks." << endl;
+            cout << "COIN Vol solver solution for volumeTest checks." << endl;
         }
         else
-        {    cout << "COIN Vol solver solution for parincLinear in error:" << endl;
+        {    cout << "COIN Vol solver solution for volumeTest in error:" << endl;
             cout << solver->osrl << endl;
         }
         if(ok == false) throw ErrorClass(" Fail unit test with Vol on volumeTest.osil");
@@ -6964,8 +6992,6 @@ if( THOROUGH == true){
         fileUtil = NULL;
     }    
 #endif
-    
-
 
 #ifdef COIN_HAS_CPX
     try{
@@ -7021,6 +7047,219 @@ if( THOROUGH == true){
     }    
 #endif
     
+
+#ifdef COIN_HAS_GRB
+    try{
+        cout << endl << "TEST " << ++nOfTest << ": Gurobi solver on p0033.osil" << endl << endl;
+
+        fileUtil = new FileUtil();
+        solver = new CoinSolver();
+
+        ok = true; 
+        osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
+        osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cpx.osol";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = fileUtil->getFileAsString( osolFileName.c_str());
+        solver->sSolverName = "gurobi";
+        solver->osil = osil;
+        solver->osol = osol;  
+        solver->osinstance = NULL; 
+        cout << "call the Gurobi Solver for p0033" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 3089;
+        //ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
+#endif
+            cout << "Gurobi solver solution for p0033 checks." << endl;
+        }
+        else
+        {    cout << "Gurobi solver solution for p0033 in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with Gurobi on p0033.osil");
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with Gurobi" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        cout << "OSrL =  " <<  solver->osrl <<  endl;
+        cout << endl << endl << endl;
+        unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Gurobi Solver:"  + eclass.errormsg << endl;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }    
+#endif
+
+#ifdef COIN_HAS_MSK
+    try{
+        cout << endl << "TEST " << ++nOfTest << ": MOSEK solver on p0033.osil" << endl << endl;
+
+        fileUtil = new FileUtil();
+        solver = new CoinSolver();
+
+        ok = true; 
+        osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
+        osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cpx.osol";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = fileUtil->getFileAsString( osolFileName.c_str());
+        solver->sSolverName = "mosek";
+        solver->osil = osil;
+        solver->osol = osol;  
+        solver->osinstance = NULL; 
+        cout << "call the MOSEK Solver for p0033" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 3089;
+        //ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
+#endif
+            cout << "MOSEK solver solution for p0033 checks." << endl;
+        }
+        else
+        {    cout << "MOSEK solver solution for p0033 in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with MOSEK on p0033.osil");
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with MOSEK" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        cout << "OSrL =  " <<  solver->osrl <<  endl;
+        cout << endl << endl << endl;
+        unitTestResultFailure  <<"Sorry Unit Test Failed Testing the MOSEK Solver:"  + eclass.errormsg << endl;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }    
+#endif
+
+#ifdef COIN_HAS_SOPLEX
+    try{
+        cout << endl << "TEST " << ++nOfTest << ": SoPlex solver on parincLinear.osil" << endl << endl;
+
+        fileUtil = new FileUtil();
+        solver = new CoinSolver();
+
+        ok = true; 
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        solver->sSolverName = "soplex";
+        solver->osil = osil;
+        solver->osinstance = NULL; 
+        cout << "call the SoPlex Solver for parincLinear" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 7668;
+        //ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
+#endif
+            cout << "SoPlex solver solution for parincLinear checks." << endl;
+        }
+        else
+        {    cout << "SoPlex solver solution for parincLinear in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with Soplex on parincLinear.osil");
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinear.osil with SoPlex" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        cout << "OSrL =  " <<  solver->osrl <<  endl;
+        cout << endl << endl << endl;
+        unitTestResultFailure  <<"Sorry Unit Test Failed Testing the SoPlex Solver:"  + eclass.errormsg << endl;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }    
+#endif
+
+#ifdef COIN_HAS_XPR
+    try{
+        cout << endl << "TEST " << ++nOfTest << ": XPRESS solver on p0033.osil" << endl << endl;
+
+        fileUtil = new FileUtil();
+        solver = new CoinSolver();
+
+        ok = true; 
+        osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
+        osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cpx.osol";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = fileUtil->getFileAsString( osolFileName.c_str());
+        solver->sSolverName = "xpress";
+        solver->osil = osil;
+        solver->osol = osol;  
+        solver->osinstance = NULL; 
+        cout << "call the XPRESS Solver for p0033" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 3089;
+        //ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
+#endif
+            cout << "XPRESS solver solution for p0033 checks." << endl;
+        }
+        else
+        {    cout << "XPRESS solver solution for p0033 in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with XPRESS on p0033.osil");
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with XPRESS" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        cout << "OSrL =  " <<  solver->osrl <<  endl;
+        cout << endl << endl << endl;
+        unitTestResultFailure  <<"Sorry Unit Test Failed Testing the XPRESS Solver:"  + eclass.errormsg << endl;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }    
+#endif
 
 
 #ifdef COIN_HAS_IPOPT

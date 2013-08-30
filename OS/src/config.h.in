@@ -36,6 +36,9 @@
 /* Define to 1 if the Glpk package is available */
 #undef COIN_HAS_GLPK
 
+/* Define to 1 if the Grb package is available */
+#undef COIN_HAS_GRB
+
 /* Define to 1 if the Ipopt package is available */
 #undef COIN_HAS_IPOPT
 
@@ -45,11 +48,20 @@
 /* Define to 1 if the Lindo package is available */
 #undef COIN_HAS_LINDO
 
+/* Define to 1 if the Msk package is available */
+#undef COIN_HAS_MSK
+
+/* Define to 1 if the Spx package is available */
+#undef COIN_HAS_SPX
+
 /* Define to 1 if the SYMPHONY package is available */
 #undef COIN_HAS_SYMPHONY
 
 /* Define to 1 if the Vol package is available */
 #undef COIN_HAS_VOL
+
+/* Define to 1 if the Xpr package is available */
+#undef COIN_HAS_XPR
 
 /* Define to the debug sanity check level (0 is no test) */
 #undef COIN_OS_CHECKLEVEL

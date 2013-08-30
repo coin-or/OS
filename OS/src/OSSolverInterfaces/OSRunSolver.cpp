@@ -200,16 +200,13 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
                     solverName = "clp";
                 }
             }
-        }//end of if on solverName
+        }//end of if solverName == ""
 
         //now build the solver through its constructor
-
-        //std::cout << "SOLVER NAME =  " << solverName << std::endl;
 
         if (solverName.find("ipopt") != std::string::npos)
         {
             // we are requesting the Ipopt solver
-
 #ifdef COIN_HAS_IPOPT
             solverType = new IpoptSolver();
             solverType->sSolverName = "ipopt";
@@ -217,149 +214,157 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
             throw ErrorClass("the Ipopt solver requested is not present");
 #endif                
         }
+
+        else if (solverName.find("lindo") != std::string::npos)
+        {
+            // we are requesting the Lindo solver
+#ifdef COIN_HAS_LINDO
+            solverType = new LindoSolver();
+            solverType->sSolverName = "lindo";
+#else
+            throw ErrorClass( "the Lindo solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("clp") != std::string::npos)
+        {
+            solverType = new CoinSolver();
+            solverType->sSolverName = "clp";
+        }
+
+        else if (solverName.find("cplex") != std::string::npos)
+        {
+#ifdef COIN_HAS_CPX
+            solverType = new CoinSolver();
+            solverType->sSolverName = "cplex";
+#else
+            throw ErrorClass( "the Cplex solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("glpk") != std::string::npos)
+        {
+#ifdef COIN_HAS_GLPK
+            solverType = new CoinSolver();
+            solverType->sSolverName = "glpk";
+#else
+            throw ErrorClass( "the GLPK solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("dylp") != std::string::npos)
+        {
+#ifdef COIN_HAS_DYLP
+            solverType = new CoinSolver();
+            solverType->sSolverName = "dylp";
+#else
+            throw ErrorClass( "the DyLP solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("symphony") != std::string::npos)
+        {
+#ifdef COIN_HAS_SYMPHONY
+            solverType = new CoinSolver();
+            solverType->sSolverName = "symphony";
+#else
+            throw ErrorClass( "the SYMPHONY solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("knitro") != std::string::npos)
+        {
+#ifdef COIN_HAS_KNITRO
+            solverType = new KnitroSolver();
+            solverType->sSolverName = "knitro";
+#else
+            throw ErrorClass( "the Knitro solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("vol") != std::string::npos)
+        {
+#ifdef COIN_HAS_VOL
+            solverType = new CoinSolver();
+            solverType->sSolverName = "vol";
+#else
+            throw ErrorClass( "the Vol solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("bonmin") != std::string::npos)
+        {
+            // we are requesting the Bonmin solver
+#ifdef COIN_HAS_BONMIN
+            solverType = new BonminSolver();
+            solverType->sSolverName = "bonmin";
+#else
+            throw ErrorClass( "the Bonmin solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("couenne") != std::string::npos)
+        {
+             // we are requesting the Couenne solver
+#ifdef COIN_HAS_COUENNE
+            solverType = new CouenneSolver();
+            solverType->sSolverName = "couenne";
+#else
+            throw ErrorClass( "the Couenne solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("cbc") != std::string::npos)
+        {
+            solverType = new CoinSolver();
+            solverType->sSolverName = "cbc";
+        }
+
+        else if (solverName.find("gurobi") != std::string::npos)
+        {
+#ifdef COIN_HAS_GRB
+            solverType = new CoinSolver();
+            solverType->sSolverName = "gurobi";
+#else
+            throw ErrorClass( "the Gurobi solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("mosek") != std::string::npos)
+        {
+#ifdef COIN_HAS_MSK
+            solverType = new CoinSolver();
+            solverType->sSolverName = "mosek";
+#else
+            throw ErrorClass( "the Mosek solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("soplex") != std::string::npos)
+        {
+#ifdef COIN_HAS_SOPLEX
+            solverType = new CoinSolver();
+            solverType->sSolverName = "soplex";
+#else
+            throw ErrorClass( "the Soplex solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("xpress") != std::string::npos)
+        {
+#ifdef COIN_HAS_XPR
+            solverType = new CoinSolver();
+            solverType->sSolverName = "xpress";
+#else
+            throw ErrorClass( "the Xpress solver requested is not present");
+#endif
+        }
+
         else
         {
-            if (solverName.find("lindo") != std::string::npos)
-            {
-                // we are requesting the Lindo solver
-#ifdef COIN_HAS_LINDO
-                solverType = new LindoSolver();
-                solverType->sSolverName = "lindo";
-#else
-                throw ErrorClass( "the Lindo solver requested is not present");
-#endif
-            }
-            else
-            {
-                if (solverName.find("clp") != std::string::npos)
-                {
-                    //std::cout << "NEWING SOLVER TYPE " << std::endl;
-                    solverType = new CoinSolver();
-                    //std::cout << "END NEWING SOLVER TYPE " << std::endl;
-                    solverType->sSolverName = "clp";
-                }
-                else
-                {
-                    if (solverName.find("cplex") != std::string::npos)
-                    {
-#ifdef COIN_HAS_CPX
-                        solverType = new CoinSolver();
-                        solverType->sSolverName = "cplex";
-#else
-                        throw ErrorClass( "the Cplex solver requested is not present");
-#endif
-                    }
-                    else
-                    {
-                        if (solverName.find("glpk") != std::string::npos)
-                        {
-#ifdef COIN_HAS_GLPK
-                            solverType = new CoinSolver();
-                            solverType->sSolverName = "glpk";
-#else
-                            throw ErrorClass( "the GLPK solver requested is not present");
-#endif
-                        }
-                        else
-                        {
-                            if (solverName.find("dylp") != std::string::npos)
-                            {
-#ifdef COIN_HAS_DYLP
-                                solverType = new CoinSolver();
-                                solverType->sSolverName = "dylp";
-#else
-                                throw ErrorClass( "the DyLP solver requested is not present");
-#endif
-                            }
-                            else
-                            {
-                                if (solverName.find("symphony")
-                                        != std::string::npos)
-                                {
-#ifdef COIN_HAS_SYMPHONY
-                                    solverType = new CoinSolver();
-                                    solverType->sSolverName = "symphony";
-#else
-                                        throw ErrorClass( "the SYMPHONY solver requested is not present");
-#endif
-                                }
-                                else
-                                {
-                                    if (solverName.find("knitro")
-                                            != std::string::npos)
-                                    {
-#ifdef COIN_HAS_KNITRO
-                    
-                                        solverType = new KnitroSolver();
-                                        solverType->sSolverName = "knitro";
-                                     
-#else
-                                        throw ErrorClass( "the Knitro solver requested is not present");
-#endif
-                                    }
-                                    else
-                                    {
-                                        if (solverName.find("vol")
-                                                != std::string::npos)
-                                        {
-#ifdef COIN_HAS_VOL
-                                            solverType = new CoinSolver();
-                                            solverType->sSolverName = "vol";
-#else
-                                            throw ErrorClass( "the Vol solver requested is not present");
-#endif
-                                        }
-                                        else
-                                        {
-                                            if (solverName.find("bonmin")
-                                                    != std::string::npos)
-                                            {
-                                                // we are requesting the Bonmin solver
-#ifdef COIN_HAS_BONMIN
-                                                solverType = new BonminSolver();
-                                                solverType->sSolverName = "bonmin";
-#else
-                                                    throw ErrorClass( "the Bonmin solver requested is not present");
-#endif
-                                            }
-                                            else
-                                            {
-                                                if (solverName.find("couenne")
-                                                        != std::string::npos)
-                                                {
-                                                    // we are requesting the Couenne solver
-#ifdef COIN_HAS_COUENNE
-                                                    solverType = new CouenneSolver();
-                                                    solverType->sSolverName = "couenne";
-#else
-                                                        throw ErrorClass( "the Couenne solver requested is not present");
-#endif
-                                                }
-                                                else     
-                                                {
-                                                	if(solverName.find("cbc") != std::string::npos)
-                                                	{
-                                                        solverType = new CoinSolver();
-                                                        solverType->sSolverName = "cbc";
-                                                	}
-                                                	else
-                                                	{
-                                                		std::string errorMessage;
-                                                		errorMessage = "solver type " + solverName + " is not supported";
-                                                		throw ErrorClass( errorMessage );
-
-                                                		
-                                                	}
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            std::string errorMessage;
+            errorMessage = "solver type " + solverName + " is not supported";
+            throw ErrorClass( errorMessage );
         }
 
         return solverType;
