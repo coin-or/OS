@@ -51,8 +51,8 @@
 /* Define to 1 if the Msk package is available */
 #undef COIN_HAS_MSK
 
-/* Define to 1 if the Spx package is available */
-#undef COIN_HAS_SPX
+/* Define to 1 if the SoPlex package is available */
+#undef COIN_HAS_SOPLEX
 
 /* Define to 1 if the SYMPHONY package is available */
 #undef COIN_HAS_SYMPHONY

@@ -3615,6 +3615,7 @@ if (PARSER_TESTS){
             ok &= (!osresult1->IsEqual(osresult2));
             if (!ok) 
                 throw ErrorClass("setNumberOfVarValuesString: osresult objects falsely compare equal!");
+
             ok &= osresult2->setNumberOfVarValuesString(i,3);
             if (!ok) 
                 throw ErrorClass("Error during setNumberOfVarValuesString!");
@@ -7155,7 +7156,7 @@ if( THOROUGH == true){
         fileUtil = NULL;
     }    
 #endif
-
+std::cout << "now try soplex" << std::endl;
 #ifdef COIN_HAS_SOPLEX
     try{
         cout << endl << "TEST " << ++nOfTest << ": SoPlex solver on parincLinear.osil" << endl << endl;
@@ -7707,6 +7708,7 @@ if(THOROUGH == true){
         if (osilreader != NULL)
             delete osilreader;
         osilreader = NULL;
+
         if (osolreader != NULL)
             delete osolreader;
         osolreader = NULL;
