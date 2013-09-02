@@ -1237,7 +1237,7 @@ Activate these projects in the Configuration Manager\index{Microsoft Visual Stud
 \subsubdivision{GLPK}
 
 \index{Third-party software!GLPK|(}%
-{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See {\tt\UrlGlpk}. 
+{\tt GLPK} is an open-source linear and integer-programming solver from the GNU organization. See {\tt\UrlGlpk}. 
 GLPK is distributed under the GNU General Public Licence (GPL)\index{GNU General Public Licence (GPL)}, which is 
 incompatible with the Eclipse Public License (EPL)\index{Eclipse Public License (EPL)} that governs OS. 
 For that reason we are unable to distribute OS binaries linked to the GLPK solver.  
@@ -1258,11 +1258,31 @@ At the time of this writing, the most up-to-date version is \GlpkVer, which can 
 %\begin{verbatim}
 %ftp://ftp.gnu.org/gnu/glpk/glpk-4.30.tar.gz
 %\end{verbatim}
+\noindent{\tt\UrlGlpkDownload}
 \index{Third-party software!GLPK|)}
 
-\noindent{\tt\UrlGlpkDownload}
 
-\subsubdivision{Cplex}
+\subsubdivision{SoPlex}
+
+\index{Third-party software!SoPlex|(}%
+{\tt SoPlex} was developed at the
+Konrad-Zuse-Zentrum f\"ur Informationstechnik Berlin
+and is available in source code. 
+SoPlex is free for academic research and can be licensed for commercial use. 
+
+Because of the licensing arrangement we are not able to provide {\tt get.soplex} scripts. Rather, each prospective user will have to download their own code from 
+
+\noindent{\tt\UrlSoPlexDownload}.
+
+There is no specific location where the source should be installed, but when the {\tt configure} script is run it is important to indicate where the required header and library files are found, for instance: 
+
+\begin{verbatim}
+configure --with-soplex-lib="-L$(HOME)/Soplex/soplex-1.7.1/lib -lsoplex"      \
+--with-cplex-incdir="$(HOME)/Soplex/soplex-1.7.1/src"
+\end{verbatim}
+\index{Third-party software!SoPlex|)}%
+
+\subsubdivision{Cplex} \label{section:Cplex}
 
 \index{cplex@{\tt cplex}|(}%
 Cplex is a linear, integer, and quadratic solver. See {\tt\UrlCplex}.
@@ -1271,7 +1291,7 @@ After installing the binaries and include files in an appropriate directory, run
 include and library directory. An example is given below:
 
 \begin{verbatim}
-configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) $(CPLEX_LIBS)"
+configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) $(CPLEX_LIBS)"   \
 --with-cplex-incdir= $(CPLEXDIR)/include
 \end{verbatim}
 
@@ -1289,6 +1309,55 @@ PATH=***:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:***
 CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 \end{verbatim}
 \index{cplex@{\tt cplex}|)}
+
+\subsubdivision{Gurobi}
+
+\index{Gurobi|(}%
+Like {\tt cplex}, Gurobi is a commercial code that solves linear, integer and quadratic programs.
+See {\tt\UrlGurobi}. Gurobi needs to be downloaded and installed similarly to {\tt cplex}, using directives on the {\tt configure} command as to where the library and header files are to be found, for example
+
+\begin{verbatim}
+configure --with-gurobi-lib="-L$(HOME)/gurobi/lib -lgurobi55 -lpthread -lm"    \
+--with-gurobi-incdir="$(HOME)/gurobi/include"
+\end{verbatim}
+
+In addition it is necessary to set the environment variable {\tt GRB\_LICENSE\_FILE} to point to the location of the license file, e.g.,
+
+\begin{verbatim}
+GRB\_LICENSE\_FILE='$(HOME)/gurobi/gurobi.lic'
+\end{verbatim}
+
+\noindent{\bf Remark.} If both {\tt cplex} (see Section \ref{section:Cplex}) and Gurobi are to be 
+linked to OS, file locations for both programs must be added to the {\tt configure} command, as follows:
+
+\begin{verbatim}
+configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) $(CPLEX_LIBS)"  \
+--with-gurobi-lib="-L$(HOME)/gurobi/lib -lgurobi55 -lpthread -lm"    \
+--with-cplex-incdir= $(CPLEXDIR)/include  --with-gurobi-incdir="$(HOME)/gurobi/include" 
+\end{verbatim}
+  
+\index{Gurobi|)}%
+
+\subsubdivision{Mosek and Xpress}
+
+\index{Mosek|(}%
+\index{Xpress|(}%
+
+In the same way two further commercial LP and IP solvers, Mosek (see {\tt\UrlMosek}) and
+Xpress (see {\small\tt\UrlXpress}), can be hooked to OS. The relevant information to add to the {\tt configure} command is
+
+\begin{verbatim}
+--with-mosek-lib="-L$(HOME)/$(MOSEK)/bin -lmosek64 -liomp5 -lpthread -lm"    \
+--with-mosek-incdir="$(HOME)/$(MOSEK)/include"                          \
+--with-xpress-lib="-L$(HOME)/$(XPRESS)/lib -lgurobi55 -lpthread -lm"    \
+--with-xpress-incdir="$(HOME)/$(XPRESS)/include"                          
+\end{verbatim}
+
+with appropriate information for the environment variables {\tt MOSEK} and {\tt XPRESS} to point
+to the corrrect file locations for the Mosek and Xpress header files and libraries.
+\index{Mosek|)}%
+\index{Xpress|)}%
+
 
 \ifknitro
 \subsubdivision{Knitro}
