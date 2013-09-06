@@ -1,118 +1,43 @@
-\division{OS Release Procedure}\label{section:ReleaseProcedure} 
+\division{OS Release Procedure}\label{section:ReleaseProcedure}
 
-\subdivision{Preparing the release}\label{section:ReleasePrep}
+Several steps are necessary in order to prepare a successful release. We collect them here.
 
-There are four scripts in the {\tt BuildTools} directory that help with the release, namely
-
-\begin{verbatim}
-prepare_new_stable
-commit_new_stable
-prepare_new_release
-commit_new_release
-\end{verbatim}
-
-\medskip
-
-The first of these, {\tt prepare\_new\_stable}, prepares a new stable version. The simplest form of invoking it is
-
-\begin{verbatim}
-($BUILDTOOLSDIR)/prepare_new_stable <loc>
-\end{verbatim}
-
-where {\tt loc} is the location that forms the basis of the new stable version, e.g., {\tt OS/trunk}.
-{\tt prepare\_new\_stable} uses svn to check out the code, but it locates the latest stable versions of all the dependencies instead of the trunk versions.
-
-Some command line options (from comments in the script):
-
-\begin{description}
-  \item[\tt -p]			Suppress checkout (useful for testing)
-  \item[\tt -m] 		Bump the major version number.
-\end{description}
-
-This script will do the following:
-
-\begin{itemize}
-  \item Set the new stable version number as the next minor version number in
-    the current major version number. Use the -m flag to bump the major
-    version number.
-
-  \item Convert externals from trunk to the top stable branch. Externals which
-    are currently stable or release are left untouched. Use -t to suppress
-    the change from trunk to stable. Set\_externals is then invoked to set
-    release externals where available.
-
-  \item Check out externals. The BuildTools version used by externals (if any)
-    is checked, and the script issues a warning if it doesn't match the
-    version used by the source URL.
-
- \item Run the scripts to download any ThirdParty code.
-
-  \item Run {\tt run\_autotools} to rebuild configure and make files.
-
-  \item Run configure, make, and make test
-
-  \item Tweak the externals to upgrade trunk  dependencies to stable.
-\end{itemize}
-
-If there is any error during these tasks the script will stop and you should
-examine the output.
-   
-\medskip
-
-The script {\tt commit\_new\_stable} commits the new stable revision. It should be run only after 
-{\tt prepare\_new\_stable} has been processed correctly.  
-
-The simplest form of invoking it is
-
-\begin{verbatim}
-($BUILDTOOLSDIR)/commit_new_stable <loc>
-\end{verbatim}
-
-\noindent
-where {\tt loc} is the location that forms the basis of the new stable version, e.g., {\tt OS/trunk}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter -c to do the commit.
-
-{\tt prepare\_new\_release} and {\tt commit\_new\_release} are the corresponding scripts to prepare and commit releases (which are based on stable versions).
-
-\subsubdivision{Version numbers}{\label{section:VersionNumbering}
-
-The version number is defined in the file {\tt configure.ac}. There are actually two versions of this file,
-in the root directory as well as the top OS directory. Each of them contains a call to {\tt AC\_INIT}, 
-in which the second parameter is the version number. Change this number appropriately as follows:
-For trunk versions, use {\bf trunk}, so that {\tt OSgetVersionNumber()} can print the correct svn revision number in the header of the output; for stable and release versions use the proper number ({\tt n.n} for stable versions, {\tt n.n.n} for releases).
 
 \subdivision{Release testing}\label{section:ReleaseTesting}
 
-\begin{itemize}
-
-\item[1.] Run the {\bf nightlyBuild.py} script.
-
-\item[2.] Test the examples.  They are in {\bf OS/examples}.  Do a {\bf make install} before running these.
+Before any release, make sure that the version you consider releasing passes a number of tests, as follows. 
 
 \begin{itemize}
 
-\item[a.]  Connect to the {\bf algorithmicDiff} folder, build and run {\bf OSAlgorithmicDiffTest.cpp}.  This takes no arguments.  This will test a bunch of the AD routines.
+\item[1.] Run the {\tt nightlyBuild.py} script.
+
+\item[2.] Do a {\tt make install}, then test the examples in {\tt OS/examples}. (Build and run each of these.) 
+
+\begin{itemize}
+
+\item[a.]  Connect to the {\tt algorithmicDiff} folder, build and run {\tt OSAlgorithmicDiffTest.cpp}.  This takes no arguments.  This will test a bunch of the AD routines.
 
 
 
-\item[b.]  Connect to the {\bf instanceGenerator} folder, build and run {\bf OSInstanceGenerator.cpp}.  This takes no arguments.
+\item[b.]  Connect to the {\tt instanceGenerator} folder, build and run {\tt OSInstanceGenerator.cpp}.  This takes no arguments.
 
-\item[c.]  Connect to the {\bf osTestCode} folder, build and run {\bf OSTestCode.cpp}.  This takes a single argument which is the location of any OSiL file.
+\item[c.]  Connect to the {\tt osTestCode} folder, build and run {\tt OSTestCode.cpp}.  This takes a single argument which is the location of any OSiL file.
 
 
 \end{itemize}
 
-\item[3.] Test the applications.  They are in {\bf OS/applications}.
+\item[3.] Test the applications.  They are in {\tt OS/applications}.
 
 \begin{itemize}
  
  
- \item[a.]  Test {\bf OSAmplClient}.  This is not a stand-alone application and is designed to be called from  {\bf ampl}.   Probably the easiest way to test this is to test the {\bf OSAmplClient}  that gets installed in the {\bf bin} directory as a result of {\bf make install}. To make life easy, temporarily copy your {\bf ampl} executable into this {\bf bin} directory.   Also copy the test problem {\bf hs71.nl}  from {\bf OS/data/amplFiles/} into the {\bf bin} directory.   Do five tests. Three local and two remote.
+ \item[a.]  Test {\tt OSAmplClient}.  This is not a stand-alone application and is designed to be called from  {\tt ampl}.   Probably the easiest way to test this is to test the {\tt OSAmplClient}  that gets installed in the {\tt bin} directory as a result of {\tt make install}. To make life easy, temporarily copy your {\tt ampl} executable into this {\tt bin} directory.   Also copy the test problem {\tt hs71.nl}  from {\tt OS/data/amplFiles/} into the {\tt bin} directory.   Do five tests, three local and two remote.
  
  
  \vskip 10pt
  
  
- {\bf Test 1:}  Inside  {\bf ampl} execute the following
+ {\bf Test 1:}  Inside  {\tt ampl} execute the following
  
 
 
@@ -130,7 +55,7 @@ The result should be an error saying:
  
  \vskip 10pt
  
- {\bf Test 2:}  Inside  {\bf ampl} execute the following
+ {\bf Test 2:}  Inside  {\tt ampl} execute the following
  
 
 
@@ -139,15 +64,15 @@ model hs71.mod;
 option solver OSAmplClient;
 option OSAmplClient_options "solver ipopt";
 solve;
-display x1;
+display x3;
 \end{verbatim}
 
-The result of {\bf display x3} should be 3.82115. 
+The result of {\tt display x3} should be 3.82115. 
 
 
  \vskip 10pt
  
- {\bf Test 3:}  Inside  {\bf ampl} execute the following
+ {\bf Test 3:}  Inside  {\tt ampl} execute the following
  
 
 
@@ -167,18 +92,18 @@ You should get an error message saying:
 \vskip 10pt
 
 {\small
-{\bf Test 4:}  Inside  {\bf ampl} execute the following
+{\bf Test 4:}  Inside  {\tt ampl} execute the following
 \begin{verbatim}
 model hs71.mod;
 option solver OSAmplClient;
 option OSAmplClient_options "solver ipopt";
 option ipopt_options "service http://74.94.100.129:808/OSServer/Services/OSSolverService";
 solve;
-display x1;
+display x3;
 \end{verbatim}
 }%end small
 
-The result of {\bf display x3} should be 3.82115. 
+The result of {\tt display x3} should be 3.82115. 
 
 
 \vskip 10pt
@@ -202,7 +127,7 @@ You should get an error message saying"
 
 
 
-There is command script, {\bf testAmpl.run} in the directory {\bf OS/data/amplFiles} that contains the commands for all of these test. Simply start {\bf ampl} and execute
+There is command script, {\tt testAmpl.run} in the directory {\tt OS/data/amplFiles} that contains the commands for all of these test. Simply start {\tt ampl} and execute
 \begin{verbatim}
 include testAmpl.run;
 \end{verbatim}
@@ -223,10 +148,10 @@ Rebuild and run. This application takes one command line argument which is the f
 
 \end{itemize}
 
-\item[4.] Test the {\bf OSSolverService}.
+\item[4.] Test the {\tt OSSolverService}.
 
 \begin{itemize}
-\item[a.] Test running a local solver.  (These examples assume that the {\bf OS/data} directory is one level above the directory  in which {\bf OSSolverService} is running. Test  for OSiL, mps, and nl files.
+\item[a.] Test running a local solver.  (These examples assume that the {\tt OS/data} directory is one level above the directory  in which {\bf OSSolverService} is running. Test  for OSiL, mps, and nl files.
 
 \begin{verbatim}
 OSSolverService -config ../data/configFiles/testLocal.config
@@ -241,7 +166,7 @@ You should get the OSrL for the simple test problem.   In all of these look for 
 \item[b.]  Test the service methods on the remote server.  
 
 
-\noindent{\bf Step 1:} Test remote {\bf solve()} method for OSiL, mps, and nl files.
+\noindent{\bf Step 1:} Test remote {\tt solve()} method for OSiL, mps, and nl files.
 
 
 
@@ -257,7 +182,7 @@ You should get the OSrL for the simple test problem in each case.  In all of the
 \vskip 10pt
 
 
-\noindent{\bf Step 2:} Test remote {\bf getJobID()} method.
+\noindent{\bf Step 2:} Test remote {\tt getJobID()} method.
 
 
 \begin{verbatim}
@@ -272,7 +197,7 @@ You will get a long jobID.
 \vskip 10pt
 
 
-\noindent{\bf Step 3:} Test remote {\bf send()} method. Use the {\bf send()} method with the jobID just  generated.  To do this open the file
+\noindent{\bf Step 3:} Test remote {\tt send()} method. Use the {\tt send()} method with the jobID just  generated.  To do this open the file
 \begin{verbatim}
 /data/osolFiles/sendWithJobID.osol
 \end{verbatim}
@@ -284,7 +209,7 @@ The result should be ``send is true.''
 
 \vskip 10pt
 
-\noindent{\bf Step 4:} Test remote {\bf knock()} method.  See if the  job is complete.
+\noindent{\bf Step 4:} Test remote {\tt knock()} method.  See if the  job is complete.
 
 
 \begin{verbatim}
@@ -295,13 +220,13 @@ You do not need to put in jobID information. The knock will get the status of al
 
 \vskip 10pt
 
-\noindent{\bf Step 5:} Test remote {\bf retrieve()} method. Get the result.
+\noindent{\bf Step 5:} Test remote {\tt retrieve()} method. Get the result.
 
 \begin{verbatim}
 OSSolverService  -config ../data/configFiles/testRemoteRetrieve.config
 \end{verbatim}
-Before executing this command make sure to put your jobID into the file {\bf retrieve.osol }.  Also, either delete the {\tt -browser} option or put in the path to your browser.
-The result of the optimization will be put into a file called {\bf test.osrl} that will be in the directory in which you are running the {\bf OSSolverService.} 
+Before executing this command make sure to put your jobID into the file {\tt retrieve.osol }.  Also, either delete the {\tt -browser} option or put in the path to your browser.
+The result of the optimization will be put into a file called {\tt test.osrl} that will be in the directory in which you are running the {\tt OSSolverService.} 
 
 \end{itemize}
 
@@ -310,5 +235,90 @@ The result of the optimization will be put into a file called {\bf test.osrl} th
 {\bf IMPORTANT:}  Please do NOT commit the changes to these config files. 
 
 
-\item[5.] Test {\bf OSCommon}. Build the OSCommon library.  Build the {\bf OSCommon} library.  Do a {\bf make install}.   Then connect to {\bf apiExamples} directory, build and run the {\bf apiExample.}
+\item[5.] Test {\tt OSCommon}. Build the OSCommon library.  Build the {\tt OSCommon} library.  Do a {\tt make install}.   Then connect to {\tt apiExamples} directory, build and run the {\tt apiExample.}
 \end{itemize}
+
+
+\subdivision{Preparing the release}\label{section:ReleasePrep}
+
+There are four scripts in the {\tt BuildTools} directory that help with the release, namely
+
+\begin{verbatim}
+prepare_new_stable
+commit_new_stable
+prepare_new_release
+commit_new_release
+\end{verbatim}
+
+\medskip
+
+The first of these, {\tt prepare\_new\_stable}, prepares a new stable version. The simplest form of invoking it is
+
+\begin{verbatim}
+($BUILDTOOLSDIR)/prepare_new_stable <loc>
+\end{verbatim}
+
+where {\tt loc} is the location on the svn server that forms the basis of the new stable version, e.g., {\tt OS/trunk}. (The leading {\tt https://projects.coin-or.org/svn/} can optionally be added.)
+{\tt prepare\_new\_stable} uses svn to check out the code, making sure to locate the latest stable versions of all the dependencies, even if the basis uses trunk versions.
+
+Some command line options (from comments in the script):
+
+\begin{description}
+  \item[\tt -p]			Suppress checkout (useful for testing)
+  \item[\tt -m] 		Bump the major version number.
+\end{description}
+
+This script will do the following:
+
+\begin{itemize}
+  \item Set the new stable version number as the next minor version number in
+    the current major version number. Use the {\tt -m} flag to bump the major
+    version number.
+
+  \item Convert externals from trunk to the top stable branch. Externals which
+    are currently stable or release are left untouched. Use {\tt -t} to suppress
+    the change from trunk to stable. The script {\tt set\_externals} is then invoked to set
+    externals to stable versions where available.
+
+  \item Check out externals. The BuildTools version used by externals (if any)
+    is checked, and the script issues a warning if it doesn't match the
+    version used by the source URL.
+
+ \item Run the scripts to download any ThirdParty code.
+
+  \item Run {\tt run\_autotools} to rebuild configure and make files.
+
+  \item Run configure, make, and make test.
+
+  \item Tweak the externals to upgrade trunk  dependencies to stable.
+\end{itemize}
+
+If there is any error during these tasks the script will stop and you should
+examine the output.
+   
+\medskip
+
+The script {\tt commit\_new\_stable} commits the new stable revision. It should be run only after 
+{\tt prepare\_new\_stable} has been processed correctly.  
+
+The simplest form of invoking it is
+
+\begin{verbatim}
+($BUILDTOOLSDIR)/commit_new_stable <loc>
+\end{verbatim}
+
+\noindent
+where {\tt loc} is the location that forms the basis of the new stable version, e.g., {\tt OS/trunk}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter {\tt -c} to do the commit.
+
+{\tt prepare\_new\_release} and {\tt commit\_new\_release} are the corresponding scripts to prepare and commit releases (which are based on stable versions).
+
+
+\subdivision{Version numbers}{\label{section:VersionNumbering}
+
+The version number is defined in the file {\tt configure.ac}. There are actually two versions of this file,
+in the root directory as well as the top OS directory. Each of them contains a call to {\tt AC\_INIT}, 
+in which the second parameter is the version number. Change this number appropriately as follows:
+For trunk versions, use {\bf trunk}, so that {\tt OSgetVersionNumber()} can print the correct svn revision number in the header of the output; for stable and release versions use the proper number ({\tt n.n} for stable versions, {\tt n.n.n} for releases).
+
+Releases are numbered {\tt n.n.n}. 
+If there are bug fixes only, the third digit is incremented. Feature changes lead to updating the second digit. If the API changes, update the first digit. Stable versions are numbered {\tt n.n}. The first two digits of the most current release correspond to the latest stable version. Thus if feature changes are implemented, a new stable version must also be prepared first.
