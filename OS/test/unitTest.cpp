@@ -7184,7 +7184,8 @@ std::cout << "now try soplex" << std::endl;
             cout << "SoPlex solver solution for parincLinear checks." << endl;
         }
         else
-        {    cout << "SoPlex solver solution for parincLinear in error:" << endl;
+        {   
+            cout << "SoPlex solver solution for parincLinear in error:" << endl;
             cout << solver->osrl << endl;
         }
         if(ok == false) throw ErrorClass(" Fail unit test with Soplex on parincLinear.osil");
