@@ -21,4 +21,4 @@ ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/
 ThirdParty/Metis  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Metis/stable/1.2
 ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/stable/1.4
 
-examples https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/trunk
+examples https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/stable/1.2
