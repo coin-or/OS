@@ -11,27 +11,100 @@ Before any release, make sure that the version you consider releasing passes a n
 
 \item[1.] Run the {\tt nightlyBuild.py} script.
 
-\item[2.] Do a {\tt make install}, then test the examples in {\tt OS/examples}. (Build and run each of these.) 
+\item[2.] Do a {\tt make install}, then test the {\tt OSSolverService}. The tests are set up under the
+assumption that this is done from the {\tt bin} directory. Switch into  the {\tt bin} directory and create a subfolder {\tt tmp} there in order to temporarily store the output.
 
 \begin{itemize}
+\item[a.] Test running a local solver,  
+%(These examples assume that the {\tt OS/data} directory is one level above the directory  in which {\bf OSSolverService} is running. 
+using in turn an OSiL, mps, and nl file.
 
-\item[a.]  Connect to the {\tt algorithmicDiff} folder, build and run {\tt OSAlgorithmicDiffTest.cpp}.  This takes no arguments.  This will test a bunch of the AD routines.
+\begin{verbatim}
+OSSolverService -config ../OS/data/configFiles/testLocal.config
+OSSolverService -config ../OS/data/configFiles/testLocalMPS.config
+OSSolverService -config ../OS/data/configFiles/testLocalNL.config
+\end{verbatim}
+
+You should get the OSrL for the simple test problem.  
+Look for {\tt <obj idx="-1">49920.55</obj>} in the first test, 
+{\tt <obj idx="-1">-7667.94</obj>} in the second, 
+and {\tt <obj idx="-1">7667.94</obj>} in the third.
+
+\item[b.]  Test the service methods on the remote server.  
+
+\noindent{\bf Step 1:} Test remote {\tt solve()} method for OSiL, mps, and nl files.
+
+\begin{verbatim}
+OSSolverService -config ../OS/data/configFiles/testRemote.config
+OSSolverService -config ../OS/data/configFiles/testRemoteMPS.config
+OSSolverService -config ../OS/data/configFiles/testRemoteNL.config
+\end{verbatim}
+
+
+You should get the OSrL for the simple test problem in each case. The optimal objective value
+(the value of the tag {\tt <obj idx="-1">}) should be, respectively, 7668, $-$7667.94, and 7667.94.
+%In all of these look for {\tt <obj idx="-1">-7667.94</obj>}.
+
+\vskip 10pt
+
+
+\noindent{\bf Step 2:} Test remote {\tt getJobID()} method.
+
+
+\begin{verbatim}
+OSSolverService  -config ../OS/data/configFiles/testRemotegetJobID.config
+\end{verbatim}
 
 
 
-\item[b.]  Connect to the {\tt instanceGenerator} folder, build and run {\tt OSInstanceGenerator.cpp}.  This takes no arguments.
+You will get a long jobID.
 
-\item[c.]  Connect to the {\tt osTestCode} folder, build and run {\tt OSTestCode.cpp}.  This takes a single argument which is the location of any OSiL file.
 
+\vskip 10pt
+
+
+\noindent{\bf Step 3:} Test remote {\tt send()} method. Use the {\tt send()} method with the jobID just  generated.  To do this open the file
+\begin{verbatim}
+/data/osolFiles/sendWithJobID.osol
+\end{verbatim}
+and replace the existing jobID with the one just generated.  Then run
+\begin{verbatim}
+OSSolverService  -config ../OS/data/configFiles/testRemoteSend.config
+\end{verbatim}
+The result should be ``send is true.''
+
+\vskip 10pt
+
+\noindent{\bf Step 4:} Test remote {\tt knock()} method.  See if the  job is complete.
+
+
+\begin{verbatim}
+OSSolverService  -config ../OS/data/configFiles/testRemoteKnock.config
+\end{verbatim}
+
+You do not need to put in jobID information. The knock will get the status of all jobs. However, if you want just the status of the job you submitted put your jobID in the {\tt knock.osol} file. 
+
+\vskip 10pt
+
+\noindent{\bf Step 5:} Test remote {\tt retrieve()} method. Get the result.
+
+\begin{verbatim}
+OSSolverService  -config ../OS/data/configFiles/testRemoteRetrieve.config
+\end{verbatim}
+Before executing this command make sure to put your jobID into the file {\tt retrieve.osol }.  
+%Also, either delete the {\tt -browser} option or put in the path to your browser.
+The result of the optimization will be put into a file called {\tt test.osrl} that will be in the {\tt tmp} folder in the directory in which you are running the {\tt OSSolverService.} 
 
 \end{itemize}
 
-\item[3.] Test the applications.  They are in {\tt OS/applications}.
+
+
+{\bf IMPORTANT:}  Please do NOT commit the changes to these config files. 
 
 \begin{itemize}
  
  
- \item[a.]  Test {\tt OSAmplClient}.  This is not a stand-alone application and is designed to be called from  {\tt ampl}.   Probably the easiest way to test this is to test the {\tt OSAmplClient}  that gets installed in the {\tt bin} directory as a result of {\tt make install}. To make life easy, temporarily copy your {\tt ampl} executable into this {\tt bin} directory.   Also copy the test problem {\tt hs71.nl}  from {\tt OS/data/amplFiles/} into the {\tt bin} directory.   Do five tests, three local and two remote.
+ \item[3.]  Test {\tt OSAmplClient}.  This is not a stand-alone application and is designed to be called from  {\tt ampl}.   Probably the easiest way to test this is to test the {\tt OSAmplClient}  that gets installed in the {\tt bin} directory as a result of {\tt make install}. To make life easy, temporarily copy your {\tt ampl} executable into this {\tt bin} directory.   Also copy the test problem {\tt hs71.mod}  from {\tt OS/data/amplFiles/} into the {\tt bin} directory.   Do five tests, three local and two remote.
  
  
  \vskip 10pt
@@ -50,15 +123,13 @@ solve;
 
 The result should be an error saying:
 \begin{verbatim}
-<message>a supported solver has not been selected</message>
+<message>solver type xyz is not supported</message>
 \end{verbatim}
  
  \vskip 10pt
  
  {\bf Test 2:}  Inside  {\tt ampl} execute the following
  
-
-
 \begin{verbatim}
 model hs71.mod;
 option solver OSAmplClient;
@@ -74,8 +145,6 @@ The result of {\tt display x3} should be 3.82115.
  
  {\bf Test 3:}  Inside  {\tt ampl} execute the following
  
-
-
 \begin{verbatim}
 model hs71.mod;
 option solver OSAmplClient;
@@ -85,7 +154,7 @@ solve;
 
 You should get an error message saying:
 \begin{verbatim}
-<message>Cbc cannot do nonlinear or quadratic</message>
+<message>This COIN-OR Solver is not configured for nonlinear programming</message>
 \end{verbatim}
 
 
@@ -96,8 +165,8 @@ You should get an error message saying:
 \begin{verbatim}
 model hs71.mod;
 option solver OSAmplClient;
-option OSAmplClient_options "solver ipopt";
-option ipopt_options "service http://74.94.100.129:808/OSServer/Services/OSSolverService";
+option OSAmplClient_options "solver ipopt   serviceLocation        
+    http://74.94.100.129:8080/OSServer/services/OSSolverService";
 solve;
 display x3;
 \end{verbatim}
@@ -113,27 +182,45 @@ The result of {\tt display x3} should be 3.82115.
 \begin{verbatim}
 model hs71.mod;
 option solver OSAmplClient;
-option OSAmplClient_options "solver clp";
-option clp_options "service  http://74.94.100.129:808/OSServer/Services/OSSolverService";
+option OSAmplClient_options "solver clp  serviceLocation   
+     http://74.94.100.129:8080/OSServer/services/OSSolverService";
 solve;
-display x3;
 \end{verbatim}
-}%end small
+}%end \small
 
-You should get an error message saying"
+You should get an error message saying
 \begin{verbatim}
 <message>Clp cannot do nonlinear or quadratic or integer</message>
 \end{verbatim}
 
 
 
-There is command script, {\tt testAmpl.run} in the directory {\tt OS/data/amplFiles} that contains the commands for all of these test. Simply start {\tt ampl} and execute
-\begin{verbatim}
-include testAmpl.run;
-\end{verbatim}
+%There is command script, {\tt testAmpl.run} in the directory {\tt OS/data/amplFiles} 
+%that contains the commands for all of these test. Simply start {\tt ampl} and execute
+%\begin{verbatim}
+%include testAmpl.run;
+%\end{verbatim}
+
+At this point you can delete the {\tt tmp} folder.
+
+
+\item[4.] Test the examples and applications.  They are in the folder {\tt examples} in the COIN root directory and in folder {\tt applications} in the OS root directory, respectively. Be sure to follow the instructions in chapter~\ref{section:examples} for building these.
+
+\begin{itemize}
+
+\item[a.]  Connect to the {\tt algorithmicDiff} folder, build and run {\tt OSAlgorithmicDiffTest.cpp}.  This takes no arguments.  This will test a bunch of the AD routines.
 
 
 
+\item[b.]  Connect to the {\tt instanceGenerator} folder, build and run {\tt OSInstanceGenerator.cpp}.  This takes no arguments.
+
+\item[c.]  Connect to the {\tt osTestCode} folder, build and run {\tt OSTestCode.cpp}.  This takes a single argument which is the location of any OSiL file.
+
+
+\end{itemize}
+
+
+\iffalse
 \item[b.] Test the {\bf OSFileUpload} application.    Edit  {\bf OSFileUpload.cpp}. First comment out line 79 and then modify line 
 \begin{verbatim}
 osagent = new OSSolverAgent("http://******/os/servlet/OSFileUpload");
@@ -145,97 +232,11 @@ osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/os/servlet/OSFileUploa
 \end{verbatim}
 }
 Rebuild and run. This application takes one command line argument which is the file to be uploaded. 
-
-\end{itemize}
-
-\item[4.] Test the {\tt OSSolverService}.
-
-\begin{itemize}
-\item[a.] Test running a local solver.  (These examples assume that the {\tt OS/data} directory is one level above the directory  in which {\bf OSSolverService} is running. Test  for OSiL, mps, and nl files.
-
-\begin{verbatim}
-OSSolverService -config ../data/configFiles/testLocal.config
-OSSolverService -config ../data/configFiles/testLocalMPS.config
-OSSolverService -config ../data/configFiles/testLocalNL.config
-\end{verbatim}
-
-
-You should get the OSrL for the simple test problem.   In all of these look for {\tt <obj idx="-1">-7667.94</obj>} in the MPS test and {\tt <obj idx="-1">-7667.94</obj>} in the other two.
-
-
-\item[b.]  Test the service methods on the remote server.  
-
-
-\noindent{\bf Step 1:} Test remote {\tt solve()} method for OSiL, mps, and nl files.
-
-
-
-\begin{verbatim}
-OSSolverService -config ../data/configFiles/testRemote.config
-OSSolverService -config ../data/configFiles/testRemoteMPS.config
-OSSolverService -config ../data/configFiles/testRemoteNL.config
-\end{verbatim}
-
-
-You should get the OSrL for the simple test problem in each case.  In all of these look for {\tt <obj idx="-1">-7667.94</obj>}.
-
-\vskip 10pt
-
-
-\noindent{\bf Step 2:} Test remote {\tt getJobID()} method.
-
-
-\begin{verbatim}
-OSSolverService  -config ../data/configFiles/testRemotegetJobID.config
-\end{verbatim}
-
-
-
-You will get a long jobID.
-
-
-\vskip 10pt
-
-
-\noindent{\bf Step 3:} Test remote {\tt send()} method. Use the {\tt send()} method with the jobID just  generated.  To do this open the file
-\begin{verbatim}
-/data/osolFiles/sendWithJobID.osol
-\end{verbatim}
-and replace the existing jobID with the one just generated.  Then run
-\begin{verbatim}
-OSSolverService  -config ../data/configFiles/testRemoteSend.config
-\end{verbatim}
-The result should be ``send is true.''
-
-\vskip 10pt
-
-\noindent{\bf Step 4:} Test remote {\tt knock()} method.  See if the  job is complete.
-
-
-\begin{verbatim}
-OSSolverService  -config ../data/configFiles/testRemoteKnock.config
-\end{verbatim}
-
-You do not need to put in jobID information. The knock will get the status of all jobs. However, if you want just the status of the job you submitted put your jobID in the {\tt knock.osol} file. 
-
-\vskip 10pt
-
-\noindent{\bf Step 5:} Test remote {\tt retrieve()} method. Get the result.
-
-\begin{verbatim}
-OSSolverService  -config ../data/configFiles/testRemoteRetrieve.config
-\end{verbatim}
-Before executing this command make sure to put your jobID into the file {\tt retrieve.osol }.  Also, either delete the {\tt -browser} option or put in the path to your browser.
-The result of the optimization will be put into a file called {\tt test.osrl} that will be in the directory in which you are running the {\tt OSSolverService.} 
+\fi
 
 \end{itemize}
 
 
-
-{\bf IMPORTANT:}  Please do NOT commit the changes to these config files. 
-
-
-\item[5.] Test {\tt OSCommon}. Build the OSCommon library.  Build the {\tt OSCommon} library.  Do a {\tt make install}.   Then connect to {\tt apiExamples} directory, build and run the {\tt apiExample.}
 \end{itemize}
 
 

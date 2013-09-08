@@ -33,6 +33,18 @@ Modify the {\tt configure.ac} file in unix only, because Windows uses different 
 
 After you have run {\tt BuildTools} you should do a completely new {\tt configure} and {\tt make}, followed by a unit test. Commit only after the unit test succeeds. (Don't forget to commit both changed code/data files and the modified config and make files.)
 
+\item Making changes to externals.
+
+To add, delete or modify an external project, edit the {\tt Dependencies} file in the top COIN directory.
+After that it is necessary to run the {\tt set\_externals} script:
+
+\begin{verbatim}
+BuildTools/set_externals   Dependencies
+\end{verbatim}
+
+Do an {\tt svn update} to verify that the externals have been set properly.
+This is followed by a  {\tt configure} and {\tt make}, and then a unit test. 
+
 \item Changing the documentation.
 
 This is easier, but make sure that pdflatex works and do not forget to commit both the source and pdf file. 
