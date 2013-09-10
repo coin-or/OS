@@ -36,10 +36,11 @@ After you have run {\tt BuildTools} you should do a completely new {\tt configur
 \item Making changes to externals.
 
 To add, delete or modify an external project, edit the {\tt Dependencies} file in the top COIN directory.
-After that it is necessary to run the {\tt set\_externals} script:
+After that it is necessary to set the {\tt svn:externals} property, as follows:
 
 \begin{verbatim}
-BuildTools/set_externals   Dependencies
+svn propset svn:externals -F Dependencies .
+svn propget svn:externals .
 \end{verbatim}
 
 Do an {\tt svn update} to verify that the externals have been set properly.
@@ -79,7 +80,7 @@ Without the {\tt Ideas by:} note, several years from now we would find it hard t
  
 When you record a small patch in a change log file, first search for previous changes by the same person, and see if per past contributions, plus the new one, add up to something legally significant. If so, you should get copyright papers for all per changes before you install the new change.
  
-If that is not so, you can install the small patch. Write ‘(tiny change)’ after the patch author’s name, like this:
+If that is not so, you can install the small patch. Write `(tiny change)' after the patch author's name, like this:
  
 \begin{verbatim}
 2002-11-04  Robert Fenk  <Robert.Fenk@gmx.de>  (tiny change)
@@ -90,5 +91,5 @@ If that is not so, you can install the small patch. Write ‘(tiny change)’ af
 Some further ideas as well as a copy of the Contributor's Statement of Respect for Ownership (CSRO)
 can be found at %{\tt http://www.coin-or.org/contributions.html#contributions}.
 \begin{verbatim}
-\tt http://www.coin-or.org/contributions.html#contributions
+http://www.coin-or.org/contributions.html#contributions
 \end{verbatim}
