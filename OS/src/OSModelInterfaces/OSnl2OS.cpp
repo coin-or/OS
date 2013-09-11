@@ -541,7 +541,7 @@ void OSnl2OS::setIBVar(OSInstance *osinstance, int lower, int upper)
     {
         if (LUv[2*i] > -1.0 + OS_EPS && LUv[2*i+1] < 2.0 - OS_EPS)
             osinstance->addVariable(i, var_name(i),0,1,'B');
-	    else
+        else
             osinstance->addVariable(i, var_name(i),
                                 LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
                                 LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
@@ -571,9 +571,6 @@ bool OSnl2OS::createOSObjects()
 //    char vartype = 'C';
     osinstance->setVariableNumber(n_var);
 
-std::cout << "var counts: " << nlvb << " " << nlvbi << " " << nlvc << " " << nlvci << " " << nlvo << " " << nlvoi;
-std::cout << " " << nwv << " " << niv << " " << nbv << " " << n_var << std::endl << std::endl;
-
     //first the nonlinear variables
     setVar(osinstance,0,nlvb - nlvbi,'C');       // continuous in an objective and in a constraint
     setIBVar(osinstance,nlvb - nlvbi,nlvb);      // integer or binary in an objective and in a constraint
@@ -582,7 +579,7 @@ std::cout << " " << nwv << " " << niv << " " << nbv << " " << n_var << std::endl
     setVar(osinstance,nlvc,nlvo - nlvoi,'C');    // continuous just in objectives
     setIBVar(osinstance,nlvo - nlvoi,nlvo);      // integer or binary just in objectives
 
-	//now the other variables
+    //now the other variables
     setVar(osinstance,CoinMax(nlvc, nlvo),CoinMax(nlvc, nlvo) + nwv,'C');  // linear arc variables
     setVar(osinstance,CoinMax(nlvc, nlvo) + nwv,n_var - niv - nbv, 'C');   // other linear
     setVar(osinstance,n_var - niv - nbv, n_var - niv, 'B') ;               // linear binary

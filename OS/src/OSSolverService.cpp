@@ -203,7 +203,6 @@ int main(int argC, const char* argV[])
 		
     try
     {
-
 	// put the command line arguments into a string for parsing		
         bool addQuotes;
 		osss << space; // needed to avoid segfault in case command line is empty
