@@ -3616,6 +3616,7 @@ if (PARSER_TESTS){
             if (!ok) 
                 throw ErrorClass("setNumberOfVarValuesString: osresult objects falsely compare equal!");
 
+
             ok &= osresult2->setNumberOfVarValuesString(i,3);
             if (!ok) 
                 throw ErrorClass("Error during setNumberOfVarValuesString!");

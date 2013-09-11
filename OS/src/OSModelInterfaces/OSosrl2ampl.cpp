@@ -83,6 +83,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
     }
     else
     {
+        std::cout << std::endl << osrl << std::endl << std::endl << std::endl;
 #ifndef NDEBUG
         outStr.str("");
         outStr.clear();
@@ -90,11 +91,17 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
-        double *x;
-        double *y;
-        std::string *otherVar;
-        std::string *otherObj;
-        std::string *otherCon;
+        double *x = NULL;
+        double *y = NULL;
+        std::string *otherVar = NULL;
+        std::string *otherObj = NULL;
+        std::string *otherCon = NULL;
+
+        double **rData = NULL;
+        int    **iData = NULL;
+        double* rvalues = NULL;
+        int*    ivalues = NULL;
+        int     nSuffixes = 0;
 
         try
         {
@@ -104,17 +111,41 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
             // see page 23 of hooking solver to AMPL
             //need_nl = printf( sReport.c_str());
 
+/** First check if there is a solution
+ *  (There might not be if some error condition was set)
+ */
+            int numSols = osresult->getSolutionNumber();
+
+            if (numSols == 0)
+            {
+//                std::string solMsg = "No solution returned!";
+                std::string solMsg = " ";
+                solve_result_num = 550;
+                write_sol(const_cast<char*>(solMsg.c_str()),  NULL, NULL , NULL);
+                return true;
+            }    
+
             //
             int i;
             int vecSize;
             int numVars = osresult->getVariableNumber();
             int numObjs = osresult->getObjectiveNumber();
             int numCons = osresult->getConstraintNumber();
-            x = new double[ numVars];
-            y = new double[ numCons];
-            otherVar = new std::string[numVars];
-            otherObj = new std::string[numObjs];
-            otherCon = new std::string[numCons];
+
+            if (numVars > 0)
+            {
+                x = new double[ numVars];
+                otherVar = new std::string[numVars];
+            }
+            if (numCons > 0)
+            {
+                y = new double[ numCons];
+                otherCon = new std::string[numCons];
+            }
+            if (numObjs > 0)
+            {
+                otherObj = new std::string[numObjs];
+            }
 
             std::vector<IndexValuePair*> primalValPair;
             std::vector<IndexValuePair*> dualValPair;
@@ -158,11 +189,6 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
             // return all solution results that are indexed over variables, objectives or constraints as suffixes
 
             int n;
-            double **rData = NULL;
-            int    **iData = NULL;
-            double* rvalues = NULL;
-            int*    ivalues = NULL;
-            int     nSuffixes = 0;
             bool    have_basic_var = false;
             bool    have_basic_con = false;
             SufDecl *suftab = NULL;
@@ -334,7 +360,10 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                     if ( (osresult->optimization->solution[0]->variables->other[i]->var != NULL) || 
                          (osresult->optimization->solution[0]->variables->other[i]->enumeration != NULL) )
                     {
-                        n = osresult->getOtherVariableResultArrayDense(0, i, otherVar, numVars);
+                        if (numVars > 0)
+                            n = osresult->getOtherVariableResultArrayDense(0, i, otherVar, numVars);
+                        else
+                            n = 0;
                         if (n < 0) 
                             throw ErrorClass("unspecified error in routine getOtherVariableResultArrayDense()");
                         else if (n > 0)
@@ -480,7 +509,10 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                     if ( (osresult->optimization->solution[0]->constraints->other[i]->con != NULL) || 
                          (osresult->optimization->solution[0]->constraints->other[i]->enumeration != NULL) )
                     {
-                        n = osresult->getOtherConstraintResultArrayDense(0, i, otherCon, numCons);
+                        if (numCons > 0)
+                            n = osresult->getOtherConstraintResultArrayDense(0, i, otherCon, numCons);
+                        else
+                            n = 0;
                         if (n < 0) 
                             throw ErrorClass("unspecified error in routine getOtherConstraintResultArrayDense()");
                         else if (n > 0)
@@ -558,7 +590,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                 // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
     
                 int  basCode[ENUM_BASIS_STATUS_NUMBER_OF_STATES] = {1,3,4,5,6,2,0};
-                if (have_basic_var)
+                if (have_basic_var && numVars > 0)
                 {
                     iData[iSuf] = new int[numVars];
                     n = osresult->getBasisInformationDense(0, ENUM_PROBLEM_COMPONENT_variables, iData[iSuf], numVars);
@@ -581,7 +613,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                     }
                     iSuf++;
                 }
-                if (have_basic_con)
+                if (have_basic_con && numCons > 0)
                 {
                     iData[iSuf] = new int[numCons];
                     n = osresult->getBasisInformationDense(0, ENUM_PROBLEM_COMPONENT_constraints, iData[iSuf], numCons);
@@ -660,8 +692,8 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                     solve_result_num = 550;
                     break;
                 } 
-                default:
-                    throw ErrorClass("Unknown solution status detected");
+                    default:
+                        throw ErrorClass("Unknown solution status detected");
             } //end of switch statement
 
             // Produce a message to send back to AMPL
@@ -733,19 +765,39 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
             // garbage collection
             if (osrlreader != NULL) delete osrlreader;
             osrlreader = NULL;
-            delete [] x; x = NULL;
-            delete [] y; y = NULL;
-            delete [] otherVar; otherVar = NULL;
-            delete [] otherObj; otherObj = NULL;
-            delete [] otherCon; otherCon = NULL;
-            for (i=0; i<nSuffixes; i++)
+            if (x != NULL) 
+                delete [] x; 
+            x = NULL;
+            if (y != NULL)
+                delete [] y; 
+            y = NULL;
+            if (otherVar != NULL)
+                delete [] otherVar; 
+            otherVar = NULL;
+            if (otherObj != NULL)
+                delete [] otherObj; 
+            otherObj = NULL;
+            if (otherCon != NULL)
+                delete [] otherCon; 
+            otherCon = NULL;
+            if (rData != NULL)
             {
-                if (rData[i] != NULL) delete [] rData[i]; 
-                if (iData[i] != NULL) delete [] iData[i];
+                for (i=0; i<nSuffixes; i++)
+                {
+                    if (rData[i] != NULL) delete [] rData[i];
+                }
+                delete [] rData; 
+                rData = NULL;
             }
-            delete [] rData; rData = NULL;
-            delete [] iData; iData = NULL;
-
+            if (iData != NULL)
+            {
+                for (i=0; i<nSuffixes; i++)
+                {
+                    if (iData[i] != NULL) delete [] iData[i];
+                }
+                delete [] iData; 
+                iData = NULL;
+            }
             return true;
         }
         catch(const ErrorClass& eclass)
@@ -754,13 +806,41 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
             outStr.clear();
             outStr << "There was an error: " + eclass.errormsg << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_error, outStr.str());
-            if (x != NULL) delete [] x; x = NULL;
-            if (y != NULL) delete [] y; y = NULL;
-            if (otherVar != NULL) delete [] otherVar; otherVar = NULL;
-            if (otherObj != NULL) delete [] otherObj; otherObj = NULL;
-            if (otherCon != NULL) delete [] otherCon; otherCon = NULL;
             if (osrlreader != NULL) delete osrlreader;
             osrlreader = NULL;
+            if (x != NULL) 
+                delete [] x; 
+            x = NULL;
+            if (y != NULL)
+                delete [] y; 
+            y = NULL;
+            if (otherVar != NULL)
+                delete [] otherVar; 
+            otherVar = NULL;
+            if (otherObj != NULL)
+                delete [] otherObj; 
+            otherObj = NULL;
+            if (otherCon != NULL)
+                delete [] otherCon; 
+            otherCon = NULL;
+            if (rData != NULL)
+            {
+                for (int i=0; i<nSuffixes; i++)
+                {
+                    if (rData[i] != NULL) delete [] rData[i];
+                }
+                delete [] rData; 
+                rData = NULL;
+            }
+            if (iData != NULL)
+            {
+                for (int i=0; i<nSuffixes; i++)
+                {
+                    if (iData[i] != NULL) delete [] iData[i];
+                }
+                delete [] iData; 
+                iData = NULL;
+            }
             return false;
         }
     }

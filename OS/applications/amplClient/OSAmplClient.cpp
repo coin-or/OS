@@ -177,17 +177,32 @@ int main(int argc, char **argv)
     char* stub = NULL;
     if (argc > 0) stub = argv[1];
 
-    // getting the OSAmplClient_options into a std::string is a bit of a pain...
-    char* temp = getenv("OSAmplClient_options");
+/** Next we need to get the command line options into a std::string
+ *  This will depend on whether OSAmplClient was run stand-alone
+ *  or was called from AMPL (indicated by the second command line argument "-AMPL")
+ */
     ostringstream temp2;
-    std::string amplclient_options;
-    if (temp != NULL)
+    std::string amplclient_options = "";
+    if (argc > 2)
     {
-        temp2 << temp; 
+        if (strncmp(argv[2],"-AMPL",5) == 0)
+        {
+            char* temp = getenv("OSAmplClient_options");
+            if (temp != NULL)
+            {
+                temp2 << temp; 
+            }
+        }
+        else
+        {
+            for (int i=2; i<argc; i++)
+                temp2 << argv[i] << " "; 
+        }
         amplclient_options = temp2.str();
     }
-    else
-        amplclient_options = "";
+
+    // getting the OSAmplClient_options into a std::string is a bit of a pain...
+
 
     // this output must be held in abeyance  until the command line
     // has been processed and printLevel has been set...
@@ -503,7 +518,10 @@ int main(int argc, char **argv)
         if (nl2OS != NULL)
             delete nl2OS;
         nl2OS = NULL;
-        return 1;
+        if ( (argc > 2) && (strncmp(argv[2],"-AMPL",5) == 0) )
+            return 0;
+        else
+            return 1;
     }
 }// end of main()
 

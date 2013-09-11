@@ -571,6 +571,9 @@ bool OSnl2OS::createOSObjects()
 //    char vartype = 'C';
     osinstance->setVariableNumber(n_var);
 
+std::cout << "var counts: " << nlvb << " " << nlvbi << " " << nlvc << " " << nlvci << " " << nlvo << " " << nlvoi;
+std::cout << " " << nwv << " " << niv << " " << nbv << " " << n_var << std::endl << std::endl;
+
     //first the nonlinear variables
     setVar(osinstance,0,nlvb - nlvbi,'C');       // continuous in an objective and in a constraint
     setIBVar(osinstance,nlvb - nlvbi,nlvb);      // integer or binary in an objective and in a constraint

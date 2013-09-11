@@ -363,7 +363,7 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
         else
         {
             std::string errorMessage;
-            errorMessage = "solver type " + solverName + " is not supported";
+            errorMessage = "solver " + solverName + " is not supported";
             throw ErrorClass( errorMessage );
         }
 
