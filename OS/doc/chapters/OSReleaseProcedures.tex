@@ -122,7 +122,7 @@ solve;
 
 The result should be an error saying:
 \begin{verbatim}
-<message>solver type xyz is not supported</message>
+<message>solver xyz is not supported</message>
 \end{verbatim}
  
  \vskip 10pt
@@ -239,8 +239,20 @@ Execute {\tt ./OSRemoteTest}.  This takes no arguments.
 Execute {\tt ./OSResultDemo}.  This takes no arguments.
 
 \item[h.]  Connect to the {\tt osSolverDemo} folder, and run {\tt make}. 
-Execute {\tt ./OSSolverDemo}.  This takes no arguments.
+Execute {\tt ./OSSolverDemo}.  This takes no arguments. The executable conducts five tests:
+\begin{itemize}
+\item[i.] A test of Clp using OSiL input. This problem should run to optimality and produce an objective of $-7667.941722$.
+\item[ii.] A test of Cbc. This test uses solver options that force the solver to stop  on a time limit.
+\item[iii.] A test of Couenne with input in .nl format. This test should run to optimality.
+\item[iv.] A test of SYMPHONY. This test runs to optimality and reports an optimal objective value of~3089.
+\item[v.] A test of Ipopt. This test stops at a locally optimal point with objective value 6.7279.
+\item[vi.] A test of Bonmin. Solver options force this test to stop prematurely.
+\end{itemize}
 
+If all tests complete successfully, the last line of the output printed should read
+\begin{verbatim}
+SolverDemo COMPLETED WITHOUT ERROR
+\end{verbatim}
 
 \end{itemize}
 
