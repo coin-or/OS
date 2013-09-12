@@ -78,7 +78,10 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
 
     if (osrl == "")
     {
-        write_sol('\0',  NULL, NULL , NULL);
+//        std::string solMsg = "No solution returned!";
+        std::string solMsg = " ";
+        solve_result_num = 550;
+        write_sol(const_cast<char*>(solMsg.c_str()),  NULL, NULL , NULL);
         return true;
     }
     else
@@ -228,7 +231,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                 SufDecl temp;
                 std::string s;
                 char* p;
-    
+
                 for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++, k++)
                 {
                     s = osresult->getOtherVariableResultName(0, i);
