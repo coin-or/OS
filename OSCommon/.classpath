@@ -4,5 +4,20 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/OSThirdParty"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/fastutil/fastutil-5.1.5.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/axis/axis.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/axis/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/axis/saaj.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/axis/wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/commons-codec/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/commons-discovery/commons-discovery-0.4.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/commons-email/commons-email-1.2.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/commons-fileupload/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/commons-logging/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/log4j/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/saxon/saxon9-xpath.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/saxon/saxon9.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/xerces/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="/OSThirdParty/lib/xerces/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
