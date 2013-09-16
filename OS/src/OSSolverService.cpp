@@ -1028,24 +1028,38 @@ void knock(OSCommandLine *oscommandline)
                 oscommandline->osplInput = temp.str();
             }
 
-
-            if (oscommandline->osol == "")
+            // if a jobID was given on the command line, use it
+            if(oscommandline->jobID != "") 
             {
-                // we need to construct the OSoL
                 OSOption *osOption = NULL;
-                osOption = new OSOption();
-                //set the jobID if there is one
-                if(oscommandline->jobID == "") osOption->setJobID( oscommandline->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
+                if (oscommandline->osol == "")
+                {
+                    osOption = new OSOption();
+                }
+                else
+                {
+                    OSoLReader *osolReader = new OSoLReader();
+                    try
+                    {
+                        osOption = osolReader->readOSoL(oscommandline->osol);
+                        delete osolReader;
+                        osolReader = NULL;
+                    }
+                    catch (const ErrorClass& eclass)
+                    {
+                        if (osolReader != NULL) delete osolReader;
+                        osolReader = NULL;
+                        throw ErrorClass(eclass.errormsg);
+                    }
+                }
+                osOption->setJobID( oscommandline->jobID);
+                OSoLWriter *osolWriter = new OSoLWriter();
                 oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;
                 delete osolWriter;
                 osolWriter = NULL;
             }
-
 
             osplOutput = osagent->knock(oscommandline->osplInput, oscommandline->osol);
             if (oscommandline->osplOutputFile != "")
@@ -1095,7 +1109,6 @@ void knock(OSCommandLine *oscommandline)
             osrlwriter = NULL;
         }
 
-
         delete fileUtil;
         fileUtil = NULL;
     }
@@ -1133,26 +1146,40 @@ void send(OSCommandLine *oscommandline)
         if (oscommandline->serviceLocation != "")
         {
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
-            // check to see if there is an osol
-            if (oscommandline->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(oscommandline->jobID == "") oscommandline->jobID = osagent->getJobID("");
-                //set the jobID
 
+            // if a jobID was given on the command line, use it
+            if(oscommandline->jobID != "") 
+            {
+                OSOption *osOption = NULL;
+                if (oscommandline->osol == "")
+                {
+                    osOption = new OSOption();
+                }
+                else
+                {
+                    OSoLReader *osolReader = new OSoLReader();
+                    try
+                    {
+                        osOption = osolReader->readOSoL(oscommandline->osol);
+                        delete osolReader;
+                        osolReader = NULL;
+                    }
+                    catch (const ErrorClass& eclass)
+                    {
+                        if (osolReader != NULL) delete osolReader;
+                        osolReader = NULL;
+                        throw ErrorClass(eclass.errormsg);
+                    }
+                }
                 osOption->setJobID( oscommandline->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
+                OSoLWriter *osolWriter = new OSoLWriter();
                 oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;
                 delete osolWriter;
                 osolWriter = NULL;
             }
+
             bSend = osagent->send(oscommandline->osil, oscommandline->osol);
             if(bSend == true)
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, "Successful send");
@@ -1191,7 +1218,6 @@ void send(OSCommandLine *oscommandline)
             osrl = eclass.errormsg;
         }
 
-
         if (oscommandline->osrlFile != "")
         {
             fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
@@ -1228,19 +1254,32 @@ void retrieve(OSCommandLine *oscommandline)
         {
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
-
-            if (oscommandline->osol == "")
+            // if a jobID was given on the command line, use it
+            if(oscommandline->jobID != "") 
             {
-                // we need to construct the OSoL
                 OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(oscommandline->jobID == "")throw ErrorClass("there is no JobID");
-                //set the jobID
+                if (oscommandline->osol == "")
+                {
+                    osOption = new OSOption();
+                }
+                else
+                {
+                    OSoLReader *osolReader = new OSoLReader();
+                    try
+                    {
+                        osOption = osolReader->readOSoL(oscommandline->osol);
+                        delete osolReader;
+                        osolReader = NULL;
+                    }
+                    catch (const ErrorClass& eclass)
+                    {
+                        if (osolReader != NULL) delete osolReader;
+                        osolReader = NULL;
+                        throw ErrorClass(eclass.errormsg);
+                    }
+                }
                 osOption->setJobID( oscommandline->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
+                OSoLWriter *osolWriter = new OSoLWriter();
                 oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;
@@ -1287,7 +1326,6 @@ void retrieve(OSCommandLine *oscommandline)
     }
     catch (const ErrorClass& eclass)
     {
-
         std::string osrl = "";
         OSResult *osresult = NULL;
         OSrLWriter *osrlwriter = NULL;
@@ -1317,8 +1355,6 @@ void retrieve(OSCommandLine *oscommandline)
             delete osrlwriter;
             osrlwriter = NULL;
         }
-
-
         delete fileUtil;
         fileUtil = NULL;
     }
@@ -1336,18 +1372,32 @@ void kill(OSCommandLine *oscommandline)
         {
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
-            if (oscommandline->osol == "")
+            // if a jobID was given on the command line, use it
+            if(oscommandline->jobID != "") 
             {
-                // we need to construct the OSoL
                 OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(oscommandline->jobID == "")throw ErrorClass("there is no JobID");
-                //set the jobID
+                if (oscommandline->osol == "")
+                {
+                    osOption = new OSOption();
+                }
+                else
+                {
+                    OSoLReader *osolReader = new OSoLReader();
+                    try
+                    {
+                        osOption = osolReader->readOSoL(oscommandline->osol);
+                        delete osolReader;
+                        osolReader = NULL;
+                    }
+                    catch (const ErrorClass& eclass)
+                    {
+                        if (osolReader != NULL) delete osolReader;
+                        osolReader = NULL;
+                        throw ErrorClass(eclass.errormsg);
+                    }
+                }
                 osOption->setJobID( oscommandline->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
+                OSoLWriter *osolWriter = new OSoLWriter();
                 oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;
@@ -1382,7 +1432,6 @@ void kill(OSCommandLine *oscommandline)
     }
     catch (const ErrorClass& eclass)
     {
-
         std::string osrl = "";
         OSResult *osresult = NULL;
         OSrLWriter *osrlwriter = NULL;
@@ -1402,7 +1451,6 @@ void kill(OSCommandLine *oscommandline)
             osrl = eclass.errormsg;
         }
 
-
         if(osresult != NULL)
         {
             delete osresult;
@@ -1413,7 +1461,6 @@ void kill(OSCommandLine *oscommandline)
             delete osrlwriter;
             osrlwriter = NULL;
         }
-
 
         delete fileUtil;
         fileUtil = NULL;

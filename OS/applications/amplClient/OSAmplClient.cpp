@@ -694,6 +694,7 @@ void send(OSCommandLine *oscommandline, OSnl2OS *nl2OS)
         }
         else
         {
+
             outStr << ": send failed." << std::endl;
             outStr << "Check to make sure you sent a jobID not on the system." << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, outStr.str());
@@ -773,16 +774,32 @@ void knock(OSCommandLine *oscommandline, OSnl2OS* nl2OS)
                 oscommandline->osplInput = temp.str();
            }
 
-            if (oscommandline->osol == "")
+            // if a jobID was given on the command line, use it
+            if(oscommandline->jobID != "") 
             {
-                // we need to construct the OSoL
                 OSOption *osOption = NULL;
-                osOption = new OSOption();
-                //set the jobID if there is one
-                if(oscommandline->jobID == "") osOption->setJobID( oscommandline->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
+                if (oscommandline->osol == "")
+                {
+                    osOption = new OSOption();
+                }
+                else
+                {
+                    OSoLReader *osolReader = new OSoLReader();
+                    try
+                    {
+                        osOption = osolReader->readOSoL(oscommandline->osol);
+                        delete osolReader;
+                        osolReader = NULL;
+                    }
+                    catch (const ErrorClass& eclass)
+                    {
+                        if (osolReader != NULL) delete osolReader;
+                        osolReader = NULL;
+                        throw ErrorClass(eclass.errormsg);
+                    }
+                }
+                osOption->setJobID( oscommandline->jobID);
+                OSoLWriter *osolWriter = new OSoLWriter();
                 oscommandline->osol = osolWriter->writeOSoL( osOption);
                 delete osOption;
                 osOption = NULL;

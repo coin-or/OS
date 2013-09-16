@@ -706,7 +706,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
 
             // add starting basis --- only supported by Clp
 
-            if (sSolverName == "clp" || sSolverName == "cbc")
+//            if (sSolverName == "clp" || sSolverName == "cbc")
             {
                 if (  osoption != NULL && 
                       osoption->optimization != NULL &&
@@ -719,7 +719,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                  *
                  *   enum Status {
                  *       isFree = 0x00,	            ///< Nonbasic free variable
-                 *       basic = 0x01,    	        ///< Basic variable
+                 *       basic = 0x01,              ///< Basic variable
                  *       atUpperBound = 0x02,       ///< Nonbasic at upper bound
                  *       atLowerBound = 0x03        ///< Nonbasic at lower bound
                  *   }
