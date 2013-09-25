@@ -2,11 +2,9 @@
 /** @file parseosil.l
  * 
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.1, 12/21/2007
- * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -113,7 +111,6 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*
 
  /* General patterns matched in more than one element */
-
 
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}

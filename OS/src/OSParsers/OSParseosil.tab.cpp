@@ -142,21 +142,21 @@ void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *p
 double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
 int atoimod1(int* osillineno, const char *ch1, const char *ch2);
 // we distinguish a newline from other whitespace
-// since we need to know when we hit a new line
+// so that we can report proper line numbers in case of error
 void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg);
 bool isnewline(char c, int* osillineno);
-bool parseVariables(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseObjectives(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseObjCoef(const char **pchar, int objcount, OSInstance *osinstance ,int* osillineno);
-bool parseConstraints(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseLinearConstraintCoefficients(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseStart(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseRowIdx(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseColIdx(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseValue(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseInstanceHeader(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseVariables(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseObjectives(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseObjCoef(const char **pchar, int objcount, OSInstance *osinstance, int* osillineno);
+bool parseConstraints(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseLinearConstraintCoefficients(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseStart(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseRowIdx(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseColIdx(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseValue(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseInstanceHeader(const char **pchar, OSInstance *osinstance, int* osillineno);
 bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
-char *parseBase64( const char **p, int *dataSize ,int* osillineno);
+char *parseBase64( const char **p, int *dataSize, int* osillineno);
 
 #define	ISWHITESPACE( char_) ((char_) == ' ' || \
                      (char_) == '\t' ||  (char_) == '\r')
