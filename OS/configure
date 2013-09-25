@@ -39657,7 +39657,7 @@ if test $coin_vpath_config = yes; then
   done
 fi
 
-###
+##
 ## columnGen Application files
 ##
 
@@ -39875,6 +39875,209 @@ fi
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
   cvl_tmp="applications/columnGen/data/y2010p95-150-150-150.osol"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+##
+## Miscellaneous files for testing
+##
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/IP_infeasible.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/IP_noconstraint.mps"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/IP_noconstraint.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/IP_unbounded.mps"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/IP_unbounded.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/LP_infeasible.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/LP_nobasis.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/LP_noconstraint.mps"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/LP_noconstraint.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/LP_unbounded.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/NaNTest2.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/nanTest.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/nonconvex2.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/nonconvex_D.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/nonconvex.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/parsertestWithErrors.osol"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/qptest2.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/qptest.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/reallyEmpty.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="test/data/share2qp.mps"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done

@@ -533,7 +533,7 @@ AC_COIN_VPATH_LINK(data/matlabFiles/markowitz.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/parincLinear.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/template.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/OSCallMatlabSolver.m)
-###
+##
 ## columnGen Application files
 ##
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen10.osol)
@@ -558,6 +558,29 @@ AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-40-60-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-60-40-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-120-120-120.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p95-150-150-150.osol)
+##
+## Miscellaneous files for testing
+##
+AC_COIN_VPATH_LINK(test/data/IP_infeasible.osil)
+AC_COIN_VPATH_LINK(test/data/IP_noconstraint.mps)
+AC_COIN_VPATH_LINK(test/data/IP_noconstraint.osil)
+AC_COIN_VPATH_LINK(test/data/IP_unbounded.mps)
+AC_COIN_VPATH_LINK(test/data/IP_unbounded.osil)
+AC_COIN_VPATH_LINK(test/data/LP_infeasible.osil)
+AC_COIN_VPATH_LINK(test/data/LP_nobasis.osil)
+AC_COIN_VPATH_LINK(test/data/LP_noconstraint.mps)
+AC_COIN_VPATH_LINK(test/data/LP_noconstraint.osil)
+AC_COIN_VPATH_LINK(test/data/LP_unbounded.osil)
+AC_COIN_VPATH_LINK(test/data/NaNTest2.osil)
+AC_COIN_VPATH_LINK(test/data/nanTest.osil)
+AC_COIN_VPATH_LINK(test/data/nonconvex2.osil)
+AC_COIN_VPATH_LINK(test/data/nonconvex_D.osil)
+AC_COIN_VPATH_LINK(test/data/nonconvex.osil)
+AC_COIN_VPATH_LINK(test/data/parsertestWithErrors.osol)
+AC_COIN_VPATH_LINK(test/data/qptest2.osil)
+AC_COIN_VPATH_LINK(test/data/qptest.osil)
+AC_COIN_VPATH_LINK(test/data/reallyEmpty.osil)
+AC_COIN_VPATH_LINK(test/data/share2qp.mps)
 ##
 ### Python Code
 ##
