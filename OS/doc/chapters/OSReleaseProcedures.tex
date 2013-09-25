@@ -25,7 +25,7 @@ OSSolverService -config ../OS/data/configFiles/testLocalMPS.config
 OSSolverService -config ../OS/data/configFiles/testLocalNL.config
 \end{verbatim}
 
-You should get the OSrL for the simple test problem.  
+Each of these should produce an OSrL string that is displayed on the screen.
 Look for {\tt <obj idx="-1">49920.55</obj>} in the first test, 
 {\tt <obj idx="-1">-7667.94</obj>} in the second, 
 and {\tt <obj idx="-1">7667.94</obj>} in the third.
@@ -48,7 +48,7 @@ You should get the OSrL for the simple test problem in each case. The optimal ob
 \vskip 10pt
 
 
-\noindent{\bf Step 2:} Test remote {\tt getJobID()} method.
+\noindent{\bf Step 2:} Test the remote {\tt getJobID()} method.
 
 
 \begin{verbatim}
@@ -57,13 +57,13 @@ OSSolverService  -config ../OS/data/configFiles/testRemotegetJobID.config
 
 
 
-You will get a long jobID.
+You will get a long jobID displayed on the screen.
 
 
 \vskip 10pt
 
 
-\noindent{\bf Step 3:} Test remote {\tt send()} method. Use the {\tt send()} method with the jobID just  generated.  To do this open the file
+\noindent{\bf Step 3:} Test the remote {\tt send()} method. Use the {\tt send()} method with the jobID just  generated.  To do this open the file
 \begin{verbatim}
 /data/osolFiles/sendWithJobID.osol
 \end{verbatim}
@@ -75,7 +75,7 @@ The result should be ``send is true.''
 
 \vskip 10pt
 
-\noindent{\bf Step 4:} Test remote {\tt knock()} method.  See if the  job is complete.
+\noindent{\bf Step 4:} Test the remote {\tt knock()} method.  See if the  job is complete.
 
 
 \begin{verbatim}
@@ -86,7 +86,7 @@ You do not need to put in jobID information. The knock will get the status of al
 
 \vskip 10pt
 
-\noindent{\bf Step 5:} Test remote {\tt retrieve()} method. Get the result.
+\noindent{\bf Step 5:} Test the remote {\tt retrieve()} method. Get the result.
 
 \begin{verbatim}
 OSSolverService  -config ../OS/data/configFiles/testRemoteRetrieve.config
@@ -95,15 +95,15 @@ Before executing this command make sure to put your jobID into the file {\tt ret
 %Also, either delete the {\tt -browser} option or put in the path to your browser.
 The result of the optimization will be put into a file called {\tt test.osrl} that will be in the {\tt tmp} folder in the directory in which you are running the {\tt OSSolverService.} 
 
-\end{itemize}
-
-
 
 {\bf IMPORTANT:}  Please do NOT commit the changes to these config files. 
 
+ \end{itemize}
+
+
  
- 
- \item[3.]  Test {\tt OSAmplClient}.  This is not a stand-alone application and is designed to be called from  {\tt ampl}.   Probably the easiest way to test this is to test the {\tt OSAmplClient}  that gets installed in the {\tt bin} directory as a result of {\tt make install}. To make life easy, temporarily copy your {\tt ampl} executable into this {\tt bin} directory.   Also copy the test problem {\tt hs71.mod}  from {\tt OS/data/amplFiles/} into the {\tt bin} directory.   Do five tests, three local and two remote.
+ \item[3.]  Test {\tt OSAmplClient}.  Although this can be run as a stand-alone application, it is designed to be called from  {\tt ampl}.  
+ {\tt OSAmplClient}   gets installed in the {\tt bin} directory as a result of {\tt make install}. To make life easy, temporarily copy your {\tt ampl} executable into this {\tt bin} directory.   Also copy the test problem {\tt hs71.mod}  from {\tt OS/data/amplFiles/} into the {\tt bin} directory and run the test from there.   Do five tests, three local and two remote.
  
  
  \vskip 10pt
@@ -194,10 +194,10 @@ You should get an error message saying
 
 
 
-%There is command script, {\tt testAmpl.run} in the directory {\tt OS/data/amplFiles} 
-%that contains the commands for all of these test. Simply start {\tt ampl} and execute
-%\begin{verbatim}
-%include testAmpl.run;
+There is a command script, {\tt testAmpl.run} in the directory {\tt OS/data/amplFiles} 
+that contains the commands for all of these test. Simply start {\tt ampl} and execute
+\begin{verbatim}
+include testAmpl.run;
 %\end{verbatim}
 
 At this point you can delete the {\tt tmp} folder.
@@ -357,6 +357,8 @@ The simplest form of invoking it is
 where {\tt loc} is the location that forms the basis of the new stable version, e.g., {\tt OS/trunk}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter {\tt -c} to do the commit.
 
 {\tt prepare\_new\_release} and {\tt commit\_new\_release} are the corresponding scripts to prepare and commit releases (which are based on stable versions).
+
+Once a new release has been committed, it is customary to inform users of this fact by sending email to both {\tt OS@list.coin-or.org} and {\tt coin-announce@list.coin-or.org}.
 
 
 \subdivision{Version numbers}{\label{section:VersionNumbering}
