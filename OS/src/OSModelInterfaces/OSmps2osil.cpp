@@ -27,7 +27,7 @@ OSmps2osil::OSmps2osil( std::string mpsfilename)
 {
     m_MpsData = new CoinMpsIO();
     int status = m_MpsData->readMps( &mpsfilename[ 0] );
-    if (status < 0) 
+    if (status != 0) 
         throw ErrorClass("Error trying to read MPS file");
 
     m_CoinPackedMatrix  =  new CoinPackedMatrix( *(m_MpsData->getMatrixByCol()));
