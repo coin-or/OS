@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -71,7 +70,7 @@
 			</xs:element>
 			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>recommendation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrices" type="Matrices" minOccurs="0">
@@ -544,10 +543,9 @@
 		</xs:sequence>
 		<xs:attribute name="matrixConIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<!--SOS: experiment -->
 	<xs:complexType name="SpecialOrderedSets">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -555,6 +553,9 @@
 				</xs:documentation>
 			</xs:annotation>
 			<xs:element name="sos" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>SOS type 1 means "at most, or usually, exactly one of these variables can be nonzero (in fact, 1). This is used most commonly to model disjunctions. Type 2 means "at most two of these variables can be nonzero, and the two variables must be consecutive". This is used to model piecewise linear (typically nonconvex) functions in one variable. Escudero defined a class of problems where there were several sets of SOS, only one of which could be active. That is, there were nested SOS1s. He called that SOS type 3. Tomlin used SOS to model convex variables in two dimensions, using a triangulation of the domain. This idea can also be used for approximations of nonconvex functions, and it has an obvious generalization to higher dimensions. In any SOS the nonzero variables must add up to 1. (Technically, in an SOS1 all variables could be zero, but this is usually ruled out.) This is called the convexity constraint, and it is possible to add it to the original formulation of the problem, or to leave the creation of this constraint up to the handler of the SOS. The convexityRowIdx attribute is to clarify which of these two situations occurs by specifying a valid row index in the first case, and leaving out the attribute in the second case.Note also that all coefficients in a convexity constraint are 1.0.</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="SOS"/>
@@ -566,13 +567,13 @@
 	</xs:complexType>
 	<xs:complexType name="SOS">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="variables" type="NonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="adjacentVariableSets" type="SOSAdjacentVariableSets" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Only needed if type > 2.      All nonzero variables belong to the same adjacency set.</xs:documentation>
+					<xs:documentation>Only needed if type >= 3.      All nonzero variables belong to the same adjacency set. Adjacency variable sets must be subsets of the SOS variable set. In an SOS2, adjacency means that variables must be consecutive. They are used to model piecewise linear functions on one variable, and what is adjacent should be reasonably clear. In an SOS3 the adjacent points are the vertices of a triangle (a two-dimensional simplex), and one cannot infer the adjacency from the order of the variables in the SOS. One also cannot infer  the size of the triangulation. That's why one needs to specify adjacency lists here. Since it is possible to omit such lists for SOS2 (and certainly for SOS1), it makes sense to allow for 0 adjacencySets. (And each triangle forms its own set, hence the plural.)</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
