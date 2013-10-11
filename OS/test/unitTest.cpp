@@ -38,6 +38,7 @@
  * Solver tests (if SOLVER_TESTS == TRUE and the solver in question is available)
  *  
  *   COIN-Clp tested on parincLinearByRow.osil
+ *                      parincQuadratic.osil
  * 
  *   COIN-Cbc tested on:
  *   <ol>
@@ -56,14 +57,18 @@
  *   GLPK tested on p0033.osil
  * 
  *   Cplex tested on p0033.osil
+ *                   parincQuadratic.osil
  * 
  *   Gurobi tested on p0033.osil
+ *                    parincQuadratic.osil
  * 
  *   Mosek tested on p0033.osil
+ *                   parincQuadratic.osil
  * 
  *   Soplex tested on p0033.osil
  * 
  *   Xpress tested on p0033.osil
+ *                    parincQuadratic.osil
  * 
  *   COIN-Ipopt tested on:
  *   <ol>
@@ -6435,6 +6440,61 @@ if (SOLVER_TESTS){
         fileUtil = NULL;
     }
 
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": Clp solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new Clp Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the clp Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
+#endif
+            cout << "Clp solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "Clp solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with Clp on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Clp" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the Clp Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif
 
     // now solve another problem -- try an integer program
     try{
@@ -7046,8 +7106,64 @@ if( THOROUGH == true){
         if (fileUtil != NULL)
             delete fileUtil;
         fileUtil = NULL;
-    }    
+    }
+
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": Cplex solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new Cplex Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the Cplex Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
+            cout << "Cplex solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "Cplex solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with Cplex on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Cplex" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the Cplex Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif //if 0
+#endif //ifdef COIN_HAS_CPX
     
 
 #ifdef COIN_HAS_GRB
@@ -7101,8 +7217,64 @@ if( THOROUGH == true){
         if (fileUtil != NULL)
             delete fileUtil;
         fileUtil = NULL;
-    }    
+    }
+
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": Gurobi solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new Gurobi Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the Gurobi Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
+            cout << "Gurobi solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "Gurobi solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with Gurobi on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Gurobi" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the Gurobi Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif //if 0
+#endif //ifdef COIN_HAS_GRB
 
 #ifdef COIN_HAS_MSK
     try{
@@ -7155,9 +7327,65 @@ if( THOROUGH == true){
         if (fileUtil != NULL)
             delete fileUtil;
         fileUtil = NULL;
-    }    
+    }
+
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": MOSEK solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new MOSEK Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the MOSEK Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
-std::cout << "now try soplex" << std::endl;
+            cout << "MOSEK solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "MOSEK solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with MOSEK on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with MOSEK" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the MOSEK Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif //if 0
+#endif //ifdef COIN_HAS_MSK
+
 #ifdef COIN_HAS_SOPLEX
     try{
         cout << endl << "TEST " << ++nOfTest << ": SoPlex solver on parincLinear.osil" << endl << endl;
@@ -7262,7 +7490,63 @@ std::cout << "now try soplex" << std::endl;
             delete fileUtil;
         fileUtil = NULL;
     }    
+
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": XPRESS solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new XPRESS Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the XPRESS Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
+            cout << "XPRESS solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "XPRESS solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with XPRESS on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with XPRESS" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the XPRESS Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif //if 0
+#endif //ifdef COIN_HAS_XPR
 
 
 #ifdef COIN_HAS_IPOPT
@@ -9954,4 +10238,5 @@ void tempPrintArrays(OSResult* os)
         return;
     }
 }
+
 
