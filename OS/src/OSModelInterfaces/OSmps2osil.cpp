@@ -26,95 +26,97 @@ using std::endl;
 OSmps2osil::OSmps2osil( std::string mpsfilename)
 {
     m_MpsData = new CoinMpsIO();
-	int nOfSOS;
-	CoinSet ** SOS;
+    int nOfSOS;
+    CoinSet ** SOS;
     int status = m_MpsData->readMps( &mpsfilename[ 0], "", nOfSOS, SOS );
     if (status != 0) 
         throw ErrorClass("Error trying to read MPS file");
 
     m_CoinPackedMatrix  =  new CoinPackedMatrix( *(m_MpsData->getMatrixByCol()));
 
-	if (nOfSOS > 0)
-	{
+    if (nOfSOS > 0)
+    {
 #ifndef NDEBUG
-		std::ostringstream outStr;
-		{
-	 		outStr << "Detected " << nOfSOS << " special ordered sets" << std::endl;
-			for (int i=0; i < nOfSOS; i++)
-			{
-			    int numberEntries = SOS[i]->numberEntries();
-				const int * which = SOS[i]->which();
-				const double * weights = SOS[i]->weights();
-				outStr << "SOS " << i << " has type " << SOS[i]->setType();
-				outStr << " and " << numberEntries << " entries:" << std::endl;
-				for (int j=0;j<numberEntries;j++)
-					outStr << "    Idx: " << which[j] << "    Weight: " << weights[j] << std::endl;
-			}
-			osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-		}
+        std::ostringstream outStr;
+        {
+             outStr << "Detected " << nOfSOS << " special ordered sets" << std::endl;
+            for (int i=0; i < nOfSOS; i++)
+            {
+                int numberEntries = SOS[i]->numberEntries();
+                const int * which = SOS[i]->which();
+                const double * weights = SOS[i]->weights();
+                outStr << "SOS " << i << " has type " << SOS[i]->setType();
+                outStr << " and " << numberEntries << " entries:" << std::endl;
+                for (int j=0;j<numberEntries;j++)
+                    outStr << "    Idx: " << which[j] << "    Weight: " << weights[j] << std::endl;
+            }
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+        }
 #endif
-//		throw ErrorClass("SOS has not been implemented yet");
-	}
+//        throw ErrorClass("SOS has not been implemented yet");
+    }
 
-	int * columnStart = NULL;
-	int * columnIdx = NULL;
-	double * elements = NULL;
+#if 0 // Not yet supported
+    int * columnStart = NULL;
+    int * columnIdx = NULL;
+    double * elements = NULL;
     status = m_MpsData->readQuadraticMps(NULL, columnStart, columnIdx, elements, 0);
 
-	if (status != 0)
-	{
-		if (status != -2 && status != -3)
-	        throw ErrorClass("Error trying to read QUADOBJ section");
-	}
-	else
-	{
+    if (status != 0)
+    {
+        if (status != -2 && status != -3)
+            throw ErrorClass("Error trying to read QUADOBJ section");
+    }
+    else
+    {
 #ifndef NDEBUG
-		std::ostringstream outStr;
-		int numberColumns=m_MpsData->getNumCols();
-		outStr << "Quadratic objective has " << columnStart[numberColumns] << " entries" << std::endl;
-		outStr << "Column starts:" << std::endl;
-		for (int i=0; i<=numberColumns; i++)
-			outStr << "    " << columnStart[i] << std::endl; 
-		for (int i=0; i<numberColumns; i++)
-		{
-			if (columnStart[i] < columnStart[i+1])
-			{
-				outStr << "Column " << i << ":    index      value" << std::endl;
-				for (int j=columnStart[i];j<columnStart[i+1];j++)
-					outStr << "                 " << columnIdx[j] << "       " << elements[j] << std::endl;
-			}
-		}
-		osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+        std::ostringstream outStr;
+        int numberColumns=m_MpsData->getNumCols();
+        outStr << "Quadratic objective has " << columnStart[numberColumns] << " entries" << std::endl;
+        outStr << "Column starts:" << std::endl;
+        for (int i=0; i<=numberColumns; i++)
+            outStr << "    " << columnStart[i] << std::endl; 
+        for (int i=0; i<numberColumns; i++)
+        {
+            if (columnStart[i] < columnStart[i+1])
+            {
+                outStr << "Column " << i << ":    index      value" << std::endl;
+                for (int j=columnStart[i];j<columnStart[i+1];j++)
+                    outStr << "                 " << columnIdx[j] << "       " << elements[j] << std::endl;
+            }
+        }
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-//		throw ErrorClass("QUADOBJ has not been implemented yet");
-	}
+//        throw ErrorClass("QUADOBJ has not been implemented yet");
+    }
 
-	int nOfCones;
-	int * coneStart = NULL;
-	int * coneIdx = NULL;
-	int * coneType = NULL;
-	status = m_MpsData->readConicMps(NULL, coneStart, coneIdx, coneType, nOfCones);
+    int nOfCones;
+    int * coneStart = NULL;
+    int * coneIdx = NULL;
+    int * coneType = NULL;
+    status = m_MpsData->readConicMps(NULL, coneStart, coneIdx, coneType, nOfCones);
     if (status != 0) 
-	{
-		if (status != -2 && status != -3)
-	        throw ErrorClass("Error trying to read cone section");
-	}
-	else
-	{
+    {
+        if (status != -2 && status != -3)
+            throw ErrorClass("Error trying to read cone section");
+    }
+    else
+    {
 #ifndef NDEBUG
-		std::ostringstream outStr;
-		outStr << "Conic section has " << nOfCones << " cones" << std::endl;
-		for (int i=0;i<nOfCones;i++) 
-		{
-			outStr << "Cone " << i << " has " << coneStart[i+1]-coneStart[i] << " entries ";
-			outStr << "(type " << coneType[i] << "):" << std::endl;
-			for (int j=coneStart[i];j<coneStart[i+1];j++)
-				outStr << "    " << coneIdx[j] << std::endl;
-		}
-		osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+        std::ostringstream outStr;
+        outStr << "Conic section has " << nOfCones << " cones" << std::endl;
+        for (int i=0;i<nOfCones;i++) 
+        {
+            outStr << "Cone " << i << " has " << coneStart[i+1]-coneStart[i] << " entries ";
+            outStr << "(type " << coneType[i] << "):" << std::endl;
+            for (int j=coneStart[i];j<coneStart[i+1];j++)
+                outStr << "    " << coneIdx[j] << std::endl;
+        }
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-//		throw ErrorClass("CSECTION has not been implemented yet");
-	}
+//        throw ErrorClass("CSECTION has not been implemented yet");
+    }
+#endif
 
 }// end constructor
 
