@@ -454,6 +454,28 @@ libOSParsers_la_SOURCES = \
 		OSoLParserData.h \
 		OSoLParserData.cpp
 
+
+#take out these dependencies for the time being (should check for the presence of (f)lex/yacc/bison)
+#$(srcdir)/OSParseosrl.tab.cpp : $(srcdir)/OSParseosrl.y
+#	$(YACC) -ldv -p osrl -o $@ $<
+#	
+#$(srcdir)/OSParseosrl.cpp : $(srcdir)/OSParseosrl.l
+#	$(LEX) -Posrl -o$@ $<
+#
+#$(srcdir)/OSParseosil.tab.cpp : $(srcdir)/OSParseosil.y
+#	$(YACC) -ldv -p osil -o $@ $<
+#	
+#$(srcdir)/OSParseosil.cpp : $(srcdir)/OSParseosil.l
+#	$(LEX) -Posil -o$@ $<
+#
+#$(srcdir)/OSParseosol.tab.cpp : $(srcdir)/OSParseosol.y
+#	$(YACC) -ldv -p osol -o $@ $<
+#	
+#$(srcdir)/OSParseosol.cpp : $(srcdir)/OSParseosol.l
+#	$(LEX) -Posol -o$@ $<
+#
+#$(srcdir)/OSParseosss.cpp : $(srcdir)/OSParseosss.l
+#	$(LEX) -Posss -o$@ $<
 libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
@@ -770,27 +792,6 @@ uninstall-am: uninstall-includecoinHEADERS uninstall-info-am
 	tags uninstall uninstall-am uninstall-includecoinHEADERS \
 	uninstall-info-am
 
-
-$(srcdir)/OSParseosrl.tab.cpp : $(srcdir)/OSParseosrl.y
-	$(YACC) -ldv -p osrl -o $@ $<
-
-$(srcdir)/OSParseosrl.cpp : $(srcdir)/OSParseosrl.l
-	$(LEX) -Posrl -o$@ $<
-
-$(srcdir)/OSParseosil.tab.cpp : $(srcdir)/OSParseosil.y
-	$(YACC) -ldv -p osil -o $@ $<
-
-$(srcdir)/OSParseosil.cpp : $(srcdir)/OSParseosil.l
-	$(LEX) -Posil -o$@ $<
-
-$(srcdir)/OSParseosol.tab.cpp : $(srcdir)/OSParseosol.y
-	$(YACC) -ldv -p osol -o $@ $<
-
-$(srcdir)/OSParseosol.cpp : $(srcdir)/OSParseosol.l
-	$(LEX) -Posol -o$@ $<
-
-$(srcdir)/OSParseosss.cpp : $(srcdir)/OSParseosss.l
-	$(LEX) -Posss -o$@ $<
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
