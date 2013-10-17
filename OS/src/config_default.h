@@ -41,9 +41,11 @@
 #define COIN_HAS_VOL 1
 
 /* Define to 1 if the CppAD package is used */
-#define COIN_HAS_CPPAD 1
+/* #define COIN_HAS_CPPAD 1 */
 
 #ifdef _MSC_VER
 /* Define to be the name of C-function for NaN check */
 #define COIN_C_ISNAN _isnan
 #endif
+
+

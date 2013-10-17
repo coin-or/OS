@@ -38,6 +38,7 @@
  * Solver tests (if SOLVER_TESTS == TRUE and the solver in question is available)
  *  
  *   COIN-Clp tested on parincLinearByRow.osil
+ *                      parincQuadratic.osil
  * 
  *   COIN-Cbc tested on:
  *   <ol>
@@ -56,14 +57,18 @@
  *   GLPK tested on p0033.osil
  * 
  *   Cplex tested on p0033.osil
+ *                   parincQuadratic.osil
  * 
  *   Gurobi tested on p0033.osil
+ *                    parincQuadratic.osil
  * 
  *   Mosek tested on p0033.osil
+ *                   parincQuadratic.osil
  * 
  *   Soplex tested on p0033.osil
  * 
  *   Xpress tested on p0033.osil
+ *                    parincQuadratic.osil
  * 
  *   COIN-Ipopt tested on:
  *   <ol>
@@ -6409,10 +6414,6 @@ if (SOLVER_TESTS){
         cout << cSolver->osrl << endl;
         if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
 
-
-
-
-
         delete cSolver;
         cSolver = NULL;
 #ifdef DEBUG
@@ -6435,6 +6436,61 @@ if (SOLVER_TESTS){
         fileUtil = NULL;
     }
 
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": Clp solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new Clp Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the clp Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
+#endif
+            cout << "Clp solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "Clp solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with Clp on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Clp" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the Clp Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif
 
     // now solve another problem -- try an integer program
     try{
@@ -7046,8 +7102,64 @@ if( THOROUGH == true){
         if (fileUtil != NULL)
             delete fileUtil;
         fileUtil = NULL;
-    }    
+    }
+
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": Cplex solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new Cplex Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the Cplex Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
+            cout << "Cplex solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "Cplex solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with Cplex on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Cplex" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the Cplex Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif //if 0
+#endif //ifdef COIN_HAS_CPX
     
 
 #ifdef COIN_HAS_GRB
@@ -7101,8 +7213,64 @@ if( THOROUGH == true){
         if (fileUtil != NULL)
             delete fileUtil;
         fileUtil = NULL;
-    }    
+    }
+
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": Gurobi solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new Gurobi Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the Gurobi Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
+            cout << "Gurobi solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "Gurobi solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with Gurobi on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Gurobi" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the Gurobi Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif //if 0
+#endif //ifdef COIN_HAS_GRB
 
 #ifdef COIN_HAS_MSK
     try{
@@ -7155,9 +7323,65 @@ if( THOROUGH == true){
         if (fileUtil != NULL)
             delete fileUtil;
         fileUtil = NULL;
-    }    
+    }
+
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": MOSEK solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new MOSEK Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the MOSEK Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
-std::cout << "now try soplex" << std::endl;
+            cout << "MOSEK solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "MOSEK solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with MOSEK on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with MOSEK" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the MOSEK Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif //if 0
+#endif //ifdef COIN_HAS_MSK
+
 #ifdef COIN_HAS_SOPLEX
     try{
         cout << endl << "TEST " << ++nOfTest << ": SoPlex solver on parincLinear.osil" << endl << endl;
@@ -7262,7 +7486,63 @@ std::cout << "now try soplex" << std::endl;
             delete fileUtil;
         fileUtil = NULL;
     }    
+
+#if 0
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": XPRESS solver on parincQuadratic.osil" << endl << endl;
+        cout << "create a new XPRESS Solver for OSiL string solution" << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CoinSolver();
+
+        osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        osol = "";
+        solver->osinstance = osilreader->readOSiL( osil);
+        solver->osil = osil;
+        cout << "call the XPRESS Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 49920.5;
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
 #endif
+            cout << "XPRESS solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {    cout << "XPRESS solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass(" Fail unit test with XPRESS on parincQuadradic.osil");
+        delete osilreader;
+        osilreader = NULL;    
+        delete solver;
+        solver = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with XPRESS" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the XPRESS Solver:"  + eclass.errormsg<< endl; 
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif //if 0
+#endif //ifdef COIN_HAS_XPR
 
 
 #ifdef COIN_HAS_IPOPT
@@ -9026,6 +9306,14 @@ if (OTHER_TESTS){
     }
 
 // test the AMPL solution writer and suffix handling
+    OSResult *osresult = NULL;
+    OSnl2OS *nl2osil = NULL;
+    OSosrl2ampl *solWriter = NULL;
+    OSrLWriter *temp_writer = NULL;
+    double *xval = NULL;
+    double *zval = NULL;
+    int* IBS;
+
     try
     {
         cout << endl << "TEST " << ++nOfTest << ": AMPL suffix handler and solution writer" << endl << endl;
@@ -9039,7 +9327,7 @@ if (OTHER_TESTS){
 
         jac0dim((char*)nlFileName.c_str(), (fint)strlen(nlFileName.c_str()));
 
-        OSnl2OS *nl2osil = new OSnl2OS(cw, rw, asl);
+        nl2osil = new OSnl2OS(cw, rw, asl);
 
         nl2osil->readNl(nlFileName);
 
@@ -9057,23 +9345,22 @@ if (OTHER_TESTS){
  
         std::cout << std::endl << "transfer suffix information from osol to osrl" << std::endl << std::endl;
 
-
-        OSResult *osresult = new OSResult();
-
         int nVars = nl2osil->osinstance->getVariableNumber();
         int nObjs = nl2osil->osinstance->getObjectiveNumber();
         int nCons = nl2osil->osinstance->getConstraintNumber();
+
+        osresult = new OSResult();
 
         osresult->setSolutionNumber(1);
         osresult->setVariableNumber(nVars);
         osresult->setObjectiveNumber(nObjs);
         osresult->setConstraintNumber(nCons);
 
-        double *xval = new double[nVars];
+        xval = new double[nVars];
         for (int i=0; i < nVars; i++)
             xval[i] = 1.2345;
 
-        double *zval = new double[nCons];
+        zval = new double[nCons];
         for (int i=0; i < nCons; i++)
             zval[i] = 1.3131;
 
@@ -9082,22 +9369,20 @@ if (OTHER_TESTS){
         if (!osresult->setDualVariableValuesDense(0, zval))
             throw ErrorClass(" Fail setting dual variables in AMPL suffix handler");
 
-        int* IBS;
-
         for (int status=0; status < ENUM_BASIS_STATUS_NUMBER_OF_STATES; status++)
         {
             int nvar = nl2osil->osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, status);
             if (nvar > 0)
             {
  
-        std::cout << std::endl << "transfer basis info for variables" << std::endl << std::endl;
+                std::cout << std::endl << "transfer basis info for variables" << std::endl << std::endl;
 
                 IBS = new int[nvar];
                 if (!nl2osil->osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, status, IBS) )
                     throw ErrorClass(" Fail basis retrieval in AMPL suffix handler");
                 if (!osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, status, IBS, nvar) )
                     throw ErrorClass(" Fail basis transfer in AMPL suffix handler");
-                delete[] IBS;
+                delete[] IBS; IBS = NULL;
             }
         }
 
@@ -9107,14 +9392,14 @@ if (OTHER_TESTS){
             if (ncon > 0)
             {
  
-        std::cout << std::endl << "transfer basis info for slacks" << std::endl << std::endl;
+                std::cout << std::endl << "transfer basis info for slacks" << std::endl << std::endl;
 
                 IBS = new int[ncon];
                 if (!nl2osil->osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, status, IBS) )
                     throw ErrorClass(" Fail basis retrieval in AMPL suffix handler");
                 if (!osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, status, IBS, ncon) )
                     throw ErrorClass(" Fail basis transfer in AMPL suffix handler");
-                delete[] IBS;
+                delete[] IBS; IBS = NULL;
             }
         }
 
@@ -9128,7 +9413,7 @@ if (OTHER_TESTS){
             OtherVariableOption *otherVar = nl2osil->osoption->getOtherVariableOption(i);
 
  
-        std::cout << std::endl << "transfer variable suffix " << otherVar->name << std::endl << std::endl;
+            std::cout << std::endl << "transfer variable suffix " << otherVar->name << std::endl << std::endl;
 
 
             if (!osresult->setOtherVariableResultNumberOfVar(0, i, otherVar->numberOfVar))
@@ -9545,23 +9830,18 @@ if (OTHER_TESTS){
 
         std::cout << std::endl << "convert OSResult to string" << std::endl << std::endl;
 
-        OSrLWriter *temp_writer = new OSrLWriter();
+        temp_writer = new OSrLWriter();
 
         std::string osrl = temp_writer->writeOSrL( osresult);
         std::cout  << osrl << std::endl;
 
         bool writeOK;
-        OSosrl2ampl *solWriter = new OSosrl2ampl();
+        solWriter = new OSosrl2ampl();
 
         std::cout << std::endl << "write AMPL solution file" << std::endl << std::endl;
 
         writeOK = solWriter->writeSolFile(osrl, nl2osil->getASL("asl"), dataDir +  "amplFiles" + dirsep + "suffixTest.sol");
 
-        delete solWriter;
-        solWriter = NULL;
-
-        delete osresult;
-        osresult = NULL;
 
 // compare suffixtest.sol to suffixtest.cmp
 
@@ -9588,10 +9868,26 @@ if (OTHER_TESTS){
             throw ErrorClass(" Fail unit test with AMPL .sol writer");
         } 
 
+
+// Garbage collection
+
         delete nl2osil;
         nl2osil = NULL;
         delete fileUtil;
-        fileUtil = NULL;    
+        fileUtil = NULL;
+        delete solWriter;
+        solWriter = NULL;
+        delete osresult;
+        osresult = NULL;
+        delete[] xval; 
+        xval = NULL;
+        delete[] zval; 
+        zval = NULL;
+        delete solWriter;
+        solWriter = NULL;
+        delete temp_writer;
+        temp_writer = NULL;
+
         unitTestResult << "TEST " << nOfTest << ": Test the AMPL .sol writer" << std::endl; 
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    
@@ -9599,10 +9895,33 @@ if (OTHER_TESTS){
     {
         unitTestResultFailure << "Sorry Unit Test Failed Testing AMPL .sol writer:" + eclass.errormsg << endl;
 
+// Catch garbage collection
         if (nl2osil != NULL)
             delete nl2osil; 
         nl2osil = NULL;
-    }
+
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+        if (solWriter != NULL)
+            delete solWriter;
+        solWriter = NULL;
+        if (temp_writer != NULL)
+            delete temp_writer;
+        temp_writer = NULL;
+        if (osresult != NULL)
+            delete osresult;
+        osresult = NULL;
+        if (xval != NULL)
+            delete[] xval; 
+        xval = NULL;
+        if (zval != NULL)
+            delete[] zval; 
+        zval = NULL;
+        if (IBS != NULL)
+            delete IBS;
+        IBS = NULL;
+   }
 
 #endif
 
@@ -9954,4 +10273,5 @@ void tempPrintArrays(OSResult* os)
         return;
     }
 }
+
 

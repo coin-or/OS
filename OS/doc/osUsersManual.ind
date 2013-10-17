@@ -1,12 +1,12 @@
 \begin{theindex}
 
   \item Algorithmic differentiation, 8, 46--47, 78--79
-  \item AMPL, 7, 8, 27--30, 109
+  \item AMPL, 7, 8, 27--30, 110
   \item AMPL nl format, 1, 7, 8, 10, 11, 19, 71--72
   \item AMPL Solver Library , \see{Third-party software, ASL}{1}
   \item {\tt amplFiles}, 27
   \item Apache Axis, 8, 16
-  \item Apache Tomcat, 1, 8, 9, 16, 92, 111--114
+  \item Apache Tomcat, 1, 8, 9, 16, 92, 112--115
   \item ASL, \see{Third-party software, ASL}{1}
 
   \indexspace
@@ -15,7 +15,7 @@
   \item {\tt bison}, 72, 90, 101
   \item Blas, \see{Third-party software, Blas}{1}
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
-  \item Bug reporting, 106
+  \item Bug reporting, 108
   \item {\tt BuildTools}, \see{COIN-OR projects, {\tt BuildTools}}{1}
 
   \indexspace
@@ -27,20 +27,20 @@
   \item {\tt Clp}, \see{COIN-OR projects, {\tt Clp}}{1}
   \item COIN-OR, 1, 93
   \item COIN-OR projects
-    \subitem {\tt Bonmin}, 24, 93, 95, 99, 102--104, 107
+    \subitem {\tt Bonmin}, 24, 93, 95, 99, 102--104, 109
     \subitem {\tt BuildTools}, 109
-    \subitem {\tt Cbc}, 24, 93, 95, 104, 109
-    \subitem {\tt Cgl}, 52, 93, 104, 109
-    \subitem {\tt Clp}, 13, 24, 48, 93, 95, 104, 109
-    \subitem {\tt CoinUtils}, 71, 93, 104, 109
-    \subitem {\tt Couenne}, 24, 95, 99, 102--104, 109
-    \subitem {\tt CppAD}, 7, 8, 78--79, 104, 109
-    \subitem {\tt DyLP}, 13, 24, 104, 109
+    \subitem {\tt Cbc}, 24, 93, 95, 104, 110
+    \subitem {\tt Cgl}, 52, 93, 104, 110
+    \subitem {\tt Clp}, 13, 24, 48, 93, 95, 104, 110
+    \subitem {\tt CoinUtils}, 71, 93, 104, 110
+    \subitem {\tt Couenne}, 24, 95, 99, 102--104, 110
+    \subitem {\tt CppAD}, 7, 8, 78--79, 104, 110
+    \subitem {\tt DyLP}, 13, 24, 104, 110
     \subitem {\tt Ipopt}, 14, 19, 24, 73, 75, 85, 90, 93, 95, 99, 
-		102--104, 109
-    \subitem {\tt Osi}, 11, 24, 104, 109
-    \subitem {\tt SYMPHONY}, 16, 24, 28--29, 95, 104, 109
-    \subitem {\tt Vol}, 104, 109
+		102--104, 110
+    \subitem {\tt Osi}, 11, 24, 104, 110
+    \subitem {\tt SYMPHONY}, 16, 24, 28--29, 95, 104, 110
+    \subitem {\tt Vol}, 104, 110
   \item COIN-OR projects, {\tt Osi}, 74, 93
   \item {\tt COIN\_HAS\_XXXXX}, 104--105
   \item {\tt COIN\_SKIP\_PROJECTS}, 93, 95, 99, 102, 104
@@ -49,9 +49,9 @@
     \subitem cache file, 93
     \subitem scripts, 89
   \item {\tt Couenne}, \see{COIN-OR projects, {\tt Couenne}}{1}
-  \item {\tt cplex}, 8, 11, 24, 105--106
+  \item {\tt cplex}, 8, 11, 24, 106
   \item {\tt CppAD}, \see{COIN-OR projects, {\tt CppAD}}{1}
-  \item Cygwin, 89, 98--100, 107
+  \item Cygwin, 89, 98--100, 109
 
   \indexspace
 
@@ -64,7 +64,7 @@
       \subsubitem Windows, 92
     \subitem tarball, 92
     \subitem zip file, 92
-  \item Doxygen, 66, 90, 107
+  \item Doxygen, 66, 90, 108
   \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
@@ -88,6 +88,7 @@
   \item {\tt GLPK}, \see{Third-party software, {\tt GLPK}}{1}
   \item GNU General Public Licence (GPL), 105
   \item {\it Griewank, A.}, 78
+  \item Gurobi, 106--107
 
   \indexspace
 
@@ -116,26 +117,27 @@
   \item {\tt LibOS}, 95
   \item {\tt libOSCommon.vcproj}, 97
   \item {\tt libOSSolvers.vcproj}, 97
-  \item LINDO, 8, 11, 73--75, 94, 106
-  \item Linux, 107
+  \item LINDO, 8, 11, 73--75, 94, 107
+  \item Linux, 109
 
   \indexspace
 
-  \item Mac OS X, 107
-  \item {\tt make}, 94, 95, 101, 114
+  \item Mac OS X, 109
+  \item {\tt make}, 94, 95, 101, 115
   \item {\tt make distclean}, 101, 102
-  \item {\tt make install}, 45, 94, 95, 109
+  \item {\tt make install}, 45, 94, 95, 110
   \item {\tt make run\_parsers}, 73
   \item {\tt make test}, 94, 95, 101
   \item makefile, 45--46, 89, 100--102, 104, 105
-  \item MATLAB, 8, 35--40, 106
-  \item Microsoft Visual Studio, 10, 96--97, 105, 111, 114
+  \item MATLAB, 8, 35--40, 107
+  \item Microsoft Visual Studio, 10, 96--97, 105, 112, 115
     \subitem {\tt Debug} configuration, 97
     \subitem {\tt Release} configuration, 97
   \item Microsoft Windows, 92, 93
-  \item MinGW, 89, 99, 100, 107
+  \item MinGW, 89, 99, 100, 109
+  \item Mosek, 107
   \item MPS format, 1, 7, 8, 10, 11, 71
-  \item MSYS, 89, 100--101, 107
+  \item MSYS, 89, 100--101, 109
   \item Mumps, \see{Third-party software, Mumps}{1}
 
   \indexspace
@@ -152,14 +154,14 @@
     \subitem trunk version, 25, 27, 102
     \subitem unit test, 94
   \item {\tt OS.sln}, 97
-  \item {\tt OSAgent}, 7, 65--66, 114
-  \item {\tt OSAmplClient}, 7, 9, 27--30, 72, 105, 109
+  \item {\tt OSAgent}, 7, 65--66, 115
+  \item {\tt OSAmplClient}, 7, 9, 27--30, 72, 105, 110
   \item {\tt OSCommon}, 8, 93
   \item {\tt OSExpressionTree}, 69
-  \item {\tt OSFileUpload}, 114--115
+  \item {\tt OSFileUpload}, 115--116
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 7--11, 14, 16, 19, 23, 40--42, 66, 69, 71--73, 114, 
-		116--119
+  \item OSiL, 1, 7--11, 14, 16, 19, 23, 40--42, 66, 69, 71--73, 115, 
+		117--120
   \item {\tt OSInstance}, 7, 46, 66--72, 75, 81
   \item {\tt OSLibrary}, 14, 65--75
   \item {\tt OSmps2osil}, 71--72
@@ -171,7 +173,7 @@
   \item {\tt OSResult}, 71--72
   \item OSrL, 7, 9, 12, 14, 15, 23, 43--44, 72
   \item {\tt OSSolverAgent}, 65
-  \item {\tt OSSolverService}, 1, 7, 9--23, 93, 95, 109
+  \item {\tt OSSolverService}, 1, 7, 9--23, 93, 95, 110
   \item {\tt OSSolverService.vcproj}, 97
   \item {\tt OSTest.vcproj}, 97
 
@@ -189,10 +191,10 @@
 
   \indexspace
 
-  \item {\tt send}, 10, 11, 14, 18--20, 114
+  \item {\tt send}, 10, 11, 14, 18--20, 115
   \item {\tt serviceLocation}, 14
-  \item SOAP protocol, 7, 9, 16, 19, 114
-  \item {\tt solve}, 10--11, 14, 16--18, 23, 114
+  \item SOAP protocol, 7, 9, 16, 19, 115
+  \item {\tt solve}, 10--11, 14, 16--18, 23, 115
   \item {\tt solveroptions.osol}, 29
   \item Subversion, 89
   \item supported solvers, 11
@@ -206,18 +208,19 @@
   \item Third-party software, 96, 103--105
     \subitem ASL, 96, 105
     \subitem Blas, 90, 93, 102
-    \subitem GLPK, 105
+    \subitem GLPK, 105--106
     \subitem HSL, 90, 99, 103
     \subitem Lapack, 90
     \subitem Mumps, 90, 93, 103
+    \subitem SoPlex, 106
   \item Third-party software, {\tt GLPK}, 8, 11, 24
   \item TortoiseSVN, 92, 96, 100
-  \item Trac system, 1, 7, 106
+  \item Trac system, 1, 7, 108
 
   \indexspace
 
-  \item {\tt unitTest}, 94, 97, 109
-  \item Unix, 89, 90, 93, 105, 107
+  \item {\tt unitTest}, 94, 97, 110
+  \item Unix, 89, 90, 93, 105, 109
   \item unix, 45
 
   \indexspace

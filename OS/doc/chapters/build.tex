@@ -1070,12 +1070,17 @@ The OS project distribution includes the COIN-OR projects  {\tt Bonmin}\index{CO
 {\tt DyLP}\index{COIN-OR projects!DyLP@{\tt DyLP}},   {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}},
 {\tt Osi}\index{COIN-OR projects!Osi@{\tt Osi}}, {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}, and {\tt Vol}\index{COIN-OR projects!Vol@{\tt Vol}}.
 (For details on any of these projects see the COIN-OR web site at {\tt\UrlCoinProjects}.)
+
 However, the project is also designed to work with  several other open source and commercial software projects.
-In the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty}
-directory, which does not contain anything other than {\tt get.xxxx} scripts and other utilities.
+These are not distributed under the Eclipse Public Library and hence they cannot be downloaded
+automatically by the system. 
+
+For the open-source packages {\tt ASL}, {\tt Blas}, {\tt Lapack} and {\tt Mumps} --- a minimal set needed to build the Ipopt solver --- there are {\tt get.xxxx} scripts in the 
+%In the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a 
+{\tt ThirdParty} directory  (see Figure~\ref{figure:osprojectrootdir}), which does not contain anything other than {\tt get.xxxx} scripts and other utilities.
 The source code for any of these packages must be downloaded separately using the {\tt get.xxxx} scripts,
 as {\tt configure}\index{configure|(} will not build these projects without the source code being present. After the download,
-{\tt configure} will recognize the presence of these files and will configure the makefiles\index{makefile} accordingly.
+{\tt configure} will recognize the presence of these files in specific locations within the {\tt ThirdParty} folder hierarchy and will configure the makefiles\index{makefile} accordingly.
 
 If the user wants to exclude these projects from the build after they have been downloaded and detected,
 a new {\tt configure} is required with instructions to skip them. For instance, if the user experiences problems
@@ -1087,6 +1092,11 @@ configure COIN_SKIP_PROJECTS="Ipopt Bonmin Couenne ThirdParty/Blas ThirdParty/La
 ThirdParty/Mumps"
 \end{verbatim}
 \index{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}
+
+Also in this class are the packages {\tt Metis}, a utility package that can optionally be used by 
+{\tt Ipopt} to speed up computations, and {\tt Glpk}, a linear programming solver (see below). 
+
+The last class of  external packages are commercial and closed-source programs, which may require special licenses, purchase agreements, and other  considerations which are strictly between the user and the third-party supplier. No {\tt get.xxxx} scripts are possible for these packages, and consequently it is hard to completely automate the build process. Nonetheless, it is possible to include these solvers, and we give below some indications as to how this might be accomplished.
 
 In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines
 the values of a number of
@@ -1291,22 +1301,16 @@ After installing the binaries and include files in an appropriate directory, run
 include and library directory. An example is given below:
 
 \begin{verbatim}
-configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) $(CPLEX_LIBS)"   \
---with-cplex-incdir= $(CPLEXDIR)/include
+configure --with-cplex-lib="-L$(HOME)/Cplex/cplex/lib -lcplex -lilocplex -lm -lpthread"   \
+--with-cplex-incdir="$(HOME)/Cplex/cplex/include"
 \end{verbatim}
 
-You may also need the following environment variables (if they are not already set). The following are values we used in a working implementation.
+You may also need the following environment variables (if they are not already set). The following  values were used in a working implementation.
 \begin{verbatim}
-SYSTEM =i86_linux2_glibc2.3_gcc3.2
-LIBFORMAT =static_pic_mt
-CPLEXDIR =/usr/local/ilog/cplex81/include/ilcplex
-CPLEXLIBPATH= -L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
-CPLEXINCDIR = $(CPLEXDIR)/include
-CPLEX_LIBS=-lcplex -lilocplex -lm -lpthread
-ILOG_HOME=/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2
-ILOG_LICENSE_FILE=/usr/local/ilog/ilm/access.ilm
-PATH=***:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:***
-CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
+LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(HOME)/Cplex/cplex/lib
+ILOG_LICENSE_FILE="$(HOME)/Cplex/cplex/access.ilm
+%PATH=***:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:***
+%CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 \end{verbatim}
 \index{cplex@{\tt cplex}|)}
 
@@ -1321,42 +1325,45 @@ configure --with-gurobi-lib="-L$(HOME)/gurobi/lib -lgurobi55 -lpthread -lm"    \
 --with-gurobi-incdir="$(HOME)/gurobi/include"
 \end{verbatim}
 
-In addition it is necessary to set the environment variable {\tt GRB\_LICENSE\_FILE} to point to the location of the license file, e.g.,
+In addition it is necessary to set the environment variables {\tt LD\_LIBRARY\_PATH} and {\tt GRB\_LICENSE\_FILE} to point to the location of the libraries and the license file, e.g.,
 
 \begin{verbatim}
-GRB\_LICENSE\_FILE='$(HOME)/gurobi/gurobi.lic'
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(HOME)/Cplex/cplex/lib
+GRB_LICENSE_FILE='$(HOME)/gurobi/gurobi.lic'
 \end{verbatim}
 
 \noindent{\bf Remark.} If both {\tt cplex} (see Section \ref{section:Cplex}) and Gurobi are to be 
 linked to OS, file locations for both programs must be added to the {\tt configure} command, as follows:
 
 \begin{verbatim}
-configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) $(CPLEX_LIBS)"  \
+configure --with-cplex-lib="-L$(HOME)/Cplex/cplex/lib -lcplex -lilocplex -lm -lpthread""  \
 --with-gurobi-lib="-L$(HOME)/gurobi/lib -lgurobi55 -lpthread -lm"    \
---with-cplex-incdir= $(CPLEXDIR)/include  --with-gurobi-incdir="$(HOME)/gurobi/include" 
+--with-cplex-incdir= $(HOME)/Cplex/cplex/include  --with-gurobi-incdir="$(HOME)/gurobi/include" 
 \end{verbatim}
   
 \index{Gurobi|)}%
 
-\subsubdivision{Mosek and Xpress}
+\subsubdivision{Mosek}% and Xpress}
 
 \index{Mosek|(}%
-\index{Xpress|(}%
+%\index{Xpress|(}%
 
-In the same way two further commercial LP and IP solvers, Mosek (see {\tt\UrlMosek}) and
-Xpress (see {\small\tt\UrlXpress}), can be hooked to OS. The relevant information to add to the {\tt configure} command is
+In the same way another commercial LP and IP solver, Mosek (see {\tt\UrlMosek})
+% and Xpress (see {\small\tt\UrlXpress})
+, can be hooked to OS. The relevant information to add to the {\tt configure} command is
 
 \begin{verbatim}
 --with-mosek-lib="-L$(HOME)/$(MOSEK)/bin -lmosek64 -liomp5 -lpthread -lm"    \
 --with-mosek-incdir="$(HOME)/$(MOSEK)/include"                          \
---with-xpress-lib="-L$(HOME)/$(XPRESS)/lib -lgurobi55 -lpthread -lm"    \
---with-xpress-incdir="$(HOME)/$(XPRESS)/include"                          
 \end{verbatim}
+%--with-xpress-lib="-L$(HOME)/$(XPRESS)/lib -lgurobi55 -lpthread -lm"    \
+%--with-xpress-incdir="$(HOME)/$(XPRESS)/include"                          
 
-with appropriate information for the environment variables {\tt MOSEK} and {\tt XPRESS} to point
-to the corrrect file locations for the Mosek and Xpress header files and libraries.
+with appropriate information for the environment variable {\tt MOSEK} %and {\tt XPRESS} 
+to point to the correct file locations for the Mosek %and Xpress 
+header files and libraries.
 \index{Mosek|)}%
-\index{Xpress|)}%
+%\index{Xpress|)}%
 
 
 \ifknitro

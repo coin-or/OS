@@ -36,26 +36,27 @@ libOSParsers_la_SOURCES = \
 		OSoLParserData.h \
 		OSoLParserData.cpp
 
-$(srcdir)/OSParseosrl.tab.cpp : $(srcdir)/OSParseosrl.y
-	$(YACC) -ldv -p osrl -o $@ $<
-	
-$(srcdir)/OSParseosrl.cpp : $(srcdir)/OSParseosrl.l
-	$(LEX) -Posrl -o$@ $<
-
-$(srcdir)/OSParseosil.tab.cpp : $(srcdir)/OSParseosil.y
-	$(YACC) -ldv -p osil -o $@ $<
-	
-$(srcdir)/OSParseosil.cpp : $(srcdir)/OSParseosil.l
-	$(LEX) -Posil -o$@ $<
-
-$(srcdir)/OSParseosol.tab.cpp : $(srcdir)/OSParseosol.y
-	$(YACC) -ldv -p osol -o $@ $<
-	
-$(srcdir)/OSParseosol.cpp : $(srcdir)/OSParseosol.l
-	$(LEX) -Posol -o$@ $<
-
-$(srcdir)/OSParseosss.cpp : $(srcdir)/OSParseosss.l
-	$(LEX) -Posss -o$@ $<
+#take out these dependencies for the time being (should check for the presence of (f)lex/yacc/bison)
+#$(srcdir)/OSParseosrl.tab.cpp : $(srcdir)/OSParseosrl.y
+#	$(YACC) -ldv -p osrl -o $@ $<
+#	
+#$(srcdir)/OSParseosrl.cpp : $(srcdir)/OSParseosrl.l
+#	$(LEX) -Posrl -o$@ $<
+#
+#$(srcdir)/OSParseosil.tab.cpp : $(srcdir)/OSParseosil.y
+#	$(YACC) -ldv -p osil -o $@ $<
+#	
+#$(srcdir)/OSParseosil.cpp : $(srcdir)/OSParseosil.l
+#	$(LEX) -Posil -o$@ $<
+#
+#$(srcdir)/OSParseosol.tab.cpp : $(srcdir)/OSParseosol.y
+#	$(YACC) -ldv -p osol -o $@ $<
+#	
+#$(srcdir)/OSParseosol.cpp : $(srcdir)/OSParseosol.l
+#	$(LEX) -Posol -o$@ $<
+#
+#$(srcdir)/OSParseosss.cpp : $(srcdir)/OSParseosss.l
+#	$(LEX) -Posss -o$@ $<
 
 libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 
