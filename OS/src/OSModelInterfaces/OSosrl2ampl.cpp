@@ -482,6 +482,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                                 suf_rput(resultName.c_str(), ASL_Sufkind_obj, rData[iSuf]);
+//                                delete [] rData; //creates a segfault...
                             }
                             else if (resultType == "integer")
                             {
@@ -498,6 +499,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                                 suf_iput(resultName.c_str(), ASL_Sufkind_obj, iData[iSuf]);
+//                                delete [] iData; //creates a segfault...
                             }
                             else
                                 throw ErrorClass("otherObjectiveResult has unsupported type in OSosrl2ampl()");
@@ -557,6 +559,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                                 suf_rput(resultName.c_str(), ASL_Sufkind_con, rData[iSuf]);
+//                                delete [] rData; //creates a segfault...
                             }
                             else if (resultType == "integer")
                             {
@@ -573,6 +576,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                                 suf_iput(resultName.c_str(), ASL_Sufkind_con, iData[iSuf]);
+//                                delete [] iData; //creates a segfault...
                             }
                             else
                                 throw ErrorClass("otherConstraintResult has unsupported type in OSosrl2ampl()");
@@ -615,6 +619,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                         suf_iput("sstatus", ASL_Sufkind_var, iData[iSuf]);
                     }
                     iSuf++;
+//                    delete [] iData; //creates a segfault...
                 }
                 if (have_basic_con && numCons > 0)
                 {
@@ -636,6 +641,8 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif 
                         suf_iput("sstatus", ASL_Sufkind_con, iData[iSuf]);
+                        iSuf++;
+//                        delete [] iData; //creates a segfault...
                     }
                 }
             }
