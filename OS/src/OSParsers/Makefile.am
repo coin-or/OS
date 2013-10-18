@@ -36,27 +36,44 @@ libOSParsers_la_SOURCES = \
 		OSoLParserData.h \
 		OSoLParserData.cpp
 
-#take out these dependencies for the time being (should check for the presence of (f)lex/yacc/bison)
-#$(srcdir)/OSParseosrl.tab.cpp : $(srcdir)/OSParseosrl.y
-#	$(YACC) -ldv -p osrl -o $@ $<
-#	
-#$(srcdir)/OSParseosrl.cpp : $(srcdir)/OSParseosrl.l
-#	$(LEX) -Posrl -o$@ $<
-#
-#$(srcdir)/OSParseosil.tab.cpp : $(srcdir)/OSParseosil.y
-#	$(YACC) -ldv -p osil -o $@ $<
-#	
-#$(srcdir)/OSParseosil.cpp : $(srcdir)/OSParseosil.l
-#	$(LEX) -Posil -o$@ $<
-#
-#$(srcdir)/OSParseosol.tab.cpp : $(srcdir)/OSParseosol.y
-#	$(YACC) -ldv -p osol -o $@ $<
-#	
-#$(srcdir)/OSParseosol.cpp : $(srcdir)/OSParseosol.l
-#	$(LEX) -Posol -o$@ $<
-#
-#$(srcdir)/OSParseosss.cpp : $(srcdir)/OSParseosss.l
-#	$(LEX) -Posss -o$@ $<
+
+########################################################################
+#                           Extra Targets                              #
+########################################################################
+
+run_parsers: osil osol osrl osss
+
+osil: OSParseosil.cpp OSParseosil.tab.cpp
+
+OSParseosil.cpp: OSParseosil.l OSParseosil.tab.cpp
+	$(LEX) -Posil -o$@ $<
+
+OSParseosil.tab.cpp: OSParseosil.y
+	$(YACC) -ldv -p osil -o $@ $<
+
+osol: OSParseosol.cpp OSParseosol.tab.cpp
+
+OSParseosol.cpp: OSParseosol.l OSParseosol.tab.cpp
+	$(LEX) -Posol -o$@ $<
+
+OSParseosol.tab.cpp: OSParseosol.y
+	$(YACC) -ldv -p osol -o $@ $<
+
+osrl: OSParseosrl.cpp OSParseosrl.tab.cpp
+
+OSParseosrl.cpp: OSParseosrl.l OSParseosrl.tab.cpp
+	$(LEX) -Posrl -o$@ $<
+
+OSParseosrl.tab.cpp: OSParseosrl.y
+	$(YACC) -ldv -p osrl -o $@ $<
+
+osss: OSParseosrl.cpp 
+
+OSParseosss.cpp: OSParseosss.l 
+	$(LEX) -Posss -o$@ $<
+
+.PHONY: run_parsers osil osol osrl osss
+
 
 libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 
