@@ -356,10 +356,24 @@ The simplest form of invoking it is
 \noindent
 where {\tt loc} is the location that forms the basis of the new stable version, e.g., {\tt OS/trunk}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter {\tt -c} to do the commit.
 
+
+
 {\tt prepare\_new\_release} and {\tt commit\_new\_release} are the corresponding scripts to prepare and commit releases (which are based on stable versions).
 
 Once a new release has been committed, it is customary to inform users of this fact by sending email to both {\tt OS@list.coin-or.org} and {\tt coin-announce@list.coin-or.org}.
 
+If doing a maintenance release of an existing stable version (i.e., a release numbered {\tt x.y.n} with {\tt n} $>0$), the changes must be merged with the corresponding stable version {\tt x.y} first.
+To do that, check out the stable version into a local directory and merge the appropriate trunk version into it, e.g.:
+
+\begin{verbatim}
+svn merge https://projects.coin-or.org/svn/OS/stable/2.8      \
+               https://projects.coin-or.org/svn/OS/trunk@4678    .
+\end{verbatim} 
+
+Make sure to resolve any conflicts and commit the merged version.
+
+After that, {\tt prepare\_new\_release} and {\tt commit\_new\_release}, as described just previously.
+ 
 
 \subdivision{Version numbers}{\label{section:VersionNumbering}
 
