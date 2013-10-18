@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = doxydoc/doxygen.conf
 
-########################################################################
+########################################################################cd ../
 #                          Subdirectories                              #
 ########################################################################
 
@@ -36,10 +36,14 @@ tests: all
 
 unitTests: tests
 
+run_parsers:
+	cd OS/src/OSParsers; make run_parsers
+	make
+
 doxydoc:
 	cd $(srcdir); doxygen doxydoc/doxygen.conf
 
-.PHONY: test unitTest tests unitTests doxydoc
+.PHONY: test unitTest tests unitTests run_parsers doxydoc
 
 ########################################################################
 #                         Maintainer Stuff                             #
