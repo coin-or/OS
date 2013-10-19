@@ -301,7 +301,16 @@ AM_CONDITIONAL(USEMULTIPLYDEFINED, test x$mac_osx = xyes)
 #############################################################################
 
 AC_PROG_YACC
-AM_PROG_LEX
+# if bison and byacc are not found, YACC is set to yacc
+# so check also if yacc is present, if set
+if test "x$YACC" = xyacc ; then
+  AC_CHECK_PROG(YACC, yacc, yacc)
+fi
+
+AC_PROG_LEX
+# if lex and flex are not found, LEX is set to :
+
+AM_CONDITIONAL(HAVE_LEXYACC, test -n "`$LEX --version`" && test -n "$YACC")
 
 #############################################################################
 # Define the root of the OS project                                         #

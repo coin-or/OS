@@ -45,32 +45,40 @@ run_parsers: osil osol osrl osss
 
 osil: OSParseosil.cpp OSParseosil.tab.cpp
 
+if HAVE_LEXYACC
 OSParseosil.cpp: OSParseosil.l OSParseosil.tab.cpp
 	$(LEX) -Posil -o$@ $<
 
 OSParseosil.tab.cpp: OSParseosil.y
 	$(YACC) -ldv -p osil -o $@ $<
+endif
 
 osol: OSParseosol.cpp OSParseosol.tab.cpp
 
+if HAVE_LEXYACC
 OSParseosol.cpp: OSParseosol.l OSParseosol.tab.cpp
 	$(LEX) -Posol -o$@ $<
 
 OSParseosol.tab.cpp: OSParseosol.y
 	$(YACC) -ldv -p osol -o $@ $<
+endif
 
 osrl: OSParseosrl.cpp OSParseosrl.tab.cpp
 
+if HAVE_LEXYACC
 OSParseosrl.cpp: OSParseosrl.l OSParseosrl.tab.cpp
 	$(LEX) -Posrl -o$@ $<
 
 OSParseosrl.tab.cpp: OSParseosrl.y
 	$(YACC) -ldv -p osrl -o $@ $<
+endif
 
 osss: OSParseosrl.cpp 
 
+if HAVE_LEXYACC
 OSParseosss.cpp: OSParseosss.l 
 	$(LEX) -Posss -o$@ $<
+endif
 
 .PHONY: run_parsers osil osol osrl osss
 

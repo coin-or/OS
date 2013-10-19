@@ -268,6 +268,8 @@ GRB_LIBS = @GRB_LIBS@
 GRB_LIBS_INSTALLED = @GRB_LIBS_INSTALLED@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
+HAVE_LEXYACC_FALSE = @HAVE_LEXYACC_FALSE@
+HAVE_LEXYACC_TRUE = @HAVE_LEXYACC_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -779,32 +781,32 @@ run_parsers: osil osol osrl osss
 
 osil: OSParseosil.cpp OSParseosil.tab.cpp
 
-OSParseosil.cpp: OSParseosil.l OSParseosil.tab.cpp
-	$(LEX) -Posil -o$@ $<
+@HAVE_LEXYACC_TRUE@OSParseosil.cpp: OSParseosil.l OSParseosil.tab.cpp
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posil -o$@ $<
 
-OSParseosil.tab.cpp: OSParseosil.y
-	$(YACC) -ldv -p osil -o $@ $<
+@HAVE_LEXYACC_TRUE@OSParseosil.tab.cpp: OSParseosil.y
+@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osil -o $@ $<
 
 osol: OSParseosol.cpp OSParseosol.tab.cpp
 
-OSParseosol.cpp: OSParseosol.l OSParseosol.tab.cpp
-	$(LEX) -Posol -o$@ $<
+@HAVE_LEXYACC_TRUE@OSParseosol.cpp: OSParseosol.l OSParseosol.tab.cpp
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posol -o$@ $<
 
-OSParseosol.tab.cpp: OSParseosol.y
-	$(YACC) -ldv -p osol -o $@ $<
+@HAVE_LEXYACC_TRUE@OSParseosol.tab.cpp: OSParseosol.y
+@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osol -o $@ $<
 
 osrl: OSParseosrl.cpp OSParseosrl.tab.cpp
 
-OSParseosrl.cpp: OSParseosrl.l OSParseosrl.tab.cpp
-	$(LEX) -Posrl -o$@ $<
+@HAVE_LEXYACC_TRUE@OSParseosrl.cpp: OSParseosrl.l OSParseosrl.tab.cpp
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posrl -o$@ $<
 
-OSParseosrl.tab.cpp: OSParseosrl.y
-	$(YACC) -ldv -p osrl -o $@ $<
+@HAVE_LEXYACC_TRUE@OSParseosrl.tab.cpp: OSParseosrl.y
+@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osrl -o $@ $<
 
 osss: OSParseosrl.cpp 
 
-OSParseosss.cpp: OSParseosss.l 
-	$(LEX) -Posss -o$@ $<
+@HAVE_LEXYACC_TRUE@OSParseosss.cpp: OSParseosss.l 
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posss -o$@ $<
 
 .PHONY: run_parsers osil osol osrl osss
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
