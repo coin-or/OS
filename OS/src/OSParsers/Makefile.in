@@ -776,37 +776,52 @@ uninstall-am: uninstall-includecoinHEADERS uninstall-info-am
 ########################################################################
 #                           Extra Targets                              #
 ########################################################################
-
 run_parsers: osil osol osrl osss
 
-osil: OSParseosil.cpp OSParseosil.tab.cpp
+osil: ${abs_source_dir}/src/OSParsers/OSParseosil.cpp \
+      ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp
 
-@HAVE_LEXYACC_TRUE@OSParseosil.cpp: OSParseosil.l OSParseosil.tab.cpp
-@HAVE_LEXYACC_TRUE@	$(LEX) -Posil -o$@ $<
+@HAVE_LEXYACC_TRUE@${abs_source_dir}/src/OSParsers/OSParseosil.cpp: \
+@HAVE_LEXYACC_TRUE@                 ${abs_source_dir}/src/OSParsers/OSParseosil.l \
+@HAVE_LEXYACC_TRUE@                 ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posil -o${abs_source_dir}/src/OSParsers/OSParseosil.cpp \
+@HAVE_LEXYACC_TRUE@                        ${abs_source_dir}/src/OSParsers/OSParseosil.l
 
-@HAVE_LEXYACC_TRUE@OSParseosil.tab.cpp: OSParseosil.y
-@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osil -o $@ $<
+@HAVE_LEXYACC_TRUE@${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp: ${abs_source_dir}/src/OSParsers/OSParseosil.y
+@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osil -o ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp \
+@HAVE_LEXYACC_TRUE@                                ${abs_source_dir}/src/OSParsers/OSParseosil.y
 
-osol: OSParseosol.cpp OSParseosol.tab.cpp
+osol: ${abs_source_dir}/src/OSParsers/OSParseosol.cpp \
+      ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp
 
-@HAVE_LEXYACC_TRUE@OSParseosol.cpp: OSParseosol.l OSParseosol.tab.cpp
-@HAVE_LEXYACC_TRUE@	$(LEX) -Posol -o$@ $<
+@HAVE_LEXYACC_TRUE@${abs_source_dir}/src/OSParsers/OSParseosol.cpp: \
+@HAVE_LEXYACC_TRUE@                 ${abs_source_dir}/src/OSParsers/OSParseosol.l \
+@HAVE_LEXYACC_TRUE@                 ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posol -o${abs_source_dir}/src/OSParsers/OSParseosol.cpp \
+@HAVE_LEXYACC_TRUE@                        ${abs_source_dir}/src/OSParsers/OSParseosol.l
 
-@HAVE_LEXYACC_TRUE@OSParseosol.tab.cpp: OSParseosol.y
-@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osol -o $@ $<
+@HAVE_LEXYACC_TRUE@${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp: ${abs_source_dir}/src/OSParsers/OSParseosol.y
+@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osol -o ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp \
+@HAVE_LEXYACC_TRUE@                                ${abs_source_dir}/src/OSParsers/OSParseosol.y
 
-osrl: OSParseosrl.cpp OSParseosrl.tab.cpp
+osrl: ${abs_source_dir}/src/OSParsers/OSParseosrl.cpp \
+      ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp
 
-@HAVE_LEXYACC_TRUE@OSParseosrl.cpp: OSParseosrl.l OSParseosrl.tab.cpp
-@HAVE_LEXYACC_TRUE@	$(LEX) -Posrl -o$@ $<
+@HAVE_LEXYACC_TRUE@${abs_source_dir}/src/OSParsers/OSParseosrl.cpp: \
+@HAVE_LEXYACC_TRUE@                 ${abs_source_dir}/src/OSParsers/OSParseosrl.l \
+@HAVE_LEXYACC_TRUE@                 ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posil -o${abs_source_dir}/src/OSParsers/OSParseosrl.cpp \
+@HAVE_LEXYACC_TRUE@                        ${abs_source_dir}/src/OSParsers/OSParseosrl.l
 
-@HAVE_LEXYACC_TRUE@OSParseosrl.tab.cpp: OSParseosrl.y
-@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osrl -o $@ $<
+@HAVE_LEXYACC_TRUE@${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp: ${abs_source_dir}/src/OSParsers/OSParseosrl.y
+@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp \
+@HAVE_LEXYACC_TRUE@                                ${abs_source_dir}/src/OSParsers/OSParseosrl.y
 
-osss: OSParseosrl.cpp 
+osss: ${abs_source_dir}/src/OSParsers/OSParseosss.cpp 
 
-@HAVE_LEXYACC_TRUE@OSParseosss.cpp: OSParseosss.l 
-@HAVE_LEXYACC_TRUE@	$(LEX) -Posss -o$@ $<
+@HAVE_LEXYACC_TRUE@${abs_source_dir}/src/OSParsers/OSParseosss.cpp: ${abs_source_dir}/src/OSParsers/OSParseosss.l 
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posss -o${abs_source_dir}/src/OSParsers/OSParseosss.cpp \
+@HAVE_LEXYACC_TRUE@                        ${abs_source_dir}/src/OSParsers/OSParseosss.l
 
 .PHONY: run_parsers osil osol osrl osss
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

@@ -40,44 +40,59 @@ libOSParsers_la_SOURCES = \
 ########################################################################
 #                           Extra Targets                              #
 ########################################################################
-
 run_parsers: osil osol osrl osss
 
-osil: OSParseosil.cpp OSParseosil.tab.cpp
+osil: ${abs_source_dir}/src/OSParsers/OSParseosil.cpp \
+      ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp
 
 if HAVE_LEXYACC
-OSParseosil.cpp: OSParseosil.l OSParseosil.tab.cpp
-	$(LEX) -Posil -o$@ $<
+${abs_source_dir}/src/OSParsers/OSParseosil.cpp: \
+                 ${abs_source_dir}/src/OSParsers/OSParseosil.l \
+                 ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp
+	$(LEX) -Posil -o${abs_source_dir}/src/OSParsers/OSParseosil.cpp \
+                        ${abs_source_dir}/src/OSParsers/OSParseosil.l
 
-OSParseosil.tab.cpp: OSParseosil.y
-	$(YACC) -ldv -p osil -o $@ $<
+${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp: ${abs_source_dir}/src/OSParsers/OSParseosil.y
+	$(YACC) -ldv -p osil -o ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp \
+                                ${abs_source_dir}/src/OSParsers/OSParseosil.y
 endif
 
-osol: OSParseosol.cpp OSParseosol.tab.cpp
+osol: ${abs_source_dir}/src/OSParsers/OSParseosol.cpp \
+      ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp
 
 if HAVE_LEXYACC
-OSParseosol.cpp: OSParseosol.l OSParseosol.tab.cpp
-	$(LEX) -Posol -o$@ $<
+${abs_source_dir}/src/OSParsers/OSParseosol.cpp: \
+                 ${abs_source_dir}/src/OSParsers/OSParseosol.l \
+                 ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp
+	$(LEX) -Posol -o${abs_source_dir}/src/OSParsers/OSParseosol.cpp \
+                        ${abs_source_dir}/src/OSParsers/OSParseosol.l
 
-OSParseosol.tab.cpp: OSParseosol.y
-	$(YACC) -ldv -p osol -o $@ $<
+${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp: ${abs_source_dir}/src/OSParsers/OSParseosol.y
+	$(YACC) -ldv -p osol -o ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp \
+                                ${abs_source_dir}/src/OSParsers/OSParseosol.y
 endif
 
-osrl: OSParseosrl.cpp OSParseosrl.tab.cpp
+osrl: ${abs_source_dir}/src/OSParsers/OSParseosrl.cpp \
+      ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp
 
 if HAVE_LEXYACC
-OSParseosrl.cpp: OSParseosrl.l OSParseosrl.tab.cpp
-	$(LEX) -Posrl -o$@ $<
+${abs_source_dir}/src/OSParsers/OSParseosrl.cpp: \
+                 ${abs_source_dir}/src/OSParsers/OSParseosrl.l \
+                 ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp
+	$(LEX) -Posil -o${abs_source_dir}/src/OSParsers/OSParseosrl.cpp \
+                        ${abs_source_dir}/src/OSParsers/OSParseosrl.l
 
-OSParseosrl.tab.cpp: OSParseosrl.y
-	$(YACC) -ldv -p osrl -o $@ $<
+${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp: ${abs_source_dir}/src/OSParsers/OSParseosrl.y
+	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp \
+                                ${abs_source_dir}/src/OSParsers/OSParseosrl.y
 endif
 
-osss: OSParseosrl.cpp 
+osss: ${abs_source_dir}/src/OSParsers/OSParseosss.cpp 
 
 if HAVE_LEXYACC
-OSParseosss.cpp: OSParseosss.l 
-	$(LEX) -Posss -o$@ $<
+${abs_source_dir}/src/OSParsers/OSParseosss.cpp: ${abs_source_dir}/src/OSParsers/OSParseosss.l 
+	$(LEX) -Posss -o${abs_source_dir}/src/OSParsers/OSParseosss.cpp \
+                        ${abs_source_dir}/src/OSParsers/OSParseosss.l
 endif
 
 .PHONY: run_parsers osil osol osrl osss
