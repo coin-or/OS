@@ -227,6 +227,7 @@ OS/data/mpsFiles/IP_noconstraint.mps -text
 OS/data/mpsFiles/IP_unbounded.mps -text
 OS/data/mpsFiles/LP_noconstraint.mps -text
 OS/data/mpsFiles/parinc.mps -text
+OS/data/mpsFiles/parincQuadratic.mps -text
 OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
 OS/data/osilFiles/HS071_NLPMod.osil -text
@@ -611,6 +612,8 @@ OS/src/OSCommonInterfaces/OSrLWriter.h -text
 OS/src/OSConfig.h -text
 OS/src/OSModelInterfaces/Makefile.am -text
 OS/src/OSModelInterfaces/Makefile.in -text
+OS/src/OSModelInterfaces/OSmps2OS.cpp -text
+OS/src/OSModelInterfaces/OSmps2OS.h -text
 OS/src/OSModelInterfaces/OSmps2osil.cpp -text
 OS/src/OSModelInterfaces/OSmps2osil.h -text
 OS/src/OSModelInterfaces/OSnl2OS.cpp -text

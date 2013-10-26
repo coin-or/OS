@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -84,7 +84,7 @@
 #include "OSSolverAgent.h"
 #include "OShL.h"
 #include "OSErrorClass.h"
-#include "OSmps2osil.h"
+#include "OSmps2OS.h"
 #include "OSBase64.h"
 #include "OSRunSolver.h"
 
@@ -159,9 +159,9 @@ void retrieve(OSCommandLine *oscommandline);
 void    knock(OSCommandLine *oscommandline);
 
 // additional methods
-void getOSiLFromNl(  OSCommandLine *oscommandline);
-void getOSiLFromMps( OSCommandLine *oscommandline);
-void getOSiLFromGams(OSCommandLine *oscommandline);
+void getOSFromNl(  OSCommandLine *oscommandline);
+void getOSFromMps( OSCommandLine *oscommandline);
+void getOSFromGams(OSCommandLine *oscommandline);
 void doPrintModel(OSCommandLine *oscommandline);
 void doPrintModel(OSInstance *osinstance);
 void doPrintRow(OSCommandLine *oscommandline);
@@ -675,7 +675,7 @@ void solve(OSCommandLine *oscommandline)
 {
     std::string osrl = "";
     OSiLReader *osilreader = NULL;
-    OSmps2osil *mps2osil = NULL;
+    OSmps2OS *mps2osil = NULL;
 #ifdef COIN_HAS_ASL
     OSnl2OS *nl2os = NULL;
 #endif
@@ -696,20 +696,20 @@ void solve(OSCommandLine *oscommandline)
                 //we better have an nl file present or mps file or osol file
                 if (oscommandline->nlFile != "")
                 {
-                    getOSiLFromNl(oscommandline);
+                    getOSFromNl(oscommandline);
                 }
                 else
                 {
                     if (oscommandline->mpsFile != "")
                     {
-                        getOSiLFromMps(oscommandline);
+                        getOSFromMps(oscommandline);
                     }
                     else
                     {
                         if (oscommandline->gamsControlFile != "")
                         {
 
-                            getOSiLFromGams(oscommandline);
+                            getOSFromGams(oscommandline);
                         }
                         else    // send an empty osil string
                         {
@@ -802,8 +802,8 @@ void solve(OSCommandLine *oscommandline)
                 {
                     if (oscommandline->mpsFile != "")
                     {
-                        mps2osil = new OSmps2osil(oscommandline->mpsFile);
-                        mps2osil->createOSInstance();
+                        mps2osil = new OSmps2OS(oscommandline->mpsFile);
+                        mps2osil->createOSObjects();
                         osinstance = mps2osil->osinstance;
                     }
                     else
@@ -1129,13 +1129,13 @@ void send(OSCommandLine *oscommandline)
             //we better have an nl file present or mps file
             if (oscommandline->nlFile != "")
             {
-                getOSiLFromNl(oscommandline);
+                getOSFromNl(oscommandline);
             }
             else
             {
                 if (oscommandline->mpsFile != "")
                 {
-                    getOSiLFromMps(oscommandline);
+                    getOSFromMps(oscommandline);
                 }
                 else    // send an empty osil string
                 {
@@ -1471,17 +1471,18 @@ void kill(OSCommandLine *oscommandline)
  *  .nl (from AMPL), GAMS, MPS format
  */
 
-void getOSiLFromNl(OSCommandLine *oscommandline)
+void getOSFromNl(OSCommandLine *oscommandline)
 {
     try
     {
 #ifdef COIN_HAS_ASL
         OSnl2OS *nl2os = NULL;
-        nl2os = new OSnl2OS();
+        OSiLWriter *osilwriter = NULL;
+
+		nl2os = new OSnl2OS();
         nl2os->readNl(oscommandline->nlFile);
         nl2os->setOsol(oscommandline->osol);
         nl2os->createOSObjects();
-        OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
         std::string osil;
         osil = osilwriter->writeOSiL( nl2os->osinstance);
@@ -1500,10 +1501,10 @@ void getOSiLFromNl(OSCommandLine *oscommandline)
         osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
         throw ErrorClass(eclass.errormsg);
     }
-}//getOSiLFromNl
+}//getOSFromNl
 
 
-void getOSiLFromGams(OSCommandLine *oscommandline)
+void getOSFromGams(OSCommandLine *oscommandline)
 {
     try
     {
@@ -1530,17 +1531,17 @@ void getOSiLFromGams(OSCommandLine *oscommandline)
         osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
         throw ErrorClass(eclass.errormsg);
     }
-}//getOSiLFromGams
+}//getOSFromGams
 
 
-void getOSiLFromMps(OSCommandLine *oscommandline)
+void getOSFromMps(OSCommandLine *oscommandline)
 {
+    OSmps2OS *mps2osil = NULL;
+    OSiLWriter *osilwriter = NULL;
     try
     {
-        OSmps2osil *mps2osil = NULL;
-        mps2osil = new OSmps2osil(oscommandline->mpsFile);
-        mps2osil->createOSInstance();
-        OSiLWriter *osilwriter = NULL;
+        mps2osil = new OSmps2OS(oscommandline->mpsFile);
+        mps2osil->createOSObjects();
         osilwriter = new OSiLWriter();
         std::string osil;
         osil = osilwriter->writeOSiL(mps2osil->osinstance);
@@ -1554,9 +1555,13 @@ void getOSiLFromMps(OSCommandLine *oscommandline)
     {
         osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
         throw ErrorClass(eclass.errormsg);
+        if (mps2osil != NULL) delete mps2osil;
+        mps2osil = NULL;
+        if (osilwriter != NULL) delete osilwriter;
+        osilwriter = NULL;
     }
 
-}//getOSiLFromMps
+}//getOSFromMps
 
 
 /** ======================== Interactive shell ========================= **/
@@ -2523,9 +2528,9 @@ void doPrintModel(OSCommandLine *oscommandline)
 		}
 		else if (oscommandline->mps != "")
 		{
-			OSmps2osil *mps2osil;
-			mps2osil = new OSmps2osil(oscommandline->mpsFile);
-			mps2osil->createOSInstance();
+			OSmps2OS *mps2osil;
+			mps2osil = new OSmps2OS(oscommandline->mpsFile);
+			mps2osil->createOSObjects();
 			std::cout << mps2osil->osinstance->printModel() << std::endl;
 			delete mps2osil;
 			mps2osil = NULL;
@@ -2596,9 +2601,9 @@ void doPrintRow(OSCommandLine *oscommandline)
 			}
 			else if (oscommandline->mps != "")
 			{
-				OSmps2osil *mps2osil;
-				mps2osil = new OSmps2osil(oscommandline->mpsFile);
-				mps2osil->createOSInstance();
+				OSmps2OS *mps2osil;
+				mps2osil = new OSmps2OS(oscommandline->mpsFile);
+				mps2osil->createOSObjects();
 				std::cout << mps2osil->osinstance->printModel(rownumber) << std::endl;
 				delete mps2osil;
 				mps2osil = NULL;

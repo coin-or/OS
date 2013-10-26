@@ -22,8 +22,8 @@ libOSModelInterfaces_la_DEPENDENCIES =
 
 # List all source files for this library, including headers
 libOSModelInterfaces_la_SOURCES = \
-	OSmps2osil.cpp \
-	OSmps2osil.h 
+	OSmps2OS.cpp \
+	OSmps2OS.h 
 
 if COIN_HAS_ASL
 libOSModelInterfaces_la_SOURCES += \
@@ -70,6 +70,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	OSmps2osil.h \
+	OSmps2OS.h \
 	OSnl2OS.h \
 	OSosrl2ampl.h
+

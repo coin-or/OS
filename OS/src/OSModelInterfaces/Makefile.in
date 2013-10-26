@@ -62,10 +62,10 @@ CONFIG_HEADER = $(top_builddir)/src/config.h \
 	$(top_builddir)/src/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-am__libOSModelInterfaces_la_SOURCES_DIST = OSmps2osil.cpp OSmps2osil.h \
+am__libOSModelInterfaces_la_SOURCES_DIST = OSmps2OS.cpp OSmps2OS.h \
 	OSnl2OS.cpp OSnl2OS.h OSosrl2ampl.cpp OSosrl2ampl.h
 @COIN_HAS_ASL_TRUE@am__objects_1 = OSnl2OS.lo OSosrl2ampl.lo
-am_libOSModelInterfaces_la_OBJECTS = OSmps2osil.lo $(am__objects_1)
+am_libOSModelInterfaces_la_OBJECTS = OSmps2OS.lo $(am__objects_1)
 libOSModelInterfaces_la_OBJECTS =  \
 	$(am_libOSModelInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -446,7 +446,7 @@ libOSModelInterfaces_la_LIBADD =
 libOSModelInterfaces_la_DEPENDENCIES = 
 
 # List all source files for this library, including headers
-libOSModelInterfaces_la_SOURCES = OSmps2osil.cpp OSmps2osil.h \
+libOSModelInterfaces_la_SOURCES = OSmps2OS.cpp OSmps2OS.h \
 	$(am__append_1)
 
 # should be another if
@@ -487,7 +487,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	OSmps2osil.h \
+	OSmps2OS.h \
 	OSnl2OS.h \
 	OSosrl2ampl.h
 
@@ -542,7 +542,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSmps2osil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSmps2OS.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSnl2OS.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSosrl2ampl.Plo@am__quote@
 

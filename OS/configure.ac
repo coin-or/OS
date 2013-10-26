@@ -127,7 +127,7 @@ if test $coin_has_couenne = yes ; then
 fi
 
 # SYMPHONY is available or not, so we define an additional symbol.
-if test $coin_has_couenne = yes ; then
+if test $coin_has_symphony = yes ; then
   AC_DEFINE(OS_HAS_SYMPHONY, [1], [Define to 1 if OS uses SYMPHONY])
 fi
 
@@ -535,6 +535,7 @@ AC_COIN_VPATH_LINK(data/gamsFiles/LP_unbounded.gms)
 ## mps test files
 ##
 AC_COIN_VPATH_LINK(data/mpsFiles/parinc.mps)
+AC_COIN_VPATH_LINK(data/mpsFiles/parincQuadratic.mps)
 AC_COIN_VPATH_LINK(data/mpsFiles/IP_unbounded.mps)
 ##
 ## MATLAB test files

@@ -108,11 +108,12 @@
  * 
  * Additional tests (if OTHER_TESTS == TRUE)
  *
- *   We test the mps to osil converter program
- *   OSmps2osil on parincLinear.mps and solve with Cbc.
+ *   We test the mps to osil converter class OSmps2OS
+ *       on parinc.mps and solve with Cbc.
+ *       on parincQuadratic.mps and solve with Ipopt.
  * 
  *   We test the AMPL nl file format to osil converter
- *   program OSnl2osil on parinc.nl and solve with Cbc.
+ *   class OSnl2OS on parinc.nl and solve with Cbc.
  * 
  *   We test the base 64 format on problem parinc.  
  *   We first read the parinc.mps file into an
@@ -140,7 +141,7 @@
 #endif
 //#include "CoinUtilsConfig.h"
 #include "OSCoinSolver.h"
-#include "OSmps2osil.h" 
+#include "OSmps2OS.h" 
 #include "OSResult.h" 
 #include "OSOption.h"
 #include "OSiLReader.h"        
@@ -368,7 +369,7 @@ int main(int argC, char* argV[])
 #ifdef COIN_HAS_ASL
     OSnl2OS *nl2osil = NULL;
 #endif 
-    OSmps2osil *mps2osil = NULL;
+    OSmps2OS *mps2osil = NULL;
     DefaultSolver *solver  = NULL;
     OSiLReader *osilreader = NULL;
     OSiLWriter *osilwriter = NULL;
@@ -477,10 +478,10 @@ if(BASIC_TESTS == true){
 
         //mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
         mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
-        mps2osil = new OSmps2osil( mpsFileName);
+        mps2osil = new OSmps2OS( mpsFileName);
 
-        // create the first in-memory OSInstance
-        mps2osil->createOSInstance() ;
+        // create the first in-memory OSInstance (OSOption will be empty)
+        mps2osil->createOSObjects() ;
         // write the instance to a string
         OSInstance *osinstance1 = mps2osil->osinstance;
         std::string sOSiL = osilwriter->writeOSiL( osinstance1  );
@@ -9151,7 +9152,7 @@ if (OTHER_TESTS){
         cout << endl << "TEST " << ++nOfTest << ": Cbc solver using MPS file" << endl << endl;
 
         mpsFileName = dataDir +  "mpsFiles" + dirsep + "parinc.mps";
-        mps2osil = new OSmps2osil( mpsFileName);
+        mps2osil = new OSmps2OS( mpsFileName);
         solver = new CoinSolver();
 
         ok = true;
@@ -9159,7 +9160,7 @@ if (OTHER_TESTS){
 //        cout << "Start testing MPS file conversion" << endl << endl;
         cout << "create a COIN Solver for MPS - OSInstance solution" << endl;
         solver->sSolverName = "cbc";
-        mps2osil->createOSInstance() ;
+        mps2osil->createOSObjects() ;
         solver->osinstance = mps2osil->osinstance;
         osol = "<osol></osol>";
         solver->osol = osol;
@@ -9203,6 +9204,63 @@ if (OTHER_TESTS){
         mps2osil = NULL;
     }
     
+    try{
+        // solve another problem
+        // a problem that is a pure quadratic
+        cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on parincQuadratic.mps" << endl << endl;
+
+        mpsFileName = dataDir +  "mpsFiles" + dirsep + "parincQuadratic.mps";
+        mps2osil = new OSmps2OS( mpsFileName);
+        solver  = new IpoptSolver();
+
+        ok = true;
+//        cout << endl;
+//        cout << "Start testing MPS file conversion" << endl << endl;
+        cout << "create an IPOPT Solver for MPS - OSInstance solution" << endl;
+        solver->sSolverName = "ipopt";
+        mps2osil->createOSObjects() ;
+
+        solver->osinstance = mps2osil->osinstance;
+        osol = "<osol></osol>";
+        solver->osol = osol;
+        cout << "call the IPOPT Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+
+        check = -49920.5;
+        //ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
+#endif
+            cout << "IPOPT solver solution for parincQuadratic checks." << endl;
+        }
+        else
+        {
+            cout << "IPOPT solver solution for parincQuadratic in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+
+        if (ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincQuadratic.mps");
+        delete solver;
+        solver = NULL;
+        delete mps2osil; 
+        mps2osil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.mps with Ipopt" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass){
+        unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl; 
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (mps2osil != NULL)
+            delete mps2osil; 
+        mps2osil = NULL;
+    }
+
     
 // test reading a GAMS file
 
@@ -9932,7 +9990,7 @@ if (OTHER_TESTS){
         cout << endl << "TEST " << ++nOfTest << ": b64 operations" << endl << endl;
 
         mpsFileName = dataDir +  "mpsFiles" + dirsep + "parinc.mps";
-        mps2osil = new OSmps2osil( mpsFileName);
+        mps2osil = new OSmps2OS( mpsFileName);
         solver = new CoinSolver();
 
         ok = true;
@@ -9942,7 +10000,7 @@ if (OTHER_TESTS){
         solver->osinstance = NULL;
         osol = "<osol></osol>";
         solver->osol = osol;
-        mps2osil->createOSInstance();
+        mps2osil->createOSObjects();
         solver->osil = osilwriter.writeOSiL( mps2osil->osinstance);
         //std::cout << solver->osil << std::endl;
         solver->buildSolverInstance();
@@ -10273,5 +10331,4 @@ void tempPrintArrays(OSResult* os)
         return;
     }
 }
-
 

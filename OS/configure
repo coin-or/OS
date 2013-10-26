@@ -31469,7 +31469,7 @@ _ACEOF
 fi
 
 # SYMPHONY is available or not, so we define an additional symbol.
-if test $coin_has_couenne = yes ; then
+if test $coin_has_symphony = yes ; then
 
 cat >>confdefs.h <<\_ACEOF
 #define OS_HAS_SYMPHONY 1
@@ -39516,6 +39516,16 @@ fi
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
   cvl_tmp="data/mpsFiles/parinc.mps"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/mpsFiles/parincQuadratic.mps"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
