@@ -3,7 +3,7 @@
  * 
  * \brief This file runs the OS unit test.
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -508,8 +508,11 @@ if(BASIC_TESTS == true){
         std::cout << "MAXIMUM DIFF = " << theMax << std::endl;
         if(theMax > 0) 
         {
+            ostringstream temp;
             std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
             unitTestResult << "WARNING:  you do not have lossless IO" << std::endl;
+            temp << "Large discrepancy at position " << theIndex << ": " << theMax << std::endl;
+            throw ErrorClass(temp.str());
         }
         else 
         {

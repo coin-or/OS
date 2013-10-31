@@ -14,8 +14,8 @@
  * <ul>
  * <li>
  * <b>-osil</b> xxx.osil (file name on local machine of optimization instance,
- *       this is NULL by default; however, if this remains NULL a problem
- * 		 instance must be specified in the osol file)
+ *       this is NULL by default; however, if it remains NULL, a problem
+ *          instance must be specified in the osol file)
  * </li>
  * <li>
  * <b>-osol</b> xxx.osol (file name on local machine of solver options,
@@ -57,7 +57,7 @@
  * </li>
  * <li>
  * <b>-config</b> pathToConfigFile is the path to a configure file with the problem
- * 	     parameters
+ *          parameters
  * </li>
  * <li>
  * <b>-insList</b> xxx.dat (used only for LINDO, file location on local
@@ -149,21 +149,23 @@ std::string get_help();
 std::string get_version();
 std::string get_options();
 void list_options(OSCommandLine *oscommandline);
+void merge_CL_options(OSCommandLine *oscommandline);
 
 // the serviceMethods
 void    solve(OSCommandLine *oscommandline);
 void getJobID(OSCommandLine *oscommandline);
 void     send(OSCommandLine *oscommandline);
-void     kill(OSCommandLine *oscommandline);
-void retrieve(OSCommandLine *oscommandline);
 void    knock(OSCommandLine *oscommandline);
+void retrieve(OSCommandLine *oscommandline);
+void     kill(OSCommandLine *oscommandline);
 
 // additional methods
+void getOS(OSCommandLine *oscommandline);
 void getOSFromNl(  OSCommandLine *oscommandline);
 void getOSFromMps( OSCommandLine *oscommandline);
 void getOSFromGams(OSCommandLine *oscommandline);
-void doPrintModel(OSCommandLine *oscommandline);
-void doPrintModel(OSInstance *osinstance);
+void doPrintModel( OSCommandLine *oscommandline);
+void doPrintModel( OSInstance *osinstance);
 void doPrintRow(OSCommandLine *oscommandline);
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 
@@ -198,14 +200,14 @@ int main(int argC, const char* argV[])
     // initialize the command line structure 
 
 //    osoptions = new osOptionsStruc();
-	OSCommandLine *oscommandline = new OSCommandLine();
+    OSCommandLine *oscommandline = new OSCommandLine();
     bool scannerActive = false;
-		
+        
     try
     {
-	// put the command line arguments into a string for parsing		
+    // put the command line arguments into a string for parsing        
         bool addQuotes;
-		osss << space; // needed to avoid segfault in case command line is empty
+        osss << space; // needed to avoid segfault in case command line is empty
 
         for (i = 1; i < argC; i++)
         {
@@ -627,7 +629,7 @@ int main(int argC, const char* argV[])
     // now call the correct serviceMethod
     // solve is the default
     if (oscommandline->serviceMethod == "") oscommandline->serviceMethod = "solve";
-	if (oscommandline->serviceMethod[0] == 's')
+    if (oscommandline->serviceMethod[0] == 's')
     {
         if (oscommandline->printModel == true)
             doPrintModel(oscommandline);
@@ -692,6 +694,8 @@ void solve(OSCommandLine *oscommandline)
         {
             // call a method here to get OSiL if we have an nl or mps file
             if (oscommandline->osil == "")
+               getOS(oscommandline);
+/*
             {
                 //we better have an nl file present or mps file or osol file
                 if (oscommandline->nlFile != "")
@@ -708,7 +712,6 @@ void solve(OSCommandLine *oscommandline)
                     {
                         if (oscommandline->gamsControlFile != "")
                         {
-
                             getOSFromGams(oscommandline);
                         }
                         else    // send an empty osil string
@@ -718,24 +721,31 @@ void solve(OSCommandLine *oscommandline)
                     }
                 }
             }
+*/
 
-	        if (oscommandline->printModel)
-		        doPrintModel(oscommandline);
-	        else if (oscommandline->printRowNumberAsString != "")
+            if (oscommandline->printModel)
+                doPrintModel(oscommandline);
+            else if (oscommandline->printRowNumberAsString != "")
                 doPrintRow(oscommandline);
 
             // place a remote call
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
+            if (oscommandline->solverName != "")
+                merge_CL_options(oscommandline);
+
             if (oscommandline->osol == "")  // we have no osol string; create a dummy
             {
                 std::ostringstream outStr;
-                outStr
-                        << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
+                outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" ";
+                outStr << "xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" ";
+                outStr << "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+                outStr << "xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
                 outStr << OS_SCHEMA_VERSION;
                 outStr << "/OSoL.xsd\"></osol>";
                 oscommandline->osol = outStr.str();
             }
+
             osrl = osagent->solve(oscommandline->osil, oscommandline->osol);
             if (oscommandline->osrlFile != "")
             {
@@ -828,10 +838,10 @@ void solve(OSCommandLine *oscommandline)
                     }
                 }
             }
-    	    if (oscommandline->printModel)
+            if (oscommandline->printModel)
                 doPrintModel(osinstance);
-    	    else if (oscommandline->printRowNumberAsString != "")
-    	        doPrintRow(osinstance, oscommandline->printRowNumberAsString);
+            else if (oscommandline->printRowNumberAsString != "")
+                doPrintRow(osinstance, oscommandline->printRowNumberAsString);
                 
             osrl = runSolver(oscommandline->solverName, oscommandline->osol, osinstance);            
 
@@ -978,7 +988,6 @@ void getJobID(OSCommandLine *oscommandline)
             osrl = eclass.errormsg;
         }
 
-
         //catch garbage collection
         if(osresult != NULL)
         {
@@ -1029,7 +1038,9 @@ void knock(OSCommandLine *oscommandline)
             }
 
             // if a jobID was given on the command line, use it
-            if(oscommandline->jobID != "") 
+            if(oscommandline->jobID != "")
+                merge_CL_options(oscommandline);
+/*
             {
                 OSOption *osOption = NULL;
                 if (oscommandline->osol == "")
@@ -1060,7 +1071,7 @@ void knock(OSCommandLine *oscommandline)
                 delete osolWriter;
                 osolWriter = NULL;
             }
-
+*/
             osplOutput = osagent->knock(oscommandline->osplInput, oscommandline->osol);
             if (oscommandline->osplOutputFile != "")
                 fileUtil->writeFileFromString(oscommandline->osplOutputFile,
@@ -1125,6 +1136,8 @@ void send(OSCommandLine *oscommandline)
     {
         // call a method here to get OSiL if we have an nl or mps file
         if (oscommandline->osil == "")
+            getOS(oscommandline);
+/*
         {
             //we better have an nl file present or mps file
             if (oscommandline->nlFile != "")
@@ -1143,12 +1156,15 @@ void send(OSCommandLine *oscommandline)
                 }
             }
         }
+*/
         if (oscommandline->serviceLocation != "")
         {
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
             // if a jobID was given on the command line, use it
-            if(oscommandline->jobID != "") 
+            if(oscommandline->jobID != "" || oscommandline->solverName != "") 
+                merge_CL_options(oscommandline);
+/*
             {
                 OSOption *osOption = NULL;
                 if (oscommandline->osol == "")
@@ -1179,7 +1195,7 @@ void send(OSCommandLine *oscommandline)
                 delete osolWriter;
                 osolWriter = NULL;
             }
-
+*/
             bSend = osagent->send(oscommandline->osil, oscommandline->osol);
             if(bSend == true)
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, "Successful send");
@@ -1255,7 +1271,9 @@ void retrieve(OSCommandLine *oscommandline)
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
             // if a jobID was given on the command line, use it
-            if(oscommandline->jobID != "") 
+            if(oscommandline->jobID != "")
+                merge_CL_options(oscommandline);
+/*
             {
                 OSOption *osOption = NULL;
                 if (oscommandline->osol == "")
@@ -1286,7 +1304,7 @@ void retrieve(OSCommandLine *oscommandline)
                 delete osolWriter;
                 osolWriter = NULL;
             }
-
+*/
             osrl = osagent->retrieve(oscommandline->osol);
 
             if (oscommandline->osrlFile != "")
@@ -1373,7 +1391,9 @@ void kill(OSCommandLine *oscommandline)
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
 
             // if a jobID was given on the command line, use it
-            if(oscommandline->jobID != "") 
+            if(oscommandline->jobID != "")
+                merge_CL_options(oscommandline);
+/*
             {
                 OSOption *osOption = NULL;
                 if (oscommandline->osol == "")
@@ -1404,7 +1424,7 @@ void kill(OSCommandLine *oscommandline)
                 delete osolWriter;
                 osolWriter = NULL;
             }
-
+*/
             osplOutput = osagent->kill(oscommandline->osol);
 
             if (oscommandline->osplOutputFile != "")
@@ -1467,9 +1487,108 @@ void kill(OSCommandLine *oscommandline)
     }
 }//end kill
 
+/** This routine merges command line options destined for the remote system
+ *  with any options already found in an osol file. In case of conflicting info,
+ *  the command line takes precedent
+ */
+void merge_CL_options(OSCommandLine *oscommandline)
+{
+    try
+    {
+        OSOption *osOption = NULL;
+        if (oscommandline->osol == "")
+        {
+            osOption = new OSOption();
+        }
+        else
+        {
+            OSoLReader *osolReader = new OSoLReader();
+            try
+            {
+                osOption = osolReader->readOSoL(oscommandline->osol);
+                delete osolReader;
+                osolReader = NULL;
+            }
+            catch (const ErrorClass& eclass)
+            {
+                if (osolReader != NULL) delete osolReader;
+                osolReader = NULL;
+                throw ErrorClass(eclass.errormsg);
+            }
+        }
+        osOption->setJobID( oscommandline->jobID);
+        osOption->setSolverToInvoke( oscommandline->solverName);
+        OSoLWriter *osolWriter = new OSoLWriter();
+        oscommandline->osol = osolWriter->writeOSoL( osOption);
+        delete osOption;
+        osOption = NULL;
+        delete osolWriter;
+        osolWriter = NULL;
+    }
+
+    catch (const ErrorClass& eclass)
+    {
+        std::string osrl = "";
+        OSResult *osresult = NULL;
+        OSrLWriter *osrlwriter = NULL;
+        //first check to see if we already have OSrL,
+        //if so don't create a new osresult object
+        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+        if(pos1 == std::string::npos)
+        {
+            osrlwriter = new OSrLWriter();
+            osresult = new OSResult();
+            osresult->setGeneralMessage(eclass.errormsg);
+            osresult->setGeneralStatusType("error");
+            osrl = osrlwriter->writeOSrL(osresult);
+        }
+        else
+        {
+            osrl = eclass.errormsg;
+        }
+
+        if (osresult != NULL)
+        {
+            delete osresult;
+            osresult = NULL;
+        }
+        if (osrlwriter != NULL)
+        {
+            delete osrlwriter;
+            osrlwriter = NULL;
+        }
+    }
+}//end merge_CL_options
+
+
 /** Some wrappers around routines that allow getting problem instances in other formats:
  *  .nl (from AMPL), GAMS, MPS format
  */
+void getOS(OSCommandLine *oscommandline)
+{
+    if (oscommandline->nlFile != "")
+    {
+        getOSFromNl(oscommandline);
+    }
+    else
+    {
+        if (oscommandline->mpsFile != "")
+        {
+            getOSFromMps(oscommandline);
+        }
+        else
+        {
+            if (oscommandline->gamsControlFile != "")
+            {
+               getOSFromGams(oscommandline);
+            }
+            else    // send an empty osil string
+            {
+               oscommandline->osil = "";
+            }
+        }
+    }
+}//end getOS
 
 void getOSFromNl(OSCommandLine *oscommandline)
 {
@@ -1479,7 +1598,7 @@ void getOSFromNl(OSCommandLine *oscommandline)
         OSnl2OS *nl2os = NULL;
         OSiLWriter *osilwriter = NULL;
 
-		nl2os = new OSnl2OS();
+        nl2os = new OSnl2OS();
         nl2os->readNl(oscommandline->nlFile);
         nl2os->setOsol(oscommandline->osol);
         nl2os->createOSObjects();
@@ -1763,7 +1882,7 @@ void interactiveShell()
                                     if(oscommandline->serviceLocation == "")
                                         getServiceLocation(oscommandline);
 
-									if( (oscommandline->osolFile == "") && (oscommandline->jobID == "") )
+                                    if( (oscommandline->osolFile == "") && (oscommandline->jobID == "") )
                                     {
                                         std::cout
                                                 << std::endl
@@ -1845,8 +1964,8 @@ void interactiveShell()
                                     std::cout << OSgetVersionInfo() << std::endl;
                                     break;
 
-									
-								case 13: // printModel
+                                    
+                                case 13: // printModel
 
                                     doPrintModel(oscommandline);
                                     break;
@@ -1981,7 +2100,7 @@ void interactiveShell()
 
                         if(optionMap.find(optionName) != optionMap.end() )
                         {
- 				            switch (optionMap[ optionName] )
+                             switch (optionMap[ optionName] )
                             {
 
                                     case 0: //osil
@@ -2053,7 +2172,7 @@ void interactiveShell()
 
                                     case 10: //printRow
                                         oscommandline->printRowNumberAsString = optionValue;
-                    					doPrintRow(oscommandline);
+                                        doPrintRow(oscommandline);
                                         break;
 
                                     case 11: //printLevel
@@ -2226,7 +2345,7 @@ std::string get_help()
             << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),"
             << endl;
     helpMsg
-            << "glpk (glpk through COIN-OR Osi), knitro (Knitro), and lindo (LINDO)."
+            << "glpk (glpk through COIN-OR Osi), and lindo (LINDO)."
             << endl;
     helpMsg << "If no value is specified for this parameter," << endl;
     helpMsg << "then cbc is the default value of this parameter." << endl;
@@ -2234,7 +2353,7 @@ std::string get_help()
     helpMsg << endl;
 
     helpMsg
-            << "-browser  browserName this paramater is a path to the browser on the  "
+            << "-browser  browserName this parameter is a path to the browser on the  "
             << endl;
     helpMsg
             << "local machine. If this optional parameter is specified then the  "
@@ -2321,10 +2440,10 @@ std::string get_options()
             << endl;
     optionMsg
             << "reset -- erase all previous option settings"
-            << endl	;
+            << endl    ;
     optionMsg
             << "list -- list the current option values"
-            << endl	;
+            << endl    ;
     optionMsg
             << "solve -- call the solver synchronously"
             << endl ;
@@ -2353,7 +2472,7 @@ std::string get_options()
             << endl;
     optionMsg
             << "mps  -- the location of the model instance in MPS format"
-            << endl	;
+            << endl    ;
     optionMsg
             << "nl -- the location of the model instance in AMPL nl format"
             << endl;
@@ -2368,7 +2487,7 @@ std::string get_options()
             << endl;
     optionMsg
             << "osplOutput --  the name of an output file in the OSpL format"
-            << endl	;
+            << endl    ;
     optionMsg
             << "serviceLocation -- the  URL of a remote solver service"
             << endl;
@@ -2382,19 +2501,19 @@ std::string get_options()
             << "for more detail on how to use the OS project."
             << endl << endl;
 
-	optionMsg
+    optionMsg
             << "PRINT OPTIONS:"
             << endl;
-	optionMsg
+    optionMsg
             << "printModel -- print the currently defined model"
             << endl;
-	optionMsg
+    optionMsg
             << "printRow nnn -- print row n of the currently defined model"
             << endl;
-	optionMsg
+    optionMsg
             << "   if nnn >= 0, prints a constraint, otherwise prints an objective row"
             << endl;
-	optionMsg
+    optionMsg
             << "printLevel nnn -- control the amount of output sent to stdout"
             << endl;
     optionMsg 
@@ -2404,10 +2523,10 @@ std::string get_options()
 #else
     optionMsg << ENUM_OUTPUT_LEVEL_detailed_trace << endl; 
 #endif
-	optionMsg
+    optionMsg
             << "logFile --- a secondary output device"
             << endl;
-	optionMsg
+    optionMsg
             << "filePrintLevel nnn -- control the amount of output sent to the secondary output device"
             << endl;
     optionMsg 
@@ -2495,149 +2614,149 @@ void list_options(OSCommandLine *oscommandline)
 
 void doPrintModel(OSCommandLine *oscommandline)
 {
-	if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
-	{
-		std::cout
-			<< "no instance defined; print command ignored" << std::endl;
-	}
-	else
-	{
-		if (oscommandline->osil != "")
-		{
-			OSiLReader *osilreader;
-			osilreader = new OSiLReader();
-			std::cout << osilreader->readOSiL(oscommandline->osil)->printModel() << std::endl;
-			delete osilreader;
-			osilreader = NULL;
-		}
-		else if (oscommandline->nl != "")
-		{
+    if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
+    {
+        std::cout
+            << "no instance defined; print command ignored" << std::endl;
+    }
+    else
+    {
+        if (oscommandline->osil != "")
+        {
+            OSiLReader *osilreader;
+            osilreader = new OSiLReader();
+            std::cout << osilreader->readOSiL(oscommandline->osil)->printModel() << std::endl;
+            delete osilreader;
+            osilreader = NULL;
+        }
+        else if (oscommandline->nl != "")
+        {
 #ifdef COIN_HAS_ASL
-			OSnl2OS *nl2os;	
-//			nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
-			nl2os = new OSnl2OS();
+            OSnl2OS *nl2os;    
+//            nl2os = new OSnl2OS( oscommandline->nlFile, oscommandline->osol);
+            nl2os = new OSnl2OS();
             nl2os->readNl(oscommandline->nlFile);
             nl2os->setOsol(oscommandline->osol);
-			nl2os->createOSObjects();
-			std::cout << nl2os->osinstance->printModel() << std::endl;
-			delete nl2os;
-			nl2os = NULL;
+            nl2os->createOSObjects();
+            std::cout << nl2os->osinstance->printModel() << std::endl;
+            delete nl2os;
+            nl2os = NULL;
 #else
-			std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
+            std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
-		}
-		else if (oscommandline->mps != "")
-		{
-			OSmps2OS *mps2osil;
-			mps2osil = new OSmps2OS(oscommandline->mpsFile);
-			mps2osil->createOSObjects();
-			std::cout << mps2osil->osinstance->printModel() << std::endl;
-			delete mps2osil;
-			mps2osil = NULL;
-		}
-	}
+        }
+        else if (oscommandline->mps != "")
+        {
+            OSmps2OS *mps2osil;
+            mps2osil = new OSmps2OS(oscommandline->mpsFile);
+            mps2osil->createOSObjects();
+            std::cout << mps2osil->osinstance->printModel() << std::endl;
+            delete mps2osil;
+            mps2osil = NULL;
+        }
+    }
 }// doPrintModel(OSCommandLine *oscommandline)
 
 void doPrintModel(OSInstance *osinstance)
 {
-	if (osinstance == NULL)
-	{
-		std::cout
-			<< "no instance defined; print command ignored" << std::endl;
-	}
-	else
-	{
-		std::cout << osinstance->printModel() << std::endl;
-	}
+    if (osinstance == NULL)
+    {
+        std::cout
+            << "no instance defined; print command ignored" << std::endl;
+    }
+    else
+    {
+        std::cout << osinstance->printModel() << std::endl;
+    }
 }// doPrintModel(OSInstance *osinstance)
 
 void doPrintRow(OSCommandLine *oscommandline)
 {
-	int rownumber;
-	if (oscommandline->printRowNumberAsString == "")
-		std::cout << "no line number given; print command ignored" << std::endl;
-	else
-	{
-		try
-		{
-			rownumber = atoi((oscommandline->printRowNumberAsString).c_str());
-		}
-		catch  (const ErrorClass& eclass)
-		{
-	                std::cout << "invalid row number; print command ignored" << std::endl;
-		}
+    int rownumber;
+    if (oscommandline->printRowNumberAsString == "")
+        std::cout << "no line number given; print command ignored" << std::endl;
+    else
+    {
+        try
+        {
+            rownumber = atoi((oscommandline->printRowNumberAsString).c_str());
+        }
+        catch  (const ErrorClass& eclass)
+        {
+                    std::cout << "invalid row number; print command ignored" << std::endl;
+        }
 
-		if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
+        if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
                 {
                         std::cout
-	                        << "no instance defined; print command ignored" << std::endl;
-		}
-		else
-		{
-			std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
-			if (oscommandline->osil != "")
-			{
-				OSiLReader *osilreader;
-				osilreader = new OSiLReader();
-		    		std::cout << osilreader->readOSiL(oscommandline->osil)->printModel(rownumber) << std::endl;
-				delete osilreader;
-				osilreader = NULL;
-			}
-			else if (oscommandline->nl != "")
-			{
+                            << "no instance defined; print command ignored" << std::endl;
+        }
+        else
+        {
+            std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
+            if (oscommandline->osil != "")
+            {
+                OSiLReader *osilreader;
+                osilreader = new OSiLReader();
+                    std::cout << osilreader->readOSiL(oscommandline->osil)->printModel(rownumber) << std::endl;
+                delete osilreader;
+                osilreader = NULL;
+            }
+            else if (oscommandline->nl != "")
+            {
 #ifdef COIN_HAS_ASL
-				OSnl2OS *nl2os;	
-//				nl2os = new OSnl2OS(oscommandline->nlFile, oscommandline->osol);
-				nl2os = new OSnl2OS();
+                OSnl2OS *nl2os;    
+//                nl2os = new OSnl2OS(oscommandline->nlFile, oscommandline->osol);
+                nl2os = new OSnl2OS();
                 nl2os->readNl(oscommandline->nlFile);
                 nl2os->setOsol(oscommandline->osol);
-				nl2os->createOSObjects();
-				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
-				delete nl2os;
-				nl2os = NULL;
+                nl2os->createOSObjects();
+                std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
+                delete nl2os;
+                nl2os = NULL;
 #else
-				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
+                std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
-			}
-			else if (oscommandline->mps != "")
-			{
-				OSmps2OS *mps2osil;
-				mps2osil = new OSmps2OS(oscommandline->mpsFile);
-				mps2osil->createOSObjects();
-				std::cout << mps2osil->osinstance->printModel(rownumber) << std::endl;
-				delete mps2osil;
-				mps2osil = NULL;
-			}
-		}
-	}
+            }
+            else if (oscommandline->mps != "")
+            {
+                OSmps2OS *mps2osil;
+                mps2osil = new OSmps2OS(oscommandline->mpsFile);
+                mps2osil->createOSObjects();
+                std::cout << mps2osil->osinstance->printModel(rownumber) << std::endl;
+                delete mps2osil;
+                mps2osil = NULL;
+            }
+        }
+    }
 }// doPrintRow(OSCommandLine *oscommandline)
 
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 {
-	int rownumber;
-	if (rownumberstring == "")
-		std::cout << "no line number given; print command ignored" << std::endl;
-	else
-	{
-		try
-		{
-			rownumber = atoi((rownumberstring).c_str());
-		}
-		catch  (const ErrorClass& eclass)
-		{
-	                std::cout << "invalid row number; print command ignored" << std::endl;
-		}
+    int rownumber;
+    if (rownumberstring == "")
+        std::cout << "no line number given; print command ignored" << std::endl;
+    else
+    {
+        try
+        {
+            rownumber = atoi((rownumberstring).c_str());
+        }
+        catch  (const ErrorClass& eclass)
+        {
+                    std::cout << "invalid row number; print command ignored" << std::endl;
+        }
 
-		if (osinstance == NULL)
+        if (osinstance == NULL)
                 {
                         std::cout
-	                        << "no instance defined; print command ignored" << std::endl;
-		}
-		else
-		{
-			std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
-	    		std::cout << osinstance->printModel(rownumber) << std::endl;
-		}
-	}
+                            << "no instance defined; print command ignored" << std::endl;
+        }
+        else
+        {
+            std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
+                std::cout << osinstance->printModel(rownumber) << std::endl;
+        }
+    }
 }// doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 
