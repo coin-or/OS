@@ -271,7 +271,7 @@ osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/os/servlet/OSFileUploa
 Rebuild and run. This application takes one command line argument which is the file to be uploaded. 
 \fi
 
-
+\index{parsingTest|(}
 \item[5.] Test the {\bf parsingTest} application, which makes sure that all the OSiL, OSoL and OSrL files behave as they should. Connect to the {\tt OS/applications/parsingTest} folder, and run {\tt make}.  Then execute the python script {\tt parsingTest.py} as follows:  
 
 \begin{verbatim}
@@ -283,6 +283,7 @@ python  ./parsingTest.py ../../data/osrlFiles
 Each of these should produce a list of files, indicating a ``successful run'' for each of them. There is one exception, {\tt data/osolFiles/parsertestWithErrors.osol}, which should produce a list of error messages. These error messages can be checked against the contents of the file 
 {\tt parsertestWithErrors.result}, which is also contained in the {\tt osolFiles}. (The python script may try to send this file to the OSoL parser, which will create further output diagnostics.)
 \end{itemize}
+\index{parsingTest|)}
 
 
 \subdivision{Preparing the release}\label{section:ReleasePrep}

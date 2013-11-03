@@ -23,6 +23,17 @@ J.~Ma.
 \newblock Ph.D. Dissertation, Department of Industrial Engineering \&
   Management Sciences, Northwestern University, Evanston, IL.
 
+\bibitem{MPS-MOSEK}
+{Mosek ApS}.
+\newblock The {MOSEK Python API} manual. version 6.0 (revision 148).
+\newblock http://docs.mosek.com/6.0/pyapi/node021.html, 2009.
+
+\bibitem{Perrin-MPS}
+Richard~K. Perrin.
+\newblock {\em {Use of the linear programming facility of the IBM Mathematical
+  Programming System (MPS/360) }}.
+\newblock {IBM, Inc.}, 1968.
+
 \bibitem{ralphsgalatiMP}
 T.K. Ralphs and M.V. Galati.
 \newblock Decomposition and dynamic cut generation in integer linear

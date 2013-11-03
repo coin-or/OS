@@ -1,11 +1,13 @@
 \ifdevelop
-\division{OS Support for Modeling Languages, Spreadsheets and Numerical Computing Software}\label{section:modellang}
+\division{OS Support for Modeling Languages, MPS format, Spreadsheets and Numerical Computing Software}\label{section:modellang}
 \else
-\division{OS Support for AMPL and GAMS}\label{section:modellang}
+\division{OS Support for AMPL, GAMS and MPS formats}\label{section:modellang}
 \fi
 
 Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
-We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt CoinOS} for GAMS\index{GAMS} (version 23.8 and above).
+We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt CoinOS} for
+GAMS\index{GAMS} (version 23.8 and above). In addition, we describe the particular version of the 
+MPS file format that is supported in {\tt OS}.
 
 
 \subdivision{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
@@ -820,6 +822,50 @@ for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt r
 
 \index{GAMS|)}
 
+
+\subdivision{MPS format}\label{section:MPS}
+
+The MPS format was originally designed for use with IBM's MPS system for solving linear programs%
+~\cite{Perrin-MPS}.
+In the near half-century since then, extensions, sometimes incompatible, were devised to allow the expression of integer linear programs, special ordered sets, quadratic objectives, etc.
+
+The particular flavor of MPS supported by OS uses the {\tt CoinUtils} library and is described briefly in this section. 
+
+The MPS file is line or record oriented and has three different types of lines:
+\begin{enumerate}
+\item Header lines, containing a non-blank alphanumeric character in the first position from the left,
+\item data lines, which contain a blank character in the first position, and
+\item comment lines, which contain an asterisk in the first position.
+\end{enumerate}
+
+Header lines separate different sections of the MPS file. Headers that describe portions of the underlying linear programming problem must follow each other in a specific sequence, namely
+
+\begin{verbatim}
+NAME
+ROWS
+COLUMNS
+RHS
+RANGES
+BOUNDS
+ENDATA
+\end{verbatim}
+
+Only the {\tt NAME}, {\tt ROWS}, {\tt COLUMNS} and {\tt ENDATA} sections are required; the other sections are optional.
+Following the {\tt BOUNDS} section and prior to the {\tt ENDATA} record additional optional 
+sections can appear, namely
+
+\begin{verbatim}
+SOS
+QUADOBJ
+CSECTION
+\end{verbatim}
+%BASIS           (Make sure to check with Matt Saltzman before implementing this...)
+%\end{verbatim}
+  
+The order among these three %four 
+sections is immaterial. For a description of these sections as well as the content and structure of data records, see~\cite{MPS-MOSEK}. There is also a sample MPS files 
+showing all the possibilities in {\tt }
+
 \ifruncode\else    % the matlab interface requires the user to compile stuff
 
 \subdivision{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:usingmatlab}
@@ -865,7 +911,7 @@ OS/applications/matlab/macOSXscript.txt
 \end{verbatim}
 the exact options that work on a 64 bit Mac with MATLAB release R2009b.
 
-\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file 
+\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/applications/matlab} which  contains the file 
 
 \begin{verbatim}
 OSMatlabSolverMex.cpp
