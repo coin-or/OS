@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -149,7 +149,7 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
+		<xs:sequence>
 			<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
@@ -168,7 +168,7 @@
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-		</xs:choice>
+		</xs:sequence>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonNegativeIntVector">
@@ -583,10 +583,10 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
-			<xs:element name="elements" type="ConstantMatrixElements"/>
-			<xs:element name="blocks" type="ConstantMatrixBlocks"/>
-		</xs:choice>
+		<xs:sequence>
+			<xs:element name="blocks" type="ConstantMatrixBlocks" minOccurs="0"/>
+			<xs:element name="elements" type="ConstantMatrixElements" minOccurs="0"/>
+		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
@@ -637,10 +637,21 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of blocks specified must agree with numberOfBlocks</xs:documentation>
-			</xs:annotation>
-			<xs:element name="block" type="ConstantMatrixBlock" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="colOffsets" type="IntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>To give column indices of leftmost column of each block in the row-wise partition</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="rowOffsets" type="IntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>To give row indices of top rows of each block in the column-wise partition</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="block" type="ConstantMatrixBlock" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number of blocks specified must agree with numberOfBlocks</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -648,13 +659,20 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:choice minOccurs="0">
+			<xs:element name="elements" type="ConstantMatrixElements"/>
 			<xs:element ref="OSnLMNode"/>
-		</xs:sequence>
-		<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+		</xs:choice>
+		<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>blockRowIdx must be at least 0 and less than colOffset array size</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="blockColIdx" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>blockColIdx must be at least 0 and less than rowOffset array size</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixBuilder">
 		<xs:annotation>
