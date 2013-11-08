@@ -573,7 +573,11 @@
 			<xs:annotation>
 				<xs:documentation>Number of the matrix child elements must match numberOfMatrices</xs:documentation>
 			</xs:annotation>
-			<xs:element name="constantMatrix" type="ConstantMatrix"/>
+			<xs:element name="constantMatrix" type="ConstantMatrix">
+				<xs:annotation>
+					<xs:documentation>If a base matrix is specified, blocks will replace the existing values.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="linearMatrix" type="LinearMatrix"/>
 			<xs:element name="generalMatrix" type="GeneralMatrix"/>
 		</xs:choice>
@@ -583,10 +587,20 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="blocks" type="ConstantMatrixBlocks" minOccurs="0"/>
+		<xs:all>
+			<xs:annotation>
+				<xs:documentation>The order is arbiitrary. Information specified later superimposes information specified earlier.</xs:documentation>
+			</xs:annotation>
 			<xs:element name="elements" type="ConstantMatrixElements" minOccurs="0"/>
-		</xs:sequence>
+			<xs:element name="transformation" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="OSnLMNode"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="blocks" type="ConstantMatrixBlocks" minOccurs="0"/>
+		</xs:all>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
@@ -660,8 +674,11 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:choice minOccurs="0">
-			<xs:element name="elements" type="ConstantMatrixElements"/>
-			<xs:element ref="OSnLMNode"/>
+			<xs:element name="elements" type="ConstantMatrixElements">
+				<xs:annotation>
+					<xs:documentation>Both start and indexes should be relative to the block</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
