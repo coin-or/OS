@@ -614,7 +614,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="start" type="IntVector"/>
+			<xs:element name="start" type="NonNegativeIntVector"/>
 			<xs:element name="nonzeros" type="SparseVector"/>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
@@ -637,12 +637,12 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="colOffsets" type="IntVector" minOccurs="0">
+			<xs:element name="colOffsets" type="NonNegativeIntVector" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>To give column indices of leftmost column of each block in the row-wise partition</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="rowOffsets" type="IntVector" minOccurs="0">
+			<xs:element name="rowOffsets" type="NonNegativeIntVector" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>To give row indices of top rows of each block in the column-wise partition</xs:documentation>
 				</xs:annotation>
@@ -743,7 +743,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="start" type="IntVector"/>
+			<xs:element name="start" type="NonNegativeIntVector"/>
 			<xs:element name="nonzeros" type="LinearMatrixValues"/>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
@@ -940,7 +940,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of entries in the el and rowIdx/colIdx child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="start" type="IntVector"/>
+			<xs:element name="start" type="NonNegativeIntVector"/>
 			<xs:element name="nonzeros" type="GeneralMatrixValues"/>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
