@@ -673,13 +673,20 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0">
-			<xs:element name="elements" type="ConstantMatrixElements">
+		<xs:all minOccurs="0">
+			<xs:element name="elements" type="ConstantMatrixElements" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Both start and indexes should be relative to the block</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-		</xs:choice>
+			<xs:element name="transformation" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="OSnLMNode"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:all>
 		<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>blockRowIdx must be at least 0 and less than colOffset array size</xs:documentation>
