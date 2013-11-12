@@ -584,7 +584,7 @@
 		</xs:choice>
 		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="GenericMatrix" mixed="false">
+	<xs:complexType name="MatrixType" mixed="false">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -619,14 +619,14 @@
 	</xs:complexType>
 	<xs:complexType name="Matrix">
 		<xs:complexContent>
-			<xs:extension base="GenericMatrix">
+			<xs:extension base="MatrixType">
 				<xs:attribute name="id" type="xs:string" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="MatrixBlock">
 		<xs:complexContent>
-			<xs:extension base="GenericMatrix">
+			<xs:extension base="MatrixType">
 				<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" default="0">
 					<xs:annotation>
 						<xs:documentation>blockRowIdx must be at least 0 and less than colOffset array size</xs:documentation>
