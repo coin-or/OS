@@ -5,13 +5,13 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define OS_VERSION      "trunk"
+#define OS_VERSION      "2.8"
 
 /* Major Version number of project */
-#define OS_VERSION_MAJOR   9999
+#define OS_VERSION_MAJOR   2
 
 /* Minor Version number of project */
-#define OS_VERSION_MINOR   9999
+#define OS_VERSION_MINOR   8
 
 /* Release Version number of project */
 #define OS_VERSION_RELEASE 9999
