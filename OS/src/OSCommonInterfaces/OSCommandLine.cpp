@@ -18,12 +18,14 @@
   *
   */
 
+#include <cstdio>
+#include <sstream>
+
 #include "OSConfig.h"
 #include "OSInstance.h"
 #include "OSOption.h"
 #include "OSOutput.h"
 #include "OSCommandLine.h"
-#include <stdio.h>
 
 using std::string;
 
