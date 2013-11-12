@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -663,12 +663,12 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="colOffsets" type="NonNegativeIntVector" minOccurs="0">
+			<xs:element name="colOffsets" type="NonNegativeIntVector">
 				<xs:annotation>
 					<xs:documentation>To give column indices of leftmost column of each block in the row-wise partition</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="rowOffsets" type="NonNegativeIntVector" minOccurs="0">
+			<xs:element name="rowOffsets" type="NonNegativeIntVector">
 				<xs:annotation>
 					<xs:documentation>To give row indices of top rows of each block in the column-wise partition</xs:documentation>
 				</xs:annotation>
