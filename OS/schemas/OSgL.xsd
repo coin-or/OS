@@ -594,7 +594,11 @@
 			</xs:annotation>
 			<xs:element name="elements" type="MatrixElements" minOccurs="0"/>
 			<xs:element name="transformation" type="MatrixTransformation" minOccurs="0"/>
-			<xs:element name="blocks" type="MatrixBlocks" minOccurs="0"/>
+			<xs:element name="blocks" type="MatrixBlocks" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If no block children, the blocks only gives partition information of the matrix.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:all>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
@@ -618,6 +622,9 @@
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 	</xs:complexType>
 	<xs:complexType name="Matrix">
+		<xs:annotation>
+			<xs:documentation>For the symmetric attribute, if the matrix is symmetric, it is assumed that only the lower triangle is given. For the base attribute, if it is matrix, a baseMatrixID. If base matrix is objectiveCoefficients, objective function indexed -1 will be the 0th row to start.</xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="MatrixType">
 				<xs:attribute name="id" type="xs:string" use="required"/>
