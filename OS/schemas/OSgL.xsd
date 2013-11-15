@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -609,16 +609,18 @@
 					<xs:enumeration value="none"/>
 					<xs:enumeration value="objectiveCoefficients"/>
 					<xs:enumeration value="linearConstraintCoefficients"/>
+					<xs:enumeration value="linearConstraintLowerBounds"/>
+					<xs:enumeration value="linearConstraintUppperBounds"/>
 					<xs:enumeration value="matrix"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 	</xs:complexType>
 	<xs:complexType name="Matrix">
@@ -652,8 +654,41 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="start" type="NonNegativeIntVector"/>
-			<xs:element name="nonzeros" type="SparseVector"/>
+			<xs:element name="constantElements" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="start" type="NonNegativeIntVector"/>
+						<xs:element name="nonzeros" type="SparseVector"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="varReferenceMatrixElements" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="start" type="NonNegativeIntVector"/>
+						<xs:element name="nonzeros" type="LinearMatrixValues"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="LinearMatrixElements" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="start" type="NonNegativeIntVector"/>
+						<xs:element name="nonzeros" type="LinearMatrixValues"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="generalMatrixElements" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:annotation>
+							<xs:documentation>Number of entries in the el and rowIdx/colIdx child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+						</xs:annotation>
+						<xs:element name="start" type="NonNegativeIntVector"/>
+						<xs:element name="nonzeros" type="GeneralMatrixValues"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>
@@ -858,7 +893,6 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:nonNegativeInteger">
-							<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
 							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 							<xs:attribute name="incr" type="xs:integer" use="optional" default="0">
 								<xs:annotation>
