@@ -592,7 +592,11 @@
 			<xs:annotation>
 				<xs:documentation>The order is arbitrary. Information specified later superimposes information specified earlier.</xs:documentation>
 			</xs:annotation>
-			<xs:element name="elements" type="MatrixElements" minOccurs="0"/>
+			<xs:element name="elements" type="MatrixElements" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If a location is specfied more than once, later information replaces ealier information.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="transformation" type="MatrixTransformation" minOccurs="0"/>
 			<xs:element name="blocks" type="MatrixBlocks" minOccurs="0">
 				<xs:annotation>
