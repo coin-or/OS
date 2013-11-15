@@ -987,17 +987,10 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="varIdx" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="varIdx" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfVarIdx under consideration of 'mult'</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="xs:int">
-							<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
-						</xs:extension>
-					</xs:simpleContent>
-				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
@@ -1102,7 +1095,7 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+		<xs:sequence>
 			<xs:element name="indexes">
 				<xs:complexType>
 					<xs:choice>
@@ -1125,8 +1118,8 @@
 			</xs:element>
 			<xs:element name="values">
 				<xs:complexType>
-					<xs:sequence minOccurs="0" maxOccurs="unbounded">
-						<xs:element name="el" type="GeneralMatrixElement"/>
+					<xs:sequence>
+						<xs:element name="el" type="GeneralMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
