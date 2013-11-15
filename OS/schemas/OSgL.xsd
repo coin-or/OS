@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -569,11 +569,12 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
 				<xs:documentation>Number of the matrix child elements must match numberOfMatrices</xs:documentation>
 			</xs:annotation>
 			<xs:element name="matrix" type="Matrix"/>
+			<!--
 			<xs:element name="constantMatrix" type="ConstantMatrix">
 				<xs:annotation>
 					<xs:documentation>If a base matrix is specified, blocks will replace the existing values.</xs:documentation>
@@ -581,7 +582,8 @@
 			</xs:element>
 			<xs:element name="linearMatrix" type="LinearMatrix"/>
 			<xs:element name="generalMatrix" type="GeneralMatrix"/>
-		</xs:choice>
+-->
+		</xs:sequence>
 		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixType" mixed="false">
@@ -590,11 +592,11 @@
 		</xs:annotation>
 		<xs:all>
 			<xs:annotation>
-				<xs:documentation>The order is arbitrary. Information specified later superimposes information specified earlier.</xs:documentation>
+				<xs:documentation>The order of matrix constructors is arbitrary. Information specified later raplaces information specified earlier.</xs:documentation>
 			</xs:annotation>
 			<xs:element name="elements" type="MatrixElements" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>If a location is specfied more than once, later information replaces ealier information.</xs:documentation>
+					<xs:documentation>If a location is specfied more than once in the child elements, later information replaces ealier information.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="transformation" type="MatrixTransformation" minOccurs="0"/>
@@ -670,7 +672,7 @@
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="start" type="NonNegativeIntVector"/>
-						<xs:element name="nonzeros" type="LinearMatrixValues"/>
+						<xs:element name="nonzeros" type="varReferenceValues"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -825,6 +827,54 @@
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>
+	<xs:complexType name="varReferenceValues">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="indexes">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="values">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="LinearMatrixValues">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -892,23 +942,9 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
-			<xs:element name="varIdx">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="xs:nonNegativeInteger">
-							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-							<xs:attribute name="incr" type="xs:integer" use="optional" default="0">
-								<xs:annotation>
-									<xs:documentation>NEW in release 2.2.1</xs:documentation>
-								</xs:annotation>
-							</xs:attribute>
-						</xs:extension>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
+		<xs:sequence>
 			<xs:element name="expr" type="LinearMatrixExpr"/>
-		</xs:choice>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixExpr">
 		<xs:annotation>
