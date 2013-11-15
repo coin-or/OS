@@ -662,7 +662,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="varReferenceMatrixElements" minOccurs="0">
+			<xs:element name="varReferenceElements" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="start" type="NonNegativeIntVector"/>
@@ -670,7 +670,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="LinearMatrixElements" minOccurs="0">
+			<xs:element name="LinearElements" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="start" type="NonNegativeIntVector"/>
@@ -678,7 +678,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="generalMatrixElements" minOccurs="0">
+			<xs:element name="generalElements" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:annotation>
