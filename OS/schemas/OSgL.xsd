@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -418,10 +418,18 @@
 			<xs:element name="values">
 				<xs:complexType>
 					<xs:choice>
-						<xs:element name="el" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
 							<xs:annotation>
 								<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
 						</xs:element>
 						<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 					</xs:choice>
@@ -458,10 +466,18 @@
 			<xs:element name="values">
 				<xs:complexType>
 					<xs:choice>
-						<xs:element name="el" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
 							<xs:annotation>
 								<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
 						</xs:element>
 						<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 					</xs:choice>
@@ -676,13 +692,13 @@
 			</xs:annotation>
 			<xs:element name="elements" type="MatrixElements" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>If a location is specfied more than once in the child elements, later information replaces ealier information. </xs:documentation>
+					<xs:documentation>If a location is specfied more than once in the child elements, later information replaces earlier information. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="transformation" type="MatrixTransformation" minOccurs="0"/>
 			<xs:element name="blocks" type="MatrixBlocks" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>If no block children, the blocks only gives partition information of the matrix.</xs:documentation>
+					<xs:documentation>If no block children, the blocks only give partition information of the matrix.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:all>
@@ -746,7 +762,7 @@
 						<xs:element name="start" type="NonNegativeIntVector"/>
 						<xs:element name="nonzeros" type="SparseVector">
 							<xs:annotation>
-								<xs:documentation>Can specify explicit 0's here. These specified 0's can replace previous information.</xs:documentation>
+								<xs:documentation>Can specify explicit 0's here. These specified 0's replace (i.e., remove) previous information.</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 					</xs:sequence>
@@ -987,10 +1003,21 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="varIdx" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="varIdx" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfVarIdx under consideration of 'mult'</xs:documentation>
+					<xs:documentation>number must agree with numberOfVarIdx</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:nonNegativeInteger">
+							<xs:attribute name="coef" type="xs:double" use="optional" default="1.0">
+								<xs:annotation>
+									<xs:documentation>NEW in release 2.2.1</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
