@@ -3845,7 +3845,6 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="id" type="xs:string" use="required"/>
-				<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3867,7 +3866,6 @@
 				<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
