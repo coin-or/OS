@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -3869,7 +3869,7 @@
 	</xs:complexType>
 	<xs:element name="matrixBlock" type="OSnLNodeMatrixBlock">
 		<xs:annotation>
-			<xs:documentation>draft. Should be appended under matrixConcatenate</xs:documentation>
+			<xs:documentation>draft. The matrixBlock is poinpointed at the upper left coner (rowIdxStart, colIdxStart) of the parent matrixMerge matrix. If blocks overlop with each other, later </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixIdentical">
@@ -4325,9 +4325,9 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixConcatenate">
+	<xs:complexType name="OSnLNodeMatrixMerge">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. mergeType is to resolve overlapping elements of the blocks.  </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
@@ -4336,11 +4336,25 @@
 				</xs:sequence>
 				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-				<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="numberOfBlocks" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:nonNegativeInteger"/>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="mergeType" use="optional" default="replace">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="replace"/>
+							<xs:enumeration value="ignore"/>
+							<xs:enumeration value="add"/>
+							<xs:enumeration value="error"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixConcatenate" type="OSnLNodeMatrixConcatenate" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixMerge" type="OSnLNodeMatrixMerge" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4874,6 +4888,7 @@
 							<xs:enumeration value="lowerTriangle"/>
 							<xs:enumeration value="diagonal"/>
 							<xs:enumeration value="permutationMatrix"/>
+							<xs:enumeration value="psycologicalLowerTriangle"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
@@ -4899,6 +4914,8 @@
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="lowerTriangle"/>
 							<xs:enumeration value="upperTriangle"/>
+							<xs:enumeration value="psycologicalLowerTriangle"/>
+							<xs:enumeration value="psycologicalUpperTriangle"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
@@ -5427,7 +5444,7 @@
 			<xs:enumeration value="matrixValueNumber"/>
 			<xs:enumeration value="matrixElementAt"/>
 			<xs:enumeration value="matrixSubmatrixAt"/>
-			<xs:enumeration value="matrixConcatenate"/>
+			<xs:enumeration value="matrixMerge"/>
 			<xs:enumeration value="matrixUpperTriangle"/>
 			<xs:enumeration value="matrixLowerTriangle"/>
 			<xs:enumeration value="matrixDiagonal"/>
