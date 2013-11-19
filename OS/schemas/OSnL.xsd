@@ -4096,7 +4096,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDotRightDivide">
+	<xs:complexType name="OSnLNodeMatrixDotDivide">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4108,26 +4108,9 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixDotRightDivide" type="OSnLNodeMatrixDotRightDivide" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixDotDivide" type="OSnLNodeMatrixDotDivide" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDotLeftDivide">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixDotLeftDivide" type="OSnLNodeMatrixDotLeftDivide" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixScalarDivide">
@@ -4491,23 +4474,6 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixTranspose" type="OSnLNodeMatrixTranspose" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDotTranspose">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixDotTranspose" type="OSnLNodeMatrixDotTranspose" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -5431,8 +5397,7 @@
 			<xs:enumeration value="matrixProduct"/>
 			<xs:enumeration value="matrixRightDivide"/>
 			<xs:enumeration value="matrixLeftDivide"/>
-			<xs:enumeration value="matrixDotRightDivide"/>
-			<xs:enumeration value="matrixDotLeftDivide"/>
+			<xs:enumeration value="matrixDotDivide"/>
 			<xs:enumeration value="matrixScalarDivide"/>
 			<xs:enumeration value="matrixPower"/>
 			<xs:enumeration value="matrixDotPower"/>
@@ -5453,7 +5418,6 @@
 			<xs:enumeration value="matrixInverse"/>
 			<xs:enumeration value="matrixTrace"/>
 			<xs:enumeration value="matrixTranspose"/>
-			<xs:enumeration value="matrixDotTranspose"/>
 			<xs:enumeration value="matrixSingular"/>
 			<xs:enumeration value="matrixFullRank"/>
 			<xs:enumeration value="matrixPositiveDefinite"/>
