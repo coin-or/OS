@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -3862,14 +3862,22 @@
 				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
-				<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>gives the rew index of the top row of this block within the larger matrix </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>gives the column index of the leftmost column of this block within the larger matrix </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixBlock" type="OSnLNodeMatrixBlock">
 		<xs:annotation>
-			<xs:documentation>draft. The matrixBlock is poinpointed at the upper left coner (rowIdxStart, colIdxStart) of the parent matrixMerge matrix. If blocks overlop with each other, later </xs:documentation>
+			<xs:documentation>draft. matrix blocks may overlop with each other</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixIdentical">
@@ -4325,6 +4333,9 @@
 					</xs:simpleType>
 				</xs:attribute>
 				<xs:attribute name="mergeType" use="optional" default="replace">
+					<xs:annotation>
+						<xs:documentation>Specifies what happens if a location within the larger matrix is referenced in more than one block</xs:documentation>
+					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="replace"/>
@@ -4854,7 +4865,7 @@
 							<xs:enumeration value="lowerTriangle"/>
 							<xs:enumeration value="diagonal"/>
 							<xs:enumeration value="permutationMatrix"/>
-							<xs:enumeration value="psycologicalLowerTriangle"/>
+							<xs:enumeration value="psychologicalLowerTriangle"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
@@ -4880,8 +4891,8 @@
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="lowerTriangle"/>
 							<xs:enumeration value="upperTriangle"/>
-							<xs:enumeration value="psycologicalLowerTriangle"/>
-							<xs:enumeration value="psycologicalUpperTriangle"/>
+							<xs:enumeration value="psychologicalLowerTriangle"/>
+							<xs:enumeration value="psychologicalUpperTriangle"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
