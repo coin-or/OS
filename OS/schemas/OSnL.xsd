@@ -4859,6 +4859,57 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixLDLDecomposition">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+				<xs:attribute name="returnedMatrix" use="optional" default="lowerTriangle">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="lowerTriangle"/>
+							<xs:enumeration value="diagonal"/>
+							<xs:enumeration value="permutationMatrix"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixLDLDecomposition" type="OSnLNodeMatrixLDLDecomposition" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixLUDecomposition">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+				<xs:attribute name="returnedMatrix" use="optional" default="lowerTriangle">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="lowerTriangle"/>
+							<xs:enumeration value="upperTriangle"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixLUDecomposition" type="OSnLNodeMatrixLUDecomposition" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<!--Special or Other Nodes: since version 1.0.0 -->
 	<xs:complexType name="OSnLNodeQuadratic">
 		<xs:annotation>
@@ -5407,6 +5458,8 @@
 			<xs:enumeration value="matrixReducedRowEchelon"/>
 			<xs:enumeration value="matrixSubspaceAngle"/>
 			<xs:enumeration value="matrixCholeskyDecomposition"/>
+			<xs:enumeration value="matrixLDLDecomposition"/>
+			<xs:enumeration value="matrixLUDecomposition"/>
 			<xs:enumeration value="quadratic"/>
 			<xs:enumeration value="qTerm"/>
 			<xs:enumeration value="sim"/>
