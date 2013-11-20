@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -4386,6 +4386,7 @@
 				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
+				<xs:attribute name="includeDiagonal" type="xs:boolean" use="optional" default="true"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4403,6 +4404,7 @@
 				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
+				<xs:attribute name="includeDiagonal" type="xs:boolean" use="optional" default="true"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4475,6 +4477,34 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixInverse" type="OSnLNodeMatrixInverse" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixGeneralizedInverse">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="leftInverse"/>
+							<xs:enumeration value="rightInverse"/>
+							<xs:enumeration value="MoorePenrose"/>
+							<xs:enumeration value="BottDuffin"/>
+							<xs:enumeration value="Drazin"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixGeneralizedInverse" type="OSnLNodeMatrixGeneralizedInverse" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4802,6 +4832,23 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixNullSpace" type="OSnLNodeMatrixNullSpace" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixLeftNullSpace">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixLeftNullSpace" type="OSnLNodeMatrixLeftNullSpace" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -5469,6 +5516,7 @@
 			<xs:enumeration value="matrixRank"/>
 			<xs:enumeration value="matrixDeterminant"/>
 			<xs:enumeration value="matrixInverse"/>
+			<xs:enumeration value="matrixGeneralizedInverse"/>
 			<xs:enumeration value="matrixTrace"/>
 			<xs:enumeration value="matrixTranspose"/>
 			<xs:enumeration value="matrixSingular"/>
@@ -5488,6 +5536,7 @@
 			<xs:enumeration value="matrixCondition"/>
 			<xs:enumeration value="matrixFrobeniusNormCondition"/>
 			<xs:enumeration value="matrixNullSpace"/>
+			<xs:enumeration value="matrixLeftNullSpace"/>
 			<xs:enumeration value="matrixRangeSpace"/>
 			<xs:enumeration value="matrixIdentity"/>
 			<xs:enumeration value="matrixReducedRowEchelon"/>
