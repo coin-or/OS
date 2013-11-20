@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -4625,7 +4625,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixEigenVectors">
+	<xs:complexType name="OSnLNodeMatrixLeftEigenVectors">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4637,11 +4637,29 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixEigenVectors" type="OSnLNodeMatrixEigenVectors" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixLeftEigenVectors" type="OSnLNodeMatrixLeftEigenVectors" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+		<xs:complexType name="OSnLNodeMatrixRightEigenVectors">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixRightEigenVectors" type="OSnLNodeMatrixRightEigenVectors" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
 	<xs:complexType name="OSnLNodeMatrixNthLargestEigenValue">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -5437,7 +5455,8 @@
 			<xs:enumeration value="matrixNegativeSemidefinite"/>
 			<xs:enumeration value="matrixIndefinite"/>
 			<xs:enumeration value="matrixEigenValues"/>
-			<xs:enumeration value="matrixEigenVectors"/>
+			<xs:enumeration value="matrixLeftEigenVectors"/>
+			<xs:enumeration value="matrixRightEigenVectors"/>
 			<xs:enumeration value="matrixNthLargestEigenValue"/>
 			<xs:enumeration value="matrixLargestEigenValue"/>
 			<xs:enumeration value="matrixNorm"/>
