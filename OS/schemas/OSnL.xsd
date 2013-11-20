@@ -4853,7 +4853,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixRangeSpace">
+	<xs:complexType name="OSnLNodeMatrixRowSpace">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4865,7 +4865,24 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixRangeSpace" type="OSnLNodeMatrixRangeSpace" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixRowSpace" type="OSnLNodeMatrixRowSpace" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixColumnSpace">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixColumnSpace" type="OSnLNodeMatrixColumnSpace" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -5537,7 +5554,8 @@
 			<xs:enumeration value="matrixFrobeniusNormCondition"/>
 			<xs:enumeration value="matrixNullSpace"/>
 			<xs:enumeration value="matrixLeftNullSpace"/>
-			<xs:enumeration value="matrixRangeSpace"/>
+			<xs:enumeration value="matrixRowSpace"/>
+			<xs:enumeration value="matrixColumnSpace"/>
 			<xs:enumeration value="matrixIdentity"/>
 			<xs:enumeration value="matrixReducedRowEchelon"/>
 			<xs:enumeration value="matrixSubspaceAngle"/>
