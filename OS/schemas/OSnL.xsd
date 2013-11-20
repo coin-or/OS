@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -3266,7 +3266,7 @@
 	<!--Variable, Objective, Constraint, Parameter Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeVariable">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to profice a child OSnLNode which evaluates to a nonnegativeinteger variable index.</xs:documentation>
+			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to provide a child OSnLNode which evaluates to a nonnegativeinteger variable index.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -3864,7 +3864,7 @@
 				</xs:sequence>
 				<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required">
 					<xs:annotation>
-						<xs:documentation>gives the rew index of the top row of this block within the larger matrix </xs:documentation>
+						<xs:documentation>gives the row index of the top row of this block within the larger matrix </xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 				<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required">
@@ -4340,7 +4340,14 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence maxOccurs="unbounded">
-					<xs:element ref="matrixBlock"/>
+					<xs:annotation>
+						<xs:documentation>number must equal numberOfBlocks.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="matrixBlock">
+						<xs:annotation>
+							<xs:documentation>draft. matrix blocks may overlop with each other. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
 				</xs:sequence>
 				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
@@ -4367,7 +4374,7 @@
 	</xs:complexType>
 	<xs:element name="matrixMerge" type="OSnLNodeMatrixMerge" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. Merge one or more blocks in general position into a single matrix</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixUpperTriangle">
@@ -4899,7 +4906,7 @@
 							<xs:enumeration value="lowerTriangle"/>
 							<xs:enumeration value="diagonal"/>
 							<xs:enumeration value="permutationMatrix"/>
-							<xs:enumeration value="psychologicalLowerTriangle"/>
+							<xs:enumeration value="quasiLowerTriangle"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
@@ -4925,8 +4932,8 @@
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="lowerTriangle"/>
 							<xs:enumeration value="upperTriangle"/>
-							<xs:enumeration value="psychologicalLowerTriangle"/>
-							<xs:enumeration value="psychologicalUpperTriangle"/>
+							<xs:enumeration value="quasiLowerTriangle"/>
+							<xs:enumeration value="quasiUpperTriangle"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
