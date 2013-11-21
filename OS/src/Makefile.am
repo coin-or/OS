@@ -28,6 +28,9 @@ lib_LTLIBRARIES = libOS.la
 # List all source files for this library, including headers
 libOS_la_SOURCES = 
 
+# Dummy C++ source to cause C++ linking
+nodist_EXTRA_libOS_la_SOURCES = dummy.cpp 
+
 # This is for libtool (on Windows)
 libOS_la_LDFLAGS = $(LT_LDFLAGS)
 
@@ -38,6 +41,9 @@ libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSModelInterfaces/libOSModelInterfaces.la \
 		./OSParsers/libOSParsers.la \
 		./OSSolverInterfaces/libOSSolverInterfaces.la 
+if DEPENDENCY_LINKING
+libOS_la_LIBADD += $(OSLIB_LIBS)
+endif
 
 ########################################################################
 #                    OSSolverService program                           #
