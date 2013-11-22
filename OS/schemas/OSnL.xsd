@@ -3859,7 +3859,7 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixIdentical">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft.  returns 1 if the two matrices are identical, 0 otherwise.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
@@ -4253,26 +4253,9 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixValueNumber">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixValueNumber" type="OSnLNodeMatrixValueNumber" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixElementAt">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. First child is the matrix to get the element, Second child is rowIdx. Third Child is colIdx.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4520,9 +4503,9 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixSingular">
+	<xs:complexType name="OSnLNodeMatrixNonsingular">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. returns 1 if the matrix is nonsingular, 0 otherwise. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4532,14 +4515,14 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixSingular" type="OSnLNodeMatrixSingular" substitutionGroup="OSnLNode">
+	<xs:element name="matrixNonsingular" type="OSnLNodeMatrixNonsingular" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixFullRank">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. returns 1 if fthe matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4550,6 +4533,40 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixFullRank" type="OSnLNodeMatrixFullRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixFullRowRank">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if fthe matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixFullRowRank" type="OSnLNodeMatrixFullRowRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixFullColumnRank">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if fthe matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixFullColumnRank" type="OSnLNodeMatrixFullColumnRank" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4726,6 +4743,24 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixSmallestEigenValue">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixSmallestEigenValue" type="OSnLNodeMatrixSmallestEigenValue" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixNorm">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -4763,7 +4798,7 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixCondition">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. The second child defines the norm.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
@@ -4904,7 +4939,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:sequence>
+				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -5499,7 +5534,6 @@
 			<xs:enumeration value="matrixSquareRoot"/>
 			<xs:enumeration value="matrixRowNumber"/>
 			<xs:enumeration value="matrixColumnNumber"/>
-			<xs:enumeration value="matrixValueNumber"/>
 			<xs:enumeration value="matrixElementAt"/>
 			<xs:enumeration value="matrixSubmatrixAt"/>
 			<xs:enumeration value="matrixMerge"/>
@@ -5512,8 +5546,10 @@
 			<xs:enumeration value="matrixGeneralizedInverse"/>
 			<xs:enumeration value="matrixTrace"/>
 			<xs:enumeration value="matrixTranspose"/>
-			<xs:enumeration value="matrixSingular"/>
+			<xs:enumeration value="matrixNonsingular"/>
 			<xs:enumeration value="matrixFullRank"/>
+			<xs:enumeration value="matrixFullRowRank"/>
+			<xs:enumeration value="matrixFullColumnRank"/>
 			<xs:enumeration value="matrixPositiveDefinite"/>
 			<xs:enumeration value="matrixPositiveSemidefinite"/>
 			<xs:enumeration value="matrixNegativeDefinite"/>
@@ -5524,6 +5560,7 @@
 			<xs:enumeration value="matrixRightEigenVectors"/>
 			<xs:enumeration value="matrixNthLargestEigenValue"/>
 			<xs:enumeration value="matrixLargestEigenValue"/>
+			<xs:enumeration value="matrixSmallestEigenValue"/>
 			<xs:enumeration value="matrixNorm"/>
 			<xs:enumeration value="matrixFrobeniusNorm"/>
 			<xs:enumeration value="matrixCondition"/>
