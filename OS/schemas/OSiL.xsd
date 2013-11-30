@@ -718,13 +718,7 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<!--Cones: draft -->
-	<xs:complexType name="ConeProgramming">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="cone" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
+				<xs:complexType name="Cone">
 					<xs:choice minOccurs="0">
 						<xs:element name="scalarVariables" type="NonNegativeIntVector"/>
 						<xs:element name="scalarConstraints" type="NonNegativeIntVector"/>
@@ -733,7 +727,12 @@
 					</xs:choice>
 					<xs:attribute name="id" type="xs:string" use="required"/>
 				</xs:complexType>
-			</xs:element>
+	<xs:complexType name="ConeProgramming">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="cone" minOccurs="0" maxOccurs="unbounded" type="Cone"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Cones">
