@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -77,6 +77,11 @@
 			<xs:element name="matrices" type="Matrices" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensors" type="Tensors" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
@@ -746,15 +751,10 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 			<xs:annotation>
 				<xs:documentation>Number of various cone child elements must match numberOfCones</xs:documentation>
 			</xs:annotation>
-			<xs:element name="nonnegativeCone">
+			<xs:element name="nonnegativeCone" type="NonnegativeCone">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="NonnegativeCone"/>
-					</xs:complexContent>
-				</xs:complexType>
 			</xs:element>
 			<xs:element name="nonpositiveCone" type="NonpositiveCone">
 				<xs:annotation>
@@ -793,34 +793,17 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		</xs:choice>
 		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="SemidefiniteCone">
+	<xs:complexType name="GenericCone">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="type" use="optional" default="positiveSemidefinite">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="positiveSemidefinite"/>
-					<xs:enumeration value="negativeSemidefinite"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-	</xs:complexType>
-	<xs:complexType name="CopositiveMatricesCone">
-		<xs:annotation>
-			<xs:documentation>draft </xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="CompletelyPositiveMatricesCone">
-		<xs:annotation>
-			<xs:documentation>draft </xs:documentation>
-		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="otherIndexes" type="NonNegativeIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>use for tensors of rank >= 3. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
@@ -829,28 +812,29 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:complexContent>
+			<xs:extension base="GenericCone"/>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="NonpositiveCone">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:complexContent>
+			<xs:extension base="GenericCone"/>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="OrthantCone">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="direction" type="OrthantConeDirection" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:sequence>
+					<xs:element name="direction" type="OrthantConeDirection" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="OrthantConeDirection">
 		<xs:annotation>
@@ -878,58 +862,132 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="distortionMatrixId" use="optional"/>
-		<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:attribute name="distortionMatrixId" use="optional"/>
+				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
+				<xs:attribute name="axisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>index is of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="RotatedQuadraticCone">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="distortionMatrixId" use="optional"/>
-		<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-		<xs:attribute name="firstAxisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="firstAxisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="secondAxisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="secondAxisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:attribute name="distortionMatrixId" use="optional"/>
+				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
+				<xs:attribute name="firstAxisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>Each index is of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="secondAxisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="1"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="NormedCone">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="distortionMatrixId" use="optional"/>
-		<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="pNorm" use="required">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minInclusive value="1.0" fixed="false"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:attribute name="distortionMatrixId" use="optional"/>
+				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
+				<xs:attribute name="axisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>index is of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="pNorm" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:double">
+							<xs:minInclusive value="1.0" fixed="false"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SemidefiniteCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:attribute name="type" use="optional" default="positiveSemidefinite">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="positiveSemidefinite"/>
+							<xs:enumeration value="negativeSemidefinite"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CopositiveMatricesCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CompletelyPositiveMatricesCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HyperbolicityCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:sequence>
+					<xs:element name="polynomial" type="Polynomial"/>
+					<xs:element name="direction" type="SparseVector"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NonnegativePolynomialsCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:attribute name="maxDegree" default="INF">
+					<xs:simpleType>
+						<xs:restriction base="xs:double">
+							<xs:pattern value="[0-9]+|INF"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="ProductCone">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="factor" type="ProductConeFactor" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfFactors" type="xs:nonNegativeInteger" use="required"/>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:sequence>
+					<xs:element name="factor" type="ProductConeFactor" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="numberOfFactors" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="ProductConeFactor">
 		<xs:annotation>
@@ -958,13 +1016,14 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="cone" type="IntersectionConeComponent" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:sequence>
+					<xs:element name="cone" type="IntersectionConeComponent" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="IntersectionConeComponent">
 		<xs:annotation>

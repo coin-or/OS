@@ -675,7 +675,7 @@
 		</xs:annotation>
 		<xs:all>
 			<xs:annotation>
-				<xs:documentation>The order of matrix constructors is arbitrary. Information specified later raplaces information specified earlier. The matrix scalarCoef is applied at the very end.</xs:documentation>
+				<xs:documentation>The order of matrix constructors is arbitrary. Information specified later replaces information specified earlier. The matrix scalarCoef is applied at the very end.</xs:documentation>
 			</xs:annotation>
 			<xs:element name="elements" type="MatrixElements" minOccurs="0">
 				<xs:annotation>
@@ -1155,6 +1155,33 @@
 		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Tensors">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:annotation>
+				<xs:documentation>Number of the tensor child elements must match numberOfTensors</xs:documentation>
+			</xs:annotation>
+			<xs:element name="tensor" type="Tensor"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensors" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Tensor" mixed="false">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number of dimensions must equal rank</xs:documentation>
+				</xs:annotation>
+				<xs:element name="dimension" type="xs:positiveInteger"/>
+			</xs:sequence>
+			<xs:element name="elements" type="SparseVector" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="XMLData">
 		<xs:annotation>
