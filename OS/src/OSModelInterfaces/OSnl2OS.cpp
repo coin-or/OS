@@ -1771,11 +1771,12 @@ bool OSnl2OS::createOSObjects()
         // garbage collection etc.
     }
 
-#ifndef NDEBUG
+//#ifndef NDEBUG
     OSiLWriter *osilwriter = new OSiLWriter();
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "WRITE THE INSTANCE\n");
     osilwriter->m_bWhiteSpace = true;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osilwriter->writeOSiL( osinstance));
+    std::cout << osilwriter->writeOSiL( osinstance);
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "DONE WRITING THE INSTANCE\n");
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, osinstance->printModel());
     delete osilwriter;
@@ -1787,7 +1788,7 @@ bool OSnl2OS::createOSObjects()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_trace, "DONE WRITING THE OPTIONS\n");
     delete osolwriter;
     osolwriter = NULL;
-#endif
+//#endif
    
     return true;
 }
