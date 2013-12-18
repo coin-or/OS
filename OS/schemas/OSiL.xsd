@@ -786,10 +786,41 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="copositiveMatricesCone" type="CopositiveMatricesCone"/>
-			<xs:element name="completelyPositiveMatricesCone" type="CompletelyPositiveMatricesCone"/>
-			<xs:element name="productCone" type="ProductCone"/>
-			<xs:element name="intersectionCone" type="IntersectionCone"/>
+			<xs:element name="copositiveMatricesCone" type="CopositiveMatricesCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="completelyPositiveMatricesCone" type="CompletelyPositiveMatricesCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="hyperbolicityCone" type="HyperbolicityCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nonNegativePolynomialsCone" type="NonNegativePolynomialsCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="sumOfSquaredPolynomialsCone" type="SumOfSquaredPolynomialsCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="productCone" type="ProductCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="intersectionCone" type="IntersectionCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -966,6 +997,30 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
+				<xs:sequence>
+					<xs:element name="upperBounds" type="SparseVector"/>
+					<xs:element name="lowerBounds" type="SparseVector"/>
+				</xs:sequence>
+				<xs:attribute name="maxDegree" default="INF">
+					<xs:simpleType>
+						<xs:restriction base="xs:double">
+							<xs:pattern value="[0-9]+|INF"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SumOfSquaredPolynomialsCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:sequence>
+					<xs:element name="upperBounds" type="SparseVector"/>
+					<xs:element name="lowerBounds" type="SparseVector"/>
+				</xs:sequence>
 				<xs:attribute name="maxDegree" default="INF">
 					<xs:simpleType>
 						<xs:restriction base="xs:double">

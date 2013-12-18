@@ -2849,6 +2849,7 @@
 									</xs:complexType>
 								</xs:element>
 							</xs:sequence>
+							<xs:attribute name="coef" type="xs:double"/>
 							<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 						</xs:extension>
 					</xs:complexContent>
