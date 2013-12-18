@@ -233,6 +233,7 @@ OS/data/osilFiles/HS071_NLP.osil -text
 OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/HS071_feas.osil -text
 OS/data/osilFiles/HS071_no-obj.osil -text
+OS/data/osilFiles/HangingChains.osil -text
 OS/data/osilFiles/IP_infeasible.osil -text
 OS/data/osilFiles/IP_noconstraint.osil -text
 OS/data/osilFiles/IP_unbounded.osil -text
@@ -246,6 +247,7 @@ OS/data/osilFiles/_ProblemsClassified.xlsx -text
 OS/data/osilFiles/avion2.osil -text
 OS/data/osilFiles/bonminEx1.osil -text
 OS/data/osilFiles/bonminEx1_Nonlinear.osil -text
+OS/data/osilFiles/br17.osil -text
 OS/data/osilFiles/callBackTest.osil -text
 OS/data/osilFiles/callBackTestRowMajor.osil -text
 OS/data/osilFiles/eastborne.osil -text
