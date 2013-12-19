@@ -460,6 +460,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfCols" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="positiveSemidefinite" type="xs:boolean" use="optional" default="false"/>
@@ -801,7 +802,7 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="nonNegativePolynomialsCone" type="NonNegativePolynomialsCone">
+			<xs:element name="nonnegativePolynomialsCone" type="NonnegativePolynomialsCone">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
@@ -998,8 +999,8 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
 				<xs:sequence>
-					<xs:element name="upperBounds" type="SparseVector"/>
-					<xs:element name="lowerBounds" type="SparseVector"/>
+					<xs:element name="upperBounds" type="SparseVector" minOccurs="0"/>
+					<xs:element name="lowerBounds" type="SparseVector" minOccurs="0"/>
 				</xs:sequence>
 				<xs:attribute name="maxDegree" default="INF">
 					<xs:simpleType>
