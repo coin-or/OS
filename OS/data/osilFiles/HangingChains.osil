@@ -419,8 +419,8 @@
 			<quadraticCone id="C0" numberOfColumns="1" numberOfRows="3"/>
 		</cones>
 		<matrixProgramming>
-			<matrixConstraints numberOfMatrixCon="10" mult="10">
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeId="C0"/>
+			<matrixConstraints numberOfMatrixCon="10">
+				<matrixCon numberOfRows="3" numberOfCols="1" lbConeId="C0" mult="10"/>
 			</matrixConstraints>
 			<nonlinearMatrixExpressions numberOfMatrixNL="10">
 				<matrixNL matrixConIdx="0">
