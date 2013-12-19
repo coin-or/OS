@@ -13,7 +13,7 @@ AC_PREREQ(2.59)
 # use this to provide a package name, version number --- make sure it is "trunk" for trunk versions
 # an email address for bug reports, and a shortened version of the package name for the tarball
 # Note that there is a second configure.ac file in root directory --- make sure to synchronize!
-AC_INIT([OS],[2.8.3],[coin-os@lists.coin-or.org])
+AC_INIT([OS],[2.8],[coin-os@lists.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -39,7 +39,7 @@ AC_PREFIX_DEFAULT([`pwd`])
 AC_CANONICAL_BUILD
 
 # Initialise projectdir
-AC_COIN_PROJECTDIR_INIT(OS,14:3:8)
+AC_COIN_PROJECTDIR_INIT(OS)
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(OS)
