@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -413,7 +413,7 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="matrixVarTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="termOperator" use="optional" default="trace">
@@ -491,7 +491,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="matrixConIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="matrixVarTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="termOperator" use="optional" default="none">
@@ -565,15 +565,15 @@
 				</xs:documentation>
 			</xs:annotation>
 			<xs:element name="sos" minOccurs="0" maxOccurs="unbounded">
-				<!--
-SOS type 1 means "at most, or usually, exactly one of these variables can be nonzero (usually, in fact, 1)". This is used most commonly to model disjunctions. Type 2 means "at most two of these variables can be nonzero, and the two variables must be consecutive". This is used to model piecewise linear (typically nonconvex) functions in one variable. Tomlin used SOS to model nonconvex functions in two variables, using a triangulation of the domain. This idea can also be used for approximations in higher dimensions. In addition there may be the requirement that all the nonzero variables in an SOS must add up to 1. If present, this is called the convexity constraint. (It is the user's responsibility to add the convexity constraint to the problem.) The attribute "convexityRowIdx" can be used to identify the
-convexity row to the solver, which might speed up the execution time.
--->
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="SOS"/>
 					</xs:complexContent>
 				</xs:complexType>
+				<!--
+SOS type 1 means "at most, or usually, exactly one of these variables can be nonzero (usually, in fact, 1)". This is used most commonly to model disjunctions. Type 2 means "at most two of these variables can be nonzero, and the two variables must be consecutive". This is used to model piecewise linear (typically nonconvex) functions in one variable. Tomlin used SOS to model nonconvex functions in two variables, using a triangulation of the domain. This idea can also be used for approximations in higher dimensions. In addition there may be the requirement that all the nonzero variables in an SOS must add up to 1. If present, this is called the convexity constraint. (It is the user's responsibility to add the convexity constraint to the problem.) The attribute "convexityRowIdx" can be used to identify the
+convexity row to the solver, which might speed up the execution time.
+-->
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfSOS" type="xs:nonNegativeInteger" use="required"/>
@@ -1058,7 +1058,7 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
 				<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
 					<xs:annotation>
