@@ -47,48 +47,49 @@
 		<nonlinearExpressions numberOfNonlinearExpressions="1">
 			<nl idx="-1">
 				<times>
-					<number value="50"></number>
+					<number value="50"/>
 					<sum>
 						<square>
-							<variable idx="22"></variable>
+							<variable idx="22"/>
 						</square>
 						<square>
-							<variable idx="23"></variable>
+							<variable idx="23"/>
 						</square>
 						<square>
-							<variable idx="24"></variable>
+							<variable idx="24"/>
 						</square>
 						<square>
-							<variable idx="25"></variable>
+							<variable idx="25"/>
 						</square>
 						<square>
-							<variable idx="26"></variable>
+							<variable idx="26"/>
 						</square>
 						<square>
-							<variable idx="27"></variable>
+							<variable idx="27"/>
 						</square>
 						<square>
-							<variable idx="28"></variable>
+							<variable idx="28"/>
 						</square>
 						<square>
-							<variable idx="29"></variable>
+							<variable idx="29"/>
 						</square>
 						<square>
-							<variable idx="30"></variable>
+							<variable idx="30"/>
 						</square>
 						<square>
-							<variable idx="31"></variable>
+							<variable idx="31"/>
 						</square>
 					</sum>
 				</times>
 			</nl>
 		</nonlinearExpressions>
 		<matrices numberOfMatrices="10">
-			<matrix id="link1" numberOfColumns="1" numberOfRows="3">
+			<matrix name="link1" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -116,12 +117,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link2" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link2" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -149,12 +151,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link3" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link3" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -182,12 +185,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link4" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link4" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -215,12 +219,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link5" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link5" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -248,12 +253,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link6" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link6" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -281,12 +287,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link7" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link7" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -314,12 +321,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link8" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link8" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -347,12 +355,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link9" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link9" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -380,12 +389,13 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
-			<matrix id="link10" numberOfColumns="1" numberOfRows="3">
+			</matrix>
+			<matrix name="link10" numberOfColumns="1" numberOfRows="3">
 				<elements>
 					<linearElements>
 						<start numberOfEl="2">
-							<el>0</el>   <el>3</el>
+							<el>0</el>
+							<el>3</el>
 						</start>
 						<nonzeros numberOfEl="3">
 							<indexes>
@@ -413,7 +423,7 @@
 						</nonzeros>
 					</linearElements>
 				</elements>
-			</matrix>			
+			</matrix>
 		</matrices>
 		<cones numberOfCones="1">
 			<quadraticCone id="C0" numberOfColumns="1" numberOfRows="3"/>
@@ -424,37 +434,36 @@
 			</matrixConstraints>
 			<nonlinearMatrixExpressions numberOfMatrixNL="10">
 				<matrixNL matrixConIdx="0">
-					<matrix id="link1"></matrix>
+					<matrix id="0"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link2"></matrix>
+					<matrix id="1"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link3"></matrix>
+					<matrix id="2"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link4"></matrix>
+					<matrix id="3"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link5"></matrix>
+					<matrix id="4"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link6"></matrix>
+					<matrix id="5"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link7"></matrix>
+					<matrix id="6"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link8"></matrix>
+					<matrix id="7"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link9"></matrix>
+					<matrix id="8"/>
 				</matrixNL>
 				<matrixNL matrixConIdx="0">
-					<matrix id="link10"></matrix>
+					<matrix id="9"/>
 				</matrixNL>
 			</nonlinearMatrixExpressions>
 		</matrixProgramming>
 	</instanceData>
 </osil>
-
