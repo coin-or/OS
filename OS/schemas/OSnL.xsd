@@ -26,7 +26,7 @@
 			<xs:documentation>draft. This is a generic matrx node from which we derive matrix operator nodes</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
-	<xs:element name="OSnLMNode" abstract="true">
+	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true">
 		<xs:annotation>
 			<xs:documentation> draft. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
