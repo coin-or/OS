@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -23,7 +23,7 @@
 	<!--Generic base matrix definitions (draft): all functions that return a matrix value  -->
 	<xs:complexType name="OSnLMNode" mixed="false">
 		<xs:annotation>
-			<xs:documentation>draft. This is a generic matrx node from which we derive matrix operator nodes</xs:documentation>
+			<xs:documentation>draft. This is a generic matrix node from which we derive matrix operator nodes</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
 	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true">
@@ -3859,7 +3859,7 @@
 			<xs:documentation>draft.  returns 1 if the two matrices are identical, 0 otherwise.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
@@ -4726,7 +4726,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
@@ -4744,7 +4744,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
@@ -4762,7 +4762,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
@@ -4780,7 +4780,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
@@ -4798,7 +4798,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
@@ -4815,7 +4815,7 @@
 			<xs:documentation>draft. The second child defines the norm.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
@@ -4833,7 +4833,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
@@ -4952,7 +4952,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
