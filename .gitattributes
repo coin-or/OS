@@ -248,6 +248,7 @@ OS/data/osilFiles/avion2.osil -text
 OS/data/osilFiles/bonminEx1.osil -text
 OS/data/osilFiles/bonminEx1_Nonlinear.osil -text
 OS/data/osilFiles/br17.osil -text
+OS/data/osilFiles/br17_new.osil -text
 OS/data/osilFiles/callBackTest.osil -text
 OS/data/osilFiles/callBackTestRowMajor.osil -text
 OS/data/osilFiles/eastborne.osil -text

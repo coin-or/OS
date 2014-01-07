@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Two alternative schema locations for now. Eventually fix both -->
+<!--
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+-->
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
+	<instanceHeader>
+		<name>br17</name>
+		<source>TSPLIB</source>
+		<description>
+			17 city problem (Repetto)			
+			This formulation uses integer semidefinite programming and is intended as a use case for the cone and matrix extensions
+		</description>
+		<fileCreator>H.I. Gassmann, J. Ma and R.K. Martin</fileCreator>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="289">
+			<var type="B" mult="289"></var>
+		</variables>
+		<objectives>
+			<obj maxOrMin="min" numberOfObjCoef="0"></obj>
+		</objectives>
+		<matrices numberOfMatrices="6">
+			<matrix numberOfColumns="17" numberOfRows="17"></matrix>
+			<matrix name="cost" numberOfColumns="17" numberOfRows="17">
+				<elements>
+					<constantElements>
+						<start numberOfEl="18">
+							<el mult="18" incr="17">0</el>
+						</start>
+						<nonzeros numberOfEl="289">
+							<indexes>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+							</indexes>
+							<values>
+								<el>9.999000000000000e+03</el>
+								<el>3.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>3.000000000000000e+00</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>7.200000000000000e+01</el>
+								<el>7.200000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>2.400000000000000e+01</el>
+								<el>2.400000000000000e+01</el>
+								<el>3.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>2.400000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>7.400000000000000e+01</el>
+								<el>9.999000000000000e+03</el>
+								<el>0.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>1.200000000000000e+01</el>
+								<el>1.200000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>7.400000000000000e+01</el>
+								<el>6.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>1.200000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>7.400000000000000e+01</el>
+								<el>0.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>6.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>1.200000000000000e+01</el>
+								<el>1.200000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>7.400000000000000e+01</el>
+								<el>6.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>1.200000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+01</el>
+								<el>6.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>0.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+01</el>
+								<el>0.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+01</el>
+								<el>6.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+01</el>
+								<el>0.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>2.600000000000000e+01</el>
+								<el>1.200000000000000e+01</el>
+								<el>1.200000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>0.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>2.600000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>2.600000000000000e+01</el>
+								<el>1.200000000000000e+01</el>
+								<el>1.200000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>2.600000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>3.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>3.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>7.200000000000000e+01</el>
+								<el>7.200000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>2.400000000000000e+01</el>
+								<el>2.400000000000000e+01</el>
+								<el>3.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>3.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>4.800000000000000e+01</el>
+								<el>4.800000000000000e+01</el>
+								<el>2.400000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+01</el>
+								<el>6.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+01</el>
+								<el>9.999000000000000e+03</el>
+								<el>0.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+01</el>
+								<el>6.000000000000000e+00</el>
+								<el>6.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+01</el>
+								<el>0.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+								<el>8.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>2.600000000000000e+01</el>
+								<el>1.200000000000000e+01</el>
+								<el>1.200000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>0.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>5.000000000000000e+00</el>
+								<el>2.600000000000000e+01</el>
+								<el>8.000000000000000e+00</el>
+								<el>8.000000000000000e+00</el>
+								<el>9.999000000000000e+03</el>
+							</values>
+						</nonzeros>
+					</constantElements>
+				</elements>
+			</matrix>
+			<matrix name="X" numberOfColumns="17" numberOfRows="17">
+				<elements>
+					<varReferenceElements>
+						<start numberOfEl="18">
+							<el mult="18" incr="17">0</el>
+						</start>
+						<nonzeros numberOfEl="289">
+							<indexes>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+							</indexes>
+							<values>
+								<el mult="289" incr="1">0</el>
+							</values>
+						</nonzeros>
+					</varReferenceElements>
+				</elements>
+			</matrix>
+			<matrix name="identity" numberOfColumns="17" numberOfRows="17">
+				<elements>
+					<constantElements>
+						<start numberOfEl="18">
+							<el mult="18" incr="1">0</el>
+						</start>
+						<nonzeros numberOfEl="17">
+							<indexes>
+								<el mult="17" incr="1">0</el>
+							</indexes>
+							<values>
+								<el mult="17">1.0</el>
+							</values>
+						</nonzeros>
+					</constantElements>
+				</elements>
+			</matrix>
+			<matrix name="MatrixOfOnes" numberOfColumns="17" numberOfRows="17">
+				<elements>
+					<constantElements>
+						<start numberOfEl="18">
+							<el mult="18" incr="17">0</el>
+						</start>
+						<nonzeros numberOfEl="289">
+							<indexes>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+								<el mult="17" incr="1">0</el>
+							</indexes>
+							<values>
+								<el mult="289">1.0</el>
+							</values>
+						</nonzeros>
+					</constantElements>
+				</elements>
+			</matrix>
+			<matrix name="VectorOfOnes" numberOfColumns="1" numberOfRows="17">
+				<elements>
+					<constantElements>
+						<start numberOfEl="2">
+							<el>0</el> <el>17</el>
+						</start>
+						<nonzeros numberOfEl="17">
+							<indexes>
+								<el mult="17" incr="1">0</el>
+							</indexes>
+							<values>
+								<el mult="17">1.0</el>
+							</values>
+						</nonzeros>
+					</constantElements>
+				</elements>
+			</matrix>
+		</matrices>
+		<cones numberOfCones="2">
+			<semidefiniteCone id="C0" numberOfColumns="17" numberOfRows="17"></semidefiniteCone>
+			<generalOrthantCone id="Zero" numberOfColumns="1" numberOfRows="17">
+				<direction ub="0.0" lb="0.0" mult="17"></direction>
+			</generalOrthantCone>
+		</cones>
+		<matrixProgramming_new>
+			<scalarObjectives numberOfObj="1">
+				<obj numberOfMatrixTerms="1" objIdx="-1">
+					<matrixTerm>
+						<matrixScalarTimes>
+							<number value="0.5"/>
+							<matrixDotTimes>
+								<matrix idx="0"/>
+								<matrix idx="1"/>
+							</matrixDotTimes>
+						</matrixScalarTimes>
+					</matrixTerm>
+				</obj>
+			</scalarObjectives>
+			<matrixConstraints numberOfMatrixCon="3">
+				<matrixCon numberOfRows="17" numberOfMatrixTerms="1" lbConeID="Zero" ubConeID="Zero">
+					<matrixTerm>
+						<matrixDiagonal>
+							<matrix idx="1"/>
+						</matrixDiagonal>
+					</matrixTerm>
+				</matrixCon>
+				<matrixCon numberOfRows="17" numberOfMatrixTerms="2" lbConeID="C0">
+					<matrixTerm>
+						<matrixTimes>
+							<matrix idx="1"/>
+							<matrix idx="4"/>
+						</matrixTimes>
+					</matrixTerm>
+					<matrixTerm>
+						<matrixScalarTimes> 
+							<number type="real" value="-2.0"/>
+							<matrix idx="4"/> 
+						</matrixScalarTimes>
+					</matrixTerm>
+				</matrixCon>
+				<matrixCon numberOfRows="17" numberOfMatrixTerms="4" lbConeID="C0">
+					<matrixTerm>
+						<VectorToDiagonalMatrix>
+							<matrixProduct>
+								<matrix idx="1"/>
+								<matrix idx="4"/>
+							</matrixProduct>
+						</VectorToDiagonalMatrix>
+					</matrixTerm>
+					<matrixTerm>
+						<matrixScalarTimes>
+							<number type="real" value="-1.0"/>
+							<matrix idx="1"/>
+						</matrixScalarTimes>
+					</matrixTerm>
+					<matrixTerm>
+						<matrix idx="3"/>
+					</matrixTerm>
+					<matrixTerm>
+						<matrixScalarTimes>
+							<number type="real" value="-0.13505554119128839085376821635687"/>
+							<matrix idx="2"/>
+						</matrixScalarTimes>						
+					</matrixTerm>
+				</matrixCon>
+			</matrixConstraints>
+		</matrixProgramming_new>
+	</instanceData>
+</osil>
