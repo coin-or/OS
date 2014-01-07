@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -714,11 +714,11 @@
 	</xs:complexType>
 	<xs:complexType name="Matrix">
 		<xs:annotation>
-			<xs:documentation>For the symmetric attribute, if the matrix is symmetric, it is assumed that only the lower triangle is given and matrix elements in the upper triangle are ignored. The scalarCoef is applied on the final matrix after the matrix the construction. For the base attribute, if it is matrix, a baseMatrixID needs to be specified. If base matrix is objectiveCoefficients, objective function indexed -1 will be the 0th row to start.</xs:documentation>
+			<xs:documentation>For the symmetric attribute, if the matrix is symmetric, it is assumed that only the upper triangle is given and matrix elements in the upper triangle are ignored. The scalarCoef is applied on the final matrix after the matrix the construction. For the base attribute, if it is matrix, a baseMatrixID needs to be specified. If base matrix is objectiveCoefficients, objective function indexed -1 will be the 0th row to start.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="MatrixType">
-				<xs:attribute name="name" type="xs:string" use="optional"/>
+				<xs:attribute name="name" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1182,6 +1182,7 @@
 			<xs:element name="elements" type="SparseVector" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>
 	<xs:complexType name="XMLData">
 		<xs:annotation>

@@ -418,7 +418,7 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="matrixID" type="xs:string" use="required"/>
 		<xs:attribute name="matrixVarTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="termOperator" use="optional" default="trace">
@@ -602,28 +602,28 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="matrixID" type="xs:string" use="required">
+		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>intended for varReference and linear matrices only</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="lbMatrixID" type="xs:string" use="optional">
+		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lbConeId" type="xs:string" use="optional">
+		<xs:attribute name="lbConeID" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains varMtx - lbMtx; assumed all R^n if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubMatrixID" type="xs:string" use="optional">
+		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubConeId" type="xs:string" use="optional">
+		<xs:attribute name="ubConeID" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
 			</xs:annotation>
@@ -683,7 +683,7 @@
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfMatrixTerms" use="required"/>
 		<xs:attribute name="orderConeID"/>
-		<xs:attribute name="constantMatrixID" type="xs:string" use="optional"/>
+		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
@@ -786,12 +786,21 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="constantMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="lbMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="lbConeId" type="xs:string" use="optional"/>
-		<xs:attribute name="ubMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="ubConeId" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>useful for consistency checks</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>useful for consistency checks</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="lbConeID" type="xs:string" use="optional"/>
+		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="ubConeID" type="xs:string" use="optional"/>
 		<xs:attribute name="numberOfMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>

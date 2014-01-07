@@ -10,16 +10,6 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNode" mixed="false">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
-		</xs:annotation>
-	</xs:complexType>
-	<xs:element name="OSnLNode" type="OSnLNode" abstract="true">
-		<xs:annotation>
-			<xs:documentation>  since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<!--Generic base matrix definitions (draft): all functions that return a matrix value  -->
 	<xs:complexType name="OSnLMNode" mixed="false">
 		<xs:annotation>
@@ -29,6 +19,16 @@
 	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true">
 		<xs:annotation>
 			<xs:documentation> draft. Set abstract to true in order to create a substitution group</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:element name="OSnLNode" type="OSnLNode" abstract="true">
+		<xs:annotation>
+			<xs:documentation>  since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<!--Arithmetic Nodes: since version 1.0.0  -->
@@ -3818,7 +3818,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3894,10 +3894,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:all>
+				<xs:sequence>
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
-				</xs:all>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3946,10 +3946,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:all>
+				<xs:sequence>
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
-				</xs:all>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4015,10 +4015,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:all>
+				<xs:sequence>
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
-				</xs:all>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4101,10 +4101,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:all>
+				<xs:sequence>
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
-				</xs:all>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4246,6 +4246,23 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixColumnNumber" type="OSnLNodeMatrixColumnNumber" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixToScalar">
+		<xs:annotation>
+			<xs:documentation>draft. Intended for 1x1 matrices only.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixToScalar" type="OSnLNodeMatrixToScalar" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -5548,6 +5565,7 @@
 			<xs:enumeration value="matrixSquareRoot"/>
 			<xs:enumeration value="matrixRowNumber"/>
 			<xs:enumeration value="matrixColumnNumber"/>
+			<xs:enumeration value="matrixToScalar"/>
 			<xs:enumeration value="matrixElementAt"/>
 			<xs:enumeration value="matrixSubmatrixAt"/>
 			<xs:enumeration value="matrixMerge"/>
