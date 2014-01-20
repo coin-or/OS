@@ -73,7 +73,7 @@
 
 \item Prepare constraint programming document/report
 
-\item Prepare a paper on OSOption and OSResult.
+%\item Prepare a paper on OSOption and OSResult.
 
 \item Write documentation on the new Java example 
 
@@ -100,29 +100,31 @@ call OSSolverService from Java.
 \item - most important - allow redirecting the output.
 \end{itemize}
 
-\item Treat \url{https://projects.coin-or.org/OS/ticket/14} 
-
-\item[] Andreas' comments regarding this issue:
-
-\item[] ``I like the message handling of Ipopt, where you can register several
-journals that can handle output for different categories with differing
-print levels. For the GAMSlinks we then have a GamsJournal that is used
-to direct the output into the GAMS output channels.
-
-\item[] ``Cbc and Osi-interfaced solvers use CoinMessageHandler. I do not really
-like them because the message handler sometimes insert spaces or
-newlines which make them very inflexible about what kind of output you
-can print, but we have a GamsMessageHandler that does the job. Not all
-Osi links support this yet. For Clp, Cbc, DyLP it should work. For the
-trunk versions of Cpx, Msk, Xpr it should also work. Symphony I don't
-remember.
-
-\item[] ``For Bonmin and Couenne one has to pass in both an Ipopt::Journal and a
-CoinMessageHandler.''
-
-\item get a log file from Cbc and put into OSrL
-
+%\item Treat \url{https://projects.coin-or.org/OS/ticket/14} 
+%
+%\item[] Andreas' comments regarding this issue:
+%
+%\item[] ``I like the message handling of Ipopt, where you can register several
+%journals that can handle output for different categories with differing
+%print levels. For the GAMSlinks we then have a GamsJournal that is used
+%to direct the output into the GAMS output channels.
+%
+%\item[] ``Cbc and Osi-interfaced solvers use CoinMessageHandler. I do not really
+l%ike them because the message handler sometimes insert spaces or
+%newlines which make them very inflexible about what kind of output you
+%can print, but we have a GamsMessageHandler that does the job. Not all
+%Osi links support this yet. For Clp, Cbc, DyLP it should work. For the
+%trunk versions of Cpx, Msk, Xpr it should also work. Symphony I don't
+%remember.
+%
+%\item[] ``For Bonmin and Couenne one has to pass in both an Ipopt::Journal and a
+%CoinMessageHandler.''
+%
+%\item get a log file from Cbc and put into OSrL
+%
 \item After ticket 14 has been implemented, allow introspection as to which solvers are connected 
+
+\item bilevel and multilevel programming
 
 \item Schema changes for version 3.0:
 

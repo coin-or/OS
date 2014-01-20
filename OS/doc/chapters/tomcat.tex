@@ -63,7 +63,14 @@ If you already have a Tomcat 6.0 server with Axis installed, and have created an
 \item{} copy the file {\tt OSServer.war} into the Tomcat {\tt tomcat/webapps}
 directory.
 
-\item{}  Stop and start Tomcat.
+\item{}  Stop and start Tomcat. The distribution contains two scripts, {\tt startup} and {\tt shutdown}, in two version, {\tt .sh} for Linux systems and {\tt .bat} for Windows systems. These files may be found, for instance, in the folder {\tt apache-tomcat-6.0.26/bin}. For instance,
+%
+\begin{verbatim}
+./startup.sh
+\end{verbatim}
+will start the service on a Linux system.
+
+
 \end{enumerate}
 
 In the directory,
@@ -164,4 +171,32 @@ xml-apis.jar
 Also,  if you are running the 1.5 JVM instead of 1.6 you need
 the {\tt saaj.jar}. 
 
+\subdivision{Troubleshooting the connection}\label{section:tomcat-troubleshooting}
 
+If there are difficulties with the connection, that is, if the remote OSSolverService does not respond or returns an error along the lines of
+
+\begin{verbatim}
+failure connecting with remote socket at address: ***.***.***.***
+\end{verbatim}
+
+there is a three step process to try to help pinpoint the problem.
+
+\begin{enumerate}
+\item
+ Type the URL 
+\begin{verbatim}
+http://***.***.***.***:8080
+\end{verbatim}
+
+into a web browser. If the Tomcat server at the remote location is working, you should see the welcome page for the Tomcat server. If you do not see welcome page, the Tomcat server is not working.
+
+\item If the Tomcat server is working, submit a job to the remote OSSolverService with the following
+{\tt serviceLocation}:
+
+\begin{verbatim}
+http://74.94.100.129:8080/OSServer/services/OSSolverService?wsdl
+\end{verbatim}
+
+This tests the connection with the OSSolver Java servlet.
+
+\item Finally, try call the OSSolverService.exe in the normal way. If this fails, the remote OSSolverService is not running properly. At this point you may also want to check whether the local solver gives sensible output when run on the same data,
