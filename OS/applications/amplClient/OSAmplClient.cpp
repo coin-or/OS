@@ -544,7 +544,7 @@ bool findInstance(OSCommandLine *oscommandline, OSnl2OS *nl2os)
             throw ErrorClass("Error reading .nl file.");
         nl2os->setOsol(oscommandline->osol);
         nl2os->setJobID(oscommandline->jobID);
-        nl2os->createOSObjects() ;
+        nl2os->createOSObjects();
         oscommandline->osinstance = nl2os->osinstance;
         return true;
     }
@@ -694,7 +694,6 @@ void send(OSCommandLine *oscommandline, OSnl2OS *nl2OS)
         }
         else
         {
-
             outStr << ": send failed." << std::endl;
             outStr << "Check to make sure you sent a jobID not on the system." << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, outStr.str());

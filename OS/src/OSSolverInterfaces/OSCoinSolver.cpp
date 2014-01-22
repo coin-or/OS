@@ -142,6 +142,7 @@ CoinSolver::~CoinSolver()
 
 void CoinSolver::buildSolverInstance() throw (ErrorClass)
 {
+    std::ostringstream outStr;
     try
     {
         if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
@@ -231,21 +232,25 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
             #endif
 
         else if (sSolverName == "")
-        {       // default solver is Clp in continuous case,
-                // Cbc for an integer program
-                if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ||
-                                      sSolverName.find( "cbc") != std::string::npos    ) sSolverName = "cbc";
-                else sSolverName = "clp";
-                osiSolver = new OsiClpSolverInterface();
+        {   // default solver is Clp in continuous case,
+            // Cbc for an integer program
+            if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ||
+                                  sSolverName.find( "cbc") != std::string::npos    ) sSolverName = "cbc";
+            else sSolverName = "clp";
+            osiSolver = new OsiClpSolverInterface();
         }
         else
-                  throw ErrorClass("Solver selected is not supported by this version of OSSolverService");
+            throw ErrorClass("Solver selected is not supported by this version of OSSolverService");
 
         // first check the various solvers and see if they are of the proper problem type
-        if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-                || (osinstance->getNumberOfQuadraticTerms() > 0) )
+        if ( (osinstance->getNumberOfNonlinearExpressions() > 0) )
         {
             throw ErrorClass( "This COIN-OR Solver is not configured for nonlinear programming");
+        }
+        if ((osinstance->getNumberOfQuadraticTerms() > 0) && 
+            (sSolverName.find( "cbc") == std::string::npos) && (sSolverName.find( "clp") == std::string::npos))
+        {
+            throw ErrorClass( "This COIN-OR Solver is not configured for quadratic programming");
         }
         // throw an exception if we have a solver that cannot do integer programming
         if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
@@ -284,7 +289,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         else osiSolver->setObjSense(-1.0);
         // set the integer variables
         int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
-        if(numOfIntVars > 0)
+        if (numOfIntVars > 0)
         {
             int *intIndex = NULL;
             int i = 0;
@@ -304,6 +309,131 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
             delete[] intIndex;
             intIndex = NULL;
         }
+
+        // the clpSolver supports quadratic objectives if present in the input    
+        int nq = osinstance->getNumberOfQuadraticTerms();
+        if (nq > 0)
+        {
+            if ( (sSolverName.find("clp") != std::string::npos) || (sSolverName.find("clp") != std::string::npos) )
+            {
+                // must get the quadratic data, verify objective terms only, and convert to sparse matrix format
+                QuadraticTerms* qterms = osinstance->getQuadraticTerms();
+
+
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "original arrays:" << std::endl;
+                outStr << "  var One indexes:";
+                for (int i=0; i<nq; i++)
+                    outStr << "  " << qterms->varOneIndexes[i];
+                outStr << std::endl;
+                outStr << "  var Two indexes:";
+                for (int i=0; i<nq; i++)
+                    outStr << "  " << qterms->varTwoIndexes[i];
+                outStr << std::endl;
+                outStr << "  coefficients:   ";
+                for (int i=0; i<nq; i++)
+                    outStr << "  " << qterms->coefficients[i];
+                outStr << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+
+                int  ncols = osinstance->getVariableNumber(); 
+                int* colStarts = new int[ncols+1];
+                for (int i=0; i<=ncols; i++)
+                    colStarts[i] = 0;
+
+                //get column lengths
+                for (int i=0; i<nq; i++)
+                {
+                    if (qterms->rowIndexes[i] != -1)
+                        throw ErrorClass("Clp solver cannot handle quadratic terms in the constraints");
+                    else
+                        colStarts[qterms->varOneIndexes[i]+1] += 1;
+                }
+
+                // convert column lengths to column starts
+                for (int i=0; i<ncols; i++)
+                    colStarts[i+1] += colStarts[i];
+
+                // sort the varOneIndexes array in ascending order
+                // assumptions: 1. Most likely the quadratic terms are sorted already
+                // 2. The order of varTwoIndexes within varOneIndexes does not matter
+                int swapLoc;
+                int iswap;
+                double dswap;
+                for (int i=0; i< ncols-1; i++)
+                {
+                    swapLoc = colStarts[i+1];
+                    for (int j=colStarts[i]; j<colStarts[i+1]; j++)
+                    {
+                        if (qterms->varOneIndexes[j] != i)
+                        {
+                            while ( (qterms->varOneIndexes[swapLoc] != i) && (swapLoc < nq))
+                                swapLoc++;
+                            if (swapLoc < nq)
+                            {
+                                iswap = qterms->varOneIndexes[j];
+                                qterms->varOneIndexes[j] = qterms->varOneIndexes[swapLoc];
+                                qterms->varOneIndexes[swapLoc] = iswap;
+                                iswap = qterms->varTwoIndexes[j];
+                                qterms->varTwoIndexes[j] = qterms->varTwoIndexes[swapLoc];
+                                qterms->varTwoIndexes[swapLoc] = iswap;
+                                dswap = qterms->coefficients[j];
+                                qterms->coefficients[j] = qterms->coefficients[swapLoc];
+                                qterms->coefficients[swapLoc] = dswap;
+#ifndef NDEBUG
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "swapping locations " << j << " and " << swapLoc << std::endl;
+                
+                                outStr << "after swap:" << std::endl;
+                                outStr << "  var One indexes:";
+                                for (int i=0; i<nq; i++)
+                                    outStr << "  " << qterms->varOneIndexes[i];
+                                outStr << std::endl;
+                                outStr << "  var Two indexes:";
+                                for (int i=0; i<nq; i++)
+                                    outStr << "  " << qterms->varTwoIndexes[i];
+                                outStr << std::endl;
+                                outStr << "  coefficients:   ";
+                                for (int i=0; i<nq; i++)
+                                    outStr << "  " << qterms->coefficients[i];
+                                outStr << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str()); 
+#endif
+                            }
+                            else
+                                throw ErrorClass("Sorting of quadratic terms failed in OSCoinSolver");
+                        }
+                    }
+                }
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "terminal arrays:" << std::endl;
+                outStr << "  var One indexes:";
+                for (int i=0; i<nq; i++)
+                    outStr << "  " << qterms->varOneIndexes[i];
+                outStr << std::endl;
+                outStr << "  var Two indexes:";
+                for (int i=0; i<nq; i++)
+                    outStr << "  " << qterms->varTwoIndexes[i];
+                outStr << std::endl;
+                outStr << "  coefficients:   ";
+                for (int i=0; i<nq; i++)
+                    outStr << "  " << qterms->coefficients[i];
+                outStr << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str()); 
+#endif
+
+                //osiSolver->loadQuadraticObjective(ncols, colStarts, qterms->varTwoIndexes, qterms->coefficients);
+                throw ErrorClass("Quadratic terms not implemented yet");
+            }               
+        }
+
         bCallbuildSolverInstance = true;
     }
     catch(const ErrorClass& eclass)
@@ -718,7 +848,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                 /* Only the following statuses are recognized:
                  *
                  *   enum Status {
-                 *       isFree = 0x00,	            ///< Nonbasic free variable
+                 *       isFree = 0x00,                ///< Nonbasic free variable
                  *       basic = 0x01,              ///< Basic variable
                  *       atUpperBound = 0x02,       ///< Nonbasic at upper bound
                  *       atLowerBound = 0x03        ///< Nonbasic at lower bound
@@ -1035,8 +1165,6 @@ void CoinSolver::solve() throw (ErrorClass)
                     cbc_argv = NULL;
                     num_cbc_argv = 0;
                 }
-
-
 
                 cpuTime = CoinCpuTime() - start;
 
@@ -1691,6 +1819,7 @@ void CoinSolver::writeResult(CbcModel *model)
     std::string description = "";
     osresult->setGeneralStatusType("normal");
     osresult->setTime(cpuTime);
+
     osresult->setServiceName( OSgetVersionInfo() );
 
     //first determine if we are feasible

@@ -146,6 +146,8 @@ OS/data/amplFiles/nonconvex_D.nl -text
 OS/data/amplFiles/parinc.dat -text
 OS/data/amplFiles/parinc.mod -text
 OS/data/amplFiles/parinc.nl -text
+OS/data/amplFiles/parincQuad2.mod -text
+OS/data/amplFiles/parincQuad2.nl -text
 OS/data/amplFiles/parincQuadratic.mod -text
 OS/data/amplFiles/parincQuadratic.nl -text
 OS/data/amplFiles/qptest.mod -text
@@ -227,6 +229,7 @@ OS/data/mpsFiles/IP_noconstraint.mps -text
 OS/data/mpsFiles/IP_unbounded.mps -text
 OS/data/mpsFiles/LP_noconstraint.mps -text
 OS/data/mpsFiles/parinc.mps -text
+OS/data/mpsFiles/parincQuad2.mps -text
 OS/data/mpsFiles/parincQuadratic.mps -text
 OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
@@ -271,6 +274,7 @@ OS/data/osilFiles/parincLinear.osil -text
 OS/data/osilFiles/parincLinearByRow.osil -text
 OS/data/osilFiles/parincLinearEmpty.osil -text
 OS/data/osilFiles/parincLinearZeroVar.osil -text
+OS/data/osilFiles/parincQuad2.osil -text
 OS/data/osilFiles/parincQuadratic.osil -text
 OS/data/osilFiles/qptest.osil -text
 OS/data/osilFiles/qptest2.osil -text

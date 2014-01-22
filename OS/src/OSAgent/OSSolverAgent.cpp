@@ -31,6 +31,9 @@
 # endif
 #endif
 
+#include <stdio.h>
+#include <sstream>
+
 using std::string;
 using std::ostringstream;
 using std::cout;
@@ -69,12 +72,24 @@ OSSolverAgent::~OSSolverAgent()
 
 string OSSolverAgent::solve(string osil, string osol)
 {
-    string sOSrL ;
+    string sOSrL;
     string theSOAP;
     string solveResult;
 
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "Inside SolverAgent solve() method \n");
+
+    std::ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+
+    outStr << "Sending to the remote system:" << std::endl << std::endl;
+    outStr << "OSiL string:" << std::endl << std::endl;
+    outStr << osil << std::endl << std::endl;
+    outStr << "OSoL string:" << std::endl << std::endl;
+    outStr << osol << std::endl << std::endl;    
+
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     bool useCDATA = true;
@@ -165,6 +180,18 @@ bool OSSolverAgent::send(string osil, string osol)
 
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "Inside SolverAgent send() method \n");
+
+    std::ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+
+    outStr << "Sending to the remote system:" << std::endl << std::endl;
+    outStr << "OSiL string:" << std::endl << std::endl;
+    outStr << osil << std::endl << std::endl;
+    outStr << "OSoL string:" << std::endl << std::endl;
+    outStr << osol << std::endl << std::endl;    
+
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     // CreateSOAPMessage inputs
@@ -232,6 +259,16 @@ string OSSolverAgent::getJobID(string osol)
 
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "Inside SolverAgent getJobID() method \n");
+
+    std::ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+
+    outStr << "Sending to the remote system:" << std::endl << std::endl;
+    outStr << "OSoL string:" << std::endl << std::endl;
+    outStr << osol << std::endl << std::endl;    
+
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     // CreateSOAPMessage inputs
@@ -290,6 +327,16 @@ string OSSolverAgent::retrieve(string osol)
 
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "Inside SolverAgent retrieve() method \n");
+
+    std::ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+
+    outStr << "Sending to the remote system:" << std::endl << std::endl;
+    outStr << "OSoL string:" << std::endl << std::endl;
+    outStr << osol << std::endl << std::endl;    
+
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     // CreateSOAPMessage inputs
@@ -352,6 +399,16 @@ string OSSolverAgent::kill(string osol)
 
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "Inside SolverAgent kill() method \n");
+
+    std::ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+
+    outStr << "Sending to the remote system:" << std::endl << std::endl;
+    outStr << "OSoL string:" << std::endl << std::endl;
+    outStr << osol << std::endl << std::endl;    
+
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     // CreateSOAPMessage inputs
@@ -407,6 +464,18 @@ string OSSolverAgent::knock(string ospl, string osol)
     bool useCDATA = true;
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "Inside SolverAgent knock() method \n");
+
+    std::ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+
+    outStr << "Sending to the remote system:" << std::endl << std::endl;
+    outStr << "OSpL string:" << std::endl << std::endl;
+    outStr << ospl << std::endl << std::endl;
+    outStr << "OSoL string:" << std::endl << std::endl;
+    outStr << osol << std::endl << std::endl;    
+
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
     // CreateSOAPMessage inputs

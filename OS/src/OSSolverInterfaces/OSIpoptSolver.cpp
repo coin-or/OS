@@ -170,7 +170,6 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
     }
     catch(const ErrorClass& eclass)
     {
-
         *ipoptErrorMsg = eclass.errormsg;
         throw;
     }
@@ -362,18 +361,18 @@ bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_valu
     {
         if(osinstance->getObjectiveNumber() > 0)
         {
-            //the following is a kludge for ipopt, new_x does not seem to get initilized if there are no constraints.
+            //the following is a kludge for ipopt, new_x does not seem to get initialized if there are no constraints.
             //if(osinstance->getConstraintNumber() <= 0) new_x = true;
-            if(new_x == false) obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), false)[ 0];
-            else obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, true, 0 )[ 0];
+            if (new_x == false) 
+                obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), false)[ 0];
+            else 
+                obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, true, 0 )[ 0];
             //if( CoinIsnan( (double)obj_value) ) return false;
             //if( CoinIsnan( obj_value ) )return false;
         }
-
     }
     catch(const ErrorClass& eclass)
     {
-
         *ipoptErrorMsg = eclass.errormsg;
         throw;
     }
@@ -451,6 +450,7 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
     if (values == NULL)
     {
         // return the values of the jacobian of the constraints
+
 
         //cout << "n: " << n << endl;
         //cout << "m: " << m << endl;
@@ -831,7 +831,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 #ifndef NDEBUG
         outStr.str("");
         outStr.clear();
-        outStr << "error in OSIpoptSolver, line 636:\n" << eclass.errormsg << endl;
+        outStr << "error trap in OSIpoptSolver:\n" << eclass.errormsg << endl;
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         osresult->setGeneralMessage( eclass.errormsg);

@@ -728,7 +728,7 @@ bool OSnl2OS::createOSObjects()
         osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
         if (fidxs.size())
         {
-            osinstance->setQuadraticTerms((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);
+            osinstance->setQuadraticCoefficients((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);
         }
     // Note: if we intended to call objval, conval etc with asl == rw later we must call qp_opify here.
 
@@ -736,8 +736,6 @@ bool OSnl2OS::createOSObjects()
     // end loop of nonlinear rows
     //
     }
-
-
 
     // now create the objective function
     // in the nl file, this is stored in dense form; convert to sparse.
@@ -771,7 +769,6 @@ bool OSnl2OS::createOSObjects()
         delete objectiveCoefficients; // delete the temporary sparse vector
         objectiveCoefficients = NULL;
     }
-
 
     //
     // now fill in row information

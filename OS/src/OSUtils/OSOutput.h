@@ -60,7 +60,7 @@ enum ENUM_OUTPUT_LEVEL
  */
 enum ENUM_OUTPUT_AREA
 {
-     ENUM_OUTPUT_AREA_main = 0,
+     ENUM_OUTPUT_AREA_main = 1,
      ENUM_OUTPUT_AREA_OSAgent,
      ENUM_OUTPUT_AREA_Command_line_parser,
      ENUM_OUTPUT_AREA_OSiL_parser,

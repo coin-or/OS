@@ -1968,6 +1968,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                 {
                     nlnode =  postfixVec[ n - 1 - i];
                     opStack.push( nlnode);
+
                     //std::cout << postfixVec[ i]->snodeName << std::endl;
                 }
 
@@ -2296,7 +2297,6 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPrefix( int rowId
         {
             OSExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
             prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
-
         }
         else
         {
@@ -2321,7 +2321,6 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int ro
         {
             OSExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
             prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
-
         }
         else
         {
@@ -3010,25 +3009,7 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
         if (instanceData->linearConstraintCoefficients->start->el != NULL)
             delete [] instanceData->linearConstraintCoefficients->start->el;
 
-/*
-    if (startsBegin == 0)
-    {
-        instanceData->linearConstraintCoefficients->start->el = starts;
-        instanceData->linearConstraintCoefficients->start->numberOfEl = startsEnd + 1;
-    }
-    else
-    {
-        instanceData->linearConstraintCoefficients->start->el = new int[startsEnd - startsBegin + 1];
-        k = 0;
-        for(i = startsBegin; i <= startsEnd; i++)
-        {
-            instanceData->linearConstraintCoefficients->start->el[k] = starts[i];
-            k++;
-        }
-    }
-*/
     instanceData->linearConstraintCoefficients->start->el = (starts+startsBegin);
-
     instanceData->linearConstraintCoefficients->start->numberOfEl = startsEnd - startsBegin + 1;
     instanceData->linearConstraintCoefficients->iNumberOfStartElements = startsEnd - startsBegin + 1;
 
@@ -3038,25 +3019,6 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
     else
         if (instanceData->linearConstraintCoefficients->value->el != NULL)
             delete[] instanceData->linearConstraintCoefficients->value->el;
-
-/*
-    if (valuesBegin == 0)
-    {
-        instanceData->linearConstraintCoefficients->value->el = values;
-    }
-    else
-    {
-        instanceData->linearConstraintCoefficients->value->el = new double[numberOfValues];
-
-        k = 0;
-        for(i = valuesBegin; i <= valuesEnd; i++)
-        {
-            instanceData->linearConstraintCoefficients->value->el[k] = values[i];
-            k++;
-        }
-    }
-    instanceData->linearConstraintCoefficients->value->numberOfEl = numberOfValues;
-*/
 
     instanceData->linearConstraintCoefficients->value->el = (values+valuesBegin);
     instanceData->linearConstraintCoefficients->value->numberOfEl = numberOfValues;
@@ -3070,16 +3032,6 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
             if (instanceData->linearConstraintCoefficients->rowIdx->el != NULL)
                 delete[] instanceData->linearConstraintCoefficients->rowIdx->el;
 
-/*
-        instanceData->linearConstraintCoefficients->rowIdx->el = new int[numberOfValues];
-        k = 0;
-        for(i = indexesBegin; i <= indexesEnd; i++)
-        {
-            instanceData->linearConstraintCoefficients->rowIdx->el[k] = indexes[i];
-            k++;
-        }
-        instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = k;
-*/
         instanceData->linearConstraintCoefficients->rowIdx->el = (indexes+indexesBegin);
         instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = numberOfValues;
     }
@@ -3091,16 +3043,6 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
             if (instanceData->linearConstraintCoefficients->colIdx->el != NULL)
                 delete[] instanceData->linearConstraintCoefficients->colIdx->el;
 
-/*
-        instanceData->linearConstraintCoefficients->colIdx->el = new int[numberOfValues];
-        k = 0;
-        for(i = indexesBegin; i <= indexesEnd; i++)
-        {
-            instanceData->linearConstraintCoefficients->colIdx->el[k] = indexes[i];
-            k++;
-        }
-        instanceData->linearConstraintCoefficients->colIdx->numberOfEl = k;
-*/
         instanceData->linearConstraintCoefficients->colIdx->el = (indexes+indexesBegin);
         instanceData->linearConstraintCoefficients->colIdx->numberOfEl = numberOfValues;
     }
@@ -3195,24 +3137,34 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
 }//copyLinearConstraintCoefficients
 
 
+bool OSInstance::setNumberOfQuadraticTerms(int nq)
+{
+    if (nq < 0)
+        throw ErrorClass("number of quadratic terms cannot be negative");
+    if (instanceData == NULL) instanceData = new InstanceData();
+    if (instanceData->quadraticCoefficients == NULL)
+        instanceData->quadraticCoefficients = new QuadraticCoefficients();
+    m_iQuadraticTermNumber = nq;
+    instanceData->quadraticCoefficients->numberOfQuadraticTerms = nq;
+    return true;
+}//setNumberOfQuadraticTerms
 
 
-bool OSInstance::setQuadraticTerms(int number,
-                                   int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients,
-                                   int begin, int end)
+bool OSInstance::setQuadraticCoefficients(int number,
+                                          int* rowIndexes, int* varOneIndexes, int* varTwoIndexes,
+                                          double* coefficients, int begin, int end)
 {
     if(number < 0) return false;
     if(number != (end - begin) + 1) return false;
     if(number == 0)
     {
-        instanceData->quadraticCoefficients = 0;
+        instanceData->quadraticCoefficients = NULL;
         return true;
     }
-    if( ((end - begin + 1) != number) ||
-            (rowIndexes == 0) ||
-            (varOneIndexes == 0) ||
-            (varTwoIndexes == 0) ||
-            (coefficients == 0) ) return false;
+    if( (rowIndexes    == 0) ||
+        (varOneIndexes == 0) ||
+        (varTwoIndexes == 0) ||
+        (coefficients  == 0)  ) return false;
     if (instanceData->quadraticCoefficients == NULL)
         instanceData->quadraticCoefficients = new QuadraticCoefficients();
 
@@ -4303,6 +4255,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
 
     outStr << "HERE ARE NUMBER OF CONSTANT TERMS:" << std::endl;
     for (i = 0; i < iNumRowStarts - 1; i++ )
+
     {
         outStr <<  m_miJacNumConTerms[ i ] << "  ";
     }

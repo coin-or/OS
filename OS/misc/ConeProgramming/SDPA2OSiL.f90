@@ -416,7 +416,7 @@
                   if (mult .eq. 1) then
                      write (6, 1024) vmark
                   else
-                     write (6, 1037) mult, vmark
+                     write (6, 1047) mult, vmark
                   endif
                endif
                write (6,1025)

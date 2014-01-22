@@ -46,7 +46,7 @@ OSmps2OS::OSmps2OS( std::string mpsfilename)
 #ifndef NDEBUG
         std::ostringstream outStr;
         {
-             outStr << "Detected " << m_nOfSOS << " special ordered sets" << std::endl;
+            outStr << "Detected " << m_nOfSOS << " special ordered sets" << std::endl;
             for (int i=0; i < m_nOfSOS; i++)
             {
                 int numberEntries = m_SOS[i]->numberEntries();
@@ -68,7 +68,6 @@ OSmps2OS::OSmps2OS( std::string mpsfilename)
         switch (m_MpsData->reader()->whichSection (  ))
         {
             case COIN_QUAD_SECTION:
-//#if 0 // Not yet supported
                 status = m_MpsData->readQuadraticMps(NULL, m_quadColumnStart, m_quadColumnIdx, m_quadElements, 0);
 
                 if (status != 0)
@@ -192,7 +191,7 @@ OSmps2OS::~OSmps2OS()
 } // end destructor
 
 // Kipp-- put in integer programming
-bool OSmps2OS::createOSObjects( )
+bool OSmps2OS::createOSObjects()
 {
     int i;
     int numvar  = m_MpsData->getNumCols();
@@ -281,8 +280,8 @@ bool OSmps2OS::createOSObjects( )
             for (int i=0; i<numberColumns; i++)
                 for (int j=m_quadColumnStart[i];j<m_quadColumnStart[i+1];j++)
                     colindexes[j] = i;
-            osinstance->setQuadraticTerms(numberElements, rowindexes, colindexes, 
-                m_quadColumnIdx, m_quadElements, 0, numberElements-1);
+            osinstance->setQuadraticCoefficients(numberElements, rowindexes, colindexes, 
+                    m_quadColumnIdx, m_quadElements, 0, numberElements-1);
         }
     }
     // store any cone information (TODO)

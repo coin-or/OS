@@ -785,7 +785,7 @@ void solve(OSCommandLine *oscommandline)
                     nl2os = new OSnl2OS();
                     nl2os->readNl(oscommandline->nlFile);
                     nl2os->setOsol(oscommandline->osol);
-                    nl2os->createOSObjects() ;
+                    nl2os->createOSObjects();
                     osinstance = nl2os->osinstance;
                     if (nl2os->osoption != NULL)
                     {

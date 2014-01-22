@@ -49,7 +49,6 @@ OSOutputChannel::OSOutputChannel(std::string name)
         this->file = fopen (this->name.c_str(), "w+" );
         std::string temp = ("Could not open file " + this->name);
         if (this->file == NULL) throw ErrorClass(temp);
-//        if (this->file == NULL) throw ErrorClass("Could not open file " + this->name);
     }
 }
 
@@ -223,11 +222,11 @@ bool OSOutput::SetPrintLevel(std::string name, ENUM_OUTPUT_LEVEL level)
     else
     {
         aLevel = level % 100;
-        area =  (level / 100) - 1;
+        area =   level / 100;
         if (aLevel >= ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS || area >= ENUM_OUTPUT_AREA_NUMBER_OF_AREAS)
             throw ErrorClass("illegal printLevel specified");
         else
-            return (outputChannel[k]->setPrintLevel((ENUM_OUTPUT_AREA)area,level));
+            return (outputChannel[k]->setPrintLevel((ENUM_OUTPUT_AREA)area, (ENUM_OUTPUT_LEVEL)aLevel));
     }
 }
 

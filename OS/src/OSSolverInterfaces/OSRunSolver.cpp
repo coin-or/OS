@@ -73,8 +73,8 @@ std::string runSolver(std::string solverName, std::string osol,
     solverType->setSolverOptions();
     solverType->solve();
     std::string resultString = solverType->osrl;
-    if (solverType != NULL)
-        delete solverType;
+
+    delete solverType;
     solverType = NULL;
     return resultString;
 } //runSolver (osinstance, osol)      

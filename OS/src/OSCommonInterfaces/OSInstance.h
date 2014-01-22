@@ -2212,23 +2212,34 @@ public:
                                          int* starts, int startsBegin, int startsEnd);
 
     /**
-     * set quadratic terms
+     * set the number of quadratic terms
+     *
+     * <p>
+     *
+     * @param nq holds the number of quadratic terms.
+     * @return whether the number of quadratic terms was set successfully.
+     */
+    bool setNumberOfQuadraticTerms(int nq);
+
+    /**
+     * set quadratic coefficients into the QuadraticCoefficients->qTerm data structure
      *
      * <p>
      *
      * @param number holds the number of quadratic terms.
      * @param rowIndexes holds an integer array of row indexes of all the quadratic terms.
      * A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
-     * @param varOneIndexes holds an integer array of the first varialbe indexes of all the quadratic terms.
-     * @param varTwoIndexes holds an integer array of the second varialbe indexes of all the quadratic terms.
-     * @param coefficients holds a double array all the quadratic term coefficients.
+     * @param varOneIndexes holds an integer array of the first  variable indexes of all the quadratic terms.
+     * @param varTwoIndexes holds an integer array of the second variable indexes of all the quadratic terms.
+     * @param coefficients holds an array of double containing all the quadratic term coefficients.
      * @param begin holds the begin index of all the arrays to copy from (usually = 0).
      * @param end holds the end index of all the arrays to copy till (usually = array length -1).
      * @return whether the quadratic terms are set successfully.
+     *
      */
-    bool setQuadraticTerms(int number,
-                           int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients,
-                           int begin, int end);
+    bool setQuadraticCoefficients(int number,
+                                  int* rowIndexes, int* varOneIndexes, int* varTwoIndexes,
+                                  double* coefficients, int begin, int end);
 
     /**
      * set quadratic terms in nonlinearExpressions
@@ -2238,8 +2249,8 @@ public:
      * @param number holds the number of quadratic terms.
      * @param rowIndexes holds an integer array of row indexes of all the quadratic terms.
      * A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
-     * @param varOneIndexes holds an integer array of the first varialbe indexes of all the quadratic terms.
-     * @param varTwoIndexes holds an integer array of the second varialbe indexes of all the quadratic terms.
+     * @param varOneIndexes holds an integer array of the first  variable indexes of all the quadratic terms.
+     * @param varTwoIndexes holds an integer array of the second variable indexes of all the quadratic terms.
      * @param coefficients holds a double array all the quadratic term coefficients.
      * @return whether the quadratic terms are set successfully.
      */
@@ -2454,6 +2465,7 @@ public:
             int objIdx, bool new_x, int highestOrder);
 
     /**
+
      * Calculate the gradient of the objective function indexed by objIdx
      * this function is overloaded
      *

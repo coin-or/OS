@@ -18,6 +18,7 @@
 
 #include "OSConfig.h"
 #include "OSMathUtil.h"
+#include "OSParameters.h"
 #include "OSGeneral.h"
 
 #ifdef HAVE_CSTDLIB
@@ -124,16 +125,38 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 
 double os_strtod_wrap(const char *str,  char **strEnd)
 {
+/* Deal with some special cases first, which are needed 
+ * for the parsers (and schemas) to work properly 
+ */
+    if (strcmp(str, "INF") == 0) 
+    {
+        *strEnd = (char *)str + 3;
+        return  OSDBL_MAX;
+    }
+    else if (strcmp(str,"-INF") == 0) 
+    {
+        *strEnd = (char *)str + 4;
+        return -OSDBL_MAX;
+    }
+    else if (strcmp(str, "NaN") == 0) 
+    {
+        *strEnd = (char *)str + 3;
+        return  OSNaN();
+    }
+    else
 #ifndef USE_DTOA
-    return    strtod(str, strEnd);
+        return    strtod(str, strEnd);
 #else
-    return os_strtod(str, strEnd);
+        return os_strtod(str, strEnd);
 #endif
 }//end os_strtod_wrap
 
 
 std::string os_dtoa_format(double  x)
 {
+/* Deal with some special cases first, which must be rendered 
+ * precisely (case-sensitive) for the parsers to work properly 
+ */
     ostringstream outStr;
     if (x ==  OSDBL_MAX)
     {

@@ -53,7 +53,7 @@ public:
 
     /**
      * create an OSInstance from the MPS instance representation
-	 * and an OSOption in case of nonstandard sections such as SOS
+     * and an OSOption in case of nonstandard sections such as SOS
      *
      * @return whether the objects are created successfully.
      */
@@ -64,10 +64,10 @@ public:
      */
     OSInstance *osinstance;
 
-	/** osoption is a pointer to an OSOption object that gets created
-	 *  if the MPS file contains nonstandard sections such as SOS
-	 */
-	OSOption *osoption;
+    /** osoption is a pointer to an OSOption object that gets created
+     *  if the MPS file contains nonstandard sections such as SOS
+     */
+    OSOption *osoption;
 
     /**
      * we may need to parse an OSoL file if the MPS file contains
@@ -93,8 +93,8 @@ private:
     /**  m_CoinPackedMatrix is a pointer to a CoinPackedMatrix object */
     CoinPackedMatrix *m_CoinPackedMatrix;
 
-	/** Data structures to hold special ordered sets */
-	int m_nOfSOS;
+    /** Data structures to hold special ordered sets */
+    int m_nOfSOS;
     CoinSet ** m_SOS;
 
     /** Data structures to hold the quadratic objective */ 
@@ -102,7 +102,7 @@ private:
     int * m_quadColumnIdx;
     double * m_quadElements;
 
-	/** Data structures to hold the cone information */
+    /** Data structures to hold the cone information */
     int m_nOfCones;
     int * m_coneStart;
     int * m_coneIdx;

@@ -130,9 +130,9 @@ public:
      * basis information, branching priorities, etc. --- cannot be stored 
      * into an OSInstance and must be stored in an OSOption object instead.)
      *
-     * @return whether the OS objects were created successfully.
+     * @return whether the objects were created successfully.
      */
-    bool createOSObjects(); 
+    bool createOSObjects();
 
     /**
      * store a number of variables into an OSInstance object 

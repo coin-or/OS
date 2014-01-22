@@ -8,7 +8,7 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 <instanceHeader>
 <name>SDPA problem</name>
 <source>Translated from SDPA format using SDPA2OSiL
-       (C) H.I. Gassmann 2010</source>
+       (C) H.I. Gassmann 2010-2013</source>
 <description>
 </description>
 </instanceHeader>
@@ -22,105 +22,199 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 <coef idx="1">          20.0000000000000    </coef>
 </obj>
 </objectives>
-<matrices numberOfMatrices="7">
-<linearMatrix id="X1" numberOfColumns="2" numberOfRows="2" symmetric="true" numberOfEl="0" numberOfBlocks="0" varIdxStart="2" varIdxEnd="4"/>
-<linearMatrix id="X2" numberOfColumns="2" numberOfRows="2" symmetric="true" numberOfEl="0" numberOfBlocks="0" varIdxStart="5" varIdxEnd="7"/>
-<constantMatrix id="F0:1" numberOfColumns="2" numberOfRows="2">
-<elements numberOfValues="2">
-<start>
-<el mult="3" incr="1">0</el>
-</start>
-<rowIdx>
-<el>0</el>
-<el>1</el>
-</rowIdx>
-<value>
-<el>          1.00000000000000    </el>
-<el>          2.00000000000000    </el>
-</value>
-</elements>
-</constantMatrix>
-<constantMatrix id="F0:2" numberOfColumns="2" numberOfRows="2">
-<elements numberOfValues="2">
-<start>
-<el mult="3" incr="1">0</el>
-</start>
-<rowIdx>
-<el>0</el>
-<el>1</el>
-</rowIdx>
-<value>
-<el>          3.00000000000000    </el>
-<el>          4.00000000000000    </el>
-</value>
-</elements>
-</constantMatrix>
-<constantMatrix id="F1:1" numberOfColumns="2" numberOfRows="2">
-<elements numberOfValues="2">
-<start>
-<el mult="3" incr="1">0</el>
-</start>
-<rowIdx>
-<el>0</el>
-<el>1</el>
-</rowIdx>
-<value>
-<el mult="2">          1.00000000000000    </el>
-</value>
-</elements>
-</constantMatrix>
-<constantMatrix id="F2:1" numberOfColumns="2" numberOfRows="2">
-<elements numberOfValues="1">
-<start>
-<el mult="2">0</el>
-<el>1</el>
-</start>
-<rowIdx>
-<el>1</el>
-</rowIdx>
-<value>
-<el>          1.00000000000000    </el>
-</value>
-</elements>
-</constantMatrix>
-<constantMatrix id="F2:2" numberOfColumns="2" numberOfRows="2">
-<elements numberOfValues="3">
-<start>
+<matrices numberOfMatrices="8">
+<matrix numberOfColumns="2" numberOfRows="2" symmetric="true">
+<elements>
+<varReferenceElements>
+<start numberOfEl="3">
 <el>0</el>
 <el>1</el>
 <el>3</el>
 </start>
-<rowIdx>
+<nonzeros numberOfEl="3">
+<indexes>
+<el>0</el>
+<el>0</el>   <el>1</el>
+</indexes>
+<values>
+<el mult="3" incr="1">2</el>
+</values>
+</nonzeros>
+</varReferenceElements>
+</elements>
+</matrix>
+<matrix numberOfColumns="2" numberOfRows="2" symmetric="true">
+<elements>
+<varReferenceElements>
+<start numberOfEl="3">
+<el>0</el>
+<el>1</el>
+<el>3</el>
+</start>
+<nonzeros numberOfEl="3">
+<indexes>
+<el>0</el>
+<el>0</el>   <el>1</el>
+</indexes>
+<values>
+<el mult="3" incr="1">5</el>
+</values>
+</nonzeros>
+</varReferenceElements>
+</elements>
+</matrix>
+<matrix numberOfColumns="2" numberOfRows="2">
+<elements>
+<constantElements>
+<start numberOfEl="3">
+<el mult="3" incr="1">0</el>
+</start>
+<nonzeros numberOfEl="2">
+<indexes>
+<el>0</el>
+<el>1</el>
+</indexes>
+<values>
+<el>          1.00000000000000    </el>
+<el>          2.00000000000000    </el>
+</values>
+</nonzeros>
+</constantElements>
+</elements>
+</matrix>
+<matrix numberOfColumns="2" numberOfRows="2">
+<elements>
+<constantElements>
+<start numberOfEl="3">
+<el mult="3" incr="1">0</el>
+</start>
+<nonzeros numberOfEl="2">
+<indexes>
+<el>0</el>
+<el>1</el>
+</indexes>
+<values>
+<el>          3.00000000000000    </el>
+<el>          4.00000000000000    </el>
+</values>
+</nonzeros>
+</constantElements>
+</elements>
+</matrix>
+<matrix numberOfColumns="2" numberOfRows="2">
+<elements>
+<constantElements>
+<start numberOfEl="3">
+<el mult="3" incr="1">0</el>
+</start>
+<nonzeros numberOfEl="2">
+<indexes>
+<el>0</el>
+<el>1</el>
+</indexes>
+<values>
+<el mult="2">          1.00000000000000    </el>
+</values>
+</nonzeros>
+</constantElements>
+</elements>
+</matrix>
+<matrix numberOfColumns="2" numberOfRows="2">
+</matrix>
+<matrix numberOfColumns="2" numberOfRows="2">
+<elements>
+<constantElements>
+<start numberOfEl="3">
 <el mult="2">0</el>
-</rowIdx>
-<value>
+<el>1</el>
+</start>
+<nonzeros numberOfEl="1">
+<indexes>
+<el>1</el>
+</indexes>
+<values>
+<el>          1.00000000000000    </el>
+</values>
+</nonzeros>
+</constantElements>
+</elements>
+</matrix>
+<matrix numberOfColumns="2" numberOfRows="2">
+<elements>
+<constantElements>
+<start numberOfEl="3">
+<el>0</el>
+<el>1</el>
+<el>3</el>
+</start>
+<nonzeros numberOfEl="3">
+<indexes>
+<el mult="2">0</el>
+<el>1</el>
+</indexes>
+<values>
 <el>          5.00000000000000    </el>
 <el>          2.00000000000000    </el>
 <el>          6.00000000000000    </el>
-</value>
+</values>
+</nonzeros>
+</constantElements>
 </elements>
-</constantMatrix>
+</matrix>
 </matrices>
-<cones numberOfCones="2">
+<cones numberOfCones="4">
 <semidefiniteCone id="C1" numberOfColumns="2" numberOfRows="2"/>
+<nonnegativeCone id="P1" numberOfColumns="2" numberOfRows="2"/>
 <semidefiniteCone id="C2" numberOfColumns="2" numberOfRows="2"/>
+<nonnegativeCone id="P2" numberOfColumns="2" numberOfRows="2"/>
 </cones>
-<matrixProgramming>
-<matrixVariables numberOfMatrixVar="2">
-<matrixVar matrixID="X1" lbConeId="C1"/>
-<matrixVar matrixID="X2" lbConeId="C2"/>
-</matrixVariables>
+<matrixProgramming_new>
+<matrixBounds numberOfBounds="2">
+<bound matrixIdx="0" lbConeID="C1"/>
+<bound matrixIdx="1" lbConeID="C2"/>
+</matrixBounds>
 <matrixConstraints numberOfMatrixCon="2">
-<matrixCon numberOfRows="1" numberOfCols="1" lbMatrixID="F01" ubMatrixID="F01"/>
-<matrixCon numberOfRows="1" numberOfCols="1" lbMatrixID="F02" ubMatrixID="F02"/>
+<matrixCon lbMatrixIdx="2" ubMatrixIdx="2" lbConeID="P1" ubConeID="P1" numberOfMatrixTerms="3">
+<matrixTerm>
+<matrixScalarTimes>
+<variable idx="0"/>
+<matrix idx="4"/>
+</matrixScalarTimes>
+</matrixTerm>
+<matrixTerm>
+<matrixScalarTimes>
+<variable idx="1"/>
+<matrix idx="6"/>
+</matrixScalarTimes>
+</matrixTerm>
+<matrixTerm>
+<matrixScalarTimes>
+<number type="real" value="-1"/>
+<matrix idx="0"/>
+</matrixScalarTimes>
+</matrixTerm>
+</matrixCon>
+<matrixCon lbMatrixIdx="3" ubMatrixIdx="3" lbConeID="P2" ubConeID="P2" numberOfMatrixTerms="3">
+<matrixTerm>
+<matrixScalarTimes>
+<variable idx="0"/>
+<matrix idx="5"/>
+</matrixScalarTimes>
+</matrixTerm>
+<matrixTerm>
+<matrixScalarTimes>
+<variable idx="1"/>
+<matrix idx="7"/>
+</matrixScalarTimes>
+</matrixTerm>
+<matrixTerm>
+<matrixScalarTimes>
+<number type="real" value="-1"/>
+<matrix idx="1"/>
+</matrixScalarTimes>
+</matrixTerm>
+</matrixCon>
 </matrixConstraints>
-<linearConstraintMatrixOperators numberOfOperators="5">
-<matrixVarOperator matrixVarIdx="0" matrixConIdx="0" scalarCoef="-1"/>
-<scalarVarOperator varIdx="0" matrixConIdx="0" matrixID="F1:1"/>
-<scalarVarOperator varIdx="1" matrixConIdx="0" matrixID="F2:1"/>
-<matrixVarOperator matrixVarIdx="1" matrixConIdx="1" scalarCoef="-1"/>
-<scalarVarOperator varIdx="1" matrixConIdx="1" matrixID="F2:2"/>
-</linearConstraintMatrixOperators>
-</matrixProgramming>
+</matrixProgramming_new>
 </instanceData>
 </osil>
