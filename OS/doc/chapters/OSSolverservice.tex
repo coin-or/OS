@@ -178,8 +178,13 @@ Currently the integer {\tt nnn} can be any number between 0 and 7 inclusive, wit
 The three highest output levels are available only if the executable was compiled in debug mode; they are mainly useful as a debugging tool.
 
 \ifbible
-By using a print level of 100 or higher, the user can control the output from one single area of the code in isolation. For instance, setting {\tt printlevel 107} allows finely detailed debug information to be generated in the main routine only, while ignoring (almost) all other output. The areas can be read off from the following table.
+By using a print level of 100 or higher, the user can control the output from one single section of the code in isolation. For instance, setting {\tt printlevel 107} allows finely detailed debug information to be generated in the main routine only, while ignoring (almost) all other output. The areas can be read off from Table~\ref{table:codeSections}.
  
+\begin{table}
+\caption{Code sections and numbers used in {\tt printLevel}}
+\centering
+\label{table:codeSections}
+\vskip 8pt
 \begin{tabular}{|l|r|}
 \hline
      Main routine & 1 \\
@@ -201,6 +206,7 @@ By using a print level of 100 or higher, the user can control the output from on
      OSUtils & 17 \\
 \hline
 \end{tabular}
+\end{table}\index{code sections}
 \fi
 
 \item[] {\tt logFile xxx}\ \ This parameter specifies a secondary output device to which output can be directed in addition to {\tt stdout}. 

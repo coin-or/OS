@@ -123,14 +123,14 @@
   \indexspace
 
   \item Mac OS X, 110
-  \item {\tt make}, 95, 96, 102, 116
+  \item {\tt make}, 95, 96, 102, 117
   \item {\tt make distclean}, 102, 103
   \item {\tt make install}, 46, 95, 96, 111
   \item {\tt make run\_parsers}, 74
   \item {\tt make test}, 95, 96, 102
   \item makefile, 46--47, 90, 101--103, 105, 106
   \item MATLAB, 8, 36--40, 108
-  \item Microsoft Visual Studio, 10, 97--98, 106, 113, 116
+  \item Microsoft Visual Studio, 10, 97--98, 106, 113, 117
     \subitem {\tt Debug} configuration, 98
     \subitem {\tt Release} configuration, 98
   \item Microsoft Windows, 93, 94
