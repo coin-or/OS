@@ -1109,9 +1109,14 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="sumOfSquaredPolynomialsCone" type="SumOfSquaredPolynomialsCone">
+			<xs:element name="sumOfSquaresPolynomialsCone" type="SumOfSquaresPolynomialsCone">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="momentsCone" type="MomentsCone">
+				<xs:annotation>
+					<xs:documentation>draft. The cone of moments is the _dual_ of a corresponding cone of nonnegative polynomials</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="productCone" type="ProductCone">
@@ -1301,8 +1306,16 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
 				<xs:sequence>
-					<xs:element name="upperBounds" type="SparseVector" minOccurs="0"/>
-					<xs:element name="lowerBounds" type="SparseVector" minOccurs="0"/>
+					<xs:element name="upperBounds" type="SparseVector" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>upper bounds on domain of polynomial. Default is +INF. Indexes are "flattened": i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lowerBounds" type="SparseVector" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>lower bounds on domain of polynomial. Default is -INF. Indexes are "flattened": i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 				</xs:sequence>
 				<xs:attribute name="maxDegree" default="INF">
 					<xs:simpleType>
@@ -1314,15 +1327,51 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="SumOfSquaredPolynomialsCone">
+	<xs:complexType name="SumOfSquaresPolynomialsCone">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
 				<xs:sequence>
-					<xs:element name="upperBounds" type="SparseVector"/>
-					<xs:element name="lowerBounds" type="SparseVector"/>
+					<xs:element name="upperBounds" type="SparseVector" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>upper bounds on domain of polynomial. Default is +INF. Indexes are "flattened": i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lowerBounds" type="SparseVector" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>lower bounds on domain of polynomial. Default is -INF. Indexes are "flattened": i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="maxDegree" default="INF">
+					<xs:simpleType>
+						<xs:restriction base="xs:double">
+							<xs:pattern value="[0-9]+|INF"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MomentsCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:sequence>
+					<xs:element name="upperBounds" type="SparseVector" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>upper bounds on domain of polynomial. Default is +INF. Indexes are "flattened": i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lowerBounds" type="SparseVector" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>lower bounds on domain of polynomial. Default is -INF. Indexes are "flattened": i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 				</xs:sequence>
 				<xs:attribute name="maxDegree" default="INF">
 					<xs:simpleType>

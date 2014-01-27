@@ -699,7 +699,7 @@
 					<xs:enumeration value="objectiveCoefficients"/>
 					<xs:enumeration value="linearConstraintCoefficients"/>
 					<xs:enumeration value="linearConstraintLowerBounds"/>
-					<xs:enumeration value="linearConstraintUppperBounds"/>
+					<xs:enumeration value="linearConstraintUpperBounds"/>
 					<xs:enumeration value="matrix"/>
 				</xs:restriction>
 			</xs:simpleType>

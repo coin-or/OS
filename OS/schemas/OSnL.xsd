@@ -13,7 +13,7 @@
 	<!--Generic base matrix definitions (draft): all functions that return a matrix value  -->
 	<xs:complexType name="OSnLMNode" mixed="false">
 		<xs:annotation>
-			<xs:documentation>draft. This is a generic matrix node from which we derive matrix operator nodes</xs:documentation>
+			<xs:documentation> draft. This is a generic matrix node from which we derive matrix operator nodes</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
 	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true">
@@ -23,12 +23,12 @@
 	</xs:element>
 	<xs:complexType name="OSnLNode" mixed="false">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
+			<xs:documentation> since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
 	<xs:element name="OSnLNode" type="OSnLNode" abstract="true">
 		<xs:annotation>
-			<xs:documentation>  since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
+			<xs:documentation> since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<!--Arithmetic Nodes: since version 1.0.0  -->
@@ -3263,7 +3263,7 @@
 	<!--Variable, Objective, Constraint, Parameter Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeVariable">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to provide a child OSnLNode which evaluates to a nonnegativeinteger variable index.</xs:documentation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -3277,7 +3277,7 @@
 	</xs:complexType>
 	<xs:element name="variable" type="OSnLNodeVariable" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to provide a child OSnLNode which evaluates to a nonnegativeinteger variable index.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeObjective">
@@ -3856,7 +3856,7 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixIdentical">
 		<xs:annotation>
-			<xs:documentation>draft.  returns 1 if the two matrices are identical, 0 otherwise.</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -3868,7 +3868,7 @@
 	</xs:complexType>
 	<xs:element name="matrixIdentical" type="OSnLNodeMatrixIdentical" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. returns 1 if the two matrices are identical, 0 otherwise.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixPlus">
@@ -4252,11 +4252,11 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixToScalar">
 		<xs:annotation>
-			<xs:documentation>draft. Intended for 1x1 matrices only.</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -4264,12 +4264,12 @@
 	</xs:complexType>
 	<xs:element name="matrixToScalar" type="OSnLNodeMatrixToScalar" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. Intended for 1x1 matrices only. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixElementAt">
 		<xs:annotation>
-			<xs:documentation>draft. First child is the matrix to get the element, Second child is rowIdx. Third Child is colIdx.</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4283,12 +4283,12 @@
 	</xs:complexType>
 	<xs:element name="matrixElementAt" type="OSnLNodeMatrixElementAt" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. First child is the matrix to get the element, Second child is rowIdx. Third Child is colIdx.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixSubmatrixAt">
 		<xs:annotation>
-			<xs:documentation>draft. First child is an OSnLMNode, which is the matrix to crop, the next four children are OSnLNode, which indicates rowIdxStart, colIdxStart, rowIdxEnd, and colIndxEnd.</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
@@ -4304,12 +4304,12 @@
 	</xs:complexType>
 	<xs:element name="matrixSubmatrixAt" type="OSnLNodeMatrixSubmatrixAt" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. First child is an OSnLMNode, which is the matrix to crop, the next four children are OSnLNode, which indicates rowIdxStart, colIdxStart, rowIdxEnd, and colIndxEnd.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixMerge">
 		<xs:annotation>
-			<xs:documentation>draft. mergeType is to resolve overlapping elements of the blocks.  </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
@@ -4348,7 +4348,7 @@
 	</xs:complexType>
 	<xs:element name="matrixMerge" type="OSnLNodeMatrixMerge" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. Merge one or more blocks in general position into a single matrix</xs:documentation>
+			<xs:documentation>draft. Merge one or more blocks in general position (including overlaps, etc.) into a single matrix</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixUpperTriangle">
@@ -4536,7 +4536,7 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixNonsingular">
 		<xs:annotation>
-			<xs:documentation>draft. returns 1 if the matrix is nonsingular, 0 otherwise. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4548,12 +4548,12 @@
 	</xs:complexType>
 	<xs:element name="matrixNonsingular" type="OSnLNodeMatrixNonsingular" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. returns 1 if the matrix is nonsingular, 0 otherwise. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixFullRank">
 		<xs:annotation>
-			<xs:documentation>draft. returns 1 if fthe matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4565,12 +4565,12 @@
 	</xs:complexType>
 	<xs:element name="matrixFullRank" type="OSnLNodeMatrixFullRank" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. returns 1 if the matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixFullRowRank">
 		<xs:annotation>
-			<xs:documentation>draft. returns 1 if fthe matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4582,12 +4582,12 @@
 	</xs:complexType>
 	<xs:element name="matrixFullRowRank" type="OSnLNodeMatrixFullRowRank" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. returns 1 if the matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixFullColumnRank">
 		<xs:annotation>
-			<xs:documentation>draft. returns 1 if fthe matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4599,7 +4599,7 @@
 	</xs:complexType>
 	<xs:element name="matrixFullColumnRank" type="OSnLNodeMatrixFullColumnRank" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. returns 1 if the matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixPositiveDefinite">
@@ -4829,7 +4829,7 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixCondition">
 		<xs:annotation>
-			<xs:documentation>draft. The second child defines the norm.</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
@@ -4842,7 +4842,7 @@
 	</xs:complexType>
 	<xs:element name="matrixCondition" type="OSnLNodeMatrixCondition" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. The second child defines the norm.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixFrobeniusNormCondition">
