@@ -4,7 +4,7 @@
   \item AMPL, 7, 8, 27--30, 111
   \item AMPL nl format, 1, 7, 8, 10, 11, 19, 72--73
   \item AMPL Solver Library , \see{Third-party software, ASL}{1}
-  \item {\tt amplFiles}, 27
+  \item {\tt amplFiles}, 28
   \item Apache Axis, 8, 16
   \item Apache Tomcat, 1, 8, 9, 16, 93, 113--116
   \item ASL, \see{Third-party software, ASL}{1}
@@ -27,19 +27,19 @@
   \item {\tt Clp}, \see{COIN-OR projects, {\tt Clp}}{1}
   \item COIN-OR, 1, 94
   \item COIN-OR projects
-    \subitem {\tt Bonmin}, 24, 94, 96, 100, 103--105, 110
+    \subitem {\tt Bonmin}, 25, 94, 96, 100, 103--105, 110
     \subitem {\tt BuildTools}, 110
-    \subitem {\tt Cbc}, 24, 94, 96, 105, 111
+    \subitem {\tt Cbc}, 25, 94, 96, 105, 111
     \subitem {\tt Cgl}, 53, 94, 105, 111
-    \subitem {\tt Clp}, 13, 24, 49, 94, 96, 105, 111
+    \subitem {\tt Clp}, 13, 25, 49, 94, 96, 105, 111
     \subitem {\tt CoinUtils}, 72, 94, 105, 111
-    \subitem {\tt Couenne}, 24, 96, 100, 103--105, 111
+    \subitem {\tt Couenne}, 25, 96, 100, 103--105, 111
     \subitem {\tt CppAD}, 7, 8, 79--80, 105, 111
-    \subitem {\tt DyLP}, 13, 24, 105, 111
-    \subitem {\tt Ipopt}, 14, 19, 24, 74, 76, 86, 91, 94, 96, 100, 
+    \subitem {\tt DyLP}, 13, 25, 105, 111
+    \subitem {\tt Ipopt}, 14, 19, 25, 74, 76, 86, 91, 94, 96, 100, 
 		103--105, 111
-    \subitem {\tt Osi}, 11, 24, 105, 111
-    \subitem {\tt SYMPHONY}, 16, 24, 28--29, 96, 105, 111
+    \subitem {\tt Osi}, 11, 25, 105, 111
+    \subitem {\tt SYMPHONY}, 18, 25, 28--29, 96, 105, 111
     \subitem {\tt Vol}, 105, 111
   \item COIN-OR projects, {\tt Osi}, 75, 94
   \item {\tt COIN\_HAS\_XXXXX}, 105--106
@@ -49,14 +49,14 @@
     \subitem cache file, 94
     \subitem scripts, 90
   \item {\tt Couenne}, \see{COIN-OR projects, {\tt Couenne}}{1}
-  \item {\tt cplex}, 8, 11, 24, 107
+  \item {\tt cplex}, 8, 11, 25, 107
   \item {\tt CppAD}, \see{COIN-OR projects, {\tt CppAD}}{1}
   \item Cygwin, 90, 99--101, 110
 
   \indexspace
 
   \item debug version, MSYS, 102
-  \item default solver, 11, 12, 14, 19, 28, 30
+  \item default solver, 11, 12, 14, 20, 28, 30
   \item Downloading
     \subitem binaries, 9
     \subitem subversion
@@ -69,7 +69,7 @@
 
   \indexspace
 
-  \item {\tt eastborne.mod}, 27--28
+  \item {\tt eastborne.mod}, 28
   \item Eclipse Public License (EPL), 9, 104, 106
 
   \indexspace
@@ -82,9 +82,9 @@
 
   \indexspace
 
-  \item GAMS, 8, 27, 30--35
+  \item GAMS, 8, 27, 31--36
   \item gcc, 90
-  \item {\tt getJobID}, 10, 11, 14, 20, 23
+  \item {\tt getJobID}, 10, 11, 14, 21, 23
   \item {\tt GLPK}, \see{Third-party software, {\tt GLPK}}{1}
   \item GNU General Public Licence (GPL), 106
   \item {\it Griewank, A.}, 79
@@ -103,13 +103,13 @@
   \indexspace
 
   \item Java, 1, 10, 53--54, 93
-  \item {\tt JobID}, 19--20, 23
+  \item {\tt JobID}, 19--21, 23, 24
   \item jobID, 11
 
   \indexspace
 
-  \item {\tt kill}, 10, 11, 14, 22--23
-  \item {\tt knock}, 10, 11, 14, 20--23
+  \item {\tt kill}, 10, 11, 14, 22--24
+  \item {\tt knock}, 10, 11, 14, 21--22, 24
 
   \indexspace
 
@@ -123,14 +123,14 @@
   \indexspace
 
   \item Mac OS X, 110
-  \item {\tt make}, 95, 96, 102, 117
+  \item {\tt make}, 95, 96, 102, 116
   \item {\tt make distclean}, 102, 103
   \item {\tt make install}, 46, 95, 96, 111
   \item {\tt make run\_parsers}, 74
   \item {\tt make test}, 95, 96, 102
   \item makefile, 46--47, 90, 101--103, 105, 106
-  \item MATLAB, 8, 36--40, 108
-  \item Microsoft Visual Studio, 10, 97--98, 106, 113, 117
+  \item MATLAB, 8, 36--41, 108
+  \item Microsoft Visual Studio, 10, 97--98, 106, 113, 116
     \subitem {\tt Debug} configuration, 98
     \subitem {\tt Release} configuration, 98
   \item Microsoft Windows, 93, 94
@@ -155,25 +155,25 @@
     \subitem unit test, 95
   \item {\tt OS.sln}, 98
   \item {\tt OSAgent}, 7, 66--67, 116
-  \item {\tt OSAmplClient}, 7, 9, 27--30, 73, 106, 111
+  \item {\tt OSAmplClient}, 7, 9, 28--30, 73, 106, 111
   \item {\tt OSCommon}, 8, 94
   \item {\tt OSExpressionTree}, 70
   \item {\tt OSFileUpload}, 116--117
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 7--11, 14, 16, 19, 23, 41--42, 67, 70, 72--74, 116, 
+  \item OSiL, 1, 7--11, 14, 16, 19, 23, 41--43, 67, 70, 72--74, 116, 
 		118--121
   \item {\tt OSInstance}, 7, 47, 67--73, 76, 82
   \item {\tt OSLibrary}, 14, 66--76
   \item {\tt OSmps2osil}, 72--73
-  \item OSnL, 42--43
+  \item OSnL, 43
   \item {\tt OSnl2osil}, 72, 106
-  \item OSoL, 7, 9, 14, 16, 19, 20, 23, 45, 73
+  \item OSoL, 7, 9, 14, 16, 20, 21, 23, 24, 45, 73
   \item {\tt OSOption}, 72--73
-  \item OSpL, 21--23, 45
+  \item OSpL, 21--22, 24, 45
   \item {\tt OSResult}, 72--73
-  \item OSrL, 7, 9, 12, 14, 15, 23, 43--44, 73
+  \item OSrL, 7, 9, 12, 14, 15, 23, 24, 43--45, 73
   \item {\tt OSSolverAgent}, 66
-  \item {\tt OSSolverService}, 1, 7, 9--23, 94, 96, 111
+  \item {\tt OSSolverService}, 1, 7, 9--24, 94, 96, 111
   \item {\tt OSSolverService.vcproj}, 98
   \item {\tt OSTest.vcproj}, 98
 
@@ -184,14 +184,12 @@
 
   \indexspace
 
-  \item Remote server
-    \subitem Connection problems, 16
-  \item {\tt retrieve}, 10, 11, 14, 19--20, 23
+  \item {\tt retrieve}, 10, 11, 14, 20--21, 24
   \item {\it Rosenbrock, H.H.}, 41
 
   \indexspace
 
-  \item {\tt send}, 10, 11, 14, 18--20, 116
+  \item {\tt send}, 10, 11, 14, 19--21, 116
   \item {\tt serviceLocation}, 14
   \item SOAP protocol, 7, 9, 16, 19, 116
   \item {\tt solve}, 10--11, 14, 16--18, 23, 116
@@ -204,7 +202,7 @@
   \indexspace
 
   \item {\tt testlocal.config}, 14--15
-  \item {\tt testRemote1.config}, 16
+  \item {\tt testRemote1.config}, 17
   \item Third-party software, 97, 104--106
     \subitem ASL, 97, 106
     \subitem Blas, 91, 94, 103
@@ -213,7 +211,7 @@
     \subitem Lapack, 91
     \subitem Mumps, 91, 94, 104
     \subitem SoPlex, 107
-  \item Third-party software, {\tt GLPK}, 8, 11, 24
+  \item Third-party software, {\tt GLPK}, 8, 11, 25
   \item TortoiseSVN, 93, 97, 101
   \item Trac system, 1, 7, 109
 

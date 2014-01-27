@@ -553,7 +553,46 @@ are specified in this way --- one through the local command interface, the other
 the information on the command line takes precedent.
 %the solver service is free to pick which one to choose.
 
-\ifdevelop
+\subdivision{Troubleshooting the connection}\label{section:tomcat-troubleshooting}
+
+If there are difficulties with the connection, that is, if the remote OSSolverService does not respond or returns an error along the lines of
+
+\begin{verbatim}
+failure connecting with remote socket at address: ***.***.***.***
+\end{verbatim}
+
+there is a three step process to try to help pinpoint the problem. 
+
+\begin{enumerate}
+\item
+Open a web browser and type the URL 
+\begin{verbatim}
+http://***.***.***.***:8080
+\end{verbatim}
+
+into a web browser. If the Tomcat server at the remote location is working, you should see the welcome page for the Tomcat server. If you do not see welcome page, the Tomcat server is not working.
+
+\item If the Tomcat server is working, try the URL
+
+\begin{verbatim}
+http://74.94.100.129:8080/OSServer/services/OSSolverService?wsdl
+\end{verbatim}
+
+This tests the connection with the OSSolver Java servlet. If a connection is established, the remote server sends back an XML file that is displayed in the browser. Any error message indicates that a connection could not be established. 
+
+\item If a connection exists, try the URL
+
+\begin{verbatim}
+http://74.94.100.129:8080/OSServer/services/OSSolverService
+\end{verbatim}
+
+This should indicate whether the  remote {\tt OSSolverService} is available or not.
+
+At this point, you may try calling the remote {\tt OSSolverService} in the normal way. At worst, this should return an interpretable error message. You may also want to check whether the local solver gives sensible output when run on the same data.
+
+\end{enumerate}
+
+\iffalse %\ifdevelop
 Whenever you are working with the remote server and things don't work as they should try:
 
 \begin{verbatim}

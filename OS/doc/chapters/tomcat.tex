@@ -171,34 +171,4 @@ xml-apis.jar
 Also,  if you are running the 1.5 JVM instead of 1.6 you need
 the {\tt saaj.jar}. 
 
-\subdivision{Troubleshooting the connection}\label{section:tomcat-troubleshooting}
-
-If there are difficulties with the connection, that is, if the remote OSSolverService does not respond or returns an error along the lines of
-
-\begin{verbatim}
-failure connecting with remote socket at address: ***.***.***.***
-\end{verbatim}
-
-there is a three step process to try to help pinpoint the problem.
-
-\begin{enumerate}
-\item
- Type the URL 
-\begin{verbatim}
-http://***.***.***.***:8080
-\end{verbatim}
-
-into a web browser. If the Tomcat server at the remote location is working, you should see the welcome page for the Tomcat server. If you do not see welcome page, the Tomcat server is not working.
-
-\item If the Tomcat server is working, submit a job to the remote OSSolverService with the following
-{\tt serviceLocation}:
-
-\begin{verbatim}
-http://74.94.100.129:8080/OSServer/services/OSSolverService?wsdl
-\end{verbatim}
-
-This tests the connection with the OSSolver Java servlet.
-
-\item Finally, try call the OSSolverService.exe in the normal way. If this fails, the remote OSSolverService is not running properly. At this point you may also want to check whether the local solver gives sensible output when run on the same data.
-
-\end{enumerate}
+If you experience problems with the connection, see~\ref{section:tomcat-troubleshooting}.
