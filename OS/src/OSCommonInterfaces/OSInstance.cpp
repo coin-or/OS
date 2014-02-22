@@ -5,7 +5,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2014, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -1969,6 +1969,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                     nlnode =  postfixVec[ n - 1 - i];
                     opStack.push( nlnode);
 
+
                     //std::cout << postfixVec[ i]->snodeName << std::endl;
                 }
 
@@ -2312,6 +2313,7 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPrefix( int rowId
 
 std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int rowIdx)
 {
+
     //if( m_binitForAlgDiff == false) this->initForAlgDiff();
     if( m_bProcessExpressionTreesMod == false ) getAllNonlinearExpressionTreesMod();
     std::vector<OSnLNode*> prefixVec;
@@ -4286,6 +4288,7 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
         index = this->instanceData->linearConstraintCoefficients->colIdx->el;
         value = this->instanceData->linearConstraintCoefficients->value->el;
     }
+
     m_miJacStart = new int[ iNumJacRowStarts];
     m_miJacNumConTerms = new int[ getConstraintNumber()];
     OSnLNodePlus *nlNodePlus;
