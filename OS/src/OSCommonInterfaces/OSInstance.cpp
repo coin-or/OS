@@ -3205,7 +3205,10 @@ bool OSInstance::setQuadraticTerms(int number,
     if(number != (end - begin) + 1) return false;
     if(number == 0)
     {
-        instanceData->quadraticCoefficients = 0;
+        if( instanceData->quadraticCoefficients->numberOfQuadraticTerms == 0 )
+           return true;
+        delete instanceData->quadraticCoefficients;
+        instanceData->quadraticCoefficients = new QuadraticCoefficients();
         return true;
     }
     if( ((end - begin + 1) != number) ||
