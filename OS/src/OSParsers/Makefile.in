@@ -780,7 +780,6 @@ uninstall-am: uninstall-includecoinHEADERS uninstall-info-am
 ########################################################################
 run_parsers: osil osol osrl osss
 
-#src/OSParsers/ ??
 osil: $(srcdir)/OSParseosil.cpp \
       $(srcdir)/OSParseosil.tab.cpp
 
