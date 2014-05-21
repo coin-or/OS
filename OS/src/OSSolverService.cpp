@@ -148,6 +148,7 @@ void interactiveShell();
 std::string get_help();
 std::string get_version();
 std::string get_options();
+std::string get_solverlist();
 void list_options(OSCommandLine *oscommandline);
 void merge_CL_options(OSCommandLine *oscommandline);
 
@@ -185,6 +186,12 @@ int main(int argC, const char* argV[])
         return 0;
     }
 
+//  Any optional output created before the printLevel is set (near line 400) must be kept in temporary buffers
+    std::ostringstream *tempBuffer = new std::ostringstream[ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS];
+
+    for (int i=ENUM_OUTPUT_LEVEL_info; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+        tempBuffer[i] << get_solverlist();
+
     void* scanner;
     FileUtil *fileUtil = NULL;
     FileUtil *inputFileUtil = NULL;
@@ -199,7 +206,6 @@ int main(int argC, const char* argV[])
      
     // initialize the command line structure 
 
-//    osoptions = new osOptionsStruc();
     OSCommandLine *oscommandline = new OSCommandLine();
     bool scannerActive = false;
         
@@ -236,29 +242,30 @@ int main(int argC, const char* argV[])
         }
 
 #ifndef NDEBUG
-        outStr.str("");
-        outStr.clear();
-        outStr << "Input String = " << osss.str() << std::endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+        for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+            tempBuffer[i] << "Input String = " << osss.str() << std::endl;
 #endif
 
         scannerActive = true;
         ossslex_init(&scanner);
 
 #ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
+        for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+            tempBuffer[i] << "Call Text Extra\n" << std::endl;
 #endif
 
         setyyextra(oscommandline, scanner);
 
 #ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call scan string\n");
+        for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+            tempBuffer[i] << "Call scan string\n" << std::endl;
 #endif
 
         osss_scan_string((osss.str()).c_str(), scanner);
 
 #ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call ossslex\n");
+        for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+            tempBuffer[i] << "Call ossslex\n" << std::endl;
 #endif
 
         ossslex(scanner);
@@ -266,7 +273,8 @@ int main(int argC, const char* argV[])
         scannerActive = false;
 
 #ifndef NDEBUG
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Done with call to ossslex\n");
+        for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+            tempBuffer[i] << "Done with call to ossslex\n" << std::endl;
 #endif
 
         // if there is a config file, get those options
@@ -277,22 +285,22 @@ int main(int argC, const char* argV[])
             configFileName = oscommandline->configFile;
 
 #ifndef NDEBUG
-            outStr.str("");
-            outStr.clear();
-            outStr << "configFileName = " << configFileName << std::endl;
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+            for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << "configFileName = " << configFileName << std::endl;
 #endif
 
             std::string configFileOptions = fileUtil->getFileAsString(
                                               configFileName.c_str());
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
+            for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << "Call Text Extra\n" << std::endl;
 #endif
 
             setyyextra(oscommandline, scanner);
 
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Done with call Text Extra\n");
+            for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << "Done with call Text Extra\n" << std::endl;
 #endif
 
             osss_scan_string(configFileOptions.c_str(), scanner);
@@ -311,19 +319,22 @@ int main(int argC, const char* argV[])
             ossslex_init(&scanner);
 
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call Text Extra\n");
+            for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << "Call Text Extra\n" << std::endl;
 #endif
 
             setyyextra(oscommandline, scanner);
 
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "Call scan string\n");
+            for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << "Call scan string\n" << std::endl;
 #endif
 
             osss_scan_string((osss.str()).c_str(), scanner);
 
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_trace, "call ossslex\n");
+            for (int i=ENUM_OUTPUT_LEVEL_trace; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << "call ossslex\n" << std::endl;
 #endif
 
             ossslex(scanner);
@@ -337,7 +348,8 @@ int main(int argC, const char* argV[])
     catch (const ErrorClass& eclass)
     {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, eclass.errormsg);
+            for (int i=ENUM_OUTPUT_LEVEL_debug; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << eclass.errormsg << std::endl;
 #endif
 
         //new stuff on April 17, 2010
@@ -365,9 +377,11 @@ int main(int argC, const char* argV[])
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, eclass.errormsg);
+            for (int i=ENUM_OUTPUT_LEVEL_debug; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << eclass.errormsg << std::endl;
 #endif
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
+            for (int i=ENUM_OUTPUT_LEVEL_error; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << osrl << std::endl;
         }
         //catch garbage collection
         delete osresult;
@@ -385,21 +399,26 @@ int main(int argC, const char* argV[])
 
     try
     {
-        outStr.str("");
-        outStr.clear();
-        outStr << std::endl << "using print level " << oscommandline->printLevel << " for stdout" << std::endl;
-
         if (oscommandline->printLevel != DEFAULT_OUTPUT_LEVEL)
         {
             osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)oscommandline->printLevel);
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, outStr.str());
+            for (int i=ENUM_OUTPUT_LEVEL_info; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << std::endl << "using print level " 
+                              << oscommandline->printLevel << " for stdout" << std::endl;
         }
 #ifndef NDEBUG
         else
         {
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_debug, outStr.str());            
+            for (int i=ENUM_OUTPUT_LEVEL_debug; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
+                tempBuffer[i] << std::endl << "using print level " 
+                              << oscommandline->printLevel << " for stdout" << std::endl;
         }
 #endif
+
+//Now process the accumulated output
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always,
+                tempBuffer[oscommandline->printLevel].str());
+        delete[] tempBuffer;
 
         if (oscommandline->logFile != "")
         {
@@ -1703,6 +1722,10 @@ void interactiveShell()
     //char *config = "-config";
     std::string configFileName = "";
 
+    bool logfileset = false;
+    bool fileprintlevelset = false;
+    int  save_fileprintlevel = -1;
+    std::string logfilename;
 
     OSCommandLine *oscommandline = new OSCommandLine();
     bool scannerActive = false;
@@ -1721,18 +1744,18 @@ void interactiveShell()
     std::string::size_type indexEnd;
     unsigned int k;
 
-    const int nCommands = 14;
+    const int nCommands = 13;
     std::string commandArray[nCommands] = 
         { "solve", "send", "getJobID", "retrieve", "kill", "knock",
-          "quit", "exit",  "reset", "list", "?", "help", "version", 
+          "quit", "exit",  "reset", "?", "help", "version", 
           "printModel"
         };
 
-    const int nOptions = 14;
+    const int nOptions = 15;
     std::string optionArray[nOptions] = 
         { "osil", "osrl", "osol", "mps", "nl", "dat",
           "serviceLocation", "solver", "osplInput",  "osplOutput", 
-          "printRow", "printLevel", "logFile", "fileLogLevel"
+          "printRow", "printLevel", "logFile", "fileLogLevel", "list"
         };
 
     //fill in the command array into a map
@@ -1802,17 +1825,20 @@ void interactiveShell()
                     indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
                     skipChars = 0;
                 }
-                if (indexStart != std::string::npos && indexEnd != std::string::npos)
+
+                if (indexStart != std::string::npos)
                 {
-                    optionValue = lineText.substr(indexStart + skipChars, 
-                                                  indexEnd - indexStart - skipChars);
+                    if (indexEnd != std::string::npos)
+                        optionValue = lineText.substr(indexStart + skipChars, 
+                                                                      indexEnd - indexStart - skipChars);
+                    else 
+                        optionValue = lineText.substr(indexStart + skipChars, 
+                                                                      lineText.length() - indexStart - skipChars);
                 }
                 else
                 {
                     optionValue = "";
                 }
-
-                //std::cout << "Option Value = " << optionValue << std::endl;
 
                 try
                 {
@@ -1837,7 +1863,8 @@ void interactiveShell()
                                     {
                                         solve(oscommandline);
                                         if (oscommandline->osrlFile != "")
-                                            std::cout <<  "\nSolve command executed. Please see " << oscommandline->osrlFile  << " for results." << std::endl;
+                                            std::cout << "\nSolve command executed. Please see " 
+                                                      << oscommandline->osrlFile  << " for results." << std::endl;
                                     }
                                     break;
 
@@ -1940,32 +1967,25 @@ void interactiveShell()
                                     break;
 
 
-
-                                case 9: // list command
-
-                                    list_options(oscommandline);
-                                    break;
-
-
-                                case 10: // ? command
+                                case 9: // ? command
 
                                     std::cout << get_options() << std::endl;
                                     break;
 
 
-                                case 11: // help command
+                                case 10: // help command
 
                                     std::cout << get_options() << std::endl;
                                     break;
 
 
-                                case 12: // version command
+                                case 11: // version command
 
                                     std::cout << OSgetVersionInfo() << std::endl;
                                     break;
 
                                     
-                                case 13: // printModel
+                                case 12: // printModel
 
                                     doPrintModel(oscommandline);
                                     break;
@@ -2063,6 +2083,10 @@ void interactiveShell()
                                                     << ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS << "): ";
                                             break;
 
+                                        case 14: //list --- options or solvers
+                                            std::cout
+                                                    << "Please select what to list (\"options\" or \"solvers\"): ";
+                                            break;
 
                                 }// end switch
                                 
@@ -2082,10 +2106,14 @@ void interactiveShell()
                                     indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
                                     skipChars = 0;
                                 }
-                                if (indexStart != std::string::npos && indexEnd != std::string::npos)
+                                if (indexStart != std::string::npos)
                                 {
-                                    optionValue = lineText.substr(indexStart + skipChars, 
-                                                                  indexEnd - indexStart - skipChars);
+                                    if (indexEnd != std::string::npos)
+                                        optionValue = lineText.substr(indexStart + skipChars, 
+                                                                      indexEnd - indexStart - skipChars);
+                                    else 
+                                        optionValue = lineText.substr(indexStart + skipChars, 
+                                                                      lineText.length() - indexStart - skipChars);
                                 }
                                 else
                                 {
@@ -2176,20 +2204,34 @@ void interactiveShell()
                                         break;
 
                                     case 11: //printLevel
-                                        std::cout
-                                                << "Please enter the print level (0-" 
-                                                << ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS << "): ";
+                                        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)atoi(optionValue.c_str()));
                                         break;
 
                                     case 12: //logFile
-                                        std::cout
-                                                << "Please enter the name of the log file: ";
+                                        osoutput->AddChannel(optionValue);
+                                        if (fileprintlevelset)
+                                            osoutput->SetPrintLevel(optionValue, (ENUM_OUTPUT_LEVEL)save_fileprintlevel);
+                                        logfileset = true;
+                                        logfilename = optionValue;
                                         break;
 
                                     case 13: //filePrintLevel
-                                            std::cout
-                                                    << "Please enter the print level (0-" 
-                                                    << ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS << "): ";
+                                        if (logfileset)
+                                            osoutput->SetPrintLevel(logfilename, 
+                                                                          (ENUM_OUTPUT_LEVEL)atoi(optionValue.c_str()));
+                                        fileprintlevelset = true;
+                                        save_fileprintlevel = atoi(optionValue.c_str());
+                                        break;
+
+
+                                    case 14: //list --- options or solvers
+                                        if (optionValue == "solvers")
+                                            std::cout << get_solverlist() << std::endl;
+                                        else if (optionValue == "options")
+                                            list_options(oscommandline);
+                                        else
+                                            std::cout << "unrecognized option value \"" 
+                                                      << optionValue << "\"" << std::endl;
                                             break;
 
                             }// end switch
@@ -2440,25 +2482,28 @@ std::string get_options()
             << endl;
     optionMsg
             << "reset -- erase all previous option settings"
-            << endl    ;
+            << endl;
     optionMsg
-            << "list -- list the current option values"
-            << endl    ;
+            << "list options -- list the current option values"
+            << endl;
     optionMsg
-            << "solve -- call the solver synchronously"
-            << endl ;
+            << "list solvers -- list the locally available solvers"
+            << endl;
     optionMsg
-            << "send -- call the solver asynchronously"
-            << endl ;
+            << "solve -- call a remote solver synchronously"
+            << endl;
+    optionMsg
+            << "send -- call a remote solver asynchronously"
+            << endl;
     optionMsg
             << "kill -- end a job on the remote server"
-            << endl ;
+            << endl;
     optionMsg
             << "retrieve -- get job result on the remote server"
-            << endl ;
+            << endl;
     optionMsg
             << "knock -- get job information on the remote server"
-            << endl ;
+            << endl;
     optionMsg
             << "getJobID -- get a job ID from the remote server"
             << endl << endl;
@@ -2472,9 +2517,9 @@ std::string get_options()
             << endl;
     optionMsg
             << "mps  -- the location of the model instance in MPS format"
-            << endl    ;
+            << endl;
     optionMsg
-            << "nl -- the location of the model instance in AMPL nl format"
+            << "nl   -- the location of the model instance in AMPL nl format"
             << endl;
     optionMsg
             << "osol -- the location of the solver option file in OSoL format"
@@ -2486,8 +2531,8 @@ std::string get_options()
             << "osplInput -- the name of an input file in OSpL format"
             << endl;
     optionMsg
-            << "osplOutput --  the name of an output file in the OSpL format"
-            << endl    ;
+            << "osplOutput -- the name of an output file in OSpL format"
+            << endl;
     optionMsg
             << "serviceLocation -- the  URL of a remote solver service"
             << endl;
@@ -2524,10 +2569,10 @@ std::string get_options()
     optionMsg << ENUM_OUTPUT_LEVEL_detailed_trace << endl; 
 #endif
     optionMsg
-            << "logFile --- a secondary output device"
+            << "logFile -- a secondary output device"
             << endl;
     optionMsg
-            << "filePrintLevel nnn -- control the amount of output sent to the secondary output device"
+            << "filePrintLevel nnn -- control the amount of output sent to logFile"
             << endl;
     optionMsg 
             << "   valid values are 0..";
@@ -2558,7 +2603,118 @@ std::string get_options()
     return optionMsg.str();
 }// get_options
 
+std::string get_solverlist()
+{
+    ostringstream temp;
+    std::string header = "This OSSolverService is configured with the following solvers:";
+    bool writeheader = true;
 
+#ifdef COIN_HAS_CLP
+        if (writeheader) temp << header << std::endl;
+        temp << "    Clp" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_CBC
+        if (writeheader) temp << header << std::endl;
+        temp << "    Cbc" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_DYLP
+        if (writeheader) temp << header << std::endl;
+        temp << "    DyLP" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_SYMPHONY
+        if (writeheader) temp << header << std::endl;
+        temp << "    SYMPHONY" << std::endl;
+        writeheader = false;
+#endif
+ 
+#ifdef COIN_HAS_VOL
+        if (writeheader) temp << header << std::endl;
+        temp << "    Vol" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_IPOPT
+        if (writeheader) temp << header << std::endl;
+        temp << "    Ipopt" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_BONMIN
+        if (writeheader) temp << header << std::endl;
+        temp << "    Bonmin" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_COUENNE
+        if (writeheader) temp << header << std::endl;
+        temp << "    Couenne" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_GLPK
+        if (writeheader) temp << header << std::endl;
+        temp << "    GLPK" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_CSDP
+        if (writeheader) temp << header << std::endl;
+        temp << "    CSDP" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_CPX
+        if (writeheader) temp << header << std::endl;
+        temp << "    CPLEX" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_GRB
+        if (writeheader) temp << header << std::endl;
+        temp << "    Gurobi" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_KNITRO
+        if (writeheader) temp << header << std::endl;
+        temp << "    Knitro" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_LINDO
+        if (writeheader) temp << header << std::endl;
+        temp << "    Lindo" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_MSK
+        if (writeheader) temp << header << std::endl;
+        temp << "    Mosek" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_SOPLEX
+        if (writeheader) temp << header << std::endl;
+        temp << "    SoPlex" << std::endl;
+        writeheader = false;
+#endif
+
+#ifdef COIN_HAS_XPR
+        if (writeheader) temp << header << std::endl;
+        temp << "    XPRESS" << std::endl;
+        writeheader = false;
+#endif
+
+    if (writeheader)
+        temp << "This OSSolverService is configured without any solvers!";
+    return temp.str();
+}// get_solverlist
 void list_options(OSCommandLine *oscommandline)
 {
     cout
