@@ -3,7 +3,7 @@
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<name>Par Inc. </name>
-		<source>Anderson, Sweeney, Williams, Camm, and Martin</source>
+		<source>Anderson, Sweeny, Williams, Camm, and Martin</source>
 		<description> A quadratic production scheduling problem: optimal solution is x0 = 459.72 and x1 = 308.20 for objective function value 49920.55 </description>
 	</instanceHeader>
 	<instanceData>
@@ -21,7 +21,7 @@
 			<con name="cutanddye" ub="630" />
 			<con name="sewing"  ub="600"/>
 			<con name="finishing"  ub="708"/>
-			<con name="inspectandpack" ub="135"/>
+			<con name="ianp" ub="135"/>
 		</constraints>
 		<linearConstraintCoefficients numberOfValues="8">
 			<start>
@@ -40,10 +40,10 @@
 				<el>3</el>
 			</rowIdx>
 			<value>
-				<el>.7</el>
-				<el>.5</el>
-				<el>1</el>				
-				<el>.1</el>
+				<el>0.7</el>
+				<el>0.5</el>
+				<el>1.0</el>				
+				<el>0.1</el>
 				<el>1.0</el>
 				<el>0.8333</el>
 				<el>0.6667</el>
