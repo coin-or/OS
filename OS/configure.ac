@@ -97,6 +97,7 @@ AC_COIN_CHECK_PACKAGE(Msk,      [osi-mosek],    [OSLib])
 AC_COIN_CHECK_PACKAGE(SoPlex,   [osi-soplex],   [OSLib])
 AC_COIN_CHECK_PACKAGE(Xpr,      [osi-xpress],   [OSLib])
 AC_COIN_CHECK_PACKAGE(Cbc,      [cbc],          [OSLib])
+#AC_COIN_CHECK_PACKAGE(Csdp,     [csdp],         [OSLib])
 AC_COIN_CHECK_PACKAGE(Bonmin,   [bonmin cppad], [OSLib])
 AC_COIN_CHECK_PACKAGE(Couenne,  [couenne cppad],[OSLib])
 AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],          [OSLib])
@@ -155,8 +156,10 @@ fi
 #                             Third party solvers                           #
 #############################################################################
 
-AC_COIN_CHECK_USER_LIBRARY([Lindo], [LINDO], [lindo.h], [OSLib])
-AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[OSLib])
+AC_COIN_CHECK_USER_LIBRARY([Lindo], [LINDO], [lindo.h])
+AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h])
+AC_COIN_CHECK_USER_LIBRARY([Csdp],  [CSDP],  [blockmat.h])
+#AC_COIN_CHECK_USER_LIBRARY([Csdp],  [CSDP],  [blockmat.h], [easy_sdp])
 
 
 #############################################################################
@@ -340,6 +343,11 @@ AC_SUBST(oslib)
 #  See if we are disabling shared libs                                      #
 #############################################################################
 
+
+#############################################################################
+#  Create links for VPATH config of certain files                           #
+#############################################################################
+
 ##
 ## the help file
 ##
@@ -394,6 +402,7 @@ AC_COIN_VPATH_LINK(data/osilFiles/spl1.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/spl2.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/volumeTest.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/wayneQuadratic.osil)
+
 ##
 ## osol test files
 ##
@@ -452,12 +461,14 @@ AC_COIN_VPATH_LINK(data/osolFiles/parsertest2.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/parsertest3.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/parsertestWithErrors.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/parsertestWithErrors.result)
+
 ##
 ## ospl test files
 ##
 AC_COIN_VPATH_LINK(data/osplFiles/demo.ospl)
 AC_COIN_VPATH_LINK(data/osplFiles/knock.ospl)
 AC_COIN_VPATH_LINK(data/osplFiles/result.ospl)
+
 ##
 ## osrl test files
 ##
@@ -467,6 +478,7 @@ AC_COIN_VPATH_LINK(data/osrlFiles/parincLinear.osrl)
 AC_COIN_VPATH_LINK(data/osrlFiles/reducedcost.osrl)
 AC_COIN_VPATH_LINK(data/osrlFiles/rosenbrockmod.osrl)
 AC_COIN_VPATH_LINK(data/osrlFiles/errorExample.osrl)
+
 ##
 ## configure test files
 ##
@@ -488,6 +500,7 @@ AC_COIN_VPATH_LINK(data/configFiles/testRemoteNL.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteBIG.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteRetrieve.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteSend.config)
+
 ##
 ## ampl test files
 ##
@@ -521,6 +534,7 @@ AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.nl)
+
 ##
 ## GAMS test files
 ##
@@ -531,12 +545,14 @@ AC_COIN_VPATH_LINK(data/gamsFiles/trnsport.gms)
 AC_COIN_VPATH_LINK(data/gamsFiles/IP_infeasible.gms)
 AC_COIN_VPATH_LINK(data/gamsFiles/IP_unbounded.gms)
 AC_COIN_VPATH_LINK(data/gamsFiles/LP_unbounded.gms)
+
 ##
 ## mps test files
 ##
 AC_COIN_VPATH_LINK(data/mpsFiles/parinc.mps)
 AC_COIN_VPATH_LINK(data/mpsFiles/parincQuadratic.mps)
 AC_COIN_VPATH_LINK(data/mpsFiles/IP_unbounded.mps)
+
 ##
 ## MATLAB test files
 ##
@@ -544,6 +560,7 @@ AC_COIN_VPATH_LINK(data/matlabFiles/markowitz.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/parincLinear.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/template.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/OSCallMatlabSolver.m)
+
 ##
 ## columnGen Application files
 ##
@@ -569,6 +586,7 @@ AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-40-60-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-60-40-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-120-120-120.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p95-150-150-150.osol)
+
 ##
 ## Miscellaneous files for testing
 ##
@@ -592,21 +610,23 @@ AC_COIN_VPATH_LINK(test/data/qptest2.osil)
 AC_COIN_VPATH_LINK(test/data/qptest.osil)
 AC_COIN_VPATH_LINK(test/data/reallyEmpty.osil)
 AC_COIN_VPATH_LINK(test/data/share2qp.mps)
+
 ##
 ### Python Code
 ##
 AC_COIN_VPATH_LINK(applications/parsingTest/parsingTest.py)
+
 ##
 ## XSLT FILE
 ##
 AC_COIN_VPATH_LINK(stylesheets/OSrL.xslt)
+
 ##
 ## CSS FILE
 ##
 AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
+
 ##
-
-
 
 
 ##############################################################################

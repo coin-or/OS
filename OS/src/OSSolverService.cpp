@@ -121,6 +121,10 @@
 #include "OSCouenneSolver.h"
 #endif
 
+#ifdef COIN_HAS_CSDP
+#include "OSCsdpSolver.h"
+#endif
+
 #include "OSCommandLine.h"
 
 #include <stdio.h>
@@ -176,6 +180,10 @@ int main(int argC, const char* argV[])
 {
     WindowsErrorPopupBlocker();
     std::ostringstream outStr;
+
+#ifdef COIN_HAS_CSDP
+    std::cout << "so far, so good! Csdp has been found" << std::endl;
+#endif
 
     std::string versionInfo = OSgetVersionInfo();
     osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, versionInfo);

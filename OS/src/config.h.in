@@ -30,6 +30,9 @@
 /* Define to 1 if the Cpx package is available */
 #undef COIN_HAS_CPX
 
+/* Define to 1 if the Csdp package is available */
+#undef COIN_HAS_CSDP
+
 /* Define to 1 if the DyLP package is available */
 #undef COIN_HAS_DYLP
 

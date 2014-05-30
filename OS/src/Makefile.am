@@ -1,10 +1,12 @@
 # Copyright (C) 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id: Makefile.am 756 2006-06-26 19:43:41Z ladanyi $
 
 # Author:  Andreas Waechter           IBM    2006-04-13
+
+# Modifications by Horand Gassmann, Jun Ma and Kipp Martin
 
 AUTOMAKE_OPTIONS = foreign
 
@@ -62,10 +64,10 @@ OSSolverService_LDADD = libOS.la $(OSLIB_LIBS)
 # dependencies to the subdirectory libraries here
 OSSolverService_DEPENDENCIES = libOS.la $(OSLIB_DEPENDENCIES)
 
+
 ########################################################################
 #                            Additional flags                          #
 ########################################################################
-
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows

@@ -47,6 +47,10 @@
 #include "OSCouenneSolver.h"
 #endif
 
+#ifdef COIN_HAS_CSDP
+#include "OSCsdpSolver.h"
+#endif
+
 #include <stdio.h>
 #include <map>
 
@@ -57,6 +61,7 @@ using std::ostringstream;
 using std::string;
 using std::map;
 
+/* Four implementations of this method, with different combinations of inputs */
 
 std::string runSolver(std::string solverName, std::string osol,
                         OSInstance *osinstance)
@@ -65,7 +70,6 @@ std::string runSolver(std::string solverName, std::string osol,
     solverType = selectSolver(solverName, osinstance);
     if (solverType == NULL)  
         throw ErrorClass("No appropriate solver found");
-    //std::cout << "SOLVER NAME = " << solverName << std::endl;
 
     solverType->osinstance = osinstance;
     solverType->osol = osol;
@@ -87,7 +91,6 @@ std::string runSolver(std::string solverName, OSOption* osoption,
     solverType = selectSolver(solverName, osinstance);
     if (solverType == NULL)  
         throw ErrorClass("No appropriate solver found");
-    //std::cout << "SOLVER NAME = " << solverName << std::endl;
 
     solverType->osinstance = osinstance;
     solverType->osoption = osoption;
@@ -100,7 +103,6 @@ std::string runSolver(std::string solverName, OSOption* osoption,
     solverType = NULL;
     return resultString;
 } //runSolver (osinstance, osoption)
-
 
 
 std::string runSolver(std::string solverName, std::string osol,
@@ -116,7 +118,6 @@ std::string runSolver(std::string solverName, std::string osol,
     solverType = selectSolver(solverName, osinstance);
     if (solverType == NULL)  
         throw ErrorClass("No appropriate solver found");
-    //std::cout << "SOLVER NAME = " << solverName << std::endl;
 
     solverType->osinstance = osinstance;
     solverType->osol = osol;
@@ -146,7 +147,6 @@ std::string runSolver(std::string solverName, OSOption* osoption,
     solverType = selectSolver(solverName, osinstance);
     if (solverType == NULL)  
         throw ErrorClass("No appropriate solver found");
-    //std::cout << "SOLVER NAME = " << solverName << std::endl;
 
     solverType->osinstance = osinstance;
     solverType->osoption = osoption;
@@ -163,7 +163,6 @@ std::string runSolver(std::string solverName, OSOption* osoption,
 } //runSolver (osil, osoption)
 
 
-
 DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 {
     DefaultSolver *solverType = NULL;
@@ -174,7 +173,12 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
             if (osinstance == NULL)
                 throw ErrorClass(
                     "there was a NULL instance sent to buildSolver");
-            //see if we have an integer program
+
+            // make sure there are no special items here, matrixProgramming, stochastic, etc.
+            // for which there is no default solver
+            // HIG: To do...
+
+            // see if we have an integer program
             if (osinstance->getNumberOfIntegerVariables()
                     + osinstance->getNumberOfBinaryVariables() > 0)  //we have an integer program
             {
@@ -357,6 +361,16 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
             solverType->sSolverName = "xpress";
 #else
             throw ErrorClass( "the Xpress solver requested is not present");
+#endif
+        }
+
+        else if (solverName.find("csdp") != std::string::npos)
+        {
+#ifdef COIN_HAS_CSDP
+            solverType = new CsdpSolver();
+            solverType->sSolverName = "csdp";
+#else
+            throw ErrorClass( "the CSDP solver requested is not present");
 #endif
         }
 

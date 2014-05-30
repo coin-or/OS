@@ -6,6 +6,8 @@
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
+# Modifications by Horand Gassmann, Jun Ma and Kipp Martin
+
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
@@ -36,21 +38,20 @@ libOSSolverInterfaces_la_SOURCES += 	OSIpoptSolver.cpp \
 	OSIpoptSolver.h
 endif
 
-
 if COIN_HAS_BONMIN
 libOSSolverInterfaces_la_SOURCES += 	OSBonminSolver.cpp \
 	OSBonminSolver.h
 endif
-
-
 
 if COIN_HAS_COUENNE
 libOSSolverInterfaces_la_SOURCES += 	OSCouenneSolver.cpp \
 	OSCouenneSolver.h
 endif
 
-
-
+if COIN_HAS_CSDP
+libOSSolverInterfaces_la_SOURCES += 	OSCsdpSolver.cpp \
+	OSCsdpSolver.h
+endif
 
 if COIN_HAS_KNITRO
 libOSSolverInterfaces_la_SOURCES += 	OSKnitroSolver.cpp \
@@ -71,12 +72,18 @@ AM_CPPFLAGS = \
 	$(OSLIB_CFLAGS)
 	
 if COIN_HAS_LINDO
-#  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 
+  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+endif
+	
+if COIN_HAS_CSDP
+  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(CSDPINCDIR)`  -DNOSHORTS
+
+#  AM_CPPFLAGS +=   -DNOSHORTS
 endif
 
-#if COIN_HAS_KNITRO
-#  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-#endif
+if COIN_HAS_KNITRO
+  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(KNITROINCDIR)` 
+endif
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
@@ -112,3 +119,8 @@ endif
 if COIN_HAS_COUENNE
 includecoin_HEADERS += OSCouenneSolver.h
 endif
+
+if COIN_HAS_CSDP
+includecoin_HEADERS += OSCsdpSolver.h
+endif
+

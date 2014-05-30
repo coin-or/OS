@@ -20,6 +20,8 @@
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
+# Modifications by Horand Gassmann, Jun Ma and Kipp Martin
+
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -55,14 +57,23 @@ host_triplet = @host@
 @COIN_HAS_COUENNE_TRUE@am__append_4 = OSCouenneSolver.cpp \
 @COIN_HAS_COUENNE_TRUE@	OSCouenneSolver.h
 
-@COIN_HAS_KNITRO_TRUE@am__append_5 = OSKnitroSolver.cpp \
+@COIN_HAS_CSDP_TRUE@am__append_5 = OSCsdpSolver.cpp \
+@COIN_HAS_CSDP_TRUE@	OSCsdpSolver.h
+
+@COIN_HAS_KNITRO_TRUE@am__append_6 = OSKnitroSolver.cpp \
 @COIN_HAS_KNITRO_TRUE@	OSKnitroSolver.h
 
-@COIN_HAS_LINDO_TRUE@am__append_6 = OSLindoSolver.h
-@COIN_HAS_KNITRO_TRUE@am__append_7 = OSKnitroSolver.h
-@COIN_HAS_IPOPT_TRUE@am__append_8 = OSIpoptSolver.h
-@COIN_HAS_BONMIN_TRUE@am__append_9 = OSBonminSolver.h
-@COIN_HAS_COUENNE_TRUE@am__append_10 = OSCouenneSolver.h
+@COIN_HAS_LINDO_TRUE@am__append_7 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_CSDP_TRUE@am__append_8 = -I`$(CYGPATH_W) $(CSDPINCDIR)`  -DNOSHORTS
+
+#  AM_CPPFLAGS +=   -DNOSHORTS
+@COIN_HAS_KNITRO_TRUE@am__append_9 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_10 = OSLindoSolver.h
+@COIN_HAS_KNITRO_TRUE@am__append_11 = OSKnitroSolver.h
+@COIN_HAS_IPOPT_TRUE@am__append_12 = OSIpoptSolver.h
+@COIN_HAS_BONMIN_TRUE@am__append_13 = OSBonminSolver.h
+@COIN_HAS_COUENNE_TRUE@am__append_14 = OSCouenneSolver.h
+@COIN_HAS_CSDP_TRUE@am__append_15 = OSCsdpSolver.h
 subdir = src/OSSolverInterfaces
 DIST_COMMON = $(am__includecoin_HEADERS_DIST) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -82,16 +93,18 @@ am__libOSSolverInterfaces_la_SOURCES_DIST = OSCoinSolver.cpp \
 	OSRunSolver.cpp OSRunSolver.h OSLindoSolver.cpp \
 	OSLindoSolver.h OSIpoptSolver.cpp OSIpoptSolver.h \
 	OSBonminSolver.cpp OSBonminSolver.h OSCouenneSolver.cpp \
-	OSCouenneSolver.h OSKnitroSolver.cpp OSKnitroSolver.h
+	OSCouenneSolver.h OSCsdpSolver.cpp OSCsdpSolver.h \
+	OSKnitroSolver.cpp OSKnitroSolver.h
 @COIN_HAS_LINDO_TRUE@am__objects_1 = OSLindoSolver.lo
 @COIN_HAS_IPOPT_TRUE@am__objects_2 = OSIpoptSolver.lo
 @COIN_HAS_BONMIN_TRUE@am__objects_3 = OSBonminSolver.lo
 @COIN_HAS_COUENNE_TRUE@am__objects_4 = OSCouenneSolver.lo
-@COIN_HAS_KNITRO_TRUE@am__objects_5 = OSKnitroSolver.lo
+@COIN_HAS_CSDP_TRUE@am__objects_5 = OSCsdpSolver.lo
+@COIN_HAS_KNITRO_TRUE@am__objects_6 = OSKnitroSolver.lo
 am_libOSSolverInterfaces_la_OBJECTS = OSCoinSolver.lo \
 	OSMatlabSolver.lo OSRunSolver.lo $(am__objects_1) \
 	$(am__objects_2) $(am__objects_3) $(am__objects_4) \
-	$(am__objects_5)
+	$(am__objects_5) $(am__objects_6)
 libOSSolverInterfaces_la_OBJECTS =  \
 	$(am_libOSSolverInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -116,7 +129,7 @@ SOURCES = $(libOSSolverInterfaces_la_SOURCES)
 DIST_SOURCES = $(am__libOSSolverInterfaces_la_SOURCES_DIST)
 am__includecoin_HEADERS_DIST = OSCoinSolver.h OSMatlabSolver.h \
 	OSRunSolver.h OSLindoSolver.h OSKnitroSolver.h OSIpoptSolver.h \
-	OSBonminSolver.h OSCouenneSolver.h
+	OSBonminSolver.h OSCouenneSolver.h OSCsdpSolver.h
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -213,6 +226,8 @@ COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
 COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
 COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
 COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
+COIN_HAS_CSDP_FALSE = @COIN_HAS_CSDP_FALSE@
+COIN_HAS_CSDP_TRUE = @COIN_HAS_CSDP_TRUE@
 COIN_HAS_DYLP_FALSE = @COIN_HAS_DYLP_FALSE@
 COIN_HAS_DYLP_TRUE = @COIN_HAS_DYLP_TRUE@
 COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
@@ -262,6 +277,8 @@ CPX_DATA_INSTALLED = @CPX_DATA_INSTALLED@
 CPX_DEPENDENCIES = @CPX_DEPENDENCIES@
 CPX_LIBS = @CPX_LIBS@
 CPX_LIBS_INSTALLED = @CPX_LIBS_INSTALLED@
+CSDPINCDIR = @CSDPINCDIR@
+CSDPLIB = @CSDPLIB@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@
@@ -477,27 +494,18 @@ noinst_LTLIBRARIES = libOSSolverInterfaces.la
 libOSSolverInterfaces_la_SOURCES = OSCoinSolver.cpp OSCoinSolver.h \
 	OSMatlabSolver.cpp OSMatlabSolver.h OSRunSolver.cpp \
 	OSRunSolver.h $(am__append_1) $(am__append_2) $(am__append_3) \
-	$(am__append_4) $(am__append_5)
+	$(am__append_4) $(am__append_5) $(am__append_6)
 
 # This is for libtool (on Windows)
 libOSSolverInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = \
-	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` \
-	$(OSLIB_CFLAGS)
-
-
-#  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 
-
-#if COIN_HAS_KNITRO
-#  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-#endif
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSCommonInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSParsers` -I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` $(OSLIB_CFLAGS) \
+	$(am__append_7) $(am__append_8) $(am__append_9)
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
@@ -510,8 +518,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = OSCoinSolver.h OSMatlabSolver.h OSRunSolver.h \
-	$(am__append_6) $(am__append_7) $(am__append_8) \
-	$(am__append_9) $(am__append_10)
+	$(am__append_10) $(am__append_11) $(am__append_12) \
+	$(am__append_13) $(am__append_14) $(am__append_15)
 all: all-am
 
 .SUFFIXES:
@@ -566,6 +574,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSBonminSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCoinSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCouenneSolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCsdpSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSIpoptSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSKnitroSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSLindoSolver.Plo@am__quote@

@@ -16,9 +16,11 @@
 
 # Copyright (C) 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 # Author:  Andreas Waechter           IBM    2006-04-13
+
+# Modifications by Horand Gassmann, Jun Ma and Kipp Martin
 
 
 srcdir = @srcdir@
@@ -187,6 +189,8 @@ COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
 COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
 COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
 COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
+COIN_HAS_CSDP_FALSE = @COIN_HAS_CSDP_FALSE@
+COIN_HAS_CSDP_TRUE = @COIN_HAS_CSDP_TRUE@
 COIN_HAS_DYLP_FALSE = @COIN_HAS_DYLP_FALSE@
 COIN_HAS_DYLP_TRUE = @COIN_HAS_DYLP_TRUE@
 COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
@@ -236,6 +240,8 @@ CPX_DATA_INSTALLED = @CPX_DATA_INSTALLED@
 CPX_DEPENDENCIES = @CPX_DEPENDENCIES@
 CPX_LIBS = @CPX_LIBS@
 CPX_LIBS_INSTALLED = @CPX_LIBS_INSTALLED@
+CSDPINCDIR = @CSDPINCDIR@
+CSDPLIB = @CSDPLIB@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@

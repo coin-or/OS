@@ -194,6 +194,8 @@ COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
 COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
 COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
 COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
+COIN_HAS_CSDP_FALSE = @COIN_HAS_CSDP_FALSE@
+COIN_HAS_CSDP_TRUE = @COIN_HAS_CSDP_TRUE@
 COIN_HAS_DYLP_FALSE = @COIN_HAS_DYLP_FALSE@
 COIN_HAS_DYLP_TRUE = @COIN_HAS_DYLP_TRUE@
 COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
@@ -243,6 +245,8 @@ CPX_DATA_INSTALLED = @CPX_DATA_INSTALLED@
 CPX_DEPENDENCIES = @CPX_DEPENDENCIES@
 CPX_LIBS = @CPX_LIBS@
 CPX_LIBS_INSTALLED = @CPX_LIBS_INSTALLED@
+CSDPINCDIR = @CSDPINCDIR@
+CSDPLIB = @CSDPLIB@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@
@@ -470,6 +474,9 @@ addlibsdir = $(DESTDIR)$(datadir)/coin/doc/OS
 ########################################################################
 #                         Maintainer Stuff                             #
 ########################################################################
+
+# Files that are generated and should be cleaned with make clean
+CLEANFILES = 
 
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES = $(am__append_3) $(VPATH_DISTCLEANFILES)
@@ -842,6 +849,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
