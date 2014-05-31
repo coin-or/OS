@@ -97,7 +97,6 @@ AC_COIN_CHECK_PACKAGE(Msk,      [osi-mosek],    [OSLib])
 AC_COIN_CHECK_PACKAGE(SoPlex,   [osi-soplex],   [OSLib])
 AC_COIN_CHECK_PACKAGE(Xpr,      [osi-xpress],   [OSLib])
 AC_COIN_CHECK_PACKAGE(Cbc,      [cbc],          [OSLib])
-#AC_COIN_CHECK_PACKAGE(Csdp,     [csdp],         [OSLib])
 AC_COIN_CHECK_PACKAGE(Bonmin,   [bonmin cppad], [OSLib])
 AC_COIN_CHECK_PACKAGE(Couenne,  [couenne cppad],[OSLib])
 AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],          [OSLib])
@@ -156,10 +155,9 @@ fi
 #                             Third party solvers                           #
 #############################################################################
 
-AC_COIN_CHECK_USER_LIBRARY([Lindo], [LINDO], [lindo.h])
-AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h])
-AC_COIN_CHECK_USER_LIBRARY([Csdp],  [CSDP],  [blockmat.h])
-#AC_COIN_CHECK_USER_LIBRARY([Csdp],  [CSDP],  [blockmat.h], [easy_sdp])
+AC_COIN_CHECK_USER_LIBRARY([Lindo], [LINDO], [lindo.h],,, [OSLib])
+AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],,, [OSLib])
+AC_COIN_CHECK_USER_LIBRARY([Csdp],  [CSDP],  [blockmat.h],,, [OSLib])
 
 
 #############################################################################

@@ -52,8 +52,10 @@
  * Include CSDP declarations so that we'll know the calling interfaces.
  */
 
-//#include "declarations.h"
-
+extern "C"
+{
+#include "declarations.h"
+}
 
 using std::cout;
 using std::endl;
@@ -160,7 +162,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 std::cout << "Hello world!" << std::endl;
 
 // disable Csdp stuff for now
-#if 0 
+#if 1
         struct blockmatrix C;
         double *b;
         struct constraintmatrix *constraints;

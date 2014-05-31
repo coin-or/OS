@@ -64,9 +64,7 @@ host_triplet = @host@
 @COIN_HAS_KNITRO_TRUE@	OSKnitroSolver.h
 
 @COIN_HAS_LINDO_TRUE@am__append_7 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_CSDP_TRUE@am__append_8 = -I`$(CYGPATH_W) $(CSDPINCDIR)`  -DNOSHORTS
-
-#  AM_CPPFLAGS +=   -DNOSHORTS
+@COIN_HAS_CSDP_TRUE@am__append_8 = -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
 @COIN_HAS_KNITRO_TRUE@am__append_9 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
 @COIN_HAS_LINDO_TRUE@am__append_10 = OSLindoSolver.h
 @COIN_HAS_KNITRO_TRUE@am__append_11 = OSKnitroSolver.h

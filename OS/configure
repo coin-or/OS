@@ -28876,7 +28876,6 @@ fi
 
 
 
-#AC_COIN_CHECK_PACKAGE(Csdp,     [csdp],         [OSLib])
 
 echo "$as_me:$LINENO: checking for COIN-OR package Bonmin" >&5
 echo $ECHO_N "checking for COIN-OR package Bonmin... $ECHO_C" >&6
@@ -31599,9 +31598,13 @@ fi
 
 
 # If we make it this far, we've verified the file and linked the function. Add
-# the necessary link flags to _{PC}LIBS and define the preprocessor symbol
+# the necessary link flags to OSLib_{PC}LIBS and define the preprocessor symbol
 # COIN_HAS_LBRY.
 
+
+      OSLIB_LIBS="$LINDOLIB $OSLIB_LIBS"
+      OSLIB_PCLIBS="$LINDOLIB $OSLIB_PCLIBS"
+      OSLIB_LIBS_INSTALLED="$LINDOLIB $OSLIB_LIBS_INSTALLED"
 
 
 
@@ -31705,9 +31708,13 @@ fi
 
 
 # If we make it this far, we've verified the file and linked the function. Add
-# the necessary link flags to _{PC}LIBS and define the preprocessor symbol
+# the necessary link flags to OSLib_{PC}LIBS and define the preprocessor symbol
 # COIN_HAS_LBRY.
 
+
+      OSLIB_LIBS="$KNITROLIB $OSLIB_LIBS"
+      OSLIB_PCLIBS="$KNITROLIB $OSLIB_PCLIBS"
+      OSLIB_LIBS_INSTALLED="$KNITROLIB $OSLIB_LIBS_INSTALLED"
 
 
 
@@ -31811,9 +31818,13 @@ fi
 
 
 # If we make it this far, we've verified the file and linked the function. Add
-# the necessary link flags to _{PC}LIBS and define the preprocessor symbol
+# the necessary link flags to OSLib_{PC}LIBS and define the preprocessor symbol
 # COIN_HAS_LBRY.
 
+
+      OSLIB_LIBS="$CSDPLIB $OSLIB_LIBS"
+      OSLIB_PCLIBS="$CSDPLIB $OSLIB_PCLIBS"
+      OSLIB_LIBS_INSTALLED="$CSDPLIB $OSLIB_LIBS_INSTALLED"
 
 
 
@@ -31839,7 +31850,6 @@ else
 fi
 
 
-#AC_COIN_CHECK_USER_LIBRARY([Csdp],  [CSDP],  [blockmat.h], [easy_sdp])
 
 
 #############################################################################
