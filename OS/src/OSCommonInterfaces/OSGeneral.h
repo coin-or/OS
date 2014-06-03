@@ -1357,6 +1357,64 @@ enum ENUM_PATHPAIR
     ENUM_PATHPAIR_output_dir
 };
 
+
+enum ENUM_MATRIX_TYPE
+{
+    ENUM_MATRIX_TYPE_zero = 1,
+    ENUM_MATRIX_TYPE_constant,
+    ENUM_MATRIX_TYPE_varref,
+    ENUM_MATRIX_TYPE_linear,
+    ENUM_MATRIX_TYPE_general,
+    ENUM_MATRIX_TYPE_unknown
+};
+
+inline int returnMatrixType(std::string type)
+{
+    if (type == "zero"    ) return ENUM_MATRIX_TYPE_zero;
+    if (type == "constant") return ENUM_MATRIX_TYPE_constant;
+    if (type == "varref"  ) return ENUM_MATRIX_TYPE_varref;
+    if (type == "linear"  ) return ENUM_MATRIX_TYPE_linear;
+    if (type == "general" ) return ENUM_MATRIX_TYPE_general;
+    if (type == "unknown" ) return ENUM_MATRIX_TYPE_unknown;
+    return 0;
+}//returnMatrixType
+
+inline bool verifyMatrixType(std::string type)
+{
+    return (returnMatrixType(type) > 0);
+}//verifyMatrixType
+
+
+enum ENUM_MATRIX_SHAPE
+{
+    ENUM_MATRIX_SHAPE_general = 1,
+    ENUM_MATRIX_SHAPE_symmetricUpper,
+    ENUM_MATRIX_SHAPE_symmetricLower,
+    ENUM_MATRIX_SHAPE_skewSymmetricUpper,
+    ENUM_MATRIX_SHAPE_skewSymmetricLower,
+    ENUM_MATRIX_SHAPE_hermitianLower,
+    ENUM_MATRIX_SHAPE_hermitianUpper
+};
+
+inline int returnMatrixShape(std::string shape)
+{
+    if (shape == "general"           ) return ENUM_MATRIX_SHAPE_general;
+    if (shape == "symmetricUpper"    ) return ENUM_MATRIX_SHAPE_symmetricUpper;
+    if (shape == "symmetricLower"    ) return ENUM_MATRIX_SHAPE_symmetricLower;
+    if (shape == "skewSymmetricUpper") return ENUM_MATRIX_SHAPE_skewSymmetricUpper;
+    if (shape == "skewSymmetricLower") return ENUM_MATRIX_SHAPE_skewSymmetricLower;
+    if (shape == "hermitianLower"    ) return ENUM_MATRIX_SHAPE_hermitianLower;
+    if (shape == "hermitianLower"    ) return ENUM_MATRIX_SHAPE_hermitianLower;
+    return 0;
+}//returnMatrixShape
+
+inline bool verifyMatrixShape(std::string shape)
+{
+    return (returnMatrixShape(shape) > 0);
+}//verifyMatrixShape
+
+
+
 /*************************************************
  *
  * A function to test equality of two doubles
@@ -1377,9 +1435,9 @@ inline bool isEqual(double x, double y)
 enum ENUM_COMBINE_ARRAYS
 {
     ENUM_COMBINE_ARRAYS_replace, //silently replace previous data (if any)
-	ENUM_COMBINE_ARRAYS_merge,	 //merge two vectors into one
+    ENUM_COMBINE_ARRAYS_merge,   //merge two vectors into one
     ENUM_COMBINE_ARRAYS_ignore,  //silently ignore current vector if previous data exist
-	ENUM_COMBINE_ARRAYS_throw    //throw an error if previous data detected
+    ENUM_COMBINE_ARRAYS_throw    //throw an error if previous data detected
 };
 
 #endif

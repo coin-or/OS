@@ -47,6 +47,7 @@ build_triplet = @build@
 host_triplet = @host@
 @DEPENDENCY_LINKING_TRUE@am__append_1 = $(OSLIB_LIBS)
 bin_PROGRAMS = OSSolverService$(EXEEXT)
+@COIN_HAS_CSDP_TRUE@am__append_2 = -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/config.h.in $(srcdir)/config_os.h.in
@@ -488,15 +489,11 @@ OSSolverService_DEPENDENCIES = libOS.la $(OSLIB_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = \
-	-I`$(CYGPATH_W) $(srcdir)/OSAgent` \
-	-I`$(CYGPATH_W) $(srcdir)/OSParsers` \
-	-I`$(CYGPATH_W) $(srcdir)/OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/OSCommonInterfaces` \
-	$(OSLIB_CFLAGS)
-
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/OSAgent` -I`$(CYGPATH_W) \
+	$(srcdir)/OSParsers` -I`$(CYGPATH_W) $(srcdir)/OSUtils` \
+	-I`$(CYGPATH_W) $(srcdir)/OSSolverInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/OSModelInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/OSCommonInterfaces` $(OSLIB_CFLAGS) $(am__append_2)
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`

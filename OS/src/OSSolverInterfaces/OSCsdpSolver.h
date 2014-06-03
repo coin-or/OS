@@ -38,7 +38,10 @@
  * Include CSDP declarations so that we'll know the calling interfaces.
  */
 
-//#include "declarations.h"
+extern "C"
+{
+#include "declarations.h"
+}
 
 
 #include <cstddef>

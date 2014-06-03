@@ -159,8 +159,6 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
          * The problem and solution data.
          */
 
-std::cout << "Hello world!" << std::endl;
-
 // disable Csdp stuff for now
 #if 1
         struct blockmatrix C;
