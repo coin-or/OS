@@ -47,7 +47,9 @@ build_triplet = @build@
 host_triplet = @host@
 @DEPENDENCY_LINKING_TRUE@am__append_1 = $(OSLIB_LIBS)
 bin_PROGRAMS = OSSolverService$(EXEEXT)
-@COIN_HAS_CSDP_TRUE@am__append_2 = -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
+@COIN_HAS_LINDO_TRUE@am__append_2 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_CSDP_TRUE@am__append_3 = -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
+@COIN_HAS_KNITRO_TRUE@am__append_4 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/config.h.in $(srcdir)/config_os.h.in
@@ -493,7 +495,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/OSAgent` -I`$(CYGPATH_W) \
 	$(srcdir)/OSParsers` -I`$(CYGPATH_W) $(srcdir)/OSUtils` \
 	-I`$(CYGPATH_W) $(srcdir)/OSSolverInterfaces` -I`$(CYGPATH_W) \
 	$(srcdir)/OSModelInterfaces` -I`$(CYGPATH_W) \
-	$(srcdir)/OSCommonInterfaces` $(OSLIB_CFLAGS) $(am__append_2)
+	$(srcdir)/OSCommonInterfaces` $(OSLIB_CFLAGS) $(am__append_2) \
+	$(am__append_3) $(am__append_4)
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`

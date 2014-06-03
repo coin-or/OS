@@ -80,8 +80,16 @@ AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/OSCommonInterfaces` \
 	$(OSLIB_CFLAGS)
 	
+if COIN_HAS_LINDO
+  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+endif
+	
 if COIN_HAS_CSDP
   AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
+endif
+
+if COIN_HAS_KNITRO
+  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(KNITROINCDIR)` 
 endif
 
 # This line is necessary to allow VPATH compilation
