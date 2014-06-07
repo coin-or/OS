@@ -3815,13 +3815,13 @@ string OSResult::getSolverOutputItem(int otherIdx, int itemIdx)
 //==================================================================
 // set methods
 
-bool OSResult::setResultHeader(std::string name, std::string source,
+bool OSResult::setHeader(std::string name, std::string source,
                                std::string fileCreator, std::string description, std::string licence)
 {
     if (this->resultHeader == NULL)
         this->resultHeader = new GeneralFileHeader();
     return this->resultHeader->setHeader(name, source, fileCreator, description, licence);
-}// end of OSResult::setResultHeader
+}// end of OSResult::setHeader
 
 bool OSResult::setGeneralStatus(GeneralStatus *status)
 {

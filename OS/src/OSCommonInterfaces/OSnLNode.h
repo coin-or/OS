@@ -52,15 +52,17 @@ class OSnLNode
 public:
 
     /**  inumberOfChildren is the number of OSnLNode child elements
-     * set to -1 if the number is not fixed, e.g., for a sum node
+     *   if this number is not fixed, e.g., for a sum node, it is temporarily set to 0
      */
     unsigned int inumberOfChildren;
 
     /**  inodeInt is the unique integer assigned to the OSnLNode*/
     int inodeInt;
 
-    /** inodeType is the number of children the node has, it is set
-     * to -1 if the number is not known a priori, e.g., a sum node
+    /** inodeType essentially tracks whether the number of children are known or not
+     *  most nodes have a known number of children, then inodeType is set to inumberOfChildren
+     *  for some nodes the number of children is not known a priori, e.g., a sum node
+     *  then inodeType is set to -1
      */
     int inodeType;
 

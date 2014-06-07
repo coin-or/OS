@@ -71,6 +71,15 @@ public:
      * if the file was not valid
      */
     char *errorText;
+
+    /** used to accumulate error message so the parser does not die
+     *  on the first error encountered
+     */
+    std::string parser_errors;
+
+    /** two booleans to govern the behavior after an error has been encountered */
+    bool ignoreDataAfterErrors;
+    bool suppressFurtherErrorMessages; 
 };//OSgLParserData
 
 inline void osgl_empty_vectors( OSgLParserData* osglData)

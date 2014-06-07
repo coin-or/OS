@@ -1524,7 +1524,7 @@ if (PARSER_TESTS){
         fileDescription = osoption->getFileDescription();
         fileCreator     = osoption->getFileCreator();
         fileLicence     = osoption->getFileLicence();
-        ok = osoption2->setOptionHeader(fileName, fileSource, fileDescription, fileCreator, fileLicence);
+        ok = osoption2->setHeader(fileName, fileSource, fileDescription, fileCreator, fileLicence);
 #ifdef DEBUG
         if (!ok)
             throw ErrorClass(" error in get/set option header");

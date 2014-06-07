@@ -7525,13 +7525,13 @@ bool SolverOptions::addSolverOption(std::string name, std::string value, std::st
  *  set option header
  */
 
-bool OSOption::setOptionHeader(std::string name, std::string source,
+bool OSOption::setHeader(std::string name, std::string source,
                                std::string description, std::string fileCreator, std::string licence)
 {
     if (this->optionHeader == NULL)
         this->optionHeader = new GeneralFileHeader();
     return this->optionHeader->setHeader(name, source, description, fileCreator, licence);
-}// end of OSOption::setOptionHeader
+}// end of OSOption::setHeader
 
 /**
  *  set() options in the <general> element

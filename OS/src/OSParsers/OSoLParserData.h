@@ -277,7 +277,6 @@ public:
     /** the OSoLParserData class destructor */
     ~OSoLParserData() ;
 
-
     /**  the status type of the result */
     std::string statusType;
 
@@ -285,15 +284,23 @@ public:
     std::string statusDescription;
 
     /** scanner is used to store data in a reentrant lexer
-     * we use this to pass an OSoLParserData object to the parser
+     *  we use this to pass an OSoLParserData object to the parser
      */
     void* scanner;
 
-
-    /**  if the parser finds invalid text it is held here and we delete
-     * if the file was not valid
+    /** if the parser finds invalid text it is held here and we delete
+     *  if the file was not valid
      */
     char *errorText;
+
+    /** used to accumulate error message so the parser does not die
+     *  on the first error encountered
+     */
+    std::string parser_errors;
+
+    /** two booleans to govern the behavior after an error has been encountered */
+    bool ignoreDataAfterErrors;
+    bool suppressFurtherErrorMessages; 
 };//OSoLParserData
 
 #endif /*OSOLPARSERDATA_H_*/

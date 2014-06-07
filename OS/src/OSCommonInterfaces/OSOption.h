@@ -2739,6 +2739,7 @@ public:
      */
     bool setOther(int numberOfOptions, OtherObjectiveOption  **other);
 
+
     /**
      *
      * A function to add an <other> element
@@ -3319,6 +3320,7 @@ public:
      */
     bool setOther(int numberOfOptions, OtherConstraintOption  **other);
 
+
     /**
      *
      * A function to add an <other> element
@@ -3613,7 +3615,7 @@ public:
      * @param description: further description about this file and/or its contents
      * @param licence: licence information if applicable
      */
-    bool setOptionHeader(std::string name, std::string source,
+    bool setHeader(std::string name, std::string source,
                          std::string fileCreator, std::string description, std::string licence);
 
 private:
