@@ -242,12 +242,14 @@ osrlBody:
  * ==========================================================
  */
 
-headerElement: | headerElementStart headerElementContent
+headerElement: | osglFileHeader
 {
     if (!osresult->setHeader(osglData->fileName, osglData->source,     
             osglData->description, osglData->fileCreator, osglData->licence) )    
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "setHeader failed");
 };
+
+osglFileHeader: headerElementStart headerElementContent;
  
 headerElementStart: HEADERSTART
 {
@@ -265,7 +267,7 @@ headerElementStart: HEADERSTART
 
 headerElementContent: headerElementEmpty | headerElementLaden;
 
-headerElementEmpty: ENDOFELEMENT;
+headerElementEmpty: GREATERTHAN HEADEREND | ENDOFELEMENT;
 
 headerElementLaden: GREATERTHAN headerElementBody HEADEREND; 
 
@@ -352,7 +354,8 @@ fileCreatorLaden: FILECREATORSTART ITEMTEXT FILECREATOREND
     free($2);
 };
 
-fileLicence: | fileLicenceContent{
+fileLicence: | fileLicenceContent
+{
     if (osglData->licencePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: licence");
     else

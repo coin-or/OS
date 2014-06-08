@@ -1,0 +1,114 @@
+/* $Id: OSParseosol.y.2 4806 2014-06-07 11:37:46Z Gassmann $ */
+/** @file OSParseosol.y.2
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * In order to allow easier maintenance of the parsers, 
+ * the files OSParseosol.y and OSParseosrl.y are stored in three pieces
+ * that are combined in the makefile.
+ * This is the second part of the file OSParseosol.y, to be appended
+ * after OSParseosol.y.1 and OSParseosgl.y.inc.
+ */
+
+
+%%
+
+#if 0
+void addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+{
+    osol_empty_vectors( parserData);
+    osgl_empty_vectors( osglData);
+    std::ostringstream outStr;
+    std::string error = errormsg;
+    error = "OSoL input is either not valid or well formed: "  + error;
+    outStr << error << std::endl;
+    outStr << "Error occurred when reading: " << osolget_text ( scanner ) << std::endl; 
+    outStr << "See line number: " << osolget_lineno( scanner) << std::endl; 
+    error = outStr.str();
+
+} //end addErrorMsg
+#endif
+
+std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+{
+    std::ostringstream outStr;
+    outStr << "At line number " << osolget_lineno( scanner) << ": "; 
+    outStr << osolget_text ( scanner ) << std::endl; 
+    outStr << errormsg << std::endl;
+
+    return outStr.str();
+} //end addErrorMsg
+
+void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, std::string errormsg )
+{
+    osol_empty_vectors( parserData);
+    osgl_empty_vectors( osglData);
+    throw ErrorClass( errormsg);
+} //end osolerror
+
+void  yygetOSOption(const char *parsestring, OSOption *osoption, OSoLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass){
+    try{
+        osol_scan_string( parsestring, scanner);
+        osolset_lineno (1 , scanner );
+        //
+        // call the Bison parser
+        //
+        if(  osolparse( osoption,  parserData, osglData) != 0) {
+            //osollex_destroy(scanner);
+              throw ErrorClass(  "Error parsing the OSoL file");
+         }
+    }
+    catch(const ErrorClass& eclass){
+        throw ErrorClass(  eclass.errormsg); 
+    }
+} //end yygetOSOption
+
+
+void osol_empty_vectors( OSoLParserData* parserData){
+/*
+    int k;
+    int numOtherVarVec = parserData->otherVarVec.size();
+   
+    for( k = 0; k < numOtherVarVec; k++){
+        if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarText != NULL) ) 
+            delete[] parserData->otherVarVec[ k]->otherVarText;
+        if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarIndex != NULL) ) 
+            delete[] parserData->otherVarVec[ k]->otherVarIndex;
+            
+        if( parserData->otherVarVec[ k]  != NULL) delete parserData->otherVarVec[ k];
+    }
+
+      parserData->otherVarVec.clear(); 
+      
+      int numDualVals =  parserData->dualVals.size();
+      for(k = 0; k < numDualVals; k++){
+          if( parserData->dualVals[ k]  != NULL  ) 
+            delete parserData->dualVals[ k];
+      }
+      parserData->dualVals.clear();
+      
+      
+       int numObjVals =  parserData->objVals.size();
+      for(k = 0; k < numObjVals; k++){
+          if( parserData->objVals[ k]  != NULL  ) 
+            delete parserData->objVals[ k];
+      }
+      parserData->objVals.clear();
+      
+      
+       int numPrimalVals =  parserData->primalVals.size();
+      for(k = 0; k < numPrimalVals; k++){    
+          if( parserData->primalVals[ k]  != NULL  ) 
+            delete parserData->primalVals[ k];
+      }
+      parserData->primalVals.clear();
+*/      
+}//end osol_empty_vectors
+

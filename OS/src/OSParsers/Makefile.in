@@ -810,6 +810,15 @@ osol: $(srcdir)/OSParseosol.cpp \
 @HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osol -o $(srcdir)/OSParseosol.tab.cpp \
 @HAVE_LEXYACC_TRUE@                                $(srcdir)/OSParseosol.y
 
+@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosol.y: \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.y.1 \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.inc \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.y.2
+@HAVE_LEXYACC_TRUE@	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.inc >osoltemp.tmp
+@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosol.y.1 osoltemp.tmp $(srcdir)/OSParseosol.y.2 \
+@HAVE_LEXYACC_TRUE@		>$(srcdir)/OSParseosol.y
+@HAVE_LEXYACC_TRUE@	rm -f osoltemp.tmp
+
 osrl: $(srcdir)/OSParseosrl.cpp \
       $(srcdir)/OSParseosrl.tab.cpp
 
