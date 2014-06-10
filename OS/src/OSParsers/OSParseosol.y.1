@@ -22,10 +22,10 @@
 %{
 
 
+#include "OSConfig.h"
 #include "OSMathUtil.h"
 #include "OSParameters.h"
 #include "OSGeneral.h"
-#include "OSConfig.h"
 #include "OSErrorClass.h"
 #include "OSOption.h"
 #include "OSoLParserData.h"
@@ -83,10 +83,7 @@ this fails in Mac OS X
 
 std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, const char* errormsg ) ;
 void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, std::string errormsg );
-
 int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
-std::string osgl_errmsg;
-
 #define scanner parserData->scanner
 %}
 
@@ -228,7 +225,6 @@ headerElement: | osglFileHeader
             osglData->description, osglData->fileCreator, osglData->licence) )     
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setHeader failed");
 };
-
 
 
 /**

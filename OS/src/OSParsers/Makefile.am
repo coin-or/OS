@@ -72,8 +72,11 @@ $(srcdir)/OSParseosol.tab.cpp: $(srcdir)/OSParseosol.y
                                 $(srcdir)/OSParseosol.y
 
 $(srcdir)/OSParseosol.y: \
+
 		$(srcdir)/OSParseosol.y.1 \
+
 		$(srcdir)/OSParseosgl.y.inc \
+
 		$(srcdir)/OSParseosol.y.2
 	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.inc >osoltemp.tmp
 	cat $(srcdir)/OSParseosol.y.1 osoltemp.tmp $(srcdir)/OSParseosol.y.2 \
@@ -94,6 +97,15 @@ $(srcdir)/OSParseosrl.cpp: \
 $(srcdir)/OSParseosrl.tab.cpp: $(srcdir)/OSParseosrl.y
 	$(YACC) -ldv -p osrl -o $(srcdir)/OSParseosrl.tab.cpp \
                                 $(srcdir)/OSParseosrl.y
+
+$(srcdir)/OSParseosrl.y: \
+		$(srcdir)/OSParseosrl.y.1 \
+		$(srcdir)/OSParseosgl.y.inc \
+		$(srcdir)/OSParseosrl.y.2
+	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosgl.y.inc >osrltemp.tmp
+	cat $(srcdir)/OSParseosrl.y.1 osrltemp.tmp $(srcdir)/OSParseosrl.y.2 \
+		>$(srcdir)/OSParseosrl.y
+	rm -f osrltemp.tmp
 endif
 
 osss: $(srcdir)/OSParseosss.cpp 

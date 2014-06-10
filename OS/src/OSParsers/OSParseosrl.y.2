@@ -1,0 +1,103 @@
+%%
+
+void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+{
+    osrl_empty_vectors( parserData );
+    osgl_empty_vectors(   osglData );
+    std::ostringstream outStr;
+    std::string error = errormsg;
+    error = "OSrL input is either not valid or well formed: "  + error;
+    outStr << error << std::endl;
+    outStr << "Error occurred when reading: " << osrlget_text ( scanner ) << std::endl; 
+    outStr << "See line number: " << osrlget_lineno( scanner) << std::endl; 
+    error = outStr.str();
+    //printf("THIS DID NOT GET DESTROYED:   %s\n", parserData->errorText);
+    //if( (parserData->errorText != NULL) &&  (strlen(parserData->errorText) > 0) ) free(  parserData->errorText);
+    //osrllex_destroy( scanner);
+    throw ErrorClass( error);
+} //end osrlerror
+
+
+std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+{
+    std::ostringstream outStr;
+    outStr << "At line number " << osrlget_lineno( scanner) << ": "; 
+    outStr << osrlget_text ( scanner ) << std::endl; 
+    outStr << errormsg << std::endl;
+
+    return outStr.str();
+} //end addErrorMsg
+
+void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, std::string errormsg )
+{
+    osrl_empty_vectors( parserData);
+    osgl_empty_vectors( osglData);
+    throw ErrorClass( errormsg);
+} //end osolerror
+
+
+
+void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass)
+{
+    try
+    {
+        osrl_scan_string( parsestring, scanner);
+        osrlset_lineno (1 , scanner );
+        //
+        // call the Bison parser
+        //
+        if(  osrlparse( osresult,  parserData, osglData) != 0) {
+            //osrllex_destroy(scanner);
+              throw ErrorClass(  "Error parsing the OSrL file");
+         }
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass(  eclass.errormsg); 
+    }
+} //end yygetOSResult
+
+
+void osrl_empty_vectors( OSrLParserData* parserData)
+{
+    int k;
+    int numOtherVarVec = parserData->otherVarVec.size();
+   
+    for (k = 0; k < numOtherVarVec; k++)
+    {
+        if ( (parserData->otherVarVec[k] != NULL) && (parserData->otherVarVec[k]->otherVarText  != NULL) ) 
+            delete[] parserData->otherVarVec[k]->otherVarText;
+        if ( (parserData->otherVarVec[k] != NULL) && (parserData->otherVarVec[k]->otherVarIndex != NULL) ) 
+            delete[] parserData->otherVarVec[k]->otherVarIndex;
+            
+        if (  parserData->otherVarVec[k] != NULL) delete parserData->otherVarVec[k];
+        }
+      parserData->otherVarVec.clear(); 
+      
+      int numDualVals =  parserData->dualVals.size();
+      for (k = 0; k < numDualVals; k++)
+    {
+          if (parserData->dualVals[k]  != NULL  ) 
+            delete parserData->dualVals[k];
+      }
+      parserData->dualVals.clear();
+      
+      
+       int numObjVals =  parserData->objVals.size();
+      for (k = 0; k < numObjVals; k++)
+    {
+          if (parserData->objVals[ k]  != NULL  ) 
+            delete parserData->objVals[ k];
+      }
+      parserData->objVals.clear();
+      
+      
+       int numPrimalVals =  parserData->primalVals.size();
+      for (k = 0; k < numPrimalVals; k++)
+    {    
+          if (parserData->primalVals[ k]  != NULL  ) 
+            delete parserData->primalVals[ k];
+      }
+      parserData->primalVals.clear();
+}//end osrl_empty_vectors
+

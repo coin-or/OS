@@ -653,6 +653,8 @@ OS/src/OSParsers/OSParseosrl.l -text
 OS/src/OSParsers/OSParseosrl.tab.cpp -text
 OS/src/OSParsers/OSParseosrl.tab.hpp -text
 OS/src/OSParsers/OSParseosrl.y -text
+OS/src/OSParsers/OSParseosrl.y.1 -text
+OS/src/OSParsers/OSParseosrl.y.2 -text
 OS/src/OSParsers/OSParseosss.cpp -text
 OS/src/OSParsers/OSParseosss.l -text
 OS/src/OSParsers/OSgLParserData.cpp -text
