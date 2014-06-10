@@ -832,6 +832,15 @@ osrl: $(srcdir)/OSParseosrl.cpp \
 @HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osrl -o $(srcdir)/OSParseosrl.tab.cpp \
 @HAVE_LEXYACC_TRUE@                                $(srcdir)/OSParseosrl.y
 
+@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosrl.y: \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.y.1 \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.inc \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.y.2
+@HAVE_LEXYACC_TRUE@	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosgl.y.inc >osrltemp.tmp
+@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosrl.y.1 osrltemp.tmp $(srcdir)/OSParseosrl.y.2 \
+@HAVE_LEXYACC_TRUE@		>$(srcdir)/OSParseosrl.y
+@HAVE_LEXYACC_TRUE@	rm -f osrltemp.tmp
+
 osss: $(srcdir)/OSParseosss.cpp 
 
 @HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosss.cpp: $(srcdir)/OSParseosss.l 

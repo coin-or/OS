@@ -72,11 +72,8 @@ $(srcdir)/OSParseosol.tab.cpp: $(srcdir)/OSParseosol.y
                                 $(srcdir)/OSParseosol.y
 
 $(srcdir)/OSParseosol.y: \
-
 		$(srcdir)/OSParseosol.y.1 \
-
 		$(srcdir)/OSParseosgl.y.inc \
-
 		$(srcdir)/OSParseosol.y.2
 	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.inc >osoltemp.tmp
 	cat $(srcdir)/OSParseosol.y.1 osoltemp.tmp $(srcdir)/OSParseosol.y.2 \

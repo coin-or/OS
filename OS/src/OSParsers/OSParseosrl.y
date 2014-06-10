@@ -1,5 +1,5 @@
 /* $Id$ */
-/** @file OSParseosrl.y
+/** @file OSParseosrl.y.1
  * 
  * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
@@ -10,6 +10,13 @@
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
+ * In order to allow easier maintenance of the parsers, 
+ * the files OSParseosol.y and OSParseosrl.y are stored in three pieces
+ * that are combined in the makefile.
+ * This is the first part of the file OSParseosrl.y.
+ * Several elements from the OSgL schema are maintained in the file
+ * OSParseosgl.y.inc, which is appended after this file.
+ * The second part, OSParseosrl.y.2 is appended at the end.
  */
 
 %{
@@ -249,128 +256,6 @@ headerElement: | osglFileHeader
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "setHeader failed");
 };
 
-osglFileHeader: headerElementStart headerElementContent;
- 
-headerElementStart: HEADERSTART
-{
-    osglData->fileName    = "";
-    osglData->source      = "";
-    osglData->description = "";
-    osglData->fileCreator = "";
-    osglData->licence     = "";
-    osglData->fileNamePresent    = false;
-    osglData->sourcePresent      = false;
-    osglData->descriptionPresent = false;
-    osglData->fileCreatorPresent = false;
-    osglData->licencePresent     = false;
-};
-
-headerElementContent: headerElementEmpty | headerElementLaden;
-
-headerElementEmpty: GREATERTHAN HEADEREND | ENDOFELEMENT;
-
-headerElementLaden: GREATERTHAN headerElementBody HEADEREND; 
-
-headerElementBody: headerElementList;
-
-headerElementList: headerChild | headerElementList headerChild;
-
-headerChild:
-    fileName 
-  | fileSource 
-  | fileDescription 
-  | fileCreator 
-  | fileLicence;
-
-fileName: | fileNameContent
-{
-    if (osglData->fileNamePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: file name");
-    else
-        osglData->fileNamePresent = true;
-};
-
-fileNameContent: fileNameEmpty | fileNameLaden;
-
-fileNameEmpty: FILENAMESTARTANDEND | FILENAMEEMPTY;
-
-fileNameLaden: FILENAMESTART ITEMTEXT FILENAMEEND
-{
-    osglData->fileName = $2;
-    free($2);
-};
-
-fileSource: | fileSourceContent
-{
-    if (osglData->sourcePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: source");
-    else
-        osglData->sourcePresent = true;
-};
-
-fileSourceContent: fileSourceEmpty | fileSourceLaden;
-
-fileSourceEmpty: FILESOURCESTARTANDEND | FILESOURCEEMPTY;
-
-fileSourceLaden: FILESOURCESTART ITEMTEXT FILESOURCEEND
-{
-    osglData->source = $2;
-    free($2);
-};
-
-fileDescription: | fileDescriptionContent
-{
-    if (osglData->descriptionPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: description");
-    else
-        osglData->descriptionPresent = true;
-};
-
-fileDescriptionContent: fileDescriptionEmpty | fileDescriptionLaden;
-
-fileDescriptionEmpty: FILEDESCRIPTIONSTARTANDEND | FILEDESCRIPTIONEMPTY;
-
-fileDescriptionLaden: FILEDESCRIPTIONSTART ITEMTEXT FILEDESCRIPTIONEND
-{
-    osglData->description = $2;
-    free($2);
-};
-
-fileCreator: | fileCreatorContent
-{
-    if (osglData->fileCreatorPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: file creator");
-    else
-        osglData->fileCreatorPresent = true;
-};
-
-fileCreatorContent: fileCreatorEmpty | fileCreatorLaden;
-
-fileCreatorEmpty: FILECREATORSTARTANDEND | FILECREATOREMPTY;
-
-fileCreatorLaden: FILECREATORSTART ITEMTEXT FILECREATOREND
-{
-    osglData->fileCreator = $2;
-    free($2);
-};
-
-fileLicence: | fileLicenceContent
-{
-    if (osglData->licencePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: licence");
-    else
-        osglData->licencePresent = true;
-};
-
-fileLicenceContent: fileLicenceEmpty | fileLicenceLaden;
-
-fileLicenceEmpty: FILELICENCESTARTANDEND | FILELICENCEEMPTY;
-
-fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
-{
-    osglData->licence = $2;
-    free($2);
-};
 
 /**
  * ========================================================== 
@@ -381,15 +266,15 @@ generalElement: | generalElementStart generalElementContent;
 
 generalElementStart: GENERALSTART
 {
-    parserData->generalStatusPresent = false;    
-    parserData->generalMessagePresent = false;
-    parserData->generalServiceURIPresent = false;
-    parserData->generalServiceNamePresent = false;
-    parserData->generalInstanceNamePresent = false;
-    parserData->generalJobIDPresent = false;
+    parserData->generalStatusPresent        = false;    
+    parserData->generalMessagePresent       = false;
+    parserData->generalServiceURIPresent    = false;
+    parserData->generalServiceNamePresent   = false;
+    parserData->generalInstanceNamePresent  = false;
+    parserData->generalJobIDPresent         = false;
     parserData->generalSolverInvokedPresent = false;
-    parserData->generalTimeStampPresent = false;
-    parserData->otherGeneralResultsPresent = false;
+    parserData->generalTimeStampPresent     = false;
+    parserData->otherGeneralResultsPresent  = false;
     osresult->general = new GeneralResult();
 };
 
@@ -4116,22 +4001,193 @@ numberOfVariablesAttribute: NUMBEROFVARIABLESATT quote INTEGER quote
 //    parserData->numberOfVarIdx = $3; 
 //}; 
 
+
+aNumber:
+    INTEGER {parserData->tempVal = $1;}
+  | DOUBLE  {parserData->tempVal = $1;}
+  ;
+
+ElementValue: 
+    ELEMENTTEXT  { parserData->tempStr = $1;       free($1); }
+  | INTEGER      { parserData->tempStr = os_dtoa_format($1); }
+  | DOUBLE       { parserData->tempStr = os_dtoa_format($1); };
+  
+quote: xmlWhiteSpace QUOTE;
+
+xmlWhiteSpace:  | xmlWhiteSpace xmlWhiteSpaceChar;
+
+xmlWhiteSpaceChar: ' ' 
+                | '\t'
+                | '\r'
+                | '\n';
+            
+
+
+/* $Id$ */
+/** @file OSParseosgl.y.inc
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ *
+ * This file contains parser elements that are contained in the OSgL schema
+ * and are shared between several of the main schemas, OSiL, OSoL and OSrL.
+ *
+ * The code is mainained in such a way that it can be inserted into any parser
+ * by a makefile with minimal changes. The only change required is to change
+ * every occurrence of the placeholder "osresult" to the appropriate
+ * reference ("osinstance" for OSiL files, "osobject" for OSoL files and
+ * "osresult" for OSrL files). The makefile accomplishes this through 
+ * maintaining each parser in two parts and to copy this include file 
+ * between the parts to make the final OSParseosxl.y file.
+ * 
+ */
+
 /** ==========================================================================
- *  The code between this and the following marker ought to be shared between 
- *  the OSoL and OSrL parsers. Unfortunately I have not been able to figure out 
- *  yet how to do that, and if it is even possible. Nonetheless the code is
- *  being developed so that it can be cut and pasted without any changes,
- *  and could be moved to an include file once the mechanism has been established. 
- *  The purpose is to parse the OSgL type IntVector and store it in memory.
- *  The IntVector is first processed into a temporary data structure held in 
- *  OSgLParserData and can then be moved to the appropriate permanent spot.
- * ============================================================================ */
+ *    This portion parses a header object used in OSoL and OSrL schema files
+ *  ==========================================================================
+ */
+osglFileHeader: headerElementStart headerElementContent;
+ 
+headerElementStart: HEADERSTART
+{
+    osglData->fileName    = "";
+    osglData->source      = "";
+    osglData->description = "";
+    osglData->fileCreator = "";
+    osglData->licence     = "";
+    osglData->fileNamePresent    = false;
+    osglData->sourcePresent      = false;
+    osglData->descriptionPresent = false;
+    osglData->fileCreatorPresent = false;
+    osglData->licencePresent     = false;
+};
+
+headerElementContent: headerElementEmpty | headerElementLaden;
+
+headerElementEmpty: GREATERTHAN HEADEREND | ENDOFELEMENT;
+
+headerElementLaden: GREATERTHAN headerElementBody HEADEREND; 
+
+headerElementBody: headerElementList;
+
+headerElementList: headerChild | headerElementList headerChild;
+
+headerChild:
+    fileName 
+  | fileSource 
+  | fileDescription 
+  | fileCreator 
+  | fileLicence;
+
+fileName: | fileNameContent
+{
+    if (osglData->fileNamePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: file name");
+    else
+        osglData->fileNamePresent = true;
+};
+
+fileNameContent: fileNameEmpty | fileNameLaden;
+
+fileNameEmpty: FILENAMESTARTANDEND | FILENAMEEMPTY;
+
+fileNameLaden: FILENAMESTART ITEMTEXT FILENAMEEND
+{
+    osglData->fileName = $2;
+    free($2);
+};
+
+fileSource: | fileSourceContent
+{
+    if (osglData->sourcePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: source");
+    else
+        osglData->sourcePresent = true;
+};
+
+fileSourceContent: fileSourceEmpty | fileSourceLaden;
+
+fileSourceEmpty: FILESOURCESTARTANDEND | FILESOURCEEMPTY;
+
+fileSourceLaden: FILESOURCESTART ITEMTEXT FILESOURCEEND
+{
+    osglData->source = $2;
+    free($2);
+};
+
+fileDescription: | fileDescriptionContent
+{
+    if (osglData->descriptionPresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: description");
+    else
+        osglData->descriptionPresent = true;
+};
+
+fileDescriptionContent: fileDescriptionEmpty | fileDescriptionLaden;
+
+fileDescriptionEmpty: FILEDESCRIPTIONSTARTANDEND | FILEDESCRIPTIONEMPTY;
+
+fileDescriptionLaden: FILEDESCRIPTIONSTART ITEMTEXT FILEDESCRIPTIONEND
+{
+    osglData->description = $2;
+    free($2);
+};
+
+fileCreator: | fileCreatorContent
+{
+    if (osglData->fileCreatorPresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: file creator");
+    else
+        osglData->fileCreatorPresent = true;
+};
+
+fileCreatorContent: fileCreatorEmpty | fileCreatorLaden;
+
+fileCreatorEmpty: FILECREATORSTARTANDEND | FILECREATOREMPTY;
+
+fileCreatorLaden: FILECREATORSTART ITEMTEXT FILECREATOREND
+{
+    osglData->fileCreator = $2;
+    free($2);
+};
+
+fileLicence: | fileLicenceContent
+{
+    if (osglData->licencePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: licence");
+    else
+        osglData->licencePresent = true;
+};
+
+fileLicenceContent: fileLicenceEmpty | fileLicenceLaden;
+
+fileLicenceEmpty: FILELICENCESTARTANDEND | FILELICENCEEMPTY;
+
+fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
+{
+    osglData->licence = $2;
+    free($2);
+};
+
+/** ==========================================================================
+ *                This portion parses an IntVector object
+ *  ==========================================================================
+ */
 
 osglIntArrayData: 
     osglIntVectorElArray 
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
-        osrlerror(NULL, NULL, parserData, osglData, "fewer data elements than specified");
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "fewer data elements than specified");
+            parserData->ignoreDataAfterErrors = true;
+        }
     }
  | osglIntVectorBase64;
 
@@ -4157,9 +4213,17 @@ osglIntVectorElAtt: osglMultAttribute | osglIncrAttribute;
 osglIntVectorElContent: GREATERTHAN INTEGER ELEND
 {
     if (osglData->osglCounter + osglData->osglMult > osglData->osglNumberOfEl)
-        osrlerror(NULL, NULL, parserData, osglData, "more data elements than specified");
-    for (int i=0; i<osglData->osglMult; i++)
-        osglData->osglIntArray[osglData->osglCounter++] = $2 + i*osglData->osglIncr;    
+    {
+        if (!parserData->suppressFurtherErrorMessages)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "more data elements than specified");
+            parserData->suppressFurtherErrorMessages = true;
+            parserData->ignoreDataAfterErrors = true;
+        }
+    }
+    else
+        for (int i=0; i<osglData->osglMult; i++)
+            osglData->osglIntArray[osglData->osglCounter++] = $2 + i*osglData->osglIncr;    
 };
 
 osglIntVectorBase64: BASE64START Base64SizeAttribute Base64Content;
@@ -4173,25 +4237,29 @@ Base64Content: Base64Empty | Base64Laden;
 
 Base64Empty: GREATERTHAN BASE64END | ENDOFELEMENT;
 
+
 Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 {
     char* b64string = $2;
-    if (b64string == NULL) 
-        osrlerror(NULL, NULL, parserData, osglData, "base 64 data expected"); 
+    if( b64string == NULL) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 data expected"); 
     if (osglData->osglSize != sizeof(int))
-        osrlerror(NULL, NULL, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
 
     std::string base64decodeddata = Base64::decodeb64( b64string );
     int base64decodeddatalength = base64decodeddata.length();
     int *intvec = NULL;
     if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
-        osrlerror(NULL, NULL, parserData, osglData, "base 64 data length does not match numberOfEl"); 
-    intvec = (int*)&base64decodeddata[0];
-    for (int i = 0; i < (base64decodeddatalength/osglData->osglSize); i++)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 data length does not match numberOfEl"); 
+    else
     {
-        osglData->osglIntArray[i] = *(intvec++);
+        intvec = (int*)&base64decodeddata[0];
+        for(int i = 0; i < (base64decodeddatalength/osglData->osglSize); i++)
+        {
+            osglData->osglIntArray[i] = *(intvec++);
+        }
     }
-    //delete [] b64string;
+    //delete[] b64string;
     free($2);
 };
 
@@ -4199,7 +4267,7 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 osglIncrAttribute: INCRATT quote INTEGER quote 
 {    
     if (osglData->osglIncrPresent) 
-        osrlerror(NULL, NULL, parserData, osglData, "only one incr attribute allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "only one incr attribute allowed");
     osglData->osglIncrPresent = true;
     osglData->osglIncr = $3;
 };
@@ -4207,35 +4275,12 @@ osglIncrAttribute: INCRATT quote INTEGER quote
 osglMultAttribute: MULTATT quote INTEGER quote 
 {    
     if (osglData->osglMultPresent) 
-        osrlerror(NULL, NULL, parserData, osglData, "only one mult attribute allowed");
-    if ($3 <= 0) osrlerror(NULL, NULL, parserData, osglData, "mult must be positive");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "only one mult attribute allowed");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "mult must be positive");
     osglData->osglMultPresent = true;
     osglData->osglMult = $3;
 };
 
-/** ==========================================================================
- *  End of marker (see previous comment)
- * ============================================================================ */
-
-aNumber:
-    INTEGER {parserData->tempVal = $1;}
-  | DOUBLE  {parserData->tempVal = $1;}
-  ;
-
-ElementValue: 
-    ELEMENTTEXT  { parserData->tempStr = $1;       free($1); }
-  | INTEGER      { parserData->tempStr = os_dtoa_format($1); }
-  | DOUBLE       { parserData->tempStr = os_dtoa_format($1); };
-  
-quote: xmlWhiteSpace QUOTE;
-
-xmlWhiteSpace:  | xmlWhiteSpace xmlWhiteSpaceChar;
-
-xmlWhiteSpaceChar: ' ' 
-                | '\t'
-                | '\r'
-                | '\n';
-            
 
 %%
 
