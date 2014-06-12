@@ -656,7 +656,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the matrix child elements must match numberOfMatrices</xs:documentation>
 			</xs:annotation>
-			<xs:element name="matrix" type="Matrix"/>
+			<xs:element name="matrix" type="OSMatrix"/>
 			<!--
 			<xs:element name="constantMatrix" type="ConstantMatrix">
 				<xs:annotation>
@@ -673,24 +673,48 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:all>
+		<xs:sequence>
+			<xs:element name="baseMatrix" type="BaseMatrix" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The cropped (and maybe transposed and scaled) matrix is placed in the target starting at the upper left corner</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>There can be arbitrarily many matrix constructors in arbitrary order. Information specified later replaces information specified earlier.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="elements" type="MatrixElements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>If a location is specfied more than once in the child elements, later information replaces earlier information. </xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="transformation" type="MatrixTransformation" minOccurs="0"/>
+				<xs:element name="blocks" type="MatrixBlocks" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>If no block children, the blocks only give partition information of the matrix.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="symmetry" use="optional" default="none">
 			<xs:annotation>
-				<xs:documentation>The order of matrix constructors is arbitrary. Information specified later replaces information specified earlier. The matrix scalarCoef is applied at the very end.</xs:documentation>
+				<xs:documentation>If symmetry is "upper" or "skewUpper", any elements below the main diagonal are ignored and inferred from the upper triangle. If symmetry is "lower" or "skewLower", any elements above the main diagonal are ignored and inferred from the lower triangle.</xs:documentation>
 			</xs:annotation>
-			<xs:element name="elements" type="MatrixElements" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>If a location is specfied more than once in the child elements, later information replaces earlier information. </xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="transformation" type="MatrixTransformation" minOccurs="0"/>
-			<xs:element name="blocks" type="MatrixBlocks" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>If no block children, the blocks only give partition information of the matrix.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:all>
-		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="none"/>
+					<xs:enumeration value="upper"/>
+					<xs:enumeration value="lower"/>
+					<xs:enumeration value="skewUpper"/>
+					<xs:enumeration value="skewLower"/>
+					<xs:enumeration value="HermitianUpper"/>
+					<xs:enumeration value="HermitianLower"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<!--		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/> -->
+		<!--		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/> -->
+		<!--
 		<xs:attribute name="symmetric" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
@@ -711,26 +735,47 @@
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+	-->
 	</xs:complexType>
-	<xs:complexType name="Matrix">
-		<xs:annotation>
-			<xs:documentation>For the symmetric attribute, if the matrix is symmetric, it is assumed that only the upper triangle is given and matrix elements in the upper triangle are ignored. The scalarCoef is applied on the final matrix after the matrix the construction. For the base attribute, if it is matrix, a baseMatrixID needs to be specified. If base matrix is objectiveCoefficients, objective function indexed -1 will be the 0th row to start.</xs:documentation>
-		</xs:annotation>
+	<xs:complexType name="OSMatrix">
 		<xs:complexContent>
 			<xs:extension base="MatrixType">
+				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 				<xs:attribute name="name" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="BaseMatrix" mixed="false">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="baseMatrixIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Defaults to last row in the baseMatrix</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Defaults to last column in the baseMatrix</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="scalarMultiplier" type="xs:double" use="optional" default="1.0"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixConstructors" mixed="false"/>
 	<xs:complexType name="MatrixBlock">
 		<xs:complexContent>
 			<xs:extension base="MatrixType">
-				<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" default="0">
+				<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>blockRowIdx must be at least 0 and less than colOffset array size</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="blockColIdx" type="xs:nonNegativeInteger" default="0">
+				<xs:attribute name="blockColIdx" type="xs:nonNegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>blockColIdx must be at least 0 and less than rowOffset array size</xs:documentation>
 					</xs:annotation>
@@ -738,7 +783,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="ConstantElements">
+	<xs:complexType name="ConstantMatrixElements">
 		<xs:sequence>
 			<xs:element name="start" type="NonNegativeIntVector"/>
 			<xs:element name="nonzeros" type="SparseVector">
@@ -748,19 +793,19 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="VarReferenceElements">
+	<xs:complexType name="VarReferenceMatrixElements">
 		<xs:sequence>
 			<xs:element name="start" type="NonNegativeIntVector"/>
 			<xs:element name="nonzeros" type="SparseNonNegativeIntVector"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="LinearElements">
+	<xs:complexType name="LinearMatrixElements">
 		<xs:sequence>
 			<xs:element name="start" type="NonNegativeIntVector"/>
 			<xs:element name="nonzeros" type="LinearMatrixValues"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="GeneralElements">
+	<xs:complexType name="GeneralMatrixElements">
 		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of entries in the el and rowIdx/colIdx child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
@@ -774,10 +819,10 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="constantElements" type="ConstantElements" minOccurs="0"/>
-			<xs:element name="varReferenceElements" type="VarReferenceElements" minOccurs="0"/>
-			<xs:element name="linearElements" type="LinearElements" minOccurs="0"/>
-			<xs:element name="generalElements" type="GeneralElements" minOccurs="0"/>
+			<xs:element name="constantElements" type="ConstantMatrixElements" minOccurs="0"/>
+			<xs:element name="varReferenceElements" type="VarReferenceMatrixElements" minOccurs="0"/>
+			<xs:element name="linearElements" type="LinearMatrixElements" minOccurs="0"/>
+			<xs:element name="generalElements" type="GeneralMatrixElements" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>
@@ -814,7 +859,7 @@
 	</xs:complexType>
 	<xs:complexType name="ConstrantMatrixTransformation">
 		<xs:complexContent>
-			<xs:extension base="Matrix">
+			<xs:extension base="OSMatrix">
 				<xs:sequence>
 					<!--				
 					<xs:element ref="OSnLMNode"/>
@@ -828,7 +873,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="Matrix"/>
+			<xs:extension base="OSMatrix"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:attribute name="baseTranspose" type="xs:boolean" default="false">
@@ -858,7 +903,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:choice minOccurs="0">
-			<xs:element name="elements" type="LinearMatrixElements"/>
+			<xs:element name="elements" type="LinearMatrixxxElements"/>
 			<xs:element name="blocks" type="LinearMatrixBlocks"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
@@ -900,7 +945,7 @@
 			<xs:element name="varIdx" type="IntVector"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="LinearMatrixElements">
+	<xs:complexType name="LinearMatrixxxElements">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -938,7 +983,7 @@
 			<xs:element name="values">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="el" type="LinearMatrixEl" minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded">
 							<xs:annotation>
 								<xs:documentation>Number must agree with numberOfEl (after "mult" has been considered in the varIdx child)</xs:documentation>
 							</xs:annotation>
@@ -962,6 +1007,7 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
 	</xs:complexType>
+	<!--	
 	<xs:complexType name="LinearMatrixElement">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -973,15 +1019,16 @@
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 	</xs:complexType>
+-->
 	<xs:complexType name="LinearMatrixEl">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="expr" type="LinearMatrixExpr"/>
+			<xs:element name="expr" type="LinearMatrixElement"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="LinearMatrixExprVarIdx">
+	<xs:complexType name="LinearMatrixElementTerm">
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1.0">
@@ -992,12 +1039,12 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="LinearMatrixExpr">
+	<xs:complexType name="LinearMatrixElement">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="varIdx" type="LinearMatrixExprVarIdx" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="varIdx" type="LinearMatrixElementTerm" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfVarIdx</xs:documentation>
 				</xs:annotation>
@@ -1052,7 +1099,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:choice minOccurs="0">
-			<xs:element name="elements" type="GeneralMatrixElements"/>
+			<xs:element name="elements" type="GeneralMatrixxxElements"/>
 			<xs:element name="blocks" type="GeneralMatrixBlocks"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
@@ -1076,7 +1123,7 @@
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="GeneralMatrixElements">
+	<xs:complexType name="GeneralMatrixxxElements">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>

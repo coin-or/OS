@@ -173,6 +173,40 @@ SparseVector::~SparseVector()
     indexes = NULL;
 }// end SparseVector destructor
 
+SparseIntVector::SparseIntVector( int number_):
+    number( number_)
+{
+    indexes = new int[ number];
+    values  = new int[ number];
+    bDeleteArrays = true;
+}// end SparseIntVector constructor
+
+
+SparseIntVector::SparseIntVector( ):
+    bDeleteArrays(true),
+    indexes( NULL),
+    values( NULL)
+{
+}// end SparseIntVector constructor
+
+SparseIntVector::~SparseIntVector()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside sparseIntVector destructor");
+#endif
+    if(	bDeleteArrays == true)
+    {
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "delete[] indexes and arrays");
+#endif
+        delete[] indexes;
+        delete[] values;
+    }
+    values = NULL;
+    indexes = NULL;
+}// end SparseIntVector destructor
+
+
 SparseMatrix::SparseMatrix():
     bDeleteArrays( true),
     isColumnMajor(true),

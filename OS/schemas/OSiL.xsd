@@ -89,6 +89,8 @@
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<!-- Note: matrixProgramming is intentionally different from scalar programming (no sections for linear and nonlinear expressions) because there are four different types of "rows" that need to be distinguished: scalar objectives, scalar constraints, matrix objectives and matrix constraints. A simple numbering convention won't do that.
+			-->
 			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
@@ -365,9 +367,11 @@
 		<xs:sequence>
 			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
 			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
-			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
+			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
+			<!--
 			<xs:element name="linearConstraintMatrixOperators" type="LinearConstraintMatrixOperators" minOccurs="0"/>
 			<xs:element name="nonlinearMatrixExpressions" type="NonlinearMatrixExpressions" minOccurs="0"/>
+			-->
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MatrixVariables">
@@ -383,26 +387,72 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="matrixID" type="xs:string" use="required"/>
+		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation>to provide bounds for X^T</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbMatrixTranspose" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>to formulate lower bound in terms of L^T</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbMatrixScalarCoef" type="xs:double" use="optional">
+			<xs:annotation>
+				<xs:documentation>to scale the lower bounding matrix</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbConeID" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains varMtx - lbMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubMatrixTranspose" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>to formulate upper bound in terms of U^T</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubMatrixScalarCoef" type="xs:double" use="optional">
+			<xs:annotation>
+				<xs:documentation>to scale the upper bounding matrix</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubConeID" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<!-- No need for a name. a <matrix> can have a name; two names might lead to confusion
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="lbMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="lbMatrixTranspose" type="xs:boolean" use="optional"/>
-		<xs:attribute name="lbMatrixScalarCoef" type="xs:double" use="optional"/>
-		<xs:attribute name="lbConeId" type="xs:string" use="optional"/>
-		<xs:attribute name="ubMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="ubMatrixTranspose" type="xs:boolean" use="optional"/>
-		<xs:attribute name="ubMatrixScalarCoef" type="xs:double" use="optional"/>
-		<xs:attribute name="ubConeId" type="xs:string" use="optional"/>
+		-->
 	</xs:complexType>
 	<xs:complexType name="MatrixProgrammingObjectives">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="obj" type="MatrixProgrammingObj" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="scalarObjectives" type="MatrixProgrammingScalarObjectives_new" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>used to add matrix expressions to scalar objectives defined in core</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixObjectives" type="MatrixObjectives_new" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>defines new objectives (possibly multidimensional)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixProgrammingObj">
 		<xs:annotation>
@@ -451,14 +501,22 @@
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="MatrixConstraints">
+	<xs:complexType name="MatrixProgrammingConstraints">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixCon" type="MatrixCon" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="scalarConstraints" type="MatrixProgrammingScalarConstraints_new" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>used to add matrix expressions to scalar  constraints defined in core</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixConstraints" type="MatrixConstraints_new" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>defines new constraints (possibly multidimensional)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixCon">
 		<xs:annotation>
@@ -566,10 +624,14 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixBounds" type="MatrixBounds_new" minOccurs="0"/>
+			<xs:element name="matrixBounds" type="MatrixBounds_new" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>used to add bounds to varReference matrices</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="scalarObjectives" type="MatrixProgrammingScalarObjectives_new" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>refers to objectives defined in core</xs:documentation>
+					<xs:documentation>used to add matrix expressions to scalar objectives defined in core</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixObjectives" type="MatrixObjectives_new" minOccurs="0">
@@ -579,7 +641,7 @@
 			</xs:element>
 			<xs:element name="scalarConstraints" type="MatrixProgrammingScalarConstraints_new" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>refers to constraints defined in core</xs:documentation>
+					<xs:documentation>used to add matrix expressions to scalar  constraints defined in core</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixConstraints" type="MatrixConstraints_new" minOccurs="0">
@@ -602,12 +664,12 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false">
 			<xs:annotation>
-				<xs:documentation>intended for varReference and linear matrices only</xs:documentation>
+				<xs:documentation>to provide bounds for X^T</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>

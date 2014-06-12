@@ -3277,7 +3277,7 @@
 	</xs:complexType>
 	<xs:element name="variable" type="OSnLNodeVariable" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to provide a child OSnLNode which evaluates to a nonnegativeinteger variable index.</xs:documentation>
+			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to provide a child OSnLNode which evaluates to a nonnegative integer variable index.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeObjective">
@@ -3818,7 +3818,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5623,3 +5623,4 @@
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
+

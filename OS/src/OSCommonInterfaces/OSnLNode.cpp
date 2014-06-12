@@ -155,6 +155,7 @@ using std::endl;
 
 OSnLNode::OSnLNode():
     m_mChildren(NULL),
+    m_mMatrixChildren(NULL),
     m_dFunctionValue( OSNaN())
     //inumberOfChildren( 0)
 {
@@ -493,8 +494,8 @@ bool OSnLNode::IsEqual(OSnLNode *that)
 // OSnLNodePlus Methods
 OSnLNodePlus::OSnLNodePlus()
 {
-
     inumberOfChildren = 2;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
@@ -549,6 +550,7 @@ OSnLNode* OSnLNodePlus::cloneOSnLNode()
 OSnLNodeSum::OSnLNodeSum()
 {
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     inodeInt = 1002;
     inodeType = -1;
 }//end OSnLNodeSum
@@ -613,6 +615,7 @@ OSnLNode* OSnLNodeSum::cloneOSnLNode()
 OSnLNodeAllDiff::OSnLNodeAllDiff()
 {
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     inodeInt = 7016;
     inodeType = -1;
 }//end OSnLNodeAllDiff
@@ -691,6 +694,7 @@ OSnLNode* OSnLNodeAllDiff::cloneOSnLNode()
 OSnLNodeMax::OSnLNodeMax()
 {
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     inodeInt = 4011;
     inodeType = -1;
 }//end OSnLNodeMax
@@ -762,6 +766,7 @@ OSnLNode* OSnLNodeMax::cloneOSnLNode()
 OSnLNodeMin::OSnLNodeMin()
 {
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     inodeInt = 4010;
     inodeType = -1;
 }//end OSnLNodeMin
@@ -834,6 +839,7 @@ OSnLNode* OSnLNodeMin::cloneOSnLNode()
 OSnLNodeMinus::OSnLNodeMinus()
 {
     inumberOfChildren = 2;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
@@ -891,6 +897,7 @@ OSnLNode* OSnLNodeMinus::cloneOSnLNode()
 OSnLNodeNegate::OSnLNodeNegate()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 1004;
@@ -943,6 +950,7 @@ OSnLNode* OSnLNodeNegate::cloneOSnLNode()
 OSnLNodeTimes::OSnLNodeTimes()
 {
     inumberOfChildren = 2;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
@@ -996,6 +1004,7 @@ OSnLNode* OSnLNodeTimes::cloneOSnLNode()
 OSnLNodeDivide::OSnLNodeDivide()
 {
     inumberOfChildren = 2;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
@@ -1051,6 +1060,7 @@ OSnLNode* OSnLNodeDivide::cloneOSnLNode()
 OSnLNodePower::OSnLNodePower()
 {
     inumberOfChildren = 2;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
@@ -1132,6 +1142,7 @@ OSnLNode* OSnLNodePower::cloneOSnLNode()
 OSnLNodeProduct::OSnLNodeProduct()
 {
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     inodeInt = 1010;
     inodeType = -1;
 }//end OSnLNodeProduct
@@ -1199,6 +1210,7 @@ OSnLNode* OSnLNodeProduct::cloneOSnLNode()
 OSnLNodeLn::OSnLNodeLn()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 2007;
@@ -1254,6 +1266,7 @@ OSnLNode* OSnLNodeLn::cloneOSnLNode()
 OSnLNodeSqrt::OSnLNodeSqrt()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 2006;
@@ -1308,6 +1321,7 @@ OSnLNode* OSnLNodeSqrt::cloneOSnLNode()
 OSnLNodeSquare::OSnLNodeSquare()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 2005;
@@ -1360,6 +1374,7 @@ OSnLNode* OSnLNodeSquare::cloneOSnLNode()
 OSnLNodeSin::OSnLNodeSin()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 3001;
@@ -1413,6 +1428,7 @@ OSnLNode* OSnLNodeSin::cloneOSnLNode()
 OSnLNodeCos::OSnLNodeCos()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 3002;
@@ -1468,6 +1484,7 @@ OSnLNode* OSnLNodeCos::cloneOSnLNode()
 OSnLNodeExp::OSnLNodeExp()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 2010;
@@ -1523,6 +1540,7 @@ OSnLNode* OSnLNodeExp::cloneOSnLNode()
 OSnLNodeAbs::OSnLNodeAbs()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 2001;
@@ -1579,6 +1597,7 @@ OSnLNode* OSnLNodeAbs::cloneOSnLNode()
 OSnLNodeErf::OSnLNodeErf()
 {
     inumberOfChildren = 1;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = 4625;
@@ -1653,6 +1672,7 @@ OSnLNode* OSnLNodeErf::cloneOSnLNode()
 OSnLNodeIf::OSnLNodeIf()
 {
     inumberOfChildren = 3;
+    inumberOfMatrixChildren = 0;
     m_mChildren = new OSnLNode*[3];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
@@ -1716,10 +1736,12 @@ OSnLNode* OSnLNodeIf::cloneOSnLNode()
 OSnLNodeNumber::OSnLNodeNumber()
 {
     inodeInt = 5001;
+    inumberOfMatrixChildren = 0;
     inumberOfChildren = 0;
     m_mChildren = NULL;
     inodeType = 0;
     value = 0.0;
+
     type = "real";
     id = "";
 
@@ -1805,6 +1827,7 @@ OSnLNodeE::OSnLNodeE()
 {
     inodeInt = 5004;
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
     inodeType = 0;
     //value = 0.0;
@@ -1875,6 +1898,7 @@ OSnLNode* OSnLNodeE::cloneOSnLNode()
 OSnLNodePI::OSnLNodePI()
 {
     inodeInt = 5003;
+    inumberOfMatrixChildren = 0;
     inumberOfChildren = 0;
     m_mChildren = NULL;
     inodeType = 0;
@@ -1974,6 +1998,7 @@ OSnLNode* OSnLNodePI::cloneOSnLNode()
 OSnLNodeVariable::OSnLNodeVariable()
 {
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
     inodeInt = 6001;
     inodeType = -1;
@@ -2113,6 +2138,92 @@ OSnLNode* OSnLNodeVariable::cloneOSnLNode()
     nlNodePoint = new OSnLNodeVariable();
     return  nlNodePoint;
 }//end OSnLNodeVariable::cloneOSnLNode
+
+
+/** OSnLNode objects with matrix arguments **/
+
+//
+// OSnLNodeMatrixDeterminant Methods
+OSnLNodeMatrixDeterminant::OSnLNodeMatrixDeterminant()
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 1;
+    m_mMatrixChildren = new OSnLMNode*[1];
+    inodeInt = 8003;
+    inodeType = 0;
+}//end OSnLNodeMatrixDeterminant
+
+OSnLNodeMatrixDeterminant::~OSnLNodeMatrixDeterminant()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixDeterminant destructor");
+#endif
+    if(inumberOfChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfChildren; i++)
+        {
+            delete m_mChildren[ i];
+            m_mChildren[i] = NULL;
+        }
+        delete[] m_mChildren;
+        m_mChildren = NULL;
+    }
+    if(inumberOfMatrixChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
+        {
+            delete m_mMatrixChildren[ i];
+            m_mMatrixChildren[i] = NULL;
+        }
+        delete[] m_mMatrixChildren;
+        m_mMatrixChildren = NULL;
+    }
+    //m_mChildren = NULL;
+    //if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
+}//end ~OSnLNodeMatrixDeterminant
+
+double OSnLNodeMatrixDeterminant::calculateFunction(double *x)
+{
+	m_dFunctionValue = -OSDBL_MAX;
+
+	for(unsigned int i = 0; i < inumberOfChildren; i++)
+    {
+        if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
+        {
+            m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
+        }
+    }
+    return m_dFunctionValue;
+}// end OSnLNodeMatrixDeterminant::calculate
+
+std::string OSnLNodeMatrixDeterminant::getTokenName()
+{
+    return "matrixDeterminant";
+}// end OSnLNodeMatrixDeterminant::getTokenName(
+
+
+ADdouble OSnLNodeMatrixDeterminant::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
+{
+    //if not support in AD, throw an exception
+    try
+    {
+        throw ErrorClass("Matrix determinant operator not supported by current Algorithmic Differentiation implementation");
+        return m_ADTape;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end OSnLNodeMatrixDeterminant::constructADTape
+
+
+OSnLNode* OSnLNodeMatrixDeterminant::cloneOSnLNode()
+{
+    OSnLNode *nlNodePoint;
+    nlNodePoint = new OSnLNodeMatrixDeterminant();
+    return  nlNodePoint;
+}//end OSnLNodeMatrixDeterminant::cloneOSnLNode
+//
 
 
 

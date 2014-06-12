@@ -5,18 +5,26 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2014, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
+ *
+ * in this file we define classes for a subset of the nodes defined in the OSnL schema
+ * These nodes fall into two broad classes: 
+ * Those that evaluate to scalar values (which inherit from OSnLNode), and
+ * those that evaluate to matrices (and inherit from OSnLMNode).
+ * OSnLNodes can have OSnLMNode children (e.g., matrixDeterminant) 
+ * and vice versa (e.g., matrixScalarTimes) 
  */
 
 #ifndef OSNLNODE_H
 #define OSNLNODE_H
 
 #include "OSConfig.h"
+#include "OSGeneral.h"
 #include "OSErrorClass.h"
 #include <iostream>
 #include <vector>
@@ -32,21 +40,20 @@ typedef double  ADdouble;
 typedef std::vector<ADdouble> ADvector;
 #endif
 
+/**
+ *  Some forward declarations to make sure circular references are hndled properly.
+ *  (It is important to make sure forward references are handled through pointers.)
+ */
+class OSnLMNode;
+class OSMatrix;
 
-
-/*! \class OSnLNode OSnLNode.h "OSnLNode.h"
- *  \brief The OSnLNode Class.
+/*! \class OSnLNode 
+ *  \brief The OSnLNode Class for nonlinear expressions.
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  * @version 1.0, 10/05/2005
  * @since   OS1.0
- *
- * \remarks
- * in this file we define an OSnL node for a subset of the nodes
- * defined in the OSnL schema
- *
  */
-
 class OSnLNode
 {
 public:
@@ -56,12 +63,18 @@ public:
      */
     unsigned int inumberOfChildren;
 
+    /**  inumberOfMatrixChildren is the number of OSnLMNode child elements
+     *   (e.g. for computation of a determinant or matrix norm) 
+     *   if there ever is a case where this number is not fixed, it is temporarily set to 0
+     */
+    unsigned int inumberOfMatrixChildren;
+
     /**  inodeInt is the unique integer assigned to the OSnLNode*/
     int inodeInt;
 
     /** inodeType essentially tracks whether the number of children are known or not
-     *  most nodes have a known number of children, then inodeType is set to inumberOfChildren
-     *  for some nodes the number of children is not known a priori, e.g., a sum node
+     *  Most nodes have a known number of children, then inodeType is set to inumberOfChildren
+     *  For some nodes the number of children is not known a priori, e.g., a sum node
      *  then inodeType is set to -1
      */
     int inodeType;
@@ -70,6 +83,11 @@ public:
      * m_mChildren holds all the operands, that is, nodes that the current node operates on.
      */
     OSnLNode **m_mChildren;
+
+    /**
+     * m_mMatrixChildren holds all the matrix-valued operands, if any.
+     */
+    OSnLMNode **m_mMatrixChildren;
 
     /**
      * m_dFunctionValue holds the function value given the current variable values.
@@ -205,12 +223,12 @@ public:
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
 
-	/**
-	 *
-	 * make a copy of this node and all its descendants
-	 * @return a pointer to the duplicate node
-	 */
-	OSnLNode* copyNodeAndDescendants();
+    /**
+     *
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    OSnLNode* copyNodeAndDescendants();
 
     /**
      * <p>
@@ -1210,6 +1228,7 @@ class OSnLNodeNumber : public OSnLNode
 {
 public:
 
+
     /** value is the value of the number */
     double value;
     /** in the C++ type is real */
@@ -1532,6 +1551,280 @@ public:
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 
 };//end OSnLNodeAllDiff
+
+
+/** The next few nodes evaluate to a scalar even though one or more of its arguments are matrices **/
+
+/*! \class OSnLNodeMatrixDeterminant
+ *  \brief The OSnLNodeMatrixDeterminant Class.
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @date    11/06/2014
+ * @since   OS2.8
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <matrixDeterminant>
+ *
+ */
+class OSnLNodeMatrixDeterminant : public OSnLNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLNodeMatrixDeterminant();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLNodeMatrixDeterminant();
+
+    /**
+
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn double OSnLNodeMatrixDeterminant::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a double.
+     */
+    virtual double calculateFunction( double *x);
+
+    /*! \fn double OSnLNodeMatrixDeterminant::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
+     *  \brief The implementation of the virtual functions.
+     *  \return a ADdouble.
+     */
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) ;
+
+    /*! \fn OSnLNodeMatrixDeterminant *cloneOSnLNodeMatrixDeterminant(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a point to a new OSnLNodeMatrixDeterminant of the proper type.
+     */
+
+    virtual OSnLNode *cloneOSnLNode() ;
+
+};//end OSnLNodeMatrixDeterminant
+
+
+
+/*! \class OSnLMNode 
+ *  \brief The OSnLMNode Class for nonlinear expressions involving matrices
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @date    11/06/2014
+ * @since   OS2.8
+ */
+
+class OSnLMNode
+{
+public:
+
+    /**  inumberOfChildren is the number of scalar-valued OSnLNode child elements
+     *   (e.g., to compute the scalar multiple of a matrix
+     *   if there ever is a case where this number is not fixed, it is temporarily set to 0
+     */
+    unsigned int inumberOfChildren;
+
+    /**  inumberOfMatrixChildren is the number of OSnLMNode child elements
+     *   in case this number is not fixed, (e.g., for a matrixSum) it is temporarily set to 0
+     */
+    unsigned int inumberOfMatrixChildren;
+
+    /**  inodeInt is the unique integer assigned to the OSnLMNode*/
+    int inodeInt;
+
+    /** inodeType essentially tracks whether the number of children are known or not
+     *  Most nodes have a known number of children, then inodeType is set to inumberOfMatrixChildren
+     *  For some nodes the number of children is not known a priori, e.g., a sum node
+     *  then inodeType is set to -1
+     */
+    int inodeType;
+
+    /**
+     * m_mChildren holds all the scalar-valued operands that the current node operates on.
+     */
+    OSnLNode **m_mChildren;
+
+    /**
+     * m_mMatrixChildren holds all the matrix-valued operands.
+     */
+    OSnLMNode **m_mMatrixChildren;
+
+    /**
+     * m_dFunctionValue holds the function value given the current variable values.
+     */
+    OSMatrix *m_dFunctionValue;
+
+    /**
+     * m_ADTape stores the expression tree for the this OSnLNode as an ADdouble.
+     */
+    //ADdouble m_ADTape;
+
+    /**
+     * @return the value of inodeInt
+     */
+    virtual std::string getTokenNumber();
+
+    /**
+
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName() = 0;
+
+    /**
+     * <p>
+     * the following method writes an OSnLMNode in
+     * OSiL format, it is used by OSiLWriter to take
+     * an OSInstance and write the corresponding OSiL
+     * </p>
+     *
+     * @return the OSnLMNode and its children as an OSiL string.
+     */
+    virtual  std::string getNonlinearExpressionInXML();
+
+    /**
+     * <p>
+     * Take a vector of OSnLMNodes in postfix format 
+     * and create an OSExpressionTree root node
+     * </p>
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes
+     * in postfix format
+     * @param nlMNodeVec holds a vector of pointers to OSnLMNodes
+     * in postfix format
+     * @return a pointer to an OSnLMNode which is the root of
+     * an OSExpressionTree.
+     */
+    OSnLMNode* createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec, std::vector<OSnLMNode*> nlMNodeVec);
+
+
+    /**
+     * <p>
+     * Take a vector of OSnLMNodes in prefix format
+     * and create an OSExpressionTree root node
+     * </p>
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes
+     * in prefix format
+     * @param nlMNodeVec holds a vector of pointers to OSnLMNodes
+     * in postfix format
+     * @return a pointer to an OSnLMNode which is the root of
+     * an OSExpressionTree.
+     */
+    OSnLNode* createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec, std::vector<OSnLMNode*> nlMNodeVec);
+
+    /**
+     * <p>
+     * Get a vector of pointers to OSnLNodes that correspond to
+     * the OSExpressionTree in prefix format
+     * </p>
+     *
+     * @return the expression tree as a vector of OSnLNodes in prefix.
+     */
+    //std::vector<OSnLNode*> getPrefixFromExpressionTree();
+
+    /**
+     * <p>
+     * Called by getPrefixFromExpressionTree().  This method calls
+     * itself recursively and
+     * generates a vector of pointers to OSnLNodes in prefix
+     * </p>
+
+     * @param a pointer prefixVector to a vector of pointers of OSnLNodes
+     * @return a vector of pointers to OSnLNodes in prefix.
+     */
+    //std::vector<OSnLNode*> preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector);
+
+    /**
+     * <p>
+     * Get a vector of pointers to OSnLNodes that correspond to
+     * the OSExpressionTree in postfix format
+     * </p>
+     *
+     * @return the expression tree as a vector of OSnLNodes in postfix.
+     */
+    //std::vector<OSnLNode*> getPostfixFromExpressionTree();
+
+    /**
+     * <p>
+     * Called by getPostfixFromExpressionTree().  This method calls
+     * itself recursively and
+     * generates a vector of pointers to OSnLNodes in postfix
+     * </p>
+     * @param a pointer postfixVector to a vector of pointers of OSnLNodes
+     * @return a vector of pointers to OSnLNodes in postfix.
+     */
+    //std::vector<OSnLNode*> postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector);
+
+    /**
+     * <p>
+     * varIdx is a map where the key is the index of an OSnLNodeVariable and
+     * (*varIdx)[ idx] is the kth variable in the map, e.g.
+     * (*varIdx)[ 5] = 2 means that variable indexed by 5 is the second variable
+     * in the OSnLNode and all of its children
+     * </p>
+     * @param a pointer to a map of the variables in the OSnLNode and its children
+     */
+    //virtual void getVariableIndexMap(std::map<int, int> *varIdx);
+
+
+    /**
+     * <p>
+     * Calculate the function value given the current variable values.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLNode class.
+     * </p>
+     *
+     * @param x holds the values of the variables in a double array.
+     * @return the function value given the current variable values.
+     */
+    //virtual Matrix* calculateFunction(double *x) = 0;
+
+
+    /**
+     * <p>
+     * Create the AD tape to be evaluated by AD.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLNode class.
+
+     * </p>
+     *
+     * @return the expression tree.
+     */
+    //virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
+
+    /**
+     *
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    OSnLMNode* copyNodeAndDescendants();
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLNode class.
+     * </p>
+     *
+     */
+    virtual OSnLMNode *cloneOSnLMNode() = 0;
+
+    /**
+     * default constructor.
+     */
+    OSnLMNode();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLMNode();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OSnLMNode *that);
+};//end OSnLMNode
 
 
 

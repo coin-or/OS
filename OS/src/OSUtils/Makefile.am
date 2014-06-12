@@ -46,7 +46,7 @@ libOSUtils_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces`   \
-	$(ASL_CFLAGS)
+	$(OSLIB_CFLAGS)
 
 
 #if USE_DTOA

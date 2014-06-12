@@ -5,7 +5,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma,  Kipp Martin,
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma,  Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -18,9 +18,510 @@
 
 #include "OSConfig.h"
 #include "OSParameters.h"
+#include "OSnLNode.h"
 
 #include <string>
 #include <vector>
+
+
+/***************************************************************************************
+ * In the schemas there is a growing number of string elements that can only take
+ * a small number of values. In C++ this can be implemented using enumerations, but the
+ * elements appear in the schemas as strings, so they must be stored internally
+ * as strings also. Below we list the enumerations and provide two utility methods
+ * that make working with them convenient:
+ * return...() functions that return the integer value associated with that enumeration
+ * verify...() functions that check that a string has a legal value for the enumeration
+ ***************************************************************************************/
+
+enum ENUM_CPUSPEEDUNIT
+{
+    ENUM_CPUSPEEDUNIT_hertz = 1,
+    ENUM_CPUSPEEDUNIT_kilohertz,
+    ENUM_CPUSPEEDUNIT_megahertz,
+    ENUM_CPUSPEEDUNIT_gigahertz,
+    ENUM_CPUSPEEDUNIT_terahertz,
+    ENUM_CPUSPEEDUNIT_flops,
+    ENUM_CPUSPEEDUNIT_kiloflops,
+    ENUM_CPUSPEEDUNIT_megaflops,
+    ENUM_CPUSPEEDUNIT_gigaflops,
+    ENUM_CPUSPEEDUNIT_teraflops,
+    ENUM_CPUSPEEDUNIT_petaflops
+};
+
+inline int returnCPUSpeedUnit(std::string unit)
+{
+    if (unit == "hertz"    ) return ENUM_CPUSPEEDUNIT_hertz;
+    if (unit == "kilohertz") return ENUM_CPUSPEEDUNIT_kilohertz;
+    if (unit == "megahertz") return ENUM_CPUSPEEDUNIT_megahertz;
+    if (unit == "gigahertz") return ENUM_CPUSPEEDUNIT_gigahertz;
+    if (unit == "terahertz") return ENUM_CPUSPEEDUNIT_terahertz;
+    if (unit == "flops"    ) return ENUM_CPUSPEEDUNIT_flops;
+    if (unit == "kiloflops") return ENUM_CPUSPEEDUNIT_kiloflops;
+    if (unit == "megaflops") return ENUM_CPUSPEEDUNIT_megaflops;
+    if (unit == "gigaflops") return ENUM_CPUSPEEDUNIT_gigaflops;
+    if (unit == "teraflops") return ENUM_CPUSPEEDUNIT_teraflops;
+    if (unit == "petaflops") return ENUM_CPUSPEEDUNIT_petaflops;
+    return 0;
+}//returnCPUSpeedUnit
+
+inline bool verifyCPUSpeedUnit(std::string unit)
+{
+    return (returnCPUSpeedUnit(unit) > 0);
+}//verifyCPUSpeedUnit
+
+enum ENUM_STORAGEUNIT
+{
+    ENUM_STORAGEUNIT_byte = 1,
+    ENUM_STORAGEUNIT_kilobyte,
+    ENUM_STORAGEUNIT_megabyte,
+    ENUM_STORAGEUNIT_gigabyte,
+    ENUM_STORAGEUNIT_terabyte,
+    ENUM_STORAGEUNIT_petabyte,
+    ENUM_STORAGEUNIT_exabyte,
+    ENUM_STORAGEUNIT_zettabyte,
+    ENUM_STORAGEUNIT_yottabyte
+};
+
+inline int returnStorageUnit(std::string unit)
+{
+    if (unit == "byte"     ) return ENUM_STORAGEUNIT_byte;
+    if (unit == "kilobyte" ) return ENUM_STORAGEUNIT_kilobyte;
+    if (unit == "megabyte" ) return ENUM_STORAGEUNIT_megabyte;
+    if (unit == "gigabyte" ) return ENUM_STORAGEUNIT_gigabyte;
+    if (unit == "terabyte" ) return ENUM_STORAGEUNIT_terabyte;
+    if (unit == "petabyte" ) return ENUM_STORAGEUNIT_petabyte;
+    if (unit == "exabyte"  ) return ENUM_STORAGEUNIT_exabyte;
+    if (unit == "zettabyte") return ENUM_STORAGEUNIT_zettabyte;
+    if (unit == "yottabyte") return ENUM_STORAGEUNIT_yottabyte;
+    return 0;
+}//returnStorageUnit
+
+inline bool verifyStorageUnit(std::string unit)
+{
+    return (returnStorageUnit(unit) > 0);
+}//verifyCPUSpeedUnit
+
+enum ENUM_TIMEUNIT
+{
+    ENUM_TIMEUNIT_tick = 1,
+    ENUM_TIMEUNIT_millisecond,
+    ENUM_TIMEUNIT_second,
+    ENUM_TIMEUNIT_minute,
+    ENUM_TIMEUNIT_hour,
+    ENUM_TIMEUNIT_day,
+    ENUM_TIMEUNIT_week,
+    ENUM_TIMEUNIT_month,
+    ENUM_TIMEUNIT_year
+};
+
+inline int returnTimeUnit(std::string unit)
+{
+    if (unit == "tick"       ) return ENUM_TIMEUNIT_tick;
+    if (unit == "millisecond") return ENUM_TIMEUNIT_millisecond;
+    if (unit == "second"     ) return ENUM_TIMEUNIT_second;
+    if (unit == "minute"     ) return ENUM_TIMEUNIT_minute;
+    if (unit == "hour"       ) return ENUM_TIMEUNIT_hour;
+    if (unit == "day"        ) return ENUM_TIMEUNIT_day;
+    if (unit == "week"       ) return ENUM_TIMEUNIT_week;
+    if (unit == "month"      ) return ENUM_TIMEUNIT_month;
+    if (unit == "year"       ) return ENUM_TIMEUNIT_year;
+    return 0;
+}//returnTimeUnit
+
+inline bool verifyTimeUnit(std::string unit)
+{
+    return (returnTimeUnit(unit) > 0);
+}//verifyTimeUnit
+
+enum ENUM_TIMETYPE
+{
+    ENUM_TIMETYPE_cpuTime = 1,
+    ENUM_TIMETYPE_elapsedTime,
+    ENUM_TIMETYPE_other
+};
+
+inline int returnTimeType(std::string type)
+{
+    if (type == "cpuTime"    ) return ENUM_TIMETYPE_cpuTime;
+    if (type == "elapsedTime") return ENUM_TIMETYPE_elapsedTime;
+    if (type == "other"      ) return ENUM_TIMETYPE_other;
+    return 0;
+}//returnTimeType
+
+inline bool verifyTimeType(std::string type)
+{
+    return (returnTimeType(type) > 0);
+}//verifyTimeType
+
+enum ENUM_TIMECATEGORY
+{
+    ENUM_TIMECATEGORY_total = 1,
+    ENUM_TIMECATEGORY_input,
+    ENUM_TIMECATEGORY_preprocessing,
+    ENUM_TIMECATEGORY_optimization,
+    ENUM_TIMECATEGORY_postprocessing,
+    ENUM_TIMECATEGORY_output,
+    ENUM_TIMECATEGORY_other
+};
+
+inline int returnTimeCategory(std::string category)
+{
+    if (category == "total"         ) return ENUM_TIMECATEGORY_total;
+    if (category == "input"         ) return ENUM_TIMECATEGORY_input;
+    if (category == "preprocessing" ) return ENUM_TIMECATEGORY_preprocessing;
+    if (category == "optimization"  ) return ENUM_TIMECATEGORY_optimization;
+    if (category == "postprocessing") return ENUM_TIMECATEGORY_postprocessing;
+    if (category == "output"        ) return ENUM_TIMECATEGORY_output;
+    if (category == "other"         ) return ENUM_TIMECATEGORY_other;
+    return 0;
+}//returnTimeCategory
+
+inline bool verifyTimeCategory(std::string category)
+{
+    return (returnTimeCategory(category) > 0);
+}//verifyTimeCategory
+
+enum ENUM_LOCATIONTYPE
+{
+    ENUM_LOCATIONTYPE_local = 1,
+    ENUM_LOCATIONTYPE_http,
+    ENUM_LOCATIONTYPE_ftp
+};
+
+inline int returnLocationType(std::string type)
+{
+    if (type == "local") return ENUM_LOCATIONTYPE_local;
+    if (type == "http" ) return ENUM_LOCATIONTYPE_http;
+    if (type == "ftp"  ) return ENUM_LOCATIONTYPE_ftp;
+    return 0;
+}//returnLocationType
+
+inline bool verifyLocationType(std::string type)
+{
+    return (returnLocationType(type) > 0);
+}//verifyLocationType
+
+enum ENUM_TRANSPORT_TYPE
+{
+    ENUM_TRANSPORT_TYPE_osp = 1,
+    ENUM_TRANSPORT_TYPE_http,
+    ENUM_TRANSPORT_TYPE_smtp,
+    ENUM_TRANSPORT_TYPE_ftp,
+    ENUM_TRANSPORT_TYPE_other
+};
+
+inline int returnTransportType(std::string type)
+{
+    if (type == "osp"  ) return ENUM_TRANSPORT_TYPE_osp;
+    if (type == "http" ) return ENUM_TRANSPORT_TYPE_http;
+    if (type == "smtp" ) return ENUM_TRANSPORT_TYPE_smtp;
+    if (type == "ftp"  ) return ENUM_TRANSPORT_TYPE_ftp;
+    if (type == "other") return ENUM_TRANSPORT_TYPE_other;
+    return 0;
+}//returnTransportType
+
+inline bool verifyTransportType(std::string type)
+{
+    return (returnTransportType(type) > 0);
+}//verifyTransportType
+
+enum ENUM_SERVICE_TYPE
+{
+    ENUM_SERVICE_TYPE_analyzer = 1,
+    ENUM_SERVICE_TYPE_solver,
+    ENUM_SERVICE_TYPE_scheduler,
+    ENUM_SERVICE_TYPE_modeler,
+    ENUM_SERVICE_TYPE_registry,
+    ENUM_SERVICE_TYPE_agent,
+    ENUM_SERVICE_TYPE_simulations
+};
+
+inline int returnServiceType(std::string type)
+{
+    if (type == "analyzer"   ) return ENUM_SERVICE_TYPE_analyzer;
+    if (type == "solver"     ) return ENUM_SERVICE_TYPE_solver;
+    if (type == "scheduler"  ) return ENUM_SERVICE_TYPE_scheduler;
+    if (type == "modeler"    ) return ENUM_SERVICE_TYPE_modeler;
+    if (type == "registry"   ) return ENUM_SERVICE_TYPE_registry;
+    if (type == "agent"      ) return ENUM_SERVICE_TYPE_agent;
+    if (type == "simulations") return ENUM_SERVICE_TYPE_simulations;
+    return 0;
+}//returnServiceType
+
+inline bool verifyServiceType(std::string type)
+{
+    return (returnServiceType(type) > 0);
+}//verifyServiceType
+
+enum ENUM_GENERAL_RESULT_STATUS
+{
+    ENUM_GENERAL_RESULT_STATUS_error = 1,
+    ENUM_GENERAL_RESULT_STATUS_warning,
+    ENUM_GENERAL_RESULT_STATUS_normal
+};
+
+inline int returnGeneralResultStatus(std::string status)
+{
+    if (status == "error"  ) return ENUM_GENERAL_RESULT_STATUS_error;
+    if (status == "warning") return ENUM_GENERAL_RESULT_STATUS_warning;
+    if (status == "normal" ) return ENUM_GENERAL_RESULT_STATUS_normal;
+    return 0;
+}//returnGeneralResultStatus
+
+inline bool verifyGeneralResultStatus(std::string status)
+{
+    return (returnGeneralResultStatus(status) > 0);
+}//verifyGeneralResultStatus
+
+enum ENUM_SYSTEM_CURRENT_STATE
+{
+    ENUM_SYSTEM_CURRENT_STATE_busy = 1,
+    ENUM_SYSTEM_CURRENT_STATE_busyButAccepting,
+    ENUM_SYSTEM_CURRENT_STATE_idle,
+    ENUM_SYSTEM_CURRENT_STATE_idleButNotAccepting,
+    ENUM_SYSTEM_CURRENT_STATE_noResponse
+};
+
+inline int returnSystemCurrentState(std::string status)
+{
+    if (status == "busy"               ) return ENUM_SYSTEM_CURRENT_STATE_busy;
+    if (status == "busyButAccepting"   ) return ENUM_SYSTEM_CURRENT_STATE_busyButAccepting;
+    if (status == "idle"               ) return ENUM_SYSTEM_CURRENT_STATE_idle;
+    if (status == "idleButNotAccepting") return ENUM_SYSTEM_CURRENT_STATE_idleButNotAccepting;
+    if (status == "noResponse"         ) return ENUM_SYSTEM_CURRENT_STATE_noResponse;
+    return 0;
+}//returnSystemCurrentState
+
+inline bool verifySystemCurrentState(std::string status)
+{
+    return (returnSystemCurrentState(status) > 0);
+}//verifySystemCurrentState
+
+enum ENUM_JOB_STATUS
+{
+    ENUM_JOB_STATUS_waiting = 1,
+    ENUM_JOB_STATUS_running,
+    ENUM_JOB_STATUS_killed,
+    ENUM_JOB_STATUS_finished,
+    ENUM_JOB_STATUS_unknown
+};
+
+inline int returnJobStatus(std::string status)
+{
+    if (status == "waiting" ) return ENUM_JOB_STATUS_waiting;
+    if (status == "running" ) return ENUM_JOB_STATUS_running;
+    if (status == "killed"  ) return ENUM_JOB_STATUS_killed;
+    if (status == "finished") return ENUM_JOB_STATUS_finished;
+    if (status == "unknown" ) return ENUM_JOB_STATUS_unknown;
+    return 0;
+}//returnJobStatus
+
+inline bool verifyJobStatus(std::string status)
+{
+    return (returnJobStatus(status) > 0);
+}//verifyJobStatus
+
+/**
+ *  Enumeration for the different states that can be used in representating a basis
+ *  The last state, ENUM_BASIS_STATUS_NUMBER_OF_STATES, is used *only* to record the
+ *  number of states, which makes it easier to convert between different representations.
+ *  (For instance, AMPL uses a different order, so there may be a need to recode values.
+ *   See OSosrl2ampl.cpp for an application.) 
+ */
+enum ENUM_BASIS_STATUS
+{
+    ENUM_BASIS_STATUS_basic = 0,
+    ENUM_BASIS_STATUS_atLower,
+    ENUM_BASIS_STATUS_atUpper,
+    ENUM_BASIS_STATUS_atEquality,
+    ENUM_BASIS_STATUS_isFree,
+    ENUM_BASIS_STATUS_superbasic,
+    ENUM_BASIS_STATUS_unknown,
+    ENUM_BASIS_STATUS_NUMBER_OF_STATES
+};
+
+inline int returnBasisStatus(std::string status)
+{
+    if (status == "basic"     ) return ENUM_BASIS_STATUS_basic;
+    if (status == "atLower"   ) return ENUM_BASIS_STATUS_atLower;
+    if (status == "atUpper"   ) return ENUM_BASIS_STATUS_atUpper;
+    if (status == "atEquality") return ENUM_BASIS_STATUS_atEquality;
+    if (status == "isFree"    ) return ENUM_BASIS_STATUS_isFree;
+    if (status == "superBasic") return ENUM_BASIS_STATUS_superbasic;
+    if (status == "unknown"   ) return ENUM_BASIS_STATUS_unknown;
+    return 0;
+}//returnBasisStatus
+
+inline bool verifyBasisStatus(std::string status)
+{
+    return (returnBasisStatus(status) > 0);
+}//verifyBasisStatus
+
+enum ENUM_SOLUTION_STATUS
+{
+    ENUM_SOLUTION_STATUS_unbounded = 1,
+    ENUM_SOLUTION_STATUS_globallyOptimal,
+    ENUM_SOLUTION_STATUS_locallyOptimal,
+    ENUM_SOLUTION_STATUS_optimal,
+    ENUM_SOLUTION_STATUS_bestSoFar,
+    ENUM_SOLUTION_STATUS_feasible,
+    ENUM_SOLUTION_STATUS_infeasible,
+    ENUM_SOLUTION_STATUS_unsure,
+    ENUM_SOLUTION_STATUS_error,
+    ENUM_SOLUTION_STATUS_other
+};
+
+inline int returnSolutionStatus(std::string status)
+{
+    if (status == "unbounded"      ) return ENUM_SOLUTION_STATUS_unbounded;
+    if (status == "globallyOptimal") return ENUM_SOLUTION_STATUS_globallyOptimal;
+    if (status == "locallyOptimal" ) return ENUM_SOLUTION_STATUS_locallyOptimal;
+    if (status == "optimal"        ) return ENUM_SOLUTION_STATUS_optimal;
+    if (status == "bestSoFar"      ) return ENUM_SOLUTION_STATUS_bestSoFar;
+    if (status == "feasible"       ) return ENUM_SOLUTION_STATUS_feasible;
+    if (status == "infeasible"     ) return ENUM_SOLUTION_STATUS_infeasible;
+    if (status == "unsure"         ) return ENUM_SOLUTION_STATUS_unsure;
+    if (status == "error"          ) return ENUM_SOLUTION_STATUS_error;
+    if (status == "other"          ) return ENUM_SOLUTION_STATUS_other;
+    return 0;
+}//returnSolutionStatus
+
+inline bool verifySolutionStatus(std::string status)
+{
+    return (returnSolutionStatus(status) > 0);
+}//verifySolutionStatus
+
+enum ENUM_SOLUTION_SUBSTATUSTYPE
+{
+    ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByLimit = 1,
+    ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByBounds,
+    ENUM_SOLUTION_SUBSTATUSTYPE_other
+};
+
+inline int returnSolutionSubstatusType(std::string type)
+{
+    if (type == "stoppedByLimit" ) return ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByLimit;
+    if (type == "stoppedByBounds") return ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByBounds;
+    if (type == "other"          ) return ENUM_SOLUTION_SUBSTATUSTYPE_other;
+    return 0;
+}//returnSolutionSubstatusType
+
+inline bool verifySolutionSubstatusType(std::string type)
+{
+    return (returnSolutionSubstatusType(type) > 0);
+}//verifySolutionSubstatusType
+
+enum ENUM_PROBLEM_COMPONENT
+{
+    ENUM_PROBLEM_COMPONENT_variables = 1,
+    ENUM_PROBLEM_COMPONENT_objectives,
+    ENUM_PROBLEM_COMPONENT_constraints
+};
+
+enum ENUM_VARTYPE
+{
+    ENUM_VARTYPE_CONTINUOUS = 1,
+    ENUM_VARTYPE_INTEGER,
+    ENUM_VARTYPE_BINARY,
+    ENUM_VARTYPE_SEMICONTINUOUS,
+    ENUM_VARTYPE_SEMIINTEGER,
+    ENUM_VARTYPE_STRING
+};
+
+inline int returnVarType(char vt)
+{
+    if (vt == 'C') return ENUM_VARTYPE_CONTINUOUS;
+    if (vt == 'B') return ENUM_VARTYPE_BINARY;
+    if (vt == 'I') return ENUM_VARTYPE_INTEGER;
+    if (vt == 'S') return ENUM_VARTYPE_STRING;
+    if (vt == 'D') return ENUM_VARTYPE_SEMICONTINUOUS;
+    if (vt == 'J') return ENUM_VARTYPE_SEMIINTEGER;
+    return 0;
+}//returnVarType
+
+inline bool verifyVarType(char vt)
+{
+    return (returnVarType(vt) > 0);
+}//verifyVarType
+
+
+enum ENUM_PATHPAIR
+{
+    ENUM_PATHPAIR_input_dir = 1,
+    ENUM_PATHPAIR_input_file,
+    ENUM_PATHPAIR_output_file,
+    ENUM_PATHPAIR_output_dir
+};
+
+
+enum ENUM_MATRIX_TYPE
+{
+    ENUM_MATRIX_TYPE_zero = 1,
+    ENUM_MATRIX_TYPE_constant,
+    ENUM_MATRIX_TYPE_varref,
+    ENUM_MATRIX_TYPE_linear,
+    ENUM_MATRIX_TYPE_general,
+    ENUM_MATRIX_TYPE_unknown
+};
+
+inline int returnMatrixType(std::string type)
+{
+    if (type == "constant") return ENUM_MATRIX_TYPE_constant;
+    if (type == "varref"  ) return ENUM_MATRIX_TYPE_varref;
+    if (type == "linear"  ) return ENUM_MATRIX_TYPE_linear;
+    if (type == "general" ) return ENUM_MATRIX_TYPE_general;
+    if (type == "unknown" ) return ENUM_MATRIX_TYPE_unknown;
+    if (type == "zero"    ) return ENUM_MATRIX_TYPE_zero;
+    return 0;
+}//returnMatrixType
+
+inline bool verifyMatrixType(std::string type)
+{
+    return (returnMatrixType(type) > 0);
+}//verifyMatrixType
+
+
+enum ENUM_MATRIX_SHAPE
+{
+    ENUM_MATRIX_SHAPE_general = 1,
+    ENUM_MATRIX_SHAPE_symmetricUpper,
+    ENUM_MATRIX_SHAPE_symmetricLower,
+    ENUM_MATRIX_SHAPE_skewSymmetricUpper,
+    ENUM_MATRIX_SHAPE_skewSymmetricLower,
+    ENUM_MATRIX_SHAPE_hermitianLower,
+    ENUM_MATRIX_SHAPE_hermitianUpper
+};
+
+inline int returnMatrixShape(std::string shape)
+{
+    if (shape == "general"           ) return ENUM_MATRIX_SHAPE_general;
+    if (shape == "symmetricUpper"    ) return ENUM_MATRIX_SHAPE_symmetricUpper;
+    if (shape == "symmetricLower"    ) return ENUM_MATRIX_SHAPE_symmetricLower;
+    if (shape == "skewSymmetricUpper") return ENUM_MATRIX_SHAPE_skewSymmetricUpper;
+    if (shape == "skewSymmetricLower") return ENUM_MATRIX_SHAPE_skewSymmetricLower;
+    if (shape == "hermitianLower"    ) return ENUM_MATRIX_SHAPE_hermitianLower;
+    if (shape == "hermitianLower"    ) return ENUM_MATRIX_SHAPE_hermitianLower;
+    return 0;
+}//returnMatrixShape
+
+inline bool verifyMatrixShape(std::string shape)
+{
+    return (returnMatrixShape(shape) > 0);
+}//verifyMatrixShape
+
+
+/**
+ * An enum to streamline set() methods of vectors
+ */
+enum ENUM_COMBINE_ARRAYS
+{
+    ENUM_COMBINE_ARRAYS_replace, //silently replace previous data (if any)
+    ENUM_COMBINE_ARRAYS_merge,   //merge two vectors into one
+    ENUM_COMBINE_ARRAYS_ignore,  //silently ignore current vector if previous data exist
+    ENUM_COMBINE_ARRAYS_throw    //throw an error if previous data detected
+};
+
 
 /*! \class GeneralFileHeader
  * \brief a data structure that holds general information about files
@@ -161,6 +662,55 @@ public:
     double* values;
 
 }; //SparseVector
+
+/*! \class SparseIntVector
+ * \brief a sparse vector data structure for integer vectors
+ */
+class SparseIntVector
+{
+public:
+
+    /**
+     * Constructor.
+     *
+     * @param number holds the size of the vector.
+     */
+    SparseIntVector(int number);
+
+    /**
+     *
+     * Default Constructor.
+     */
+    SparseIntVector();
+
+    /**
+     *
+     * Default destructor.
+     */
+    ~SparseIntVector();
+
+    /**
+     * bDeleteArrays is true if we delete the arrays in garbage collection
+     * set to true by default
+     */
+    bool bDeleteArrays;
+
+    /**
+     * number is the number of elements in the indexes and values arrays.
+     */
+    int number;
+
+    /**
+     * indexes holds an integer array of indexes, which corresponding values are nonzero.
+     */
+    int* indexes;
+
+    /**
+     * values holds an integer array of nonzero values.
+     */
+    int* values;
+
+}; //SparseIntVector
 
 
 /*! \class SparseMatrix
@@ -590,7 +1140,6 @@ struct IndexValuePair
     /** value is a double that holds the value of the entity
      */
     double value;
-
 };
 
 /*! \class BasisStatus
@@ -696,6 +1245,515 @@ public:
      */
     int getBasisDense(int *resultArray, int dim, bool flipIdx);
 };//class BasisStatus
+
+
+/*********************************************************************************
+ *
+ * Here we have a number of classes to represent a matrix
+ * This construct is new to OS starting June 2014 (trunk version 4811)
+ *
+ *********************************************************************************/
+
+/** 
+ *  There is a circular dependency involving general matrices, 
+ *  since the elements may contain nonlinear expressions (OSnLNodes)
+ *  which themselves may contain references to matrices.
+ *  Thus we need several forward declarations both here and in OSnLNode.h
+ */
+class OSnLNode;
+class OSnLMNode;
+
+/*! \class ConstantMatrixElements
+ * \brief a data structure to represent the constant elements in a MatrixType object
+ */
+class ConstantMatrixElements
+{
+    IntVector *start;
+    SparseVector *nonzeros;
+
+    ConstantMatrixElements();
+    ~ConstantMatrixElements();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ConstantMatrixElements *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ConstantMatrixElements *that);
+};//class ConstantMatrixElements
+
+/*! \class VarReferenceMatrixElements
+ * \brief a data structure to represent variable reference elements in a MatrixType object
+ *  Each nonzero element is of the form x_{k} where k is the index of a variable
+ */
+class VarReferenceMatrixElements
+{
+    IntVector *start;
+    SparseIntVector *nonzeros;
+
+    VarReferenceMatrixElements();
+    ~VarReferenceMatrixElements();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(VarReferenceMatrixElements *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(VarReferenceMatrixElements *that);
+};//class VarReferenceMatrixElements
+
+
+/*! \class LinearMatrixElementTerm
+ * \brief a data structure to represent a term in a linearMatrix element
+ *  A term has the form c*x_{k}, where c defaults to 1 and k is a valid index for a variable
+ *  This is essentially an index-value pair, but with the presence of a default value
+ */
+class LinearMatrixElementTerm
+{
+    int idx;
+    double coef;
+
+    LinearMatrixElementTerm();
+    ~LinearMatrixElementTerm();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(LinearMatrixElementTerm *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(LinearMatrixElementTerm *that);
+};//class LinearMatrixElementTerm
+
+/*! \class LinearMatrixElement
+ * \brief a data structure to represent an expression in a linearMatrix element
+ *  A LinearMatrixElement is a (finite) sum of LinearMatrixElementTerms,
+ *  with an optional additive constant
+ * @param numberOfVarIdx gives the number of terms in the expression
+ */
+class LinearMatrixElement
+{
+    int numberOfVarIdx;
+    double constant;
+
+    LinearMatrixElementTerm* varIdx;
+
+    LinearMatrixElement();
+    ~LinearMatrixElement();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(LinearMatrixElement *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(LinearMatrixElement *that);
+};//class LinearMatrixElement
+
+/*! \class LinearMatrixValues
+ * \brief a data structure to represent the nonzeros in a linearMatrix element
+ */
+class LinearMatrixValues
+{
+    int numberOfEl;
+    IntVector *indexes;
+    LinearMatrixElement  *values;     
+    
+    LinearMatrixValues();
+    ~LinearMatrixValues();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(LinearMatrixValues *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(LinearMatrixValues *that);
+};//class LinearMatrixValues
+
+/*! \class LinearMatrixElements
+ * \brief a data structure to represent the nonzero values in a linearMatrix element
+ */
+class LinearMatrixElements
+{
+    IntVector *start;
+    LinearMatrixValues *nonzeros;
+
+    LinearMatrixElements();
+    ~LinearMatrixElements();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(LinearMatrixElements *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(LinearMatrixElements *that);
+};//class LinearMatrixElements
+
+/*! \class GeneralMatrixValues
+ * \brief a data structure to represent the nonzeros in a generalMatrix element
+ */
+class GeneralMatrixValues
+{
+    int numberOfEl;
+    IntVector *indexes;
+    OSnLNode **values;
+
+    GeneralMatrixValues();
+    ~GeneralMatrixValues();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(GeneralMatrixValues *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(GeneralMatrixValues *that);
+};//class GeneralMatrixValues
+
+/*! \class GeneralMatrixElements
+ * \brief a data structure to represent the nonzero values in a generalMatrix element
+ */
+class GeneralMatrixElements
+{
+    IntVector *start;
+    GeneralMatrixValues *nonzeros;
+
+    GeneralMatrixElements();
+    ~GeneralMatrixElements();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(GeneralMatrixElements *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(GeneralMatrixElements *that);
+};//class GeneralMatrixElements
+
+/*! \class MatrixElements
+ * \brief a data structure to represent the nonzeroes of a matrix explicitly element by element
+ */
+class MatrixElements
+{
+    bool rowMajor;
+    ConstantMatrixElements         *constantElements;
+    VarReferenceMatrixElements *varReferenceElements;
+    LinearMatrixElements             *linearElements;
+    GeneralMatrixElements           *generalElements;
+
+    MatrixElements();
+    ~MatrixElements();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixElements *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixElements *that);
+};//class MatrixElements
+
+
+
+/*! \class MatrixTransformation
+ * \brief a data structure to represent the nonzeroes of a matrix 
+ *  by transformation from other (previously defined) matrices 
+ */
+class MatrixTransformation
+{
+};//class MatrixTransformation
+
+/*! \class MatrixBlocks
+ * \brief a data structure to represent the nonzeroes of a matrix 
+ *  in a blockwise fashion. Each block can be given elementwise, 
+ *  through transformation or nested blocks, and so on, recursively.
+ */
+class MatrixBlocks
+{
+};//class MatrixBlocks
+
+
+/*! \class MatrixConstructor
+ * \brief a data structure to describe one step in the construction of a matrix
+ */
+class MatrixConstructor
+{
+    MatrixElements *elements;
+    MatrixTransformation *transformation;
+    MatrixBlocks *blocks;
+
+    MatrixConstructor();
+    ~MatrixConstructor();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixConstructor *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixConstructor *that);
+};//class MatrixConstructor
+
+/*! \class BaseMatrix
+ * \brief a data structure to represent a point of departure for
+ *  constructing a matrix by modifying parts of a previously defined matrix 
+ */
+class BaseMatrix
+{
+};//class BaseMatrix
+
+
+/*! \class MatrixType
+ * \brief a data structure to represent a MatrixType object (from which we derive Matrix and MatrixBlock)
+ *
+ */
+class MatrixType
+{
+public:
+    ENUM_MATRIX_SHAPE symmetry;
+    ENUM_MATRIX_TYPE  matrixType;
+
+    BaseMatrix *baseMatrix;
+    std::vector<MatrixConstructor*> matrixConstructor;
+
+    MatrixType();
+    ~MatrixType();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixType *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixType *that);
+
+};// class MatrixType
+
+
+
+/*! \class OSMatrix
+ * \brief a data structure to represent a Matrix object (derived from MatrixType)
+ *
+ */
+class OSMatrix : public MatrixType
+{
+public:
+    int numberOfRows;
+    int numberOfColumns;
+    std::string name;
+
+    OSMatrix();
+    ~OSMatrix();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OSMatrix *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OSMatrix *that);
+
+};// class OSMatrix
+
+
+
 
 /*! \class StorageCapacity
  *  \brief the StorageCapacity class.
@@ -926,494 +1984,6 @@ class OSGeneral
 
 };
 
-/***************************************************************************************
- * In the schemas there is a growing number of string elements that can only take
- * a small number of values. One implementation in C++ uses enumerations, but the
- * elements appear in the schemas as strings, so they must be stored internally
- * as strings also. Below we list the enumerations and provide two utility methods
- * that make working with them convenient:
- * return...() functions that return the integer value associated with that enumeration
- * verify...() functions that check that a string has a legal value for the enumeration
- ***************************************************************************************/
-
-enum ENUM_CPUSPEEDUNIT
-{
-    ENUM_CPUSPEEDUNIT_hertz = 1,
-    ENUM_CPUSPEEDUNIT_kilohertz,
-    ENUM_CPUSPEEDUNIT_megahertz,
-    ENUM_CPUSPEEDUNIT_gigahertz,
-    ENUM_CPUSPEEDUNIT_terahertz,
-    ENUM_CPUSPEEDUNIT_flops,
-    ENUM_CPUSPEEDUNIT_kiloflops,
-    ENUM_CPUSPEEDUNIT_megaflops,
-    ENUM_CPUSPEEDUNIT_gigaflops,
-    ENUM_CPUSPEEDUNIT_teraflops,
-    ENUM_CPUSPEEDUNIT_petaflops
-};
-
-inline int returnCPUSpeedUnit(std::string unit)
-{
-    if (unit == "hertz"    ) return ENUM_CPUSPEEDUNIT_hertz;
-    if (unit == "kilohertz") return ENUM_CPUSPEEDUNIT_kilohertz;
-    if (unit == "megahertz") return ENUM_CPUSPEEDUNIT_megahertz;
-    if (unit == "gigahertz") return ENUM_CPUSPEEDUNIT_gigahertz;
-    if (unit == "terahertz") return ENUM_CPUSPEEDUNIT_terahertz;
-    if (unit == "flops"    ) return ENUM_CPUSPEEDUNIT_flops;
-    if (unit == "kiloflops") return ENUM_CPUSPEEDUNIT_kiloflops;
-    if (unit == "megaflops") return ENUM_CPUSPEEDUNIT_megaflops;
-    if (unit == "gigaflops") return ENUM_CPUSPEEDUNIT_gigaflops;
-    if (unit == "teraflops") return ENUM_CPUSPEEDUNIT_teraflops;
-    if (unit == "petaflops") return ENUM_CPUSPEEDUNIT_petaflops;
-    return 0;
-}//returnCPUSpeedUnit
-
-inline bool verifyCPUSpeedUnit(std::string unit)
-{
-    return (returnCPUSpeedUnit(unit) > 0);
-}//verifyCPUSpeedUnit
-
-enum ENUM_STORAGEUNIT
-{
-    ENUM_STORAGEUNIT_byte = 1,
-    ENUM_STORAGEUNIT_kilobyte,
-    ENUM_STORAGEUNIT_megabyte,
-    ENUM_STORAGEUNIT_gigabyte,
-    ENUM_STORAGEUNIT_terabyte,
-    ENUM_STORAGEUNIT_petabyte,
-    ENUM_STORAGEUNIT_exabyte,
-    ENUM_STORAGEUNIT_zettabyte,
-    ENUM_STORAGEUNIT_yottabyte
-};
-
-inline int returnStorageUnit(std::string unit)
-{
-    if (unit == "byte"     ) return ENUM_STORAGEUNIT_byte;
-    if (unit == "kilobyte" ) return ENUM_STORAGEUNIT_kilobyte;
-    if (unit == "megabyte" ) return ENUM_STORAGEUNIT_megabyte;
-    if (unit == "gigabyte" ) return ENUM_STORAGEUNIT_gigabyte;
-    if (unit == "terabyte" ) return ENUM_STORAGEUNIT_terabyte;
-    if (unit == "petabyte" ) return ENUM_STORAGEUNIT_petabyte;
-    if (unit == "exabyte"  ) return ENUM_STORAGEUNIT_exabyte;
-    if (unit == "zettabyte") return ENUM_STORAGEUNIT_zettabyte;
-    if (unit == "yottabyte") return ENUM_STORAGEUNIT_yottabyte;
-    return 0;
-}//returnStorageUnit
-
-inline bool verifyStorageUnit(std::string unit)
-{
-    return (returnStorageUnit(unit) > 0);
-}//verifyCPUSpeedUnit
-
-enum ENUM_TIMEUNIT
-{
-    ENUM_TIMEUNIT_tick = 1,
-    ENUM_TIMEUNIT_millisecond,
-    ENUM_TIMEUNIT_second,
-    ENUM_TIMEUNIT_minute,
-    ENUM_TIMEUNIT_hour,
-    ENUM_TIMEUNIT_day,
-    ENUM_TIMEUNIT_week,
-    ENUM_TIMEUNIT_month,
-    ENUM_TIMEUNIT_year
-};
-
-inline int returnTimeUnit(std::string unit)
-{
-    if (unit == "tick"       ) return ENUM_TIMEUNIT_tick;
-    if (unit == "millisecond") return ENUM_TIMEUNIT_millisecond;
-    if (unit == "second"     ) return ENUM_TIMEUNIT_second;
-    if (unit == "minute"     ) return ENUM_TIMEUNIT_minute;
-    if (unit == "hour"       ) return ENUM_TIMEUNIT_hour;
-    if (unit == "day"        ) return ENUM_TIMEUNIT_day;
-    if (unit == "week"       ) return ENUM_TIMEUNIT_week;
-    if (unit == "month"      ) return ENUM_TIMEUNIT_month;
-    if (unit == "year"       ) return ENUM_TIMEUNIT_year;
-    return 0;
-}//returnTimeUnit
-
-inline bool verifyTimeUnit(std::string unit)
-{
-    return (returnTimeUnit(unit) > 0);
-}//verifyTimeUnit
-
-enum ENUM_TIMETYPE
-{
-    ENUM_TIMETYPE_cpuTime = 1,
-    ENUM_TIMETYPE_elapsedTime,
-    ENUM_TIMETYPE_other
-};
-
-inline int returnTimeType(std::string type)
-{
-    if (type == "cpuTime"    ) return ENUM_TIMETYPE_cpuTime;
-    if (type == "elapsedTime") return ENUM_TIMETYPE_elapsedTime;
-    if (type == "other"      ) return ENUM_TIMETYPE_other;
-    return 0;
-}//returnTimeType
-
-inline bool verifyTimeType(std::string type)
-{
-    return (returnTimeType(type) > 0);
-}//verifyTimeType
-
-enum ENUM_TIMECATEGORY
-{
-    ENUM_TIMECATEGORY_total = 1,
-    ENUM_TIMECATEGORY_input,
-    ENUM_TIMECATEGORY_preprocessing,
-    ENUM_TIMECATEGORY_optimization,
-    ENUM_TIMECATEGORY_postprocessing,
-    ENUM_TIMECATEGORY_output,
-    ENUM_TIMECATEGORY_other
-};
-
-inline int returnTimeCategory(std::string category)
-{
-    if (category == "total"         ) return ENUM_TIMECATEGORY_total;
-    if (category == "input"         ) return ENUM_TIMECATEGORY_input;
-    if (category == "preprocessing" ) return ENUM_TIMECATEGORY_preprocessing;
-    if (category == "optimization"  ) return ENUM_TIMECATEGORY_optimization;
-    if (category == "postprocessing") return ENUM_TIMECATEGORY_postprocessing;
-    if (category == "output"        ) return ENUM_TIMECATEGORY_output;
-    if (category == "other"         ) return ENUM_TIMECATEGORY_other;
-    return 0;
-}//returnTimeCategory
-
-inline bool verifyTimeCategory(std::string category)
-{
-    return (returnTimeCategory(category) > 0);
-}//verifyTimeCategory
-
-enum ENUM_LOCATIONTYPE
-{
-    ENUM_LOCATIONTYPE_local = 1,
-    ENUM_LOCATIONTYPE_http,
-    ENUM_LOCATIONTYPE_ftp
-};
-
-inline int returnLocationType(std::string type)
-{
-    if (type == "local") return ENUM_LOCATIONTYPE_local;
-    if (type == "http" ) return ENUM_LOCATIONTYPE_http;
-    if (type == "ftp"  ) return ENUM_LOCATIONTYPE_ftp;
-    return 0;
-}//returnLocationType
-
-inline bool verifyLocationType(std::string type)
-{
-    return (returnLocationType(type) > 0);
-}//verifyLocationType
-
-enum ENUM_TRANSPORT_TYPE
-{
-    ENUM_TRANSPORT_TYPE_osp = 1,
-    ENUM_TRANSPORT_TYPE_http,
-    ENUM_TRANSPORT_TYPE_smtp,
-    ENUM_TRANSPORT_TYPE_ftp,
-    ENUM_TRANSPORT_TYPE_other
-};
-
-inline int returnTransportType(std::string type)
-{
-    if (type == "osp"  ) return ENUM_TRANSPORT_TYPE_osp;
-    if (type == "http" ) return ENUM_TRANSPORT_TYPE_http;
-    if (type == "smtp" ) return ENUM_TRANSPORT_TYPE_smtp;
-    if (type == "ftp"  ) return ENUM_TRANSPORT_TYPE_ftp;
-    if (type == "other") return ENUM_TRANSPORT_TYPE_other;
-    return 0;
-}//returnTransportType
-
-inline bool verifyTransportType(std::string type)
-{
-    return (returnTransportType(type) > 0);
-}//verifyTransportType
-
-enum ENUM_SERVICE_TYPE
-{
-    ENUM_SERVICE_TYPE_analyzer = 1,
-    ENUM_SERVICE_TYPE_solver,
-    ENUM_SERVICE_TYPE_scheduler,
-    ENUM_SERVICE_TYPE_modeler,
-    ENUM_SERVICE_TYPE_registry,
-    ENUM_SERVICE_TYPE_agent,
-    ENUM_SERVICE_TYPE_simulations
-};
-
-inline int returnServiceType(std::string type)
-{
-    if (type == "analyzer"   ) return ENUM_SERVICE_TYPE_analyzer;
-    if (type == "solver"     ) return ENUM_SERVICE_TYPE_solver;
-    if (type == "scheduler"  ) return ENUM_SERVICE_TYPE_scheduler;
-    if (type == "modeler"    ) return ENUM_SERVICE_TYPE_modeler;
-    if (type == "registry"   ) return ENUM_SERVICE_TYPE_registry;
-    if (type == "agent"      ) return ENUM_SERVICE_TYPE_agent;
-    if (type == "simulations") return ENUM_SERVICE_TYPE_simulations;
-    return 0;
-}//returnServiceType
-
-inline bool verifyServiceType(std::string type)
-{
-    return (returnServiceType(type) > 0);
-}//verifyServiceType
-
-enum ENUM_GENERAL_RESULT_STATUS
-{
-    ENUM_GENERAL_RESULT_STATUS_error = 1,
-    ENUM_GENERAL_RESULT_STATUS_warning,
-    ENUM_GENERAL_RESULT_STATUS_normal
-};
-
-inline int returnGeneralResultStatus(std::string status)
-{
-    if (status == "error"  ) return ENUM_GENERAL_RESULT_STATUS_error;
-    if (status == "warning") return ENUM_GENERAL_RESULT_STATUS_warning;
-    if (status == "normal" ) return ENUM_GENERAL_RESULT_STATUS_normal;
-    return 0;
-}//returnGeneralResultStatus
-
-inline bool verifyGeneralResultStatus(std::string status)
-{
-    return (returnGeneralResultStatus(status) > 0);
-}//verifyGeneralResultStatus
-
-enum ENUM_SYSTEM_CURRENT_STATE
-{
-    ENUM_SYSTEM_CURRENT_STATE_busy = 1,
-    ENUM_SYSTEM_CURRENT_STATE_busyButAccepting,
-    ENUM_SYSTEM_CURRENT_STATE_idle,
-    ENUM_SYSTEM_CURRENT_STATE_idleButNotAccepting,
-    ENUM_SYSTEM_CURRENT_STATE_noResponse
-};
-
-inline int returnSystemCurrentState(std::string status)
-{
-    if (status == "busy"               ) return ENUM_SYSTEM_CURRENT_STATE_busy;
-    if (status == "busyButAccepting"   ) return ENUM_SYSTEM_CURRENT_STATE_busyButAccepting;
-    if (status == "idle"               ) return ENUM_SYSTEM_CURRENT_STATE_idle;
-    if (status == "idleButNotAccepting") return ENUM_SYSTEM_CURRENT_STATE_idleButNotAccepting;
-    if (status == "noResponse"         ) return ENUM_SYSTEM_CURRENT_STATE_noResponse;
-    return 0;
-}//returnSystemCurrentState
-
-inline bool verifySystemCurrentState(std::string status)
-{
-    return (returnSystemCurrentState(status) > 0);
-}//verifySystemCurrentState
-
-enum ENUM_JOB_STATUS
-{
-    ENUM_JOB_STATUS_waiting = 1,
-    ENUM_JOB_STATUS_running,
-    ENUM_JOB_STATUS_killed,
-    ENUM_JOB_STATUS_finished,
-    ENUM_JOB_STATUS_unknown
-};
-
-inline int returnJobStatus(std::string status)
-{
-    if (status == "waiting" ) return ENUM_JOB_STATUS_waiting;
-    if (status == "running" ) return ENUM_JOB_STATUS_running;
-    if (status == "killed"  ) return ENUM_JOB_STATUS_killed;
-    if (status == "finished") return ENUM_JOB_STATUS_finished;
-    if (status == "unknown" ) return ENUM_JOB_STATUS_unknown;
-    return 0;
-}//returnJobStatus
-
-inline bool verifyJobStatus(std::string status)
-{
-    return (returnJobStatus(status) > 0);
-}//verifyJobStatus
-
-/**
- *  Enumeration for the different states that can be used in representating a basis
- *  The last state, ENUM_BASIS_STATUS_NUMBER_OF_STATES, is used *only* to record the
- *  number of states, which makes it easier to convert between different representations.
- *  (For instance, AMPL uses a different order, so there may be a need to recode values.
- *   See OSosrl2ampl.cpp for an application.) 
- */
-enum ENUM_BASIS_STATUS
-{
-    ENUM_BASIS_STATUS_basic = 0,
-    ENUM_BASIS_STATUS_atLower,
-    ENUM_BASIS_STATUS_atUpper,
-    ENUM_BASIS_STATUS_atEquality,
-    ENUM_BASIS_STATUS_isFree,
-    ENUM_BASIS_STATUS_superbasic,
-    ENUM_BASIS_STATUS_unknown,
-    ENUM_BASIS_STATUS_NUMBER_OF_STATES
-};
-
-inline int returnBasisStatus(std::string status)
-{
-    if (status == "basic"     ) return ENUM_BASIS_STATUS_basic;
-    if (status == "atLower"   ) return ENUM_BASIS_STATUS_atLower;
-    if (status == "atUpper"   ) return ENUM_BASIS_STATUS_atUpper;
-    if (status == "atEquality") return ENUM_BASIS_STATUS_atEquality;
-    if (status == "isFree"    ) return ENUM_BASIS_STATUS_isFree;
-    if (status == "superBasic") return ENUM_BASIS_STATUS_superbasic;
-    if (status == "unknown"   ) return ENUM_BASIS_STATUS_unknown;
-    return 0;
-}//returnBasisStatus
-
-inline bool verifyBasisStatus(std::string status)
-{
-    return (returnBasisStatus(status) > 0);
-}//verifyBasisStatus
-
-enum ENUM_SOLUTION_STATUS
-{
-    ENUM_SOLUTION_STATUS_unbounded = 1,
-    ENUM_SOLUTION_STATUS_globallyOptimal,
-    ENUM_SOLUTION_STATUS_locallyOptimal,
-    ENUM_SOLUTION_STATUS_optimal,
-    ENUM_SOLUTION_STATUS_bestSoFar,
-    ENUM_SOLUTION_STATUS_feasible,
-    ENUM_SOLUTION_STATUS_infeasible,
-    ENUM_SOLUTION_STATUS_unsure,
-    ENUM_SOLUTION_STATUS_error,
-    ENUM_SOLUTION_STATUS_other
-};
-
-inline int returnSolutionStatus(std::string status)
-{
-    if (status == "unbounded"      ) return ENUM_SOLUTION_STATUS_unbounded;
-    if (status == "globallyOptimal") return ENUM_SOLUTION_STATUS_globallyOptimal;
-    if (status == "locallyOptimal" ) return ENUM_SOLUTION_STATUS_locallyOptimal;
-    if (status == "optimal"        ) return ENUM_SOLUTION_STATUS_optimal;
-    if (status == "bestSoFar"      ) return ENUM_SOLUTION_STATUS_bestSoFar;
-    if (status == "feasible"       ) return ENUM_SOLUTION_STATUS_feasible;
-    if (status == "infeasible"     ) return ENUM_SOLUTION_STATUS_infeasible;
-    if (status == "unsure"         ) return ENUM_SOLUTION_STATUS_unsure;
-    if (status == "error"          ) return ENUM_SOLUTION_STATUS_error;
-    if (status == "other"          ) return ENUM_SOLUTION_STATUS_other;
-    return 0;
-}//returnSolutionStatus
-
-inline bool verifySolutionStatus(std::string status)
-{
-    return (returnSolutionStatus(status) > 0);
-}//verifySolutionStatus
-
-enum ENUM_SOLUTION_SUBSTATUSTYPE
-{
-    ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByLimit = 1,
-    ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByBounds,
-    ENUM_SOLUTION_SUBSTATUSTYPE_other
-};
-
-inline int returnSolutionSubstatusType(std::string type)
-{
-    if (type == "stoppedByLimit" ) return ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByLimit;
-    if (type == "stoppedByBounds") return ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByBounds;
-    if (type == "other"          ) return ENUM_SOLUTION_SUBSTATUSTYPE_other;
-    return 0;
-}//returnSolutionSubstatusType
-
-inline bool verifySolutionSubstatusType(std::string type)
-{
-    return (returnSolutionSubstatusType(type) > 0);
-}//verifySolutionSubstatusType
-
-enum ENUM_PROBLEM_COMPONENT
-{
-    ENUM_PROBLEM_COMPONENT_variables = 1,
-    ENUM_PROBLEM_COMPONENT_objectives,
-    ENUM_PROBLEM_COMPONENT_constraints
-};
-
-enum ENUM_VARTYPE
-{
-    ENUM_VARTYPE_CONTINUOUS = 1,
-    ENUM_VARTYPE_INTEGER,
-    ENUM_VARTYPE_BINARY,
-    ENUM_VARTYPE_SEMICONTINUOUS,
-    ENUM_VARTYPE_SEMIINTEGER,
-    ENUM_VARTYPE_STRING
-};
-
-inline int returnVarType(char vt)
-{
-    if (vt == 'C') return ENUM_VARTYPE_CONTINUOUS;
-    if (vt == 'B') return ENUM_VARTYPE_BINARY;
-    if (vt == 'I') return ENUM_VARTYPE_INTEGER;
-    if (vt == 'S') return ENUM_VARTYPE_STRING;
-    if (vt == 'D') return ENUM_VARTYPE_SEMICONTINUOUS;
-    if (vt == 'J') return ENUM_VARTYPE_SEMIINTEGER;
-    return 0;
-}//returnVarType
-
-inline bool verifyVarType(char vt)
-{
-    return (returnVarType(vt) > 0);
-}//verifyVarType
-
-
-enum ENUM_PATHPAIR
-{
-
-    ENUM_PATHPAIR_input_dir = 1,
-    ENUM_PATHPAIR_input_file,
-    ENUM_PATHPAIR_output_file,
-    ENUM_PATHPAIR_output_dir
-};
-
-
-enum ENUM_MATRIX_TYPE
-{
-    ENUM_MATRIX_TYPE_zero = 1,
-    ENUM_MATRIX_TYPE_constant,
-    ENUM_MATRIX_TYPE_varref,
-    ENUM_MATRIX_TYPE_linear,
-    ENUM_MATRIX_TYPE_general,
-    ENUM_MATRIX_TYPE_unknown
-};
-
-inline int returnMatrixType(std::string type)
-{
-    if (type == "zero"    ) return ENUM_MATRIX_TYPE_zero;
-    if (type == "constant") return ENUM_MATRIX_TYPE_constant;
-    if (type == "varref"  ) return ENUM_MATRIX_TYPE_varref;
-    if (type == "linear"  ) return ENUM_MATRIX_TYPE_linear;
-    if (type == "general" ) return ENUM_MATRIX_TYPE_general;
-    if (type == "unknown" ) return ENUM_MATRIX_TYPE_unknown;
-    return 0;
-}//returnMatrixType
-
-inline bool verifyMatrixType(std::string type)
-{
-    return (returnMatrixType(type) > 0);
-}//verifyMatrixType
-
-
-enum ENUM_MATRIX_SHAPE
-{
-    ENUM_MATRIX_SHAPE_general = 1,
-    ENUM_MATRIX_SHAPE_symmetricUpper,
-    ENUM_MATRIX_SHAPE_symmetricLower,
-    ENUM_MATRIX_SHAPE_skewSymmetricUpper,
-    ENUM_MATRIX_SHAPE_skewSymmetricLower,
-    ENUM_MATRIX_SHAPE_hermitianLower,
-    ENUM_MATRIX_SHAPE_hermitianUpper
-};
-
-inline int returnMatrixShape(std::string shape)
-{
-    if (shape == "general"           ) return ENUM_MATRIX_SHAPE_general;
-    if (shape == "symmetricUpper"    ) return ENUM_MATRIX_SHAPE_symmetricUpper;
-    if (shape == "symmetricLower"    ) return ENUM_MATRIX_SHAPE_symmetricLower;
-    if (shape == "skewSymmetricUpper") return ENUM_MATRIX_SHAPE_skewSymmetricUpper;
-    if (shape == "skewSymmetricLower") return ENUM_MATRIX_SHAPE_skewSymmetricLower;
-    if (shape == "hermitianLower"    ) return ENUM_MATRIX_SHAPE_hermitianLower;
-    if (shape == "hermitianLower"    ) return ENUM_MATRIX_SHAPE_hermitianLower;
-    return 0;
-}//returnMatrixShape
-
-inline bool verifyMatrixShape(std::string shape)
-{
-    return (returnMatrixShape(shape) > 0);
-}//verifyMatrixShape
-
-
 
 /*************************************************
  *
@@ -1421,23 +1991,12 @@ inline bool verifyMatrixShape(std::string shape)
  * This is needed to check equality of objects
  * when members can have NaN as a possible value
  *
-*************************************************/
+ *************************************************/
 inline bool isEqual(double x, double y)
 {
     if (OSIsnan(x) && OSIsnan(y)) return true;
     if (x == y) return true;
     return false;
 }
-
-/**
- * An enum to streamline set() methods of vectors
- */
-enum ENUM_COMBINE_ARRAYS
-{
-    ENUM_COMBINE_ARRAYS_replace, //silently replace previous data (if any)
-    ENUM_COMBINE_ARRAYS_merge,   //merge two vectors into one
-    ENUM_COMBINE_ARRAYS_ignore,  //silently ignore current vector if previous data exist
-    ENUM_COMBINE_ARRAYS_throw    //throw an error if previous data detected
-};
 
 #endif
