@@ -676,7 +676,7 @@
 		<xs:sequence>
 			<xs:element name="baseMatrix" type="BaseMatrix" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>The cropped (and maybe transposed and scaled) matrix is placed in the target starting at the upper left corner</xs:documentation>
+					<xs:documentation>The cropped (and maybe transposed and scaled) matrix is placed in the target such that its upper left corner is in position targetMatrixFirstRow / targetMatrixFirstColumn</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -751,6 +751,8 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="baseMatrixIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="targetMatrixFirstRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="targetMatrixFirstCol" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional">
