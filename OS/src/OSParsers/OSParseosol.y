@@ -113,7 +113,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token EMPTYLBVALUEATT EMPTYUBVALUEATT LBVALUEATT UBVALUEATT
 %token EMPTYLBDUALVALUEATT EMPTYUBDUALVALUEATT LBDUALVALUEATT UBDUALVALUEATT
 %token SOLVERATT EMPTYSOLVERATT WEIGHTATT EMPTYWEIGHTATT;
-%token TRANSPORTTYPEATT LOCATIONTYPEATT;
+%token TRANSPORTTYPEATT LOCATIONTYPEATT SYMMETRYATT;
 
 %token HEADERSTART HEADEREND GENERALSTART GENERALEND SYSTEMSTART SYSTEMEND SERVICESTART SERVICEEND;
 %token JOBSTART JOBEND OPTIMIZATIONSTART OPTIMIZATIONEND;
@@ -163,6 +163,13 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token BASE64START BASE64END;
 %token INCRATT MULTATT SIZEOFATT;
 %token ELSTART ELEND;
+
+%token MATRIXSTART MATRIXEND BASEMATRIXEND BASEMATRIXSTART;
+%token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND;
+
+%token EMPTYSYMMETRYATT SYMMETRYATT;
+
+%token NUMBEROFBLOCKSATT;
 
 %token DUMMY
 
@@ -5117,7 +5124,7 @@ fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
 };
 
 /** ==========================================================================
- *                This portion parses an IntVector object
+ *              This portion parses the content of an IntVector object
  *  ==========================================================================
  */
 
@@ -5221,6 +5228,167 @@ osglMultAttribute: MULTATT quote INTEGER quote
     osglData->osglMultPresent = true;
     osglData->osglMult = $3;
 };
+
+
+/** ===================================================================================
+ *    This portion parses an OSMatrix object used in OSiL, OSoL and OSrL schema files
+ *  ===================================================================================
+ */
+osglMatrix: matrixStart matrixAttributes matrixContent;
+ 
+matrixStart: MATRIXSTART
+{
+    //osglData->...;
+};
+
+matrixAttributes: 
+    | symmetryAttribute
+    {
+        if (verifySymmetry(parserData->symmetryAttribute) == false)
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "symmetry type not recognized");
+        parserData->errorText = NULL;
+    };
+
+symmetryAttribute: SYMMETRYATT ATTRIBUTETEXT QUOTE 
+{ 
+    parserData->symmetryAttribute = $2; 
+    free($2);
+};
+
+
+matrixContent: matrixEmpty | matrixLaden;
+
+matrixEmpty: GREATERTHAN MATRIXEND | ENDOFELEMENT;
+
+matrixLaden: GREATERTHAN matrixBody MATRIXEND; 
+
+matrixBody: baseMatrix matrixConstructorList;
+
+baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd;
+
+baseMatrixStart: BASEMATRIXSTART;
+
+baseMatrixAttributes: baseMatrixAttList;
+
+baseMatrixAttList: | baseMatrixAttList baseMatrixAtt;
+
+baseMatrixAtt:
+      baseMatrixIdxAtt    
+    | targetMatrixFirstRowAtt
+    | targetMatrixFirstColAtt
+    | baseMatrixStartRowAtt
+    | baseMatrixStartColAtt
+    | baseMatrixEndRowAtt
+    | baseMatrixEndColAtt
+    | baseTransposeAtt
+    | scalarMultiplierAtt;
+
+baseMatrixIdxAtt: ;
+targetMatrixFirstRowAtt: ;
+targetMatrixFirstColAtt: ;
+baseMatrixStartRowAtt: ;
+baseMatrixStartColAtt: ;
+baseMatrixEndRowAtt: ;
+baseMatrixEndColAtt: ;
+baseTransposeAtt: ;
+scalarMultiplierAtt: ;
+
+baseMatrixEnd: GREATERTHAN BASEMATRIXEND | ENDOFELEMENT;
+
+matrixConstructorList: | matrixConstructorList matrixConstructor;
+
+matrixConstructor: matrixElements | matrixTransformation | matrixBlocks;
+
+matrixElements: matrixElementsStart MatrixElementsAttributes MatrixElementsContent;
+
+matrixElementsStart: ;
+
+MatrixElementsAttributes: ; 
+
+MatrixElementsContent: ;
+
+matrixTransformation: OSnLMNode;
+
+matrixBlocks: matrixBlocksStart matrixBlocksAttributes matrixBlocksContent;
+
+matrixBlocksStart: BLOCKSSTART; 
+
+matrixBlocksAttributes: numberOfBlocksAttribute;
+
+matrixBlocksContent: colOffsets rowOffsets blockList;
+
+colOffsets: 
+
+rowOffsets:
+
+blockList: | blockList matrixBlock;
+
+matrixBlock: matrixBlockStart matrixBlockAttributes matrixBlockContent;
+
+matrixBlockStart: BLOCKSTART; 
+
+matrixBlockAttributes: matrixBlockAttList;
+
+matrixBlockAttList: matrixBlockAtt | matrixBlockAttList matrixBlockAtt;
+
+matrixBlockAtt:
+      blockRowIdxAtt 
+    | blockColIdxAtt 
+    | symmetryAttribute
+    {
+        if (verifySymmetry(parserData->symmetryAttribute) == false)
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "symmetry type not recognized");
+        parserData->errorText = NULL;
+    };
+
+blockRowIdxAtt: ;
+
+blockColIdxAtt: ;
+
+matrixBlockContent: blockEmpty | blockLaden;
+
+blockEmpty: GREATERTHAN BLOCKEND | ENDOFELEMENT;
+
+blockLaden: GREATERTHAN blockBody BLOCKEND; 
+
+blockBody: baseMatrix matrixConstructorList;
+
+
+OSnLMNode: matrixReference
+         | matrixDiagonal
+         | matrixDotTimes
+         | matrixIdentity
+         | matrixInverse
+         | matrixMerge
+         | matrixMinus
+         | matrixPlus
+         | matrixTimes
+         | matrixScalarTimes
+         | matrixSubMatrixAt
+         | matrixTranspose;
+
+matrixReference: ;
+matrixDiagonal: ;
+matrixDotTimes: ;
+matrixIdentity: ;
+matrixInverse: ;
+matrixMerge: ;
+matrixMinus: ;
+matrixPlus: ;
+matrixTimes: ;
+matrixScalarTimes: ;
+matrixSubMatrixAt: ;
+matrixTranspose: ;
+
+numberOfBlocksAttribute: NUMBEROFBLOCKSATT quote INTEGER quote
+{
+    if (osglData->numberOfBlocksAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfBlocks attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <blocks> cannot be negative");
+    osglData->numberOfBlocksAttributePresent = true;        
+    osglData->numberOfBlocks = $3;
+};
+
 
 
 /* $Id$ */

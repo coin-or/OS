@@ -355,32 +355,32 @@ parserData->maxVec.clear();
 parserData->minVec.clear();
 parserData->productVec.clear();
 };
-		
-		
+
+
 nlnode: number
-		| variable 
-		| times 
-		| plus 
-		| sum 
-		| minus 
-		| negate
-		| divide 
-		| power 
-		| product
-		| ln 
-		| sqrt 
-		| square
-		| sin
-		| cos
-		| exp
-		| if
-		| abs
-		| erf
-		| max
-		| min
-		| E
-		| PI
-		| allDiff ;
+      | variable 
+      | times 
+      | plus 
+      | sum 
+      | minus 
+      | negate
+      | divide 
+      | power 
+      | product
+      | ln 
+      | sqrt 
+      | square
+      | sin
+      | cos
+      | exp
+      | if
+      | abs
+      | erf
+      | max
+      | min
+      | E
+      | PI
+      | allDiff ;
 
 
 times: TIMESSTART {

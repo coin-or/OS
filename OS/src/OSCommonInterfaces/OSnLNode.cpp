@@ -1586,13 +1586,9 @@ OSnLNode* OSnLNodeAbs::cloneOSnLNode()
     nlNodePoint = new OSnLNodeAbs();
     return  nlNodePoint;
 }//end OSnLNodeAbs::cloneOSnLNode
-//
-//
+// end OSnLNodeAbs methods
 
 
-
-
-//
 // OSnLNodeErf Methods
 OSnLNodeErf::OSnLNodeErf()
 {
@@ -1662,12 +1658,9 @@ OSnLNode* OSnLNodeErf::cloneOSnLNode()
     nlNodePoint = new OSnLNodeErf();
     return  nlNodePoint;
 }//end OSnLNodeErf::cloneOSnLNode
-//
-//
+// end OSnLNodeErf methods
 
 
-
-//
 // OSnLNodeIf Methods
 OSnLNodeIf::OSnLNodeIf()
 {
@@ -1728,8 +1721,8 @@ OSnLNode* OSnLNodeIf::cloneOSnLNode()
     nlNodePoint = new OSnLNodeIf();
     return  nlNodePoint;
 }//end OSnLNodeIf::cloneOSnLNode
-//
-//
+// end OSnLNodeIf methods
+
 
 
 // OSnLNodeNumber Methods
@@ -1819,7 +1812,7 @@ OSnLNode* OSnLNodeNumber::cloneOSnLNode()
     nlNodePoint = new OSnLNodeNumber();
     return  nlNodePoint;
 }//end OSnLNodeNumber::cloneOSnLNode
-// edn OSnLNodeNumber methods
+// end OSnLNodeNumber methods
 
 
 // OSnLNodeE Methods
@@ -1890,7 +1883,6 @@ OSnLNode* OSnLNodeE::cloneOSnLNode()
     nlNodePoint = new OSnLNodeE();
     return  nlNodePoint;
 }//end OSnLNodeE::cloneOSnLNode
-
 //end OSnLNodeE
 
 

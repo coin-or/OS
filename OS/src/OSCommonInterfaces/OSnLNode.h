@@ -12,7 +12,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  *
- * in this file we define classes for a subset of the nodes defined in the OSnL schema
+ * In this file we define classes for a subset of the nodes defined in the OSnL schema
  * These nodes fall into two broad classes: 
  * Those that evaluate to scalar values (which inherit from OSnLNode), and
  * those that evaluate to matrices (and inherit from OSnLMNode).

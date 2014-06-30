@@ -816,6 +816,7 @@ public:
 
     /**
      * starts holds an integer array of start elements, each start element
+
      * pints to the start of partials for that row
      */
     int* starts;
@@ -1602,7 +1603,7 @@ class MatrixElements
 };//class MatrixElements
 
 
-
+#if 0
 /*! \class MatrixTransformation
  * \brief a data structure to represent the nonzeroes of a matrix 
  *  by transformation from other (previously defined) matrices 
@@ -1610,6 +1611,9 @@ class MatrixElements
 class MatrixTransformation
 {
 };//class MatrixTransformation
+#endif
+
+class MatrixBlock; //forward desclaration
 
 /*! \class MatrixBlocks
  * \brief a data structure to represent the nonzeroes of a matrix 
@@ -1618,6 +1622,11 @@ class MatrixTransformation
  */
 class MatrixBlocks
 {
+public:
+    int numberOfBlocks;
+    IntVector *colOffsets;
+    IntVector *rowOffsets;
+    MatrixBlock **block;
 };//class MatrixBlocks
 
 
@@ -1627,7 +1636,7 @@ class MatrixBlocks
 class MatrixConstructor
 {
     MatrixElements *elements;
-    MatrixTransformation *transformation;
+    OSnLMNode *transformation;
     MatrixBlocks *blocks;
 
     MatrixConstructor();
@@ -1664,6 +1673,70 @@ class MatrixConstructor
  */
 class BaseMatrix
 {
+public:
+    /**
+     * the index of the base matrix
+     */
+    int baseMatrixIdx;
+
+    /**
+     * to pinpoint the position of the upper left corner of the base matrix within the target matrix
+     */
+    int targetMatrixFirstRow;
+    int targetMatrixFirstCol;
+
+    /**
+     * to select the position of the upper left corner 
+     * of the portion of the base matrix that is to be selected 
+     */
+    int baseMatrixStartRow;
+    int baseMatrixStartCol;
+
+    /**
+     * to select the position of the lower right corner 
+     * of the portion of the base matrix that is to be selected 
+     */
+    int baseMatrixEndRow;
+    int baseMatrixEndCol;
+
+    /**
+     * to allow the base matrix to be transposed before it is attached to the target matrix
+     */
+    bool baseTranspose;
+
+    /**
+     * to allow the base matrix to be scaled before it is attached to the target matrix
+     */
+    double scalarMultiplier;
+
+
+    BaseMatrix();
+    ~BaseMatrix();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(BaseMatrix *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(BaseMatrix *that);
 };//class BaseMatrix
 
 
@@ -1752,6 +1825,44 @@ public:
 
 };// class OSMatrix
 
+
+/*! \class MatrixBlock
+ * \brief a data structure to represent a MatrixBlock object (derived from MatrixType)
+ *
+ */
+class MatrixBlock : public MatrixType
+{
+public:
+    int blockRowIdx;
+    int blockColIdx;
+
+    MatrixBlock();
+    ~MatrixBlock();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixBlock *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixBlock *that);
+};// class MatrixBlock
 
 
 
