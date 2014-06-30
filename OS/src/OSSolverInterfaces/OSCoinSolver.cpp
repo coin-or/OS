@@ -456,7 +456,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "build solver options\n");
 #endif
     this->bSetSolverOptions = true;
-    // the osi maps
+    // the osi maps (NOTE: These are the only options supported by generic OsiSolverInterface)
     // the OsiHintParameter Map
     std::map<std::string, OsiHintParam> hintParamMap;
     hintParamMap["OsiDoPresolveInInitial"] = OsiDoPresolveInInitial;
@@ -491,17 +491,12 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
     dblParamMap["OsiObjOffset"] = OsiObjOffset;
     dblParamMap["OsiLastDblParam"] = OsiLastDblParam;
     //
-    //
     // the OsiIntParam Map
     std::map<std::string, OsiIntParam>  intParamMap;
     intParamMap["OsiMaxNumIteration"] = OsiMaxNumIteration;
     intParamMap["OsiMaxNumIterationHotStart"] = OsiMaxNumIterationHotStart;
     intParamMap["OsiNameDiscipline"] = OsiNameDiscipline;
     intParamMap["OsiLastIntParam"] = OsiLastIntParam;
-    //
-    //
-    // initialize low level of printing
-
 
     /*
      * start default settings -- these get set
@@ -514,16 +509,13 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
     // this seems true regardless of max or min
     osiSolver->setDblParam(OsiObjOffset, -osinstance->getObjectiveConstants()[0]);
 
-
-
-    // treat symphony differently
+    // Set SYMPHONY default print level
 #ifdef COIN_HAS_SYMPHONY
     if( sSolverName.find( "symphony") != std::string::npos)
     {
         OsiSymSolverInterface * si =
             dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
-        //set default verbosity to -2
-        si->setSymParam("verbosity",   -2);
+        si->setSymParam("verbosity", -2);
     }
 #endif       //symphony end    
     /*
@@ -531,7 +523,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
      *
      */
 
-    //
+    // read option string if necessary
     try
     {
         if(osoption == NULL && osol.length() > 0)
@@ -540,6 +532,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
             osoption = m_osolreader->readOSoL( osol);
         }
 
+// Process any options found
         if(osoption != NULL)
         {
             int i;
@@ -642,11 +635,11 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     }
                 }
 
-                // treat Cbc separately to take advantage of CbcMain1()
+                // Next get all options that are specific to one solver
 
                 if( sSolverName.find( "cbc") != std::string::npos)
                 {
-                    // get Cbc options
+                    // get Cbc options and create a command line for CbcMain1()
                     if(optionsVector.size() > 0) optionsVector.clear();
                     optionsVector = osoption->getSolverOptions( "cbc",true);
 
@@ -699,17 +692,75 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
 
                 }//end of cbc if
 
+                // Here we look for options specific to Clp. Use the Cbc interface if there are any
 
-                // also need to treat SYMPHONY differently
-
-#ifdef COIN_HAS_SYMPHONY
-                if(optionsVector.size() > 0) optionsVector.clear();
-                //if( !optionsVector.empty() ) optionsVector.clear();
-                //first the number of processors -- applies only to SYMPHONY
-                if( sSolverName.find( "symphony") != std::string::npos)
+                else if( sSolverName.find( "clp") != std::string::npos)
                 {
+                    // get Clp options and create a command line for CbcMain1()
+                    if(optionsVector.size() > 0) optionsVector.clear();
+                    optionsVector = osoption->getSolverOptions( "clp",true);
+
+                    int num_cbc_options = optionsVector.size();
+                    if (num_cbc_options > 0)
+                    {
+                        char *cstr;
+                        std::string cbc_option;
+                        num_cbc_argv = optionsVector.size() + 3;
+                        cbc_argv = new const char*[ num_cbc_argv];
+
+                        // the first option
+                        cbc_option = "OS";
+                        cstr = new char [cbc_option.size() + 1];
+                        strcpy (cstr, cbc_option.c_str());
+                        cbc_argv[ 0] = cstr;
+    
+                        for(i = 0; i < num_cbc_options; i++)
+                        {
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "clp solver option  "  << optionsVector[ i]->name << std::endl;
+                            outStr << "clp solver value   "  << optionsVector[ i]->name << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+
+                            if(optionsVector[ i]->value.length() > 0 )
+                            {
+                                cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+                            }
+                            else
+                            {
+                                cbc_option = "-" + optionsVector[ i]->name ;
+                            }
+                            cstr = new char [cbc_option.size() + 1];
+                            strcpy (cstr, cbc_option.c_str());
+                            cbc_argv[i +  1] = cstr;
+                        }
+
+                        // the solve option
+                        cbc_option = "-solve";
+                        cstr = new char [cbc_option.size() + 1];
+                        strcpy (cstr, cbc_option.c_str());
+                        cbc_argv[ num_cbc_argv - 2] = cstr;
+    
+                        // the quit option
+                        cbc_option = "-quit";
+                        cstr = new char [cbc_option.size() + 1];
+                        strcpy (cstr, cbc_option.c_str());
+                        cbc_argv[ num_cbc_argv - 1] = cstr;
+                    }
+                }
+
+                // Options for SYMPHONY
+
+                else if( sSolverName.find( "symphony") != std::string::npos)
+                {
+#ifdef COIN_HAS_SYMPHONY
+                    if(optionsVector.size() > 0) optionsVector.clear();
+                    //first the number of processors -- applies only to SYMPHONY
                     OsiSymSolverInterface * si =
                         dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
+
                     optionsVector = osoption->getSolverOptions( "symphony",true);
                     int num_sym_options = optionsVector.size();
                     for(i = 0; i < num_sym_options; i++)
@@ -721,12 +772,26 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                         outStr << "symphony solver value   "  << optionsVector[ i]->name << std::endl;
                         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-                        si->setSymParam(optionsVector[ i]->name,   optionsVector[ i]->value);
+                        if (optionsVector[ i]->type == "OsiStrParam" || optionsVector[ i]->type == "string")
+                        {
+                            if (!si->setSymParam(optionsVector[ i]->name, optionsVector[ i]->value))
+                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ i]->name);
+                        }
+                        else if (optionsVector[ i]->type == "OsiDblParam" || optionsVector[ i]->type == "double")
+                        {
+                            if (!si->setSymParam(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd )))
+                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ i]->name);
+                        }
+                        else if (optionsVector[ i]->type == "OsiIntParam" || optionsVector[ i]->type == "integer")
+                        {
+                            if (!si->setSymParam(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) ))
+                                throw ErrorClass ("Failed to set Symphony solver option "+optionsVector[ i]->name);
+                        }
                     }
-                }
 #endif      //symphony end            
-
+                }
             }
+
             //now set initial values
             int n,m,k;
             if (osoption != NULL)
@@ -848,7 +913,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                 /* Only the following statuses are recognized:
                  *
                  *   enum Status {
-                 *       isFree = 0x00,                ///< Nonbasic free variable
+                 *       isFree = 0x00,             ///< Nonbasic free variable
                  *       basic = 0x01,              ///< Basic variable
                  *       atUpperBound = 0x02,       ///< Nonbasic at upper bound
                  *       atLowerBound = 0x03        ///< Nonbasic at lower bound
@@ -1058,36 +1123,14 @@ void CoinSolver::solve() throw (ErrorClass)
         double start = CoinCpuTime();
         try
         {
-            if( sSolverName.find( "cbc") != std::string::npos)
+            if( (sSolverName.find( "cbc") != std::string::npos) ||
+               ((sSolverName.find( "clp") != std::string::npos) && num_cbc_argv > 0) )
             {
-                //if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
                 // just use simple branch and bound for anything but cbc
                 CbcModel model(  *osiSolver);
-                //CoinMessages coinMessages;
-                //int numberOfMessages;
-                //CoinOneMessage currentMessage;
-                //CoinMessageHandler * generalMessageHandler;
-                //CoinOneMessage **coinOneMessage;
-                //CoinOneMessage *oneMessage;
 
                 CbcMain0(  model);
 
-                /*
-                coinMessages = model.messages();
-                numberOfMessages = coinMessages.numberMessages_;
-                for(int i = 0; i < numberOfMessages - 1; i++){
-                    oneMessage = coinMessages.message_[ i] ;
-                //    std::cout << "ONE MESSAGE = " << oneMessage->message() << std::endl;
-                }
-
-                generalMessageHandler = model.messageHandler();
-                currentMessage = generalMessageHandler->currentMessage();
-                std::cout << "HIGHEST NUMBER =  "  << generalMessageHandler->highestNumber() << std::endl;
-                std::cout << "CURRENT SOURCE =  "  << generalMessageHandler->currentSource() << std::endl;
-                std::cout << "MESSAGE BUFFER =  "  << generalMessageHandler->messageBuffer() << std::endl;
-                */
-
-                //CoinMessages generalMessages = model.getModelPtr()->messages();
                 // make sure we define cbc_argv if not done already when reading options
                 if(num_cbc_argv <= 0)
                 {
@@ -1102,13 +1145,11 @@ void CoinSolver::solve() throw (ErrorClass)
                     strcpy (cstr, cbc_option.c_str());
                     cbc_argv[ 0] = cstr;
 
-
                     // the log option -- by default minimal printing
                     cbc_option = "-log=0";
                     cstr = new char [cbc_option.size() + 1];
                     strcpy (cstr, cbc_option.c_str());
                     cbc_argv[ 1] = cstr;
-
 
                     // the solve option
                     cbc_option = "-solve";
@@ -1121,7 +1162,6 @@ void CoinSolver::solve() throw (ErrorClass)
                     cstr = new char [cbc_option.size() + 1];
                     strcpy (cstr, cbc_option.c_str());
                     cbc_argv[ 3] = cstr;
-
                 }
                 int i;
 
@@ -1131,28 +1171,12 @@ void CoinSolver::solve() throw (ErrorClass)
                 outStr.clear();
                 for(i = 0; i < num_cbc_argv; i++)
                 {
-                    outStr << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
+                    outStr << sSolverName << " option: "  << cbc_argv[ i]   <<  std::endl;
                 }
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 CbcMain1( num_cbc_argv, cbc_argv, model);
-                /*
-                coinMessages = model.messages();
-                numberOfMessages = coinMessages.numberMessages_;
-                for(int i = 0; i < 5; i++){
-                    oneMessage = coinMessages.message_[ i] ;
-                    std::cout << "ONE MESSAGE = " << oneMessage->message() << std::endl;
-                }
-                numberOfMessages = coinMessages.numberMessages_;
-                generalMessageHandler = model.messageHandler();
-                currentMessage = generalMessageHandler->currentMessage();
 
-                std::cout << "HIGHEST NUMBER =  "  << generalMessageHandler->highestNumber() << std::endl;
-                std::cout << "CURRENT SOURCE =  "  << generalMessageHandler->currentSource() << std::endl;
-                std::cout << "MESSAGE BUFFER =  "  << generalMessageHandler->messageBuffer() << std::endl;
-                std::cout << "NUMBER OF STRING FIELDS  =  "  << generalMessageHandler->numberStringFields() << std::endl;
-
-                */
                 //do the garbage collection on cbc_argv
                 for(i = 0; i < num_cbc_argv; i++)
                 {
