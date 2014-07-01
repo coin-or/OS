@@ -204,6 +204,10 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token BASEMATRIXSTARTROWATT BASEMATRIXSTARTCOLATT BASEMATRIXENDROWATT BASEMATRIXENDCOLATT;
 %token SCALARMULTIPLIERATT EMPTYBASETRANSPOSEATT BASETRANSPOSEATT;
 
+%token ELEMENTSSTART ELEMENTSEND;
+
+%token EMPTYROWMAJORATT ROWMAJORATT;
+
 %token DUMMY
 
 %%
@@ -4442,13 +4446,15 @@ baseTransposeAtt: baseTransposeAttEmpty | baseTransposeAttContent;
 
 baseTransposeAttEmpty: EMPTYBASETRANSPOSEATT
 {
-    osglData->baseTransposeAttribute = false;
+    osglData->baseTransposeAttribute = true;
 };
 
 baseTransposeAttContent: BASETRANSPOSEATT ATTRIBUTETEXT quote 
 { 
-    if ($2 == "true") osglData->baseTransposeAttribute = true;
-        else          osglData->baseTransposeAttribute = false;
+    if      ($2 == "false") osglData->baseTransposeAttribute = false;
+    else if ($2 == "true")  osglData->baseTransposeAttribute = true;
+    else if ($2 == "")      osglData->baseTransposeAttribute = true;
+    else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
     free($2);
 };
 
@@ -4468,9 +4474,25 @@ matrixConstructor: matrixElements | matrixTransformation | matrixBlocks;
 
 matrixElements: matrixElementsStart MatrixElementsAttributes MatrixElementsContent;
 
-matrixElementsStart: ;
+matrixElementsStart: ELEMENTSSTART;
 
-MatrixElementsAttributes: ; 
+MatrixElementsAttributes: | rowMajorAtt; 
+
+rowMajorAtt: rowMajorAttEmpty | rowMajorAttContent;
+
+rowMajorAttEmpty: EMPTYROWMAJORATT
+{
+    osglData->rowMajorAttribute = true;
+};
+
+rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT quote 
+{ 
+    if      ($2 == "false") osglData->rowMajorAttribute = false;
+    else if ($2 == "true")  osglData->rowMajorAttribute = true;
+    else if ($2 == "")      osglData->rowMajorAttribute = true;
+    else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "rowMajor attribute in <baseMatrix> element must be \"true\" or \"false\"");
+    free($2);
+};
 
 MatrixElementsContent: ;
 

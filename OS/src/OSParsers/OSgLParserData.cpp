@@ -72,8 +72,8 @@ OSgLParserData::OSgLParserData() :
     baseMatrixEndRowAttributePresent(false),
     baseMatrixEndColAttributePresent(false),
     baseTransposeAttributePresent(false),
-    scalarMultiplierAttributePresent(false)
-
+    scalarMultiplierAttributePresent(false),
+    rowMajorAttribute(false)
 {
 
 }//OSgLParserData

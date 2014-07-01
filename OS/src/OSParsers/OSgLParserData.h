@@ -110,6 +110,7 @@ public:
     bool baseMatrixEndColAttributePresent;
     bool baseTransposeAttributePresent;
     bool scalarMultiplierAttributePresent;
+    bool rowMajorAttribute;
 
 };//OSgLParserData
 

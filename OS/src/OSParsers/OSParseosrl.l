@@ -179,6 +179,10 @@ return(DOUBLE);}
 
  /* attributes returning strings (that are potentially empty)*/
 
+({xmlwhitespace}+rowMajor{equality}\"\") {YY_PRINT; return(EMPTYROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\'\') {YY_PRINT; return(EMPTYROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(ROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(ROWMAJORATT);}
 ({xmlwhitespace}+baseTranspose{equality}\"\") {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
 ({xmlwhitespace}+baseTranspose{equality}\'\') {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
 ({xmlwhitespace}+baseTranspose{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(BASETRANSPOSEATT);}
@@ -382,6 +386,18 @@ return(DOUBLE);}
 {xmlwhitespace}*\<varIdx {YY_PRINT; return(VARIDXSTART);}
 {xmlwhitespace}*\<\/varIdx{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIDXEND);}
 
+
+ /* These elements are part of the OSgL schema and are used in both OSoL and OSrL parsers */
+{xmlwhitespace}*\<matrix {YY_PRINT;  return(MATRIXSTART);}
+{xmlwhitespace}*\<\/matrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXEND);}
+{xmlwhitespace}*\<baseMatrix {YY_PRINT;  return(BASEMATRIXSTART);}
+{xmlwhitespace}*\<\/baseMatrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(BASEMATRIXEND);}
+{xmlwhitespace}*\<blocks {YY_PRINT;  return(BLOCKSSTART);}
+{xmlwhitespace}*\<\/blocks{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(BLOCKSEND);}
+{xmlwhitespace}*\<block {YY_PRINT;  return(BLOCKSTART);}
+{xmlwhitespace}*\<\/block{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(BLOCKEND);}
+{xmlwhitespace}*\<elements {YY_PRINT;  return(ELEMENTSSTART);}
+{xmlwhitespace}*\<\/elements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ELEMENTSEND);}
 
  /* The <item> element and the children of the option header are treated specially because they may legitimately contain special characters */
 
