@@ -43,7 +43,36 @@ OSgLParserData::OSgLParserData() :
     sourcePresent(false),
     descriptionPresent(false),
     fileCreatorPresent(false),
-    licencePresent(false)
+    licencePresent(false),
+
+    symmetryAttribute(""),
+    symmetryAttributePresent(false),
+    matrixNameAttribute(""),
+    matrixNameAttributePresent(false),
+    numberOfBlocks(-1),
+    numberOfBlocksPresent(false),
+    numberOfColumns(-1),
+    numberOfColumnsPresent(false),
+    numberOfRows(-1),
+    numberOfRowsPresent(false),
+    baseMatrixIdxAttribute(-1),
+    targetMatrixFirstRowAttribute(0),
+    targetMatrixFirstColAttribute(0),
+    baseMatrixStartRowAttribute(0),
+    baseMatrixStartColAttribute(0),
+    baseMatrixEndRowAttribute(-1),
+    baseMatrixEndColAttribute(-1),
+    baseTransposeAttribute(false),
+    scalarMultiplierAttribute(0.0),
+    baseMatrixIdxAttributePresent(false),
+    targetMatrixFirstRowAttributePresent(false),
+    targetMatrixFirstColAttributePresent(false),
+    baseMatrixStartRowAttributePresent(false),
+    baseMatrixStartColAttributePresent(false),
+    baseMatrixEndRowAttributePresent(false),
+    baseMatrixEndColAttributePresent(false),
+    baseTransposeAttributePresent(false),
+    scalarMultiplierAttributePresent(false)
 
 {
 

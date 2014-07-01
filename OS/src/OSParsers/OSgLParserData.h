@@ -79,7 +79,38 @@ public:
 
     /** two booleans to govern the behavior after an error has been encountered */
     bool ignoreDataAfterErrors;
-    bool suppressFurtherErrorMessages; 
+    bool suppressFurtherErrorMessages;
+
+    /** data structures to temporarily hold a matrix and its subordinate elements */
+    std::string  symmetryAttribute;
+    bool symmetryAttributePresent;
+    std::string  matrixNameAttribute;
+    bool matrixNameAttributePresent;
+    int  numberOfBlocks;
+    bool numberOfBlocksPresent;
+    int  numberOfColumns;
+    bool numberOfColumnsPresent;
+    int  numberOfRows;
+    bool numberOfRowsPresent;
+    int  baseMatrixIdxAttribute;
+    int  targetMatrixFirstRowAttribute;
+    int  targetMatrixFirstColAttribute;
+    int  baseMatrixStartRowAttribute;
+    int  baseMatrixStartColAttribute;
+    int  baseMatrixEndRowAttribute;
+    int  baseMatrixEndColAttribute;
+    bool baseTransposeAttribute;
+    double scalarMultiplierAttribute;
+    bool baseMatrixIdxAttributePresent;
+    bool targetMatrixFirstRowAttributePresent;
+    bool targetMatrixFirstColAttributePresent;
+    bool baseMatrixStartRowAttributePresent;
+    bool baseMatrixStartColAttributePresent;
+    bool baseMatrixEndRowAttributePresent;
+    bool baseMatrixEndColAttributePresent;
+    bool baseTransposeAttributePresent;
+    bool scalarMultiplierAttributePresent;
+
 };//OSgLParserData
 
 inline void osgl_empty_vectors( OSgLParserData* osglData)

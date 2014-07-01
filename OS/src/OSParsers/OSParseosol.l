@@ -160,14 +160,32 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfOtherConstraintOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTOPTIONSATT);}
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
 ({xmlwhitespace}+numberOfSolverOptions{equality}) {YY_PRINT; return(NUMBEROFSOLVEROPTIONSATT);}
+
+({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFROWSATT);}
+({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCOLUMNSATT);}
+
 ({xmlwhitespace}+idx{equality}) {YY_PRINT; return(IDXATT);}
 ({xmlwhitespace}+sosIdx{equality}) {YY_PRINT; return(SOSIDXATT);}
 ({xmlwhitespace}+groupWeight{equality}) {YY_PRINT; return(GROUPWEIGHTATT);}
 ({xmlwhitespace}+lbDualValue{equality}) {YY_PRINT; return(LBDUALVALUEATT);}
 ({xmlwhitespace}+ubDualValue{equality}) {YY_PRINT; return(UBDUALVALUEATT);}
 
+({xmlwhitespace}+baseMatrixIdx{equality}) {YY_PRINT; return(BASEMATRIXIDXATT);}
+({xmlwhitespace}+targetMatrixFirstRow{equality}) {YY_PRINT; return(TARGETMATRIXFIRSTROWATT);}
+({xmlwhitespace}+targetMatrixFirstCol{equality}) {YY_PRINT; return(TARGETMATRIXFIRSTCOLATT);}
+({xmlwhitespace}+baseMatrixStartRow{equality}) {YY_PRINT; return(BASEMATRIXSTARTROWATT);}
+({xmlwhitespace}+baseMatrixStartCol{equality}) {YY_PRINT; return(BASEMATRIXSTARTCOLATT);}
+({xmlwhitespace}+baseMatrixEndRow{equality}) {YY_PRINT; return(BASEMATRIXENDROWATT);}
+({xmlwhitespace}+baseMatrixEndCol{equality}) {YY_PRINT; return(BASEMATRIXENDCOLATT);}
+({xmlwhitespace}+scalarMultiplier{equality}) {YY_PRINT; return(SCALARMULTIPLIERATT);}
+
+
  /* attributes returning strings (that are potentially empty)*/
 
+({xmlwhitespace}+baseTranspose{equality}\"\") {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
+({xmlwhitespace}+baseTranspose{equality}\'\') {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
+({xmlwhitespace}+baseTranspose{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(BASETRANSPOSEATT);}
+({xmlwhitespace}+baseTranspose{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(BASETRANSPOSEATT);}
 ({xmlwhitespace}+category{equality}\"\") {YY_PRINT; return(EMPTYCATEGORYATT);}
 ({xmlwhitespace}+category{equality}\'\') {YY_PRINT; return(EMPTYCATEGORYATT);}
 ({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}

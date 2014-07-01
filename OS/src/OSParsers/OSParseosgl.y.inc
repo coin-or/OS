@@ -270,18 +270,33 @@ matrixStart: MATRIXSTART
 
 matrixAttributes: 
     | symmetryAttribute
+    | numberOfRowsAttribute
+    | numberOfColumnsAttribute
+    | matrixNameAttribute
     {
-        if (verifySymmetry(parserData->symmetryAttribute) == false)
+        if (verifySymmetry(osglData->symmetryAttribute) == false)
             parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "symmetry type not recognized");
         parserData->errorText = NULL;
     };
 
 symmetryAttribute: SYMMETRYATT ATTRIBUTETEXT QUOTE 
 { 
-    parserData->symmetryAttribute = $2; 
+    if (osglData->symmetryAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one symmetry attribute in <matrix> element");
+    osglData->symmetryAttributePresent = true;   
+    osglData->symmetryAttribute = $2; 
     free($2);
 };
 
+
+matrixNameAttribute: NAMEATT ATTRIBUTETEXT QUOTE 
+{ 
+    if (osglData->matrixNameAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one name attribute in <matrix> element");
+    osglData->matrixNameAttributePresent = true;   
+    osglData->matrixNameAttribute = $2; 
+    free($2);
+};
 
 matrixContent: matrixEmpty | matrixLaden;
 
@@ -300,25 +315,114 @@ baseMatrixAttributes: baseMatrixAttList;
 baseMatrixAttList: | baseMatrixAttList baseMatrixAtt;
 
 baseMatrixAtt:
-      baseMatrixIdxAtt    
-    | targetMatrixFirstRowAtt
-    | targetMatrixFirstColAtt
-    | baseMatrixStartRowAtt
-    | baseMatrixStartColAtt
-    | baseMatrixEndRowAtt
-    | baseMatrixEndColAtt
-    | baseTransposeAtt
-    | scalarMultiplierAtt;
+      baseMatrixIdxAttribute
+    | targetMatrixFirstRowAttribute
+    | targetMatrixFirstColAttribute
+    | baseMatrixStartRowAttribute
+    | baseMatrixStartColAttribute
+    | baseMatrixEndRowAttribute
+    | baseMatrixEndColAttribute
+    | baseTransposeAttribute
+    | scalarMultiplierAttribute;
 
-baseMatrixIdxAtt: ;
-targetMatrixFirstRowAtt: ;
-targetMatrixFirstColAtt: ;
-baseMatrixStartRowAtt: ;
-baseMatrixStartColAtt: ;
-baseMatrixEndRowAtt: ;
-baseMatrixEndColAtt: ;
-baseTransposeAtt: ;
-scalarMultiplierAtt: ;
+baseMatrixIdxAttribute: BASEMATRIXIDXATT QUOTE INTEGER QUOTE 
+{ 
+    if (osglData->baseMatrixIdxAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix idx cannot be negative");
+    osglData->baseMatrixIdxAttributePresent = true;   
+    osglData->baseMatrixIdxAttribute = $3; 
+};
+
+targetMatrixFirstRowAttribute: TARGETMATRIXFIRSTROWATT QUOTE INTEGER QUOTE 
+{ 
+    if (osglData->targetMatrixFirstRowAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one targetMatrixFirstRow attribute in <baseMatrix> element");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "targetMatrix first row cannot be negative");
+    osglData->targetMatrixFirstRowAttributePresent = true;   
+    osglData->targetMatrixFirstRowAttribute = $3; 
+};
+
+targetMatrixFirstColAttribute: TARGETMATRIXFIRSTCOLATT QUOTE INTEGER QUOTE
+{ 
+    if (osglData->targetMatrixFirstColAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one targetMatrixFirstCol attribute in <baseMatrix> element");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "targetMatrix first col cannot be negative");
+    osglData->targetMatrixFirstColAttributePresent = true;   
+    osglData->targetMatrixFirstColAttribute = $3; 
+};
+
+baseMatrixStartRowAttribute: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
+{ 
+    if (osglData->baseMatrixStartRowAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixStartRow attribute in <baseMatrix> element");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix first row cannot be negative");
+    osglData->baseMatrixStartRowAttributePresent = true;   
+    osglData->baseMatrixStartRowAttribute = $3; 
+};
+
+baseMatrixStartColAttribute: BASEMATRIXSTARTCOLATT QUOTE INTEGER QUOTE
+{ 
+    if (osglData->baseMatrixStartColAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixStartCol attribute in <baseMatrix> element");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix first col cannot be negative");
+    osglData->baseMatrixStartColAttributePresent = true;   
+    osglData->baseMatrixStartColAttribute = $3; 
+};
+
+baseMatrixEndRowAttribute: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
+{ 
+    if (osglData->baseMatrixEndRowAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix last row cannot be negative");
+    osglData->baseMatrixEndRowAttributePresent = true;   
+    osglData->baseMatrixEndRowAttribute = $3; 
+};
+
+baseMatrixEndColAttribute: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
+{ 
+    if (osglData->baseMatrixEndColAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix last col cannot be negative");
+    osglData->baseMatrixEndColAttributePresent = true;   
+    osglData->baseMatrixEndColAttribute = $3; 
+};
+
+baseTransposeAttribute: baseTransposeAtt
+{ 
+    if (osglData->baseTransposeAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseTranspose attribute in <baseMatrix> element");
+    osglData->baseTransposeAttributePresent = true;   
+};
+
+baseTransposeAtt: baseTransposeAttEmpty | baseTransposeAttContent;
+
+baseTransposeAttEmpty: EMPTYBASETRANSPOSEATT
+{
+    osglData->baseTransposeAttribute = false;
+};
+
+baseTransposeAttContent: BASETRANSPOSEATT ATTRIBUTETEXT quote 
+{ 
+    if ($2 == "true") osglData->baseTransposeAttribute = true;
+        else          osglData->baseTransposeAttribute = false;
+    free($2);
+};
+
+scalarMultiplierAttribute: SCALARMULTIPLIERATT QUOTE aNumber QUOTE
+{
+    if (osglData->scalarMultiplierAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one scalar multiplier attribute in <baseMatrix> element");
+    osglData->scalarMultiplierAttributePresent = true;   
+    osglData->scalarMultiplierAttribute = parserData->tempVal;
+};
 
 baseMatrixEnd: GREATERTHAN BASEMATRIXEND | ENDOFELEMENT;
 
@@ -416,5 +520,22 @@ numberOfBlocksAttribute: NUMBEROFBLOCKSATT quote INTEGER quote
     osglData->numberOfBlocks = $3;
 };
 
+numberOfColumnsAttribute: NUMBEROFCOLUMNSATT quote INTEGER quote
+{
+    if (osglData->numberOfColumnsAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfColumns attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <blocks> cannot be negative");
+    osglData->numberOfColumnsAttributePresent = true;        
+    osglData->numberOfColumns = $3;
+};
+
+numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
+{
+    if (osglData->numberOfRowsAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfRows attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <rows> cannot be negative");
+    osglData->numberOfRowsAttributePresent = true;        
+    osglData->numberOfRows = $3;
+};
 
 
