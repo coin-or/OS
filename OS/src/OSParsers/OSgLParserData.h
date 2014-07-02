@@ -43,6 +43,8 @@ public:
     int  osglCounter;
     int  osglTempint;
 
+    double* osglDblArray;
+
     /** data structure to process a GeneralFileHeader and hold the data temporarily */
     std::string fileName;
     std::string source;

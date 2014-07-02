@@ -398,6 +398,16 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/block{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(BLOCKEND);}
 {xmlwhitespace}*\<elements {YY_PRINT;  return(ELEMENTSSTART);}
 {xmlwhitespace}*\<\/elements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ELEMENTSEND);}
+{xmlwhitespace}*\<constantElements {YY_PRINT;  return(CONSTANTELEMENTSSTART);}
+{xmlwhitespace}*\<\/constantElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CONSTANTELEMENTSEND);}
+{xmlwhitespace}*\<start {YY_PRINT;  return(STARTVECTORSTART);}
+{xmlwhitespace}*\<\/start{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(STARTVECTOREND);}
+{xmlwhitespace}*\<nonzeros {YY_PRINT;  return(NONZEROSSTART);}
+{xmlwhitespace}*\<\/nonzeros{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(NONZEROSEND);}
+{xmlwhitespace}*\<indexes {YY_PRINT;  return(INDEXESSTART);}
+{xmlwhitespace}*\<\/indexes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INDEXESEND);}
+{xmlwhitespace}*\<nonzeros {YY_PRINT;  return(VALUESSTART);}
+{xmlwhitespace}*\<\/nonzeros{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(VALUESEND);}
 
  /* The <item> element and the children of the option header are treated specially because they may legitimately contain special characters */
 

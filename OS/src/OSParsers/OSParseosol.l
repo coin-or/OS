@@ -182,14 +182,6 @@ return(DOUBLE);}
 
  /* attributes returning strings (that are potentially empty)*/
 
-({xmlwhitespace}+rowMajor{equality}\"\") {YY_PRINT; return(EMPTYROWMAJORATT);}
-({xmlwhitespace}+rowMajor{equality}\'\') {YY_PRINT; return(EMPTYROWMAJORATT);}
-({xmlwhitespace}+rowMajor{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(ROWMAJORATT);}
-({xmlwhitespace}+rowMajor{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(ROWMAJORATT);}
-({xmlwhitespace}+baseTranspose{equality}\"\") {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
-({xmlwhitespace}+baseTranspose{equality}\'\') {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
-({xmlwhitespace}+baseTranspose{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(BASETRANSPOSEATT);}
-({xmlwhitespace}+baseTranspose{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(BASETRANSPOSEATT);}
 ({xmlwhitespace}+category{equality}\"\") {YY_PRINT; return(EMPTYCATEGORYATT);}
 ({xmlwhitespace}+category{equality}\'\') {YY_PRINT; return(EMPTYCATEGORYATT);}
 ({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
@@ -224,10 +216,6 @@ return(DOUBLE);}
 ({xmlwhitespace}+solver{equality}\'\') {YY_PRINT; return(EMPTYSOLVERATT);}
 ({xmlwhitespace}+solver{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SOLVERATT);}
 ({xmlwhitespace}+solver{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(SOLVERATT);}
-({xmlwhitespace}+type{equality}\"\") {YY_PRINT; return(EMPTYSYMMETRYATT);}
-({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYSYMMETRYATT);}
-({xmlwhitespace}+solver{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SYMMETRYATT);}
-({xmlwhitespace}+solver{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(SYMMETRYATT);}
 ({xmlwhitespace}+type{equality}\"\") {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
@@ -309,6 +297,7 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/password{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(PASSWORDEND);}
 {xmlwhitespace}*\<contact {YY_PRINT; return(CONTACTSTART);}
 {xmlwhitespace}*\<\/contact{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONTACTEND);}
+
 {xmlwhitespace}*\<otherOptions {YY_PRINT; return(OTHEROPTIONSSTART);}
 {xmlwhitespace}*\<\/otherOptions{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHEROPTIONSEND);}
 {xmlwhitespace}*\<other {YY_PRINT; return(OTHERSTART);}
@@ -420,6 +409,21 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/enumeration{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ENUMERATIONEND);}
 
  /* These elements are part of the OSgL schema and are used in both OSoL and OSrL parsers */
+
+({xmlwhitespace}+rowMajor{equality}\"\") {YY_PRINT; return(EMPTYROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\'\') {YY_PRINT; return(EMPTYROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(ROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(ROWMAJORATT);}
+({xmlwhitespace}+baseTranspose{equality}\"\") {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
+({xmlwhitespace}+baseTranspose{equality}\'\') {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
+({xmlwhitespace}+baseTranspose{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(BASETRANSPOSEATT);}
+({xmlwhitespace}+baseTranspose{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(BASETRANSPOSEATT);}
+({xmlwhitespace}+type{equality}\"\") {YY_PRINT; return(EMPTYSYMMETRYATT);}
+({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYSYMMETRYATT);}
+({xmlwhitespace}+solver{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SYMMETRYATT);}
+({xmlwhitespace}+solver{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(SYMMETRYATT);}
+
+
 {xmlwhitespace}*\<matrix {YY_PRINT;  return(MATRIXSTART);}
 {xmlwhitespace}*\<\/matrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXEND);}
 {xmlwhitespace}*\<baseMatrix {YY_PRINT;  return(BASEMATRIXSTART);}
@@ -430,6 +434,16 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/block{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(BLOCKEND);}
 {xmlwhitespace}*\<elements {YY_PRINT;  return(ELEMENTSSTART);}
 {xmlwhitespace}*\<\/elements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ELEMENTSEND);}
+{xmlwhitespace}*\<constantElements {YY_PRINT;  return(CONSTANTELEMENTSSTART);}
+{xmlwhitespace}*\<\/constantElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CONSTANTELEMENTSEND);}
+{xmlwhitespace}*\<start {YY_PRINT;  return(STARTVECTORSTART);}
+{xmlwhitespace}*\<\/start{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(STARTVECTOREND);}
+{xmlwhitespace}*\<nonzeros {YY_PRINT;  return(NONZEROSSTART);}
+{xmlwhitespace}*\<\/nonzeros{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(NONZEROSEND);}
+{xmlwhitespace}*\<indexes {YY_PRINT;  return(INDEXESSTART);}
+{xmlwhitespace}*\<\/indexes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INDEXESEND);}
+{xmlwhitespace}*\<nonzeros {YY_PRINT;  return(VALUESSTART);}
+{xmlwhitespace}*\<\/nonzeros{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(VALUESEND);}
 
  /* The <item> element and the children of the option header are treated specially because they may legitimately contain special characters */
 

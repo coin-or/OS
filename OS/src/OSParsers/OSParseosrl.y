@@ -204,7 +204,9 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token BASEMATRIXSTARTROWATT BASEMATRIXSTARTCOLATT BASEMATRIXENDROWATT BASEMATRIXENDCOLATT;
 %token SCALARMULTIPLIERATT EMPTYBASETRANSPOSEATT BASETRANSPOSEATT;
 
-%token ELEMENTSSTART ELEMENTSEND;
+%token ELEMENTSSTART ELEMENTSEND;  
+%token CONSTANTELEMENTSSTART CONSTANTELEMENTSEND STARTVECTORSTART STARTVECTOREND;
+%token NONZEROSSTART NONZEROSEND INDEXESSTART INDEXESEND VALUESSTART VALUESEND;
 
 %token EMPTYROWMAJORATT ROWMAJORATT;
 
@@ -4053,13 +4055,13 @@ xmlWhiteSpaceChar: ' '
  * This file contains parser elements that are contained in the OSgL schema
  * and are shared between several of the main schemas, OSiL, OSoL and OSrL.
  *
- * The code is mainained in such a way that it can be inserted into any parser
+ * The code is maintained in such a way that it can be inserted into any parser
  * by a makefile with minimal changes. The only change required is to change
  * every occurrence of the placeholder "osresult" to the appropriate
  * reference ("osinstance" for OSiL files, "osobject" for OSoL files and
  * "osresult" for OSrL files). The makefile accomplishes this through 
  * maintaining each parser in two parts and to copy this include file 
- * between the parts to make the final OSParseosxl.y file.
+ * between the two parts to make the final OSParseosxl.y file.
  * 
  */
 
@@ -4191,7 +4193,7 @@ fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
 };
 
 /** ==========================================================================
- *              This portion parses the content of an IntVector object
+ *         This portion parses the content of an IntVector <el> array
  *  ==========================================================================
  */
 
@@ -4295,6 +4297,110 @@ osglMultAttribute: MULTATT quote INTEGER quote
     osglData->osglMultPresent = true;
     osglData->osglMult = $3;
 };
+
+/** ==========================================================================
+ *        This portion parses the content of a DoubleVector <el> element
+ *  ==========================================================================
+ */
+
+osglDblArrayData: 
+    osglDblVectorElArray 
+    {
+         if (osglData->osglCounter < osglData->osglNumberOfEl)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "fewer data elements than specified");
+            parserData->ignoreDataAfterErrors = true;
+        }
+    }
+ | osglDblVectorBase64;
+
+osglDblVectorElArray: | osglDblVectorElArray osglDblVectorEl;
+
+osglDblVectorEl: osglDblVectorElStart osglDblVectorElAttributes osglDblVectorElContent;
+
+osglDblVectorElStart: ELSTART
+{    
+    osglData->osglMultPresent = false;
+    osglData->osglIncrPresent = false;
+    osglData->osglMult = 1;
+};
+
+
+osglDblVectorElAttributes: | osglMultAttribute;
+
+osglDblVectorElContent: GREATERTHAN aNumber ELEND
+{
+    if (osglData->osglCounter + osglData->osglMult > osglData->osglNumberOfEl)
+    {
+        if (!parserData->suppressFurtherErrorMessages)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "more data elements than specified");
+            parserData->suppressFurtherErrorMessages = true;
+            parserData->ignoreDataAfterErrors = true;
+        }
+    }
+    else
+        for (int i=0; i<osglData->osglMult; i++)
+            osglData->osglDblArray[osglData->osglCounter++] = parserData->tempVal;    
+};
+
+osglDblVectorBase64: BASE64START Base64SizeAttribute Base64Content;
+
+Base64SizeAttribute: SIZEOFATT quote INTEGER quote
+{
+    osglData->osglSize = $3;
+};
+
+Base64Content: Base64Empty | Base64Laden;
+
+Base64Empty: GREATERTHAN BASE64END | ENDOFELEMENT;
+
+Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
+{
+    char* b64string = $2;
+    if( b64string == NULL) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 data expected"); 
+    if (osglData->osglSize != sizeof(int))
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
+
+    std::string base64decodeddata = Base64::decodeb64( b64string );
+    int base64decodeddatalength = base64decodeddata.length();
+    double *dblvec = NULL;
+    if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 data length does not match numberOfEl"); 
+    else
+    {
+        dblvec = (double*)&base64decodeddata[0];
+        for(int i = 0; i < (base64decodeddatalength/osglData->osglSize); i++)
+        {
+            osglData->osglDblArray[i] = *(dblvec++);
+        }
+    }
+    //delete[] b64string;
+    free($2);
+};
+
+
+/** ==========================================================================
+ *              This portion parses the content of a SparseVector object
+ *  ==========================================================================
+ */
+
+osglSparseVector: osglSparseVectorNumberOfElATT osglSparseVectorIndexes osglSparseVectorValues
+{
+};
+
+osglSparseVectorNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new    int[parserData->numberOf];
+    osglData->osglDblArray = new double[parserData->numberOf];
+}; 
+
+osglSparseVectorIndexes: INDEXESSTART osglIntVectorElArray INDEXESEND;
+
+osglSparseVectorValues:  VALUESSTART  osglDblVectorElArray VALUESEND;
 
 
 /** ===================================================================================
@@ -4494,7 +4600,68 @@ rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT quote
     free($2);
 };
 
-MatrixElementsContent: ;
+MatrixElementsContent: constantElements varReferenceElements linearElements generalElements;
+
+constantElements: | constantElementsStart constantElementsContent; 
+
+constantElementsStart: CONSTANTELEMENTSSTART;
+
+constantElementsContent: constantElementsStartVector constantElementsNonzeros;
+
+constantElementsStartVector: constantElementsStartVectorStart constantElementsStartVectorNumberOfElATT constantElementsStartVectorContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+constantElementsStartVectorStart: STARTVECTORSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+constantElementsStartVectorNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+constantElementsStartVectorContent: constantElementsStartVectorEmpty | constantElementsStartVectorLaden;
+
+constantElementsStartVectorEmpty: ENDOFELEMENT;
+
+constantElementsStartVectorLaden: GREATERTHAN constantElementsStartVectorBody STARTVECTOREND;
+
+constantElementsStartVectorBody:  osglIntArrayData;
+
+constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZEROSEND
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+constantElementsNonzerosStart: NONZEROSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+varReferenceElements: ; 
+
+linearElements: ;
+
+generalElements: ;
 
 matrixTransformation: OSnLMNode;
 
