@@ -11,12 +11,14 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  * In order to allow easier maintenance of the parsers, 
- * the files OSParseosol.y and OSParseosrl.y are stored in three pieces
+ * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
  * that are combined in the makefile.
  * This is the first part of the file OSParseosrl.y.
- * Several elements from the OSgL schema are maintained in the file
- * OSParseosgl.y.inc, which is appended after this file.
- * The second part, OSParseosrl.y.2 is appended at the end.
+ * Tokens pertaining to the OSgL parser (in file OSParseosgl.y.inc1) are appended, 
+ * followed by the grammar rules involving only OSrL constructs (OSParseosrl.y.2). 
+ * After that we put the grammar rules for elements from the OSgL schema, 
+ * maintained in the file OSParseosgl.y.inc2.
+ * The postamble in OSParseosrl.y.3 is appended at the end.
  */
 
 %{
@@ -187,11 +189,30 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token USEDCPUSPEEDSTART USEDCPUSPEEDEND
 %token USEDDISKSPACESTART USEDDISKSPACEEND
 %token USEDMEMORYSTART USEDMEMORYEND
-%token VALUESSTART VALUESEND 
 %token VALUESSTRINGSTART VALUESSTRINGEND
 %token VARSTART VAREND 
 %token VARIABLESSTART VARIABLESEND 
 %token VARIDXSTART VARIDXEND 
+
+
+/* $Id$ */
+/** @file OSParseosgl.y.inc1
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * In order to allow easier maintenance of the parsers, 
+ * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
+ * These are the tokens pertaining to the OSgL parser.
+ * They are appended after the other tokens.
+ *
+ */
 
 %token MATRIXSTART MATRIXEND BASEMATRIXEND BASEMATRIXSTART;
 %token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND;
@@ -207,6 +228,9 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token ELEMENTSSTART ELEMENTSEND;  
 %token CONSTANTELEMENTSSTART CONSTANTELEMENTSEND STARTVECTORSTART STARTVECTOREND;
 %token NONZEROSSTART NONZEROSEND INDEXESSTART INDEXESEND VALUESSTART VALUESEND;
+%token VARREFERENCEELEMENTSSTART VARREFERENCEELEMENTSEND;
+%token LINEARELEMENTSSTART LINEARELEMENTSEND; 
+%token GENERALELEMENTSSTART GENERALELEMENTSEND; 
 
 %token EMPTYROWMAJORATT ROWMAJORATT;
 
@@ -214,6 +238,26 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %%
 
+/* $Id$ */
+/** @file OSParseosrl.y.2
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * In order to allow easier maintenance of the parsers, 
+ * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
+ * that are combined in the makefile.
+ * This is the third part of the file OSParseosrl.y, containing 
+ * the grammar rules involving only OSrL constructs. 
+ *
+ * See also the comments in OSParseosrl.y.1. 
+ */
 
 osrldoc: 
     osrlStartEmpty osrlBody osrlEnd
@@ -4055,13 +4099,14 @@ xmlWhiteSpaceChar: ' '
  * This file contains parser elements that are contained in the OSgL schema
  * and are shared between several of the main schemas, OSiL, OSoL and OSrL.
  *
- * The code is maintained in such a way that it can be inserted into any parser
- * by a makefile with minimal changes. The only change required is to change
- * every occurrence of the placeholder "osresult" to the appropriate
- * reference ("osinstance" for OSiL files, "osobject" for OSoL files and
- * "osresult" for OSrL files). The makefile accomplishes this through 
- * maintaining each parser in two parts and to copy this include file 
- * between the two parts to make the final OSParseosxl.y file.
+ * The code is maintained in such a way that it can be inserted into any one
+ * of these parsers by a makefile with minimal changes. 
+ * The only change required is to change every occurrence of the placeholder
+ * "osresult" to the appropriate reference ("osinstance" for OSiL files, 
+ * "osoption" for OSoL files and "osresult" for OSrL files). 
+ * The makefile accomplishes this through maintaining each parser 
+ * in two parts and to copy this include file between the two parts 
+ * to make the final OSParseosxl.y file.
  * 
  */
 
@@ -4403,6 +4448,27 @@ osglSparseVectorIndexes: INDEXESSTART osglIntVectorElArray INDEXESEND;
 osglSparseVectorValues:  VALUESSTART  osglDblVectorElArray VALUESEND;
 
 
+/** ==========================================================================
+ *          This portion parses the content of a SparseIntVector object
+ *  ==========================================================================
+ */
+
+osglSparseIntVector: osglSparseIntVectorNumberOfElATT osglSparseIntVectorIndexes osglSparseIntVectorValues
+{
+};
+
+osglSparseIntVectorNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+    osglData->osglValArray = new int[parserData->numberOf];
+}; 
+
+osglSparseIntVectorIndexes: INDEXESSTART osglIntVectorElArray INDEXESEND;
+
+osglSparseIntVectorValues:  VALUESSTART  osglIntVectorElArray VALUESEND;
+
 /** ===================================================================================
  *    This portion parses an OSMatrix object used in OSiL, OSoL and OSrL schema files
  *  ===================================================================================
@@ -4647,6 +4713,8 @@ constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZERO
 //            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
+    delete[] osglData->osglDblArray;
+    osglData->osglDblArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -4657,11 +4725,110 @@ constantElementsNonzerosStart: NONZEROSSTART
     osglData->osglNumberOfElPresent= false;
 };
 
-varReferenceElements: ; 
+varReferenceElements: | varReferenceElementsStart varReferenceElementsContent; 
 
-linearElements: ;
+varReferenceElementsStart: VARREFERENCEELEMENTSSTART;
 
-generalElements: ;
+varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsNonzeros;
+
+varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferenceElementsStartVectorNumberOfElATT varReferenceElementsStartVectorContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+varReferenceElementsStartVectorStart: STARTVECTORSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+varReferenceElementsStartVectorNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+varReferenceElementsStartVectorContent: varReferenceElementsStartVectorEmpty | varReferenceElementsStartVectorLaden;
+
+varReferenceElementsStartVectorEmpty: ENDOFELEMENT;
+
+varReferenceElementsStartVectorLaden: GREATERTHAN varReferenceElementsStartVectorBody STARTVECTOREND;
+
+varReferenceElementsStartVectorBody:  osglIntArrayData;
+
+varReferenceElementsNonzeros: varReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    delete[] osglData->osglValArray;
+    osglData->osglValArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+varReferenceElementsNonzerosStart: NONZEROSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+linearElements: | linearElementsStart linearElementsContent; 
+
+linearElementsStart: LINEARELEMENTSSTART;
+
+linearElementsContent: linearElementsStartVector linearElementsNonzeros;
+
+linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVectorNumberOfElATT linearElementsStartVectorContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+linearElementsStartVectorStart: STARTVECTORSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+linearElementsStartVectorNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+linearElementsStartVectorContent: linearElementsStartVectorEmpty | linearElementsStartVectorLaden;
+
+linearElementsStartVectorEmpty: ENDOFELEMENT;
+
+linearElementsStartVectorLaden: GREATERTHAN linearElementsStartVectorBody STARTVECTOREND;
+
+linearElementsStartVectorBody:  osglIntArrayData;
+
+linearElementsNonzeros: 
+{
+    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<linearElements> not implemented yet");    
+};
+
+generalElements: 
+{
+    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<generalElements> not implemented yet");    
+};
 
 matrixTransformation: OSnLMNode;
 
@@ -4763,6 +4930,25 @@ numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
     osglData->numberOfRows = $3;
 };
 
+
+/* $Id$ */
+/** @file OSParseosol.y.3
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * In order to allow easier maintenance of the parsers, 
+ * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
+ * that are combined in the makefile.
+ * This is the last part of the file OSParseosrl.y, to be appended
+ * after OSParseosrl.y.1, OSParseosgl.y.inc1, OSParseosrl.y.2 and OSParseosgl.y.inc2.
+ */
 
 %%
 

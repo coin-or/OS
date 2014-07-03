@@ -1,0 +1,43 @@
+/* $Id: OSParseosgl.y.inc1 4806 2014-06-07 11:37:46Z Gassmann $ */
+/** @file OSParseosgl.y.inc1
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * In order to allow easier maintenance of the parsers, 
+ * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
+ * These are the tokens pertaining to the OSgL parser.
+ * They are appended after the other tokens.
+ *
+ */
+
+%token MATRIXSTART MATRIXEND BASEMATRIXEND BASEMATRIXSTART;
+%token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND;
+
+%token EMPTYSYMMETRYATT SYMMETRYATT;
+
+%token NUMBEROFBLOCKSATT NUMBEROFCOLUMNSATT NUMBEROFROWSATT;
+
+%token BASEMATRIXIDXATT TARGETMATRIXFIRSTROWATT TARGETMATRIXFIRSTCOLATT; 
+%token BASEMATRIXSTARTROWATT BASEMATRIXSTARTCOLATT BASEMATRIXENDROWATT BASEMATRIXENDCOLATT;
+%token SCALARMULTIPLIERATT EMPTYBASETRANSPOSEATT BASETRANSPOSEATT;
+
+%token ELEMENTSSTART ELEMENTSEND;  
+%token CONSTANTELEMENTSSTART CONSTANTELEMENTSEND STARTVECTORSTART STARTVECTOREND;
+%token NONZEROSSTART NONZEROSEND INDEXESSTART INDEXESEND VALUESSTART VALUESEND;
+%token VARREFERENCEELEMENTSSTART VARREFERENCEELEMENTSEND;
+%token LINEARELEMENTSSTART LINEARELEMENTSEND; 
+%token GENERALELEMENTSSTART GENERALELEMENTSEND; 
+
+%token EMPTYROWMAJORATT ROWMAJORATT;
+
+%token DUMMY
+
+%%
+

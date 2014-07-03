@@ -44,6 +44,7 @@ public:
     int  osglTempint;
 
     double* osglDblArray;
+    int*    osglValArray;
 
     /** data structure to process a GeneralFileHeader and hold the data temporarily */
     std::string fileName;

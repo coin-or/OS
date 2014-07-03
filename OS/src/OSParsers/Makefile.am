@@ -71,12 +71,22 @@ $(srcdir)/OSParseosol.tab.cpp: $(srcdir)/OSParseosol.y
 	$(YACC) -ldv -p osol -o $(srcdir)/OSParseosol.tab.cpp \
                                 $(srcdir)/OSParseosol.y
 
+$(srcdir)/OSParseosol.l: \
+		$(srcdir)/OSParseosol.l.1 \
+		$(srcdir)/OSParseosgl.l.inc \
+		$(srcdir)/OSParseosol.l.2
+	cat $(srcdir)/OSParseosol.l.1 $(srcdir)/OSParseosgl.l.inc $(srcdir)/OSParseosol.l.2 \
+		>$(srcdir)/OSParseosol.l
+
 $(srcdir)/OSParseosol.y: \
 		$(srcdir)/OSParseosol.y.1 \
-		$(srcdir)/OSParseosgl.y.inc \
-		$(srcdir)/OSParseosol.y.2
-	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.inc >osoltemp.tmp
-	cat $(srcdir)/OSParseosol.y.1 osoltemp.tmp $(srcdir)/OSParseosol.y.2 \
+		$(srcdir)/OSParseosgl.y.inc1 \
+		$(srcdir)/OSParseosol.y.2   \
+		$(srcdir)/OSParseosgl.y.inc2 \
+		$(srcdir)/OSParseosol.y.3
+	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.inc2 >osoltemp.tmp
+	cat $(srcdir)/OSParseosol.y.1 $(srcdir)/OSParseosgl.y.inc1 \
+		$(srcdir)/OSParseosol.y.2 osoltemp.tmp $(srcdir)/OSParseosol.y.3 \
 		>$(srcdir)/OSParseosol.y
 	rm -f osoltemp.tmp
 endif
@@ -95,12 +105,22 @@ $(srcdir)/OSParseosrl.tab.cpp: $(srcdir)/OSParseosrl.y
 	$(YACC) -ldv -p osrl -o $(srcdir)/OSParseosrl.tab.cpp \
                                 $(srcdir)/OSParseosrl.y
 
+$(srcdir)/OSParseosrl.l: \
+		$(srcdir)/OSParseosrl.l.1 \
+		$(srcdir)/OSParseosgl.l.inc \
+		$(srcdir)/OSParseosrl.l.2
+	cat $(srcdir)/OSParseosrl.l.1 $(srcdir)/OSParseosgl.l.inc $(srcdir)/OSParseosrl.l.2 \
+		>$(srcdir)/OSParseosrl.l
+
 $(srcdir)/OSParseosrl.y: \
 		$(srcdir)/OSParseosrl.y.1 \
-		$(srcdir)/OSParseosgl.y.inc \
-		$(srcdir)/OSParseosrl.y.2
-	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosgl.y.inc >osrltemp.tmp
-	cat $(srcdir)/OSParseosrl.y.1 osrltemp.tmp $(srcdir)/OSParseosrl.y.2 \
+		$(srcdir)/OSParseosgl.y.inc1 \
+		$(srcdir)/OSParseosrl.y.2   \
+		$(srcdir)/OSParseosgl.y.inc2 \
+		$(srcdir)/OSParseosrl.y.3
+	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosgl.y.inc2 >osrltemp.tmp
+	cat $(srcdir)/OSParseosrl.y.1 $(srcdir)/OSParseosgl.y.inc1 \
+		$(srcdir)/OSParseosrl.y.2 osrltemp.tmp $(srcdir)/OSParseosrl.y.3 \
 		>$(srcdir)/OSParseosrl.y
 	rm -f osrltemp.tmp
 endif

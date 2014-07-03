@@ -35,6 +35,7 @@ OSgLParserData::OSgLParserData() :
     osglCounter(0),
     osglTempint(0),
     osglDblArray(NULL),
+    osglValArray(NULL),
     fileName(""),
     source(""),
     description(""),
