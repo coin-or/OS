@@ -1,5 +1,5 @@
-/* $Id: OSParseosgl.y.inc1 4806 2014-06-07 11:37:46Z Gassmann $ */
-/** @file OSParseosgl.y.inc1
+/* $Id: OSParseosgl.y.tokens 4806 2014-06-07 11:37:46Z Gassmann $ */
+/** @file OSParseosgl.y.tokens
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  *
@@ -10,10 +10,10 @@
  * This software is licensed under the Common Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
- * In order to allow easier maintenance of the parsers, 
- * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
+ * In order to allow easier maintenance of the parsers, the files 
+ * OSParseosil.y, OSParseosol.y and OSParseosrl.y are stored in several pieces.
  * These are the tokens pertaining to the OSgL parser.
- * They are appended after the other tokens.
+ * They are appended after the regular OSxL tokens.
  *
  */
 
@@ -35,9 +35,10 @@
 %token LINEARELEMENTSSTART LINEARELEMENTSEND; 
 %token GENERALELEMENTSSTART GENERALELEMENTSEND; 
 
-%token EMPTYROWMAJORATT ROWMAJORATT;
+%token COLOFFSETSSTART COLOFFSETSEND ROWOFFSETSSTART ROWOFFSETSEND;
+
+%token EMPTYROWMAJORATT ROWMAJORATT BLOCKROWIDXATT BLOCKCOLIDXATT;
 
 %token DUMMY
 
-%%
 

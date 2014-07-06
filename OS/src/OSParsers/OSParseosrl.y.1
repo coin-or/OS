@@ -14,11 +14,13 @@
  * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
  * that are combined in the makefile.
  * This is the first part of the file OSParseosrl.y.
- * Tokens pertaining to the OSgL parser (in file OSParseosgl.y.inc1) are appended, 
- * followed by the grammar rules involving only OSrL constructs (OSParseosrl.y.2). 
- * After that we put the grammar rules for elements from the OSgL schema, 
- * maintained in the file OSParseosgl.y.inc2.
- * The postamble in OSParseosrl.y.3 is appended at the end.
+ * Tokens pertaining to the OSgL and OSnL parsers are appended.
+ * These are in files OSParseosgl.y.tokens and OSParseosnl.y.tokens.   
+ * Then follow the syntax rules involving only OSrL constructs (OSParseosrl.y.2). 
+ * After that we put the syntax rules for elements from the OSgL schema, 
+ * maintained in the file OSParseosgl.y.syntax, and then the OSnL syntax
+ * in OSParseosnl.y.syntax. The postamble in OSParseosrl.y.3 is appended at the end.
+ * This process could be repeated for as many other auxiliary schemas as needed. 
  */
 
 %{

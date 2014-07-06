@@ -1,0 +1,30 @@
+/* $Id: OSParseosnl.y.tokens 4806 2014-06-07 11:37:46Z Gassmann $ */
+/** @file OSParseosnl.y.tokens
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * In order to allow easier maintenance of the parsers, the files 
+ * OSParseosil.y, OSParseosol.y and OSParseosrl.y are stored in several pieces.
+ * These are the tokens pertaining to the OSnL parser.
+ * They are appended after the regular OSxL tokens.
+ *
+ */
+
+%token NONLINEAREXPRESSIONSSTART NONLINEAREXPRESSIONSEND NUMBEROFNONLINEAREXPRESSIONS NLSTART NLEND
+%token POWERSTART POWEREND PLUSSTART PLUSEND MINUSSTART MINUSEND
+%token DIVIDESTART DIVIDEEND LNSTART LNEND SQRTSTART SQRTEND SUMSTART SUMEND PRODUCTSTART PRODUCTEND 
+%token EXPSTART EXPEND NEGATESTART NEGATEEND IFSTART IFEND
+%token SQUARESTART SQUAREEND COSSTART COSEND SINSTART SINEND
+%token VARIABLESTART VARIABLEEND ABSSTART ABSEND ERFSTART ERFEND  MAXSTART MAXEND
+%token ALLDIFFSTART ALLDIFFEND MINSTART MINEND ESTART EEND PISTART PIEND
+%token TIMESSTART TIMESEND NUMBERSTART  NUMBEREND
+
+%token IDATT COEFATT
+

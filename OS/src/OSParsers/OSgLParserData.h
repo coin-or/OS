@@ -114,6 +114,10 @@ public:
     bool baseTransposeAttributePresent;
     bool scalarMultiplierAttributePresent;
     bool rowMajorAttribute;
+    int  blockRowIdx;
+    bool blockRowIdxAttributePresent;
+    int  blockColIdx;
+    bool blockColIdxAttributePresent;
 
 };//OSgLParserData
 

@@ -1,0 +1,30 @@
+ /* last section of OSParseosil.l */
+
+ "<!--" BEGIN comment;
+ <comment>. |
+ <comment>\n ;
+ <comment>"-->" BEGIN 0;
+ 
+  "<?" BEGIN xmldeclaration;
+ <xmldeclaration>. |
+ <xmldeclaration>\n ;
+ <xmldeclaration>"?>" BEGIN 0;
+ 
+
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
+
+. {  
+	std::string error;
+	std::ostringstream outStr;
+	outStr << "encountered a spurious character in the lexer" << endl;
+	outStr << "The first character is: ";
+	outStr <<  yytext;
+	outStr << endl;
+	outStr << "See line number: " << yylineno << endl;  
+	error = outStr.str();
+	throw ErrorClass( error);
+}
+
+%%
+

@@ -75,7 +75,11 @@ OSgLParserData::OSgLParserData() :
     baseMatrixEndColAttributePresent(false),
     baseTransposeAttributePresent(false),
     scalarMultiplierAttributePresent(false),
-    rowMajorAttribute(false)
+    rowMajorAttribute(false),
+    blockRowIdx(-1),
+    blockRowIdxAttributePresent(false),
+    blockColIdx(-1),
+    blockColIdxAttributePresent(false)
 {
 
 }//OSgLParserData

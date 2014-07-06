@@ -1,5 +1,5 @@
-/* $Id: OSParseosgl.y.inc 4806 2014-06-07 11:37:46Z Gassmann $ */
-/** @file OSParseosgl.y.inc
+/* $Id: OSParseosgl.y.syntax 4806 2014-06-07 11:37:46Z Gassmann $ */
+/** @file OSParseosgl.y.syntax
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  *
@@ -19,8 +19,8 @@
  * "targetObject" to the appropriate reference ("osinstance" for OSiL files, 
  * "osoption" for OSoL files and "osresult" for OSrL files). 
  * The makefile accomplishes this through maintaining each parser 
- * in two parts and to copy this include file between the two parts 
- * to make the final OSParseosxl.y file.
+ * in several parts and to copy this include file between the OSxL syntax rules
+ * and the postamble to make the final OSParseosxl.y file.
  * 
  */
 
@@ -754,9 +754,69 @@ matrixBlocksAttributes: numberOfBlocksAttribute;
 
 matrixBlocksContent: colOffsets rowOffsets blockList;
 
-colOffsets: 
+colOffsets: colOffsetsStart colOffsetsNumberOfElATT colOffsetsContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <blocks> colOffsets failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
 
-rowOffsets:
+colOffsetsStart: COLOFFSETSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+colOffsetsNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+colOffsetsContent: colOffsetsEmpty | colOffsetsLaden;
+
+colOffsetsEmpty: ENDOFELEMENT;
+
+colOffsetsLaden: GREATERTHAN colOffsetsBody COLOFFSETSEND;
+
+colOffsetsBody:  osglIntArrayData;
+
+rowOffsets: rowOffsetsStart rowOffsetsNumberOfElATT rowOffsetsContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <blocks> rowOffsets failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+rowOffsetsStart: ROWOFFSETSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+rowOffsetsNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+rowOffsetsContent: rowOffsetsEmpty | rowOffsetsLaden;
+
+rowOffsetsEmpty: ENDOFELEMENT;
+
+rowOffsetsLaden: GREATERTHAN rowOffsetsBody ROWOFFSETSEND;
+
+rowOffsetsBody:  osglIntArrayData;
 
 blockList: | blockList matrixBlock;
 
@@ -778,9 +838,23 @@ matrixBlockAtt:
         parserData->errorText = NULL;
     };
 
-blockRowIdxAtt: ;
+blockRowIdxAtt: BLOCKROWIDXATT quote INTEGER quote
+{
+    if (osglData->blockRowIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockRowIdx attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockRowIdx cannot be negative");
+    osglData->blockRowIdxAttributePresent = true;        
+    osglData->blockRowIdx = $3;
+};
 
-blockColIdxAtt: ;
+blockColIdxAtt: BLOCKCOLIDXATT quote INTEGER quote
+{
+    if (osglData->blockColIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockColIdx attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockColIdx cannot be negative");
+    osglData->blockColIdxAttributePresent = true;        
+    osglData->blockColIdx = $3;
+};
 
 matrixBlockContent: blockEmpty | blockLaden;
 

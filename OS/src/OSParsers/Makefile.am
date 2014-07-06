@@ -55,6 +55,25 @@ $(srcdir)/OSParseosil.cpp: \
 $(srcdir)/OSParseosil.tab.cpp: $(srcdir)/OSParseosil.y
 	$(YACC) -ldv -p osil -o $(srcdir)/OSParseosil.tab.cpp \
                                 $(srcdir)/OSParseosil.y
+
+$(srcdir)/OSParseosil.l: \
+		$(srcdir)/OSParseosil.l.1 \
+		$(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosil.l.2
+	cat $(srcdir)/OSParseosil.l.1 $(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosil.l.2 >$(srcdir)/OSParseosil.l
+
+$(srcdir)/OSParseosil.y: \
+		$(srcdir)/OSParseosil.y.1 \
+		$(srcdir)/OSParseosnl.y.tokens \
+		$(srcdir)/OSParseosil.y.2   \
+		$(srcdir)/OSParseosnl.y.syntax \
+		$(srcdir)/OSParseosil.y.3
+	sed 's/targetObject/osinstance/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	cat $(srcdir)/OSParseosil.y.1 $(srcdir)/OSParseosnl.y.tokens \
+		$(srcdir)/OSParseosil.y.2 osnltemp.tmp $(srcdir)/OSParseosil.y.3 \
+		>$(srcdir)/OSParseosil.y
+	rm -f osnltemp.tmp
 endif
 
 osol: $(srcdir)/OSParseosol.cpp \
@@ -73,22 +92,29 @@ $(srcdir)/OSParseosol.tab.cpp: $(srcdir)/OSParseosol.y
 
 $(srcdir)/OSParseosol.l: \
 		$(srcdir)/OSParseosol.l.1 \
-		$(srcdir)/OSParseosgl.l.inc \
+		$(srcdir)/OSParseosgl.l.patterns \
+		$(srcdir)/OSParseosnl.l.patterns \
 		$(srcdir)/OSParseosol.l.2
-	cat $(srcdir)/OSParseosol.l.1 $(srcdir)/OSParseosgl.l.inc $(srcdir)/OSParseosol.l.2 \
-		>$(srcdir)/OSParseosol.l
+	cat $(srcdir)/OSParseosol.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosol.l.2 >$(srcdir)/OSParseosol.l
 
 $(srcdir)/OSParseosol.y: \
 		$(srcdir)/OSParseosol.y.1 \
-		$(srcdir)/OSParseosgl.y.inc1 \
+		$(srcdir)/OSParseosgl.y.tokens \
+		$(srcdir)/OSParseosnl.y.tokens \
 		$(srcdir)/OSParseosol.y.2   \
-		$(srcdir)/OSParseosgl.y.inc2 \
+		$(srcdir)/OSParseosgl.y.syntax \
+		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosol.y.3
-	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.inc2 >osoltemp.tmp
-	cat $(srcdir)/OSParseosol.y.1 $(srcdir)/OSParseosgl.y.inc1 \
-		$(srcdir)/OSParseosol.y.2 osoltemp.tmp $(srcdir)/OSParseosol.y.3 \
-		>$(srcdir)/OSParseosol.y
-	rm -f osoltemp.tmp
+	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	cat $(srcdir)/OSParseosol.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
+		$(srcdir)/OSParseosol.y.2 osgltemp.tmp osnltemp.tmp \
+		$(srcdir)/OSParseosol.y.3 >$(srcdir)/OSParseosol.y
+	rm -f osgltemp.tmp
+	rm -f osnltemp.tmp
 endif
 
 osrl: $(srcdir)/OSParseosrl.cpp \
@@ -107,22 +133,29 @@ $(srcdir)/OSParseosrl.tab.cpp: $(srcdir)/OSParseosrl.y
 
 $(srcdir)/OSParseosrl.l: \
 		$(srcdir)/OSParseosrl.l.1 \
-		$(srcdir)/OSParseosgl.l.inc \
+		$(srcdir)/OSParseosgl.l.patterns \
+		$(srcdir)/OSParseosnl.l.patterns \
 		$(srcdir)/OSParseosrl.l.2
-	cat $(srcdir)/OSParseosrl.l.1 $(srcdir)/OSParseosgl.l.inc $(srcdir)/OSParseosrl.l.2 \
-		>$(srcdir)/OSParseosrl.l
+	cat $(srcdir)/OSParseosrl.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosrl.l.2 >$(srcdir)/OSParseosrl.l
 
 $(srcdir)/OSParseosrl.y: \
 		$(srcdir)/OSParseosrl.y.1 \
-		$(srcdir)/OSParseosgl.y.inc1 \
+		$(srcdir)/OSParseosgl.y.tokens \
+		$(srcdir)/OSParseosnl.y.tokens \
 		$(srcdir)/OSParseosrl.y.2   \
-		$(srcdir)/OSParseosgl.y.inc2 \
+		$(srcdir)/OSParseosgl.y.syntax \
+		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosrl.y.3
-	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosgl.y.inc2 >osrltemp.tmp
-	cat $(srcdir)/OSParseosrl.y.1 $(srcdir)/OSParseosgl.y.inc1 \
-		$(srcdir)/OSParseosrl.y.2 osrltemp.tmp $(srcdir)/OSParseosrl.y.3 \
-		>$(srcdir)/OSParseosrl.y
-	rm -f osrltemp.tmp
+	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	cat $(srcdir)/OSParseosrl.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
+		$(srcdir)/OSParseosrl.y.2 osgltemp.tmp osnltemp.tmp \
+		$(srcdir)/OSParseosrl.y.3 >$(srcdir)/OSParseosrl.y
+	rm -f osgltemp.tmp
+	rm -f osnltemp.tmp
 endif
 
 osss: $(srcdir)/OSParseosss.cpp 

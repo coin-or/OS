@@ -14,11 +14,13 @@
  * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
  * that are combined in the makefile.
  * This is the first part of the file OSParseosol.y.
- * Tokens pertaining to the OSgL parser (in file OSParseosgl.y.inc1) are appended, 
- * followed by the grammar rules involving only OSoL constructs (OSParseosol.y.2). 
- * After that we put the grammar rules for elements from the OSgL schema, 
- * maintained in the file OSParseosgl.y.inc2.
- * The postamble in OSParseosol.y.3 is appended at the end.
+ * Tokens pertaining to the OSgL and OSnL parsers are appended.
+ * These are in files OSParseosgl.y.tokens and OSParseosnl.y.tokens.   
+ * Then follow the syntax rules involving only OSoL constructs (OSParseosol.y.2). 
+ * After that we put the syntax rules for elements from the OSgL schema, 
+ * maintained in the file OSParseosgl.y.syntax, and then the OSnL syntax
+ * in OSParseosnl.y.syntax. The postamble in OSParseosol.y.3 is appended at the end.
+ * This process could be repeated for as many other auxiliary schemas as needed. 
  */
 
 %{
@@ -167,7 +169,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token ELSTART ELEND;
 
 /* $Id$ */
-/** @file OSParseosgl.y.inc1
+/** @file OSParseosgl.y.tokens
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  *
@@ -178,10 +180,10 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
  * This software is licensed under the Common Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
- * In order to allow easier maintenance of the parsers, 
- * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
+ * In order to allow easier maintenance of the parsers, the files 
+ * OSParseosil.y, OSParseosol.y and OSParseosrl.y are stored in several pieces.
  * These are the tokens pertaining to the OSgL parser.
- * They are appended after the other tokens.
+ * They are appended after the regular OSxL tokens.
  *
  */
 
@@ -203,11 +205,42 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token LINEARELEMENTSSTART LINEARELEMENTSEND; 
 %token GENERALELEMENTSSTART GENERALELEMENTSEND; 
 
-%token EMPTYROWMAJORATT ROWMAJORATT;
+%token COLOFFSETSSTART COLOFFSETSEND ROWOFFSETSSTART ROWOFFSETSEND;
+
+%token EMPTYROWMAJORATT ROWMAJORATT BLOCKROWIDXATT BLOCKCOLIDXATT;
 
 %token DUMMY
 
-%%
+
+/* $Id$ */
+/** @file OSParseosnl.y.tokens
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * In order to allow easier maintenance of the parsers, the files 
+ * OSParseosil.y, OSParseosol.y and OSParseosrl.y are stored in several pieces.
+ * These are the tokens pertaining to the OSnL parser.
+ * They are appended after the regular OSxL tokens.
+ *
+ */
+
+%token NONLINEAREXPRESSIONSSTART NONLINEAREXPRESSIONSEND NUMBEROFNONLINEAREXPRESSIONS NLSTART NLEND
+%token POWERSTART POWEREND PLUSSTART PLUSEND MINUSSTART MINUSEND
+%token DIVIDESTART DIVIDEEND LNSTART LNEND SQRTSTART SQRTEND SUMSTART SUMEND PRODUCTSTART PRODUCTEND 
+%token EXPSTART EXPEND NEGATESTART NEGATEEND IFSTART IFEND
+%token SQUARESTART SQUAREEND COSSTART COSEND SINSTART SINEND
+%token VARIABLESTART VARIABLEEND ABSSTART ABSEND ERFSTART ERFEND  MAXSTART MAXEND
+%token ALLDIFFSTART ALLDIFFEND MINSTART MINEND ESTART EEND PISTART PIEND
+%token TIMESSTART TIMESEND NUMBERSTART  NUMBEREND
+
+%token IDATT COEFATT
 
 /* $Id$ */
 /** @file OSParseosol.y.2
@@ -229,6 +262,8 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
  *
  * See also the comments in OSParseosol.y.1. 
  */
+
+%%
 
 osoldoc: 
     osolStartEmpty osolBody osolEnd
@@ -5026,7 +5061,7 @@ xmlWhiteSpaceChar: ' '
             
 
 /* $Id$ */
-/** @file OSParseosgl.y.inc
+/** @file OSParseosgl.y.syntax
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  *
@@ -5046,8 +5081,8 @@ xmlWhiteSpaceChar: ' '
  * "osoption" to the appropriate reference ("osinstance" for OSiL files, 
  * "osoption" for OSoL files and "osresult" for OSrL files). 
  * The makefile accomplishes this through maintaining each parser 
- * in two parts and to copy this include file between the two parts 
- * to make the final OSParseosxl.y file.
+ * in several parts and to copy this include file between the OSxL syntax rules
+ * and the postamble to make the final OSParseosxl.y file.
  * 
  */
 
@@ -5781,9 +5816,69 @@ matrixBlocksAttributes: numberOfBlocksAttribute;
 
 matrixBlocksContent: colOffsets rowOffsets blockList;
 
-colOffsets: 
+colOffsets: colOffsetsStart colOffsetsNumberOfElATT colOffsetsContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <blocks> colOffsets failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
 
-rowOffsets:
+colOffsetsStart: COLOFFSETSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+colOffsetsNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+colOffsetsContent: colOffsetsEmpty | colOffsetsLaden;
+
+colOffsetsEmpty: ENDOFELEMENT;
+
+colOffsetsLaden: GREATERTHAN colOffsetsBody COLOFFSETSEND;
+
+colOffsetsBody:  osglIntArrayData;
+
+rowOffsets: rowOffsetsStart rowOffsetsNumberOfElATT rowOffsetsContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <blocks> rowOffsets failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+rowOffsetsStart: ROWOFFSETSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent= false;
+};
+
+rowOffsetsNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+rowOffsetsContent: rowOffsetsEmpty | rowOffsetsLaden;
+
+rowOffsetsEmpty: ENDOFELEMENT;
+
+rowOffsetsLaden: GREATERTHAN rowOffsetsBody ROWOFFSETSEND;
+
+rowOffsetsBody:  osglIntArrayData;
 
 blockList: | blockList matrixBlock;
 
@@ -5805,9 +5900,23 @@ matrixBlockAtt:
         parserData->errorText = NULL;
     };
 
-blockRowIdxAtt: ;
+blockRowIdxAtt: BLOCKROWIDXATT quote INTEGER quote
+{
+    if (osglData->blockRowIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockRowIdx attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockRowIdx cannot be negative");
+    osglData->blockRowIdxAttributePresent = true;        
+    osglData->blockRowIdx = $3;
+};
 
-blockColIdxAtt: ;
+blockColIdxAtt: BLOCKCOLIDXATT quote INTEGER quote
+{
+    if (osglData->blockColIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockColIdx attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockColIdx cannot be negative");
+    osglData->blockColIdxAttributePresent = true;        
+    osglData->blockColIdx = $3;
+};
 
 matrixBlockContent: blockEmpty | blockLaden;
 
@@ -5873,6 +5982,347 @@ numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
 
 
 /* $Id$ */
+/** @file OSParseosnl.y.syntax
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ *
+ * This file contains parser elements that are contained in the OSnL schema
+ * and are shared between several of the main schemas, OSiL, OSoL and OSrL.
+ *
+ * The code is maintained in such a way that it can be inserted into any one
+ * of these parsers by a makefile with minimal changes. 
+ * The only change required is to change every occurrence of the placeholder
+ * "osoption" to the appropriate reference ("osinstance" for OSiL files, 
+ * "osoption" for OSoL files and "osresult" for OSrL files). 
+ * The makefile accomplishes this through maintaining each parser 
+ * in several parts and to copy this include file between the OSxL syntax rules
+ * and the postamble to make the final OSParseosxl.y file.
+ * 
+ */
+
+/** ==========================================================================
+ *           This portion parses the scalar nonlinear expressions
+ *  ==========================================================================
+ */
+
+nonlinearExpressions:  
+				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
+				{  if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, osinstance, parserData, "actual number of nl terms less than number attribute");   };
+				
+
+nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE  GREATERTHAN { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+parserData->tmpnlcount = $3;
+osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
+if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
+for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
+	osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
+}
+};
+				
+nlnodes: 
+		| nlnodes nlstart  
+		nlIdxATT  GREATERTHAN nlnode {
+	// IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
+	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	parserData->nlnodecount++;
+}  NLEND ;
+
+nlstart: NLSTART
+{
+	if(parserData->nlnodecount >= parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
+};
+
+nlIdxATT:  IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $3;
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
+// clear the vectors of pointers
+parserData->nlNodeVec.clear();
+parserData->sumVec.clear();
+//parserData->allDiffVec.clear();
+parserData->maxVec.clear();
+parserData->minVec.clear();
+parserData->productVec.clear();
+};
+
+
+nlnode: number
+      | variable 
+      | times 
+      | plus 
+      | sum 
+      | minus 
+      | negate
+      | divide 
+      | power 
+      | product
+      | ln 
+      | sqrt 
+      | square
+      | sin
+      | cos
+      | exp
+      | if
+      | abs
+      | erf
+      | max
+      | min
+      | E
+      | PI
+      | allDiff ;
+
+
+times: TIMESSTART {
+	parserData->nlNodePoint = new OSnLNodeTimes();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode nlnode TIMESEND;
+
+plus: PLUSSTART {
+	parserData->nlNodePoint = new OSnLNodePlus();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode nlnode PLUSEND;
+
+minus: MINUSSTART {
+	parserData->nlNodePoint = new OSnLNodeMinus();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode nlnode MINUSEND;
+
+negate: NEGATESTART {
+	parserData->nlNodePoint = new OSnLNodeNegate();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode  NEGATEEND;
+
+divide: DIVIDESTART { 
+	parserData->nlNodePoint = new OSnLNodeDivide();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode nlnode DIVIDEEND;
+
+power: POWERSTART {
+	parserData->nlNodePoint = new OSnLNodePower();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode nlnode POWEREND;
+
+sum: SUMSTART {
+	parserData->nlNodePoint = new OSnLNodeSum();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->sumVec.push_back( parserData->nlNodePoint);
+}
+anothersumnlnode SUMEND {
+	parserData->sumVec.back()->m_mChildren = new OSnLNode*[ parserData->sumVec.back()->inumberOfChildren];
+	parserData->sumVec.pop_back();
+};
+
+anothersumnlnode: 
+			| anothersumnlnode nlnode {	parserData->sumVec.back()->inumberOfChildren++; };
+			
+			
+			
+
+allDiff: ALLDIFFSTART {
+	
+	parserData->nlNodePoint =   new OSnLNodeAllDiff ();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->allDiffVec.push_back( parserData->nlNodePoint);
+}
+anotherallDiffnlnode ALLDIFFEND {
+	parserData->allDiffVec.back()->m_mChildren = new OSnLNode*[ parserData->allDiffVec.back()->inumberOfChildren];
+	parserData->allDiffVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+anotherallDiffnlnode: 
+			| anotherallDiffnlnode nlnode {	parserData->allDiffVec.back()->inumberOfChildren++; };
+			
+			
+max: MAXSTART {
+	parserData->nlNodePoint = new OSnLNodeMax();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->maxVec.push_back( parserData->nlNodePoint);
+}
+anothermaxnlnode MAXEND {
+	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
+	parserData->maxVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+anothermaxnlnode: 
+			| anothermaxnlnode nlnode {	parserData->maxVec.back()->inumberOfChildren++; };
+			
+min: MINSTART {
+	parserData->nlNodePoint = new OSnLNodeMin();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->minVec.push_back( parserData->nlNodePoint);
+}
+anotherminnlnode MINEND {
+	parserData->minVec.back()->m_mChildren = new OSnLNode*[ parserData->minVec.back()->inumberOfChildren];
+	parserData->minVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+anotherminnlnode: 
+			| anotherminnlnode nlnode {	parserData->minVec.back()->inumberOfChildren++; };
+			
+			
+product: PRODUCTSTART {
+	parserData->nlNodePoint = new OSnLNodeProduct();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->productVec.push_back( parserData->nlNodePoint);
+}
+anotherproductnlnode PRODUCTEND {
+	parserData->productVec.back()->m_mChildren = new OSnLNode*[ parserData->productVec.back()->inumberOfChildren];
+	parserData->productVec.pop_back();
+};
+
+anotherproductnlnode: 
+			| anotherproductnlnode nlnode {	parserData->productVec.back()->inumberOfChildren++; };
+
+
+ln: LNSTART {
+	parserData->nlNodePoint = new OSnLNodeLn();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode LNEND;
+
+sqrt: SQRTSTART {
+	parserData->nlNodePoint = new OSnLNodeSqrt();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode SQRTEND;
+
+square: SQUARESTART {
+	parserData->nlNodePoint = new OSnLNodeSquare();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode SQUAREEND;
+
+cos: COSSTART {
+	parserData->nlNodePoint = new OSnLNodeCos();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode COSEND;
+
+sin: SINSTART {
+	parserData->nlNodePoint = new OSnLNodeSin();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode SINEND;
+
+
+
+exp: EXPSTART {
+	parserData->nlNodePoint = new OSnLNodeExp();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode EXPEND;
+
+abs: ABSSTART {
+	parserData->nlNodePoint = new OSnLNodeAbs();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode ABSEND {
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+
+erf: ERFSTART {
+	parserData->nlNodePoint = new OSnLNodeErf();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode ERFEND {
+//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+
+if: IFSTART {
+	parserData->nlNodePoint = new OSnLNodeIf();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode nlnode nlnode IFEND {
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+E: ESTART {	parserData->nlNodePoint = new OSnLNodeE();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);} eend;
+	
+eend: ENDOFELEMENT
+			| GREATERTHAN EEND;
+			
+PI: PISTART {	parserData->nlNodePoint = new OSnLNodePI();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);} piend;
+	
+piend: ENDOFELEMENT
+			| GREATERTHAN PIEND;
+			
+number: NUMBERSTART {
+	parserData->nlNodeNumberPoint = new OSnLNodeNumber();
+	parserData->nlNodeVec.push_back( parserData->nlNodeNumberPoint);
+} anotherNumberATT  numberend {parserData->numbervalueattON = false; parserData->numbertypeattON = false; parserData->numberidattON = false;};
+
+numberend: ENDOFELEMENT
+			| GREATERTHAN NUMBEREND;
+
+anotherNumberATT:
+			|anotherNumberATT numberATT ;
+			
+numberATT: numbertypeATT  {if(parserData->numbertypeattON) osilerror( NULL, osinstance, parserData, "too many number type attributes"); 
+			parserData->numbertypeattON = true; }
+		| numbervalueATT  {if(parserData->numbervalueattON) osilerror( NULL, osinstance, parserData, "too many number value attributes"); 
+			parserData->numbervalueattON = true; }
+		| numberidATT  {if(parserData->numberidattON) osilerror( NULL, osinstance, parserData,"too many number id attributes"); 
+			parserData->numberidattON = true; }			
+			;
+			
+numbertypeATT: TYPEATT ATTRIBUTETEXT {
+	parserData->nlNodeNumberPoint->type = $2;
+} QUOTE;
+
+numberidATT:   IDATT   ATTRIBUTETEXT {
+	parserData->nlNodeNumberPoint->id = $2;
+}  QUOTE ;
+
+numbervalueATT: VALUEATT QUOTE  DOUBLE QUOTE {if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeNumberPoint->value = $3;
+}
+		| VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeNumberPoint->value = $3;
+} ;
+
+variable: VARIABLESTART {
+	parserData->nlNodeVariablePoint = new OSnLNodeVariable();
+	parserData->nlNodeVec.push_back( parserData->nlNodeVariablePoint);
+} anotherVariableATT  variableend {parserData->variablecoefattON = false; parserData->variableidxattON = false;} ;
+		      
+variableend: ENDOFELEMENT
+			| GREATERTHAN nlnode {
+	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
+	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+}    VARIABLEEND
+           | GREATERTHAN VARIABLEEND;
+			
+anotherVariableATT:
+			|anotherVariableATT variableATT ;
+			
+variableATT: variablecoefATT  {if(parserData->variablecoefattON) osilerror( NULL, osinstance, parserData, "too many variable coef attributes"); 
+			parserData->variablecoefattON = true; }
+		| variableidxATT  {if(parserData->variableidxattON) osilerror( NULL, osinstance, parserData, "too many variable idx attributes"); 
+			parserData->variableidxattON = true; 
+			};
+			
+variablecoefATT: COEFATT  QUOTE DOUBLE QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeVariablePoint->coef = $3;
+}
+				| COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeVariablePoint->coef = $3;		
+}  ;
+				
+variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeVariablePoint->idx = $3;
+	if( $3 >= osinstance->instanceData->variables->numberOfVariables){
+	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
+	 }
+}  ; 
+
+
+/* $Id$ */
 /** @file OSParseosol.y.3
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin 
@@ -5887,8 +6337,8 @@ numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
  * In order to allow easier maintenance of the parsers, 
  * the files OSParseosol.y and OSParseosrl.y are stored in several pieces
  * that are combined in the makefile.
- * This is the last part of the file OSParseosol.y, to be appended
- * after OSParseosol.y.1, OSParseosgl.y.inc1, OSParseosol.y.2 and OSParseosgl.y.inc2.
+ * This is the last part of the file OSParseosol.y containing the postamble.
+ * It is appended as the last file.
  */
 
 %%

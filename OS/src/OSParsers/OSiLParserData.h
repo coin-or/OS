@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -74,6 +74,8 @@ public:
      */
     bool qtermcoefattON;
 
+
+#if 0
     /** These entities are used for parsing <nonlinearExpressions> */
 
     /** a pointer to an OSnLNode object */
@@ -155,7 +157,7 @@ public:
      * parsing we need to temporarily store all of its children
      */
     std::vector<OSnLNode*> minVec;
-
+#endif
 
     /** These variables are used to parse the <timeDomain> element */
 
