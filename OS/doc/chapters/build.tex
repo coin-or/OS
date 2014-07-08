@@ -1093,10 +1093,11 @@ ThirdParty/Mumps"
 \end{verbatim}
 \index{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}
 
-Also in this class are the packages {\tt Metis}, a utility package that can optionally be used by 
+Other open-source code that can be handled in the same way as just described are the packages 
+{\tt Metis}, a utility package that can optionally be used by 
 {\tt Ipopt} to speed up computations, and {\tt Glpk}, a linear programming solver (see below). 
 
-The last class of  external packages are commercial and closed-source programs, which may require special licenses, purchase agreements, and other  considerations which are strictly between the user and the third-party supplier. No {\tt get.xxxx} scripts are possible for these packages, and consequently it is hard to completely automate the build process. Nonetheless, it is possible to include these solvers, and we give below some indications as to how this might be accomplished.
+The second class of  external packages are commercial and closed-source programs, which may require special licenses, purchase agreements, and other  considerations which are strictly between the user and the third-party supplier. No {\tt get.xxxx} scripts are possible for these packages, and consequently it is hard to completely automate the build process. Nonetheless, it is possible to include these solvers, and we give below some indications as to how this might be accomplished.
 
 In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines
 the values of a number of
@@ -1428,6 +1429,17 @@ After running {\tt configure} as described above,  on Unix systems, it will be n
 environment variables {\tt LD\_LIBRARY\_PATH} or {\tt DYLD\_LIBRARY\_PATH} (on Mac OS X) to point to the
 location of the installed third-party libraries in the case that the libraries are dynamic and not static libraries.
 
+\subsubdivision{Other solvers}
+
+It is possible to connect other solvers. This requires appropriate {\tt COIN\_HAS\_XXXX} variables to be set, which is accomplished by adding reference to the solver in the {\tt configure.ac} file by calling one of  
+
+\begin{verbatim}
+AC_COIN_CHECK_PACKAGE
+AC_COIN_CHECK_USER_LIBRARY
+\end{verbatim}
+
+\noindent
+depending on whether the solver has a build system under {\tt COIN\_OR} (the first case) or does not. The file {\tt BuildTools/coin.m4} contains some more information about the use of these two commands. Once the changes to {\tt configure.ac} have been made, it is necessary to run the autotools again, followed by a {\tt configure} step (making sure to include appropriate {\tt lib} and {\tt include} directories) as well as a {\tt make install}. 
 
 \subdivision{Bug Reporting}
 
