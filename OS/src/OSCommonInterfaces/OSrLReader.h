@@ -21,6 +21,7 @@
 #include "OSResult.h"
 #include "OSrLParserData.h"
 #include "OSgLParserData.h"
+#include "OSnLParserData.h"
 #include "OSErrorClass.h"
 
 
@@ -80,5 +81,10 @@ private:
      * temporarily store data from the OSgL schema elements.
      */
     OSgLParserData *m_osglData;
+
+    /** m_osnlData is the object used in the parser to
+     * temporarily store data from the OSnL schema elements.
+     */
+    OSnLParserData *m_osnlData;
 };
 #endif

@@ -60,7 +60,8 @@ libOSParsers_la_LIBADD =
 am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
 	OSParseosol.lo OSParseosol.tab.lo OSParseosrl.lo \
 	OSParseosrl.tab.lo OSParseosss.lo OSgLParserData.lo \
-	OSiLParserData.lo OSrLParserData.lo OSoLParserData.lo
+	OSiLParserData.lo OSnLParserData.lo OSoLParserData.lo \
+	OSrLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -457,10 +458,12 @@ libOSParsers_la_SOURCES = \
 		OSgLParserData.cpp \
 		OSiLParserData.h \
 		OSiLParserData.cpp \
-		OSrLParserData.h \
-		OSrLParserData.cpp \
+		OSnLParserData.h \
+		OSnLParserData.cpp \
 		OSoLParserData.h \
-		OSoLParserData.cpp
+		OSoLParserData.cpp \
+		OSrLParserData.h \
+		OSrLParserData.cpp
 
 libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 
@@ -494,8 +497,9 @@ includecoin_HEADERS = \
 	OSParseosol.tab.hpp \
 	OSgLParserData.h \
 	OSiLParserData.h \
-	OSrLParserData.h \
-	OSoLParserData.h
+	OSnLParserData.h \
+	OSoLParserData.h \
+	OSrLParserData.h
 
 all: all-am
 
@@ -557,6 +561,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosss.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSgLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLParserData.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSnLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSoLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLParserData.Plo@am__quote@
 
@@ -810,7 +815,7 @@ osil: $(srcdir)/OSParseosil.cpp \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.2   \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.syntax \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.3
-@HAVE_LEXYACC_TRUE@	sed 's/targetObject/osinstance/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 @HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosil.y.1 $(srcdir)/OSParseosnl.y.tokens \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.2 osnltemp.tmp $(srcdir)/OSParseosil.y.3 \
 @HAVE_LEXYACC_TRUE@		>$(srcdir)/OSParseosil.y
@@ -846,8 +851,8 @@ osol: $(srcdir)/OSParseosol.cpp \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.syntax \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.syntax \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.y.3
-@HAVE_LEXYACC_TRUE@	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
-@HAVE_LEXYACC_TRUE@	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 @HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosol.y.1 \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.y.2 osgltemp.tmp osnltemp.tmp \
@@ -885,8 +890,8 @@ osrl: $(srcdir)/OSParseosrl.cpp \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.syntax \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.syntax \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.y.3
-@HAVE_LEXYACC_TRUE@	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
-@HAVE_LEXYACC_TRUE@	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 @HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosrl.y.1 \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.y.2 osgltemp.tmp osnltemp.tmp \

@@ -221,7 +221,8 @@ OSoLParserData::OSoLParserData() :
 
     statusType(""),
     statusDescription(""),
-    errorText(NULL)
+    errorText(NULL),
+    parser_errors("")
 {
 
 }//OSoLParserData

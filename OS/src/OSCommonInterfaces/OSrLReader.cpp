@@ -20,7 +20,7 @@
 
 
 
-void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData) throw(ErrorClass);
+void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass);
 int osrllex_init(void** ptr_yy_globals);
 int osrllex_destroy (void* scanner );
 void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
@@ -36,6 +36,10 @@ OSrLReader::OSrLReader( )
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrL_parser, ENUM_OUTPUT_LEVEL_trace, "new OSgLParserData()");
 #endif
     m_osglData = new OSgLParserData();
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrL_parser, ENUM_OUTPUT_LEVEL_trace, "new OSnLParserData()");
+#endif
+    m_osnlData = new OSnLParserData();
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrL_parser, ENUM_OUTPUT_LEVEL_trace, "new OSResult()");
 #endif
@@ -80,6 +84,12 @@ OSrLReader::~OSrLReader()
     m_osglData = NULL;
 
 #ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrL_parser, ENUM_OUTPUT_LEVEL_trace, "delete osnlData");
+#endif
+    if( m_osnlData != NULL) delete m_osnlData;
+    m_osnlData = NULL;
+
+#ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrL_parser, ENUM_OUTPUT_LEVEL_trace, "success!");
 #endif
 }
@@ -89,7 +99,7 @@ OSResult* OSrLReader::readOSrL(const std::string& posrl) throw(ErrorClass)
     if (posrl.length() > 0)
     {
         const char *ch = posrl.c_str();
-        yygetOSResult( ch, m_osresult, m_parserData, m_osglData);
+        yygetOSResult( ch, m_osresult, m_parserData, m_osglData, m_osnlData);
     }
     return m_osresult;
 }

@@ -34,6 +34,7 @@
 #include "OSResult.h"
 #include "OSrLParserData.h"
 #include "OSgLParserData.h"
+#include "OSnLParserData.h"
 #include "OSBase64.h"
 
 #include <iostream>
@@ -55,7 +56,7 @@ int osrlget_lineno( void* yyscanner);
 char *osrlget_text (void* yyscanner );
 void osrlset_lineno (int line_number , void* yyscanner );
 void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
-void  yygetOSResult(const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData ) throw(ErrorClass);
+void  yygetOSResult(const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData ) throw(ErrorClass);
 void osrl_empty_vectors( OSrLParserData* parserData);
 void osgl_empty_vectors( OSgLParserData* osglData);
 
@@ -70,6 +71,7 @@ void osgl_empty_vectors( OSgLParserData* osglData);
 %parse-param{OSResult *osresult}
 %parse-param{OSrLParserData *parserData}
 %parse-param{OSgLParserData *osglData}
+%parse-param{OSnLParserData *osnlData}
 %lex-param {void* scanner}
 
 
@@ -84,8 +86,8 @@ this fails in Mac OS X
 */
 
 %{
-std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg ) ;
-void osrlerror(YYLTYPE* type, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, std::string errormsg);
+std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg ) ;
+void osrlerror(YYLTYPE* type, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData* osnlData, std::string errormsg);
 int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 #define scanner parserData->scanner
 %}

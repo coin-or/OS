@@ -23,7 +23,7 @@
 
 
 //bison function
-void yygetOSOption(const char *osil, OSOption* osoption, OSoLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass);
+void yygetOSOption(const char *osil, OSOption* osoption, OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass);
 //lex functions
 int osollex_init(void** ptr_yy_globals);
 int osollex_destroy (void* scanner );
@@ -44,6 +44,10 @@ OSoLReader::OSoLReader( )
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoL_parser, ENUM_OUTPUT_LEVEL_trace, "new OSgLParserData()");
 #endif
     m_osglData = new OSgLParserData();
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoL_parser, ENUM_OUTPUT_LEVEL_trace, "new OSnLParserData()");
+#endif
+    m_osnlData = new OSnLParserData();
     // initialize the lexer and set yyextra
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoL_parser, ENUM_OUTPUT_LEVEL_trace, "initialize the lexer");
@@ -65,6 +69,8 @@ OSoLReader::~OSoLReader()
     m_parserData = NULL;
     if( m_osglData != NULL) delete m_osglData;
     m_osglData = NULL;
+    if( m_osnlData != NULL) delete m_osnlData;
+    m_osnlData = NULL;
 }
 
 OSOption* OSoLReader::readOSoL(const std::string& posol) throw(ErrorClass)
@@ -72,7 +78,7 @@ OSOption* OSoLReader::readOSoL(const std::string& posol) throw(ErrorClass)
     if (posol.length() > 0)
     {
         const char *ch = posol.c_str();
-        yygetOSOption( ch, m_osoption, m_parserData, m_osglData);
+        yygetOSOption( ch, m_osoption, m_parserData, m_osglData, m_osnlData);
     }
     return m_osoption;
 }//end readOSoL

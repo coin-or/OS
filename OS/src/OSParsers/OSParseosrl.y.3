@@ -19,7 +19,8 @@
 
 %%
 
-void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+#if 0
+void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     osrl_empty_vectors( parserData );
     osgl_empty_vectors(   osglData );
@@ -35,9 +36,9 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
     //osrllex_destroy( scanner);
     throw ErrorClass( error);
 } //end osrlerror
+#endif
 
-
-std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     std::ostringstream outStr;
     outStr << "At line number " << osrlget_lineno( scanner) << ": "; 
@@ -47,7 +48,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* par
     return outStr.str();
 } //end addErrorMsg
 
-void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, std::string errormsg )
+void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     osrl_empty_vectors( parserData);
     osgl_empty_vectors( osglData);
@@ -56,7 +57,7 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 
 
 
-void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass)
+void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass)
 {
     try
     {
@@ -65,7 +66,7 @@ void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData 
         //
         // call the Bison parser
         //
-        if(  osrlparse( osresult,  parserData, osglData) != 0) {
+        if(  osrlparse( osresult,  parserData, osglData, osnlData) != 0) {
             //osrllex_destroy(scanner);
               throw ErrorClass(  "Error parsing the OSrL file");
          }

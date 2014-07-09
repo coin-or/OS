@@ -19,6 +19,7 @@ using namespace std;
 
 OSiLParserData::~OSiLParserData()
 {
+#if 0
     // clear the vectors of pointers
     nlNodeVec.clear();
     //delete nlNodeVec.back();
@@ -36,7 +37,7 @@ OSiLParserData::~OSiLParserData()
     if (m_miObjStageInfo != NULL)
         delete []m_miObjStageInfo;
     m_miObjStageInfo = NULL;
-
+#endif
 }//~OSiLParserData
 
 
@@ -48,13 +49,13 @@ OSiLParserData::OSiLParserData() :
     qtermidxattON(false),
     qtermidattON(false),
     qtermcoefattON(false),
-    nlnodecount(0),
-    tmpnlcount(0),
-    numbertypeattON(false),
-    numbervalueattON(false),
-    numberidattON(false),
-    variableidxattON(false),
-    variablecoefattON(false),
+//    nlnodecount(0),
+//    tmpnlcount(0),
+//    numbertypeattON(false),
+//    numbervalueattON(false),
+//    numberidattON(false),
+//    variableidxattON(false),
+//    variablecoefattON(false),
     timeDomainStages(false),
     timeDomainInterval(false),
     stagecount(0),
@@ -77,7 +78,8 @@ OSiLParserData::OSiLParserData() :
     intervalhorizonON(false),
     intervalhorizon(0.0),
     intervalstartON(false),
-    intervalstart(0.0)
+    intervalstart(0.0),
+    parser_errors("")
 {
     m_miVarStageInfo = NULL;
     m_miConStageInfo = NULL;

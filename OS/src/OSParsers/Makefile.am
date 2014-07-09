@@ -31,10 +31,12 @@ libOSParsers_la_SOURCES = \
 		OSgLParserData.cpp \
 		OSiLParserData.h \
 		OSiLParserData.cpp \
-		OSrLParserData.h \
-		OSrLParserData.cpp \
+		OSnLParserData.h \
+		OSnLParserData.cpp \
 		OSoLParserData.h \
-		OSoLParserData.cpp
+		OSoLParserData.cpp \
+		OSrLParserData.h \
+		OSrLParserData.cpp
 
 
 ########################################################################
@@ -69,7 +71,7 @@ $(srcdir)/OSParseosil.y: \
 		$(srcdir)/OSParseosil.y.2   \
 		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosil.y.3
-	sed 's/targetObject/osinstance/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	sed 's/parserObjects/osinstance, parserData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 	cat $(srcdir)/OSParseosil.y.1 $(srcdir)/OSParseosnl.y.tokens \
 		$(srcdir)/OSParseosil.y.2 osnltemp.tmp $(srcdir)/OSParseosil.y.3 \
 		>$(srcdir)/OSParseosil.y
@@ -107,8 +109,8 @@ $(srcdir)/OSParseosol.y: \
 		$(srcdir)/OSParseosgl.y.syntax \
 		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosol.y.3
-	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
-	sed 's/targetObject/osoption/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 	cat $(srcdir)/OSParseosol.y.1 \
 		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
 		$(srcdir)/OSParseosol.y.2 osgltemp.tmp osnltemp.tmp \
@@ -148,8 +150,8 @@ $(srcdir)/OSParseosrl.y: \
 		$(srcdir)/OSParseosgl.y.syntax \
 		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosrl.y.3
-	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
-	sed 's/targetObject/osresult/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 	cat $(srcdir)/OSParseosrl.y.1 \
 		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
 		$(srcdir)/OSParseosrl.y.2 osgltemp.tmp osnltemp.tmp \
@@ -200,5 +202,7 @@ includecoin_HEADERS = \
 	OSParseosol.tab.hpp \
 	OSgLParserData.h \
 	OSiLParserData.h \
-	OSrLParserData.h \
-	OSoLParserData.h
+	OSnLParserData.h \
+	OSoLParserData.h \
+	OSrLParserData.h
+

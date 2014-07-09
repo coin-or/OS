@@ -34,6 +34,7 @@
 #include "OSOption.h"
 #include "OSoLParserData.h"
 #include "OSgLParserData.h"
+#include "OSnLParserData.h"
 #include "OSBase64.h"
 
 #include <iostream>
@@ -55,7 +56,7 @@ int osolget_lineno( void* yyscanner);
 char *osolget_text (void* yyscanner );
 void osolset_lineno (int line_number , void* yyscanner );
 void osolset_extra (OSoLParserData* parserData , void* yyscanner );
-void  yygetOSOption(const char *ch, OSOption* m_osoption, OSoLParserData *m_parserData, OSgLParserData *osglData ) throw(ErrorClass);
+void  yygetOSOption(const char *ch, OSOption* m_osoption, OSoLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData ) throw(ErrorClass);
 void osol_empty_vectors( OSoLParserData* parserData);
 void osgl_empty_vectors( OSgLParserData* osglData);
 
@@ -70,6 +71,7 @@ void osgl_empty_vectors( OSgLParserData* osglData);
 %parse-param{OSOption *osoption}
 %parse-param{OSoLParserData *parserData}
 %parse-param{OSgLParserData *osglData}
+%parse-param{OSnLParserData *osnlData}
 %lex-param {void* scanner}
 
 
@@ -85,8 +87,8 @@ this fails in Mac OS X
 
 %{
 
-std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, const char* errormsg ) ;
-void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, std::string errormsg );
+std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg ) ;
+void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg );
 int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 #define scanner parserData->scanner
 %}
@@ -299,12 +301,12 @@ osolEnd: osolEnding
         if (parserData->parser_errors != "")
         {
             parserData->parser_errors += ("\n\nOSoL input is either not valid or well formed.\n"); 
-            osolerror( NULL, osoption, parserData, osglData, parserData->parser_errors);
+            osolerror( NULL, osoption, parserData, osglData, osnlData, parserData->parser_errors);
         }
     };
 
 osolEnding: OSOLEND
-  | { parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "unexpected end of file, expecting </osol>");};
+  | { parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "unexpected end of file, expecting </osol>");};
 
 osolBody: 
     headerElement generalElement systemElement serviceElement jobElement optimizationElement;
@@ -319,7 +321,7 @@ headerElement: | osglFileHeader
 {
     if (!osoption->setHeader(osglData->fileName, osglData->source,
             osglData->description, osglData->fileCreator, osglData->licence) )     
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setHeader failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setHeader failed");
 };
 
 
@@ -376,7 +378,7 @@ serviceURI: serviceURIStart serviceURIContent;
 serviceURIStart: SERVICEURISTART
 {
     if (parserData->serviceURIPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <serviceURI>");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <serviceURI>");
     else
         parserData->serviceURIPresent = true;
     
@@ -391,7 +393,7 @@ serviceURILaden: GREATERTHAN serviceURIBody SERVICEURIEND;
 serviceURIBody:  ELEMENTTEXT 
     {
         if (osoption->setServiceURI($1) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setServiceURI failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setServiceURI failed");
         free($1); 
         parserData->errorText = NULL;
     };
@@ -403,7 +405,7 @@ serviceName: serviceNameStart serviceNameContent;
 serviceNameStart: SERVICENAMESTART 
     {
         if (parserData->serviceNamePresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <serviceName>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <serviceName>");
         parserData->serviceNamePresent = true;
     };
 
@@ -416,7 +418,7 @@ serviceNameLaden: GREATERTHAN serviceNameBody SERVICENAMEEND;
 serviceNameBody:  ELEMENTTEXT  
     {
         if (osoption->setServiceName($1) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setServiceName failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setServiceName failed");
         free($1); 
         parserData->errorText = NULL;
     };
@@ -427,7 +429,7 @@ instanceName: instanceNameStart instanceNameContent;
 
 instanceNameStart:  INSTANCENAMESTART 
     {    if (parserData->instanceNamePresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <instanceName>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <instanceName>");
         parserData->instanceNamePresent = true;
     };
 
@@ -440,7 +442,7 @@ instanceNameLaden: GREATERTHAN instanceNameBody INSTANCENAMEEND;
 instanceNameBody:  ELEMENTTEXT  
     {
         if (osoption->setInstanceName($1) == false) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setInstanceName failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setInstanceName failed");
         free($1); 
         parserData->errorText = NULL;
     };
@@ -450,14 +452,14 @@ instanceNameBody:  ELEMENTTEXT
 instanceLocation: instanceLocationStart instanceLocationAttributes instanceLocationContent
 {
     if (osoption->setInstanceLocation(parserData->tempStr,parserData->typeAttribute) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setInstanceLocation failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setInstanceLocation failed");
     parserData->errorText = NULL;
 };
 
 instanceLocationStart:  INSTANCELOCATIONSTART 
     {
         if (parserData->instanceLocationPresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <instanceLocation>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <instanceLocation>");
         parserData->instanceLocationPresent = true;
         parserData->typeAttribute = "local";
     };
@@ -466,7 +468,7 @@ instanceLocationAttributes:
     | locationTypeAttribute
     {   
         if (verifyLocationType(parserData->typeAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "instance location type not recognized");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "instance location type not recognized");
         parserData->errorText = NULL;
     };
 
@@ -494,7 +496,7 @@ jobID: jobIDStart jobIDContent;
 
 jobIDStart: JOBIDSTART 
     {    if (parserData->jobIDPresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <jobID>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <jobID>");
         parserData->jobIDPresent = true;
     };
     
@@ -507,7 +509,7 @@ jobIDLaden: GREATERTHAN jobIDBody JOBIDEND;
 jobIDBody:  ELEMENTTEXT  
     {
         if (osoption->setJobID($1) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setJobID failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setJobID failed");
         free($1); 
         parserData->errorText = NULL;
     };
@@ -518,7 +520,7 @@ solverToInvoke: solverToInvokeStart solverToInvokeContent;
 solverToInvokeStart: SOLVERTOINVOKESTART 
     {
         if (parserData->solverToInvokePresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <solverToInvoke>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <solverToInvoke>");
         parserData->solverToInvokePresent = true;
     };
 
@@ -531,7 +533,7 @@ solverToInvokeLaden: GREATERTHAN solverToInvokeBody SOLVERTOINVOKEEND;
 solverToInvokeBody:  ELEMENTTEXT  
     {
         if (osoption->setSolverToInvoke($1) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setSolverToInvoke failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setSolverToInvoke failed");
         free($1); 
         parserData->errorText = NULL;
     };
@@ -543,7 +545,7 @@ license: licenseStart licenseContent;
 licenseStart: LICENSESTART
 {
     if (parserData->licensePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <license>");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <license>");
     parserData->licensePresent = true;    
 };
 
@@ -556,7 +558,7 @@ licenseLaden: GREATERTHAN licensebody LICENSEEND;
 licensebody: ELEMENTTEXT 
     {
         if (osoption->setLicense($1) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setLicense failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setLicense failed");
         free($1);
         parserData->errorText = NULL;
     };
@@ -567,7 +569,7 @@ username: usernameStart usernameContent;
 
 usernameStart: USERNAMESTART
 {    if (parserData->usernamePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <username>");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <username>");
     parserData->usernamePresent = true;    
 };
 
@@ -580,7 +582,7 @@ usernameLaden: GREATERTHAN usernamebody USERNAMEEND;
 usernamebody: ELEMENTTEXT 
     {
         if (osoption->setUserName($1) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setUsername failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setUsername failed");
         free($1); 
         parserData->errorText = NULL;
     };
@@ -591,7 +593,7 @@ password: passwordStart passwordContent;
 
 passwordStart: PASSWORDSTART
 {    if (parserData->passwordPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <password>");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <password>");
     parserData->passwordPresent = true;    
 };
 
@@ -604,7 +606,7 @@ passwordLaden: GREATERTHAN passwordbody PASSWORDEND;
 passwordbody: ELEMENTTEXT 
     {
         if (osoption->setPassword($1) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setPassword failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setPassword failed");
         free($1); 
         parserData->errorText = NULL;
     };
@@ -614,14 +616,14 @@ passwordbody: ELEMENTTEXT
 contact: contactStart contactAttributes contactContent
 {
     if (osoption->setContact(parserData->tempStr,parserData->typeAttribute) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setContact failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setContact failed");
     parserData->errorText = NULL;
 };
 
 contactStart: CONTACTSTART
 {
     if (parserData->contactPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <contact>");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <contact>");
     parserData->contactPresent = true;
     parserData->typeAttribute = "osp";
     parserData->tempStr = "";
@@ -631,7 +633,7 @@ contactAttributes:
     | transportTypeAttribute
     {   
         if (verifyTransportType(parserData->typeAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "transport type not recognized");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "transport type not recognized");
     };
 
 transportTypeAttribute: TRANSPORTTYPEATT ATTRIBUTETEXT QUOTE 
@@ -665,7 +667,7 @@ otherGeneralOptionsStart: OTHEROPTIONSSTART
     {
         if (parserData->otherGeneralOptionsPresent)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <general> <otherOptions>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <general> <otherOptions>");
             parserData->ignoreDataAfterErrors = true;            
         }
         parserData->otherGeneralOptionsPresent = true;
@@ -673,7 +675,7 @@ otherGeneralOptionsStart: OTHEROPTIONSSTART
 
 otherGeneralOptionsAttributes: numberOfOtherOptionsAttribute 
     {
-        if (parserData->tempInt < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of other general options cannot be negative");
+        if (parserData->tempInt < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other general options cannot be negative");
         parserData->numberOf = parserData->tempInt;
         parserData->kounter = 0;
     };
@@ -682,12 +684,12 @@ otherGeneralOptionsContent:
     otherGeneralOptionsEmpty 
     {
         if (parserData->numberOf > 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected at least one <other> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <other> element");
     }  
   | otherGeneralOptionsLaden
     {
         if (parserData->kounter < parserData->numberOf - 1)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer <other> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <other> elements than specified");
     };
     
 otherGeneralOptionsEmpty: GREATERTHAN OTHEROPTIONSEND | ENDOFELEMENT;
@@ -705,7 +707,7 @@ otherGeneralOption: otherGeneralOptionStart otherGeneralAttributes otherGeneralE
         parserData->kounter++;
         if (!parserData->ignoreDataAfterErrors)
             if (osoption->setAnOtherGeneralOption(parserData->nameAttribute, parserData->valueAttribute, parserData->descriptionAttribute) == false)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setOtherGeneralOption failed");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setOtherGeneralOption failed");
     };    
 
 otherGeneralOptionStart: OTHERSTART
@@ -714,7 +716,7 @@ otherGeneralOptionStart: OTHERSTART
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <other> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <other> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -730,7 +732,7 @@ otherGeneralOptionStart: OTHERSTART
 otherGeneralAttributes: otherGeneralAttList
 {
     if (!parserData->nameAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> must have name attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> must have name attribute");
 };    
 
 otherGeneralAttList: | otherGeneralAttList otherGeneralAtt;
@@ -738,7 +740,7 @@ otherGeneralAttList: | otherGeneralAttList otherGeneralAtt;
 otherGeneralAtt: 
     nameAttribute
     {    if (parserData->nameAttribute.length() == 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "otherOption name cannot be empty");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "otherOption name cannot be empty");
     }
   | valueAttribute
   | descriptionAttribute
@@ -788,7 +790,7 @@ minDiskSpace: minDiskSpaceStart minDiskSpaceAttributes minDiskSpaceContent;
 
 minDiskSpaceStart: MINDISKSPACESTART
     {    if (parserData->minDiskSpacePresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one minDiskSpace element allowed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one minDiskSpace element allowed");
         parserData->minDiskSpacePresent = true;    
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;    
@@ -810,7 +812,7 @@ minDiskSpaceContent: GREATERTHAN minDiskSpaceValue MINDISKSPACEEND;
 minDiskSpaceValue: aNumber
 {
     if (osoption->setMinDiskSpace(parserData->unitAttribute, parserData->descriptionAttribute, parserData->tempVal) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setMinDiskSpace failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setMinDiskSpace failed");
     parserData->errorText = NULL;
 };
 
@@ -819,7 +821,7 @@ minMemorySize: minMemoryStart minMemoryAttributes minMemoryContent;
 
 minMemoryStart: MINMEMORYSTART
     {    if (parserData->minMemoryPresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one minMemory element allowed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one minMemory element allowed");
         parserData->minMemoryPresent = true;
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;    
@@ -841,7 +843,7 @@ minMemoryContent: GREATERTHAN minMemoryValue MINMEMORYEND;
 minMemoryValue: aNumber
 {
     if (osoption->setMinMemorySize(parserData->unitAttribute, parserData->descriptionAttribute, parserData->tempVal) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setMinMemorySize failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setMinMemorySize failed");
     parserData->errorText = NULL;
 };
 
@@ -851,7 +853,7 @@ minCPUSpeed: minCPUSpeedStart minCPUSpeedAttributes minCPUSpeedContent;
 
 minCPUSpeedStart: MINCPUSPEEDSTART
     {    if (parserData->minCPUSpeedPresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one minCPUSpeed element allowed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one minCPUSpeed element allowed");
         parserData->minCPUSpeedPresent = true;
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;    
@@ -873,7 +875,7 @@ minCPUSpeedContent: GREATERTHAN minCPUSpeedValue MINCPUSPEEDEND;
 minCPUSpeedValue: aNumber
 {    
     if (osoption->setMinCPUSpeed(parserData->unitAttribute, parserData->descriptionAttribute, parserData->tempVal) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setMinCPUSpeed failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setMinCPUSpeed failed");
     parserData->errorText = NULL;
 };
 
@@ -883,7 +885,7 @@ minCPUNumber: minCPUNumberStart minCPUNumberAttributes minCPUNumberContent;
 
 minCPUNumberStart: MINCPUNUMBERSTART
     {    if (parserData->minCPUNumberPresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one minCPUNumber element allowed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one minCPUNumber element allowed");
         parserData->minCPUNumberPresent = true;
         parserData->descriptionAttributePresent = false;    
         parserData->descriptionAttribute = "";    
@@ -897,7 +899,7 @@ minCPUNumberContent: GREATERTHAN minCPUNumberValue MINCPUNUMBEREND;
 minCPUNumberValue: INTEGER 
 {
     if (osoption->setMinCPUNumber($1, parserData->descriptionAttribute) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setMinCPUNumber failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setMinCPUNumber failed");
     //free($1); 
     parserData->errorText = NULL; 
 };
@@ -915,7 +917,7 @@ otherSystemOptionsStart: OTHEROPTIONSSTART
 {
     if (parserData->otherSystemOptionsPresent)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <system> <otherOptions>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <system> <otherOptions>");
             parserData->ignoreDataAfterErrors = true;
         }
     parserData->otherSystemOptionsPresent = true;
@@ -923,7 +925,7 @@ otherSystemOptionsStart: OTHEROPTIONSSTART
 
 otherSystemOptionsAttributes: numberOfOtherOptionsAttribute
 {
-    if (parserData->tempInt < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of other system options cannot be negative");
+    if (parserData->tempInt < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other system options cannot be negative");
     parserData->numberOf = parserData->tempInt;
     parserData->kounter = 0;
 };
@@ -931,11 +933,11 @@ otherSystemOptionsAttributes: numberOfOtherOptionsAttribute
 otherSystemOptionsContent: 
     otherSystemOptionsEmpty
     {    if (parserData->numberOf > 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected at least one <other> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <other> element");
     }
   | otherSystemOptionsLaden
     {    if (parserData->kounter < parserData->numberOf - 1)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer <other> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <other> elements than specified");
     };
 
 otherSystemOptionsEmpty: GREATERTHAN OTHEROPTIONSEND | ENDOFELEMENT;
@@ -953,7 +955,7 @@ otherSystemOption: otherSystemOptionStart otherSystemOptionAttributes otherSyste
         parserData->kounter++;
         if (!parserData->ignoreDataAfterErrors)
             if (osoption->setAnOtherSystemOption(parserData->nameAttribute, parserData->valueAttribute, parserData->descriptionAttribute) == false)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setOtherSystemOption failed");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setOtherSystemOption failed");
     };
 
 otherSystemOptionStart: OTHERSTART
@@ -962,7 +964,7 @@ otherSystemOptionStart: OTHERSTART
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <other> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <other> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -977,7 +979,7 @@ otherSystemOptionStart: OTHERSTART
 
 otherSystemOptionAttributes: otherSystemOptionAttList
 {    if (!parserData->nameAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> must have name attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> must have name attribute");
 };
     
 otherSystemOptionAttList: | otherSystemOptionAttList otherSystemOptionAtt;
@@ -986,7 +988,7 @@ otherSystemOptionAtt:
     nameAttribute
     {
         if (parserData->nameAttribute.length() == 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "otherOption name cannot be empty");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "otherOption name cannot be empty");
     }
   | valueAttribute
   | descriptionAttribute
@@ -1030,7 +1032,7 @@ serviceType: serviceTypeStart serviceTypeContent;
 
 serviceTypeStart: SERVICETYPESTART
     {    if (parserData->serviceTypePresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one currentState element allowed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one currentState element allowed");
         parserData->serviceTypePresent = true;
     };
 
@@ -1045,7 +1047,7 @@ serviceTypeBody:  ELEMENTTEXT
         parserData->tempStr = $1; 
         free($1);
         if (osoption->setServiceType(parserData->tempStr) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setServiceType failed; current system state not recognized");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setServiceType failed; current system state not recognized");
         parserData->errorText = NULL;
     };
 
@@ -1061,7 +1063,7 @@ otherServiceOptionsStart: OTHEROPTIONSSTART
 {
     if (parserData->otherServiceOptionsPresent)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <service> <otherOptions>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <service> <otherOptions>");
             parserData->ignoreDataAfterErrors = true;            
         }
     parserData->otherServiceOptionsPresent = true;
@@ -1069,7 +1071,7 @@ otherServiceOptionsStart: OTHEROPTIONSSTART
 
 otherServiceOptionsAttributes: numberOfOtherOptionsAttribute
 {
-    if (parserData->tempInt < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of other service options cannot be negative");
+    if (parserData->tempInt < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other service options cannot be negative");
     parserData->numberOf = parserData->tempInt;
     parserData->kounter = 0;
 };
@@ -1077,11 +1079,11 @@ otherServiceOptionsAttributes: numberOfOtherOptionsAttribute
 otherServiceOptionsContent: 
     otherServiceOptionsEmpty
     {    if (parserData->numberOf > 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected at least one <other> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <other> element");
     }
   | otherServiceOptionsLaden
     {    if (parserData->kounter < parserData->numberOf - 1)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer <other> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <other> elements than specified");
     };
 
 otherServiceOptionsEmpty: GREATERTHAN OTHEROPTIONSEND | ENDOFELEMENT;
@@ -1099,7 +1101,7 @@ otherServiceOption: otherServiceOptionStart otherServiceOptionAttributes otherSe
         parserData->kounter++;
         if (!parserData->ignoreDataAfterErrors)
             if (osoption->setAnOtherServiceOption(parserData->nameAttribute, parserData->valueAttribute, parserData->descriptionAttribute) == false)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setOtherServiceOption failed");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setOtherServiceOption failed");
     };
 
 otherServiceOptionStart: OTHERSTART
@@ -1108,7 +1110,7 @@ otherServiceOptionStart: OTHERSTART
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <other> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <other> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -1123,7 +1125,7 @@ otherServiceOptionStart: OTHERSTART
 
 otherServiceOptionAttributes: otherServiceOptionAttList
 {    if (!parserData->nameAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> must have name attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> must have name attribute");
 };
     
 otherServiceOptionAttList: | otherServiceOptionAttList otherServiceOptionAtt;
@@ -1132,7 +1134,7 @@ otherServiceOptionAtt:
     nameAttribute 
     {
         if (parserData->nameAttribute.length() == 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "otherOption name cannot be empty");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "otherOption name cannot be empty");
     }
   | valueAttribute 
   | descriptionAttribute
@@ -1201,13 +1203,13 @@ jobChild:
 maxTime: maxTimeStart maxTimeAttributes maxTimeContent
 {    
     if (osoption->setMaxTime(parserData->maxTimeValue, parserData->unitAttribute) == false)       
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "max time request could not be honored");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "max time request could not be honored");
 }; 
 
 maxTimeStart: MAXTIMESTART
 {    
     if (parserData->maxTimePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <maxTime> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <maxTime> element allowed");
     parserData->maxTimePresent = true;
     parserData->unitAttributePresent = false;    
     parserData->unitAttribute = "second"; 
@@ -1236,7 +1238,7 @@ requestedStartTime: requestedStartTimeStart requestedStartTimeContent;
 
 requestedStartTimeStart: REQUESTEDSTARTTIMESTART 
     {    if (parserData->requestedStartTimePresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one requestedStartTime element allowed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one requestedStartTime element allowed");
         parserData->requestedStartTimePresent = true;
     };
 
@@ -1249,7 +1251,7 @@ requestedStartTimeLaden: GREATERTHAN requestedStartTimeBody REQUESTEDSTARTTIMEEN
 requestedStartTimeBody:  ELEMENTTEXT  
     {
         if (osoption->setRequestedStartTime($1) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setRequestedStartTime failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setRequestedStartTime failed");    
         free($1); 
         parserData->errorText = NULL;
         };
@@ -1260,7 +1262,7 @@ dependencies: dependenciesStart dependenciesAttributes dependenciesContent
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setJobDependencies(parserData->numberOf, parserData->jobDependencies) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <job> <dependencies> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <job> <dependencies> failed");
     delete[] parserData->jobDependencies;
     parserData->jobDependencies = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -1271,7 +1273,7 @@ dependenciesStart: DEPENDENCIESSTART
 {
     if (parserData->dependenciesPresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <dependencies> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <dependencies> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->dependenciesPresent = true;
@@ -1287,7 +1289,7 @@ dependenciesLaden: GREATERTHAN dependenciesList DEPENDENCIESEND
 {
     if (parserData->kounter < parserData->numberOf)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few job IDs in <dependencies> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few job IDs in <dependencies> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1300,7 +1302,7 @@ dependencyJobID: JOBIDSTART GREATERTHAN ELEMENTTEXT JOBIDEND
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too many job IDs in <dependencies> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many job IDs in <dependencies> element");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -1319,7 +1321,7 @@ requiredDirectories: requiredDirectoriesStart numberOfPathsAttribute requiredDir
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setRequiredDirectories(parserData->numberOf,parserData->paths) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <requiredDirectories> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <requiredDirectories> failed");
     delete[] parserData->paths;
     parserData->paths = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -1330,7 +1332,7 @@ requiredDirectoriesStart: REQUIREDDIRECTORIESSTART
 {
     if (parserData->requiredDirectoriesPresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <requiredDirectories> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <requiredDirectories> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->requiredDirectoriesPresent = true;
@@ -1344,7 +1346,7 @@ requiredDirectoriesLaden: GREATERTHAN PathList REQUIREDDIRECTORIESEND
 {
     if (parserData->kounter < parserData->numberOf)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few paths in <requiredDirectories> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few paths in <requiredDirectories> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1355,7 +1357,7 @@ requiredFiles: requiredFilesStart numberOfPathsAttribute requiredFilesContent
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setRequiredFiles(parserData->numberOf, parserData->paths) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <requiredFiles> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <requiredFiles> failed");
     delete[] parserData->paths;
     parserData->paths = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -1366,7 +1368,7 @@ requiredFilesStart: REQUIREDFILESSTART
 {
     if (parserData->requiredFilesPresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <requiredFiles> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <requiredFiles> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->requiredFilesPresent = true;
@@ -1380,7 +1382,7 @@ requiredFilesLaden: GREATERTHAN PathList REQUIREDFILESEND
 {
     if (parserData->kounter < parserData->numberOf)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few paths in <requiredFiles> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few paths in <requiredFiles> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1391,7 +1393,7 @@ directoriesToMake: directoriesToMakeStart numberOfPathsAttribute directoriesToMa
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setDirectoriesToMake(parserData->numberOf, parserData->paths) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <directoriesToMake> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <directoriesToMake> failed");
     delete[] parserData->paths;
     parserData->paths = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -1402,7 +1404,7 @@ directoriesToMakeStart: DIRECTORIESTOMAKESTART
 {
     if (parserData->directoriesToMakePresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <directoriesToMake> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <directoriesToMake> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->directoriesToMakePresent = true;
@@ -1416,7 +1418,7 @@ directoriesToMakeLaden: GREATERTHAN PathList DIRECTORIESTOMAKEEND
 {
     if (parserData->kounter < parserData->numberOf)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few paths in <directoriesToMake> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few paths in <directoriesToMake> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1427,7 +1429,7 @@ filesToMake: filesToMakeStart numberOfPathsAttribute filesToMakeContent
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setFilesToMake(parserData->numberOf, parserData->paths) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <filesToMake> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <filesToMake> failed");
     delete[] parserData->paths;
     parserData->paths = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -1438,7 +1440,7 @@ filesToMakeStart: FILESTOMAKESTART
 {
     if (parserData->filesToMakePresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <filesToMake> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <filesToMake> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->filesToMakePresent = true;
@@ -1452,7 +1454,7 @@ filesToMakeLaden: GREATERTHAN PathList FILESTOMAKEEND
 {
     if (parserData->kounter < parserData->numberOf)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few paths in <filesToMake> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few paths in <filesToMake> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1464,7 +1466,7 @@ inputDirectoriesToMove: inputDirectoriesToMoveStart inputDirectoriesToMoveAttrib
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setPathPairs(ENUM_PATHPAIR_input_dir, parserData->fromPaths, 
                 parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <inputDirectoriesToMove> failed");
     delete[] parserData->fromPaths;
     delete[] parserData->toPaths;
     delete[] parserData->makeCopy;
@@ -1479,7 +1481,7 @@ inputDirectoriesToMoveStart: INPUTDIRECTORIESTOMOVESTART
 {
     if (parserData->inputDirectoriesToMovePresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <inputDirectoriesToMove> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <inputDirectoriesToMove> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->inputDirectoriesToMovePresent = true;
@@ -1495,7 +1497,7 @@ inputDirectoriesToMoveLaden: GREATERTHAN inputDirectoriesToMoveList INPUTDIRECTO
 {
     if (parserData->kounter < parserData->numberOfPathPairs)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few path pairs in <inputDirectoriesToMove> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few path pairs in <inputDirectoriesToMove> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1511,7 +1513,7 @@ inputFilesToMove: inputFilesToMoveStart inputFilesToMoveAttributes inputFilesToM
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setPathPairs(ENUM_PATHPAIR_input_file, parserData->fromPaths, 
                 parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <inputFilesToMove> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <inputFilesToMove> failed");
     delete[] parserData->fromPaths;
     delete[] parserData->toPaths;
     delete[] parserData->makeCopy;
@@ -1526,7 +1528,7 @@ inputFilesToMoveStart: INPUTFILESTOMOVESTART
 {
     if (parserData->inputFilesToMovePresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <inputFilesToMove> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <inputFilesToMove> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->inputFilesToMovePresent = true;
@@ -1542,7 +1544,7 @@ inputFilesToMoveLaden: GREATERTHAN inputFilesToMoveList INPUTFILESTOMOVEEND
 {
     if (parserData->kounter < parserData->numberOfPathPairs)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few path pairs in <inputFilesToMove> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few path pairs in <inputFilesToMove> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1558,7 +1560,7 @@ outputFilesToMove: outputFilesToMoveStart outputFilesToMoveAttributes outputFile
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setPathPairs(ENUM_PATHPAIR_output_file, parserData->fromPaths, 
                 parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <inputDirectoriesToMake> failed");
     delete[] parserData->fromPaths;
     delete[] parserData->toPaths;
     delete[] parserData->makeCopy;
@@ -1573,7 +1575,7 @@ outputFilesToMoveStart: OUTPUTFILESTOMOVESTART
 {
     if (parserData->outputFilesToMovePresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <outputFilesToMove> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <outputFilesToMove> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->outputFilesToMovePresent = true;
@@ -1589,7 +1591,7 @@ outputFilesToMoveLaden: GREATERTHAN outputFilesToMoveList OUTPUTFILESTOMOVEEND
 {
     if (parserData->kounter < parserData->numberOfPathPairs)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few path pairs in <outputFilesToMake> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few path pairs in <outputFilesToMake> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1605,7 +1607,7 @@ outputDirectoriesToMove: outputDirectoriesToMoveStart outputDirectoriesToMoveAtt
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setPathPairs(ENUM_PATHPAIR_output_dir, parserData->fromPaths, 
                 parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <inputDirectoriesToMake> failed");
     delete[] parserData->fromPaths;
     delete[] parserData->toPaths;
     delete[] parserData->makeCopy;
@@ -1620,7 +1622,7 @@ outputDirectoriesToMoveStart: OUTPUTDIRECTORIESTOMOVESTART
 {
     if (parserData->outputDirectoriesToMovePresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <outputDirectoriesToMove> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <outputDirectoriesToMove> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->outputDirectoriesToMovePresent = true;
@@ -1636,7 +1638,7 @@ outputDirectoriesToMoveLaden: GREATERTHAN outputDirectoriesToMoveList OUTPUTDIRE
 {
     if (parserData->kounter < parserData->numberOfPathPairs)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few path pairs in <outputDirectoriesToMake> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few path pairs in <outputDirectoriesToMake> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1651,7 +1653,7 @@ filesToDelete: filesToDeleteStart filesToDeleteAttributes filesToDeleteContent
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setFilesToDelete(parserData->numberOf, parserData->paths) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <filesToDelete> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <filesToDelete> failed");
     delete[] parserData->paths;
     parserData->paths = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -1662,7 +1664,7 @@ filesToDeleteStart: FILESTODELETESTART
 {
     if (parserData->filesToDeletePresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <filesToDelete> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <filesToDelete> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->filesToDeletePresent = true;
@@ -1678,7 +1680,7 @@ filesToDeleteLaden: GREATERTHAN PathList FILESTODELETEEND
 {
     if (parserData->kounter < parserData->numberOf)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few paths in <filesToDelete> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few paths in <filesToDelete> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1689,7 +1691,7 @@ directoriesToDelete: directoriesToDeleteStart directoriesToDeleteAttributes dire
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setDirectoriesToDelete(parserData->numberOf, parserData->paths) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <directoriesToDelete> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <directoriesToDelete> failed");
     delete[] parserData->paths;
     parserData->paths = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -1700,7 +1702,7 @@ directoriesToDeleteStart: DIRECTORIESTODELETESTART
 {
     if (parserData->directoriesToDeletePresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <directoriesToDelete> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <directoriesToDelete> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->directoriesToDeletePresent = true;
@@ -1716,7 +1718,7 @@ directoriesToDeleteLaden: GREATERTHAN PathList DIRECTORIESTODELETEEND
 {
     if (parserData->kounter < parserData->numberOf)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few paths in <directoriesToDelete> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few paths in <directoriesToDelete> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1726,7 +1728,7 @@ directoriesToDeleteList: directoryToDelete | directoriesToDeleteList directoryTo
 directoryToDelete: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 {
     if (parserData->kounter >= parserData->numberOf)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too many paths in <directoriesToDelete> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many paths in <directoriesToDelete> element");
     else
     {
         parserData->paths[parserData->kounter] = $3;
@@ -1741,7 +1743,7 @@ processesToKill: processesToKillStart processesToKillAttributes processesToKillC
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setProcessesToKill(parserData->numberOf, parserData->processesToKill) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <processesToKill> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <processesToKill> failed");
     delete[] parserData->processesToKill;
     parserData->processesToKill = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -1752,7 +1754,7 @@ processesToKillStart: PROCESSESTOKILLSTART
 {
     if (parserData->processesToKillPresent)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one <processesToKill> element allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one <processesToKill> element allowed");
         parserData->ignoreDataAfterErrors = true;
     }
     parserData->processesToKillPresent = true;
@@ -1768,7 +1770,7 @@ processesToKillLaden: GREATERTHAN processesToKillList PROCESSESTOKILLEND
 {
     if (parserData->kounter < parserData->numberOf)
     {
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few process IDs in <processesToKill> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few process IDs in <processesToKill> element");
         parserData->ignoreDataAfterErrors = true;        
     }
 };
@@ -1781,7 +1783,7 @@ processID: PROCESSSTART GREATERTHAN ELEMENTTEXT PROCESSEND
     {
     if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too many process IDs in <processesToKill> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many process IDs in <processesToKill> element");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -1806,7 +1808,7 @@ otherJobOptionsStart: OTHEROPTIONSSTART
 {
     if (parserData->otherJobOptionsPresent)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated element: <job> <otherOptions>");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated element: <job> <otherOptions>");
             parserData->ignoreDataAfterErrors = true;            
         }
     parserData->otherJobOptionsPresent = true;
@@ -1814,7 +1816,7 @@ otherJobOptionsStart: OTHEROPTIONSSTART
 
 otherJobOptionsAttributes: numberOfOtherOptionsAttribute 
 {
-    if (parserData->tempInt < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of other job options cannot be negative");
+    if (parserData->tempInt < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other job options cannot be negative");
     parserData->numberOf = parserData->tempInt;
     parserData->kounter = 0;
 };
@@ -1822,11 +1824,11 @@ otherJobOptionsAttributes: numberOfOtherOptionsAttribute
 otherJobOptionsContent: 
     otherJobOptionsEmpty
     {    if (parserData->numberOf > 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected at least one <other> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <other> element");
     }
   | otherJobOptionsLaden
     {    if (parserData->kounter < parserData->numberOf - 1)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer <other> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <other> elements than specified");
     };
 
 otherJobOptionsEmpty: GREATERTHAN OTHEROPTIONSEND | ENDOFELEMENT;
@@ -1844,7 +1846,7 @@ otherJobOption: otherJobOptionStart otherJobOptionAttributes otherJobOptionEnd
         parserData->kounter++;
         if (!parserData->ignoreDataAfterErrors)
             if (osoption->setAnOtherJobOption(parserData->nameAttribute, parserData->valueAttribute, parserData->descriptionAttribute) == false)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setOtherJobOption failed");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setOtherJobOption failed");
     };    
 
 otherJobOptionStart: OTHERSTART
@@ -1853,7 +1855,7 @@ otherJobOptionStart: OTHERSTART
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <other> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <other> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -1869,7 +1871,7 @@ otherJobOptionStart: OTHERSTART
 otherJobOptionAttributes: otherJobOptionAttList
 {
     if (!parserData->nameAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> must have name attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> must have name attribute");
 };
 
 otherJobOptionAttList: | otherJobOptionAttList otherJobOptionAtt;
@@ -1878,7 +1880,7 @@ otherJobOptionAtt:
     nameAttribute 
     {
         if (parserData->nameAttribute.length() == 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "otherOption name cannot be empty");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "otherOption name cannot be empty");
     }
   | valueAttribute 
   | descriptionAttribute
@@ -1911,19 +1913,19 @@ optimizationATT:
     {    
         parserData->numberOfVariables = parserData->tempInt; 
         if (osoption->setNumberOfVariables(parserData->tempInt) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setNumberOfVariables failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setNumberOfVariables failed");
     }             
   | numberOfConstraintsAttribute 
     {
         parserData->numberOfConstraints = parserData->tempInt; 
         if (osoption->setNumberOfConstraints(parserData->tempInt) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setNumberOfConstraints failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setNumberOfConstraints failed");
     } 
   | numberOfObjectivesAttribute 
     {    
         parserData->numberOfObjectives = parserData->tempInt; 
         if (osoption->setNumberOfObjectives(parserData->tempInt) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setNumberOfObjectives failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setNumberOfObjectives failed");
     };
 
 
@@ -1951,7 +1953,7 @@ variablesStart: VARIABLESSTART
 variablesAttributes: numberOfOtherVariableOptions
 {    
     if (osoption->setNumberOfOtherVariableOptions(parserData->numberOfOtherVariableOptions) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setNumberOfOtherVariableOptions failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setNumberOfOtherVariableOptions failed");
     parserData->iOther = 0;
 };
 
@@ -1980,7 +1982,7 @@ initialVariableValues: | initialVariableValuesStart initialVariableValuesAttribu
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitVarValues(parserData->numberOfVar, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <initialVariableValues> failed");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->valArray;
@@ -2011,7 +2013,7 @@ initialVariableValuesContent:
     {
         if (parserData->numberOfVar > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialVariableValues>: expected at least one <var> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialVariableValues>: expected at least one <var> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -2019,7 +2021,7 @@ initialVariableValuesContent:
     {
         if (parserData->kounter < parserData->numberOfVar)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialVariableValues>: fewer <var> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialVariableValues>: fewer <var> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -2043,7 +2045,7 @@ initVarValueStart: VARSTART
     if (parserData->kounter >= parserData->numberOfVar)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <var> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <var> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -2055,7 +2057,7 @@ initVarValueStart: VARSTART
 initVarValueAttributes: initVarValueAttList
 {
     if (parserData->idxAttributePresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<var> element must have idx attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<var> element must have idx attribute");
 };
 
 initVarValueAttList: | initVarValueAttList initVarValueAtt;
@@ -2064,11 +2066,11 @@ initVarValueAtt:
     idxAttribute 
     {
         if (parserData->idxAttribute < 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "variable index must be nonnegative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");
         if (osoption->optimization->numberOfVariables >= 0)
         {
             if (parserData->idxAttribute >= osoption->optimization->numberOfVariables)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "variable index exceeds upper limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index exceeds upper limit");
         };
         if (!parserData->ignoreDataAfterErrors)
             parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
@@ -2081,7 +2083,7 @@ initVarValueAtt:
   | valueAttribute
     {
         if (parserData->valueAttribute == "")
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected an integer or floating point value");
         if (!parserData->ignoreDataAfterErrors)
             parserData->valArray[parserData->kounter] = os_strtod((parserData->valueAttribute).c_str(), NULL);
     };
@@ -2094,7 +2096,7 @@ initialVariableValuesString: | initialVariableValuesStringStart initialVariableV
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitVarValuesString(parserData->numberOfVar, parserData->idxArray, parserData->valueString, parserData->namArray) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <initialVariableValuesString> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <initialVariableValuesString> failed");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->valueString;
@@ -2125,7 +2127,7 @@ initialVariableValuesStringContent:
     {
         if (parserData->numberOfVar > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialVariableValuesString>: expected at least one <var> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialVariableValuesString>: expected at least one <var> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -2133,7 +2135,7 @@ initialVariableValuesStringContent:
     {
         if (parserData->kounter < parserData->numberOfVar)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too few initial values in <initialVariableValuesString> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too few initial values in <initialVariableValuesString> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -2157,7 +2159,7 @@ initVarValueStringStart: VARSTART
     if (parserData->kounter >= parserData->numberOfVar)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <var> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <var> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -2170,7 +2172,7 @@ initVarValueStringStart: VARSTART
 initVarValueStringAttributes: initVarValueStringAttList
 {
     if (parserData->idxAttributePresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<var> element must have idx attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<var> element must have idx attribute");
 };
 
 initVarValueStringAttList: | initVarValueStringAttList initVarValueStringAtt;
@@ -2179,11 +2181,11 @@ initVarValueStringAtt:
     idxAttribute 
     {
         if (parserData->idxAttribute < 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "variable index must be nonnegative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");
         if (osoption->optimization->numberOfVariables >= 0)
         {
             if (parserData->idxAttribute >= osoption->optimization->numberOfVariables)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "variable index exceeds upper limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index exceeds upper limit");
         };
         if (!parserData->ignoreDataAfterErrors)
             parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
@@ -2223,7 +2225,7 @@ variablesBasic: | variablesBasicStart variablesBasicNumberOfElATT variablesBasic
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -2257,7 +2259,7 @@ variablesAtLower: | variablesAtLowerStart variablesAtLowerNumberOfElATT variable
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atLower, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables atLower failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables atLower failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -2292,7 +2294,7 @@ variablesAtUpper: | variablesAtUpperStart variablesAtUpperNumberOfElATT variable
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atUpper, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables atUpper failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables atUpper failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -2326,7 +2328,7 @@ variablesAtEquality: | variablesAtEqualityStart variablesAtEqualityNumberOfElATT
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables atEquality failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables atEquality failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -2360,7 +2362,7 @@ variablesIsFree: | variablesIsFreeStart variablesIsFreeNumberOfElATT variablesIs
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_isFree, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables isFree failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables isFree failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -2394,7 +2396,7 @@ variablesSuperbasic: | variablesSuperbasicStart variablesSuperbasicNumberOfElATT
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables superbasic failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables superbasic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -2428,7 +2430,7 @@ variablesUnknown: | variablesUnknownStart variablesUnknownNumberOfElATT variable
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables unknown failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables unknown failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -2463,7 +2465,7 @@ integerVariableBranchingWeights: | integerVariableBranchingWeightsStart
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setIntegerVariableBranchingWeights(parserData->numberOfVar, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <initialVariableValues> failed");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->valArray;
@@ -2494,7 +2496,7 @@ integerVariableBranchingWeightsContent:
     {
         if (parserData->numberOfVar > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected at least one <var> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <var> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -2502,7 +2504,7 @@ integerVariableBranchingWeightsContent:
     {
         if (parserData->kounter < parserData->numberOfVar)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer <var> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <var> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -2529,7 +2531,7 @@ branchingWeightStart: VARSTART
     if (parserData->kounter >= parserData->numberOfVar)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <var> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <var> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -2543,7 +2545,7 @@ branchingWeightStart: VARSTART
 branchingWeightAttributes: branchingWeightAttList
 {
     if (parserData->idxAttributePresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<var> element must have idx attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<var> element must have idx attribute");
 };
 
 branchingWeightAttList: | branchingWeightAttList branchingWeightAtt;
@@ -2552,11 +2554,11 @@ branchingWeightAtt:
     idxAttribute 
     {
         if (parserData->idxAttribute < 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "variable index must be nonnegative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");
         if (osoption->optimization->numberOfVariables >= 0)
         {
             if (parserData->idxAttribute >= osoption->optimization->numberOfVariables)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "variable index exceeds upper limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index exceeds upper limit");
         };
         if (!parserData->ignoreDataAfterErrors)
             parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
@@ -2569,7 +2571,7 @@ branchingWeightAtt:
   | valueAttribute
     {
         if (parserData->valueAttribute == "")
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected an integer or floating point value");
         if (!parserData->ignoreDataAfterErrors)
             parserData->valArray[parserData->kounter] = os_strtod((parserData->valueAttribute).c_str(), NULL);
     };
@@ -2593,7 +2595,7 @@ sosVariableBranchingWeightsStart: SOSVARIABLEBRANCHINGWEIGHTSSTART
 sosVariableBranchingWeightsAttributes: NUMBEROFSOSATT QUOTE INTEGER QUOTE   
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <sos> elements must be nonnegative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <sos> elements must be nonnegative");
     parserData->numberOfSOS = $3;
 };
 
@@ -2602,14 +2604,14 @@ sosVariableBranchingWeightsContent:
     {
         if (parserData->numberOfSOS > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected at least one <sos> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <sos> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
   | sosVariableBranchingWeightsLaden
     {    if (parserData->currentSOS != parserData->numberOfSOS)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer <sos> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <sos> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -2626,7 +2628,7 @@ sosWeightGroup: sosWeightGroupStart sosWeightGroupAttributes sosWeightGroupConte
         if (!osoption->setAnotherSOSVariableBranchingWeight(parserData->sosIdx, 
                     parserData->numberOfVar, parserData->groupWeight,
                     parserData->idxArray,     parserData->valArray, parserData->namArray) )
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "error processing SOS branching weights");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "error processing SOS branching weights");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->valArray;
@@ -2644,7 +2646,7 @@ sosWeightGroupStart: SOSSTART
     if (parserData->currentSOS >= parserData->numberOfSOS)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too many SOS branching weights");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many SOS branching weights");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -2658,9 +2660,9 @@ sosWeightGroupStart: SOSSTART
 sosWeightGroupAttributes: sosWeightGroupAttList
 {
     if (!parserData->sosIdxAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "SOS index required");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "SOS index required");
     if (!parserData->numberOfVarAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfVar required");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfVar required");
 };
 
 sosWeightGroupAttList: | sosWeightGroupAttList sosWeightGroupAtt; 
@@ -2700,7 +2702,7 @@ otherVariableOptionStart: OTHERSTART
     if (parserData->iOther >= parserData->numberOfOtherVariableOptions)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <otherVariableOptions> than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <otherVariableOptions> than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -2729,7 +2731,7 @@ otherVariableOptionStart: OTHERSTART
 otherVariableOptionAttributes: otherVariableOptionAttList 
     {
         if (!parserData->nameAttributePresent) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element requires name attribute"); 
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element requires name attribute"); 
         if (!parserData->ignoreDataAfterErrors)
             if (!osoption->setOtherVariableOptionAttributes(
                     parserData->iOther,
@@ -2743,7 +2745,7 @@ otherVariableOptionAttributes: otherVariableOptionAttList
                     parserData->varTypeAttribute,
                     parserData->enumTypeAttribute,
                     parserData->descriptionAttribute) )
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element could not be initialed"); 
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element could not be initialed"); 
     };
       
 otherVariableOptionAttList: | otherVariableOptionAttList otherVariableOptionATT;
@@ -2789,7 +2791,7 @@ otherVar: otherVarStart otherVarAttributes otherVarContent
                 parserData->valueAttribute,
                 parserData->lbValueAttribute, 
                 parserData->ubValueAttribute) )
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set other variable option <var> element failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set other variable option <var> element failed");
     parserData->kounter++;
 };
 
@@ -2798,7 +2800,7 @@ otherVarStart: VARSTART
     if (parserData->kounter >= parserData->numberOfVar)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <var> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <var> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -2821,11 +2823,11 @@ otherVarAtt:
     idxAttribute
     {
         if (parserData->idxAttribute < 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "variable index must be nonnegative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index must be nonnegative");
         if (osoption->optimization->numberOfVariables >= 0)
         {
             if (parserData->idxAttribute >= osoption->optimization->numberOfVariables)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "variable index exceeds upper limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index exceeds upper limit");
         };
     }
   | nameAttribute
@@ -2855,7 +2857,7 @@ objectivesStart: OBJECTIVESSTART
 objectivesAttributes: numberOfOtherObjectiveOptions
 {    
     if (osoption->setNumberOfOtherObjectiveOptions(parserData->numberOfOtherObjectiveOptions) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setNumberOfOtherVariableOptions failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setNumberOfOtherVariableOptions failed");
     parserData->iOther = 0;
 };
 
@@ -2883,7 +2885,7 @@ initialObjectiveValues: | initialObjectiveValuesStart initialObjectiveValuesAttr
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitObjValues(parserData->numberOfObj, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <initialObjectiveValues> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <initialObjectiveValues> failed");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->valArray;
@@ -2917,7 +2919,7 @@ initialObjectiveValuesContent:
     {    
         if (parserData->numberOfObj > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialObjectiveValues>: expected at least one <obj> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialObjectiveValues>: expected at least one <obj> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -2925,7 +2927,7 @@ initialObjectiveValuesContent:
     {
         if (parserData->kounter < parserData->numberOfObj)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialObjectiveValues>: fewer <obj> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialObjectiveValues>: fewer <obj> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -2949,7 +2951,7 @@ initObjValueStart: OBJSTART
     if (parserData->kounter >= parserData->numberOfObj)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <obj> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <obj> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -2967,11 +2969,11 @@ initObjValueAtt:
     idxAttribute 
     {
         if (parserData->idxAttribute >= 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "objective index must be negative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index must be negative");
         if (osoption->optimization->numberOfObjectives >= 0)
         {
             if (parserData->idxAttribute < -osoption->optimization->numberOfObjectives)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "objective index exceeds limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index exceeds limit");
         };
         parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
     }
@@ -2982,7 +2984,7 @@ initObjValueAtt:
   | valueAttribute
     {
         if (parserData->valueAttribute == "")
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected an integer or floating point value");
         parserData->valArray[parserData->kounter] = os_strtod((parserData->valueAttribute).c_str(), NULL);
     };
 
@@ -2993,7 +2995,7 @@ initialObjectiveBounds: | initialObjectiveBoundsStart numberOfObjATT initialObje
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitObjBounds(parserData->numberOfObj, parserData->idxArray, parserData->lbValArray, parserData->ubValArray, parserData->namArray) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <initialObjectiveBounds> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <initialObjectiveBounds> failed");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->lbValArray;
@@ -3030,7 +3032,7 @@ initialObjectiveBoundsContent:
     {
         if (parserData->numberOfObj > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialObjectiveBounds>: expected at least one <obj> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialObjectiveBounds>: expected at least one <obj> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -3038,7 +3040,7 @@ initialObjectiveBoundsContent:
     {
         if (parserData->kounter < parserData->numberOfObj)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialObjectiveBounds>: fewer <obj> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialObjectiveBounds>: fewer <obj> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -3062,7 +3064,7 @@ initObjBoundStart: OBJSTART
     if (parserData->kounter >= parserData->numberOfObj)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <var> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <var> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -3083,11 +3085,11 @@ initObjBoundAtt:
     idxAttribute 
     {
         if (parserData->idxAttribute >= 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "objective index must be nonnegative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index must be nonnegative");
         if (osoption->optimization->numberOfObjectives >= 0)
         {
             if (parserData->idxAttribute < -osoption->optimization->numberOfVariables)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "objective index exceeds limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index exceeds limit");
         };
         parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
     }
@@ -3098,13 +3100,13 @@ initObjBoundAtt:
   | lbValueAttribute
     {
         if (parserData->lbValueAttribute == "")
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected an integer or floating point value");
         parserData->lbValArray[parserData->kounter] = os_strtod((parserData->lbValueAttribute).c_str(), NULL);
     }
   | ubValueAttribute
     {
         if (parserData->ubValueAttribute == "")
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected an integer or floating point value");
         parserData->ubValArray[parserData->kounter] = os_strtod((parserData->ubValueAttribute).c_str(), NULL);
     };
 
@@ -3132,7 +3134,7 @@ objectivesBasic: | objectivesBasicStart objectivesBasicNumberOfElATT objectivesB
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set objectives basic failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set objectives basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3165,7 +3167,7 @@ objectivesAtLower: | objectivesAtLowerStart objectivesAtLowerNumberOfElATT objec
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atLower, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set objectives atLower failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set objectives atLower failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3198,7 +3200,7 @@ objectivesAtUpper: | objectivesAtUpperStart objectivesAtUpperNumberOfElATT objec
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atUpper, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set objectives atUpper failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set objectives atUpper failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3231,7 +3233,7 @@ objectivesAtEquality: | objectivesAtEqualityStart objectivesAtEqualityNumberOfEl
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set objectives atEquality failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set objectives atEquality failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3264,7 +3266,7 @@ objectivesIsFree: | objectivesIsFreeStart objectivesIsFreeNumberOfElATT objectiv
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_isFree, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set objectives isFree failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set objectives isFree failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3297,7 +3299,7 @@ objectivesSuperbasic: | objectivesSuperbasicStart objectivesSuperbasicNumberOfEl
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set objectives superbasic failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set objectives superbasic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3332,7 +3334,7 @@ objectivesUnknown: | objectivesUnknownStart objectivesUnknownNumberOfElATT objec
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set objectives unknown failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set objectives unknown failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3375,7 +3377,7 @@ otherObjectiveOptionStart: OTHERSTART
     if (parserData->iOther >= parserData->numberOfOtherObjectiveOptions)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <otherObjectiveOptions> than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <otherObjectiveOptions> than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -3404,7 +3406,7 @@ otherObjectiveOptionStart: OTHERSTART
 otherObjectiveOptionAttributes: otherObjectiveOptionAttList
     {
         if (!parserData->nameAttributePresent) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element requires name attribute"); 
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element requires name attribute"); 
         if (!parserData->ignoreDataAfterErrors)
             if (!osoption->setOtherObjectiveOptionAttributes(
                     parserData->iOther,
@@ -3418,7 +3420,7 @@ otherObjectiveOptionAttributes: otherObjectiveOptionAttList
                     parserData->objTypeAttribute,
                     parserData->enumTypeAttribute,
                     parserData->descriptionAttribute) )
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element could not be initialed"); 
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element could not be initialed"); 
     };
 
 
@@ -3465,7 +3467,7 @@ otherObj: otherObjStart otherObjAttributes  otherObjContent
                 parserData->valueAttribute,
                 parserData->lbValueAttribute, 
                 parserData->ubValueAttribute) )
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set other objective option <obj> element failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set other objective option <obj> element failed");
     parserData->kounter++;
 };
 
@@ -3475,7 +3477,7 @@ otherObjStart: OBJSTART
     if (parserData->kounter >= parserData->numberOfObj)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <obj> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <obj> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -3499,11 +3501,11 @@ otherObjAtt:
     idxAttribute
     {
         if (parserData->idxAttribute >= 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "objective index must be negative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index must be negative");
         if (osoption->optimization->numberOfObjectives >= 0)
         {
             if (parserData->idxAttribute < -osoption->optimization->numberOfObjectives)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "objective index exceeds limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "objective index exceeds limit");
         };
     }
   | nameAttribute
@@ -3533,7 +3535,7 @@ constraintsStart: CONSTRAINTSSTART
 constraintsAttributes: numberOfOtherConstraintOptions
 {    
     if (osoption->setNumberOfOtherConstraintOptions(parserData->numberOfOtherConstraintOptions) == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setNumberOfOtherConstraintOptions failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setNumberOfOtherConstraintOptions failed");
     parserData->iOther = 0;
 };
 
@@ -3561,7 +3563,7 @@ initialConstraintValues: | initialConstraintValuesStart initialConstraintValuesA
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitConValues(parserData->numberOfCon, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <initialConstraintValues> failed");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->valArray;
@@ -3593,7 +3595,7 @@ initialConstraintValuesContent:
     {
         if (parserData->numberOfCon > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialConstraintValues>: expected at least one <con element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialConstraintValues>: expected at least one <con element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -3601,7 +3603,7 @@ initialConstraintValuesContent:
     {
         if (parserData->kounter < parserData->numberOfCon)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialConstraintValues>: fewer <con> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialConstraintValues>: fewer <con> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -3625,7 +3627,7 @@ initConValueStart: CONSTART
     if (parserData->kounter >= parserData->numberOfCon)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <con> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <con> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -3638,7 +3640,7 @@ initConValueStart: CONSTART
 initConValueAttributes: initConValueAttList
 {
     if (parserData->idxAttributePresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<con> element must have idx attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<con> element must have idx attribute");
 };
 
 initConValueAttList: | initConValueAttList initConValueAtt;
@@ -3647,11 +3649,11 @@ initConValueAtt:
     idxAttribute 
     {
         if (parserData->idxAttribute < 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "constraint index must be nonnegative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index must be nonnegative");
         if (osoption->optimization->numberOfConstraints >= 0)
         {
             if (parserData->idxAttribute >= osoption->optimization->numberOfConstraints)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "constraint index exceeds upper limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index exceeds upper limit");
         };
         parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
     }
@@ -3662,7 +3664,7 @@ initConValueAtt:
   | valueAttribute
     {
         if (parserData->valueAttribute == "")
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected an integer or floating point value");
         parserData->valArray[parserData->kounter] = os_strtod((parserData->valueAttribute).c_str(), NULL);
     };
 
@@ -3674,7 +3676,7 @@ initialDualValues: | initialDualValuesStart initialDualValuesAttributes initialD
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitDualValues(parserData->numberOfCon, parserData->idxArray, parserData->lbValArray, parserData->ubValArray, parserData->namArray) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <initialConstraintValues> failed");
     delete[] parserData->idxArray;
     delete[] parserData->namArray;
     delete[] parserData->lbValArray;
@@ -3710,7 +3712,7 @@ initialDualValuesContent:
     {
         if (parserData->numberOfCon > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialDualValues>: expected at least one <con> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialDualValues>: expected at least one <con> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -3718,7 +3720,7 @@ initialDualValuesContent:
     {
         if (parserData->kounter < parserData->numberOfCon)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<initialDualValues>: fewer <con> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<initialDualValues>: fewer <con> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -3742,7 +3744,7 @@ initDualValueStart: CONSTART
     if (parserData->kounter >= parserData->numberOfCon)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <con> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <con> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -3758,7 +3760,7 @@ initDualValueStart: CONSTART
 initDualValueAttributes: initDualValueAttList
 {
     if (parserData->idxAttributePresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<con> element must have idx attribute");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<con> element must have idx attribute");
 };
 
 initDualValueAttList: | initDualValueAttList initDualValueAtt;
@@ -3767,11 +3769,11 @@ initDualValueAtt:
     idxAttribute
     {
         if (parserData->idxAttribute < 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "constraint index must be nonnegative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index must be nonnegative");
         if (osoption->optimization->numberOfConstraints >= 0)
         {
             if (parserData->idxAttribute >= osoption->optimization->numberOfConstraints)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "constraint index exceeds upper limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index exceeds upper limit");
         };
         parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
     }
@@ -3813,7 +3815,7 @@ slacksBasic: | slacksBasicStart slacksBasicNumberOfElATT slacksBasicContent
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set slacks basic failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set slacks basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3846,7 +3848,7 @@ slacksAtLower: | slacksAtLowerStart slacksAtLowerNumberOfElATT slacksAtLowerCont
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atLower, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set slacks atLower failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set slacks atLower failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3880,7 +3882,7 @@ slacksAtUpper: | slacksAtUpperStart slacksAtUpperNumberOfElATT slacksAtUpperCont
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atUpper, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set slacks atUpper failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set slacks atUpper failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3914,7 +3916,7 @@ slacksAtEquality: | slacksAtEqualityStart slacksAtEqualityNumberOfElATT slacksAt
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set slacks atEquality failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set slacks atEquality failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3948,7 +3950,7 @@ slacksIsFree: | slacksIsFreeStart slacksIsFreeNumberOfElATT slacksIsFreeContent
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_isFree, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set slacks isFree failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set slacks isFree failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -3982,7 +3984,7 @@ slacksSuperbasic: | slacksSuperbasicStart slacksSuperbasicNumberOfElATT slacksSu
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables superbasic failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables superbasic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -4016,7 +4018,7 @@ slacksUnknown: | slacksUnknownStart slacksUnknownNumberOfElATT slacksUnknownCont
 {
     if (!parserData->ignoreDataAfterErrors)
         if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set slacks unknown failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set slacks unknown failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -4059,7 +4061,7 @@ otherConstraintOptionStart: OTHERSTART
     if (parserData->iOther >= parserData->numberOfOtherConstraintOptions)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <otherConstraintOptions> than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <otherConstraintOptions> than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -4088,7 +4090,7 @@ otherConstraintOptionStart: OTHERSTART
 otherConstraintOptionAttributes: otherConstraintOptionAttList
     {
         if(!parserData->nameAttributePresent) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element requires name attribute"); 
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element requires name attribute"); 
         if (!parserData->ignoreDataAfterErrors)
             if (!osoption->setOtherConstraintOptionAttributes(
                     parserData->iOther,
@@ -4102,7 +4104,7 @@ otherConstraintOptionAttributes: otherConstraintOptionAttList
                     parserData->conTypeAttribute,
                     parserData->enumTypeAttribute,
                     parserData->descriptionAttribute) )
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element could not be initialed"); 
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element could not be initialed"); 
     };
 
 otherConstraintOptionAttList: | otherConstraintOptionAttList otherConstraintOptionATT;
@@ -4148,7 +4150,7 @@ otherCon: otherConStart otherConAttributes  otherConContent
                 parserData->valueAttribute,
                 parserData->lbValueAttribute, 
                 parserData->ubValueAttribute) )
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set other constraint option <con> element failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set other constraint option <con> element failed");
     parserData->kounter++;
 };
   
@@ -4157,7 +4159,7 @@ otherConStart: CONSTART
     if (parserData->kounter >= parserData->numberOfCon)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <con> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <con> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -4180,11 +4182,11 @@ otherConAtt:
     idxAttribute
     {
         if (parserData->idxAttribute < 0)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "constraint index must be nonnegative");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index must be nonnegative");
         if (osoption->optimization->numberOfConstraints >= 0)
         {
             if (parserData->idxAttribute >= osoption->optimization->numberOfConstraints)
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "constraint index exceeds upper limit");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "constraint index exceeds upper limit");
         };
     }
   | nameAttribute
@@ -4214,7 +4216,7 @@ solverOptionsStart: SOLVEROPTIONSSTART;
 numberOfSolverOptionsATT: numberOfSolverOptionsAttribute
 {
     if (!osoption->setNumberOfSolverOptions(parserData->numberOfSolverOptions) )
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setNumberOfSolverOptions failed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setNumberOfSolverOptions failed");
     parserData->iOption = 0;
 }; 
 
@@ -4223,7 +4225,7 @@ solverOptionsContent:
     {
         if (parserData->numberOfSolverOptions > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected at least one <solverOption> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <solverOption> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -4231,7 +4233,7 @@ solverOptionsContent:
     {
         if (parserData->iOption != parserData->numberOfSolverOptions)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer <solverOption> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <solverOption> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -4257,7 +4259,7 @@ solverOption: solverOptionStart solverOptionAttributes solverOptionContent
                     parserData->typeAttribute,
                     parserData->descriptionAttribute,
                     parserData->itemList) )
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "setSolverOptionContent failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setSolverOptionContent failed");
     if (parserData->numberOfItems > 0)
         delete[] parserData->itemList;
     parserData->itemList = NULL;
@@ -4285,7 +4287,7 @@ solverOptionStart: SOLVEROPTIONSTART
 solverOptionAttributes: solverOptionAttList
 {
     if (!parserData->nameAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "name attribute must be present");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "name attribute must be present");
 };
 
 solverOptionAttList: solverOptionATT | solverOptionAttList solverOptionATT;
@@ -4308,7 +4310,7 @@ solverOptionContent:
     {
         if (parserData->numberOfItems > 0)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "expected at least one <item> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <item> element");
             parserData->ignoreDataAfterErrors = true;        
         }
     }
@@ -4316,7 +4318,7 @@ solverOptionContent:
     {
         if (parserData->kounter < parserData->numberOfItems)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer <item> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <item> elements than specified");
             parserData->ignoreDataAfterErrors = true;        
         }
     };
@@ -4341,7 +4343,7 @@ solverOptionItemContent:
         if (parserData->kounter >= parserData->numberOfItems)
             if (!parserData->suppressFurtherErrorMessages)
             {
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <item> elements than specified");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <item> elements than specified");
                 parserData->suppressFurtherErrorMessages = true;
                 parserData->ignoreDataAfterErrors = true;
             }
@@ -4358,7 +4360,7 @@ solverOptionItemBody:  ITEMTEXT
     if (parserData->kounter >= parserData->numberOf)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <item> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <item> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -4378,7 +4380,7 @@ Path: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too many paths in <requiredDirectories> element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many paths in <requiredDirectories> element");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -4397,13 +4399,13 @@ Path: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 PathPair: PathPairStart PathPairAttributes PathPairEnd
 {    
     if (parserData->kounter >= parserData->numberOfPathPairs)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too many path pairs");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many path pairs");
     else
     {
         if (!parserData->pathPairFromPresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "\"from\" attribute must be present");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "\"from\" attribute must be present");
         if (!parserData->pathPairToPresent)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "\"to\" attribute must be present");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "\"to\" attribute must be present");
            parserData->fromPaths[parserData->kounter] = parserData->pathPairFrom;
            parserData->toPaths[parserData->kounter] = parserData->pathPairTo;
         parserData->makeCopy[parserData->kounter] = parserData->pathPairMakeCopy;
@@ -4414,7 +4416,7 @@ PathPair: PathPairStart PathPairAttributes PathPairEnd
 PathPairStart: PATHPAIRSTART
 {
 //    if (parserData->kounter >= parserData->numberOfPathPairs)
-//        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "too many path pairs");
+//        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many path pairs");
     parserData->pathPairFrom = "";
     parserData->pathPairTo = "";
     parserData->pathPairFromPresent = false;
@@ -4438,7 +4440,7 @@ PathPairAttribute:
 PathPairFromATT: FROMATT ATTRIBUTETEXT QUOTE
 {
     if (parserData->pathPairFromPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one \"from\" attribute allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one \"from\" attribute allowed");
     parserData->pathPairFromPresent = true;
     parserData->pathPairFrom = $2;
     free($2);
@@ -4447,7 +4449,7 @@ PathPairFromATT: FROMATT ATTRIBUTETEXT QUOTE
 PathPairToATT: TOATT ATTRIBUTETEXT QUOTE
 {
     if (parserData->pathPairToPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one \"to\" attribute allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one \"to\" attribute allowed");
     parserData->pathPairToPresent = true;
     parserData->pathPairTo = $2;
     free($2);
@@ -4456,7 +4458,7 @@ PathPairToATT: TOATT ATTRIBUTETEXT QUOTE
 PathPairMakeCopyATT: MAKECOPYATT ATTRIBUTETEXT QUOTE
 {
     if (parserData->pathPairMakeCopyPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one \"makeCopy\" attribute allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one \"makeCopy\" attribute allowed");
     parserData->pathPairMakeCopyPresent = true;
     parserData->pathPairMakeCopy = (strcmp($2,"true") == 0);
     free($2);
@@ -4471,7 +4473,7 @@ PathPairEnd: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 categoryAttribute: categoryAtt
 {   
     if (parserData->categoryAttributePresent ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one category attribute allowed for this element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one category attribute allowed for this element");
     parserData->categoryAttributePresent = true;
 };
 
@@ -4491,7 +4493,7 @@ categoryAttContent: CATEGORYATT ATTRIBUTETEXT quote
 /* ----------------------------------------------------------------------- */
 conTypeAttribute: conTypeAtt
         {   if (parserData->conTypeAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one conType attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one conType attribute allowed for this element");
             parserData->conTypeAttributePresent = true;
         };
 
@@ -4510,7 +4512,7 @@ conTypeAttContent: CONTYPEATT ATTRIBUTETEXT QUOTE
 descriptionAttribute: descriptionAtt
 {
     if (parserData->descriptionAttributePresent ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one description attribute allowed for this element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one description attribute allowed for this element");
     parserData->descriptionAttributePresent = true;
 };
 
@@ -4528,7 +4530,7 @@ descriptionAttContent: DESCRIPTIONATT ATTRIBUTETEXT quote
 /* ----------------------------------------------------------------------- */
 enumTypeAttribute: enumTypeAtt
         {   if (parserData->enumTypeAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one enumType attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one enumType attribute allowed for this element");
             parserData->enumTypeAttributePresent = true;
         };
 
@@ -4548,7 +4550,7 @@ enumTypeAttContent: ENUMTYPEATT ATTRIBUTETEXT QUOTE
 groupWeightAttribute: groupWeightAtt
 {
     if (parserData->groupWeightAttributePresent ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one groupWeight attribute allowed for this element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one groupWeight attribute allowed for this element");
     parserData->groupWeightAttributePresent = true;
 };
 
@@ -4562,7 +4564,7 @@ groupWeightAtt: GROUPWEIGHTATT QUOTE aNumber QUOTE
 idxAttribute: idxAtt
 {   
     if (parserData->idxAttributePresent ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one idx attribute allowed for this element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one idx attribute allowed for this element");
     parserData->idxAttributePresent = true;
 };
 
@@ -4577,7 +4579,7 @@ idxAttContent: IDXATT quote INTEGER quote
 lbValueAttribute: lbValueAtt
 {   
     if (parserData->lbValueAttributePresent ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one lb attribute allowed for this element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one lb attribute allowed for this element");
     parserData->lbValueAttributePresent = true;
 };
 
@@ -4597,7 +4599,7 @@ lbValueAttContent: LBVALUEATT ATTRIBUTETEXT quote
 /* ----------------------------------------------------------------------- */
 lbDualValueAttribute: lbDualValueAtt
         {   if (parserData->lbValueAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one lb attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one lb attribute allowed for this element");
             parserData->lbValueAttributePresent = true;
         };
 
@@ -4617,7 +4619,7 @@ lbDualValueAttContent: LBDUALVALUEATT quote aNumber quote
 nameAttribute: nameAtt
     {
         if (parserData->nameAttributePresent ) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one name attribute allowed for this element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one name attribute allowed for this element");
         parserData->nameAttributePresent = true;
     };
 
@@ -4637,7 +4639,7 @@ nameAttContent: NAMEATT ATTRIBUTETEXT quote
 /* ----------------------------------------------------------------------- */
 objTypeAttribute: objTypeAtt
         {   if (parserData->objTypeAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one objType attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one objType attribute allowed for this element");
             parserData->objTypeAttributePresent = true;
         };
 
@@ -4656,7 +4658,7 @@ objTypeAttContent: OBJTYPEATT ATTRIBUTETEXT QUOTE
 /* ----------------------------------------------------------------------- */
 solverAttribute: solverAtt
     {   if (parserData->solverAttributePresent ) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one solver attribute allowed for this element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one solver attribute allowed for this element");
         parserData->solverAttributePresent = true;
     };
 
@@ -4674,7 +4676,7 @@ solverAttContent: SOLVERATT ATTRIBUTETEXT quote
 /* ----------------------------------------------------------------------- */
 sosIdxAttribute: sosIdxAtt
     {   if (parserData->sosIdxAttributePresent ) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one sosIdx attribute allowed for this element");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one sosIdx attribute allowed for this element");
         parserData->sosIdxAttributePresent = true;
     };
 
@@ -4683,14 +4685,14 @@ sosIdxAtt: sosIdxAttContent;
 sosIdxAttContent: SOSIDXATT quote INTEGER quote 
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "SOS index must be nonnegative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "SOS index must be nonnegative");
     parserData->sosIdx = $3;
 };
 
 /* ----------------------------------------------------------------------- */
 typeAttribute: typeAtt
         {   if (parserData->typeAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one type attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one type attribute allowed for this element");
             parserData->typeAttributePresent = true;
         };
 
@@ -4709,7 +4711,7 @@ typeAttContent: TYPEATT ATTRIBUTETEXT QUOTE
 ubValueAttribute: ubValueAtt
 {
    if (parserData->ubValueAttributePresent ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one ub attribute allowed for this element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one ub attribute allowed for this element");
     parserData->ubValueAttributePresent = true;
 };
 
@@ -4729,7 +4731,7 @@ ubValueAttContent: UBVALUEATT ATTRIBUTETEXT quote
 /* ----------------------------------------------------------------------- */
 ubDualValueAttribute: ubDualValueAtt
         {   if (parserData->ubValueAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one ub attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one ub attribute allowed for this element");
             parserData->ubValueAttributePresent = true;
         };
 
@@ -4747,7 +4749,7 @@ ubDualValueAttContent: UBDUALVALUEATT quote aNumber quote
 /* ----------------------------------------------------------------------- */
 unitAttribute: unitAtt
         {   if (parserData->unitAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one unit attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one unit attribute allowed for this element");
             parserData->unitAttributePresent = true;
         };
         
@@ -4765,7 +4767,7 @@ unitAttContent: UNITATT ATTRIBUTETEXT QUOTE
 /* ----------------------------------------------------------------------- */
 valueAttribute: valueAtt
         {   if (parserData->valueAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one value attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one value attribute allowed for this element");
             parserData->valueAttributePresent = true;
         };
 
@@ -4783,7 +4785,7 @@ valueAttContent: VALUEATT ATTRIBUTETEXT QUOTE
 /* ----------------------------------------------------------------------- */
 varTypeAttribute: varTypeAtt
         {   if (parserData->varTypeAttributePresent ) 
-                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one varType attribute allowed for this element");
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one varType attribute allowed for this element");
             parserData->varTypeAttributePresent = true;
         };
 
@@ -4807,8 +4809,8 @@ varTypeAttContent: VARTYPEATT ATTRIBUTETEXT QUOTE
 numberOfConAttribute: NUMBEROFCONATT quote INTEGER quote
 {
     if (parserData->numberOfConAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfCon attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <con> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfCon attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <con> cannot be negative");
     parserData->numberOfConAttributePresent = true;        
     parserData->numberOfCon = $3;
 };
@@ -4816,8 +4818,8 @@ numberOfConAttribute: NUMBEROFCONATT quote INTEGER quote
 numberOfConstraintsAttribute: NUMBEROFCONSTRAINTSATT quote INTEGER quote 
 {
     if (parserData->numberOfConstraintsPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfConstraints attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of constraints cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfConstraints attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of constraints cannot be negative");
     parserData->numberOfConstraintsPresent = true;        
     parserData->tempInt = $3; 
 };
@@ -4825,8 +4827,8 @@ numberOfConstraintsAttribute: NUMBEROFCONSTRAINTSATT quote INTEGER quote
 numberOfElAttribute: NUMBEROFELATT quote INTEGER quote 
 {
     if (osglData->osglNumberOfElPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfEl attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <el> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfEl attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <el> cannot be negative");
     osglData->osglNumberOfElPresent = true;
     parserData->numberOf = $3; 
 }; 
@@ -4834,8 +4836,8 @@ numberOfElAttribute: NUMBEROFELATT quote INTEGER quote
 numberOfEnumerationsAttribute: NUMBEROFENUMERATIONSATT quote INTEGER quote 
 {
     if (parserData->numberOfEnumerationsAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfEnumerations attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <enumeration> elements cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <enumeration> elements cannot be negative");
     parserData->numberOfEnumerationsAttributePresent = true;        
     parserData->numberOfEnumerations = $3; 
 }; 
@@ -4843,8 +4845,8 @@ numberOfEnumerationsAttribute: NUMBEROFENUMERATIONSATT quote INTEGER quote
 numberOfItemsAttribute: NUMBEROFITEMSATT quote INTEGER quote 
 {    
    if (parserData->numberOfItemsPresent ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one numberOfItems attribute allowed");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of items cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one numberOfItems attribute allowed");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of items cannot be negative");
     parserData->numberOfItemsPresent = true;
     parserData->numberOfItems = $3;
 };
@@ -4852,7 +4854,7 @@ numberOfItemsAttribute: NUMBEROFITEMSATT quote INTEGER quote
 numberOfJobIDsATT: NUMBEROFJOBIDSATT QUOTE INTEGER QUOTE
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Number of job IDs cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Number of job IDs cannot be negative");
     else
         parserData->jobDependencies = new std::string[$3];
     parserData->numberOf = $3;
@@ -4862,8 +4864,8 @@ numberOfJobIDsATT: NUMBEROFJOBIDSATT QUOTE INTEGER QUOTE
 numberOfObjAttribute: NUMBEROFOBJATT quote INTEGER quote
 {
     if (parserData->numberOfObjAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfObj attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <obj> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfObj attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <obj> cannot be negative");
     parserData->numberOfObjAttributePresent = true;        
     parserData->numberOfObj = $3;
 }; 
@@ -4871,40 +4873,40 @@ numberOfObjAttribute: NUMBEROFOBJATT quote INTEGER quote
 numberOfObjectivesAttribute: NUMBEROFOBJECTIVESATT quote INTEGER quote 
 {
     if (parserData->numberOfObjectivesPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfObjectives attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of objectives cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfObjectives attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of objectives cannot be negative");
     parserData->numberOfObjectivesPresent = true;
     parserData->tempInt = $3; 
 };
 
 numberOfOtherConstraintOptionsAttribute: NUMBEROFOTHERCONSTRAINTOPTIONSATT quote INTEGER quote 
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of other constraint options cannot be negative");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other constraint options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherObjectiveOptionsAttribute: NUMBEROFOTHEROBJECTIVEOPTIONSATT quote INTEGER quote 
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of other objective options cannot be negative");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other objective options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherOptionsAttribute: NUMBEROFOTHEROPTIONSATT quote INTEGER quote
 {
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of other options cannot be negative");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfOtherVariableOptionsAttribute: NUMBEROFOTHERVARIABLEOPTIONSATT quote INTEGER quote 
 {    
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of other variable options cannot be negative");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of other variable options cannot be negative");
     parserData->tempInt = $3;
 };
 
 numberOfPathPairsAttribute: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Number of path pairs cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Number of path pairs cannot be negative");
     else if ($3 > 0)
     {
         parserData->fromPaths = new std::string[$3];
@@ -4918,7 +4920,7 @@ numberOfPathPairsAttribute: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
 numberOfPathsAttribute: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Number of paths cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Number of paths cannot be negative");
     else
         parserData->paths = new std::string[$3];
     parserData->numberOf = $3;
@@ -4928,7 +4930,7 @@ numberOfPathsAttribute: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 numberOfProcessesATT: NUMBEROFPROCESSESATT QUOTE INTEGER QUOTE
 {
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Number of job IDs cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Number of job IDs cannot be negative");
     else
         parserData->processesToKill = new std::string[$3];
     parserData->numberOf = $3;
@@ -4938,15 +4940,15 @@ numberOfProcessesATT: NUMBEROFPROCESSESATT QUOTE INTEGER QUOTE
 
 numberOfSolverOptionsAttribute: NUMBEROFSOLVEROPTIONSATT quote INTEGER quote 
 {    
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of solver options cannot be negative");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of solver options cannot be negative");
     parserData->numberOfSolverOptions = $3;
 };
 
 numberOfVarAttribute: NUMBEROFVARATT quote INTEGER quote 
 {
     if (parserData->numberOfVarAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfVar attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <var> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfVar attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <var> cannot be negative");
     parserData->numberOfVarAttributePresent = true;        
     parserData->numberOfVar = $3; 
 }; 
@@ -4954,15 +4956,15 @@ numberOfVarAttribute: NUMBEROFVARATT quote INTEGER quote
 numberOfVariablesAttribute: NUMBEROFVARIABLESATT quote INTEGER quote 
 {    if (parserData->numberOfVariablesPresent)
 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfVariables attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of variables cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfVariables attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of variables cannot be negative");
     parserData->numberOfVariablesPresent = true;    
     parserData->tempInt = $3; 
 };
 
 //numberOfVarIdxAttribute: NUMBEROFVARIDXATT quote INTEGER quote 
 //{
-//    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <varIdx> cannot be negative");
+//    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <varIdx> cannot be negative");
 //    parserData->numberOfVarIdx = $3; 
 //}; 
 
@@ -4984,7 +4986,7 @@ otherEnumeration: otherEnumerationStart otherEnumerationAttributes otherEnumerat
                 parserData->valueAttribute, 
                 parserData->descriptionAttribute, 
                 osglData->osglIntArray) )
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <other> option enumeration failed");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <other> option enumeration failed");
 
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
@@ -4997,7 +4999,7 @@ otherEnumerationStart: ENUMERATIONSTART
     if (parserData->kounter >= parserData->numberOfEnumerations)
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more <enumeration> elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <enumeration> elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -5011,9 +5013,9 @@ otherEnumerationStart: ENUMERATIONSTART
 otherEnumerationAttributes: otherEnumerationAttList 
     {
         if(!osglData->osglNumberOfElPresent) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element enumeration requires numberOfEl attribute"); 
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element enumeration requires numberOfEl attribute"); 
         if(!parserData->valueAttributePresent) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element enumeration requires value attribute"); 
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<other> element enumeration requires value attribute"); 
     };
       
 otherEnumerationAttList: | otherEnumerationAttList otherEnumerationATT;
@@ -5077,9 +5079,12 @@ xmlWhiteSpaceChar: ' '
  *
  * The code is maintained in such a way that it can be inserted into any one
  * of these parsers by a makefile with minimal changes. 
- * The only change required is to change every occurrence of the placeholder
- * "osoption" to the appropriate reference ("osinstance" for OSiL files, 
- * "osoption" for OSoL files and "osresult" for OSrL files). 
+ * The only change required is to change every occurrence of the
+ * placeholder "osoption, parserData, osglData, osnlData" to the appropriate reference.
+ * For OSiL files, this is "osinstance, parserData, osnlData", 
+ * for OSoL files, "osoption, parserData, osglData, osnlData", and
+ * for OSrL files, "osresult, parserData, osglData, osnlData".
+ * Other schemas with their own separate syntax elements can be added as needed.
  * The makefile accomplishes this through maintaining each parser 
  * in several parts and to copy this include file between the OSxL syntax rules
  * and the postamble to make the final OSParseosxl.y file.
@@ -5126,7 +5131,7 @@ headerChild:
 fileName: | fileNameContent
 {
     if (osglData->fileNamePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated header information: file name");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated header information: file name");
     else
         osglData->fileNamePresent = true;
 };
@@ -5144,7 +5149,7 @@ fileNameLaden: FILENAMESTART ITEMTEXT FILENAMEEND
 fileSource: | fileSourceContent
 {
     if (osglData->sourcePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated header information: source");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated header information: source");
     else
         osglData->sourcePresent = true;
 };
@@ -5162,7 +5167,7 @@ fileSourceLaden: FILESOURCESTART ITEMTEXT FILESOURCEEND
 fileDescription: | fileDescriptionContent
 {
     if (osglData->descriptionPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated header information: description");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated header information: description");
     else
         osglData->descriptionPresent = true;
 };
@@ -5180,7 +5185,7 @@ fileDescriptionLaden: FILEDESCRIPTIONSTART ITEMTEXT FILEDESCRIPTIONEND
 fileCreator: | fileCreatorContent
 {
     if (osglData->fileCreatorPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated header information: file creator");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated header information: file creator");
     else
         osglData->fileCreatorPresent = true;
 };
@@ -5198,7 +5203,7 @@ fileCreatorLaden: FILECREATORSTART ITEMTEXT FILECREATOREND
 fileLicence: | fileLicenceContent
 {
     if (osglData->licencePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "Repeated header information: licence");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "Repeated header information: licence");
     else
         osglData->licencePresent = true;
 };
@@ -5223,7 +5228,7 @@ osglIntArrayData:
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer data elements than specified");
             parserData->ignoreDataAfterErrors = true;
         }
     }
@@ -5254,7 +5259,7 @@ osglIntVectorElContent: GREATERTHAN INTEGER ELEND
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more data elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -5280,15 +5285,15 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 {
     char* b64string = $2;
     if( b64string == NULL) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "base 64 data expected"); 
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "base 64 data expected"); 
     if (osglData->osglSize != sizeof(int))
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "base 64 encoded with a size of int different than on this machine"); 
 
     std::string base64decodeddata = Base64::decodeb64( b64string );
     int base64decodeddatalength = base64decodeddata.length();
     int *intvec = NULL;
     if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "base 64 data length does not match numberOfEl"); 
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "base 64 data length does not match numberOfEl"); 
     else
     {
         intvec = (int*)&base64decodeddata[0];
@@ -5305,7 +5310,7 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 osglIncrAttribute: INCRATT quote INTEGER quote 
 {    
     if (osglData->osglIncrPresent) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one incr attribute allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one incr attribute allowed");
     osglData->osglIncrPresent = true;
     osglData->osglIncr = $3;
 };
@@ -5313,8 +5318,8 @@ osglIncrAttribute: INCRATT quote INTEGER quote
 osglMultAttribute: MULTATT quote INTEGER quote 
 {    
     if (osglData->osglMultPresent) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "only one mult attribute allowed");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "mult must be positive");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one mult attribute allowed");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "mult must be positive");
     osglData->osglMultPresent = true;
     osglData->osglMult = $3;
 };
@@ -5329,7 +5334,7 @@ osglDblArrayData:
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "fewer data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer data elements than specified");
             parserData->ignoreDataAfterErrors = true;
         }
     }
@@ -5355,7 +5360,7 @@ osglDblVectorElContent: GREATERTHAN aNumber ELEND
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more data elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -5380,15 +5385,15 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 {
     char* b64string = $2;
     if( b64string == NULL) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "base 64 data expected"); 
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "base 64 data expected"); 
     if (osglData->osglSize != sizeof(int))
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "base 64 encoded with a size of int different than on this machine"); 
 
     std::string base64decodeddata = Base64::decodeb64( b64string );
     int base64decodeddatalength = base64decodeddata.length();
     double *dblvec = NULL;
     if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "base 64 data length does not match numberOfEl"); 
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "base 64 data length does not match numberOfEl"); 
     else
     {
         dblvec = (double*)&base64decodeddata[0];
@@ -5463,14 +5468,14 @@ matrixAttributes:
     | matrixNameAttribute
     {
         if (verifySymmetry(osglData->symmetryAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "symmetry type not recognized");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "symmetry type not recognized");
         parserData->errorText = NULL;
     };
 
 symmetryAttribute: SYMMETRYATT ATTRIBUTETEXT QUOTE 
 { 
     if (osglData->symmetryAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one symmetry attribute in <matrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one symmetry attribute in <matrix> element");
     osglData->symmetryAttributePresent = true;   
     osglData->symmetryAttribute = $2; 
     free($2);
@@ -5480,7 +5485,7 @@ symmetryAttribute: SYMMETRYATT ATTRIBUTETEXT QUOTE
 matrixNameAttribute: NAMEATT ATTRIBUTETEXT QUOTE 
 { 
     if (osglData->matrixNameAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one name attribute in <matrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one name attribute in <matrix> element");
     osglData->matrixNameAttributePresent = true;   
     osglData->matrixNameAttribute = $2; 
     free($2);
@@ -5516,9 +5521,9 @@ baseMatrixAtt:
 baseMatrixIdxAttribute: BASEMATRIXIDXATT QUOTE INTEGER QUOTE 
 { 
     if (osglData->baseMatrixIdxAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix idx cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
     osglData->baseMatrixIdxAttributePresent = true;   
     osglData->baseMatrixIdxAttribute = $3; 
 };
@@ -5526,9 +5531,9 @@ baseMatrixIdxAttribute: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
 targetMatrixFirstRowAttribute: TARGETMATRIXFIRSTROWATT QUOTE INTEGER QUOTE 
 { 
     if (osglData->targetMatrixFirstRowAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one targetMatrixFirstRow attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one targetMatrixFirstRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "targetMatrix first row cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "targetMatrix first row cannot be negative");
     osglData->targetMatrixFirstRowAttributePresent = true;   
     osglData->targetMatrixFirstRowAttribute = $3; 
 };
@@ -5536,9 +5541,9 @@ targetMatrixFirstRowAttribute: TARGETMATRIXFIRSTROWATT QUOTE INTEGER QUOTE
 targetMatrixFirstColAttribute: TARGETMATRIXFIRSTCOLATT QUOTE INTEGER QUOTE
 { 
     if (osglData->targetMatrixFirstColAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one targetMatrixFirstCol attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one targetMatrixFirstCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "targetMatrix first col cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "targetMatrix first col cannot be negative");
     osglData->targetMatrixFirstColAttributePresent = true;   
     osglData->targetMatrixFirstColAttribute = $3; 
 };
@@ -5546,9 +5551,9 @@ targetMatrixFirstColAttribute: TARGETMATRIXFIRSTCOLATT QUOTE INTEGER QUOTE
 baseMatrixStartRowAttribute: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
 { 
     if (osglData->baseMatrixStartRowAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one baseMatrixStartRow attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixStartRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix first row cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix first row cannot be negative");
     osglData->baseMatrixStartRowAttributePresent = true;   
     osglData->baseMatrixStartRowAttribute = $3; 
 };
@@ -5556,9 +5561,9 @@ baseMatrixStartRowAttribute: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
 baseMatrixStartColAttribute: BASEMATRIXSTARTCOLATT QUOTE INTEGER QUOTE
 { 
     if (osglData->baseMatrixStartColAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one baseMatrixStartCol attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixStartCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix first col cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix first col cannot be negative");
     osglData->baseMatrixStartColAttributePresent = true;   
     osglData->baseMatrixStartColAttribute = $3; 
 };
@@ -5566,9 +5571,9 @@ baseMatrixStartColAttribute: BASEMATRIXSTARTCOLATT QUOTE INTEGER QUOTE
 baseMatrixEndRowAttribute: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
 { 
     if (osglData->baseMatrixEndRowAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix last row cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix last row cannot be negative");
     osglData->baseMatrixEndRowAttributePresent = true;   
     osglData->baseMatrixEndRowAttribute = $3; 
 };
@@ -5576,9 +5581,9 @@ baseMatrixEndRowAttribute: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
 baseMatrixEndColAttribute: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
 { 
     if (osglData->baseMatrixEndColAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix last col cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix last col cannot be negative");
     osglData->baseMatrixEndColAttributePresent = true;   
     osglData->baseMatrixEndColAttribute = $3; 
 };
@@ -5586,7 +5591,7 @@ baseMatrixEndColAttribute: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
 baseTransposeAttribute: baseTransposeAtt
 { 
     if (osglData->baseTransposeAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one baseTranspose attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseTranspose attribute in <baseMatrix> element");
     osglData->baseTransposeAttributePresent = true;   
 };
 
@@ -5602,14 +5607,14 @@ baseTransposeAttContent: BASETRANSPOSEATT ATTRIBUTETEXT quote
     if      ($2 == "false") osglData->baseTransposeAttribute = false;
     else if ($2 == "true")  osglData->baseTransposeAttribute = true;
     else if ($2 == "")      osglData->baseTransposeAttribute = true;
-    else parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
+    else parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
     free($2);
 };
 
 scalarMultiplierAttribute: SCALARMULTIPLIERATT QUOTE aNumber QUOTE
 {
     if (osglData->scalarMultiplierAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "more than one scalar multiplier attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one scalar multiplier attribute in <baseMatrix> element");
     osglData->scalarMultiplierAttributePresent = true;   
     osglData->scalarMultiplierAttribute = parserData->tempVal;
 };
@@ -5638,7 +5643,7 @@ rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT quote
     if      ($2 == "false") osglData->rowMajorAttribute = false;
     else if ($2 == "true")  osglData->rowMajorAttribute = true;
     else if ($2 == "")      osglData->rowMajorAttribute = true;
-    else parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "rowMajor attribute in <baseMatrix> element must be \"true\" or \"false\"");
+    else parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "rowMajor attribute in <baseMatrix> element must be \"true\" or \"false\"");
     free($2);
 };
 
@@ -5654,7 +5659,7 @@ constantElementsStartVector: constantElementsStartVectorStart constantElementsSt
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -5686,7 +5691,7 @@ constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZERO
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     delete[] osglData->osglDblArray;
@@ -5711,7 +5716,7 @@ varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferen
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -5743,7 +5748,7 @@ varReferenceElementsNonzeros: varReferenceElementsNonzerosStart osglSparseIntVec
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     delete[] osglData->osglValArray;
@@ -5768,7 +5773,7 @@ linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVec
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -5798,12 +5803,12 @@ linearElementsStartVectorBody:  osglIntArrayData;
 
 linearElementsNonzeros: 
 {
-    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<linearElements> not implemented yet");    
+    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<linearElements> not implemented yet");    
 };
 
 generalElements: 
 {
-    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<generalElements> not implemented yet");    
+    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<generalElements> not implemented yet");    
 };
 
 matrixTransformation: OSnLMNode;
@@ -5820,7 +5825,7 @@ colOffsets: colOffsetsStart colOffsetsNumberOfElATT colOffsetsContent
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <blocks> colOffsets failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <blocks> colOffsets failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -5852,7 +5857,7 @@ rowOffsets: rowOffsetsStart rowOffsetsNumberOfElATT rowOffsetsContent
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <blocks> rowOffsets failed");    
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set <blocks> rowOffsets failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -5896,15 +5901,15 @@ matrixBlockAtt:
     | symmetryAttribute
     {
         if (verifySymmetry(parserData->symmetryAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "symmetry type not recognized");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "symmetry type not recognized");
         parserData->errorText = NULL;
     };
 
 blockRowIdxAtt: BLOCKROWIDXATT quote INTEGER quote
 {
     if (osglData->blockRowIdxAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockRowIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockRowIdx cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "blockRowIdx attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "blockRowIdx cannot be negative");
     osglData->blockRowIdxAttributePresent = true;        
     osglData->blockRowIdx = $3;
 };
@@ -5912,8 +5917,8 @@ blockRowIdxAtt: BLOCKROWIDXATT quote INTEGER quote
 blockColIdxAtt: BLOCKCOLIDXATT quote INTEGER quote
 {
     if (osglData->blockColIdxAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockColIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockColIdx cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "blockColIdx attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "blockColIdx cannot be negative");
     osglData->blockColIdxAttributePresent = true;        
     osglData->blockColIdx = $3;
 };
@@ -5956,8 +5961,8 @@ matrixTranspose: ;
 numberOfBlocksAttribute: NUMBEROFBLOCKSATT quote INTEGER quote
 {
     if (osglData->numberOfBlocksAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfBlocks attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <blocks> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfBlocks attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
     osglData->numberOfBlocksAttributePresent = true;        
     osglData->numberOfBlocks = $3;
 };
@@ -5965,8 +5970,8 @@ numberOfBlocksAttribute: NUMBEROFBLOCKSATT quote INTEGER quote
 numberOfColumnsAttribute: NUMBEROFCOLUMNSATT quote INTEGER quote
 {
     if (osglData->numberOfColumnsAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfColumns attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <blocks> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfColumns attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
     osglData->numberOfColumnsAttributePresent = true;        
     osglData->numberOfColumns = $3;
 };
@@ -5974,8 +5979,8 @@ numberOfColumnsAttribute: NUMBEROFCOLUMNSATT quote INTEGER quote
 numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
 {
     if (osglData->numberOfRowsAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfRows attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <rows> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfRows attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <rows> cannot be negative");
     osglData->numberOfRowsAttributePresent = true;        
     osglData->numberOfRows = $3;
 };
@@ -5999,7 +6004,7 @@ numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
  * The code is maintained in such a way that it can be inserted into any one
  * of these parsers by a makefile with minimal changes. 
  * The only change required is to change every occurrence of the placeholder
- * "osoption" to the appropriate reference ("osinstance" for OSiL files, 
+ * "targetObject" to the appropriate reference ("osinstance" for OSiL files, 
  * "osoption" for OSoL files and "osresult" for OSrL files). 
  * The makefile accomplishes this through maintaining each parser 
  * in several parts and to copy this include file between the OSxL syntax rules
@@ -6013,44 +6018,44 @@ numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
  */
 
 nonlinearExpressions:  
-				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
-				{  if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, osinstance, parserData, "actual number of nl terms less than number attribute");   };
-				
+                | NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
+                {  if (osnlData->nlnodecount < osnlData->tmpnlcount)  parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "actual number of nl terms less than number attribute");   };
+                
 
-nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE  GREATERTHAN { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-parserData->tmpnlcount = $3;
+nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE  GREATERTHAN { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+osnlData->tmpnlcount = $3;
 osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
 if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
 for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
-	osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
+    osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
 }
 };
-				
+                
 nlnodes: 
-		| nlnodes nlstart  
-		nlIdxATT  GREATERTHAN nlnode {
-	// IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
-	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
-	parserData->nlnodecount++;
+        | nlnodes nlstart  
+        nlIdxATT  GREATERTHAN nlnode {
+    // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->m_treeRoot = 
+    osnlData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+    osnlData->nlnodecount++;
 }  NLEND ;
 
 nlstart: NLSTART
 {
-	if(parserData->nlnodecount >= parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
+    if(osnlData->nlnodecount >= osnlData->tmpnlcount) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "actual number of nl terms greater than number attribute");
 };
 
-nlIdxATT:  IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
-osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $3;
-osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
+nlIdxATT:  IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+//osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount] = new Nl();
+osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->idx = $3;
+osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree = new OSExpressionTree();
 // clear the vectors of pointers
-parserData->nlNodeVec.clear();
-parserData->sumVec.clear();
-//parserData->allDiffVec.clear();
-parserData->maxVec.clear();
-parserData->minVec.clear();
-parserData->productVec.clear();
+osnlData->nlNodeVec.clear();
+osnlData->sumVec.clear();
+//osnlData->allDiffVec.clear();
+osnlData->maxVec.clear();
+osnlData->minVec.clear();
+osnlData->productVec.clear();
 };
 
 
@@ -6081,244 +6086,239 @@ nlnode: number
 
 
 times: TIMESSTART {
-	parserData->nlNodePoint = new OSnLNodeTimes();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode TIMESEND;
 
 plus: PLUSSTART {
-	parserData->nlNodePoint = new OSnLNodePlus();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodePlus();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode PLUSEND;
 
 minus: MINUSSTART {
-	parserData->nlNodePoint = new OSnLNodeMinus();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeMinus();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode MINUSEND;
 
 negate: NEGATESTART {
-	parserData->nlNodePoint = new OSnLNodeNegate();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeNegate();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode  NEGATEEND;
 
 divide: DIVIDESTART { 
-	parserData->nlNodePoint = new OSnLNodeDivide();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeDivide();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode DIVIDEEND;
 
 power: POWERSTART {
-	parserData->nlNodePoint = new OSnLNodePower();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodePower();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode POWEREND;
 
 sum: SUMSTART {
-	parserData->nlNodePoint = new OSnLNodeSum();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-	parserData->sumVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeSum();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->sumVec.push_back( osnlData->nlNodePoint);
 }
 anothersumnlnode SUMEND {
-	parserData->sumVec.back()->m_mChildren = new OSnLNode*[ parserData->sumVec.back()->inumberOfChildren];
-	parserData->sumVec.pop_back();
+    osnlData->sumVec.back()->m_mChildren = new OSnLNode*[ osnlData->sumVec.back()->inumberOfChildren];
+    osnlData->sumVec.pop_back();
 };
 
 anothersumnlnode: 
-			| anothersumnlnode nlnode {	parserData->sumVec.back()->inumberOfChildren++; };
-			
-			
-			
+            | anothersumnlnode nlnode { osnlData->sumVec.back()->inumberOfChildren++; };
+            
+            
+            
 
 allDiff: ALLDIFFSTART {
-	
-	parserData->nlNodePoint =   new OSnLNodeAllDiff ();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-	parserData->allDiffVec.push_back( parserData->nlNodePoint);
+    
+    osnlData->nlNodePoint =   new OSnLNodeAllDiff ();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->allDiffVec.push_back( osnlData->nlNodePoint);
 }
 anotherallDiffnlnode ALLDIFFEND {
-	parserData->allDiffVec.back()->m_mChildren = new OSnLNode*[ parserData->allDiffVec.back()->inumberOfChildren];
-	parserData->allDiffVec.pop_back();
-	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+    osnlData->allDiffVec.back()->m_mChildren = new OSnLNode*[ osnlData->allDiffVec.back()->inumberOfChildren];
+    osnlData->allDiffVec.pop_back();
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
 anotherallDiffnlnode: 
-			| anotherallDiffnlnode nlnode {	parserData->allDiffVec.back()->inumberOfChildren++; };
-			
-			
+            | anotherallDiffnlnode nlnode { osnlData->allDiffVec.back()->inumberOfChildren++; };
+            
+            
 max: MAXSTART {
-	parserData->nlNodePoint = new OSnLNodeMax();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-	parserData->maxVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeMax();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->maxVec.push_back( osnlData->nlNodePoint);
 }
 anothermaxnlnode MAXEND {
-	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
-	parserData->maxVec.pop_back();
-	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+    osnlData->maxVec.back()->m_mChildren = new OSnLNode*[ osnlData->maxVec.back()->inumberOfChildren];
+    osnlData->maxVec.pop_back();
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
 anothermaxnlnode: 
-			| anothermaxnlnode nlnode {	parserData->maxVec.back()->inumberOfChildren++; };
-			
+            | anothermaxnlnode nlnode { osnlData->maxVec.back()->inumberOfChildren++; };
+            
 min: MINSTART {
-	parserData->nlNodePoint = new OSnLNodeMin();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-	parserData->minVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeMin();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->minVec.push_back( osnlData->nlNodePoint);
 }
 anotherminnlnode MINEND {
-	parserData->minVec.back()->m_mChildren = new OSnLNode*[ parserData->minVec.back()->inumberOfChildren];
-	parserData->minVec.pop_back();
-	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+    osnlData->minVec.back()->m_mChildren = new OSnLNode*[ osnlData->minVec.back()->inumberOfChildren];
+    osnlData->minVec.pop_back();
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
 anotherminnlnode: 
-			| anotherminnlnode nlnode {	parserData->minVec.back()->inumberOfChildren++; };
-			
-			
+            | anotherminnlnode nlnode { osnlData->minVec.back()->inumberOfChildren++; };
+            
+            
 product: PRODUCTSTART {
-	parserData->nlNodePoint = new OSnLNodeProduct();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-	parserData->productVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeProduct();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->productVec.push_back( osnlData->nlNodePoint);
 }
 anotherproductnlnode PRODUCTEND {
-	parserData->productVec.back()->m_mChildren = new OSnLNode*[ parserData->productVec.back()->inumberOfChildren];
-	parserData->productVec.pop_back();
+    osnlData->productVec.back()->m_mChildren = new OSnLNode*[ osnlData->productVec.back()->inumberOfChildren];
+    osnlData->productVec.pop_back();
 };
 
 anotherproductnlnode: 
-			| anotherproductnlnode nlnode {	parserData->productVec.back()->inumberOfChildren++; };
+            | anotherproductnlnode nlnode { osnlData->productVec.back()->inumberOfChildren++; };
 
 
 ln: LNSTART {
-	parserData->nlNodePoint = new OSnLNodeLn();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeLn();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode LNEND;
 
 sqrt: SQRTSTART {
-	parserData->nlNodePoint = new OSnLNodeSqrt();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeSqrt();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode SQRTEND;
 
 square: SQUARESTART {
-	parserData->nlNodePoint = new OSnLNodeSquare();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeSquare();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode SQUAREEND;
 
 cos: COSSTART {
-	parserData->nlNodePoint = new OSnLNodeCos();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeCos();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode COSEND;
 
 sin: SINSTART {
-	parserData->nlNodePoint = new OSnLNodeSin();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeSin();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode SINEND;
 
-
-
 exp: EXPSTART {
-	parserData->nlNodePoint = new OSnLNodeExp();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeExp();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode EXPEND;
 
 abs: ABSSTART {
-	parserData->nlNodePoint = new OSnLNodeAbs();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeAbs();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode ABSEND {
-osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
-
 
 erf: ERFSTART {
-	parserData->nlNodePoint = new OSnLNodeErf();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeErf();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode ERFEND {
-//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
-
 
 if: IFSTART {
-	parserData->nlNodePoint = new OSnLNodeIf();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeIf();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode nlnode IFEND {
-osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
-E: ESTART {	parserData->nlNodePoint = new OSnLNodeE();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);} eend;
-	
+E: ESTART {    osnlData->nlNodePoint = new OSnLNodeE();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);} eend;
+    
 eend: ENDOFELEMENT
-			| GREATERTHAN EEND;
-			
-PI: PISTART {	parserData->nlNodePoint = new OSnLNodePI();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);} piend;
-	
+            | GREATERTHAN EEND;
+            
+PI: PISTART {    osnlData->nlNodePoint = new OSnLNodePI();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);} piend;
+    
 piend: ENDOFELEMENT
-			| GREATERTHAN PIEND;
-			
+            | GREATERTHAN PIEND;
+            
 number: NUMBERSTART {
-	parserData->nlNodeNumberPoint = new OSnLNodeNumber();
-	parserData->nlNodeVec.push_back( parserData->nlNodeNumberPoint);
-} anotherNumberATT  numberend {parserData->numbervalueattON = false; parserData->numbertypeattON = false; parserData->numberidattON = false;};
+    osnlData->nlNodeNumberPoint = new OSnLNodeNumber();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodeNumberPoint);
+} anotherNumberATT  numberend {osnlData->numbervalueattON = false; osnlData->numbertypeattON = false; osnlData->numberidattON = false;};
 
 numberend: ENDOFELEMENT
-			| GREATERTHAN NUMBEREND;
+            | GREATERTHAN NUMBEREND;
 
 anotherNumberATT:
-			|anotherNumberATT numberATT ;
-			
-numberATT: numbertypeATT  {if(parserData->numbertypeattON) osilerror( NULL, osinstance, parserData, "too many number type attributes"); 
-			parserData->numbertypeattON = true; }
-		| numbervalueATT  {if(parserData->numbervalueattON) osilerror( NULL, osinstance, parserData, "too many number value attributes"); 
-			parserData->numbervalueattON = true; }
-		| numberidATT  {if(parserData->numberidattON) osilerror( NULL, osinstance, parserData,"too many number id attributes"); 
-			parserData->numberidattON = true; }			
-			;
-			
+            |anotherNumberATT numberATT ;
+            
+numberATT: numbertypeATT  {if(osnlData->numbertypeattON) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many number type attributes"); 
+            osnlData->numbertypeattON = true; }
+        | numbervalueATT  {if(osnlData->numbervalueattON) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many number value attributes"); 
+            osnlData->numbervalueattON = true; }
+        | numberidATT  {if(osnlData->numberidattON) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,"too many number id attributes"); 
+            osnlData->numberidattON = true; }            
+            ;
+            
 numbertypeATT: TYPEATT ATTRIBUTETEXT {
-	parserData->nlNodeNumberPoint->type = $2;
+    osnlData->nlNodeNumberPoint->type = $2;
 } QUOTE;
 
 numberidATT:   IDATT   ATTRIBUTETEXT {
-	parserData->nlNodeNumberPoint->id = $2;
+    osnlData->nlNodeNumberPoint->id = $2;
 }  QUOTE ;
 
-numbervalueATT: VALUEATT QUOTE  DOUBLE QUOTE {if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-	parserData->nlNodeNumberPoint->value = $3;
+numbervalueATT: VALUEATT QUOTE  DOUBLE QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeNumberPoint->value = $3;
 }
-		| VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-	parserData->nlNodeNumberPoint->value = $3;
+        | VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeNumberPoint->value = $3;
 } ;
 
 variable: VARIABLESTART {
-	parserData->nlNodeVariablePoint = new OSnLNodeVariable();
-	parserData->nlNodeVec.push_back( parserData->nlNodeVariablePoint);
-} anotherVariableATT  variableend {parserData->variablecoefattON = false; parserData->variableidxattON = false;} ;
-		      
+    osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodeVariablePoint);
+} anotherVariableATT  variableend {osnlData->variablecoefattON = false; osnlData->variableidxattON = false;} ;
+              
 variableend: ENDOFELEMENT
-			| GREATERTHAN nlnode {
-	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
-	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+            | GREATERTHAN nlnode {
+    osnlData->nlNodeVariablePoint->inumberOfChildren = 1;
+    osnlData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
 }    VARIABLEEND
            | GREATERTHAN VARIABLEEND;
-			
+            
 anotherVariableATT:
-			|anotherVariableATT variableATT ;
-			
-variableATT: variablecoefATT  {if(parserData->variablecoefattON) osilerror( NULL, osinstance, parserData, "too many variable coef attributes"); 
-			parserData->variablecoefattON = true; }
-		| variableidxATT  {if(parserData->variableidxattON) osilerror( NULL, osinstance, parserData, "too many variable idx attributes"); 
-			parserData->variableidxattON = true; 
-			};
-			
-variablecoefATT: COEFATT  QUOTE DOUBLE QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-	parserData->nlNodeVariablePoint->coef = $3;
+            |anotherVariableATT variableATT ;
+            
+variableATT: variablecoefATT  {if(osnlData->variablecoefattON) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many variable coef attributes"); 
+            osnlData->variablecoefattON = true; }
+        | variableidxATT  {if(osnlData->variableidxattON) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "too many variable idx attributes"); 
+            osnlData->variableidxattON = true; 
+            };
+            
+variablecoefATT: COEFATT  QUOTE DOUBLE QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->coef = $3;
 }
-				| COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-	parserData->nlNodeVariablePoint->coef = $3;		
+                | COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->coef = $3;        
 }  ;
-				
-variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-	parserData->nlNodeVariablePoint->idx = $3;
-	if( $3 >= osinstance->instanceData->variables->numberOfVariables){
-	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
-	 }
+                
+variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->idx = $3;
+    if( $3 >= osinstance->instanceData->variables->numberOfVariables){
+         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index exceeds number of variables");
+     }
 }  ; 
 
 
@@ -6359,7 +6359,7 @@ void addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData
 } //end addErrorMsg
 #endif
 
-std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     std::ostringstream outStr;
     outStr << "At line number " << osolget_lineno( scanner) << ": "; 
@@ -6369,21 +6369,24 @@ std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* par
     return outStr.str();
 } //end addErrorMsg
 
-void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, std::string errormsg )
+void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     osol_empty_vectors( parserData);
     osgl_empty_vectors( osglData);
+    osnl_empty_vectors( osnlData);
     throw ErrorClass( errormsg);
 } //end osolerror
 
-void  yygetOSOption(const char *parsestring, OSOption *osoption, OSoLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass){
+void  yygetOSOption(const char *parsestring, OSOption *osoption, 
+      OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass)
+{
     try{
         osol_scan_string( parsestring, scanner);
         osolset_lineno (1 , scanner );
         //
         // call the Bison parser
         //
-        if(  osolparse( osoption,  parserData, osglData) != 0) {
+        if(  osolparse( osoption,  parserData, osglData, osnlData) != 0) {
             //osollex_destroy(scanner);
               throw ErrorClass(  "Error parsing the OSoL file");
          }

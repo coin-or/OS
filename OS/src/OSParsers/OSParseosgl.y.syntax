@@ -15,9 +15,12 @@
  *
  * The code is maintained in such a way that it can be inserted into any one
  * of these parsers by a makefile with minimal changes. 
- * The only change required is to change every occurrence of the placeholder
- * "targetObject" to the appropriate reference ("osinstance" for OSiL files, 
- * "osoption" for OSoL files and "osresult" for OSrL files). 
+ * The only change required is to change every occurrence of the
+ * placeholder "parserObjects" to the appropriate reference.
+ * For OSiL files, this is "osinstance, parserData, osnlData", 
+ * for OSoL files, "osoption, parserData, osglData, osnlData", and
+ * for OSrL files, "osresult, parserData, osglData, osnlData".
+ * Other schemas with their own separate syntax elements can be added as needed.
  * The makefile accomplishes this through maintaining each parser 
  * in several parts and to copy this include file between the OSxL syntax rules
  * and the postamble to make the final OSParseosxl.y file.
@@ -64,7 +67,7 @@ headerChild:
 fileName: | fileNameContent
 {
     if (osglData->fileNamePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "Repeated header information: file name");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "Repeated header information: file name");
     else
         osglData->fileNamePresent = true;
 };
@@ -82,7 +85,7 @@ fileNameLaden: FILENAMESTART ITEMTEXT FILENAMEEND
 fileSource: | fileSourceContent
 {
     if (osglData->sourcePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "Repeated header information: source");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "Repeated header information: source");
     else
         osglData->sourcePresent = true;
 };
@@ -100,7 +103,7 @@ fileSourceLaden: FILESOURCESTART ITEMTEXT FILESOURCEEND
 fileDescription: | fileDescriptionContent
 {
     if (osglData->descriptionPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "Repeated header information: description");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "Repeated header information: description");
     else
         osglData->descriptionPresent = true;
 };
@@ -118,7 +121,7 @@ fileDescriptionLaden: FILEDESCRIPTIONSTART ITEMTEXT FILEDESCRIPTIONEND
 fileCreator: | fileCreatorContent
 {
     if (osglData->fileCreatorPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "Repeated header information: file creator");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "Repeated header information: file creator");
     else
         osglData->fileCreatorPresent = true;
 };
@@ -136,7 +139,7 @@ fileCreatorLaden: FILECREATORSTART ITEMTEXT FILECREATOREND
 fileLicence: | fileLicenceContent
 {
     if (osglData->licencePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "Repeated header information: licence");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "Repeated header information: licence");
     else
         osglData->licencePresent = true;
 };
@@ -161,7 +164,7 @@ osglIntArrayData:
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
         {
-            parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "fewer data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "fewer data elements than specified");
             parserData->ignoreDataAfterErrors = true;
         }
     }
@@ -192,7 +195,7 @@ osglIntVectorElContent: GREATERTHAN INTEGER ELEND
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more data elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -218,15 +221,15 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 {
     char* b64string = $2;
     if( b64string == NULL) 
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "base 64 data expected"); 
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "base 64 data expected"); 
     if (osglData->osglSize != sizeof(int))
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "base 64 encoded with a size of int different than on this machine"); 
 
     std::string base64decodeddata = Base64::decodeb64( b64string );
     int base64decodeddatalength = base64decodeddata.length();
     int *intvec = NULL;
     if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "base 64 data length does not match numberOfEl"); 
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "base 64 data length does not match numberOfEl"); 
     else
     {
         intvec = (int*)&base64decodeddata[0];
@@ -243,7 +246,7 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 osglIncrAttribute: INCRATT quote INTEGER quote 
 {    
     if (osglData->osglIncrPresent) 
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "only one incr attribute allowed");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "only one incr attribute allowed");
     osglData->osglIncrPresent = true;
     osglData->osglIncr = $3;
 };
@@ -251,8 +254,8 @@ osglIncrAttribute: INCRATT quote INTEGER quote
 osglMultAttribute: MULTATT quote INTEGER quote 
 {    
     if (osglData->osglMultPresent) 
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "only one mult attribute allowed");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "mult must be positive");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "only one mult attribute allowed");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mult must be positive");
     osglData->osglMultPresent = true;
     osglData->osglMult = $3;
 };
@@ -267,7 +270,7 @@ osglDblArrayData:
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
         {
-            parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "fewer data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "fewer data elements than specified");
             parserData->ignoreDataAfterErrors = true;
         }
     }
@@ -293,7 +296,7 @@ osglDblVectorElContent: GREATERTHAN aNumber ELEND
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more data elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -318,15 +321,15 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 {
     char* b64string = $2;
     if( b64string == NULL) 
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "base 64 data expected"); 
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "base 64 data expected"); 
     if (osglData->osglSize != sizeof(int))
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "base 64 encoded with a size of int different than on this machine"); 
 
     std::string base64decodeddata = Base64::decodeb64( b64string );
     int base64decodeddatalength = base64decodeddata.length();
     double *dblvec = NULL;
     if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "base 64 data length does not match numberOfEl"); 
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "base 64 data length does not match numberOfEl"); 
     else
     {
         dblvec = (double*)&base64decodeddata[0];
@@ -401,14 +404,14 @@ matrixAttributes:
     | matrixNameAttribute
     {
         if (verifySymmetry(osglData->symmetryAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "symmetry type not recognized");
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "symmetry type not recognized");
         parserData->errorText = NULL;
     };
 
 symmetryAttribute: SYMMETRYATT ATTRIBUTETEXT QUOTE 
 { 
     if (osglData->symmetryAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one symmetry attribute in <matrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one symmetry attribute in <matrix> element");
     osglData->symmetryAttributePresent = true;   
     osglData->symmetryAttribute = $2; 
     free($2);
@@ -418,7 +421,7 @@ symmetryAttribute: SYMMETRYATT ATTRIBUTETEXT QUOTE
 matrixNameAttribute: NAMEATT ATTRIBUTETEXT QUOTE 
 { 
     if (osglData->matrixNameAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one name attribute in <matrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one name attribute in <matrix> element");
     osglData->matrixNameAttributePresent = true;   
     osglData->matrixNameAttribute = $2; 
     free($2);
@@ -454,9 +457,9 @@ baseMatrixAtt:
 baseMatrixIdxAttribute: BASEMATRIXIDXATT QUOTE INTEGER QUOTE 
 { 
     if (osglData->baseMatrixIdxAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixIdx attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix idx cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix idx cannot be negative");
     osglData->baseMatrixIdxAttributePresent = true;   
     osglData->baseMatrixIdxAttribute = $3; 
 };
@@ -464,9 +467,9 @@ baseMatrixIdxAttribute: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
 targetMatrixFirstRowAttribute: TARGETMATRIXFIRSTROWATT QUOTE INTEGER QUOTE 
 { 
     if (osglData->targetMatrixFirstRowAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one targetMatrixFirstRow attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one targetMatrixFirstRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "targetMatrix first row cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "targetMatrix first row cannot be negative");
     osglData->targetMatrixFirstRowAttributePresent = true;   
     osglData->targetMatrixFirstRowAttribute = $3; 
 };
@@ -474,9 +477,9 @@ targetMatrixFirstRowAttribute: TARGETMATRIXFIRSTROWATT QUOTE INTEGER QUOTE
 targetMatrixFirstColAttribute: TARGETMATRIXFIRSTCOLATT QUOTE INTEGER QUOTE
 { 
     if (osglData->targetMatrixFirstColAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one targetMatrixFirstCol attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one targetMatrixFirstCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "targetMatrix first col cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "targetMatrix first col cannot be negative");
     osglData->targetMatrixFirstColAttributePresent = true;   
     osglData->targetMatrixFirstColAttribute = $3; 
 };
@@ -484,9 +487,9 @@ targetMatrixFirstColAttribute: TARGETMATRIXFIRSTCOLATT QUOTE INTEGER QUOTE
 baseMatrixStartRowAttribute: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
 { 
     if (osglData->baseMatrixStartRowAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixStartRow attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixStartRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix first row cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix first row cannot be negative");
     osglData->baseMatrixStartRowAttributePresent = true;   
     osglData->baseMatrixStartRowAttribute = $3; 
 };
@@ -494,9 +497,9 @@ baseMatrixStartRowAttribute: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
 baseMatrixStartColAttribute: BASEMATRIXSTARTCOLATT QUOTE INTEGER QUOTE
 { 
     if (osglData->baseMatrixStartColAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixStartCol attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixStartCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix first col cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix first col cannot be negative");
     osglData->baseMatrixStartColAttributePresent = true;   
     osglData->baseMatrixStartColAttribute = $3; 
 };
@@ -504,9 +507,9 @@ baseMatrixStartColAttribute: BASEMATRIXSTARTCOLATT QUOTE INTEGER QUOTE
 baseMatrixEndRowAttribute: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
 { 
     if (osglData->baseMatrixEndRowAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix last row cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix last row cannot be negative");
     osglData->baseMatrixEndRowAttributePresent = true;   
     osglData->baseMatrixEndRowAttribute = $3; 
 };
@@ -514,9 +517,9 @@ baseMatrixEndRowAttribute: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
 baseMatrixEndColAttribute: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
 { 
     if (osglData->baseMatrixEndColAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "baseMatrix last col cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix last col cannot be negative");
     osglData->baseMatrixEndColAttributePresent = true;   
     osglData->baseMatrixEndColAttribute = $3; 
 };
@@ -524,7 +527,7 @@ baseMatrixEndColAttribute: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
 baseTransposeAttribute: baseTransposeAtt
 { 
     if (osglData->baseTransposeAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one baseTranspose attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseTranspose attribute in <baseMatrix> element");
     osglData->baseTransposeAttributePresent = true;   
 };
 
@@ -540,14 +543,14 @@ baseTransposeAttContent: BASETRANSPOSEATT ATTRIBUTETEXT quote
     if      ($2 == "false") osglData->baseTransposeAttribute = false;
     else if ($2 == "true")  osglData->baseTransposeAttribute = true;
     else if ($2 == "")      osglData->baseTransposeAttribute = true;
-    else parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
+    else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
     free($2);
 };
 
 scalarMultiplierAttribute: SCALARMULTIPLIERATT QUOTE aNumber QUOTE
 {
     if (osglData->scalarMultiplierAttributePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "more than one scalar multiplier attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one scalar multiplier attribute in <baseMatrix> element");
     osglData->scalarMultiplierAttributePresent = true;   
     osglData->scalarMultiplierAttribute = parserData->tempVal;
 };
@@ -576,7 +579,7 @@ rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT quote
     if      ($2 == "false") osglData->rowMajorAttribute = false;
     else if ($2 == "true")  osglData->rowMajorAttribute = true;
     else if ($2 == "")      osglData->rowMajorAttribute = true;
-    else parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "rowMajor attribute in <baseMatrix> element must be \"true\" or \"false\"");
+    else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "rowMajor attribute in <baseMatrix> element must be \"true\" or \"false\"");
     free($2);
 };
 
@@ -592,7 +595,7 @@ constantElementsStartVector: constantElementsStartVectorStart constantElementsSt
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -624,7 +627,7 @@ constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZERO
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     delete[] osglData->osglDblArray;
@@ -649,7 +652,7 @@ varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferen
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -681,7 +684,7 @@ varReferenceElementsNonzeros: varReferenceElementsNonzerosStart osglSparseIntVec
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     delete[] osglData->osglValArray;
@@ -706,7 +709,7 @@ linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVec
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set variables basic failed");    
+//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -736,12 +739,12 @@ linearElementsStartVectorBody:  osglIntArrayData;
 
 linearElementsNonzeros: 
 {
-    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<linearElements> not implemented yet");    
+    parserData->parser_errors += addErrorMsg( NULL, parserObjects, "<linearElements> not implemented yet");    
 };
 
 generalElements: 
 {
-    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "<generalElements> not implemented yet");    
+    parserData->parser_errors += addErrorMsg( NULL, parserObjects, "<generalElements> not implemented yet");    
 };
 
 matrixTransformation: OSnLMNode;
@@ -758,7 +761,7 @@ colOffsets: colOffsetsStart colOffsetsNumberOfElATT colOffsetsContent
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <blocks> colOffsets failed");    
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set <blocks> colOffsets failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -790,7 +793,7 @@ rowOffsets: rowOffsetsStart rowOffsetsNumberOfElATT rowOffsetsContent
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "set <blocks> rowOffsets failed");    
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set <blocks> rowOffsets failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
@@ -834,15 +837,15 @@ matrixBlockAtt:
     | symmetryAttribute
     {
         if (verifySymmetry(parserData->symmetryAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, targetObject, parserData, osglData, "symmetry type not recognized");
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "symmetry type not recognized");
         parserData->errorText = NULL;
     };
 
 blockRowIdxAtt: BLOCKROWIDXATT quote INTEGER quote
 {
     if (osglData->blockRowIdxAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockRowIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockRowIdx cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockRowIdx attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockRowIdx cannot be negative");
     osglData->blockRowIdxAttributePresent = true;        
     osglData->blockRowIdx = $3;
 };
@@ -850,8 +853,8 @@ blockRowIdxAtt: BLOCKROWIDXATT quote INTEGER quote
 blockColIdxAtt: BLOCKCOLIDXATT quote INTEGER quote
 {
     if (osglData->blockColIdxAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockColIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "blockColIdx cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockColIdx attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockColIdx cannot be negative");
     osglData->blockColIdxAttributePresent = true;        
     osglData->blockColIdx = $3;
 };
@@ -894,8 +897,8 @@ matrixTranspose: ;
 numberOfBlocksAttribute: NUMBEROFBLOCKSATT quote INTEGER quote
 {
     if (osglData->numberOfBlocksAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfBlocks attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <blocks> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfBlocks attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <blocks> cannot be negative");
     osglData->numberOfBlocksAttributePresent = true;        
     osglData->numberOfBlocks = $3;
 };
@@ -903,8 +906,8 @@ numberOfBlocksAttribute: NUMBEROFBLOCKSATT quote INTEGER quote
 numberOfColumnsAttribute: NUMBEROFCOLUMNSATT quote INTEGER quote
 {
     if (osglData->numberOfColumnsAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfColumns attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <blocks> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfColumns attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <blocks> cannot be negative");
     osglData->numberOfColumnsAttributePresent = true;        
     osglData->numberOfColumns = $3;
 };
@@ -912,8 +915,8 @@ numberOfColumnsAttribute: NUMBEROFCOLUMNSATT quote INTEGER quote
 numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
 {
     if (osglData->numberOfRowsAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "numberOfRows attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, "number of <rows> cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfRows attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <rows> cannot be negative");
     osglData->numberOfRowsAttributePresent = true;        
     osglData->numberOfRows = $3;
 };

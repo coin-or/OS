@@ -86,6 +86,7 @@
 #include "OSResult.h"
 #include "OSrLParserData.h"
 #include "OSgLParserData.h"
+#include "OSnLParserData.h"
 #include "OSBase64.h"
 
 #include <iostream>
@@ -107,7 +108,7 @@ int osrlget_lineno( void* yyscanner);
 char *osrlget_text (void* yyscanner );
 void osrlset_lineno (int line_number , void* yyscanner );
 void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
-void  yygetOSResult(const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData ) throw(ErrorClass);
+void  yygetOSResult(const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData ) throw(ErrorClass);
 void osrl_empty_vectors( OSrLParserData* parserData);
 void osgl_empty_vectors( OSgLParserData* osglData);
 
@@ -836,8 +837,8 @@ typedef struct YYLTYPE
 /* Copy the second part of user declarations.  */
 
 
-std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg ) ;
-void osrlerror(YYLTYPE* type, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, std::string errormsg);
+std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg ) ;
+void osrlerror(YYLTYPE* type, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData* osnlData, std::string errormsg);
 int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 #define scanner parserData->scanner
 
@@ -1574,128 +1575,128 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   298,   298,   299,   301,   308,   318,   318,   320,   320,
-     322,   324,   326,   335,   336,   339,   348,   348,   361,   361,
-     363,   377,   377,   379,   379,   381,   383,   385,   385,   388,
-     389,   390,   391,   392,   393,   394,   395,   396,   399,   401,
-     416,   423,   423,   426,   431,   435,   444,   448,   453,   453,
-     455,   457,   459,   459,   461,   466,   476,   482,   482,   485,
-     490,   496,   496,   499,   501,   508,   508,   510,   510,   512,
-     514,   517,   519,   526,   526,   528,   528,   530,   532,   537,
-     539,   546,   546,   548,   548,   550,   552,   557,   559,   566,
-     566,   568,   568,   570,   572,   577,   579,   586,   586,   588,
-     588,   590,   592,   597,   599,   606,   606,   608,   608,   610,
-     612,   617,   619,   626,   626,   628,   628,   630,   632,   637,
-     639,   646,   656,   661,   667,   667,   669,   671,   673,   673,
-     675,   680,   692,   698,   698,   701,   708,   713,   720,   720,
-     724,   724,   726,   737,   737,   739,   739,   741,   743,   745,
-     745,   748,   749,   750,   751,   752,   753,   756,   758,   765,
-     765,   767,   767,   769,   771,   778,   780,   791,   793,   793,
-     796,   802,   808,   810,   816,   818,   829,   831,   831,   834,
-     840,   846,   848,   855,   857,   868,   870,   870,   873,   879,
-     885,   887,   894,   896,   905,   906,   912,   914,   920,   922,
-     929,   939,   944,   950,   950,   952,   954,   956,   956,   958,
-     963,   975,   981,   981,   984,   991,   996,  1002,  1002,  1006,
-    1006,  1008,  1019,  1019,  1021,  1021,  1023,  1025,  1027,  1027,
-    1030,  1031,  1032,  1033,  1034,  1035,  1038,  1040,  1047,  1047,
-    1049,  1049,  1051,  1053,  1061,  1063,  1070,  1070,  1072,  1072,
-    1074,  1076,  1081,  1083,  1090,  1090,  1092,  1092,  1094,  1096,
-    1101,  1103,  1110,  1110,  1112,  1112,  1114,  1116,  1121,  1123,
-    1130,  1130,  1132,  1132,  1134,  1136,  1143,  1145,  1152,  1162,
-    1167,  1173,  1173,  1175,  1177,  1179,  1179,  1181,  1186,  1198,
-    1204,  1204,  1207,  1214,  1219,  1226,  1226,  1229,  1229,  1231,
-    1247,  1247,  1249,  1249,  1251,  1253,  1255,  1255,  1258,  1259,
-    1260,  1261,  1262,  1263,  1264,  1265,  1266,  1267,  1268,  1271,
-    1273,  1280,  1280,  1282,  1282,  1284,  1286,  1294,  1296,  1303,
-    1303,  1305,  1305,  1307,  1309,  1314,  1316,  1323,  1323,  1325,
-    1325,  1327,  1329,  1334,  1336,  1343,  1343,  1345,  1345,  1347,
-    1349,  1354,  1356,  1363,  1363,  1365,  1365,  1367,  1369,  1374,
-    1376,  1383,  1393,  1398,  1404,  1404,  1406,  1408,  1410,  1410,
-    1412,  1414,  1428,  1428,  1431,  1431,  1431,  1431,  1434,  1434,
-    1436,  1436,  1438,  1440,  1449,  1450,  1453,  1455,  1466,  1468,
-    1468,  1471,  1477,  1483,  1485,  1492,  1494,  1505,  1507,  1507,
-    1510,  1516,  1522,  1524,  1531,  1533,  1544,  1546,  1546,  1549,
-    1555,  1561,  1563,  1570,  1572,  1582,  1583,  1589,  1591,  1598,
-    1600,  1607,  1617,  1622,  1628,  1628,  1630,  1632,  1634,  1634,
-    1636,  1641,  1653,  1659,  1659,  1662,  1669,  1674,  1681,  1681,
-    1684,  1684,  1686,  1694,  1700,  1700,  1703,  1710,  1716,  1722,
-    1730,  1735,  1741,  1741,  1743,  1745,  1747,  1747,  1749,  1751,
-    1760,  1762,  1762,  1764,  1764,  1764,  1766,  1776,  1786,  1806,
-    1812,  1814,  1824,  1830,  1830,  1833,  1838,  1843,  1853,  1858,
-    1864,  1864,  1866,  1868,  1870,  1870,  1872,  1877,  1887,  1893,
-    1893,  1896,  1902,  1909,  1909,  1912,  1912,  1914,  1916,  1916,
-    1918,  1918,  1920,  1922,  1930,  1930,  1932,  1938,  1938,  1946,
-    1946,  1948,  1950,  1952,  1954,  1954,  1956,  1958,  1966,  1971,
-    1977,  1977,  1979,  1981,  1983,  1983,  1985,  1996,  2005,  2005,
-    2008,  2009,  2012,  2015,  2015,  2017,  2019,  2027,  2032,  2038,
-    2038,  2040,  2042,  2044,  2044,  2046,  2057,  2066,  2066,  2069,
-    2070,  2074,  2075,  2077,  2077,  2079,  2081,  2086,  2086,  2088,
-    2093,  2093,  2095,  2097,  2099,  2101,  2101,  2110,  2112,  2119,
-    2119,  2121,  2123,  2125,  2128,  2128,  2138,  2140,  2147,  2147,
-    2149,  2151,  2153,  2156,  2156,  2165,  2167,  2174,  2174,  2176,
-    2178,  2180,  2183,  2183,  2192,  2194,  2201,  2201,  2203,  2205,
-    2207,  2210,  2210,  2219,  2221,  2228,  2228,  2230,  2232,  2234,
-    2237,  2237,  2246,  2248,  2255,  2255,  2257,  2259,  2261,  2264,
-    2264,  2273,  2275,  2282,  2282,  2284,  2286,  2288,  2291,  2291,
-    2293,  2298,  2317,  2323,  2323,  2326,  2337,  2348,  2354,  2360,
-    2366,  2372,  2378,  2385,  2385,  2387,  2387,  2389,  2391,  2391,
-    2393,  2393,  2395,  2402,  2411,  2411,  2414,  2420,  2427,  2427,
-    2429,  2429,  2431,  2433,  2442,  2442,  2444,  2455,  2463,  2469,
-    2469,  2472,  2478,  2479,  2483,  2483,  2485,  2487,  2490,  2494,
-    2494,  2496,  2504,  2504,  2512,  2512,  2514,  2516,  2518,  2520,
-    2520,  2522,  2524,  2532,  2537,  2543,  2543,  2545,  2547,  2550,
-    2550,  2552,  2561,  2571,  2571,  2574,  2575,  2578,  2581,  2581,
-    2583,  2588,  2588,  2591,  2593,  2595,  2597,  2597,  2606,  2608,
-    2615,  2615,  2617,  2619,  2621,  2623,  2623,  2632,  2634,  2641,
-    2641,  2643,  2645,  2647,  2650,  2650,  2659,  2661,  2668,  2668,
-    2670,  2672,  2674,  2677,  2677,  2686,  2688,  2695,  2695,  2697,
-    2699,  2701,  2704,  2704,  2713,  2715,  2722,  2722,  2724,  2726,
-    2728,  2731,  2731,  2740,  2742,  2749,  2749,  2751,  2753,  2755,
-    2758,  2758,  2767,  2769,  2776,  2776,  2778,  2780,  2782,  2785,
-    2785,  2787,  2793,  2812,  2819,  2819,  2822,  2833,  2844,  2850,
-    2856,  2862,  2868,  2874,  2883,  2883,  2885,  2885,  2887,  2889,
-    2889,  2891,  2891,  2893,  2898,  2908,  2908,  2911,  2916,  2923,
-    2923,  2925,  2925,  2927,  2929,  2936,  2936,  2938,  2949,  2957,
-    2963,  2963,  2966,  2972,  2973,  2977,  2977,  2979,  2981,  2984,
-    2987,  2987,  2989,  2996,  2996,  3004,  3004,  3006,  3008,  3010,
-    3012,  3012,  3014,  3017,  3025,  3030,  3036,  3036,  3038,  3040,
-    3042,  3042,  3044,  3053,  3062,  3062,  3065,  3066,  3069,  3072,
-    3072,  3074,  3079,  3079,  3081,  3083,  3085,  3087,  3087,  3096,
-    3098,  3105,  3105,  3107,  3109,  3111,  3113,  3113,  3122,  3124,
-    3131,  3131,  3133,  3135,  3137,  3140,  3140,  3149,  3151,  3158,
-    3158,  3160,  3162,  3164,  3167,  3167,  3176,  3178,  3185,  3185,
-    3187,  3189,  3191,  3194,  3194,  3203,  3205,  3212,  3212,  3214,
-    3216,  3218,  3221,  3221,  3230,  3232,  3239,  3239,  3241,  3243,
-    3245,  3248,  3248,  3257,  3259,  3266,  3266,  3268,  3270,  3272,
-    3275,  3275,  3277,  3283,  3302,  3308,  3308,  3311,  3322,  3333,
-    3339,  3345,  3351,  3357,  3363,  3370,  3370,  3372,  3372,  3374,
-    3376,  3376,  3378,  3378,  3380,  3387,  3396,  3396,  3400,  3405,
-    3413,  3413,  3415,  3415,  3417,  3419,  3426,  3426,  3428,  3439,
-    3447,  3453,  3453,  3456,  3462,  3463,  3467,  3467,  3469,  3471,
-    3473,  3477,  3477,  3479,  3484,  3493,  3498,  3504,  3504,  3506,
-    3508,  3510,  3510,  3512,  3517,  3531,  3539,  3539,  3542,  3548,
-    3554,  3560,  3568,  3578,  3583,  3589,  3589,  3591,  3593,  3595,
-    3595,  3597,  3603,  3608,  3610,  3610,  3612,  3614,  3626,  3626,
-    3628,  3633,  3642,  3647,  3653,  3653,  3655,  3657,  3659,  3659,
-    3661,  3666,  3678,  3686,  3686,  3689,  3694,  3700,  3706,  3715,
-    3720,  3726,  3726,  3728,  3730,  3732,  3732,  3734,  3740,  3745,
-    3747,  3747,  3749,  3751,  3762,  3769,  3769,  3771,  3776,  3781,
-    3788,  3788,  3790,  3795,  3800,  3807,  3807,  3809,  3814,  3819,
-    3826,  3826,  3828,  3833,  3838,  3846,  3853,  3853,  3855,  3860,
-    3865,  3872,  3872,  3874,  3879,  3884,  3891,  3891,  3893,  3898,
-    3903,  3910,  3910,  3912,  3917,  3922,  3929,  3929,  3931,  3936,
-    3941,  3948,  3948,  3950,  3955,  3961,  3967,  3976,  3982,  3996,
-    4005,  4011,  4020,  4026,  4032,  4038,  4044,  4050,  4059,  4065,
-    4074,  4079,  4085,  4102,  4103,  4107,  4108,  4109,  4111,  4113,
-    4113,  4115,  4116,  4117,  4118,  4152,  4154,  4168,  4168,  4170,
-    4170,  4172,  4174,  4176,  4176,  4179,  4180,  4181,  4182,  4183,
-    4185,  4185,  4193,  4193,  4195,  4195,  4197,  4203,  4203,  4211,
-    4211,  4213,  4213,  4215,  4221,  4221,  4229,  4229,  4231,  4231,
-    4233,  4239,  4239,  4247,  4247,  4249,  4249,  4251,  4257,  4257,
-    4265,  4265,  4267,  4267,  4269,  4281,  4289,  4291,  4291,  4293,
-    4295,  4304,  4306,  4306,  4308,  4308,  4310,  4326,  4328,  4333,
-    4333,  4335,  4335,  4338,  4364,  4372,  4429,  4434,  4434,  4436,
-    4436,  4438
+       0,   300,   300,   301,   303,   310,   320,   320,   322,   322,
+     324,   326,   328,   337,   338,   341,   350,   350,   363,   363,
+     365,   379,   379,   381,   381,   383,   385,   387,   387,   390,
+     391,   392,   393,   394,   395,   396,   397,   398,   401,   403,
+     418,   425,   425,   428,   433,   437,   446,   450,   455,   455,
+     457,   459,   461,   461,   463,   468,   478,   484,   484,   487,
+     492,   498,   498,   501,   503,   510,   510,   512,   512,   514,
+     516,   519,   521,   528,   528,   530,   530,   532,   534,   539,
+     541,   548,   548,   550,   550,   552,   554,   559,   561,   568,
+     568,   570,   570,   572,   574,   579,   581,   588,   588,   590,
+     590,   592,   594,   599,   601,   608,   608,   610,   610,   612,
+     614,   619,   621,   628,   628,   630,   630,   632,   634,   639,
+     641,   648,   658,   663,   669,   669,   671,   673,   675,   675,
+     677,   682,   694,   700,   700,   703,   710,   715,   722,   722,
+     726,   726,   728,   739,   739,   741,   741,   743,   745,   747,
+     747,   750,   751,   752,   753,   754,   755,   758,   760,   767,
+     767,   769,   769,   771,   773,   780,   782,   793,   795,   795,
+     798,   804,   810,   812,   818,   820,   831,   833,   833,   836,
+     842,   848,   850,   857,   859,   870,   872,   872,   875,   881,
+     887,   889,   896,   898,   907,   908,   914,   916,   922,   924,
+     931,   941,   946,   952,   952,   954,   956,   958,   958,   960,
+     965,   977,   983,   983,   986,   993,   998,  1004,  1004,  1008,
+    1008,  1010,  1021,  1021,  1023,  1023,  1025,  1027,  1029,  1029,
+    1032,  1033,  1034,  1035,  1036,  1037,  1040,  1042,  1049,  1049,
+    1051,  1051,  1053,  1055,  1063,  1065,  1072,  1072,  1074,  1074,
+    1076,  1078,  1083,  1085,  1092,  1092,  1094,  1094,  1096,  1098,
+    1103,  1105,  1112,  1112,  1114,  1114,  1116,  1118,  1123,  1125,
+    1132,  1132,  1134,  1134,  1136,  1138,  1145,  1147,  1154,  1164,
+    1169,  1175,  1175,  1177,  1179,  1181,  1181,  1183,  1188,  1200,
+    1206,  1206,  1209,  1216,  1221,  1228,  1228,  1231,  1231,  1233,
+    1249,  1249,  1251,  1251,  1253,  1255,  1257,  1257,  1260,  1261,
+    1262,  1263,  1264,  1265,  1266,  1267,  1268,  1269,  1270,  1273,
+    1275,  1282,  1282,  1284,  1284,  1286,  1288,  1296,  1298,  1305,
+    1305,  1307,  1307,  1309,  1311,  1316,  1318,  1325,  1325,  1327,
+    1327,  1329,  1331,  1336,  1338,  1345,  1345,  1347,  1347,  1349,
+    1351,  1356,  1358,  1365,  1365,  1367,  1367,  1369,  1371,  1376,
+    1378,  1385,  1395,  1400,  1406,  1406,  1408,  1410,  1412,  1412,
+    1414,  1416,  1430,  1430,  1433,  1433,  1433,  1433,  1436,  1436,
+    1438,  1438,  1440,  1442,  1451,  1452,  1455,  1457,  1468,  1470,
+    1470,  1473,  1479,  1485,  1487,  1494,  1496,  1507,  1509,  1509,
+    1512,  1518,  1524,  1526,  1533,  1535,  1546,  1548,  1548,  1551,
+    1557,  1563,  1565,  1572,  1574,  1584,  1585,  1591,  1593,  1600,
+    1602,  1609,  1619,  1624,  1630,  1630,  1632,  1634,  1636,  1636,
+    1638,  1643,  1655,  1661,  1661,  1664,  1671,  1676,  1683,  1683,
+    1686,  1686,  1688,  1696,  1702,  1702,  1705,  1712,  1718,  1724,
+    1732,  1737,  1743,  1743,  1745,  1747,  1749,  1749,  1751,  1753,
+    1762,  1764,  1764,  1766,  1766,  1766,  1768,  1778,  1788,  1808,
+    1814,  1816,  1826,  1832,  1832,  1835,  1840,  1845,  1855,  1860,
+    1866,  1866,  1868,  1870,  1872,  1872,  1874,  1879,  1889,  1895,
+    1895,  1898,  1904,  1911,  1911,  1914,  1914,  1916,  1918,  1918,
+    1920,  1920,  1922,  1924,  1932,  1932,  1934,  1940,  1940,  1948,
+    1948,  1950,  1952,  1954,  1956,  1956,  1958,  1960,  1968,  1973,
+    1979,  1979,  1981,  1983,  1985,  1985,  1987,  1998,  2007,  2007,
+    2010,  2011,  2014,  2017,  2017,  2019,  2021,  2029,  2034,  2040,
+    2040,  2042,  2044,  2046,  2046,  2048,  2059,  2068,  2068,  2071,
+    2072,  2076,  2077,  2079,  2079,  2081,  2083,  2088,  2088,  2090,
+    2095,  2095,  2097,  2099,  2101,  2103,  2103,  2112,  2114,  2121,
+    2121,  2123,  2125,  2127,  2130,  2130,  2140,  2142,  2149,  2149,
+    2151,  2153,  2155,  2158,  2158,  2167,  2169,  2176,  2176,  2178,
+    2180,  2182,  2185,  2185,  2194,  2196,  2203,  2203,  2205,  2207,
+    2209,  2212,  2212,  2221,  2223,  2230,  2230,  2232,  2234,  2236,
+    2239,  2239,  2248,  2250,  2257,  2257,  2259,  2261,  2263,  2266,
+    2266,  2275,  2277,  2284,  2284,  2286,  2288,  2290,  2293,  2293,
+    2295,  2300,  2319,  2325,  2325,  2328,  2339,  2350,  2356,  2362,
+    2368,  2374,  2380,  2387,  2387,  2389,  2389,  2391,  2393,  2393,
+    2395,  2395,  2397,  2404,  2413,  2413,  2416,  2422,  2429,  2429,
+    2431,  2431,  2433,  2435,  2444,  2444,  2446,  2457,  2465,  2471,
+    2471,  2474,  2480,  2481,  2485,  2485,  2487,  2489,  2492,  2496,
+    2496,  2498,  2506,  2506,  2514,  2514,  2516,  2518,  2520,  2522,
+    2522,  2524,  2526,  2534,  2539,  2545,  2545,  2547,  2549,  2552,
+    2552,  2554,  2563,  2573,  2573,  2576,  2577,  2580,  2583,  2583,
+    2585,  2590,  2590,  2593,  2595,  2597,  2599,  2599,  2608,  2610,
+    2617,  2617,  2619,  2621,  2623,  2625,  2625,  2634,  2636,  2643,
+    2643,  2645,  2647,  2649,  2652,  2652,  2661,  2663,  2670,  2670,
+    2672,  2674,  2676,  2679,  2679,  2688,  2690,  2697,  2697,  2699,
+    2701,  2703,  2706,  2706,  2715,  2717,  2724,  2724,  2726,  2728,
+    2730,  2733,  2733,  2742,  2744,  2751,  2751,  2753,  2755,  2757,
+    2760,  2760,  2769,  2771,  2778,  2778,  2780,  2782,  2784,  2787,
+    2787,  2789,  2795,  2814,  2821,  2821,  2824,  2835,  2846,  2852,
+    2858,  2864,  2870,  2876,  2885,  2885,  2887,  2887,  2889,  2891,
+    2891,  2893,  2893,  2895,  2900,  2910,  2910,  2913,  2918,  2925,
+    2925,  2927,  2927,  2929,  2931,  2938,  2938,  2940,  2951,  2959,
+    2965,  2965,  2968,  2974,  2975,  2979,  2979,  2981,  2983,  2986,
+    2989,  2989,  2991,  2998,  2998,  3006,  3006,  3008,  3010,  3012,
+    3014,  3014,  3016,  3019,  3027,  3032,  3038,  3038,  3040,  3042,
+    3044,  3044,  3046,  3055,  3064,  3064,  3067,  3068,  3071,  3074,
+    3074,  3076,  3081,  3081,  3083,  3085,  3087,  3089,  3089,  3098,
+    3100,  3107,  3107,  3109,  3111,  3113,  3115,  3115,  3124,  3126,
+    3133,  3133,  3135,  3137,  3139,  3142,  3142,  3151,  3153,  3160,
+    3160,  3162,  3164,  3166,  3169,  3169,  3178,  3180,  3187,  3187,
+    3189,  3191,  3193,  3196,  3196,  3205,  3207,  3214,  3214,  3216,
+    3218,  3220,  3223,  3223,  3232,  3234,  3241,  3241,  3243,  3245,
+    3247,  3250,  3250,  3259,  3261,  3268,  3268,  3270,  3272,  3274,
+    3277,  3277,  3279,  3285,  3304,  3310,  3310,  3313,  3324,  3335,
+    3341,  3347,  3353,  3359,  3365,  3372,  3372,  3374,  3374,  3376,
+    3378,  3378,  3380,  3380,  3382,  3389,  3398,  3398,  3402,  3407,
+    3415,  3415,  3417,  3417,  3419,  3421,  3428,  3428,  3430,  3441,
+    3449,  3455,  3455,  3458,  3464,  3465,  3469,  3469,  3471,  3473,
+    3475,  3479,  3479,  3481,  3486,  3495,  3500,  3506,  3506,  3508,
+    3510,  3512,  3512,  3514,  3519,  3533,  3541,  3541,  3544,  3550,
+    3556,  3562,  3570,  3580,  3585,  3591,  3591,  3593,  3595,  3597,
+    3597,  3599,  3605,  3610,  3612,  3612,  3614,  3616,  3628,  3628,
+    3630,  3635,  3644,  3649,  3655,  3655,  3657,  3659,  3661,  3661,
+    3663,  3668,  3680,  3688,  3688,  3691,  3696,  3702,  3708,  3717,
+    3722,  3728,  3728,  3730,  3732,  3734,  3734,  3736,  3742,  3747,
+    3749,  3749,  3751,  3753,  3764,  3771,  3771,  3773,  3778,  3783,
+    3790,  3790,  3792,  3797,  3802,  3809,  3809,  3811,  3816,  3821,
+    3828,  3828,  3830,  3835,  3840,  3848,  3855,  3855,  3857,  3862,
+    3867,  3874,  3874,  3876,  3881,  3886,  3893,  3893,  3895,  3900,
+    3905,  3912,  3912,  3914,  3919,  3924,  3931,  3931,  3933,  3938,
+    3943,  3950,  3950,  3952,  3957,  3963,  3969,  3978,  3984,  3998,
+    4007,  4013,  4022,  4028,  4034,  4040,  4046,  4052,  4061,  4067,
+    4076,  4081,  4087,  4104,  4105,  4109,  4110,  4111,  4113,  4115,
+    4115,  4117,  4118,  4119,  4120,  4157,  4159,  4173,  4173,  4175,
+    4175,  4177,  4179,  4181,  4181,  4184,  4185,  4186,  4187,  4188,
+    4190,  4190,  4198,  4198,  4200,  4200,  4202,  4208,  4208,  4216,
+    4216,  4218,  4218,  4220,  4226,  4226,  4234,  4234,  4236,  4236,
+    4238,  4244,  4244,  4252,  4252,  4254,  4254,  4256,  4262,  4262,
+    4270,  4270,  4272,  4272,  4274,  4286,  4294,  4296,  4296,  4298,
+    4300,  4309,  4311,  4311,  4313,  4313,  4315,  4331,  4333,  4338,
+    4338,  4340,  4340,  4343,  4369,  4377,  4434,  4439,  4439,  4441,
+    4441,  4443
 };
 #endif
 
@@ -3402,7 +3403,7 @@ do								\
     }								\
   else								\
     {								\
-      yyerror (&yylloc, osresult, parserData, osglData, YY_("syntax error: cannot back up")); \
+      yyerror (&yylloc, osresult, parserData, osglData, osnlData, YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -3482,7 +3483,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value, Location, osresult, parserData, osglData); \
+		  Type, Value, Location, osresult, parserData, osglData, osnlData); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -3496,10 +3497,10 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData, osglData)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData, osglData, osnlData)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
@@ -3507,6 +3508,7 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parser
     OSResult *osresult;
     OSrLParserData *parserData;
     OSgLParserData *osglData;
+    OSnLParserData *osnlData;
 #endif
 {
   if (!yyvaluep)
@@ -3515,6 +3517,7 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parser
   YYUSE (osresult);
   YYUSE (parserData);
   YYUSE (osglData);
+  YYUSE (osnlData);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
@@ -3536,10 +3539,10 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parser
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData, osglData)
+yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData, osglData, osnlData)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
@@ -3547,6 +3550,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData, 
     OSResult *osresult;
     OSrLParserData *parserData;
     OSgLParserData *osglData;
+    OSnLParserData *osnlData;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -3556,7 +3560,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData, 
 
   YY_LOCATION_PRINT (yyoutput, *yylocationp);
   YYFPRINTF (yyoutput, ": ");
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData, osglData);
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData, osglData, osnlData);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -3599,16 +3603,17 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData)
+yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
 #else
 static void
-yy_reduce_print (yyvsp, yylsp, yyrule, osresult, parserData, osglData)
+yy_reduce_print (yyvsp, yylsp, yyrule, osresult, parserData, osglData, osnlData)
     YYSTYPE *yyvsp;
     YYLTYPE *yylsp;
     int yyrule;
     OSResult *osresult;
     OSrLParserData *parserData;
     OSgLParserData *osglData;
+    OSnLParserData *osnlData;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -3622,7 +3627,7 @@ yy_reduce_print (yyvsp, yylsp, yyrule, osresult, parserData, osglData)
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       , &(yylsp[(yyi + 1) - (yynrhs)])		       , osresult, parserData, osglData);
+		       , &(yylsp[(yyi + 1) - (yynrhs)])		       , osresult, parserData, osglData, osnlData);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -3630,7 +3635,7 @@ yy_reduce_print (yyvsp, yylsp, yyrule, osresult, parserData, osglData)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, yylsp, Rule, osresult, parserData, osglData); \
+    yy_reduce_print (yyvsp, yylsp, Rule, osresult, parserData, osglData, osnlData); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -3881,10 +3886,10 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep, yylocationp, osresult, parserData, osglData)
+yydestruct (yymsg, yytype, yyvaluep, yylocationp, osresult, parserData, osglData, osnlData)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
@@ -3892,6 +3897,7 @@ yydestruct (yymsg, yytype, yyvaluep, yylocationp, osresult, parserData, osglData
     OSResult *osresult;
     OSrLParserData *parserData;
     OSgLParserData *osglData;
+    OSnLParserData *osnlData;
 #endif
 {
   YYUSE (yyvaluep);
@@ -3899,6 +3905,7 @@ yydestruct (yymsg, yytype, yyvaluep, yylocationp, osresult, parserData, osglData
   YYUSE (osresult);
   YYUSE (parserData);
   YYUSE (osglData);
+  YYUSE (osnlData);
 
   if (!yymsg)
     yymsg = "Deleting";
@@ -3921,7 +3928,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData);
+int yyparse (OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData);
 #else
 int yyparse ();
 #endif
@@ -3949,13 +3956,14 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData)
+yyparse (OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
 #else
 int
-yyparse (osresult, parserData, osglData)
+yyparse (osresult, parserData, osglData, osnlData)
     OSResult *osresult;
     OSrLParserData *parserData;
     OSgLParserData *osglData;
+    OSnLParserData *osnlData;
 #endif
 #endif
 {
@@ -4261,14 +4269,14 @@ yyreduce:
         if (parserData->parser_errors != "")
         {
             parserData->parser_errors += ("\n\nOSrL input is either not valid or well formed.\n"); 
-            osrlerror( NULL, osresult, parserData, osglData, parserData->parser_errors);
+            osrlerror( NULL, osresult, parserData, osglData, osnlData, parserData->parser_errors);
         }
     }
     break;
 
   case 14:
 
-    { parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "unexpected end of file, expecting </osol>");}
+    { parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "unexpected end of file, expecting </osol>");}
     break;
 
   case 17:
@@ -4276,7 +4284,7 @@ yyreduce:
     {
     if (!osresult->setHeader(osglData->fileName, osglData->source,     
             osglData->description, osglData->fileCreator, osglData->licence) )    
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "setHeader failed");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "setHeader failed");
 }
     break;
 
@@ -4300,9 +4308,9 @@ yyreduce:
 
     {
         if (parserData->generalStatusPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one generalStatus element allowed");    
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one generalStatus element allowed");    
         if (osresult->general->generalStatus != NULL) 
-            osrlerror(NULL, NULL, parserData, osglData, "generalStatus previously allocated");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "generalStatus previously allocated");
         parserData->generalStatusPresent = true;
         parserData->typeAttributePresent = false;
         parserData->descriptionAttributePresent = false;
@@ -4317,7 +4325,7 @@ yyreduce:
 
     {
         if (!parserData->typeAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "type attribute must be present for generalStatus element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "type attribute must be present for generalStatus element");
         parserData->kounter = 0;
     }
     break;
@@ -4326,7 +4334,7 @@ yyreduce:
 
     { 
         if (osresult->setGeneralStatusType(parserData->typeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "general status type does not match any legal value");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "general status type does not match any legal value");
     }
     break;
 
@@ -4341,7 +4349,7 @@ yyreduce:
 
     {
        if (osresult->setNumberOfGeneralSubstatuses(parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "Attempting to reallocate substatus array. Potential loss of data.");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "Attempting to reallocate substatus array. Potential loss of data.");
         parserData->numberOf = parserData->tempInt;
         parserData->kounter = 0;
     }
@@ -4350,14 +4358,14 @@ yyreduce:
   case 46:
 
     {    if (parserData->numberOf > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <substatus> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <substatus> element");
     }
     break;
 
   case 47:
 
     {    if (parserData->kounter != parserData->numberOf)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <substatus> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <substatus> elements than specified");
     }
     break;
 
@@ -4372,7 +4380,7 @@ yyreduce:
 
     {
     if (parserData->kounter >= parserData->numberOf)
-        osrlerror( NULL, NULL, parserData, osglData, "more <substatus> elements than specified");
+        osrlerror( NULL, NULL, parserData, osglData, osnlData, "more <substatus> elements than specified");
     parserData->nameAttributePresent = false;
     parserData->descriptionAttributePresent = false;
     parserData->nameAttribute = "";
@@ -4384,7 +4392,7 @@ yyreduce:
 
     {
     if (!parserData->nameAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<substatus> must have name attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<substatus> must have name attribute");
 }
     break;
 
@@ -4392,7 +4400,7 @@ yyreduce:
 
     {    
         if (osresult->setGeneralSubstatusName(parserData->kounter, parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "Error while setting <general> substatus name");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "Error while setting <general> substatus name");
     }
     break;
 
@@ -4400,7 +4408,7 @@ yyreduce:
 
     {    
         if (osresult->setGeneralSubstatusDescription(parserData->kounter, parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "Error while setting <general> substatus description");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "Error while setting <general> substatus description");
     }
     break;
 
@@ -4408,7 +4416,7 @@ yyreduce:
 
     {
         if (parserData->generalMessagePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one message element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one message element allowed");
         parserData->generalMessagePresent = true;
     }
     break;
@@ -4422,7 +4430,7 @@ yyreduce:
 
     {
         if (parserData->generalServiceURIPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one serviceURI element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one serviceURI element allowed");
         parserData->generalServiceURIPresent = true;
     }
     break;
@@ -4438,7 +4446,7 @@ yyreduce:
 
     {
         if (parserData->generalServiceNamePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one serviceName element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one serviceName element allowed");
         parserData->generalServiceNamePresent = true;
     }
     break;
@@ -4454,7 +4462,7 @@ yyreduce:
 
     {
         if (parserData->generalInstanceNamePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one instanceName element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one instanceName element allowed");
         parserData->generalInstanceNamePresent = true;
     }
     break;
@@ -4470,7 +4478,7 @@ yyreduce:
 
     {
         if (parserData->generalJobIDPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one jobID element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one jobID element allowed");
         parserData->generalJobIDPresent = true;
     }
     break;
@@ -4486,7 +4494,7 @@ yyreduce:
 
     {
         if (parserData->generalSolverInvokedPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one solverInvoked element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one solverInvoked element allowed");
         parserData->generalSolverInvokedPresent = true;
     }
     break;
@@ -4502,7 +4510,7 @@ yyreduce:
 
     {
         if (parserData->generalTimeStampPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one timeStamp element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one timeStamp element allowed");
         parserData->generalTimeStampPresent = true;
     }
     break;
@@ -4518,7 +4526,7 @@ yyreduce:
 
     {
         if (parserData->otherGeneralResultsPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one general other results element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one general other results element allowed");
         parserData->otherGeneralResultsPresent = true;
     }
     break;
@@ -4526,9 +4534,9 @@ yyreduce:
   case 121:
 
     {
-    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other general results cannot be negative");
+    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other general results cannot be negative");
     if (osresult->setNumberOfOtherGeneralResults(parserData->tempInt) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "Attempting to reallocate other general results array. Potential loss of data.");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "Attempting to reallocate other general results array. Potential loss of data.");
     parserData->numberOf = parserData->tempInt;
     parserData->kounter = 0;
 }
@@ -4538,7 +4546,7 @@ yyreduce:
 
     {
         if (parserData->numberOf > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <other> element");
     }
     break;
 
@@ -4546,7 +4554,7 @@ yyreduce:
 
     {
         if (parserData->kounter < parserData->numberOf - 1)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <other> elements than specified");
     }
     break;
 
@@ -4561,7 +4569,7 @@ yyreduce:
 
     {
     if (parserData->kounter >= parserData->numberOf)
-        osrlerror(NULL, NULL, parserData, osglData, "more <other> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <other> elements than specified");
     parserData->nameAttributePresent = false;
     parserData->valueAttributePresent = false;
     parserData->descriptionAttributePresent = false;
@@ -4575,7 +4583,7 @@ yyreduce:
 
     {
     if (!parserData->nameAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<other> must have name attribute");
 }
     break;
 
@@ -4583,9 +4591,9 @@ yyreduce:
 
     {
         if (parserData->nameAttribute.length() == 0)
-            osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "otherResult name cannot be empty");
         if (osresult->setOtherGeneralResultName(parserData->kounter, parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setGeneralOtherResultName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setGeneralOtherResultName failed");
     }
     break;
 
@@ -4593,7 +4601,7 @@ yyreduce:
 
     {    
         if (osresult->setOtherGeneralResultValue(parserData->kounter, parserData->valueAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setGeneralOtherResultValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setGeneralOtherResultValue failed");
     }
     break;
 
@@ -4601,7 +4609,7 @@ yyreduce:
 
     {    
         if (osresult->setOtherGeneralResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setGeneralOtherResultDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setGeneralOtherResultDescription failed");
     }
     break;
 
@@ -4622,7 +4630,7 @@ yyreduce:
 
     {
         if (parserData->systemInformationPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one systemInformation element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one systemInformation element allowed");
         parserData->systemInformationPresent = true;
     }
     break;
@@ -4640,7 +4648,7 @@ yyreduce:
 
     {
         if (parserData->systemAvailableDiskSpacePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one availableDiskSpace element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one availableDiskSpace element allowed");
         parserData->systemAvailableDiskSpacePresent = true;    
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;    
@@ -4653,7 +4661,7 @@ yyreduce:
 
     {
         if (osresult->setAvailableDiskSpaceUnit( parserData->unitAttribute) == false) 
-            osrlerror(NULL, NULL, parserData, osglData, "availableDiskSpace unit not recognized");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "availableDiskSpace unit not recognized");
         parserData->errorText = NULL;
     }
     break;
@@ -4678,7 +4686,7 @@ yyreduce:
 
     {
         if (parserData->systemAvailableMemoryPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one availableMemory element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one availableMemory element allowed");
         parserData->systemAvailableMemoryPresent = true;
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;    
@@ -4691,7 +4699,7 @@ yyreduce:
 
     {
         if (osresult->setAvailableMemoryUnit( parserData->unitAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "availableDiskSpace unit not recognized");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "availableDiskSpace unit not recognized");
         parserData->errorText = NULL;
     }
     break;
@@ -4716,7 +4724,7 @@ yyreduce:
 
     {
         if (parserData->systemAvailableCPUSpeedPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one availableCPUSpeed element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one availableCPUSpeed element allowed");
         parserData->systemAvailableCPUSpeedPresent = true;
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;    
@@ -4729,7 +4737,7 @@ yyreduce:
 
     {
         if (osresult->setAvailableCPUSpeedUnit( parserData->unitAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "available CPU Speed could not be set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "available CPU Speed could not be set");
         parserData->errorText = NULL;
     }
     break;
@@ -4754,7 +4762,7 @@ yyreduce:
 
     {
         if (parserData->systemAvailableCPUNumberPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one availableCPUNumber element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one availableCPUNumber element allowed");
         parserData->systemAvailableCPUNumberPresent = true;
         parserData->descriptionAttributePresent = false;    
         parserData->descriptionAttribute = "";    
@@ -4780,7 +4788,7 @@ yyreduce:
 
     {
         if (parserData->otherSystemResultsPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one system other results element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one system other results element allowed");
         parserData->otherSystemResultsPresent = true;
     }
     break;
@@ -4788,9 +4796,9 @@ yyreduce:
   case 200:
 
     {
-    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other system results cannot be negative");
+    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other system results cannot be negative");
     if (osresult->setNumberOfOtherSystemResults(parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherSystemResults failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfOtherSystemResults failed");
     parserData->numberOf = parserData->tempInt;
     parserData->kounter = 0;
 }
@@ -4800,7 +4808,7 @@ yyreduce:
 
     {
         if (parserData->numberOf > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <other> element");
     }
     break;
 
@@ -4808,7 +4816,7 @@ yyreduce:
 
     {
         if (parserData->kounter < parserData->numberOf - 1)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <other> elements than specified");
     }
     break;
 
@@ -4823,7 +4831,7 @@ yyreduce:
 
     {
     if (parserData->kounter >= parserData->numberOf)
-        osrlerror(NULL, NULL, parserData, osglData, "more <other> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <other> elements than specified");
     parserData->nameAttributePresent = false;
     parserData->valueAttributePresent = false;
     parserData->descriptionAttributePresent = false;
@@ -4837,7 +4845,7 @@ yyreduce:
 
     {
     if (!parserData->nameAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<other> must have name attribute");
 }
     break;
 
@@ -4845,9 +4853,9 @@ yyreduce:
 
     {
         if (parserData->nameAttribute.length() == 0)
-            osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "otherResult name cannot be empty");
         if (osresult->setOtherSystemResultName(parserData->kounter, parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSystemOtherResultName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSystemOtherResultName failed");
     }
     break;
 
@@ -4855,7 +4863,7 @@ yyreduce:
 
     {    
         if (osresult->setOtherSystemResultValue(parserData->kounter, parserData->valueAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSystemOtherResultValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSystemOtherResultValue failed");
     }
     break;
 
@@ -4863,7 +4871,7 @@ yyreduce:
 
     {    
         if (osresult->setOtherSystemResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSystemOtherResultDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSystemOtherResultDescription failed");
     }
     break;
 
@@ -4884,7 +4892,7 @@ yyreduce:
 
     {
         if (parserData->serviceCurrentStatePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one currentState element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one currentState element allowed");
         parserData->serviceCurrentStatePresent = true;
     }
     break;
@@ -4894,7 +4902,7 @@ yyreduce:
     {
        parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
         if (osresult->setCurrentState(parserData->tempStr) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setCurrentState failed; current system state not recognized");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setCurrentState failed; current system state not recognized");
         parserData->errorText = NULL;
     }
     break;
@@ -4903,7 +4911,7 @@ yyreduce:
 
     {
         if (parserData->serviceCurrentJobCountPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one currentJobCount element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one currentJobCount element allowed");
         parserData->serviceCurrentJobCountPresent = true;
     }
     break;
@@ -4919,7 +4927,7 @@ yyreduce:
 
     {
         if (parserData->serviceTotalJobsSoFarPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one totalJobsSoFar element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one totalJobsSoFar element allowed");
         parserData->serviceTotalJobsSoFarPresent = true;
     }
     break;
@@ -4935,7 +4943,7 @@ yyreduce:
 
     {
         if (parserData->timeServiceStartedPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one timeServiceStarted element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one timeServiceStarted element allowed");
         parserData->timeServiceStartedPresent = true;
     }
     break;
@@ -4951,7 +4959,7 @@ yyreduce:
 
     {
         if (parserData->serviceUtilizationPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one serviceUtilization element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one serviceUtilization element allowed");
         parserData->serviceUtilizationPresent = true;
     }
     break;
@@ -4960,7 +4968,7 @@ yyreduce:
 
     {
     if (osresult->setServiceUtilization( parserData->tempVal) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setServiceUtilization failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setServiceUtilization failed");
     parserData->errorText = NULL;
 }
     break;
@@ -4969,7 +4977,7 @@ yyreduce:
 
     {
         if (parserData->otherServiceResultsPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one service other results element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one service other results element allowed");
         parserData->otherServiceResultsPresent = true;
     }
     break;
@@ -4977,9 +4985,9 @@ yyreduce:
   case 278:
 
     {
-    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other service results cannot be negative");
+    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other service results cannot be negative");
     if (osresult->setNumberOfOtherServiceResults(parserData->tempInt) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherServiceResults failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfOtherServiceResults failed");
     parserData->numberOf = parserData->tempInt;
     parserData->kounter = 0;
 }
@@ -4989,7 +4997,7 @@ yyreduce:
 
     {
         if (parserData->numberOf > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <other> element");
     }
     break;
 
@@ -4997,7 +5005,7 @@ yyreduce:
 
     {
         if (parserData->kounter < parserData->numberOf - 1)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <other> elements than specified");
     }
     break;
 
@@ -5012,7 +5020,7 @@ yyreduce:
 
     {
     if (parserData->kounter >= parserData->numberOf)
-        osrlerror(NULL, NULL, parserData, osglData, "more <other> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <other> elements than specified");
     parserData->nameAttributePresent = false;
     parserData->valueAttributePresent = false;
     parserData->descriptionAttributePresent = false;
@@ -5026,7 +5034,7 @@ yyreduce:
 
     {
     if (!parserData->nameAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<other> must have name attribute");
 }
     break;
 
@@ -5034,9 +5042,9 @@ yyreduce:
 
     {
         if (parserData->nameAttribute.length() == 0)
-            osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "otherResult name cannot be empty");
         if (osresult->setOtherServiceResultName(parserData->kounter, parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setServiceOtherResultName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setServiceOtherResultName failed");
     }
     break;
 
@@ -5044,7 +5052,7 @@ yyreduce:
 
     {    
         if (osresult->setOtherServiceResultValue(parserData->kounter, parserData->valueAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setServiceOtherResultValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setServiceOtherResultValue failed");
     }
     break;
 
@@ -5052,7 +5060,7 @@ yyreduce:
 
     {    
         if (osresult->setOtherServiceResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setServiceOtherResultDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setServiceOtherResultDescription failed");
     }
     break;
 
@@ -5078,7 +5086,7 @@ yyreduce:
 
     {
         if (parserData->jobStatusPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one job status element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one job status element allowed");
         parserData->jobStatusPresent = true;
     }
     break;
@@ -5088,7 +5096,7 @@ yyreduce:
     {
         parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
         if (osresult->setJobStatus(parserData->tempStr) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setJobStatus failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setJobStatus failed");
         parserData->errorText = NULL;
     }
     break;
@@ -5097,7 +5105,7 @@ yyreduce:
 
     {
         if (parserData->jobSubmitTimePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one submitTime element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one submitTime element allowed");
         parserData->jobSubmitTimePresent = true;
     }
     break;
@@ -5113,7 +5121,7 @@ yyreduce:
 
     {
         if (parserData->scheduledStartTimePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one scheduledStartTime element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one scheduledStartTime element allowed");
         parserData->scheduledStartTimePresent = true;
     }
     break;
@@ -5129,7 +5137,7 @@ yyreduce:
 
     {
         if (parserData->actualStartTimePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one actualStartTime element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one actualStartTime element allowed");
         parserData->actualStartTimePresent = true;
     }
     break;
@@ -5145,7 +5153,7 @@ yyreduce:
 
     {
         if (parserData->jobEndTimePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one job endTime element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one job endTime element allowed");
         parserData->jobEndTimePresent = true;
     }
     break;
@@ -5161,7 +5169,7 @@ yyreduce:
 
     {
         if (parserData->jobTimingInformationPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one timingInformation element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one timingInformation element allowed");
         parserData->jobTimingInformationPresent = true;
     }
     break;
@@ -5169,9 +5177,9 @@ yyreduce:
   case 361:
 
     {
-    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, "number of time measurements cannot be negative");
+    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of time measurements cannot be negative");
     if (osresult->setNumberOfTimes(parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setNumberOfTimes failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfTimes failed");
     parserData->numberOfTimes = parserData->tempInt;
     parserData->ivar = 0;
 }
@@ -5181,7 +5189,7 @@ yyreduce:
 
     {
         if (parserData->numberOfTimes > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <time> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <time> element");
     }
     break;
 
@@ -5189,7 +5197,7 @@ yyreduce:
 
     {
         if (parserData->ivar != parserData->numberOfTimes)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <time> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <time> elements than specified");
     }
     break;
 
@@ -5197,7 +5205,7 @@ yyreduce:
 
     {
     if (parserData->ivar >= parserData->numberOfTimes)
-        osrlerror(NULL, NULL, parserData, osglData, "more <time> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <time> elements than specified");
     parserData->unitAttributePresent = false;
     parserData->typeAttributePresent = false;
     parserData->categoryAttributePresent = false;
@@ -5214,7 +5222,7 @@ yyreduce:
     {    
     if (osresult->setTimingInformation(parserData->ivar, parserData->typeAttribute, parserData->categoryAttribute,
         parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue) == false)       
-            osrlerror(NULL, NULL, parserData, osglData, "timing information could not be stored");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "timing information could not be stored");
     parserData->ivar++;
 }
     break;
@@ -5233,7 +5241,7 @@ yyreduce:
 
     {
         if (parserData->jobUsedDiskSpacePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one usedDiskSpace element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one usedDiskSpace element allowed");
         parserData->jobUsedDiskSpacePresent = true;        
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;
@@ -5246,7 +5254,7 @@ yyreduce:
 
     {
         if (osresult->setUsedDiskSpaceUnit( parserData->unitAttribute) == false) 
-            osrlerror(NULL, NULL, parserData, osglData, "availableDiskSpace unit could not be set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "availableDiskSpace unit could not be set");
         parserData->errorText = NULL;
     }
     break;
@@ -5271,7 +5279,7 @@ yyreduce:
 
     {
         if (parserData->jobUsedMemoryPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one usedMemory element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one usedMemory element allowed");
         parserData->jobUsedMemoryPresent = true;
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;    
@@ -5284,7 +5292,7 @@ yyreduce:
 
     {
         if (osresult->setUsedMemoryUnit( parserData->unitAttribute) == false) 
-            osrlerror(NULL, NULL, parserData, osglData, "usedMemory unit could not be set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "usedMemory unit could not be set");
         parserData->errorText = NULL;
     }
     break;
@@ -5309,7 +5317,7 @@ yyreduce:
 
     {
         if (parserData->jobUsedCPUSpeedPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one usedCPUSpeed element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one usedCPUSpeed element allowed");
         parserData->jobUsedCPUSpeedPresent = true;
         parserData->unitAttributePresent = false;    
         parserData->descriptionAttributePresent = false;    
@@ -5322,7 +5330,7 @@ yyreduce:
 
     {
         if (osresult->setUsedCPUSpeedUnit( parserData->unitAttribute) == false) 
-            osrlerror(NULL, NULL, parserData, osglData, "availableCPUSpeed unit could not be set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "availableCPUSpeed unit could not be set");
         parserData->errorText = NULL;
     }
     break;
@@ -5347,7 +5355,7 @@ yyreduce:
 
     {
         if (parserData->jobUsedCPUNumberPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one usedCPUNumber element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one usedCPUNumber element allowed");
         parserData->jobUsedCPUNumberPresent = true;
         parserData->descriptionAttributePresent = false;    
         parserData->descriptionAttribute = "";    
@@ -5373,7 +5381,7 @@ yyreduce:
 
     {
         if (parserData->otherJobResultsPresent)
-            osrlerror(NULL, NULL, parserData, osglData, "only one job other results element allowed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one job other results element allowed");
         parserData->otherJobResultsPresent = true;
     }
     break;
@@ -5381,9 +5389,9 @@ yyreduce:
   case 421:
 
     {
-    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other job results cannot be negative");
+    if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other job results cannot be negative");
     if (osresult->setNumberOfOtherJobResults(parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherJobResults failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfOtherJobResults failed");
     parserData->numberOf = parserData->tempInt;
     parserData->kounter = 0;
 }
@@ -5393,7 +5401,7 @@ yyreduce:
 
     {
         if (parserData->numberOf > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <other> element");
     }
     break;
 
@@ -5401,7 +5409,7 @@ yyreduce:
 
     {
         if (parserData->kounter < parserData->numberOf - 1)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <other> elements than specified");
     }
     break;
 
@@ -5416,7 +5424,7 @@ yyreduce:
 
     {
     if (parserData->kounter >= parserData->numberOf)
-        osrlerror(NULL, NULL, parserData, osglData, "more <other> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <other> elements than specified");
     parserData->nameAttributePresent = false;
     parserData->valueAttributePresent = false;
     parserData->descriptionAttributePresent = false;
@@ -5430,7 +5438,7 @@ yyreduce:
 
     {
     if (!parserData->nameAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<other> must have name attribute");
 }
     break;
 
@@ -5438,9 +5446,9 @@ yyreduce:
 
     {
         if (parserData->nameAttribute.length() == 0)
-            osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "otherResult name cannot be empty");
         if (osresult->setOtherJobResultName(parserData->kounter, parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setJobOtherResultName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setJobOtherResultName failed");
     }
     break;
 
@@ -5448,7 +5456,7 @@ yyreduce:
 
     {    
         if (osresult->setOtherJobResultValue(parserData->kounter, parserData->valueAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setJobOtherResultValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setJobOtherResultValue failed");
     }
     break;
 
@@ -5456,7 +5464,7 @@ yyreduce:
 
     {    
         if (osresult->setOtherJobResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setJobOtherResultDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setJobOtherResultDescription failed");
     }
     break;
 
@@ -5474,7 +5482,7 @@ yyreduce:
 
     {
     if (!parserData->numberAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "numberOfSolutions was never set");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "numberOfSolutions was never set");
 }
     break;
 
@@ -5483,7 +5491,7 @@ yyreduce:
     {
         parserData->numberOfSolutions = parserData->tempInt; 
         if (osresult->setSolutionNumber(parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolutionNumber failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionNumber failed");
         parserData->solutionIdx = 0;
     }
     break;
@@ -5493,7 +5501,7 @@ yyreduce:
     {    
         parserData->numberOfVariables = parserData->tempInt; 
         if (osresult->setVariableNumber(parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setVariableNumber failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setVariableNumber failed");
     }
     break;
 
@@ -5502,7 +5510,7 @@ yyreduce:
     {
         parserData->numberOfConstraints = parserData->tempInt; 
         if (osresult->setConstraintNumber(parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setConstraintNumber failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setConstraintNumber failed");
     }
     break;
 
@@ -5511,7 +5519,7 @@ yyreduce:
     {    
         parserData->numberOfObjectives = parserData->tempInt; 
         if (osresult->setObjectiveNumber(parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setObjectiveNumber failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setObjectiveNumber failed");
     }
     break;
 
@@ -5519,7 +5527,7 @@ yyreduce:
 
     {
         if (parserData->numberOfSolutions > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <solution> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <solution> element");
     }
     break;
 
@@ -5527,7 +5535,7 @@ yyreduce:
 
     {
         if (parserData->solutionIdx != parserData->numberOfSolutions)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <solution> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <solution> elements than specified");
     }
     break;
 
@@ -5535,7 +5543,7 @@ yyreduce:
 
     {
     if (parserData->solutionIdx >= parserData->numberOfSolutions) 
-        osrlerror(NULL, NULL, parserData, osglData, "too many solutions"); 
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "too many solutions"); 
     parserData->idxAttributePresent = false;
     parserData->nameAttributePresent = false;
     parserData->weightedObjAttributePresent = false;
@@ -5546,11 +5554,11 @@ yyreduce:
 
     {
     if (parserData->idxAttributePresent)
-        osrlerror(NULL, NULL, parserData, osglData, "target objective idx previously set");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "target objective idx previously set");
     parserData->idxAttributePresent = true;
-    if((yyvsp[(3) - (4)].ival) >= 0) osrlerror(NULL, NULL, parserData, osglData, "target objective index must be negative");
+    if((yyvsp[(3) - (4)].ival) >= 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "target objective index must be negative");
       if (osresult->setSolutionTargetObjectiveIdx(parserData->solutionIdx, (yyvsp[(3) - (4)].ival)) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setSolutionTargetObjectiveIdx failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionTargetObjectiveIdx failed");
  }
     break;
 
@@ -5558,11 +5566,11 @@ yyreduce:
 
     {
     if (parserData->nameAttributePresent)
-        osrlerror(NULL, NULL, parserData, osglData, "target objective name previously set");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "target objective name previously set");
     parserData->nameAttributePresent = true;
     parserData->tempStr = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
       if (osresult->setSolutionTargetObjectiveName(parserData->solutionIdx, parserData->tempStr) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setSolutionTargetObjectiveName failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionTargetObjectiveName failed");
  }
     break;
 
@@ -5570,21 +5578,21 @@ yyreduce:
 
     {
     if (parserData->weightedObjAttributePresent)
-        osrlerror(NULL, NULL, parserData, osglData, "weighted objective attribute previously set");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "weighted objective attribute previously set");
     parserData->weightedObjAttributePresent = true;
     parserData->tempStr = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
     if (parserData->tempStr == "true")
     {
           if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, true) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolutionWeightedObjectives failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionWeightedObjectives failed");
     }
     else if (parserData->tempStr == "false")
     {
           if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, false) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolutionWeightedObjectives failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionWeightedObjectives failed");
     }
     else
-        osrlerror(NULL, NULL, parserData, osglData, "weightedobjectives must be true or false");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "weightedobjectives must be true or false");
 }
     break;
 
@@ -5611,7 +5619,7 @@ yyreduce:
 
     {
         if (!parserData->typeAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "type attribute must be present for solution status element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "type attribute must be present for solution status element");
     }
     break;
 
@@ -5619,7 +5627,7 @@ yyreduce:
 
     {   
         if (osresult->setSolutionStatusType(parserData->solutionIdx, parserData->typeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolutionStatusType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionStatusType failed");
     }
     break;
 
@@ -5627,7 +5635,7 @@ yyreduce:
 
     {
        if (osresult->setSolutionStatusDescription(parserData->solutionIdx, parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolutionStatusDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionStatusDescription failed");
     }
     break;
 
@@ -5635,7 +5643,7 @@ yyreduce:
 
     {
         if (osresult->setNumberOfSolutionSubstatuses(parserData->solutionIdx, parserData->tempInt) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setNumberOfSolutionSubstatuses failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfSolutionSubstatuses failed");
         parserData->numberOf = parserData->tempInt;
         parserData->kounter = 0;
     }
@@ -5645,7 +5653,7 @@ yyreduce:
 
     {
         if (parserData->numberOf > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <substatus> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <substatus> element");
     }
     break;
 
@@ -5653,7 +5661,7 @@ yyreduce:
 
     {
         if (parserData->kounter != parserData->numberOf)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <substatus> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <substatus> elements than specified");
     }
     break;
 
@@ -5668,7 +5676,7 @@ yyreduce:
 
     {
     if (parserData->kounter >= parserData->numberOf)
-        osrlerror(NULL, NULL, parserData, osglData, "more <substatus> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <substatus> elements than specified");
     parserData->typeAttributePresent = false;
     parserData->descriptionAttributePresent = false;
     parserData->typeAttribute = "";
@@ -5680,7 +5688,7 @@ yyreduce:
 
     {
     if (!parserData->typeAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<substatus> must have type attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<substatus> must have type attribute");
 }
     break;
 
@@ -5689,7 +5697,7 @@ yyreduce:
     {    
         if (osresult->setSolutionSubstatusType(parserData->solutionIdx, parserData->kounter, 
                                                parserData->typeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolutionSubstatusType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionSubstatusType failed");
     }
     break;
 
@@ -5698,7 +5706,7 @@ yyreduce:
     {    
         if (osresult->setSolutionSubstatusDescription(parserData->solutionIdx, parserData->kounter,
                                                       parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolutionSubstatusDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionSubstatusDescription failed");
     }
     break;
 
@@ -5724,7 +5732,7 @@ yyreduce:
 
     {    
     if (osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, parserData->tempInt) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherVariableResults failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfOtherVariableResults failed");
     parserData->numberOfOtherVariableResults = parserData->tempInt;
     parserData->iOther = 0;
 }
@@ -5734,7 +5742,7 @@ yyreduce:
 
     {
     if (osresult->setNumberOfVarValues(parserData->solutionIdx, parserData->numberOfVar) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfVarValues failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfVarValues failed");
     parserData->kounter = 0;
 }
     break;
@@ -5743,7 +5751,7 @@ yyreduce:
 
     {
         if (parserData->numberOfVar > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <var> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <var> element");
     }
     break;
 
@@ -5751,7 +5759,7 @@ yyreduce:
 
     {
         if (parserData->kounter != parserData->numberOfVar)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <var> elements than specified");
     }
     break;
 
@@ -5759,11 +5767,11 @@ yyreduce:
 
     {
     if (!parserData->idxAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "idx attribute not set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "idx attribute not set");
     if (osresult->setVarValue(parserData->solutionIdx, parserData->kounter, 
                               parserData->idx,         parserData->nameAttribute,
                               parserData->tempVal                           ) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setVarValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setVarValue failed");
     parserData->kounter++;
 }
     break;
@@ -5772,7 +5780,7 @@ yyreduce:
 
     {    
     if (parserData->kounter >= parserData->numberOfVar)
-        osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <var> elements than specified");
     parserData->idxAttributePresent = false;
     parserData->nameAttributePresent = false;
     parserData->name = "";    
@@ -5783,7 +5791,7 @@ yyreduce:
 
     {
     if (osresult->setNumberOfVarValuesString(parserData->solutionIdx, parserData->numberOfVar) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfVarValuesString failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfVarValuesString failed");
     parserData->kounter = 0;
 }
     break;
@@ -5792,7 +5800,7 @@ yyreduce:
 
     {
         if (parserData->numberOfVar > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <var> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <var> element");
     }
     break;
 
@@ -5800,7 +5808,7 @@ yyreduce:
 
     {
         if (parserData->kounter != parserData->numberOfVar)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <var> elements than specified");
     }
     break;
 
@@ -5808,11 +5816,11 @@ yyreduce:
 
     {
     if (!parserData->idxAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "idx attribute not set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "idx attribute not set");
     if (osresult->setVarValueString(parserData->solutionIdx, parserData->kounter, 
                                      parserData->idx,         parserData->nameAttribute,
                                     parserData->tempStr                           ) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setVarValueString failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setVarValueString failed");
     parserData->kounter++;
 }
     break;
@@ -5821,7 +5829,7 @@ yyreduce:
 
     {    
     if (parserData->kounter >= parserData->numberOfVar)
-        osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <var> elements than specified");
     parserData->idxAttributePresent = false;
     parserData->nameAttributePresent = false;
     parserData->name = "";    
@@ -5851,7 +5859,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set variables basic failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -5871,7 +5879,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atLower, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set variables atLower failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set variables atLower failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -5891,7 +5899,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atUpper, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set variables atUpper failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set variables atUpper failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -5911,7 +5919,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set variables atEquality failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set variables atEquality failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -5931,7 +5939,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_isFree, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set variables isFree failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set variables isFree failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -5951,7 +5959,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set variables superbasic failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set variables superbasic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -5971,7 +5979,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set variables unknown failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set variables unknown failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -5998,7 +6006,7 @@ yyreduce:
 
     {
     if (parserData->iOther >= parserData->numberOfOtherVariableResults)
-        osrlerror(NULL, NULL, parserData, osglData, "more <otherVariableResults> than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherVariableResults> than specified");
     parserData->nameAttributePresent = false;    
     parserData->numberOfVarAttributePresent = false;    
     parserData->numberOfEnumerationsAttributePresent = false;    
@@ -6019,7 +6027,7 @@ yyreduce:
 
     {
         if(!parserData->nameAttributePresent) 
-            osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "other element requires name attribute"); 
     }
     break;
 
@@ -6027,12 +6035,12 @@ yyreduce:
 
     {
         if (parserData->numberOfVarAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "numberOfVar attribute previously set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfVar attribute previously set");
         parserData->numberOfVarAttributePresent = true;
          if (osresult->setOtherVariableResultNumberOfVar(parserData->solutionIdx, 
                                                          parserData->iOther, 
                                                          parserData->numberOfVar) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultNumberOfVar failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultNumberOfVar failed");
         parserData->kounter = 0;
     }
     break;
@@ -6041,12 +6049,12 @@ yyreduce:
 
     {
         if (parserData->numberOfEnumerationsAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "numberOfEnumerations attribute previously set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
         parserData->numberOfEnumerationsAttributePresent = true;
          if (osresult->setOtherVariableResultNumberOfEnumerations(parserData->solutionIdx, 
                                                          parserData->iOther, 
                                                          parserData->numberOfEnumerations) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultNumberOfEnumerations failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultNumberOfEnumerations failed");
         parserData->kounter = 0;
     }
     break;
@@ -6056,7 +6064,7 @@ yyreduce:
     {    
          if (osresult->setOtherVariableResultValue(parserData->solutionIdx, parserData->iOther, 
                                                    parserData->valueAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultValue failed");
     }
     break;
 
@@ -6065,7 +6073,7 @@ yyreduce:
     {    
          if (osresult->setOtherVariableResultName(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultName failed");
     }
     break;
 
@@ -6074,7 +6082,7 @@ yyreduce:
     {    
          if (osresult->setOtherVariableResultType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->typeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultType failed");
     }
     break;
 
@@ -6083,7 +6091,7 @@ yyreduce:
     {    
          if (osresult->setOtherVariableResultVarType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->varTypeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVarType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultVarType failed");
     }
     break;
 
@@ -6092,7 +6100,7 @@ yyreduce:
     {    
          if (osresult->setOtherVariableResultEnumType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->enumTypeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultEnumType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultEnumType failed");
     }
     break;
 
@@ -6101,7 +6109,7 @@ yyreduce:
     {    
          if (osresult->setOtherVariableResultDescription(parserData->solutionIdx, parserData->iOther, 
                                                          parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultDescription failed");
     }
     break;
 
@@ -6109,7 +6117,7 @@ yyreduce:
 
     {     
     if (!parserData->idxAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "idx attribute not set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "idx attribute not set");
     parserData->kounter++;
 }
     break;
@@ -6118,7 +6126,7 @@ yyreduce:
 
     {    
     if (parserData->kounter >= parserData->numberOfVar)
-        osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <var> elements than specified");
     parserData->idxAttributePresent = false;
     parserData->nameAttributePresent = false;
     parserData->name = ""    ;
@@ -6130,7 +6138,7 @@ yyreduce:
     {    
          if (osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, 
                                                     parserData->kounter, parserData->idx) == false)
-                osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVarIdx failed");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultVarIdx failed");
     }
     break;
 
@@ -6139,7 +6147,7 @@ yyreduce:
     {    
          if (osresult->setOtherVariableResultVarName(parserData->solutionIdx, parserData->iOther, 
                                                     parserData->kounter, parserData->nameAttribute) == false)
-                osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVarName failed");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultVarName failed");
     }
     break;
 
@@ -6149,7 +6157,7 @@ yyreduce:
          if (osresult->setOtherVariableResultVar(parserData->solutionIdx, parserData->iOther, 
                                                  parserData->kounter,     parserData->tempStr) 
                                                      == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVar failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultVar failed");
     }
     break;
 
@@ -6158,7 +6166,7 @@ yyreduce:
     {     
     if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_variables, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set other variable option failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other variable option failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6180,7 +6188,7 @@ yyreduce:
 
     {
         if(!parserData->nameAttributePresent) 
-            osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "other element enumeration requires name attribute"); 
     }
     break;
 
@@ -6207,7 +6215,7 @@ yyreduce:
     {
     parserData->numberOfOtherObjectiveResults = parserData->tempInt;
     if (osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, parserData->tempInt) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherObjectiveResults failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfOtherObjectiveResults failed");
     parserData->iOther = 0;
 }
     break;
@@ -6216,7 +6224,7 @@ yyreduce:
 
     {
     if (osresult->setNumberOfObjValues(parserData->solutionIdx, parserData->numberOfObj) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setNumberOfObjValues failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfObjValues failed");
     parserData->kounter = 0;
 }
     break;
@@ -6225,7 +6233,7 @@ yyreduce:
 
     {
         if (parserData->numberOfObj > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <obj> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <obj> element");
     }
     break;
 
@@ -6233,7 +6241,7 @@ yyreduce:
 
     {
         if (parserData->kounter != parserData->numberOfObj)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <obj> elements than specified");
     }
     break;
 
@@ -6243,7 +6251,7 @@ yyreduce:
     if (osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
                               parserData->idx,         parserData->nameAttribute,
                               parserData->tempVal                           ) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setObjValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setObjValue failed");
     parserData->kounter++;
 }
     break;
@@ -6252,7 +6260,7 @@ yyreduce:
 
     {    
     if (parserData->kounter >= parserData->numberOfObj)
-        osrlerror(NULL, NULL, parserData, osglData, "more <obj> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <obj> elements than specified");
     parserData->idxAttributePresent = false;
     parserData->idx = -1;
     parserData->nameAttributePresent = false;
@@ -6271,7 +6279,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set objectives basic failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set objectives basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6291,7 +6299,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atLower, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set objectives atLower failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set objectives atLower failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6311,7 +6319,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atUpper, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set objectives atUpper failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set objectives atUpper failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6331,7 +6339,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set objectives atEquality failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set objectives atEquality failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6351,7 +6359,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_isFree, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set objectives isFree failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set objectives isFree failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6371,7 +6379,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set objectives superbasic failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set objectives superbasic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6391,7 +6399,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set objectives unknown failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set objectives unknown failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6418,7 +6426,7 @@ yyreduce:
 
     {
     if (parserData->iOther >= parserData->numberOfOtherObjectiveResults)
-        osrlerror(NULL, NULL, parserData, osglData, "more <otherObjectiveResults> than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherObjectiveResults> than specified");
     parserData->nameAttributePresent = false;    
     parserData->numberOfObjAttributePresent = false;    
     parserData->numberOfEnumerationsAttributePresent = false;    
@@ -6439,7 +6447,7 @@ yyreduce:
 
     {
         if(!parserData->nameAttributePresent) 
-            osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "other element requires name attribute"); 
     }
     break;
 
@@ -6447,12 +6455,12 @@ yyreduce:
 
     {
         if (parserData->numberOfObjAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "numberOfObj attribute previously set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfObj attribute previously set");
         parserData->numberOfObjAttributePresent = true;
          if (osresult->setOtherObjectiveResultNumberOfObj(parserData->solutionIdx, 
                                                           parserData->iOther, 
                                                           parserData->numberOfObj) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultNumberOfObj failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultNumberOfObj failed");
         parserData->kounter = 0;
     }
     break;
@@ -6461,12 +6469,12 @@ yyreduce:
 
     {
         if (parserData->numberOfEnumerationsAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "numberOfEnumerations attribute previously set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
         parserData->numberOfEnumerationsAttributePresent = true;
          if (osresult->setOtherObjectiveResultNumberOfEnumerations(parserData->solutionIdx, 
                                                          parserData->iOther, 
                                                          parserData->numberOfEnumerations) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultNumberOfEnumerations failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultNumberOfEnumerations failed");
         parserData->kounter = 0;
     }
     break;
@@ -6476,7 +6484,7 @@ yyreduce:
     {    
          if (osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, 
                                                     parserData->valueAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultValue failed");
     }
     break;
 
@@ -6485,7 +6493,7 @@ yyreduce:
     {    
           if (osresult->setOtherObjectiveResultName(parserData->solutionIdx, parserData->iOther, 
                                                    parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultName failed");
     }
     break;
 
@@ -6494,7 +6502,7 @@ yyreduce:
     {    
          if (osresult->setOtherObjectiveResultType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->typeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultType failed");
     }
     break;
 
@@ -6503,7 +6511,7 @@ yyreduce:
     {    
          if (osresult->setOtherObjectiveResultObjType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->objTypeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObjType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultObjType failed");
     }
     break;
 
@@ -6512,7 +6520,7 @@ yyreduce:
     {    
          if (osresult->setOtherObjectiveResultEnumType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->enumTypeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultEnumType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultEnumType failed");
     }
     break;
 
@@ -6523,7 +6531,7 @@ yyreduce:
                                                           parserData->iOther, 
                                                           parserData->descriptionAttribute) 
                                                               == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultDescription failed");
     }
     break;
 
@@ -6538,7 +6546,7 @@ yyreduce:
 
     {    
     if (parserData->kounter >= parserData->numberOfObj)
-        osrlerror(NULL, NULL, parserData, osglData, "more <obj> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <obj> elements than specified");
     parserData->idxAttributePresent = false;
     parserData->idx = -1;    
     parserData->nameAttributePresent = false;
@@ -6550,7 +6558,7 @@ yyreduce:
 
     {
         if (osresult->setOtherObjectiveResultObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->idx) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObjIdx failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultObjIdx failed");
     }
     break;
 
@@ -6559,7 +6567,7 @@ yyreduce:
     {    
          if (osresult->setOtherObjectiveResultObjName(parserData->solutionIdx, parserData->iOther, 
                                                     parserData->kounter, parserData->nameAttribute) == false)
-                osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObjName failed");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultObjName failed");
     }
     break;
 
@@ -6567,7 +6575,7 @@ yyreduce:
 
     {
         if (osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObj failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultObj failed");
     }
     break;
 
@@ -6576,7 +6584,7 @@ yyreduce:
     {     
     if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_objectives, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set other objective option failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other objective option failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6598,7 +6606,7 @@ yyreduce:
 
     {
         if(!parserData->nameAttributePresent) 
-            osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "other element enumeration requires name attribute"); 
     }
     break;
 
@@ -6625,7 +6633,7 @@ yyreduce:
     {
     parserData->numberOfOtherConstraintResults = parserData->tempInt;
     if (osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, parserData->tempInt) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherConstraintResults failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfOtherConstraintResults failed");
     parserData->iOther = 0;
 }
     break;
@@ -6639,7 +6647,7 @@ yyreduce:
 
     {
     if (osresult->setNumberOfDualValues(parserData->solutionIdx, parserData->numberOfCon) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfDualValues failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfDualValues failed");
     parserData->kounter = 0;
 }
     break;
@@ -6648,7 +6656,7 @@ yyreduce:
 
     {
         if (parserData->numberOfCon > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <con> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <con> element");
     }
     break;
 
@@ -6656,7 +6664,7 @@ yyreduce:
 
     {
         if (parserData->kounter != parserData->numberOfCon)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <con> elements than specified");
     }
     break;
 
@@ -6666,7 +6674,7 @@ yyreduce:
     if (osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
                                parserData->idx,         parserData->nameAttribute,
                                parserData->tempVal                           ) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setDualValue failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setDualValue failed");
     parserData->kounter++;
 }
     break;
@@ -6675,7 +6683,7 @@ yyreduce:
 
     {    
     if (parserData->kounter >= parserData->numberOfCon)
-        osrlerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <con> elements than specified");
     parserData->idxAttributePresent = false;
     parserData->nameAttributePresent = false;
     parserData->name = "";    
@@ -6693,7 +6701,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set slacks basic failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set slacks basic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6713,7 +6721,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atLower, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set slacks atLower failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set slacks atLower failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6733,7 +6741,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atUpper, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set slacks atUpper failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set slacks atUpper failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6753,7 +6761,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set slacks atEquality failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set slacks atEquality failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6773,7 +6781,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_isFree, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set slacks isFree failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set slacks isFree failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6793,7 +6801,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set variables superbasic failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set variables superbasic failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6813,7 +6821,7 @@ yyreduce:
 
     {
     if (osresult->setBasisStatus(parserData->solutionIdx, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_unknown, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set slacks unknown failed");    
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set slacks unknown failed");    
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -6840,7 +6848,7 @@ yyreduce:
 
     {
     if (parserData->iOther >= parserData->numberOfOtherConstraintResults)
-        osrlerror(NULL, NULL, parserData, osglData, "more <otherConstraintResults> than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherConstraintResults> than specified");
     parserData->nameAttributePresent = false;    
     parserData->numberOfConAttributePresent = false;    
     parserData->numberOfEnumerationsAttributePresent = false;    
@@ -6861,7 +6869,7 @@ yyreduce:
 
     {
         if (!parserData->nameAttributePresent) 
-            osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "other element requires name attribute"); 
     }
     break;
 
@@ -6869,12 +6877,12 @@ yyreduce:
 
     {
         if (parserData->numberOfConAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "numberOfCon attribute previously set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfCon attribute previously set");
         parserData->numberOfConAttributePresent = true;
          if (osresult->setOtherConstraintResultNumberOfCon(parserData->solutionIdx, 
                                                            parserData->iOther, 
                                                            parserData->numberOfCon) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultNumberOfCon failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultNumberOfCon failed");
         parserData->kounter = 0;
     }
     break;
@@ -6883,12 +6891,12 @@ yyreduce:
 
     {
         if (parserData->numberOfEnumerationsAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "numberOfEnumerations attribute previously set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
         parserData->numberOfEnumerationsAttributePresent = true;
          if (osresult->setOtherConstraintResultNumberOfEnumerations(parserData->solutionIdx, 
                                                          parserData->iOther, 
                                                          parserData->numberOfEnumerations) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultNumberOfEnumerations failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultNumberOfEnumerations failed");
         parserData->kounter = 0;
     }
     break;
@@ -6898,7 +6906,7 @@ yyreduce:
     {    
          if (osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, 
                                                      parserData->valueAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultValue failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultValue failed");
     }
     break;
 
@@ -6907,7 +6915,7 @@ yyreduce:
     {    
          if (osresult->setOtherConstraintResultName(parserData->solutionIdx, parserData->iOther, 
                                                     parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultName failed");
     }
     break;
 
@@ -6916,7 +6924,7 @@ yyreduce:
     {    
          if (osresult->setOtherConstraintResultType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->typeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultType failed");
     }
     break;
 
@@ -6925,7 +6933,7 @@ yyreduce:
     {    
          if (osresult->setOtherConstraintResultConType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->conTypeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultConType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultConType failed");
     }
     break;
 
@@ -6934,7 +6942,7 @@ yyreduce:
     {    
          if (osresult->setOtherConstraintResultEnumType(parserData->solutionIdx, parserData->iOther, 
                                                   parserData->enumTypeAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultEnumType failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultEnumType failed");
     }
     break;
 
@@ -6943,7 +6951,7 @@ yyreduce:
     {    
          if (osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, 
                                                            parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultDescription failed");
     }
     break;
 
@@ -6951,7 +6959,7 @@ yyreduce:
 
     {     
     if (!parserData->idxAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "idx attribute not set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "idx attribute not set");
     parserData->kounter++;
 }
     break;
@@ -6960,7 +6968,7 @@ yyreduce:
 
     {    
     if (parserData->kounter >= parserData->numberOfCon)
-        osrlerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <con> elements than specified");
     parserData->idxAttributePresent = false;
     parserData->nameAttributePresent = false;
     parserData->name = ""    ;
@@ -6971,7 +6979,7 @@ yyreduce:
 
     {    
          if (osresult->setOtherConstraintResultConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->idx) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultConIdx failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultConIdx failed");
     }
     break;
 
@@ -6980,7 +6988,7 @@ yyreduce:
     {    
          if (osresult->setOtherConstraintResultConName(parserData->solutionIdx, parserData->iOther, 
                                                     parserData->kounter, parserData->nameAttribute) == false)
-                osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultConName failed");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultConName failed");
     }
     break;
 
@@ -6988,7 +6996,7 @@ yyreduce:
 
     {    
          if (osresult->setOtherConstraintResultCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultCon failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultCon failed");
     }
     break;
 
@@ -6997,7 +7005,7 @@ yyreduce:
     {     
     if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_constraints, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-        osrlerror(NULL, NULL, parserData, osglData, "set other constraint option failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other constraint option failed");
     delete[] osglData->osglIntArray;
     osglData->osglIntArray = NULL;
     osglData->osglNumberOfEl = 0;
@@ -7019,7 +7027,7 @@ yyreduce:
 
     {
         if(!parserData->nameAttributePresent) 
-            osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "other element enumeration requires name attribute"); 
     }
     break;
 
@@ -7043,7 +7051,7 @@ yyreduce:
 
     {    
     if (osresult->setNumberOfOtherSolutionResults(parserData->solutionIdx, parserData->tempInt) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherSolutionResults failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfOtherSolutionResults failed");
     parserData->numberOf = parserData->tempInt;
     parserData->iOther = 0; 
 }
@@ -7053,7 +7061,7 @@ yyreduce:
 
     {
         if (parserData->numberOf > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <otherSolutionResult> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <otherSolutionResult> element");
     }
     break;
 
@@ -7061,7 +7069,7 @@ yyreduce:
 
     {
         if (parserData->iOther != parserData->numberOf)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <otherSolutionResult> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <otherSolutionResult> elements than specified");
     }
     break;
 
@@ -7076,7 +7084,7 @@ yyreduce:
 
     {
     if (parserData->iOther >= parserData->numberOf)
-        osrlerror(NULL, NULL, parserData, osglData, "more <otherSolutionResult> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherSolutionResult> elements than specified");
     parserData->numberOfItemsPresent = false; 
     parserData->nameAttributePresent = false;
     parserData->valueAttributePresent = false;
@@ -7092,9 +7100,9 @@ yyreduce:
 
     {
     if (!parserData->nameAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have name attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<otherSolutionResult> element must have name attribute");
     //if (!parserData->numberOfItemsPresent)
-    //    osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have numberOfItems attribute");
+    //    osrlerror (NULL, NULL, parserData, osglData, osnlData, "<otherSolutionResult> element must have numberOfItems attribute");
 }
     break;
 
@@ -7103,7 +7111,7 @@ yyreduce:
     {    
         if (osresult->setOtherSolutionResultName(parserData->solutionIdx, parserData->iOther,
                                                  parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultName failed");
     }
     break;
 
@@ -7112,7 +7120,7 @@ yyreduce:
     {    
         if (osresult->setOtherSolutionResultValue(parserData->solutionIdx, parserData->iOther,
                                                  parserData->valueAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultValuee failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultValuee failed");
     }
     break;
 
@@ -7121,7 +7129,7 @@ yyreduce:
     {    
         if (osresult->setOtherSolutionResultCategory(parserData->solutionIdx, parserData->iOther,
                                                      parserData->categoryAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultCategory failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultCategory failed");
     }
     break;
 
@@ -7132,7 +7140,7 @@ yyreduce:
                                                         parserData->iOther,
                                                         parserData->descriptionAttribute) 
                                                             == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultDescription failed");
     }
     break;
 
@@ -7142,7 +7150,7 @@ yyreduce:
         if (osresult->setOtherSolutionResultNumberOfItems(parserData->solutionIdx, 
                                                           parserData->iOther,
                                                           parserData->numberOfItems) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultNumberOfItems failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultNumberOfItems failed");
         parserData->kounter = 0;
     }
     break;
@@ -7151,7 +7159,7 @@ yyreduce:
 
     {
         if (parserData->numberOfItems > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <item> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <item> element");
     }
     break;
 
@@ -7159,7 +7167,7 @@ yyreduce:
 
     {
         if (parserData->kounter != parserData->numberOfItems)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <item> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <item> elements than specified");
     }
     break;
 
@@ -7174,7 +7182,7 @@ yyreduce:
 
     {
         if (parserData->kounter >= parserData->numberOfItems)
-            osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <item> elements than specified");
     }
     break;
 
@@ -7182,12 +7190,12 @@ yyreduce:
 
     {
     if (parserData->kounter >= parserData->numberOfItems)
-        osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <item> elements than specified");
     parserData->itemContent = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
     if (osresult->setOtherSolutionResultItem(parserData->solutionIdx, parserData->iOther, 
                                              parserData->kounter, parserData->itemContent) 
                                                  == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultItem failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultItem failed");
 }
     break;
 
@@ -7202,7 +7210,7 @@ yyreduce:
 
     {    
     if (osresult->setNumberOfSolverOutputs(parserData->tempInt) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setNumberOfSolverOutputs failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfSolverOutputs failed");
     parserData->numberOf = parserData->tempInt;
     parserData->iOther = 0; 
 }
@@ -7212,7 +7220,7 @@ yyreduce:
 
     {
         if (parserData->numberOf > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <solverOutput> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <solverOutput> element");
     }
     break;
 
@@ -7220,7 +7228,7 @@ yyreduce:
 
     {
         if (parserData->iOther != parserData->numberOf)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <solverOutput> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <solverOutput> elements than specified");
     }
     break;
 
@@ -7235,7 +7243,7 @@ yyreduce:
 
     {
     if (parserData->iOther >= parserData->numberOf)
-        osrlerror(NULL, NULL, parserData, osglData, "more <solverOutput> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <solverOutput> elements than specified");
     parserData->numberOfItemsPresent = false; 
     parserData->nameAttributePresent = false;
     parserData->categoryAttributePresent = false;
@@ -7249,9 +7257,9 @@ yyreduce:
 
     {
     if (!parserData->nameAttributePresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<solverOutput> element must have name attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<solverOutput> element must have name attribute");
     if (!parserData->numberOfItemsPresent)
-        osrlerror (NULL, NULL, parserData, osglData, "<solverOutput> element must have numberOfItems attribute");
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<solverOutput> element must have numberOfItems attribute");
 }
     break;
 
@@ -7259,7 +7267,7 @@ yyreduce:
 
     {    
         if (osresult->setSolverOutputName(parserData->iOther, parserData->nameAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputName failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolverOutputName failed");
     }
     break;
 
@@ -7268,7 +7276,7 @@ yyreduce:
     {    
         if (osresult->setSolverOutputCategory(parserData->iOther, 
                                               parserData->categoryAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputCategory failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolverOutputCategory failed");
     }
     break;
 
@@ -7277,7 +7285,7 @@ yyreduce:
     {    
         if (osresult->setSolverOutputDescription(parserData->iOther, 
                                                  parserData->descriptionAttribute) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputDescription failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolverOutputDescription failed");
     }
     break;
 
@@ -7286,7 +7294,7 @@ yyreduce:
     {    
         if (osresult->setSolverOutputNumberOfItems(parserData->iOther, 
                                                    parserData->numberOfItems) == false)
-            osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputNumberOfItems failed");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolverOutputNumberOfItems failed");
         parserData->kounter = 0;
     }
     break;
@@ -7295,7 +7303,7 @@ yyreduce:
 
     {
         if (parserData->numberOfItems > 0)
-            osrlerror(NULL, NULL, parserData, osglData, "expected at least one <item> element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <item> element");
     }
     break;
 
@@ -7303,7 +7311,7 @@ yyreduce:
 
     {
         if (parserData->kounter != parserData->numberOfItems)
-            osrlerror(NULL, NULL, parserData, osglData, "fewer <item> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <item> elements than specified");
     }
     break;
 
@@ -7318,7 +7326,7 @@ yyreduce:
 
     {
         if (parserData->kounter >= parserData->numberOfItems)
-            osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <item> elements than specified");
     }
     break;
 
@@ -7326,11 +7334,11 @@ yyreduce:
 
     {
     if (parserData->kounter >= parserData->numberOfItems)
-        osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <item> elements than specified");
     parserData->itemContent = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
     if (osresult->setSolverOutputItem(parserData->iOther, parserData->kounter, 
                                       parserData->itemContent) == false)
-        osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputItem failed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolverOutputItem failed");
 }
     break;
 
@@ -7338,7 +7346,7 @@ yyreduce:
 
     {
         if (parserData->categoryAttributePresent ) 
-            osrlerror(NULL, NULL, parserData, osglData, "only one category attribute allowed for this element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one category attribute allowed for this element");
         parserData->categoryAttributePresent = true;
     }
     break;
@@ -7361,7 +7369,7 @@ yyreduce:
 
     {
         if (parserData->conTypeAttributePresent ) 
-                osrlerror(NULL, NULL, parserData, osglData, "only one conType attribute allowed for this element");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one conType attribute allowed for this element");
         parserData->conTypeAttributePresent = true;
     }
     break;
@@ -7384,7 +7392,7 @@ yyreduce:
 
     {
         if (parserData->descriptionAttributePresent ) 
-            osrlerror(NULL, NULL, parserData, osglData, "only one description attribute allowed for this element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one description attribute allowed for this element");
         parserData->descriptionAttributePresent = true;
     }
     break;
@@ -7407,7 +7415,7 @@ yyreduce:
 
     {
         if (parserData->enumTypeAttributePresent ) 
-                osrlerror(NULL, NULL, parserData, osglData, "only one enumType attribute allowed for this element");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one enumType attribute allowed for this element");
         parserData->enumTypeAttributePresent = true;
     }
     break;
@@ -7430,7 +7438,7 @@ yyreduce:
 
     {    
         if (parserData->idxAttributePresent)
-            osrlerror(NULL, NULL, parserData, osglData, "idx attribute was previously set");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "idx attribute was previously set");
         parserData->idxAttributePresent = true;
         parserData->idx = (yyvsp[(3) - (4)].ival); 
     }
@@ -7440,7 +7448,7 @@ yyreduce:
 
     {
        if (parserData->nameAttributePresent ) 
-            osrlerror(NULL, NULL, parserData, osglData, "only one name attribute allowed for this element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one name attribute allowed for this element");
         parserData->nameAttributePresent = true;
     }
     break;
@@ -7463,7 +7471,7 @@ yyreduce:
 
     {
         if (parserData->objTypeAttributePresent ) 
-                osrlerror(NULL, NULL, parserData, osglData, "only one objType attribute allowed for this element");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one objType attribute allowed for this element");
         parserData->objTypeAttributePresent = true;
     }
     break;
@@ -7486,7 +7494,7 @@ yyreduce:
 
     {
         if (parserData->typeAttributePresent ) 
-                osrlerror(NULL, NULL, parserData, osglData, "only one type attribute allowed for this element");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one type attribute allowed for this element");
         parserData->typeAttributePresent = true;
     }
     break;
@@ -7509,7 +7517,7 @@ yyreduce:
 
     {
         if (parserData->unitAttributePresent ) 
-            osrlerror(NULL, NULL, parserData, osglData, "only one unit attribute allowed for this element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one unit attribute allowed for this element");
         parserData->unitAttributePresent = true;
     }
     break;
@@ -7532,7 +7540,7 @@ yyreduce:
 
     {
         if (parserData->valueAttributePresent ) 
-            osrlerror(NULL, NULL, parserData, osglData, "only one value attribute allowed for this element");
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one value attribute allowed for this element");
         parserData->valueAttributePresent = true;
     }
     break;
@@ -7555,7 +7563,7 @@ yyreduce:
 
     {
         if (parserData->varTypeAttributePresent ) 
-                osrlerror(NULL, NULL, parserData, osglData, "only one varType attribute allowed for this element");
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one varType attribute allowed for this element");
         parserData->varTypeAttributePresent = true;
     }
     break;
@@ -7577,7 +7585,7 @@ yyreduce:
   case 1105:
 
     {
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <con> cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of <con> cannot be negative");
     parserData->numberOfCon = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7586,8 +7594,8 @@ yyreduce:
 
     {
     if (parserData->nConPresent)
-        osrlerror(NULL, NULL, parserData, osglData, "numberOfConstraints attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of constraints cannot be negative");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfConstraints attribute previously set");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of constraints cannot be negative");
     parserData->nConPresent = true;        
     parserData->tempInt = (yyvsp[(3) - (4)].ival); 
 }
@@ -7596,7 +7604,7 @@ yyreduce:
   case 1107:
 
     {
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <el> cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of <el> cannot be negative");
     parserData->numberOf = (yyvsp[(3) - (4)].ival); 
 }
     break;
@@ -7604,7 +7612,7 @@ yyreduce:
   case 1108:
 
     {
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <enumeration> elements cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of <enumeration> elements cannot be negative");
     parserData->numberOfEnumerations = (yyvsp[(3) - (4)].ival); 
 }
     break;
@@ -7613,8 +7621,8 @@ yyreduce:
 
     {    
    if (parserData->numberOfItemsPresent ) 
-        osrlerror(NULL, NULL, parserData, osglData, "only one numberOfItems attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of items cannot be negative");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one numberOfItems attribute allowed");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of items cannot be negative");
     parserData->numberOfItemsPresent = true;
     parserData->numberOfItems = (yyvsp[(3) - (4)].ival);
 }
@@ -7623,7 +7631,7 @@ yyreduce:
   case 1110:
 
     {
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <obj> cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of <obj> cannot be negative");
     parserData->numberOfObj = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7632,8 +7640,8 @@ yyreduce:
 
     {
     if (parserData->nObjPresent)
-        osrlerror(NULL, NULL, parserData, osglData, "numberOfObjectives attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of objectives cannot be negative");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfObjectives attribute previously set");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of objectives cannot be negative");
     parserData->nObjPresent = true;
     parserData->tempInt = (yyvsp[(3) - (4)].ival); 
 }
@@ -7642,7 +7650,7 @@ yyreduce:
   case 1112:
 
     {
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other constraint results cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other constraint results cannot be negative");
     parserData->tempInt = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7650,7 +7658,7 @@ yyreduce:
   case 1113:
 
     {
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other objective results cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other objective results cannot be negative");
     parserData->tempInt = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7658,7 +7666,7 @@ yyreduce:
   case 1114:
 
     {
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other results cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other results cannot be negative");
     parserData->tempInt = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7666,7 +7674,7 @@ yyreduce:
   case 1115:
 
     {    
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other solution results cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other solution results cannot be negative");
     parserData->tempInt = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7674,7 +7682,7 @@ yyreduce:
   case 1116:
 
     {    
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other variable results cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other variable results cannot be negative");
     parserData->tempInt = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7683,8 +7691,8 @@ yyreduce:
 
     {
     if (parserData->numberAttributePresent)
-        osrlerror(NULL, NULL, parserData, osglData, "numberOfSolutions attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of solutions cannot be negative");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfSolutions attribute previously set");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of solutions cannot be negative");
     parserData->numberAttributePresent = true;
     parserData->tempInt = (yyvsp[(3) - (4)].ival); 
 }
@@ -7693,7 +7701,7 @@ yyreduce:
   case 1118:
 
     {    
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other solver outputs cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other solver outputs cannot be negative");
     parserData->tempInt = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7702,9 +7710,9 @@ yyreduce:
 
     {
    if (parserData->numberAttributePresent ) 
-        osrlerror(NULL, NULL, parserData, osglData, "only one numberOfSubstatuses attribute allowed");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one numberOfSubstatuses attribute allowed");
     parserData->numberAttributePresent = true;
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <substatus> elements cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of <substatus> elements cannot be negative");
     parserData->tempInt = (yyvsp[(3) - (4)].ival);
 }
     break;
@@ -7719,7 +7727,7 @@ yyreduce:
   case 1121:
 
     {
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <var> cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of <var> cannot be negative");
     parserData->numberOfVar = (yyvsp[(3) - (4)].ival); 
 }
     break;
@@ -7728,8 +7736,8 @@ yyreduce:
 
     {
     if (parserData->nVarPresent)
-        osrlerror(NULL, NULL, parserData, osglData, "numberOfVariables attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of variables cannot be negative");
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfVariables attribute previously set");
+    if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of variables cannot be negative");
     parserData->nVarPresent = true;    
     parserData->tempInt = (yyvsp[(3) - (4)].ival); 
 }
@@ -7780,7 +7788,7 @@ yyreduce:
 
     {
     if (osglData->fileNamePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: file name");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "Repeated header information: file name");
     else
         osglData->fileNamePresent = true;
 }
@@ -7798,7 +7806,7 @@ yyreduce:
 
     {
     if (osglData->sourcePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: source");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "Repeated header information: source");
     else
         osglData->sourcePresent = true;
 }
@@ -7816,7 +7824,7 @@ yyreduce:
 
     {
     if (osglData->descriptionPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: description");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "Repeated header information: description");
     else
         osglData->descriptionPresent = true;
 }
@@ -7834,7 +7842,7 @@ yyreduce:
 
     {
     if (osglData->fileCreatorPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: file creator");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "Repeated header information: file creator");
     else
         osglData->fileCreatorPresent = true;
 }
@@ -7852,7 +7860,7 @@ yyreduce:
 
     {
     if (osglData->licencePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "Repeated header information: licence");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "Repeated header information: licence");
     else
         osglData->licencePresent = true;
 }
@@ -7871,7 +7879,7 @@ yyreduce:
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "fewer data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "fewer data elements than specified");
             parserData->ignoreDataAfterErrors = true;
         }
     }
@@ -7894,7 +7902,7 @@ yyreduce:
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
-            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "more data elements than specified");
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more data elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
         }
@@ -7917,15 +7925,15 @@ yyreduce:
     {
     char* b64string = (yyvsp[(2) - (3)].sval);
     if( b64string == NULL) 
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 data expected"); 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "base 64 data expected"); 
     if (osglData->osglSize != sizeof(int))
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "base 64 encoded with a size of int different than on this machine"); 
 
     std::string base64decodeddata = Base64::decodeb64( b64string );
     int base64decodeddatalength = base64decodeddata.length();
     int *intvec = NULL;
     if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 data length does not match numberOfEl"); 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "base 64 data length does not match numberOfEl"); 
     else
     {
         intvec = (int*)&base64decodeddata[0];
@@ -7943,7 +7951,7 @@ yyreduce:
 
     {    
     if (osglData->osglIncrPresent) 
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "only one incr attribute allowed");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "only one incr attribute allowed");
     osglData->osglIncrPresent = true;
     osglData->osglIncr = (yyvsp[(3) - (4)].ival);
 }
@@ -7953,8 +7961,8 @@ yyreduce:
 
     {    
     if (osglData->osglMultPresent) 
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "only one mult attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) <= 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "mult must be positive");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "only one mult attribute allowed");
+    if ((yyvsp[(3) - (4)].ival) <= 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "mult must be positive");
     osglData->osglMultPresent = true;
     osglData->osglMult = (yyvsp[(3) - (4)].ival);
 }
@@ -7972,15 +7980,15 @@ yyreduce:
     {
     char* b64string = (yyvsp[(2) - (3)].sval);
     if( b64string == NULL) 
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 data expected"); 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "base 64 data expected"); 
     if (osglData->osglSize != sizeof(int))
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "base 64 encoded with a size of int different than on this machine"); 
 
     std::string base64decodeddata = Base64::decodeb64( b64string );
     int base64decodeddatalength = base64decodeddata.length();
     double *dblvec = NULL;
     if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, "base 64 data length does not match numberOfEl"); 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "base 64 data length does not match numberOfEl"); 
     else
     {
         dblvec = (double*)&base64decodeddata[0];
@@ -8031,7 +8039,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (&yylloc, osresult, parserData, osglData, YY_("syntax error"));
+      yyerror (&yylloc, osresult, parserData, osglData, osnlData, YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -8055,11 +8063,11 @@ yyerrlab:
 	if (0 < yysize && yysize <= yymsg_alloc)
 	  {
 	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (&yylloc, osresult, parserData, osglData, yymsg);
+	    yyerror (&yylloc, osresult, parserData, osglData, osnlData, yymsg);
 	  }
 	else
 	  {
-	    yyerror (&yylloc, osresult, parserData, osglData, YY_("syntax error"));
+	    yyerror (&yylloc, osresult, parserData, osglData, osnlData, YY_("syntax error"));
 	    if (yysize != 0)
 	      goto yyexhaustedlab;
 	  }
@@ -8083,7 +8091,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval, &yylloc, osresult, parserData, osglData);
+		      yytoken, &yylval, &yylloc, osresult, parserData, osglData, osnlData);
 	  yychar = YYEMPTY;
 	}
     }
@@ -8140,7 +8148,7 @@ yyerrlab1:
 
       yyerror_range[0] = *yylsp;
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp, yylsp, osresult, parserData, osglData);
+		  yystos[yystate], yyvsp, yylsp, osresult, parserData, osglData, osnlData);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -8180,7 +8188,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (&yylloc, osresult, parserData, osglData, YY_("memory exhausted"));
+  yyerror (&yylloc, osresult, parserData, osglData, osnlData, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -8188,7 +8196,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval, &yylloc, osresult, parserData, osglData);
+		 yytoken, &yylval, &yylloc, osresult, parserData, osglData, osnlData);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -8196,7 +8204,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp, yylsp, osresult, parserData, osglData);
+		  yystos[*yyssp], yyvsp, yylsp, osresult, parserData, osglData, osnlData);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -8215,7 +8223,8 @@ yyreturn:
 
 
 
-void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+#if 0
+void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     osrl_empty_vectors( parserData );
     osgl_empty_vectors(   osglData );
@@ -8231,9 +8240,9 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
     //osrllex_destroy( scanner);
     throw ErrorClass( error);
 } //end osrlerror
+#endif
 
-
-std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     std::ostringstream outStr;
     outStr << "At line number " << osrlget_lineno( scanner) << ": "; 
@@ -8243,7 +8252,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* par
     return outStr.str();
 } //end addErrorMsg
 
-void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, std::string errormsg )
+void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     osrl_empty_vectors( parserData);
     osgl_empty_vectors( osglData);
@@ -8252,7 +8261,7 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 
 
 
-void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass)
+void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass)
 {
     try
     {
@@ -8261,7 +8270,7 @@ void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData 
         //
         // call the Bison parser
         //
-        if(  osrlparse( osresult,  parserData, osglData) != 0) {
+        if(  osrlparse( osresult,  parserData, osglData, osnlData) != 0) {
             //osrllex_destroy(scanner);
               throw ErrorClass(  "Error parsing the OSrL file");
          }

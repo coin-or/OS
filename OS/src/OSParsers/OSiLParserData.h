@@ -229,6 +229,12 @@ public:
 
     /** intervalstart holds the value for the start of the planning horizon*/
     double intervalstart;
+
+
+    /** used to accumulate error message so the parser does not die
+     *  on the first error encountered
+     */
+    std::string parser_errors;
 };
 
 #endif /*OSILPARSERDATA_H_*/

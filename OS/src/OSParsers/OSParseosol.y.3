@@ -35,7 +35,7 @@ void addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData
 } //end addErrorMsg
 #endif
 
-std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
+std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     std::ostringstream outStr;
     outStr << "At line number " << osolget_lineno( scanner) << ": "; 
@@ -45,21 +45,24 @@ std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* par
     return outStr.str();
 } //end addErrorMsg
 
-void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, std::string errormsg )
+void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg )
 {
     osol_empty_vectors( parserData);
     osgl_empty_vectors( osglData);
+    osnl_empty_vectors( osnlData);
     throw ErrorClass( errormsg);
 } //end osolerror
 
-void  yygetOSOption(const char *parsestring, OSOption *osoption, OSoLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass){
+void  yygetOSOption(const char *parsestring, OSOption *osoption, 
+      OSoLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass)
+{
     try{
         osol_scan_string( parsestring, scanner);
         osolset_lineno (1 , scanner );
         //
         // call the Bison parser
         //
-        if(  osolparse( osoption,  parserData, osglData) != 0) {
+        if(  osolparse( osoption,  parserData, osglData, osnlData) != 0) {
             //osollex_destroy(scanner);
               throw ErrorClass(  "Error parsing the OSoL file");
          }

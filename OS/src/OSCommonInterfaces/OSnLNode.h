@@ -41,7 +41,7 @@ typedef std::vector<ADdouble> ADvector;
 #endif
 
 /**
- *  Some forward declarations to make sure circular references are hndled properly.
+ *  Some forward declarations to make sure circular references are handled properly.
  *  (It is important to make sure forward references are handled through pointers.)
  */
 class OSnLMNode;
@@ -1580,7 +1580,6 @@ public:
     ~OSnLNodeMatrixDeterminant();
 
     /**
-
      *
      * @return the value of operator name
      */
@@ -1826,6 +1825,61 @@ public:
     bool IsEqual(OSnLMNode *that);
 };//end OSnLMNode
 
+class OSnLMNodeMatrixRef : public OSnLMNode
+{
+public:
+
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixRef();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixRef();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+    virtual std::string getNonlinearExpressionInXML();
+
+#if 0
+    /*! \fn double OSnLNodeNumber::double(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a double.
+     */
+    virtual double calculateFunction( double *x);
+#endif
+
+    /*! \fn OSnLMNode *cloneOSnLNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a point to a new OSnLNode of the proper type.
+     */
+    virtual OSnLMNode *cloneOSnMLNode() ;
+
+#if 0
+    /*! \fn double OSnLNodeNumber::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
+     *  \brief The implementation of the virtual functions.
+     *  \return a ADdouble.
+     */
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
+#endif
+
+};//end OSnLNodeNumber
 
 
 /*

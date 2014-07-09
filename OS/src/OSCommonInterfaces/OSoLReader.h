@@ -23,6 +23,7 @@
 #include "OSOption.h"
 #include "OSoLParserData.h"
 #include "OSgLParserData.h"
+#include "OSnLParserData.h"
 
 
 /*! \class OSoLReader
@@ -72,6 +73,11 @@ private:
      * temporarily store data from the OSgL schema elements.
      */
     OSgLParserData *m_osglData;
+
+    /** m_osnlData is the object used in the parser to
+     * temporarily store data from the OSnL schema elements.
+     */
+    OSnLParserData *m_osnlData;
 };
 
 

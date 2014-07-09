@@ -34,6 +34,7 @@
 #include "OSOption.h"
 #include "OSoLParserData.h"
 #include "OSgLParserData.h"
+#include "OSnLParserData.h"
 #include "OSBase64.h"
 
 #include <iostream>
@@ -55,7 +56,7 @@ int osolget_lineno( void* yyscanner);
 char *osolget_text (void* yyscanner );
 void osolset_lineno (int line_number , void* yyscanner );
 void osolset_extra (OSoLParserData* parserData , void* yyscanner );
-void  yygetOSOption(const char *ch, OSOption* m_osoption, OSoLParserData *m_parserData, OSgLParserData *osglData ) throw(ErrorClass);
+void  yygetOSOption(const char *ch, OSOption* m_osoption, OSoLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData ) throw(ErrorClass);
 void osol_empty_vectors( OSoLParserData* parserData);
 void osgl_empty_vectors( OSgLParserData* osglData);
 
@@ -70,6 +71,7 @@ void osgl_empty_vectors( OSgLParserData* osglData);
 %parse-param{OSOption *osoption}
 %parse-param{OSoLParserData *parserData}
 %parse-param{OSgLParserData *osglData}
+%parse-param{OSnLParserData *osnlData}
 %lex-param {void* scanner}
 
 
@@ -85,8 +87,8 @@ this fails in Mac OS X
 
 %{
 
-std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, const char* errormsg ) ;
-void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, std::string errormsg );
+std::string addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg ) ;
+void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg );
 int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 #define scanner parserData->scanner
 %}
