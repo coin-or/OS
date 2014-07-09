@@ -143,14 +143,15 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\OSModelInterfaces\OSmps2OS.cpp" />
     <ClCompile Include="..\..\..\src\OSSolverInterfaces\OSCoinSolver.cpp" />
     <ClCompile Include="..\..\..\src\OSAgent\OShL.cpp" />
-    <ClCompile Include="..\..\..\src\OSModelInterfaces\OSmps2osil.cpp" />
     <ClCompile Include="..\..\..\src\OSAgent\OSSolverAgent.cpp" />
     <ClCompile Include="..\..\..\src\OSAgent\OSWSUtil.cpp" />
     <ClCompile Include="..\..\..\src\OSSolverInterfaces\OSRunSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\OSModelInterfaces\OSmps2OS.h" />
     <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSBonminSolver.h" />
     <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSCouenneSolver.h" />
     <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSRunSolver.h" />
@@ -174,7 +175,6 @@
     <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSLindoSolver.h" />
     <ClInclude Include="..\..\..\src\OSUtils\OSMathUtil.h" />
     <ClInclude Include="..\..\..\src\OSModelInterfaces\OSMatlab.h" />
-    <ClInclude Include="..\..\..\src\OSModelInterfaces\OSmps2osil.h" />
     <ClInclude Include="..\..\..\src\OSModelInterfaces\OSnl2osil.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSnLNode.h" />
     <ClInclude Include="..\..\..\src\OSParsers\OSoLParserData.h" />
