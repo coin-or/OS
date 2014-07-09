@@ -643,6 +643,9 @@ OS/src/OSParsers/OSParseosil.l.2 -text
 OS/src/OSParsers/OSParseosil.tab.cpp -text
 OS/src/OSParsers/OSParseosil.tab.hpp -text
 OS/src/OSParsers/OSParseosil.y -text
+OS/src/OSParsers/OSParseosil.y.1 -text
+OS/src/OSParsers/OSParseosil.y.2 -text
+OS/src/OSParsers/OSParseosil.y.3 -text
 OS/src/OSParsers/OSParseosnl.l.patterns -text
 OS/src/OSParsers/OSParseosnl.y.syntax -text
 OS/src/OSParsers/OSParseosnl.y.tokens -text
@@ -673,6 +676,8 @@ OS/src/OSParsers/OSgLParserData.cpp -text
 OS/src/OSParsers/OSgLParserData.h -text
 OS/src/OSParsers/OSiLParserData.cpp -text
 OS/src/OSParsers/OSiLParserData.h -text
+OS/src/OSParsers/OSnLParserData.cpp -text
+OS/src/OSParsers/OSnLParserData.h -text
 OS/src/OSParsers/OSoLParserData.cpp -text
 OS/src/OSParsers/OSoLParserData.h -text
 OS/src/OSParsers/OSrLParserData.cpp -text

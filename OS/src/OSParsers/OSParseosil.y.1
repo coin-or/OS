@@ -1,0 +1,222 @@
+/* $Id: OSParseosil.y.1 4813 2014-06-30 18:03:02Z Gassmann $ */
+/** @file OSParseosil.y.1
+ * 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ *
+ * \remarks
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License. 
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * In order to allow easier maintenance of the parsers, 
+ * the files OSParseosil.y and OSParseosil.l are stored in several pieces
+ * that are combined in the makefile.
+ * This is the first part of the file OSParseosil.y.
+ * Tokens pertaining to the OSnL parses are appended next.
+ * These are in file OSParseosnl.y.tokens.   
+ * Then follow the syntax rules involving only OSiL constructs (OSParseosil.y.2). 
+ * After that we put the syntax rules for elements from the OSnL schema, 
+ * maintained in the file OSParseosnl.y.syntax. 
+ * The postamble in OSParseosil.y.3 is appended at the end.
+ * This process could be repeated for as many other auxiliary schemas as needed. 
+ */
+
+%{
+
+#include <string>
+#include <iostream>
+#include <sstream>  
+ 
+#include "OSInstance.h" 
+#include "OSnLNode.h"
+#include "OSErrorClass.h"
+#include "OSParameters.h"
+#include "OSiLParserData.h"
+#include "OSnLParserData.h"
+#include "OSBase64.h"
+#include "OSMathUtil.h"
+#include "OSConfig.h"
+
+//#define CHECK_PARSE_TIME
+
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
+
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
+
+
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
+int osillex_init(void** ptr_yy_globals);
+int osillex_destroy (void* yyscanner );
+void osilset_extra (OSiLParserData* parserData , void* yyscanner );
+int osilget_lineno( void* yyscanner);
+char *osilget_text (void* yyscanner );
+void osilset_lineno (int line_number , void* yyscanner );
+void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSnLParserData *osnlData) throw(ErrorClass);
+//
+
+double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
+int atoimod1(int* osillineno, const char *ch1, const char *ch2);
+// we distinguish a newline from other whitespace
+// so that we can report proper line numbers in case of error
+void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg);
+bool isnewline(char c, int* osillineno);
+bool parseVariables(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseObjectives(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseObjCoef(const char **pchar, int objcount, OSInstance *osinstance, int* osillineno);
+bool parseConstraints(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseLinearConstraintCoefficients(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseStart(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseRowIdx(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseColIdx(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseValue(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseInstanceHeader(const char **pchar, OSInstance *osinstance, int* osillineno);
+bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
+char *parseBase64( const char **p, int *dataSize, int* osillineno);
+
+#define	ISWHITESPACE( char_) ((char_) == ' ' || \
+                     (char_) == '\t' ||  (char_) == '\r')
+
+#define	ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+
+#define GETATTRIBUTETEXT  	\
+	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
+	ch++; \
+	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
+	if(*ch == '\"'){ \
+		ch++; \
+	    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+	    *p = ch; \
+	    for( ; *ch != '\"'; ch++); \
+	}\
+	else{\
+	    if(*ch == '\'') { \
+	    	ch++; \
+	        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+	        *p = ch; \
+	        for( ; *ch != '\''; ch++); \
+	    } \
+	    else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
+	}\
+	numChar = ch - *p; \
+	attText = new char[numChar + 1]; \
+	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
+	attText[ki] = '\0'; \
+	attTextEnd = &attText[ki]; 
+	
+#define GAIL printf("GAIL ANN HONDA\n")
+
+
+	
+#define ECHOCHECK \
+	GAIL; \
+	printf("%c", ch[-2]); \
+	printf("%c", ch[-1]); \
+	printf("%c", ch[0]); \
+	printf("%c", ch[1]); \
+	printf("%c", ch[2]); \
+	printf("%c", ch[3]); \
+	printf("%c", ch[4]); \
+	printf("%c", ch[5]); \
+	printf("%c \n", ch[6]); \
+	GAIL;
+%}
+
+%pure-parser
+%locations
+%defines
+%parse-param{OSInstance *osinstance}
+%parse-param{OSiLParserData *parserData}
+%parse-param{OSnLParserData *osnlData}
+%lex-param {void* scanner}
+
+
+
+
+%error-verbose
+
+
+
+/* %name-prefix="osil" 
+this fails on in Mac OS X
+*/
+
+%union {
+	double dval;
+	int ival;
+	char* sval;
+	
+}
+%{
+int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
+void osilerror(YYLTYPE* type, OSInstance *osintance, OSiLParserData *parserData, OSnLParserData *osnlData, std::string errormsg );
+std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osintance, OSiLParserData* parserData, OSnLParserData *osnlData, std::string errormsg ) ;
+
+ 
+#define scanner parserData->scanner
+%}
+
+%token <sval> QUOTE
+%token <sval> ATTRIBUTETEXT 
+%token <ival> INTEGER  
+%token <dval> DOUBLE 
+
+
+%token ENDOFELEMENT GREATERTHAN 
+%token OSILEND INSTANCEDATAEND INSTANCEDATASTARTEND
+
+%token QUADRATICCOEFFICIENTSSTART QUADRATICCOEFFICIENTSEND
+%token NUMBEROFQTERMSATT QTERMSTART QTERMEND  
+
+%token IDXATT IDXONEATT IDXTWOATT TYPEATT VALUEATT  
+
+%token TIMEDOMAINSTART TIMEDOMAINEND
+%token STAGESSTART STAGESEND STAGESTART STAGEEND
+%token NAMEATT  NUMBEROFSTAGESATT HORIZONATT STARTATT
+%token VARIABLESSTART CONSTRAINTSSTART OBJECTIVESSTART
+%token VARIABLESEND CONSTRAINTSEND OBJECTIVESEND
+%token NUMBEROFVARIABLESATT NUMBEROFCONSTRAINTSATT NUMBEROFOBJECTIVESATT
+%token STARTIDXATT 
+%token VARSTART VAREND CONSTART CONEND OBJSTART OBJEND
+%token INTERVALSTART INTERVALEND
+
+
+
+
+
+ 
+
