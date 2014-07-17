@@ -367,6 +367,7 @@
 			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
 			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
 -->
+			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MatrixVariables">
@@ -384,7 +385,7 @@
 		</xs:annotation>
 		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>matrix of varReference</xs:documentation>
+				<xs:documentation>matrix of varReference </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -405,6 +406,11 @@
 		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>used to control which new variables are created</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<!-- No need for a name. a <matrix> can have a name; two names might lead to confusion
@@ -572,20 +578,9 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixTerm" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixTerms</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="MatrixTransformation">
-							<xs:attribute name="objIdx" type="xs:negativeInteger" default="-1"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="obj" type="Nl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixProgrammingScalarObj">
 		<xs:annotation>
@@ -621,12 +616,12 @@
 		</xs:sequence>
 		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>matrix of objReference</xs:documentation>
+				<xs:documentation>matrix of objReference </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
-				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone</xs:documentation>
+				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses core objectives, orderConeIdx can be omitted</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -646,6 +641,11 @@
 					<xs:enumeration value="nonlinear"/>
 				</xs:restriction>
 			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>used to control which new objectives are created</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfMatrixTerms" use="required"/>
 	</xs:complexType>
@@ -676,12 +676,44 @@
 		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
+	<xs:complexType name="MatrixExpressions">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="expr" type="MatrixExpression" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number must agree with numberOfExpr</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixExpression">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLNode"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="shape">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="nonlinear"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+<!--	
 	<xs:complexType name="MatrixProgrammingScalarConstraints">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="con" type="MatrixProgrammingScalarCon" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="con" type="MatrixProgrammingScalarTerm" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Number must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
@@ -689,6 +721,31 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+-->
+	<!--	
+	<xs:complexType name="MatrixProgrammingScalarTerm">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="matrixTerm" type="MatrixTransformation" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfMatrixTerms</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="rowIdx" type="xs:integer" use="required"/>
+		<xs:attribute name="shape">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="nonlinear"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+-->
 	<xs:complexType name="MatrixProgrammingScalarCon">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -787,7 +844,7 @@
 		</xs:sequence>
 		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>matrix of conReference</xs:documentation>
+				<xs:documentation>matrix of conReference </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -822,6 +879,11 @@
 					<xs:enumeration value="nonlinear"/>
 				</xs:restriction>
 			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>used to control which new constraints are created</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
