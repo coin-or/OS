@@ -415,6 +415,12 @@ return(DOUBLE);}
 ({xmlwhitespace}+baseMatrixIdx{equality}) {YY_PRINT; return(BLOCKROWIDXATT);}
 ({xmlwhitespace}+baseMatrixIdx{equality}) {YY_PRINT; return(BLOCKCOLIDXATT);}
 
+ /* attributes returning strings (that are potentially empty)*/
+
+({xmlwhitespace}+excludeElementIfSet{equality}\"\") {YY_PRINT; return(EMPTYEXCLUDEATT);}
+({xmlwhitespace}+excludeElementIfSet{equality}\'\') {YY_PRINT; return(EMPTYEXCLUDEATT);}
+({xmlwhitespace}+excludeElementIfSet{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(EXCLUDEATT);}
+({xmlwhitespace}+excludeElementIfSet{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(EXCLUDEATT);}
 
 {xmlwhitespace}*\<matrix {YY_PRINT;  return(MATRIXSTART);}
 {xmlwhitespace}*\<\/matrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXEND);}
@@ -430,10 +436,16 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/constantElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CONSTANTELEMENTSEND);}
 {xmlwhitespace}*\<varReferenceElements {YY_PRINT;  return(VARREFERENCEELEMENTSSTART);}
 {xmlwhitespace}*\<\/varReferenceElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(VARREFERENCEELEMENTSEND);}
+{xmlwhitespace}*\<varReferenceElements {YY_PRINT;  return(OBJREFERENCEELEMENTSSTART);}
+{xmlwhitespace}*\<\/varReferenceElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OBJREFERENCEELEMENTSEND);}
+{xmlwhitespace}*\<varReferenceElements {YY_PRINT;  return(CONREFERENCEELEMENTSSTART);}
+{xmlwhitespace}*\<\/varReferenceElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CONREFERENCEELEMENTSEND);}
 {xmlwhitespace}*\<linearElements {YY_PRINT;  return(LINEARELEMENTSSTART);}
 {xmlwhitespace}*\<\/linearElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(LINEARELEMENTSEND);}
 {xmlwhitespace}*\<generalElements {YY_PRINT;  return(GENERALELEMENTSSTART);}
 {xmlwhitespace}*\<\/generalElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(GENERALELEMENTSEND);}
+{xmlwhitespace}*\<generalElements {YY_PRINT;  return(PATTERNELEMENTSSTART);}
+{xmlwhitespace}*\<\/generalElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(PATTERNELEMENTSEND);}
 {xmlwhitespace}*\<start {YY_PRINT;  return(STARTVECTORSTART);}
 {xmlwhitespace}*\<\/start{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(STARTVECTOREND);}
 {xmlwhitespace}*\<nonzeros {YY_PRINT;  return(NONZEROSSTART);}

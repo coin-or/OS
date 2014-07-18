@@ -454,25 +454,51 @@ enum ENUM_PATHPAIR
     ENUM_PATHPAIR_output_dir
 };
 
-
+/**
+ * An enum to track the many different types of values that a matrix can contain
+ * Note that these types are partially ordered, which makes it easier to infer a matrix's type
+ * from the types of its constructors
+ */
 enum ENUM_MATRIX_TYPE
 {
-    ENUM_MATRIX_TYPE_zero = 1,
-    ENUM_MATRIX_TYPE_constant,
-    ENUM_MATRIX_TYPE_varref,
-    ENUM_MATRIX_TYPE_linear,
-    ENUM_MATRIX_TYPE_general,
-    ENUM_MATRIX_TYPE_unknown
+    ENUM_MATRIX_TYPE_zero = 1,        // matrix is empty
+
+    ENUM_MATRIX_TYPE_constant = 10,   // matrix elements contain constant values
+    ENUM_MATRIX_TYPE_linear,          // matrix contains linear expressions
+    ENUM_MATRIX_TYPE_quadratic,       // matrix contains quadratic expressions
+    ENUM_MATRIX_TYPE_general,         // matrix contains general nonlinear expressions
+
+    ENUM_MATRIX_TYPE_varref = 20,     // matrix elements contain indexes of variables in the core
+    ENUM_MATRIX_TYPE_conref,          // matrix elements contain indexes of objectives in the core
+    ENUM_MATRIX_TYPE_objref,          // matrix elements contain indexes of constraints in the core
+    ENUM_MATRIX_TYPE_mixedref,        // mixed reference to objectives and constraints
+
+    ENUM_MATRIX_TYPE_addpattern = 30, // matrix contains ones for matrix elements that should be included
+    ENUM_MATRIX_TYPE_subtpattern,     // matrix contains ones for matrix elements that should be zeroed out
+
+    ENUM_MATRIX_TYPE_jumbled = 40,    // mixture of matrix elements that is unsuited for further use
+    ENUM_MATRIX_TYPE_unknown = 99
+
 };
 
 inline int returnMatrixType(std::string type)
 {
-    if (type == "constant") return ENUM_MATRIX_TYPE_constant;
-    if (type == "varref"  ) return ENUM_MATRIX_TYPE_varref;
-    if (type == "linear"  ) return ENUM_MATRIX_TYPE_linear;
-    if (type == "general" ) return ENUM_MATRIX_TYPE_general;
-    if (type == "unknown" ) return ENUM_MATRIX_TYPE_unknown;
-    if (type == "zero"    ) return ENUM_MATRIX_TYPE_zero;
+    if (type == "zero"       ) return ENUM_MATRIX_TYPE_zero;
+    if (type == "constant"   ) return ENUM_MATRIX_TYPE_constant;
+    if (type == "linear"     ) return ENUM_MATRIX_TYPE_linear;
+    if (type == "quadratic"  ) return ENUM_MATRIX_TYPE_quadratic;
+    if (type == "general"    ) return ENUM_MATRIX_TYPE_general;
+
+    if (type == "varref"     ) return ENUM_MATRIX_TYPE_varref;
+    if (type == "conref"     ) return ENUM_MATRIX_TYPE_conref;
+    if (type == "objref"     ) return ENUM_MATRIX_TYPE_objref;
+    if (type == "mixedref"   ) return ENUM_MATRIX_TYPE_mixedref;
+
+    if (type == "addpattern" ) return ENUM_MATRIX_TYPE_addpattern;
+    if (type == "subtpattern") return ENUM_MATRIX_TYPE_subtpattern;
+
+    if (type == "jumbled"    ) return ENUM_MATRIX_TYPE_jumbled;
+    if (type == "unknown"    ) return ENUM_MATRIX_TYPE_unknown;
     return 0;
 }//returnMatrixType
 
@@ -481,6 +507,46 @@ inline bool verifyMatrixType(std::string type)
     return (returnMatrixType(type) > 0);
 }//verifyMatrixType
 
+/**
+ *  A function to merge two matrix types so we can infer the type of a matrix recursively
+ */
+inline int mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE type2)
+{
+    // two matrices of same type 
+    if (type1 == type2) return type1;
+
+    // if one matrix is jumbled, the result must be a jumbled matrix
+    if (type1 == ENUM_MATRIX_TYPE_jumbled || type2 == ENUM_MATRIX_TYPE_jumbled) 
+        return ENUM_MATRIX_TYPE_jumbled;
+
+    if (type1 == ENUM_MATRIX_TYPE_unknown) return type2;
+    if (type2 == ENUM_MATRIX_TYPE_unknown) return type1;
+    if (type1 == ENUM_MATRIX_TYPE_zero) return type2;
+    if (type2 == ENUM_MATRIX_TYPE_zero) return type1;
+
+    // these matrix types do not mix with any other types
+    if (type1 == ENUM_MATRIX_TYPE_varref || type2 == ENUM_MATRIX_TYPE_varref) 
+        return ENUM_MATRIX_TYPE_jumbled;
+    if (type1 == ENUM_MATRIX_TYPE_addpattern || type2 == ENUM_MATRIX_TYPE_addpattern) 
+        return ENUM_MATRIX_TYPE_jumbled;
+    if (type1 == ENUM_MATRIX_TYPE_subtpattern || type2 == ENUM_MATRIX_TYPE_subtpattern) 
+        return ENUM_MATRIX_TYPE_jumbled;
+
+    // at this point we have row references or expressions (of unequal type) 
+    if (type1 < ENUM_MATRIX_TYPE_varref) // linear or nonlinear expression
+    {
+        if (type2 > ENUM_MATRIX_TYPE_varref) return ENUM_MATRIX_TYPE_jumbled;  
+        else if (type1 < type2) return type2;
+        else return type1;
+    }
+    else // row reference                              
+    {
+        if (type2 < ENUM_MATRIX_TYPE_varref) return ENUM_MATRIX_TYPE_jumbled;  
+        else if (type1 < type2) return type2;
+        else return type1;
+    }
+    return ENUM_MATRIX_TYPE_unknown;
+}//returnMatrixType
 
 enum ENUM_MATRIX_SHAPE
 {
@@ -516,10 +582,10 @@ inline bool verifyMatrixShape(std::string shape)
  */
 enum ENUM_COMBINE_ARRAYS
 {
-    ENUM_COMBINE_ARRAYS_replace, //silently replace previous data (if any)
-    ENUM_COMBINE_ARRAYS_merge,   //merge two vectors into one
-    ENUM_COMBINE_ARRAYS_ignore,  //silently ignore current vector if previous data exist
-    ENUM_COMBINE_ARRAYS_throw    //throw an error if previous data detected
+    ENUM_COMBINE_ARRAYS_replace, // silently replace previous data (if any)
+    ENUM_COMBINE_ARRAYS_merge,   // merge two vectors into one
+    ENUM_COMBINE_ARRAYS_ignore,  // silently ignore current vector if previous data exist
+    ENUM_COMBINE_ARRAYS_throw    // throw an error if previous data detected
 };
 
 
@@ -652,7 +718,7 @@ public:
     int number;
 
     /**
-     * indexes holds an integer array of indexes, which corresponding values are nonzero.
+     * indexes holds an integer array of indexes whose corresponding values are nonzero.
      */
     int* indexes;
 
@@ -701,7 +767,7 @@ public:
     int number;
 
     /**
-     * indexes holds an integer array of indexes, which corresponding values are nonzero.
+     * indexes holds an integer array of indexes whose corresponding values are nonzero.
      */
     int* indexes;
 
@@ -816,8 +882,7 @@ public:
 
     /**
      * starts holds an integer array of start elements, each start element
-
-     * pints to the start of partials for that row
+     * points to the start of partials for that row
      */
     int* starts;
 

@@ -88,7 +88,9 @@ public:
     std::string  symmetryAttribute;
     bool symmetryAttributePresent;
     std::string  matrixNameAttribute;
+    std::string  matrixTypeAttribute;
     bool matrixNameAttributePresent;
+    bool matrixTypeAttributePresent;
     int  numberOfBlocks;
     bool numberOfBlocksPresent;
     int  numberOfColumns;
@@ -114,6 +116,7 @@ public:
     bool baseTransposeAttributePresent;
     bool scalarMultiplierAttributePresent;
     bool rowMajorAttribute;
+    bool excludeIfSetAttribute;
     int  blockRowIdx;
     bool blockRowIdxAttributePresent;
     int  blockColIdx;
