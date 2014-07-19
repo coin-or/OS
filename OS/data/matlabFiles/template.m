@@ -50,7 +50,6 @@ ObjType = 1;
 Q = [];
 % replace Template with the name of your  problem
 prob_name = 'Template Example'
-password = 'chicagoesmuyFRIO';
 %the solver
 solverName = 'cbc';
 %the remote service service address
