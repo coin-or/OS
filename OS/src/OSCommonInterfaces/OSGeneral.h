@@ -473,8 +473,8 @@ enum ENUM_MATRIX_TYPE
     ENUM_MATRIX_TYPE_objref,          // matrix elements contain indexes of constraints in the core
     ENUM_MATRIX_TYPE_mixedref,        // mixed reference to objectives and constraints
 
-    ENUM_MATRIX_TYPE_addpattern = 30, // matrix contains ones for matrix elements that should be included
-    ENUM_MATRIX_TYPE_subtpattern,     // matrix contains ones for matrix elements that should be zeroed out
+    ENUM_MATRIX_TYPE_pospattern = 30, // matrix contains ones for matrix elements that should be included
+    ENUM_MATRIX_TYPE_negpattern,      // matrix contains ones for matrix elements that should be zeroed out
 
     ENUM_MATRIX_TYPE_jumbled = 40,    // mixture of matrix elements that is unsuited for further use
     ENUM_MATRIX_TYPE_unknown = 99
@@ -483,22 +483,22 @@ enum ENUM_MATRIX_TYPE
 
 inline int returnMatrixType(std::string type)
 {
-    if (type == "zero"       ) return ENUM_MATRIX_TYPE_zero;
-    if (type == "constant"   ) return ENUM_MATRIX_TYPE_constant;
-    if (type == "linear"     ) return ENUM_MATRIX_TYPE_linear;
-    if (type == "quadratic"  ) return ENUM_MATRIX_TYPE_quadratic;
-    if (type == "general"    ) return ENUM_MATRIX_TYPE_general;
+    if (type == "zero"      ) return ENUM_MATRIX_TYPE_zero;
+    if (type == "constant"  ) return ENUM_MATRIX_TYPE_constant;
+    if (type == "linear"    ) return ENUM_MATRIX_TYPE_linear;
+    if (type == "quadratic" ) return ENUM_MATRIX_TYPE_quadratic;
+    if (type == "general"   ) return ENUM_MATRIX_TYPE_general;
 
-    if (type == "varref"     ) return ENUM_MATRIX_TYPE_varref;
-    if (type == "conref"     ) return ENUM_MATRIX_TYPE_conref;
-    if (type == "objref"     ) return ENUM_MATRIX_TYPE_objref;
-    if (type == "mixedref"   ) return ENUM_MATRIX_TYPE_mixedref;
+    if (type == "varref"    ) return ENUM_MATRIX_TYPE_varref;
+    if (type == "conref"    ) return ENUM_MATRIX_TYPE_conref;
+    if (type == "objref"    ) return ENUM_MATRIX_TYPE_objref;
+    if (type == "mixedref"  ) return ENUM_MATRIX_TYPE_mixedref;
 
-    if (type == "addpattern" ) return ENUM_MATRIX_TYPE_addpattern;
-    if (type == "subtpattern") return ENUM_MATRIX_TYPE_subtpattern;
+    if (type == "pospattern") return ENUM_MATRIX_TYPE_pospattern;
+    if (type == "negpattern") return ENUM_MATRIX_TYPE_negpattern;
 
-    if (type == "jumbled"    ) return ENUM_MATRIX_TYPE_jumbled;
-    if (type == "unknown"    ) return ENUM_MATRIX_TYPE_unknown;
+    if (type == "jumbled"   ) return ENUM_MATRIX_TYPE_jumbled;
+    if (type == "unknown"   ) return ENUM_MATRIX_TYPE_unknown;
     return 0;
 }//returnMatrixType
 
@@ -527,21 +527,22 @@ inline int mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE type2)
     // these matrix types do not mix with any other types
     if (type1 == ENUM_MATRIX_TYPE_varref || type2 == ENUM_MATRIX_TYPE_varref) 
         return ENUM_MATRIX_TYPE_jumbled;
-    if (type1 == ENUM_MATRIX_TYPE_addpattern || type2 == ENUM_MATRIX_TYPE_addpattern) 
+    if (type1 == ENUM_MATRIX_TYPE_pospattern || type2 == ENUM_MATRIX_TYPE_pospattern) 
         return ENUM_MATRIX_TYPE_jumbled;
-    if (type1 == ENUM_MATRIX_TYPE_subtpattern || type2 == ENUM_MATRIX_TYPE_subtpattern) 
+    if (type1 == ENUM_MATRIX_TYPE_negpattern || type2 == ENUM_MATRIX_TYPE_negpattern) 
         return ENUM_MATRIX_TYPE_jumbled;
 
     // at this point we have row references or expressions (of unequal type) 
-    if (type1 < ENUM_MATRIX_TYPE_varref) // linear or nonlinear expression
+    if (type1 > ENUM_MATRIX_TYPE_varref) // row reference
+    {
+        if (type2 > ENUM_MATRIX_TYPE_varref)
+            return ENUM_MATRIX_TYPE_mixedref;
+        else
+            return ENUM_MATRIX_TYPE_jumbled;
+    }                                  
+    else // linear or nonlinear expression   
     {
         if (type2 > ENUM_MATRIX_TYPE_varref) return ENUM_MATRIX_TYPE_jumbled;  
-        else if (type1 < type2) return type2;
-        else return type1;
-    }
-    else // row reference                              
-    {
-        if (type2 < ENUM_MATRIX_TYPE_varref) return ENUM_MATRIX_TYPE_jumbled;  
         else if (type1 < type2) return type2;
         else return type1;
     }

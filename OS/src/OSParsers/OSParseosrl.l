@@ -393,6 +393,8 @@ return(DOUBLE);}
 ({xmlwhitespace}+scalarMultiplier{equality}) {YY_PRINT; return(SCALARMULTIPLIERATT);}
 ({xmlwhitespace}+baseMatrixIdx{equality}) {YY_PRINT; return(BLOCKROWIDXATT);}
 ({xmlwhitespace}+baseMatrixIdx{equality}) {YY_PRINT; return(BLOCKCOLIDXATT);}
+({xmlwhitespace}+numberOfVarIdx{equality}) {YY_PRINT; return(NUMBEROFVARIDXATT);}
+({xmlwhitespace}+constant{equality}) {YY_PRINT; return(CONSTANTATT);}
 
  /* attributes returning strings (that are potentially empty)*/
 
@@ -437,6 +439,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/colOffsets{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(COLOFFSETSEND);}
 {xmlwhitespace}*\<rowOffsets {YY_PRINT;  return(ROWOFFSETSSTART);}
 {xmlwhitespace}*\<\/rowOffsets{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ROWOFFSETSEND);}
+{xmlwhitespace}*\<varIdx {YY_PRINT;  return(VARIDXSTART);}
+{xmlwhitespace}*\<\/varIDX{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(VARIDXEND);}
 
  /* The <item> element and the children of the file header are treated specially because they may legitimately contain special characters */
 

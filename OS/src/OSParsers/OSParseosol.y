@@ -192,8 +192,8 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token MATRIXSTART MATRIXEND BASEMATRIXEND BASEMATRIXSTART;
 %token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND;
 
-%token EMPTYSYMMETRYATT SYMMETRYATT, EMPTYEXCLUDEATT, EXCLUDEATT;
-%token NUMBEROFBLOCKSATT NUMBEROFCOLUMNSATT NUMBEROFROWSATT;
+%token EMPTYSYMMETRYATT SYMMETRYATT EMPTYEXCLUDEATT EXCLUDEATT CONSTANTATT;
+%token NUMBEROFBLOCKSATT NUMBEROFCOLUMNSATT NUMBEROFROWSATT NUMBEROFVARIDXATT;
 
 %token BASEMATRIXIDXATT TARGETMATRIXFIRSTROWATT TARGETMATRIXFIRSTCOLATT; 
 %token BASEMATRIXSTARTROWATT BASEMATRIXSTARTCOLATT BASEMATRIXENDROWATT BASEMATRIXENDCOLATT;
@@ -207,7 +207,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token GENERALELEMENTSSTART GENERALELEMENTSEND; 
 %token CONREFERENCEELEMENTSSTART CONREFERENCEELEMENTSEND;
 %token OBJREFERENCEELEMENTSSTART OBJREFERENCEELEMENTSEND;
-%token PATTERNELEMENTSSTART PATTERNELEMENTSEND; 
+%token PATTERNELEMENTSSTART PATTERNELEMENTSEND VARIDXSTART VARIDXEND; 
 
 %token COLOFFSETSSTART COLOFFSETSEND ROWOFFSETSSTART ROWOFFSETSEND;
 
@@ -5639,11 +5639,11 @@ matrixConstructorList: | matrixConstructorList matrixConstructor;
 
 matrixConstructor: matrixElements | matrixTransformation | matrixBlocks;
 
-matrixElements: matrixElementsStart MatrixElementsAttributes MatrixElementsContent;
+matrixElements: matrixElementsStart matrixElementsAttributes matrixElementsContent;
 
 matrixElementsStart: ELEMENTSSTART;
 
-MatrixElementsAttributes: | rowMajorAtt; 
+matrixElementsAttributes: | rowMajorAtt; 
 
 rowMajorAtt: rowMajorAttEmpty | rowMajorAttContent;
 
@@ -5661,7 +5661,7 @@ rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT quote
     free($2);
 };
 
-MatrixElementsContent: constantElements varReferenceElements linearElements generalElements 
+matrixElementsContent: constantElements varReferenceElements linearElements generalElements 
                        conReferenceElements objReferenceElements patternElements;
 
 constantElements: | constantElementsStart constantElementsContent; 
@@ -5684,7 +5684,7 @@ constantElementsStartVector: constantElementsStartVectorStart constantElementsSt
 constantElementsStartVectorStart: STARTVECTORSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 constantElementsStartVectorNumberOfElATT: numberOfElAttribute
@@ -5718,7 +5718,7 @@ constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZERO
 constantElementsNonzerosStart: NONZEROSSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 varReferenceElements: | varReferenceElementsStart varReferenceElementsContent VARREFERENCEELEMENTSEND; 
@@ -5741,7 +5741,7 @@ varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferen
 varReferenceElementsStartVectorStart: STARTVECTORSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 varReferenceElementsStartVectorNumberOfElATT: numberOfElAttribute
@@ -5775,7 +5775,7 @@ varReferenceElementsNonzeros: varReferenceElementsNonzerosStart osglSparseIntVec
 varReferenceElementsNonzerosStart: NONZEROSSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 linearElements: | linearElementsStart linearElementsContent; 
@@ -5798,7 +5798,7 @@ linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVec
 linearElementsStartVectorStart: STARTVECTORSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 linearElementsStartVectorNumberOfElATT: numberOfElAttribute
@@ -5816,10 +5816,128 @@ linearElementsStartVectorLaden: GREATERTHAN linearElementsStartVectorBody STARTV
 
 linearElementsStartVectorBody:  osglIntArrayData;
 
-linearElementsNonzeros: 
+linearElementsNonzeros: linearElementsNonzerosStart linearElementsNonzerosNumberOfElATT linearElementsNonzerosContent
 {
-    parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "<linearElements> not implemented yet");    
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
 };
+
+linearElementsNonzerosStart: NONZEROSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent = false;
+};
+
+linearElementsNonzerosNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+linearElementsNonzerosContent: 
+
+GREATERTHAN linearElementsNonzerosBody NONZEROSEND;
+
+linearElementsNonzerosBody: linearElementsNonzerosIndexes linearElementsNonzerosValues;
+
+linearElementsNonzerosIndexes:
+    | linearElementsNonzerosIndexesStart linearElementsNonzerosIndexesContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    delete[] osglData->osglValArray;
+    osglData->osglValArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+linearElementsNonzerosIndexesStart: INDEXESSTART
+{
+//    osglData->osglNumberOfEl = 0;
+//    osglData->osglNumberOfElPresent = false;
+};
+
+
+linearElementsNonzerosIndexesContent: linearElementsNonzerosIndexesEmpty | linearElementsNonzerosIndexesLaden;
+
+linearElementsNonzerosIndexesEmpty: ENDOFELEMENT;
+
+linearElementsNonzerosIndexesLaden: GREATERTHAN linearElementsNonzerosIndexesBody INDEXESEND;
+
+linearElementsNonzerosIndexesBody:  osglIntArrayData;
+
+linearElementsNonzerosValues:
+    | linearElementsNonzerosValuesStart linearElementsNonzerosValuesContent;
+
+linearElementsNonzerosValuesStart: VALUESSTART
+{
+//    osglData->osglNumberOfVarIdxPresent = false;
+//    osglData->osglConstantPresent = false;
+};
+
+linearElementsNonzerosValuesContent: linearElementsNonzerosValuesEmpty | linearElementsNonzerosValuesLaden;
+
+linearElementsNonzerosValuesEmpty: ENDOFELEMENT;
+
+linearElementsNonzerosValuesLaden: GREATERTHAN linearElementsNonzerosElList VALUESEND;
+
+linearElementsNonzerosElList:  | linearElementsNonzerosElList linearElementsNonzerosEl;
+
+linearElementsNonzerosEl: linearElementsNonzerosElStart linearElementsNonzerosElAttributes
+                          linearElementsNonzerosElContent;
+
+linearElementsNonzerosElStart: ELSTART
+{
+    osglData->osglNumberOfVarIdxPresent = false;
+    osglData->osglConstantPresent = false;
+};
+
+linearElementsNonzerosElAttributes: linearElementsNonzerosElAttList;
+
+linearElementsNonzerosElAttList: | linearElementsNonzerosElAttList linearElementsNonzerosElAtt;
+
+linearElementsNonzerosElAtt: 
+      numberOfVarIdxAttribute
+    | constantAttribute;
+
+constantAttribute: CONSTANTATT QUOTE aNumber QUOTE
+{
+}; 
+
+linearElementsNonzerosElContent: linearElementsNonzerosElEmpty | linearElementsNonzerosElLaden;
+
+linearElementsNonzerosElEmpty: ENDOFELEMENT;
+
+linearElementsNonzerosElLaden: GREATERTHAN linearElementsNonzerosVarIdxList ELEND;
+
+linearElementsNonzerosVarIdxList: | linearElementsNonzerosVarIdxList linearElementsNonzerosVarIdx;
+
+linearElementsNonzerosVarIdx: 
+    linearElementsNonzerosVarIdxStart linearElementsNonzerosVarIdxCoefATT linearElementsNonzerosVarIdxContent;
+
+linearElementsNonzerosVarIdxStart: VARIDXSTART
+{
+    osglData->osglCoefPresent = false;
+    osglData->osglCoef = 1.0;
+};
+
+linearElementsNonzerosVarIdxCoefATT: | COEFATT QUOTE aNumber QUOTE
+{
+}; 
+
+linearElementsNonzerosVarIdxContent: GREATERTHAN INTEGER VARIDXEND
+{
+};
+ 
 
 generalElements: 
 {
@@ -5846,7 +5964,7 @@ conReferenceElementsStartVector: conReferenceElementsStartVectorStart conReferen
 conReferenceElementsStartVectorStart: STARTVECTORSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 conReferenceElementsStartVectorNumberOfElATT: numberOfElAttribute
@@ -5880,7 +5998,7 @@ conReferenceElementsNonzeros: conReferenceElementsNonzerosStart osglSparseIntVec
 conReferenceElementsNonzerosStart: NONZEROSSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 objReferenceElements: | objReferenceElementsStart objReferenceElementsContent OBJREFERENCEELEMENTSEND; 
@@ -5903,7 +6021,7 @@ objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferen
 objReferenceElementsStartVectorStart: STARTVECTORSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 objReferenceElementsStartVectorNumberOfElATT: numberOfElAttribute
@@ -5937,12 +6055,14 @@ objReferenceElementsNonzeros: objReferenceElementsNonzerosStart osglSparseIntVec
 objReferenceElementsNonzerosStart: NONZEROSSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
-patternElements: | patternElementsStart excludeIfSetAtt patternElementsContent PATTERNELEMENTSEND; 
+patternElements: | patternElementsStart patternElementsAttributes patternElementsContent PATTERNELEMENTSEND; 
 
 patternElementsStart: PATTERNELEMENTSSTART;
+
+patternElementsAttributes: | excludeIfSetAtt; 
 
 excludeIfSetAtt: excludeIfSetAttEmpty | excludeIfSetAttContent;
 
@@ -5976,7 +6096,7 @@ patternElementsStartVector: patternElementsStartVectorStart patternElementsStart
 patternElementsStartVectorStart: STARTVECTORSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 patternElementsStartVectorNumberOfElATT: numberOfElAttribute
@@ -6010,7 +6130,7 @@ patternElementsNonzeros: patternElementsNonzerosStart osglSparseIntVector NONZER
 patternElementsNonzerosStart: NONZEROSSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 matrixTransformation: OSnLMNode;
@@ -6037,7 +6157,7 @@ colOffsets: colOffsetsStart colOffsetsNumberOfElATT colOffsetsContent
 colOffsetsStart: COLOFFSETSSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 colOffsetsNumberOfElATT: numberOfElAttribute
@@ -6069,7 +6189,7 @@ rowOffsets: rowOffsetsStart rowOffsetsNumberOfElATT rowOffsetsContent
 rowOffsetsStart: ROWOFFSETSSTART
 {
     osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent= false;
+    osglData->osglNumberOfElPresent = false;
 };
 
 rowOffsetsNumberOfElATT: numberOfElAttribute
@@ -6187,6 +6307,14 @@ numberOfRowsAttribute: NUMBEROFROWSATT quote INTEGER quote
     osglData->numberOfRows = $3;
 };
 
+numberOfVarIdxAttribute: NUMBEROFVARIDXATT quote INTEGER quote
+{
+    if (osglData->numberOfVarIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfRows attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <rows> cannot be negative");
+    osglData->numberOfVarIdxAttributePresent = true;        
+    osglData->numberOfVarIdx = $3;
+};
 
 /* $Id$ */
 /** @file OSParseosnl.y.syntax
