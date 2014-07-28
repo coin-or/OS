@@ -129,12 +129,13 @@ adouble ([ \t\n\r]*(-?(([0-9]+|[0-9]*\.[0-9]*)([eE][-+]?[0-9]+)?|INF)|NaN)[ \t\n
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 {twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
-{aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
+{aninteger} {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
 {adouble} {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
-/*	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
+/*
+	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
 		std::ostringstream outStr;
 		outStr << "encountered a spurious character in the lexer" << endl;
 		outStr << "The first character is: \'";
@@ -142,7 +143,8 @@ yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
 		outStr << endl;
 		outStr << "See line number: " << yylineno << endl;  
 		throw ErrorClass( outStr.str());
-	} */
+	} 
+*/
 return(DOUBLE);}
 
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}

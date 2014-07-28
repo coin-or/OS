@@ -118,8 +118,8 @@ equality ([ \t\n\r])*=([ \t\n\r])*
 quote (\"|\') 
 twoquotes (\"\"|\'\')
 greater_than (>)
-aninteger (-?[0-9]+)
-adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF)|NaN)
+aninteger ([ \t\n\r]*-?[0-9]+[ \t\n\r]*)
+adouble ([ \t\n\r]*(-?(([0-9]+|[0-9]*\.[0-9]*)([eE][-+]?[0-9]+)?|INF)|NaN)[ \t\n\r]*)
 %% 
 
 {xmlwhitespace}* 
@@ -128,10 +128,10 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF)|NaN)
 
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 {twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
-({xmlwhitespace}*{greater_than}{xmlwhitespace}*) { YY_PRINT;     return(GREATERTHAN);}
-({xmlwhitespace}*{aninteger}{xmlwhitespace}*)  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
+({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
+{aninteger} {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
-({xmlwhitespace}*{adouble}{xmlwhitespace}*) {YY_PRINT; 
+{adouble} {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
 /*
