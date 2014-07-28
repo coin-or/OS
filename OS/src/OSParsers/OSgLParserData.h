@@ -14,6 +14,8 @@
 #ifndef OSGLPARSERDATA_H
 #define OSGLPARSERDATA_H
 
+#include "OSGeneral.h"
+
 #include <stdio.h>
 #include <string>
 
@@ -84,6 +86,9 @@ public:
     bool ignoreDataAfterErrors;
     bool suppressFurtherErrorMessages;
 
+    /** We need to hold a <matrices> element temporarily */
+    Matrices* matrices;
+
     /** data structures to temporarily hold a matrix and its subordinate elements */
     std::string  symmetryAttribute;
     bool symmetryAttributePresent;
@@ -121,6 +126,17 @@ public:
     bool blockRowIdxAttributePresent;
     int  blockColIdx;
     bool blockColIdxAttributePresent;
+    bool osglNumberOfVarIdxPresent;
+    bool osglConstantPresent;
+    bool osglCoefPresent;
+    double osglCoef;
+    bool numberOfBlocksAttributePresent;
+    bool numberOfColumnsAttributePresent;
+    bool numberOfRowsAttributePresent;
+    bool numberOfVarIdxAttributePresent;
+    int  numberOfVarIdx;
+
+    
 
 };//OSgLParserData
 

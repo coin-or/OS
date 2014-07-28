@@ -10,16 +10,24 @@
  * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  *
+ * Like the grammar rules in OSParseosrl.y, this file is maintained in several pieces 
  * in order to avoid duplication when parsing elements of auxiliary schemas,
  * such as OSgL, OSnL, etc. This is the first part of OSparseosrl.l.   
  */
 %{
 
-#include "OSConfig.h"
-
 #include <iostream>
-#include <sstream> 
- 
+#include <sstream>  
+
+#include "OSConfig.h"
+#include "OSDataStructures.h"
+#include "OSErrorClass.h"
+#include "OSMathUtil.h"
+#include "OSrLParserData.h"
+#include "OSParseosrl.tab.hpp"
+#include "OSResult.h"
+#include "OSGeneral.h"
+
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
@@ -30,13 +38,13 @@
 # endif
 #endif
 
-#ifdef HAVE_CSTRING
-# include <cstring>
+#ifdef HAVE_CTIME
+# include <ctime>
 #else
-# ifdef HAVE_STRING_H
-#  include <string.h>
+# ifdef HAVE_TIME_H
+#  include <time.h>
 # else
-#  error "don't have header file for string"
+#  error "don't have header file for time"
 # endif
 #endif
 
@@ -50,13 +58,14 @@
 # endif
 #endif
  
-
-//#define OSRLPARSERDEBUG
-
-#ifdef OSRLPARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
-#else     
-	#define YY_PRINT ;
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
 #endif
 
 
@@ -69,26 +78,27 @@
   #endif
 #endif
 
-#include "OSErrorClass.h"
-#include "OSMathUtil.h"
-#include "OSGeneral.h"
-#include "OSParseosrl.tab.hpp"
-#include "OSResult.h"
-#include "OSrLParserData.h"
-
 using std::cout;
 using std::endl;
 using std::ostringstream;
+
+//#define OSRLPARSERDEBUG
+
+#ifdef OSRLPARSERDEBUG
+	#define YY_PRINT  printf("%s", yytext);
+#else     
+	#define YY_PRINT;
+#endif
      
 %}
 
-%option nounput
 %option prefix="osrl"
 %option noyywrap  
 %option reentrant
 %option bison-bridge
 %option bison-locations
 %option yylineno   
+%option nounput
 
 %x osrlattributetext
 %x doublequoteattributetext
@@ -99,8 +109,6 @@ using std::ostringstream;
 %x comment
 %x xmldeclaration
 
-
-   
 %{
 #define YY_EXTRA_TYPE OSrLParserData*
 %}  
@@ -114,7 +122,6 @@ aninteger (-?[0-9]+)
 adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF)|NaN)
 %% 
 
-
 {xmlwhitespace}* 
 
  /* General patterns matched in more than one element */
@@ -127,17 +134,17 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF)|NaN)
 ({xmlwhitespace}*{adouble}{xmlwhitespace}*) {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
-	/*
+/*
 	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
 		std::ostringstream outStr;
 		outStr << "encountered a spurious character in the lexer" << endl;
-		outStr << "The first character is: ";
-		outStr <<  yytext;
+		outStr << "The first character is: \'";
+		outStr <<  yytext << "\'";
 		outStr << endl;
 		outStr << "See line number: " << yylineno << endl;  
 		throw ErrorClass( outStr.str());
 	}
-	*/
+*/
 return(DOUBLE);}
 
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
@@ -383,6 +390,42 @@ return(DOUBLE);}
 
  /* include file OSParseosgl.l.patterns --- patterns for OSgL schema elements */
 
+ /* The <item> element and the children of the file header are treated specially because they may legitimately contain special characters */
+
+{xmlwhitespace}*\<item{xmlwhitespace}*\>{xmlwhitespace}*\<\/item{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(ITEMEMPTY);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
+{xmlwhitespace}*\<\/item{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(ITEMEND);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(ITEMSTARTANDEND);}
+
+{xmlwhitespace}*\<optionHeader {YY_PRINT; return(HEADERSTART);}
+{xmlwhitespace}*\<\/optionHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(HEADEREND);}
+
+{xmlwhitespace}*\<name{xmlwhitespace}*\>{xmlwhitespace}*\<\/name{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILENAMEEMPTY);}
+{xmlwhitespace}*\<name{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILENAMESTART);}
+{xmlwhitespace}*\<\/name{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILENAMEEND);}
+{xmlwhitespace}*\<name{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILENAMESTARTANDEND);}
+
+{xmlwhitespace}*\<source{xmlwhitespace}*\>{xmlwhitespace}*\<\/source{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILESOURCEEMPTY);}
+{xmlwhitespace}*\<source{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILESOURCESTART);}
+{xmlwhitespace}*\<\/source{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILESOURCEEND);}
+{xmlwhitespace}*\<source{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILESOURCESTARTANDEND);}
+
+{xmlwhitespace}*\<description{xmlwhitespace}*\>{xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILEDESCRIPTIONEMPTY);}
+{xmlwhitespace}*\<description{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILEDESCRIPTIONSTART);}
+{xmlwhitespace}*\<\/description{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILEDESCRIPTIONEND);}
+{xmlwhitespace}*\<description{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILEDESCRIPTIONSTARTANDEND);}
+
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\>{xmlwhitespace}*\<\/fileCreator{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILECREATOREMPTY);}
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILECREATORSTART);}
+{xmlwhitespace}*\<\/fileCreator{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILECREATOREND);}
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILECREATORSTARTANDEND);}
+
+{xmlwhitespace}*\<licence{xmlwhitespace}*\>{xmlwhitespace}*\<\/licence{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILELICENCEEMPTY);}
+{xmlwhitespace}*\<licence{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILELICENCESTART);}
+{xmlwhitespace}*\<\/licence{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILELICENCEEND);}
+{xmlwhitespace}*\<licence{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILELICENCESTARTANDEND);}
+
+
 ({xmlwhitespace}+baseMatrixIdx{equality}) {YY_PRINT; return(BASEMATRIXIDXATT);}
 ({xmlwhitespace}+targetMatrixFirstRow{equality}) {YY_PRINT; return(TARGETMATRIXFIRSTROWATT);}
 ({xmlwhitespace}+targetMatrixFirstCol{equality}) {YY_PRINT; return(TARGETMATRIXFIRSTCOLATT);}
@@ -441,39 +484,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/rowOffsets{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ROWOFFSETSEND);}
 {xmlwhitespace}*\<varIdx {YY_PRINT;  return(VARIDXSTART);}
 {xmlwhitespace}*\<\/varIDX{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(VARIDXEND);}
-
- /* The <item> element and the children of the file header are treated specially because they may legitimately contain special characters */
-
-{xmlwhitespace}*\<item{xmlwhitespace}*\>{xmlwhitespace}*\<\/item{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(ITEMEMPTY);}
-{xmlwhitespace}*\<item{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
-{xmlwhitespace}*\<\/item{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(ITEMEND);}
-{xmlwhitespace}*\<item{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(ITEMSTARTANDEND);}
-
-{xmlwhitespace}*\<name{xmlwhitespace}*\>{xmlwhitespace}*\<\/name{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILENAMEEMPTY);}
-{xmlwhitespace}*\<name{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILENAMESTART);}
-{xmlwhitespace}*\<\/name{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILENAMEEND);}
-{xmlwhitespace}*\<name{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILENAMESTARTANDEND);}
-
-{xmlwhitespace}*\<source{xmlwhitespace}*\>{xmlwhitespace}*\<\/source{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILESOURCEEMPTY);}
-{xmlwhitespace}*\<source{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILESOURCESTART);}
-{xmlwhitespace}*\<\/source{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILESOURCEEND);}
-{xmlwhitespace}*\<source{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILESOURCESTARTANDEND);}
-
-{xmlwhitespace}*\<description{xmlwhitespace}*\>{xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILEDESCRIPTIONEMPTY);}
-{xmlwhitespace}*\<description{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILEDESCRIPTIONSTART);}
-{xmlwhitespace}*\<\/description{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILEDESCRIPTIONEND);}
-{xmlwhitespace}*\<description{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILEDESCRIPTIONSTARTANDEND);}
-
-{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\>{xmlwhitespace}*\<\/fileCreator{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILECREATOREMPTY);}
-{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILECREATORSTART);}
-{xmlwhitespace}*\<\/fileCreator{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILECREATOREND);}
-{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILECREATORSTARTANDEND);}
-
-{xmlwhitespace}*\<licence{xmlwhitespace}*\>{xmlwhitespace}*\<\/licence{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILELICENCEEMPTY);}
-{xmlwhitespace}*\<licence{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILELICENCESTART);}
-{xmlwhitespace}*\<\/licence{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILELICENCEEND);}
-{xmlwhitespace}*\<licence{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILELICENCESTARTANDEND);}
-
+{xmlwhitespace}*\<transformation {YY_PRINT;  return(TRANSFORMATIONSTART);}
+{xmlwhitespace}*\<\/transformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INDEXESEND);}
 
  /* include file OSParseosnl.l.patterns --- patterns for OSnL schema elements */
 
@@ -535,6 +547,11 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/PI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(PIEND);}
 {xmlwhitespace}*\<variable {YY_PRINT;  return(VARIABLESTART);}
 {xmlwhitespace}*\<\/variable{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIABLEEND);}
+
+{xmlwhitespace}*\<matrixTrace {YY_PRINT; return(MATRIXTRACESTART);}
+{xmlwhitespace}*\<\/matrixTrace{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTRACEEND);}
+{xmlwhitespace}*\<matrixToScalar {YY_PRINT; return(MATRIXTOSCALARSTART);}
+{xmlwhitespace}*\<\/matrixToScalar{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTOSCALAREND);}
 
 
 

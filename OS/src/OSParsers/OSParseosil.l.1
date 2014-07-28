@@ -7,7 +7,7 @@
  * Copyright (C) 2005-2014, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  * Like the grammar rules in OSParseosil.y, this file is maintained in several pieces 
@@ -17,9 +17,16 @@
 %{
 
 #include <iostream>
-#include "OSDataStructures.h"
-#include "OSMathUtil.h"
+#include <sstream>  
+
 #include "OSConfig.h"
+#include "OSDataStructures.h"
+#include "OSErrorClass.h"
+#include "OSMathUtil.h"
+#include "OSiLParserData.h"
+#include "OSParseosil.tab.hpp"
+#include "OSInstance.h"
+#include "OSGeneral.h"
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -51,19 +58,14 @@
 # endif
 #endif
 
-#include <sstream>  
-#include "OSiLParserData.h"
-#include "OSErrorClass.h"
-#include "OSParseosil.tab.hpp"
-#include "OSInstance.h"
-
-
-//#define OSILPARSERDEBUG
-
-#ifdef OSILPARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
-#else     
-	#define YY_PRINT ;
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
 #endif
 
 
@@ -80,6 +82,14 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
+//#define OSILPARSERDEBUG
+
+#ifdef OSILPARSERDEBUG
+	#define YY_PRINT  printf("%s", yytext);
+#else     
+	#define YY_PRINT;
+#endif
+
 %}
 
 %option prefix="osil"
@@ -89,11 +99,13 @@ using std::ostringstream;
 %option bison-locations
 %option yylineno
 %option nounput
+
 %x osilattributetext
 %x doublequoteattributetext
 %x singlequoteattributetext
 %x startelement
 %x elementtext
+%x itemtext
 %x comment
 %x xmldeclaration
 
@@ -103,12 +115,11 @@ using std::ostringstream;
  
 xmlwhitespace ([ \t\n\r])
 equality ([ \t\n\r])*=([ \t\n\r])*
-quote [\" | \']  
+quote [\"|\']  
+twoquotes (\"\"|\'\')
 greater_than (>)
-aninteger (-?[0-9]+)
-adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
-
-
+aninteger ([ \t\n\r]*-?[0-9]+[ \t\n\r]*)
+adouble ([ \t\n\r]*(-?(([0-9]+|[0-9]*\.[0-9]*)([eE][-+]?[0-9]+)?|INF)|NaN)[ \t\n\r]*)
 %% 
  
 {xmlwhitespace}*
@@ -116,46 +127,58 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
  /* General patterns matched in more than one element */
 
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
+{twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
 {aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
 {adouble} {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
-	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
+/*	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
 		std::ostringstream outStr;
 		outStr << "encountered a spurious character in the lexer" << endl;
-		outStr << "The first character is: ";
-		outStr <<  yytext;
+		outStr << "The first character is: \'";
+		outStr <<  yytext << "\'";
 		outStr << endl;
 		outStr << "See line number: " << yylineno << endl;  
 		throw ErrorClass( outStr.str());
-	}
+	} */
 return(DOUBLE);}
-
-
 
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
+ /* attributes returning numeric values*/
 
 ({xmlwhitespace}+numberOfVariables{equality}) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
 ({xmlwhitespace}+numberOfConstraints{equality}) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
 ({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
 ({xmlwhitespace}+numberOfQuadraticTerms{equality}) {YY_PRINT; return(NUMBEROFQTERMSATT);}
 ({xmlwhitespace}+numberOfStages{equality}) {YY_PRINT; return(NUMBEROFSTAGESATT);}
+({xmlwhitespace}+numberOfMatrices{equality}) {YY_PRINT; return(NUMBEROFMATRICESATT);}
+({xmlwhitespace}+numberOfMatrices{equality}) {YY_PRINT; return(NUMBEROFCONESATT);}
 
 ({xmlwhitespace}+idx{equality}) {YY_PRINT;   return(IDXATT);}
 ({xmlwhitespace}+idxOne{equality}) {YY_PRINT;   return(IDXONEATT);}
 ({xmlwhitespace}+idxTwo{equality}) {YY_PRINT;   return(IDXTWOATT);}
+({xmlwhitespace}+incr{equality}) {YY_PRINT; return(INCRATT);}
+({xmlwhitespace}+mult{equality}) {YY_PRINT; return(MULTATT);}
 ({xmlwhitespace}+startIdx{equality}) {YY_PRINT; return(STARTIDXATT);}
 ({xmlwhitespace}+horizon{equality}) {YY_PRINT; return(HORIZONATT);}
 ({xmlwhitespace}+start{equality}) {YY_PRINT; return(STARTATT);}
 ({xmlwhitespace}+value{equality}) {YY_PRINT;  return(VALUEATT);}
 
+ /* attributes returning strings (that are potentially empty)*/
+
+({xmlwhitespace}+id{equality}\"\") {YY_PRINT; return(EMPTYIDATT);}
+({xmlwhitespace}+id{equality}\'\') {YY_PRINT; return(EMPTYIDATT);}
 ({xmlwhitespace}+id{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(IDATT);}
 ({xmlwhitespace}+id{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(IDATT);}
+({xmlwhitespace}+name{equality}\"\") {YY_PRINT; return(EMPTYNAMEATT);}
+({xmlwhitespace}+name{equality}\'\') {YY_PRINT; return(EMPTYNAMEATT);}
 ({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
 ({xmlwhitespace}+name{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
+({xmlwhitespace}+type{equality}\"\") {YY_PRINT; return(EMPTYTYPEATT);}
+({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
 
@@ -191,8 +214,19 @@ return(DOUBLE);}
 {xmlwhitespace}*\<interval {YY_PRINT; return(INTERVALSTART);}
 {xmlwhitespace}*\<\/interval{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INTERVALEND);}
 
+ /* patterns for <matrices> and <cones> */
+{xmlwhitespace}*\<matrices {YY_PRINT;  return(MATRICESSTART);}
+{xmlwhitespace}*\<\/matrices{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRICESEND);}
+{xmlwhitespace}*\<cones {YY_PRINT;  return(CONESSTART);}
+{xmlwhitespace}*\<\/cones{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CONESEND);}
 
- /* patterns for <parametersAndStochasticElements> 
+{xmlwhitespace}*\<base64BinaryData {YY_PRINT; return(BASE64START);}
+{xmlwhitespace}*\<\/base64BinaryData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASE64END);}
+{xmlwhitespace}*\<el {YY_PRINT;  return(ELSTART);}
+{xmlwhitespace}*\<\/el{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ELEND);}
+
+ /* patterns for <parametersAndStochasticElements> */
+ /*
 {xmlwhitespace}*\<parametersAndStochasticElements {YY_PRINT; return(PARAMETERSSTART);}
 {xmlwhitespace}*\<\/parametersAndStochasticElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(PARAMETERSEND);}
 {xmlwhitespace}*\<param {YY_PRINT; return(PARAMSTART);}

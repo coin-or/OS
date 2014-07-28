@@ -16,10 +16,17 @@
  */
 %{
 
-#include "OSConfig.h"
-
 #include <iostream>
 #include <sstream>  
+
+#include "OSConfig.h"
+#include "OSDataStructures.h"
+#include "OSErrorClass.h"
+#include "OSMathUtil.h"
+#include "OSoLParserData.h"
+#include "OSParseosol.tab.hpp"
+#include "OSOption.h"
+#include "OSGeneral.h"
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -51,14 +58,14 @@
 # endif
 #endif
 
- 
-//#define OSOLPARSERDEBUG
-
-#ifdef OSOLPARSERDEBUG
-
-	#define YY_PRINT  printf("%s", yytext);
-#else     
-	#define YY_PRINT  ;
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
 #endif
 
 
@@ -71,26 +78,27 @@
   #endif
 #endif
 
-#include "OSErrorClass.h"
-#include "OSMathUtil.h"
-#include "OSGeneral.h"
-#include "OSParseosol.tab.hpp"
-#include "OSOption.h"
-#include "OSoLParserData.h"
-
 using std::cout;
 using std::endl;
 using std::ostringstream;
+ 
+//#define OSOLPARSERDEBUG
+
+#ifdef OSOLPARSERDEBUG
+	#define YY_PRINT  printf("%s", yytext);
+#else     
+	#define YY_PRINT;
+#endif
 
 %}
 
-%option nounput
 %option prefix="osol"
 %option noyywrap
 %option reentrant
 %option bison-bridge
 %option bison-locations
 %option yylineno   
+%option nounput
 
 %x osolattributetext
 %x doublequoteattributetext
@@ -101,8 +109,6 @@ using std::ostringstream;
 %x comment
 %x xmldeclaration
   
-
-
 %{
 #define YY_EXTRA_TYPE OSoLParserData*
 %} 
@@ -115,7 +121,6 @@ greater_than (>)
 aninteger (-?[0-9]+)
 adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF)|NaN)
 %%
-
  
 {xmlwhitespace}*
 
@@ -133,16 +138,18 @@ yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
 	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
 		std::ostringstream outStr;
 		outStr << "encountered a spurious character in the lexer" << endl;
-		outStr << "The first character is: ";
-		outStr <<  yytext;
+		outStr << "The first character is: \'";
+		outStr <<  yytext << "\'";
 		outStr << endl;
 		outStr << "See line number: " << yylineno << endl;  
 		throw ErrorClass( outStr.str());
 	}
-	*/
+*/
 return(DOUBLE);}
 
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
+
+ /* attributes returning numeric values*/
 
 ({xmlwhitespace}+numberOfOtherOptions{equality}) {YY_PRINT; return(NUMBEROFOTHEROPTIONSATT);}
 ({xmlwhitespace}+numberOfJobIDs{equality}) {YY_PRINT; return(NUMBEROFJOBIDSATT);}
@@ -168,6 +175,9 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCOLUMNSATT);}
 
 ({xmlwhitespace}+idx{equality}) {YY_PRINT; return(IDXATT);}
+({xmlwhitespace}+incr{equality}) {YY_PRINT; return(INCRATT);}
+({xmlwhitespace}+mult{equality}) {YY_PRINT; return(MULTATT);}
+({xmlwhitespace}+sizeOf{equality}) {YY_PRINT; return(SIZEOFATT);}
 ({xmlwhitespace}+sosIdx{equality}) {YY_PRINT; return(SOSIDXATT);}
 ({xmlwhitespace}+groupWeight{equality}) {YY_PRINT; return(GROUPWEIGHTATT);}
 ({xmlwhitespace}+lbDualValue{equality}) {YY_PRINT; return(LBDUALVALUEATT);}
@@ -243,16 +253,9 @@ return(DOUBLE);}
 ({xmlwhitespace}+makeCopy{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(MAKECOPYATT);}
 ({xmlwhitespace}+makeCopy{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(MAKECOPYATT);}
 
-({xmlwhitespace}+incr{equality}) {YY_PRINT; return(INCRATT);}
-({xmlwhitespace}+mult{equality}) {YY_PRINT; return(MULTATT);}
-({xmlwhitespace}+sizeOf{equality}) {YY_PRINT; return(SIZEOFATT);}
-
 {xmlwhitespace}*\<osol{xmlwhitespace}*\> {return(OSOLSTARTEMPTY);}
 {xmlwhitespace}*\<osol{xmlwhitespace}+ {YY_PRINT; BEGIN osolattributetext;  return(OSOLSTART);}
 {xmlwhitespace}*\<\/osol{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSOLEND);}
-
-{xmlwhitespace}*\<optionHeader {YY_PRINT; return(HEADERSTART);}
-{xmlwhitespace}*\<\/optionHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(HEADEREND);}
 
 {xmlwhitespace}*\<general {YY_PRINT; return(GENERALSTART);}
 {xmlwhitespace}*\<\/general{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALEND);}

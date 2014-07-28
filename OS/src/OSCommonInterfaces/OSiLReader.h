@@ -19,6 +19,7 @@
 
 #include "OSInstance.h"
 #include "OSiLParserData.h"
+#include "OSgLParserData.h"
 #include "OSnLParserData.h"
 #include "OSErrorClass.h"
 
@@ -67,6 +68,11 @@ private:
     /** m_parserData is the object used in the parser to temporarily store data
      */
     OSiLParserData *m_parserData;
+
+    /** m_osglData is the object used in the parser to
+     * temporarily store data from the OSgL schema elements.
+     */
+    OSgLParserData *m_osglData;
 
     /** m_osnlData is the object used in the parser to
      * temporarily store data from the OSnL schema elements.

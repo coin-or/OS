@@ -52,8 +52,9 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 {
     osrl_empty_vectors( parserData);
     osgl_empty_vectors( osglData);
+    osnl_empty_vectors( osnlData);
     throw ErrorClass( errormsg);
-} //end osolerror
+} //end osrlerror
 
 
 
@@ -80,6 +81,7 @@ void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData 
 
 void osrl_empty_vectors( OSrLParserData* parserData)
 {
+#if 0
     int k;
     int numOtherVarVec = parserData->otherVarVec.size();
    
@@ -119,5 +121,6 @@ void osrl_empty_vectors( OSrLParserData* parserData)
             delete parserData->primalVals[ k];
       }
       parserData->primalVals.clear();
+#endif
 }//end osrl_empty_vectors
 

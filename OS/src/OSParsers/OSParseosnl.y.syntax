@@ -94,7 +94,10 @@ nlnode: number
       | min
       | E
       | PI
-      | allDiff ;
+      | allDiff 
+
+      | matrixTrace
+;
 
 
 times: TIMESSTART {
@@ -291,12 +294,16 @@ numberidATT:   IDATT   ATTRIBUTETEXT {
     osnlData->nlNodeNumberPoint->id = $2;
 }  QUOTE ;
 
-numbervalueATT: VALUEATT QUOTE  DOUBLE QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlNodeNumberPoint->value = $3;
+numbervalueATT: 
+            VALUEATT QUOTE aNumber QUOTE {/*if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");*/
+    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
+}
+/*         | VALUEATT QUOTE {std::cout << "HHH--valueatt";} aNumber QUOTE {if ( *$2 != *$5 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
 }
         | VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlNodeNumberPoint->value = $3;
-} ;
+}*/ ;
 
 variable: VARIABLESTART {
     osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
@@ -319,12 +326,14 @@ variableATT: variablecoefATT  {if(osnlData->variablecoefattON) parserData->parse
             osnlData->variableidxattON = true; 
             };
             
-variablecoefATT: COEFATT  QUOTE DOUBLE QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlNodeVariablePoint->coef = $3;
+variablecoefATT: COEFATT  QUOTE aNumber QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->coef = parserData->tempVal;
 }
-                | COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+/*                | COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlNodeVariablePoint->coef = $3;        
-}  ;
+}
+*/
+;
                 
 variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlNodeVariablePoint->idx = $3;
@@ -333,4 +342,60 @@ variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->pars
      }
 }  ; 
 
+matrixTrace: MATRIXTRACESTART {
+    osnlData->nlNodePoint = new OSnLNodeTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+} OSnLMNode MATRIXTRACEEND;
+
+matrixTrace: MATRIXTOSCALARSTART {
+    osnlData->nlNodePoint = new OSnLNodeTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+} OSnLMNode MATRIXTOSCALAREND;
+
+OSnLMNode: matrixReference
+         | matrixDiagonal
+         | matrixDotTimes
+         | matrixIdentity
+         | matrixInverse
+         | matrixLowerTriangle
+         | matrixUpperTriangle
+         | matrixMerge
+         | matrixMinus
+         | matrixPlus
+         | matrixTimes
+         | matrixScalarTimes
+         | matrixSubMatrixAt
+         | matrixTranspose;
+
+matrixReference: MATRIXSTART
+{
+    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
+    osnlData->OSnLMNodeVec.push_back(osnlData->nlMNodeMatrixRef);
+} matrixIdxATT matrixreferenceend {osnlData->matrixidxattON = false;} ;
+              
+matrixreferenceend: ENDOFELEMENT
+           | GREATERTHAN MATRIXEND;
+                           
+matrixIdxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    osnlData->nlMNodeMatrixRef->idx = $3;
+    if( $3 >= osglData->matrices->numberOfMatrices){
+         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "matrix index exceeds number of matrices");
+     }
+}  ; 
+
+
+;
+matrixDiagonal: ;
+matrixDotTimes: ;
+matrixIdentity: ;
+matrixInverse: ;
+matrixLowerTriangle: ;
+matrixUpperTriangle: ;
+matrixMerge: ;
+matrixMinus: ;
+matrixPlus: ;
+matrixTimes: ;
+matrixScalarTimes: ;
+matrixSubMatrixAt: ;
+matrixTranspose: ;
 

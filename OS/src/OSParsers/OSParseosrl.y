@@ -59,6 +59,7 @@ void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
 void  yygetOSResult(const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData, OSnLParserData *osnlData ) throw(ErrorClass);
 void osrl_empty_vectors( OSrLParserData* parserData);
 void osgl_empty_vectors( OSgLParserData* osglData);
+void osnl_empty_vectors( OSnLParserData* osnlData);
 
 
 
@@ -128,12 +129,6 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token OPTIMIZATIONSTART OPTIMIZATIONEND
 
 %token ITEMSTART ITEMEND ITEMSTARTANDEND ITEMEMPTY
-
-%token FILENAMESTART FILENAMEEND FILENAMEEMPTY FILENAMESTARTANDEND;
-%token FILESOURCESTART FILESOURCEEND FILESOURCEEMPTY FILESOURCESTARTANDEND;
-%token FILEDESCRIPTIONSTART FILEDESCRIPTIONEND FILEDESCRIPTIONEMPTY FILEDESCRIPTIONSTARTANDEND; 
-%token FILECREATORSTART FILECREATOREND FILECREATOREMPTY FILECREATORSTARTANDEND;
-%token FILELICENCESTART FILELICENCEEND FILELICENCEEMPTY FILELICENCESTARTANDEND;
 
 %token ACTUALSTARTTIMESTART ACTUALSTARTTIMEEND
 %token ATEQUALITYSTART ATEQUALITYEND
@@ -218,6 +213,20 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
  *
  */
 
+%token HEADERSTART HEADEREND
+
+%token FILENAMESTART FILENAMEEND FILENAMEEMPTY FILENAMESTARTANDEND;
+%token FILESOURCESTART FILESOURCEEND FILESOURCEEMPTY FILESOURCESTARTANDEND;
+%token FILEDESCRIPTIONSTART FILEDESCRIPTIONEND FILEDESCRIPTIONEMPTY FILEDESCRIPTIONSTARTANDEND; 
+%token FILECREATORSTART FILECREATOREND FILECREATOREMPTY FILECREATORSTARTANDEND;
+%token FILELICENCESTART FILELICENCEEND FILELICENCEEMPTY FILELICENCESTARTANDEND;
+
+%token ENUMERATIONSTART ENUMERATIONEND NUMBEROFELATT;
+%token ITEMEMPTY ITEMSTART ITEMEND ITEMSTARTANDEND;
+%token BASE64START BASE64END;
+%token INCRATT MULTATT SIZEOFATT;
+%token ELSTART ELEND;
+
 %token MATRIXSTART MATRIXEND BASEMATRIXEND BASEMATRIXSTART;
 %token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND;
 
@@ -237,12 +246,13 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token CONREFERENCEELEMENTSSTART CONREFERENCEELEMENTSEND;
 %token OBJREFERENCEELEMENTSSTART OBJREFERENCEELEMENTSEND;
 %token PATTERNELEMENTSSTART PATTERNELEMENTSEND VARIDXSTART VARIDXEND; 
+%token TRANSFORMATIONSTART TRANSFORMATIONEND;
 
 %token COLOFFSETSSTART COLOFFSETSEND ROWOFFSETSSTART ROWOFFSETSEND;
 
 %token EMPTYROWMAJORATT ROWMAJORATT BLOCKROWIDXATT BLOCKCOLIDXATT;
 
-%token DUMMY
+%token DUMMY;
 
 
 /* $Id$ */
@@ -271,7 +281,9 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token SQUARESTART SQUAREEND COSSTART COSEND SINSTART SINEND
 %token VARIABLESTART VARIABLEEND ABSSTART ABSEND ERFSTART ERFEND  MAXSTART MAXEND
 %token ALLDIFFSTART ALLDIFFEND MINSTART MINEND ESTART EEND PISTART PIEND
-%token TIMESSTART TIMESEND NUMBERSTART  NUMBEREND
+%token TIMESSTART TIMESEND NUMBERSTART NUMBEREND 
+
+%token MATRIXTRACESTART MATRIXTRACEEND MATRIXTOSCALARSTART MATRIXTOSCALAREND
 
 %token IDATT COEFATT
 
@@ -4529,7 +4541,7 @@ matrixAttributes:
     | matrixNameAttribute
     | matrixTypeAttribute
     {
-        if (verifySymmetry(osglData->symmetryAttribute) == false)
+        if (verifyMatrixSymmetry(osglData->symmetryAttribute) == false)
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "symmetry type not recognized");
         if (verifyMatrixType(osglData->matrixTypeAttribute) == false)
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "matrix type not recognized");
@@ -4996,12 +5008,135 @@ linearElementsNonzerosVarIdxCoefATT: | COEFATT QUOTE aNumber QUOTE
 linearElementsNonzerosVarIdxContent: GREATERTHAN INTEGER VARIDXEND
 {
 };
- 
 
-generalElements: 
+generalElements: | generalElementsStart generalElementsContent; 
+
+generalElementsStart: GENERALELEMENTSSTART;
+
+generalElementsContent: generalElementsStartVector generalElementsNonzeros;
+
+generalElementsStartVector: generalElementsStartVectorStart generalElementsStartVectorNumberOfElATT generalElementsStartVectorContent
 {
-    parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "<generalElements> not implemented yet");    
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
 };
+
+generalElementsStartVectorStart: STARTVECTORSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent = false;
+};
+
+generalElementsStartVectorNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+generalElementsStartVectorContent: generalElementsStartVectorEmpty | generalElementsStartVectorLaden;
+
+generalElementsStartVectorEmpty: ENDOFELEMENT;
+
+generalElementsStartVectorLaden: GREATERTHAN generalElementsStartVectorBody STARTVECTOREND;
+
+generalElementsStartVectorBody:  osglIntArrayData;
+
+generalElementsNonzeros: generalElementsNonzerosStart generalElementsNonzerosNumberOfElATT generalElementsNonzerosContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+generalElementsNonzerosStart: NONZEROSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent = false;
+};
+
+generalElementsNonzerosNumberOfElATT: numberOfElAttribute
+{
+    osglData->osglCounter = 0; 
+    osglData->osglNumberOfEl = parserData->numberOf;
+    osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+generalElementsNonzerosContent: 
+
+GREATERTHAN generalElementsNonzerosBody NONZEROSEND;
+
+generalElementsNonzerosBody: generalElementsNonzerosIndexes generalElementsNonzerosValues;
+
+generalElementsNonzerosIndexes:
+    | generalElementsNonzerosIndexesStart generalElementsNonzerosIndexesContent
+{
+    if (!parserData->ignoreDataAfterErrors)
+//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+//            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "set variables basic failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    delete[] osglData->osglValArray;
+    osglData->osglValArray = NULL;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+generalElementsNonzerosIndexesStart: INDEXESSTART
+{
+//    osglData->osglNumberOfEl = 0;
+//    osglData->osglNumberOfElPresent = false;
+};
+
+
+generalElementsNonzerosIndexesContent: generalElementsNonzerosIndexesEmpty | generalElementsNonzerosIndexesLaden;
+
+generalElementsNonzerosIndexesEmpty: ENDOFELEMENT;
+
+generalElementsNonzerosIndexesLaden: GREATERTHAN generalElementsNonzerosIndexesBody INDEXESEND;
+
+generalElementsNonzerosIndexesBody:  osglIntArrayData;
+
+generalElementsNonzerosValues:
+    | generalElementsNonzerosValuesStart generalElementsNonzerosValuesContent;
+
+generalElementsNonzerosValuesStart: VALUESSTART
+{
+//    osglData->osglNumberOfVarIdxPresent = false;
+//    osglData->osglConstantPresent = false;
+};
+
+generalElementsNonzerosValuesContent: generalElementsNonzerosValuesEmpty | generalElementsNonzerosValuesLaden;
+
+generalElementsNonzerosValuesEmpty: ENDOFELEMENT;
+
+generalElementsNonzerosValuesLaden: GREATERTHAN generalElementsNonzerosElList VALUESEND;
+
+generalElementsNonzerosElList:  | generalElementsNonzerosElList generalElementsNonzerosEl;
+
+generalElementsNonzerosEl: generalElementsNonzerosElStart generalElementsNonzerosElContent;
+
+generalElementsNonzerosElStart: ELSTART
+{
+    osglData->osglNumberOfVarIdxPresent = false;
+    osglData->osglConstantPresent = false;
+};
+
+generalElementsNonzerosElContent: generalElementsNonzerosElEmpty | generalElementsNonzerosElLaden;
+
+generalElementsNonzerosElEmpty: ENDOFELEMENT;
+
+generalElementsNonzerosElLaden: GREATERTHAN nlnode ELEND;
+
 
 conReferenceElements: | conReferenceElementsStart conReferenceElementsContent CONREFERENCEELEMENTSEND; 
 
@@ -5192,7 +5327,11 @@ patternElementsNonzerosStart: NONZEROSSTART
     osglData->osglNumberOfElPresent = false;
 };
 
-matrixTransformation: OSnLMNode;
+matrixTransformation: matrixTransformationStart OSnLMNode matrixTransformationEnd;
+
+matrixTransformationStart: TRANSFORMATIONSTART;
+
+matrixTransformationEnd: TRANSFORMATIONEND;
 
 matrixBlocks: matrixBlocksStart matrixBlocksAttributes matrixBlocksContent;
 
@@ -5281,7 +5420,7 @@ matrixBlockAtt:
     | blockColIdxAtt 
     | symmetryAttribute
     {
-        if (verifySymmetry(parserData->symmetryAttribute) == false)
+        if (verifyMatrixSymmetry(osglData->symmetryAttribute) == false)
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "symmetry type not recognized");
         parserData->errorText = NULL;
     };
@@ -5311,33 +5450,6 @@ blockEmpty: GREATERTHAN BLOCKEND | ENDOFELEMENT;
 blockLaden: GREATERTHAN blockBody BLOCKEND; 
 
 blockBody: baseMatrix matrixConstructorList;
-
-
-OSnLMNode: matrixReference
-         | matrixDiagonal
-         | matrixDotTimes
-         | matrixIdentity
-         | matrixInverse
-         | matrixMerge
-         | matrixMinus
-         | matrixPlus
-         | matrixTimes
-         | matrixScalarTimes
-         | matrixSubMatrixAt
-         | matrixTranspose;
-
-matrixReference: ;
-matrixDiagonal: ;
-matrixDotTimes: ;
-matrixIdentity: ;
-matrixInverse: ;
-matrixMerge: ;
-matrixMinus: ;
-matrixPlus: ;
-matrixTimes: ;
-matrixScalarTimes: ;
-matrixSubMatrixAt: ;
-matrixTranspose: ;
 
 numberOfBlocksAttribute: NUMBEROFBLOCKSATT quote INTEGER quote
 {
@@ -5471,7 +5583,10 @@ nlnode: number
       | min
       | E
       | PI
-      | allDiff ;
+      | allDiff 
+
+      | matrixTrace
+;
 
 
 times: TIMESSTART {
@@ -5668,12 +5783,16 @@ numberidATT:   IDATT   ATTRIBUTETEXT {
     osnlData->nlNodeNumberPoint->id = $2;
 }  QUOTE ;
 
-numbervalueATT: VALUEATT QUOTE  DOUBLE QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlNodeNumberPoint->value = $3;
+numbervalueATT: 
+            VALUEATT QUOTE aNumber QUOTE {/*if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");*/
+    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
+}
+/*         | VALUEATT QUOTE {std::cout << "HHH--valueatt";} aNumber QUOTE {if ( *$2 != *$5 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
 }
         | VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlNodeNumberPoint->value = $3;
-} ;
+}*/ ;
 
 variable: VARIABLESTART {
     osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
@@ -5696,12 +5815,14 @@ variableATT: variablecoefATT  {if(osnlData->variablecoefattON) parserData->parse
             osnlData->variableidxattON = true; 
             };
             
-variablecoefATT: COEFATT  QUOTE DOUBLE QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlNodeVariablePoint->coef = $3;
+variablecoefATT: COEFATT  QUOTE aNumber QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->coef = parserData->tempVal;
 }
-                | COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+/*                | COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlNodeVariablePoint->coef = $3;        
-}  ;
+}
+*/
+;
                 
 variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlNodeVariablePoint->idx = $3;
@@ -5710,6 +5831,62 @@ variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->pars
      }
 }  ; 
 
+matrixTrace: MATRIXTRACESTART {
+    osnlData->nlNodePoint = new OSnLNodeTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+} OSnLMNode MATRIXTRACEEND;
+
+matrixTrace: MATRIXTOSCALARSTART {
+    osnlData->nlNodePoint = new OSnLNodeTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+} OSnLMNode MATRIXTOSCALAREND;
+
+OSnLMNode: matrixReference
+         | matrixDiagonal
+         | matrixDotTimes
+         | matrixIdentity
+         | matrixInverse
+         | matrixLowerTriangle
+         | matrixUpperTriangle
+         | matrixMerge
+         | matrixMinus
+         | matrixPlus
+         | matrixTimes
+         | matrixScalarTimes
+         | matrixSubMatrixAt
+         | matrixTranspose;
+
+matrixReference: MATRIXSTART
+{
+    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
+    osnlData->OSnLMNodeVec.push_back(osnlData->nlMNodeMatrixRef);
+} matrixIdxATT matrixreferenceend {osnlData->matrixidxattON = false;} ;
+              
+matrixreferenceend: ENDOFELEMENT
+           | GREATERTHAN MATRIXEND;
+                           
+matrixIdxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlMNodeMatrixRef->idx = $3;
+    if( $3 >= osglData->matrices->numberOfMatrices){
+         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
+     }
+}  ; 
+
+
+;
+matrixDiagonal: ;
+matrixDotTimes: ;
+matrixIdentity: ;
+matrixInverse: ;
+matrixLowerTriangle: ;
+matrixUpperTriangle: ;
+matrixMerge: ;
+matrixMinus: ;
+matrixPlus: ;
+matrixTimes: ;
+matrixScalarTimes: ;
+matrixSubMatrixAt: ;
+matrixTranspose: ;
 
 /* $Id$ */
 /** @file OSParseosol.y.3
@@ -5765,8 +5942,9 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 {
     osrl_empty_vectors( parserData);
     osgl_empty_vectors( osglData);
+    osnl_empty_vectors( osnlData);
     throw ErrorClass( errormsg);
-} //end osolerror
+} //end osrlerror
 
 
 
@@ -5793,6 +5971,7 @@ void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData 
 
 void osrl_empty_vectors( OSrLParserData* parserData)
 {
+#if 0
     int k;
     int numOtherVarVec = parserData->otherVarVec.size();
    
@@ -5832,5 +6011,6 @@ void osrl_empty_vectors( OSrLParserData* parserData)
             delete parserData->primalVals[ k];
       }
       parserData->primalVals.clear();
+#endif
 }//end osrl_empty_vectors
 

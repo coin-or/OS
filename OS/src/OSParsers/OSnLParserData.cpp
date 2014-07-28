@@ -19,7 +19,7 @@
 OSnLParserData::~OSnLParserData()
 {
     // clear the vectors of pointers
-    nlMNodeVec.clear();
+    OSnLMNodeVec.clear();
     //delete nlNodeVec.back();
     matrixSumVec.clear();
     matrixProductVec.clear();

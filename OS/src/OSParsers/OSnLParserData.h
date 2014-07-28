@@ -164,7 +164,7 @@ public:
     OSnLMNode *nlMNodePoint;
 
     /** a pointer to an OSnLMNode object that is a simple matrix reference */
-    OSnLMNodeMatrixRef *nlMNodeMatrixPoint;
+    OSnLMNodeMatrixReference *nlMNodeMatrixRef;
 
     /** nlmnodecount is the number of nlm nodes in the instance*/
     int nlmnodecount;
@@ -175,7 +175,7 @@ public:
     int tmpnlmcount;
 
     /** matrixreftypeattON is set to true if the type attribute has been parsed
-     * for an OSnLMNodeMatrixRef object, an exception is thrown if there is more than
+     * for an OSnLMNodeMatrixReference object, an exception is thrown if there is more than
      * one matrixref attribute
      */
     bool matrixreftypeattON ;
@@ -186,8 +186,8 @@ public:
      */
     bool matrixidxattON ;
 
-    /** nlMNodeVec holds a vector of pointers to OSnLMNodes */
-    std::vector<OSnLMNode*> nlMNodeVec;
+    /** OSnLMNodeVec holds a vector of pointers to OSnLMNodes */
+    std::vector<OSnLMNode*> OSnLMNodeVec;
 
     /** the OSnLMNodeMatrixSum node can have any number of children, including
      * other children with an indeterminate number of children so when
@@ -221,7 +221,7 @@ public:
 inline void osnl_empty_vectors( OSnLParserData* osnlData)
 {
 
-}//end osgl_empty_vectors
+}//end osnl_empty_vectors
 
 
 

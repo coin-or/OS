@@ -804,21 +804,28 @@ osil: $(srcdir)/OSParseosil.cpp \
 
 @HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosil.l: \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.l.1 \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.l.patterns \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.l.patterns \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.l.2
-@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosil.l.1 $(srcdir)/OSParseosnl.l.patterns \
+@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosil.l.1 \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.l.2 >$(srcdir)/OSParseosil.l
 
 @HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosil.y: \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.1 \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.tokens \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.2   \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.syntax \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.syntax \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.3
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
-@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosil.y.1 $(srcdir)/OSParseosnl.y.tokens \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.2 osnltemp.tmp $(srcdir)/OSParseosil.y.3 \
-@HAVE_LEXYACC_TRUE@		>$(srcdir)/OSParseosil.y
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosil.y.1 \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.2 osgltemp.tmp osnltemp.tmp \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.3 >$(srcdir)/OSParseosil.y
+@HAVE_LEXYACC_TRUE@	rm -f osgltemp.tmp
 @HAVE_LEXYACC_TRUE@	rm -f osnltemp.tmp
 
 osol: $(srcdir)/OSParseosol.cpp \

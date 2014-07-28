@@ -17,7 +17,7 @@
 
 
 //bison function
-void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSnLParserData *osnlData) throw(ErrorClass);
+void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass);
 //lex functions
 int osillex_init(void** ptr_yy_globals);
 int osillex_destroy (void* scanner );
@@ -28,6 +28,7 @@ OSiLReader::OSiLReader( )
 {
     m_osinstance = new OSInstance();
     m_parserData = new OSiLParserData();
+    m_osglData = new OSgLParserData();
     m_osnlData = new OSnLParserData();
 
     // initialize the lexer and set yyextra
@@ -43,6 +44,8 @@ OSiLReader::~OSiLReader()
     osillex_destroy(m_parserData->scanner );
     if( m_parserData != NULL) delete m_parserData;
     m_parserData = NULL;
+    if( m_osglData != NULL) delete m_osglData;
+    m_osglData = NULL;
     if( m_osnlData != NULL) delete m_osnlData;
     m_osnlData = NULL;
 }
@@ -52,7 +55,7 @@ OSInstance* OSiLReader::readOSiL(const std::string& posil) throw(ErrorClass)
     try
     {
         const char *ch = posil.c_str();
-        yygetOSInstance( ch, m_osinstance, m_parserData, m_osnlData);
+        yygetOSInstance( ch, m_osinstance, m_parserData, m_osglData, m_osnlData);
         return m_osinstance;
     }
     catch(const ErrorClass& eclass)

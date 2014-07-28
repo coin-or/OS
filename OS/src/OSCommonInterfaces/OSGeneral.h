@@ -549,33 +549,33 @@ inline int mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE type2)
     return ENUM_MATRIX_TYPE_unknown;
 }//returnMatrixType
 
-enum ENUM_MATRIX_SHAPE
+enum ENUM_MATRIX_SYMMETRY
 {
-    ENUM_MATRIX_SHAPE_general = 1,
-    ENUM_MATRIX_SHAPE_symmetricUpper,
-    ENUM_MATRIX_SHAPE_symmetricLower,
-    ENUM_MATRIX_SHAPE_skewSymmetricUpper,
-    ENUM_MATRIX_SHAPE_skewSymmetricLower,
-    ENUM_MATRIX_SHAPE_hermitianLower,
-    ENUM_MATRIX_SHAPE_hermitianUpper
+    ENUM_MATRIX_SYMMETRY_none = 1,
+    ENUM_MATRIX_SYMMETRY_symmetricUpper,
+    ENUM_MATRIX_SYMMETRY_symmetricLower,
+    ENUM_MATRIX_SYMMETRY_skewSymmetricUpper,
+    ENUM_MATRIX_SYMMETRY_skewSymmetricLower,
+    ENUM_MATRIX_SYMMETRY_hermitianLower,
+    ENUM_MATRIX_SYMMETRY_hermitianUpper
 };
 
-inline int returnMatrixShape(std::string shape)
+inline int returnMatrixSymmetry(std::string symmetry)
 {
-    if (shape == "general"           ) return ENUM_MATRIX_SHAPE_general;
-    if (shape == "symmetricUpper"    ) return ENUM_MATRIX_SHAPE_symmetricUpper;
-    if (shape == "symmetricLower"    ) return ENUM_MATRIX_SHAPE_symmetricLower;
-    if (shape == "skewSymmetricUpper") return ENUM_MATRIX_SHAPE_skewSymmetricUpper;
-    if (shape == "skewSymmetricLower") return ENUM_MATRIX_SHAPE_skewSymmetricLower;
-    if (shape == "hermitianLower"    ) return ENUM_MATRIX_SHAPE_hermitianLower;
-    if (shape == "hermitianLower"    ) return ENUM_MATRIX_SHAPE_hermitianLower;
+    if (symmetry == "none"              ) return ENUM_MATRIX_SYMMETRY_none;
+    if (symmetry == "symmetricUpper"    ) return ENUM_MATRIX_SYMMETRY_symmetricUpper;
+    if (symmetry == "symmetricLower"    ) return ENUM_MATRIX_SYMMETRY_symmetricLower;
+    if (symmetry == "skewSymmetricUpper") return ENUM_MATRIX_SYMMETRY_skewSymmetricUpper;
+    if (symmetry == "skewSymmetricLower") return ENUM_MATRIX_SYMMETRY_skewSymmetricLower;
+    if (symmetry == "hermitianLower"    ) return ENUM_MATRIX_SYMMETRY_hermitianLower;
+    if (symmetry == "hermitianLower"    ) return ENUM_MATRIX_SYMMETRY_hermitianLower;
     return 0;
-}//returnMatrixShape
+}//returnMatrixSymmetry
 
-inline bool verifyMatrixShape(std::string shape)
+inline bool verifyMatrixSymmetry(std::string symmetry)
 {
-    return (returnMatrixShape(shape) > 0);
-}//verifyMatrixShape
+    return (returnMatrixSymmetry(symmetry) > 0);
+}//verifyMatrixSymmetry
 
 
 /**
@@ -1813,7 +1813,7 @@ public:
 class MatrixType
 {
 public:
-    ENUM_MATRIX_SHAPE symmetry;
+    ENUM_MATRIX_SYMMETRY symmetry;
     ENUM_MATRIX_TYPE  matrixType;
 
     BaseMatrix *baseMatrix;
@@ -1930,7 +1930,52 @@ public:
     bool deepCopyFrom(MatrixBlock *that);
 };// class MatrixBlock
 
+/*! \class Matrices
+ * \brief The in-memory representation of the
+ * <b><matrices></b> element.
+ */
+class Matrices
+{
+public:
 
+    /** The Matrices class constructor */
+    Matrices();
+
+    /** The Matrices class destructor */
+    ~Matrices();
+
+    /** numberOfMatrices is the number of
+     * <nl> elements in the
+     * <b><matrices></b> element.
+     */
+    int numberOfMatrices;
+
+    /** matrix is pointer to an array of OSMatrix object pointers */
+    OSMatrix **matrix;
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(Matrices *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(Matrices *that);
+}; // Matrices
 
 /*! \class StorageCapacity
  *  \brief the StorageCapacity class.

@@ -59,5 +59,10 @@
 {xmlwhitespace}*\<variable {YY_PRINT;  return(VARIABLESTART);}
 {xmlwhitespace}*\<\/variable{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIABLEEND);}
 
+{xmlwhitespace}*\<matrixTrace {YY_PRINT; return(MATRIXTRACESTART);}
+{xmlwhitespace}*\<\/matrixTrace{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTRACEEND);}
+{xmlwhitespace}*\<matrixToScalar {YY_PRINT; return(MATRIXTOSCALARSTART);}
+{xmlwhitespace}*\<\/matrixToScalar{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTOSCALAREND);}
+
 
 

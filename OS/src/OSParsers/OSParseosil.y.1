@@ -14,11 +14,11 @@
  * the files OSParseosil.y and OSParseosil.l are stored in several pieces
  * that are combined in the makefile.
  * This is the first part of the file OSParseosil.y.
- * Tokens pertaining to the OSnL parses are appended next.
- * These are in file OSParseosnl.y.tokens.   
+ * Tokens pertaining to the OSgL and OSnL parses are appended next.
+ * These are in files OSParseosnl.y.tokens and OSParseosnl.y.tokens.   
  * Then follow the syntax rules involving only OSiL constructs (OSParseosil.y.2). 
- * After that we put the syntax rules for elements from the OSnL schema, 
- * maintained in the file OSParseosnl.y.syntax. 
+ * After that we put the syntax rules for elements from the OSgL and OSnL schema, 
+ * maintained in the files OSParseosnl.y.syntax and OSParseosnl.y.syntax. 
  * The postamble in OSParseosil.y.3 is appended at the end.
  * This process could be repeated for as many other auxiliary schemas as needed. 
  */
@@ -30,10 +30,12 @@
 #include <sstream>  
  
 #include "OSInstance.h" 
+#include "OSGeneral.h" 
 #include "OSnLNode.h"
 #include "OSErrorClass.h"
 #include "OSParameters.h"
 #include "OSiLParserData.h"
+#include "OSgLParserData.h"
 #include "OSnLParserData.h"
 #include "OSBase64.h"
 #include "OSMathUtil.h"
@@ -41,6 +43,11 @@
 
 //#define CHECK_PARSE_TIME
 
+#define DEBUG
+
+#ifdef DEBUG
+#define YYDEBUG 1
+#endif
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -85,7 +92,11 @@ void osilset_extra (OSiLParserData* parserData , void* yyscanner );
 int osilget_lineno( void* yyscanner);
 char *osilget_text (void* yyscanner );
 void osilset_lineno (int line_number , void* yyscanner );
-void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSnLParserData *osnlData) throw(ErrorClass);
+void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw(ErrorClass);
+void osil_empty_vectors( OSiLParserData* parserData);
+void osgl_empty_vectors( OSgLParserData* osglData);
+void osnl_empty_vectors( OSnLParserData* osnlData);
+
 //
 
 double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
@@ -161,6 +172,7 @@ char *parseBase64( const char **p, int *dataSize, int* osillineno);
 %defines
 %parse-param{OSInstance *osinstance}
 %parse-param{OSiLParserData *parserData}
+%parse-param{OSgLParserData *osglData}
 %parse-param{OSnLParserData *osnlData}
 %lex-param {void* scanner}
 
@@ -183,26 +195,28 @@ this fails on in Mac OS X
 }
 %{
 int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
-void osilerror(YYLTYPE* type, OSInstance *osintance, OSiLParserData *parserData, OSnLParserData *osnlData, std::string errormsg );
-std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osintance, OSiLParserData* parserData, OSnLParserData *osnlData, std::string errormsg ) ;
-
+void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg );
+std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, OSgLParserData* osglData, OSnLParserData *osnlData, std::string errormsg ) ;
  
 #define scanner parserData->scanner
 %}
 
 %token <sval> QUOTE
 %token <sval> ATTRIBUTETEXT 
+%token <sval> ELEMENTTEXT
+%token <sval> ITEMTEXT
 %token <ival> INTEGER  
 %token <dval> DOUBLE 
 
-
-%token ENDOFELEMENT GREATERTHAN 
+%token TWOQUOTES ENDOFELEMENT GREATERTHAN 
 %token OSILEND INSTANCEDATAEND INSTANCEDATASTARTEND
+
+%token EMPTYIDATT EMPTYNAMEATT EMPTYTYPEATT
 
 %token QUADRATICCOEFFICIENTSSTART QUADRATICCOEFFICIENTSEND
 %token NUMBEROFQTERMSATT QTERMSTART QTERMEND  
 
-%token IDXATT IDXONEATT IDXTWOATT TYPEATT VALUEATT  
+%token IDXATT IDXONEATT IDXTWOATT TYPEATT VALUEATT
 
 %token TIMEDOMAINSTART TIMEDOMAINEND
 %token STAGESSTART STAGESEND STAGESTART STAGEEND
@@ -214,9 +228,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osintance, OSiLParserData* 
 %token VARSTART VAREND CONSTART CONEND OBJSTART OBJEND
 %token INTERVALSTART INTERVALEND
 
-
-
-
-
+%token MATRICESSTART MATRICESEND NUMBEROFMATRICESATT
+%token CONESSTART CONESEND NUMBEROFCONESATT
  
 

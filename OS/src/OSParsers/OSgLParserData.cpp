@@ -36,6 +36,7 @@ OSgLParserData::OSgLParserData() :
     osglTempint(0),
     osglDblArray(NULL),
     osglValArray(NULL),
+
     fileName(""),
     source(""),
     description(""),
@@ -46,7 +47,10 @@ OSgLParserData::OSgLParserData() :
     descriptionPresent(false),
     fileCreatorPresent(false),
     licencePresent(false),
-
+    parser_errors(""),
+    ignoreDataAfterErrors(false),
+    suppressFurtherErrorMessages(false),
+    matrices(NULL),
     symmetryAttribute(""),
     symmetryAttributePresent(false),
     matrixNameAttribute(""),
@@ -82,7 +86,16 @@ OSgLParserData::OSgLParserData() :
     blockRowIdx(-1),
     blockRowIdxAttributePresent(false),
     blockColIdx(-1),
-    blockColIdxAttributePresent(false)
+    blockColIdxAttributePresent(false),
+    osglNumberOfVarIdxPresent(false),
+    osglConstantPresent(false),
+    osglCoefPresent(false),
+    osglCoef(0.0),
+    numberOfBlocksAttributePresent(false),
+    numberOfColumnsAttributePresent(false),
+    numberOfRowsAttributePresent(false),
+    numberOfVarIdxAttributePresent(false),
+    numberOfVarIdx(0)
 {
 
 }//OSgLParserData

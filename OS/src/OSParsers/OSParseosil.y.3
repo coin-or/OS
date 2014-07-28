@@ -36,15 +36,16 @@ void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserDa
 }//end osilerror()
 #endif 
 
-void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, OSnLParserData* osnlData, std::string errormsg )
+void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg )
 {
-//    osol_empty_vectors( parserData);
-//    osnl_empty_vectors( osnlData);
+    osil_empty_vectors( parserData);
+    osgl_empty_vectors( osglData);
+    osnl_empty_vectors( osnlData);
     throw ErrorClass( errormsg);
-} //end osolerror
+} //end osilerror
 
 
-std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, OSnLParserData* osnlData, std::string errormsg )
+std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg )
 {
     std::ostringstream outStr;
     outStr << "At line number " << osilget_lineno( scanner) << ": "; 
@@ -55,7 +56,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 } //end addErrorMsg
 
 
-void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSnLParserData *osnlData) throw (ErrorClass) {
+void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData) throw (ErrorClass) {
 	try {
 		parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
 		parseInstanceData( &osil, osinstance, &parserData->osillineno);	
@@ -69,7 +70,7 @@ void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData 
 		//
 		// call the Bison parser
 		//
-		if(  osilparse( osinstance,  parserData, osnlData) != 0) {
+		if(  osilparse( osinstance,  parserData, osglData, osnlData) != 0) {
 			throw ErrorClass(  "Error parsing the OSiL");
 		}
 	}
@@ -2556,4 +2557,44 @@ void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg){
 	throw ErrorClass( error);
 }//end osilerror_wrapper
 
+void osil_empty_vectors( OSiLParserData* parserData){
+/*
+    int k;
+    int numOtherVarVec = parserData->otherVarVec.size();
+   
+    for( k = 0; k < numOtherVarVec; k++){
+        if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarText != NULL) ) 
+            delete[] parserData->otherVarVec[ k]->otherVarText;
+        if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarIndex != NULL) ) 
+            delete[] parserData->otherVarVec[ k]->otherVarIndex;
+            
+        if( parserData->otherVarVec[ k]  != NULL) delete parserData->otherVarVec[ k];
+    }
+
+      parserData->otherVarVec.clear(); 
+      
+      int numDualVals =  parserData->dualVals.size();
+      for(k = 0; k < numDualVals; k++){
+          if( parserData->dualVals[ k]  != NULL  ) 
+            delete parserData->dualVals[ k];
+      }
+      parserData->dualVals.clear();
+      
+      
+       int numObjVals =  parserData->objVals.size();
+      for(k = 0; k < numObjVals; k++){
+          if( parserData->objVals[ k]  != NULL  ) 
+            delete parserData->objVals[ k];
+      }
+      parserData->objVals.clear();
+      
+      
+       int numPrimalVals =  parserData->primalVals.size();
+      for(k = 0; k < numPrimalVals; k++){    
+          if( parserData->primalVals[ k]  != NULL  ) 
+            delete parserData->primalVals[ k];
+      }
+      parserData->primalVals.clear();
+*/      
+}//end osil_empty_vectors
 

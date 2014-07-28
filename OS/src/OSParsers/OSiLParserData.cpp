@@ -79,6 +79,15 @@ OSiLParserData::OSiLParserData() :
     intervalhorizon(0.0),
     intervalstartON(false),
     intervalstart(0.0),
+    numberOfMatricesPresent(false), 
+    numberOfConesPresent(false),
+    numberOfMatrices(0), 
+    numberOfCones(0),
+    numberOfEl(0), 
+    numberOf(0), 
+    tempVal(0.0),
+    ignoreDataAfterErrors(false),
+    suppressFurtherErrorMessages(false),
     parser_errors("")
 {
     m_miVarStageInfo = NULL;

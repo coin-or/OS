@@ -459,7 +459,7 @@ public:
     /** The NonlinearExpressions class destructor */
     ~NonlinearExpressions();
 
-    /** numberOfNonlinearExpression is the number of
+    /** numberOfNonlinearExpressions is the number of
      * <nl> elements in the
      * <b><nonlinearExpressions></b> element.
      */
@@ -473,7 +473,6 @@ public:
      */
     bool IsEqual(NonlinearExpressions *that);
 }; // NonlinearExpressions
-
 
 
 /*! \class TimeDomainStageVar
@@ -2736,6 +2735,7 @@ public:
     bool setTimeDomainStages(int number, std::string *names);
 
     /**
+
     * This sets the variables associated with each time domain stage in temporal order.
     * (I.e., for each stage numberOfVariables gives the number of variables accociated
     * with this stage and startIdx gives the first variable in this stage.)

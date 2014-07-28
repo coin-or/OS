@@ -220,16 +220,31 @@ public:
      *  for the time interval */
     bool intervalhorizonON;
 
-    /** intervalhorizon holds the value of the end of the planning horizon*/
+    /** intervalhorizon holds the value of the end of the planning horizon */
     double intervalhorizon;
 
     /** intervalstartON is true if we have found a start time
      *  for the time interval */
     bool intervalstartON;
 
-    /** intervalstart holds the value for the start of the planning horizon*/
+    /** intervalstart holds the value for the start of the planning horizon */
     double intervalstart;
 
+    /** some elements to hold matrices and cones */
+    bool numberOfMatricesPresent; 
+    bool numberOfConesPresent; 
+    int  numberOfMatrices;
+    int  numberOfCones;
+    int  numberOfEl;
+    int  numberOf;
+    double tempVal;
+
+    /** if the parser finds invalid text it is held here and we delete
+     *  if the file was not valid
+     */
+    bool ignoreDataAfterErrors;
+    bool suppressFurtherErrorMessages;
+    char *errorText;
 
     /** used to accumulate error message so the parser does not die
      *  on the first error encountered

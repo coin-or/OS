@@ -60,21 +60,28 @@ $(srcdir)/OSParseosil.tab.cpp: $(srcdir)/OSParseosil.y
 
 $(srcdir)/OSParseosil.l: \
 		$(srcdir)/OSParseosil.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns \
 		$(srcdir)/OSParseosnl.l.patterns \
 		$(srcdir)/OSParseosil.l.2
-	cat $(srcdir)/OSParseosil.l.1 $(srcdir)/OSParseosnl.l.patterns \
+	cat $(srcdir)/OSParseosil.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
 		$(srcdir)/OSParseosil.l.2 >$(srcdir)/OSParseosil.l
 
 $(srcdir)/OSParseosil.y: \
 		$(srcdir)/OSParseosil.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens \
 		$(srcdir)/OSParseosnl.y.tokens \
 		$(srcdir)/OSParseosil.y.2   \
+		$(srcdir)/OSParseosgl.y.syntax \
 		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosil.y.3
-	sed 's/parserObjects/osinstance, parserData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
-	cat $(srcdir)/OSParseosil.y.1 $(srcdir)/OSParseosnl.y.tokens \
-		$(srcdir)/OSParseosil.y.2 osnltemp.tmp $(srcdir)/OSParseosil.y.3 \
-		>$(srcdir)/OSParseosil.y
+	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	cat $(srcdir)/OSParseosil.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
+		$(srcdir)/OSParseosil.y.2 osgltemp.tmp osnltemp.tmp \
+		$(srcdir)/OSParseosil.y.3 >$(srcdir)/OSParseosil.y
+	rm -f osgltemp.tmp
 	rm -f osnltemp.tmp
 endif
 

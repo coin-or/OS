@@ -172,6 +172,7 @@ OSnLNode* OSnLNode::copyNodeAndDescendants()
 {
 	OSnLNode* ndcopy = cloneOSnLNode();
 	ndcopy->inumberOfChildren = inumberOfChildren;
+	ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
 	ndcopy->inodeInt = inodeInt;
 	ndcopy->inodeType = inodeType;
 	
@@ -181,6 +182,15 @@ OSnLNode* OSnLNode::copyNodeAndDescendants()
 		for (int i=0; i < inumberOfChildren; i++)
 		{
 			ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+		}
+	}
+
+	if (inumberOfMatrixChildren > 0)
+	{
+		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+		for (int i=0; i < inumberOfMatrixChildren; i++)
+		{
+			ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
 		}
 	}
 
@@ -476,6 +486,8 @@ bool OSnLNode::IsEqual(OSnLNode *that)
         {
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
             if (this->inodeInt != that->inodeInt)
                 return false;
             if (this->inodeType != that->inodeType)
@@ -483,6 +495,10 @@ bool OSnLNode::IsEqual(OSnLNode *that)
 
             for (unsigned int i = 0; i < this->inumberOfChildren; i++)
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
                     return false;
 
             return true;
@@ -2217,9 +2233,496 @@ OSnLNode* OSnLNodeMatrixDeterminant::cloneOSnLNode()
 }//end OSnLNodeMatrixDeterminant::cloneOSnLNode
 //
 
+OSnLMNode::OSnLMNode():
+    m_mChildren(NULL),
+    m_mMatrixChildren(NULL),
+    m_dFunctionValue(NULL)
+    //inumberOfChildren( 0)
+{
+}//end OSnLMNode
+
+OSnLMNode::~OSnLMNode()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNode destructor");
+#endif
+}//end ~OSnLNode
+
+OSnLMNode* OSnLMNode::copyNodeAndDescendants()
+{
+	OSnLMNode* ndcopy = cloneOSnLMNode();
+	ndcopy->inumberOfChildren = inumberOfChildren;
+	ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+	ndcopy->inodeInt = inodeInt;
+	ndcopy->inodeType = inodeType;
+	
+	if (inumberOfChildren > 0)
+	{
+		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+		for (int i=0; i < inumberOfChildren; i++)
+		{
+			ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+		}
+	}
+
+	if (inumberOfMatrixChildren > 0)
+	{
+		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+		for (int i=0; i < inumberOfMatrixChildren; i++)
+		{
+			ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+		}
+	}
+
+	return ndcopy;
+}// end copyNodeAndDescendants
+
+#if 0
+OSnLMNode* OSnLMNode::createExpressionTreeFromPostfix(std::vector<OSnLMNode*> nlMNodeVec)
+{
+    std::vector<OSnLMNode*> stackVec ;
+    unsigned int kount =  0;
+    while(kount <= nlMNodeVec.size() - 1)
+    {
+        int numkids = nlMNodeVec[kount]->inumberOfMatrixChildren;
+        if(numkids  > 0)
+        {
+            for(int i = numkids - 1; i >= 0;  i--)
+            {
+                nlMNodeVec[kount]->m_mMatrixChildren[i] = stackVec.back()	;
+                stackVec.pop_back();
+            }
+        }
+        stackVec.push_back( nlMNodeVec[kount]);
+        kount++;
+    }
+    stackVec.clear();
+    return nlMNodeVec[ kount - 1];
+}//end createExpressionTreeFromPostfix
+
+std::vector<OSnLMNode*> OSnLMNode::getPostfixFromExpressionTree( )
+{
+//    std::vector<OSnLMNode*> postfixVector;
+//    return postOrderOSnLNodeTraversal( &postfixVector);
+    return 0;
+}//getPostfixFromExpressionTree
+
+std::vector<OSnLNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector)
+{
+    if(inumberOfChildren > 0)
+    {
+        unsigned int i;
+        for(i = 0; i < inumberOfChildren; i++)
+            m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
+    }
+    (*postfixVector).push_back( this);
+    return *postfixVector;
+}//end postOrderOSnLNodeTraversal()
+
+OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec)
+{
+    std::vector<OSnLNode*> stackVec;
+    int kount =  nlNodeVec.size() - 1;
+    while(kount >= 0)
+    {
+        int numkids = nlNodeVec[kount]->inumberOfChildren;
+        if(numkids > 0)
+        {
+            for(int i = 0; i < numkids;  i++)
+            {
+                nlNodeVec[kount]->m_mChildren[i] = stackVec.back()	;
+                stackVec.pop_back();
+            }
+        }
+        stackVec.push_back( nlNodeVec[kount]);
+        kount--;
+    }
+    stackVec.clear();
+    return nlNodeVec[ 0];
+}//end createExpressionTreeFromPrefix
+
+std::vector<OSnLNode*> OSnLNode::getPrefixFromExpressionTree()
+{
+    std::vector<OSnLNode*> prefixVector;
+    return preOrderOSnLNodeTraversal( &prefixVector);
+}//getPrefixFromExpressionTree
+
+std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector)
+{
+    (*prefixVector).push_back( this);
+    if(inumberOfChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfChildren; i++)
+            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+    }
+    return *prefixVector;
+}//end preOrderOSnLNodeTraversal
+#endif
+
+std::string OSnLMNode::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    // when I create an OSnLNode from a token number, I need to know how many children there are
+//	if(inodeType == -1){
+    outStr << "[";
+    outStr << inumberOfChildren ;
+    outStr << "]";
+//	}
+    return outStr.str();
+}//getTokenNumber
+
+
+/*
+OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
+// kipp possibly make this a static method or put it somewhere else
+	OSnLNode *nlNodePoint;
+	int nodeID ;
+	int pos1, pos2;
+	std::string str1, str2;
+	// convert the std::string tokens into the appropriate objects
+		// kipp -- put in error check -- make sure > 0 and < 10001
+	nodeID = atoi(  &sToken.substr(0, 4)[0]);
+	switch (nodeID){
+		case OS_SUM:  // the sum token
+			pos1 = sToken.find('[');
+			pos2 = sToken.find(']');
+			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+				// throw error
+			}
+			OSnLNodeSum *nlNodePointSum;
+			nlNodePointSum = new OSnLNodeSum();
+			nlNodePointSum->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+			nlNodePointSum->m_mChildren = new OSnLNode*[ nlNodePointSum->inumberOfChildren];
+			return nlNodePointSum;
+		break;
+		case OS_MAX:  // the max token
+			pos1 = sToken.find('[');
+			pos2 = sToken.find(']');
+			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+				// throw error
+			}
+			OSnLNodeMax *nlNodePointMax;
+			nlNodePointMax = new OSnLNodeMax();
+			nlNodePointMax->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+			nlNodePointMax->m_mChildren = new OSnLNode*[ nlNodePointMax->inumberOfChildren];
+			return nlNodePointMax;
+		break;
+		case OS_PRODUCT:  // the product token
+			pos1 = sToken.find('[');
+			pos2 = sToken.find(']');
+			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+				// throw error
+			}
+			OSnLNodeProduct *nlNodePointProduct;
+			nlNodePointProduct = new OSnLNodeProduct();
+			nlNodePointProduct->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+			nlNodePointProduct->m_mChildren = new OSnLNode*[ nlNodePointProduct->inumberOfChildren];
+			return nlNodePointProduct;
+		break;
+		case OS_NUMBER:  // the number token
+			pos1 = sToken.find(':');
+			if(pos1 != 4){
+				//throw error
+			}
+			// now get the second semicolon, the one that should be after value
+			pos2 = sToken.find(':', pos1 + 1);
+			if(pos2 != std::string::npos) {
+			}
+			else{
+				//throw error
+			}
+			OSnLNodeNumber *nlNodePointNumber;
+			nlNodePointNumber = new OSnLNodeNumber();
+			nlNodePointNumber->value = atof(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+			return nlNodePointNumber;
+		break;
+		case OS_VARIABLE:  // the variable token
+			pos1 = sToken.find('[');
+			pos2 = sToken.find(']');
+			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+				// throw error
+			}
+			OSnLNodeVariable *nlNodePointVariable;
+			nlNodePointVariable = new OSnLNodeVariable();
+			nlNodePointVariable->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+			nlNodePointVariable->m_mChildren = new OSnLNode*[ nlNodePointVariable->inumberOfChildren];
+			// throw error if there is more than one child
+			// now get the index and the coefficient
+			pos1 = sToken.find(':');
+			if(pos1 != 4){
+				//throw error
+			}
+			// now get the second semicolon, the one that should be after idx
+			pos2 = sToken.find(':', pos1 + 1);
+			if(pos2 == std::string::npos) {
+				//throw error
+			}
+			nlNodePointVariable->idx = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+			// now get the coefficient
+			str1 = sToken;
+			str2 = sToken.substr(pos2 + 1, str1.length() - pos2 - 1);
+			nlNodePointVariable->coef = atof(&str2[0]);
+			return nlNodePointVariable;
+		break;
+		default:
+			nlNodePoint = nlNodeArray[ nlNodeIdxMap[ nodeID]]->cloneOSnLNode();
+		break;
+	}
+	return nlNodePoint;
+}//end getOSnLNodeFromToken
+*/
 
 
 
+std::string OSnLMNode::getNonlinearExpressionInXML()
+{
+    ostringstream outStr, logStr;
+    outStr << "<" ;
+    outStr << this->getTokenName();
+#ifndef NDEBUG
+    logStr << "nonlinear node " << this->getTokenName() << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, logStr.str());
+#endif
+    if(inumberOfChildren > 0)
+    {
+        outStr << ">";
+    }
+    else
+    {
+        outStr << "/>";
+    }
+    if(inumberOfChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfChildren; i++)
+        {
+            outStr << m_mChildren[i]->getNonlinearExpressionInXML();
+        }
+    }
+    if(inumberOfChildren > 0)
+    {
+        outStr << "</" ;
+        outStr << this->getTokenName() ;
+        outStr << ">" ;
+    }
+    return outStr.str();
+}//getNonlinearExpressionInXML()
+//
+//
 
+#if 0
+void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    unsigned int i;
+    if(inodeInt != OS_VARIABLE)
+    {
+        for(i = 0; i < inumberOfChildren; i++)
+        {
+            m_mChildren[ i]->getVariableIndexMap( varIdx);
+        }
+    }
+}//getVariableIndexMap
+#endif
+
+bool OSnLMNode::IsEqual(OSnLMNode *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNode");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//OSnLNode::IsEqual
+
+
+// OSnLMNodeMatrixReference Methods
+OSnLMNodeMatrixReference::OSnLMNodeMatrixReference()
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
+    inodeInt = 9001;
+    inodeType = -1;
+    idx = -1;
+}//end OSnLMNodeMatrixReference
+
+OSnLMNodeMatrixReference::~OSnLMNodeMatrixReference()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLMNodeMatrixReference destructor" << endl;
+    outStr << "number kids = " <<  inumberOfChildren << endl;
+    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    if(m_mChildren != NULL)
+    {
+        for(unsigned int i = 0; i < inumberOfChildren; i++)
+        {
+            delete m_mChildren[ i];
+            m_mChildren[i] = NULL;
+        }
+        delete[]  m_mChildren;
+        m_mChildren = NULL;
+    }
+    if(m_mMatrixChildren != NULL)
+    {
+        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
+        {
+            delete m_mMatrixChildren[ i];
+            m_mMatrixChildren[i] = NULL;
+        }
+        delete[]  m_mMatrixChildren;
+        m_mMatrixChildren = NULL;
+    }
+}//end ~OSnLMNodeMatrixReference
+
+#if 0
+std::string OSnLMNodeMatrixReference::getTokenNumber()
+{
+    ostringstream outStr;
+    // put in an error if inodeInt is not 6001
+    outStr << inodeInt;
+    outStr << "[";
+    outStr << inumberOfChildren ;
+    outStr << "]";
+    outStr << ":" ;
+    outStr << idx;
+    outStr << ":" ;
+    outStr << coef;
+    outStr << ":real:" ;
+    return outStr.str();
+}//getTokenNumber
+#endif
+
+std::string OSnLMNodeMatrixReference::getTokenName()
+{
+    return "matrixRef";
+}// end OSnLMNodeMatrixReference::getTokenName()
+
+#if 0
+//this could be inherited from OSnLMNode??
+std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<" ;
+    outStr << "variable";
+    outStr << "  idx=\"";
+    outStr << idx ;
+    outStr << "\"";
+    outStr << "  coef=\"";
+    outStr << os_dtoa_format(coef);
+    outStr << "\"";
+    if(inumberOfChildren > 0)
+    {
+        outStr << ">";
+    }
+    else
+    {
+        outStr << "/>";
+    }
+    if(inumberOfChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfChildren; i++)
+        {
+            outStr << m_mChildren[i]->getNonlinearExpressionInXML();
+        }
+    }
+    if(inumberOfChildren > 0)
+    {
+        outStr << "</" ;
+        outStr << "variable" ;
+        outStr << ">" ;
+    }
+    return outStr.str();
+}//getPrefix
+#endif
+
+#if 0
+double OSnLMNodeMatrixReference::calculateFunction(double *x)
+{
+    m_dFunctionValue = coef*x[idx];
+    return m_dFunctionValue;
+}// end OSnLMNodeMatrixReference::calculate
+
+ADdouble OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
+{
+    m_ADTape = coef;
+    //std::cout << "Inside OSnLMNodeMatrixReference "<<  std::endl;
+    //std::cout << "Value of OSiL index = " << idx << std::endl;
+    //std::cout << "Value of AD index = " << (*varIdx)[ idx] << std::endl;
+    //std::cout << "Value of AD variable = " << (*XAD)[ (*varIdx)[ idx] ] << std::endl;
+    m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
+    return m_ADTape;
+}// end OSnLMNodeMatrixReference::constructADTape
+
+
+void OSnLMNodeMatrixReference::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    int numVars;
+    if( (*varIdx).find( idx) != (*varIdx).end() )
+    {
+        //std::cout  << "Index already in the map " << idx <<  std::endl;
+    }
+    else  // variable to map with variable index as the key
+    {
+        //std::cout << "Found a new index to add to the map " << idx << std::endl;
+        numVars = (*varIdx).size();
+        //std::cout << "numVars =  " << numVars << std::endl;
+        (*varIdx)[ idx] = numVars;
+    }
+    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+}//getVariableIndexMap
+#endif
+
+OSnLMNode* OSnLMNodeMatrixReference::cloneOSnLMNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixReference();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixReference::cloneOSnLNode
 
 
