@@ -76,7 +76,7 @@
 			</xs:element>
 			<xs:element name="matrices" type="Matrices" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
+					<xs:documentation>recommendation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="tensors" type="Tensors" minOccurs="0">
@@ -86,7 +86,7 @@
 			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<!-- Note: matrixProgramming is intentionally different from scalar programming because there are four different types of "rows" that need to be distinguished: scalar objectives, scalar constraints, matrix objectives and matrix constraints. A simple numbering convention won't do that, so there are no separate sections for linear and nonlinear expressions.
@@ -275,7 +275,7 @@
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of entries in the start elements must equal numberOfVariables (if columnMajor) or numberOfConstraints (ir rowMajor), after considering "mult".                           Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="LinearConstraintCoefficientsIntVector">
 				<xs:annotation>
@@ -707,7 +707,7 @@
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-<!--	
+	<!--	
 	<xs:complexType name="MatrixProgrammingScalarConstraints">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1169,6 +1169,15 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					</xs:complexContent>
 				</xs:complexType>
 			</xs:element>
+			<xs:element name="polarCone">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="GenericCone">
+							<xs:attribute name="referenceConeIdx" type="xs:nonNegativeInteger"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1243,7 +1252,7 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="distortionMatrixId" use="optional"/>
+				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
 				<xs:attribute name="axisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
 					<xs:annotation>
@@ -1259,7 +1268,7 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="distortionMatrixId" use="optional"/>
+				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
 				<xs:attribute name="firstAxisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
 					<xs:annotation>
@@ -1276,7 +1285,7 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="distortionMatrixId" use="optional"/>
+				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
 				<xs:attribute name="axisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
 					<xs:annotation>
@@ -1299,11 +1308,11 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
-				<xs:attribute name="type" use="optional" default="positiveSemidefinite">
+				<xs:attribute name="semidefiniteness" use="optional" default="positive">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:enumeration value="positiveSemidefinite"/>
-							<xs:enumeration value="negativeSemidefinite"/>
+							<xs:enumeration value="positive"/>
+							<xs:enumeration value="negative"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
@@ -1430,9 +1439,8 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
 				<xs:sequence>
-					<xs:element name="factor" type="ProductConeFactor" maxOccurs="unbounded"/>
+					<xs:element name="factors" type="NonNegativeIntVector"/>
 				</xs:sequence>
-				<xs:attribute name="numberOfFactors" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1466,9 +1474,8 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
 				<xs:sequence>
-					<xs:element name="cone" type="IntersectionConeComponent" maxOccurs="unbounded"/>
+					<xs:element name="components" type="NonNegativeIntVector"/>
 				</xs:sequence>
-				<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

@@ -116,11 +116,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="el" type="LinearConstraintCoefficientsIntVectorEl" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="el" type="LinearConstraintCoefficientsIntVectorEl" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
@@ -695,11 +691,11 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the matrix child elements must match numberOfMatrices</xs:documentation>
 			</xs:annotation>
-			<xs:element name="matrix" type="OSMatrix" minOccurs="0"/>
+			<xs:element name="matrix" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
 			<!--
 			<xs:element name="constantMatrix" type="ConstantMatrix">
 				<xs:annotation>
@@ -709,7 +705,7 @@
 			<xs:element name="linearMatrix" type="LinearMatrix"/>
 			<xs:element name="generalMatrix" type="GeneralMatrix"/>
 -->
-		</xs:choice>
+		</xs:sequence>
 		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixType" mixed="false">
@@ -1326,7 +1322,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes">
+			<xs:element name="indexes" minOccurs="0">
 				<xs:complexType>
 					<xs:choice>
 						<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
@@ -1346,7 +1342,7 @@
 					</xs:choice>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="values">
+			<xs:element name="values" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded">
@@ -1416,7 +1412,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElementVar">
@@ -1573,11 +1569,11 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the tensor child elements must match numberOfTensors</xs:documentation>
 			</xs:annotation>
-			<xs:element name="tensor" type="Tensor"/>
+			<xs:element name="tensor" type="Tensor" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfTensors" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>

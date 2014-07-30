@@ -3818,7 +3818,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4319,7 +4319,7 @@
 					</xs:annotation>
 					<xs:element ref="matrixBlock">
 						<xs:annotation>
-							<xs:documentation>draft. matrix blocks may overlop with each other. </xs:documentation>
+							<xs:documentation>draft. matrix blocks may overlop with each other. Later blocks override earlier values </xs:documentation>
 						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
@@ -5623,4 +5623,3 @@
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
-
