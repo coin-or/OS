@@ -1705,3 +1705,47 @@ bool TimeSpan::deepCopyFrom(TimeSpan *that)
     return true;
 }// end of TimeSpan::deepCopyFrom
 
+MatrixType::MatrixType():
+    baseMatrix(NULL),
+    matrixConstructor(NULL)
+{
+}
+
+MatrixType::~MatrixType()
+{
+    if (baseMatrix != NULL)
+        delete baseMatrix;
+    baseMatrix = NULL;
+}
+
+
+OSMatrix::OSMatrix():
+    numberOfRows(0),
+    numberOfColumns(0),
+    idx(-1),
+    name("")
+{
+}// end of OSMatrix
+
+OSMatrix::~OSMatrix()
+{
+}// end of ~OSMatrix
+
+
+BaseMatrix::BaseMatrix():
+    baseMatrixIdx(-1),
+    targetMatrixFirstRow(0),
+    targetMatrixFirstCol(0),
+    baseMatrixStartRow(0),
+    baseMatrixStartCol(0),
+    baseMatrixEndRow(-1),
+    baseMatrixEndCol(-1),
+    baseTranspose(false),
+    scalarMultiplier(1.0)
+{
+} // end of BaseMatrix
+
+BaseMatrix::~BaseMatrix()
+{
+} // end of ~BaseMatrix
+

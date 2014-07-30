@@ -291,18 +291,6 @@ std::string OSnLNode::getTokenNumber()
 }//getTokenNumber
 
 
-//std::string OSnLNode::getTokenName(){
-//	ostringstream outStr;
-//	outStr << this->snodeName;
-//	if(inodeType == -1){
-//		outStr << "[";
-//		outStr << inumberOfChildren ;
-//		outStr << "]";
-//	}
-//	return outStr.str();
-//}//getTokenNumber
-
-
 /*
 OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
 // kipp possibly make this a static method or put it somewhere else
@@ -438,8 +426,6 @@ std::string OSnLNode::getNonlinearExpressionInXML()
     }
     return outStr.str();
 }//getNonlinearExpressionInXML()
-//
-//
 
 
 void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)

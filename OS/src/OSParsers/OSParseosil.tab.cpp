@@ -5258,7 +5258,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osEx
 
     { if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = (yyvsp[(3) - (4)].ival);
-    if( (yyvsp[(3) - (4)].ival) >= osglData->matrices->numberOfMatrices){
+    if( (yyvsp[(3) - (4)].ival) >= osglData->numberOfMatrices){
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
      }
 }

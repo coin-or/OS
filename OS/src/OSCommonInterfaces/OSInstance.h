@@ -475,6 +475,385 @@ public:
 }; // NonlinearExpressions
 
 
+/*! \class Matrices
+ * \brief The in-memory representation of the
+ * <b><matrices></b> element.
+ */
+class Matrices
+{
+public:
+
+    /** The Matrices class constructor */
+    Matrices();
+
+    /** The Matrices class destructor */
+    ~Matrices();
+
+    /** numberOfMatrices is the number of
+     * <nl> elements in the
+     * <b><matrices></b> element.
+     */
+    int numberOfMatrices;
+
+    /** matrix is pointer to an array of OSMatrix object pointers */
+    OSMatrix **matrix;
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(Matrices *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(Matrices *that);
+}; // Matrices
+
+
+enum ENUM_CONE_TYPE
+{
+    ENUM_CONE_TYPE_nonnegative = 1,
+    ENUM_CONE_TYPE_nonpositive,
+    ENUM_CONE_TYPE_orthant,
+    ENUM_CONE_TYPE_quadratic,
+    ENUM_CONE_TYPE_rotatedQuadratic,
+    ENUM_CONE_TYPE_normed,
+    ENUM_CONE_TYPE_semidefinite,
+    ENUM_CONE_TYPE_copositiveMatrices,
+    ENUM_CONE_TYPE_completelyPositiveMatrices,
+    ENUM_CONE_TYPE_hyperbolicity,
+    ENUM_CONE_TYPE_nonnegPolynomials,
+    ENUM_CONE_TYPE_moments,
+    ENUM_CONE_TYPE_product,
+    ENUM_CONE_TYPE_intersection,
+    ENUM_CONE_TYPE_dual,
+    ENUM_CONE_TYPE_polar
+};
+
+inline int returnConeType(std::string type)
+{
+    if (type == "nonnegative"               ) return ENUM_CONE_TYPE_nonnegative;
+    if (type == "nonpositive"               ) return ENUM_CONE_TYPE_nonpositive;
+    if (type == "orthant"                   ) return ENUM_CONE_TYPE_orthant;
+    if (type == "quadratic"                 ) return ENUM_CONE_TYPE_quadratic;
+    if (type == "rotatedQuadratic"          ) return ENUM_CONE_TYPE_rotatedQuadratic;
+    if (type == "normed"                    ) return ENUM_CONE_TYPE_normed;
+    if (type == "semidefinite"              ) return ENUM_CONE_TYPE_semidefinite;
+    if (type == "copositiveMatrices"        ) return ENUM_CONE_TYPE_copositiveMatrices;
+    if (type == "completelyPositiveMatrices") return ENUM_CONE_TYPE_completelyPositiveMatrices;
+    if (type == "hyperbolicity"             ) return ENUM_CONE_TYPE_hyperbolicity;
+    if (type == "nonnegPolynomials"         ) return ENUM_CONE_TYPE_nonnegPolynomials;
+    if (type == "moments"                   ) return ENUM_CONE_TYPE_moments;
+    if (type == "product"                   ) return ENUM_CONE_TYPE_product;
+    if (type == "intersection"              ) return ENUM_CONE_TYPE_intersection;
+    if (type == "dual"                      ) return ENUM_CONE_TYPE_dual;
+    if (type == "polar"                     ) return ENUM_CONE_TYPE_polar;
+    return 0;
+}//returnConeType
+
+inline bool verifyConeType(std::string type)
+{
+    return (returnConeType(type) > 0);
+}//verifyConeType
+
+
+/*! \class Cone
+ * \brief The in-memory representation of a generic cone 
+ * Specific cone types are derived from this generic class
+ */
+class Cone
+{
+public:
+
+    /** The Cone class constructor */
+    Cone();
+
+    /** The Cone class destructor */
+    ~Cone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(Cone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(Cone *that);
+}; // Cone
+
+/*! \class NonnegativeCone
+ *  \brief The NonnegativeCone Class.
+ *
+ * \remarks
+ * The in-memory representation of the OSiL element <nonnegativeCone>
+ *
+ */
+class NonnegativeCone : public Cone
+{
+public:
+    /**
+     * default constructor.
+     */
+    NonnegativeCone();
+
+    /**
+     * default destructor.
+     */
+    ~NonnegativeCone();
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(NonnegativeCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(NonnegativeCone *that);
+
+};//end NonnegativeCone
+
+/*! \class NonpositiveCone
+ *  \brief The NonpositiveCone Class.
+ *
+ * \remarks
+ * The in-memory representation of the OSiL element <nonpositiveCone>
+ *
+ */
+class NonpositiveCone : public Cone
+{
+public:
+    /**
+     * default constructor.
+     */
+    NonpositiveCone();
+
+    /**
+     * default destructor.
+     */
+    ~NonpositiveCone();
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(NonpositiveCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(NonpositiveCone *that);
+
+};//end NonpositiveCone
+
+
+/*! \class OrthantCone
+ *  \brief The OrthantCone Class.
+ *
+ * \remarks
+ * The in-memory representation of the OSiL element <orthantCone>
+ *
+ */
+class OrthantCone : public Cone
+{
+public:
+    /** For each dimension of the cone, give the upper and lower bounds
+     *  The upper bound can be only zero or +infty,
+     *  the lower bound can be only zero or -infty,
+     */
+    double** ub;  
+    double** lb;  
+
+    /**
+     * default constructor.
+     */
+    OrthantCone();
+
+    /**
+     * default destructor.
+     */
+    ~OrthantCone();
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OrthantCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(OrthantCone *that);
+
+};//end OrthantCone
+
+/*
+    ENUM_CONE_TYPE_quadratic,
+    ENUM_CONE_TYPE_rotatedQuadratic,
+    ENUM_CONE_TYPE_normed,
+    ENUM_CONE_TYPE_semidefinite,
+    ENUM_CONE_TYPE_coposMatrices,
+    ENUM_CONE_TYPE_completelyPositiveMatrices,
+    ENUM_CONE_TYPE_hyperbolicity,
+    ENUM_CONE_TYPE_nonnegPolynomials,
+    ENUM_CONE_TYPE_moments,
+    ENUM_CONE_TYPE_product,
+    ENUM_CONE_TYPE_intersection,
+    ENUM_CONE_TYPE_dual,
+    ENUM_CONE_TYPE_polar
+*/
+
+/*! \class Cones
+ * \brief The in-memory representation of the
+ * <b><cones></b> element.
+ */
+class Cones
+{
+public:
+
+    /** The Cones class constructor */
+    Cones();
+
+    /** The Cones class destructor */
+    ~Cones();
+
+    /** numberOfCones is the number of
+     * <nl> elements in the
+     * <b><cones></b> element.
+     */
+    int numberOfCones;
+
+    /** cone is pointer to an array of Cone object pointers */
+    Cone **cone;
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(Cones *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(Cones *that);
+}; // Cones
+
 /*! \class TimeDomainStageVar
  * \brief The in-memory representation of the
  * <b><var></b> element.

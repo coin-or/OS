@@ -86,8 +86,11 @@ public:
     bool ignoreDataAfterErrors;
     bool suppressFurtherErrorMessages;
 
-    /** We need to hold a <matrices> element temporarily */
-    Matrices* matrices;
+    /** We need to hold a <matrix> element temporarily */
+    OSMatrix* matrix;
+
+    /** We also need to keep track locally of the number of matrices */
+    int numberOfMatrices;
 
     /** data structures to temporarily hold a matrix and its subordinate elements */
     std::string  symmetryAttribute;

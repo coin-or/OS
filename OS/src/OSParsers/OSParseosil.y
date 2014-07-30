@@ -2668,10 +2668,10 @@ matrixreferenceend: ENDOFELEMENT
                            
 matrixIdxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= osglData->matrices->numberOfMatrices){
+    if( $3 >= osglData->numberOfMatrices){
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
      }
-}  ; 
+}; 
 
 
 ;

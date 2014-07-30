@@ -233,14 +233,11 @@ OSInstance::~OSInstance()
         m_mmdDenseObjectiveCoefficients = NULL;
     }
 
-
-
     //if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == true) delete m_linearConstraintCoefficientsInColumnMajor;
     //if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == false) delete m_linearConstraintCoefficientsInRowMajor;
 
     if( m_linearConstraintCoefficientsInColumnMajor != NULL) delete m_linearConstraintCoefficientsInColumnMajor;
     if (m_linearConstraintCoefficientsInRowMajor != NULL ) delete m_linearConstraintCoefficientsInRowMajor;
-
 
     if( (m_binitForAlgDiff == true)  )
     {
@@ -248,7 +245,6 @@ OSInstance::~OSInstance()
         m_miNonLinearVarsReverseMap = NULL;
         if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL)
         {
-
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
@@ -272,8 +268,8 @@ OSInstance::~OSInstance()
         }
     }
 
-    //std::cout << "Do garbage collection for the nonlinear API" << std::endl;
     // garbage collection for the gradient
+    //std::cout << "Do garbage collection for the nonlinear API" << std::endl;
     if(m_bNonLinearStructuresInitialized == true )
     {
         delete[] m_mdObjectiveFunctionValues;
@@ -781,6 +777,213 @@ NonlinearExpressions::~NonlinearExpressions()
 }//end ~NonlinearExpressions()
 
 
+Matrices::Matrices():
+    numberOfMatrices(0) ,
+    matrix(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Matrices Constructor");
+#endif
+}//end Matrices()
+
+Matrices::~Matrices()
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Matrices Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF MATRICES = " << numberOfMatrices << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+    int i;
+    if(numberOfMatrices > 0 && matrix != NULL)
+    {
+        for( i = 0; i < numberOfMatrices; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING MATRIX " << matrix[ i]->idx << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(matrix != NULL)
+            {
+                if(matrix[i] != NULL)
+                {
+                    delete matrix[i];
+                    matrix[i] = NULL;
+                }
+            }
+        }
+    }
+    if(matrix != NULL)
+    {
+        delete[] matrix;
+        matrix = NULL;
+    }
+}//end ~Matrices()
+
+
+Cones::Cones():
+    numberOfCones(0) ,
+    cone(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Cones Constructor");
+#endif
+}//end Cones()
+
+Cones::~Cones()
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Cones Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF CONES = " << numberOfCones << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+    int i;
+    if(numberOfCones > 0 && cone != NULL)
+    {
+        for( i = 0; i < numberOfCones; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING CONE " << cone[ i]->idx << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(cone != NULL)
+            {
+                if(cone[i] != NULL)
+                {
+                    delete cone[i];
+                    cone[i] = NULL;
+                }
+            }
+        }
+    }
+    if(cone != NULL)
+    {
+        delete[] cone;
+        cone = NULL;
+    }
+}//end ~Cones()
+
+Cone::Cone():
+    numberOfRows(0),
+    numberOfColumns(0),
+    numberOfOtherIndexes(0),
+    otherIndexes(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Cone Constructor");
+#endif
+}//end Cone()
+
+Cone::~Cone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Cone Destructor");
+#endif
+    if(otherIndexes != NULL)
+    {
+        delete[] otherIndexes;
+        otherIndexes = NULL;
+    }
+}//end ~Cone()
+
+std::string Cone::getConeName()
+{
+    return "genericCone";
+}// end NonnegativeCone::getConeName()
+
+std::string NonnegativeCone::getConeName()
+{
+    return "nonnegativeCone";
+}// end NonnegativeCone::getConeName()
+
+std::string NonpositiveCone::getConeName()
+{
+    return "nonpositiveCone";
+}// end NonpositiveCone::getConeName()
+
+
+#if 0
+-------------------------------
+OtherOptionEnumeration::OtherOptionEnumeration():
+    IntVector(),
+    value(""),
+    description("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherOptionEnumeration Constructor");
+#endif
+}
+
+OtherOptionEnumeration::OtherOptionEnumeration(int n):
+    IntVector(n),
+    value(""),
+    description("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the alternate OtherOptionEnumeration Constructor");
+#endif
+}
+
+OSnLNode::OSnLNode():
+    m_mChildren(NULL),
+    m_mMatrixChildren(NULL),
+    m_dFunctionValue( OSNaN())
+    //inumberOfChildren( 0)
+{
+}//end OSnLNode
+
+OSnLNode::~OSnLNode()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNode destructor");
+#endif
+}//end ~OSnLNode
+
+// OSnLNodePlus Methods
+OSnLNodePlus::OSnLNodePlus()
+{
+    inumberOfChildren = 2;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = new OSnLNode*[2];
+    m_mChildren[ 0] = NULL;
+    m_mChildren[ 1] = NULL;
+    inodeInt = 1001;
+    inodeType = 2;
+}//end OSnLNodePlus
+
+
+OSnLNodePlus::~OSnLNodePlus()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePlus destructor");
+#endif
+    for(unsigned int i = 0; i < inumberOfChildren; i++)
+    {
+        if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
+        m_mChildren[i] = NULL;
+    }
+    //m_mChildren = NULL;
+    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
+}//end ~OSnLNodePlus
+
+================================
+#endif
+
+
+
 TimeDomainStageVar::TimeDomainStageVar():
     idx(0)
 {
@@ -1036,7 +1239,7 @@ InstanceData::InstanceData()
     quadraticCoefficients = new QuadraticCoefficients();
     nonlinearExpressions = new NonlinearExpressions();
     timeDomain = NULL;
-}
+}//end of InstanceData constructor
 
 InstanceData::~InstanceData()
 {
@@ -1084,8 +1287,12 @@ InstanceData::~InstanceData()
         delete timeDomain;
         timeDomain = NULL;
     }
-}
+}//end of InstanceData destructor
 
+
+/** the get() methods
+ *  =================
+ */
 string OSInstance::getInstanceName()
 {
     if (m_sInstanceName.length() <= 0)
@@ -1969,7 +2176,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                     nlnode =  postfixVec[ n - 1 - i];
                     opStack.push( nlnode);
 
-
                     //std::cout << postfixVec[ i]->snodeName << std::endl;
                 }
 
@@ -2651,9 +2857,8 @@ double OSInstance::getTimeDomainIntervalHorizon()
 
 
 
-
-// the set() methods
-
+/* the set() methods
+   ================= */
 
 bool OSInstance::setInstanceName(string name)
 {
@@ -2683,8 +2888,7 @@ bool OSInstance::setInstanceLicence(string licence)
 {
     instanceHeader->licence = licence;
     return true;
-}//setInstanceDescription
-
+}//setInstanceLicence
 
 
 bool OSInstance::setVariableNumber(int number)
@@ -3459,7 +3663,7 @@ bool OSInstance::addQTermsToExpressionTree()
         m_bQTermsAdded =true;
     }
     return true;
-}
+} //addQTermsToExpressionTree
 
 
 std::string OSInstance::printModel( )
@@ -3489,6 +3693,7 @@ std::string OSInstance::printModel( )
     {
         outStr << this->printModel( i);
     }
+
 
     outStr << std::endl;
     outStr << "Variables:" << std::endl;
@@ -3816,7 +4021,6 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 }//calculateAllConstraintFunctionGradients
 
 
-
 SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, double *objLambda, double *conLambda,
         int idx, bool new_x, int highestOrder)
 {
@@ -3967,7 +4171,6 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 }//calculateObjectiveFunctionGradient
 
 
-
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bool new_x)
 {
     try
@@ -3995,7 +4198,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
                     }
                 }
 
-                if(( new_x == true ) || (m_iHighestOrderEvaluated < 0) )this->forwardAD(0, m_vdX);
+                if(( new_x == true ) || (m_iHighestOrderEvaluated < 0) ) this->forwardAD(0, m_vdX);
 
                 if(( new_x == true ) || (m_iHighestOrderEvaluated < 1) )
                 {
@@ -4086,7 +4289,6 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
     }
     return m_LagrangianSparseHessian;
 }//calculateHessian
-
 
 
 bool OSInstance::getSparseJacobianFromColumnMajor( )
@@ -4266,7 +4468,6 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
 #endif
     return true;
 }//getSparseJacobianFromColumnMajor
-
 
 
 bool OSInstance::getSparseJacobianFromRowMajor( )
@@ -5121,6 +5322,13 @@ bool OSInstance::initObjGradients()
  * end revised AD test code
  */
 
+/**
+ * set methods for matrices object
+ */
+
+/**
+ * set methods for cones object
+ */
 
 /**
  * set methods for timeDomain object
@@ -6336,7 +6544,6 @@ bool NonlinearExpressions::IsEqual(NonlinearExpressions *that)
         }
     }
 }//NonlinearExpressions::IsEqual
-
 
 
 bool Nl::IsEqual(Nl *that)

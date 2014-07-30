@@ -524,7 +524,7 @@ inline int mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE type2)
     if (type1 == ENUM_MATRIX_TYPE_zero) return type2;
     if (type2 == ENUM_MATRIX_TYPE_zero) return type1;
 
-    // these matrix types do not mix with any other types
+    // these matrix types do not mix with any other types (NOTE: type1 and type2 are now different!)
     if (type1 == ENUM_MATRIX_TYPE_varref || type2 == ENUM_MATRIX_TYPE_varref) 
         return ENUM_MATRIX_TYPE_jumbled;
     if (type1 == ENUM_MATRIX_TYPE_pospattern || type2 == ENUM_MATRIX_TYPE_pospattern) 
@@ -1860,6 +1860,7 @@ class OSMatrix : public MatrixType
 public:
     int numberOfRows;
     int numberOfColumns;
+    int idx;
     std::string name;
 
     OSMatrix();
@@ -1930,52 +1931,7 @@ public:
     bool deepCopyFrom(MatrixBlock *that);
 };// class MatrixBlock
 
-/*! \class Matrices
- * \brief The in-memory representation of the
- * <b><matrices></b> element.
- */
-class Matrices
-{
-public:
 
-    /** The Matrices class constructor */
-    Matrices();
-
-    /** The Matrices class destructor */
-    ~Matrices();
-
-    /** numberOfMatrices is the number of
-     * <nl> elements in the
-     * <b><matrices></b> element.
-     */
-    int numberOfMatrices;
-
-    /** matrix is pointer to an array of OSMatrix object pointers */
-    OSMatrix **matrix;
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(Matrices *that);
-
-    /**
-     *
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */    
-    bool deepCopyFrom(Matrices *that);
-}; // Matrices
 
 /*! \class StorageCapacity
  *  \brief the StorageCapacity class.
