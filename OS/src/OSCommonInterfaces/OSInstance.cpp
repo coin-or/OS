@@ -912,6 +912,192 @@ std::string NonpositiveCone::getConeName()
     return "nonpositiveCone";
 }// end NonpositiveCone::getConeName()
 
+OrthantCone::OrthantCone():
+    lb(NULL),
+    ub(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OrthantCone Constructor");
+#endif
+}//end OrthantCone()
+
+OrthantCone::~OrthantCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OrthantCone Destructor");
+#endif
+    if(lb != NULL)
+    {
+        delete[] lb;
+        lb = NULL;
+    }
+    if(ub != NULL)
+    {
+        delete[] ub;
+        ub = NULL;
+    }
+}//end ~OrthantCone()
+
+std::string OrthantCone::getConeName()
+{
+    return "orthantCone";
+}// end OrthantCone::getConeName()
+
+QuadraticCone::QuadraticCone():
+    normFactor(1.0),
+    distortionMatrixIdx(-1),
+    axisDirectionIndex(0)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the QuadraticCone Constructor");
+#endif
+}//end QuadraticCone()
+
+QuadraticCone::~QuadraticCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the QuadraticCone Destructor");
+#endif
+}//end ~QuadraticCone()
+
+std::string QuadraticCone::getConeName()
+{
+    return "quadraticCone";
+}// end QuadraticCone::getConeName()
+
+
+RotatedQuadraticCone::RotatedQuadraticCone():
+    normFactor(1.0),
+    distortionMatrixIdx(-1),
+    firstAxisDirectionIndex(0),
+    secondAxisDirectionIndex(1)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the RotatedQuadraticCone Constructor");
+#endif
+}//end RotatedQuadraticCone()
+
+RotatedQuadraticCone::~RotatedQuadraticCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the RotatedQuadraticCone Destructor");
+#endif
+}//end ~RotatedQuadraticCone()
+
+std::string RotatedQuadraticCone::getConeName()
+{
+    return "rotatedQuadraticCone";
+}// end RotatedQuadraticCone::getConeName()
+
+
+SemidefiniteCone::SemidefiniteCone():
+    semidefiniteness("positive"),
+    isPosSemiDefinite(true)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the SemidefiniteCone Constructor");
+#endif
+}//end SemidefiniteCone()
+
+SemidefiniteCone::~SemidefiniteCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the SemidefiniteCone Destructor");
+#endif
+}//end ~SemidefiniteCone()
+
+std::string SemidefiniteCone::getConeName()
+{
+    return "semidefiniteCone";
+}// end SemidefiniteCone::getConeName()
+
+
+ProductCone::ProductCone():
+    numberOfFactors(0),
+    factor(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ProductCone Constructor");
+#endif
+}//end ProductCone()
+
+ProductCone::~ProductCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ProductCone Destructor");
+#endif
+}//end ~ProductCone()
+
+std::string ProductCone::getConeName()
+{
+    return "productCone";
+}// end ProductCone::getConeName()
+
+
+IntersectionCone::IntersectionCone():
+    numberOfComponents(0),
+    component(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the IntersectionCone Constructor");
+#endif
+}//end IntersectionCone()
+
+IntersectionCone::~IntersectionCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the IntersectionCone Destructor");
+#endif
+}//end ~IntersectionCone()
+
+std::string IntersectionCone::getConeName()
+{
+    return "intersectionCone";
+}// end IntersectionCone::getConeName()
+
+
+DualCone::DualCone():
+    referenceConeIdx(0)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the DualCone Constructor");
+#endif
+}//end DualCone()
+
+DualCone::~DualCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the DualCone Destructor");
+#endif
+}//end ~DualCone()
+
+std::string DualCone::getConeName()
+{
+    return "dualCone";
+}// end DualCone::getConeName()
+
+
+PolarCone::PolarCone():
+    referenceConeIdx(0)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the PolarCone Constructor");
+#endif
+}//end PolarCone()
+
+PolarCone::~PolarCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the PolarCone Destructor");
+#endif
+}//end ~PolarCone()
+
+std::string PolarCone::getConeName()
+{
+    return "polarCone";
+}// end PolarCone::getConeName()
+
+
 
 #if 0
 -------------------------------

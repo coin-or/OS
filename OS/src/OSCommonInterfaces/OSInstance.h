@@ -535,7 +535,7 @@ enum ENUM_CONE_TYPE
     ENUM_CONE_TYPE_copositiveMatrices,
     ENUM_CONE_TYPE_completelyPositiveMatrices,
     ENUM_CONE_TYPE_hyperbolicity,
-    ENUM_CONE_TYPE_nonnegPolynomials,
+    ENUM_CONE_TYPE_nonnegativePolynomials,
     ENUM_CONE_TYPE_moments,
     ENUM_CONE_TYPE_product,
     ENUM_CONE_TYPE_intersection,
@@ -555,7 +555,7 @@ inline int returnConeType(std::string type)
     if (type == "copositiveMatrices"        ) return ENUM_CONE_TYPE_copositiveMatrices;
     if (type == "completelyPositiveMatrices") return ENUM_CONE_TYPE_completelyPositiveMatrices;
     if (type == "hyperbolicity"             ) return ENUM_CONE_TYPE_hyperbolicity;
-    if (type == "nonnegPolynomials"         ) return ENUM_CONE_TYPE_nonnegPolynomials;
+    if (type == "nonnegativePolynomials"    ) return ENUM_CONE_TYPE_nonnegativePolynomials;
     if (type == "moments"                   ) return ENUM_CONE_TYPE_moments;
     if (type == "product"                   ) return ENUM_CONE_TYPE_product;
     if (type == "intersection"              ) return ENUM_CONE_TYPE_intersection;
@@ -791,21 +791,516 @@ public:
 
 };//end OrthantCone
 
-/*
-    ENUM_CONE_TYPE_quadratic,
-    ENUM_CONE_TYPE_rotatedQuadratic,
+
+/*! \class QuadraticCone
+ * \brief The in-memory representation of a quadratic cone 
+ */
+class QuadraticCone
+{
+public:
+
+    /** The QuadraticCone class constructor */
+    QuadraticCone();
+
+    /** The QuadraticCone class destructor */
+    ~QuadraticCone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /** quadratic cones normally are of the form x0 >= x1^2 + x2^2 + ...
+     *  However, the appearance can be modified using a norm factor p 
+     *  and a distortion matrix M to the form
+     *  x0 >= p (x1, x2, ...) M (x1, x2, ...)'
+     */
+    double normFactor;
+    int distortionMatrixIdx;
+
+    /** The index of the first component can be changed
+     *  Since there are possibly many dimensions, the index is coded 
+     *  as i0*n1*n2*... + i1*n2*n3... + ... + i_r, 
+     *  where i0, i1, etc are zero-based indexes for the different dimensions:
+     *  i0 = 0, 1, ..., n0 -1, where n0 is the number of rows,
+     *  i1 = 0, 1, ..., n1 -1, where n1 is the number of columns,
+     *  and so on for higher dimensions (if any)
+     */
+    int axisDirectionIndex;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(QuadraticCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(QuadraticCone *that);
+}; // QuadraticCone
+
+
+/*! \class RotatedQuadraticCone
+ * \brief The in-memory representation of a rotated quadratic cone 
+ */
+class RotatedQuadraticCone
+{
+public:
+
+    /** The RotatedQuadraticCone class constructor */
+    RotatedQuadraticCone();
+
+    /** The RotatedQuadraticCone class destructor */
+    ~RotatedQuadraticCone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /** rotated quadratic cones normally are of the form x0x1 >= x2^2 + x3^2 + ...
+     *  However, the appearance can be modified using a norm factor p 
+     *  and a distortion matrix M to the form
+     *  x0x1 >= p (x2, x3, ...) M (x2, x3, ...)'
+     */
+    double normFactor;
+    int distortionMatrixIdx;
+
+    /** The indices of the first two component can be changed
+     *  Since there are possibly many dimensions, each index is coded 
+     *  as i0*n1*n2*... + i1*n2*n3... + ... + i_r, 
+     *  where i0, i1, etc are zero-based indexes for the different dimensions:
+     *  i0 = 0, 1, ..., n0 -1, where n0 is the number of rows,
+     *  i1 = 0, 1, ..., n1 -1, where n1 is the number of columns,
+     *  and so on for higher dimensions (if any)
+     */
+    int firstAxisDirectionIndex;
+    int secondAxisDirectionIndex;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(RotatedQuadraticCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(RotatedQuadraticCone *that);
+}; // RotatedQuadraticCone
+
+/*  Not yet implemented:
     ENUM_CONE_TYPE_normed,
-    ENUM_CONE_TYPE_semidefinite,
-    ENUM_CONE_TYPE_coposMatrices,
+*/
+
+/*! \class SemidefiniteCone
+ * \brief The in-memory representation of a cone of semidefinite matrices 
+ */
+class SemidefiniteCone
+{
+public:
+
+    /** The SemidefiniteCone class constructor */
+    SemidefiniteCone();
+
+    /** The SemidefiniteCone class destructor */
+    ~SemidefiniteCone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /** we need to distinguish positive and negative semidefiniteness */
+    std::string semidefiniteness;
+
+    /** information about semidefiniteness is also tracked in a boolean variable */
+    bool isPosSemiDefinite;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(SemidefiniteCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(SemidefiniteCone *that);
+}; // SemidefiniteCone
+
+/*  Not yet implemented: 
+    ENUM_CONE_TYPE_copositiveMatrices,
     ENUM_CONE_TYPE_completelyPositiveMatrices,
     ENUM_CONE_TYPE_hyperbolicity,
-    ENUM_CONE_TYPE_nonnegPolynomials,
+    ENUM_CONE_TYPE_nonnegativePolynomials,
     ENUM_CONE_TYPE_moments,
-    ENUM_CONE_TYPE_product,
-    ENUM_CONE_TYPE_intersection,
-    ENUM_CONE_TYPE_dual,
-    ENUM_CONE_TYPE_polar
 */
+
+/*! \class ProductCone
+ * \brief The in-memory representation of a product cone 
+ */
+class ProductCone
+{
+public:
+
+    /** The ProductCone class constructor */
+    ProductCone();
+
+    /** The ProductCone class destructor */
+    ~ProductCone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /** the list of "factors" contributing to the product 
+     *  each factor contains a refrence to a previously defined cone
+     */
+    int numberOfFactors;
+    int* factor;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ProductCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(ProductCone *that);
+}; // ProductCone
+
+/*! \class IntersectionCone
+ * \brief The in-memory representation of an intersection cone 
+ */
+class IntersectionCone
+{
+public:
+
+    /** The IntersectionCone class constructor */
+    IntersectionCone();
+
+    /** The IntersectionCone class destructor */
+    ~IntersectionCone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /** the list of components contributing to the intersection 
+     *  each component contains a refrence to a previously defined cone
+     */
+    int numberOfComponents;
+    int* component;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(IntersectionCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(IntersectionCone *that);
+}; // IntersectionCone
+
+
+/*! \class DualCone
+ * \brief The in-memory representation of a dual cone 
+ */
+class DualCone
+{
+public:
+
+    /** The DualCone class constructor */
+    DualCone();
+
+    /** The DualCone class destructor */
+    ~DualCone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /** Dual cones use a reference to another, previously defined cone */
+    int referenceConeIdx;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(DualCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(DualCone *that);
+}; // DualCone
+
+/*! \class PolarCone
+ * \brief The in-memory representation of a polar cone 
+ */
+class PolarCone
+{
+public:
+
+    /** The PolarCone class constructor */
+    PolarCone();
+
+    /** The PolarCone class destructor */
+    ~PolarCone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /** Polar cones use a reference to another, previously defined cone */
+    int referenceConeIdx;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(PolarCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(PolarCone *that);
+}; // Cone
+
 
 /*! \class Cones
  * \brief The in-memory representation of the

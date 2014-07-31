@@ -221,6 +221,27 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/matrices{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRICESEND);}
 {xmlwhitespace}*\<cones {YY_PRINT;  return(CONESSTART);}
 {xmlwhitespace}*\<\/cones{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CONESEND);}
+{xmlwhitespace}*\<nonnegativeCone {YY_PRINT;  return(NONNEGATIVECONESTART);}
+{xmlwhitespace}*\<\/nonnegativeCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(NONNEGATIVECONEEND);}
+{xmlwhitespace}*\<nonpositiveCone {YY_PRINT;  return(NONPOSITIVECONESTART);}
+{xmlwhitespace}*\<\/nonpositiveCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(NONPOSITIVECONEEND);}
+{xmlwhitespace}*\<generalOrthantCone {YY_PRINT;  return(ORTHANTCONESTART);}
+{xmlwhitespace}*\<\/generalOrthantCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ORTHANTCONEEND);}
+{xmlwhitespace}*\<quadraticCone {YY_PRINT;  return(QUADRATICCONESTART);}
+{xmlwhitespace}*\<\/quadraticCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(QUADRATICCONEEND);}
+{xmlwhitespace}*\<rotatedQuadraticCone {YY_PRINT;  return(ROTATEDQUADRATICCONESTART);}
+{xmlwhitespace}*\<\/rotatedQuadraticCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ROTATEDQUADRATICCONEEND);}
+{xmlwhitespace}*\<semidefiniteCone {YY_PRINT;  return(SEMIDEFINITECONESTART);}
+{xmlwhitespace}*\<\/semidefiniteCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SEMIDEFINITECONEEND);}
+{xmlwhitespace}*\<productCone {YY_PRINT;  return(PRODUCTCONESTART);}
+{xmlwhitespace}*\<\/productCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(PRODUCTCONEEND);}
+{xmlwhitespace}*\<intersectionCone {YY_PRINT;  return(INTERSECTIONCONESTART);}
+{xmlwhitespace}*\<\/intersectionCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INTERSECTIONCONEEND);}
+{xmlwhitespace}*\<dualCone {YY_PRINT;  return(DUALCONESTART);}
+{xmlwhitespace}*\<\/dualCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DUALCONEEND);}
+{xmlwhitespace}*\<polarCone {YY_PRINT;  return(POLARCONESTART);}
+{xmlwhitespace}*\<\/polarCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(POLARCONEEND);}
+
 
 {xmlwhitespace}*\<base64BinaryData {YY_PRINT; return(BASE64START);}
 {xmlwhitespace}*\<\/base64BinaryData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASE64END);}

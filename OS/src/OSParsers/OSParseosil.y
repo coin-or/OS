@@ -212,15 +212,24 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token OSILEND INSTANCEDATAEND INSTANCEDATASTARTEND
 
 %token EMPTYIDATT EMPTYNAMEATT EMPTYTYPEATT
+%token IDXATT IDXONEATT IDXTWOATT NAMEATT TYPEATT VALUEATT
 
 %token QUADRATICCOEFFICIENTSSTART QUADRATICCOEFFICIENTSEND
 %token NUMBEROFQTERMSATT QTERMSTART QTERMEND  
 
-%token IDXATT IDXONEATT IDXTWOATT TYPEATT VALUEATT
+%token MATRICESSTART MATRICESEND NUMBEROFMATRICESATT
+%token CONESSTART CONESEND NUMBEROFCONESATT
+
+%token NONNEGATIVECONESTART NONNEGATIVECONEEND NONPOSITIVECONESTART NONPOSITIVECONEEND
+%token ORTHANTCONESTART ORTHANTCONEEND QUADRATICCONESTART QUADRATICCONEEND
+%token ROTATEDQUADRATICCONESTART ROTATEDQUADRATICCONEEND
+%token SEMIDEFINITECONESTART SEMIDEFINITECONEEND PRODUCTCONESTART PRODUCTCONEEND
+%token INTERSECTIONCONESTART INTERSECTIONCONEEND
+%token DUALCONESTART DUALCONEEND POLARCONESTART POLARCONEEND
 
 %token TIMEDOMAINSTART TIMEDOMAINEND
 %token STAGESSTART STAGESEND STAGESTART STAGEEND
-%token NAMEATT  NUMBEROFSTAGESATT HORIZONATT STARTATT
+%token NUMBEROFSTAGESATT HORIZONATT STARTATT
 %token VARIABLESSTART CONSTRAINTSSTART OBJECTIVESSTART
 %token VARIABLESEND CONSTRAINTSEND OBJECTIVESEND
 %token NUMBEROFVARIABLESATT NUMBEROFCONSTRAINTSATT NUMBEROFOBJECTIVESATT
@@ -228,9 +237,6 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token VARSTART VAREND CONSTART CONEND OBJSTART OBJEND
 %token INTERVALSTART INTERVALEND
 
-%token MATRICESSTART MATRICESEND NUMBEROFMATRICESATT
-%token CONESSTART CONESEND NUMBEROFCONESATT
- 
 
 /* $Id$ */
 /** @file OSParseosgl.y.tokens
@@ -449,9 +455,99 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 */
 ;
 
-
 qtermidxatt: IDXATT QUOTE INTEGER  QUOTE {  if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $3;}  ;
+
+
+
+matrices: | matricesStart matricesAttributes matricesContent;
+
+matricesStart: MATRICESSTART;
+
+matricesAttributes: numberOfMatricesATT;
+
+matricesContent: matricesEmpty | matricesLaden;
+
+matricesEmpty: ENDOFELEMENT;
+
+matricesLaden: GREATERTHAN matrixList MATRICESEND;
+
+matrixList: | matrixList osglMatrix;
+
+
+cones: | conesStart conesAttributes conesContent;
+
+conesStart: CONESSTART;
+
+conesAttributes: numberOfConesATT;
+
+conesContent: conesEmpty | conesLaden;
+
+conesEmpty: ENDOFELEMENT;
+
+conesLaden: GREATERTHAN coneList CONESEND;
+
+coneList: | coneList cone;
+
+cone: 
+      nonnegativeCone
+    | nonpositiveCone
+    | generalOrthantCone
+    | quadraticCone
+    | rotatedQuadraticCone
+    | normedCone
+    | semidefiniteCone
+    | copositiveMatricesCone
+    | completelyPositiveMatricesCone
+    | hyperbolicityCone
+    | nonnegativePolynomialsCone
+    | sumOfSquaresPolynomialsCone
+    | momentsCone
+    | productCone
+    | intersectionCone
+    | dualCone
+    | polarCone
+;
+
+nonnegativeCone: nonnegativeConeStart nonnegativeConeAttributes nonnegativeConeEnd;
+
+nonnegativeConeStart: NONNEGATIVECONESTART;
+
+nonnegativeConeAttributes: nonnegativeConeAttList;
+
+nonnegativeConeAttList: nonnegativeConeAttList nonnegativeConeAtt;
+
+nonnegativeConeAtt: 
+      numberOfRowsATT;
+    | numberOfColumnsATT;
+    | nameATT;
+
+nonnegativeConeEnd: ;
+
+nonpositiveCone:  conesStart conesAttributes conesContent;
+generalOrthantCone:  conesStart conesAttributes conesContent;
+quadraticCone:  conesStart conesAttributes conesContent;
+rotatedQuadraticCone:  conesStart conesAttributes conesContent;
+normedCone:  conesStart conesAttributes conesContent;
+semidefiniteCone:  conesStart conesAttributes conesContent;
+copositiveMatricesCone:  conesStart conesAttributes conesContent;
+completelyPositiveMatricesCone:  conesStart conesAttributes conesContent;
+hyperbolicityCone:  conesStart conesAttributes conesContent;
+nonnegativePolynomialsCone:  conesStart conesAttributes conesContent;
+sumOfSquaresPolynomialsCone:  conesStart conesAttributes conesContent;
+momentsCone:  conesStart conesAttributes conesContent;
+productCone:  conesStart conesAttributes conesContent;
+intersectionCone:  conesStart conesAttributes conesContent;
+dualCone:  conesStart conesAttributes conesContent;
+polarCone:  conesStart conesAttributes conesContent;
+
+
+
+
+matrixProgramming: /*matrixProgrammingStart matrixProgrammingAttributes matrixProgrammingContent matrixProgrammingEnd*/;
+		
+
+
 
 timeDomain: | timedomainstart timedomain;
 
@@ -816,80 +912,6 @@ intervalstartatt: STARTATT QUOTE aNumber QUOTE {
 		parserData->intervalstart = parserData->tempVal;};
 
 
-matrices: | matricesStart matricesAttributes matricesContent;
-
-matricesStart: MATRICESSTART;
-
-matricesAttributes: numberOfMatricesATT;
-
-matricesContent: matricesEmpty | matricesLaden;
-
-matricesEmpty: ENDOFELEMENT;
-
-matricesLaden: GREATERTHAN matrixList MATRICESEND;
-
-matrixList: | matrixList osglMatrix;
-
-
-cones: | conesStart conesAttributes conesContent;
-
-conesStart: CONESSTART;
-
-conesAttributes: numberOfConesATT;
-
-conesContent: conesEmpty | conesLaden;
-
-conesEmpty: ENDOFELEMENT;
-
-conesLaden: GREATERTHAN coneList CONESEND;
-
-coneList: | coneList cone;
-
-cone: 
-      nonnegativeCone
-    | nonpositiveCone
-    | generalOrthantCone
-    | quadraticCone
-    | rotatedQuadraticCone
-    | normedCone
-    | semidefiniteCone
-    | copositiveMatricesCone
-    | completelyPositiveMatricesCone
-    | hyperbolicityCone
-    | nonnegativePolynomialsCone
-    | sumOfSquaresPolynomialsCone
-    | momentsCone
-    | productCone
-    | intersectionCone
-    | dualCone
-    | polarCone
-;
-
-nonnegativeCone: ;
-nonpositiveCone: ;
-generalOrthantCone: ;
-quadraticCone: ;
-rotatedQuadraticCone: ;
-normedCone: ;
-semidefiniteCone: ;
-copositiveMatricesCone: ;
-completelyPositiveMatricesCone: ;
-hyperbolicityCone: ;
-nonnegativePolynomialsCone: ;
-sumOfSquaresPolynomialsCone: ;
-momentsCone: ;
-productCone: ;
-intersectionCone: ;
-dualCone: ;
-polarCone: ;
-
-
-
-
-matrixProgramming: /*matrixProgrammingStart matrixProgrammingAttributes matrixProgrammingContent matrixProgrammingEnd*/;
-		
-
-
 numberOfElAttribute: NUMBEROFELATT quote INTEGER quote 
 {
     if (osglData->osglNumberOfElPresent)
@@ -899,8 +921,10 @@ numberOfElAttribute: NUMBEROFELATT quote INTEGER quote
     parserData->numberOfEl = $3; 
 }; 
 
-numberOfMatricesATT: NUMBEROFMATRICESATT quote INTEGER quote 
+numberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE 
 {
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->numberOfMatricesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <matrix> elements cannot be negative");
@@ -908,14 +932,49 @@ numberOfMatricesATT: NUMBEROFMATRICESATT quote INTEGER quote
     parserData->numberOfMatrices = $3; 
 }; 
 
-numberOfConesATT: NUMBEROFCONESATT quote INTEGER quote 
+numberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE 
 {
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->numberOfConesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfCones attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <cone> elements cannot be negative");
     parserData->numberOfConesPresent = true;
     parserData->numberOfCones = $3; 
 }; 
+
+numberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->numberOfRowsPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfRows attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of rows cannot be negative");
+    parserData->numberOfRowsPresent = true;
+    parserData->numberOfRows = $3; 
+};
+
+numberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->numberOfColumnsPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfColumns attribute previously set");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of columns cannot be negative");
+    parserData->numberOfColumnsPresent = true;
+    parserData->numberOfColumns = $3; 
+}; 
+
+
+nameATT: NAMEATT ATTRIBUTETEXT QUOTE 
+{
+    if (parserData->numberOfColumnsPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
+    parserData->namePresent = true;
+    parserData->name = $2; 
+};
+		
+
 
 aNumber:
     xmlWhiteSpace INTEGER xmlWhiteSpace {parserData->tempVal = $2;}
