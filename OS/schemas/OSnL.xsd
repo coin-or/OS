@@ -4292,7 +4292,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="5" maxOccurs="5">
+				<xs:sequence minOccurs="1" maxOccurs="1">
 					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLNode"/>
@@ -4304,7 +4304,7 @@
 	</xs:complexType>
 	<xs:element name="matrixSubmatrixAt" type="OSnLNodeMatrixSubmatrixAt" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. First child is an OSnLMNode, which is the matrix to crop, the next four children are OSnLNode, which indicates rowIdxStart, colIdxStart, rowIdxEnd, and colIndxEnd.</xs:documentation>
+			<xs:documentation>draft. First child is an OSnLMNode, which is the matrix to crop, the next four children are OSnLNode, which indicate rowIdxStart, colIdxStart, rowIdxEnd, and colIndxEnd.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixMerge">

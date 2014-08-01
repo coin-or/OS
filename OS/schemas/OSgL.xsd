@@ -379,8 +379,8 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes" type="SparseVectorIndexes"/>
-			<xs:element name="values" type="SparseVectorValues"/>
+			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
+			<xs:element name="values" type="SparseVectorValues" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" use="required"/>
 	</xs:complexType>
@@ -425,7 +425,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes" type="SparseIntVectorIndexes"/>
+			<xs:element name="indexes" type="SparseVectorIndexes"/>
 			<xs:element name="values" type="SparseIntVectorValues"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" use="required"/>
@@ -471,8 +471,11 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes" type="SparseNonNegativeIntVectorIndexes"/>
-			<xs:element name="values" type="SparseNonNegativeIntVectorValues"/>
+			<xs:annotation>
+				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
+			<xs:element name="values" type="SparseNonNegativeIntVectorValues" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" use="required"/>
 	</xs:complexType>
@@ -514,8 +517,11 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes" type="SparseNegativeIntVectorIndexes"/>
-			<xs:element name="values" type="SparseNegativeIntVectorValues"/>
+			<xs:annotation>
+				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
+			<xs:element name="values" type="SparseNegativeIntVectorValues" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" use="required"/>
 	</xs:complexType>
@@ -1037,17 +1043,26 @@
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixElements">
 		<xs:sequence>
-			<xs:element name="start" type="NonNegativeIntVector"/>
+			<xs:element name="start" type="SparseVectorIndexes">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if columnwise) and numberOfRows + 1 (if rowwise), after "mult" is considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="nonzeros" type="SparseVector">
 				<xs:annotation>
-					<xs:documentation>Can specify explicit 0's here. These specified 0's replace (i.e., remove) previous information.</xs:documentation>
+					<xs:documentation>Can specify explicit 0's here. These specified 0's replace (and perhaps remove) previous information.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="VarReferenceMatrixElements">
 		<xs:sequence>
-			<xs:element name="start" type="NonNegativeIntVector"/>
+			<xs:element name="start" type="SparseVectorIndexes">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if columnwise) and numberOfRows + 1 (if rowwise), after "mult" is considered
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="nonzeros" type="SparseNonNegativeIntVector">
 				<xs:annotation>
 					<xs:documentation>Must refer to an existing variable index</xs:documentation>
@@ -1057,7 +1072,12 @@
 	</xs:complexType>
 	<xs:complexType name="ObjReferenceMatrixElements">
 		<xs:sequence>
-			<xs:element name="start" type="NonNegativeIntVector"/>
+			<xs:element name="start" type="SparseVectorIndexes">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if columnwise) and numberOfRows + 1 (if rowwise), after "mult" is considered
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="nonzeros" type="SparseNegativeIntVector">
 				<xs:annotation>
 					<xs:documentation>Must refer to an existing objective index</xs:documentation>
@@ -1067,7 +1087,12 @@
 	</xs:complexType>
 	<xs:complexType name="ConReferenceMatrixElements">
 		<xs:sequence>
-			<xs:element name="start" type="NonNegativeIntVector"/>
+			<xs:element name="start" type="SparseVectorIndexes">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if columnwise) and numberOfRows + 1 (if rowwise), after "mult" is considered
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="nonzeros" type="SparseNonNegativeIntVector">
 				<xs:annotation>
 					<xs:documentation>Must refer to an existing constraint index</xs:documentation>
@@ -1077,22 +1102,34 @@
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElements">
 		<xs:sequence>
-			<xs:element name="start" type="NonNegativeIntVector"/>
+			<xs:element name="start" type="SparseVectorIndexes">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if columnwise) and numberOfRows + 1 (if rowwise), after "mult" is considered
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="nonzeros" type="LinearMatrixValues"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixElements">
 		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of entries in the el and rowIdx/colIdx child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-			<xs:element name="start" type="NonNegativeIntVector"/>
+			<xs:element name="start" type="SparseVectorIndexes">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if columnwise) and numberOfRows + 1 (if rowwise), after "mult" is considered
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="nonzeros" type="GeneralMatrixValues"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="PatternMatrixElements">
 		<xs:sequence>
-			<xs:element name="start" type="NonNegativeIntVector"/>
+			<xs:element name="start" type="SparseVectorIndexes">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if columnwise) and numberOfRows + 1 (if rowwise), after "mult" is considered
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="nonzeros" type="NonNegativeIntVector">
 				<xs:annotation>
 					<xs:documentation>Record only the row/column number; value must be 1</xs:documentation>
@@ -1515,7 +1552,10 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes">
+			<xs:annotation>
+				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="indexes" minOccurs="0">
 				<xs:complexType>
 					<xs:choice>
 						<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
@@ -1535,7 +1575,7 @@
 					</xs:choice>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="values">
+			<xs:element name="values" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="el" type="GeneralMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
