@@ -25,7 +25,7 @@ osildoc: quadraticCoefficients nonlinearExpressions matrices cones matrixProgram
 
 
 theInstanceEnd:  INSTANCEDATASTARTEND
-	| INSTANCEDATAEND ;
+    | INSTANCEDATAEND ;
 
 osilEnd: osilEnding
     {
@@ -37,84 +37,81 @@ osilEnd: osilEnding
     };
 
 osilEnding: OSILEND
-	| { parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "unexpected end of file, expecting </osil>");};
+    | { parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "unexpected end of file, expecting </osil>");};
 
 
 quadraticCoefficients: 
-	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND 
-	{if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) 
-	parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of qterms less than numberOfQuadraticTerms");};
+    |  QUADRATICCOEFFICIENTSSTART osilQuadnumberATT qTermlist  QUADRATICCOEFFICIENTSEND 
+    {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) 
+    parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of qterms less than numberOfQuadraticTerms");};
    
 
-quadnumberatt: NUMBEROFQTERMSATT QUOTE INTEGER QUOTE GREATERTHAN  { 
+osilQuadnumberATT: NUMBEROFQTERMSATT QUOTE INTEGER QUOTE GREATERTHAN  { 
 if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms = $3;  
 if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0 ) 
 osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ $3 ];
 for(int i = 0; i < $3; i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();} ;
 
-qTermlist:  qterm
-		| qTermlist qterm ;
-		   
+qTermlist: | qTermlist qterm ;
+           
 qterm: qtermStart anotherqTermATT  qtermend 
 {
-	parserData->qtermcount++; 
-	if(!parserData->qtermidxattON)  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "the qTerm attribute idx is required"); 
-	if(!parserData->qtermidxOneattON)  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "the qTerm attribute idxOne is required"); 
-	if(!parserData->qtermidxTwoattON)  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "the qTerm attribute idxTwo is required"); 
-	parserData->qtermidattON = false; 
-	parserData->qtermidxattON = false; 
-	parserData->qtermidxOneattON = false; 
-	parserData->qtermidxTwoattON = false;
-	parserData->qtermcoefattON = false;
+    parserData->qtermcount++; 
+    if(!parserData->qtermidxattON)  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "the qTerm attribute idx is required"); 
+    if(!parserData->qtermidxOneattON)  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "the qTerm attribute idxOne is required"); 
+    if(!parserData->qtermidxTwoattON)  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "the qTerm attribute idxTwo is required"); 
+    parserData->qtermidattON = false; 
+    parserData->qtermidxattON = false; 
+    parserData->qtermidxOneattON = false; 
+    parserData->qtermidxTwoattON = false;
+    parserData->qtermcoefattON = false;
 } ;
 
 qtermStart: QTERMSTART
 {
-	if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
- 	parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many QuadraticTerms");
+    if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
+     parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many QuadraticTerms");
 } 
-  
-				
+                
 qtermend:  ENDOFELEMENT
-		| GREATERTHAN  QTERMEND;
-	
+        | GREATERTHAN  QTERMEND;
+    
 
 anotherqTermATT: 
-	| anotherqTermATT qtermatt  ;
-	
+    | anotherqTermATT qtermatt  ;
+    
+
+qtermatt:    osilQtermidxOneATT   
+            { if(parserData->qtermidxOneattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idxOne attributes"); 
+            parserData->qtermidxOneattON = true;  }
+        | osilQtermidxTwoATT      
+            { if(parserData->qtermidxTwoattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idxTwo attributes"); 
+            parserData->qtermidxTwoattON = true;  }
+        | osilQtermcoefATT 
+            { if(parserData->qtermcoefattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm coef attributes"); 
+            parserData->qtermcoefattON = true;  }
+        | osilQtermidxATT 
+            { if(parserData->qtermidxattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idx attributes"); 
+            parserData->qtermidxattON = true;  }
+        ;
 
 
-qtermatt:    qtermidxOneatt   
-			{ if(parserData->qtermidxOneattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idxOne attributes"); 
-			parserData->qtermidxOneattON = true;  }
-		| qtermidxTwoatt      
-			{ if(parserData->qtermidxTwoattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idxTwo attributes"); 
-			parserData->qtermidxTwoattON = true;  }
-		| qtermcoefatt 
-			{ if(parserData->qtermcoefattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm coef attributes"); 
-			parserData->qtermcoefattON = true;  }
-		| qtermidxatt 
-			{ if(parserData->qtermidxattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idx attributes"); 
-			parserData->qtermidxattON = true;  }
-		;
-
-
-qtermidxOneatt:  IDXONEATT QUOTE INTEGER QUOTE  {  if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+osilQtermidxOneATT:  IDXONEATT QUOTE INTEGER QUOTE  {  if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = $3;
-	if( $3 >= osinstance->instanceData->variables->numberOfVariables){
-	 	parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index exceeds number of variables");
-	 }
+    if( $3 >= osinstance->instanceData->variables->numberOfVariables){
+         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index exceeds number of variables");
+     }
 }  ;
 
-qtermidxTwoatt: IDXTWOATT QUOTE INTEGER QUOTE  { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+osilQtermidxTwoATT: IDXTWOATT QUOTE INTEGER QUOTE  { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = $3;
-	if( $3 >= osinstance->instanceData->variables->numberOfVariables){
-	 	parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index exceeds number of variables");
-	 }
+    if( $3 >= osinstance->instanceData->variables->numberOfVariables){
+         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index exceeds number of variables");
+     }
 }  ;
 
-qtermcoefatt: COEFATT QUOTE aNumber  QUOTE  {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+osilQtermcoefATT: COEFATT QUOTE aNumber QUOTE  {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = parserData->tempVal;}
 /* 
 | COEFATT QUOTE INTEGER  QUOTE  { 
@@ -122,16 +119,21 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 */
 ;
 
-qtermidxatt: IDXATT QUOTE INTEGER  QUOTE {  if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+osilQtermidxATT: IDXATT QUOTE INTEGER  QUOTE {  if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $3;}  ;
 
 
 
 matrices: | matricesStart matricesAttributes matricesContent;
 
-matricesStart: MATRICESSTART;
+matricesStart: MATRICESSTART 
+{
+#ifdef DEBUG
+    yydebug = 1;
+#endif
+};
 
-matricesAttributes: numberOfMatricesATT;
+matricesAttributes: osilNumberOfMatricesATT;
 
 matricesContent: matricesEmpty | matricesLaden;
 
@@ -146,7 +148,7 @@ cones: | conesStart conesAttributes conesContent;
 
 conesStart: CONESSTART;
 
-conesAttributes: numberOfConesATT;
+conesAttributes: osilNumberOfConesATT;
 
 conesContent: conesEmpty | conesLaden;
 
@@ -156,24 +158,23 @@ conesLaden: GREATERTHAN coneList CONESEND;
 
 coneList: | coneList cone;
 
-cone: 
-      nonnegativeCone
+cone: nonnegativeCone
     | nonpositiveCone
-    | generalOrthantCone
+/*    | generalOrthantCone */
     | quadraticCone
     | rotatedQuadraticCone
-    | normedCone
+/*    | normedCone */
     | semidefiniteCone
-    | copositiveMatricesCone
-    | completelyPositiveMatricesCone
-    | hyperbolicityCone
-    | nonnegativePolynomialsCone
-    | sumOfSquaresPolynomialsCone
-    | momentsCone
+/*    | copositiveMatricesCone */
+/*    | completelyPositiveMatricesCone */
+/*    | hyperbolicityCone */
+/*    | nonnegativePolynomialsCone */
+/*    | sumOfSquaresPolynomialsCone */
+/*    | momentsCone */
     | productCone
     | intersectionCone
-    | dualCone
-    | polarCone
+/*    | dualCone */
+/*    | polarCone */
 ;
 
 nonnegativeCone: nonnegativeConeStart nonnegativeConeAttributes nonnegativeConeEnd;
@@ -185,34 +186,169 @@ nonnegativeConeAttributes: nonnegativeConeAttList;
 nonnegativeConeAttList: nonnegativeConeAttList nonnegativeConeAtt;
 
 nonnegativeConeAtt: 
-      numberOfRowsATT;
-    | numberOfColumnsATT;
-    | nameATT;
+      osilNumberOfRowsATT
+    | osilNumberOfColumnsATT
+    | osilNameATT;
 
-nonnegativeConeEnd: ;
+nonnegativeConeEnd: ENDOFELEMENT | GREATERTHAN NONNEGATIVECONEEND;
 
-nonpositiveCone:  conesStart conesAttributes conesContent;
-generalOrthantCone:  conesStart conesAttributes conesContent;
-quadraticCone:  conesStart conesAttributes conesContent;
-rotatedQuadraticCone:  conesStart conesAttributes conesContent;
-normedCone:  conesStart conesAttributes conesContent;
-semidefiniteCone:  conesStart conesAttributes conesContent;
-copositiveMatricesCone:  conesStart conesAttributes conesContent;
-completelyPositiveMatricesCone:  conesStart conesAttributes conesContent;
-hyperbolicityCone:  conesStart conesAttributes conesContent;
-nonnegativePolynomialsCone:  conesStart conesAttributes conesContent;
-sumOfSquaresPolynomialsCone:  conesStart conesAttributes conesContent;
-momentsCone:  conesStart conesAttributes conesContent;
-productCone:  conesStart conesAttributes conesContent;
-intersectionCone:  conesStart conesAttributes conesContent;
-dualCone:  conesStart conesAttributes conesContent;
-polarCone:  conesStart conesAttributes conesContent;
+nonpositiveCone: nonpositiveConeStart nonpositiveConeAttributes nonpositiveConeEnd;
+
+nonpositiveConeStart: NONPOSITIVECONESTART;
+
+nonpositiveConeAttributes: nonpositiveConeAttList;
+
+nonpositiveConeAttList: nonpositiveConeAttList nonpositiveConeAtt;
+
+nonpositiveConeAtt: 
+      osilNumberOfRowsATT
+    | osilNumberOfColumnsATT
+    | osilNameATT;
+
+nonpositiveConeEnd: ENDOFELEMENT | GREATERTHAN NONPOSITIVECONEEND;
+
+/* generalOrthantCone:  conesStart conesAttributes conesContent; */
+
+quadraticCone: quadraticConeStart quadraticConeAttributes quadraticConeEnd;
+
+quadraticConeStart: QUADRATICCONESTART;
+
+quadraticConeAttributes: quadraticConeAttList;
+
+quadraticConeAttList: quadraticConeAttList quadraticConeAtt;
+
+quadraticConeAtt: 
+      osilNumberOfRowsATT
+    | osilNumberOfColumnsATT
+    | osilNameATT
+    | osilDistortionMatrixIdxATT
+    | osilNormScaleFactorATT
+    | osilAxisDirectionATT
+;
+
+quadraticConeEnd: ENDOFELEMENT | GREATERTHAN QUADRATICCONEEND;
+
+rotatedQuadraticCone:  rotatedQuadraticConeStart rotatedQuadraticConeAttributes rotatedQuadraticConeEnd;
+
+rotatedQuadraticConeStart: ROTATEDQUADRATICCONESTART;
+
+rotatedQuadraticConeAttributes: rotatedQuadraticConeAttList;
+
+rotatedQuadraticConeAttList: rotatedQuadraticConeAttList rotatedQuadraticConeAtt;
+
+rotatedQuadraticConeAtt: 
+      osilNumberOfRowsATT
+    | osilNumberOfColumnsATT
+    | osilNameATT
+    | osilDistortionMatrixIdxATT
+    | osilNormScaleFactorATT
+    | osilFirstAxisDirectionATT
+    | osilSecondAxisDirectionATT
+;
+
+rotatedQuadraticConeEnd: ENDOFELEMENT | GREATERTHAN ROTATEDQUADRATICCONEEND;
+
+/* normedCone:  conesStart conesAttributes conesContent; */
+
+semidefiniteCone:  semidefiniteConeStart semidefiniteConeAttributes semidefiniteConeEnd;
+
+semidefiniteConeStart: SEMIDEFINITECONESTART;
+
+semidefiniteConeAttributes: semidefiniteConeAttList;
+
+semidefiniteConeAttList: semidefiniteConeAttList semidefiniteConeAtt;
+
+semidefiniteConeAtt: 
+      osilNumberOfRowsATT
+    | osilNumberOfColumnsATT
+    | osilNameATT
+    | osilSemidefinitenessATT
+{std::cout << "semidefinite cone!!!" << std::endl;}
+;
+
+semidefiniteConeEnd: ENDOFELEMENT | GREATERTHAN SEMIDEFINITECONEEND;
+
+/* copositiveMatricesCone:  conesStart conesAttributes conesContent; */
+
+/* completelyPositiveMatricesCone:  conesStart conesAttributes conesContent; */
+
+/* hyperbolicityCone:  conesStart conesAttributes conesContent; */
+
+/* nonnegativePolynomialsCone:  conesStart conesAttributes conesContent; */
+
+/* sumOfSquaresPolynomialsCone:  conesStart conesAttributes conesContent; */
+
+/* momentsCone:  conesStart conesAttributes conesContent; */
+
+productCone:  productConeStart productConeAttributes productConeContent;
+
+productConeStart: PRODUCTCONESTART;
+
+productConeAttributes: productConeAttList;
+
+productConeAttList: productConeAttList productConeAtt;
+
+productConeAtt: 
+      osilNumberOfRowsATT
+    | osilNumberOfColumnsATT
+    | osilNameATT
+;
+
+productConeContent: productConeFactors productConeEnd;
+
+productConeFactors: productConeFactorsStart productConeFactorsAttributes productConeFactorsContent;
+
+productConeFactorsStart: FACTORSSTART;
+
+productConeFactorsAttributes: osilNumberOfElATT;
+
+productConeFactorsContent: productConeFactorList productConeFactorsEnd;
+
+productConeFactorList: osglIntArrayData;
+
+productConeFactorsEnd: ENDOFELEMENT | GREATERTHAN FACTORSEND;
+
+productConeEnd: ENDOFELEMENT | GREATERTHAN PRODUCTCONEEND;
+
+intersectionCone:  intersectionConeStart intersectionConeAttributes intersectionConeContent;
+
+intersectionConeStart: INTERSECTIONCONESTART;
+
+intersectionConeAttributes: intersectionConeAttList;
+
+intersectionConeAttList: intersectionConeAttList intersectionConeAtt;
+
+intersectionConeAtt: 
+      osilNumberOfRowsATT
+    | osilNumberOfColumnsATT
+    | osilNameATT
+;
+
+intersectionConeContent: intersectionConeComponents intersectionConeEnd;
+
+intersectionConeComponents: intersectionConeComponentsStart intersectionConeComponentsAttributes intersectionConeComponentsContent;
+
+intersectionConeComponentsStart: COMPONENTSSTART;
+
+intersectionConeComponentsAttributes: osilNumberOfElATT;
+
+intersectionConeComponentsContent: intersectionConeComponentList intersectionConeComponentsEnd;
+
+intersectionConeComponentList: osglIntArrayData;
+
+intersectionConeComponentsEnd: ENDOFELEMENT | GREATERTHAN COMPONENTSEND;
+
+intersectionConeEnd: ENDOFELEMENT | GREATERTHAN INTERSECTIONCONEEND;
+
+/* dualCone:  conesStart conesAttributes conesContent; */
+
+/* polarCone:  conesStart conesAttributes conesContent; */
 
 
 
 
-matrixProgramming: /*matrixProgrammingStart matrixProgrammingAttributes matrixProgrammingContent matrixProgrammingEnd*/;
-		
+matrixProgramming: /* | matrixProgrammingStart matrixProgrammingAttributes matrixProgrammingContent matrixProgrammingEnd*/;
+        
 
 
 
@@ -228,106 +364,106 @@ timedomain:
 timedomainend: ENDOFELEMENT
              | GREATERTHAN TIMEDOMAINEND;
 
-stages: stagesstart numberofstagesatt stagelist STAGESEND
+stages: stagesstart osilNumberofstagesATT stagelist STAGESEND
 {
-	if( osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount )
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of stages less than numberOfStages");
+    if( osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount )
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of stages less than numberOfStages");
  /* After stages have been processed, make sure that all variables and constraints have been assigned
   * to a stage (uniquely) and all objectives have been assigned as well (possibly more than once).
   * For future reference also record the stage to which each variable and constraint belongs. 
   */
-	parserData->m_miVarStageInfo = new int [ osinstance->instanceData->variables->numberOfVariables ];
-	parserData->m_miObjStageInfo = new int [ osinstance->instanceData->objectives->numberOfObjectives ];
-	parserData->m_miConStageInfo = new int [ osinstance->instanceData->constraints->numberOfConstraints ];
-	parserData->nvarcovered = 0;
-	for (int i = 0; i < osinstance->instanceData->variables->numberOfVariables; i++)
-		 parserData->m_miVarStageInfo[i] = -1;
-	for (int i = 0; i < osinstance->instanceData->objectives->numberOfObjectives; i++)
-		 parserData->m_miObjStageInfo[i] = -1;
-	for (int i = 0; i < osinstance->instanceData->constraints->numberOfConstraints; i++)
-		 parserData->m_miConStageInfo[i] = -1;
-	for (int k = 0; k < osinstance->instanceData->timeDomain->stages->numberOfStages; k++)
-		{for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[k]->variables->numberOfVariables; i++)
-			{			
-			if (parserData->m_miVarStageInfo[ osinstance->instanceData->timeDomain->stages->stage[k]->variables->var[i]->idx ] != -1)
-					parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable belongs to two stages");
-				parserData->m_miVarStageInfo[ osinstance->instanceData->timeDomain->stages->stage[k]->variables->var[i]->idx ] = k;
-			};
-		 parserData->nvarcovered += osinstance->instanceData->timeDomain->stages->stage[k]->variables->numberOfVariables;
-		};
-	if (parserData->nvarcovered != osinstance->instanceData->variables->numberOfVariables)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "some variables not assigned to any stage");
-	parserData->nconcovered = 0;
-	for (int k = 0; k < osinstance->instanceData->timeDomain->stages->numberOfStages; k++)
-		{for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[k]->constraints->numberOfConstraints; i++)
-			{if (parserData->m_miConStageInfo[ osinstance->instanceData->timeDomain->stages->stage[k]->constraints->con[i]->idx ] != -1)
-				parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint belongs to two stages");
-				 parserData->m_miConStageInfo[ osinstance->instanceData->timeDomain->stages->stage[k]->constraints->con[i]->idx ] = k;
-			};
-		 parserData->nconcovered += osinstance->instanceData->timeDomain->stages->stage[k]->constraints->numberOfConstraints;
-		};
-	if (parserData->nconcovered != osinstance->instanceData->constraints->numberOfConstraints)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "some constraints not assigned to any stage");
-	for (int k = 0; k < osinstance->instanceData->timeDomain->stages->numberOfStages; k++)
-		{ for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[k]->objectives->numberOfObjectives; i++)
-			{ if (parserData->m_miObjStageInfo[ -osinstance->instanceData->timeDomain->stages->stage[k]->objectives->obj[i]->idx-1 ] == -1)
-	  			  parserData->m_miObjStageInfo[ -osinstance->instanceData->timeDomain->stages->stage[k]->objectives->obj[i]->idx-1 ] = k;
-			};
-		};
-	for (int i = 0; i < osinstance->instanceData->objectives->numberOfObjectives; i++)
-		if (parserData->m_miObjStageInfo[i] == -1)
-			parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "some objectives not assigned to any stage");
+    parserData->m_miVarStageInfo = new int [ osinstance->instanceData->variables->numberOfVariables ];
+    parserData->m_miObjStageInfo = new int [ osinstance->instanceData->objectives->numberOfObjectives ];
+    parserData->m_miConStageInfo = new int [ osinstance->instanceData->constraints->numberOfConstraints ];
+    parserData->nvarcovered = 0;
+    for (int i = 0; i < osinstance->instanceData->variables->numberOfVariables; i++)
+         parserData->m_miVarStageInfo[i] = -1;
+    for (int i = 0; i < osinstance->instanceData->objectives->numberOfObjectives; i++)
+         parserData->m_miObjStageInfo[i] = -1;
+    for (int i = 0; i < osinstance->instanceData->constraints->numberOfConstraints; i++)
+         parserData->m_miConStageInfo[i] = -1;
+    for (int k = 0; k < osinstance->instanceData->timeDomain->stages->numberOfStages; k++)
+        {for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[k]->variables->numberOfVariables; i++)
+            {            
+            if (parserData->m_miVarStageInfo[ osinstance->instanceData->timeDomain->stages->stage[k]->variables->var[i]->idx ] != -1)
+                    parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable belongs to two stages");
+                parserData->m_miVarStageInfo[ osinstance->instanceData->timeDomain->stages->stage[k]->variables->var[i]->idx ] = k;
+            };
+         parserData->nvarcovered += osinstance->instanceData->timeDomain->stages->stage[k]->variables->numberOfVariables;
+        };
+    if (parserData->nvarcovered != osinstance->instanceData->variables->numberOfVariables)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "some variables not assigned to any stage");
+    parserData->nconcovered = 0;
+    for (int k = 0; k < osinstance->instanceData->timeDomain->stages->numberOfStages; k++)
+        {for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[k]->constraints->numberOfConstraints; i++)
+            {if (parserData->m_miConStageInfo[ osinstance->instanceData->timeDomain->stages->stage[k]->constraints->con[i]->idx ] != -1)
+                parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint belongs to two stages");
+                 parserData->m_miConStageInfo[ osinstance->instanceData->timeDomain->stages->stage[k]->constraints->con[i]->idx ] = k;
+            };
+         parserData->nconcovered += osinstance->instanceData->timeDomain->stages->stage[k]->constraints->numberOfConstraints;
+        };
+    if (parserData->nconcovered != osinstance->instanceData->constraints->numberOfConstraints)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "some constraints not assigned to any stage");
+    for (int k = 0; k < osinstance->instanceData->timeDomain->stages->numberOfStages; k++)
+        { for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[k]->objectives->numberOfObjectives; i++)
+            { if (parserData->m_miObjStageInfo[ -osinstance->instanceData->timeDomain->stages->stage[k]->objectives->obj[i]->idx-1 ] == -1)
+                    parserData->m_miObjStageInfo[ -osinstance->instanceData->timeDomain->stages->stage[k]->objectives->obj[i]->idx-1 ] = k;
+            };
+        };
+    for (int i = 0; i < osinstance->instanceData->objectives->numberOfObjectives; i++)
+        if (parserData->m_miObjStageInfo[i] == -1)
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "some objectives not assigned to any stage");
 };
 
 stagesstart: STAGESSTART {osinstance->instanceData->timeDomain->stages = new TimeDomainStages();}
 
-numberofstagesatt: NUMBEROFSTAGESATT QUOTE INTEGER QUOTE GREATERTHAN {
-	if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-	if ($3 < 1) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of stages must be positive");
-	osinstance->instanceData->timeDomain->stages->numberOfStages = $3;
-	if (osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
-		osinstance->instanceData->timeDomain->stages->stage = new TimeDomainStage*[ $3 ];
-	for(int i = 0; i < $3; i++) 
-	{	osinstance->instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
-		osinstance->instanceData->timeDomain->stages->stage[i]->variables   = new TimeDomainStageVariables();
-		osinstance->instanceData->timeDomain->stages->stage[i]->constraints = new TimeDomainStageConstraints();
-		osinstance->instanceData->timeDomain->stages->stage[i]->objectives  = new TimeDomainStageObjectives();
-	}
+osilNumberofstagesATT: NUMBEROFSTAGESATT QUOTE INTEGER QUOTE GREATERTHAN {
+    if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if ($3 < 1) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of stages must be positive");
+    osinstance->instanceData->timeDomain->stages->numberOfStages = $3;
+    if (osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
+        osinstance->instanceData->timeDomain->stages->stage = new TimeDomainStage*[ $3 ];
+    for(int i = 0; i < $3; i++) 
+    {    osinstance->instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
+        osinstance->instanceData->timeDomain->stages->stage[i]->variables   = new TimeDomainStageVariables();
+        osinstance->instanceData->timeDomain->stages->stage[i]->constraints = new TimeDomainStageConstraints();
+        osinstance->instanceData->timeDomain->stages->stage[i]->objectives  = new TimeDomainStageObjectives();
+    }
 };
 
 stagelist: stage
-	| stagelist stage;
+    | stagelist stage;
 
 stage: {
-	if( osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many stages");
-	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables = 0;
-	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints = 0;
-	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = 0;
+    if( osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many stages");
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables = 0;
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints = 0;
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = 0;
 }
-STAGESTART stagenameATT stageend { /* set defaults for next stage */
-	parserData->stagenameON = false;
-	parserData->stageVariablesON = false;
-	parserData->stageObjectivesON = false;
-	parserData->stageConstraintsON = false;
-	parserData->stageVariablesOrdered = false;
-	parserData->stageObjectivesOrdered = false;
-	parserData->stageConstraintsOrdered = false;
-	parserData->stageVariableStartIdx = 0;
-	parserData->stageObjectiveStartIdx = 0;
-	parserData->stageConstraintStartIdx = 0;
-	parserData->stagevarcount = 0;
-	parserData->stageconcount = 0;
-	parserData->stageobjcount = 0;
-	parserData->stagecount++;
+STAGESTART osilStagenameATT stageend { /* set defaults for next stage */
+    parserData->stagenameON = false;
+    parserData->stageVariablesON = false;
+    parserData->stageObjectivesON = false;
+    parserData->stageConstraintsON = false;
+    parserData->stageVariablesOrdered = false;
+    parserData->stageObjectivesOrdered = false;
+    parserData->stageConstraintsOrdered = false;
+    parserData->stageVariableStartIdx = 0;
+    parserData->stageObjectiveStartIdx = 0;
+    parserData->stageConstraintStartIdx = 0;
+    parserData->stagevarcount = 0;
+    parserData->stageconcount = 0;
+    parserData->stageobjcount = 0;
+    parserData->stagecount++;
 };
 
-stagenameATT: 
-		| NAMEATT ATTRIBUTETEXT QUOTE {
-		  osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = $2;};
-		
+osilStagenameATT: 
+        | NAMEATT ATTRIBUTETEXT QUOTE {
+          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = $2;};
+        
 stageend: ENDOFELEMENT
-		| GREATERTHAN stagecontent STAGEEND;
+        | GREATERTHAN stagecontent STAGEEND;
 
 stagecontent: stagevariables stageconstraints stageobjectives;
 
@@ -337,63 +473,63 @@ stagevariables:
         };
 
 anotherstagevarATT:
-	  | anotherstagevarATT stagevaratt;
-		
-stagevaratt: numberofstagevariablesatt
-      | stagevarstartidxATT;
+      | anotherstagevarATT stagevaratt;
+        
+stagevaratt: osilNumberofstagevariablesATT
+      | osilStagevarstartidxATT;
            
-numberofstagevariablesatt: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE  {
-	if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of variables cannot be negative");
-	if ($3 > osinstance->instanceData->variables->numberOfVariables)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variables in this stage");		 
-	if ($3 > 0) {
-		if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables > 0)
-			parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfVariables");
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables = $3;
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var = new TimeDomainStageVar*[ $3 ];
-		for (int i = 0; i < $3; i++) 
-		{	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i] = new TimeDomainStageVar;
-			osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i]->idx = 0; 
-		}
-	};
+osilNumberofstagevariablesATT: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE  {
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of variables cannot be negative");
+    if ($3 > osinstance->instanceData->variables->numberOfVariables)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variables in this stage");         
+    if ($3 > 0) {
+        if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables > 0)
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfVariables");
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables = $3;
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var = new TimeDomainStageVar*[ $3 ];
+        for (int i = 0; i < $3; i++) 
+        {    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i] = new TimeDomainStageVar;
+            osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i]->idx = 0; 
+        }
+    };
 };
 
-stagevarstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
-	if (parserData->stageVariablesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
-	if ($3 < 0 && $3 >= osinstance->instanceData->variables->numberOfVariables)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index out of range");
-	parserData->stageVariablesOrdered = true;
-	parserData->stageVariableStartIdx = $3;
+osilStagevarstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
+    if (parserData->stageVariablesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
+    if ($3 < 0 && $3 >= osinstance->instanceData->variables->numberOfVariables)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index out of range");
+    parserData->stageVariablesOrdered = true;
+    parserData->stageVariableStartIdx = $3;
 };
 
 restofstagevariables: emptyvarlist {
-	if ((parserData->stageVariablesOrdered != true) && 
-		 (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables > 0) ) 
-		  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varlist missing");
-	for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables; i++)
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i]->idx = parserData->stageVariableStartIdx + i;
-	}
-	| GREATERTHAN stagevarlist VARIABLESEND {
-	  if (parserData->stagevarcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables)
-	      parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few variables supplied");
-	  };
+    if ((parserData->stageVariablesOrdered != true) && 
+         (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables > 0) ) 
+          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varlist missing");
+    for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables; i++)
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i]->idx = parserData->stageVariableStartIdx + i;
+    }
+    | GREATERTHAN stagevarlist VARIABLESEND {
+      if (parserData->stagevarcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables)
+          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few variables supplied");
+      };
 
 emptyvarlist: ENDOFELEMENT
-			| GREATERTHAN VARIABLESEND;
-		
+            | GREATERTHAN VARIABLESEND;
+        
 stagevarlist: stagevar
-	        | stagevarlist stagevar;
+            | stagevarlist stagevar;
 
 stagevar: {if (parserData->stageVariablesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no varlist expected");}
-		VARSTART stagevaridxATT stagevarend;
+        VARSTART osilStagevaridxATT stagevarend;
 
-stagevaridxATT: IDXATT QUOTE INTEGER QUOTE {
-	if ($3 < 0 && $3 >= osinstance->instanceData->variables->numberOfVariables)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index out of range");		 
-	if (parserData->stagevarcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables) 
-	    parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variables in this stage");
-	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[parserData->stagevarcount]->idx = $3;
-	parserData->stagevarcount++;
+osilStagevaridxATT: IDXATT QUOTE INTEGER QUOTE {
+    if ($3 < 0 && $3 >= osinstance->instanceData->variables->numberOfVariables)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index out of range");         
+    if (parserData->stagevarcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variables in this stage");
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[parserData->stagevarcount]->idx = $3;
+    parserData->stagevarcount++;
 };
 
 stagevarend: ENDOFELEMENT
@@ -402,143 +538,135 @@ stagevarend: ENDOFELEMENT
 stageconstraints: 
       | CONSTRAINTSSTART anotherstageconATT restofstageconstraints {
         parserData->stageConstraintsON = true;
-	};
+    };
 
 anotherstageconATT:
-		| anotherstageconATT stageconatt;
-		
-stageconatt: numberofstageconstraintsatt
-           | stageconstartidxATT;
+        | anotherstageconATT stageconatt;
+        
+stageconatt: osilNumberofstageconstraintsATT
+           | osilStageconstartidxATT;
            
-numberofstageconstraintsatt: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE {
-	if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of constraints cannot be negative");
-	if ($3 > osinstance->instanceData->constraints->numberOfConstraints)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many constraints in this stage");		 
-	if ($3 > 0) {
-		if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints > 0)
-			parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfConstraints");
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints = $3;
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con = new TimeDomainStageCon*[ $3 ];
-		for (int i = 0; i < $3; i++) 
-		{	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i] = new TimeDomainStageCon;
-			osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i]->idx = 0; 
-		}
-	};
+osilNumberofstageconstraintsATT: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE {
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of constraints cannot be negative");
+    if ($3 > osinstance->instanceData->constraints->numberOfConstraints)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many constraints in this stage");         
+    if ($3 > 0) {
+        if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints > 0)
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfConstraints");
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints = $3;
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con = new TimeDomainStageCon*[ $3 ];
+        for (int i = 0; i < $3; i++) 
+        {    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i] = new TimeDomainStageCon;
+            osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i]->idx = 0; 
+        }
+    };
 };
 
-stageconstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
-	if (parserData->stageConstraintsOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
-	if ($3 < 0 && $3 >= osinstance->instanceData->constraints->numberOfConstraints)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint index out of range");
-	parserData->stageConstraintsOrdered = true;
-	parserData->stageConstraintStartIdx = $3;
+osilStageconstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
+    if (parserData->stageConstraintsOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
+    if ($3 < 0 && $3 >= osinstance->instanceData->constraints->numberOfConstraints)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint index out of range");
+    parserData->stageConstraintsOrdered = true;
+    parserData->stageConstraintStartIdx = $3;
 };
 
 restofstageconstraints: emptyconlist {
-	if ((parserData->stageConstraintsOrdered != true) && 
-		 (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints > 0) ) 
-		  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "conlist missing");
-	for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints; i++)
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i]->idx = parserData->stageConstraintStartIdx + i;
-	}
-	| GREATERTHAN stageconlist CONSTRAINTSEND {
-	  if (parserData->stageconcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints)
-	      parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few constraints supplied");
-	  };
-		
+    if ((parserData->stageConstraintsOrdered != true) && 
+         (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints > 0) ) 
+          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "conlist missing");
+    for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints; i++)
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i]->idx = parserData->stageConstraintStartIdx + i;
+    }
+    | GREATERTHAN stageconlist CONSTRAINTSEND {
+      if (parserData->stageconcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints)
+          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few constraints supplied");
+      };
+        
 emptyconlist: ENDOFELEMENT
-			| GREATERTHAN CONSTRAINTSEND;
-			
+            | GREATERTHAN CONSTRAINTSEND;
+            
 stageconlist: stagecon
             | stageconlist stagecon;
 
 stagecon: {if (parserData->stageConstraintsOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no conlist expected");}
-		CONSTART stageconidxATT stageconend;
+        CONSTART osilStageconidxATT stageconend;
 
-stageconidxATT: IDXATT QUOTE INTEGER QUOTE {
-	if ($3 < 0 && $3 >= osinstance->instanceData->constraints->numberOfConstraints)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint index out of range");		 
-	if (parserData->stageconcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints) 
-	    parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many constraints in this stage");
-	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[parserData->stageconcount]->idx = $3;
-	parserData->stageconcount++;
+osilStageconidxATT: IDXATT QUOTE INTEGER QUOTE {
+    if ($3 < 0 && $3 >= osinstance->instanceData->constraints->numberOfConstraints)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint index out of range");         
+    if (parserData->stageconcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many constraints in this stage");
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[parserData->stageconcount]->idx = $3;
+    parserData->stageconcount++;
 };
 
 stageconend: ENDOFELEMENT
            | GREATERTHAN CONEND;
 
 stageobjectives: { /* By default, an objective belongs to every stage */
-			osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = 
-				osinstance->instanceData->objectives->numberOfObjectives;
-			osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj = 
-				new TimeDomainStageObj*[ osinstance->instanceData->objectives->numberOfObjectives ];
-			for (int i = 0; i < osinstance->instanceData->objectives->numberOfObjectives; i++) 
-			{	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i] = new TimeDomainStageObj;
-				osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = -(i+1); 
-			}
-	};
+            osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = 
+                osinstance->instanceData->objectives->numberOfObjectives;
+            osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj = 
+                new TimeDomainStageObj*[ osinstance->instanceData->objectives->numberOfObjectives ];
+            for (int i = 0; i < osinstance->instanceData->objectives->numberOfObjectives; i++) 
+            {    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i] = new TimeDomainStageObj;
+                osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = -(i+1); 
+            }
+    };
     | OBJECTIVESSTART anotherstageobjATT restofstageobjectives {
-	  parserData->stageObjectivesON = true;
-	};
+      parserData->stageObjectivesON = true;
+    };
 
 anotherstageobjATT:
-		| anotherstageobjATT stageobjatt;
-		
-stageobjatt: numberofstageobjectivesatt
-           | stageobjstartidxATT;
+        | anotherstageobjATT stageobjatt;
+        
+stageobjatt: osilNumberofstageobjectivesATT
+           | osilStageobjstartidxATT;
            
-numberofstageobjectivesatt: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE {
-	if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of objectives cannot be negative");
-	if ($3 > osinstance->instanceData->objectives->numberOfObjectives)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many objectives in this stage");		 
-	if ($3 > 0) {
-		if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives > 0)
-			parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfObjectives");
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = $3;
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj = new TimeDomainStageObj*[ $3 ];
-		for (int i = 0; i < $3; i++) 
-		{	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i] = new TimeDomainStageObj;
-			osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = 0; 
-		}
-	};
-};
-
-stageobjstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
-	if (parserData->stageObjectivesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
-	if ($3 >= 0 && $3 <= -osinstance->instanceData->objectives->numberOfObjectives - 1)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");
-	parserData->stageObjectivesOrdered = true;
-	parserData->stageObjectiveStartIdx = $3;
+osilNumberofstageobjectivesATT: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE {
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of objectives cannot be negative");
+    if ($3 > osinstance->instanceData->objectives->numberOfObjectives)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many objectives in this stage");         
+    if ($3 > 0) {
+        if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives > 0)
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfObjectives");
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = $3;
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj = new TimeDomainStageObj*[ $3 ];
+        for (int i = 0; i < $3; i++) 
+        {    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i] = new TimeDomainStageObj;
+            osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = 0; 
+        }
+    };
 };
 
 restofstageobjectives: emptyobjlist {
-	if ((parserData->stageObjectivesOrdered != true) && 
-		 (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives > 0) ) 
-		  parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objlist missing");
-	for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives; i++)
-		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = parserData->stageObjectiveStartIdx - i;
-	}
-	| GREATERTHAN stageobjlist OBJECTIVESEND {
-	  if (parserData->stageobjcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives)
-	      parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few objectives supplied");
-	};
-	
+    if ((parserData->stageObjectivesOrdered != true) && 
+         (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives > 0) ) 
+          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objlist missing");
+    for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives; i++)
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = parserData->stageObjectiveStartIdx - i;
+    }
+    | GREATERTHAN stageobjlist OBJECTIVESEND {
+      if (parserData->stageobjcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives)
+          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few objectives supplied");
+    };
+    
 emptyobjlist: ENDOFELEMENT
-			| GREATERTHAN OBJECTIVESEND;
+            | GREATERTHAN OBJECTIVESEND;
 
 stageobjlist: stageobj
             | stageobjlist stageobj;
 
 stageobj: {if (parserData->stageObjectivesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no objlist expected");}
-		OBJSTART stageobjidxATT stageobjend;
+        OBJSTART osilStageobjidxATT stageobjend;
 
-stageobjidxATT: IDXATT QUOTE INTEGER QUOTE {
-	if ($3 >= 0 && $3 >= -osinstance->instanceData->objectives->numberOfObjectives - 1)
-		parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");		 
-	if (parserData->stageobjcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives) 
-	    parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many objectives in this stage");
-	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[parserData->stageobjcount]->idx = $3;
-	parserData->stageobjcount++;
+osilStageobjidxATT: IDXATT QUOTE INTEGER QUOTE {
+    if ($3 >= 0 && $3 >= -osinstance->instanceData->objectives->numberOfObjectives - 1)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");         
+    if (parserData->stageobjcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many objectives in this stage");
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[parserData->stageobjcount]->idx = $3;
+    parserData->stageobjcount++;
 };
 
 stageobjend: ENDOFELEMENT
@@ -550,36 +678,45 @@ interval:
         {osinstance->instanceData->timeDomain->interval = new TimeDomainInterval();
         }
         INTERVALSTART anotherIntervalATT intervalend {
-		parserData->intervalhorizonON = false;
-		parserData->intervalstartON = false;
-		printf("Interval not yet supported.\n\n");
+        parserData->intervalhorizonON = false;
+        parserData->intervalstartON = false;
+        printf("Interval not yet supported.\n\n");
 };
 
 intervalend: ENDOFELEMENT
-	| GREATERTHAN INTERVALEND;
+    | GREATERTHAN INTERVALEND;
 
 anotherIntervalATT:
-	| anotherIntervalATT intervalatt;
+    | anotherIntervalATT intervalatt;
 
-intervalatt: intervalhorizonatt 
-		{ if(parserData->intervalhorizonON) 
+intervalatt: osilIntervalhorizonATT 
+        { if(parserData->intervalhorizonON) 
        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many interval horizon attributes");
-		parserData->intervalhorizonON = true; }
-	|   intervalstartatt 
-		{ if(parserData->intervalstartON) 
+        parserData->intervalhorizonON = true; }
+    |   osilIntervalstartATT 
+        { if(parserData->intervalstartON) 
        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many interval start attributes");
-		parserData->intervalstartON = true; }
-
-intervalhorizonatt: HORIZONATT QUOTE aNumber QUOTE {
-		if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-		parserData->intervalhorizon = parserData->tempVal;};
-
-intervalstartatt: STARTATT QUOTE aNumber QUOTE {
-		if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-		parserData->intervalstart = parserData->tempVal;};
+        parserData->intervalstartON = true; }
 
 
-numberOfElAttribute: NUMBEROFELATT quote INTEGER quote 
+osilStageobjstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
+    if (parserData->stageObjectivesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
+    if ($3 >= 0 && $3 <= -osinstance->instanceData->objectives->numberOfObjectives - 1)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");
+    parserData->stageObjectivesOrdered = true;
+    parserData->stageObjectiveStartIdx = $3;
+};
+
+osilIntervalhorizonATT: HORIZONATT QUOTE aNumber QUOTE {
+        if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+        parserData->intervalhorizon = parserData->tempVal;};
+
+osilIntervalstartATT: STARTATT QUOTE aNumber QUOTE {
+        if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+        parserData->intervalstart = parserData->tempVal;};
+
+
+osilNumberOfElATT: NUMBEROFELATT quote INTEGER quote 
 {
     if (osglData->osglNumberOfElPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfEl attribute previously set");
@@ -588,7 +725,7 @@ numberOfElAttribute: NUMBEROFELATT quote INTEGER quote
     parserData->numberOfEl = $3; 
 }; 
 
-numberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE 
+osilNumberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE 
 {
     if ($2 != $4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
@@ -599,7 +736,7 @@ numberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE
     parserData->numberOfMatrices = $3; 
 }; 
 
-numberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE 
+osilNumberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE 
 {
     if ($2 != $4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
@@ -610,7 +747,7 @@ numberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE
     parserData->numberOfCones = $3; 
 }; 
 
-numberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE 
+osilNumberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE 
 {
     if ($2 != $4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
@@ -621,7 +758,7 @@ numberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE
     parserData->numberOfRows = $3; 
 };
 
-numberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE 
+osilNumberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE 
 {
     if ($2 != $4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
@@ -632,15 +769,81 @@ numberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE
     parserData->numberOfColumns = $3; 
 }; 
 
-
-nameATT: NAMEATT ATTRIBUTETEXT QUOTE 
+osilNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
 {
     if (parserData->numberOfColumnsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->namePresent = true;
     parserData->name = $2; 
 };
-		
+
+
+osilNormScaleFactorATT: NORMSCALEFACTORATT QUOTE aNumber QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->normScaleFactorPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "normScaleFactor attribute previously set");
+    if (parserData->tempVal <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "scale factor must be positive");
+    parserData->normScaleFactorPresent = true;
+    parserData->normScaleFactor = parserData->tempVal; 
+};
+
+osilDistortionMatrixIdxATT: DISTORTIONMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->distortionMatrixPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "distortionMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "distortion matrix index cannot be negative");
+    parserData->distortionMatrixPresent = true;
+    parserData->distortionMatrix = $3; 
+};
+ 
+osilAxisDirectionATT: AXISDIRECTIONATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->axisDirectionPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axisDirection attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axis direction index cannot be negative");
+    parserData->axisDirectionPresent = true;
+    parserData->axisDirection = $3; 
+};
+
+
+osilFirstAxisDirectionATT: FIRSTAXISDIRECTIONATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->firstAxisDirectionPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "firstAxisDirection attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axis direction index cannot be negative");
+    parserData->firstAxisDirectionPresent = true;
+    parserData->firstAxisDirection = $3; 
+};
+
+osilSecondAxisDirectionATT: SECONDAXISDIRECTIONATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->secondAxisDirectionPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "secondAxisDirection attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axis direction index cannot be negative");
+    parserData->secondAxisDirectionPresent = true;
+    parserData->secondAxisDirection = $3; 
+};
+
+osilSemidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE 
+{
+    if (parserData->semidefinitenessPresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
+    parserData->semidefinitenessPresent = true;
+    if ($2 != "true" && $2 != "false")
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "semidefiniteness must be either \"true\" or \"false \"");
+    else
+        parserData->semidefiniteness = $2; 
+};
 
 
 aNumber:

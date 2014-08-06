@@ -46,7 +46,9 @@ OSnLParserData::OSnLParserData() :
     numbervalueattON(false),
     numberidattON(false),
     variableidxattON(false),
-    variablecoefattON(false)
+    variablecoefattON(false),
+    includeDiagonalAttributePresent(false),
+    includeDiagonalAttribute("")
 {
 
 }//OSnLParserData

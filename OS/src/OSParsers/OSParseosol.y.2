@@ -1477,6 +1477,7 @@ directoriesToDeleteLaden: GREATERTHAN PathList DIRECTORIESTODELETEEND
     }
 };
 
+/*
 directoriesToDeleteList: directoryToDelete | directoriesToDeleteList directoryToDelete;
 
 directoryToDelete: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
@@ -1490,7 +1491,7 @@ directoryToDelete: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
     }
     free($3); 
 };
-
+*/
 
 /* -------------------------------------------- */
 processesToKill: processesToKillStart processesToKillAttributes processesToKillContent
@@ -1996,7 +1997,8 @@ variablesBasicNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 variablesBasicContent: variablesBasicEmpty | variablesBasicLaden;
@@ -2031,7 +2033,8 @@ variablesAtLowerNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 variablesAtLowerContent: variablesAtLowerEmpty | variablesAtLowerLaden;
@@ -2065,7 +2068,8 @@ variablesAtUpperNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 variablesAtUpperContent: variablesAtUpperEmpty | variablesAtUpperLaden;
@@ -2099,7 +2103,8 @@ variablesAtEqualityNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 variablesAtEqualityContent: variablesAtEqualityEmpty | variablesAtEqualityLaden;
@@ -2133,7 +2138,8 @@ variablesIsFreeNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 variablesIsFreeContent: variablesIsFreeEmpty | variablesIsFreeLaden;
@@ -2167,7 +2173,8 @@ variablesSuperbasicNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 variablesSuperbasicContent: variablesSuperbasicEmpty | variablesSuperbasicLaden;
@@ -2201,7 +2208,8 @@ variablesUnknownNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 variablesUnknownContent: variablesUnknownEmpty | variablesUnknownLaden;
@@ -2905,7 +2913,8 @@ objectivesBasicNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 objectivesBasicContent: objectivesBasicEmpty | objectivesBasicLaden;
@@ -2938,7 +2947,8 @@ objectivesAtLowerNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 objectivesAtLowerContent: objectivesAtLowerEmpty | objectivesAtLowerLaden;
@@ -2971,7 +2981,8 @@ objectivesAtUpperNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 objectivesAtUpperContent: objectivesAtUpperEmpty | objectivesAtUpperLaden;
@@ -3004,7 +3015,8 @@ objectivesAtEqualityNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 objectivesAtEqualityContent: objectivesAtEqualityEmpty | objectivesAtEqualityLaden;
@@ -3037,7 +3049,8 @@ objectivesIsFreeNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 objectivesIsFreeContent: objectivesIsFreeEmpty | objectivesIsFreeLaden;
@@ -3071,7 +3084,8 @@ objectivesSuperbasicNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 objectivesSuperbasicContent: objectivesSuperbasicEmpty | objectivesSuperbasicLaden;
@@ -3105,7 +3119,8 @@ objectivesUnknownNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 objectivesUnknownContent: objectivesUnknownEmpty | objectivesUnknownLaden;
@@ -3586,7 +3601,8 @@ slacksBasicNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 slacksBasicContent: slacksBasicEmpty | slacksBasicLaden;
@@ -3619,7 +3635,8 @@ slacksAtLowerNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 slacksAtLowerContent: slacksAtLowerEmpty | slacksAtLowerLaden;
@@ -3653,7 +3670,8 @@ slacksAtUpperNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 slacksAtUpperContent: slacksAtUpperEmpty | slacksAtUpperLaden;
@@ -3687,7 +3705,8 @@ slacksAtEqualityNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 slacksAtEqualityContent: slacksAtEqualityEmpty | slacksAtEqualityLaden;
@@ -3721,7 +3740,8 @@ slacksIsFreeNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 slacksIsFreeContent: slacksIsFreeEmpty | slacksIsFreeLaden;
@@ -3755,7 +3775,8 @@ slacksSuperbasicNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 slacksSuperbasicContent: slacksSuperbasicEmpty | slacksSuperbasicLaden;
@@ -3789,7 +3810,8 @@ slacksUnknownNumberOfElATT: numberOfElAttribute
 {
     osglData->osglCounter = 0; 
     osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
+    if (parserData->numberOf > 0)
+        osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
 slacksUnknownContent: slacksUnknownEmpty | slacksUnknownLaden;
@@ -4780,7 +4802,8 @@ otherEnumerationATT:
         osglData->osglCounter = 0; 
         osglData->osglNumberOfElPresent = true;
         osglData->osglNumberOfEl = parserData->numberOf;
-        osglData->osglIntArray = new int[parserData->numberOf];
+        if (parserData->numberOf > 0)
+            osglData->osglIntArray = new int[parserData->numberOf];
     } 
   | valueAttribute
   | descriptionAttribute

@@ -82,7 +82,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-//#define OSILPARSERDEBUG
+#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
@@ -169,6 +169,13 @@ return(DOUBLE);}
 ({xmlwhitespace}+start{equality}) {YY_PRINT; return(STARTATT);}
 ({xmlwhitespace}+value{equality}) {YY_PRINT;  return(VALUEATT);}
 
+({xmlwhitespace}+normScaleFactor{equality}) {YY_PRINT;  return(NORMSCALEFACTORATT);}
+({xmlwhitespace}+distortionMatrixIdx{equality}) {YY_PRINT;  return(DISTORTIONMATRIXIDXATT);}
+({xmlwhitespace}+axisDirection{equality}) {YY_PRINT;  return(AXISDIRECTIONATT);}
+({xmlwhitespace}+firstAxisDirection{equality}) {YY_PRINT;  return(FIRSTAXISDIRECTIONATT);}
+({xmlwhitespace}+secondAxisDirection{equality}) {YY_PRINT;  return(SECONDAXISDIRECTIONATT);}
+
+
  /* attributes returning strings (that are potentially empty)*/
 
 ({xmlwhitespace}+id{equality}\"\") {YY_PRINT; return(EMPTYIDATT);}
@@ -183,6 +190,13 @@ return(DOUBLE);}
 ({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
+
+
+({xmlwhitespace}+semidefiniteness{equality}\"\") {YY_PRINT; return(EMPTYSEMIDEFINITENESSATT);}
+({xmlwhitespace}+semidefiniteness{equality}\'\') {YY_PRINT; return(EMPTYSEMIDEFINITENESSATT);}
+({xmlwhitespace}+semidefiniteness{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SEMIDEFINITENESSATT);}
+({xmlwhitespace}+semidefiniteness{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(SEMIDEFINITENESSATT);}
+
 
  /* patterns for <quadraticCoefficients> */
 {xmlwhitespace}*\<\/osil{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSILEND);}
@@ -241,6 +255,10 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/dualCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DUALCONEEND);}
 {xmlwhitespace}*\<polarCone {YY_PRINT;  return(POLARCONESTART);}
 {xmlwhitespace}*\<\/polarCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(POLARCONEEND);}
+{xmlwhitespace}*\<factors {YY_PRINT;  return(FACTORSSTART);}
+{xmlwhitespace}*\<\/factors{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(FACTORSEND);}
+{xmlwhitespace}*\<components {YY_PRINT;  return(COMPONENTSSTART);}
+{xmlwhitespace}*\<\/components{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(COMPONENTSEND);}
 
 
 {xmlwhitespace}*\<base64BinaryData {YY_PRINT; return(BASE64START);}
@@ -314,6 +332,8 @@ return(DOUBLE);}
 ({xmlwhitespace}+excludeElementIfSet{equality}\'\') {YY_PRINT; return(EMPTYEXCLUDEATT);}
 ({xmlwhitespace}+excludeElementIfSet{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(EXCLUDEATT);}
 ({xmlwhitespace}+excludeElementIfSet{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(EXCLUDEATT);}
+
+ /* tokens for the <matrix> element */
 
 {xmlwhitespace}*\<matrix {YY_PRINT;  return(MATRIXSTART);}
 {xmlwhitespace}*\<\/matrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXEND);}
@@ -422,7 +442,39 @@ return(DOUBLE);}
 {xmlwhitespace}*\<matrixToScalar {YY_PRINT; return(MATRIXTOSCALARSTART);}
 {xmlwhitespace}*\<\/matrixToScalar{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTOSCALAREND);}
 
+{xmlwhitespace}*\<matrixDiagonal {YY_PRINT; return(MATRIXDIAGONALSTART);}
+{xmlwhitespace}*\<\/matrixDiagonal{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXDIAGONALEND);}
+{xmlwhitespace}*\<matrixDotTimes {YY_PRINT; return(MATRIXDOTTIMESSTART);}
+{xmlwhitespace}*\<\/matrixDotTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXDOTTIMESEND);}
+{xmlwhitespace}*\<matrixIdentity {YY_PRINT; return(MATRIXIDENTITYSTART);}
+{xmlwhitespace}*\<\/matrixIdentity{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXIDENTITYEND);}
+{xmlwhitespace}*\<matrixInverse {YY_PRINT; return(MATRIXINVERSESTART);}
+{xmlwhitespace}*\<\/matrixInverse{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXINVERSEEND);}
+{xmlwhitespace}*\<matrixLowerTriangle {YY_PRINT; return(MATRIXLOWERTRIANGLESTART);}
+{xmlwhitespace}*\<\/matrixLowerTriangle{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXLOWERTRIANGLEEND);}
+{xmlwhitespace}*\<matrixUpperTriangle {YY_PRINT; return(MATRIXUPPERTRIANGLESTART);}
+{xmlwhitespace}*\<\/matrixUpperTriangle{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXUPPERTRIANGLEEND);}
+{xmlwhitespace}*\<matrixMerge {YY_PRINT; return(MATRIXMERGESTART);}
+{xmlwhitespace}*\<\/matrixMerge{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXMERGEEND);}
+{xmlwhitespace}*\<matrixMinus {YY_PRINT; return(MATRIXMINUSSTART);}
+{xmlwhitespace}*\<\/matrixMinus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXMINUSEND);}
+{xmlwhitespace}*\<matrixPlus {YY_PRINT; return(MATRIXPLUSSTART);}
+{xmlwhitespace}*\<\/matrixPlus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXPLUSEND);}
+{xmlwhitespace}*\<matrixTimes {YY_PRINT; return(MATRIXTIMESSTART);}
+{xmlwhitespace}*\<\/matrixTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTIMESEND);}
+{xmlwhitespace}*\<matrixScalarTimes {YY_PRINT; return(MATRIXSCALARTIMESSTART);}
+{xmlwhitespace}*\<\/matrixScalarTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXSCALARTIMESEND);}
+{xmlwhitespace}*\<matrixSubMatrixAt {YY_PRINT; return(MATRIXSUBMATRIXATSTART);}
+{xmlwhitespace}*\<\/matrixSubMatrixAt{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXSUBMATRIXATEND);}
+{xmlwhitespace}*\<matrixTranspose {YY_PRINT; return(MATRIXTRANSPOSESTART);}
+{xmlwhitespace}*\<\/matrixTranspose{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTRANSPOSEEND);}
 
+ /* attributes returning strings (that are potentially empty)*/
+
+({xmlwhitespace}+includeDiagonal{equality}\"\") {YY_PRINT; return(EMPTYINCLUDEDIAGONALATT);}
+({xmlwhitespace}+includeDiagonal{equality}\'\') {YY_PRINT; return(EMPTYINCLUDEDIAGONALATT);}
+({xmlwhitespace}+includeDiagonal{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(INCLUDEDIAGONALATT);}
+({xmlwhitespace}+includeDiagonal{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(INCLUDEDIAGONALATT);}
 
  /* last section of OSParseosil.l */
 

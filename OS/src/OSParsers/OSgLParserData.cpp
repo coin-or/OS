@@ -20,6 +20,9 @@ OSgLParserData::~OSgLParserData()
     if (osglIntArray != NULL)
         delete[] osglIntArray;
     osglIntArray = NULL;
+    if (osglDblArray != NULL)
+        delete[] osglDblArray;
+    osglDblArray = NULL;
 }//~OSgLParserData
 
 

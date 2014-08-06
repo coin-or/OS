@@ -143,8 +143,11 @@ bool GeneralFileHeader::setHeader(std::string name, std::string source,
 SparseVector::SparseVector( int number_):
     number( number_)
 {
-    indexes = new int[ number];
-    values = new double[ number];
+//    if (number > 0)
+    {
+        indexes = new int[ number];
+        values = new double[ number];
+    }
     bDeleteArrays = true;
 }// end SparseVector constructor
 
@@ -166,12 +169,13 @@ SparseVector::~SparseVector()
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "delete[] indexes and arrays");
 #endif
-        delete[] indexes;
-        delete[] values;
+        if (indexes != NULL) delete[] indexes;
+        if (values  != NULL) delete[] values;
+        indexes = NULL;
+        values  = NULL;
     }
-    values = NULL;
-    indexes = NULL;
 }// end SparseVector destructor
+
 
 SparseIntVector::SparseIntVector( int number_):
     number( number_)
@@ -199,11 +203,11 @@ SparseIntVector::~SparseIntVector()
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "delete[] indexes and arrays");
 #endif
-        delete[] indexes;
-        delete[] values;
+        if (indexes != NULL) delete[] indexes;
+        if (values  != NULL) delete[] values;
+        indexes = NULL;
+        values = NULL;
     }
-    values = NULL;
-    indexes = NULL;
 }// end SparseIntVector destructor
 
 
@@ -240,13 +244,13 @@ SparseMatrix::~SparseMatrix()
 #endif
     if( bDeleteArrays == true)
     {
-        delete[] starts;
-        delete[] indexes;
-        delete[] values;
+        if (starts  != NULL) delete[] starts;
+        if (indexes != NULL) delete[] indexes;
+        if (values  != NULL) delete[] values;
+        starts = NULL;
+        indexes = NULL;
+        values = NULL;
     }
-    starts = NULL;
-    indexes = NULL;
-    values = NULL;
 }// end SparseMatrix Destructor
 
 
@@ -330,15 +334,15 @@ SparseJacobianMatrix::~SparseJacobianMatrix()
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "delete SparseJacobianArrays");
 #endif
-        delete[] starts;
-        delete[] conVals;
-        delete[] indexes;
-        delete[] values;
+        if (starts  != NULL) delete[] starts;
+        if (conVals != NULL) delete[] conVals;
+        if (indexes != NULL) delete[] indexes;
+        if (values  != NULL) delete[] values;
+        starts  = NULL;
+        conVals = NULL;
+        indexes = NULL;
+        values  = NULL;
     }
-    starts = NULL;
-    conVals = NULL;
-    indexes = NULL;
-    values = NULL;
 }// end SparseJacobianMatrix Destructor
 
 
@@ -360,13 +364,13 @@ SparseHessianMatrix::~SparseHessianMatrix()
 #endif
     if(bDeleteArrays == true)
     {
-        delete[] hessRowIdx;
-        delete[] hessColIdx;
-        delete[] hessValues;
+        if (hessRowIdx != NULL) delete[] hessRowIdx;
+        if (hessColIdx != NULL) delete[] hessColIdx;
+        if (hessValues != NULL) delete[] hessValues;
+        hessRowIdx = NULL;
+        hessColIdx = NULL;
+        hessValues = NULL;
     }
-    hessRowIdx = NULL;
-    hessColIdx = NULL;
-    hessValues = NULL;
 }// end SparseHessianMatrix Destructor
 
 
@@ -384,14 +388,14 @@ QuadraticTerms::~QuadraticTerms()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside QuadraticTerms destructor");
 #endif
-    delete[] rowIndexes;
-    rowIndexes = NULL;
-    delete[] varOneIndexes;
+    if (rowIndexes    != NULL) delete[] rowIndexes;
+    if (varOneIndexes != NULL) delete[] varOneIndexes;
+    if (varTwoIndexes != NULL) delete[] varTwoIndexes;
+    if (coefficients  != NULL) delete[] coefficients;
+    rowIndexes    = NULL;
     varOneIndexes = NULL;
-    delete[] varTwoIndexes;
     varTwoIndexes = NULL;
-    delete[] coefficients;
-    coefficients = NULL;
+    coefficients  = NULL;
 }
 
 
@@ -424,7 +428,7 @@ IntVector::~IntVector()
 #endif
     if(	bDeleteArrays == true)
     {
-        delete[] el;
+        if (el != NULL) delete[] el;
         el = NULL;
     }
 }
@@ -723,7 +727,7 @@ DoubleVector::~DoubleVector()
 #endif
     if(	bDeleteArrays == true)
     {
-        delete[] el;
+        if (el != NULL) delete[] el;
         el = NULL;
     }
 }

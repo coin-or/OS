@@ -298,7 +298,7 @@ numbervalueATT:
             VALUEATT QUOTE aNumber QUOTE {/*if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");*/
     osnlData->nlNodeNumberPoint->value = parserData->tempVal;
 }
-/*         | VALUEATT QUOTE {std::cout << "HHH--valueatt";} aNumber QUOTE {if ( *$2 != *$5 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+/*         | VALUEATT QUOTE aNumber QUOTE {if ( *$2 != *$5 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlNodeNumberPoint->value = parserData->tempVal;
 }
         | VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
@@ -376,7 +376,7 @@ matrixReference: MATRIXSTART
 matrixreferenceend: ENDOFELEMENT
            | GREATERTHAN MATRIXEND;
                            
-matrixIdxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+matrixIdxATT: IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
     if( $3 >= osglData->numberOfMatrices){
          parserData->parser_errors += addErrorMsg( NULL, parserObjects, "matrix index exceeds number of matrices");
@@ -384,18 +384,143 @@ matrixIdxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser
 }; 
 
 
-;
-matrixDiagonal: ;
-matrixDotTimes: ;
-matrixIdentity: ;
-matrixInverse: ;
-matrixLowerTriangle: ;
-matrixUpperTriangle: ;
-matrixMerge: ;
-matrixMinus: ;
-matrixPlus: ;
-matrixTimes: ;
-matrixScalarTimes: ;
-matrixSubMatrixAt: ;
-matrixTranspose: ;
+matrixDiagonal: matrixDiagonalStart matrixDiagonalContent;
+
+matrixDiagonalStart: MATRIXDIAGONALSTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixDiagonalContent: OSnLMNode MATRIXDIAGONALEND;
+
+matrixDotTimes: matrixDotTimesStart matrixDotTimesContent;
+
+matrixDotTimesStart: MATRIXDOTTIMESSTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixDotTimesContent: OSnLMNode OSnLMNode MATRIXDOTTIMESEND;
+
+matrixIdentity: matrixIdentityStart matrixIdentityContent;
+
+matrixIdentityStart: MATRIXIDENTITYSTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixIdentityContent: nlnode MATRIXIDENTITYEND;
+
+matrixInverse: matrixInverseStart matrixInverseContent;
+
+matrixInverseStart: MATRIXINVERSESTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixInverseContent: OSnLMNode MATRIXINVERSEEND;
+
+matrixLowerTriangle: matrixLowerTriangleStart matrixLowerTriangleAttribute matrixLowerTriangleContent;
+
+matrixLowerTriangleStart: MATRIXLOWERTRIANGLESTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixLowerTriangleAttribute: | includeDiagonalATT;
+
+matrixLowerTriangleContent: OSnLMNode MATRIXLOWERTRIANGLEEND;
+
+matrixUpperTriangle: matrixUpperTriangleStart matrixUpperTriangleAttribute matrixUpperTriangleContent;
+
+matrixUpperTriangleStart: MATRIXUPPERTRIANGLESTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixUpperTriangleAttribute: | includeDiagonalATT;
+
+matrixUpperTriangleContent: OSnLMNode MATRIXUPPERTRIANGLEEND;
+
+includeDiagonalATT: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
+{ 
+    osnlData->includeDiagonalAttribute = $2; 
+    free($2);
+};
+
+
+matrixMerge: matrixMergeStart matrixMergeEnd;
+
+matrixMergeStart: MATRIXMERGESTART 
+{
+     parserData->parser_errors += addErrorMsg( NULL, parserObjects, "matrix merge not yet implemented");
+};
+
+matrixMergeEnd: ENDOFELEMENT | GREATERTHAN MATRIXMERGEEND;
+
+matrixMinus: matrixMinusStart matrixMinusContent;
+
+matrixMinusStart: MATRIXMINUSSTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixMinusContent: OSnLMNode OSnLMNode MATRIXMINUSEND;
+
+matrixPlus: matrixPlusStart matrixPlusContent;
+
+matrixPlusStart: MATRIXPLUSSTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixPlusContent: OSnLMNode OSnLMNode MATRIXPLUSEND;
+
+matrixTimes: matrixTimesStart matrixTimesContent;
+
+matrixTimesStart: MATRIXTIMESSTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
+
+matrixScalarTimes: matrixScalarTimesStart matrixScalarTimesContent;
+
+matrixScalarTimesStart: MATRIXSCALARTIMESSTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixScalarTimesContent: nlnode OSnLMNode MATRIXSCALARTIMESEND;
+
+matrixSubMatrixAt: matrixSubMatrixAtStart matrixSubMatrixAtContent;
+
+matrixSubMatrixAtStart: MATRIXSUBMATRIXATSTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixSubMatrixAtContent: OSnLMNode nlnode nlnode nlnode nlnode MATRIXSUBMATRIXATEND;
+
+matrixTranspose: matrixTransposeStart matrixTransposeContent;
+
+matrixTransposeStart: MATRIXTRANSPOSESTART 
+{
+//    osnlData->nlNodePoint = new OSnLNodeTimes();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixTransposeContent: nlnode nlnode MATRIXTRANSPOSEEND;
 

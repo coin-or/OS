@@ -82,7 +82,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-//#define OSILPARSERDEBUG
+#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
@@ -169,6 +169,13 @@ return(DOUBLE);}
 ({xmlwhitespace}+start{equality}) {YY_PRINT; return(STARTATT);}
 ({xmlwhitespace}+value{equality}) {YY_PRINT;  return(VALUEATT);}
 
+({xmlwhitespace}+normScaleFactor{equality}) {YY_PRINT;  return(NORMSCALEFACTORATT);}
+({xmlwhitespace}+distortionMatrixIdx{equality}) {YY_PRINT;  return(DISTORTIONMATRIXIDXATT);}
+({xmlwhitespace}+axisDirection{equality}) {YY_PRINT;  return(AXISDIRECTIONATT);}
+({xmlwhitespace}+firstAxisDirection{equality}) {YY_PRINT;  return(FIRSTAXISDIRECTIONATT);}
+({xmlwhitespace}+secondAxisDirection{equality}) {YY_PRINT;  return(SECONDAXISDIRECTIONATT);}
+
+
  /* attributes returning strings (that are potentially empty)*/
 
 ({xmlwhitespace}+id{equality}\"\") {YY_PRINT; return(EMPTYIDATT);}
@@ -183,6 +190,13 @@ return(DOUBLE);}
 ({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
+
+
+({xmlwhitespace}+semidefiniteness{equality}\"\") {YY_PRINT; return(EMPTYSEMIDEFINITENESSATT);}
+({xmlwhitespace}+semidefiniteness{equality}\'\') {YY_PRINT; return(EMPTYSEMIDEFINITENESSATT);}
+({xmlwhitespace}+semidefiniteness{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SEMIDEFINITENESSATT);}
+({xmlwhitespace}+semidefiniteness{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(SEMIDEFINITENESSATT);}
+
 
  /* patterns for <quadraticCoefficients> */
 {xmlwhitespace}*\<\/osil{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSILEND);}
@@ -241,6 +255,10 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/dualCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DUALCONEEND);}
 {xmlwhitespace}*\<polarCone {YY_PRINT;  return(POLARCONESTART);}
 {xmlwhitespace}*\<\/polarCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(POLARCONEEND);}
+{xmlwhitespace}*\<factors {YY_PRINT;  return(FACTORSSTART);}
+{xmlwhitespace}*\<\/factors{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(FACTORSEND);}
+{xmlwhitespace}*\<components {YY_PRINT;  return(COMPONENTSSTART);}
+{xmlwhitespace}*\<\/components{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(COMPONENTSEND);}
 
 
 {xmlwhitespace}*\<base64BinaryData {YY_PRINT; return(BASE64START);}
