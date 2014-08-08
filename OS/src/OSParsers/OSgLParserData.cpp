@@ -99,7 +99,9 @@ OSgLParserData::OSgLParserData() :
     numberOfColumnsAttributePresent(false),
     numberOfRowsAttributePresent(false),
     numberOfVarIdxAttributePresent(false),
-    numberOfVarIdx(0)
+    numberOfVarIdx(0),
+    numberOfElAttributePresent(false),
+    numberOfEl(0)
 {
 
 }//OSgLParserData

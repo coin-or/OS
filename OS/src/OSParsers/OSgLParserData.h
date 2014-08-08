@@ -138,6 +138,8 @@ public:
     bool numberOfRowsAttributePresent;
     bool numberOfVarIdxAttributePresent;
     int  numberOfVarIdx;
+    bool numberOfElAttributePresent;
+    int  numberOfEl;
 
     
 

@@ -232,11 +232,58 @@ public:
 
     /** some elements to hold matrices and cones */
     bool numberOfMatricesPresent; 
-    bool numberOfConesPresent; 
     int  numberOfMatrices;
+    bool numberOfConesPresent; 
     int  numberOfCones;
+    bool numberOfRowsPresent; 
+    int  numberOfRows;
+    bool numberOfColumnsPresent; 
+    int  numberOfColumns;
+
     int  numberOfEl;
     int  numberOf;
+
+    bool namePresent;
+    std::string name;
+    bool normScaleFactorPresent;
+    double normScaleFactor;
+    bool distortionMatrixPresent;
+    int distortionMatrix;
+    bool axisDirectionPresent;
+    int axisDirection;
+    bool firstAxisDirectionPresent;
+    int firstAxisDirection;
+    bool secondAxisDirectionPresent;
+    int secondAxisDirection;
+    bool semidefinitenessPresent;
+    std::string semidefiniteness;
+
+    int numberOfMatrixVar;
+    int numberOfMatrixObj;
+    int numberOfMatrixCon;
+    int numberOfMatrixTerms;
+    int numberOfMatrixExpr;
+
+    bool matrixIdxAttributePresent;
+    bool lbMatrixIdxAttributePresent;
+    bool lbConeIdxAttributePresent;
+    bool ubMatrixIdxAttributePresent;
+    bool ubConeIdxAttributePresent;
+    bool orderConeIdxAttributePresent;
+    bool patternMatrixIdxAttributePresent;
+    bool constantMatrixIdxAttributePresent;
+    int matrixIdx;
+    int lbMatrixIdx;
+    int lbConeIdx;
+    int ubMatrixIdx;
+    int ubConeIdx;
+    int orderConeIdx;
+    int patternMatrixIdx;
+    int constantMatrixIdx;
+
+    bool shapePresent;
+    std::string shape;
+
     double tempVal;
 
     /** if the parser finds invalid text it is held here and we delete

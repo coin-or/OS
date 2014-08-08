@@ -378,7 +378,7 @@ matrixStart: MATRIXSTART
 
 matrixAttributes: matrixAttributeList;
 
-matrixAttributeList: matrixAttributeList matrixAttribute;
+matrixAttributeList: | matrixAttributeList matrixAttribute;
 
 matrixAttribute:
       osglSymmetryATT
@@ -1223,7 +1223,7 @@ matrixBlockStart: BLOCKSTART;
 
 matrixBlockAttributes: matrixBlockAttList;
 
-matrixBlockAttList: matrixBlockAtt | matrixBlockAttList matrixBlockAtt;
+matrixBlockAttList: | matrixBlockAttList matrixBlockAtt;
 
 matrixBlockAtt:
       osglBlockRowIdxATT

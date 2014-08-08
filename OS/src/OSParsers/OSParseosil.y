@@ -232,6 +232,16 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token AXISDIRECTIONATT FIRSTAXISDIRECTIONATT SECONDAXISDIRECTIONATT
 %token EMPTYSEMIDEFINITENESSATT SEMIDEFINITENESSATT
 
+%token MATRIXPROGRAMMINGSTART MATRIXPROGRAMMINGEND
+%token MATRIXVARIABLESSTART   MATRIXVARIABLESEND   NUMBEROFMATRIXVARATT MATRIXVARSTART MATRIXVAREND
+%token MATRIXOBJECTIVESSTART  MATRIXOBJECTIVESEND  NUMBEROFMATRIXOBJATT MATRIXOBJSTART MATRIXOBJEND
+%token MATRIXCONSTRAINTSSTART MATRIXCONSTRAINTSEND NUMBEROFMATRIXCONATT MATRIXCONSTART MATRIXCONEND
+%token NUMBEROFMATRIXTERMSATT MATRIXTERMSTART MATRIXTERMEND
+%token MATRIXEXPRESSIONSSTART MATRIXEXPRESSIONSEND NUMBEROFMATRIXEXPRATT MATRIXEXPRSTART MATRIXEXPREND
+
+%token MATRIXIDXATT LBMATRIXIDXATT LBCONEIDXATT UBMATRIXIDXATT UBCONEIDXATT PATTERNMATRIXIDXATT
+%token ORDERCONEIDXATT CONSTANTMATRIXIDXATT SHAPEATT EMPTYSHAPEATT
+
 %token TIMEDOMAINSTART TIMEDOMAINEND
 %token STAGESSTART STAGESEND STAGESTART STAGEEND
 %token NUMBEROFSTAGESATT HORIZONATT STARTATT
@@ -264,44 +274,44 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 
 %token HEADERSTART HEADEREND
 
-%token FILENAMESTART FILENAMEEND FILENAMEEMPTY FILENAMESTARTANDEND;
-%token FILESOURCESTART FILESOURCEEND FILESOURCEEMPTY FILESOURCESTARTANDEND;
-%token FILEDESCRIPTIONSTART FILEDESCRIPTIONEND FILEDESCRIPTIONEMPTY FILEDESCRIPTIONSTARTANDEND; 
-%token FILECREATORSTART FILECREATOREND FILECREATOREMPTY FILECREATORSTARTANDEND;
-%token FILELICENCESTART FILELICENCEEND FILELICENCEEMPTY FILELICENCESTARTANDEND;
+%token FILENAMESTART FILENAMEEND FILENAMEEMPTY FILENAMESTARTANDEND
+%token FILESOURCESTART FILESOURCEEND FILESOURCEEMPTY FILESOURCESTARTANDEND
+%token FILEDESCRIPTIONSTART FILEDESCRIPTIONEND FILEDESCRIPTIONEMPTY FILEDESCRIPTIONSTARTANDEND
+%token FILECREATORSTART FILECREATOREND FILECREATOREMPTY FILECREATORSTARTANDEND
+%token FILELICENCESTART FILELICENCEEND FILELICENCEEMPTY FILELICENCESTARTANDEND
 
-%token ENUMERATIONSTART ENUMERATIONEND NUMBEROFELATT;
-%token ITEMEMPTY ITEMSTART ITEMEND ITEMSTARTANDEND;
-%token BASE64START BASE64END;
-%token INCRATT MULTATT SIZEOFATT;
-%token ELSTART ELEND;
+%token ENUMERATIONSTART ENUMERATIONEND NUMBEROFELATT
+%token ITEMEMPTY ITEMSTART ITEMEND ITEMSTARTANDEND
+%token BASE64START BASE64END
+%token INCRATT MULTATT SIZEOFATT
+%token ELSTART ELEND
 
-%token MATRIXSTART MATRIXEND BASEMATRIXEND BASEMATRIXSTART;
-%token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND;
+%token MATRIXSTART MATRIXEND BASEMATRIXEND BASEMATRIXSTART
+%token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND
 
-%token EMPTYSYMMETRYATT SYMMETRYATT EMPTYEXCLUDEATT EXCLUDEATT CONSTANTATT;
-%token NUMBEROFBLOCKSATT NUMBEROFCOLUMNSATT NUMBEROFROWSATT NUMBEROFVARIDXATT;
+%token EMPTYSYMMETRYATT SYMMETRYATT EMPTYEXCLUDEATT EXCLUDEATT CONSTANTATT
+%token NUMBEROFBLOCKSATT NUMBEROFCOLUMNSATT NUMBEROFROWSATT NUMBEROFVARIDXATT
 
-%token BASEMATRIXIDXATT TARGETMATRIXFIRSTROWATT TARGETMATRIXFIRSTCOLATT; 
-%token BASEMATRIXSTARTROWATT BASEMATRIXSTARTCOLATT BASEMATRIXENDROWATT BASEMATRIXENDCOLATT;
-%token SCALARMULTIPLIERATT EMPTYBASETRANSPOSEATT BASETRANSPOSEATT;
+%token BASEMATRIXIDXATT TARGETMATRIXFIRSTROWATT TARGETMATRIXFIRSTCOLATT
+%token BASEMATRIXSTARTROWATT BASEMATRIXSTARTCOLATT BASEMATRIXENDROWATT BASEMATRIXENDCOLATT
+%token SCALARMULTIPLIERATT EMPTYBASETRANSPOSEATT BASETRANSPOSEATT
 
-%token ELEMENTSSTART ELEMENTSEND;  
-%token CONSTANTELEMENTSSTART CONSTANTELEMENTSEND STARTVECTORSTART STARTVECTOREND;
-%token NONZEROSSTART NONZEROSEND INDEXESSTART INDEXESEND VALUESSTART VALUESEND;
-%token VARREFERENCEELEMENTSSTART VARREFERENCEELEMENTSEND;
-%token LINEARELEMENTSSTART LINEARELEMENTSEND; 
-%token GENERALELEMENTSSTART GENERALELEMENTSEND; 
-%token CONREFERENCEELEMENTSSTART CONREFERENCEELEMENTSEND;
-%token OBJREFERENCEELEMENTSSTART OBJREFERENCEELEMENTSEND;
-%token PATTERNELEMENTSSTART PATTERNELEMENTSEND VARIDXSTART VARIDXEND; 
-%token TRANSFORMATIONSTART TRANSFORMATIONEND;
+%token ELEMENTSSTART ELEMENTSEND
+%token CONSTANTELEMENTSSTART CONSTANTELEMENTSEND STARTVECTORSTART STARTVECTOREND
+%token NONZEROSSTART NONZEROSEND INDEXESSTART INDEXESEND VALUESSTART VALUESEND
+%token VARREFERENCEELEMENTSSTART VARREFERENCEELEMENTSEND
+%token LINEARELEMENTSSTART LINEARELEMENTSEND
+%token GENERALELEMENTSSTART GENERALELEMENTSEND
+%token CONREFERENCEELEMENTSSTART CONREFERENCEELEMENTSEND
+%token OBJREFERENCEELEMENTSSTART OBJREFERENCEELEMENTSEND
+%token PATTERNELEMENTSSTART PATTERNELEMENTSEND VARIDXSTART VARIDXEND
+%token TRANSFORMATIONSTART TRANSFORMATIONEND
 
-%token COLOFFSETSSTART COLOFFSETSEND ROWOFFSETSSTART ROWOFFSETSEND;
+%token COLOFFSETSSTART COLOFFSETSEND ROWOFFSETSSTART ROWOFFSETSEND
 
-%token EMPTYROWMAJORATT ROWMAJORATT BLOCKROWIDXATT BLOCKCOLIDXATT;
+%token EMPTYROWMAJORATT ROWMAJORATT BLOCKROWIDXATT BLOCKCOLIDXATT
 
-%token DUMMY;
+%token DUMMY
 
 
 /* $Id$ */
@@ -531,7 +541,7 @@ nonnegativeConeStart: NONNEGATIVECONESTART;
 
 nonnegativeConeAttributes: nonnegativeConeAttList;
 
-nonnegativeConeAttList: nonnegativeConeAttList nonnegativeConeAtt;
+nonnegativeConeAttList: | nonnegativeConeAttList nonnegativeConeAtt;
 
 nonnegativeConeAtt: 
       osilNumberOfRowsATT
@@ -546,7 +556,7 @@ nonpositiveConeStart: NONPOSITIVECONESTART;
 
 nonpositiveConeAttributes: nonpositiveConeAttList;
 
-nonpositiveConeAttList: nonpositiveConeAttList nonpositiveConeAtt;
+nonpositiveConeAttList: | nonpositiveConeAttList nonpositiveConeAtt;
 
 nonpositiveConeAtt: 
       osilNumberOfRowsATT
@@ -563,7 +573,7 @@ quadraticConeStart: QUADRATICCONESTART;
 
 quadraticConeAttributes: quadraticConeAttList;
 
-quadraticConeAttList: quadraticConeAttList quadraticConeAtt;
+quadraticConeAttList: | quadraticConeAttList quadraticConeAtt;
 
 quadraticConeAtt: 
       osilNumberOfRowsATT
@@ -582,7 +592,7 @@ rotatedQuadraticConeStart: ROTATEDQUADRATICCONESTART;
 
 rotatedQuadraticConeAttributes: rotatedQuadraticConeAttList;
 
-rotatedQuadraticConeAttList: rotatedQuadraticConeAttList rotatedQuadraticConeAtt;
+rotatedQuadraticConeAttList: | rotatedQuadraticConeAttList rotatedQuadraticConeAtt;
 
 rotatedQuadraticConeAtt: 
       osilNumberOfRowsATT
@@ -604,14 +614,13 @@ semidefiniteConeStart: SEMIDEFINITECONESTART;
 
 semidefiniteConeAttributes: semidefiniteConeAttList;
 
-semidefiniteConeAttList: semidefiniteConeAttList semidefiniteConeAtt;
+semidefiniteConeAttList: | semidefiniteConeAttList semidefiniteConeAtt;
 
 semidefiniteConeAtt: 
       osilNumberOfRowsATT
     | osilNumberOfColumnsATT
     | osilNameATT
     | osilSemidefinitenessATT
-{std::cout << "semidefinite cone!!!" << std::endl;}
 ;
 
 semidefiniteConeEnd: ENDOFELEMENT | GREATERTHAN SEMIDEFINITECONEEND;
@@ -634,7 +643,7 @@ productConeStart: PRODUCTCONESTART;
 
 productConeAttributes: productConeAttList;
 
-productConeAttList: productConeAttList productConeAtt;
+productConeAttList: | productConeAttList productConeAtt;
 
 productConeAtt: 
       osilNumberOfRowsATT
@@ -664,7 +673,7 @@ intersectionConeStart: INTERSECTIONCONESTART;
 
 intersectionConeAttributes: intersectionConeAttList;
 
-intersectionConeAttList: intersectionConeAttList intersectionConeAtt;
+intersectionConeAttList: | intersectionConeAttList intersectionConeAtt;
 
 intersectionConeAtt: 
       osilNumberOfRowsATT
@@ -695,22 +704,176 @@ intersectionConeEnd: ENDOFELEMENT | GREATERTHAN INTERSECTIONCONEEND;
 
 
 
-matrixProgramming: /* | matrixProgrammingStart matrixProgrammingAttributes matrixProgrammingContent matrixProgrammingEnd*/;
+matrixProgramming: | matrixProgrammingStart matrixProgrammingAttributes matrixProgrammingContent; 
         
+matrixProgrammingStart: MATRIXPROGRAMMINGSTART;
+
+matrixProgrammingAttributes: 
+
+matrixProgrammingContent: matrixProgrammingEmpty | matrixProgrammingLaden;
+
+matrixProgrammingEmpty: ENDOFELEMENT;
+
+matrixProgrammingLaden: 
+        GREATERTHAN  matrixVariables matrixObjectives matrixConstraints matrixExpressions MATRIXPROGRAMMINGEND;
+
+matrixVariables: | matrixVariablesStart matrixVariablesAttributes matrixVariablesContent;
+
+matrixVariablesStart: MATRIXVARIABLESSTART;
+
+matrixVariablesAttributes: numberOfMatrixVarATT;
+
+matrixVariablesContent: matrixVarList matrixVariablesEnd;
+
+matrixVariablesEnd: ENDOFELEMENT
+             | GREATERTHAN MATRIXVARIABLESEND;
+
+matrixVarList: | matrixVarList matrixVar;
+
+matrixVar: matrixVarStart matrixVarAttributes matrixVarEnd;
+
+matrixVarStart: MATRIXVARSTART;
+
+matrixVarAttributes: matrixVarAttList;
+
+matrixVarAttList: | matrixVarAttList matrixVarAtt;
+
+matrixVarAtt: 
+      matrixIdxATT
+    | lbMatrixIdxATT
+    | lbConeIdxATT
+    | ubMatrixIdxATT
+    | ubConeIdxATT
+    | patternMatrixIdxATT
+    | osilNameATT
+;
+
+matrixVarEnd: ENDOFELEMENT
+            | GREATERTHAN MATRIXVAREND;
+
+matrixObjectives: | matrixObjectivesStart matrixObjectivesAttributes matrixObjectivesContent;
+
+matrixObjectivesStart: MATRIXOBJECTIVESSTART;
+
+matrixObjectivesAttributes: numberOfMatrixObjATT;
+
+matrixObjectivesContent: matrixObjList matrixObjectivesEnd;
+
+matrixObjectivesEnd: ENDOFELEMENT
+             | GREATERTHAN MATRIXOBJECTIVESEND;
+
+matrixObjList: | matrixObjList matrixObj;
+
+matrixObj: matrixObjStart matrixObjAttributes matrixObjTerms matrixObjEnd;
+
+matrixObjStart: MATRIXOBJSTART;
+
+matrixObjAttributes: matrixObjAttList;
+
+matrixObjAttList: | matrixObjAttList matrixObjAtt;
+
+matrixObjAtt: 
+      matrixIdxATT
+    | orderConeIdxATT
+    | constantMatrixIdxATT
+    | patternMatrixIdxATT
+    | osilNameATT
+    | osilShapeATT
+    | numberOfMatrixTermsATT
+;
+
+matrixObjTerms: matrixTermList;
+
+matrixObjEnd: ENDOFELEMENT
+            | GREATERTHAN MATRIXOBJEND;
+
+matrixTermList: | matrixTermList matrixTerm;
+
+matrixTerm: matrixTermStart OSnLMNode matrixTermEnd;
+
+matrixTermStart: MATRIXTERMSTART GREATERTHAN;
+
+matrixTermEnd: MATRIXTERMEND;
+
+matrixConstraints: | matrixConstraintsStart matrixConstraintsAttributes matrixConstraintsContent;
+
+matrixConstraintsStart: MATRIXCONSTRAINTSSTART;
+
+matrixConstraintsAttributes: numberOfMatrixConATT;
+
+matrixConstraintsContent: matrixConList matrixConstraintsEnd;
+
+matrixConstraintsEnd: ENDOFELEMENT
+             | GREATERTHAN MATRIXCONSTRAINTSEND;
+
+matrixConList: | matrixConList matrixCon;
+
+matrixCon: matrixConStart matrixConAttributes matrixConTerms matrixConEnd;
+
+matrixConStart: MATRIXCONSTART;
+
+matrixConAttributes: matrixConAttList;
+
+matrixConAttList: | matrixConAttList matrixConAtt;
+
+matrixConAtt: 
+      matrixIdxATT
+    | lbMatrixIdxATT
+    | lbConeIdxATT
+    | ubMatrixIdxATT
+    | ubConeIdxATT
+    | patternMatrixIdxATT
+    | osilNameATT
+    | osilShapeATT
+    | numberOfMatrixTermsATT
+;
+
+matrixConTerms: matrixTermList;
+
+matrixConEnd: ENDOFELEMENT
+            | GREATERTHAN MATRIXCONEND;
+
+matrixTermList: | matrixTermList matrixTerm;
+
+matrixTerm: matrixTermStart OSnLMNode matrixTermEnd;
+
+matrixTermStart: MATRIXTERMSTART GREATERTHAN;
+
+matrixTermEnd: MATRIXTERMEND;
+
+matrixConEnd: ENDOFELEMENT
+            | GREATERTHAN MATRIXCONEND;
+
+matrixExpressions: matrixExpressionsStart matrixExpressionsAtt matrixExpressionsContent;
+
+matrixExpressionsStart: MATRIXEXPRESSIONSSTART;
+
+matrixExpressionsAtt: numberOfMatrixExprATT;
+
+matrixExpressionsContent: matrixExpressionsEmpty | matrixExpressionsLaden;
+
+matrixExpressionsEmpty: ENDOFELEMENT;
+
+matrixExpressionsLaden: GREATERTHAN matrixExprList MATRIXEXPRESSIONSEND;
+
+matrixExprList: | matrixExprList matrixExpr;
+
+matrixExpr: MATRIXEXPRSTART GREATERTHAN nlnode MATRIXEXPREND;
 
 
+timeDomain: | timeDomainStart timeDomainContent;
 
-timeDomain: | timedomainstart timedomain;
+timeDomainStart: TIMEDOMAINSTART {osinstance->instanceData->timeDomain = new TimeDomain();} 
 
-timedomainstart: TIMEDOMAINSTART {osinstance->instanceData->timeDomain = new TimeDomain();} 
+timeDomainContent: timeDomainEmpty | timeDomainLaden;
 
-timedomain:
-      | timedomainend 
-      | GREATERTHAN stages   TIMEDOMAINEND
+timeDomainEmpty: ENDOFELEMENT
+             | GREATERTHAN TIMEDOMAINEND;
+
+timeDomainLaden: 
+        GREATERTHAN stages   TIMEDOMAINEND
       | GREATERTHAN interval TIMEDOMAINEND;
 
-timedomainend: ENDOFELEMENT
-             | GREATERTHAN TIMEDOMAINEND;
 
 stages: stagesstart osilNumberofstagesATT stagelist STAGESEND
 {
@@ -1117,14 +1280,63 @@ osilNumberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE
     parserData->numberOfColumns = $3; 
 }; 
 
+numberOfMatrixVarATT: NUMBEROFMATRIXVARATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix variables cannot be negative");
+    parserData->numberOfMatrixVar = $3; 
+}; 
+
+numberOfMatrixObjATT: NUMBEROFMATRIXOBJATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix objectives cannot be negative");
+    parserData->numberOfMatrixObj = $3; 
+}; 
+
+numberOfMatrixConATT: NUMBEROFMATRIXCONATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix constraints cannot be negative");
+    parserData->numberOfMatrixCon = $3; 
+}; 
+
+numberOfMatrixTermsATT: NUMBEROFMATRIXTERMSATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix terms cannot be negative");
+    parserData->numberOfMatrixTerms = $3; 
+}; 
+
+numberOfMatrixExprATT: NUMBEROFMATRIXEXPRATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of expressions cannot be negative");
+    parserData->numberOfMatrixExpr = $3; 
+}; 
+
+
 osilNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
 {
-    if (parserData->numberOfColumnsPresent)
+    if (parserData->namePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->namePresent = true;
     parserData->name = $2; 
 };
 
+
+osilShapeATT: SHAPEATT ATTRIBUTETEXT QUOTE 
+{
+    if (parserData->shapePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "shape attribute previously set");
+    parserData->shapePresent = true;
+    parserData->shape = $2; 
+};
 
 osilNormScaleFactorATT: NORMSCALEFACTORATT QUOTE aNumber QUOTE 
 {
@@ -1192,6 +1404,95 @@ osilSemidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE
     else
         parserData->semidefiniteness = $2; 
 };
+
+matrixIdxATT: MATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->matrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index cannot be negative");
+    parserData->matrixIdxAttributePresent = true;
+    parserData->matrixIdx = $3; 
+};
+
+lbMatrixIdxATT: LBMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->lbMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "lbMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "lower bounding matrix index cannot be negative");
+    parserData->lbMatrixIdxAttributePresent = true;
+    parserData->lbMatrixIdx = $3; 
+};
+
+constantMatrixIdxATT: CONSTANTMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->constantMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constantMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index cannot be negative");
+    parserData->constantMatrixIdxAttributePresent = true;
+    parserData->constantMatrixIdx = $3; 
+};
+
+lbConeIdxATT: LBCONEIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->lbConeIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "lbConeIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "lower bounding cone index cannot be negative");
+    parserData->lbConeIdxAttributePresent = true;
+    parserData->lbConeIdx = $3; 
+};
+
+ubMatrixIdxATT: UBMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->ubMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "ubMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "upper bounding matrix index cannot be negative");
+    parserData->ubMatrixIdxAttributePresent = true;
+    parserData->ubMatrixIdx = $3; 
+};
+
+ubConeIdxATT: UBCONEIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->ubConeIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "ubConeIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "upper bounding cone index cannot be negative");
+    parserData->ubConeIdxAttributePresent = true;
+    parserData->ubConeIdx = $3; 
+};
+
+orderConeIdxATT: ORDERCONEIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->orderConeIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "ubConeIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "order cone index cannot be negative");
+    parserData->orderConeIdxAttributePresent = true;
+    parserData->orderConeIdx = $3; 
+};
+
+patternMatrixIdxATT: PATTERNMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->patternMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "patternMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "pattern matrix index cannot be negative");
+    parserData->patternMatrixIdxAttributePresent = true;
+    parserData->patternMatrixIdx = $3; 
+};
+
 
 
 aNumber:
@@ -1593,7 +1894,7 @@ matrixStart: MATRIXSTART
 
 matrixAttributes: matrixAttributeList;
 
-matrixAttributeList: matrixAttributeList matrixAttribute;
+matrixAttributeList: | matrixAttributeList matrixAttribute;
 
 matrixAttribute:
       osglSymmetryATT
@@ -2438,7 +2739,7 @@ matrixBlockStart: BLOCKSTART;
 
 matrixBlockAttributes: matrixBlockAttList;
 
-matrixBlockAttList: matrixBlockAtt | matrixBlockAttList matrixBlockAtt;
+matrixBlockAttList: | matrixBlockAttList matrixBlockAtt;
 
 matrixBlockAtt:
       osglBlockRowIdxATT
