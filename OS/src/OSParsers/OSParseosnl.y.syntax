@@ -392,7 +392,7 @@ matrixDiagonalStart: MATRIXDIAGONALSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixDiagonalContent: OSnLMNode MATRIXDIAGONALEND;
+matrixDiagonalContent: GREATERTHAN OSnLMNode MATRIXDIAGONALEND;
 
 matrixDotTimes: matrixDotTimesStart matrixDotTimesContent;
 
@@ -402,7 +402,7 @@ matrixDotTimesStart: MATRIXDOTTIMESSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixDotTimesContent: OSnLMNode OSnLMNode MATRIXDOTTIMESEND;
+matrixDotTimesContent: GREATERTHAN OSnLMNode OSnLMNode MATRIXDOTTIMESEND;
 
 matrixIdentity: matrixIdentityStart matrixIdentityContent;
 
@@ -412,7 +412,7 @@ matrixIdentityStart: MATRIXIDENTITYSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixIdentityContent: nlnode MATRIXIDENTITYEND;
+matrixIdentityContent: GREATERTHAN nlnode MATRIXIDENTITYEND;
 
 matrixInverse: matrixInverseStart matrixInverseContent;
 
@@ -422,7 +422,7 @@ matrixInverseStart: MATRIXINVERSESTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixInverseContent: OSnLMNode MATRIXINVERSEEND;
+matrixInverseContent: GREATERTHAN OSnLMNode MATRIXINVERSEEND;
 
 matrixLowerTriangle: matrixLowerTriangleStart matrixLowerTriangleAttribute matrixLowerTriangleContent;
 
@@ -434,7 +434,7 @@ matrixLowerTriangleStart: MATRIXLOWERTRIANGLESTART
 
 matrixLowerTriangleAttribute: | includeDiagonalATT;
 
-matrixLowerTriangleContent: OSnLMNode MATRIXLOWERTRIANGLEEND;
+matrixLowerTriangleContent: GREATERTHAN OSnLMNode MATRIXLOWERTRIANGLEEND;
 
 matrixUpperTriangle: matrixUpperTriangleStart matrixUpperTriangleAttribute matrixUpperTriangleContent;
 
@@ -446,7 +446,7 @@ matrixUpperTriangleStart: MATRIXUPPERTRIANGLESTART
 
 matrixUpperTriangleAttribute: | includeDiagonalATT;
 
-matrixUpperTriangleContent: OSnLMNode MATRIXUPPERTRIANGLEEND;
+matrixUpperTriangleContent: GREATERTHAN OSnLMNode MATRIXUPPERTRIANGLEEND;
 
 includeDiagonalATT: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
 { 
@@ -472,7 +472,7 @@ matrixMinusStart: MATRIXMINUSSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixMinusContent: OSnLMNode OSnLMNode MATRIXMINUSEND;
+matrixMinusContent: GREATERTHAN OSnLMNode OSnLMNode MATRIXMINUSEND;
 
 matrixPlus: matrixPlusStart matrixPlusContent;
 
@@ -482,7 +482,7 @@ matrixPlusStart: MATRIXPLUSSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixPlusContent: OSnLMNode OSnLMNode MATRIXPLUSEND;
+matrixPlusContent: GREATERTHAN OSnLMNode OSnLMNode MATRIXPLUSEND;
 
 matrixTimes: matrixTimesStart matrixTimesContent;
 
@@ -492,7 +492,7 @@ matrixTimesStart: MATRIXTIMESSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
+matrixTimesContent: GREATERTHAN OSnLMNode OSnLMNode MATRIXTIMESEND;
 
 matrixScalarTimes: matrixScalarTimesStart matrixScalarTimesContent;
 
@@ -502,7 +502,7 @@ matrixScalarTimesStart: MATRIXSCALARTIMESSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixScalarTimesContent: nlnode OSnLMNode MATRIXSCALARTIMESEND;
+matrixScalarTimesContent: GREATERTHAN nlnode OSnLMNode MATRIXSCALARTIMESEND;
 
 matrixSubMatrixAt: matrixSubMatrixAtStart matrixSubMatrixAtContent;
 
@@ -512,7 +512,7 @@ matrixSubMatrixAtStart: MATRIXSUBMATRIXATSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixSubMatrixAtContent: OSnLMNode nlnode nlnode nlnode nlnode MATRIXSUBMATRIXATEND;
+matrixSubMatrixAtContent: GREATERTHAN OSnLMNode nlnode nlnode nlnode nlnode MATRIXSUBMATRIXATEND;
 
 matrixTranspose: matrixTransposeStart matrixTransposeContent;
 
@@ -522,5 +522,5 @@ matrixTransposeStart: MATRIXTRANSPOSESTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixTransposeContent: nlnode nlnode MATRIXTRANSPOSEEND;
+matrixTransposeContent: GREATERTHAN OSnLMNode MATRIXTRANSPOSEEND;
 
