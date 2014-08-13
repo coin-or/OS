@@ -16,6 +16,14 @@
  */
 %{
 
+//#define OSILPARSERDEBUG
+
+#ifdef OSILPARSERDEBUG
+	#define YY_PRINT  printf("%s", yytext);
+#else     
+	#define YY_PRINT;
+#endif
+
 #include <iostream>
 #include <sstream>  
 
@@ -81,14 +89,6 @@
 using std::cout;
 using std::endl;
 using std::ostringstream;
-
-#define OSILPARSERDEBUG
-
-#ifdef OSILPARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
-#else     
-	#define YY_PRINT;
-#endif
 
 %}
 
@@ -162,7 +162,7 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfMatrixObj{equality}) {YY_PRINT; return(NUMBEROFMATRIXOBJATT);}
 ({xmlwhitespace}+numberOfMatrixCon{equality}) {YY_PRINT; return(NUMBEROFMATRIXCONATT);}
 ({xmlwhitespace}+numberOfMatrixTerms{equality}) {YY_PRINT; return(NUMBEROFMATRIXTERMSATT);}
-({xmlwhitespace}+numberOfMatrixExpr{equality}) {YY_PRINT; return(NUMBEROFMATRIXEXPRATT);}
+({xmlwhitespace}+numberOfExpr{equality}) {YY_PRINT; return(NUMBEROFMATRIXEXPRATT);}
 
 ({xmlwhitespace}+idx{equality}) {YY_PRINT;   return(IDXATT);}
 ({xmlwhitespace}+idxOne{equality}) {YY_PRINT;   return(IDXONEATT);}
@@ -272,6 +272,7 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/matrixConstraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXCONSTRAINTSEND);}
 {xmlwhitespace}*\<matrixCon {YY_PRINT;  return(MATRIXCONSTART);}
 {xmlwhitespace}*\<\/matrixCon{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXCONEND);}
+{xmlwhitespace}*\<matrixTerm {YY_PRINT;  return(MATRIXTERMSTART);}
 {xmlwhitespace}*\<\/matrixTerm{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXTERMEND);}
 {xmlwhitespace}*\<matrixExpressions {YY_PRINT;  return(MATRIXEXPRESSIONSSTART);}
 {xmlwhitespace}*\<\/matrixExpressions{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXEXPRESSIONSEND);}

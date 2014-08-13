@@ -199,6 +199,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token MATRIXSTART MATRIXEND BASEMATRIXEND BASEMATRIXSTART
 %token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND
 
+
 %token EMPTYSYMMETRYATT SYMMETRYATT EMPTYEXCLUDEATT EXCLUDEATT CONSTANTATT
 %token NUMBEROFBLOCKSATT NUMBEROFCOLUMNSATT NUMBEROFROWSATT NUMBEROFVARIDXATT
 
@@ -252,7 +253,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token ALLDIFFSTART ALLDIFFEND MINSTART MINEND ESTART EEND PISTART PIEND
 %token TIMESSTART TIMESEND NUMBERSTART NUMBEREND 
 
-%token MATRIXTRACESTART MATRIXTRACEEND MATRIXTOSCALARSTART MATRIXTOSCALAREND
+%token MATRIXDETERMINANTSTART MATRIXDETERMINANTEND MATRIXTRACESTART MATRIXTRACEEND MATRIXTOSCALARSTART MATRIXTOSCALAREND
 
 %token MATRIXDIAGONALSTART MATRIXDIAGONALEND MATRIXDOTTIMESSTART MATRIXDOTTIMESEND
 %token MATRIXIDENTITYSTART MATRIXIDENTITYEND MATRIXINVERSESTART  MATRIXINVERSEEND
@@ -260,7 +261,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token MATRIXMERGESTART MATRIXMERGEEND MATRIXMINUSSTART MATRIXMINUSEND
 %token MATRIXPLUSSTART MATRIXPLUSEND MATRIXTIMESSTART MATRIXTIMESEND
 %token MATRIXSCALARTIMESSTART MATRIXSCALARTIMESEND MATRIXSUBMATRIXATSTART MATRIXSUBMATRIXATEND
-%token MATRIXTRANSPOSESTART MATRIXTRANSPOSEEND
+%token MATRIXTRANSPOSESTART MATRIXTRANSPOSEEND MATRIXREFERENCESTART MATRIXREFERENCEEND
 
 %token EMPTYINCLUDEDIAGONALATT INCLUDEDIAGONALATT
 
@@ -5455,7 +5456,7 @@ osglSparseVectorValues:  VALUESSTART  GREATERTHAN osglDblVectorElArray VALUESEND
  *  ==========================================================================
  */
 
-osglSparseIntVector: osglSparseIntVectorNumberOfElATT osglSparseIntVectorIndexes osglSparseIntVectorValues
+osglSparseIntVector: osglSparseIntVectorNumberOfElATT GREATERTHAN osglSparseIntVectorIndexes osglSparseIntVectorValues
 {
 };
 
@@ -5746,11 +5747,11 @@ constantElementsNonzerosStart: NONZEROSSTART
 };
 
 
-varReferenceElements: | varReferenceElementsStart GREATERTHAN varReferenceElementsContent VARREFERENCEELEMENTSEND; 
+varReferenceElements: | varReferenceElementsStart GREATERTHAN varReferenceElementsContent; 
 
 varReferenceElementsStart: VARREFERENCEELEMENTSSTART;
 
-varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsNonzeros;
+varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsNonzeros VARREFERENCEELEMENTSEND;
 
 varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferenceElementsStartVectorContent
 {
@@ -5800,7 +5801,7 @@ linearElements: | linearElementsStart linearElementsContent;
 
 linearElementsStart: LINEARELEMENTSSTART;
 
-linearElementsContent: GREATERTHAN linearElementsStartVector linearElementsNonzeros;
+linearElementsContent: GREATERTHAN linearElementsStartVector linearElementsNonzeros LINEARELEMENTSEND;
 
 linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVectorContent
 {
@@ -5951,7 +5952,7 @@ generalElements: | generalElementsStart generalElementsContent;
 
 generalElementsStart: GENERALELEMENTSSTART;
 
-generalElementsContent: GREATERTHAN generalElementsStartVector generalElementsNonzeros;
+generalElementsContent: GREATERTHAN generalElementsStartVector generalElementsNonzeros GENERALELEMENTSEND;
 
 generalElementsStartVector: generalElementsStartVectorStart generalElementsStartVectorContent
 {
@@ -6186,12 +6187,12 @@ excludeIfSetAttContent: EXCLUDEATT ATTRIBUTETEXT quote
     else if ($2 == "true")  osglData->excludeIfSetAttribute = true;
     else if ($2 == "")      osglData->excludeIfSetAttribute = true;
     else parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "excludeIfSet attribute in <baseMatrix> element must be \"true\" or \"false\"");
-    free($2);
+//    free($2);
 };
 
-patternElementsContent: patternElementsStartVector patternElementsNonzeros;
+patternElementsContent: GREATERTHAN patternElementsStartVector patternElementsNonzeros;
 
-patternElementsStartVector: patternElementsStartVectorStart patternElementsStartVectorNumberOfElATT patternElementsStartVectorContent
+patternElementsStartVector: patternElementsStartVectorStart patternElementsStartVectorContent
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
@@ -6223,7 +6224,7 @@ patternElementsStartVectorLaden: GREATERTHAN patternElementsStartVectorBody STAR
 
 patternElementsStartVectorBody:  osglIntArrayData;
 
-patternElementsNonzeros: patternElementsNonzerosStart osglSparseIntVector NONZEROSEND
+patternElementsNonzeros: patternElementsNonzerosStart osglNumberOfElATT GREATERTHAN osglIntArrayData NONZEROSEND
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
@@ -6534,7 +6535,9 @@ nlnode: number
       | PI
       | allDiff 
 
+      | matrixDeterminant
       | matrixTrace
+      | matrixToScalar
 ;
 
 
@@ -6780,12 +6783,17 @@ variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->pars
      }
 }  ; 
 
+matrixDeterminant: MATRIXDETERMINANTSTART {
+    osnlData->nlNodePoint = new OSnLNodeTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+} OSnLMNode MATRIXDETERMINANTEND;
+
 matrixTrace: MATRIXTRACESTART {
     osnlData->nlNodePoint = new OSnLNodeTimes();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } OSnLMNode MATRIXTRACEEND;
 
-matrixTrace: MATRIXTOSCALARSTART {
+matrixToScalar: MATRIXTOSCALARSTART {
     osnlData->nlNodePoint = new OSnLNodeTimes();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } OSnLMNode MATRIXTOSCALAREND;
@@ -6805,14 +6813,14 @@ OSnLMNode: matrixReference
          | matrixSubMatrixAt
          | matrixTranspose;
 
-matrixReference: MATRIXSTART
+matrixReference: MATRIXREFERENCESTART
 {
     osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
     osnlData->OSnLMNodeVec.push_back(osnlData->nlMNodeMatrixRef);
 } matrixIdxATT matrixreferenceend {osnlData->matrixidxattON = false;} ;
               
 matrixreferenceend: ENDOFELEMENT
-           | GREATERTHAN MATRIXEND;
+           | GREATERTHAN MATRIXREFERENCEEND;
                            
 matrixIdxATT: IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
@@ -6830,7 +6838,7 @@ matrixDiagonalStart: MATRIXDIAGONALSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixDiagonalContent: GREATERTHAN OSnLMNode MATRIXDIAGONALEND;
+matrixDiagonalContent: OSnLMNode MATRIXDIAGONALEND;
 
 matrixDotTimes: matrixDotTimesStart matrixDotTimesContent;
 
@@ -6840,7 +6848,7 @@ matrixDotTimesStart: MATRIXDOTTIMESSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixDotTimesContent: GREATERTHAN OSnLMNode OSnLMNode MATRIXDOTTIMESEND;
+matrixDotTimesContent: OSnLMNode OSnLMNode MATRIXDOTTIMESEND;
 
 matrixIdentity: matrixIdentityStart matrixIdentityContent;
 
@@ -6850,7 +6858,7 @@ matrixIdentityStart: MATRIXIDENTITYSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixIdentityContent: GREATERTHAN nlnode MATRIXIDENTITYEND;
+matrixIdentityContent: nlnode MATRIXIDENTITYEND;
 
 matrixInverse: matrixInverseStart matrixInverseContent;
 
@@ -6860,7 +6868,7 @@ matrixInverseStart: MATRIXINVERSESTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixInverseContent: GREATERTHAN OSnLMNode MATRIXINVERSEEND;
+matrixInverseContent: OSnLMNode MATRIXINVERSEEND;
 
 matrixLowerTriangle: matrixLowerTriangleStart matrixLowerTriangleAttribute matrixLowerTriangleContent;
 
@@ -6872,7 +6880,7 @@ matrixLowerTriangleStart: MATRIXLOWERTRIANGLESTART
 
 matrixLowerTriangleAttribute: | includeDiagonalATT;
 
-matrixLowerTriangleContent: GREATERTHAN OSnLMNode MATRIXLOWERTRIANGLEEND;
+matrixLowerTriangleContent: OSnLMNode MATRIXLOWERTRIANGLEEND;
 
 matrixUpperTriangle: matrixUpperTriangleStart matrixUpperTriangleAttribute matrixUpperTriangleContent;
 
@@ -6884,7 +6892,7 @@ matrixUpperTriangleStart: MATRIXUPPERTRIANGLESTART
 
 matrixUpperTriangleAttribute: | includeDiagonalATT;
 
-matrixUpperTriangleContent: GREATERTHAN OSnLMNode MATRIXUPPERTRIANGLEEND;
+matrixUpperTriangleContent: OSnLMNode MATRIXUPPERTRIANGLEEND;
 
 includeDiagonalATT: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
 { 
@@ -6910,7 +6918,7 @@ matrixMinusStart: MATRIXMINUSSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixMinusContent: GREATERTHAN OSnLMNode OSnLMNode MATRIXMINUSEND;
+matrixMinusContent: OSnLMNode OSnLMNode MATRIXMINUSEND;
 
 matrixPlus: matrixPlusStart matrixPlusContent;
 
@@ -6920,7 +6928,7 @@ matrixPlusStart: MATRIXPLUSSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixPlusContent: GREATERTHAN OSnLMNode OSnLMNode MATRIXPLUSEND;
+matrixPlusContent: OSnLMNode OSnLMNode MATRIXPLUSEND;
 
 matrixTimes: matrixTimesStart matrixTimesContent;
 
@@ -6930,7 +6938,7 @@ matrixTimesStart: MATRIXTIMESSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixTimesContent: GREATERTHAN OSnLMNode OSnLMNode MATRIXTIMESEND;
+matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
 
 matrixScalarTimes: matrixScalarTimesStart matrixScalarTimesContent;
 
@@ -6940,7 +6948,7 @@ matrixScalarTimesStart: MATRIXSCALARTIMESSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixScalarTimesContent: GREATERTHAN nlnode OSnLMNode MATRIXSCALARTIMESEND;
+matrixScalarTimesContent: nlnode OSnLMNode MATRIXSCALARTIMESEND;
 
 matrixSubMatrixAt: matrixSubMatrixAtStart matrixSubMatrixAtContent;
 
@@ -6950,7 +6958,7 @@ matrixSubMatrixAtStart: MATRIXSUBMATRIXATSTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixSubMatrixAtContent: GREATERTHAN OSnLMNode nlnode nlnode nlnode nlnode MATRIXSUBMATRIXATEND;
+matrixSubMatrixAtContent: OSnLMNode nlnode nlnode nlnode nlnode MATRIXSUBMATRIXATEND;
 
 matrixTranspose: matrixTransposeStart matrixTransposeContent;
 
@@ -6960,7 +6968,7 @@ matrixTransposeStart: MATRIXTRANSPOSESTART
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixTransposeContent: GREATERTHAN OSnLMNode MATRIXTRANSPOSEEND;
+matrixTransposeContent: OSnLMNode MATRIXTRANSPOSEEND;
 
 /* $Id$ */
 /** @file OSParseosol.y.3

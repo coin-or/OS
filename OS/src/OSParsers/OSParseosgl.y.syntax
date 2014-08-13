@@ -346,7 +346,7 @@ osglSparseVectorValues:  VALUESSTART  GREATERTHAN osglDblVectorElArray VALUESEND
  *  ==========================================================================
  */
 
-osglSparseIntVector: osglSparseIntVectorNumberOfElATT osglSparseIntVectorIndexes osglSparseIntVectorValues
+osglSparseIntVector: osglSparseIntVectorNumberOfElATT GREATERTHAN osglSparseIntVectorIndexes osglSparseIntVectorValues
 {
 };
 
@@ -637,11 +637,11 @@ constantElementsNonzerosStart: NONZEROSSTART
 };
 
 
-varReferenceElements: | varReferenceElementsStart GREATERTHAN varReferenceElementsContent VARREFERENCEELEMENTSEND; 
+varReferenceElements: | varReferenceElementsStart GREATERTHAN varReferenceElementsContent; 
 
 varReferenceElementsStart: VARREFERENCEELEMENTSSTART;
 
-varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsNonzeros;
+varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsNonzeros VARREFERENCEELEMENTSEND;
 
 varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferenceElementsStartVectorContent
 {
@@ -691,7 +691,7 @@ linearElements: | linearElementsStart linearElementsContent;
 
 linearElementsStart: LINEARELEMENTSSTART;
 
-linearElementsContent: GREATERTHAN linearElementsStartVector linearElementsNonzeros;
+linearElementsContent: GREATERTHAN linearElementsStartVector linearElementsNonzeros LINEARELEMENTSEND;
 
 linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVectorContent
 {
@@ -842,7 +842,7 @@ generalElements: | generalElementsStart generalElementsContent;
 
 generalElementsStart: GENERALELEMENTSSTART;
 
-generalElementsContent: GREATERTHAN generalElementsStartVector generalElementsNonzeros;
+generalElementsContent: GREATERTHAN generalElementsStartVector generalElementsNonzeros GENERALELEMENTSEND;
 
 generalElementsStartVector: generalElementsStartVectorStart generalElementsStartVectorContent
 {
@@ -1077,12 +1077,12 @@ excludeIfSetAttContent: EXCLUDEATT ATTRIBUTETEXT quote
     else if ($2 == "true")  osglData->excludeIfSetAttribute = true;
     else if ($2 == "")      osglData->excludeIfSetAttribute = true;
     else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "excludeIfSet attribute in <baseMatrix> element must be \"true\" or \"false\"");
-    free($2);
+//    free($2);
 };
 
-patternElementsContent: patternElementsStartVector patternElementsNonzeros;
+patternElementsContent: GREATERTHAN patternElementsStartVector patternElementsNonzeros;
 
-patternElementsStartVector: patternElementsStartVectorStart patternElementsStartVectorNumberOfElATT patternElementsStartVectorContent
+patternElementsStartVector: patternElementsStartVectorStart patternElementsStartVectorContent
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
@@ -1114,7 +1114,7 @@ patternElementsStartVectorLaden: GREATERTHAN patternElementsStartVectorBody STAR
 
 patternElementsStartVectorBody:  osglIntArrayData;
 
-patternElementsNonzeros: patternElementsNonzerosStart osglSparseIntVector NONZEROSEND
+patternElementsNonzeros: patternElementsNonzerosStart osglNumberOfElATT GREATERTHAN osglIntArrayData NONZEROSEND
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)

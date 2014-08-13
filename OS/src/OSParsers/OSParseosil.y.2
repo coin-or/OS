@@ -293,7 +293,7 @@ productConeAtt:
     | osilNameATT
 ;
 
-productConeContent: productConeFactors productConeEnd;
+productConeContent: GREATERTHAN productConeFactors productConeEnd;
 
 productConeFactors: productConeFactorsStart productConeFactorsAttributes productConeFactorsContent;
 
@@ -301,13 +301,17 @@ productConeFactorsStart: FACTORSSTART;
 
 productConeFactorsAttributes: osilNumberOfElATT;
 
-productConeFactorsContent: productConeFactorList productConeFactorsEnd;
+productConeFactorsContent: productConeFactorsEmpty | productConeFactorsLaden;
+
+productConeFactorsEmpty: ENDOFELEMENT; 
+
+productConeFactorsLaden: GREATERTHAN productConeFactorList productConeFactorsEnd;
 
 productConeFactorList: osglIntArrayData;
 
-productConeFactorsEnd: ENDOFELEMENT | GREATERTHAN FACTORSEND;
+productConeFactorsEnd: FACTORSEND;
 
-productConeEnd: ENDOFELEMENT | GREATERTHAN PRODUCTCONEEND;
+productConeEnd: PRODUCTCONEEND;
 
 intersectionCone:  intersectionConeStart intersectionConeAttributes intersectionConeContent;
 
@@ -323,7 +327,7 @@ intersectionConeAtt:
     | osilNameATT
 ;
 
-intersectionConeContent: intersectionConeComponents intersectionConeEnd;
+intersectionConeContent: GREATERTHAN intersectionConeComponents intersectionConeEnd;
 
 intersectionConeComponents: intersectionConeComponentsStart intersectionConeComponentsAttributes intersectionConeComponentsContent;
 
@@ -331,13 +335,17 @@ intersectionConeComponentsStart: COMPONENTSSTART;
 
 intersectionConeComponentsAttributes: osilNumberOfElATT;
 
-intersectionConeComponentsContent: intersectionConeComponentList intersectionConeComponentsEnd;
+intersectionConeComponentsContent: intersectionConeComponentsEmpty | intersectionConeComponentsLaden;
+
+intersectionConeComponentsEmpty: ENDOFELEMENT;
+
+intersectionConeComponentsLaden: GREATERTHAN intersectionConeComponentList intersectionConeComponentsEnd;
 
 intersectionConeComponentList: osglIntArrayData;
 
-intersectionConeComponentsEnd: ENDOFELEMENT | GREATERTHAN COMPONENTSEND;
+intersectionConeComponentsEnd: COMPONENTSEND;
 
-intersectionConeEnd: ENDOFELEMENT | GREATERTHAN INTERSECTIONCONEEND;
+intersectionConeEnd: INTERSECTIONCONEEND;
 
 /* dualCone:  conesStart conesAttributes conesContent; */
 
@@ -346,11 +354,9 @@ intersectionConeEnd: ENDOFELEMENT | GREATERTHAN INTERSECTIONCONEEND;
 
 
 
-matrixProgramming: | matrixProgrammingStart matrixProgrammingAttributes matrixProgrammingContent; 
+matrixProgramming: | matrixProgrammingStart matrixProgrammingContent; 
         
 matrixProgrammingStart: MATRIXPROGRAMMINGSTART;
-
-matrixProgrammingAttributes: 
 
 matrixProgrammingContent: matrixProgrammingEmpty | matrixProgrammingLaden;
 
@@ -365,10 +371,13 @@ matrixVariablesStart: MATRIXVARIABLESSTART;
 
 matrixVariablesAttributes: numberOfMatrixVarATT;
 
-matrixVariablesContent: matrixVarList matrixVariablesEnd;
+matrixVariablesContent: matrixVariablesEmpty | matrixVariablesLaden;
 
-matrixVariablesEnd: ENDOFELEMENT
-             | GREATERTHAN MATRIXVARIABLESEND;
+matrixVariablesEmpty: ENDOFELEMENT;
+
+matrixVariablesLaden: GREATERTHAN matrixVarList matrixVariablesEnd;
+
+matrixVariablesEnd: MATRIXVARIABLESEND;
 
 matrixVarList: | matrixVarList matrixVar;
 
@@ -399,14 +408,17 @@ matrixObjectivesStart: MATRIXOBJECTIVESSTART;
 
 matrixObjectivesAttributes: numberOfMatrixObjATT;
 
-matrixObjectivesContent: matrixObjList matrixObjectivesEnd;
+matrixObjectivesContent: matrixObjectivesEmpty | matrixObjectivesLaden;
 
-matrixObjectivesEnd: ENDOFELEMENT
-             | GREATERTHAN MATRIXOBJECTIVESEND;
+matrixObjectivesEmpty: ENDOFELEMENT;
+
+matrixObjectivesLaden: GREATERTHAN matrixObjList matrixObjectivesEnd;
+
+matrixObjectivesEnd: MATRIXOBJECTIVESEND;
 
 matrixObjList: | matrixObjList matrixObj;
 
-matrixObj: matrixObjStart matrixObjAttributes matrixObjTerms matrixObjEnd;
+matrixObj: matrixObjStart matrixObjAttributes matrixObjContent;
 
 matrixObjStart: MATRIXOBJSTART;
 
@@ -424,10 +436,17 @@ matrixObjAtt:
     | numberOfMatrixTermsATT
 ;
 
+matrixObjContent: matrixObjEmpty | matrixObjLaden;
+
+matrixObjEmpty: ENDOFELEMENT;
+
+matrixObjLaden: GREATERTHAN matrixObjTerms matrixObjEnd;
+
 matrixObjTerms: matrixTermList;
 
-matrixObjEnd: ENDOFELEMENT
-            | GREATERTHAN MATRIXOBJEND;
+matrixObjEnd: MATRIXOBJEND;
+
+/* matrixTermList is used in both matrixObjectives and matrixConstraints */
 
 matrixTermList: | matrixTermList matrixTerm;
 
@@ -437,20 +456,24 @@ matrixTermStart: MATRIXTERMSTART GREATERTHAN;
 
 matrixTermEnd: MATRIXTERMEND;
 
+
 matrixConstraints: | matrixConstraintsStart matrixConstraintsAttributes matrixConstraintsContent;
 
 matrixConstraintsStart: MATRIXCONSTRAINTSSTART;
 
 matrixConstraintsAttributes: numberOfMatrixConATT;
 
-matrixConstraintsContent: matrixConList matrixConstraintsEnd;
+matrixConstraintsContent: matrixConstraintsEmpty | matrixConstraintsLaden; 
 
-matrixConstraintsEnd: ENDOFELEMENT
-             | GREATERTHAN MATRIXCONSTRAINTSEND;
+matrixConstraintsEmpty: ENDOFELEMENT;
+
+matrixConstraintsLaden: GREATERTHAN matrixConList matrixConstraintsEnd;
+
+matrixConstraintsEnd: MATRIXCONSTRAINTSEND;
 
 matrixConList: | matrixConList matrixCon;
 
-matrixCon: matrixConStart matrixConAttributes matrixConTerms matrixConEnd;
+matrixCon: matrixConStart matrixConAttributes matrixConContent;
 
 matrixConStart: MATRIXCONSTART;
 
@@ -470,23 +493,18 @@ matrixConAtt:
     | numberOfMatrixTermsATT
 ;
 
+matrixConContent: matrixConEmpty | matrixConLaden;
+
+matrixConEmpty: ENDOFELEMENT;
+
+matrixConLaden: GREATERTHAN matrixConTerms matrixConEnd;
+
 matrixConTerms: matrixTermList;
 
-matrixConEnd: ENDOFELEMENT
-            | GREATERTHAN MATRIXCONEND;
+matrixConEnd: MATRIXCONEND;
 
-matrixTermList: | matrixTermList matrixTerm;
 
-matrixTerm: matrixTermStart OSnLMNode matrixTermEnd;
-
-matrixTermStart: MATRIXTERMSTART GREATERTHAN;
-
-matrixTermEnd: MATRIXTERMEND;
-
-matrixConEnd: ENDOFELEMENT
-            | GREATERTHAN MATRIXCONEND;
-
-matrixExpressions: matrixExpressionsStart matrixExpressionsAtt matrixExpressionsContent;
+matrixExpressions: | matrixExpressionsStart matrixExpressionsAtt matrixExpressionsContent;
 
 matrixExpressionsStart: MATRIXEXPRESSIONSSTART;
 
@@ -500,8 +518,9 @@ matrixExpressionsLaden: GREATERTHAN matrixExprList MATRIXEXPRESSIONSEND;
 
 matrixExprList: | matrixExprList matrixExpr;
 
-matrixExpr: MATRIXEXPRSTART GREATERTHAN nlnode MATRIXEXPREND;
+matrixExpr: MATRIXEXPRSTART matrixExprIdxATT GREATERTHAN nlnode MATRIXEXPREND;
 
+matrixExprIdxATT: IDXATT QUOTE INTEGER QUOTE;
 
 timeDomain: | timeDomainStart timeDomainContent;
 
