@@ -121,11 +121,11 @@ bool GeneralFileHeader::deepCopyFrom(GeneralFileHeader *that)
 
 std::string GeneralFileHeader::getHeaderItem(std::string item)
 {
-	if (item == "name")        return name;
-	if (item == "source")      return source;
-	if (item == "description") return description;
-	if (item == "fileCreator") return fileCreator;
-	if (item == "licence")     return licence;
+    if (item == "name")        return name;
+    if (item == "source")      return source;
+    if (item == "description") return description;
+    if (item == "fileCreator") return fileCreator;
+    if (item == "licence")     return licence;
     throw ErrorClass("Attempting to access undefined header item in getHeaderItem");
 }//end of GeneralFileHeader::getHeaderItem
 
@@ -164,7 +164,7 @@ SparseVector::~SparseVector()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside sparseVector destructor");
 #endif
-    if(	bDeleteArrays == true)
+    if(    bDeleteArrays == true)
     {
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "delete[] indexes and arrays");
@@ -198,7 +198,7 @@ SparseIntVector::~SparseIntVector()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside sparseIntVector destructor");
 #endif
-    if(	bDeleteArrays == true)
+    if(    bDeleteArrays == true)
     {
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "delete[] indexes and arrays");
@@ -426,7 +426,7 @@ IntVector::~IntVector()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside IntVector destructor");
 #endif
-    if(	bDeleteArrays == true)
+    if(    bDeleteArrays == true)
     {
         if (el != NULL) delete[] el;
         el = NULL;
@@ -450,8 +450,8 @@ bool IntVector::setIntVector(int *i, int ni)
 bool IntVector::extendIntVector(int i)
 {
     int ni;
-//	if (this == NULL)
-//		this = new IntVector();
+//    if (this == NULL)
+//        this = new IntVector();
 
     if (this->el == NULL)
         ni = 0;
@@ -559,7 +559,7 @@ bool IntVector::setRandom(double density, bool conformant, int iMin, int iMax)
 
     int n;
 
-    if (conformant)	n = this->numberOfEl;
+    if (conformant)    n = this->numberOfEl;
     else            n = (int)(4*OSRand());
 
     el = new int[n];
@@ -725,7 +725,7 @@ DoubleVector::~DoubleVector()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Inside the DoubleVector Destructor");
 #endif
-    if(	bDeleteArrays == true)
+    if(    bDeleteArrays == true)
     {
         if (el != NULL) delete[] el;
         el = NULL;
@@ -858,43 +858,43 @@ bool BasisStatus::setIntVector(int status, int *i, int ni)
     case ENUM_BASIS_STATUS_basic:
     {
         if (this->basic == NULL) this->basic = new IntVector();
-//			else delete[] this->basic;
+//            else delete[] this->basic;
         return this->basic->setIntVector(i, ni);
     }
     case ENUM_BASIS_STATUS_atLower:
     {
         if (this->atLower == NULL) this->atLower = new IntVector(ni);
-//			else delete[] this->atLower;
+//            else delete[] this->atLower;
         return this->atLower->setIntVector(i, ni);
     }
     case ENUM_BASIS_STATUS_atUpper:
     {
         if (this->atUpper == NULL) this->atUpper = new IntVector(ni);
-//			else delete[] this->atUpper;
+//            else delete[] this->atUpper;
         return this->atUpper->setIntVector(i, ni);
     }
     case ENUM_BASIS_STATUS_atEquality:
     {
         if (this->atEquality == NULL) this->atEquality = new IntVector(ni);
-//			else delete[] this->atEquality;
+//            else delete[] this->atEquality;
         return this->atEquality->setIntVector(i, ni);
     }
     case ENUM_BASIS_STATUS_isFree:
     {
         if (this->isFree == NULL) this->isFree = new IntVector(ni);
-//			else delete[] this->isFree;
+//            else delete[] this->isFree;
         return this->isFree->setIntVector(i, ni);
     }
     case ENUM_BASIS_STATUS_superbasic:
     {
         if (this->superbasic == NULL) this->superbasic = new IntVector(ni);
-//			else delete[] this->superbasic;
+//            else delete[] this->superbasic;
         return this->superbasic->setIntVector(i, ni);
     }
     case ENUM_BASIS_STATUS_unknown:
     {
         if (this->unknown == NULL) this->unknown = new IntVector(ni);
-//			else delete[] this->unknown;
+//            else delete[] this->unknown;
         return this->unknown->setIntVector(i, ni);
     }
     default:
@@ -999,37 +999,37 @@ int BasisStatus::getNumberOfEl(int status)
     case ENUM_BASIS_STATUS_basic:
     {
         if (this->basic == NULL) return -1;
-        else return	this->basic->numberOfEl;
+        else return    this->basic->numberOfEl;
     }
     case ENUM_BASIS_STATUS_atLower:
     {
         if (this->atLower == NULL) return -1;
-        else return	this->atLower->numberOfEl;
+        else return    this->atLower->numberOfEl;
     }
     case ENUM_BASIS_STATUS_atUpper:
     {
         if (this->atUpper == NULL) return -1;
-        else return	this->atUpper->numberOfEl;
+        else return    this->atUpper->numberOfEl;
     }
     case ENUM_BASIS_STATUS_atEquality:
     {
         if (this->atEquality == NULL) return -1;
-        else return	this->atEquality->numberOfEl;
+        else return    this->atEquality->numberOfEl;
     }
     case ENUM_BASIS_STATUS_isFree:
     {
         if (this->isFree == NULL) return -1;
-        else return	this->isFree->numberOfEl;
+        else return    this->isFree->numberOfEl;
     }
     case ENUM_BASIS_STATUS_superbasic:
     {
         if (this->superbasic == NULL) return -1;
-        else return	this->superbasic->numberOfEl;
+        else return    this->superbasic->numberOfEl;
     }
     case ENUM_BASIS_STATUS_unknown:
     {
         if (this->unknown == NULL) return -1;
-        else return	this->unknown->numberOfEl;
+        else return    this->unknown->numberOfEl;
     }
     default:
         throw ErrorClass("Unknown basis status encountered in getBasisStatusNumberOfEl");
@@ -1045,43 +1045,43 @@ int BasisStatus::getEl(int status, int j)
     {
         if (this->basic == NULL)
             throw ErrorClass("\"basic\" index array never defined in routine BasisStatus::getEl()");
-        else return	this->basic->el[j];
+        else return    this->basic->el[j];
     }
     case ENUM_BASIS_STATUS_atLower:
     {
         if (this->atLower == NULL)
             throw ErrorClass("\"atLower\" index array never defined in routine BasisStatus::getEl()");
-        else return	this->atLower->el[j];
+        else return    this->atLower->el[j];
     }
     case ENUM_BASIS_STATUS_atUpper:
     {
         if (this->atUpper == NULL)
             throw ErrorClass("\"atUpper\" index array never defined in routine BasisStatus::getEl()");
-        else return	this->atUpper->el[j];
+        else return    this->atUpper->el[j];
     }
     case ENUM_BASIS_STATUS_atEquality:
     {
         if (this->atEquality == NULL)
             throw ErrorClass("\"atEquality\" index array never defined in routine BasisStatus::getEl()");
-        else return	this->atEquality->el[j];
+        else return    this->atEquality->el[j];
     }
     case ENUM_BASIS_STATUS_isFree:
     {
         if (this->isFree == NULL)
             throw ErrorClass("\"isFree\" index array never defined in routine BasisStatus::getEl()");
-        else return	this->isFree->el[j];
+        else return    this->isFree->el[j];
     }
     case ENUM_BASIS_STATUS_superbasic:
     {
         if (this->superbasic == NULL)
             throw ErrorClass("\"superbasic\" index array never defined in routine BasisStatus::getEl()");
-        else return	this->superbasic->el[j];
+        else return    this->superbasic->el[j];
     }
     case ENUM_BASIS_STATUS_unknown:
     {
         if (this->unknown == NULL)
             throw ErrorClass("\"unknown\" index array never defined in routine BasisStatus::getEl()");
-        else return	this->unknown->el[j];
+        else return    this->unknown->el[j];
     }
     default:
         throw ErrorClass("Unknown basis status encountered in getBasisStatusNumberOfEl");
@@ -1709,32 +1709,428 @@ bool TimeSpan::deepCopyFrom(TimeSpan *that)
     return true;
 }// end of TimeSpan::deepCopyFrom
 
-MatrixType::MatrixType():
-    baseMatrix(NULL),
-    matrixConstructor(NULL)
+ConstantMatrixElements::ConstantMatrixElements():
+    start(NULL),
+    nonzeros(NULL)
 {
-}
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConstantMatrixElements Constructor");
+#endif
+}// end of ConstantMatrixElements::ConstantMatrixElements()
 
-MatrixType::~MatrixType()
+ConstantMatrixElements::~ConstantMatrixElements()
 {
-    if (baseMatrix != NULL)
-        delete baseMatrix;
-    baseMatrix = NULL;
-}
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConstantMatrixElements Destructor");
+#endif
+    if (start != NULL)
+        delete start;
+    start = NULL;
+    if (nonzeros != NULL)
+        delete nonzeros;
+    nonzeros = NULL;
+}// end of ConstantMatrixElements::~ConstantMatrixElements()
 
+VarReferenceMatrixElements::VarReferenceMatrixElements():
+    start(NULL),
+    nonzeros(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the VarReferenceMatrixElements Constructor");
+#endif
+}// end of VarReferenceMatrixElements::VarReferenceMatrixElements()
 
-OSMatrix::OSMatrix():
-    numberOfRows(0),
-    numberOfColumns(0),
+VarReferenceMatrixElements::~VarReferenceMatrixElements()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the VarReferenceMatrixElements Destructor");
+#endif
+    if (start != NULL)
+        delete start;
+    start = NULL;
+    if (nonzeros != NULL)
+        delete nonzeros;
+    nonzeros = NULL;
+}// end of VarReferenceMatrixElements::~VarReferenceMatrixElements()
+
+LinearMatrixElementTerm::LinearMatrixElementTerm():
     idx(-1),
-    name("")
+    coef(1.0)
 {
-}// end of OSMatrix
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElementTerm Constructor");
+#endif
+}// end of LinearMatrixElementTerm::LinearMatrixElementTerm()
 
-OSMatrix::~OSMatrix()
+LinearMatrixElementTerm::~LinearMatrixElementTerm()
 {
-}// end of ~OSMatrix
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElementTerm Destructor");
+#endif
+}// end of LinearMatrixElementTerm::~LinearMatrixElementTerm()
 
+LinearMatrixElement::LinearMatrixElement():
+    numberOfVarIdx(0),
+    constant(0.0),
+    varIdx(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElement Constructor");
+#endif
+}// end of LinearMatrixElement::LinearMatrixElement()
+
+LinearMatrixElement::~LinearMatrixElement()
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElement Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF VARIDX = " << numberOfVarIdx << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+    if(numberOfVarIdx > 0 && varIdx != NULL)
+    {
+        for (int i=0; i < numberOfVarIdx; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING VARIDX " << i << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(varIdx != NULL)
+            {
+                if (varIdx[i] != NULL)
+                    delete varIdx[i];
+                varIdx[i] = NULL;
+            }
+        }
+    }
+    if(varIdx != NULL)
+    {
+        delete [] varIdx;
+        varIdx = NULL;
+    }
+}// end of LinearMatrixElement::~LinearMatrixElement()
+
+
+LinearMatrixValues::LinearMatrixValues():
+    numberOfEl(0),
+    indexes(NULL),
+    values(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixValues Constructor");
+#endif
+}// end of LinearMatrixValues::LinearMatrixValues()
+
+
+LinearMatrixValues::~LinearMatrixValues()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixValues Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF VALUES = " << numberOfEl << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+
+    if (values != NULL)
+        delete values;
+    values = NULL;
+}// end of LinearMatrixValues::~LinearMatrixValues()
+
+
+LinearMatrixElements::LinearMatrixElements():
+    start(NULL),
+    nonzeros(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElements Constructor");
+#endif
+}// end of LinearMatrixElements::LinearMatrixElements()
+
+LinearMatrixElements::~LinearMatrixElements()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElements Destructor");
+#endif
+    if(start != NULL)
+        delete start;
+    start = NULL;
+    if(nonzeros != NULL)
+        delete nonzeros;
+    nonzeros = NULL;
+}// end of LinearMatrixElements::~LinearMatrixElements()
+
+
+GeneralMatrixValues::GeneralMatrixValues():
+    numberOfEl(0),
+    indexes(NULL),
+    values(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixValues Constructor");
+#endif
+}// end of GeneralMatrixValues::GeneralMatrixValues()
+
+GeneralMatrixValues::~GeneralMatrixValues()
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixValues Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF VALUES = " << numberOfEl << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+
+    if(numberOfEl > 0 && values != NULL)
+    {
+        for (int i=0; i < numberOfEl; i++)
+        {
+            if (values[i] != NULL)
+                delete values[i];
+            values[i] = NULL;
+        }
+    }
+    if (values != NULL)
+        delete [] values;
+    values = NULL;
+}// end of GeneralMatrixValues::~GeneralMatrixValues()
+
+GeneralMatrixElements::GeneralMatrixElements():
+    start(NULL),
+    nonzeros(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixElements Constructor");
+#endif
+}// end of GeneralMatrixElements::GeneralMatrixElements()
+
+GeneralMatrixElements::~GeneralMatrixElements()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixElements Destructor");
+#endif
+    if (start != NULL)
+        delete start;
+    start = NULL;
+    if (nonzeros != NULL)
+        delete nonzeros;
+    nonzeros = NULL;
+}// end of GeneralMatrixElements::~GeneralMatrixElements()
+
+ObjReferenceMatrixElements::ObjReferenceMatrixElements():
+    start(NULL),
+    nonzeros(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjReferenceMatrixElements Constructor");
+#endif
+}// end of ObjReferenceMatrixElements::ObjReferenceMatrixElements()
+
+ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjReferenceMatrixElements Destructor");
+#endif
+    if (start != NULL)
+        delete start;
+    start = NULL;
+    if (nonzeros != NULL)
+        delete nonzeros;
+    nonzeros = NULL;
+}// end of ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
+
+ConReferenceMatrixElements::ConReferenceMatrixElements():
+    start(NULL),
+    nonzeros(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConReferenceMatrixElements Constructor");
+#endif
+}// end of ObjReferenceMatrixElements::ObjReferenceMatrixElements()
+
+ConReferenceMatrixElements::~ConReferenceMatrixElements()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConReferenceMatrixElements Destructor");
+#endif
+    if (start != NULL)
+        delete start;
+    start = NULL;
+    if (nonzeros != NULL)
+        delete nonzeros;
+    nonzeros = NULL;
+}// end of ConReferenceMatrixElements::~ConReferenceMatrixElements()
+
+PatternMatrixElements::PatternMatrixElements():
+    start(NULL),
+    nonzeros(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the PatternMatrixElements Constructor");
+#endif
+}// end of PatternMatrixElements::PatternMatrixElements()
+
+PatternMatrixElements::~PatternMatrixElements()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the PatternMatrixElements Destructor");
+#endif
+    if (start != NULL)
+        delete start;
+    start = NULL;
+    if (nonzeros != NULL)
+        delete nonzeros;
+    nonzeros = NULL;
+}// end of PatternMatrixElements::~PatternMatrixElements()
+
+MatrixElements::MatrixElements():
+    constantElements(NULL),
+    varReferenceElements(NULL),
+    linearElements(NULL),
+    generalElements(NULL),
+    objReferenceElements(NULL),
+    conReferenceElements(NULL),
+    patternElements(NULL),
+    rowMajor(false)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixElements Constructor");
+#endif
+}// end of MatrixElements::MatrixElements()
+
+MatrixElements::~MatrixElements()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixElements Destructor");
+#endif
+    if (constantElements != NULL)
+        delete constantElements;
+    constantElements = NULL;
+
+    if (varReferenceElements != NULL)
+        delete varReferenceElements;
+    varReferenceElements = NULL;
+
+    if (linearElements != NULL)
+        delete linearElements;
+    linearElements = NULL;
+
+    if (generalElements != NULL)
+        delete generalElements;
+    generalElements = NULL;
+
+    if (objReferenceElements != NULL)
+        delete objReferenceElements;
+    objReferenceElements = NULL;
+
+    if (conReferenceElements != NULL)
+        delete conReferenceElements;
+    conReferenceElements = NULL;
+
+    if (patternElements != NULL)
+        delete patternElements;
+    patternElements = NULL;
+}// end of MatrixElements::~MatrixElements()
+
+MatrixTransformation::MatrixTransformation():
+    transformation(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixTransformation Constructor");
+#endif
+}// end of MatrixTransformation::MatrixTransformation()
+
+MatrixTransformation::~MatrixTransformation()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixTransformation Destructor");
+#endif
+    if (transformation != NULL)
+        delete transformation;
+    transformation = NULL;
+}// end of MatrixTransformation::~MatrixTransformation()
+
+MatrixBlocks::MatrixBlocks():
+    numberOfBlocks(0),
+    colOffsets(NULL),
+    rowOffsets(NULL),
+    block(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlocks Constructor");
+#endif
+}// end of MatrixBlocks::MatrixBlocks()
+
+MatrixBlocks::~MatrixBlocks()
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlocks Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF BLOCKS = " << numberOfBlocks << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+    if (colOffsets != NULL)
+        delete colOffsets;
+    colOffsets = NULL;
+    if (rowOffsets != NULL)
+        delete rowOffsets;
+    rowOffsets = NULL;
+
+    if(numberOfBlocks > 0 && block != NULL)
+    {
+        for (int i=0; i < numberOfBlocks; i++)
+        {
+            if (block[i] != NULL)
+                delete block[i];
+            block[i] = NULL;
+        }
+    }
+    if (block != NULL)
+        delete [] block;
+    block = NULL;
+}// end of MatrixBlocks::~MatrixBlocks()
+
+MatrixConstructor::MatrixConstructor():
+    cType(0),
+    cPtr(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstructor Constructor");
+#endif
+}//end of MatrixConstructor::MatrixConstructor
+
+MatrixConstructor::~MatrixConstructor()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstructor Destructor");
+#endif
+    if (cPtr != NULL)
+    {
+        if      (cType == 1) delete static_cast<MatrixElements*>       (cPtr);
+        else if (cType == 2) delete static_cast<MatrixTransformation*> (cPtr);
+        else if (cType == 3) delete static_cast<MatrixBlocks*>         (cPtr);
+    }
+    cPtr = NULL;
+    cType = 0;
+}//end of MatrixConstructor::~MatrixConstructor
 
 BaseMatrix::BaseMatrix():
     baseMatrixIdx(-1),
@@ -1747,9 +2143,70 @@ BaseMatrix::BaseMatrix():
     baseTranspose(false),
     scalarMultiplier(1.0)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the BaseMatrix Constructor");
+#endif
 } // end of BaseMatrix
 
 BaseMatrix::~BaseMatrix()
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the BaseMatrix Destructor");
+#endif
 } // end of ~BaseMatrix
+
+MatrixType::MatrixType():
+    baseMatrix(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Constructor");
+#endif
+} // end of MatrixType
+
+MatrixType::~MatrixType()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Destructor");
+#endif
+    if (baseMatrix != NULL)
+        delete baseMatrix;
+    baseMatrix = NULL;
+    if (matrixConstructor.size() > 0)
+        matrixConstructor.clear();
+}// end of ~MatrixType
+
+OSMatrix::OSMatrix():
+    numberOfRows(0),
+    numberOfColumns(0),
+    idx(-1),
+    name("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrix Constructor");
+#endif
+}// end of OSMatrix
+
+OSMatrix::~OSMatrix()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrix Destructor");
+#endif
+}// end of ~OSMatrix
+
+
+MatrixBlock::MatrixBlock():
+    blockRowIdx(-1),
+    blockColIdx(-1)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlock Constructor");
+#endif
+}// end of OSMatrix
+
+MatrixBlock::~MatrixBlock()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlock Destructor");
+#endif
+}// end of ~OSMatrix
 

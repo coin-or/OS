@@ -11,20 +11,19 @@
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
+ *<p> 1. Elements become objects of class type (the ComplexType is the class) </p>
  *
-<p> 1. Elements become objects of class type (the ComplexType is the class) </p>
-
-<p> 2. The attributes, children of the element, and text correspond to members of the class.  </p>
-(Note text does not have a name and becomes .value)
-
-<p> 3. Model groups such as choice and sequence and all correspond to arrays </p>
-
-<p><b>Exceptions:</b> </p>
-<ol>
-<li> anything specific to XML such as base64, multi, incr does not go into classes </li>
-<li> The root OSnLNode of each <nl> element is called ExpressionTree </li>
-<li> Root is not called osil; it is called osinstance </li>
-</ol>
+ *<p> 2. The attributes, children of the element, and text correspond to members of the class.  </p>
+ *       (Note text does not have a name and becomes .value)
+ *
+ *<p> 3. Model groups such as choice and sequence and all correspond to arrays </p>
+ *
+ *<p><b>Exceptions:</b> </p>
+ *<ol>
+ *<li> anything specific to XML such as base64, multi, incr does not go into classes </li>
+ *<li> The root OSnLNode of each <nl> element is called ExpressionTree </li>
+ *<li> Root is not called osil; it is called osinstance </li>
+ *</ol>
  */
 
 
@@ -72,7 +71,6 @@ public:
      * default value is empty
      */
     std::string name;
-
 
     /**
      * A function to check for the equality of two objects
@@ -540,7 +538,8 @@ enum ENUM_CONE_TYPE
     ENUM_CONE_TYPE_product,
     ENUM_CONE_TYPE_intersection,
     ENUM_CONE_TYPE_dual,
-    ENUM_CONE_TYPE_polar
+    ENUM_CONE_TYPE_polar,
+    ENUM_CONE_TYPE_unknown
 };
 
 inline int returnConeType(std::string type)
@@ -561,6 +560,7 @@ inline int returnConeType(std::string type)
     if (type == "intersection"              ) return ENUM_CONE_TYPE_intersection;
     if (type == "dual"                      ) return ENUM_CONE_TYPE_dual;
     if (type == "polar"                     ) return ENUM_CONE_TYPE_polar;
+    if (type == "unknown"                   ) return ENUM_CONE_TYPE_unknown;
     return 0;
 }//returnConeType
 
@@ -598,8 +598,8 @@ public:
     int numberOfOtherIndexes;
     int* otherIndexes;
 
-    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
-    int coneType;
+    /** The type of the cone */
+    ENUM_CONE_TYPE coneType;
 
     /** cones are referenced by an (automatically created) index */
     int idx;
@@ -1348,6 +1348,187 @@ public:
      */    
     bool deepCopyFrom(Cones *that);
 }; // Cones
+
+
+/*! \class MatrixVar
+ * \brief The in-memory representation of the
+ * <b><matrixVar></b> element.
+ */
+class MatrixVar
+{
+public:
+
+    /** The MatrixVar class constructor */
+    MatrixVar();
+
+    /** The MatrixVar class destructor */
+    ~MatrixVar();
+
+    /** matrixIdx gives the reference to a matrix on which this matrix variable is based */
+    int matrixIdx;
+
+    /** lbMatrixIdx gives a lower bound for this matrixVar */
+    int lbMatrixIdx;
+
+    /** lbConeIdx gives a cone that must contain matrixVar - lbMatrix */
+    int lbConeIdx;
+
+    /** ubMatrixIdx gives an upper bound for this matrixVar */
+    int ubMatrixIdx;
+
+    /** ubConeIdx gives a cone that must contain ubMatrix - matrixVar */
+    int ubConeIdx;
+
+    /** patternMatrixIdx refers to a pattern matrix that describes the
+     *  locations in this matrixVar that are allowed to be nonzero */
+    int patternMatrixIdx;
+
+    /** an optional name to this matrixVar */
+    std::string name;
+}; // MatrixVar
+
+
+/*! \class MatrixObj
+ * \brief The in-memory representation of the
+ * <b><matrixObj></b> element.
+ */
+class MatrixObj
+{
+public:
+
+    /** The MatrixVar class constructor */
+    MatrixObj();
+
+    /** The MatrixVar class destructor */
+    ~MatrixObj();
+
+    /** matrixIdx gives the reference to a matrix on which this multidimensional objective is based */
+    int matrixIdx;
+
+    /** orderConeIdx gives a cone that expresses preferences during the optimization 
+     *  x is (weakly) preferred to y if obj(x) - obj(y) lies in the cone. 
+     */
+    int orderConeIdx;
+
+    /** constantMatrixIdx gives a constant added to the matrixObj */
+    int ubMatrixIdx;
+
+    /** patternMatrixIdx refers to a pattern matrix that describes the
+     *  locations in this matrixObj that are allowed to be nonzero */
+    int patternMatrixIdx;
+
+    /** an optional name to this matrixObj */
+    std::string name;
+
+    /** this component expresses the shape of the objective
+     * (linear/quadratic/nonlinear)
+     */
+    std::string shape;
+
+    /** numberOfMatrixTerms gives the number of matrix-valued terms that are added
+     *  to form this objective
+     */
+    int numberOfMatrixTerms;
+
+    /** This array gives the terms making up the matrix objective */
+    MatrixTransformation **matrixTerm;
+}; // MatrixObj
+
+/*! \class MatrixCon
+ * \brief The in-memory representation of the
+ * <b><matrixCon></b> element.
+ */
+class MatrixCon
+{
+public:
+
+    /** The MatrixCon class constructor */
+    MatrixCon();
+
+    /** The MatrixCon class destructor */
+    ~MatrixCon();
+
+    /** matrixIdx gives the reference to a matrix on which this matrix constraint is based */
+    int matrixIdx;
+
+    /** lbMatrixIdx gives a lower bound for this matrixCon */
+    int lbMatrixIdx;
+
+    /** lbConeIdx gives a cone that must contain matrixCon - lbMatrix */
+    int lbConeIdx;
+
+    /** ubMatrixIdx gives an upper bound for this matrixCon */
+    int ubMatrixIdx;
+
+    /** ubConeIdx gives a cone that must contain ubMatrix - matrixCon */
+    int ubConeIdx;
+
+    /** patternMatrixIdx refers to a pattern matrix that describes the
+     *  locations in this matrixCon that are allowed to be nonzero */
+    int patternMatrixIdx;
+
+    /** an optional name to this MatrixCon */
+    std::string name;
+
+    /** this component expresses the shape of the constraint
+     * (linear/quadratic/nonlinear)
+     */
+    std::string shape;
+
+    /** numberOfMatrixTerms gives the number of matrix-valued terms that are added
+     *  to form the body of this constraint
+     */
+    int numberOfMatrixTerms;
+
+    /** This array gives the terms making up the matrix constraint */
+    MatrixTransformation **matrixTerm;
+}; // MatrixObj
+
+
+
+/*! \class MatrixExpression
+ * \brief The in-memory representation of the <b><expr></b> element,
+ * which is like a nonlinear expression, but since it involves matrices,
+ * the expression could be linear, so a "shape" attribute is added
+ * to distinguish linear and nonlinear expressions.
+ */
+class MatrixExpression: Nl
+{
+public:
+
+    /** The MatrixExpression class constructor */
+    MatrixExpression();
+
+    /** The MatrixExpression class destructor */
+    ~MatrixExpression();
+
+    /** shape is used to track whether the expression is linear or nonlinear */
+    std::string shape;
+}; // MatrixExpression
+
+
+/*! \class MatrixExpressions
+ * \brief The in-memory representation of the 
+   <b><matrixExpressions></b> element.
+ */
+class MatrixExpressions
+{
+public:
+
+    /** The MatrixExpressions class constructor */
+    MatrixExpressions();
+
+    /** The MatrixExpressions class destructor */
+    ~MatrixExpressions();
+
+    /** numberOfExpr gives the number of expressions */
+    int numberOfExpr;
+
+    /** a pointer to an array of expr object pointers */
+    MatrixExpression **expr;
+
+}; // MatrixExpressions
+
 
 /*! \class TimeDomainStageVar
  * \brief The in-memory representation of the
@@ -2311,7 +2492,7 @@ private:
      * @return true if the variables are processed.
      * @throws Exception if the elements in variables are logically inconsistent.
      */
-    bool processVariables()	;
+    bool processVariables()    ;
 
     /**
      * process objectives.
@@ -2578,7 +2759,7 @@ public:
 
     /**
      * Get constraint types. The contraint types are not part of the OSiL schema,
-	 * but they are used in solver interfaces such as OSLindoSolver.cpp.
+     * but they are used in solver interfaces such as OSLindoSolver.cpp.
      * <ul>
      * <li>R for range constraint lb <= constraint <= ub </li>
      * <li>L for less than constraint  -INF <= con <= ub or con <= ub</li>
@@ -2813,6 +2994,7 @@ public:
     * @return a vector of size numberOfStages.
     */
     int* getTimeDomainStageNumberOfVariables();
+
 
     /**
     * Get the number of constraints contained in each time stage
@@ -3141,7 +3323,7 @@ public:
      */
     bool setNonlinearExpressions(int nexpr, Nl** root);
 
-	// methods to print the current model or parts of it
+    // methods to print the current model or parts of it
 
     /**
      * Print the infix representation of the problem.
@@ -3420,8 +3602,8 @@ public:
     /**
      *
      * @return true if successful in adding the qTerms to the ExpressionTree.
-	 * \remark due to the typo in the name of the method, this has been flagged as obsolescent
-	 * and is being replaced by addQTermsToExpressionTree() -- see below
+     * \remark due to the typo in the name of the method, this has been flagged as obsolescent
+     * and is being replaced by addQTermsToExpressionTree() -- see below
      */
     bool addQTermsToExressionTree();
 

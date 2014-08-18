@@ -533,7 +533,7 @@ inline int mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE type2)
         return ENUM_MATRIX_TYPE_jumbled;
 
     // at this point we have row references or expressions (of unequal type) 
-    if (type1 > ENUM_MATRIX_TYPE_varref) // row reference
+    if (type1 > ENUM_MATRIX_TYPE_varref) // row reference (objective or constraint)
     {
         if (type2 > ENUM_MATRIX_TYPE_varref)
             return ENUM_MATRIX_TYPE_mixedref;
@@ -1254,7 +1254,7 @@ public:
     /**
      *  Set the indices for a particular status
      *  @param status is a string representing the allowed statuses
-     *		(as defined in enumeration ENUM_BASIS_STATUS - see below)
+     *        (as defined in enumeration ENUM_BASIS_STATUS - see below)
      *  @param i contains the array of indices
      *  @param ni contains the number of elements in i
      */
@@ -1263,7 +1263,7 @@ public:
     /**
      *  Add one index to a particular status
      *  @param status is a string representing the allowed statuses
-     *		(as defined in enumeration ENUM_BASIS_STATUS - see below)
+     *        (as defined in enumeration ENUM_BASIS_STATUS - see below)
      *  @param idx contains the value of the index
      */
     bool addIdx(int status, int idx);
@@ -1335,6 +1335,7 @@ class OSnLMNode;
  */
 class ConstantMatrixElements
 {
+public:
     IntVector *start;
     SparseVector *nonzeros;
 
@@ -1372,6 +1373,7 @@ class ConstantMatrixElements
  */
 class VarReferenceMatrixElements
 {
+public:
     IntVector *start;
     SparseIntVector *nonzeros;
 
@@ -1411,6 +1413,7 @@ class VarReferenceMatrixElements
  */
 class LinearMatrixElementTerm
 {
+public:
     int idx;
     double coef;
 
@@ -1450,10 +1453,11 @@ class LinearMatrixElementTerm
  */
 class LinearMatrixElement
 {
+public:
     int numberOfVarIdx;
     double constant;
 
-    LinearMatrixElementTerm* varIdx;
+    LinearMatrixElementTerm** varIdx;
 
     LinearMatrixElement();
     ~LinearMatrixElement();
@@ -1488,9 +1492,10 @@ class LinearMatrixElement
  */
 class LinearMatrixValues
 {
+public:
     int numberOfEl;
     IntVector *indexes;
-    LinearMatrixElement  *values;     
+    LinearMatrixElement *values;     
     
     LinearMatrixValues();
     ~LinearMatrixValues();
@@ -1525,6 +1530,7 @@ class LinearMatrixValues
  */
 class LinearMatrixElements
 {
+public:
     IntVector *start;
     LinearMatrixValues *nonzeros;
 
@@ -1561,6 +1567,7 @@ class LinearMatrixElements
  */
 class GeneralMatrixValues
 {
+public:
     int numberOfEl;
     IntVector *indexes;
     OSnLNode **values;
@@ -1598,6 +1605,7 @@ class GeneralMatrixValues
  */
 class GeneralMatrixElements
 {
+public:
     IntVector *start;
     GeneralMatrixValues *nonzeros;
 
@@ -1629,16 +1637,141 @@ class GeneralMatrixElements
     bool deepCopyFrom(GeneralMatrixElements *that);
 };//class GeneralMatrixElements
 
+
+/*! \class ObjReferenceMatrixElements
+ * \brief a data structure to represent objective reference elements in a MatrixType object
+ *  Each nonzero element is of the form x_{k} where k is the index of an objective (i.e., less than zero)
+ */
+class ObjReferenceMatrixElements
+{
+public:
+    IntVector *start;
+    SparseIntVector *nonzeros;
+
+    ObjReferenceMatrixElements();
+    ~ObjReferenceMatrixElements();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ObjReferenceMatrixElements *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ObjReferenceMatrixElements *that);
+};//class ObjReferenceMatrixElements
+
+
+/*! \class ConReferenceMatrixElements
+ * \brief a data structure to represent constraint reference elements in a MatrixType object
+ *  Each nonzero element is of the form x_{k} where k is the index of a constraint
+ */
+class ConReferenceMatrixElements
+{
+public:
+    IntVector *start;
+    SparseIntVector *nonzeros;
+
+    ConReferenceMatrixElements();
+    ~ConReferenceMatrixElements();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ConReferenceMatrixElements *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ConReferenceMatrixElements *that);
+};//class ConReferenceMatrixElements
+
+/*! \class PatternMatrixElements
+ * \brief a data structure to represent "pattern" elements in a MatrixType object
+ *  Each nonzero element must be +1 (so only the indexes are represented) and
+ *  denotes a location in the pattern matrix that either can or cannot be nonzero,
+ *  depending on the value of the boolean excludeElementIfSet;
+ */
+class PatternMatrixElements
+{
+public:
+    bool excludeElementIfSet;
+    IntVector *start;
+    IntVector *nonzeros;
+
+    PatternMatrixElements();
+    ~PatternMatrixElements();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(PatternMatrixElements *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(PatternMatrixElements *that);
+};//class PatternMatrixElements
+
+
 /*! \class MatrixElements
  * \brief a data structure to represent the nonzeroes of a matrix explicitly element by element
  */
 class MatrixElements
 {
-    bool rowMajor;
+public:
     ConstantMatrixElements         *constantElements;
     VarReferenceMatrixElements *varReferenceElements;
     LinearMatrixElements             *linearElements;
     GeneralMatrixElements           *generalElements;
+    ObjReferenceMatrixElements *objReferenceElements;
+    ConReferenceMatrixElements *conReferenceElements;
+    PatternMatrixElements           *patternElements;
+
+    bool rowMajor;
 
     MatrixElements();
     ~MatrixElements();
@@ -1669,22 +1802,49 @@ class MatrixElements
 };//class MatrixElements
 
 
-#if 0
 /*! \class MatrixTransformation
  * \brief a data structure to represent the nonzeroes of a matrix 
  *  by transformation from other (previously defined) matrices 
  */
 class MatrixTransformation
 {
+public:
+    OSnLMNode *transformation;
+
+    MatrixTransformation();
+    ~MatrixTransformation();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixTransformation *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixTransformation *that);
 };//class MatrixTransformation
-#endif
 
 class MatrixBlock; //forward desclaration
 
 /*! \class MatrixBlocks
  * \brief a data structure to represent the nonzeroes of a matrix 
  *  in a blockwise fashion. Each block can be given elementwise, 
- *  through transformation or nested blocks, and so on, recursively.
+ *  through transformation, or nested blocks, and so on, recursively.
  */
 class MatrixBlocks
 {
@@ -1693,17 +1853,59 @@ public:
     IntVector *colOffsets;
     IntVector *rowOffsets;
     MatrixBlock **block;
+
+    MatrixBlocks();
+    ~MatrixBlocks();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixBlocks *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixBlocks *that);
 };//class MatrixBlocks
 
 
 /*! \class MatrixConstructor
  * \brief a data structure to describe one step in the construction of a matrix
+ *  Each constructor is either an elementwise description,  or as a transformation 
+ *  involving matrices defined earlier in the process, or as a blockwise description, 
+ *  which itself can contain other constructors recursively in setting up each block.
  */
 class MatrixConstructor
 {
-    MatrixElements *elements;
-    OSnLMNode *transformation;
-    MatrixBlocks *blocks;
+public:
+
+/**
+ *  The type of each constructor is tracked in the integer cType
+ *  cType = 1: MatrixElements
+ *  cType = 2: Transformation
+ *  cType = 3: MatrixBlocks
+ */
+    int cType;
+
+/**
+ * The pointer to the constructor is originally maintained as a void*,
+ * to be changed as needed
+ */
+    void* cPtr;
 
     MatrixConstructor();
     ~MatrixConstructor();

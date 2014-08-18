@@ -800,12 +800,12 @@ Matrices::~Matrices()
     int i;
     if(numberOfMatrices > 0 && matrix != NULL)
     {
-        for( i = 0; i < numberOfMatrices; i++)
+        for (i = 0; i < numberOfMatrices; i++)
         {
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
-            outStr << "DESTROYING MATRIX " << matrix[ i]->idx << endl;
+            outStr << "DESTROYING MATRIX " << i << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
             if(matrix != NULL)
@@ -854,7 +854,7 @@ Cones::~Cones()
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
-            outStr << "DESTROYING CONE " << cone[ i]->idx << endl;
+            outStr << "DESTROYING CONE " << i << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
             if(cone != NULL)
@@ -878,7 +878,9 @@ Cone::Cone():
     numberOfRows(0),
     numberOfColumns(0),
     numberOfOtherIndexes(0),
-    otherIndexes(NULL)
+    otherIndexes(NULL),
+    coneType(ENUM_CONE_TYPE_unknown),
+    idx(-1)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Cone Constructor");
