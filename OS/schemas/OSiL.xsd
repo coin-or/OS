@@ -367,7 +367,11 @@
 			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
 			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
 -->
-			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0"/>
+			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>For scalar-valued expressions  in "core" objectives and constraints</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MatrixVariables">
@@ -385,7 +389,7 @@
 		</xs:annotation>
 		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>matrix of varReference </xs:documentation>
+				<xs:documentation>matrix of varReference; may be an empty matrix </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -410,9 +414,10 @@
 		</xs:attribute>
 		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
-				<xs:documentation>used to control which new variables are created</xs:documentation>
+				<xs:documentation>used to control which new variables are created. Default: Completely dense matrix; Create all variables not mentioned in reference matrix</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="name"/>
 		<!-- No need for a name. a <matrix> can have a name; two names might lead to confusion
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		-->
@@ -616,17 +621,22 @@
 		</xs:sequence>
 		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>matrix of objReference </xs:documentation>
+				<xs:documentation>matrix of objReference; may be an empty matrix  </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
-				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses core objectives, orderConeIdx can be omitted</xs:documentation>
+				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses only core objectives, orderConeIdx can be omitted and defaults to the corresponding orthant cone</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>added to objective;        zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>used to control which new objectives are created. Default: Completely dense matrix; Create all objectives not mentioned in reference matrix</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
@@ -641,11 +651,6 @@
 					<xs:enumeration value="nonlinear"/>
 				</xs:restriction>
 			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>used to control which new objectives are created</xs:documentation>
-			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfMatrixTerms" use="required"/>
 	</xs:complexType>
@@ -696,7 +701,11 @@
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="idx" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to existing (i.e., core) objectives (if negative) or constraints (if nonnegative)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="shape">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -844,7 +853,7 @@
 		</xs:sequence>
 		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>matrix of conReference </xs:documentation>
+				<xs:documentation>matrix of conReference; may be an empty matrix  </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -867,6 +876,11 @@
 				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>used to control which new constraints are created. Default: Completely dense matrix; Create all constraints not mentioned in reference matrix</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="shape" default="nonlinear">
 			<xs:annotation>
@@ -879,11 +893,6 @@
 					<xs:enumeration value="nonlinear"/>
 				</xs:restriction>
 			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>used to control which new constraints are created</xs:documentation>
-			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1219,7 +1228,11 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:complexContent>
 			<xs:extension base="GenericCone">
 				<xs:sequence>
-					<xs:element name="direction" type="OrthantConeDirection" maxOccurs="unbounded"/>
+					<xs:element name="direction" type="OrthantConeDirection" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>There must be (numberOfRows* NumberOfColumns) directions (after accounting for 'mult')</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1229,6 +1242,9 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="lb" use="required">
+			<xs:annotation>
+				<xs:documentation>must be either 0 or -INF</xs:documentation>
+			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
 					<xs:enumeration value="0.0"/>
@@ -1237,6 +1253,9 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="ub" use="required">
+			<xs:annotation>
+				<xs:documentation>must be either 0 or INF</xs:documentation>
+			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
 					<xs:enumeration value="0.0"/>
@@ -1254,9 +1273,9 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 			<xs:extension base="GenericCone">
 				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-				<xs:attribute name="axisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
+				<xs:attribute name="axisDirection" type="xs:nonNegativeInteger" use="optional" default="0">
 					<xs:annotation>
-						<xs:documentation>index is of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+						<xs:documentation>This is an index of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
@@ -1270,12 +1289,12 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 			<xs:extension base="GenericCone">
 				<xs:attribute name="distortionMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
-				<xs:attribute name="firstAxisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="0">
+				<xs:attribute name="firstAxisDirection" type="xs:nonNegativeInteger" use="optional" default="0">
 					<xs:annotation>
-						<xs:documentation>Each index is of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
+						<xs:documentation>Each is an index of the form i0*n1*n2*... + i1*n2*n3... + ... + i_r, with zero-based indices i0, i1, ..., i_r</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="secondAxisDirectionIndex" type="xs:nonNegativeInteger" use="optional" default="1"/>
+				<xs:attribute name="secondAxisDirection" type="xs:nonNegativeInteger" use="optional" default="1"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

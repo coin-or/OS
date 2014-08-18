@@ -3822,7 +3822,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrix" type="OSnLNodeMatrix" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixReference" type="OSnLNodeMatrix" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4292,7 +4292,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLNode"/>
