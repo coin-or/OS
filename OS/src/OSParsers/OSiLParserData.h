@@ -233,6 +233,7 @@ public:
     /** some elements to hold matrices and cones */
     bool numberOfMatricesPresent; 
     int  numberOfMatrices;
+    int  matrixCounter;
     bool numberOfConesPresent; 
     int  numberOfCones;
     bool numberOfRowsPresent; 

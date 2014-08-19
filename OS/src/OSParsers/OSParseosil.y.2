@@ -124,16 +124,26 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 
 
-matrices: | matricesStart matricesAttributes matricesContent;
+matrices: | matricesStart matricesAttributes matricesContent
+{
+    if (parserData->matrixCounter < parserData->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer matrices than specified");
+};
 
 matricesStart: MATRICESSTART 
 {
-#ifdef DEBUG
-    yydebug = 1;
-#endif
+    osinstance->instanceData->matrices = new Matrices();
+    parserData->matrixCounter = 0;
 };
 
-matricesAttributes: osilNumberOfMatricesATT;
+matricesAttributes: osilNumberOfMatricesATT
+{
+    osinstance->instanceData->matrices->numberOfMatrices = parserData->numberOfMatrices;
+    if (parserData->numberOfMatrices < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices cannot be negative");
+    else
+        osinstance->instanceData->matrices->matrix = new OSMatrix*[parserData->numberOfMatrices];
+};
 
 matricesContent: matricesEmpty | matricesLaden;
 
@@ -141,7 +151,13 @@ matricesEmpty: ENDOFELEMENT;
 
 matricesLaden: GREATERTHAN matrixList MATRICESEND;
 
-matrixList: | matrixList osglMatrix;
+matrixList: | matrixList osglMatrix
+{
+    if (parserData->matrixCounter > parserData->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+    osinstance->instanceData->matrices->matrix[parserData->matrixCounter] = osglData->matrix;
+    parserData->matrixCounter++;
+};
 
 
 cones: | conesStart conesAttributes conesContent;

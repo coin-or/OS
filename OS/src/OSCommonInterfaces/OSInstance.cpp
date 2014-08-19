@@ -869,7 +869,7 @@ Cones::~Cones()
     }
     if(cone != NULL)
     {
-        delete[] cone;
+        delete [] cone;
         cone = NULL;
     }
 }//end ~Cones()
@@ -1099,78 +1099,383 @@ std::string PolarCone::getConeName()
     return "polarCone";
 }// end PolarCone::getConeName()
 
-
-
-#if 0
--------------------------------
-OtherOptionEnumeration::OtherOptionEnumeration():
-    IntVector(),
-    value(""),
-    description("")
+MatrixProgramming::MatrixProgramming():
+    matrixVariables(NULL),
+    matrixObjectives(NULL),
+    matrixConstraints(NULL),
+    matrixExpressions(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
-        "Inside the OtherOptionEnumeration Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixProgramming Constructor");
 #endif
-}
+}//end MatrixProgramming()
 
-OtherOptionEnumeration::OtherOptionEnumeration(int n):
-    IntVector(n),
-    value(""),
-    description("")
+MatrixProgramming::~MatrixProgramming()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
-        "Inside the alternate OtherOptionEnumeration Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixProgramming Destructor");
 #endif
-}
+    if (matrixVariables != NULL)
+        delete matrixVariables;
+    matrixVariables = NULL;
+    if (matrixObjectives != NULL)
+        delete matrixObjectives;
+    matrixObjectives = NULL;
+    if (matrixConstraints != NULL)
+        delete matrixConstraints;
+    matrixConstraints = NULL;
+    if (matrixExpressions != NULL)
+        delete matrixExpressions;
+    matrixExpressions = NULL;
+}//end ~MatrixProgramming()
 
-OSnLNode::OSnLNode():
-    m_mChildren(NULL),
-    m_mMatrixChildren(NULL),
-    m_dFunctionValue( OSNaN())
-    //inumberOfChildren( 0)
-{
-}//end OSnLNode
 
-OSnLNode::~OSnLNode()
+MatrixVariables::MatrixVariables():
+    numberOfMatrixVar(0),
+    matrixVar(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNode destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixVariables Constructor");
 #endif
-}//end ~OSnLNode
+}//end MatrixVariables()
 
-// OSnLNodePlus Methods
-OSnLNodePlus::OSnLNodePlus()
+MatrixVariables::~MatrixVariables()
 {
-    inumberOfChildren = 2;
-    inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[2];
-    m_mChildren[ 0] = NULL;
-    m_mChildren[ 1] = NULL;
-    inodeInt = 1001;
-    inodeType = 2;
-}//end OSnLNodePlus
+    std::ostringstream outStr;
 
-
-OSnLNodePlus::~OSnLNodePlus()
-{
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePlus destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixVariables Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF MATRIXVAR = " << numberOfMatrixVar << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
+
+    if (numberOfMatrixVar > 0 && matrixVar != NULL)
     {
-        if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
+        for(int i = 0; i < numberOfMatrixVar; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING MATRIXVAR " << i << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(matrixVar != NULL)
+            {
+                if(matrixVar[i] != NULL)
+                {
+                    delete matrixVar[i];
+                    matrixVar[i] = NULL;
+                }
+            }
+        }
     }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-}//end ~OSnLNodePlus
+    if(matrixVar != NULL)
+    {
+        delete [] matrixVar;
+        matrixVar = NULL;
+    }
+}//end ~MatrixVariables()
 
-================================
+MatrixObjectives::MatrixObjectives():
+    numberOfMatrixObj(0),
+    matrixObj(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixObjectives Constructor");
+#endif
+}//end MatrixObjectives()
+
+MatrixObjectives::~MatrixObjectives()
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixObjectives Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF MATRIXOBJ = " << numberOfMatrixObj << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
 
+    if (numberOfMatrixObj > 0 && matrixObj != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixObj; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING MATRIXOBJ " << i << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(matrixObj != NULL)
+            {
+                if(matrixObj[i] != NULL)
+                {
+                    delete matrixObj[i];
+                    matrixObj[i] = NULL;
+                }
+            }
+        }
+    }
+    if(matrixObj != NULL)
+    {
+        delete [] matrixObj;
+        matrixObj = NULL;
+    }
+}//end ~MatrixObjectives()
 
+MatrixConstraints::MatrixConstraints():
+    numberOfMatrixCon(0),
+    matrixCon(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstraints Constructor");
+#endif
+}//end MatrixConstraints()
+
+MatrixConstraints::~MatrixConstraints()
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstraints Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF MATRIXCON = " << numberOfMatrixCon << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+
+    if (numberOfMatrixCon > 0 && matrixCon != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixCon; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING MATRIXCON " << i << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(matrixCon != NULL)
+            {
+                if(matrixCon[i] != NULL)
+                {
+                    delete matrixCon[i];
+                    matrixCon[i] = NULL;
+                }
+            }
+        }
+    }
+    if(matrixCon != NULL)
+    {
+        delete [] matrixCon;
+        matrixCon = NULL;
+    }
+}//end ~MatrixConstraints()
+
+
+MatrixExpressions::MatrixExpressions():
+    numberOfExpr(0),
+    expr(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixExpressions Constructor");
+#endif
+}//end MatrixExpressions()
+
+MatrixExpressions::~MatrixExpressions()
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixExpressions Destructor");
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF EXPR = " << numberOfExpr << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+
+    if (numberOfExpr > 0 && expr != NULL)
+    {
+        for(int i = 0; i < numberOfExpr; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING EXPR " << i << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(expr != NULL)
+            {
+                if(expr[i] != NULL)
+                {
+                    delete expr[i];
+                    expr[i] = NULL;
+                }
+            }
+        }
+    }
+    if(expr != NULL)
+    {
+        delete [] expr;
+        expr = NULL;
+    }
+}//end ~MatrixExpressions()
+
+
+MatrixVar::MatrixVar():
+    matrixIdx(-1),
+    lbMatrixIdx(-1),
+    lbConeIdx(-1),
+    ubMatrixIdx(-1),
+    ubConeIdx(-1),
+    patternMatrixIdx(-1),
+    name("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixVar Constructor");
+#endif
+}//end MatrixVar()
+
+MatrixVar::~MatrixVar()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixVar Destructor");
+#endif
+}//end ~MatrixVar()
+
+
+MatrixObj::MatrixObj():
+    matrixIdx(-1),
+    orderConeIdx(-1),
+    constantMatrixIdx(-1),
+    patternMatrixIdx(-1),
+    name(""),
+    shape(""),
+    numberOfMatrixTerms(0),
+    matrixTerm(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixObj Constructor");
+#endif
+}//end MatrixObj()
+
+MatrixObj::~MatrixObj()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixObj Destructor");
+#endif
+
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF MATRIXTERMS = " << numberOfMatrixTerms << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+
+    if (numberOfMatrixTerms > 0 && matrixTerm != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixTerms; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING MATRIXTERM " << i << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(matrixTerm != NULL)
+            {
+                if(matrixTerm[i] != NULL)
+                {
+                    delete matrixTerm[i];
+                    matrixTerm[i] = NULL;
+                }
+            }
+        }
+    }
+    if(matrixTerm != NULL)
+    {
+        delete [] matrixTerm;
+        matrixTerm = NULL;
+    }
+}//end ~MatrixObj()
+
+
+MatrixCon::MatrixCon():
+    matrixIdx(-1),
+    lbMatrixIdx(-1),
+    lbConeIdx(-1),
+    ubMatrixIdx(-1),
+    ubConeIdx(-1),
+    patternMatrixIdx(-1),
+    name(""),
+    shape(""),
+    numberOfMatrixTerms(0),
+    matrixTerm(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixCon Constructor");
+#endif
+}//end MatrixCon()
+
+MatrixCon::~MatrixCon()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixCon Destructor");
+#endif
+
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr.str("");
+    outStr.clear();
+    outStr << "NUMBER OF MATRIXTERMS = " << numberOfMatrixTerms << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+
+    if (numberOfMatrixTerms > 0 && matrixTerm != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixTerms; i++)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "DESTROYING MATRIXTERM " << i << endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            if(matrixTerm != NULL)
+            {
+                if(matrixTerm[i] != NULL)
+                {
+                    delete matrixTerm[i];
+                    matrixTerm[i] = NULL;
+                }
+            }
+        }
+    }
+    if(matrixTerm != NULL)
+    {
+        delete [] matrixTerm;
+        matrixTerm = NULL;
+    }
+}//end ~MatrixCon()
+
+MatrixExpression::MatrixExpression():
+    Nl(),
+    shape("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixExpression Constructor");
+#endif
+}
+
+MatrixExpression::~MatrixExpression()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixExpression Destructor");
+#endif
+}
 
 TimeDomainStageVar::TimeDomainStageVar():
     idx(0)
@@ -1426,6 +1731,9 @@ InstanceData::InstanceData()
     linearConstraintCoefficients = new LinearConstraintCoefficients();
     quadraticCoefficients = new QuadraticCoefficients();
     nonlinearExpressions = new NonlinearExpressions();
+    matrices = new Matrices();
+    cones = new Cones();
+    matrixProgramming = new MatrixProgramming();
     timeDomain = NULL;
 }//end of InstanceData constructor
 
@@ -1468,6 +1776,24 @@ InstanceData::~InstanceData()
     {
         delete nonlinearExpressions;
         nonlinearExpressions = NULL;
+    }
+
+    if (matrices != NULL)
+    {
+        delete matrices;
+        matrices = NULL;
+    }
+
+    if (cones != NULL)
+    {
+        delete cones;
+        cones = NULL;
+    }
+
+    if (matrixProgramming != NULL)
+    {
+        delete matrixProgramming;
+        matrixProgramming = NULL;
     }
 
     if (timeDomain != NULL)
@@ -1697,6 +2023,7 @@ int OSInstance::getObjectiveNumber()
         m_iObjectiveNumber = instanceData->objectives->numberOfObjectives;
     }
     return m_iObjectiveNumber;
+
 }//getObjectiveNumber
 
 bool OSInstance::processObjectives()
@@ -2305,6 +2632,7 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPostfix( int rowI
             OSExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
             postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
         }
+
         else
         {
             throw ErrorClass("Error in getNonlinearExpressionTreeInPostfix, rowIdx not valid");
@@ -2487,6 +2815,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         tmpStack.pop();
                         tmpStack.push("(" + tmp2 +  " ^ "  + tmp1 + ")");
                         break;
+
 
                     case OS_ABS :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing abs operator");

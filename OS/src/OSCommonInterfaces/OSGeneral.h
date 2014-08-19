@@ -1882,6 +1882,26 @@ public:
     bool deepCopyFrom(MatrixBlocks *that);
 };//class MatrixBlocks
 
+enum ENUM_MATRIX_CONSTRUCTOR_TYPE
+{
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_elements = 1,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks
+};
+
+inline int returnMatrixConstructorType(std::string cType)
+{
+    if (cType == "elements"      ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
+    if (cType == "transformation") return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
+    if (cType == "blocks"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
+    return 0;
+}//returnMatrixConstructorType
+
+inline bool verifyMatrixConstructorType(std::string type)
+{
+    return (returnMatrixConstructorType(type) > 0);
+}//verifyMatrixConstructorType
+
 
 /*! \class MatrixConstructor
  * \brief a data structure to describe one step in the construction of a matrix
@@ -1907,7 +1927,13 @@ public:
  */
     void* cPtr;
 
+    /** default constructor */
     MatrixConstructor();
+
+    /** alternate constructor */
+    MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE cType);
+
+    /** destructor */
     ~MatrixConstructor();
 
     /**

@@ -43,7 +43,7 @@
 
 //#define CHECK_PARSE_TIME
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define YYDEBUG 1
@@ -483,16 +483,26 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 
 
-matrices: | matricesStart matricesAttributes matricesContent;
+matrices: | matricesStart matricesAttributes matricesContent
+{
+    if (parserData->matrixCounter < parserData->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer matrices than specified");
+};
 
 matricesStart: MATRICESSTART 
 {
-#ifdef DEBUG
-    yydebug = 1;
-#endif
+    osinstance->instanceData->matrices = new Matrices();
+    parserData->matrixCounter = 0;
 };
 
-matricesAttributes: osilNumberOfMatricesATT;
+matricesAttributes: osilNumberOfMatricesATT
+{
+    osinstance->instanceData->matrices->numberOfMatrices = parserData->numberOfMatrices;
+    if (parserData->numberOfMatrices < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices cannot be negative");
+    else
+        osinstance->instanceData->matrices->matrix = new OSMatrix*[parserData->numberOfMatrices];
+};
 
 matricesContent: matricesEmpty | matricesLaden;
 
@@ -500,7 +510,13 @@ matricesEmpty: ENDOFELEMENT;
 
 matricesLaden: GREATERTHAN matrixList MATRICESEND;
 
-matrixList: | matrixList osglMatrix;
+matrixList: | matrixList osglMatrix
+{
+    if (parserData->matrixCounter > parserData->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+    osinstance->instanceData->matrices->matrix[parserData->matrixCounter] = osglData->matrix;
+    parserData->matrixCounter++;
+};
 
 
 cones: | conesStart conesAttributes conesContent;
@@ -1909,10 +1925,21 @@ osglMatrix: matrixStart matrixAttributes matrixContent;
  
 matrixStart: MATRIXSTART
 {
-    //osglData->...;
+    osglData->matrix = new OSMatrix();
+    osglData->symmetryAttributePresent = false;
+    osglData->matrixTypeAttributePresent = false;
+    osglData->numberOfRowsPresent = false;
+    osglData->numberOfColumnsPresent = false;
+    osglData->matrixNameAttributePresent = false;
 };
 
-matrixAttributes: matrixAttributeList;
+matrixAttributes: matrixAttributeList
+{
+    if (osglData->numberOfRowsPresent = false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");
+    if (osglData->numberOfColumnsPresent = false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfColumns is missing");
+};
 
 matrixAttributeList: | matrixAttributeList matrixAttribute;
 
@@ -1959,7 +1986,7 @@ osglMatrixTypeATT: TYPEATT ATTRIBUTETEXT QUOTE
 
 matrixContent: matrixEmpty | matrixLaden;
 
-matrixEmpty: /* GREATERTHAN MATRIXEND | */ ENDOFELEMENT;
+matrixEmpty: ENDOFELEMENT;
 
 matrixLaden: GREATERTHAN matrixBody MATRIXEND; 
 
@@ -1967,9 +1994,27 @@ matrixBody: baseMatrix matrixConstructorList;
 
 baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd;
 
-baseMatrixStart: BASEMATRIXSTART;
+baseMatrixStart: BASEMATRIXSTART
+{
+    osglData->matrix->baseMatrix = new BaseMatrix();
+    osglData->baseMatrixIdxAttributePresent = false;
+    osglData->targetMatrixFirstRowAttributePresent = false;
+    osglData->targetMatrixFirstColAttributePresent = false;
+    osglData->baseMatrixStartRowAttributePresent = false;
+    osglData->baseMatrixStartColAttributePresent = false;
+    osglData->baseMatrixEndRowAttributePresent = false;
+    osglData->baseMatrixEndColAttributePresent = false;
+    osglData->baseTransposeAttributePresent = false;
+    osglData->scalarMultiplierAttributePresent = false;
+    osglData->baseMatrixEndRowAttribute = osglData->matrix->numberOfRows;
+    osglData->baseMatrixEndColAttribute = osglData->matrix->numberOfColumns;
+};
 
-baseMatrixAttributes: baseMatrixAttList;
+baseMatrixAttributes: baseMatrixAttList
+{
+    if (osglData->baseMatrixIdxAttributePresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute baseMatrixIdx is missing");
+};
 
 baseMatrixAttList: | baseMatrixAttList baseMatrixAtt;
 
@@ -2093,7 +2138,11 @@ matrixConstructor: matrixElements | matrixTransformation | matrixBlocks;
 
 matrixElements: matrixElementsStart matrixElementsAttributes matrixElementsContent;
 
-matrixElementsStart: ELEMENTSSTART;
+matrixElementsStart: ELEMENTSSTART
+{
+    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_elements);
+    osglData->matrix->matrixConstructor.push_back(tempC);
+};
 
 matrixElementsAttributes: | osglRowMajorATT; 
 
@@ -2671,13 +2720,22 @@ patternElementsNonzerosStart: NONZEROSSTART
 
 matrixTransformation: matrixTransformationStart GREATERTHAN OSnLMNode matrixTransformationEnd;
 
-matrixTransformationStart: TRANSFORMATIONSTART;
+matrixTransformationStart: TRANSFORMATIONSTART
+{
+    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation);
+    osglData->matrix->matrixConstructor.push_back(tempC);
+};
 
 matrixTransformationEnd: TRANSFORMATIONEND;
 
 matrixBlocks: matrixBlocksStart matrixBlocksAttributes matrixBlocksContent;
 
-matrixBlocksStart: BLOCKSSTART; 
+matrixBlocksStart: BLOCKSSTART
+{
+    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks);
+    osglData->matrix->matrixConstructor.push_back(tempC);
+};
+
 
 matrixBlocksAttributes: osglNumberOfBlocksATT;
 
@@ -3250,7 +3308,7 @@ matrixreferenceend: ENDOFELEMENT
                            
 matrixIdxATT: IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= osglData->numberOfMatrices){
+    if( $3 >= parserData->numberOfMatrices){
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
      }
 }; 

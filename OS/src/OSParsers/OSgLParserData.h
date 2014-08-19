@@ -90,7 +90,8 @@ public:
     OSMatrix* matrix;
 
     /** We also need to keep track locally of the number of matrices */
-    int numberOfMatrices;
+//    int numberOfMatrices;
+//    int currentMatrix;
 
     /** data structures to temporarily hold a matrix and its subordinate elements */
     std::string  symmetryAttribute;

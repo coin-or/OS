@@ -1094,6 +1094,8 @@ public:
      */
     bool setRandom(double density, bool conformant, int iMin, int iMax);
 
+
+
     /**
      * A function to make a deep copy of an instance of this class
      * @param that: the instance from which information is to be copied
@@ -1388,6 +1390,29 @@ public:
 }; // MatrixVar
 
 
+/*! \class MatrixVariables
+ * \brief The in-memory representation of the
+ * <b><matrixVariables></b> element.
+ */
+class MatrixVariables
+{
+public:
+
+    /** The MatrixVariables class constructor */
+    MatrixVariables();
+
+    /** The MatrixVariables class destructor */
+    ~MatrixVariables();
+
+    /** numberOfMatrixVar gives the number of <matrixVar> children */
+    int numberOfMatrixVar;
+
+    /** matrixVar is an array of pointers to the <matrixVar> children */
+    MatrixVar** matrixVar;
+
+}; // MatrixVariables
+
+
 /*! \class MatrixObj
  * \brief The in-memory representation of the
  * <b><matrixObj></b> element.
@@ -1411,7 +1436,7 @@ public:
     int orderConeIdx;
 
     /** constantMatrixIdx gives a constant added to the matrixObj */
-    int ubMatrixIdx;
+    int constantMatrixIdx;
 
     /** patternMatrixIdx refers to a pattern matrix that describes the
      *  locations in this matrixObj that are allowed to be nonzero */
@@ -1433,6 +1458,30 @@ public:
     /** This array gives the terms making up the matrix objective */
     MatrixTransformation **matrixTerm;
 }; // MatrixObj
+
+
+/*! \class MatrixObjectives
+ * \brief The in-memory representation of the
+ * <b><matrixObjectives></b> element.
+ */
+class MatrixObjectives
+{
+public:
+
+    /** The MatrixObjectives class constructor */
+    MatrixObjectives();
+
+    /** The MatrixObjectives class destructor */
+    ~MatrixObjectives();
+
+    /** numberOfMatrixObj gives the number of <matrixObj> children */
+    int numberOfMatrixObj;
+
+    /** matrixObj is an array of pointers to the <matrixObj> children */
+    MatrixObj** matrixObj;
+
+}; // MatrixObjectives
+
 
 /*! \class MatrixCon
  * \brief The in-memory representation of the
@@ -1482,8 +1531,30 @@ public:
 
     /** This array gives the terms making up the matrix constraint */
     MatrixTransformation **matrixTerm;
-}; // MatrixObj
+}; // MatrixCon
 
+
+/*! \class MatrixConstraints
+ * \brief The in-memory representation of the
+ * <b><matrixConstraints></b> element.
+ */
+class MatrixConstraints
+{
+public:
+
+    /** The MatrixConstraints class constructor */
+    MatrixConstraints();
+
+    /** The MatrixConstraints class destructor */
+    ~MatrixConstraints();
+
+    /** numberOfMatrixCon gives the number of <matrixCon> children */
+    int numberOfMatrixCon;
+
+    /** matrixCon is an array of pointers to the <matrixCon> children */
+    MatrixObj** matrixCon;
+
+}; // MatrixConstraints
 
 
 /*! \class MatrixExpression
@@ -1528,6 +1599,34 @@ public:
     MatrixExpression **expr;
 
 }; // MatrixExpressions
+
+
+/*! \class MatrixProgramming
+ * \brief The in-memory representation of the 
+   <b><matrixProgramming></b> element.
+ */
+class MatrixProgramming
+{
+public:
+
+    /** The MatrixProgramming class constructor */
+    MatrixProgramming();
+
+    /** The MatrixProgramming class destructor */
+    ~MatrixProgramming();
+
+    /** a pointer to the matrixVariables object */
+    MatrixVariables* matrixVariables;
+
+    /** a pointer to the matrixObjectives object */
+    MatrixObjectives* matrixObjectives;
+
+    /** a pointer to the matrixConstraints object */
+    MatrixConstraints* matrixConstraints;
+
+    /** a pointer to the matrixExpressions object */
+    MatrixExpressions* matrixExpressions;
+}; // MatrixProgramming
 
 
 /*! \class TimeDomainStageVar
@@ -1800,17 +1899,32 @@ public:
     LinearConstraintCoefficients *linearConstraintCoefficients;
 
     /** quadraticCoefficients is a pointer to a
-     * QuadraticCoefficients object
+     *  QuadraticCoefficients object
      */
     QuadraticCoefficients* quadraticCoefficients;
 
     /** nonlinearExpressions is a pointer to a
-     * NonlinearExpressions object
+     *  NonlinearExpressions object
      */
     NonlinearExpressions* nonlinearExpressions;
 
+    /** matrices is a pointer to a
+     *  Matrices object
+     */
+    Matrices* matrices;
+
+    /** cones is a pointer to a
+     *  Cones object
+     */
+    Cones* cones;
+
+    /** matrixProgramming is a pointer to a
+     *  MatrixProgramming object
+     */
+    MatrixProgramming* matrixProgramming;
+
     /** timeDomain is a pointer to a
-     * TimeDomain object
+     *  TimeDomain object
      */
     TimeDomain* timeDomain;
 
@@ -3181,6 +3295,7 @@ public:
      * If for a specific objective, there are no objecitve coefficients, use null for the corresponding array member.
      * @return whether the objectives are set successfully.
      */
+
     bool setObjectives(int number, std::string *names, std::string *maxOrMins, double *constants, double *weights, SparseVector **objectitiveCoefficients);
 
     /**
