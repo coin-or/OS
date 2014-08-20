@@ -1569,92 +1569,92 @@ static const yytype_uint16 yyrline[] =
        0,   383,   383,   386,   387,   389,   398,   399,   402,   403,
      408,   415,   415,   417,   430,   436,   437,   440,   441,   444,
      447,   450,   453,   459,   466,   473,   481,   486,   486,   492,
-     498,   507,   507,   509,   511,   513,   513,   522,   522,   524,
-     526,   528,   528,   530,   532,   534,   534,   536,   537,   539,
-     540,   542,   549,   550,   555,   557,   559,   561,   561,   564,
-     565,   566,   568,   568,   570,   572,   574,   576,   576,   579,
-     580,   581,   583,   583,   587,   589,   591,   593,   593,   596,
-     597,   598,   599,   600,   601,   604,   604,   606,   608,   610,
-     612,   612,   615,   616,   617,   618,   619,   620,   621,   624,
-     624,   628,   630,   632,   634,   634,   637,   638,   639,   640,
-     643,   643,   657,   659,   661,   663,   663,   666,   667,   668,
-     671,   673,   675,   677,   679,   679,   681,   683,   685,   687,
-     689,   691,   693,   695,   697,   697,   700,   701,   702,   705,
-     707,   709,   711,   713,   713,   715,   717,   719,   721,   723,
-     732,   732,   734,   736,   736,   738,   741,   743,   743,   745,
-     747,   749,   749,   751,   753,   755,   757,   757,   759,   761,
-     763,   765,   765,   768,   769,   770,   771,   772,   773,   774,
-     777,   778,   780,   780,   782,   784,   786,   786,   788,   790,
-     792,   794,   794,   796,   798,   800,   802,   802,   805,   806,
-     807,   808,   809,   810,   811,   814,   814,   816,   818,   820,
-     822,   826,   826,   828,   830,   832,   835,   835,   837,   839,
-     841,   841,   843,   845,   847,   849,   849,   851,   853,   855,
-     857,   857,   860,   861,   862,   863,   864,   865,   866,   867,
-     868,   871,   871,   873,   875,   877,   879,   882,   882,   884,
-     886,   888,   888,   890,   892,   894,   894,   896,   898,   900,
-     900,   902,   904,   904,   906,   907,   910,   911,   914,   965,
-     967,   981,   982,   984,   984,  1008,  1009,  1012,  1013,  1015,
-    1017,  1018,  1022,  1023,  1025,  1026,  1028,  1044,  1052,  1059,
-    1064,  1065,  1067,  1068,  1070,  1070,  1073,  1082,  1083,  1085,
-    1086,  1090,  1091,  1093,  1094,  1096,  1112,  1120,  1127,  1132,
-    1133,  1135,  1136,  1138,  1138,  1141,  1150,  1151,  1153,  1163,
-    1167,  1168,  1170,  1171,  1173,  1189,  1196,  1201,  1202,  1204,
-    1205,  1207,  1207,  1210,  1219,  1220,  1225,  1225,  1233,  1234,
-    1236,  1237,  1239,  1243,  1249,  1257,  1261,  1266,  1275,  1286,
-    1297,  1308,  1319,  1327,  1335,  1343,  1351,  1360,  1369,  1377,
-    1388,  1399,  1411,  1422,  1433,  1444,  1455,  1466,  1477,  1488,
-    1499,  1510,  1521,  1535,  1536,  1543,  1545,  1545,  1547,  1548,
-    1549,  1550,  1715,  1723,  1725,  1725,  1727,  1729,  1738,  1740,
-    1740,  1742,  1742,  1744,  1760,  1763,  1763,  1765,  1765,  1768,
-    1809,  1809,  1811,  1813,  1821,  1821,  1823,  1876,  1880,  1891,
-    1893,  1901,  1905,  1916,  1918,  1924,  1926,  1936,  1944,  1944,
-    1947,  1948,  1949,  1950,  1951,  1960,  1969,  1978,  1987,  1987,
-    1989,  1991,  1993,  1995,  1995,  1997,  2013,  2019,  2019,  2022,
-    2023,  2024,  2025,  2026,  2027,  2028,  2029,  2030,  2032,  2042,
-    2052,  2062,  2072,  2082,  2092,  2102,  2109,  2109,  2111,  2116,
-    2125,  2133,  2133,  2135,  2135,  2137,  2137,  2137,  2139,  2141,
-    2147,  2147,  2149,  2149,  2151,  2156,  2165,  2165,  2167,  2169,
-    2172,  2174,  2174,  2176,  2178,  2180,  2191,  2197,  2197,  2199,
-    2201,  2203,  2205,  2218,  2225,  2225,  2227,  2229,  2231,  2242,
-    2248,  2248,  2250,  2252,  2254,  2256,  2269,  2275,  2275,  2277,
-    2279,  2281,  2292,  2298,  2298,  2300,  2302,  2304,  2306,  2317,
-    2323,  2330,  2332,  2334,  2335,  2348,  2355,  2355,  2357,  2359,
-    2361,  2363,  2364,  2366,  2372,  2372,  2374,  2376,  2378,  2378,
-    2380,  2383,  2389,  2391,  2391,  2394,  2395,  2397,  2401,  2401,
-    2403,  2405,  2407,  2407,  2410,  2412,  2418,  2418,  2422,  2426,
-    2426,  2428,  2430,  2432,  2443,  2449,  2449,  2451,  2453,  2455,
-    2457,  2468,  2474,  2481,  2483,  2485,  2486,  2499,  2506,  2506,
-    2508,  2510,  2512,  2514,  2515,  2517,  2523,  2523,  2525,  2527,
-    2529,  2529,  2531,  2533,  2539,  2539,  2541,  2543,  2546,  2546,
-    2548,  2550,  2552,  2563,  2569,  2569,  2571,  2573,  2575,  2577,
-    2590,  2596,  2596,  2598,  2600,  2602,  2613,  2619,  2619,  2621,
-    2623,  2625,  2627,  2640,  2646,  2646,  2648,  2650,  2650,  2652,
-    2652,  2654,  2659,  2668,  2670,  2681,  2694,  2694,  2696,  2698,
-    2700,  2702,  2715,  2721,  2723,  2729,  2731,  2733,  2740,  2742,
-    2744,  2746,  2757,  2763,  2770,  2770,  2772,  2774,  2776,  2778,
-    2789,  2795,  2802,  2802,  2804,  2806,  2808,  2810,  2810,  2812,
-    2814,  2816,  2818,  2818,  2821,  2822,  2823,  2830,  2839,  2848,
-    2848,  2850,  2850,  2852,  2854,  2856,  2865,  2874,  2883,  2892,
-    2901,  2906,  2914,  2955,  2956,  2960,  2969,  2971,  2970,  2978,
-    2983,  2997,  2998,  2999,  3000,  3001,  3002,  3003,  3004,  3005,
-    3006,  3007,  3008,  3009,  3010,  3011,  3012,  3013,  3014,  3015,
-    3016,  3017,  3018,  3019,  3020,  3022,  3023,  3024,  3028,  3028,
-    3033,  3033,  3038,  3038,  3043,  3043,  3048,  3048,  3053,  3053,
-    3058,  3058,  3068,  3069,  3074,  3074,  3086,  3087,  3090,  3090,
-    3101,  3102,  3104,  3104,  3115,  3116,  3119,  3119,  3129,  3130,
-    3133,  3133,  3138,  3138,  3143,  3143,  3148,  3148,  3153,  3153,
-    3158,  3158,  3163,  3163,  3170,  3170,  3176,  3176,  3183,  3183,
-    3186,  3187,  3189,  3189,  3192,  3193,  3195,  3195,  3200,  3201,
-    3203,  3204,  3206,  3208,  3210,  3214,  3214,  3218,  3218,  3223,
-    3233,  3233,  3238,  3239,  3239,  3243,  3245,  3246,  3248,  3250,
-    3254,  3263,  3270,  3270,  3275,  3275,  3280,  3280,  3285,  3286,
-    3287,  3288,  3289,  3290,  3291,  3292,  3293,  3294,  3295,  3296,
-    3297,  3298,  3301,  3300,  3306,  3307,  3309,  3317,  3319,  3325,
-    3327,  3329,  3335,  3337,  3339,  3345,  3347,  3349,  3355,  3357,
-    3359,  3365,  3365,  3367,  3369,  3371,  3377,  3377,  3379,  3381,
-    3388,  3390,  3395,  3395,  3397,  3399,  3405,  3407,  3409,  3415,
-    3417,  3419,  3425,  3427,  3429,  3435,  3437,  3439,  3445,  3447,
-    3449,  3455
+     498,   507,   507,   509,   511,   513,   513,   523,   523,   525,
+     527,   529,   529,   531,   533,   535,   535,   537,   538,   540,
+     541,   543,   550,   551,   556,   558,   560,   562,   562,   565,
+     566,   567,   569,   569,   571,   573,   575,   577,   577,   580,
+     581,   582,   584,   584,   588,   590,   592,   594,   594,   597,
+     598,   599,   600,   601,   602,   605,   605,   607,   609,   611,
+     613,   613,   616,   617,   618,   619,   620,   621,   622,   625,
+     625,   629,   631,   633,   635,   635,   638,   639,   640,   641,
+     644,   644,   658,   660,   662,   664,   664,   667,   668,   669,
+     672,   674,   676,   678,   680,   680,   682,   684,   686,   688,
+     690,   692,   694,   696,   698,   698,   701,   702,   703,   706,
+     708,   710,   712,   714,   714,   716,   718,   720,   722,   724,
+     733,   733,   735,   737,   737,   739,   742,   744,   744,   746,
+     748,   750,   750,   752,   754,   756,   758,   758,   760,   762,
+     764,   766,   766,   769,   770,   771,   772,   773,   774,   775,
+     778,   779,   781,   781,   783,   785,   787,   787,   789,   791,
+     793,   795,   795,   797,   799,   801,   803,   803,   806,   807,
+     808,   809,   810,   811,   812,   815,   815,   817,   819,   821,
+     823,   827,   827,   829,   831,   833,   836,   836,   838,   840,
+     842,   842,   844,   846,   848,   850,   850,   852,   854,   856,
+     858,   858,   861,   862,   863,   864,   865,   866,   867,   868,
+     869,   872,   872,   874,   876,   878,   880,   883,   883,   885,
+     887,   889,   889,   891,   893,   895,   895,   897,   899,   901,
+     901,   903,   905,   905,   907,   908,   911,   912,   915,   966,
+     968,   982,   983,   985,   985,  1009,  1010,  1013,  1014,  1016,
+    1018,  1019,  1023,  1024,  1026,  1027,  1029,  1045,  1053,  1060,
+    1065,  1066,  1068,  1069,  1071,  1071,  1074,  1083,  1084,  1086,
+    1087,  1091,  1092,  1094,  1095,  1097,  1113,  1121,  1128,  1133,
+    1134,  1136,  1137,  1139,  1139,  1142,  1151,  1152,  1154,  1164,
+    1168,  1169,  1171,  1172,  1174,  1190,  1197,  1202,  1203,  1205,
+    1206,  1208,  1208,  1211,  1220,  1221,  1226,  1226,  1234,  1235,
+    1237,  1238,  1240,  1244,  1250,  1258,  1262,  1267,  1276,  1287,
+    1298,  1309,  1320,  1328,  1336,  1344,  1352,  1361,  1370,  1378,
+    1389,  1400,  1412,  1423,  1434,  1445,  1456,  1467,  1478,  1489,
+    1500,  1511,  1522,  1536,  1537,  1544,  1546,  1546,  1548,  1549,
+    1550,  1551,  1716,  1724,  1726,  1726,  1728,  1730,  1739,  1741,
+    1741,  1743,  1743,  1745,  1761,  1764,  1764,  1766,  1766,  1769,
+    1810,  1810,  1812,  1814,  1822,  1822,  1824,  1877,  1881,  1892,
+    1894,  1902,  1906,  1917,  1919,  1925,  1927,  1937,  1955,  1955,
+    1958,  1959,  1960,  1961,  1962,  1965,  1974,  1983,  1992,  1992,
+    1994,  1996,  1998,  2000,  2000,  2005,  2021,  2045,  2045,  2048,
+    2049,  2050,  2051,  2052,  2053,  2054,  2055,  2056,  2058,  2068,
+    2078,  2088,  2098,  2108,  2120,  2132,  2139,  2139,  2141,  2146,
+    2155,  2163,  2163,  2165,  2165,  2167,  2167,  2167,  2169,  2175,
+    2180,  2180,  2182,  2182,  2184,  2189,  2198,  2198,  2200,  2202,
+    2205,  2207,  2207,  2209,  2214,  2216,  2227,  2233,  2233,  2235,
+    2237,  2239,  2241,  2254,  2261,  2261,  2263,  2265,  2267,  2278,
+    2284,  2284,  2286,  2288,  2290,  2292,  2305,  2311,  2311,  2313,
+    2315,  2317,  2328,  2334,  2334,  2336,  2338,  2340,  2342,  2353,
+    2359,  2366,  2368,  2370,  2371,  2384,  2391,  2391,  2393,  2395,
+    2397,  2399,  2400,  2402,  2408,  2408,  2410,  2412,  2414,  2414,
+    2416,  2419,  2425,  2427,  2427,  2430,  2431,  2433,  2437,  2437,
+    2439,  2441,  2443,  2443,  2446,  2448,  2454,  2454,  2458,  2462,
+    2462,  2464,  2466,  2468,  2479,  2485,  2485,  2487,  2489,  2491,
+    2493,  2504,  2510,  2517,  2519,  2521,  2522,  2535,  2542,  2542,
+    2544,  2546,  2548,  2550,  2551,  2553,  2559,  2559,  2561,  2563,
+    2565,  2565,  2567,  2569,  2575,  2575,  2577,  2579,  2582,  2582,
+    2584,  2586,  2588,  2599,  2605,  2605,  2607,  2609,  2611,  2613,
+    2626,  2632,  2632,  2634,  2636,  2638,  2649,  2655,  2655,  2657,
+    2659,  2661,  2663,  2676,  2682,  2682,  2684,  2686,  2686,  2688,
+    2688,  2690,  2695,  2704,  2706,  2717,  2730,  2730,  2732,  2734,
+    2736,  2738,  2751,  2757,  2762,  2767,  2769,  2771,  2777,  2779,
+    2784,  2786,  2797,  2803,  2810,  2810,  2812,  2814,  2816,  2818,
+    2829,  2835,  2842,  2842,  2844,  2846,  2848,  2850,  2850,  2852,
+    2854,  2856,  2858,  2858,  2861,  2862,  2863,  2870,  2879,  2888,
+    2888,  2890,  2890,  2892,  2894,  2896,  2905,  2914,  2923,  2932,
+    2941,  2946,  2954,  2995,  2996,  3000,  3009,  3011,  3010,  3018,
+    3023,  3037,  3038,  3039,  3040,  3041,  3042,  3043,  3044,  3045,
+    3046,  3047,  3048,  3049,  3050,  3051,  3052,  3053,  3054,  3055,
+    3056,  3057,  3058,  3059,  3060,  3062,  3063,  3064,  3068,  3068,
+    3073,  3073,  3078,  3078,  3083,  3083,  3088,  3088,  3093,  3093,
+    3098,  3098,  3108,  3109,  3114,  3114,  3126,  3127,  3130,  3130,
+    3141,  3142,  3144,  3144,  3155,  3156,  3159,  3159,  3169,  3170,
+    3173,  3173,  3178,  3178,  3183,  3183,  3188,  3188,  3193,  3193,
+    3198,  3198,  3203,  3203,  3210,  3210,  3216,  3216,  3223,  3223,
+    3226,  3227,  3229,  3229,  3232,  3233,  3235,  3235,  3240,  3241,
+    3243,  3244,  3246,  3248,  3250,  3254,  3254,  3258,  3258,  3263,
+    3273,  3273,  3278,  3279,  3279,  3283,  3285,  3286,  3288,  3290,
+    3294,  3303,  3310,  3310,  3315,  3315,  3320,  3320,  3325,  3326,
+    3327,  3328,  3329,  3330,  3331,  3332,  3333,  3334,  3335,  3336,
+    3337,  3338,  3341,  3340,  3346,  3347,  3349,  3357,  3359,  3365,
+    3367,  3369,  3375,  3377,  3379,  3385,  3387,  3389,  3395,  3397,
+    3399,  3405,  3405,  3407,  3409,  3411,  3417,  3417,  3419,  3421,
+    3428,  3430,  3435,  3435,  3437,  3439,  3445,  3447,  3449,  3455,
+    3457,  3459,  3465,  3467,  3469,  3475,  3477,  3479,  3485,  3487,
+    3489,  3495
 };
 #endif
 
@@ -4066,6 +4066,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     if (parserData->matrixCounter > parserData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
     osinstance->instanceData->matrices->matrix[parserData->matrixCounter] = osglData->matrix;
+    osinstance->instanceData->matrices->matrix[parserData->matrixCounter]->idx = parserData->matrixCounter;
     parserData->matrixCounter++;
 }
     break;
@@ -4934,22 +4935,21 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
   case 417:
 
     {
-    if (osglData->numberOfRowsPresent = false)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");
-    if (osglData->numberOfColumnsPresent = false)
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");    
+    else
+        osglData->matrix->numberOfRows = osglData->numberOfRows;
+    if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfColumns is missing");
+    else
+        osglData->matrix->numberOfColumns = osglData->numberOfColumns;
+    if (osglData->symmetryAttributePresent == true)
+        osglData->matrix->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetryAttribute);
+    if (osglData->matrixNameAttributePresent == true)
+        osglData->matrix->name = osglData->matrixNameAttribute;
+    if (osglData->matrixTypeAttributePresent == true)
+        osglData->matrix->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->matrixTypeAttribute);
 }
-    break;
-
-  case 424:
-
-    {
-        if (verifyMatrixSymmetry(osglData->symmetryAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "symmetry type not recognized");
-        if (verifyMatrixType(osglData->matrixTypeAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix type not recognized");
-        parserData->errorText = NULL;
-    }
     break;
 
   case 425:
@@ -4985,6 +4985,13 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 }
     break;
 
+  case 434:
+
+    {
+    
+}
+    break;
+
   case 435:
 
     {
@@ -5008,6 +5015,24 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     {
     if (osglData->baseMatrixIdxAttributePresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute baseMatrixIdx is missing");
+    else
+        osglData->matrix->baseMatrix->baseMatrixIdx = osglData->baseMatrixIdxAttribute;
+    if (osglData->targetMatrixFirstRowAttributePresent == true)
+        osglData->matrix->baseMatrix->targetMatrixFirstRow = osglData->targetMatrixFirstRowAttribute;
+    if (osglData->targetMatrixFirstColAttributePresent == true)
+        osglData->matrix->baseMatrix->targetMatrixFirstCol = osglData->targetMatrixFirstColAttribute;
+    if (osglData->baseMatrixStartRowAttributePresent == true)
+        osglData->matrix->baseMatrix->baseMatrixStartRow = osglData->baseMatrixStartRowAttribute;
+    if (osglData->baseMatrixStartColAttributePresent == true)
+        osglData->matrix->baseMatrix->baseMatrixStartCol = osglData->baseMatrixStartColAttribute;
+    if (osglData->baseMatrixEndRowAttributePresent == true)
+        osglData->matrix->baseMatrix->baseMatrixEndRow = osglData->baseMatrixEndRowAttribute;
+    if (osglData->baseMatrixEndColAttributePresent == true)
+        osglData->matrix->baseMatrix->baseMatrixEndCol = osglData->baseMatrixEndColAttribute;
+    if (osglData->baseTransposeAttributePresent == true)
+        osglData->matrix->baseMatrix->baseTranspose = osglData->baseTransposeAttribute;
+    if (osglData->scalarMultiplierAttributePresent == true)
+        osglData->matrix->baseMatrix->scalarMultiplier = osglData->scalarMultiplierAttribute;
 }
     break;
 
@@ -5078,6 +5103,8 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ((yyvsp[(3) - (4)].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last row cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) > osglData->matrix->numberOfRows)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last row exceeds matrix dimensions");
     osglData->baseMatrixEndRowAttributePresent = true;   
     osglData->baseMatrixEndRowAttribute = (yyvsp[(3) - (4)].ival); 
 }
@@ -5090,6 +5117,8 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ((yyvsp[(3) - (4)].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last col cannot be negative");
+    if ((yyvsp[(3) - (4)].ival) > osglData->matrix->numberOfColumns)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last col exceeds matrix dimensions");
     osglData->baseMatrixEndColAttributePresent = true;   
     osglData->baseMatrixEndColAttribute = (yyvsp[(3) - (4)].ival); 
 }
@@ -5132,11 +5161,17 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 }
     break;
 
+  case 468:
+
+    {
+    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
+}
+    break;
+
   case 469:
 
     {
-    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_elements);
-    osglData->matrix->matrixConstructor.push_back(tempC);
+    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_elements);
 }
     break;
 
@@ -5155,6 +5190,13 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     else if ((yyvsp[(2) - (3)].sval) == "")      osglData->rowMajorAttribute = true;
     else parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "rowMajor attribute in <baseMatrix> element must be \"true\" or \"false\"");
     free((yyvsp[(2) - (3)].sval));
+}
+    break;
+
+  case 483:
+
+    {
+    osglData->tempC->elPtr->constantElements = new ConstantMatrixElements(); 
 }
     break;
 
@@ -5602,19 +5644,31 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 }
     break;
 
+  case 643:
+
+    {
+    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
+}
+    break;
+
   case 644:
 
     {
-    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation);
-    osglData->matrix->matrixConstructor.push_back(tempC);
+    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation);
 }
     break;
 
   case 647:
 
     {
-    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks);
-    osglData->matrix->matrixConstructor.push_back(tempC);
+    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks);
+}
+    break;
+
+  case 649:
+
+    {
+    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
 }
     break;
 

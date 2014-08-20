@@ -2109,34 +2109,31 @@ MatrixBlocks::~MatrixBlocks()
 }// end of MatrixBlocks::~MatrixBlocks()
 
 MatrixConstructor::MatrixConstructor():
-    cType(0),
-    cPtr(NULL)
+    cType(ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown),
+    elPtr(NULL),
+    trPtr(NULL),
+    blPtr(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstructor Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the default MatrixConstructor Constructor");
 #endif
 }//end of MatrixConstructor::MatrixConstructor
 
 MatrixConstructor::MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE cType)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstructor Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the alternate MatrixConstructor Constructor");
 #endif
+    this->cType = cType;
+    elPtr = NULL;
+    trPtr = NULL;
+    blPtr = NULL;
     if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements)
-    {
-        this->cType = cType;
-        this->cPtr = new MatrixElements();
-    }
-    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
-    {
-        this->cType = cType;
-        this->cPtr = new MatrixTransformation();
-    }
-    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
-    {
-        this->cType = cType;
-        this->cPtr = new MatrixBlocks();
-    }
+        elPtr = new MatrixElements();
+    else if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+        trPtr = new MatrixTransformation();
+    else if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+        blPtr = new MatrixBlocks();
 }
 
 
@@ -2145,14 +2142,20 @@ MatrixConstructor::~MatrixConstructor()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstructor Destructor");
 #endif
-    if (cPtr != NULL)
-    {
-        if      (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements)       delete static_cast<MatrixElements*>       (cPtr);
-        else if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) delete static_cast<MatrixTransformation*> (cPtr);
-        else if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)         delete static_cast<MatrixBlocks*>         (cPtr);
-    }
-    cPtr = NULL;
-    cType = 0;
+//    if (cPtr != NULL)
+//    {
+//        if      (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements)       delete static_cast<MatrixElements*>       (cPtr);
+//        else if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) delete static_cast<MatrixTransformation*> (cPtr);
+//        else if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)         delete static_cast<MatrixBlocks*>         (cPtr);
+//    }
+//    cPtr = NULL;
+    if (elPtr != NULL) delete elPtr;
+    if (trPtr != NULL) delete trPtr;
+    if (blPtr != NULL) delete blPtr;
+    elPtr = NULL;
+    trPtr = NULL;
+    blPtr = NULL;
+    cType = ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown;
 }//end of MatrixConstructor::~MatrixConstructor
 
 BaseMatrix::BaseMatrix():

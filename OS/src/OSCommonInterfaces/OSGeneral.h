@@ -578,6 +578,28 @@ inline bool verifyMatrixSymmetry(std::string symmetry)
 }//verifyMatrixSymmetry
 
 
+enum ENUM_MATRIX_CONSTRUCTOR_TYPE
+{
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_elements = 1,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown
+};
+
+inline int returnMatrixConstructorType(std::string cType)
+{
+    if (cType == "elements"      ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
+    if (cType == "transformation") return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
+    if (cType == "blocks"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown;
+}//returnMatrixConstructorType
+
+inline bool verifyMatrixConstructorType(std::string type)
+{
+    return (returnMatrixConstructorType(type) > 0);
+}//verifyMatrixConstructorType
+
+
 /**
  * An enum to streamline set() methods of vectors
  */
@@ -1882,85 +1904,6 @@ public:
     bool deepCopyFrom(MatrixBlocks *that);
 };//class MatrixBlocks
 
-enum ENUM_MATRIX_CONSTRUCTOR_TYPE
-{
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_elements = 1,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks
-};
-
-inline int returnMatrixConstructorType(std::string cType)
-{
-    if (cType == "elements"      ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
-    if (cType == "transformation") return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
-    if (cType == "blocks"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
-    return 0;
-}//returnMatrixConstructorType
-
-inline bool verifyMatrixConstructorType(std::string type)
-{
-    return (returnMatrixConstructorType(type) > 0);
-}//verifyMatrixConstructorType
-
-
-/*! \class MatrixConstructor
- * \brief a data structure to describe one step in the construction of a matrix
- *  Each constructor is either an elementwise description,  or as a transformation 
- *  involving matrices defined earlier in the process, or as a blockwise description, 
- *  which itself can contain other constructors recursively in setting up each block.
- */
-class MatrixConstructor
-{
-public:
-
-/**
- *  The type of each constructor is tracked in the integer cType
- *  cType = 1: MatrixElements
- *  cType = 2: Transformation
- *  cType = 3: MatrixBlocks
- */
-    int cType;
-
-/**
- * The pointer to the constructor is originally maintained as a void*,
- * to be changed as needed
- */
-    void* cPtr;
-
-    /** default constructor */
-    MatrixConstructor();
-
-    /** alternate constructor */
-    MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE cType);
-
-    /** destructor */
-    ~MatrixConstructor();
-
-    /**
-     *
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixConstructor *that);
-
-    /**
-     *
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */
-    bool deepCopyFrom(MatrixConstructor *that);
-};//class MatrixConstructor
-
 /*! \class BaseMatrix
  * \brief a data structure to represent a point of departure for
  *  constructing a matrix by modifying parts of a previously defined matrix 
@@ -2032,6 +1975,67 @@ public:
      */
     bool deepCopyFrom(BaseMatrix *that);
 };//class BaseMatrix
+
+
+/*! \class MatrixConstructor
+ * \brief a data structure to describe one step in the construction of a matrix
+ *  Each constructor is either an elementwise description,  or as a transformation 
+ *  involving matrices defined earlier in the process, or as a blockwise description, 
+ *  which itself can contain other constructors recursively in setting up each block.
+ */
+class MatrixConstructor
+{
+public:
+
+/**
+ *  The type of each constructor is tracked in the integer cType
+ *  cType = 1: MatrixElements
+ *  cType = 2: Transformation
+ *  cType = 3: MatrixBlocks
+ */
+    ENUM_MATRIX_CONSTRUCTOR_TYPE cType;
+
+/**
+ * After considerable experimentation it seemed best to implement three
+ * separate pointers, to be activated as needed
+ */
+    MatrixElements       *elPtr;
+    MatrixTransformation *trPtr;
+    MatrixBlocks         *blPtr;
+
+    /** default constructor */
+    MatrixConstructor();
+
+    /** alternate constructor */
+    MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE cType);
+
+    /** destructor */
+    ~MatrixConstructor();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixConstructor *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixConstructor *that);
+};//class MatrixConstructor
 
 
 /*! \class MatrixType

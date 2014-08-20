@@ -93,7 +93,10 @@ public:
 //    int numberOfMatrices;
 //    int currentMatrix;
 
-    /** data structures to temporarily hold a matrix and its subordinate elements */
+    /** This matrix constructor is needed in order to properly push the constructor vector */
+    MatrixConstructor* tempC;
+
+    /** other data structures to temporarily hold a matrix and its subordinate elements */
     std::string  symmetryAttribute;
     bool symmetryAttributePresent;
     std::string  matrixNameAttribute;

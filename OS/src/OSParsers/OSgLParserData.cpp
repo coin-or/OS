@@ -54,6 +54,7 @@ OSgLParserData::OSgLParserData() :
     ignoreDataAfterErrors(false),
     suppressFurtherErrorMessages(false),
     matrix(NULL),
+    tempC(NULL),
 //    numberOfMatrices(0),
 //    currentMatrix(),
     symmetryAttribute(""),

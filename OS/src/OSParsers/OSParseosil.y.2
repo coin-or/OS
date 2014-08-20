@@ -156,6 +156,7 @@ matrixList: | matrixList osglMatrix
     if (parserData->matrixCounter > parserData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
     osinstance->instanceData->matrices->matrix[parserData->matrixCounter] = osglData->matrix;
+    osinstance->instanceData->matrices->matrix[parserData->matrixCounter]->idx = parserData->matrixCounter;
     parserData->matrixCounter++;
 };
 

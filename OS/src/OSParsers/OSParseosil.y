@@ -515,6 +515,7 @@ matrixList: | matrixList osglMatrix
     if (parserData->matrixCounter > parserData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
     osinstance->instanceData->matrices->matrix[parserData->matrixCounter] = osglData->matrix;
+    osinstance->instanceData->matrices->matrix[parserData->matrixCounter]->idx = parserData->matrixCounter;
     parserData->matrixCounter++;
 };
 
@@ -1935,10 +1936,20 @@ matrixStart: MATRIXSTART
 
 matrixAttributes: matrixAttributeList
 {
-    if (osglData->numberOfRowsPresent = false)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");
-    if (osglData->numberOfColumnsPresent = false)
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");    
+    else
+        osglData->matrix->numberOfRows = osglData->numberOfRows;
+    if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfColumns is missing");
+    else
+        osglData->matrix->numberOfColumns = osglData->numberOfColumns;
+    if (osglData->symmetryAttributePresent == true)
+        osglData->matrix->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetryAttribute);
+    if (osglData->matrixNameAttributePresent == true)
+        osglData->matrix->name = osglData->matrixNameAttribute;
+    if (osglData->matrixTypeAttributePresent == true)
+        osglData->matrix->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->matrixTypeAttribute);
 };
 
 matrixAttributeList: | matrixAttributeList matrixAttribute;
@@ -1949,13 +1960,7 @@ matrixAttribute:
     | osglNumberOfColumnsATT
     | osglMatrixNameATT
     | osglMatrixTypeATT
-    {
-        if (verifyMatrixSymmetry(osglData->symmetryAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "symmetry type not recognized");
-        if (verifyMatrixType(osglData->matrixTypeAttribute) == false)
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix type not recognized");
-        parserData->errorText = NULL;
-    };
+;
 
 osglSymmetryATT: SYMMETRYATT ATTRIBUTETEXT QUOTE 
 { 
@@ -1992,7 +1997,10 @@ matrixLaden: GREATERTHAN matrixBody MATRIXEND;
 
 matrixBody: baseMatrix matrixConstructorList;
 
-baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd;
+baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd
+{
+    
+};
 
 baseMatrixStart: BASEMATRIXSTART
 {
@@ -2014,6 +2022,24 @@ baseMatrixAttributes: baseMatrixAttList
 {
     if (osglData->baseMatrixIdxAttributePresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute baseMatrixIdx is missing");
+    else
+        osglData->matrix->baseMatrix->baseMatrixIdx = osglData->baseMatrixIdxAttribute;
+    if (osglData->targetMatrixFirstRowAttributePresent == true)
+        osglData->matrix->baseMatrix->targetMatrixFirstRow = osglData->targetMatrixFirstRowAttribute;
+    if (osglData->targetMatrixFirstColAttributePresent == true)
+        osglData->matrix->baseMatrix->targetMatrixFirstCol = osglData->targetMatrixFirstColAttribute;
+    if (osglData->baseMatrixStartRowAttributePresent == true)
+        osglData->matrix->baseMatrix->baseMatrixStartRow = osglData->baseMatrixStartRowAttribute;
+    if (osglData->baseMatrixStartColAttributePresent == true)
+        osglData->matrix->baseMatrix->baseMatrixStartCol = osglData->baseMatrixStartColAttribute;
+    if (osglData->baseMatrixEndRowAttributePresent == true)
+        osglData->matrix->baseMatrix->baseMatrixEndRow = osglData->baseMatrixEndRowAttribute;
+    if (osglData->baseMatrixEndColAttributePresent == true)
+        osglData->matrix->baseMatrix->baseMatrixEndCol = osglData->baseMatrixEndColAttribute;
+    if (osglData->baseTransposeAttributePresent == true)
+        osglData->matrix->baseMatrix->baseTranspose = osglData->baseTransposeAttribute;
+    if (osglData->scalarMultiplierAttributePresent == true)
+        osglData->matrix->baseMatrix->scalarMultiplier = osglData->scalarMultiplierAttribute;
 };
 
 baseMatrixAttList: | baseMatrixAttList baseMatrixAtt;
@@ -2085,6 +2111,8 @@ osglBaseMatrixEndRowATT: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last row cannot be negative");
+    if ($3 > osglData->matrix->numberOfRows)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last row exceeds matrix dimensions");
     osglData->baseMatrixEndRowAttributePresent = true;   
     osglData->baseMatrixEndRowAttribute = $3; 
 };
@@ -2095,6 +2123,8 @@ osglBaseMatrixEndColATT: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last col cannot be negative");
+    if ($3 > osglData->matrix->numberOfColumns)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last col exceeds matrix dimensions");
     osglData->baseMatrixEndColAttributePresent = true;   
     osglData->baseMatrixEndColAttribute = $3; 
 };
@@ -2136,12 +2166,15 @@ matrixConstructorList: | matrixConstructorList matrixConstructor;
 
 matrixConstructor: matrixElements | matrixTransformation | matrixBlocks;
 
-matrixElements: matrixElementsStart matrixElementsAttributes matrixElementsContent;
+matrixElements: matrixElementsStart matrixElementsAttributes matrixElementsContent
+{
+    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
+};
+
 
 matrixElementsStart: ELEMENTSSTART
 {
-    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_elements);
-    osglData->matrix->matrixConstructor.push_back(tempC);
+    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_elements);
 };
 
 matrixElementsAttributes: | osglRowMajorATT; 
@@ -2173,7 +2206,10 @@ matrixElementsEnd: ELEMENTSEND;
 
 constantElements: | constantElementsStart GREATERTHAN constantElementsContent; 
 
-constantElementsStart: CONSTANTELEMENTSSTART;
+constantElementsStart: CONSTANTELEMENTSSTART
+{
+    osglData->tempC->elPtr->constantElements = new ConstantMatrixElements(); 
+};
 
 constantElementsContent: constantElementsStartVector constantElementsNonzeros CONSTANTELEMENTSEND;
 
@@ -2718,12 +2754,14 @@ patternElementsNonzerosStart: NONZEROSSTART
     osglData->osglNumberOfElPresent = false;
 };
 
-matrixTransformation: matrixTransformationStart GREATERTHAN OSnLMNode matrixTransformationEnd;
+matrixTransformation: matrixTransformationStart GREATERTHAN OSnLMNode matrixTransformationEnd
+{
+    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
+};
 
 matrixTransformationStart: TRANSFORMATIONSTART
 {
-    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation);
-    osglData->matrix->matrixConstructor.push_back(tempC);
+    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation);
 };
 
 matrixTransformationEnd: TRANSFORMATIONEND;
@@ -2732,14 +2770,16 @@ matrixBlocks: matrixBlocksStart matrixBlocksAttributes matrixBlocksContent;
 
 matrixBlocksStart: BLOCKSSTART
 {
-    MatrixConstructor* tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks);
-    osglData->matrix->matrixConstructor.push_back(tempC);
+    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks);
 };
 
 
 matrixBlocksAttributes: osglNumberOfBlocksATT;
 
-matrixBlocksContent: GREATERTHAN colOffsets rowOffsets blockList matrixBlocksEnd;
+matrixBlocksContent: GREATERTHAN colOffsets rowOffsets blockList matrixBlocksEnd
+{
+    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
+};
 
 matrixBlocksEnd: BLOCKSEND;
 
