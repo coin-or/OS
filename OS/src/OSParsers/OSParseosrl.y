@@ -4614,7 +4614,6 @@ matrixBody: baseMatrix matrixConstructorList;
 
 baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd
 {
-    
 };
 
 baseMatrixStart: BASEMATRIXSTART
@@ -4676,6 +4675,10 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
+    if ($3 > parserData->matrixCounter)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
+    osglData->matrix->matrixType  = mergeMatrixType(osglData->matrix->matrixType,
+                      osinstance->instanceData->matrices->matrix[$3]->matrixType);
     osglData->baseMatrixIdxAttributePresent = true;   
     osglData->baseMatrixIdxAttribute = $3; 
 };
@@ -4841,8 +4844,10 @@ constantElementsStartVector: constantElementsStartVectorStart constantElementsSt
 
 constantElementsStartVectorStart: STARTVECTORSTART
 {
-    osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent = false;
+    if (osglData->rowMajorAttribute == true)
+        osglData->osglNumberOfEl = osglData->matrix->numberOfColumns;
+    else
+        osglData->osglNumberOfEl = osglData->matrix->numberOfRows;
 };
 
 constantElementsStartVectorContent: constantElementsStartVectorEmpty | constantElementsStartVectorLaden;
@@ -4853,17 +4858,19 @@ constantElementsStartVectorLaden: GREATERTHAN constantElementsStartVectorBody ST
 
 constantElementsStartVectorBody:  osglIntArrayData;
 
-constantElementsNonzeros: constantElementsNonzerosStart /*osglNumberOfElATT GREATERTHAN*/ osglSparseVector NONZEROSEND
+constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZEROSEND
 {
     if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "set variables basic failed");    
-    delete[] osglData->osglIntArray;
-    osglData->osglIntArray = NULL;
-    delete[] osglData->osglDblArray;
-    osglData->osglDblArray = NULL;
+//    delete[] osglData->osglIntArray;
+//    osglData->osglIntArray = NULL;
+//    delete[] osglData->osglDblArray;
+//    osglData->osglDblArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
+    if (osglData->numberOfEl > 0)
+        osglData->matrix->matrixType  = mergeMatrixType(osglData->matrix->matrixType, ENUM_MATRIX_TYPE_constant);
 };
 
 constantElementsNonzerosStart: NONZEROSSTART

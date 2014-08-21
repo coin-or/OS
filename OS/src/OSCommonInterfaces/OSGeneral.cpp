@@ -2182,7 +2182,8 @@ BaseMatrix::~BaseMatrix()
 } // end of ~BaseMatrix
 
 MatrixType::MatrixType():
-    baseMatrix(NULL)
+    baseMatrix(NULL),
+    matrixType(ENUM_MATRIX_TYPE_unknown)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Constructor");
