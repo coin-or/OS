@@ -5126,10 +5126,10 @@ xmlWhiteSpaceChar: ' '
  * The code is maintained in such a way that it can be inserted into any one
  * of these parsers by a makefile with minimal changes. 
  * The only change required is to change every occurrence of the
- * placeholder "osoption, parserData, osglData, osnlData" to the appropriate reference.
- * For OSiL files, this is "osinstance, parserData, osnlData", 
- * for OSoL files, "osoption, parserData, osglData, osnlData", and
- * for OSrL files, "osresult, parserData, osglData, osnlData".
+ * placeholder "osoption, parserData, osglData, osnlData" to the appropriate reference, which is
+ * for OSiL files "osinstance, parserData, osglData, osnlData", 
+ * for OSoL files,  "osoption, parserData, osglData, osnlData", and
+ * for OSrL files,  "osresult, parserData, osglData, osnlData".
  * Other schemas with their own separate syntax elements can be added as needed.
  * The makefile accomplishes this through maintaining each parser 
  * in several parts and to copy this include file between the OSxL syntax rules

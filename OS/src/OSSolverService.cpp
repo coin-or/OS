@@ -181,10 +181,6 @@ int main(int argC, const char* argV[])
     WindowsErrorPopupBlocker();
     std::ostringstream outStr;
 
-#ifdef COIN_HAS_CSDP
-    std::cout << "so far, so good! Csdp has been found" << std::endl;
-#endif
-
     std::string versionInfo = OSgetVersionInfo();
     osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, versionInfo);
 
