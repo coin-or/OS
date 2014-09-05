@@ -10,11 +10,20 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="ExprNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation> experiment. This is a generic expression node from which we derive OSnLNode and OSnLMNode</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
 	<!--Generic base matrix definitions (draft): all functions that return a matrix value  -->
 	<xs:complexType name="OSnLMNode" mixed="false">
 		<xs:annotation>
 			<xs:documentation> draft. This is a generic matrix node from which we derive matrix operator nodes</xs:documentation>
 		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ExprNode">
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true">
 		<xs:annotation>
@@ -25,6 +34,10 @@
 		<xs:annotation>
 			<xs:documentation> since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
 		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ExprNode">
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="OSnLNode" type="OSnLNode" abstract="true">
 		<xs:annotation>
@@ -5540,7 +5553,7 @@
 			<xs:enumeration value="inIntegerSet"/>
 			<xs:enumeration value="inPositiveIntegerSet"/>
 			<xs:enumeration value="inNonnegativeIntegerSet"/>
-			<xs:enumeration value="matrix"/>
+			<xs:enumeration value="matrixReference"/>
 			<xs:enumeration value="matrixBlock"/>
 			<xs:enumeration value="matrixIdentical"/>
 			<xs:enumeration value="matrixPlus"/>
