@@ -1,0 +1,313 @@
+Seq	Category	Code	function	scalar children	matrix children	Remarks
+1	basic arithmetic functions	1001	plus	2		
+2		1002	sum	-1		
+3		1003	minus	2		
+4		1004	negate	1		
+5		1005	times	2		
+6		1006	divide	2		
+7		1007	quotient	2		
+8		1008	rem	2		
+9		1009	power	2		
+10		1010	product	-1		
+11	other non-trig functions	2001	abs	1		
+12		2002	floor	1		
+13		2003	ceiling	1		
+14		2004	percent	1		
+15		2005	square	1		
+16		2006	squareRoot	1		
+17		2007	ln	1		
+18		2008	log	1		
+19		2009	log10	1		
+20		2010	exp	1		
+21		2011	factorial	1		
+22		2012	combination	2		
+23		2013	permutation	2		
+24		2014	gcd	-1		
+25		2015	lcm	-1		
+26		2016	roundToInt	1		
+27		2017	round	2		
+28		2018	truncate	2		
+29		2019	sign	1		
+30		2020	rand	1		two attributes
+31		2021	gammaFn	1		
+32		2022	gammaLn	1		
+33	trig functions	3001	sin	1		
+34		3002	cos	1		
+35		3003	tan	1		
+36		3004	arcsin	1		
+37		3005	arccos	1		
+38		3006	arctan	1		
+39		3007	sinh	1		
+40		3008	cosh	1		
+41		3009	tanh	1		
+42		3010	arcsinh	1		
+43		3011	arccosh	1		
+44		3012	arctanh	1		
+45		3013	cot	1		
+46		3014	coth	1		
+47		3015	arccot	1		
+48		3016	arccoth	1		
+49		3017	sec	1		
+50		3018	sech	1		
+51		3019	arcsec	1		
+52		3020	arcsech	1		
+53		3021	csc	1		
+54		3022	csch	1		
+55		3023	arccsc	1		
+56		3024	arccsch	1		
+57	statistical functions	4001	mean	-1		
+58		4002	geometricMean	-1		
+59		4003	harmonicMean	-1		
+60		4004	trimMean	-1*		"first is %, others are data points"
+61		4005	count	-1		
+62		4006	median	-1		
+63		4007	firstQuartile	-1		
+64		4008	thirdQuartile	-1		
+65		4009	mode	-1		
+66		4010	min	-1		
+67		4011	max	-1		
+68		4012	percentile	-1*		"first is %, others are data points"
+69		4013	large	-1*		kth largest?
+70		4014	small	-1*		kth smallest?
+71		4015	range	-1		
+72		4016	interQuantileRange	-1		
+73		4017	absdev	-1		
+74		4018	stddev	-1		
+75		4019	variance	-1		
+76		4020	cv	-1		
+77		4021	skewness	-1		
+78		4022	kurtosis	-1		
+79		4023	covariance	>=4		?
+80		4024	correlation	>=4		?
+81		4025	pearsonCorrelation	>=4		?
+82		4026	rankCorrelation	>=4		?
+83		4027	autoCorrelation1	>=2		?
+84		4028	autoCorrelation	>=3		?
+85		4029	npv	>=2		?
+86		4030	irr	>=2		?
+87		4031	erf	1		
+88	discrete probability distributions	4101	empiricalDiscreteDist	>=3		?
+89		4102	empiricalDiscreteCum	>=3		?
+90		4111	discreteUniformDist	2		???
+91		4112	discreteUniformCum	2		???
+92		4113	discreteUniformInv	2		???
+93		4121	bernoulliDist	2		
+94		4122	bernoulliCum	2		
+95		4123	bernoulliInv	2		
+96		4131	binomialDist	3		
+97		4132	binomialCum	3		
+98		4133	binomialInv	3		
+99		4141	multinomialDist	>=3		?
+100		4142	multinomialCum	>=3		?
+101		4143	multinomialInv	>=3		?
+102		4151	hypergeometricDist	4		?
+103		4152	hypergeometricCum	4		?
+104		4153	hypergeometricInv	4		?
+105		4161	poissonDist	2		
+106		4162	poissonCum	2		
+107		4163	poissonInv	2		
+108		4171	geometricDist	2		
+109		4172	geometricCum	2		
+110		4173	geometricInv	2		
+111		4181	negativeBinomialDist	3		
+112		4182	negativeBinomialCum	3		
+113		4183	negativeBinomialInv	3		
+114	cont. prob. Distributions	4401	empiricalContinousDist	>=3		???
+115		4402	empiricalContinuousCum	>=3		???
+116		4411	uniformDist	3		
+117		4412	uniformCum	3		
+118		4413	uniformInv	3		
+119		4421	normalDist	3		
+120		4422	normalCum	3		
+121		4423	normalInv	3		
+122		4431	stdNormalDist	1		
+123		4432	stdNormalCum	1		
+124		4433	stdNormalInv	1		
+125		4441	bivariateNormalDist	7		
+126		4442	bivariateNormalCum	7		
+127		4451	exponentialDist	2		
+128		4452	exponentialCum	2		
+129		4453	exponentialInv	2		
+130		4461	weibullDist	4		check
+131		4462	weibullCum	4		check
+132		4463	weibullInv	4		check
+133		4471	erlangDist	3		check
+134		4472	erlangCum	3		check
+135		4473	erlangInv	3		check
+136		4481	gammaDist	4		?
+137		4482	gammaCum	4		?
+138		4483	gammaInv	4		?
+139		4491	betaDist	3		?
+140		4492	betaCum	3		?
+141		4493	betaInv	3		?
+142		4501	betaGeneralDist	5		?
+143		4502	betaGeneralCum	5		?
+144		4503	betaGeneralInv	5		?
+145		4511	lognormalDist	3		?
+146		4512	lognormalCum	3		?
+147		4513	lognormalInv	3		?
+148		4521	cauchyDist	3		?
+149		4522	cauchyCum	3		?
+150		4523	cauchyInv	3		?
+151		4531	tDist	2		
+152		4532	tCum	2		
+153		4533	tInv	2		
+154		4541	chiSquareDist	2		
+155		4542	chiSquareCum	2		
+156		4543	chiSquareInv	2		
+157		4551	fDist	3		
+158		4552	fCum	3		
+159		4553	fInv	3		
+160		4561	logisticDist	3		
+161		4562	logisticCum	3		
+162		4563	logisticInv	3		
+163		4571	logLogisticDist	3		
+164		4572	logLogisticCum	3		
+165		4573	logLogisticInv	3		
+166		4581	logarithmicDist	3		
+167		4582	logarithmicCum	3		
+168		4583	logarithmicInv	3		
+169		4591	paretoDist	3		
+170		4592	paretoCum	3		
+171		4593	paretoInv	3		
+172		4601	rayleighDist	2		
+173		4602	rayleighCum	2		
+174		4603	rayleighInv	2		
+175		4611	pertDist	4		
+176		4612	pertCum	4		
+177		4613	pertInv	4		
+178		4621	triangularDist	4		"3 parameters, one argument"
+179		4622	triangularCum	4		"4 parameters, one argument"
+180		4623	triangularInv	4		"5 parameters, one argument"
+181		4624	unitNormalLinearLoss	1		
+182	reference and constants	5001	number	0		three attributes
+183	(terminal nodes)	5002	string	0		three attributes
+184		5003	identifier	0		one attribute
+185		5004	PI	0		
+186		5005	E	0		
+187		5006	INF	0		
+188		5007	EPS	0		
+189		5008	TINY	0		
+190		5009	TRUE	0		
+191		5010	FALSE	0		
+192		5011	EULERGAMMA	0		
+193		5011	NAN	0		
+194	reference to problem components	6001	variable	0*		"one optional argument, two attributes"
+195		6002	objective	0*		"one optional argument, one attribute"
+196		6003	constraint	0*		"one optional argument, two attributes"
+197		6004	qTerm	0*		"one optional argument, three attributes"
+198		6005	quadratic	***		one or more qTerm
+199	other lookups	6501	parameter	0		two attributes
+200		6502	randomVariable	0		two attributes
+201		6503	sim	***		"0 or more simInput, 1 simOutput, one attribute"
+202		6504	simInput	0*		"one optional argument, two attributes"
+203		6505	simOutput	0*		"one optional argument, two attributes"
+204		6506	userF	-1		one attribute
+205		6507	arg	0		one attribute
+206		6508	xPath	***		"one argument of type xPathIndex, two attributes"
+207		6509	xPathIndex	0*		"one optional argument, two attributes"
+208		6510	nodeRef	0*		"one optional argument, two attributes"
+209		6511	arcRef	0*		"one optional argument, two attributes"
+210		6512	complements	2		
+211		6513	prob	1		
+212		6514	prefix	***		tree
+213		6515	postfix	***		tree
+214		6516	infix	***		tree
+215	logical functions	7001	if	3		
+216		7002	lt	2		
+217		7003	leq	2		
+218		7004	gt	2		
+219		7005	geq	2		
+220		7006	eq	2		
+221		7007	neq	2		
+222		7008	and	2		could be -1…
+223		7009	or	2		could be -1…
+224		7010	xor	2		
+225		7011	implies	2		
+226		7012	not	1		
+227		7013	forAll	>=1		
+228		7014	exists	>=1		
+229		7015	logicCount	>=1		
+230		7016	allDiff	-1		
+231		7017	allDisjoint	>=1		
+232		7018	atMost	>=2		
+233		7019	atLeast	>=2		
+234		7020	exactly	>=2		
+235		7021	inSet	>=2		
+236		7022	inRealSet	1		
+237		7023	inPositiveRealSet	1		
+238		7024	inNonnegativeRealSet	1		
+239		7025	inIntegerSet	1		
+240		7026	inPositiveIntegerSet	1		
+241		7027	inNonnegativeIntegerSet	1		
+242	scalar-valued matrix functions	8001	matrixDeterminant		1	
+243		8002	matrixTrace		1	
+244		8003	matrixToScalar		1	
+245		8004	matrixElementAt	2	1	
+246		8005	matrixNorm	1	1	
+247		8006	matrixFrobeniusNorm		1	
+248		8007	matrixCondition	1	1	
+249		8008	matrixFrobeniusNormCondition		1	
+250		8009	matrixLargestEigenValue	1???	1	
+251		8010	matrixNthLargestEigenValue	1	1	
+252		8011	matrixSmallestEigenValue	1???	1	
+253		8012	matrixSubspaceAngle		>=2	
+254		8013	matrixColumnNumber		1	
+255		8014	matrixRowNumber		1	
+256		8015	matrixRank		1	
+257		8016	matrixColumnRank		1	
+258		8017	matrixRowRank		1	
+259		8018	matrixNonsingular		1	
+260		8019	matrixPositiveDefinite		1	
+261		8020	matrixPositiveSemidefinite		1	
+262		8021	matrixNegativeDefinite		1	
+263		8022	matrixNegativeSemidefinite		1	
+264		8023	matrixIndefinite		1	
+265		8024	matrixFullRank		1	
+266		8025	matrixFullColumnRank		1	
+267		8026	matrixFullRowRank		1	
+268		8027	matrixIdentical		2	
+269	matrix-valued functions	8501	matrixPlus		2	
+270		8502	matrixSum		-1	
+271		8503	matrixMinus		2	
+272		8504	matrixNegate		1	
+273		8505	matrixTimes		2	
+274		8506	matrixProduct		-1	
+275		8507	matrixLeftDivide		2	
+276		8508	matrixRightDivide		2	
+277		8509	matrixPower	1	1	
+278		8510	matrixInverse		1	
+279		8511	matrixGeneralizedInverse		1	one attribute
+280		8512	matrixExp		1	
+281		8513	matrixSquareRoot		1	
+282		8514	matrixLog		1	
+283		8515	matrixTranspose		1	
+284		8516	matrixScalarPlus	1	1	
+285		8517	matrixScalarMinus	1	1	
+286		8518	matrixScalarTimes	1	1	
+287		8519	matrixScalarDivide	1	1	
+288		8520	matrixDotTimes		2	
+289		8521	matrixDotDivide		2	
+290		8522	matrixDotPower		2	
+291		8523	matrixDotExp		1	
+292		8524	matrixEigenValues		1	
+293		8525	matrixLeftEigenVectors		1	
+294		8526	matrixRightEigenVectors		1	
+295		8527	matrixCholeskyDecomposition		1	
+296		8528	matrixLDLDecomposition		1	one attribute
+297		8529	matrixLUDecomposition		1	one attribute
+298		8530	matrixColumnSpace		1	
+299		8531	matrixRowSpace		1	
+300		8532	matrixNullSpace		1	
+301		8533	matrixLeftNullSpace		1	
+302		8534	matrixRightNullSpace		1	
+303		8535	matrixReducedRowEchelon		1	
+304		8536	matrixIdentity		1	
+305		8537	matrixLowerTriangle		1	one attribute
+306		8538	matrixUpperTriangle		1	one attribute
+307		8539	matrixDiagonal		1	
+308		8540	matrixVectorToDiagonalMatrix		1	
+309		8541	matrixReference		1	one attribute
+310		8542	matrixBlock		1	two attributes
+311		8543	matrixMerge		>=1*	"matrixBlock objects, plus four attributes"
+312		8544	matrixSubmatrixAt	4	1	

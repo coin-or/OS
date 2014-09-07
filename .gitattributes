@@ -564,6 +564,7 @@ OS/schemas/OSgL.xsd -text
 OS/schemas/OSiL.xsd -text
 OS/schemas/OSlL.xsd -text
 OS/schemas/OSmL.xsd -text
+OS/schemas/OSnL-Nodes.txt -text
 OS/schemas/OSnL.xsd -text
 OS/schemas/OSoL.xsd -text
 OS/schemas/OSpL.xsd -text
