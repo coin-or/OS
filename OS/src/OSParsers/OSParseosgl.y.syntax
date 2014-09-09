@@ -658,7 +658,7 @@ constantElements: | constantElementsStart GREATERTHAN constantElementsContent;
 
 constantElementsStart: CONSTANTELEMENTSSTART
 {
-    osglData->tempC->elPtr->constantElements = new ConstantMatrixElements(); 
+    ((MatrixElements*)osglData->tempC->cPtr)->constantElements = new ConstantMatrixElements(); 
 };
 
 constantElementsContent: constantElementsStartVector constantElementsNonzeros CONSTANTELEMENTSEND;

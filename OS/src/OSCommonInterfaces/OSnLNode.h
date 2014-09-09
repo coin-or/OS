@@ -2,7 +2,7 @@
 /** @file OSnLNode.h
  * \brief This file defines the OSnLNode class along with its derived classes.
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2014, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -42,19 +42,18 @@ typedef std::vector<ADdouble> ADvector;
 
 /**
  *  Some forward declarations to make sure circular references are handled properly.
- *  (It is important to make sure forward references are handled through pointers.)
  */
+class OSnLNode;
 class OSnLMNode;
 class OSMatrix;
 
-/*! \class OSnLNode 
- *  \brief The OSnLNode Class for nonlinear expressions.
+/*! \class ExprNode 
+ *  \brief A generic class from which we derive both OSnLNode and OSnLMNode
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.9, 10/Sep/2014
  */
-class OSnLNode
+class ExprNode
 {
 public:
 
@@ -69,13 +68,14 @@ public:
      */
     unsigned int inumberOfMatrixChildren;
 
-    /**  inodeInt is the unique integer assigned to the OSnLNode*/
+    /**  inodeInt is the unique integer assigned to the OSnLNode or OSnLMNode in OSParameters.h.
+     */
     int inodeInt;
 
-    /** inodeType essentially tracks whether the number of children are known or not
-     *  Most nodes have a known number of children, then inodeType is set to inumberOfChildren
-     *  For some nodes the number of children is not known a priori, e.g., a sum node
-     *  then inodeType is set to -1
+    /** inodeType essentially tracks whether the number of children are known or not.
+     *  For most nodes this is known, in which case inodeType is set to inumberOfChildren.
+     *  For some nodes the number of children is not known a priori, e.g., a sum node,
+     *  then inodeType is set to -1.
      */
     int inodeType;
 
@@ -88,16 +88,6 @@ public:
      * m_mMatrixChildren holds all the matrix-valued operands, if any.
      */
     OSnLMNode **m_mMatrixChildren;
-
-    /**
-     * m_dFunctionValue holds the function value given the current variable values.
-     */
-    double m_dFunctionValue;
-
-    /**
-     * m_ADTape stores the expression tree for the this OSnLNode as an ADdouble.
-     */
-    ADdouble m_ADTape;
 
     /**
      * @return the value of inodeInt
@@ -119,6 +109,134 @@ public:
      * @return the OSnLNode and its children as an OSiL string.
      */
     virtual  std::string getNonlinearExpressionInXML();
+
+    /**
+     * <p>
+     * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
+     * the OSExpressionTree in prefix format
+     * </p>
+     *
+     * @return the expression tree as a vector of ExprNodes in prefix.
+     */
+    std::vector<ExprNode*> getPrefixFromExpressionTree();
+
+    /**
+     * <p>
+     * Called by getPrefixFromExpressionTree().  This method calls
+     * itself recursively and
+     * generates a vector of pointers to ExprNode in prefix
+     * </p>
+     * @param a pointer prefixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNode in prefix.
+     */
+    std::vector<ExprNode*> preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector);
+
+    /**
+     * <p>
+     * Get a vector of pointers to ExprNodes that correspond to
+     * the OSExpressionTree in postfix format
+     * </p>
+     *
+     * @return the expression tree as a vector of ExprNodes in postfix.
+     */
+    std::vector<ExprNode*> getPostfixFromExpressionTree();
+
+    /**
+     * <p>
+     * Called by getPostfixFromExpressionTree().  This method calls
+     * itself recursively and
+     * generates a vector of pointers to ExprNodes in postfix
+     * </p>
+     * @param a pointer postfixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNodes in postfix.
+     */
+    std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
+
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLNode class.
+     * </p>
+     *
+     * @param x holds the values of the variables in a double array.
+     * @return the function value given the current variable values.
+     */
+    virtual ExprNode *cloneExprNode() = 0;
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ExprNode *that);
+
+    /**
+     * default constructor.
+     */
+    ExprNode();
+
+    /**
+     * default destructor.
+     */
+    ~ExprNode();
+};//end ExprNode
+
+/*! \class OSnLNode 
+ *  \brief The OSnLNode Class for nonlinear expressions.
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ */
+class OSnLNode: public ExprNode
+{
+public:
+    /**
+     * m_dFunctionValue holds the function value given the current variable values.
+     */
+    double m_dFunctionValue;
+
+    /**
+     * m_ADTape stores the expression tree for the this OSnLNode as an ADdouble.
+     */
+    ADdouble m_ADTape;
+
+
+    /**
+     * <p>
+     * varIdx is a map where the key is the index of an OSnLNodeVariable and
+     * (*varIdx)[ idx] is the kth variable in the map, e.g.
+     * (*varIdx)[ 5] = 2 means that variable indexed by 5 is the second variable
+     * in the OSnLNode and all of its children
+     * </p>
+     * @param a pointer to a map of the variables in the OSnLNode and its children
+     */
+    virtual void getVariableIndexMap(std::map<int, int> *varIdx);
+
+    /**
+     * <p>
+     * Calculate the function value given the current variable values.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLNode class.
+     * </p>
+     *
+     * @param x holds the values of the variables in a double array.
+     * @return the function value given the current variable values.
+     */
+    virtual double calculateFunction(double *x) = 0;
+
+
+    /**
+     * <p>
+     * Create the AD tape to be evaluated by AD.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLNode class.
+     * </p>
+     *
+     * @return the expression tree.
+     */
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
+
 
     /**
      * <p>
@@ -144,6 +262,19 @@ public:
      * an OSExpressionTree.
      */
     OSnLNode* createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec);
+
+
+    /**
+     * <p>
+     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
+     * and create a scalar-valued OSExpressionTree root node
+     * </p>
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes and OSnLMNodes
+     * in prefix format
+     * @return a pointer to an OSnLNode which is the root of
+     * an OSExpressionTree.
+     */
+    OSnLNode* createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec);
 
     /**
      * <p>
@@ -188,61 +319,6 @@ public:
     std::vector<OSnLNode*> postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector);
 
     /**
-     * <p>
-     * varIdx is a map where the key is the index of an OSnLNodeVariable and
-     * (*varIdx)[ idx] is the kth variable in the map, e.g.
-     * (*varIdx)[ 5] = 2 means that variable indexed by 5 is the second variable
-     * in the OSnLNode and all of its children
-     * </p>
-     * @param a pointer to a map of the variables in the OSnLNode and its children
-     */
-    virtual void getVariableIndexMap(std::map<int, int> *varIdx);
-
-
-    /**
-     * <p>
-     * Calculate the function value given the current variable values.
-     * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from this OSnLNode class.
-     * </p>
-     *
-     * @param x holds the values of the variables in a double array.
-     * @return the function value given the current variable values.
-     */
-    virtual double calculateFunction(double *x) = 0;
-
-
-    /**
-     * <p>
-     * Create the AD tape to be evaluated by AD.
-     * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from this OSnLNode class.
-     * </p>
-     *
-     * @return the expression tree.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
-
-    /**
-     *
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
-     */
-    OSnLNode* copyNodeAndDescendants();
-
-    /**
-     * <p>
-     * Create or clone a node of this type.
-     * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from this OSnLNode class.
-     * </p>
-     *
-     * @param x holds the values of the variables in a double array.
-     * @return the function value given the current variable values.
-     */
-    virtual OSnLNode *cloneOSnLNode() = 0;
-
-    /**
      * default constructor.
      */
     OSnLNode();
@@ -253,6 +329,12 @@ public:
     virtual ~OSnLNode();
 
     /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    OSnLNode* copyNodeAndDescendants();
+
+    /**
      * A function to check for the equality of two objects
      */
     bool IsEqual(OSnLNode *that);
@@ -261,7 +343,7 @@ public:
 /*! \class OSnLNodePlus
  *  \brief The OSnLNodePlus Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -300,18 +382,18 @@ public:
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
 };//end OSnLNodePlus
 
 /*! \class OSnLNodeSum
  *  \brief The OSnLNodeSum Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -344,11 +426,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeSum::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -360,7 +442,7 @@ public:
 /*! \class OSnLNodeMax
  *  \brief The OSnLNodeMax Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -393,11 +475,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeMax::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -409,7 +491,7 @@ public:
 /*! \class OSnLNodeMin
  *  \brief The OSnLNodeMin Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -442,11 +524,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeMin::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -460,7 +542,7 @@ public:
 /*! \class OSnLNodeMinus
  *  \brief The OSnLNodeMinus Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -494,11 +576,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeMinus::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -511,7 +593,7 @@ public:
 /*! \class OSnLNodeNegate
  *  \brief The OSnLNodeNegate Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -544,11 +626,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
 
     /*! \fn double OSnLNodeNegate::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
@@ -562,7 +644,7 @@ public:
 /*! \class OSnLNodeTimes
  *  \brief The OSnLNodeTimes Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -595,11 +677,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeNegate::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -613,7 +695,7 @@ public:
 /*! \class OSnLNodeDivide
  *  \brief The OSnLNodeDivide Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -647,11 +729,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeDivide::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -663,7 +745,7 @@ public:
 /*! \class OSnLNodePower
  *  \brief The OSnLNodePower Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -696,11 +778,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -713,7 +795,7 @@ public:
 /*! \class OSnLNodeProduct
  *  \brief The OSnLNodeProduct Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -746,11 +828,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeProduct::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -764,7 +846,7 @@ public:
 /*! \class OSnLNodeLn
  *  \brief The OSnLNodeLn Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -797,11 +879,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeLn::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -815,7 +897,7 @@ public:
 /*! \class OSnLNodeSqrt
  *  \brief The OSnLNodeSqrt Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -848,11 +930,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
     /*! \fn double OSnLNodeSqrt::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
      *  \return a ADdouble.
@@ -865,7 +947,7 @@ public:
 /*! \class OSnLNodeSquare
  *  \brief The OSnLNodeSquare Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -898,11 +980,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeSquare::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -914,7 +996,7 @@ public:
 /*! \class OSnLNodeCos
  *  \brief The OSnLNodeCos Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -947,11 +1029,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeCos::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -963,7 +1045,7 @@ public:
 /*! \class OSnLNodeSin
  *  \brief The OSnLNodeSin Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -996,11 +1078,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeSin::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -1012,7 +1094,7 @@ public:
 /*! \class OSnLNodeExp
  *  \brief The OSnLNodeExp Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1051,18 +1133,18 @@ public:
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
 };//end OSnLNodeExp
 
 /*! \class OSnLNodeAbs
  *  \brief The OSnLNodeAbs Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1095,11 +1177,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeAbs::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -1113,7 +1195,7 @@ public:
 /*! \class OSnLNodeErf
  *  \brief The OSnLNodeErf Class.
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1146,11 +1228,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeLn::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -1165,7 +1247,7 @@ public:
 /*! \class OSnLNodeIf
  *  \brief The OSnLNodeIf Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1198,11 +1280,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeIf::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -1215,7 +1297,7 @@ public:
 /*! \class OSnLNodeNumber
  *  \brief The OSnLNodeNumber Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1271,11 +1353,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
 
     /*! \fn double OSnLNodeNumber::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
@@ -1291,7 +1373,7 @@ public:
 /*! \class OSnLNodeE
  *  \brief The OSnLNodeE Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1339,11 +1421,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
 
     /*! \fn double OSnLNodeE::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
@@ -1358,7 +1440,7 @@ public:
 /*! \class OSnLNodePI
  *  \brief The OSnLNodePI Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1406,11 +1488,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
 
     /*! \fn double OSnLNodePI::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
@@ -1426,7 +1508,7 @@ public:
 /*! \class OSnLNodeVariable
  *  \brief The OSnLNodeVariable Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1485,11 +1567,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeVariable::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -1503,7 +1585,7 @@ public:
 /*! \class OSnLNodeAllDiff
  *  \brief The OSnLNodeAllDiff Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1537,11 +1619,11 @@ public:
      */
     virtual double calculateFunction( double *x);
 
-    /*! \fn OSnLNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeAllDiff::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -1557,7 +1639,7 @@ public:
 /*! \class OSnLNodeMatrixDeterminant
  *  \brief The OSnLNodeMatrixDeterminant Class.
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  * @date    11/06/2014
  * @since   OS2.8
  *
@@ -1596,18 +1678,18 @@ public:
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 
-    /*! \fn OSnLNodeMatrixDeterminant *cloneOSnLNodeMatrixDeterminant(double *x)
+    /*! \fn OSnLNodeMatrixDeterminant *cloneExprNodeMatrixDeterminant(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNodeMatrixDeterminant of the proper type.
      */
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
 };//end OSnLNodeMatrixDeterminant
 
 /*! \class OSnLNodeMatrixTrace
  *  \brief The OSnLNodeMatrixTrace Class.
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  * @date    11/06/2014
  * @since   OS2.8
  *
@@ -1647,12 +1729,12 @@ public:
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 
-    /*! \fn OSnLNodeMatrixTrace *cloneOSnLNodeMatrixTrace(double *x)
+    /*! \fn OSnLNodeMatrixTrace *cloneExprNodeMatrixTrace(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNodeMatrixTrace of the proper type.
      */
 
-    virtual OSnLNode *cloneOSnLNode();
+    virtual OSnLNode *cloneExprNode();
 
 };//end OSnLNodeMatrixTrace
 
@@ -1665,196 +1747,33 @@ public:
  * @since   OS2.8
  */
 
-class OSnLMNode
+class OSnLMNode: public ExprNode
 {
 public:
 
-    /**  inumberOfChildren is the number of scalar-valued OSnLNode child elements
-     *   (e.g., to compute the scalar multiple of a matrix)
-     *   if there ever is a case where the number of children is not fixed, it is temporarily set to 0
-     */
-    unsigned int inumberOfChildren;
-
-    /**  inumberOfMatrixChildren is the number of OSnLMNode child elements
-     *   in case this number is not fixed, (e.g., for a matrixSum) it is temporarily set to 0
-     */
-    unsigned int inumberOfMatrixChildren;
-
-    /**  inodeInt is the unique integer assigned to the OSnLMNode*/
-    int inodeInt;
-
-    /** inodeType essentially tracks whether the number of children are known or not
-     *  Most nodes have a known number of children, then inodeType is set to inumberOfMatrixChildren
-     *  For some nodes the number of children is not known a priori, e.g., a sum node
-     *  then inodeType is set to -1
-     */
-    int inodeType;
-
-    /**
-     * m_mChildren holds all the scalar-valued operands that the current node operates on.
-     */
-    OSnLNode **m_mChildren;
-
-    /**
-     * m_mMatrixChildren holds all the matrix-valued operands.
-     */
-    OSnLMNode **m_mMatrixChildren;
-
-    /**
-     * m_dFunctionValue holds the function value given the current variable values.
-     */
-    OSMatrix *m_dFunctionValue;
-
-    /**
-     * m_ADTape stores the expression tree for the this OSnLNode as an ADdouble.
-     */
-    //ADdouble m_ADTape;
-
-    /**
-     * @return the value of inodeInt
-     */
-    virtual std::string getTokenNumber();
-
-    /**
-     * @return the value of operator name
-     */
-    virtual std::string getTokenName() = 0;
-
     /**
      * <p>
-     * the following method writes an OSnLMNode in
-     * OSiL format, it is used by OSiLWriter to take
-     * an OSInstance and write the corresponding OSiL
+     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in postfix format
+     * and create a matrix-valued OSExpressionTree root node
      * </p>
-     *
-     * @return the OSnLMNode and its children as an OSiL string.
-     */
-    virtual  std::string getNonlinearExpressionInXML();
-
-    /**
-     * <p>
-     * Take a vector of OSnLMNodes in postfix format 
-     * and create an OSExpressionTree root node
-     * </p>
-     * @param nlNodeVec holds a vector of pointers to OSnLNodes
-     * in postfix format
-     * @param nlMNodeVec holds a vector of pointers to OSnLMNodes
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes and OSnLMNodes
      * in postfix format
      * @return a pointer to an OSnLMNode which is the root of
      * an OSExpressionTree.
      */
-//    OSnLMNode* createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec, std::vector<OSnLMNode*> nlMNodeVec);
+    OSnLMNode* createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec);
 
-    /**
+	/**
      * <p>
-     * Take a vector of OSnLMNodes in prefix format
-     * and create an OSExpressionTree root node
+     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
+     * and create a matrix-valued OSExpressionTree root node
      * </p>
-     * @param nlNodeVec holds a vector of pointers to OSnLNodes
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes and OSnLMNodes
      * in prefix format
-     * @param nlMNodeVec holds a vector of pointers to OSnLMNodes
-     * in postfix format
      * @return a pointer to an OSnLMNode which is the root of
      * an OSExpressionTree.
      */
-//    OSnLNode* createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec, std::vector<OSnLMNode*> nlMNodeVec);
-
-    /**
-     * <p>
-     * Get a vector of pointers to OSnLNodes that correspond to
-     * the OSExpressionTree in prefix format
-     * </p>
-     *
-     * @return the expression tree as a vector of OSnLNodes in prefix.
-     */
-    //std::vector<OSnLNode*> getPrefixFromExpressionTree();
-
-    /**
-     * <p>
-     * Called by getPrefixFromExpressionTree().  This method calls
-     * itself recursively and
-     * generates a vector of pointers to OSnLNodes in prefix
-     * </p>
-
-     * @param a pointer prefixVector to a vector of pointers of OSnLNodes
-     * @return a vector of pointers to OSnLNodes in prefix.
-     */
-    //std::vector<OSnLNode*> preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector);
-
-    /**
-     * <p>
-     * Get a vector of pointers to OSnLNodes that correspond to
-     * the OSExpressionTree in postfix format
-     * </p>
-     *
-     * @return the expression tree as a vector of OSnLNodes in postfix.
-     */
-    //std::vector<OSnLNode*> getPostfixFromExpressionTree();
-
-    /**
-     * <p>
-     * Called by getPostfixFromExpressionTree().  This method calls
-     * itself recursively and
-     * generates a vector of pointers to OSnLNodes in postfix
-     * </p>
-     * @param a pointer postfixVector to a vector of pointers of OSnLNodes
-     * @return a vector of pointers to OSnLNodes in postfix.
-     */
-    //std::vector<OSnLNode*> postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector);
-
-    /**
-     * <p>
-     * varIdx is a map where the key is the index of an OSnLNodeVariable and
-     * (*varIdx)[ idx] is the kth variable in the map, e.g.
-     * (*varIdx)[ 5] = 2 means that variable indexed by 5 is the second variable
-     * in the OSnLNode and all of its children
-     * </p>
-     * @param a pointer to a map of the variables in the OSnLNode and its children
-     */
-    //virtual void getVariableIndexMap(std::map<int, int> *varIdx);
-
-
-    /**
-     * <p>
-     * Calculate the function value given the current variable values.
-     * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from this OSnLNode class.
-     * </p>
-     *
-     * @param x holds the values of the variables in a double array.
-     * @return the function value given the current variable values.
-     */
-    //virtual Matrix* calculateFunction(double *x) = 0;
-
-
-    /**
-     * <p>
-     * Create the AD tape to be evaluated by AD.
-     * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from this OSnLNode class.
-
-     * </p>
-     *
-     * @return the expression tree.
-     */
-    //virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
-
-    /**
-     *
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
-     */
-    OSnLMNode* copyNodeAndDescendants();
-
-    /**
-     * <p>
-     * Create or clone a node of this type.
-     * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from this OSnLNode class.
-     * </p>
-     *
-     */
-    virtual OSnLMNode *cloneOSnLMNode() = 0;
+    OSnLMNode* createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec);
 
     /**
      * default constructor.
@@ -1865,6 +1784,13 @@ public:
      * default destructor.
      */
     virtual ~OSnLMNode();
+
+
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    OSnLMNode* copyNodeAndDescendants();
 
     /**
      * A function to check for the equality of two objects
@@ -1915,11 +1841,11 @@ public:
     virtual double calculateFunction( double *x);
 #endif
 
-    /*! \fn OSnLMNode *cloneOSnLNode(double *x)
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
-     *  \return a pointer to a new OSnLNode of the proper type.
+     *  \return a pointer to a new OSnLMNode of the proper type.
      */
-    virtual OSnLMNode *cloneOSnLMNode();
+    virtual OSnLMNode *cloneExprNode();
 
 #if 0
     /*! \fn double OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)

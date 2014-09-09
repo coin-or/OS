@@ -75,16 +75,19 @@ public:
     ~OSnLParserData() ;
 
 
-    /** These entities are used for parsing <nonlinearExpressions> */
+    /** These entities are used for parsing <nonlinearExpressions> and */
 
     /** a pointer to an OSnLNode object */
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
 
     /** a pointer to an OSnLNode object that is a variable */
     OSnLNodeVariable *nlNodeVariablePoint;
 
     /** a pointer to an OSnLNode object that is a number */
     OSnLNodeNumber *nlNodeNumberPoint;
+
+    /** a pointer to an OSnLMNode object that is a simple matrix reference */
+    OSnLMNodeMatrixReference *nlMNodeMatrixRef;
 
     /** nlnodecount is the number of nl nodes in the instance*/
     int nlnodecount;
@@ -101,78 +104,77 @@ public:
     bool numbertypeattON ;
 
     /** numbervalueattON is set to true if the value attribute has been parsed
-     * for an OSnLNodeNumber object, an exception is thrown if there is more than
-     * one value attribute
+     *  for an OSnLNodeNumber object, an exception is thrown if there is more than
+     *  one value attribute
      */
     bool numbervalueattON;
 
     /** numberidattON is set to true if the id attribute has been parsed
-     * for an OSnLNodeNumber object, an exception is thrown if there is more than
-     * one id attribute
+     *  for an OSnLNodeNumber object, an exception is thrown if there is more than
+     *  one id attribute
      */
     bool numberidattON;
 
     /** variableidxattON is set to true if the idx attribute has been parsed
-     * for an OSnLNodeVariable, an exception is thrown if there is more than
-     * one idx attribute
+     *  for an OSnLNodeVariable, an exception is thrown if there is more than
+     *  one idx attribute
      */
     bool variableidxattON ;
 
     /** variablecoefattON is set to true if the coeff attribute has been parsed
-     * for an OSnLNodeVariable, an exception is thrown if there is more than
-     * one coeff attribute
+     *  for an OSnLNodeVariable, an exception is thrown if there is more than
+     *  one coeff attribute
      */
     bool variablecoefattON ;
 
-    /** nlNodeVec holds a vector of pointers to OSnLNodes */
-    std::vector<OSnLNode*> nlNodeVec;
+    /** nlNodeVec holds a vector of pointers to OSnLNodes and OSnLMNodes 
+     *  In order to build the expression tree correctly from the prefix notation
+     *  found in the OSiL file, we need to store both OSnLNodes and OSnLMNodes
+     *  into the same vector of ExprNodes
+     */
+    std::vector<ExprNode*> nlNodeVec;
 
     /** the OSnLNodeSum node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
+     *  other children with an indeterminate number of children so when
+     *  parsing we need to temporarily store all of its children
      */
-    std::vector<OSnLNode*> sumVec;
+    std::vector<ExprNode*> sumVec;
 
     /** the OSnLNodeallDiff node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
+     *  other children with an indeterminate number of children so when
+     *  parsing we need to temporarily store all of its children
      */
-    std::vector<OSnLNode*> allDiffVec;
+    std::vector<ExprNode*> allDiffVec;
 
     /** the OSnLNodeProduct node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
+     *  other children with an indeterminate number of children so when
+     *  parsing we need to temporarily store all of its children
      */
-    std::vector<OSnLNode*> productVec;
+    std::vector<ExprNode*> productVec;
 
     /** the OSnLNodeMax node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
+     *  other children with an indeterminate number of children so when
+     *  parsing we need to temporarily store all of its children
      */
-    std::vector<OSnLNode*> maxVec;
+    std::vector<ExprNode*> maxVec;
 
     /** the OSnLNodeMin node can have any number of children, including
+     *  other children with an indeterminate number of children so when
+     *  parsing we need to temporarily store all of its children
+     */
+    std::vector<ExprNode*> minVec;
+
+    /** the OSnLMNodeMatrixSum node can have any number of children, including
      * other children with an indeterminate number of children so when
      * parsing we need to temporarily store all of its children
      */
-    std::vector<OSnLNode*> minVec;
+    std::vector<ExprNode*> matrixSumVec;
 
-
-    /** These entities are used for parsing linear and nonlinear matrix expressions */
-
-    /** a pointer to an OSnLMNode object */
-    OSnLMNode *nlMNodePoint;
-
-    /** a pointer to an OSnLMNode object that is a simple matrix reference */
-    OSnLMNodeMatrixReference *nlMNodeMatrixRef;
-
-    /** nlmnodecount is the number of nlm nodes in the instance*/
-    int nlmnodecount;
-
-    /** tmpnlcount counts the number of nlm nodes actually found. 
-     *  If this number differs from nlnodecount, then an exception is thrown
+    /** the OSnLMNodeProduct node can have any number of children, including
+     * other children with an indeterminate number of children so when
+     * parsing we need to temporarily store all of its children
      */
-    int tmpnlmcount;
+    std::vector<ExprNode*> matrixProductVec;
 
     /** matrixreftypeattON is set to true if the type attribute has been parsed
      * for an OSnLMNodeMatrixReference object, an exception is thrown if there is more than
@@ -185,21 +187,6 @@ public:
      * one idx attribute
      */
     bool matrixidxattON ;
-
-    /** OSnLMNodeVec holds a vector of pointers to OSnLMNodes */
-    std::vector<OSnLMNode*> OSnLMNodeVec;
-
-    /** the OSnLMNodeMatrixSum node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
-     */
-    std::vector<OSnLMNode*> matrixSumVec;
-
-    /** the OSnLMNodeProduct node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
-     */
-    std::vector<OSnLMNode*> matrixProductVec;
 
     /**  Attributes and other data items associated with parsing the OSnLMNodes */
     bool includeDiagonalAttributePresent;

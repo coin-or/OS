@@ -18,28 +18,10 @@
 
 OSnLParserData::~OSnLParserData()
 {
-    // clear the vectors of pointers
-    OSnLMNodeVec.clear();
-    //delete nlNodeVec.back();
-    matrixSumVec.clear();
-    matrixProductVec.clear();
 }//~OSnLParserData
 
 
 OSnLParserData::OSnLParserData() :
-//    osglMultPresent(false),
-//    osglIncrPresent(false),
-//    osglNumberOfElPresent(false),
-//    osglNumberOfEl(-1),
-//    osglIntArray(NULL),
-//    osglMult(1),
-//    osglIncr(1),
-//    osglSize(0),
-//    osglCounter(0),
-//    osglTempint(0),
-//    osglDblArray(NULL),
-//    osglValArray(NULL),
-
     nlnodecount(0),
     tmpnlcount(0),
     numbertypeattON(false),

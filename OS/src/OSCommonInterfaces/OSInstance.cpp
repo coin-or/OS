@@ -2606,6 +2606,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx)
 {
     if( m_bProcessExpressionTreesMod == false )
     {
+
         getAllNonlinearExpressionTreesMod();
     }
     if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end()) return m_mapExpressionTreesMod[ rowIdx];
@@ -3909,7 +3910,7 @@ bool OSInstance::setQuadraticCoefficients(int number,
         k++;
     }
     return true;
-}//setQuadraticTerms
+}//setQuadraticCoefficients
 
 bool OSInstance::setQuadraticTermsInNonlinearExpressions(int numQPTerms, int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients)
 {
@@ -3968,10 +3969,11 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
         instanceData->nonlinearExpressions->nl[i] = new Nl();
         instanceData->nonlinearExpressions->nl[i]->idx = root[i]->idx;
         instanceData->nonlinearExpressions->nl[i]->osExpressionTree = new OSExpressionTree();
-        instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot    = root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
+        instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot
+            = (OSnLNode*)root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
     }
     return true;
-}//setQuadraticTerms
+}//setNonlinearExpressions
 
 
 bool OSInstance::initializeNonLinearStructures( )

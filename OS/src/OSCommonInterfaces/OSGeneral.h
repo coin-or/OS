@@ -2003,17 +2003,12 @@ public:
     ENUM_MATRIX_CONSTRUCTOR_TYPE cType;
 
 /**
- * After considerable experimentation it seemed best to implement three
- * separate pointers, to be activated as needed
+ *  This pointer is used for any of the three types
+ *  (redefined as necessary in the alternate constructor below)
  */
-    MatrixElements       *elPtr;
-    MatrixTransformation *trPtr;
-    MatrixBlocks         *blPtr;
+    void *cPtr;
 
-    /** default constructor */
-    MatrixConstructor();
-
-    /** alternate constructor */
+    /** special constructor */
     MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE cType);
 
     /** destructor */

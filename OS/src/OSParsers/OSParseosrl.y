@@ -4826,7 +4826,7 @@ constantElements: | constantElementsStart GREATERTHAN constantElementsContent;
 
 constantElementsStart: CONSTANTELEMENTSSTART
 {
-    osglData->tempC->elPtr->constantElements = new ConstantMatrixElements(); 
+    ((MatrixElements*)osglData->tempC->cPtr)->constantElements = new ConstantMatrixElements(); 
 };
 
 constantElementsContent: constantElementsStartVector constantElementsNonzeros CONSTANTELEMENTSEND;
@@ -5610,50 +5610,65 @@ osglMultATT: MULTATT QUOTE INTEGER QUOTE
  */
 
 /** ==========================================================================
- *           This portion parses the scalar nonlinear expressions
+ *           This portion parses nonlinear and matrix expressions
  *  ==========================================================================
  */
 
 nonlinearExpressions:  
                 | NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
-                {  if (osnlData->nlnodecount < osnlData->tmpnlcount)  parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "actual number of nl terms less than number attribute");   };
+    {  
+        if (osnlData->nlnodecount < osnlData->tmpnlcount)  
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "actual number of nl terms less than number attribute");   
+    };
                 
 
-nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE  GREATERTHAN { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-osnlData->tmpnlcount = $3;
-osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
-if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
-for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
-    osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
-}
-};
+nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
+    { 
+        if ( *$2 != *$4 ) 
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+        osnlData->tmpnlcount = $3;
+        osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
+        if (osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) 
+            osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
+        for (int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
+        {
+            osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
+        }
+    };
                 
 nlnodes: 
-        | nlnodes nlstart  
-        nlIdxATT  GREATERTHAN nlnode {
+        | nlnodes scalarExpressionTree;
+
+scalarExpressionTree: nlstart nlIdxATT  GREATERTHAN nlnode NLEND
+    {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->m_treeRoot = 
-    osnlData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
-    osnlData->nlnodecount++;
-}  NLEND ;
+        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->m_treeRoot = 
+            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        osnlData->nlnodecount++;
+    };
 
 nlstart: NLSTART
-{
-    if(osnlData->nlnodecount >= osnlData->tmpnlcount) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "actual number of nl terms greater than number attribute");
-};
+    {
+        if (osnlData->nlnodecount >= osnlData->tmpnlcount) 
+            parserData->parser_errors += 
+                addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "actual number of nl terms greater than number attribute");
+        // clear the vectors of pointers
+        osnlData->nlNodeVec.clear();
+        osnlData->sumVec.clear();
+        //osnlData->allDiffVec.clear();
+        osnlData->maxVec.clear();
+        osnlData->minVec.clear();
+        osnlData->productVec.clear();
+    };
 
-nlIdxATT:  IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-//osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount] = new Nl();
-osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->idx = $3;
-osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree = new OSExpressionTree();
-// clear the vectors of pointers
-osnlData->nlNodeVec.clear();
-osnlData->sumVec.clear();
-//osnlData->allDiffVec.clear();
-osnlData->maxVec.clear();
-osnlData->minVec.clear();
-osnlData->productVec.clear();
-};
+nlIdxATT:  IDXATT QUOTE INTEGER QUOTE 
+    { 
+        if ( *$2 != *$4 ) 
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+        //osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount] = new Nl();
+        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->idx = $3;
+        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree = new OSExpressionTree();
+    };
 
 
 nlnode: number
@@ -5686,7 +5701,20 @@ nlnode: number
       | matrixToScalar
 ;
 
-
+/** The first two nodes are terminal nodes; they have no descendants */
+E: ESTART {    osnlData->nlNodePoint = new OSnLNodeE();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);} eend;
+    
+eend: ENDOFELEMENT
+            | GREATERTHAN EEND;
+            
+PI: PISTART {    osnlData->nlNodePoint = new OSnLNodePI();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);} piend;
+    
+piend: ENDOFELEMENT
+            | GREATERTHAN PIEND;
+            
+/** These nodes have a fixed number of descendants (which get allocated automatically in the constructor) */
 times: TIMESSTART {
     osnlData->nlNodePoint = new OSnLNodeTimes();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
@@ -5716,80 +5744,6 @@ power: POWERSTART {
     osnlData->nlNodePoint = new OSnLNodePower();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode POWEREND;
-
-sum: SUMSTART {
-    osnlData->nlNodePoint = new OSnLNodeSum();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-    osnlData->sumVec.push_back( osnlData->nlNodePoint);
-}
-anothersumnlnode SUMEND {
-    osnlData->sumVec.back()->m_mChildren = new OSnLNode*[ osnlData->sumVec.back()->inumberOfChildren];
-    osnlData->sumVec.pop_back();
-};
-
-anothersumnlnode: 
-            | anothersumnlnode nlnode { osnlData->sumVec.back()->inumberOfChildren++; };
-            
-            
-            
-
-allDiff: ALLDIFFSTART {
-    
-    osnlData->nlNodePoint =   new OSnLNodeAllDiff ();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-    osnlData->allDiffVec.push_back( osnlData->nlNodePoint);
-}
-anotherallDiffnlnode ALLDIFFEND {
-    osnlData->allDiffVec.back()->m_mChildren = new OSnLNode*[ osnlData->allDiffVec.back()->inumberOfChildren];
-    osnlData->allDiffVec.pop_back();
-    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
-};
-
-anotherallDiffnlnode: 
-            | anotherallDiffnlnode nlnode { osnlData->allDiffVec.back()->inumberOfChildren++; };
-            
-            
-max: MAXSTART {
-    osnlData->nlNodePoint = new OSnLNodeMax();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-    osnlData->maxVec.push_back( osnlData->nlNodePoint);
-}
-anothermaxnlnode MAXEND {
-    osnlData->maxVec.back()->m_mChildren = new OSnLNode*[ osnlData->maxVec.back()->inumberOfChildren];
-    osnlData->maxVec.pop_back();
-    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
-};
-
-anothermaxnlnode: 
-            | anothermaxnlnode nlnode { osnlData->maxVec.back()->inumberOfChildren++; };
-            
-min: MINSTART {
-    osnlData->nlNodePoint = new OSnLNodeMin();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-    osnlData->minVec.push_back( osnlData->nlNodePoint);
-}
-anotherminnlnode MINEND {
-    osnlData->minVec.back()->m_mChildren = new OSnLNode*[ osnlData->minVec.back()->inumberOfChildren];
-    osnlData->minVec.pop_back();
-    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
-};
-
-anotherminnlnode: 
-            | anotherminnlnode nlnode { osnlData->minVec.back()->inumberOfChildren++; };
-            
-            
-product: PRODUCTSTART {
-    osnlData->nlNodePoint = new OSnLNodeProduct();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-    osnlData->productVec.push_back( osnlData->nlNodePoint);
-}
-anotherproductnlnode PRODUCTEND {
-    osnlData->productVec.back()->m_mChildren = new OSnLNode*[ osnlData->productVec.back()->inumberOfChildren];
-    osnlData->productVec.pop_back();
-};
-
-anotherproductnlnode: 
-            | anotherproductnlnode nlnode { osnlData->productVec.back()->inumberOfChildren++; };
 
 
 ln: LNSTART {
@@ -5842,18 +5796,109 @@ if: IFSTART {
 osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
-E: ESTART {    osnlData->nlNodePoint = new OSnLNodeE();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);} eend;
-    
-eend: ENDOFELEMENT
-            | GREATERTHAN EEND;
+
+/** some more scalar-valued nodes that involve matrix children */
+matrixDeterminant: MATRIXDETERMINANTSTART {
+    osnlData->nlNodePoint = new OSnLNodeMatrixDeterminant();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+} OSnLMNode MATRIXDETERMINANTEND;
+
+matrixTrace: MATRIXTRACESTART {
+    osnlData->nlNodePoint = new OSnLNodeMatrixTrace();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+} OSnLMNode MATRIXTRACEEND;
+
+matrixToScalar: MATRIXTOSCALARSTART {
+//    osnlData->nlNodePoint = new OSnLNodeMatrixToScalar();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+} OSnLMNode MATRIXTOSCALAREND;
+
+
+/** 
+ *  These nodes have a variable number of descendants that cannot be allocated beforehand.
+ *  Some dirty trickery is involved in accomplishing everything.
+ *  First, when such a node is encountered, it is pushed onto two vectors simultaneously:
+ *  the vector of all nl nodes and a vector of special nodes (to cater for the possibility
+ *  that there might be nested sums). Both vectors point to the same memory location,
+ *  which can be manipulated through whichever vector is more convenient. This is used in
+ *  SUMEND below to allocate the right number of descendants (once this is known) and in
+ *  nlnode below it to increment the number of descendants.
+ */
+sum: SUMSTART {
+    osnlData->nlNodePoint = new OSnLNodeSum();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->sumVec.push_back( osnlData->nlNodePoint);
+}
+anothersumnlnode SUMEND {
+    ((OSnLNode*)osnlData->sumVec.back())->m_mChildren 
+        = new OSnLNode*[ ((OSnLNode*)osnlData->sumVec.back())->inumberOfChildren];
+    osnlData->sumVec.pop_back();
+};
+
+anothersumnlnode: | anothersumnlnode nlnode { ((OSnLNode*)osnlData->sumVec.back())->inumberOfChildren++; };
             
-PI: PISTART {    osnlData->nlNodePoint = new OSnLNodePI();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);} piend;
-    
-piend: ENDOFELEMENT
-            | GREATERTHAN PIEND;
+
+allDiff: ALLDIFFSTART {    
+    osnlData->nlNodePoint = new OSnLNodeAllDiff ();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->allDiffVec.push_back( osnlData->nlNodePoint);
+}
+anotherallDiffnlnode ALLDIFFEND {
+    ((OSnLNode*)osnlData->allDiffVec.back())->m_mChildren 
+        = new OSnLNode*[ ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren];
+    osnlData->allDiffVec.pop_back();
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+anotherallDiffnlnode: 
+            | anotherallDiffnlnode nlnode { ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren++; };
             
+            
+max: MAXSTART {
+    osnlData->nlNodePoint = new OSnLNodeMax();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->maxVec.push_back( osnlData->nlNodePoint);
+}
+anothermaxnlnode MAXEND {
+    osnlData->maxVec.back()->m_mChildren = new OSnLNode*[ osnlData->maxVec.back()->inumberOfChildren];
+    osnlData->maxVec.pop_back();
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+anothermaxnlnode: 
+            | anothermaxnlnode nlnode { osnlData->maxVec.back()->inumberOfChildren++; };
+
+
+min: MINSTART {
+    osnlData->nlNodePoint = new OSnLNodeMin();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->minVec.push_back( osnlData->nlNodePoint);
+}
+anotherminnlnode MINEND {
+    osnlData->minVec.back()->m_mChildren = new OSnLNode*[ osnlData->minVec.back()->inumberOfChildren];
+    osnlData->minVec.pop_back();
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+anotherminnlnode: 
+            | anotherminnlnode nlnode { osnlData->minVec.back()->inumberOfChildren++; };
+            
+            
+product: PRODUCTSTART {
+    osnlData->nlNodePoint = new OSnLNodeProduct();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->productVec.push_back( osnlData->nlNodePoint);
+}
+anotherproductnlnode PRODUCTEND {
+    osnlData->productVec.back()->m_mChildren = new OSnLNode*[ osnlData->productVec.back()->inumberOfChildren];
+    osnlData->productVec.pop_back();
+};
+
+anotherproductnlnode: 
+            | anotherproductnlnode nlnode { osnlData->productVec.back()->inumberOfChildren++; };
+
+
+
 number: NUMBERSTART {
     osnlData->nlNodeNumberPoint = new OSnLNodeNumber();
     osnlData->nlNodeVec.push_back( osnlData->nlNodeNumberPoint);
@@ -5863,13 +5908,13 @@ numberend: ENDOFELEMENT
             | GREATERTHAN NUMBEREND;
 
 anotherNumberATT:
-            |anotherNumberATT numberATT ;
+            | anotherNumberATT numberATT ;
             
 numberATT: numbertypeATT  {if(osnlData->numbertypeattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many number type attributes"); 
             osnlData->numbertypeattON = true; }
-        | numbervalueATT  {if(osnlData->numbervalueattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many number value attributes"); 
+         | numbervalueATT  {if(osnlData->numbervalueattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many number value attributes"); 
             osnlData->numbervalueattON = true; }
-        | numberidATT  {if(osnlData->numberidattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData,"too many number id attributes"); 
+         | numberidATT  {if(osnlData->numberidattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData,"too many number id attributes"); 
             osnlData->numberidattON = true; }            
             ;
             
@@ -5891,6 +5936,7 @@ numbervalueATT:
         | VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlNodeNumberPoint->value = $3;
 }*/ ;
+
 
 variable: VARIABLESTART {
     osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
@@ -5929,20 +5975,8 @@ variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->pars
      }
 }  ; 
 
-matrixDeterminant: MATRIXDETERMINANTSTART {
-    osnlData->nlNodePoint = new OSnLNodeTimes();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-} OSnLMNode MATRIXDETERMINANTEND;
 
-matrixTrace: MATRIXTRACESTART {
-    osnlData->nlNodePoint = new OSnLNodeTimes();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-} OSnLMNode MATRIXTRACEEND;
-
-matrixToScalar: MATRIXTOSCALARSTART {
-    osnlData->nlNodePoint = new OSnLNodeTimes();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-} OSnLMNode MATRIXTOSCALAREND;
+/** OSnLMNodes are parsed in essentially the same way as OSnLNodes */
 
 OSnLMNode: matrixReference
          | matrixDiagonal
@@ -5962,8 +5996,9 @@ OSnLMNode: matrixReference
 matrixReference: MATRIXREFERENCESTART
 {
     osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
-    osnlData->OSnLMNodeVec.push_back(osnlData->nlMNodeMatrixRef);
+    osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixRef);
 } matrixIdxATT matrixreferenceend {osnlData->matrixidxattON = false;} ;
+
               
 matrixreferenceend: ENDOFELEMENT
            | GREATERTHAN MATRIXREFERENCEEND;

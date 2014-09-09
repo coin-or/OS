@@ -4,7 +4,7 @@
  * \brief This file defines the CoinSolver class.
  * \detail Read an OSInstance object and convert to COIN data structures
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
