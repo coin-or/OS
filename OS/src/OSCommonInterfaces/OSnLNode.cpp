@@ -804,7 +804,7 @@ OSnLNodeAllDiff::OSnLNodeAllDiff()
 {
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
-    inodeInt = OS_ALLDIF;
+    inodeInt = OS_ALLDIFF;
     inodeType = -1;
 }//end OSnLNodeAllDiff
 
@@ -3399,6 +3399,7 @@ OSnLMNodeMatrixIdentity::~OSnLMNodeMatrixIdentity()
         for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
         {
             if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
+
             m_mMatrixChildren[i] = NULL;
         }
         delete[]  m_mMatrixChildren;
