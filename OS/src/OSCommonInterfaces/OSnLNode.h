@@ -17,7 +17,8 @@
  * Those that evaluate to scalar values (which inherit from OSnLNode), and
  * those that evaluate to matrices (and inherit from OSnLMNode).
  * OSnLNodes can have OSnLMNode children (e.g., matrixDeterminant) 
- * and vice versa (e.g., matrixScalarTimes) 
+ * and vice versa (e.g., matrixScalarTimes). 
+ * Both OSnLNode and OSnLMNode inherit from the base class ExprNode. 
  */
 
 #ifndef OSNLNODE_H
@@ -57,17 +58,6 @@ class ExprNode
 {
 public:
 
-    /**  inumberOfChildren is the number of OSnLNode child elements
-     *   if this number is not fixed, e.g., for a sum node, it is temporarily set to 0
-     */
-    unsigned int inumberOfChildren;
-
-    /**  inumberOfMatrixChildren is the number of OSnLMNode child elements
-     *   (e.g. for computation of a determinant or matrix norm) 
-     *   if there ever is a case where this number is not fixed, it is temporarily set to 0
-     */
-    unsigned int inumberOfMatrixChildren;
-
     /**  inodeInt is the unique integer assigned to the OSnLNode or OSnLMNode in OSParameters.h.
      */
     int inodeInt;
@@ -78,6 +68,17 @@ public:
      *  then inodeType is set to -1.
      */
     int inodeType;
+
+    /**  inumberOfChildren is the number of OSnLNode child elements
+     *   If this number is not fixed, e.g., for a sum node, it is temporarily set to 0
+     */
+    unsigned int inumberOfChildren;
+
+    /**  inumberOfMatrixChildren is the number of OSnLMNode child elements
+     *   (e.g. for computation of a determinant or matrix norm) 
+     *   if there ever is a case where this number is not fixed, it is temporarily set to 0
+     */
+    unsigned int inumberOfMatrixChildren;
 
     /**
      * m_mChildren holds all the operands, that is, nodes that the current node operates on.
@@ -95,25 +96,25 @@ public:
     virtual std::string getTokenNumber();
 
     /**
-     * @return the value of operator name
+     * @return the value of the operator name
      */
     virtual std::string getTokenName() = 0;
 
     /**
      * <p>
-     * the following method writes an OSnLNode in
-     * OSiL format, it is used by OSiLWriter to take
-     * an OSInstance and write the corresponding OSiL
+     * The following method writes an OSnLNode or OSnLMNode
+     * in OSiL format. it is used by OSiLWriter to take
+     * an OSInstance and write the corresponding OSiL.
      * </p>
      *
      * @return the OSnLNode and its children as an OSiL string.
      */
-    virtual  std::string getNonlinearExpressionInXML();
+    virtual std::string getNonlinearExpressionInXML();
 
     /**
      * <p>
      * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
-     * the OSExpressionTree in prefix format
+     * the OSExpressionTree in prefix format.
      * </p>
      *
      * @return the expression tree as a vector of ExprNodes in prefix.
@@ -122,8 +123,8 @@ public:
 
     /**
      * <p>
-     * Called by getPrefixFromExpressionTree().  This method calls
-     * itself recursively and
+     * Called by getPrefixFromExpressionTree().  
+     * This method calls itself recursively and
      * generates a vector of pointers to ExprNode in prefix
      * </p>
      * @param a pointer prefixVector to a vector of pointers of ExprNodes
@@ -143,9 +144,9 @@ public:
 
     /**
      * <p>
-     * Called by getPostfixFromExpressionTree().  This method calls
-     * itself recursively and
-     * generates a vector of pointers to ExprNodes in postfix
+     * Called by getPostfixFromExpressionTree(). 
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNodes in postfix.
      * </p>
      * @param a pointer postfixVector to a vector of pointers of ExprNodes
      * @return a vector of pointers to ExprNodes in postfix.
@@ -157,7 +158,7 @@ public:
      * <p>
      * Create or clone a node of this type.
      * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from this OSnLNode class.
+     * operator nodes that derive or extend from this class.
      * </p>
      *
      * @param x holds the values of the variables in a double array.
@@ -250,6 +251,18 @@ public:
      */
     OSnLNode* createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec);
 
+
+    /**
+     * <p>
+     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes)in postfix format 
+     * and create an OSExpressionTree root node
+     * </p>
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes
+     * in postfix format
+     * @return a pointer to an OSnLNode which is the root of
+     * an OSExpressionTree.
+     */
+    OSnLNode* createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec);
 
     /**
      * <p>
@@ -1750,6 +1763,8 @@ public:
 class OSnLMNode: public ExprNode
 {
 public:
+    /** idx is the index of the matrix */
+    int idx;
 
     /**
      * <p>
@@ -1798,13 +1813,555 @@ public:
     bool IsEqual(OSnLMNode *that);
 };//end OSnLMNode
 
-class OSnLMNodeMatrixReference : public OSnLMNode
+class OSnLMNodeMatrixPlus : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixPlus();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixPlus();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixPlus
+
+class OSnLMNodeMatrixSum : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixSum();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixSum();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+
+#if 0
+    /*! \fn double OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
+     *  \brief The implementation of the virtual functions.
+     *  \return a ADdouble.
+     */
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
+#endif
+
+};//end OSnLMNodeMatrixPlus
+
+class OSnLMNodeMatrixMinus : public OSnLMNode
 {
 public:
 
     /** idx is the index of the matrix */
     int idx;
 
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixMinus();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixMinus();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixMinus
+
+class OSnLMNodeMatrixNegate : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixNegate();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixNegate();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixNegate
+
+class OSnLMNodeMatrixTimes : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixTimes();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixTimes();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixTimes
+
+class OSnLMNodeMatrixInverse : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixInverse();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixInverse();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixInverse
+
+class OSnLMNodeMatrixTranspose : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixTranspose();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixTranspose();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixTranspose
+
+class OSnLMNodeMatrixScalarTimes : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixScalarTimes();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixScalarTimes();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixScalarTimes
+
+class OSnLMNodeMatrixDotTimes : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixDotTimes();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixDotTimes();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixDotTimes
+
+class OSnLMNodeMatrixIdentity : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixIdentity();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixIdentity();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixIdentity
+
+class OSnLMNodeMatrixLowerTriangle : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixLowerTriangle();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixLowerTriangle();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixLowerTriangle
+
+class OSnLMNodeMatrixUpperTriangle : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixUpperTriangle();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixUpperTriangle();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixUpperTriangle
+
+class OSnLMNodeMatrixDiagonal : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixDiagonal();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixDiagonal();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixDiagonal
+
+class OSnLMNodeMatrixDiagonalFromVector : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixDiagonalFromVector();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixDiagonalFromVector();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /**
+     *
+     * @return a string token that corresponds to the OSnLNode.
+     */
+//    virtual std::string getTokenNumber();
+
+    /**
+     *
+     * @return the OSiL XML for the OSnLMNode <matrix>.
+     */
+//    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+};//end OSnLMNodeMatrixDiagonalFromVector
+
+
+class OSnLMNodeMatrixReference : public OSnLMNode
+{
+public:
     /**
      * default constructor.
      */
