@@ -339,6 +339,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>First argument is base of logarithm. </xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -402,11 +405,14 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeCombination">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>First argument is n in "(n!/(k!(n-k)!))". </xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -424,6 +430,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>First argument is n in "(n!/(n-k)!)". </xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -487,11 +496,14 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeRound">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>Round to nearest multiple of 10^a, where a is second argument.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -504,11 +516,14 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeTruncate">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>Truncate towards zero to nearest multiple of 10^a, where a is second argument.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -585,6 +600,23 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="gammaLn" type="OSnLNodeGammaLn" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeErf">
+		<xs:annotation>
+			<xs:documentation>since version 2.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="erf" type="OSnLNodeErf" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -1057,6 +1089,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument gives amount to trim (at each end).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1064,7 +1099,7 @@
 	</xs:complexType>
 	<xs:element name="trimMean" type="OSnLNodeTrimMean" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0. First argument gives amount to trim (at each end).</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeCount">
@@ -1193,6 +1228,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is percent, rest is data</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1200,22 +1238,25 @@
 	</xs:complexType>
 	<xs:element name="percentile" type="OSnLNodePercentile" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeLarge">
+	<xs:complexType name="OSnLNodeKthLargest">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is "k", rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="large" type="OSnLNodeLarge" substitutionGroup="OSnLNode">
+	<xs:element name="kLargest" type="OSnLNodeKthLargest" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -1227,6 +1268,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is "k", rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1380,7 +1424,10 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="unbounded">
-					<xs:element ref="OSnLNode"/>
+					<xs:sequence>
+						<xs:element ref="OSnLNode"/>
+						<xs:element ref="OSnLNode"/>
+					</xs:sequence>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1465,6 +1512,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is lag, rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1482,6 +1532,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is interest rate, rest is data (equally spaced cash flows).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1499,6 +1552,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is interest rate guess, rest is data (equally spaced cash flows).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1509,44 +1565,60 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeErf">
+	<xs:complexType name="OSnLNodeEmpiricalDiscreteDist">
 		<xs:annotation>
-			<xs:documentation>since version 2.0.0. </xs:documentation>
+			<xs:documentation>Experiment. </xs:documentation>
 		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="erf" type="OSnLNodeErf" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<!--<xs:complexType name="OSnLNodeEmpiricalDiscreteDist">
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="empiricalDiscreteDist" type="OSnLNodeEmpiricalDiscreteDist" substitutionGroup="OSnLNode"/>
+	<xs:element name="empiricalDiscreteDist" type="OSnLNodeEmpiricalDiscreteDist" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>Experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeEmpiricalDiscreteCum">
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="empiricalDiscreteCum" type="OSnLNodeEmpiricalDiscreteCum" substitutionGroup="OSnLNode"/>
-	-->
+	<xs:element name="empiricalDiscreteCum" type="OSnLNodeEmpiricalDiscreteCum" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>Experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeEmpiricalDiscreteInv">
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; rest is data.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="empiricalDiscreteInv" type="OSnLNodeEmpiricalDiscreteInv" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>Experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeDiscreteUniformDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -1554,6 +1626,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); uniform on 1, 2, ..., N (2d argument).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1571,6 +1646,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); uniform on 1, 2, ..., N (2d argument).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1588,6 +1666,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability;  uniform on 1, 2, ..., N (2d argument).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1605,6 +1686,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2d argument is "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1622,6 +1706,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2d argument is "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1639,6 +1726,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2d argument is "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1656,6 +1746,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); others are "N" and "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1673,6 +1766,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); others are "N" and "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1690,6 +1786,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; others are "N" and "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1707,6 +1806,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2nd is "N", followed by k event probabilities (that sum to 1).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1724,6 +1826,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd is "N", followed by k event probabilities (that sum to 1).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1741,6 +1846,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd is "N", followed by k event probabilities (that sum to 1).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1758,6 +1866,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); others are population size N, population successes K, number of draws n.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1775,6 +1886,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); others are population size N, population successes K, number of draws n.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1792,6 +1906,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; others are population size N, population successes K, number of draws n.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1809,6 +1926,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2d is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1826,6 +1946,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); ; 2d is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1843,6 +1966,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2d is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1860,6 +1986,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2nd is "decay" p. (Support is {0, 1, ...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1877,6 +2006,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd is "decay" p. (Support is {0, 1, ...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1894,6 +2026,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd is "decay" p. (Support is {0, 1, ...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1911,6 +2046,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2nd argument: p of success; 3rd argument: number of successes; support: {0,1,...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1928,6 +2066,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: p of success; 3rd argument: number of successes; support: {0,1,...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1945,6 +2086,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: p of success; 3rd argument: number of successes; support: {0,1,...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1955,27 +2099,66 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--<xs:complexType name="OSnLNodeEmpiricalContinuousDist">
+	<xs:complexType name="OSnLNodeLogarithmicDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2d argument: p.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="empiricalContinuousDist" type="OSnLNodeEmpiricalContinuousDist" substitutionGroup="OSnLNode"/>
-	<xs:complexType name="OSnLNodeEmpiricalContinuousCum">
+	<xs:element name="logarithmicDist" type="OSnLNodeLogarithmicDist" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeLogarithmicCum">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: p.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="empiricalContinuousCum" type="OSnLNodeEmpiricalContinuousCum" substitutionGroup="OSnLNode"/>
-	-->
+	<xs:element name="logarithmicCum" type="OSnLNodeLogarithmicCum" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeLogarithmicInv">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: p.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="logarithmicInv" type="OSnLNodeLogarithmicInv" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeUniformDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -1983,6 +2166,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); support is [a,b] (2d and 3d args).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2000,6 +2186,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); support is [a,b] (2d and 3d args).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2017,6 +2206,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; support is [a,b] (2d and 3d args).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2034,6 +2226,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: mean; 3rd argument: standard deviation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2051,6 +2246,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: mean; 3rd argument: standard deviation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2068,6 +2266,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd argument: mean; 3rd argument: standard deviation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2129,6 +2330,11 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:element name="unitNormalLinearLoss" type="OSnLNodeUnitNormalLinearLoss" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeBivariateNormalDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -2136,6 +2342,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="7" maxOccurs="7">
+					<xs:annotation>
+						<xs:documentation>Probability density at (x1,x2) --- first two arguments. Arguments 3 and 4: mu1, mu 2. Arguments 5 and 6: sigma1,sigma2; Argument 7: correlation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2153,6 +2362,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="7" maxOccurs="7">
+					<xs:annotation>
+						<xs:documentation>Cumulative probability distribution up to (x1,x2) --- first two arguments. Arguments 3 and 4: mu1, mu 2. Arguments 5 and 6: sigma1,sigma2; Argument 7: correlation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2170,6 +2382,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation> probability density at x (1st argument); 2nd argument is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2187,6 +2402,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2204,6 +2422,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd argument is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2221,6 +2442,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: shape (k); 3rd argument: scale (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2238,6 +2462,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: shape (k); 3rd argument: scale (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2255,6 +2482,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd argument: shape (k); 3rd argument: scale (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2272,6 +2502,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: shape (k); 3rd argument: rate (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2289,6 +2522,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: shape (k); 3rd argument: rate (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2306,6 +2542,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd argument: shape (k); 3rd argument: rate (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2322,7 +2561,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="4" maxOccurs="4">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: scale; 3rd argument: shape.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2339,7 +2581,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="4" maxOccurs="4">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: scale; 3rd argument: shape.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2356,13 +2601,76 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="4" maxOccurs="4">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: scale; 3rd argument: shape.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="gammaInv" type="OSnLNodeGammaInv" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGeneralizedGammaDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: scale; 3rd argument: shape; 4th argument: second shape parameter; 5th argument: location (shift).</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="generalizedGammaDist" type="OSnLNodeGeneralizedGammaDist" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGeneralizedGammaCum">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: scale; 3rd argument: shape; 4th argument: second shape parameter; 5th argument: location (shift).</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="generalizedGammaCum" type="OSnLNodeGeneralizedGammaCum" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGeneralizedGammaInv">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: scale; 3rd argument: shape; 4th argument: second shape parameter; 5th argument: location (shift).</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="generalizedGammaInv" type="OSnLNodeGeneralizedGammaInv" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -2374,6 +2682,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: alpha; 3rd argument: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2391,6 +2702,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2408,6 +2722,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: alpha; 3rd argument: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2425,6 +2742,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2442,6 +2762,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2459,6 +2782,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2476,6 +2802,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: mu; 3rd argument: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2493,6 +2822,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: mu; 3rd argument: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2510,6 +2842,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: mu; 3rd argument: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2526,7 +2861,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="3">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>probability mass at x</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2543,7 +2881,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="3">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>cumulative probability up to x</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2560,7 +2901,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="3">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>quantile (at prob. p)</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2578,6 +2922,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2595,6 +2942,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2612,6 +2962,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2629,6 +2982,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2646,6 +3002,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2663,6 +3022,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2680,6 +3042,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d argument: numerator df; 3rd argument: denominator df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2697,6 +3062,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: numerator df; 3rd argument: denominator df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2714,6 +3082,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: numerator df; 3rd argument: denominator df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2731,6 +3102,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d argument: mean; 3rd argument: scale (>0).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2748,6 +3122,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: mean; 3rd argument: scale (>0).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2765,6 +3142,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: mean; 3rd argument: scale (>0).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2782,6 +3162,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: scale (alpha); 3rd argument: shape (beta).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2799,6 +3182,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: scale (alpha); 3rd argument: shape (beta).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2816,6 +3202,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: scale (alpha); 3rd argument: shape (beta).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2826,53 +3215,62 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeLogarithmicDist">
+	<xs:complexType name="OSnLNodeExpLogDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>Exponential-logarithmic density at x (1st arg.); 2nd arg: p; 3rd arg: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="logarithmicDist" type="OSnLNodeLogarithmicDist" substitutionGroup="OSnLNode">
+	<xs:element name="expLogDist" type="OSnLNodeExpLogDist" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeLogarithmicCum">
+	<xs:complexType name="OSnLNodeExpLogCum">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>Cumulative exponential-logarithmic distribution at x (1st arg.); 2nd arg: p; 3rd arg: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="logarithmicCum" type="OSnLNodeLogarithmicCum" substitutionGroup="OSnLNode">
+	<xs:element name="expLogCum" type="OSnLNodeExpLogCum" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeLogarithmicInv">
+	<xs:complexType name="OSnLNodeExpLogInv">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd arg: p; 3rd arg: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="logarithmicInv" type="OSnLNodeLogarithmicInv" substitutionGroup="OSnLNode">
+	<xs:element name="expLogInv" type="OSnLNodeExpLogInv" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -2884,6 +3282,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation> probability density at x (1st argument); 2nd argument: xm (left endpoint of support); 3rd parameter: alpha.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2901,6 +3302,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: xm (left endpoint of support); 3rd parameter: alpha.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2918,6 +3322,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: xm (left endpoint of support); 3rd parameter: alpha.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2935,6 +3342,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d arg: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2952,6 +3362,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d arg: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2969,6 +3382,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d arg: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2986,6 +3402,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3003,6 +3422,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3020,6 +3442,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3037,6 +3462,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd arg: minimum; 3d arg: mode; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3054,6 +3482,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd arg: minimum; 3d arg: mode; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3071,6 +3502,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation> 1st argument: cumulative probability; 2nd arg: minimum; 3d arg: mode; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3088,16 +3522,14 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>XXXWhich is which</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="unitNormalLinearLoss" type="OSnLNodeUnitNormalLinearLoss" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<!--Terminal Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeNumber">
 		<xs:annotation>
@@ -4295,8 +4727,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLNode"/>
+				<xs:sequence minOccurs="1" maxOccurs="1">
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -4313,7 +4744,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
+				<xs:sequence minOccurs="1" maxOccurs="1">
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
@@ -4331,8 +4762,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLNode"/>
+				<xs:sequence minOccurs="1" maxOccurs="1">
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -5246,19 +5676,22 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixIdentity">
+	<xs:complexType name="OSnLNodeIdentityMatrix">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>dimension of the matrix</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixIdentity" type="OSnLNodeMatrixIdentity" substitutionGroup="OSnLMNode">
+	<xs:element name="identityMatrix" type="OSnLNodeIdentityMatrix" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -5316,7 +5749,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeVectorToDiagonalMatrix">
+	<xs:complexType name="OSnLNodeDiagonalMatrixFromVector">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -5328,7 +5761,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="VectorToDiagonalMatrix" type="OSnLNodeVectorToDiagonalMatrix" substitutionGroup="OSnLMNode">
+	<xs:element name="diagonalMatrixFromVector" type="OSnLNodeDiagonalMatrixFromVector" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -5426,6 +5859,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>XXXWhich is which</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLNode"/>
