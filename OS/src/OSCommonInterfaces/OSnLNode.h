@@ -90,6 +90,18 @@ public:
      */
     OSnLMNode **m_mMatrixChildren;
 
+
+    /**
+     * default constructor.
+     */
+    ExprNode();
+
+    /**
+     * default destructor.
+     */
+    virtual ~ExprNode();
+
+
     /**
      * @return the value of inodeInt
      */
@@ -153,7 +165,6 @@ public:
      */
     std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
 
-
     /**
      * <p>
      * Create or clone a node of this type.
@@ -169,18 +180,9 @@ public:
     /**
      * A function to check for the equality of two objects
      */
-    bool IsEqual(ExprNode *that);
-
-    /**
-     * default constructor.
-     */
-    ExprNode();
-
-    /**
-     * default destructor.
-     */
-    ~ExprNode();
+    virtual bool IsEqual(ExprNode *that);
 };//end ExprNode
+
 
 /*! \class OSnLNode 
  *  \brief The OSnLNode Class for nonlinear expressions.
@@ -201,6 +203,17 @@ public:
      * m_ADTape stores the expression tree for the this OSnLNode as an ADdouble.
      */
     ADdouble m_ADTape;
+
+
+    /**
+     * default constructor.
+     */
+    OSnLNode();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLNode();
 
 
     /**
@@ -225,7 +238,6 @@ public:
      * @return the function value given the current variable values.
      */
     virtual double calculateFunction(double *x) = 0;
-
 
     /**
      * <p>
@@ -255,7 +267,7 @@ public:
     /**
      * <p>
      * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes)in postfix format 
-     * and create an OSExpressionTree root node
+     * and create a scalar-valued OSExpressionTree root node
      * </p>
      * @param nlNodeVec holds a vector of pointers to OSnLNodes
      * in postfix format
@@ -263,6 +275,7 @@ public:
      * an OSExpressionTree.
      */
     OSnLNode* createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec);
+
 
     /**
      * <p>
@@ -310,6 +323,7 @@ public:
      */
     std::vector<OSnLNode*> preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector);
 
+
     /**
      * <p>
      * Get a vector of pointers to OSnLNodes that correspond to
@@ -332,16 +346,6 @@ public:
     std::vector<OSnLNode*> postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector);
 
     /**
-     * default constructor.
-     */
-    OSnLNode();
-
-    /**
-     * default destructor.
-     */
-    virtual ~OSnLNode();
-
-    /**
      * make a copy of this node and all its descendants
      * @return a pointer to the duplicate node
      */
@@ -352,6 +356,7 @@ public:
      */
     bool IsEqual(OSnLNode *that);
 };//end OSnLNode
+
 
 /*! \class OSnLNodePlus
  *  \brief The OSnLNodePlus Class.
@@ -2168,18 +2173,18 @@ public:
     virtual OSnLMNode *cloneExprNode();
 };//end OSnLMNodeMatrixDotTimes
 
-class OSnLMNodeMatrixIdentity : public OSnLMNode
+class OSnLMNodeIdentityMatrix : public OSnLMNode
 {
 public:
     /**
      * default constructor.
      */
-    OSnLMNodeMatrixIdentity();
+    OSnLMNodeIdentityMatrix();
 
     /**
      * default destructor.
      */
-    ~OSnLMNodeMatrixIdentity();
+    ~OSnLMNodeIdentityMatrix();
 
     /**
      *
@@ -2204,7 +2209,7 @@ public:
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual OSnLMNode *cloneExprNode();
-};//end OSnLMNodeMatrixIdentity
+};//end OSnLMNodeIdentityMatrix
 
 class OSnLMNodeMatrixLowerTriangle : public OSnLMNode
 {
@@ -2320,18 +2325,18 @@ public:
     virtual OSnLMNode *cloneExprNode();
 };//end OSnLMNodeMatrixDiagonal
 
-class OSnLMNodeMatrixDiagonalFromVector : public OSnLMNode
+class OSnLMNodeDiagonalMatrixFromVector : public OSnLMNode
 {
 public:
     /**
      * default constructor.
      */
-    OSnLMNodeMatrixDiagonalFromVector();
+    OSnLMNodeDiagonalMatrixFromVector();
 
     /**
      * default destructor.
      */
-    ~OSnLMNodeMatrixDiagonalFromVector();
+    ~OSnLMNodeDiagonalMatrixFromVector();
 
     /**
      *
@@ -2356,7 +2361,7 @@ public:
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual OSnLMNode *cloneExprNode();
-};//end OSnLMNodeMatrixDiagonalFromVector
+};//end OSnLMNodeDiagonalMatrixFromVector
 
 
 class OSnLMNodeMatrixReference : public OSnLMNode
@@ -2382,7 +2387,7 @@ public:
      *
      * @return a string token that corresponds to the OSnLNode.
      */
-//    virtual std::string getTokenNumber();
+    virtual std::string getTokenNumber();
 
     /**
      *

@@ -185,7 +185,7 @@ ExprNode::~ExprNode()
 		m_mChildren = NULL;
 		inumberOfChildren = 0;
 	}
-    else
+    else if (inumberOfChildren > 0 || m_mChildren != NULL)
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
         
 	if (inumberOfMatrixChildren > 0 && m_mMatrixChildren != NULL)
@@ -200,7 +200,7 @@ ExprNode::~ExprNode()
 		m_mMatrixChildren = NULL;
 		inumberOfMatrixChildren = 0;
 	}
-    else
+    else if (inumberOfMatrixChildren > 0 || m_mMatrixChildren != NULL)
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
 }//end ~ExprNode
 
@@ -209,12 +209,11 @@ std::string ExprNode::getTokenNumber()
 {
     ostringstream outStr;
     outStr << inodeInt;
-    // when I create an OSnLNode from a token number, I need to know how many children there are
-//	if(inodeType == -1){
     outStr << "[";
-    outStr << inumberOfChildren ;
+    outStr << inumberOfChildren;
+    outStr << ",";
+    outStr << inumberOfMatrixChildren;
     outStr << "]";
-//	}
     return outStr.str();
 }//getTokenNumber
 
@@ -228,13 +227,13 @@ std::string ExprNode::getNonlinearExpressionInXML()
     logStr << "nonlinear node " << this->getTokenName() << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, logStr.str());
 #endif
-    if(inumberOfChildren > 0 || inumberOfMatrixChildren > 0)
+    if(inumberOfChildren == 0 && inumberOfMatrixChildren == 0)
     {
-        outStr << ">";
+        outStr << "/>";
     }
     else
     {
-        outStr << "/>";
+        outStr << ">";
         if(inumberOfChildren > 0)
 		{
 			for(unsigned int i = 0; i < inumberOfChildren; i++)
@@ -256,19 +255,19 @@ std::string ExprNode::getNonlinearExpressionInXML()
     return outStr.str();
 }//getNonlinearExpressionInXML()
 
-#if 0
+
 std::vector<ExprNode*> ExprNode::preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector)
 {
     (*prefixVector).push_back( this);
     if(inumberOfChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+            m_mChildren[i]->ExprNode::preOrderOSnLNodeTraversal( prefixVector);
     }
     if(inumberOfMatrixChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-            m_mMatrixChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+            m_mMatrixChildren[i]->ExprNode::preOrderOSnLNodeTraversal( prefixVector);
     }
     return *prefixVector;
 }//end preOrderOSnLNodeTraversal
@@ -279,18 +278,17 @@ std::vector<ExprNode*> ExprNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
     {
         unsigned int i;
         for(i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
+            m_mChildren[i]->ExprNode::postOrderOSnLNodeTraversal( postfixVector);
     }
     if(inumberOfMatrixChildren > 0)
     {
         unsigned int i;
         for(i = 0; i < inumberOfMatrixChildren; i++)
-            m_mMatrixChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
+            m_mMatrixChildren[i]->ExprNode::postOrderOSnLNodeTraversal( postfixVector);
     }
     (*postfixVector).push_back( this);
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
-#endif
 
 bool ExprNode::IsEqual(ExprNode *that)
 {
@@ -693,17 +691,8 @@ OSnLNodePlus::~OSnLNodePlus()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLNodePlus destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-//    for(unsigned int i = 0; i < inumberOfChildren; i++)
-//    {
-//        if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-//        m_mChildren[i] = NULL;
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodePlus
 
 std::string OSnLNodePlus::getTokenName()
@@ -748,16 +737,6 @@ OSnLNodeSum::~OSnLNodeSum()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSum destructor");
 #endif
-//    if(inumberOfChildren > 0)
-//    {
-//        for(unsigned int i = 0; i < inumberOfChildren; i++)
-//        {
-//            delete m_mChildren[ i];
-//            m_mChildren[i] = NULL;
-//        }
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSum
 
 std::string OSnLNodeSum::getTokenName()
@@ -814,16 +793,6 @@ OSnLNodeAllDiff::~OSnLNodeAllDiff()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeAllDiff destructor");
 #endif
-//    if(inumberOfChildren > 0)
-//    {
-//        for(unsigned int i = 0; i < inumberOfChildren; i++)
-//        {
-//            delete m_mChildren[ i];
-//            m_mChildren[i] = NULL;
-//        }
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeAllDiff
 
 std::string OSnLNodeAllDiff::getTokenName()
@@ -892,16 +861,6 @@ OSnLNodeMax::~OSnLNodeMax()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMax destructor");
 #endif
-//    if(inumberOfChildren > 0)
-//    {
-//        for(unsigned int i = 0; i < inumberOfChildren; i++)
-//        {
-//            delete m_mChildren[ i];
-//            m_mChildren[i] = NULL;
-//        }
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeMax
 
 double OSnLNodeMax::calculateFunction(double *x)
@@ -964,16 +923,6 @@ OSnLNodeMin::~OSnLNodeMin()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMin destructor");
 #endif
-//    if(inumberOfChildren > 0)
-//    {
-//        for(unsigned int i = 0; i < inumberOfChildren; i++)
-//        {
-//            delete m_mChildren[ i];
-//            m_mChildren[i] = NULL;
-//        }
-//    }
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-//    //m_mChildren = NULL;
 }//end ~OSnLNodeMin
 
 
@@ -1041,13 +990,6 @@ OSnLNodeMinus::~OSnLNodeMinus()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMinus destructor");
 #endif
-//    for(unsigned int i = 0; i < inumberOfChildren; i++)
-//    {
-//        delete m_mChildren[ i];
-//        m_mChildren[i] = NULL;
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeMinus
 
 std::string OSnLNodeMinus::getTokenName()
@@ -1098,13 +1040,6 @@ OSnLNodeNegate::~OSnLNodeNegate()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeNegate destructor");
 #endif
-//    for(unsigned int i = 0; i < inumberOfChildren; i++)
-//    {
-//        delete m_mChildren[ i];
-//        m_mChildren[i] = NULL;
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeNegate
 
 std::string OSnLNodeNegate::getTokenName()
@@ -1152,13 +1087,6 @@ OSnLNodeTimes::~OSnLNodeTimes()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeTimes destructor");
 #endif
-//    for(unsigned int i = 0; i < inumberOfChildren; i++)
-//    {
-//        delete m_mChildren[ i];
-//        m_mChildren[i] = NULL;
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeTimes
 
 std::string OSnLNodeTimes::getTokenName()
@@ -1206,13 +1134,6 @@ OSnLNodeDivide::~OSnLNodeDivide()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeDivide destructor");
 #endif
-//    for(unsigned int i = 0; i < inumberOfChildren; i++)
-//    {
-//        delete m_mChildren[ i];
-//        m_mChildren[i] = NULL;
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeDivide
 
 std::string OSnLNodeDivide::getTokenName()
@@ -1262,13 +1183,6 @@ OSnLNodePower::~OSnLNodePower()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePower destructor");
 #endif
-//    for(unsigned int i = 0; i < inumberOfChildren; i++)
-//    {
-//        delete m_mChildren[ i];
-//        m_mChildren[i] = NULL;
-//    }
-//    //m_mChildren = NULL;
-//    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodePower
 
 std::string OSnLNodePower::getTokenName()
@@ -1341,18 +1255,6 @@ OSnLNodeProduct::~OSnLNodeProduct()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeProduct destructor");
 #endif
-#if 0
-    if(inumberOfChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-#endif
 }//end ~OSnLNodeProduct
 
 std::string OSnLNodeProduct::getTokenName()
@@ -1413,15 +1315,6 @@ OSnLNodeLn::~OSnLNodeLn()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeLn destructor");
 #endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-#endif
 }//end ~OSnLNodeLn
 
 std::string OSnLNodeLn::getTokenName()
@@ -1471,15 +1364,6 @@ OSnLNodeSqrt::~OSnLNodeSqrt()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSqrt destructor");
 #endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-#endif
 }//end ~OSnLNodeSqrt
 
 std::string OSnLNodeSqrt::getTokenName()
@@ -1528,15 +1412,6 @@ OSnLNodeSquare::~OSnLNodeSquare()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSquare destructor");
 #endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-#endif
 }//end ~OSnLNodeSquare
 
 std::string OSnLNodeSquare::getTokenName()
@@ -1582,15 +1457,6 @@ OSnLNodeSin::~OSnLNodeSin()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSin destructor");
-#endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 #endif
 }//end ~OSnLNodeSin
 
@@ -1638,15 +1504,6 @@ OSnLNodeCos::~OSnLNodeCos()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeCos destructor");
-#endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 #endif
 }//end ~OSnLNodeCos
 
@@ -1697,15 +1554,6 @@ OSnLNodeExp::~OSnLNodeExp()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeExp destructor");
 #endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-#endif
 }//end ~OSnLNodeExp
 
 std::string OSnLNodeExp::getTokenName()
@@ -1755,15 +1603,6 @@ OSnLNodeAbs::~OSnLNodeAbs()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeAbs destructor");
 #endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-#endif
 }//end ~OSnLNodeAbs
 
 std::string OSnLNodeAbs::getTokenName()
@@ -1809,15 +1648,6 @@ OSnLNodeErf::~OSnLNodeErf()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeErf destructor");
-#endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 #endif
 }//end ~OSnLNodeErf
 
@@ -1886,15 +1716,6 @@ OSnLNodeIf::~OSnLNodeIf()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeIf destructor");
 #endif
-#if 0
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        delete m_mChildren[ i];
-        m_mChildren[i] = NULL;
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-#endif
 }//end ~OSnLNodeIf
 
 std::string OSnLNodeIf::getTokenName()
@@ -1953,15 +1774,14 @@ OSnLNodeNumber::~OSnLNodeNumber()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeNumber destructor");
 #endif
-//    m_mChildren = NULL;
 }//end ~OSnLNodeNumber
 
 std::string OSnLNodeNumber::getTokenNumber()
 {
     ostringstream outStr;
     outStr << inodeInt;
-//	outStr << ":" ;
-//	outStr << value ;
+	outStr << ":" ;
+	outStr << value ;
 //	//if(type.length() > 0){
 //		outStr << ":" ;
 //		outStr << type ;
@@ -2042,7 +1862,6 @@ OSnLNodeE::~OSnLNodeE()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeE destructor");
 #endif
-//    m_mChildren = NULL;
 }//end ~OSnLNodeE
 
 
@@ -2112,7 +1931,6 @@ OSnLNodePI::~OSnLNodePI()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePI destructor");
 #endif
-//    m_mChildren = NULL;
 }//end ~OSnLNodePI
 
 
@@ -2179,20 +1997,7 @@ OSnLNodeVariable::~OSnLNodeVariable()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLNodeVariable destructor" << endl;
-//    outStr << "number kids = " <<  inumberOfChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(inumberOfChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-    }
-    //m_mChildren = NULL;
-    if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 #endif
 }//end ~OSnLNodeVariable
 
@@ -2328,30 +2133,6 @@ OSnLNodeMatrixDeterminant::~OSnLNodeMatrixDeterminant()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixDeterminant destructor");
 #endif
-#if 0
-    if(inumberOfChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[] m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(inumberOfMatrixChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[] m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
-    //m_mChildren = NULL;
-    //if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
-#endif
 }//end ~OSnLNodeMatrixDeterminant
 
 double OSnLNodeMatrixDeterminant::calculateFunction(double *x)
@@ -2411,30 +2192,6 @@ OSnLNodeMatrixTrace::~OSnLNodeMatrixTrace()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixTrace destructor");
-#endif
-#if 0
-    if(inumberOfChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[] m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(inumberOfMatrixChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[] m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
-    //m_mChildren = NULL;
-    //if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 #endif
 }//end ~OSnLNodeMatrixDeterminant
 
@@ -2874,31 +2631,7 @@ OSnLMNodeMatrixPlus::~OSnLMNodeMatrixPlus()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixPlus destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixPlus
 
@@ -2930,31 +2663,7 @@ OSnLMNodeMatrixSum::~OSnLMNodeMatrixSum()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixSum destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixSum
 
@@ -2986,31 +2695,7 @@ OSnLMNodeMatrixMinus::~OSnLMNodeMatrixMinus()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixMinus destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixMinus
 
@@ -3042,31 +2727,7 @@ OSnLMNodeMatrixNegate::~OSnLMNodeMatrixNegate()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixNegate destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixNegate
 
@@ -3098,31 +2759,7 @@ OSnLMNodeMatrixTimes::~OSnLMNodeMatrixTimes()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixTimes destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixTimes
 
@@ -3154,31 +2791,7 @@ OSnLMNodeMatrixInverse::~OSnLMNodeMatrixInverse()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixInverse destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixInverse
 
@@ -3210,31 +2823,7 @@ OSnLMNodeMatrixTranspose::~OSnLMNodeMatrixTranspose()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixTranspose destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-  //  outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0    
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixTranspose
 
@@ -3266,31 +2855,7 @@ OSnLMNodeMatrixScalarTimes::~OSnLMNodeMatrixScalarTimes()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixScalarTimes destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixScalarTimes
 
@@ -3322,31 +2887,7 @@ OSnLMNodeMatrixDotTimes::~OSnLMNodeMatrixDotTimes()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixDotTimes destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixDotTimes
 
@@ -3362,63 +2903,39 @@ OSnLMNode* OSnLMNodeMatrixDotTimes::cloneExprNode()
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixDotTimes::cloneExprNode
 
-#if 0
-// OSnLMNodeMatrixIdentity Methods
-OSnLMNodeMatrixIdentity::OSnLMNodeMatrixIdentity()
+
+// OSnLMNodeIdentityMatrix Methods
+OSnLMNodeIdentityMatrix::OSnLMNodeIdentityMatrix()
 {
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
-    inodeInt = OS_MATRIX_IDENTITY;
+    inodeInt = OS_IDENTITY_MATRIX;
     inodeType = -1;
-    idx = -1;
-}//end OSnLMNodeMatrixIdentity
+}//end OSnLMNodeIdentityMatrix
 
-OSnLMNodeMatrixIdentity::~OSnLMNodeMatrixIdentity()
+OSnLMNodeIdentityMatrix::~OSnLMNodeIdentityMatrix()
 {
     std::ostringstream outStr;
 #ifndef NDEBUG
-    outStr << "inside OSnLMNodeMatrixIdentity destructor" << endl;
-    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
+    outStr << "inside OSnLMNodeIdentityMatrix destructor" << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
+}//end ~OSnLMNodeIdentityMatrix
 
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
-}//end ~OSnLMNodeMatrixIdentity
-
-std::string OSnLMNodeMatrixIdentity::getTokenName()
+std::string OSnLMNodeIdentityMatrix::getTokenName()
 {
-    return "matrixIdentity";
-}// end OSnLMNodeMatrixIdentity::getTokenName()
+    return "identityMatrix";
+}// end OSnLMNodeIdentityMatrix::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixIdentity::cloneExprNode()
+OSnLMNode* OSnLMNodeIdentityMatrix::cloneExprNode()
 {
     OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixIdentity();
+    nlMNodePoint = new OSnLMNodeIdentityMatrix();
     return  nlMNodePoint;
-}//end OSnLMNodeMatrixIdentity::cloneExprNode
-#endif
+}//end OSnLMNodeIdentityMatrix::cloneExprNode
+
 
 // OSnLMNodeMatrixLowerTriangle Methods
 OSnLMNodeMatrixLowerTriangle::OSnLMNodeMatrixLowerTriangle()
@@ -3436,31 +2953,7 @@ OSnLMNodeMatrixLowerTriangle::~OSnLMNodeMatrixLowerTriangle()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixLowerTriangle destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixLowerTriangle
 
@@ -3492,31 +2985,7 @@ OSnLMNodeMatrixUpperTriangle::~OSnLMNodeMatrixUpperTriangle()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixUpperTriangle destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixUpperTriangle
 
@@ -3548,31 +3017,7 @@ OSnLMNodeMatrixDiagonal::~OSnLMNodeMatrixDiagonal()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixDiagonal destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixDiagonal
 
@@ -3589,62 +3034,38 @@ OSnLMNode* OSnLMNodeMatrixDiagonal::cloneExprNode()
 }//end OSnLMNodeMatrixDiagonal::cloneExprNode
 
 
-#if 0
-// OSnLMNodeMatrixReference Methods
-OSnLMNodeMatrixReference::OSnLMNodeMatrixReference()
+// OSnLMNodeDiagonalMatrixFromVector Methods
+OSnLMNodeDiagonalMatrixFromVector::OSnLMNodeDiagonalMatrixFromVector()
 {
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
-    inodeInt = OS_VECTOR_TO_DIAGONAL_MATRIX;
+    inodeInt = OS_DIAGONAL_MATRIX_FROM_VECTOR;
     inodeType = -1;
-    idx = -1;
-}//end OSnLMNodeMatrixReference
+}//end OSnLMNodeDiagonalMatrixFromVector
 
-OSnLMNodeMatrixReference::~OSnLMNodeMatrixReference()
+OSnLMNodeDiagonalMatrixFromVector::~OSnLMNodeDiagonalMatrixFromVector()
 {
     std::ostringstream outStr;
 #ifndef NDEBUG
-    outStr << "inside OSnLMNodeMatrixReference destructor" << endl;
-    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
+    outStr << "inside OSnLMNodeDiagonalMatrixFromVector destructor" << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
-}//end ~OSnLMNodeMatrixReference
+}//end ~OSnLMNodeDiagonalMatrixFromVector
 
-std::string OSnLMNodeMatrixReference::getTokenName()
+std::string OSnLMNodeDiagonalMatrixFromVector::getTokenName()
 {
-    return "matrixRef";
-}// end OSnLMNodeMatrixReference::getTokenName()
+    return "diagonalMatrixFromVector";
+}// end OSnLMNodeDiagonalMatrixFromVector::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixReference::cloneExprNode()
+OSnLMNode* OSnLMNodeDiagonalMatrixFromVector::cloneExprNode()
 {
     OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixReference();
+    nlMNodePoint = new OSnLMNodeDiagonalMatrixFromVector();
     return  nlMNodePoint;
-}//end OSnLMNodeMatrixReference::cloneExprNode
-#endif
+}//end OSnLMNodeDiagonalMatrixFromVector::cloneExprNode
+
 
 // OSnLMNodeMatrixReference Methods
 OSnLMNodeMatrixReference::OSnLMNodeMatrixReference()
@@ -3655,7 +3076,6 @@ OSnLMNodeMatrixReference::OSnLMNodeMatrixReference()
     m_mMatrixChildren = NULL;
     inodeInt = OS_MATRIX_REFERENCE;
     inodeType = -1;
-    idx = -1;
 }//end OSnLMNodeMatrixReference
 
 OSnLMNodeMatrixReference::~OSnLMNodeMatrixReference()
@@ -3663,35 +3083,10 @@ OSnLMNodeMatrixReference::~OSnLMNodeMatrixReference()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixReference destructor" << endl;
-//    outStr << "scalar kids = " <<  inumberOfChildren << endl;
-//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-#if 0
-    if(m_mChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-            m_mChildren[i] = NULL;
-        }
-        delete[]  m_mChildren;
-        m_mChildren = NULL;
-    }
-    if(m_mMatrixChildren != NULL)
-    {
-        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-        {
-            if( m_mMatrixChildren[ i] != NULL) delete m_mMatrixChildren[ i];
-            m_mMatrixChildren[i] = NULL;
-        }
-        delete[]  m_mMatrixChildren;
-        m_mMatrixChildren = NULL;
-    }
 #endif
 }//end ~OSnLMNodeMatrixReference
 
-#if 0
 std::string OSnLMNodeMatrixReference::getTokenNumber()
 {
     ostringstream outStr;
@@ -3702,54 +3097,14 @@ std::string OSnLMNodeMatrixReference::getTokenNumber()
     outStr << ":" ;
     outStr << idx;
     outStr << ":" ;
-    outStr << coef;
-    outStr << ":real:" ;
     return outStr.str();
 }//getTokenNumber
-#endif
 
 std::string OSnLMNodeMatrixReference::getTokenName()
 {
     return "matrixReference";
 }// end OSnLMNodeMatrixReference::getTokenName()
 
-#if 0
-//this could be inherited from OSnLMNode??
-std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
-{
-    ostringstream outStr;
-    outStr << "<" ;
-    outStr << "variable";
-    outStr << "  idx=\"";
-    outStr << idx ;
-    outStr << "\"";
-    outStr << "  coef=\"";
-    outStr << os_dtoa_format(coef);
-    outStr << "\"";
-    if(inumberOfChildren > 0)
-    {
-        outStr << ">";
-    }
-    else
-    {
-        outStr << "/>";
-    }
-    if(inumberOfChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            outStr << m_mChildren[i]->getNonlinearExpressionInXML();
-        }
-    }
-    if(inumberOfChildren > 0)
-    {
-        outStr << "</" ;
-        outStr << "variable" ;
-        outStr << ">" ;
-    }
-    return outStr.str();
-}//getPrefix
-#endif
 
 #if 0
 double OSnLMNodeMatrixReference::calculateFunction(double *x)
