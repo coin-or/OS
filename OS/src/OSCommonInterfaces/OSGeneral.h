@@ -587,18 +587,24 @@ inline bool verifyMatrixSymmetry(std::string symmetry)
 
 enum ENUM_MATRIX_CONSTRUCTOR_TYPE
 {
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_elements = 1,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown = 0,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_elements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_block,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix
 };
 
 inline int returnMatrixConstructorType(std::string cType)
 {
+    if (cType == "baseMatrix"    ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
     if (cType == "elements"      ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
     if (cType == "transformation") return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
     if (cType == "blocks"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
-    return ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown;
+    if (cType == "block"         ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
+    if (cType == "matrix"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
+    return 0;
 }//returnMatrixConstructorType
 
 inline bool verifyMatrixConstructorType(std::string type)
@@ -1359,6 +1365,177 @@ public:
 class OSnLNode;
 class OSnLMNode;
 
+
+/*! \class MatrixNode
+ *  \brief a generic class from which we derive matrix constructors
+ *  (BaseMatrix, MatrixElements, MatrixTransformation and MatrixBlocks)
+ *  as well as matrix types (OSMatrix and MatrixBlock).
+ */
+class MatrixNode
+{
+public:
+
+    /**
+     *  nType is a unique integer assigned to each type of matrix node
+     */
+    ENUM_MATRIX_CONSTRUCTOR_TYPE nType;
+
+    /**  inumberOfChildren is the number of MatrixNode child elements
+     *   For the matrix types (OSMatrix and block) this number is not fixed and is temporarily set to 0
+     */
+    unsigned int inumberOfChildren;
+
+    /**
+     * m_mChildren holds all the children, that is, nodes that the current node operates on.
+     */
+    MatrixNode **m_mChildren;
+
+    /** default constructor */
+    MatrixNode();
+
+    /** destructor */
+    virtual ~MatrixNode();
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the operator
+     */
+    virtual std::string getNodeName() = 0;
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /**
+     * <p>
+     * Get a vector of pointers to OSnLNodes and OSnLMMatrixNodes that correspond to
+     * the MatrixNode tree in prefix format.
+     * </p>
+     *
+     * @return the node tree as a vector of MatrixNodes in prefix.
+     */
+    std::vector<MatrixNode*> getPrefixFromNodeTree();
+
+    /**
+     * <p>
+     * Called by getPrefixFromNodeTree().  
+     * This method calls itself recursively and
+     * generates a vector of pointers to MatrixNode in prefix
+     * </p>
+     * @param a pointer prefixVector to a vector of pointers of MatrixNodes
+     * @return a vector of pointers to MatrixNode in prefix.
+     */
+    std::vector<MatrixNode*> preOrderMatrixNodeTraversal( std::vector<MatrixNode*> *prefixVector);
+
+    /**
+     * <p>
+     * Get a vector of pointers to MatrixNodes that correspond to
+     * the MatrixNode tree in postfix format
+     * </p>
+     *
+     * @return the node tree as a vector of MatrixNodes in postfix.
+     */
+    std::vector<MatrixNode*> getPostfixFromNodeTree();
+
+    /**
+     * <p>
+     * Called by getPostfixFromNodeTree(). 
+     * This method calls itself recursively and
+     * generates a vector of pointers to MatrixNodes in postfix.
+     * </p>
+     * @param a pointer postfixVector to a vector of pointers of MatrixNodes
+     * @return a vector of pointers to MatrixNodes in postfix.
+     */
+    std::vector<MatrixNode*> postOrderMatrixNodeTraversal( std::vector<MatrixNode*> *postfixVector);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual MatrixNode *cloneMatrixNode() = 0;
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    virtual bool IsEqual(MatrixNode *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixNode *that);
+};//end MatrixNode
+
+
+/*! \class MatrixConstructor
+ *  \brief a data structure to describe one step in the construction of a matrix.
+ *  To facilitate parsing of complicated matrix constructors we distinguish
+ *  a number of different forms of constructor:
+ *  1 - BaseMatrix
+ *  2 - Elements   
+ *  3 - Transformation
+ *  4 - MatrixBlocks
+ */
+class MatrixConstructor : public MatrixNode
+{
+public:
+    /** constructor */
+    MatrixConstructor();
+
+    /** destructor */
+    ~MatrixConstructor();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixConstructor *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixConstructor *that);
+};//class MatrixConstructor
+
+
 /*! \class ConstantMatrixElements
  * \brief a data structure to represent the constant elements in a MatrixType object
  */
@@ -1789,7 +1966,7 @@ public:
 /*! \class MatrixElements
  * \brief a data structure to represent the nonzeroes of a matrix explicitly element by element
  */
-class MatrixElements
+class MatrixElements : public MatrixConstructor
 {
 public:
     ConstantMatrixElements         *constantElements;
@@ -1803,13 +1980,47 @@ public:
     bool rowMajor;
 
     MatrixElements();
-    ~MatrixElements();
+    virtual ~MatrixElements();
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the operator
+     */
+    virtual std::string getNodeName();
+
+
+    /*! \fn MatrixElements *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual MatrixElements *cloneMatrixNode();
+
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    MatrixElements* copyNodeAndDescendants();
 
     /**
      *
      * A function to check for the equality of two objects
      */
     bool IsEqual(MatrixElements *that);
+
+    /**
+     * <p>
+
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
 
     /**
      *
@@ -1835,13 +2046,40 @@ public:
  * \brief a data structure to represent the nonzeroes of a matrix 
  *  by transformation from other (previously defined) matrices 
  */
-class MatrixTransformation
+class MatrixTransformation : public MatrixConstructor
 {
 public:
     OSnLMNode *transformation;
 
     MatrixTransformation();
     ~MatrixTransformation();
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the operator
+     */
+    virtual std::string getNodeName();
+
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn MatrixTransformation *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual MatrixTransformation *cloneMatrixNode();
 
     /**
      *
@@ -1875,7 +2113,7 @@ class MatrixBlock; //forward desclaration
  *  in a blockwise fashion. Each block can be given elementwise, 
  *  through transformation, or nested blocks, and so on, recursively.
  */
-class MatrixBlocks
+class MatrixBlocks : public MatrixConstructor
 {
 public:
     int numberOfBlocks;
@@ -1885,6 +2123,33 @@ public:
 
     MatrixBlocks();
     ~MatrixBlocks();
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the operator
+     */
+    virtual std::string getNodeName();
+
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn MatrixBlocks *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual MatrixBlocks *cloneMatrixNode();
 
     /**
      *
@@ -1915,7 +2180,7 @@ public:
  * \brief a data structure to represent a point of departure for
  *  constructing a matrix by modifying parts of a previously defined matrix 
  */
-class BaseMatrix
+class BaseMatrix : public MatrixConstructor
 {
 public:
     /**
@@ -1958,6 +2223,33 @@ public:
     ~BaseMatrix();
 
     /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the operator
+     */
+    virtual std::string getNodeName();
+
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn BaseMatrix *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual BaseMatrix *cloneMatrixNode();
+
+    /**
      *
      * A function to check for the equality of two objects
      */
@@ -1984,74 +2276,15 @@ public:
 };//class BaseMatrix
 
 
-/*! \class MatrixConstructor
- * \brief a data structure to describe one step in the construction of a matrix
- *  Each constructor is either an elementwise description,  or as a transformation 
- *  involving matrices defined earlier in the process, or as a blockwise description, 
- *  which itself can contain other constructors recursively in setting up each block.
- */
-class MatrixConstructor
-{
-public:
-
-/**
- *  The type of each constructor is tracked in the integer cType
- *  cType = 1: MatrixElements
- *  cType = 2: Transformation
- *  cType = 3: MatrixBlocks
- */
-    ENUM_MATRIX_CONSTRUCTOR_TYPE cType;
-
-/**
- *  This pointer is used for any of the three types
- *  (redefined as necessary in the alternate constructor below)
- */
-    void *cPtr;
-
-    /** special constructor */
-    MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE cType);
-
-    /** destructor */
-    ~MatrixConstructor();
-
-    /**
-     *
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixConstructor *that);
-
-    /**
-     *
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */
-    bool deepCopyFrom(MatrixConstructor *that);
-};//class MatrixConstructor
-
-
 /*! \class MatrixType
  * \brief a data structure to represent a MatrixType object (from which we derive Matrix and MatrixBlock)
  *
  */
-class MatrixType
+class MatrixType : public MatrixNode
 {
 public:
     ENUM_MATRIX_SYMMETRY symmetry;
     ENUM_MATRIX_TYPE  matrixType;
-
-    BaseMatrix *baseMatrix;
-    std::vector<MatrixConstructor*> matrixConstructor;
 
     MatrixType();
     ~MatrixType();
@@ -2101,6 +2334,45 @@ public:
     ~OSMatrix();
 
     /**
+     * <p>
+     * Take a vector of MatrixNodes in prefix format
+     * and create a matrix root node
+     * </p>
+     * @param mtxConstructorVec holds a vector of pointers to matrix constructors,
+     * mtxConstructorVec and blocks in prefix format
+     * @return a pointer to an OSMatrix which is the root of
+     * a list of constructors.
+     */
+    OSMatrix* createConstructorTreeFromPrefix(std::vector<MatrixNode*> mtxConstructorVec);
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the operator
+     */
+    virtual std::string getNodeName();
+
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn OSMatrix *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual OSMatrix *cloneMatrixNode();
+
+    /**
      *
      * A function to check for the equality of two objects
      */
@@ -2139,6 +2411,33 @@ public:
 
     MatrixBlock();
     ~MatrixBlock();
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the operator
+     */
+    virtual std::string getNodeName();
+
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn MatrixBlock *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual MatrixBlock *cloneMatrixNode();
 
     /**
      *
@@ -2270,6 +2569,7 @@ public:
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+
      */
     bool setRandom(double density, bool conformant);
 

@@ -577,8 +577,6 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/matrixDiagonal{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXDIAGONALEND);}
 {xmlwhitespace}*\<matrixDotTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXDOTTIMESSTART);}
 {xmlwhitespace}*\<\/matrixDotTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXDOTTIMESEND);}
-{xmlwhitespace}*\<matrixIdentity{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXIDENTITYSTART);}
-{xmlwhitespace}*\<\/matrixIdentity{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXIDENTITYEND);}
 {xmlwhitespace}*\<matrixInverse{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXINVERSESTART);}
 {xmlwhitespace}*\<\/matrixInverse{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXINVERSEEND);}
 {xmlwhitespace}*\<matrixLowerTriangle{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXLOWERTRIANGLESTART);}
@@ -593,12 +591,16 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/matrixPlus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXPLUSEND);}
 {xmlwhitespace}*\<matrixTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTIMESSTART);}
 {xmlwhitespace}*\<\/matrixTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTIMESEND);}
+{xmlwhitespace}*\<matrixProduct{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXPRODUCTSTART);}
+{xmlwhitespace}*\<\/matrixProduct{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXPRODUCTEND);}
 {xmlwhitespace}*\<matrixScalarTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXSCALARTIMESSTART);}
 {xmlwhitespace}*\<\/matrixScalarTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXSCALARTIMESEND);}
 {xmlwhitespace}*\<matrixSubMatrixAt{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXSUBMATRIXATSTART);}
 {xmlwhitespace}*\<\/matrixSubMatrixAt{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXSUBMATRIXATEND);}
 {xmlwhitespace}*\<matrixTranspose{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTRANSPOSESTART);}
 {xmlwhitespace}*\<\/matrixTranspose{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTRANSPOSEEND);}
+{xmlwhitespace}*\<identityMatrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(IDENTITYMATRIXSTART);}
+{xmlwhitespace}*\<\/identityMatrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(IDENTITYMATRIXEND);}
 
  /* attributes returning strings (that are potentially empty)*/
 

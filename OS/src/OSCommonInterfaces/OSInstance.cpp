@@ -2607,6 +2607,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx)
     if( m_bProcessExpressionTreesMod == false )
     {
 
+
         getAllNonlinearExpressionTreesMod();
     }
     if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end()) return m_mapExpressionTreesMod[ rowIdx];
@@ -3960,7 +3961,8 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
         return true;
     }
 
-//    instanceData->nonlinearExpressions = new NonlinearExpressions(); 
+    if (instanceData->nonlinearExpressions == NULL)
+        instanceData->nonlinearExpressions = new NonlinearExpressions(); 
     instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nexpr;
     instanceData->nonlinearExpressions->nl = new Nl*[nexpr];
 
@@ -5675,6 +5677,7 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
         std::map<int, OSExpressionTree*>::iterator posMapExpTree;
         std::map<int, int>::iterator posVarIndexMap;
         if( objLambda == NULL) throw ErrorClass("must have a multiplier for the objective function even if zero when calling getSecondOrderResults");
+
         if( conMultipliers == NULL) throw ErrorClass("cannot have a null vector of lagrange multipliers when calling getSecondOrderResults -- okay if  zero");
         if( m_vdLambda.size() > 0) m_vdLambda.clear();
         for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)

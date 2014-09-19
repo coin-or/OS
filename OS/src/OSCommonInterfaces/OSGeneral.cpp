@@ -1709,6 +1709,129 @@ bool TimeSpan::deepCopyFrom(TimeSpan *that)
     return true;
 }// end of TimeSpan::deepCopyFrom
 
+/***************************************************************
+ *                                                             *
+ * Implementations of methods for various matrix classes       *
+ *                                                             *
+ ***************************************************************/
+ 
+MatrixNode::MatrixNode():
+    nType(ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown),
+    inumberOfChildren(),
+    m_mChildren(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "in MatrixNode constructor");
+#endif
+}
+
+MatrixNode::~MatrixNode()
+{
+#ifndef NDEBUG
+    std::ostringstream outStr;
+    outStr << "inside MatrixNode destructor" << std::endl;
+    outStr << "number of kids = " <<  inumberOfChildren << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    if (inumberOfChildren > 0 && m_mChildren != NULL)
+    {
+        for (int i=0; i<inumberOfChildren; i++)
+        {
+            if (m_mChildren[i] != NULL) 
+                delete m_mChildren[i];
+            m_mChildren[i] = NULL;
+        }
+        delete [] m_mChildren;
+        m_mChildren = NULL;
+        inumberOfChildren = 0;
+    }
+    else if (inumberOfChildren > 0 || m_mChildren != NULL)
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
+}
+
+ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixNode::getNodeType()
+{
+}// end of MatrixNode::getNodeType()
+
+bool MatrixNode::IsEqual(MatrixNode *that)
+{
+}// end of MatrixNode::IsEqual()
+
+std::string MatrixNode::getMatrixNodeInXML()
+{
+}// end of MatrixNode::getMatrixNodeInXML()
+// end of methods for MatrixNode
+
+
+// methods for BaseMatrix ----------------------------------------
+BaseMatrix::BaseMatrix():
+    baseMatrixIdx(-1),
+    targetMatrixFirstRow(0),
+    targetMatrixFirstCol(0),
+    baseMatrixStartRow(0),
+    baseMatrixStartCol(0),
+    baseMatrixEndRow(-1),
+    baseMatrixEndCol(-1),
+    baseTranspose(false),
+    scalarMultiplier(1.0)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the BaseMatrix Constructor");
+#endif
+} // end of BaseMatrix
+
+BaseMatrix::~BaseMatrix()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the BaseMatrix Destructor");
+#endif
+} // end of ~BaseMatrix
+
+std::string BaseMatrix::getNodeName()
+{
+    return "baseMatrix";
+}// end of BaseMatrix::getNodeName()
+
+ENUM_MATRIX_CONSTRUCTOR_TYPE BaseMatrix::getNodeType()
+{
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
+}// end of BaseMatrix::getNodeType()
+
+BaseMatrix* BaseMatrix::cloneMatrixNode()
+{
+    MatrixNode *nodePtr;
+    nodePtr = new BaseMatrix();
+    return  (BaseMatrix*)nodePtr;
+}// end of BaseMatrix::cloneMatrixNode
+
+std::string BaseMatrix::getMatrixNodeInXML()
+{
+#if 0
+    ostringstream outStr;
+    outStr << "<" ;
+    outStr << this->getTokenName();
+    outStr << "  value=\"";
+    outStr << os_dtoa_format(value);
+    outStr << "\"";
+    outStr << " type=\"";
+    outStr << type ;
+    outStr << "\"";
+    if(id.length() > 0)
+    {
+        outStr << "  id=\"";
+        outStr << id ;
+        outStr << "\"";
+    }
+    outStr << "/>";
+    return outStr.str();
+#endif
+}// end of BaseMatrix::getMatrixNodeInXML()
+bool BaseMatrix::IsEqual(BaseMatrix *that)
+{
+}// end of BaseMatrix::IsEqual()
+// end of methods for BaseMatrix
+
+
 ConstantMatrixElements::ConstantMatrixElements():
     start(NULL),
     nonzeros(NULL)
@@ -1731,6 +1854,7 @@ ConstantMatrixElements::~ConstantMatrixElements()
     nonzeros = NULL;
 }// end of ConstantMatrixElements::~ConstantMatrixElements()
 
+
 VarReferenceMatrixElements::VarReferenceMatrixElements():
     start(NULL),
     nonzeros(NULL)
@@ -1752,6 +1876,7 @@ VarReferenceMatrixElements::~VarReferenceMatrixElements()
         delete nonzeros;
     nonzeros = NULL;
 }// end of VarReferenceMatrixElements::~VarReferenceMatrixElements()
+
 
 LinearMatrixElementTerm::LinearMatrixElementTerm():
     idx(-1),
@@ -2047,6 +2172,53 @@ MatrixElements::~MatrixElements()
     patternElements = NULL;
 }// end of MatrixElements::~MatrixElements()
 
+std::string MatrixElements::getNodeName()
+{
+    return "elements";
+}// end of MatrixElements::getNodeName()
+
+ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixElements::getNodeType()
+{
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
+}// end of MatrixElements::getNodeType()
+
+MatrixElements* MatrixElements::cloneMatrixNode()
+{
+    MatrixElements *nodePtr;
+    nodePtr = new MatrixElements();
+    return  (MatrixElements*)nodePtr;
+}// end of MatrixElements::cloneMatrixNode
+
+std::string MatrixElements::getMatrixNodeInXML()
+{
+#if 0
+    ostringstream outStr;
+    outStr << "<" ;
+    outStr << this->getTokenName();
+    outStr << "  value=\"";
+    outStr << os_dtoa_format(value);
+    outStr << "\"";
+    outStr << " type=\"";
+    outStr << type ;
+    outStr << "\"";
+    if(id.length() > 0)
+    {
+        outStr << "  id=\"";
+        outStr << id ;
+        outStr << "\"";
+    }
+    outStr << "/>";
+    return outStr.str();
+#endif
+}// end of MatrixElements::getMatrixNodeInXML()
+
+bool MatrixElements::IsEqual(MatrixElements *that)
+{
+}// end of MatrixElements::IsEqual()
+// end of methods for MatrixElements
+
+
+// methods for MatrixTransformation --------------------------------------------
 MatrixTransformation::MatrixTransformation():
     transformation(NULL)
 {
@@ -2065,6 +2237,52 @@ MatrixTransformation::~MatrixTransformation()
     transformation = NULL;
 }// end of MatrixTransformation::~MatrixTransformation()
 
+std::string MatrixTransformation::getNodeName()
+{
+    return "transformation";
+}// end of MatrixTransformation::getNodeName()
+
+ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixTransformation::getNodeType()
+{
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
+}// end of MatrixTransformation::getNodeType()
+
+MatrixTransformation* MatrixTransformation::cloneMatrixNode()
+{
+    MatrixTransformation *nodePtr;
+    nodePtr = new MatrixTransformation();
+    return  (MatrixTransformation*)nodePtr;
+}// end of MatrixTransformation::cloneMatrixNode
+
+std::string MatrixTransformation::getMatrixNodeInXML()
+{
+#if 0
+    ostringstream outStr;
+    outStr << "<" ;
+    outStr << this->getTokenName();
+    outStr << "  value=\"";
+    outStr << os_dtoa_format(value);
+    outStr << "\"";
+    outStr << " type=\"";
+    outStr << type ;
+    outStr << "\"";
+    if(id.length() > 0)
+    {
+        outStr << "  id=\"";
+        outStr << id ;
+        outStr << "\"";
+    }
+    outStr << "/>";
+    return outStr.str();
+#endif
+}// end of MatrixTransformation::getMatrixNodeInXML()
+
+bool MatrixTransformation::IsEqual(MatrixTransformation *that)
+{
+}// end of MatrixTransformation::IsEqual()
+//end of methods for MatrixTransformation
+
+// methods for MatrixBlocks -----------------------------------------------
 MatrixBlocks::MatrixBlocks():
     numberOfBlocks(0),
     colOffsets(NULL),
@@ -2108,26 +2326,57 @@ MatrixBlocks::~MatrixBlocks()
     block = NULL;
 }// end of MatrixBlocks::~MatrixBlocks()
 
-MatrixConstructor::MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE cType)
+std::string MatrixBlocks::getNodeName()
+{
+    return "blocks";
+}// end of MatrixBlocks::getNodeName()
+
+ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixBlocks::getNodeType()
+{
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
+}// end of MatrixBlocks::getNodeType()
+
+MatrixBlocks* MatrixBlocks::cloneMatrixNode()
+{
+    MatrixNode *nodePtr;
+    nodePtr = new MatrixBlocks();
+    return  (MatrixBlocks*)nodePtr;
+}// end of MatrixBlocks::cloneMatrixNode
+
+std::string MatrixBlocks::getMatrixNodeInXML()
+{
+#if 0
+    ostringstream outStr;
+    outStr << "<" ;
+    outStr << this->getTokenName();
+    outStr << "  value=\"";
+    outStr << os_dtoa_format(value);
+    outStr << "\"";
+    outStr << " type=\"";
+    outStr << type ;
+    outStr << "\"";
+    if(id.length() > 0)
+    {
+        outStr << "  id=\"";
+        outStr << id ;
+        outStr << "\"";
+    }
+    outStr << "/>";
+    return outStr.str();
+#endif
+}// end of MatrixBlocks::getMatrixNodeInXML()
+
+bool MatrixBlocks::IsEqual(MatrixBlocks *that)
+{
+}// end of MatrixBlocks::IsEqual()
+// end of methods for MatrixBlocks
+
+// methods for MatrixConstructor ----------------------------------------------
+MatrixConstructor::MatrixConstructor()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the  MatrixConstructor Constructor");
 #endif
-    this->cType = cType;
-    switch (cType)
-    {
-        case ENUM_MATRIX_CONSTRUCTOR_TYPE_elements:
-            cPtr = new MatrixElements();
-            break;
-        case ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation:
-            cPtr = new MatrixTransformation();
-            break;
-        case ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks:
-            cPtr = new MatrixBlocks();
-            break;
-        default:
-            break;
-    }    
 }
 
 MatrixConstructor::~MatrixConstructor()
@@ -2135,49 +2384,15 @@ MatrixConstructor::~MatrixConstructor()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstructor Destructor");
 #endif
-    switch (cType)
-    {
-        case ENUM_MATRIX_CONSTRUCTOR_TYPE_elements:
-            delete (MatrixElements*) cPtr;
-            break;
-        case ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation:
-            delete (MatrixTransformation*) cPtr;
-            break;
-        case ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks:
-            delete (MatrixBlocks*) cPtr;
-            break;
-        default:
-            break;
-    }    
-    cPtr = NULL;
-    cType = ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown;
 }//end of MatrixConstructor::~MatrixConstructor
+// end of methods for MatrixConstructor
 
-BaseMatrix::BaseMatrix():
-    baseMatrixIdx(-1),
-    targetMatrixFirstRow(0),
-    targetMatrixFirstCol(0),
-    baseMatrixStartRow(0),
-    baseMatrixStartCol(0),
-    baseMatrixEndRow(-1),
-    baseMatrixEndCol(-1),
-    baseTranspose(false),
-    scalarMultiplier(1.0)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the BaseMatrix Constructor");
-#endif
-} // end of BaseMatrix
 
-BaseMatrix::~BaseMatrix()
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the BaseMatrix Destructor");
-#endif
-} // end of ~BaseMatrix
 
+
+// methods for MatrixType
 MatrixType::MatrixType():
-    baseMatrix(NULL),
+    symmetry(ENUM_MATRIX_SYMMETRY_none),
     matrixType(ENUM_MATRIX_TYPE_unknown)
 {
 #ifndef NDEBUG
@@ -2190,13 +2405,11 @@ MatrixType::~MatrixType()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Destructor");
 #endif
-    if (baseMatrix != NULL)
-        delete baseMatrix;
-    baseMatrix = NULL;
-    if (matrixConstructor.size() > 0)
-        matrixConstructor.clear();
 }// end of ~MatrixType
+// end of methods for MatrixType
 
+
+// methods for OSMatrix ------------------------------------------------
 OSMatrix::OSMatrix():
     numberOfRows(0),
     numberOfColumns(0),
@@ -2215,7 +2428,75 @@ OSMatrix::~OSMatrix()
 #endif
 }// end of ~OSMatrix
 
+std::string OSMatrix::getNodeName()
+{
+    return "matrix";
+}// end of OSMatrix::getNodeName()
 
+ENUM_MATRIX_CONSTRUCTOR_TYPE OSMatrix::getNodeType()
+{
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
+}// end of OSMatrix::getNodeType()
+
+OSMatrix* OSMatrix::cloneMatrixNode()
+{
+    MatrixType *nodePtr;
+    nodePtr = new OSMatrix();
+    return  (OSMatrix*)nodePtr;
+}// end of OSMatrix::cloneMatrixNode
+
+OSMatrix* OSMatrix::createConstructorTreeFromPrefix(std::vector<MatrixNode*> mtxConstructorVec)
+{
+    std::vector<MatrixNode*> stackVec;
+    int kount =  mtxConstructorVec.size() - 1;
+    while(kount >= 0)
+    {
+        int numkids = mtxConstructorVec[kount]->inumberOfChildren;
+        if(numkids > 0)
+        {
+            for(int i = 0; i < numkids;  i++)
+            {
+                mtxConstructorVec[kount]->m_mChildren[i] = stackVec.back()	;
+                stackVec.pop_back();
+            }
+        }
+        stackVec.push_back( mtxConstructorVec[kount]);
+        kount--;
+    }
+    stackVec.clear();
+    return (OSMatrix*)mtxConstructorVec[ 0];
+}//end OSMatrix::createExpressionTreeFromPrefix
+
+std::string OSMatrix::getMatrixNodeInXML()
+{
+#if 0
+    ostringstream outStr;
+    outStr << "<" ;
+    outStr << this->getTokenName();
+    outStr << "  value=\"";
+    outStr << os_dtoa_format(value);
+    outStr << "\"";
+    outStr << " type=\"";
+    outStr << type ;
+    outStr << "\"";
+    if(id.length() > 0)
+    {
+        outStr << "  id=\"";
+        outStr << id ;
+        outStr << "\"";
+    }
+    outStr << "/>";
+    return outStr.str();
+#endif
+}// end of OSMatrix::getMatrixNodeInXML()
+
+bool OSMatrix::IsEqual(OSMatrix *that)
+{
+}// end of OSMatrix::IsEqual()
+// end of methods for OSMatrix
+
+
+// methods for MatrixBlock --------------------------------------
 MatrixBlock::MatrixBlock():
     blockRowIdx(-1),
     blockColIdx(-1)
@@ -2223,12 +2504,56 @@ MatrixBlock::MatrixBlock():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlock Constructor");
 #endif
-}// end of OSMatrix
+}// end of MatrixBlock
 
 MatrixBlock::~MatrixBlock()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlock Destructor");
 #endif
-}// end of ~OSMatrix
+}// end of ~MatrixBlock
 
+std::string MatrixBlock::getNodeName()
+{
+    return "block";
+}// end of MatrixBlock::getNodeName()
+
+ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixBlock::getNodeType()
+{
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
+}// end of MatrixBlock::getNodeType()
+
+MatrixBlock* MatrixBlock::cloneMatrixNode()
+{
+    MatrixType *nodePtr;
+    nodePtr = new MatrixBlock();
+    return  (MatrixBlock*)nodePtr;
+}// end of MatrixBlock::cloneMatrixNode
+
+std::string MatrixBlock::getMatrixNodeInXML()
+{
+#if 0
+    ostringstream outStr;
+    outStr << "<" ;
+    outStr << this->getTokenName();
+    outStr << "  value=\"";
+    outStr << os_dtoa_format(value);
+    outStr << "\"";
+    outStr << " type=\"";
+    outStr << type ;
+    outStr << "\"";
+    if(id.length() > 0)
+    {
+        outStr << "  id=\"";
+        outStr << id ;
+        outStr << "\"";
+    }
+    outStr << "/>";
+    return outStr.str();
+#endif
+}// end of MatrixBlock::getMatrixNodeInXML()
+
+bool MatrixBlock::IsEqual(MatrixBlock *that)
+{
+}// end of MatrixBlock::IsEqual()
+// end of methods for MatrixBlock ----------------------------------------------

@@ -287,12 +287,12 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token MATRIXDETERMINANTSTART MATRIXDETERMINANTEND MATRIXTRACESTART MATRIXTRACEEND MATRIXTOSCALARSTART MATRIXTOSCALAREND
 
 %token MATRIXDIAGONALSTART MATRIXDIAGONALEND MATRIXDOTTIMESSTART MATRIXDOTTIMESEND
-%token MATRIXIDENTITYSTART MATRIXIDENTITYEND MATRIXINVERSESTART  MATRIXINVERSEEND
 %token MATRIXLOWERTRIANGLESTART MATRIXLOWERTRIANGLEEND MATRIXUPPERTRIANGLESTART MATRIXUPPERTRIANGLEEND
 %token MATRIXMERGESTART MATRIXMERGEEND MATRIXMINUSSTART MATRIXMINUSEND
-%token MATRIXPLUSSTART MATRIXPLUSEND MATRIXTIMESSTART MATRIXTIMESEND
+%token MATRIXPLUSSTART MATRIXPLUSEND MATRIXTIMESSTART MATRIXTIMESEND MATRIXPRODUCTSTART MATRIXPRODUCTEND
 %token MATRIXSCALARTIMESSTART MATRIXSCALARTIMESEND MATRIXSUBMATRIXATSTART MATRIXSUBMATRIXATEND
 %token MATRIXTRANSPOSESTART MATRIXTRANSPOSEEND MATRIXREFERENCESTART MATRIXREFERENCEEND
+%token IDENTITYMATRIXSTART IDENTITYMATRIXEND MATRIXINVERSESTART  MATRIXINVERSEEND
 
 %token EMPTYINCLUDEDIAGONALATT INCLUDEDIAGONALATT
 
@@ -4537,16 +4537,39 @@ osglSparseIntVectorValues:  VALUESSTART  GREATERTHAN osglIntVectorElArray VALUES
  *    This portion parses an OSMatrix object used in OSiL, OSoL and OSrL schema files
  *  ===================================================================================
  */
-osglMatrix: matrixStart matrixAttributes matrixContent;
+
+/**
+ *  Note: A matrix is essentially a list of constructors.
+ *  This is very similar to parsing an expression tree.
+ */
+osglMatrix: matrixStart matrixAttributes matrixContent
+{
+//	IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osinstance->instanceData->matrices->matrix[osglData->matrixCounter] = 
+        ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    osglData->matrixCounter++;
+};
  
 matrixStart: MATRIXSTART
 {
-    osglData->matrix = new OSMatrix();
+    if (osglData->matrixCounter >= osglData->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
     osglData->symmetryAttributePresent = false;
     osglData->matrixTypeAttributePresent = false;
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
     osglData->matrixNameAttributePresent = false;
+    osglData->mtxConstructorVec.clear();
+    osglData->mtxBlkVec.clear();
+
+    /**
+     *  The <matrix> tag combines the functions of the <nl> tag and the top OSnLNode,
+     *  so we also initial the storage vectors here
+     */
+    osglData->tempC = new OSMatrix();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxBlkVec.push_back(osglData->tempC);
 };
 
 matrixAttributes: matrixAttributeList
@@ -4554,17 +4577,17 @@ matrixAttributes: matrixAttributeList
     if (osglData->numberOfRowsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");    
     else
-        osglData->matrix->numberOfRows = osglData->numberOfRows;
+        ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "mandatory attribute numberOfColumns is missing");
     else
-        osglData->matrix->numberOfColumns = osglData->numberOfColumns;
+        ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
     if (osglData->symmetryAttributePresent == true)
-        osglData->matrix->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetryAttribute);
+        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetryAttribute);
     if (osglData->matrixNameAttributePresent == true)
-        osglData->matrix->name = osglData->matrixNameAttribute;
+        ((OSMatrix*)osglData->tempC)->name = osglData->matrixNameAttribute;
     if (osglData->matrixTypeAttributePresent == true)
-        osglData->matrix->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->matrixTypeAttribute);
+        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->matrixTypeAttribute);
 };
 
 matrixAttributeList: | matrixAttributeList matrixAttribute;
@@ -4608,17 +4631,27 @@ matrixContent: matrixEmpty | matrixLaden;
 
 matrixEmpty: ENDOFELEMENT;
 
-matrixLaden: GREATERTHAN matrixBody MATRIXEND; 
+matrixLaden: GREATERTHAN matrixBody MATRIXEND
+{
+//    ((MatrixConstructor*)osglData->mtxBlkVec.back())->m_mChildren = 
+//        new MatrixConstructor*[((MatrixConstructor*)osglData->mtxBlkVec.back())->inumberOfChildren];
+    osglData->mtxBlkVec.back()->m_mChildren = 
+        new MatrixNode*[osglData->mtxBlkVec.back()->inumberOfChildren];
+    osglData->mtxBlkVec.pop_back();
+}; 
 
 matrixBody: baseMatrix matrixConstructorList;
 
 baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd
 {
+    osglData->mtxBlkVec.back()->inumberOfChildren++; 
 };
 
 baseMatrixStart: BASEMATRIXSTART
 {
-    osglData->matrix->baseMatrix = new BaseMatrix();
+    osglData->tempC = new BaseMatrix();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
+
     osglData->baseMatrixIdxAttributePresent = false;
     osglData->targetMatrixFirstRowAttributePresent = false;
     osglData->targetMatrixFirstColAttributePresent = false;
@@ -4637,23 +4670,23 @@ baseMatrixAttributes: baseMatrixAttList
     if (osglData->baseMatrixIdxAttributePresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "mandatory attribute baseMatrixIdx is missing");
     else
-        osglData->matrix->baseMatrix->baseMatrixIdx = osglData->baseMatrixIdxAttribute;
+        ((BaseMatrix*)osglData->tempC)->baseMatrixIdx = osglData->baseMatrixIdxAttribute;
     if (osglData->targetMatrixFirstRowAttributePresent == true)
-        osglData->matrix->baseMatrix->targetMatrixFirstRow = osglData->targetMatrixFirstRowAttribute;
+        ((BaseMatrix*)osglData->tempC)->targetMatrixFirstRow = osglData->targetMatrixFirstRowAttribute;
     if (osglData->targetMatrixFirstColAttributePresent == true)
-        osglData->matrix->baseMatrix->targetMatrixFirstCol = osglData->targetMatrixFirstColAttribute;
+        ((BaseMatrix*)osglData->tempC)->targetMatrixFirstCol = osglData->targetMatrixFirstColAttribute;
     if (osglData->baseMatrixStartRowAttributePresent == true)
-        osglData->matrix->baseMatrix->baseMatrixStartRow = osglData->baseMatrixStartRowAttribute;
+        ((BaseMatrix*)osglData->tempC)->baseMatrixStartRow = osglData->baseMatrixStartRowAttribute;
     if (osglData->baseMatrixStartColAttributePresent == true)
-        osglData->matrix->baseMatrix->baseMatrixStartCol = osglData->baseMatrixStartColAttribute;
+        ((BaseMatrix*)osglData->tempC)->baseMatrixStartCol = osglData->baseMatrixStartColAttribute;
     if (osglData->baseMatrixEndRowAttributePresent == true)
-        osglData->matrix->baseMatrix->baseMatrixEndRow = osglData->baseMatrixEndRowAttribute;
+        ((BaseMatrix*)osglData->tempC)->baseMatrixEndRow = osglData->baseMatrixEndRowAttribute;
     if (osglData->baseMatrixEndColAttributePresent == true)
-        osglData->matrix->baseMatrix->baseMatrixEndCol = osglData->baseMatrixEndColAttribute;
+        ((BaseMatrix*)osglData->tempC)->baseMatrixEndCol = osglData->baseMatrixEndColAttribute;
     if (osglData->baseTransposeAttributePresent == true)
-        osglData->matrix->baseMatrix->baseTranspose = osglData->baseTransposeAttribute;
+        ((BaseMatrix*)osglData->tempC)->baseTranspose = osglData->baseTransposeAttribute;
     if (osglData->scalarMultiplierAttributePresent == true)
-        osglData->matrix->baseMatrix->scalarMultiplier = osglData->scalarMultiplierAttribute;
+        ((BaseMatrix*)osglData->tempC)->scalarMultiplier = osglData->scalarMultiplierAttribute;
 };
 
 baseMatrixAttList: | baseMatrixAttList baseMatrixAtt;
@@ -4675,7 +4708,7 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
-    if ($3 > parserData->matrixCounter)
+    if ($3 > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
     osglData->matrix->matrixType  = mergeMatrixType(osglData->matrix->matrixType,
                       osinstance->instanceData->matrices->matrix[$3]->matrixType);
@@ -4780,19 +4813,23 @@ osglScalarMultiplierATT: SCALARMULTIPLIERATT QUOTE aNumber QUOTE
 
 baseMatrixEnd: GREATERTHAN BASEMATRIXEND | ENDOFELEMENT;
 
-matrixConstructorList: | matrixConstructorList matrixConstructor;
+matrixConstructorList: | matrixConstructorList matrixConstructor
+{
+    osglData->mtxBlkVec.back()->inumberOfChildren++; 
+};
 
 matrixConstructor: matrixElements | matrixTransformation | matrixBlocks;
 
 matrixElements: matrixElementsStart matrixElementsAttributes matrixElementsContent
 {
-    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
+//    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
 };
 
 
 matrixElementsStart: ELEMENTSSTART
 {
-    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_elements);
+    osglData->tempC = new MatrixElements();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
 };
 
 matrixElementsAttributes: | osglRowMajorATT; 
@@ -4801,15 +4838,15 @@ osglRowMajorATT: rowMajorAttEmpty | rowMajorAttContent;
 
 rowMajorAttEmpty: EMPTYROWMAJORATT
 {
-    osglData->rowMajorAttribute = true;
+    ((MatrixElements*)osglData->tempC)->rowMajor = true;
 };
 
 rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT quote 
 { 
-    if      ($2 == "false") osglData->rowMajorAttribute = false;
-    else if ($2 == "true")  osglData->rowMajorAttribute = true;
-    else if ($2 == "")      osglData->rowMajorAttribute = true;
-    else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "rowMajor attribute in <baseMatrix> element must be \"true\" or \"false\"");
+    if      ($2 == "false") ((MatrixElements*)osglData->tempC)->rowMajor = false;
+    else if ($2 == "true")  ((MatrixElements*)osglData->tempC)->rowMajor = true;
+    else if ($2 == "")      ((MatrixElements*)osglData->tempC)->rowMajor = true;
+    else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "rowMajor attribute in <elements> must be \"true\" or \"false\"");
     free($2);
 };
 
@@ -4826,7 +4863,7 @@ constantElements: | constantElementsStart GREATERTHAN constantElementsContent;
 
 constantElementsStart: CONSTANTELEMENTSSTART
 {
-    ((MatrixElements*)osglData->tempC->cPtr)->constantElements = new ConstantMatrixElements(); 
+    ((MatrixElements*)osglData->tempC)->constantElements = new ConstantMatrixElements(); 
 };
 
 constantElementsContent: constantElementsStartVector constantElementsNonzeros CONSTANTELEMENTSEND;
@@ -4869,8 +4906,8 @@ constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZERO
 //    osglData->osglDblArray = NULL;
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
-    if (osglData->numberOfEl > 0)
-        osglData->matrix->matrixType  = mergeMatrixType(osglData->matrix->matrixType, ENUM_MATRIX_TYPE_constant);
+//    if (osglData->numberOfEl > 0)
+//        osglData->tempC->matrixType  = mergeMatrixType(osglData->tempC->matrixType, ENUM_MATRIX_TYPE_constant);
 };
 
 constantElementsNonzerosStart: NONZEROSSTART
@@ -5378,12 +5415,13 @@ patternElementsNonzerosStart: NONZEROSSTART
 
 matrixTransformation: matrixTransformationStart GREATERTHAN OSnLMNode matrixTransformationEnd
 {
-    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
+//    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
 };
 
 matrixTransformationStart: TRANSFORMATIONSTART
 {
-    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation);
+    osglData->tempC = new MatrixTransformation();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
 };
 
 matrixTransformationEnd: TRANSFORMATIONEND;
@@ -5392,7 +5430,8 @@ matrixBlocks: matrixBlocksStart matrixBlocksAttributes matrixBlocksContent;
 
 matrixBlocksStart: BLOCKSSTART
 {
-    osglData->tempC = new MatrixConstructor(ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks);
+    osglData->tempC = new MatrixBlocks();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
 };
 
 
@@ -5400,7 +5439,7 @@ matrixBlocksAttributes: osglNumberOfBlocksATT;
 
 matrixBlocksContent: GREATERTHAN colOffsets rowOffsets blockList matrixBlocksEnd
 {
-    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
+//    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
 };
 
 matrixBlocksEnd: BLOCKSEND;
@@ -5615,12 +5654,16 @@ osglMultATT: MULTATT QUOTE INTEGER QUOTE
  */
 
 nonlinearExpressions:  
-                | NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
+                | nonlinearExpressionsStart nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
     {  
         if (osnlData->nlnodecount < osnlData->tmpnlcount)  
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "actual number of nl terms less than number attribute");   
     };
-                
+
+nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
+{               
+    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
+};
 
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
     { 
@@ -5635,7 +5678,12 @@ nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN
             osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
         }
     };
-                
+
+/**
+ *  Note: In order to be semantically correct, the sequence of nlnodes must be structured
+ *  such that the nodes can be partitioned into one or more expression trees. 
+ *  The expression tree is eventually identified with its root node.
+ */                  
 nlnodes: 
         | nlnodes scalarExpressionTree;
 
@@ -5713,7 +5761,8 @@ PI: PISTART {    osnlData->nlNodePoint = new OSnLNodePI();
     
 piend: ENDOFELEMENT
             | GREATERTHAN PIEND;
-            
+
+   
 /** These nodes have a fixed number of descendants (which get allocated automatically in the constructor) */
 times: TIMESSTART {
     osnlData->nlNodePoint = new OSnLNodeTimes();
@@ -5744,7 +5793,6 @@ power: POWERSTART {
     osnlData->nlNodePoint = new OSnLNodePower();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode POWEREND;
-
 
 ln: LNSTART {
     osnlData->nlNodePoint = new OSnLNodeLn();
@@ -5814,12 +5862,108 @@ matrixToScalar: MATRIXTOSCALARSTART {
 } OSnLMNode MATRIXTOSCALAREND;
 
 
+/** These next two numbers have attributes
+ *  In addition <variable> has an optional OSnLNode descendant 
+ *  (for variable index expressions) --- not implemented yet.
+ */
+number: NUMBERSTART {
+    osnlData->nlNodeNumberPoint = new OSnLNodeNumber();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodeNumberPoint);
+} anotherNumberATT  numberend {osnlData->numbervalueattON = false; osnlData->numbertypeattON = false; osnlData->numberidattON = false;};
+
+numberend: ENDOFELEMENT
+         | GREATERTHAN NUMBEREND;
+
+anotherNumberATT:
+         | anotherNumberATT numberATT;
+            
+numberATT: numbertypeATT
+         | numbervalueATT
+         | numberidATT            
+            ;
+            
+numbertypeATT: TYPEATT ATTRIBUTETEXT 
+{
+    if (osnlData->numbertypeattON) parserData->parser_errors += 
+        addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many number type attributes"); 
+    osnlData->numbertypeattON = true;
+    osnlData->nlNodeNumberPoint->type = $2;
+} QUOTE;
+
+numberidATT:   IDATT   ATTRIBUTETEXT 
+{
+    if (osnlData->numberidattON) parserData->parser_errors += 
+        addErrorMsg( NULL, osresult, parserData, osglData, osnlData,"too many number id attributes"); 
+    osnlData->numberidattON = true;
+    osnlData->nlNodeNumberPoint->id = $2;
+} QUOTE;
+
+numbervalueATT: VALUEATT QUOTE aNumber QUOTE 
+{
+    if (osnlData->numbervalueattON) parserData->parser_errors += 
+        addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many number value attributes"); 
+    osnlData->numbervalueattON = true;
+    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
+};
+
+
+variable: VARIABLESTART 
+{
+    osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodeVariablePoint);
+} anotherVariableATT  variableend {osnlData->variablecoefattON = false; osnlData->variableidxattON = false;} ;
+              
+variableend: 
+      ENDOFELEMENT
+    | GREATERTHAN VARIABLEEND
+    | GREATERTHAN nlnode 
+        {
+            osnlData->nlNodeVariablePoint->inumberOfChildren = 1;
+            osnlData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+        }    
+        VARIABLEEND;
+            
+anotherVariableATT:
+            | anotherVariableATT variableATT;
+            
+variableATT: 
+      variablecoefATT  
+        {
+            if (osnlData->variablecoefattON) parserData->parser_errors += 
+                addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many variable coef attributes"); 
+            osnlData->variablecoefattON = true; 
+        }
+    | variableidxATT
+        {
+            if (osnlData->variableidxattON) parserData->parser_errors += 
+                addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many variable idx attributes"); 
+            osnlData->variableidxattON = true; 
+        }
+;
+            
+variablecoefATT: COEFATT  QUOTE aNumber QUOTE 
+{ 
+    if ( *$2 != *$4 ) parserData->parser_errors += 
+        addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->coef = parserData->tempVal;
+};
+                
+variableidxATT: IDXATT QUOTE  INTEGER QUOTE 
+{ 
+    if ( *$2 != *$4 ) parserData->parser_errors += 
+        addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->idx = $3;
+    if ( $3 >= osinstance->instanceData->variables->numberOfVariables)
+         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "variable index exceeds number of variables");
+}; 
+
+
 /** 
  *  These nodes have a variable number of descendants that cannot be allocated beforehand.
  *  Some dirty trickery is involved in accomplishing everything.
  *  First, when such a node is encountered, it is pushed onto two vectors simultaneously:
  *  the vector of all nl nodes and a vector of special nodes (to cater for the possibility
- *  that there might be nested sums). Both vectors point to the same memory location,
+ *  that there might be nested sums, etc.). Both vectors point to the same memory location,
  *  which can be manipulated through whichever vector is more convenient. This is used in
  *  SUMEND below to allocate the right number of descendants (once this is known) and in
  *  nlnode below it to increment the number of descendants.
@@ -5882,7 +6026,7 @@ anotherminnlnode MINEND {
 
 anotherminnlnode: 
             | anotherminnlnode nlnode { osnlData->minVec.back()->inumberOfChildren++; };
-            
+
             
 product: PRODUCTSTART {
     osnlData->nlNodePoint = new OSnLNodeProduct();
@@ -5899,89 +6043,11 @@ anotherproductnlnode:
 
 
 
-number: NUMBERSTART {
-    osnlData->nlNodeNumberPoint = new OSnLNodeNumber();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodeNumberPoint);
-} anotherNumberATT  numberend {osnlData->numbervalueattON = false; osnlData->numbertypeattON = false; osnlData->numberidattON = false;};
-
-numberend: ENDOFELEMENT
-            | GREATERTHAN NUMBEREND;
-
-anotherNumberATT:
-            | anotherNumberATT numberATT ;
-            
-numberATT: numbertypeATT  {if(osnlData->numbertypeattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many number type attributes"); 
-            osnlData->numbertypeattON = true; }
-         | numbervalueATT  {if(osnlData->numbervalueattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many number value attributes"); 
-            osnlData->numbervalueattON = true; }
-         | numberidATT  {if(osnlData->numberidattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData,"too many number id attributes"); 
-            osnlData->numberidattON = true; }            
-            ;
-            
-numbertypeATT: TYPEATT ATTRIBUTETEXT {
-    osnlData->nlNodeNumberPoint->type = $2;
-} QUOTE;
-
-numberidATT:   IDATT   ATTRIBUTETEXT {
-    osnlData->nlNodeNumberPoint->id = $2;
-}  QUOTE ;
-
-numbervalueATT: 
-            VALUEATT QUOTE aNumber QUOTE {/*if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");*/
-    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
-}
-/*         | VALUEATT QUOTE aNumber QUOTE {if ( *$2 != *$5 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
-}
-        | VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlNodeNumberPoint->value = $3;
-}*/ ;
-
-
-variable: VARIABLESTART {
-    osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodeVariablePoint);
-} anotherVariableATT  variableend {osnlData->variablecoefattON = false; osnlData->variableidxattON = false;} ;
-              
-variableend: ENDOFELEMENT
-            | GREATERTHAN nlnode {
-    osnlData->nlNodeVariablePoint->inumberOfChildren = 1;
-    osnlData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
-}    VARIABLEEND
-           | GREATERTHAN VARIABLEEND;
-            
-anotherVariableATT:
-            |anotherVariableATT variableATT ;
-            
-variableATT: variablecoefATT  {if(osnlData->variablecoefattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many variable coef attributes"); 
-            osnlData->variablecoefattON = true; }
-        | variableidxATT  {if(osnlData->variableidxattON) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many variable idx attributes"); 
-            osnlData->variableidxattON = true; 
-            };
-            
-variablecoefATT: COEFATT  QUOTE aNumber QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlNodeVariablePoint->coef = parserData->tempVal;
-}
-/*                | COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlNodeVariablePoint->coef = $3;        
-}
-*/
-;
-                
-variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlNodeVariablePoint->idx = $3;
-    if( $3 >= osinstance->instanceData->variables->numberOfVariables){
-         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "variable index exceeds number of variables");
-     }
-}  ; 
-
-
 /** OSnLMNodes are parsed in essentially the same way as OSnLNodes */
 
 OSnLMNode: matrixReference
          | matrixDiagonal
          | matrixDotTimes
-         | matrixIdentity
          | matrixInverse
          | matrixLowerTriangle
          | matrixUpperTriangle
@@ -5989,9 +6055,12 @@ OSnLMNode: matrixReference
          | matrixMinus
          | matrixPlus
          | matrixTimes
+         | matrixProduct
          | matrixScalarTimes
          | matrixSubMatrixAt
-         | matrixTranspose;
+         | matrixTranspose
+         | identityMatrix
+;
 
 matrixReference: MATRIXREFERENCESTART
 {
@@ -6005,7 +6074,7 @@ matrixreferenceend: ENDOFELEMENT
                            
 matrixIdxATT: IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= parserData->numberOfMatrices){
+    if( $3 >= osglData->numberOfMatrices){
          parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
      }
 }; 
@@ -6031,15 +6100,15 @@ matrixDotTimesStart: MATRIXDOTTIMESSTART
 
 matrixDotTimesContent: OSnLMNode OSnLMNode MATRIXDOTTIMESEND;
 
-matrixIdentity: matrixIdentityStart matrixIdentityContent;
+identityMatrix: identityMatrixStart identityMatrixContent;
 
-matrixIdentityStart: MATRIXIDENTITYSTART 
+identityMatrixStart: IDENTITYMATRIXSTART 
 {
 //    osnlData->nlNodePoint = new OSnLNodeTimes();
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixIdentityContent: nlnode MATRIXIDENTITYEND;
+identityMatrixContent: nlnode IDENTITYMATRIXEND;
 
 matrixInverse: matrixInverseStart matrixInverseContent;
 
@@ -6120,6 +6189,22 @@ matrixTimesStart: MATRIXTIMESSTART
 };
 
 matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
+
+            
+matrixProduct: MATRIXPRODUCTSTART {
+//    osnlData->nlNodePoint = new OSnLNodeProduct();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+//    osnlData->mtxProdVec.push_back( osnlData->nlNodePoint);
+}
+anothermatrixproductnode MATRIXPRODUCTEND {
+//    osnlData->mtxProdVec.back()->m_mChildren = new OSnLNode*[ osnlData->mtxProdVec.back()->inumberOfMatrixChildren];
+//    osnlData->mtxProdVec.pop_back();
+};
+
+anothermatrixproductnode: 
+            | anothermatrixproductnode OSnLMNode { /*osnlData->mtxProdVec.back()->inumberOfMatrixChildren++; */};
+
+
 
 matrixScalarTimes: matrixScalarTimesStart matrixScalarTimesContent;
 

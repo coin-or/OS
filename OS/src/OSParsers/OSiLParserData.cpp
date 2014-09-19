@@ -80,8 +80,6 @@ OSiLParserData::OSiLParserData() :
     intervalstartON(false),
     intervalstart(0.0),
     numberOfMatricesPresent(false), 
-    numberOfMatrices(0), 
-    matrixCounter(0),
     numberOfConesPresent(false),
     numberOfCones(0),
     numberOfRowsPresent(false),

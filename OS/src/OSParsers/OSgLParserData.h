@@ -90,11 +90,17 @@ public:
     OSMatrix* matrix;
 
     /** We also need to keep track locally of the number of matrices */
-//    int numberOfMatrices;
-//    int currentMatrix;
+    int numberOfMatrices;
+    int matrixCounter;
 
     /** This matrix constructor is needed in order to properly push the constructor vector */
-    MatrixConstructor* tempC;
+    MatrixNode* tempC;
+
+    /** Two vectors to process the matrix nodes into the right order */
+    std::vector<MatrixNode*> mtxConstructorVec;
+    std::vector<MatrixNode*> mtxBlkVec;
+
+    
 
     /** other data structures to temporarily hold a matrix and its subordinate elements */
     std::string  symmetryAttribute;

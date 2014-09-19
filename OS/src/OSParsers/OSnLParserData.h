@@ -75,7 +75,7 @@ public:
     ~OSnLParserData() ;
 
 
-    /** These entities are used for parsing <nonlinearExpressions> and */
+    /** These entities are used for parsing <nonlinearExpressions>  */
 
     /** a pointer to an OSnLNode object */
     ExprNode *nlNodePoint;

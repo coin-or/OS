@@ -126,23 +126,26 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 matrices: | matricesStart matricesAttributes matricesContent
 {
-    if (parserData->matrixCounter < parserData->numberOfMatrices)
+    if (osglData->matrixCounter < osglData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer matrices than specified");
 };
 
-matricesStart: MATRICESSTART 
+matricesStart: MATRICESSTART
 {
     osinstance->instanceData->matrices = new Matrices();
-    parserData->matrixCounter = 0;
 };
 
 matricesAttributes: osilNumberOfMatricesATT
 {
-    osinstance->instanceData->matrices->numberOfMatrices = parserData->numberOfMatrices;
-    if (parserData->numberOfMatrices < 0)
+    osinstance->instanceData->matrices->numberOfMatrices = osglData->numberOfMatrices;
+    if (osglData->numberOfMatrices < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices cannot be negative");
     else
-        osinstance->instanceData->matrices->matrix = new OSMatrix*[parserData->numberOfMatrices];
+    {
+        osinstance->instanceData->matrices->matrix = new OSMatrix*[osglData->numberOfMatrices];
+        for (int i=0; i < osglData->numberOfMatrices; i++)
+            osinstance->instanceData->matrices->matrix[i] = new OSMatrix();
+    }
 };
 
 matricesContent: matricesEmpty | matricesLaden;
@@ -151,14 +154,12 @@ matricesEmpty: ENDOFELEMENT;
 
 matricesLaden: GREATERTHAN matrixList MATRICESEND;
 
-matrixList: | matrixList osglMatrix
-{
-    if (parserData->matrixCounter > parserData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
-    osinstance->instanceData->matrices->matrix[parserData->matrixCounter] = osglData->matrix;
-    osinstance->instanceData->matrices->matrix[parserData->matrixCounter]->idx = parserData->matrixCounter;
-    parserData->matrixCounter++;
-};
+/**
+ *  Note: A matrix is essentially a list of constructors.
+ *  We therefore treat each matrix as homeomorphic to an expression tree
+ *  and use the same logic as for parsing the OSiL schema element <nonlinearExpressions>.
+ */
+matrixList: | matrixList osglMatrix;
 
 
 cones: | conesStart conesAttributes conesContent;
@@ -922,7 +923,7 @@ osilNumberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <matrix> elements cannot be negative");
     parserData->numberOfMatricesPresent = true;
-    parserData->numberOfMatrices = $3; 
+    osglData->numberOfMatrices = $3; 
 }; 
 
 osilNumberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE 

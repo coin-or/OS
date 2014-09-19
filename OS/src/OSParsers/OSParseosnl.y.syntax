@@ -30,12 +30,16 @@
  */
 
 nonlinearExpressions:  
-                | NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
+                | nonlinearExpressionsStart nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
     {  
         if (osnlData->nlnodecount < osnlData->tmpnlcount)  
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "actual number of nl terms less than number attribute");   
     };
-                
+
+nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
+{               
+    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
+};
 
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
     { 
@@ -50,7 +54,12 @@ nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN
             osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
         }
     };
-                
+
+/**
+ *  Note: In order to be semantically correct, the sequence of nlnodes must be structured
+ *  such that the nodes can be partitioned into one or more expression trees. 
+ *  The expression tree is eventually identified with its root node.
+ */                  
 nlnodes: 
         | nlnodes scalarExpressionTree;
 
@@ -128,7 +137,8 @@ PI: PISTART {    osnlData->nlNodePoint = new OSnLNodePI();
     
 piend: ENDOFELEMENT
             | GREATERTHAN PIEND;
-            
+
+   
 /** These nodes have a fixed number of descendants (which get allocated automatically in the constructor) */
 times: TIMESSTART {
     osnlData->nlNodePoint = new OSnLNodeTimes();
@@ -159,7 +169,6 @@ power: POWERSTART {
     osnlData->nlNodePoint = new OSnLNodePower();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode POWEREND;
-
 
 ln: LNSTART {
     osnlData->nlNodePoint = new OSnLNodeLn();
@@ -229,12 +238,108 @@ matrixToScalar: MATRIXTOSCALARSTART {
 } OSnLMNode MATRIXTOSCALAREND;
 
 
+/** These next two numbers have attributes
+ *  In addition <variable> has an optional OSnLNode descendant 
+ *  (for variable index expressions) --- not implemented yet.
+ */
+number: NUMBERSTART {
+    osnlData->nlNodeNumberPoint = new OSnLNodeNumber();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodeNumberPoint);
+} anotherNumberATT  numberend {osnlData->numbervalueattON = false; osnlData->numbertypeattON = false; osnlData->numberidattON = false;};
+
+numberend: ENDOFELEMENT
+         | GREATERTHAN NUMBEREND;
+
+anotherNumberATT:
+         | anotherNumberATT numberATT;
+            
+numberATT: numbertypeATT
+         | numbervalueATT
+         | numberidATT            
+            ;
+            
+numbertypeATT: TYPEATT ATTRIBUTETEXT 
+{
+    if (osnlData->numbertypeattON) parserData->parser_errors += 
+        addErrorMsg( NULL, parserObjects, "too many number type attributes"); 
+    osnlData->numbertypeattON = true;
+    osnlData->nlNodeNumberPoint->type = $2;
+} QUOTE;
+
+numberidATT:   IDATT   ATTRIBUTETEXT 
+{
+    if (osnlData->numberidattON) parserData->parser_errors += 
+        addErrorMsg( NULL, parserObjects,"too many number id attributes"); 
+    osnlData->numberidattON = true;
+    osnlData->nlNodeNumberPoint->id = $2;
+} QUOTE;
+
+numbervalueATT: VALUEATT QUOTE aNumber QUOTE 
+{
+    if (osnlData->numbervalueattON) parserData->parser_errors += 
+        addErrorMsg( NULL, parserObjects, "too many number value attributes"); 
+    osnlData->numbervalueattON = true;
+    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
+};
+
+
+variable: VARIABLESTART 
+{
+    osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodeVariablePoint);
+} anotherVariableATT  variableend {osnlData->variablecoefattON = false; osnlData->variableidxattON = false;} ;
+              
+variableend: 
+      ENDOFELEMENT
+    | GREATERTHAN VARIABLEEND
+    | GREATERTHAN nlnode 
+        {
+            osnlData->nlNodeVariablePoint->inumberOfChildren = 1;
+            osnlData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+        }    
+        VARIABLEEND;
+            
+anotherVariableATT:
+            | anotherVariableATT variableATT;
+            
+variableATT: 
+      variablecoefATT  
+        {
+            if (osnlData->variablecoefattON) parserData->parser_errors += 
+                addErrorMsg( NULL, parserObjects, "too many variable coef attributes"); 
+            osnlData->variablecoefattON = true; 
+        }
+    | variableidxATT
+        {
+            if (osnlData->variableidxattON) parserData->parser_errors += 
+                addErrorMsg( NULL, parserObjects, "too many variable idx attributes"); 
+            osnlData->variableidxattON = true; 
+        }
+;
+            
+variablecoefATT: COEFATT  QUOTE aNumber QUOTE 
+{ 
+    if ( *$2 != *$4 ) parserData->parser_errors += 
+        addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->coef = parserData->tempVal;
+};
+                
+variableidxATT: IDXATT QUOTE  INTEGER QUOTE 
+{ 
+    if ( *$2 != *$4 ) parserData->parser_errors += 
+        addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    osnlData->nlNodeVariablePoint->idx = $3;
+    if ( $3 >= osinstance->instanceData->variables->numberOfVariables)
+         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "variable index exceeds number of variables");
+}; 
+
+
 /** 
  *  These nodes have a variable number of descendants that cannot be allocated beforehand.
  *  Some dirty trickery is involved in accomplishing everything.
  *  First, when such a node is encountered, it is pushed onto two vectors simultaneously:
  *  the vector of all nl nodes and a vector of special nodes (to cater for the possibility
- *  that there might be nested sums). Both vectors point to the same memory location,
+ *  that there might be nested sums, etc.). Both vectors point to the same memory location,
  *  which can be manipulated through whichever vector is more convenient. This is used in
  *  SUMEND below to allocate the right number of descendants (once this is known) and in
  *  nlnode below it to increment the number of descendants.
@@ -297,7 +402,7 @@ anotherminnlnode MINEND {
 
 anotherminnlnode: 
             | anotherminnlnode nlnode { osnlData->minVec.back()->inumberOfChildren++; };
-            
+
             
 product: PRODUCTSTART {
     osnlData->nlNodePoint = new OSnLNodeProduct();
@@ -314,89 +419,11 @@ anotherproductnlnode:
 
 
 
-number: NUMBERSTART {
-    osnlData->nlNodeNumberPoint = new OSnLNodeNumber();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodeNumberPoint);
-} anotherNumberATT  numberend {osnlData->numbervalueattON = false; osnlData->numbertypeattON = false; osnlData->numberidattON = false;};
-
-numberend: ENDOFELEMENT
-            | GREATERTHAN NUMBEREND;
-
-anotherNumberATT:
-            | anotherNumberATT numberATT ;
-            
-numberATT: numbertypeATT  {if(osnlData->numbertypeattON) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "too many number type attributes"); 
-            osnlData->numbertypeattON = true; }
-         | numbervalueATT  {if(osnlData->numbervalueattON) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "too many number value attributes"); 
-            osnlData->numbervalueattON = true; }
-         | numberidATT  {if(osnlData->numberidattON) parserData->parser_errors += addErrorMsg( NULL, parserObjects,"too many number id attributes"); 
-            osnlData->numberidattON = true; }            
-            ;
-            
-numbertypeATT: TYPEATT ATTRIBUTETEXT {
-    osnlData->nlNodeNumberPoint->type = $2;
-} QUOTE;
-
-numberidATT:   IDATT   ATTRIBUTETEXT {
-    osnlData->nlNodeNumberPoint->id = $2;
-}  QUOTE ;
-
-numbervalueATT: 
-            VALUEATT QUOTE aNumber QUOTE {/*if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");*/
-    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
-}
-/*         | VALUEATT QUOTE aNumber QUOTE {if ( *$2 != *$5 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlNodeNumberPoint->value = parserData->tempVal;
-}
-        | VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlNodeNumberPoint->value = $3;
-}*/ ;
-
-
-variable: VARIABLESTART {
-    osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
-    osnlData->nlNodeVec.push_back( osnlData->nlNodeVariablePoint);
-} anotherVariableATT  variableend {osnlData->variablecoefattON = false; osnlData->variableidxattON = false;} ;
-              
-variableend: ENDOFELEMENT
-            | GREATERTHAN nlnode {
-    osnlData->nlNodeVariablePoint->inumberOfChildren = 1;
-    osnlData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
-}    VARIABLEEND
-           | GREATERTHAN VARIABLEEND;
-            
-anotherVariableATT:
-            |anotherVariableATT variableATT ;
-            
-variableATT: variablecoefATT  {if(osnlData->variablecoefattON) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "too many variable coef attributes"); 
-            osnlData->variablecoefattON = true; }
-        | variableidxATT  {if(osnlData->variableidxattON) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "too many variable idx attributes"); 
-            osnlData->variableidxattON = true; 
-            };
-            
-variablecoefATT: COEFATT  QUOTE aNumber QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlNodeVariablePoint->coef = parserData->tempVal;
-}
-/*                | COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlNodeVariablePoint->coef = $3;        
-}
-*/
-;
-                
-variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlNodeVariablePoint->idx = $3;
-    if( $3 >= osinstance->instanceData->variables->numberOfVariables){
-         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "variable index exceeds number of variables");
-     }
-}  ; 
-
-
 /** OSnLMNodes are parsed in essentially the same way as OSnLNodes */
 
 OSnLMNode: matrixReference
          | matrixDiagonal
          | matrixDotTimes
-         | matrixIdentity
          | matrixInverse
          | matrixLowerTriangle
          | matrixUpperTriangle
@@ -404,9 +431,12 @@ OSnLMNode: matrixReference
          | matrixMinus
          | matrixPlus
          | matrixTimes
+         | matrixProduct
          | matrixScalarTimes
          | matrixSubMatrixAt
-         | matrixTranspose;
+         | matrixTranspose
+         | identityMatrix
+;
 
 matrixReference: MATRIXREFERENCESTART
 {
@@ -420,7 +450,7 @@ matrixreferenceend: ENDOFELEMENT
                            
 matrixIdxATT: IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= parserData->numberOfMatrices){
+    if( $3 >= osglData->numberOfMatrices){
          parserData->parser_errors += addErrorMsg( NULL, parserObjects, "matrix index exceeds number of matrices");
      }
 }; 
@@ -446,15 +476,15 @@ matrixDotTimesStart: MATRIXDOTTIMESSTART
 
 matrixDotTimesContent: OSnLMNode OSnLMNode MATRIXDOTTIMESEND;
 
-matrixIdentity: matrixIdentityStart matrixIdentityContent;
+identityMatrix: identityMatrixStart identityMatrixContent;
 
-matrixIdentityStart: MATRIXIDENTITYSTART 
+identityMatrixStart: IDENTITYMATRIXSTART 
 {
 //    osnlData->nlNodePoint = new OSnLNodeTimes();
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixIdentityContent: nlnode MATRIXIDENTITYEND;
+identityMatrixContent: nlnode IDENTITYMATRIXEND;
 
 matrixInverse: matrixInverseStart matrixInverseContent;
 
@@ -535,6 +565,22 @@ matrixTimesStart: MATRIXTIMESSTART
 };
 
 matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
+
+            
+matrixProduct: MATRIXPRODUCTSTART {
+//    osnlData->nlNodePoint = new OSnLNodeProduct();
+//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+//    osnlData->mtxProdVec.push_back( osnlData->nlNodePoint);
+}
+anothermatrixproductnode MATRIXPRODUCTEND {
+//    osnlData->mtxProdVec.back()->m_mChildren = new OSnLNode*[ osnlData->mtxProdVec.back()->inumberOfMatrixChildren];
+//    osnlData->mtxProdVec.pop_back();
+};
+
+anothermatrixproductnode: 
+            | anothermatrixproductnode OSnLMNode { /*osnlData->mtxProdVec.back()->inumberOfMatrixChildren++; */};
+
+
 
 matrixScalarTimes: matrixScalarTimesStart matrixScalarTimesContent;
 

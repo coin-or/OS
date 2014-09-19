@@ -45,105 +45,105 @@ using std::endl;
 
 //
 //const std::string msnodeNames[] = {
-//	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
-//	"quotient", "rem", "power", "product",
-//	/*2--*/"abs", "floor", "ceiling", "percent", "square", "squareRoot", "ln", "log", "log10", "exp",
-//	"factorial", "combination", "permutation", "gcd", "lcm", "roundToInt", "round", "truncate", "sign", "rand","gammaFn", "gammaLn",
-//	/*3--*/"sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh",
-//	"cot", "coth", "arccot", "arccoth", "sec", "sech", "arcsec", "arcsech", "csc", "csch", "arccsc", "arccsch",
-//	/*4--*/"mean", "geometricMean", "harmonicMean", "trimMean", "count", "median", "firstQuartile", "thirdQuartile", "mode", "min", "max",
-//	"percentile", "large", "small", "range", "interQuantileRange", "absdev", "stddev", "variance", "cv", "skewness", "kurtosis",
-//	"covariance", "correlation", "pearsonCorrelation", "rankCorrelation", "autoCorrelation1", "autoCorrelation", "npv", "irr",
-//	/*"empiricalDiscreteDist", "empiricalDiscreteCum", */"discreteUniformDist", "discreteUniformCum", "discreteUniformInv",
-//	"bernoulliDist", "bernoulliCum", "bernoulliInv", "binomialDist", "binomialCum", "binomialInv", "multinomialDist", "multinomialCum", "multinomialInv",
-//	"hypergeometricDist", "hypergeometricCum", "hypergeometricInv", "poissonDist", "poissonCum", "poissonInv",
-//	"geometricDist", "geometricCum", "geometricInv", "negativeBinomialDist", "negativeBinomialCum", "negativeBinomialInv",
-//	/*"empiricalContinousDist", "empiricalContinuousCum",*/ "uniformDist", "uniformCum", "uniformInv",
-//	"normalDist", "normalCum", "normalInv", "stdNormalDist", "stdNormalCum", "stdNormalInv", "bivariateNormalDist", "bivariateNormalCum",
-//	"exponentialDist", "exponentialCum", "exponentialInv", "weibullDist", "weibullCum", "weibullInv", "erlangDist", "erlangCum", "erlangInv",
-//	"gammaDist", "gammaCum", "gammaInv", "betaDist", "betaCum", "betaInv", "betaGeneralDist", "betaGeneralCum", "betaGeneralInv",
-//	"lognormalDist", "lognormalCum", "lognormalInv", "cauchyDist", "cauchyCum", "cauchyInv", "tDist", "tCum", "tInv",
-//	"chiSquareDist", "chiSquareCum", "chiSquareInv", "fDist", "fCum", "fInv", "logisticDist", "logisticCum", "logisticInv",
-//	"logLogisticDist", "logLogisticCum", "logLogisticInv", "logarithmicDist", "logarithmicCum", "logarithmicInv",
-//	"paretoDist", "paretoCum", "paretoDist", "rayleighDist", "rayleighCum", "rayleighInv", "pertDist", "pertCum", "pertDist",
-//	"triangularDist", "triangularCum", "triangularInv", "unitNormalLinearLoss", erf
-//	/*5--*/"number", "identifier", "PI", "E", "INF", "EPS", "TRUE", "FALSE", "EULERGAMMA", "NAN",
-//	/*6--*/"variable", "objective", "constraint", "parameter",
-//	/*7--*/"if", "lt", "leq", "gt", "geq", "eq", "neq", "and", "or", "xor", "implies", "not",
-//	"forAll", "exists", "logicCount", "allDiff", /*"allDisjoint",*/ "atMost", "atLeast", "exactly",
-//	"inSet", "inRealSet", "inPositiveRealSet", "inNonnegativeRealSet", "inIntegerSet", "inPositiveIntegerSet","inNonnegativeIntegerSet",
-//	/*8--*/
-//	/*9--*/"qTerm", "quadratic", "sim", "simInput", "simOutput", "userF", "arg", "xPath", "xPathIndex",
-//	"nodeRef", "arcRef", "complements", /*"prob",*/
+//    /*1--*/"plus", "sum", "minus", "negate", "times", "divide",
+//    "quotient", "rem", "power", "product",
+//    /*2--*/"abs", "floor", "ceiling", "percent", "square", "squareRoot", "ln", "log", "log10", "exp",
+//    "factorial", "combination", "permutation", "gcd", "lcm", "roundToInt", "round", "truncate", "sign", "rand","gammaFn", "gammaLn",
+//    /*3--*/"sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh",
+//    "cot", "coth", "arccot", "arccoth", "sec", "sech", "arcsec", "arcsech", "csc", "csch", "arccsc", "arccsch",
+//    /*4--*/"mean", "geometricMean", "harmonicMean", "trimMean", "count", "median", "firstQuartile", "thirdQuartile", "mode", "min", "max",
+//    "percentile", "large", "small", "range", "interQuantileRange", "absdev", "stddev", "variance", "cv", "skewness", "kurtosis",
+//    "covariance", "correlation", "pearsonCorrelation", "rankCorrelation", "autoCorrelation1", "autoCorrelation", "npv", "irr",
+//    /*"empiricalDiscreteDist", "empiricalDiscreteCum", */"discreteUniformDist", "discreteUniformCum", "discreteUniformInv",
+//    "bernoulliDist", "bernoulliCum", "bernoulliInv", "binomialDist", "binomialCum", "binomialInv", "multinomialDist", "multinomialCum", "multinomialInv",
+//    "hypergeometricDist", "hypergeometricCum", "hypergeometricInv", "poissonDist", "poissonCum", "poissonInv",
+//    "geometricDist", "geometricCum", "geometricInv", "negativeBinomialDist", "negativeBinomialCum", "negativeBinomialInv",
+//    /*"empiricalContinousDist", "empiricalContinuousCum",*/ "uniformDist", "uniformCum", "uniformInv",
+//    "normalDist", "normalCum", "normalInv", "stdNormalDist", "stdNormalCum", "stdNormalInv", "bivariateNormalDist", "bivariateNormalCum",
+//    "exponentialDist", "exponentialCum", "exponentialInv", "weibullDist", "weibullCum", "weibullInv", "erlangDist", "erlangCum", "erlangInv",
+//    "gammaDist", "gammaCum", "gammaInv", "betaDist", "betaCum", "betaInv", "betaGeneralDist", "betaGeneralCum", "betaGeneralInv",
+//    "lognormalDist", "lognormalCum", "lognormalInv", "cauchyDist", "cauchyCum", "cauchyInv", "tDist", "tCum", "tInv",
+//    "chiSquareDist", "chiSquareCum", "chiSquareInv", "fDist", "fCum", "fInv", "logisticDist", "logisticCum", "logisticInv",
+//    "logLogisticDist", "logLogisticCum", "logLogisticInv", "logarithmicDist", "logarithmicCum", "logarithmicInv",
+//    "paretoDist", "paretoCum", "paretoDist", "rayleighDist", "rayleighCum", "rayleighInv", "pertDist", "pertCum", "pertDist",
+//    "triangularDist", "triangularCum", "triangularInv", "unitNormalLinearLoss", erf
+//    /*5--*/"number", "identifier", "PI", "E", "INF", "EPS", "TRUE", "FALSE", "EULERGAMMA", "NAN",
+//    /*6--*/"variable", "objective", "constraint", "parameter",
+//    /*7--*/"if", "lt", "leq", "gt", "geq", "eq", "neq", "and", "or", "xor", "implies", "not",
+//    "forAll", "exists", "logicCount", "allDiff", /*"allDisjoint",*/ "atMost", "atLeast", "exactly",
+//    "inSet", "inRealSet", "inPositiveRealSet", "inNonnegativeRealSet", "inIntegerSet", "inPositiveIntegerSet","inNonnegativeIntegerSet",
+//    /*8--*/
+//    /*9--*/"qTerm", "quadratic", "sim", "simInput", "simOutput", "userF", "arg", "xPath", "xPathIndex",
+//    "nodeRef", "arcRef", "complements", /*"prob",*/
 //};
 
 
 
 
 //const int m_miNodeIndexes[] = {
-//	/*1--*/1001, 1002, 1003, 1004, 1005, 1006,
-//	1007, 1008, 1009, 1010,
-//	/*2--*/2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-//	2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022,
-//	/*3--*/3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010, 3011, 3012,
-//	3013, 3014, 3015, 3016, 3017, 3018, 3019, 3020, 3021, 3022, 3023, 3024,
-//	/*4--*/4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011,
-//	4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022,
-//	4023, 4024, 4025, 4026, 4027, 4028, 4029, 4030,
-//	/*4101, 4102, */4111, 4112, 4113,
-//	4121, 4122, 4123, 4131, 4132, 4133, 4141, 4142, 4143,
-//	4151, 4152, 4153, 4161, 4162, 4163,
-//	4171, 4172, 4173, 4181, 4182, 4183,
-//	/*4401, 4402,*/ 4411, 4412, 4413,
-//	4421, 4422, 4423, 4431, 4432, 4433, 4441, 4442,
-//	4451, 4452, 4453, 4461, 4462, 4463, 4471, 4472, 4473,
-//	4481, 4482, 4483, 4491, 4492, 4493, 4501, 4502, 4503,
-//	4511, 4512, 4513, 4521, 4522, 4523, 4531, 4532, 4533,
-//	4541, 4542, 4543, 4551, 4552, 4553, 4561, 4562, 4563,
-//	4571, 4572, 4573, 4581, 4582, 4583,
-//	4591, 4592, 4593, 4601, 4602, 4603, 4611, 4612, 4613,
-//	4621, 4622, 4623, 4624,4625
-//	/*5--*/5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010,
-//	/*6--*/6001, 6002, 6003, 6004,
-//	/*7--*/7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012,
-//	7013, 7014, 7015, 7016, /*7017,*/ 7018, 7019, 7020,
-//	7021, 7022, 7023, 7024, 7025, 7026, 7027,
-//	/*8--*/
-//	/*9--*/9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009,
-//	9010, 9011, 9012, /*9013,*/
+//    /*1--*/1001, 1002, 1003, 1004, 1005, 1006,
+//    1007, 1008, 1009, 1010,
+//    /*2--*/2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+//    2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022,
+//    /*3--*/3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010, 3011, 3012,
+//    3013, 3014, 3015, 3016, 3017, 3018, 3019, 3020, 3021, 3022, 3023, 3024,
+//    /*4--*/4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011,
+//    4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022,
+//    4023, 4024, 4025, 4026, 4027, 4028, 4029, 4030,
+//    /*4101, 4102, */4111, 4112, 4113,
+//    4121, 4122, 4123, 4131, 4132, 4133, 4141, 4142, 4143,
+//    4151, 4152, 4153, 4161, 4162, 4163,
+//    4171, 4172, 4173, 4181, 4182, 4183,
+//    /*4401, 4402,*/ 4411, 4412, 4413,
+//    4421, 4422, 4423, 4431, 4432, 4433, 4441, 4442,
+//    4451, 4452, 4453, 4461, 4462, 4463, 4471, 4472, 4473,
+//    4481, 4482, 4483, 4491, 4492, 4493, 4501, 4502, 4503,
+//    4511, 4512, 4513, 4521, 4522, 4523, 4531, 4532, 4533,
+//    4541, 4542, 4543, 4551, 4552, 4553, 4561, 4562, 4563,
+//    4571, 4572, 4573, 4581, 4582, 4583,
+//    4591, 4592, 4593, 4601, 4602, 4603, 4611, 4612, 4613,
+//    4621, 4622, 4623, 4624,4625
+//    /*5--*/5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010,
+//    /*6--*/6001, 6002, 6003, 6004,
+//    /*7--*/7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012,
+//    7013, 7014, 7015, 7016, /*7017,*/ 7018, 7019, 7020,
+//    7021, 7022, 7023, 7024, 7025, 7026, 7027,
+//    /*8--*/
+//    /*9--*/9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009,
+//    9010, 9011, 9012, /*9013,*/
 //};
 
 //const int m_miNodeTypes[] = {
-//	/*1--*/2, -1, 2, 1, 2, 2,
-//	2, 2, 2, -1,
-//	/*2--*/1, 1, 1, 1, 1, 1, 1, 2, 1, 1,
-//	1, 2, 2, -1, -1, 1, 2, 2, 1, 1, 1, 1,
-//	/*3--*/1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-//	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-//	/*4--*/-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-//	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-//	-1, -1, -1, -1, -1, -1, -1, -1,
-//	/*-1, -1, */2, 2, 2,
-//	2, 2, 2, 3, 3, 3, -1, -1, -1,
-//	4, 4, 4, 2, 2, 2,
-//	2, 2, 2, 3, 3, 3,
-//	/*-1, -1,*/ 3, 3, 3,
-//	3, 3, 3, 1, 1, 1, 7, 7,
-//	2, 2, 2, 4, 4, 4, 3, 3, 3,
-//	3, 3, 3, 3, 3, 3, 5, 5, 5,
-//	3, 3, 3, 3, 3, 3, 2, 2, 2,
-//	2, 2, 2, 3, 3, 3, 3, 3, 3,
-//	3, 3, 3, 3, 3, 3,
-//	3, 3, 3, 2, 2, 2, 4, 4, 4,
-//	4, 4, 4, 1,
-//	/*5--*/0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-//	/*6--*/-1, -1, -1, 0,
-//	/*7--*/3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-//	-1, -1, -1, -1, /*-1,*/ -1, -1, -1,
-//	-1, 1, 1, 1, 1, 1, 1
-//	/*8--*/
-//	/*9--*/-1, -1, -1, -1, -1, -1, 0, -1, -1,
-//	-1, -1, 2, /*1,*/
+//    /*1--*/2, -1, 2, 1, 2, 2,
+//    2, 2, 2, -1,
+//    /*2--*/1, 1, 1, 1, 1, 1, 1, 2, 1, 1,
+//    1, 2, 2, -1, -1, 1, 2, 2, 1, 1, 1, 1,
+//    /*3--*/1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//    /*4--*/-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+//    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+//    -1, -1, -1, -1, -1, -1, -1, -1,
+//    /*-1, -1, */2, 2, 2,
+//    2, 2, 2, 3, 3, 3, -1, -1, -1,
+//    4, 4, 4, 2, 2, 2,
+//    2, 2, 2, 3, 3, 3,
+//    /*-1, -1,*/ 3, 3, 3,
+//    3, 3, 3, 1, 1, 1, 7, 7,
+//    2, 2, 2, 4, 4, 4, 3, 3, 3,
+//    3, 3, 3, 3, 3, 3, 5, 5, 5,
+//    3, 3, 3, 3, 3, 3, 2, 2, 2,
+//    2, 2, 2, 3, 3, 3, 3, 3, 3,
+//    3, 3, 3, 3, 3, 3,
+//    3, 3, 3, 2, 2, 2, 4, 4, 4,
+//    4, 4, 4, 1,
+//    /*5--*/0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//    /*6--*/-1, -1, -1, 0,
+//    /*7--*/3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+//    -1, -1, -1, -1, /*-1,*/ -1, -1, -1,
+//    -1, 1, 1, 1, 1, 1, 1
+//    /*8--*/
+//    /*9--*/-1, -1, -1, -1, -1, -1, 0, -1, -1,
+//    -1, -1, 2, /*1,*/
 //};
 
 
@@ -166,40 +166,40 @@ ExprNode::ExprNode():
 
 ExprNode::~ExprNode()
 {
-    std::ostringstream outStr;
 #ifndef NDEBUG
+    std::ostringstream outStr;
     outStr << "inside ExprNode destructor" << std::endl;
     outStr << "scalar kids = " <<  inumberOfChildren << std::endl;
     outStr << "matrix kids = " <<  inumberOfMatrixChildren << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-	if (inumberOfChildren > 0 && m_mChildren != NULL)
-	{
-		for (int i=0; i<inumberOfChildren; i++)
-		{
-			if (m_mChildren[i] != NULL) 
-				delete m_mChildren[i];
-			m_mChildren[i] = NULL;
-		}
-		delete [] m_mChildren;
-		m_mChildren = NULL;
-		inumberOfChildren = 0;
-	}
+    if (inumberOfChildren > 0 && m_mChildren != NULL)
+    {
+        for (int i=0; i<inumberOfChildren; i++)
+        {
+            if (m_mChildren[i] != NULL) 
+                delete m_mChildren[i];
+            m_mChildren[i] = NULL;
+        }
+        delete [] m_mChildren;
+        m_mChildren = NULL;
+        inumberOfChildren = 0;
+    }
     else if (inumberOfChildren > 0 || m_mChildren != NULL)
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
         
-	if (inumberOfMatrixChildren > 0 && m_mMatrixChildren != NULL)
-	{
-		for (int i=0; i<inumberOfMatrixChildren; i++)
-		{
-			if (m_mMatrixChildren[i] != NULL) 
-				delete m_mMatrixChildren[i];
-			m_mMatrixChildren[i] = NULL;
-		}
-		delete [] m_mMatrixChildren;
-		m_mMatrixChildren = NULL;
-		inumberOfMatrixChildren = 0;
-	}
+    if (inumberOfMatrixChildren > 0 && m_mMatrixChildren != NULL)
+    {
+        for (int i=0; i<inumberOfMatrixChildren; i++)
+        {
+            if (m_mMatrixChildren[i] != NULL) 
+                delete m_mMatrixChildren[i];
+            m_mMatrixChildren[i] = NULL;
+        }
+        delete [] m_mMatrixChildren;
+        m_mMatrixChildren = NULL;
+        inumberOfMatrixChildren = 0;
+    }
     else if (inumberOfMatrixChildren > 0 || m_mMatrixChildren != NULL)
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
 }//end ~ExprNode
@@ -235,19 +235,19 @@ std::string ExprNode::getNonlinearExpressionInXML()
     {
         outStr << ">";
         if(inumberOfChildren > 0)
-		{
-			for(unsigned int i = 0; i < inumberOfChildren; i++)
-			{
-				outStr << m_mChildren[i]->getNonlinearExpressionInXML();
-			}
-		}
-	    if(inumberOfMatrixChildren > 0)
-		{
-			for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-			{
-				outStr << m_mMatrixChildren[i]->getNonlinearExpressionInXML();
-			}
-	    }
+        {
+            for(unsigned int i = 0; i < inumberOfChildren; i++)
+            {
+                outStr << m_mChildren[i]->getNonlinearExpressionInXML();
+            }
+        }
+        if(inumberOfMatrixChildren > 0)
+        {
+            for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
+            {
+                outStr << m_mMatrixChildren[i]->getNonlinearExpressionInXML();
+            }
+        }
         outStr << "</" ;
         outStr << this->getTokenName() ;
         outStr << ">" ;
@@ -374,7 +374,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNod
         {
             for(int i = numkids - 1; i >= 0;  i--)
             {
-                nlNodeVec[kount]->m_mChildren[i] = stackVec.back()	;
+                nlNodeVec[kount]->m_mChildren[i] = stackVec.back()    ;
                 stackVec.pop_back();
             }
         }
@@ -479,101 +479,101 @@ std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<OSnLNode
 /*
 OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
 // kipp possibly make this a static method or put it somewhere else
-	OSnLNode *nlNodePoint;
-	int nodeID ;
-	int pos1, pos2;
-	std::string str1, str2;
-	// convert the std::string tokens into the appropriate objects
-		// kipp -- put in error check -- make sure > 0 and < 10001
-	nodeID = atoi(  &sToken.substr(0, 4)[0]);
-	switch (nodeID){
-		case OS_SUM:  // the sum token
-			pos1 = sToken.find('[');
-			pos2 = sToken.find(']');
-			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-				// throw error
-			}
-			OSnLNodeSum *nlNodePointSum;
-			nlNodePointSum = new OSnLNodeSum();
-			nlNodePointSum->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			nlNodePointSum->m_mChildren = new OSnLNode*[ nlNodePointSum->inumberOfChildren];
-			return nlNodePointSum;
-		break;
-		case OS_MAX:  // the max token
-			pos1 = sToken.find('[');
-			pos2 = sToken.find(']');
-			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-				// throw error
-			}
-			OSnLNodeMax *nlNodePointMax;
-			nlNodePointMax = new OSnLNodeMax();
-			nlNodePointMax->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			nlNodePointMax->m_mChildren = new OSnLNode*[ nlNodePointMax->inumberOfChildren];
-			return nlNodePointMax;
-		break;
-		case OS_PRODUCT:  // the product token
-			pos1 = sToken.find('[');
-			pos2 = sToken.find(']');
-			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-				// throw error
-			}
-			OSnLNodeProduct *nlNodePointProduct;
-			nlNodePointProduct = new OSnLNodeProduct();
-			nlNodePointProduct->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			nlNodePointProduct->m_mChildren = new OSnLNode*[ nlNodePointProduct->inumberOfChildren];
-			return nlNodePointProduct;
-		break;
-		case OS_NUMBER:  // the number token
-			pos1 = sToken.find(':');
-			if(pos1 != 4){
-				//throw error
-			}
-			// now get the second semicolon, the one that should be after value
-			pos2 = sToken.find(':', pos1 + 1);
-			if(pos2 != std::string::npos) {
-			}
-			else{
-				//throw error
-			}
-			OSnLNodeNumber *nlNodePointNumber;
-			nlNodePointNumber = new OSnLNodeNumber();
-			nlNodePointNumber->value = atof(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			return nlNodePointNumber;
-		break;
-		case OS_VARIABLE:  // the variable token
-			pos1 = sToken.find('[');
-			pos2 = sToken.find(']');
-			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-				// throw error
-			}
-			OSnLNodeVariable *nlNodePointVariable;
-			nlNodePointVariable = new OSnLNodeVariable();
-			nlNodePointVariable->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			nlNodePointVariable->m_mChildren = new OSnLNode*[ nlNodePointVariable->inumberOfChildren];
-			// throw error if there is more than one child
-			// now get the index and the coefficient
-			pos1 = sToken.find(':');
-			if(pos1 != 4){
-				//throw error
-			}
-			// now get the second semicolon, the one that should be after idx
-			pos2 = sToken.find(':', pos1 + 1);
-			if(pos2 == std::string::npos) {
-				//throw error
-			}
-			nlNodePointVariable->idx = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			// now get the coefficient
-			str1 = sToken;
-			str2 = sToken.substr(pos2 + 1, str1.length() - pos2 - 1);
-			nlNodePointVariable->coef = atof(&str2[0]);
-			return nlNodePointVariable;
-		break;
-		default:
-			nlNodePoint = nlNodeArray[ nlNodeIdxMap[ nodeID]]->cloneExprNode();
+    OSnLNode *nlNodePoint;
+    int nodeID ;
+    int pos1, pos2;
+    std::string str1, str2;
+    // convert the std::string tokens into the appropriate objects
+        // kipp -- put in error check -- make sure > 0 and < 10001
+    nodeID = atoi(  &sToken.substr(0, 4)[0]);
+    switch (nodeID){
+        case OS_SUM:  // the sum token
+            pos1 = sToken.find('[');
+            pos2 = sToken.find(']');
+            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+                // throw error
+            }
+            OSnLNodeSum *nlNodePointSum;
+            nlNodePointSum = new OSnLNodeSum();
+            nlNodePointSum->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            nlNodePointSum->m_mChildren = new OSnLNode*[ nlNodePointSum->inumberOfChildren];
+            return nlNodePointSum;
+        break;
+        case OS_MAX:  // the max token
+            pos1 = sToken.find('[');
+            pos2 = sToken.find(']');
+            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+                // throw error
+            }
+            OSnLNodeMax *nlNodePointMax;
+            nlNodePointMax = new OSnLNodeMax();
+            nlNodePointMax->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            nlNodePointMax->m_mChildren = new OSnLNode*[ nlNodePointMax->inumberOfChildren];
+            return nlNodePointMax;
+        break;
+        case OS_PRODUCT:  // the product token
+            pos1 = sToken.find('[');
+            pos2 = sToken.find(']');
+            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+                // throw error
+            }
+            OSnLNodeProduct *nlNodePointProduct;
+            nlNodePointProduct = new OSnLNodeProduct();
+            nlNodePointProduct->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            nlNodePointProduct->m_mChildren = new OSnLNode*[ nlNodePointProduct->inumberOfChildren];
+            return nlNodePointProduct;
+        break;
+        case OS_NUMBER:  // the number token
+            pos1 = sToken.find(':');
+            if(pos1 != 4){
+                //throw error
+            }
+            // now get the second semicolon, the one that should be after value
+            pos2 = sToken.find(':', pos1 + 1);
+            if(pos2 != std::string::npos) {
+            }
+            else{
+                //throw error
+            }
+            OSnLNodeNumber *nlNodePointNumber;
+            nlNodePointNumber = new OSnLNodeNumber();
+            nlNodePointNumber->value = atof(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            return nlNodePointNumber;
+        break;
+        case OS_VARIABLE:  // the variable token
+            pos1 = sToken.find('[');
+            pos2 = sToken.find(']');
+            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+                // throw error
+            }
+            OSnLNodeVariable *nlNodePointVariable;
+            nlNodePointVariable = new OSnLNodeVariable();
+            nlNodePointVariable->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            nlNodePointVariable->m_mChildren = new OSnLNode*[ nlNodePointVariable->inumberOfChildren];
+            // throw error if there is more than one child
+            // now get the index and the coefficient
+            pos1 = sToken.find(':');
+            if(pos1 != 4){
+                //throw error
+            }
+            // now get the second semicolon, the one that should be after idx
+            pos2 = sToken.find(':', pos1 + 1);
+            if(pos2 == std::string::npos) {
+                //throw error
+            }
+            nlNodePointVariable->idx = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            // now get the coefficient
+            str1 = sToken;
+            str2 = sToken.substr(pos2 + 1, str1.length() - pos2 - 1);
+            nlNodePointVariable->coef = atof(&str2[0]);
+            return nlNodePointVariable;
+        break;
+        default:
+            nlNodePoint = nlNodeArray[ nlNodeIdxMap[ nodeID]]->cloneExprNode();
 
-		break;
-	}
-	return nlNodePoint;
+        break;
+    }
+    return nlNodePoint;
 }//end getOSnLNodeFromToken
 */
 
@@ -594,30 +594,30 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
 OSnLNode* OSnLNode::copyNodeAndDescendants()
 {
     OSnLNode* ndcopy = (OSnLNode*)cloneExprNode();
-	ndcopy->inumberOfChildren = inumberOfChildren;
-	ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-	ndcopy->inodeInt = inodeInt;
-	ndcopy->inodeType = inodeType;
-	
-	if (inumberOfChildren > 0)
-	{
-		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-		for (int i=0; i < inumberOfChildren; i++)
-		{
-			ndcopy->m_mChildren[i] = /*(OSnLNode)*/m_mChildren[i]->copyNodeAndDescendants();
-		}
-	}
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    
+    if (inumberOfChildren > 0)
+    {
+        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = /*(OSnLNode)*/m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
 
-	if (inumberOfMatrixChildren > 0)
-	{
-		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-		for (int i=0; i < inumberOfMatrixChildren; i++)
-		{
-			ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-		}
-	}
+    if (inumberOfMatrixChildren > 0)
+    {
+        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
 
-	return ndcopy;
+    return ndcopy;
 }// end OSnLNode::copyNodeAndDescendants
 
 bool OSnLNode::IsEqual(OSnLNode *that)
@@ -865,13 +865,13 @@ OSnLNodeMax::~OSnLNodeMax()
 
 double OSnLNodeMax::calculateFunction(double *x)
 {
-	m_dFunctionValue = -OSDBL_MAX;
+    m_dFunctionValue = -OSDBL_MAX;
 
-	for(unsigned int i = 0; i < inumberOfChildren; i++)
+    for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
         if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
         {
-            m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
+            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
         }
     }
     return m_dFunctionValue;
@@ -933,13 +933,13 @@ std::string OSnLNodeMin::getTokenName()
 
 double OSnLNodeMin::calculateFunction(double *x)
 {
-	m_dFunctionValue = OSDBL_MAX;
+    m_dFunctionValue = OSDBL_MAX;
 
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
         if(m_mChildren[i]->calculateFunction(x) < m_dFunctionValue)
         {
-            m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
+            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
         }
     }
     return m_dFunctionValue;
@@ -1221,8 +1221,8 @@ ADdouble OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD
 
 
 //ADdouble OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD){
-//		m_ADTape = AD::pow(m_mChildren[0]->constructADTape( ADIdx, XAD) , m_mChildren[1]->constructADTape( ADIdx, XAD) );
-//	return m_ADTape;
+//        m_ADTape = AD::pow(m_mChildren[0]->constructADTape( ADIdx, XAD) , m_mChildren[1]->constructADTape( ADIdx, XAD) );
+//    return m_ADTape;
 //}// end OSnLNodePower::constructADTape
 
 
@@ -1780,16 +1780,16 @@ std::string OSnLNodeNumber::getTokenNumber()
 {
     ostringstream outStr;
     outStr << inodeInt;
-	outStr << ":" ;
-	outStr << value ;
-//	//if(type.length() > 0){
-//		outStr << ":" ;
-//		outStr << type ;
-//	//}
-//	//if(id.length() > 0){
-//		outStr << ":" ;
-//		outStr << id;
-//	//}
+    outStr << ":" ;
+    outStr << value ;
+//    //if(type.length() > 0){
+//        outStr << ":" ;
+//        outStr << type ;
+//    //}
+//    //if(id.length() > 0){
+//        outStr << ":" ;
+//        outStr << id;
+//    //}
     return outStr.str();
 }//getTokenNumber
 
@@ -2137,13 +2137,13 @@ OSnLNodeMatrixDeterminant::~OSnLNodeMatrixDeterminant()
 
 double OSnLNodeMatrixDeterminant::calculateFunction(double *x)
 {
-	m_dFunctionValue = -OSDBL_MAX;
+    m_dFunctionValue = -OSDBL_MAX;
 
-	for(unsigned int i = 0; i < inumberOfChildren; i++)
+    for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
         if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
         {
-            m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
+            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
         }
     }
     return m_dFunctionValue;
@@ -2198,13 +2198,13 @@ OSnLNodeMatrixTrace::~OSnLNodeMatrixTrace()
 double OSnLNodeMatrixTrace::calculateFunction(double *x)
 {
 #if 0
-	m_dFunctionValue = -OSDBL_MAX;
+    m_dFunctionValue = -OSDBL_MAX;
 
-	for(unsigned int i = 0; i < inumberOfChildren; i++)
+    for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
         if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
         {
-            m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
+            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
         }
     }
     return m_dFunctionValue;
@@ -2243,7 +2243,7 @@ OSnLNode* OSnLNodeMatrixTrace::cloneExprNode()
 
 OSnLMNode::OSnLMNode():
     ExprNode(),
-	idx(0)
+    idx(0)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNode constructor");
@@ -2259,31 +2259,31 @@ OSnLMNode::~OSnLMNode()
 
 OSnLMNode* OSnLMNode::copyNodeAndDescendants()
 {
-	OSnLMNode* ndcopy = (OSnLMNode*)cloneExprNode();
-	ndcopy->inumberOfChildren = inumberOfChildren;
-	ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-	ndcopy->inodeInt = inodeInt;
-	ndcopy->inodeType = inodeType;
-	
-	if (inumberOfChildren > 0)
-	{
-		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-		for (int i=0; i < inumberOfChildren; i++)
-		{
-			ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-		}
-	}
+    OSnLMNode* ndcopy = (OSnLMNode*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    
+    if (inumberOfChildren > 0)
+    {
+        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
 
-	if (inumberOfMatrixChildren > 0)
-	{
-		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-		for (int i=0; i < inumberOfMatrixChildren; i++)
-		{
-			ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-		}
-	}
+    if (inumberOfMatrixChildren > 0)
+    {
+        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
 
-	return ndcopy;
+    return ndcopy;
 }// end copyNodeAndDescendants
 
 #if 0
@@ -2298,7 +2298,7 @@ OSnLMNode* OSnLMNode::createExpressionTreeFromPostfix(std::vector<OSnLMNode*> nl
         {
             for(int i = numkids - 1; i >= 0;  i--)
             {
-                nlMNodeVec[kount]->m_mMatrixChildren[i] = stackVec.back()	;
+                nlMNodeVec[kount]->m_mMatrixChildren[i] = stackVec.back()    ;
                 stackVec.pop_back();
             }
         }
@@ -2339,7 +2339,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNode
         {
             for(int i = 0; i < numkids;  i++)
             {
-                nlNodeVec[kount]->m_mChildren[i] = stackVec.back()	;
+                nlNodeVec[kount]->m_mChildren[i] = stackVec.back()    ;
                 stackVec.pop_back();
             }
         }
@@ -2372,11 +2372,11 @@ std::string OSnLMNode::getTokenNumber()
     ostringstream outStr;
     outStr << inodeInt;
     // when I create an OSnLNode from a token number, I need to know how many children there are
-//	if(inodeType == -1){
+//    if(inodeType == -1){
     outStr << "[";
     outStr << inumberOfChildren ;
     outStr << "]";
-//	}
+//    }
     return outStr.str();
 }//getTokenNumber
 
@@ -2384,100 +2384,100 @@ std::string OSnLMNode::getTokenNumber()
 /*
 OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
 // kipp possibly make this a static method or put it somewhere else
-	OSnLNode *nlNodePoint;
-	int nodeID ;
-	int pos1, pos2;
-	std::string str1, str2;
-	// convert the std::string tokens into the appropriate objects
-		// kipp -- put in error check -- make sure > 0 and < 10001
-	nodeID = atoi(  &sToken.substr(0, 4)[0]);
-	switch (nodeID){
-		case OS_SUM:  // the sum token
-			pos1 = sToken.find('[');
-			pos2 = sToken.find(']');
-			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-				// throw error
-			}
-			OSnLNodeSum *nlNodePointSum;
-			nlNodePointSum = new OSnLNodeSum();
-			nlNodePointSum->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			nlNodePointSum->m_mChildren = new OSnLNode*[ nlNodePointSum->inumberOfChildren];
-			return nlNodePointSum;
-		break;
-		case OS_MAX:  // the max token
-			pos1 = sToken.find('[');
-			pos2 = sToken.find(']');
-			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-				// throw error
-			}
-			OSnLNodeMax *nlNodePointMax;
-			nlNodePointMax = new OSnLNodeMax();
-			nlNodePointMax->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			nlNodePointMax->m_mChildren = new OSnLNode*[ nlNodePointMax->inumberOfChildren];
-			return nlNodePointMax;
-		break;
-		case OS_PRODUCT:  // the product token
-			pos1 = sToken.find('[');
-			pos2 = sToken.find(']');
-			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-				// throw error
-			}
-			OSnLNodeProduct *nlNodePointProduct;
-			nlNodePointProduct = new OSnLNodeProduct();
-			nlNodePointProduct->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			nlNodePointProduct->m_mChildren = new OSnLNode*[ nlNodePointProduct->inumberOfChildren];
-			return nlNodePointProduct;
-		break;
-		case OS_NUMBER:  // the number token
-			pos1 = sToken.find(':');
-			if(pos1 != 4){
-				//throw error
-			}
-			// now get the second semicolon, the one that should be after value
-			pos2 = sToken.find(':', pos1 + 1);
-			if(pos2 != std::string::npos) {
-			}
-			else{
-				//throw error
-			}
-			OSnLNodeNumber *nlNodePointNumber;
-			nlNodePointNumber = new OSnLNodeNumber();
-			nlNodePointNumber->value = atof(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			return nlNodePointNumber;
-		break;
-		case OS_VARIABLE:  // the variable token
-			pos1 = sToken.find('[');
-			pos2 = sToken.find(']');
-			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-				// throw error
-			}
-			OSnLNodeVariable *nlNodePointVariable;
-			nlNodePointVariable = new OSnLNodeVariable();
-			nlNodePointVariable->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			nlNodePointVariable->m_mChildren = new OSnLNode*[ nlNodePointVariable->inumberOfChildren];
-			// throw error if there is more than one child
-			// now get the index and the coefficient
-			pos1 = sToken.find(':');
-			if(pos1 != 4){
-				//throw error
-			}
-			// now get the second semicolon, the one that should be after idx
-			pos2 = sToken.find(':', pos1 + 1);
-			if(pos2 == std::string::npos) {
-				//throw error
-			}
-			nlNodePointVariable->idx = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-			// now get the coefficient
-			str1 = sToken;
-			str2 = sToken.substr(pos2 + 1, str1.length() - pos2 - 1);
-			nlNodePointVariable->coef = atof(&str2[0]);
-			return nlNodePointVariable;
-		break;
-		default:
-			nlNodePoint = nlNodeArray[ nlNodeIdxMap[ nodeID]]->cloneExprNode();
-		break;
-	}
-	return nlNodePoint;
+    OSnLNode *nlNodePoint;
+    int nodeID ;
+    int pos1, pos2;
+    std::string str1, str2;
+    // convert the std::string tokens into the appropriate objects
+        // kipp -- put in error check -- make sure > 0 and < 10001
+    nodeID = atoi(  &sToken.substr(0, 4)[0]);
+    switch (nodeID){
+        case OS_SUM:  // the sum token
+            pos1 = sToken.find('[');
+            pos2 = sToken.find(']');
+            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+                // throw error
+            }
+            OSnLNodeSum *nlNodePointSum;
+            nlNodePointSum = new OSnLNodeSum();
+            nlNodePointSum->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            nlNodePointSum->m_mChildren = new OSnLNode*[ nlNodePointSum->inumberOfChildren];
+            return nlNodePointSum;
+        break;
+        case OS_MAX:  // the max token
+            pos1 = sToken.find('[');
+            pos2 = sToken.find(']');
+            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+                // throw error
+            }
+            OSnLNodeMax *nlNodePointMax;
+            nlNodePointMax = new OSnLNodeMax();
+            nlNodePointMax->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            nlNodePointMax->m_mChildren = new OSnLNode*[ nlNodePointMax->inumberOfChildren];
+            return nlNodePointMax;
+        break;
+        case OS_PRODUCT:  // the product token
+            pos1 = sToken.find('[');
+            pos2 = sToken.find(']');
+            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+                // throw error
+            }
+            OSnLNodeProduct *nlNodePointProduct;
+            nlNodePointProduct = new OSnLNodeProduct();
+            nlNodePointProduct->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            nlNodePointProduct->m_mChildren = new OSnLNode*[ nlNodePointProduct->inumberOfChildren];
+            return nlNodePointProduct;
+        break;
+        case OS_NUMBER:  // the number token
+            pos1 = sToken.find(':');
+            if(pos1 != 4){
+                //throw error
+            }
+            // now get the second semicolon, the one that should be after value
+            pos2 = sToken.find(':', pos1 + 1);
+            if(pos2 != std::string::npos) {
+            }
+            else{
+                //throw error
+            }
+            OSnLNodeNumber *nlNodePointNumber;
+            nlNodePointNumber = new OSnLNodeNumber();
+            nlNodePointNumber->value = atof(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            return nlNodePointNumber;
+        break;
+        case OS_VARIABLE:  // the variable token
+            pos1 = sToken.find('[');
+            pos2 = sToken.find(']');
+            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
+                // throw error
+            }
+            OSnLNodeVariable *nlNodePointVariable;
+            nlNodePointVariable = new OSnLNodeVariable();
+            nlNodePointVariable->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            nlNodePointVariable->m_mChildren = new OSnLNode*[ nlNodePointVariable->inumberOfChildren];
+            // throw error if there is more than one child
+            // now get the index and the coefficient
+            pos1 = sToken.find(':');
+            if(pos1 != 4){
+                //throw error
+            }
+            // now get the second semicolon, the one that should be after idx
+            pos2 = sToken.find(':', pos1 + 1);
+            if(pos2 == std::string::npos) {
+                //throw error
+            }
+            nlNodePointVariable->idx = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
+            // now get the coefficient
+            str1 = sToken;
+            str2 = sToken.substr(pos2 + 1, str1.length() - pos2 - 1);
+            nlNodePointVariable->coef = atof(&str2[0]);
+            return nlNodePointVariable;
+        break;
+        default:
+            nlNodePoint = nlNodeArray[ nlNodeIdxMap[ nodeID]]->cloneExprNode();
+        break;
+    }
+    return nlNodePoint;
 }//end getOSnLNodeFromToken
 */
 
@@ -2588,30 +2588,30 @@ OSnLMNode* OSnLMNode::copyNodeAndDescendants()
 {
     OSnLMNode* ndcopy = cloneExprNode();
 
-	ndcopy->inumberOfChildren = inumberOfChildren;
-	ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-	ndcopy->inodeInt = inodeInt;
-	ndcopy->inodeType = inodeType;
-	
-	if (inumberOfChildren > 0)
-	{
-		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-		for (int i=0; i < inumberOfChildren; i++)
-		{
-			ndcopy->m_mChildren[i] = m_mChildren[i]->(OSnLNode)copyNodeAndDescendants();
-		}
-	}
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    
+    if (inumberOfChildren > 0)
+    {
+        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->(OSnLNode)copyNodeAndDescendants();
+        }
+    }
 
-	if (inumberOfMatrixChildren > 0)
-	{
-		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-		for (int i=0; i < inumberOfMatrixChildren; i++)
-		{
-			ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->(OSnLMNode)copyNodeAndDescendants();
-		}
-	}
+    if (inumberOfMatrixChildren > 0)
+    {
+        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->(OSnLMNode)copyNodeAndDescendants();
+        }
+    }
 
-	return ndcopy;
+    return ndcopy;
 }// end OSnLNode::copyNodeAndDescendants
 #endif
 
@@ -2806,7 +2806,7 @@ OSnLMNode* OSnLMNodeMatrixInverse::cloneExprNode()
     nlMNodePoint = new OSnLMNodeMatrixInverse();
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixInverse::cloneExprNode
-#define	OS_MATRIX_TRANSPOSE	8515
+#define    OS_MATRIX_TRANSPOSE    8515
 // OSnLMNodeMatrixTranspose Methods
 OSnLMNodeMatrixTranspose::OSnLMNodeMatrixTranspose()
 {

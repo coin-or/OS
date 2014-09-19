@@ -1783,7 +1783,7 @@ public:
      */
     OSnLMNode* createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec);
 
-	/**
+    /**
      * <p>
      * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
      * and create a matrix-valued OSExpressionTree root node
