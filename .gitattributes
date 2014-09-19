@@ -287,6 +287,7 @@ OS/data/osilFiles/spl1.osil -text
 OS/data/osilFiles/spl2.osil -text
 OS/data/osilFiles/test24locR1.osil -text
 OS/data/osilFiles/test48locR1.osil -text
+OS/data/osilFiles/testMatricesAndCones.osil -text
 OS/data/osilFiles/testOperators.osil -text
 OS/data/osilFiles/volumeTest.osil -text
 OS/data/osilFiles/wayneQuadratic.osil -text
