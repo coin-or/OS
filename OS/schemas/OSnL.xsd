@@ -6173,11 +6173,11 @@
 			<xs:enumeration value="matrixLeftNullSpace"/>
 			<xs:enumeration value="matrixRightNullSpace"/>
 			<xs:enumeration value="matrixReducedRowEchelon"/>
-			<xs:enumeration value="matrixIdentity"/>
+			<xs:enumeration value="identityMatrix"/>
 			<xs:enumeration value="matrixLowerTriangle"/>
 			<xs:enumeration value="matrixUpperTriangle"/>
 			<xs:enumeration value="matrixDiagonal"/>
-			<xs:enumeration value="matrixVectorToDiagonalMatrix"/>
+			<xs:enumeration value="diagonalMatrixFromVector"/>
 			<xs:enumeration value="matrixReference"/>
 			<xs:enumeration value="matrixBlock"/>
 			<xs:enumeration value="matrixMerge"/>
