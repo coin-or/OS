@@ -1153,9 +1153,9 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="excludeElementIfSet" type="xs:boolean" default="false">
+		<xs:attribute name="negativePattern" type="xs:boolean" default="false">
 			<xs:annotation>
-				<xs:documentation>pattern elements MUST be 1.  If excludeElementIfSet is true, marked elements are excluded from the matrix, otherwise marked elements are included</xs:documentation>
+				<xs:documentation>pattern elements MUST be 1. In a 'positive' pattern, i.e., if negativePattern is false (or absent), marked elements are INcluded in the matrix, otherwise marked elements denote 'holes' that are to be excluded.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>

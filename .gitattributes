@@ -576,6 +576,7 @@ OS/schemas/OStL.xsl -text
 OS/schemas/OSuL.xsd -text
 OS/schemas/fml.xsl -text
 OS/schemas/lpfml.xsd -text
+OS/schemas/testMatricesAndCones.osil -text
 OS/src/Makefile.am -text
 OS/src/Makefile.in -text
 OS/src/OSAgent/Makefile.am -text
