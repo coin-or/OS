@@ -110,11 +110,8 @@ public:
     bool matrixNameAttributePresent;
     bool matrixTypeAttributePresent;
     int  numberOfBlocks;
-    bool numberOfBlocksPresent;
     int  numberOfColumns;
-    bool numberOfColumnsPresent;
     int  numberOfRows;
-    bool numberOfRowsPresent;
     int  baseMatrixIdxAttribute;
     int  targetMatrixFirstRowAttribute;
     int  targetMatrixFirstColAttribute;
@@ -134,7 +131,7 @@ public:
     bool baseTransposeAttributePresent;
     bool scalarMultiplierAttributePresent;
     bool rowMajorAttribute;
-    bool excludeIfSetAttribute;
+    bool negativePatternAttribute;
     int  blockRowIdx;
     bool blockRowIdxAttributePresent;
     int  blockColIdx;

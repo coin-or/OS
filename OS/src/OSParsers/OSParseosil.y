@@ -290,7 +290,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token BLOCKSTART BLOCKEND BLOCKSSTART BLOCKSEND
 
 
-%token EMPTYSYMMETRYATT SYMMETRYATT EMPTYEXCLUDEATT EXCLUDEATT CONSTANTATT
+%token EMPTYSYMMETRYATT SYMMETRYATT EMPTYNEGATIVEPATTERNATT NEGATIVEPATTERNATT CONSTANTATT
 %token NUMBEROFBLOCKSATT NUMBEROFCOLUMNSATT NUMBEROFROWSATT NUMBEROFVARIDXATT
 
 %token BASEMATRIXIDXATT TARGETMATRIXFIRSTROWATT TARGETMATRIXFIRSTCOLATT
@@ -306,6 +306,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token CONREFERENCEELEMENTSSTART CONREFERENCEELEMENTSEND
 %token OBJREFERENCEELEMENTSSTART OBJREFERENCEELEMENTSEND
 %token PATTERNELEMENTSSTART PATTERNELEMENTSEND VARIDXSTART VARIDXEND
+
 %token TRANSFORMATIONSTART TRANSFORMATIONEND
 
 %token COLOFFSETSSTART COLOFFSETSEND ROWOFFSETSSTART ROWOFFSETSEND
@@ -1943,8 +1944,8 @@ matrixStart: MATRIXSTART
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
     osglData->symmetryAttributePresent = false;
     osglData->matrixTypeAttributePresent = false;
-    osglData->numberOfRowsPresent = false;
-    osglData->numberOfColumnsPresent = false;
+    osglData->numberOfRowsAttributePresent = false;
+    osglData->numberOfColumnsAttributePresent = false;
     osglData->matrixNameAttributePresent = false;
     osglData->mtxConstructorVec.clear();
     osglData->mtxBlkVec.clear();
@@ -1960,11 +1961,11 @@ matrixStart: MATRIXSTART
 
 matrixAttributes: matrixAttributeList
 {
-    if (osglData->numberOfRowsPresent == false)
+    if (osglData->numberOfRowsAttributePresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");    
     else
         ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
-    if (osglData->numberOfColumnsPresent == false)
+    if (osglData->numberOfColumnsAttributePresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfColumns is missing");
     else
         ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
@@ -2047,8 +2048,8 @@ baseMatrixStart: BASEMATRIXSTART
     osglData->baseMatrixEndColAttributePresent = false;
     osglData->baseTransposeAttributePresent = false;
     osglData->scalarMultiplierAttributePresent = false;
-    osglData->baseMatrixEndRowAttribute = osglData->matrix->numberOfRows;
-    osglData->baseMatrixEndColAttribute = osglData->matrix->numberOfColumns;
+    osglData->baseMatrixEndRowAttribute = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows;
+    osglData->baseMatrixEndColAttribute = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns;
 };
 
 baseMatrixAttributes: baseMatrixAttList
@@ -2096,8 +2097,9 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
     if ($3 > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
-    osglData->matrix->matrixType  = mergeMatrixType(osglData->matrix->matrixType,
-                      osinstance->instanceData->matrices->matrix[$3]->matrixType);
+    ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
+        mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
+                   osinstance->instanceData->matrices->matrix[$3]->matrixType);
     osglData->baseMatrixIdxAttributePresent = true;   
     osglData->baseMatrixIdxAttribute = $3; 
 };
@@ -2148,7 +2150,7 @@ osglBaseMatrixEndRowATT: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last row cannot be negative");
-    if ($3 > osglData->matrix->numberOfRows)
+    if ($3 > ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last row exceeds matrix dimensions");
     osglData->baseMatrixEndRowAttributePresent = true;   
     osglData->baseMatrixEndRowAttribute = $3; 
@@ -2160,7 +2162,7 @@ osglBaseMatrixEndColATT: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last col cannot be negative");
-    if ($3 > osglData->matrix->numberOfColumns)
+    if ($3 > ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last col exceeds matrix dimensions");
     osglData->baseMatrixEndColAttributePresent = true;   
     osglData->baseMatrixEndColAttribute = $3; 
@@ -2256,7 +2258,7 @@ constantElementsContent: constantElementsStartVector constantElementsNonzeros CO
 
 constantElementsStartVector: constantElementsStartVectorStart constantElementsStartVectorContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2268,9 +2270,10 @@ constantElementsStartVector: constantElementsStartVectorStart constantElementsSt
 constantElementsStartVectorStart: STARTVECTORSTART
 {
     if (osglData->rowMajorAttribute == true)
-        osglData->osglNumberOfEl = osglData->matrix->numberOfColumns;
+        osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
     else
-        osglData->osglNumberOfEl = osglData->matrix->numberOfRows;
+        osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];    
 };
 
 constantElementsStartVectorContent: constantElementsStartVectorEmpty | constantElementsStartVectorLaden;
@@ -2311,7 +2314,7 @@ varReferenceElementsContent: varReferenceElementsStartVector varReferenceElement
 
 varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferenceElementsStartVectorContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2336,7 +2339,7 @@ varReferenceElementsStartVectorBody:  osglIntArrayData;
 
 varReferenceElementsNonzeros: varReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2361,7 +2364,7 @@ linearElementsContent: GREATERTHAN linearElementsStartVector linearElementsNonze
 
 linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVectorContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2386,7 +2389,7 @@ linearElementsStartVectorBody:  osglIntArrayData;
 
 linearElementsNonzeros: linearElementsNonzerosStart linearElementsNonzerosNumberOfElAttribute linearElementsNonzerosContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2415,7 +2418,7 @@ linearElementsNonzerosBody: linearElementsNonzerosIndexes linearElementsNonzeros
 linearElementsNonzerosIndexes:
     | linearElementsNonzerosIndexesStart linearElementsNonzerosIndexesContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2512,7 +2515,7 @@ generalElementsContent: GREATERTHAN generalElementsStartVector generalElementsNo
 
 generalElementsStartVector: generalElementsStartVectorStart generalElementsStartVectorContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2537,7 +2540,7 @@ generalElementsStartVectorBody:  osglIntArrayData;
 
 generalElementsNonzeros: generalElementsNonzerosStart generalElementsNonzerosNumberOfElAttribute generalElementsNonzerosContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2566,7 +2569,7 @@ generalElementsNonzerosBody: generalElementsNonzerosIndexes generalElementsNonze
 generalElementsNonzerosIndexes:
     | generalElementsNonzerosIndexesStart generalElementsNonzerosIndexesContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2632,7 +2635,7 @@ conReferenceElementsContent: GREATERTHAN conReferenceElementsStartVector conRefe
 
 conReferenceElementsStartVector: conReferenceElementsStartVectorStart conReferenceElementsStartVectorContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2657,7 +2660,7 @@ conReferenceElementsStartVectorBody:  osglIntArrayData;
 
 conReferenceElementsNonzeros: conReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2682,7 +2685,7 @@ objReferenceElementsContent: GREATERTHAN objReferenceElementsStartVector objRefe
 
 objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferenceElementsStartVectorContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2707,7 +2710,7 @@ objReferenceElementsStartVectorBody:  osglIntArrayData;
 
 objReferenceElementsNonzeros: objReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2728,21 +2731,20 @@ patternElements: | patternElementsStart patternElementsAttributes patternElement
 
 patternElementsStart: PATTERNELEMENTSSTART;
 
-patternElementsAttributes: | osglExcludeIfSetATT; 
+patternElementsAttributes: | osglNegativePatternATT; 
 
-osglExcludeIfSetATT: excludeIfSetAttEmpty | excludeIfSetAttContent;
+osglNegativePatternATT: negativePatternAttEmpty | negativePatternAttContent;
 
-excludeIfSetAttEmpty: EMPTYEXCLUDEATT
+negativePatternAttEmpty: EMPTYNEGATIVEPATTERNATT
 {
-    osglData->excludeIfSetAttribute = true;
+    osglData->negativePatternAttribute = true;
 };
 
-excludeIfSetAttContent: EXCLUDEATT ATTRIBUTETEXT quote 
+negativePatternAttContent: NEGATIVEPATTERNATT ATTRIBUTETEXT quote 
 { 
-    if      ($2 == "false") osglData->excludeIfSetAttribute = false;
-    else if ($2 == "true")  osglData->excludeIfSetAttribute = true;
-    else if ($2 == "")      osglData->excludeIfSetAttribute = true;
-    else parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "excludeIfSet attribute in <baseMatrix> element must be \"true\" or \"false\"");
+    if      ($2 == "false") osglData->negativePatternAttribute = false;
+    else if ($2 == "true")  osglData->negativePatternAttribute = true;
+    else parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "negativePattern attribute in <baseMatrix> element must be \"true\" or \"false\"");
 //    free($2);
 };
 
@@ -2750,7 +2752,7 @@ patternElementsContent: GREATERTHAN patternElementsStartVector patternElementsNo
 
 patternElementsStartVector: patternElementsStartVectorStart patternElementsStartVectorContent
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2782,7 +2784,7 @@ patternElementsStartVectorBody:  osglIntArrayData;
 
 patternElementsNonzeros: patternElementsNonzerosStart osglNumberOfElATT GREATERTHAN osglIntArrayData NONZEROSEND
 {
-    if (!parserData->ignoreDataAfterErrors)
+//    if (!parserData->ignoreDataAfterErrors)
 //        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 //            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "set variables basic failed");    
     delete[] osglData->osglIntArray;
@@ -2934,7 +2936,7 @@ osglBlockColIdxATT: BLOCKCOLIDXATT quote INTEGER quote
 
 matrixBlockContent: blockEmpty | blockLaden;
 
-blockEmpty: GREATERTHAN BLOCKEND | ENDOFELEMENT;
+blockEmpty: /*GREATERTHAN BLOCKEND |*/ ENDOFELEMENT;
 
 blockLaden: GREATERTHAN blockBody BLOCKEND; 
 
@@ -2979,7 +2981,7 @@ osglNumberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE
 osglNumberOfVarIdxATT: NUMBEROFVARIDXATT QUOTE INTEGER QUOTE
 {
     if (osglData->numberOfVarIdxAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfRows attribute previously set");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfVarIdx attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <rows> cannot be negative");
     osglData->numberOfVarIdxAttributePresent = true;        
     osglData->numberOfVarIdx = $3;
@@ -3506,7 +3508,7 @@ matrixInverseStart: MATRIXINVERSESTART
 
 matrixInverseContent: OSnLMNode MATRIXINVERSEEND;
 
-matrixLowerTriangle: matrixLowerTriangleStart matrixLowerTriangleAttribute matrixLowerTriangleContent;
+matrixLowerTriangle: matrixLowerTriangleStart matrixLowerTriangleAttribute GREATERTHAN matrixLowerTriangleContent;
 
 matrixLowerTriangleStart: MATRIXLOWERTRIANGLESTART 
 {
@@ -3518,7 +3520,7 @@ matrixLowerTriangleAttribute: | includeDiagonalATT;
 
 matrixLowerTriangleContent: OSnLMNode MATRIXLOWERTRIANGLEEND;
 
-matrixUpperTriangle: matrixUpperTriangleStart matrixUpperTriangleAttribute matrixUpperTriangleContent;
+matrixUpperTriangle: matrixUpperTriangleStart matrixUpperTriangleAttribute GREATERTHAN matrixUpperTriangleContent;
 
 matrixUpperTriangleStart: MATRIXUPPERTRIANGLESTART 
 {
@@ -3530,10 +3532,20 @@ matrixUpperTriangleAttribute: | includeDiagonalATT;
 
 matrixUpperTriangleContent: OSnLMNode MATRIXUPPERTRIANGLEEND;
 
-includeDiagonalATT: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
-{ 
-    osnlData->includeDiagonalAttribute = $2; 
-    free($2);
+includeDiagonalATT: /*includeDiagonalAttEmpty | */ includeDiagonalAttContent;
+
+includeDiagonalAttEmpty: EMPTYINCLUDEDIAGONALATT
+{
+    osnlData->includeDiagonalAttribute = true;
+};
+
+includeDiagonalAttContent: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
+{
+    if ($2 != "false" && $2 != "true")
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "includeDiagonal attribute must be \"true\" or \"false\"");
+    else 
+        osnlData->includeDiagonalAttribute = $2;
+//    free($2);
 };
 
 

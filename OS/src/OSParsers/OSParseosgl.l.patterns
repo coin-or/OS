@@ -55,10 +55,10 @@
 
  /* attributes returning strings (that are potentially empty)*/
 
-({xmlwhitespace}+excludeElementIfSet{equality}\"\") {YY_PRINT; return(EMPTYEXCLUDEATT);}
-({xmlwhitespace}+excludeElementIfSet{equality}\'\') {YY_PRINT; return(EMPTYEXCLUDEATT);}
-({xmlwhitespace}+excludeElementIfSet{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(EXCLUDEATT);}
-({xmlwhitespace}+excludeElementIfSet{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(EXCLUDEATT);}
+({xmlwhitespace}+negativePattern{equality}\"\") {YY_PRINT; return(EMPTYNEGATIVEPATTERNATT);}
+({xmlwhitespace}+negativePattern{equality}\'\') {YY_PRINT; return(EMPTYNEGATIVEPATTERNATT);}
+({xmlwhitespace}+negativePattern{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NEGATIVEPATTERNATT);}
+({xmlwhitespace}+negativePattern{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NEGATIVEPATTERNATT);}
 
 ({xmlwhitespace}+baseTranspose{equality}\"\") {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
 ({xmlwhitespace}+baseTranspose{equality}\'\') {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}

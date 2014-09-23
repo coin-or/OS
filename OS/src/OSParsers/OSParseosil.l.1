@@ -16,10 +16,10 @@
  */
 %{
 
-#define OSILPARSERDEBUG
+//#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
+	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext);
 #else     
 	#define YY_PRINT;
 #endif
@@ -99,6 +99,7 @@ using std::ostringstream;
 %option bison-locations
 %option yylineno
 %option nounput
+%option debug
 
 %x osilattributetext
 %x doublequoteattributetext

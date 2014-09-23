@@ -2102,6 +2102,7 @@ ConReferenceMatrixElements::~ConReferenceMatrixElements()
 }// end of ConReferenceMatrixElements::~ConReferenceMatrixElements()
 
 PatternMatrixElements::PatternMatrixElements():
+    negativePattern(false),
     start(NULL),
     nonzeros(NULL)
 {
@@ -2392,6 +2393,8 @@ MatrixConstructor::~MatrixConstructor()
 
 // methods for MatrixType
 MatrixType::MatrixType():
+    numberOfRows(0),
+    numberOfColumns(0),
     symmetry(ENUM_MATRIX_SYMMETRY_none),
     matrixType(ENUM_MATRIX_TYPE_unknown)
 {
@@ -2411,8 +2414,8 @@ MatrixType::~MatrixType()
 
 // methods for OSMatrix ------------------------------------------------
 OSMatrix::OSMatrix():
-    numberOfRows(0),
-    numberOfColumns(0),
+//    numberOfRows(0),
+//    numberOfColumns(0),
     idx(-1),
     name("")
 {

@@ -496,7 +496,7 @@ matrixInverseStart: MATRIXINVERSESTART
 
 matrixInverseContent: OSnLMNode MATRIXINVERSEEND;
 
-matrixLowerTriangle: matrixLowerTriangleStart matrixLowerTriangleAttribute matrixLowerTriangleContent;
+matrixLowerTriangle: matrixLowerTriangleStart matrixLowerTriangleAttribute GREATERTHAN matrixLowerTriangleContent;
 
 matrixLowerTriangleStart: MATRIXLOWERTRIANGLESTART 
 {
@@ -508,7 +508,7 @@ matrixLowerTriangleAttribute: | includeDiagonalATT;
 
 matrixLowerTriangleContent: OSnLMNode MATRIXLOWERTRIANGLEEND;
 
-matrixUpperTriangle: matrixUpperTriangleStart matrixUpperTriangleAttribute matrixUpperTriangleContent;
+matrixUpperTriangle: matrixUpperTriangleStart matrixUpperTriangleAttribute GREATERTHAN matrixUpperTriangleContent;
 
 matrixUpperTriangleStart: MATRIXUPPERTRIANGLESTART 
 {
@@ -520,10 +520,20 @@ matrixUpperTriangleAttribute: | includeDiagonalATT;
 
 matrixUpperTriangleContent: OSnLMNode MATRIXUPPERTRIANGLEEND;
 
-includeDiagonalATT: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
-{ 
-    osnlData->includeDiagonalAttribute = $2; 
-    free($2);
+includeDiagonalATT: /*includeDiagonalAttEmpty | */ includeDiagonalAttContent;
+
+includeDiagonalAttEmpty: EMPTYINCLUDEDIAGONALATT
+{
+    osnlData->includeDiagonalAttribute = true;
+};
+
+includeDiagonalAttContent: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
+{
+    if ($2 != "false" && $2 != "true")
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "includeDiagonal attribute must be \"true\" or \"false\"");
+    else 
+        osnlData->includeDiagonalAttribute = $2;
+//    free($2);
 };
 
 

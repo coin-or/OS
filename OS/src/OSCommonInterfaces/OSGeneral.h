@@ -1930,7 +1930,13 @@ public:
 class PatternMatrixElements
 {
 public:
-    bool excludeElementIfSet;
+    /**
+     *  Chooses between positive pattern (a '1' indicates that a value is to be set)
+     *  and negative pattern (a '1' indicates that the value is to be *omitted*.
+     *  (The default is negativePattern = false.)
+     */
+    bool negativePattern;
+
     IntVector *start;
     IntVector *nonzeros;
 
@@ -2283,6 +2289,8 @@ public:
 class MatrixType : public MatrixNode
 {
 public:
+    int numberOfRows;
+    int numberOfColumns;
     ENUM_MATRIX_SYMMETRY symmetry;
     ENUM_MATRIX_TYPE  matrixType;
 
@@ -2325,8 +2333,8 @@ public:
 class OSMatrix : public MatrixType
 {
 public:
-    int numberOfRows;
-    int numberOfColumns;
+//    int numberOfRows;
+//    int numberOfColumns;
     int idx;
     std::string name;
 

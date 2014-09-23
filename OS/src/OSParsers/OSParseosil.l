@@ -16,10 +16,10 @@
  */
 %{
 
-#define OSILPARSERDEBUG
+//#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
+	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext);
 #else     
 	#define YY_PRINT;
 #endif
@@ -99,6 +99,7 @@ using std::ostringstream;
 %option bison-locations
 %option yylineno
 %option nounput
+%option debug
 
 %x osilattributetext
 %x doublequoteattributetext
@@ -373,10 +374,10 @@ return(DOUBLE);}
 
  /* attributes returning strings (that are potentially empty)*/
 
-({xmlwhitespace}+excludeElementIfSet{equality}\"\") {YY_PRINT; return(EMPTYEXCLUDEATT);}
-({xmlwhitespace}+excludeElementIfSet{equality}\'\') {YY_PRINT; return(EMPTYEXCLUDEATT);}
-({xmlwhitespace}+excludeElementIfSet{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(EXCLUDEATT);}
-({xmlwhitespace}+excludeElementIfSet{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(EXCLUDEATT);}
+({xmlwhitespace}+negativePattern{equality}\"\") {YY_PRINT; return(EMPTYNEGATIVEPATTERNATT);}
+({xmlwhitespace}+negativePattern{equality}\'\') {YY_PRINT; return(EMPTYNEGATIVEPATTERNATT);}
+({xmlwhitespace}+negativePattern{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NEGATIVEPATTERNATT);}
+({xmlwhitespace}+negativePattern{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NEGATIVEPATTERNATT);}
 
 ({xmlwhitespace}+baseTranspose{equality}\"\") {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
 ({xmlwhitespace}+baseTranspose{equality}\'\') {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
@@ -507,11 +508,11 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/matrixDotTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXDOTTIMESEND);}
 {xmlwhitespace}*\<matrixInverse{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXINVERSESTART);}
 {xmlwhitespace}*\<\/matrixInverse{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXINVERSEEND);}
-{xmlwhitespace}*\<matrixLowerTriangle{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXLOWERTRIANGLESTART);}
+{xmlwhitespace}*\<matrixLowerTriangle {YY_PRINT; return(MATRIXLOWERTRIANGLESTART);}
 {xmlwhitespace}*\<\/matrixLowerTriangle{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXLOWERTRIANGLEEND);}
-{xmlwhitespace}*\<matrixUpperTriangle{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXUPPERTRIANGLESTART);}
+{xmlwhitespace}*\<matrixUpperTriangle {YY_PRINT; return(MATRIXUPPERTRIANGLESTART);}
 {xmlwhitespace}*\<\/matrixUpperTriangle{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXUPPERTRIANGLEEND);}
-{xmlwhitespace}*\<matrixMerge{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXMERGESTART);}
+{xmlwhitespace}*\<matrixMerge {YY_PRINT; return(MATRIXMERGESTART);}
 {xmlwhitespace}*\<\/matrixMerge{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXMERGEEND);}
 {xmlwhitespace}*\<matrixMinus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXMINUSSTART);}
 {xmlwhitespace}*\<\/matrixMinus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXMINUSEND);}
