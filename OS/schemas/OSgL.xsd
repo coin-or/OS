@@ -1168,9 +1168,8 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:element name="varReferenceElements" type="VarReferenceMatrixElements" minOccurs="0"/>
 			<xs:element name="linearElements" type="LinearMatrixElements" minOccurs="0"/>
 			<xs:element name="generalElements" type="GeneralMatrixElements" minOccurs="0"/>
-			<xs:element name="conReferenceElements" type="ConReferenceMatrixElements" minOccurs="0"/>
 			<xs:element name="objReferenceElements" type="ObjReferenceMatrixElements" minOccurs="0"/>
-			<xs:element name="patternElements" type="PatternMatrixElements" minOccurs="0"/>
+			<xs:element name="conReferenceElements" type="ConReferenceMatrixElements" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>

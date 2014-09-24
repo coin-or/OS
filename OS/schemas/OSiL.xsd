@@ -387,9 +387,17 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfRows" use="required"/>
+		<xs:attribute name="numberOfColumns" use="required"/>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
-				<xs:documentation>matrix of varReference; may be an empty matrix </xs:documentation>
+				<xs:documentation>controls location of scalar variables. If missing: Completely dense matrix.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="varReferenceMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core variables instead of creation of new ones. 
+Note: only where template matrix so indicates</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -410,11 +418,6 @@
 		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>used to control which new variables are created. Default: Completely dense matrix; Create all variables not mentioned in reference matrix</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name"/>
@@ -619,9 +622,17 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfColumns" use="required"/>
+		<xs:attribute name="numberOfRows" use="required"/>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
-				<xs:documentation>matrix of objReference; may be an empty matrix  </xs:documentation>
+				<xs:documentation>controls location of scalar objectives. If missing: Completely dense matrix.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="objReferenceMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
+Note: only where template matrix so indicates  </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
@@ -632,11 +643,6 @@
 		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>added to objective;        zero if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>used to control which new objectives are created. Default: Completely dense matrix; Create all objectives not mentioned in reference matrix</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
@@ -851,9 +857,17 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="numberOfRows" use="required"/>
+		<xs:attribute name="numberOfColumns" use="required"/>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
-				<xs:documentation>matrix of conReference; may be an empty matrix  </xs:documentation>
+				<xs:documentation>controls location of scalar constraints. If missing: Completely dense matrix.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="conReferenceMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
+Note: only where template matrix so indicates</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -874,11 +888,6 @@
 		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="patternMatrixIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>used to control which new constraints are created. Default: Completely dense matrix; Create all constraints not mentioned in reference matrix</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
