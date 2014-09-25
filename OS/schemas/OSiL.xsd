@@ -387,17 +387,17 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="numberOfRows" use="required"/>
-		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls location of scalar variables. If missing: Completely dense matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="varReferenceMatrixIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="varReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core variables instead of creation of new ones. 
-Note: only where template matrix so indicates</xs:documentation>
+Note: only where template matrix indicates a nonzero</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -622,17 +622,17 @@ Note: only where template matrix so indicates</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="numberOfRows" use="required"/>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls location of scalar objectives. If missing: Completely dense matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="objReferenceMatrixIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="objReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
-Note: only where template matrix so indicates  </xs:documentation>
+Note: only where template matrix indicates a nonzero </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
@@ -857,17 +857,17 @@ Note: only where template matrix so indicates  </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRows" use="required"/>
-		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls location of scalar constraints. If missing: Completely dense matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="conReferenceMatrixIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="conReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
-Note: only where template matrix so indicates</xs:documentation>
+Note: only where template matrix indicates a nonzero</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
