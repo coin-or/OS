@@ -1116,7 +1116,7 @@
 </xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="nonzeros" type="LinearMatrixValues">
+			<xs:element name="nonzeros" type="LinearMatrixNonzeros">
 				<xs:annotation>
 					<xs:documentation>Each nonzero is a linear expression of the form 
 a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
@@ -1132,7 +1132,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 </xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="nonzeros" type="GeneralMatrixValues">
+			<xs:element name="nonzeros" type="GeneralMatrixNonzeros">
 				<xs:annotation>
 					<xs:documentation>Each nonzero is a general nonlinear expression</xs:documentation>
 				</xs:annotation>
@@ -1366,29 +1366,31 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="start" type="NonNegativeIntVector"/>
-			<xs:element name="nonzeros" type="LinearMatrixValues"/>
+			<xs:element name="nonzeros" type="LinearMatrixNonzeros"/>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
+	</xs:complexType>
+	<xs:complexType name="LinearMatrixNonzeros">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
+			<xs:element name="values" type="LinearMatrixValues" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixValues">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
-			<xs:element name="values" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>Number must agree with numberOfEl</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
+			<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number must agree with numberOfEl</xs:documentation>
+				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixBlocks">
 		<xs:annotation>
@@ -1403,19 +1405,6 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
 	</xs:complexType>
-	<!--	
-	<xs:complexType name="LinearMatrixElement">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
-		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
-	</xs:complexType>
--->
 	<xs:complexType name="LinearMatrixEl">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1528,7 +1517,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				<xs:documentation>Number of entries in the el and rowIdx/colIdx child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="NonNegativeIntVector"/>
-			<xs:element name="nonzeros" type="GeneralMatrixValues"/>
+			<xs:element name="nonzeros" type="GeneralMatrixNonzeros"/>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>
@@ -1544,7 +1533,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="GeneralMatrixValues">
+	<xs:complexType name="GeneralMatrixNonzeros">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -1552,35 +1541,15 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="indexes" minOccurs="0">
-				<xs:complexType>
-					<xs:choice>
-						<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
-							</xs:annotation>
-							<xs:complexType>
-								<xs:simpleContent>
-									<xs:extension base="xs:nonNegativeInteger">
-										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
-									</xs:extension>
-								</xs:simpleContent>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-					</xs:choice>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="values" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="el" type="GeneralMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
+			<xs:element name="values" type="GeneralMatrixValues"  minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="GeneralMatrixValues">
+		<xs:sequence>
+			<xs:element name="el" type="GeneralMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixElement">
 		<xs:annotation>
