@@ -917,7 +917,7 @@ osilNumberOfElATT: NUMBEROFELATT quote INTEGER quote
 
 osilNumberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->numberOfMatricesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices attribute previously set");

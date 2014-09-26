@@ -1792,8 +1792,8 @@ static const yytype_uint16 yyrline[] =
     4244,  4244,  4246,  4246,  4248,  4254,  4262,  4262,  4264,  4264,
     4266,  4272,  4280,  4280,  4282,  4282,  4284,  4290,  4298,  4298,
     4300,  4300,  4302,  4308,  4316,  4316,  4318,  4318,  4320,  4332,
-    4340,  4342,  4342,  4344,  4346,  4355,  4357,  4357,  4359,  4359,
-    4361,  4377,  4380,  4380,  4382,  4382,  4385,  5604,  5609,  5617
+    4341,  4343,  4343,  4345,  4347,  4356,  4358,  4358,  4360,  4360,
+    4362,  4379,  4382,  4382,  4384,  4384,  4387,  5661,  5666,  5674
 };
 #endif
 
@@ -7978,6 +7978,7 @@ yyreduce:
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
         {
+std::cout << "expected " << osglData->osglNumberOfEl << " elements; got " << osglData->osglCounter << std::endl;
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "fewer data elements than specified");
             parserData->ignoreDataAfterErrors = true;
         }
@@ -8001,6 +8002,7 @@ yyreduce:
     {
         if (!parserData->suppressFurtherErrorMessages)
         {
+std::cout << "expected " << osglData->osglNumberOfEl << " elements; got " << osglData->osglCounter + osglData->osglMult << std::endl;
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more data elements than specified");
             parserData->suppressFurtherErrorMessages = true;
             parserData->ignoreDataAfterErrors = true;
