@@ -1062,6 +1062,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="VarReferenceMatrixElements">
 		<xs:sequence>
@@ -1077,6 +1078,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ObjReferenceMatrixElements">
 		<xs:sequence>
@@ -1092,6 +1094,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ConReferenceMatrixElements">
 		<xs:sequence>
@@ -1107,6 +1110,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElements">
 		<xs:sequence>
@@ -1123,6 +1127,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixElements">
 		<xs:sequence>
@@ -1138,6 +1143,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="PatternMatrixElements">
 		<xs:sequence>
@@ -1171,7 +1177,6 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:element name="objReferenceElements" type="ObjReferenceMatrixElements" minOccurs="0"/>
 			<xs:element name="conReferenceElements" type="ConReferenceMatrixElements" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>
 	<xs:complexType name="ValueMatrixElements">
 		<xs:annotation>
@@ -1182,7 +1187,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:element name="linearElements" type="LinearMatrixElements" minOccurs="0"/>
 			<xs:element name="generalElements" type="GeneralMatrixElements" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ReferenceMatrixElements">
 		<xs:annotation>
@@ -1193,7 +1198,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:element name="objReferenceElements" type="ObjReferenceMatrixElements" minOccurs="0"/>
 			<xs:element name="conReferenceElements" type="ConReferenceMatrixElements" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixTransformation">
 		<xs:annotation>
@@ -1368,7 +1373,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:element name="start" type="NonNegativeIntVector"/>
 			<xs:element name="nonzeros" type="LinearMatrixNonzeros"/>
 		</xs:sequence>
-		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixNonzeros">
 		<xs:annotation>
@@ -1519,7 +1524,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:element name="start" type="NonNegativeIntVector"/>
 			<xs:element name="nonzeros" type="GeneralMatrixNonzeros"/>
 		</xs:sequence>
-		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixBlocks">
 		<xs:annotation>
@@ -1542,7 +1547,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
-			<xs:element name="values" type="GeneralMatrixValues"  minOccurs="0"/>
+			<xs:element name="values" type="GeneralMatrixValues" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
