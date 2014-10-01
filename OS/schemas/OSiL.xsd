@@ -421,6 +421,11 @@ Note: only where template matrix indicates a nonzero</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name"/>
+		<xs:attribute name="varType" type="GeneralEnumerationVarType" use="optional" default="C">
+			<xs:annotation>
+				<xs:documentation>same type for every newly created variable</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<!-- No need for a name. a <matrix> can have a name; two names might lead to confusion
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		-->

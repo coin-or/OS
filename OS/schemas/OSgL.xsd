@@ -1062,6 +1062,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="VarReferenceMatrixElements">
@@ -1078,6 +1079,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ObjReferenceMatrixElements">
@@ -1094,6 +1096,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ConReferenceMatrixElements">
@@ -1110,6 +1113,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElements">
@@ -1127,6 +1131,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixElements">
@@ -1143,6 +1148,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="PatternMatrixElements">
@@ -1383,7 +1389,6 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
 			<xs:element name="values" type="LinearMatrixValues" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixValues">
 		<xs:annotation>
