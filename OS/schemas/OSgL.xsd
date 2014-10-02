@@ -99,6 +99,7 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+	<!-- not needed ...	
 	<xs:complexType name="LinearConstraintCoefficientsIntVectorEl">
 		<xs:simpleContent>
 			<xs:extension base="xs:int">
@@ -141,6 +142,7 @@
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
+-->
 	<xs:complexType name="IntVectorEl">
 		<xs:simpleContent>
 			<xs:extension base="xs:int">
@@ -384,6 +386,7 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+	<!-- not needed ...	
 	<xs:complexType name="SparseVectorIndexesEl">
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
@@ -419,16 +422,21 @@
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
+-->
 	<xs:complexType name="SparseVector">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
-			<xs:element name="values" type="SparseVectorValues" minOccurs="0"/>
+			<xs:annotation>
+				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
+			<xs:element name="values" type="SizelessDoubleVector" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" use="required"/>
 	</xs:complexType>
+	<!-- not needed ...	
 	<xs:complexType name="SparseIntVectorIndexesEl">
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
@@ -465,16 +473,21 @@
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
+-->
 	<xs:complexType name="SparseIntVector">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="indexes" type="SparseVectorIndexes"/>
-			<xs:element name="values" type="SparseIntVectorValues"/>
+			<xs:annotation>
+				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
+			<xs:element name="values" type="SizelessIntVector" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" use="required"/>
 	</xs:complexType>
+	<!-- not needed ...	
 	<xs:complexType name="SparseNonNegativeIntVectorIndexesEl">
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
@@ -511,6 +524,7 @@
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
+-->
 	<xs:complexType name="SparseNonNegativeIntVector">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -519,11 +533,12 @@
 			<xs:annotation>
 				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
-			<xs:element name="values" type="SparseNonNegativeIntVectorValues" minOccurs="0"/>
+			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
+			<xs:element name="values" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" use="required"/>
 	</xs:complexType>
+	<!-- not needed ..
 	<xs:complexType name="SparseNegativeIntVectorIndexesEl">
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
@@ -557,6 +572,7 @@
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
+-->
 	<xs:complexType name="SparseNegativeIntVector">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -565,8 +581,8 @@
 			<xs:annotation>
 				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="indexes" type="SparseVectorIndexes" minOccurs="0"/>
-			<xs:element name="values" type="SparseNegativeIntVectorValues" minOccurs="0"/>
+			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
+			<xs:element name="values" type="SizelessNegativeIntVector" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" use="required"/>
 	</xs:complexType>
@@ -1363,6 +1379,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
+	<!-- not needed ...
 	<xs:complexType name="LinearMatrix">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1394,6 +1411,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
+-->
 	<xs:complexType name="LinearMatrixVariables">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1410,6 +1428,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			<xs:element name="varIdx" type="IntVector"/>
 		</xs:sequence>
 	</xs:complexType>
+	<!-- not needed ...
 	<xs:complexType name="LinearMatrixxxElements">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1420,6 +1439,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
+-->
 	<xs:complexType name="LinearMatrixNonzeros">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1528,6 +1548,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
+<!-- not needed ...
 	<xs:complexType name="GeneralMatrix">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1570,6 +1591,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
+-->
 	<xs:complexType name="GeneralMatrixBlocks">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
