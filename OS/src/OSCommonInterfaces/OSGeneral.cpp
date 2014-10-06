@@ -1751,14 +1751,17 @@ MatrixNode::~MatrixNode()
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixNode::getNodeType()
 {
+    return nType;
 }// end of MatrixNode::getNodeType()
 
 bool MatrixNode::IsEqual(MatrixNode *that)
 {
+    return true;
 }// end of MatrixNode::IsEqual()
 
 std::string MatrixNode::getMatrixNodeInXML()
 {
+    return "";
 }// end of MatrixNode::getMatrixNodeInXML()
 // end of methods for MatrixNode
 
@@ -1806,8 +1809,8 @@ BaseMatrix* BaseMatrix::cloneMatrixNode()
 
 std::string BaseMatrix::getMatrixNodeInXML()
 {
-#if 0
     ostringstream outStr;
+#if 0
     outStr << "<" ;
     outStr << this->getTokenName();
     outStr << "  value=\"";
@@ -1823,8 +1826,8 @@ std::string BaseMatrix::getMatrixNodeInXML()
         outStr << "\"";
     }
     outStr << "/>";
-    return outStr.str();
 #endif
+    return outStr.str();
 }// end of BaseMatrix::getMatrixNodeInXML()
 bool BaseMatrix::IsEqual(BaseMatrix *that)
 {
@@ -1833,6 +1836,8 @@ bool BaseMatrix::IsEqual(BaseMatrix *that)
 
 
 ConstantMatrixElements::ConstantMatrixElements():
+    numberOfValues(-1),
+    rowMajor(false),
     start(NULL),
     nonzeros(NULL)
 {
@@ -1856,6 +1861,8 @@ ConstantMatrixElements::~ConstantMatrixElements()
 
 
 VarReferenceMatrixElements::VarReferenceMatrixElements():
+    numberOfValues(-1),
+    rowMajor(false),
     start(NULL),
     nonzeros(NULL)
 {
@@ -1940,15 +1947,15 @@ LinearMatrixElement::~LinearMatrixElement()
     }
 }// end of LinearMatrixElement::~LinearMatrixElement()
 
-
 LinearMatrixValues::LinearMatrixValues():
     numberOfEl(0),
-    indexes(NULL),
-    values(NULL)
+    el(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixValues Constructor");
+
 #endif
+
 }// end of LinearMatrixValues::LinearMatrixValues()
 
 
@@ -1957,10 +1964,41 @@ LinearMatrixValues::~LinearMatrixValues()
     std::ostringstream outStr;
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixValues Destructor");
-    outStr.str("");
-    outStr.clear();
-    outStr << "NUMBER OF VALUES = " << numberOfEl << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+//    outStr.str("");
+//    outStr.clear();
+//    outStr << "NUMBER OF VALUES = " << numberOfEl << endl;
+//    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+
+    if (numberOfEl > 0 && el != NULL)
+    {
+        for (int i=0; i < numberOfEl; i++)
+        {
+            if (el[i] != NULL)
+                delete el[i];
+            el[i] = NULL;
+        }
+    }
+    if (el != NULL)
+        delete [] el;
+    el = NULL;
+}// end of LinearMatrixValues::~LinearMatrixValues()
+
+LinearMatrixNonzeros::LinearMatrixNonzeros():
+    indexes(NULL),
+    values(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixNonzeros Constructor");
+#endif
+}// end of LinearMatrixNonzeros::LinearMatrixNonzeros()
+
+
+LinearMatrixNonzeros::~LinearMatrixNonzeros()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixNonzeros Destructor");
 #endif
     if (indexes != NULL)
         delete indexes;
@@ -1969,10 +2007,12 @@ LinearMatrixValues::~LinearMatrixValues()
     if (values != NULL)
         delete values;
     values = NULL;
-}// end of LinearMatrixValues::~LinearMatrixValues()
+}// end of LinearMatrixNonzeros::~LinearMatrixNonzeros()
 
 
 LinearMatrixElements::LinearMatrixElements():
+    numberOfValues(-1),
+    rowMajor(false),
     start(NULL),
     nonzeros(NULL)
 {
@@ -2036,6 +2076,8 @@ GeneralMatrixValues::~GeneralMatrixValues()
 }// end of GeneralMatrixValues::~GeneralMatrixValues()
 
 GeneralMatrixElements::GeneralMatrixElements():
+    numberOfValues(-1),
+    rowMajor(false),
     start(NULL),
     nonzeros(NULL)
 {
@@ -2058,6 +2100,8 @@ GeneralMatrixElements::~GeneralMatrixElements()
 }// end of GeneralMatrixElements::~GeneralMatrixElements()
 
 ObjReferenceMatrixElements::ObjReferenceMatrixElements():
+    numberOfValues(-1),
+    rowMajor(false),
     start(NULL),
     nonzeros(NULL)
 {
@@ -2080,6 +2124,8 @@ ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
 }// end of ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
 
 ConReferenceMatrixElements::ConReferenceMatrixElements():
+    numberOfValues(-1),
+    rowMajor(false),
     start(NULL),
     nonzeros(NULL)
 {
@@ -2101,28 +2147,6 @@ ConReferenceMatrixElements::~ConReferenceMatrixElements()
     nonzeros = NULL;
 }// end of ConReferenceMatrixElements::~ConReferenceMatrixElements()
 
-PatternMatrixElements::PatternMatrixElements():
-    negativePattern(false),
-    start(NULL),
-    nonzeros(NULL)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the PatternMatrixElements Constructor");
-#endif
-}// end of PatternMatrixElements::PatternMatrixElements()
-
-PatternMatrixElements::~PatternMatrixElements()
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the PatternMatrixElements Destructor");
-#endif
-    if (start != NULL)
-        delete start;
-    start = NULL;
-    if (nonzeros != NULL)
-        delete nonzeros;
-    nonzeros = NULL;
-}// end of PatternMatrixElements::~PatternMatrixElements()
 
 MatrixElements::MatrixElements():
     constantElements(NULL),
@@ -2130,9 +2154,7 @@ MatrixElements::MatrixElements():
     linearElements(NULL),
     generalElements(NULL),
     objReferenceElements(NULL),
-    conReferenceElements(NULL),
-    patternElements(NULL),
-    rowMajor(false)
+    conReferenceElements(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixElements Constructor");
@@ -2167,10 +2189,6 @@ MatrixElements::~MatrixElements()
     if (conReferenceElements != NULL)
         delete conReferenceElements;
     conReferenceElements = NULL;
-
-    if (patternElements != NULL)
-        delete patternElements;
-    patternElements = NULL;
 }// end of MatrixElements::~MatrixElements()
 
 std::string MatrixElements::getNodeName()
@@ -2192,8 +2210,8 @@ MatrixElements* MatrixElements::cloneMatrixNode()
 
 std::string MatrixElements::getMatrixNodeInXML()
 {
-#if 0
     ostringstream outStr;
+#if 0
     outStr << "<" ;
     outStr << this->getTokenName();
     outStr << "  value=\"";
@@ -2209,12 +2227,13 @@ std::string MatrixElements::getMatrixNodeInXML()
         outStr << "\"";
     }
     outStr << "/>";
-    return outStr.str();
 #endif
+    return outStr.str();
 }// end of MatrixElements::getMatrixNodeInXML()
 
 bool MatrixElements::IsEqual(MatrixElements *that)
 {
+    return true;
 }// end of MatrixElements::IsEqual()
 // end of methods for MatrixElements
 
@@ -2257,8 +2276,8 @@ MatrixTransformation* MatrixTransformation::cloneMatrixNode()
 
 std::string MatrixTransformation::getMatrixNodeInXML()
 {
-#if 0
     ostringstream outStr;
+#if 0
     outStr << "<" ;
     outStr << this->getTokenName();
     outStr << "  value=\"";
@@ -2274,12 +2293,13 @@ std::string MatrixTransformation::getMatrixNodeInXML()
         outStr << "\"";
     }
     outStr << "/>";
-    return outStr.str();
 #endif
+    return outStr.str();
 }// end of MatrixTransformation::getMatrixNodeInXML()
 
 bool MatrixTransformation::IsEqual(MatrixTransformation *that)
 {
+    return true;
 }// end of MatrixTransformation::IsEqual()
 //end of methods for MatrixTransformation
 
@@ -2346,8 +2366,8 @@ MatrixBlocks* MatrixBlocks::cloneMatrixNode()
 
 std::string MatrixBlocks::getMatrixNodeInXML()
 {
-#if 0
     ostringstream outStr;
+#if 0
     outStr << "<" ;
     outStr << this->getTokenName();
     outStr << "  value=\"";
@@ -2363,12 +2383,13 @@ std::string MatrixBlocks::getMatrixNodeInXML()
         outStr << "\"";
     }
     outStr << "/>";
-    return outStr.str();
 #endif
+    return outStr.str();
 }// end of MatrixBlocks::getMatrixNodeInXML()
 
 bool MatrixBlocks::IsEqual(MatrixBlocks *that)
 {
+    return true;
 }// end of MatrixBlocks::IsEqual()
 // end of methods for MatrixBlocks
 
@@ -2472,8 +2493,8 @@ OSMatrix* OSMatrix::createConstructorTreeFromPrefix(std::vector<MatrixNode*> mtx
 
 std::string OSMatrix::getMatrixNodeInXML()
 {
-#if 0
     ostringstream outStr;
+#if 0
     outStr << "<" ;
     outStr << this->getTokenName();
     outStr << "  value=\"";
@@ -2489,12 +2510,13 @@ std::string OSMatrix::getMatrixNodeInXML()
         outStr << "\"";
     }
     outStr << "/>";
-    return outStr.str();
 #endif
+    return outStr.str();
 }// end of OSMatrix::getMatrixNodeInXML()
 
 bool OSMatrix::IsEqual(OSMatrix *that)
 {
+    return true;
 }// end of OSMatrix::IsEqual()
 // end of methods for OSMatrix
 
@@ -2535,8 +2557,8 @@ MatrixBlock* MatrixBlock::cloneMatrixNode()
 
 std::string MatrixBlock::getMatrixNodeInXML()
 {
-#if 0
     ostringstream outStr;
+#if 0
     outStr << "<" ;
     outStr << this->getTokenName();
     outStr << "  value=\"";
@@ -2552,11 +2574,12 @@ std::string MatrixBlock::getMatrixNodeInXML()
         outStr << "\"";
     }
     outStr << "/>";
-    return outStr.str();
 #endif
+    return outStr.str();
 }// end of MatrixBlock::getMatrixNodeInXML()
 
 bool MatrixBlock::IsEqual(MatrixBlock *that)
 {
+    return true;
 }// end of MatrixBlock::IsEqual()
 // end of methods for MatrixBlock ----------------------------------------------

@@ -84,6 +84,7 @@ OSgLParserData::OSgLParserData() :
     baseMatrixEndColAttributePresent(false),
     baseTransposeAttributePresent(false),
     scalarMultiplierAttributePresent(false),
+    rowMajorAttributePresent(false),
     rowMajorAttribute(false),
     negativePatternAttribute(false),
     blockRowIdx(-1),
@@ -97,10 +98,14 @@ OSgLParserData::OSgLParserData() :
     numberOfBlocksAttributePresent(false),
     numberOfColumnsAttributePresent(false),
     numberOfRowsAttributePresent(false),
+    numberOfValuesAttributePresent(false),
+    numberOfValues(0),
     numberOfVarIdxAttributePresent(false),
     numberOfVarIdx(0),
     numberOfElAttributePresent(false),
-    numberOfEl(0)
+    numberOfEl(0),
+    osglNumberOfNonzeros(0),
+    osglNonzeroCounter(0)
 {
 
 }//OSgLParserData

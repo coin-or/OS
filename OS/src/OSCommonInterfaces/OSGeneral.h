@@ -803,7 +803,9 @@ public:
     int number;
 
     /**
-     * indexes holds an integer array of indexes whose corresponding values are nonzero.
+     * indexes holds an integer array of indexes whose corresponding values
+     * are listed in the same order in the values array. 
+     * Typically those would be nonzero.
      */
     int* indexes;
 
@@ -962,13 +964,11 @@ public:
 
 
 
-
-
 /*! \class SparseHessianMatrix SparseHessianMatrix.h "SparseHessianMatrix.h"
  *  \brief The in-memory representation of a SparseHessianMatrix..
  *
  * \remarks
-<p>  Store and uppertriangular Hessian Matrix in sparse format </p>
+<p>  Store an upper-triangular Hessian Matrix in sparse format </p>
 <p>  Assume there are n variables in what follows </p>
 
  *
@@ -1056,7 +1056,6 @@ public:
     double* coefficients;
 
     /**
-     *
      * Default constructor.
      */
     QuadraticTerms();
@@ -1074,7 +1073,7 @@ public:
     IntVector();
     ~IntVector();
 
-    // alternate constructor
+    /** alternate constructor */
     IntVector(int n);
 
     /**
@@ -1091,7 +1090,6 @@ public:
     bool IsEqual(IntVector *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1158,17 +1156,15 @@ public:
     OtherOptionEnumeration();
     ~OtherOptionEnumeration();
 
-    // alternate constructor
+    /** alternate constructor */
     OtherOptionEnumeration(int n);
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(OtherOptionEnumeration *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1208,7 +1204,6 @@ public:
 };//class OtherOptionEnumeration
 
 
-
 /*! \class DoubleVector
  * \brief a double vector data structure
  */
@@ -1217,6 +1212,7 @@ class DoubleVector
 public:
     DoubleVector();
     ~DoubleVector();
+
     /**
      * bDeleteArrays is true if we delete the arrays in garbage collection
      * set to true by default
@@ -1239,8 +1235,7 @@ struct IndexValuePair
      */
     int idx;
 
-    /** value is a double that holds the value of the entity
-     */
+    /** value is a double that holds the value of the entity */
     double value;
 };
 
@@ -1263,13 +1258,11 @@ public:
     ~BasisStatus();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(BasisStatus *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1381,12 +1374,14 @@ public:
     ENUM_MATRIX_CONSTRUCTOR_TYPE nType;
 
     /**  inumberOfChildren is the number of MatrixNode child elements
-     *   For the matrix types (OSMatrix and block) this number is not fixed and is temporarily set to 0
+     *   For the matrix types (OSMatrix and MatrixBlock) this number
+     *   is not fixed and is temporarily set to 0
      */
     unsigned int inumberOfChildren;
 
     /**
-     * m_mChildren holds all the children, that is, nodes that the current node operates on.
+     * m_mChildren holds all the children, that is, nodes used
+     * in the definition or construction of the current node.
      */
     MatrixNode **m_mChildren;
 
@@ -1402,7 +1397,7 @@ public:
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
     /**
-     * @return the name of the operator
+     * @return the name of the matrix constructor
      */
     virtual std::string getNodeName() = 0;
 
@@ -1418,7 +1413,7 @@ public:
 
     /**
      * <p>
-     * Get a vector of pointers to OSnLNodes and OSnLMMatrixNodes that correspond to
+     * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
      * the MatrixNode tree in prefix format.
      * </p>
      *
@@ -1473,7 +1468,6 @@ public:
     virtual bool IsEqual(MatrixNode *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1517,7 +1511,6 @@ public:
     bool IsEqual(MatrixConstructor *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1542,7 +1535,24 @@ public:
 class ConstantMatrixElements
 {
 public:
+    /**
+     *  numberOfValues records the number of entries in the arrays
+     *  that make up the instance of nonzeros
+     */
+    int numberOfValues;
+ 
+    /**
+     *  To indicate whether the constant matrix elements are stored 
+     *  in row major form or column major form
+     */
+    bool rowMajor;
+
+    /**
+     *  A vector listing the row or column starts
+     */
     IntVector *start;
+
+    /** The indices and values of the (nonzero) constant elements */
     SparseVector *nonzeros;
 
     ConstantMatrixElements();
@@ -1555,7 +1565,6 @@ public:
     bool IsEqual(ConstantMatrixElements *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1580,20 +1589,35 @@ public:
 class VarReferenceMatrixElements
 {
 public:
+    /**
+     *  numberOfValues records the number of entries in the arrays
+     *  that make up the instance of nonzeros
+     */
+    int numberOfValues;
+ 
+    /**
+     *  To indicate whether the varReference matrix elements are stored 
+     *  in row major form or column major form
+     */
+    bool rowMajor;
+
+    /**
+     *  A vector listing the row or column starts
+     */
     IntVector *start;
+
+    /** The row (or column) indices and variable references of the elements */
     SparseIntVector *nonzeros;
 
     VarReferenceMatrixElements();
     ~VarReferenceMatrixElements();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(VarReferenceMatrixElements *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1627,13 +1651,11 @@ public:
     ~LinearMatrixElementTerm();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(LinearMatrixElementTerm *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1669,13 +1691,11 @@ public:
     ~LinearMatrixElement();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(LinearMatrixElement *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1693,15 +1713,15 @@ public:
     bool deepCopyFrom(LinearMatrixElement *that);
 };//class LinearMatrixElement
 
+
 /*! \class LinearMatrixValues
- * \brief a data structure to represent the nonzeros in a linearMatrix element
+ * \brief a data structure to represent the linear expressions in a LinearMatrixNonzeros element
  */
 class LinearMatrixValues
 {
 public:
     int numberOfEl;
-    IntVector *indexes;
-    LinearMatrixElement *values;     
+    LinearMatrixElement **el;     
     
     LinearMatrixValues();
     ~LinearMatrixValues();
@@ -1731,14 +1751,81 @@ public:
     bool deepCopyFrom(LinearMatrixValues *that);
 };//class LinearMatrixValues
 
+
+/*! \class LinearMatrixNonzeros
+ * \brief a data structure to represent the nonzeros in a linearMatrix element
+ */
+class LinearMatrixNonzeros
+{
+public:
+    /**
+     *  numberOfEl gives the number of nonzero elements, which is the dimension
+     *  of both the indexes and values element
+     */
+    //int numberOfEl;
+
+    /** row or column indices, depending on rowMajor */
+    IntVector *indexes;
+
+    /**
+     *  The values are expressions of the form
+     *  a_0 + a_1 x_{i_1} * a_2 x_{i_2} + ...
+     *  Each term in this sum is stored as a separate LinearMatrixElementTerm object
+     */
+    LinearMatrixValues *values;     
+    
+    LinearMatrixNonzeros();
+    ~LinearMatrixNonzeros();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(LinearMatrixNonzeros *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(LinearMatrixNonzeros *that);
+};//class LinearMatrixNonzeros
+
 /*! \class LinearMatrixElements
  * \brief a data structure to represent the nonzero values in a linearMatrix element
  */
 class LinearMatrixElements
 {
 public:
+    /**
+     *  numberOfValues records the number of entries in the arrays
+     *  that make up the instance of nonzeros
+     */
+    int numberOfValues;
+ 
+    /**
+     *  To indicate whether the linear matrix elements are stored 
+     *  in row major form or column major form
+     */
+    bool rowMajor;
+
+    /**
+     *  A vector listing the row or column starts
+     */
     IntVector *start;
-    LinearMatrixValues *nonzeros;
+
+    /** The indices and values of the (nonzero) linear matrix elements */
+    LinearMatrixNonzeros *nonzeros;
 
     LinearMatrixElements();
     ~LinearMatrixElements();
@@ -1750,7 +1837,6 @@ public:
     bool IsEqual(LinearMatrixElements *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1812,7 +1898,24 @@ public:
 class GeneralMatrixElements
 {
 public:
+    /**
+     *  numberOfValues records the number of entries in the arrays
+     *  that make up the instance of nonzeros
+     */
+    int numberOfValues;
+ 
+    /**
+     *  To indicate whether the general matrix elements are stored 
+     *  in row major form or column major form
+     */
+    bool rowMajor;
+
+    /**
+     *  A vector listing the row or column starts
+     */
     IntVector *start;
+
+    /** The indices and values of the (nonzero) elements */
     GeneralMatrixValues *nonzeros;
 
     GeneralMatrixElements();
@@ -1851,7 +1954,24 @@ public:
 class ObjReferenceMatrixElements
 {
 public:
+    /**
+     *  numberOfValues records the number of entries in the arrays
+     *  that make up the instance of nonzeros
+     */
+    int numberOfValues;
+ 
+    /**
+     *  To indicate whether the objReference matrix elements are stored 
+     *  in row major form or column major form
+     */
+    bool rowMajor;
+
+    /**
+     *  A vector listing the row or column starts
+     */
     IntVector *start;
+
+    /** The row (or column) indices and objective references of the elements */
     SparseIntVector *nonzeros;
 
     ObjReferenceMatrixElements();
@@ -1864,7 +1984,6 @@ public:
     bool IsEqual(ObjReferenceMatrixElements *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1890,7 +2009,24 @@ public:
 class ConReferenceMatrixElements
 {
 public:
+    /**
+     *  numberOfValues records the number of entries in the arrays
+     *  that make up the instance of nonzeros
+     */
+    int numberOfValues;
+ 
+    /**
+     *  To indicate whether the conReference matrix elements are stored 
+     *  in row major form or column major form
+     */
+    bool rowMajor;
+
+    /**
+     *  A vector listing the row or column starts
+     */
     IntVector *start;
+
+    /** The row (or column) indices and constraint references of the elements */
     SparseIntVector *nonzeros;
 
     ConReferenceMatrixElements();
@@ -1903,7 +2039,6 @@ public:
     bool IsEqual(ConReferenceMatrixElements *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1921,53 +2056,6 @@ public:
     bool deepCopyFrom(ConReferenceMatrixElements *that);
 };//class ConReferenceMatrixElements
 
-/*! \class PatternMatrixElements
- * \brief a data structure to represent "pattern" elements in a MatrixType object
- *  Each nonzero element must be +1 (so only the indexes are represented) and
- *  denotes a location in the pattern matrix that either can or cannot be nonzero,
- *  depending on the value of the boolean excludeElementIfSet;
- */
-class PatternMatrixElements
-{
-public:
-    /**
-     *  Chooses between positive pattern (a '1' indicates that a value is to be set)
-     *  and negative pattern (a '1' indicates that the value is to be *omitted*.
-     *  (The default is negativePattern = false.)
-     */
-    bool negativePattern;
-
-    IntVector *start;
-    IntVector *nonzeros;
-
-    PatternMatrixElements();
-    ~PatternMatrixElements();
-
-    /**
-     *
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(PatternMatrixElements *that);
-
-    /**
-     *
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */
-    bool deepCopyFrom(PatternMatrixElements *that);
-};//class PatternMatrixElements
-
 
 /*! \class MatrixElements
  * \brief a data structure to represent the nonzeroes of a matrix explicitly element by element
@@ -1981,9 +2069,6 @@ public:
     GeneralMatrixElements           *generalElements;
     ObjReferenceMatrixElements *objReferenceElements;
     ConReferenceMatrixElements *conReferenceElements;
-    PatternMatrixElements           *patternElements;
-
-    bool rowMajor;
 
     MatrixElements();
     virtual ~MatrixElements();
@@ -2012,14 +2097,12 @@ public:
     MatrixElements* copyNodeAndDescendants();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(MatrixElements *that);
 
     /**
      * <p>
-
      * The following method writes a matrix node in OSgL format. 
      * it is used by OSgLWriter to write a <matrix> element.
      * </p>
@@ -2029,7 +2112,6 @@ public:
     virtual std::string getMatrixNodeInXML();
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -2094,7 +2176,6 @@ public:
     bool IsEqual(MatrixTransformation *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -2122,9 +2203,24 @@ class MatrixBlock; //forward desclaration
 class MatrixBlocks : public MatrixConstructor
 {
 public:
-    int numberOfBlocks;
+    /**
+     *  An array listing the leftmost column of each block within the larger matrix
+     *  It is assumed thst the blocks are neatly "stacked"
+     */
     IntVector *colOffsets;
+
+    /**
+     *  An array listing the top row of each block within the larger matrix
+     */
     IntVector *rowOffsets;
+
+    /** 
+     *  This integer gives the number of blocks for which values are provided
+     *  Due to block-sparsity, this could be less than card(colOffsets)*card(rowOffsets)
+     */
+    int numberOfBlocks;
+
+    /** The nonzeros in each block are held in this data structure */
     MatrixBlock **block;
 
     MatrixBlocks();
@@ -2158,13 +2254,11 @@ public:
     virtual MatrixBlocks *cloneMatrixNode();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(MatrixBlocks *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -2181,6 +2275,7 @@ public:
      */
     bool deepCopyFrom(MatrixBlocks *that);
 };//class MatrixBlocks
+
 
 /*! \class BaseMatrix
  * \brief a data structure to represent a point of departure for
@@ -2283,7 +2378,7 @@ public:
 
 
 /*! \class MatrixType
- * \brief a data structure to represent a MatrixType object (from which we derive Matrix and MatrixBlock)
+ * \brief a data structure to represent a MatrixType object (from which we derive OSMatrix and MatrixBlock)
  *
  */
 class MatrixType : public MatrixNode
@@ -2327,7 +2422,7 @@ public:
 
 
 /*! \class OSMatrix
- * \brief a data structure to represent a Matrix object (derived from MatrixType)
+ * \brief a data structure to represent a matrix object (derived from MatrixType)
  *
  */
 class OSMatrix : public MatrixType
@@ -2696,7 +2791,6 @@ public:
      */
     bool deepCopyFrom(TimeSpan *that);
 }; //TimeSpan
-
 
 
 class OSGeneral

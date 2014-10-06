@@ -130,6 +130,7 @@ public:
     bool baseMatrixEndColAttributePresent;
     bool baseTransposeAttributePresent;
     bool scalarMultiplierAttributePresent;
+    bool rowMajorAttributePresent;
     bool rowMajorAttribute;
     bool negativePatternAttribute;
     int  blockRowIdx;
@@ -143,11 +144,14 @@ public:
     bool numberOfBlocksAttributePresent;
     bool numberOfColumnsAttributePresent;
     bool numberOfRowsAttributePresent;
+    bool numberOfValuesAttributePresent;
+    int  numberOfValues;
     bool numberOfVarIdxAttributePresent;
     int  numberOfVarIdx;
     bool numberOfElAttributePresent;
     int  numberOfEl;
-
+    int  osglNumberOfNonzeros;
+    int  osglNonzeroCounter;
     
 
 };//OSgLParserData
