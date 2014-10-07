@@ -724,7 +724,7 @@ constantElementsAtt:
     }
 ;
 
-constantElementsContent: constantElementsStartVector constantElementsNonzeros CONSTANTELEMENTSEND;
+constantElementsContent: constantElementsStartVector constantElementsIndexes constantElementsValues CONSTANTELEMENTSEND;
 
 constantElementsStartVector: constantElementsStartVectorStart constantElementsStartVectorContent
 {
@@ -754,6 +754,59 @@ constantElementsStartVectorLaden: GREATERTHAN constantElementsStartVectorBody ST
 
 constantElementsStartVectorBody: osglIntArrayData;
 
+
+constantElementsIndexes: constantElementsIndexesStart constantElementsIndexesContent
+{
+    ((MatrixElements*)osglData->tempC)->constantElements->indexes = new IntVector();
+    ((MatrixElements*)osglData->tempC)->constantElements->indexes->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->constantElements->indexes->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+constantElementsIndexesStart: INDEXESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->constantElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+constantElementsIndexesContent: constantElementsIndexesEmpty | constantElementsIndexesLaden;
+
+constantElementsIndexesEmpty: ENDOFELEMENT;
+
+constantElementsIndexesLaden: GREATERTHAN constantElementsIndexesBody INDEXESEND;
+
+constantElementsIndexesBody: osglIntArrayData;
+
+
+constantElementsValues: constantElementsValuesStart constantElementsValuesContent
+{
+    ((MatrixElements*)osglData->tempC)->constantElements->values = new DoubleVector();
+    ((MatrixElements*)osglData->tempC)->constantElements->values->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->constantElements->values->el = osglData->osglDblArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+constantElementsValuesStart: VALUESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->constantElements->numberOfValues;
+    osglData->osglDblArray = new double[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "values vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+constantElementsValuesContent: constantElementsValuesEmpty | constantElementsValuesLaden;
+
+constantElementsValuesEmpty: ENDOFELEMENT;
+
+constantElementsValuesLaden: GREATERTHAN constantElementsValuesBody VALUESEND;
+
+constantElementsValuesBody: osglDblArrayData;
+
+/*
 constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZEROSEND
 {
     ((MatrixElements*)osglData->tempC)->constantElements->nonzeros = new SparseVector();
@@ -764,14 +817,13 @@ constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZERO
     parserData->ignoreDataAfterErrors = false;        
 };
 
-
 constantElementsNonzerosStart: NONZEROSSTART
 {
     osglData->osglCounter = 0;
     osglData->osglNumberOfEl = 0;
     osglData->osglNumberOfElPresent = false;
 };
-
+*/
 
 varReferenceElements: | varReferenceElementsStart varReferenceElementsAttributes GREATERTHAN varReferenceElementsContent; 
 
@@ -801,7 +853,7 @@ varReferenceElementsAtt:
     }
 ;
 
-varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsNonzeros VARREFERENCEELEMENTSEND;
+varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsIndexes varReferenceElementsValues VARREFERENCEELEMENTSEND;
 
 varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferenceElementsStartVectorContent
 {
@@ -819,7 +871,6 @@ varReferenceElementsStartVectorStart: STARTVECTORSTART
     else
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->osglNumberOfElPresent = false;
     osglData->osglCounter = 0;
 std::cout << "start vector has length " << osglData->osglNumberOfEl << std::endl;  
 };
@@ -832,6 +883,58 @@ varReferenceElementsStartVectorLaden: GREATERTHAN varReferenceElementsStartVecto
 
 varReferenceElementsStartVectorBody:  osglIntArrayData;
 
+varReferenceElementsIndexes: varReferenceElementsIndexesStart varReferenceElementsIndexesContent
+{
+    ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes = new IntVector();
+    ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+varReferenceElementsIndexesStart: INDEXESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->varReferenceElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+varReferenceElementsIndexesContent:varReferenceElementsIndexesEmpty | varReferenceElementsIndexesLaden;
+
+varReferenceElementsIndexesEmpty: ENDOFELEMENT;
+
+varReferenceElementsIndexesLaden: GREATERTHAN varReferenceElementsIndexesBody INDEXESEND;
+
+varReferenceElementsIndexesBody: osglIntArrayData;
+
+
+varReferenceElementsValues: varReferenceElementsValuesStart varReferenceElementsValuesContent
+{
+    ((MatrixElements*)osglData->tempC)->varReferenceElements->values = new IntVector();
+    ((MatrixElements*)osglData->tempC)->varReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->varReferenceElements->values->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+varReferenceElementsValuesStart: VALUESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->varReferenceElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "values vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+varReferenceElementsValuesContent: varReferenceElementsValuesEmpty | varReferenceElementsValuesLaden;
+
+varReferenceElementsValuesEmpty: ENDOFELEMENT;
+
+varReferenceElementsValuesLaden: GREATERTHAN varReferenceElementsValuesBody VALUESEND;
+
+varReferenceElementsValuesBody: osglIntArrayData;
+
+/*
 varReferenceElementsNonzeros: varReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
 {
 //    if (!parserData->ignoreDataAfterErrors)
@@ -856,9 +959,9 @@ varReferenceElementsNonzerosStart: NONZEROSSTART
     osglData->osglNumberOfElPresent = false;
     osglData->osglCounter = 0;
 };
+*/
 
-
-linearElements: | linearElementsStart linearElementsAttributes linearElementsContent; 
+linearElements: | linearElementsStart linearElementsAttributes GREATERTHAN linearElementsContent; 
 
 linearElementsStart: LINEARELEMENTSSTART
 {
@@ -886,7 +989,7 @@ linearElementsAtt:
     }
 ;
 
-linearElementsContent: GREATERTHAN linearElementsStartVector linearElementsNonzeros LINEARELEMENTSEND;
+linearElementsContent: linearElementsStartVector linearElementsIndexes linearElementsValues LINEARELEMENTSEND;
 
 linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVectorContent
 {
@@ -917,6 +1020,33 @@ linearElementsStartVectorLaden: GREATERTHAN linearElementsStartVectorBody STARTV
 
 linearElementsStartVectorBody:  osglIntArrayData;
 
+
+linearElementsIndexes: linearElementsIndexesStart linearElementsIndexesContent
+{
+    ((MatrixElements*)osglData->tempC)->linearElements->indexes = new IntVector();
+    ((MatrixElements*)osglData->tempC)->linearElements->indexes->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->linearElements->indexes->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+linearElementsIndexesStart: INDEXESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+linearElementsIndexesContent: linearElementsIndexesEmpty | linearElementsIndexesLaden;
+
+linearElementsIndexesEmpty: ENDOFELEMENT;
+
+linearElementsIndexesLaden: GREATERTHAN linearElementsIndexesBody INDEXESEND;
+
+linearElementsIndexesBody: osglIntArrayData;
+
+/*
 linearElementsNonzeros: linearElementsNonzerosStart linearElementsNonzerosContent
 {
 //    if (!parserData->ignoreDataAfterErrors)
@@ -969,41 +1099,49 @@ linearElementsNonzerosIndexesEmpty: ENDOFELEMENT;
 linearElementsNonzerosIndexesLaden: GREATERTHAN linearElementsNonzerosIndexesBody INDEXESEND;
 
 linearElementsNonzerosIndexesBody:  osglIntArrayData;
+*/
 
 
-linearElementsNonzerosValues:
+linearElementsValues:
     {
         if (osglData->osglNumberOfNonzeros > 0)
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "expected <values> element");
     };    
-  | linearElementsNonzerosValuesStart linearElementsNonzerosValuesContent
+  | 
+    linearElementsValuesStart linearElementsValuesContent
     {
         if (osglData->osglNumberOfNonzeros > osglData->osglNonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "too few <el> elements");
         else if (osglData->osglNumberOfNonzeros < osglData->osglNonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "too many <el> elements");        
+        ((MatrixElements*)osglData->tempC)->linearElements->values->numberOfEl = osglData->osglNumberOfEl;
+//        ((MatrixElements*)osglData->tempC)->linearElements->values->el = osglData->osglDblArray;
+        parserData->suppressFurtherErrorMessages = false;
+        parserData->ignoreDataAfterErrors = false;        
     };
 
-linearElementsNonzerosValuesStart: VALUESSTART
+linearElementsValuesStart: VALUESSTART
 {
-//    osglData->osglNumberOfVarIdxPresent = false;
-//    osglData->osglConstantPresent = false;
-    osglData->osglNumberOfNonzeros = osglData->osglNumberOfEl;
+    osglData->osglNumberOfNonzeros = ((MatrixElements*)osglData->tempC)->constantElements->numberOfValues;
     osglData->osglNonzeroCounter = 0;
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values = 
+    ((MatrixElements*)osglData->tempC)->linearElements->values = 
                 new LinearMatrixValues();
+    osglData->osglDblArray = new double[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "values vector has length " << osglData->osglNumberOfEl << std::endl;  
 };
 
-linearElementsNonzerosValuesContent: linearElementsNonzerosValuesEmpty | linearElementsNonzerosValuesLaden;
+linearElementsValuesContent: linearElementsValuesEmpty | linearElementsValuesLaden;
 
-linearElementsNonzerosValuesEmpty: ENDOFELEMENT;
+linearElementsValuesEmpty: ENDOFELEMENT;
 
-linearElementsNonzerosValuesLaden: GREATERTHAN linearElementsNonzerosElList VALUESEND;
+linearElementsValuesLaden: GREATERTHAN linearElementsValuesBody VALUESEND;
 
-linearElementsNonzerosElList:  | linearElementsNonzerosElList linearElementsNonzerosEl;
+linearElementsValuesBody: linearElementsValuesElList;
 
-linearElementsNonzerosEl: linearElementsNonzerosElStart linearElementsNonzerosElAttributes
-                          linearElementsNonzerosElContent
+linearElementsValuesElList:  | linearElementsValuesElList linearElementsValuesEl;
+
+linearElementsValuesEl: linearElementsValuesElStart linearElementsValuesElAttributes linearElementsValuesElContent
 {
     osglData->osglNonzeroCounter++;
     if (osglData->osglNonzeroCounter > osglData->osglNumberOfNonzeros)
@@ -1011,29 +1149,29 @@ linearElementsNonzerosEl: linearElementsNonzerosElStart linearElementsNonzerosEl
         
 };
 
-linearElementsNonzerosElStart: ELSTART
+linearElementsValuesElStart: ELSTART
 {
     osglData->osglNumberOfVarIdxPresent = false;
     osglData->osglConstantPresent = false;
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values->numberOfEl
+    ((MatrixElements*)osglData->tempC)->linearElements->values->numberOfEl
         = ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues;    
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values->el
+    ((MatrixElements*)osglData->tempC)->linearElements->values->el
         = new LinearMatrixElement*[((MatrixElements*)osglData->tempC)->linearElements->numberOfValues];    
 };
 
-linearElementsNonzerosElAttributes: linearElementsNonzerosElAttList
+linearElementsValuesElAttributes: linearElementsValuesElAttList
 {
     if (!osglData->numberOfVarIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfVarIdx attribute missing");
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values->el[osglData->osglNonzeroCounter]->numberOfVarIdx
+    ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->numberOfVarIdx
         = osglData->numberOfVarIdx;
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values->el[osglData->osglNonzeroCounter]->varIdx
+    ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx
         = new LinearMatrixElementTerm*[osglData->numberOfVarIdx];
 };
 
-linearElementsNonzerosElAttList: | linearElementsNonzerosElAttList linearElementsNonzerosElAtt;
+linearElementsValuesElAttList: | linearElementsValuesElAttList linearElementsValuesElAtt;
 
-linearElementsNonzerosElAtt: 
+linearElementsValuesElAtt: 
       osglNumberOfVarIdxATT
     | osglConstantATT;
 
@@ -1043,40 +1181,41 @@ osglConstantATT: CONSTANTATT QUOTE aNumber QUOTE
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "linear matrix elements: duplicate constant");    
     else
     {
-        ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values->el[osglData->osglNonzeroCounter]->constant
+        ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->constant
              = parserData->tempVal;
         osglData->osglConstantPresent = true;
     }
 };
 
-linearElementsNonzerosElContent: linearElementsNonzerosElEmpty | linearElementsNonzerosElLaden;
+linearElementsValuesElContent: linearElementsValuesElEmpty | linearElementsValuesElLaden;
 
-linearElementsNonzerosElEmpty: ENDOFELEMENT;
+linearElementsValuesElEmpty: ENDOFELEMENT;
 
-linearElementsNonzerosElLaden: GREATERTHAN linearElementsNonzerosVarIdxList ELEND;
+linearElementsValuesElLaden: GREATERTHAN linearElementsValuesVarIdxList ELEND;
 
-linearElementsNonzerosVarIdxList: | linearElementsNonzerosVarIdxList linearElementsNonzerosVarIdx;
+linearElementsValuesVarIdxList: | linearElementsValuesVarIdxList linearElementsValuesVarIdx;
 
-linearElementsNonzerosVarIdx: 
-    linearElementsNonzerosVarIdxStart osglLinearElementsNonzerosVarIdxCoefATT linearElementsNonzerosVarIdxContent;
+linearElementsValuesVarIdx: 
+    linearElementsValuesVarIdxStart osglLinearElementsValuesVarIdxCoefATT linearElementsValuesVarIdxContent;
 
-linearElementsNonzerosVarIdxStart: VARIDXSTART
+linearElementsValuesVarIdxStart: VARIDXSTART
 {
     osglData->osglCoefPresent = false;
     osglData->osglCoef = 1.0;
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]
+    ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]
         = new LinearMatrixElementTerm();
 };
 
-osglLinearElementsNonzerosVarIdxCoefATT: | COEFATT QUOTE aNumber QUOTE
+osglLinearElementsValuesVarIdxCoefATT: | COEFATT QUOTE aNumber QUOTE
 {
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->coef = parserData->tempVal;
+    ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->coef = parserData->tempVal;
 }; 
 
-linearElementsNonzerosVarIdxContent: GREATERTHAN INTEGER VARIDXEND
+linearElementsValuesVarIdxContent: GREATERTHAN INTEGER VARIDXEND
 {
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->idx = parserData->tempVal;
+    ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->idx = parserData->tempVal;
 };
+
 
 generalElements: | generalElementsStart generalElementsAttributes  generalElementsContent; 
 
@@ -1231,7 +1370,7 @@ generalElementsNonzerosElEmpty: ENDOFELEMENT;
 generalElementsNonzerosElLaden: GREATERTHAN nlnode ELEND;
 
 
-conReferenceElements: | conReferenceElementsStart conReferenceElementsAttributes conReferenceElementsContent CONREFERENCEELEMENTSEND; 
+conReferenceElements: | conReferenceElementsStart conReferenceElementsAttributes GREATERTHAN conReferenceElementsContent; 
 
 conReferenceElementsStart: CONREFERENCEELEMENTSSTART
 {
@@ -1259,15 +1398,10 @@ conReferenceElementsAtt:
     }
 ;
 
-conReferenceElementsContent: GREATERTHAN conReferenceElementsStartVector conReferenceElementsNonzeros;
+conReferenceElementsContent: conReferenceElementsStartVector conReferenceElementsIndexes conReferenceElementsValues CONREFERENCEELEMENTSEND;
 
 conReferenceElementsStartVector: conReferenceElementsStartVectorStart conReferenceElementsStartVectorContent
 {
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start->el = osglData->osglIntArray;
@@ -1295,6 +1429,66 @@ conReferenceElementsStartVectorLaden: GREATERTHAN conReferenceElementsStartVecto
 
 conReferenceElementsStartVectorBody:  osglIntArrayData;
 
+conReferenceElementsStartVectorContent: conReferenceElementsStartVectorEmpty | conReferenceElementsStartVectorLaden;
+
+conReferenceElementsStartVectorEmpty: ENDOFELEMENT;
+
+conReferenceElementsStartVectorLaden: GREATERTHAN conReferenceElementsStartVectorBody STARTVECTOREND;
+
+conReferenceElementsStartVectorBody:  osglIntArrayData;
+
+conReferenceElementsIndexes: conReferenceElementsIndexesStart conReferenceElementsIndexesContent
+{
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes = new IntVector();
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+conReferenceElementsIndexesStart: INDEXESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->conReferenceElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+conReferenceElementsIndexesContent:conReferenceElementsIndexesEmpty | conReferenceElementsIndexesLaden;
+
+conReferenceElementsIndexesEmpty: ENDOFELEMENT;
+
+conReferenceElementsIndexesLaden: GREATERTHAN conReferenceElementsIndexesBody INDEXESEND;
+
+conReferenceElementsIndexesBody: osglIntArrayData;
+
+
+conReferenceElementsValues: conReferenceElementsValuesStart conReferenceElementsValuesContent
+{
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->values = new IntVector();
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->values->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+conReferenceElementsValuesStart: VALUESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->conReferenceElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "values vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+conReferenceElementsValuesContent: conReferenceElementsValuesEmpty | conReferenceElementsValuesLaden;
+
+conReferenceElementsValuesEmpty: ENDOFELEMENT;
+
+conReferenceElementsValuesLaden: GREATERTHAN conReferenceElementsValuesBody VALUESEND;
+
+conReferenceElementsValuesBody: osglIntArrayData;
+
+/*
 conReferenceElementsNonzeros: conReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
 {
 //    if (!parserData->ignoreDataAfterErrors)
@@ -1304,6 +1498,10 @@ conReferenceElementsNonzeros: conReferenceElementsNonzerosStart osglSparseIntVec
 //    osglData->osglIntArray = NULL;
 //    delete[] osglData->osglValArray;
 //    osglData->osglValArray = NULL;
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->nonzeros = new SparseIntVector();
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->nonzeros->number  = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->nonzeros->indexes = osglData->osglIntArray;
+    ((MatrixElements*)osglData->tempC)->conReferenceElements->nonzeros->values  = osglData->osglValArray;
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
     osglData->osglCounter = 0;
@@ -1313,9 +1511,11 @@ conReferenceElementsNonzerosStart: NONZEROSSTART
 {
     osglData->osglNumberOfEl = 0;
     osglData->osglNumberOfElPresent = false;
+    osglData->osglCounter = 0;
 };
+*/
 
-objReferenceElements: | objReferenceElementsStart objReferenceElementsAttributes objReferenceElementsContent OBJREFERENCEELEMENTSEND; 
+objReferenceElements: | objReferenceElementsStart objReferenceElementsAttributes GREATERTHAN objReferenceElementsContent; 
 
 objReferenceElementsStart: OBJREFERENCEELEMENTSSTART
 {
@@ -1343,15 +1543,10 @@ objReferenceElementsAtt:
     }
 ;
 
-objReferenceElementsContent: GREATERTHAN objReferenceElementsStartVector objReferenceElementsNonzeros;
+objReferenceElementsContent: objReferenceElementsStartVector objReferenceElementsIndexes objReferenceElementsValues OBJREFERENCEELEMENTSEND;
 
 objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferenceElementsStartVectorContent
 {
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start->el = osglData->osglIntArray;
@@ -1379,15 +1574,66 @@ objReferenceElementsStartVectorLaden: GREATERTHAN objReferenceElementsStartVecto
 
 objReferenceElementsStartVectorBody:  osglIntArrayData;
 
+
+objReferenceElementsIndexes: objReferenceElementsIndexesStart objReferenceElementsIndexesContent
+{
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes = new IntVector();
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+objReferenceElementsIndexesStart: INDEXESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->objReferenceElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+objReferenceElementsIndexesContent:objReferenceElementsIndexesEmpty | objReferenceElementsIndexesLaden;
+
+objReferenceElementsIndexesEmpty: ENDOFELEMENT;
+
+objReferenceElementsIndexesLaden: GREATERTHAN objReferenceElementsIndexesBody INDEXESEND;
+
+objReferenceElementsIndexesBody: osglIntArrayData;
+
+
+objReferenceElementsValues: objReferenceElementsValuesStart objReferenceElementsValuesContent
+{
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->values = new IntVector();
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->values->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+objReferenceElementsValuesStart: VALUESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->objReferenceElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "values vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+objReferenceElementsValuesContent: objReferenceElementsValuesEmpty | objReferenceElementsValuesLaden;
+
+objReferenceElementsValuesEmpty: ENDOFELEMENT;
+
+objReferenceElementsValuesLaden: GREATERTHAN objReferenceElementsValuesBody VALUESEND;
+
+objReferenceElementsValuesBody: osglIntArrayData;
+
+
+/*
 objReferenceElementsNonzeros: objReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
 {
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
-//    delete[] osglData->osglValArray;
-//    osglData->osglValArray = NULL;
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->nonzeros = new SparseIntVector();
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->nonzeros->number  = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->nonzeros->indexes = osglData->osglIntArray;
+    ((MatrixElements*)osglData->tempC)->objReferenceElements->nonzeros->values  = osglData->osglValArray;
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
     osglData->osglCounter = 0;
@@ -1397,7 +1643,9 @@ objReferenceElementsNonzerosStart: NONZEROSSTART
 {
     osglData->osglNumberOfEl = 0;
     osglData->osglNumberOfElPresent = false;
+    osglData->osglCounter = 0;
 };
+*/
 
 /*
 patternElements: | patternElementsStart patternElementsAttributes patternElementsContent PATTERNELEMENTSEND; 

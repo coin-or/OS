@@ -1836,10 +1836,11 @@ bool BaseMatrix::IsEqual(BaseMatrix *that)
 
 
 ConstantMatrixElements::ConstantMatrixElements():
-    numberOfValues(-1),
     rowMajor(false),
+    numberOfValues(-1),
     start(NULL),
-    nonzeros(NULL)
+    indexes(NULL),
+    values(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConstantMatrixElements Constructor");
@@ -1854,17 +1855,21 @@ ConstantMatrixElements::~ConstantMatrixElements()
     if (start != NULL)
         delete start;
     start = NULL;
-    if (nonzeros != NULL)
-        delete nonzeros;
-    nonzeros = NULL;
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+    if (values != NULL)
+        delete values;
+    values = NULL;
 }// end of ConstantMatrixElements::~ConstantMatrixElements()
 
 
 VarReferenceMatrixElements::VarReferenceMatrixElements():
-    numberOfValues(-1),
     rowMajor(false),
+    numberOfValues(-1),
     start(NULL),
-    nonzeros(NULL)
+    indexes(NULL),
+    values(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the VarReferenceMatrixElements Constructor");
@@ -1879,9 +1884,12 @@ VarReferenceMatrixElements::~VarReferenceMatrixElements()
     if (start != NULL)
         delete start;
     start = NULL;
-    if (nonzeros != NULL)
-        delete nonzeros;
-    nonzeros = NULL;
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+    if (values != NULL)
+        delete values;
+    values = NULL;
 }// end of VarReferenceMatrixElements::~VarReferenceMatrixElements()
 
 
@@ -2011,10 +2019,11 @@ LinearMatrixNonzeros::~LinearMatrixNonzeros()
 
 
 LinearMatrixElements::LinearMatrixElements():
-    numberOfValues(-1),
     rowMajor(false),
+    numberOfValues(-1),
     start(NULL),
-    nonzeros(NULL)
+    indexes(NULL),
+    values(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElements Constructor");
@@ -2030,9 +2039,12 @@ LinearMatrixElements::~LinearMatrixElements()
     if(start != NULL)
         delete start;
     start = NULL;
-    if(nonzeros != NULL)
-        delete nonzeros;
-    nonzeros = NULL;
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+    if (values != NULL)
+        delete values;
+    values = NULL;
 }// end of LinearMatrixElements::~LinearMatrixElements()
 
 
@@ -2076,10 +2088,11 @@ GeneralMatrixValues::~GeneralMatrixValues()
 }// end of GeneralMatrixValues::~GeneralMatrixValues()
 
 GeneralMatrixElements::GeneralMatrixElements():
-    numberOfValues(-1),
     rowMajor(false),
+    numberOfValues(-1),
     start(NULL),
-    nonzeros(NULL)
+    indexes(NULL),
+    values(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixElements Constructor");
@@ -2094,16 +2107,20 @@ GeneralMatrixElements::~GeneralMatrixElements()
     if (start != NULL)
         delete start;
     start = NULL;
-    if (nonzeros != NULL)
-        delete nonzeros;
-    nonzeros = NULL;
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+    if (values != NULL)
+        delete values;
+    values = NULL;
 }// end of GeneralMatrixElements::~GeneralMatrixElements()
 
 ObjReferenceMatrixElements::ObjReferenceMatrixElements():
-    numberOfValues(-1),
     rowMajor(false),
+    numberOfValues(-1),
     start(NULL),
-    nonzeros(NULL)
+    indexes(NULL),
+    values(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjReferenceMatrixElements Constructor");
@@ -2118,16 +2135,20 @@ ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
     if (start != NULL)
         delete start;
     start = NULL;
-    if (nonzeros != NULL)
-        delete nonzeros;
-    nonzeros = NULL;
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+    if (values != NULL)
+        delete values;
+    values = NULL;
 }// end of ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
 
 ConReferenceMatrixElements::ConReferenceMatrixElements():
-    numberOfValues(-1),
     rowMajor(false),
+    numberOfValues(-1),
     start(NULL),
-    nonzeros(NULL)
+    indexes(NULL),
+    values(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConReferenceMatrixElements Constructor");
@@ -2142,9 +2163,12 @@ ConReferenceMatrixElements::~ConReferenceMatrixElements()
     if (start != NULL)
         delete start;
     start = NULL;
-    if (nonzeros != NULL)
-        delete nonzeros;
-    nonzeros = NULL;
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+    if (values != NULL)
+        delete values;
+    values = NULL;
 }// end of ConReferenceMatrixElements::~ConReferenceMatrixElements()
 
 

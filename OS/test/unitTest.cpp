@@ -560,8 +560,11 @@ if(BASIC_TESTS == true){
         postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
         int n = postfixVec.size();
         nodeNames1 = new std::string[ n];
-        for (int i = 0 ; i < n; i++){
-        //    std::cout << postfixVec[i]->getTokenName() << std::endl;
+        for (int i = 0 ; i < n; i++)
+        {
+            std::cout << "node " << i << "@" << postfixVec[i] <<":  " << postfixVec[i]->getTokenName();
+            std::cout << "   scalar kids = " << postfixVec[i]->inumberOfChildren;
+            std::cout << "   matrix kids = " << postfixVec[i]->inumberOfMatrixChildren << std::endl;
             nodeNames1[i] = postfixVec[i]->getTokenName();
         }
 //        std::cout << std::endl << std::endl;
@@ -758,6 +761,50 @@ if (PARSER_TESTS){
         fileUtil = NULL;
     }    
 
+#if 0
+    if( THOROUGH == true){
+        try{ 
+            cout << endl << "TEST " << ++nOfTest << ": Test parsing another OSiL file (testMatricesAndCones.osil)" << endl << endl;
+
+            fileUtil = new FileUtil();
+            osilreader = new OSiLReader(); 
+            osilwriter = new OSiLWriter();
+    
+            cout << "First read the file into a string" << endl;
+            osilFileName = dataDir  + "osilFiles" + dirsep + "testMatricesAndCones.osil";
+            osil = fileUtil->getFileAsString( osilFileName.c_str());
+            cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
+            osilreader->readOSiL( osil);
+            //cout << osilwriter->writeOSiL( osilreader->readOSiL( osil)) << endl;
+
+            delete osilreader;
+            osilreader = NULL;
+            delete osilwriter;
+            osilwriter = NULL;
+            delete fileUtil;
+            fileUtil = NULL;
+
+            unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem testMatricesAndCones.osil" << std::endl;
+            cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+        }    
+        catch(const ErrorClass& eclass){
+            cout << endl << endl << endl;
+            cout << eclass.errormsg << endl;
+            unitTestResultFailure << "Sorry Unit Test Failed Testing OSiL <matrix> Parser (Test " << nOfTest << ")" << endl;
+
+            if (osilreader != NULL)
+                delete osilreader;
+            osilreader = NULL;
+            if (osilwriter != NULL)
+                delete osilwriter;
+            osilwriter = NULL;
+            if (fileUtil != NULL)
+                delete fileUtil;
+        fileUtil = NULL;
+        }    
+    }
+#endif
+
     // now test the get() and set() methods in OSInstance
     // use get() and set() methods to create a second OSInstance object (deep copy)
     OSInstance *osinstance2 = new OSInstance();
@@ -939,7 +986,6 @@ if (PARSER_TESTS){
             delete fileUtil;
         fileUtil = NULL;
     }    
-
 
 #if 0
     //

@@ -1536,16 +1536,16 @@ class ConstantMatrixElements
 {
 public:
     /**
-     *  numberOfValues records the number of entries in the arrays
-     *  that make up the instance of nonzeros
-     */
-    int numberOfValues;
- 
-    /**
      *  To indicate whether the constant matrix elements are stored 
      *  in row major form or column major form
      */
     bool rowMajor;
+ 
+    /**
+     *  numberOfValues records the number of entries in the arrays
+     *  that make up the instance of nonzeros
+     */
+    int numberOfValues;
 
     /**
      *  A vector listing the row or column starts
@@ -1553,7 +1553,9 @@ public:
     IntVector *start;
 
     /** The indices and values of the (nonzero) constant elements */
-    SparseVector *nonzeros;
+    IntVector *indexes;
+    DoubleVector *values;
+
 
     ConstantMatrixElements();
     ~ConstantMatrixElements();
@@ -1607,7 +1609,8 @@ public:
     IntVector *start;
 
     /** The row (or column) indices and variable references of the elements */
-    SparseIntVector *nonzeros;
+    IntVector *indexes;
+    IntVector *values;
 
     VarReferenceMatrixElements();
     ~VarReferenceMatrixElements();
@@ -1779,6 +1782,7 @@ public:
 
     /**
      *
+
      * A function to check for the equality of two objects
      */
     bool IsEqual(LinearMatrixNonzeros *that);
@@ -1824,8 +1828,17 @@ public:
      */
     IntVector *start;
 
-    /** The indices and values of the (nonzero) linear matrix elements */
-    LinearMatrixNonzeros *nonzeros;
+    /** 
+     *  The indexes of the (nonzero) linear matrix elements
+     *  row or column indexes, depending on rowMajor */
+    IntVector *indexes;
+
+    /**
+     *  The values are expressions of the form
+     *  a_0 + a_1 x_{i_1} * a_2 x_{i_2} + ...
+     *  Each term in this sum is stored as a separate LinearMatrixElementTerm object
+     */
+    LinearMatrixValues *values;     
 
     LinearMatrixElements();
     ~LinearMatrixElements();
@@ -1915,20 +1928,25 @@ public:
      */
     IntVector *start;
 
-    /** The indices and values of the (nonzero) elements */
-    GeneralMatrixValues *nonzeros;
+    /** 
+     *  The indexes of the (nonzero) linear matrix elements
+     *  row or column indexes, depending on rowMajor */
+    IntVector *indexes;
+
+    /**
+     *  The values are general nonlinear expressions 
+     */
+    GeneralMatrixValues *values;     
 
     GeneralMatrixElements();
     ~GeneralMatrixElements();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(GeneralMatrixElements *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1972,7 +1990,8 @@ public:
     IntVector *start;
 
     /** The row (or column) indices and objective references of the elements */
-    SparseIntVector *nonzeros;
+    IntVector *indexes;
+    IntVector *values;
 
     ObjReferenceMatrixElements();
     ~ObjReferenceMatrixElements();
@@ -2027,7 +2046,8 @@ public:
     IntVector *start;
 
     /** The row (or column) indices and constraint references of the elements */
-    SparseIntVector *nonzeros;
+    IntVector *indexes;
+    IntVector *values;
 
     ConReferenceMatrixElements();
     ~ConReferenceMatrixElements();
