@@ -38,11 +38,74 @@
 				<el>2.5</el>
 			</value>
 		</linearConstraintCoefficients>
-		<nonlinearExpressions numberOfNonlinearExpressions="1">
+		<nonlinearExpressions numberOfNonlinearExpressions="6">
 			<nl idx="-1">
-				<matrixTrace>
-					<matrixReference idx="0"/>
-				</matrixTrace>
+				<sum>
+					<ln>
+						<sum>
+							<variable idx="0"></variable>
+							<variable idx="1" coef="2"></variable>
+						</sum>
+					</ln>
+				</sum> 
+			</nl>
+			<nl idx="-1">
+				<sum>
+					<sum>
+						<ln>
+							<variable idx="0"></variable>
+						</ln>
+						<ln>
+							<variable idx="1" coef="2"></variable>
+						</ln>
+					</sum>
+				</sum> 
+			</nl>
+			
+			<nl idx="0">
+				<sum>
+					<ln>
+						<sum>
+							<variable idx="0" coef="3.0"></variable>
+							<variable idx="1" coef="1.2"></variable>
+						</sum>
+					</ln>
+				</sum> 
+			</nl>
+			<nl idx="0">
+				<sum>
+					<sum>
+						<ln>
+							<variable idx="0" coef="3.0"></variable>
+						</ln>
+						<ln>
+							<variable idx="1" coef="1.2"></variable>
+						</ln>
+					</sum>
+				</sum> 
+			</nl>
+			
+			<nl idx="1">
+				<sum>
+					<ln>
+						<sum>
+							<variable idx="0" coef="4.5"></variable>
+							<variable idx="1" coef="-0.2"></variable>
+						</sum>
+					</ln>
+				</sum> 
+			</nl>
+			<nl idx="1">
+				<sum>
+					<sum>
+						<ln>
+							<variable idx="0" coef="4.5"></variable>
+						</ln>
+						<ln>
+							<variable idx="1" coef="2.5"></variable>
+						</ln>
+					</sum>
+				</sum> 
 			</nl>
 		</nonlinearExpressions>
 		<matrices numberOfMatrices= " 29 " >
@@ -69,17 +132,17 @@
 				<elements>
 					<constantElements numberOfValues="4">
 						<start>
-							<el mult="5" incr="1"> 0 </el>
+							<el> 0 </el >    <el>   4   </el >
 						</start>
-							<indexes>
-								<el mult="4" incr="1"> 0 </el>
-							</indexes>
-							<values>
-								<el>2.0</el>
-								<el>3.0</el>
-								<el>4.0</el>
-								<el>5.0</el>
-							</values>
+						<indexes>
+							<el mult="4" incr="1"> 0 </el>
+						</indexes>
+						<values>
+							<el>2.0</el>
+							<el>3.0</el>
+							<el>4.0</el>
+							<el>5.0</el>
+						</values>
 					</constantElements>
 				</elements>
 			</matrix>
@@ -96,17 +159,17 @@
 			<matrix numberOfColumns="4" numberOfRows="4" name="3-baseAndConstantElements">
 				<baseMatrix baseMatrixIdx="2"/>
 				<elements>
-					<constantElements numberOfValues="1" rowMajor="true">
+					<constantElements numberOfValues="1" rowMajor='true'>
 						<start>
 							<el mult="3">0</el>
 							<el mult="2">1</el>
 						</start>
-							<indexes>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el  > 100.0 </el>
-							</values>
+						<indexes>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el  > 100.0 </el>
+						</values>
 					</constantElements>
 				</elements>
 			</matrix>
@@ -127,14 +190,14 @@
 								<start>
 									<el mult="3" incr="1">0</el>
 								</start>
-									<indexes>
-										<el>0</el>
-										<el>1</el>
-									</indexes>
-									<values>
-										<el>-2</el>
-										<el>3</el>
-									</values>
+								<indexes>
+									<el>0</el>
+									<el>1</el>
+								</indexes>
+								<values>
+									<el>-2</el>
+									<el>3</el>
+								</values>
 							</constantElements>
 						</elements>
 					</block>
@@ -158,12 +221,12 @@
 							<el>1</el>
 							<el>1</el>
 						</start>
-							<indexes>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el>3</el>
-							</values>
+						<indexes>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el>3</el>
+						</values>
 					</constantElements>
 				</elements>
 			</matrix>
@@ -174,14 +237,14 @@
 							<el>0</el>
 							<el>2</el>
 						</start>
-							<indexes>
-								<el>0</el>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el>1</el>
-								<el>0</el>
-							</values>
+						<indexes>
+							<el>0</el>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el>1</el>
+							<el>0</el>
+						</values>
 					</varReferenceElements>
 				</elements>
 			</matrix>
@@ -191,25 +254,24 @@
 						<start>
 							<el mult="3" incr="2">0</el>
 						</start>
-							<indexes>
-								<el>0</el>   <el>1</el>
-								<el>0</el>   <el>1</el>
-							</indexes>
-							<values>
-								<el numberOfVarIdx="1" constant="2">
-									<varIdx coef="0.5">0</varIdx>
-								</el>
-								<el numberOfVarIdx="2">
-									<varIdx>0</varIdx>
-									<varIdx>1</varIdx>
-								</el>
-								<el numberOfVarIdx="0" constant="-1">
-								</el>
-								<el numberOfVarIdx="2" constant="1">
-									<varIdx coef="2">0</varIdx>
-									<varIdx coef="3">1</varIdx>
-								</el>
-							</values>
+						<indexes>
+							<el>0</el>   <el>1</el>
+							<el>0</el>   <el>1</el>
+						</indexes>
+						<values>
+							<el numberOfVarIdx="1" constant="2">
+								<varIdx coef="0.5">0</varIdx>
+							</el>
+							<el numberOfVarIdx="2">
+								<varIdx>0</varIdx>
+								<varIdx>1</varIdx>
+							</el>
+							<el numberOfVarIdx="0" constant="-1"/>
+							<el numberOfVarIdx="2" constant="1">
+								<varIdx coef="2">0</varIdx>
+								<varIdx coef="3">1</varIdx>
+							</el>
+						</values>
 					</linearElements>
 				</elements>
 			</matrix>
@@ -219,34 +281,34 @@
 						<start>
 							<el mult="3" incr="2">0</el>
 						</start>
-							<indexes>
-								<el>0</el>    <el>1</el>
-								<el>1</el>    <el>0</el>
-							</indexes>
-							<values>
-								<el>
-									<plus>
-										<number value="1.0"></number>
-										<ln>
-											<variable idx="0"/>
-										</ln>
-									</plus>
-								</el>
-								<el>
-									<times>
-										<variable idx="0" coef="2.0"/>
-										<variable idx="1"></variable>
-									</times>
-								</el>
-								<el>
-									<sin>
-										<variable idx="1" coef="5.0"/>
-									</sin>
-								</el>
-								<el>
-									<number value="3.0"></number>
-								</el>
-							</values>
+						<indexes>
+							<el>0</el>    <el>1</el>
+							<el>1</el>    <el>0</el>
+						</indexes>
+						<values>
+							<el>
+								<plus>
+									<number value="1.0"></number>
+									<ln>
+										<variable idx="0"/>
+									</ln>
+								</plus>
+							</el>
+							<el>
+								<times>
+									<variable idx="0" coef="2.0"/>
+									<variable idx="1"></variable>
+								</times>
+							</el>
+							<el>
+								<sin>
+									<variable idx="1" coef="5.0"/>
+								</sin>
+							</el>
+							<el>
+								<number value="3.0"></number>
+							</el>
+						</values>
 					</generalElements>
 				</elements>
 			</matrix>
@@ -256,56 +318,56 @@
 						<start>
 							<el>0</el>    <el>1</el>    <el>1</el>
 						</start>
-							<indexes>
-								<el>0</el>
-							</indexes>
-							<values>
-								<el>6.0</el>
-							</values>
+						<indexes>
+							<el>0</el>
+						</indexes>
+						<values>
+							<el>6.0</el>
+						</values>
 					</constantElements>
 					<varReferenceElements numberOfValues="1" rowMajor="true">
 						<start> 
 							<el>0</el>    <el>1</el>    <el>1</el>
 						</start>
-							<indexes>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el>1</el>
-							</values>
+						<indexes>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el>1</el>
+						</values>
 					</varReferenceElements>
 					<linearElements numberOfValues="1" rowMajor="true">
 						<start>
 							<el>0</el>    <el>0</el>    <el>1</el>
 						</start>
-							<indexes>
-								<el>0</el>
-							</indexes>
-							<values>
-								<el numberOfVarIdx="1">
-									<varIdx>1</varIdx>
-								</el>
-							</values>
+						<indexes>
+							<el>0</el>
+						</indexes>
+						<values>
+							<el numberOfVarIdx="1">
+								<varIdx>1</varIdx>
+							</el>
+						</values>
 					</linearElements>
 					<generalElements numberOfValues="1">
 						<start>
 							<el>0</el>    <el>0</el>    <el>1</el>
 						</start>
-							<indexes>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el>
-									<plus>
-										<matrixDeterminant>
-											<matrixReference idx="0"></matrixReference>
-										</matrixDeterminant>										
-										<matrixTrace>
-											<matrixReference idx="0"></matrixReference>
-										</matrixTrace>
-									</plus>
-								</el>
-							</values>
+						<indexes>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el>
+								<plus>
+									<matrixDeterminant>
+										<matrixReference idx="0"></matrixReference>
+									</matrixDeterminant>										
+									<matrixTrace>
+										<matrixReference idx="0"></matrixReference>
+									</matrixTrace>
+								</plus>
+							</el>
+						</values>
 					</generalElements>
 				</elements>
 			</matrix>
@@ -315,12 +377,12 @@
 						<start>
 							<el mult="3" incr="1">0</el>
 						</start>
-							<indexes>
-								<el>0</el>     <el>1</el>
-							</indexes>
-							<values>
-								<el>0</el>     <el>1</el>
-							</values>
+						<indexes>
+							<el>0</el>     <el>1</el>
+						</indexes>
+						<values>
+							<el>0</el>     <el>1</el>
+						</values>
 					</conReferenceElements>
 				</elements>
 			</matrix>
@@ -330,14 +392,14 @@
 						<start>
 						<el>0</el>    <el>1</el>    <el>2</el>
 						</start>
-							<indexes>
-								<el>0</el>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el>-2</el>
-								<el>-1</el>
-							</values>						
+						<indexes>
+							<el>0</el>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el>-2</el>
+							<el>-1</el>
+						</values>						
 					</objReferenceElements>
 				</elements>
 			</matrix>
@@ -347,23 +409,23 @@
 						<start>
 							<el>0</el>    <el>1</el>    <el>1</el>
 						</start>
-							<indexes>
-								<el>0</el>
-							</indexes>
-							<values>
-								<el>-1</el>
-							</values>
+						<indexes>
+							<el>0</el>
+						</indexes>
+						<values>
+							<el>-1</el>
+						</values>
 					</objReferenceElements>
 					<conReferenceElements numberOfValues="1" rowMajor="true">
 						<start> 
 							<el>0</el>    <el>1</el>    <el>1</el>
 						</start>
-							<indexes>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el>1</el>
-							</values>
+						<indexes>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el>1</el>
+						</values>
 					</conReferenceElements>
 				</elements>
 			</matrix>
@@ -373,23 +435,23 @@
 						<start>
 							<el>0</el>    <el>1</el>    <el>1</el>
 						</start>
-							<indexes>
-								<el>0</el>
-							</indexes>
-							<values>
-								<el>6.0</el>
-							</values>
+						<indexes>
+							<el>0</el>
+						</indexes>
+						<values>
+							<el>6.0</el>
+						</values>
 					</constantElements>
 					<conReferenceElements numberOfValues="1" rowMajor="true">
 						<start> 
 							<el>0</el>    <el>1</el>    <el>1</el>
 						</start>
-							<indexes>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el>1</el>
-							</values>
+						<indexes>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el>1</el>
+						</values>
 					</conReferenceElements>
 				</elements>
 			</matrix>
@@ -456,12 +518,12 @@
 						<start>
 							<el mult="3" incr="1">0</el>
 						</start>
-							<indexes>
-								<el mult="2">0</el>
-							</indexes>
-							<values>
-								<el mult="2" incr="1">0</el>
-							</values>
+						<indexes>
+							<el mult="2">0</el>
+						</indexes>
+						<values>
+							<el mult="2" incr="1">0</el>
+						</values>
 					</varReferenceElements>
 				</elements>
 			</matrix>
@@ -472,29 +534,29 @@
 							<el>0</el>
 							<el>18</el>
 						</start>
-							<indexes>
-								<el incr="1" mult="18">0</el>
-							</indexes>
-							<values>
-								<el>1</el>
-								<el>2</el>
-								<el>3</el>
-								<el>4</el>
-								<el>5</el>
-								<el>6</el>
-								<el>7</el>
-								<el>8</el>
-								<el>9</el>
-								<el>10</el>
-								<el>11</el>
-								<el>12</el>
-								<el>13</el>
-								<el>14</el>
-								<el>15</el>
-								<el>16</el>
-								<el>17</el>
-								<el>18</el>
-							</values>
+						<indexes>
+							<el incr="1" mult="18">0</el>
+						</indexes>
+						<values>
+							<el>1</el>
+							<el>2</el>
+							<el>3</el>
+							<el>4</el>
+							<el>5</el>
+							<el>6</el>
+							<el>7</el>
+							<el>8</el>
+							<el>9</el>
+							<el>10</el>
+							<el>11</el>
+							<el>12</el>
+							<el>13</el>
+							<el>14</el>
+							<el>15</el>
+							<el>16</el>
+							<el>17</el>
+							<el>18</el>
+						</values>
 					</constantElements>
 				</elements>
 			</matrix>
@@ -516,12 +578,12 @@
 							<el>0</el>
 							<el mult="18">1</el>
 						</start>
-							<indexes>
-								<el>0</el>
-							</indexes>
-							<values>
-								<el>1.5</el>
-							</values>
+						<indexes>
+							<el>0</el>
+						</indexes>
+						<values>
+							<el>1.5</el>
+						</values>
 					</constantElements>
 				</elements>
 				<transformation>
@@ -546,17 +608,17 @@
 								<start>
 									<el incr="1" mult="7">0</el>
 								</start>
-									<indexes>
-										<el>3</el>
-										<el>1</el>
-										<el>6</el>
-										<el>5</el>
-										<el>4</el>
-										<el>2</el>
-									</indexes>
-									<values>
-										<el mult="6">2.3</el>
-									</values>
+								<indexes>
+									<el>3</el>
+									<el>1</el>
+									<el>6</el>
+									<el>5</el>
+									<el>4</el>
+									<el>2</el>
+								</indexes>
+								<values>
+									<el mult="6">2.3</el>
+								</values>
 							</constantElements>
 						</elements>
 						<transformation>
@@ -592,12 +654,12 @@
 											<el>0</el>
 											<el mult="2">1</el>
 										</start>
-											<indexes>
-												<el>1</el>
-											</indexes>
-											<values>
-												<el>3.14</el>
-											</values>
+										<indexes>
+											<el>1</el>
+										</indexes>
+										<values>
+											<el>3.14</el>
+										</values>
 									</constantElements>
 								</elements>
 							</block>
@@ -627,16 +689,16 @@
 													<el>0</el>
 													<el>1</el>
 												</start>
-													<indexes>
-														<el>0</el>
-													</indexes>
-													<values>
-														<el>
-															<matrixTrace>
-																<matrixReference idx="7"/>
-															</matrixTrace>
-														</el>
-													</values>
+												<indexes>
+													<el>0</el>
+												</indexes>
+												<values>
+													<el>
+														<matrixTrace>
+															<matrixReference idx="7"/>
+														</matrixTrace>
+													</el>
+												</values>
 											</generalElements>
 										</elements>
 									</block>
@@ -657,12 +719,12 @@
 											<el>0</el>
 											<el mult="2">1</el>
 										</start>
-											<indexes>
-												<el>1</el>
-											</indexes>
-											<values>
-												<el>2.71</el>
-											</values>
+										<indexes>
+											<el>1</el>
+										</indexes>
+										<values>
+											<el>2.71</el>
+										</values>
 									</constantElements>
 								</elements>
 								<blocks numberOfBlocks="2">
@@ -690,16 +752,16 @@
 													<el>0</el>
 													<el>1</el>
 												</start>
-													<indexes>
-														<el>0</el>
-													</indexes>
-													<values>
-														<el>
-															<matrixTrace>
-																<matrixReference idx="7"/>
-															</matrixTrace>
-														</el>
-													</values>
+												<indexes>
+													<el>0</el>
+												</indexes>
+												<values>
+													<el>
+														<matrixTrace>
+															<matrixReference idx="7"/>
+														</matrixTrace>
+													</el>
+												</values>
 											</generalElements>
 										</elements>
 									</block>
@@ -710,12 +772,12 @@
 											<el>0</el>
 											<el mult="2">1</el>
 										</start>
-											<indexes>
-												<el>1</el>
-											</indexes>
-											<values>
-												<el>6.28</el>
-											</values>
+										<indexes>
+											<el>1</el>
+										</indexes>
+										<values>
+											<el>6.28</el>
+										</values>
 									</constantElements>
 								</elements>
 							</block>
@@ -727,17 +789,17 @@
 								<start>
 									<el incr="1" mult="7">0</el>
 								</start>
-									<indexes>
-										<el>3</el>
-										<el>1</el>
-										<el>6</el>
-										<el>5</el>
-										<el>4</el>
-										<el>2</el>
-									</indexes>
-									<values>
-										<el mult="6">2.3</el>
-									</values>
+								<indexes>
+									<el>3</el>
+									<el>1</el>
+									<el>6</el>
+									<el>5</el>
+									<el>4</el>
+									<el>2</el>
+								</indexes>
+								<values>
+									<el mult="6">2.3</el>
+								</values>
 							</constantElements>
 						</elements>
 						<transformation>
@@ -771,12 +833,12 @@
 											<el>0</el>
 											<el mult="2">1</el>
 										</start>
-											<indexes>
-												<el>1</el>
-											</indexes>
-											<values>
-												<el>3.14</el>
-											</values>
+										<indexes>
+											<el>1</el>
+										</indexes>
+										<values>
+											<el>3.14</el>
+										</values>
 									</constantElements>
 								</elements>
 							</block>
@@ -810,16 +872,16 @@
 													<el>0</el>
 													<el>1</el>
 												</start>
-													<indexes>
-														<el>0</el>
-													</indexes>
-													<values>
-														<el>
-															<matrixTrace>
-																<matrixReference idx="7"/>
-															</matrixTrace>
-														</el>
-													</values>
+												<indexes>
+													<el>0</el>
+												</indexes>
+												<values>
+													<el>
+														<matrixTrace>
+															<matrixReference idx="7"/>
+														</matrixTrace>
+													</el>
+												</values>
 											</generalElements>
 										</elements>
 									</block>
@@ -840,12 +902,12 @@
 											<el>0</el>
 											<el mult="2">1</el>
 										</start>
-											<indexes>
-												<el>1</el>
-											</indexes>
-											<values>
-												<el>2.71</el>
-											</values>
+										<indexes>
+											<el>1</el>
+										</indexes>
+										<values>
+											<el>2.71</el>
+										</values>
 									</constantElements>
 								</elements>
 								<blocks numberOfBlocks="2">
@@ -873,16 +935,16 @@
 													<el>0</el>
 													<el>1</el>
 												</start>
-													<indexes>
-														<el>0</el>
-													</indexes>
-													<values>
-														<el>
-															<matrixTrace>
-																<matrixReference idx="7"/>
-															</matrixTrace>
-														</el>
-													</values>
+												<indexes>
+													<el>0</el>
+												</indexes>
+												<values>
+													<el>
+														<matrixTrace>
+															<matrixReference idx="7"/>
+														</matrixTrace>
+													</el>
+												</values>
 											</generalElements>
 										</elements>
 									</block>
@@ -893,12 +955,12 @@
 											<el>0</el>
 											<el mult="2">1</el>
 										</start>
-											<indexes>
-												<el>1</el>
-											</indexes>
-											<values>
-												<el>6.28</el>
-											</values>
+										<indexes>
+											<el>1</el>
+										</indexes>
+										<values>
+											<el>6.28</el>
+										</values>
 									</constantElements>
 								</elements>
 							</block>
@@ -908,17 +970,17 @@
 								<start>
 									<el incr="1" mult="7">0</el>
 								</start>
-									<indexes>
-										<el>3</el>
-										<el>1</el>
-										<el>6</el>
-										<el>5</el>
-										<el>4</el>
-										<el>2</el>
-									</indexes>
-									<values>
-										<el mult="6">6.7</el>
-									</values>
+								<indexes>
+									<el>3</el>
+									<el>1</el>
+									<el>6</el>
+									<el>5</el>
+									<el>4</el>
+									<el>2</el>
+								</indexes>
+								<values>
+									<el mult="6">6.7</el>
+								</values>
 							</constantElements>
 						</elements>
 					</block>
@@ -929,12 +991,12 @@
 							<el>0</el>
 							<el mult="18">1</el>
 						</start>
-							<indexes>
-								<el>1</el>
-							</indexes>
-							<values>
-								<el>1.5</el>
-							</values>
+						<indexes>
+							<el>1</el>
+						</indexes>
+						<values>
+							<el>1.5</el>
+						</values>
 					</constantElements>
 				</elements>
 			</matrix>
@@ -1032,6 +1094,7 @@
 				</components>
 			</intersectionCone>
 		</cones>
+<!--
 		<matrixProgramming>
 			<matrixVariables numberOfMatrixVar="9">
 				<matrixVar numberOfRows="2" numberOfColumns="2" lbConeIdx="0"></matrixVar>
@@ -1075,5 +1138,6 @@
 				</expr>
 			</matrixExpressions>
 		</matrixProgramming>
+-->
 	</instanceData>
 </osil>

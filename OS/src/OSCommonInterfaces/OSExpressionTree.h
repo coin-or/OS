@@ -2,7 +2,7 @@
 /** @file OSExpressionTree.h
  *
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -20,6 +20,7 @@
 #include <vector>
 #include <map>
 
+class OSnLNode; 
 
 /*! \class OSExpressionTree
  *  \brief Used to hold the instance in memory.
@@ -107,12 +108,12 @@ public:
      * </p>
      *
      * @return a map of the variables in the current expression tree.
-	 * \remark This method is obsolescent due to the typo in the name 
-	 * and has been replaced by getVariableIndicesMap(); 
+     * \remark This method is obsolescent due to the typo in the name 
+     * and has been replaced by getVariableIndicesMap(); 
      */
     std::map<int, int> *getVariableIndiciesMap();
 
-	/**
+    /**
      * Retrieve a map of the indices of the variables
      * that are in the expression tree
      *
@@ -122,7 +123,7 @@ public:
      */
     std::map<int, int> *getVariableIndicesMap();
 
-	/**
+    /**
      * m_bIndexMapGenerated is set to true if getVariableIndicesMap() has been called
      */
     bool  m_bIndexMapGenerated;

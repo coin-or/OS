@@ -180,7 +180,10 @@ return(DOUBLE);}
 ({xmlwhitespace}+lbConeIdx{equality}) {YY_PRINT;  return(LBCONEIDXATT);}
 ({xmlwhitespace}+ubMatrixIdx{equality}) {YY_PRINT;  return(UBMATRIXIDXATT);}
 ({xmlwhitespace}+ubConeIdx{equality}) {YY_PRINT;  return(UBCONEIDXATT);}
-({xmlwhitespace}+patternMatrixIdx{equality}) {YY_PRINT;  return(PATTERNMATRIXIDXATT);}
+({xmlwhitespace}+templateMatrixIdx{equality}) {YY_PRINT;  return(TEMPLATEMATRIXIDXATT);}
+({xmlwhitespace}+varReferenceMatrixIdx{equality}) {YY_PRINT;  return(VARREFERENCEMATRIXIDXATT);}
+({xmlwhitespace}+objReferenceMatrixIdx{equality}) {YY_PRINT;  return(OBJREFERENCEMATRIXIDXATT);}
+({xmlwhitespace}+conReferenceMatrixIdx{equality}) {YY_PRINT;  return(CONREFERENCEMATRIXIDXATT);}
 
 ({xmlwhitespace}+orderConeIdx{equality}) {YY_PRINT;  return(ORDERCONEIDXATT);}
 ({xmlwhitespace}+constantMatrixIdx{equality}) {YY_PRINT;  return(CONSTANTMATRIXIDXATT);}
@@ -210,6 +213,8 @@ return(DOUBLE);}
 ({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
+({xmlwhitespace}+varType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VARTYPEATT);}
+({xmlwhitespace}+varType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VARTYPEATT);}
 
 
 ({xmlwhitespace}+semidefiniteness{equality}\"\") {YY_PRINT; return(EMPTYSEMIDEFINITENESSATT);}
@@ -385,6 +390,11 @@ return(DOUBLE);}
 ({xmlwhitespace}+baseTranspose{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(BASETRANSPOSEATT);}
 ({xmlwhitespace}+baseTranspose{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(BASETRANSPOSEATT);}
 
+({xmlwhitespace}+rowMajor{equality}\"\") {YY_PRINT; return(EMPTYROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\'\') {YY_PRINT; return(EMPTYROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(ROWMAJORATT);}
+({xmlwhitespace}+rowMajor{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(ROWMAJORATT);}
+
 ({xmlwhitespace}+symmetry{equality}\"\") {YY_PRINT; return(EMPTYSYMMETRYATT);}
 ({xmlwhitespace}+symmetry{equality}\'\') {YY_PRINT; return(EMPTYSYMMETRYATT);}
 ({xmlwhitespace}+symmetry{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SYMMETRYATT);}
@@ -417,6 +427,7 @@ return(DOUBLE);}
 {xmlwhitespace}*\<patternElements {YY_PRINT;  return(PATTERNELEMENTSSTART);}
 {xmlwhitespace}*\<\/patternElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(PATTERNELEMENTSEND);}
 {xmlwhitespace}*\<start {YY_PRINT;  return(STARTVECTORSTART);}
+
 {xmlwhitespace}*\<\/start{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(STARTVECTOREND);}
 {xmlwhitespace}*\<nonzeros {YY_PRINT;  return(NONZEROSSTART);}
 {xmlwhitespace}*\<\/nonzeros{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(NONZEROSEND);}
@@ -555,7 +566,7 @@ return(DOUBLE);}
  <xmldeclaration>\n ;
  <xmldeclaration>"?>" BEGIN 0;
 
-<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); /*yylval->sval = yytext;*/ printf("attributetext: |%s| -- |%s|\n",yytext,yylval->sval); return(ATTRIBUTETEXT);}
 <singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
 
 . {  

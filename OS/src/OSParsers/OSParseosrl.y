@@ -4619,6 +4619,9 @@ matrixAttribute:
 
 osglSymmetryATT: SYMMETRYATT ATTRIBUTETEXT QUOTE 
 { 
+std::string ts = $2;
+std::cout << "symmetry attribute read:   |" << $2 << "|" << std::endl;
+std::cout << "symmetry attribute stored: |" << ts << "|" << std::endl;
     if (osglData->symmetryAttributePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one symmetry attribute in <matrix> element");
     osglData->symmetryAttributePresent = true;   
@@ -4628,6 +4631,9 @@ osglSymmetryATT: SYMMETRYATT ATTRIBUTETEXT QUOTE
 
 osglMatrixNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
 { 
+std::string ts = $2;
+std::cout << "matrix name attribute read:   |" << $2 << "|" << std::endl;
+std::cout << "matrix name attribute stored: |" << ts << "|" << std::endl;
     if (osglData->matrixNameAttributePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one name attribute in <matrix> element");
     osglData->matrixNameAttributePresent = true;   
@@ -4636,7 +4642,10 @@ osglMatrixNameATT: NAMEATT ATTRIBUTETEXT QUOTE
 };
 
 osglMatrixTypeATT: TYPEATT ATTRIBUTETEXT QUOTE 
-{ 
+{
+std::string ts = $2;
+std::cout << "matrix type attribute read:   |" << $2 << "|" << std::endl;
+std::cout << "matrix type attribute stored: |" << ts << "|" << std::endl;
     if (osglData->matrixTypeAttributePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more than one type attribute in <matrix> element");
     osglData->matrixTypeAttributePresent = true;   
@@ -4813,7 +4822,10 @@ baseTransposeAttEmpty: EMPTYBASETRANSPOSEATT
 };
 
 baseTransposeAttContent: BASETRANSPOSEATT ATTRIBUTETEXT quote 
-{ 
+{
+std::string ts = $2;
+std::cout << "baseTranspose attribute read:   |" << $2 << "|" << std::endl;
+std::cout << "baseTranspose attribute stored: |" << ts << "|" << std::endl;
     if      ($2 == "false") osglData->baseTransposeAttribute = false;
     else if ($2 == "true")  osglData->baseTransposeAttribute = true;
     else if ($2 == "")      osglData->baseTransposeAttribute = true;
@@ -4859,7 +4871,7 @@ matrixElementsContent: matrixElementsEmpty | matrixElementsLaden;
 matrixElementsEmpty: ENDOFELEMENT;
 
 matrixElementsLaden: GREATERTHAN constantElements varReferenceElements linearElements generalElements 
-                       conReferenceElements objReferenceElements /*patternElements*/ matrixElementsEnd;
+                                 objReferenceElements conReferenceElements matrixElementsEnd;
 
 matrixElementsEnd: ELEMENTSEND;
 
@@ -4893,7 +4905,9 @@ constantElementsAtt:
     }
 ;
 
-constantElementsContent: constantElementsStartVector constantElementsIndexes constantElementsValues CONSTANTELEMENTSEND;
+constantElementsContent: constantElementsStartVector constantElementsNonzeros CONSTANTELEMENTSEND;
+
+constantElementsNonzeros: | constantElementsIndexes constantElementsValues;
 
 constantElementsStartVector: constantElementsStartVectorStart constantElementsStartVectorContent
 {
@@ -4927,7 +4941,8 @@ constantElementsStartVectorBody: osglIntArrayData;
 constantElementsIndexes: constantElementsIndexesStart constantElementsIndexesContent
 {
     ((MatrixElements*)osglData->tempC)->constantElements->indexes = new IntVector();
-    ((MatrixElements*)osglData->tempC)->constantElements->indexes->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->constantElements->indexes->numberOfEl
+        = ((MatrixElements*)osglData->tempC)->constantElements->numberOfValues;
     ((MatrixElements*)osglData->tempC)->constantElements->indexes->el = osglData->osglIntArray;
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
@@ -5022,7 +5037,9 @@ varReferenceElementsAtt:
     }
 ;
 
-varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsIndexes varReferenceElementsValues VARREFERENCEELEMENTSEND;
+varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsNonzeros VARREFERENCEELEMENTSEND;
+
+varReferenceElementsNonzeros: | varReferenceElementsIndexes varReferenceElementsValues;
 
 varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferenceElementsStartVectorContent
 {
@@ -5158,7 +5175,9 @@ linearElementsAtt:
     }
 ;
 
-linearElementsContent: linearElementsStartVector linearElementsIndexes linearElementsValues LINEARELEMENTSEND;
+linearElementsContent: linearElementsStartVector linearElementsNonzeros LINEARELEMENTSEND;
+
+linearElementsNonzeros: | linearElementsIndexes linearElementsValues;
 
 linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVectorContent
 {
@@ -5291,10 +5310,16 @@ linearElementsValues:
 
 linearElementsValuesStart: VALUESSTART
 {
-    osglData->osglNumberOfNonzeros = ((MatrixElements*)osglData->tempC)->constantElements->numberOfValues;
+    osglData->osglNumberOfNonzeros = ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues;
     osglData->osglNonzeroCounter = 0;
-    ((MatrixElements*)osglData->tempC)->linearElements->values = 
-                new LinearMatrixValues();
+    ((MatrixElements*)osglData->tempC)->linearElements->values = new LinearMatrixValues();
+    ((MatrixElements*)osglData->tempC)->linearElements->values->numberOfEl
+        = ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues;    
+    ((MatrixElements*)osglData->tempC)->linearElements->values->el
+        = new LinearMatrixElement*[((MatrixElements*)osglData->tempC)->linearElements->numberOfValues]; 
+    for (int i=0; i < ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues; i++)
+        ((MatrixElements*)osglData->tempC)->linearElements->values->el[i]
+            = new LinearMatrixElement(); 
     osglData->osglDblArray = new double[osglData->osglNumberOfEl];
     osglData->osglCounter = 0;
 std::cout << "values vector has length " << osglData->osglNumberOfEl << std::endl;  
@@ -5322,11 +5347,7 @@ linearElementsValuesElStart: ELSTART
 {
     osglData->osglNumberOfVarIdxPresent = false;
     osglData->osglConstantPresent = false;
-    ((MatrixElements*)osglData->tempC)->linearElements->values->numberOfEl
-        = ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues;    
-    ((MatrixElements*)osglData->tempC)->linearElements->values->el
-        = new LinearMatrixElement*[((MatrixElements*)osglData->tempC)->linearElements->numberOfValues];    
-};
+};  
 
 linearElementsValuesElAttributes: linearElementsValuesElAttList
 {
@@ -5386,7 +5407,7 @@ linearElementsValuesVarIdxContent: GREATERTHAN INTEGER VARIDXEND
 };
 
 
-generalElements: | generalElementsStart generalElementsAttributes  generalElementsContent; 
+generalElements: | generalElementsStart generalElementsAttributes GREATERTHAN generalElementsContent; 
 
 generalElementsStart: GENERALELEMENTSSTART
 {
@@ -5414,15 +5435,12 @@ generalElementsAtt:
     }
 ;
 
-generalElementsContent: GREATERTHAN generalElementsStartVector generalElementsNonzeros GENERALELEMENTSEND;
+generalElementsContent: generalElementsStartVector generalElementsNonzeros GENERALELEMENTSEND;
+
+generalElementsNonzeros: | generalElementsIndexes generalElementsValues;
 
 generalElementsStartVector: generalElementsStartVectorStart generalElementsStartVectorContent
 {
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
     ((MatrixElements*)osglData->tempC)->generalElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->generalElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->generalElements->start->el = osglData->osglIntArray;
@@ -5450,6 +5468,34 @@ generalElementsStartVectorLaden: GREATERTHAN generalElementsStartVectorBody STAR
 
 generalElementsStartVectorBody:  osglIntArrayData;
 
+
+generalElementsIndexes: generalElementsIndexesStart generalElementsIndexesContent
+{
+    ((MatrixElements*)osglData->tempC)->generalElements->indexes = new IntVector();
+    ((MatrixElements*)osglData->tempC)->generalElements->indexes->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->generalElements->indexes->el = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+generalElementsIndexesStart: INDEXESSTART
+{
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->generalElements->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::endl;  
+};
+
+generalElementsIndexesContent: generalElementsIndexesEmpty | generalElementsIndexesLaden;
+
+generalElementsIndexesEmpty: ENDOFELEMENT;
+
+generalElementsIndexesLaden: GREATERTHAN generalElementsIndexesBody INDEXESEND;
+
+generalElementsIndexesBody: osglIntArrayData;
+
+
+/*
 generalElementsNonzeros: generalElementsNonzerosStart generalElementsNonzerosNumberOfElAttribute generalElementsNonzerosContent
 {
 //    if (!parserData->ignoreDataAfterErrors)
@@ -5506,37 +5552,59 @@ generalElementsNonzerosIndexesEmpty: ENDOFELEMENT;
 generalElementsNonzerosIndexesLaden: GREATERTHAN generalElementsNonzerosIndexesBody INDEXESEND;
 
 generalElementsNonzerosIndexesBody:  osglIntArrayData;
+*/
 
-generalElementsNonzerosValues:
-    | generalElementsNonzerosValuesStart generalElementsNonzerosValuesContent;
+generalElementsValues:
+    | generalElementsValuesStart generalElementsValuesContent;
 
-generalElementsNonzerosValuesStart: VALUESSTART
+generalElementsValuesStart: VALUESSTART
 {
-//    osglData->osglNumberOfVarIdxPresent = false;
-//    osglData->osglConstantPresent = false;
+    osglData->osglNonzeroCounter = 0;
+    osglData->osglNumberOfNonzeros = ((MatrixElements*)osglData->tempC)->generalElements->numberOfValues;
+
+    ((MatrixElements*)osglData->tempC)->generalElements->values = new GeneralMatrixValues();
+    ((MatrixElements*)osglData->tempC)->generalElements->values->numberOfEl = osglData->osglNumberOfNonzeros;
+    ((MatrixElements*)osglData->tempC)->generalElements->values->el
+        = new OSExpressionTree*[osglData->osglNumberOfNonzeros];
+
+    for (int i=0; i<osglData->osglNumberOfNonzeros; i++)
+        ((MatrixElements*)osglData->tempC)->generalElements->values->el[i] = new OSExpressionTree();
+std::cout << "values vector has length " << osglData->osglNumberOfNonzeros << std::endl;  
 };
 
-generalElementsNonzerosValuesContent: generalElementsNonzerosValuesEmpty | generalElementsNonzerosValuesLaden;
+generalElementsValuesContent: generalElementsValuesEmpty | generalElementsValuesLaden;
 
-generalElementsNonzerosValuesEmpty: ENDOFELEMENT;
+generalElementsValuesEmpty: ENDOFELEMENT;
 
-generalElementsNonzerosValuesLaden: GREATERTHAN generalElementsNonzerosElList VALUESEND;
+generalElementsValuesLaden: GREATERTHAN generalElementsElList VALUESEND;
 
-generalElementsNonzerosElList:  | generalElementsNonzerosElList generalElementsNonzerosEl;
+generalElementsElList:  | generalElementsElList generalElementsEl;
 
-generalElementsNonzerosEl: generalElementsNonzerosElStart generalElementsNonzerosElContent;
+generalElementsEl: generalElementsElStart generalElementsElContent;
 
-generalElementsNonzerosElStart: ELSTART
-{
-    osglData->osglNumberOfVarIdxPresent = false;
-    osglData->osglConstantPresent = false;
-};
+generalElementsElStart: ELSTART
+    {
+        if (osglData->osglNumberOfNonzeros >= osglData->osglNonzeroCounter) 
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, " number of <el> terms greater than expected");
+        osnlData->nlNodeVec.clear();
+        osnlData->sumVec.clear();
+        osnlData->maxVec.clear();
+        osnlData->minVec.clear();
+        osnlData->productVec.clear();
+    };
 
-generalElementsNonzerosElContent: generalElementsNonzerosElEmpty | generalElementsNonzerosElLaden;
+generalElementsElContent: generalElementsElEmpty | generalElementsElLaden;
 
-generalElementsNonzerosElEmpty: ENDOFELEMENT;
+generalElementsElEmpty: ENDOFELEMENT;
 
-generalElementsNonzerosElLaden: GREATERTHAN nlnode ELEND;
+generalElementsElLaden: GREATERTHAN nlnode ELEND
+    {
+    // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+
+        ((MatrixElements*)osglData->tempC)->generalElements->values->el[osglData->osglNonzeroCounter]->m_treeRoot = 
+            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        osglData->osglNonzeroCounter++;
+    };
 
 
 conReferenceElements: | conReferenceElementsStart conReferenceElementsAttributes GREATERTHAN conReferenceElementsContent; 
@@ -5567,7 +5635,9 @@ conReferenceElementsAtt:
     }
 ;
 
-conReferenceElementsContent: conReferenceElementsStartVector conReferenceElementsIndexes conReferenceElementsValues CONREFERENCEELEMENTSEND;
+conReferenceElementsContent: conReferenceElementsStartVector conReferenceElementsNonzeros CONREFERENCEELEMENTSEND;
+
+conReferenceElementsNonzeros: | conReferenceElementsIndexes conReferenceElementsValues;
 
 conReferenceElementsStartVector: conReferenceElementsStartVectorStart conReferenceElementsStartVectorContent
 {
@@ -5712,7 +5782,9 @@ objReferenceElementsAtt:
     }
 ;
 
-objReferenceElementsContent: objReferenceElementsStartVector objReferenceElementsIndexes objReferenceElementsValues OBJREFERENCEELEMENTSEND;
+objReferenceElementsContent: objReferenceElementsStartVector objReferenceElementsNonzeros OBJREFERENCEELEMENTSEND;
+
+objReferenceElementsNonzeros: | objReferenceElementsIndexes objReferenceElementsValues;
 
 objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferenceElementsStartVectorContent
 {
@@ -6135,12 +6207,21 @@ rowMajorAttEmpty: EMPTYROWMAJORATT
     osglData->rowMajorAttributePresent = true;
 };
 
-rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT quote 
+rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT QUOTE 
 { 
     if (osglData->rowMajorAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "rowMajor attribute encountered more than once");
     else
     {
+std::string ts = $2;
+std::cout << "rowMajor attribute read:   |" << $2 << "|" << std::endl;
+std::cout << "rowMajor attribute stored: |" << ts << "|" << std::endl;
+ ts = $3;
+std::cout << "QUOTE read:   |" << $3 << "|" << std::endl;
+std::cout << "QUOTE stored: |" << ts << "|" << std::endl;
+
+        if      ($2 == "false") osglData->rowMajorAttribute = false;
+
         if      ($2 == "false") osglData->rowMajorAttribute = false;
         else if ($2 == "true")  osglData->rowMajorAttribute = true;
         else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "rowMajor attribute must be \"true\" or \"false\"");

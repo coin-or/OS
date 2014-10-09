@@ -19,6 +19,7 @@
 #include "OSConfig.h"
 #include "OSParameters.h"
 #include "OSnLNode.h"
+#include "OSExpressionTree.h"
 
 #include <string>
 #include <vector>
@@ -1357,6 +1358,7 @@ public:
  */
 class OSnLNode;
 class OSnLMNode;
+class OSExpressionTree;
 
 
 /*! \class MatrixNode
@@ -1781,8 +1783,6 @@ public:
     ~LinearMatrixNonzeros();
 
     /**
-     *
-
      * A function to check for the equality of two objects
      */
     bool IsEqual(LinearMatrixNonzeros *that);
@@ -1867,6 +1867,46 @@ public:
     bool deepCopyFrom(LinearMatrixElements *that);
 };//class LinearMatrixElements
 
+#if 0
+
+/*! \class GeneralMatrixElement
+ * \brief a data structure to represent one nonzero in a generalMatrix element
+ */
+class GeneralMatrixElement
+{
+public:
+    int numberOfEl;
+    Nl **el;
+
+    GeneralMatrixElement();
+    ~GeneralMatrixElement();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(GeneralMatrixElement *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(GeneralMatrixElement *that);
+};//class GeneralMatrixElement
+#endif
+
 /*! \class GeneralMatrixValues
  * \brief a data structure to represent the nonzeros in a generalMatrix element
  */
@@ -1874,8 +1914,7 @@ class GeneralMatrixValues
 {
 public:
     int numberOfEl;
-    IntVector *indexes;
-    OSnLNode **values;
+    OSExpressionTree **el;
 
     GeneralMatrixValues();
     ~GeneralMatrixValues();
@@ -1936,7 +1975,7 @@ public:
     /**
      *  The values are general nonlinear expressions 
      */
-    GeneralMatrixValues *values;     
+    GeneralMatrixValues *values;
 
     GeneralMatrixElements();
     ~GeneralMatrixElements();

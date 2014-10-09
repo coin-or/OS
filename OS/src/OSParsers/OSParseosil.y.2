@@ -408,13 +408,16 @@ matrixVarAttributes: matrixVarAttList;
 matrixVarAttList: | matrixVarAttList matrixVarAtt;
 
 matrixVarAtt: 
-      matrixIdxATT
+      osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | templateMatrixIdxATT
+    | varReferenceMatrixIdxATT
     | lbMatrixIdxATT
     | lbConeIdxATT
     | ubMatrixIdxATT
     | ubConeIdxATT
-    | patternMatrixIdxATT
     | osilNameATT
+    | varTypeATT
 ;
 
 matrixVarEnd: ENDOFELEMENT
@@ -445,10 +448,12 @@ matrixObjAttributes: matrixObjAttList;
 matrixObjAttList: | matrixObjAttList matrixObjAtt;
 
 matrixObjAtt: 
-      matrixIdxATT
+      osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | templateMatrixIdxATT
+    | objReferenceMatrixIdxATT
     | orderConeIdxATT
     | constantMatrixIdxATT
-    | patternMatrixIdxATT
     | osilNameATT
     | osilShapeATT
     | numberOfMatrixTermsATT
@@ -500,12 +505,14 @@ matrixConAttributes: matrixConAttList;
 matrixConAttList: | matrixConAttList matrixConAtt;
 
 matrixConAtt: 
-      matrixIdxATT
+      osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | templateMatrixIdxATT
+    | conReferenceMatrixIdxATT
     | lbMatrixIdxATT
     | lbConeIdxATT
     | ubMatrixIdxATT
     | ubConeIdxATT
-    | patternMatrixIdxATT
     | osilNameATT
     | osilShapeATT
     | numberOfMatrixTermsATT
@@ -1161,17 +1168,62 @@ orderConeIdxATT: ORDERCONEIDXATT QUOTE INTEGER QUOTE
     parserData->orderConeIdx = $3; 
 };
 
-patternMatrixIdxATT: PATTERNMATRIXIDXATT QUOTE INTEGER QUOTE 
+templateMatrixIdxATT: TEMPLATEMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
     if ($2 != $4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if (parserData->patternMatrixIdxAttributePresent)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "patternMatrixIdx attribute previously set");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "pattern matrix index cannot be negative");
-    parserData->patternMatrixIdxAttributePresent = true;
-    parserData->patternMatrixIdx = $3; 
+    if (parserData->templateMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "templateMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "template matrix index cannot be negative");
+    parserData->templateMatrixIdxAttributePresent = true;
+    parserData->templateMatrixIdx = $3; 
 };
 
+
+varTypeATT: VARTYPEATT ATTRIBUTETEXT QUOTE 
+{
+    if (parserData->varTypeAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varType attribute previously set");
+    parserData->varTypeAttributePresent = true;
+    if ($2 != "true" && $2 != "false")
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varType must be one of C, B, I, S, D, J");
+    else
+        parserData->varType = *($2);
+std::cout << "default var type: " << parserData->varType << std::endl;
+};
+
+varReferenceMatrixIdxATT: VARREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->varReferenceMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varReferenceMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varReference matrix index cannot be negative");
+    parserData->varReferenceMatrixIdxAttributePresent = true;
+    parserData->varReferenceMatrixIdx = $3; 
+};
+
+objReferenceMatrixIdxATT: OBJREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->objReferenceMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objReferenceMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objReference matrix index cannot be negative");
+    parserData->objReferenceMatrixIdxAttributePresent = true;
+    parserData->objReferenceMatrixIdx = $3; 
+};
+
+conReferenceMatrixIdxATT: CONREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if ($2 != $4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->conReferenceMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "conReferenceMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "conReference matrix index cannot be negative");
+    parserData->conReferenceMatrixIdxAttributePresent = true;
+    parserData->conReferenceMatrixIdx = $3; 
+};
 
 
 aNumber:

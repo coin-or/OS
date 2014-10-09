@@ -269,16 +269,25 @@ public:
     bool ubMatrixIdxAttributePresent;
     bool ubConeIdxAttributePresent;
     bool orderConeIdxAttributePresent;
-    bool patternMatrixIdxAttributePresent;
+    bool templateMatrixIdxAttributePresent;
     bool constantMatrixIdxAttributePresent;
-    int matrixIdx;
-    int lbMatrixIdx;
-    int lbConeIdx;
-    int ubMatrixIdx;
-    int ubConeIdx;
-    int orderConeIdx;
-    int patternMatrixIdx;
-    int constantMatrixIdx;
+    bool varReferenceMatrixIdxAttributePresent;
+    bool objReferenceMatrixIdxAttributePresent;
+    bool conReferenceMatrixIdxAttributePresent;
+    bool varTypeAttributePresent;
+
+    int  matrixIdx;
+    int  lbMatrixIdx;   
+    int  lbConeIdx;
+    int  ubMatrixIdx;
+    int  ubConeIdx;
+    int  orderConeIdx;
+    int  templateMatrixIdx;
+    int  constantMatrixIdx;
+    int  varReferenceMatrixIdx;
+    int  objReferenceMatrixIdx;
+    int  conReferenceMatrixIdx;
+    char varType;
 
     bool shapePresent;
     std::string shape;

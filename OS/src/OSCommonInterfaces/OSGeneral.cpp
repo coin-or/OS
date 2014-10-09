@@ -2050,8 +2050,7 @@ LinearMatrixElements::~LinearMatrixElements()
 
 GeneralMatrixValues::GeneralMatrixValues():
     numberOfEl(0),
-    indexes(NULL),
-    values(NULL)
+    el(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixValues Constructor");
@@ -2069,22 +2068,18 @@ GeneralMatrixValues::~GeneralMatrixValues()
     outStr << "NUMBER OF VALUES = " << numberOfEl << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-    if (indexes != NULL)
-        delete indexes;
-    indexes = NULL;
-
-    if(numberOfEl > 0 && values != NULL)
+    if (numberOfEl > 0 && el != NULL)
     {
         for (int i=0; i < numberOfEl; i++)
         {
-            if (values[i] != NULL)
-                delete values[i];
-            values[i] = NULL;
+            if (el[i] != NULL)
+                delete el[i];
+            el[i] = NULL;
         }
     }
-    if (values != NULL)
-        delete [] values;
-    values = NULL;
+    if (el != NULL)
+        delete [] el;
+    el = NULL;
 }// end of GeneralMatrixValues::~GeneralMatrixValues()
 
 GeneralMatrixElements::GeneralMatrixElements():
