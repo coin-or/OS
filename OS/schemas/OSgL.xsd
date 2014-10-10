@@ -1138,7 +1138,7 @@
 		<xs:sequence>
 			<xs:element name="start" type="SizelessNonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
+					<xs:documentation>number of "el" children must equal numberOfColumns + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0">
@@ -1160,7 +1160,7 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 		<xs:sequence>
 			<xs:element name="start" type="SizelessNonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
+					<xs:documentation>number of "el" children must equal numberOfColumns + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0">
@@ -1182,7 +1182,7 @@ Each value must refer to an existing (core) variable index</xs:documentation>
 		<xs:sequence>
 			<xs:element name="start" type="SizelessNonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
+					<xs:documentation>number of "el" children must equal numberOfColumns + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
@@ -1200,7 +1200,7 @@ Each value must refer to an existing (core) objective index</xs:documentation>
 		<xs:sequence>
 			<xs:element name="start" type="SizelessNonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
+					<xs:documentation>number of "el" children must equal numberOfColumns + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0">
@@ -1222,7 +1222,7 @@ Each value must refer to an existing (core) constraint index</xs:documentation>
 		<xs:sequence>
 			<xs:element name="start" type="SizelessNonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
+					<xs:documentation>number of "el" children must equal numberOfColumns + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0">
@@ -1245,7 +1245,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 		<xs:sequence>
 			<xs:element name="start" type="SizelessNonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfRows + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
+					<xs:documentation>number of "el" children must equal numberOfColumns + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0">
@@ -1313,12 +1313,12 @@ Each nonzero is a general nonlinear expression</xs:documentation>
 		<xs:sequence>
 			<xs:element name="colOffsets" type="NonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>To give column indices of leftmost column of each block in the row-wise partition</xs:documentation>
+					<xs:documentation>The number of culumn offsets is one more than the number of blocks in each row of the decomposition. They give column indices of the leftmost column of each block. The last element will be equal to the number of columns in this MatrixType.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="rowOffsets" type="NonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>To give row indices of top rows of each block in the column-wise partition</xs:documentation>
+					<xs:documentation>The number of row offsets is one more than the number of blocks in each column of the decomposition. They give row indices of the top row of each block. The last element will be equal to the number of rows in this MatrixType.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="block" type="MatrixBlock" minOccurs="0" maxOccurs="unbounded">
