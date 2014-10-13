@@ -91,7 +91,6 @@ OSgLParserData::OSgLParserData() :
     blockRowIdxAttributePresent(false),
     blockColIdx(-1),
     blockColIdxAttributePresent(false),
-    osglNumberOfVarIdxPresent(false),
     osglConstantPresent(false),
     osglCoefPresent(false),
     osglCoef(0.0),
@@ -105,7 +104,9 @@ OSgLParserData::OSgLParserData() :
     numberOfElAttributePresent(false),
     numberOfEl(0),
     osglNumberOfNonzeros(0),
-    osglNonzeroCounter(0)
+    osglNonzeroCounter(0),
+    matrixBlockNumberOfRows(NULL),
+    matrixBlockNumberOfCols(NULL)
 {
 
 }//OSgLParserData

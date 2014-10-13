@@ -2,7 +2,7 @@
 /** @file OSgLWriter.cpp
  *
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -12,7 +12,6 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  */
-
 
 #include "OSgLWriter.h"
 #include "OSStringUtil.h"
@@ -28,50 +27,6 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-
-
-/*! \brief Take an IntVector object and write
- * a string that validates against the OSgL schema.
- *
- * @param v is the IntVector to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
- * @param writeBase64 controls whether the IntVector is to be output in base64 format
- *        or as a sequence of <el> (including mult and incr attributes)
- */
-std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase64)
-{
-    ostringstream outStr;
-    int mult, incr;
-
-    if (v->numberOfEl > 0)
-    {
-        if(writeBase64 == false)
-        {
-            for(int i = 0; i < v->numberOfEl;)
-            {
-                getMultIncr(&(v->el[i]), &mult, &incr, (v->numberOfEl) - i, 0);
-                if (mult == 1)
-                    outStr << "<el>" ;
-                else if (incr == 0)
-                    outStr << "<el mult=\"" << mult << "\">";
-                else
-                    outStr << "<el mult=\"" << mult << "\" incr=\"" << incr << "\">";
-                outStr << v->el[i];
-                outStr << "</el>" ;
-                if(addWhiteSpace == true) outStr << endl;
-                i += mult;
-            }
-        }
-        else
-        {
-            outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\">" ;
-            outStr << Base64::encodeb64( (char*)v->el, (v->numberOfEl)*sizeof(int) );
-            outStr << "</base64BinaryData>" ;
-            if(addWhiteSpace == true) outStr << endl;
-        }
-    }
-    return outStr.str();
-}// end writeIntVectorData
 
 /*! \brief Take a GeneralFileHeader object and write
  * a string that validates against the OSgL schema.
@@ -138,6 +93,49 @@ std::string writeOtherOptionEnumeration(OtherOptionEnumeration *e, bool addWhite
     return outStr.str();
 }// end writeOtherOptionEnumeration
 
+
+/*! \brief Take an IntVector object and write
+ * a string that validates against the OSgL schema.
+ *
+ * @param v is the IntVector to be output
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
+ * @param writeBase64 controls whether the IntVector is to be output in base64 format
+ *        or as a sequence of <el> (including mult and incr attributes)
+ */
+std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase64)
+{
+    ostringstream outStr;
+    int mult, incr;
+
+    if (v->numberOfEl > 0)
+    {
+        if(writeBase64 == false)
+        {
+            for(int i = 0; i < v->numberOfEl;)
+            {
+                getMultIncr(&(v->el[i]), &mult, &incr, (v->numberOfEl) - i, 0);
+                if (mult == 1)
+                    outStr << "<el>" ;
+                else if (incr == 0)
+                    outStr << "<el mult=\"" << mult << "\">";
+                else
+                    outStr << "<el mult=\"" << mult << "\" incr=\"" << incr << "\">";
+                outStr << v->el[i];
+                outStr << "</el>" ;
+                if(addWhiteSpace == true) outStr << endl;
+                i += mult;
+            }
+        }
+        else
+        {
+            outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\">" ;
+            outStr << Base64::encodeb64( (char*)v->el, (v->numberOfEl)*sizeof(int) );
+            outStr << "</base64BinaryData>" ;
+            if(addWhiteSpace == true) outStr << endl;
+        }
+    }
+    return outStr.str();
+}// end writeIntVectorData
 
 
 /*! \brief Take a DoubleVector object and write
@@ -258,4 +256,4 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
     }
 
     return outStr.str();
-}// end writeDblVectorData
+}// end writeBasisStatus

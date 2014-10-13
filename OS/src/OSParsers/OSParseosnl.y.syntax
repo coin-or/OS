@@ -520,20 +520,12 @@ matrixUpperTriangleAttribute: | includeDiagonalATT;
 
 matrixUpperTriangleContent: OSnLMNode MATRIXUPPERTRIANGLEEND;
 
-includeDiagonalATT: /*includeDiagonalAttEmpty | */ includeDiagonalAttContent;
-
-includeDiagonalAttEmpty: EMPTYINCLUDEDIAGONALATT
+includeDiagonalATT: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
 {
-    osnlData->includeDiagonalAttribute = true;
-};
-
-includeDiagonalAttContent: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE 
-{
-    if ($2 != "false" && $2 != "true")
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "includeDiagonal attribute must be \"true\" or \"false\"");
-    else 
-        osnlData->includeDiagonalAttribute = $2;
-//    free($2);
+    if      (strcmp($2,"false") == 0) osnlData->includeDiagonalAttribute = false;
+    else if (strcmp($2,"true" ) == 0) osnlData->includeDiagonalAttribute = true;
+    else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "osnlData->includeDiagonal attribute must be \"true\" or \"false\"");
+    free($2);
 };
 
 

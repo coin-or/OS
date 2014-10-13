@@ -18,6 +18,7 @@
 #include "OSMathUtil.h"
 #include "OSBase64.h"
 #include "OSOutput.h"
+#include "OSgLWriter.h"
 
 #include <iostream>
 #include <sstream>
@@ -1810,23 +1811,17 @@ BaseMatrix* BaseMatrix::cloneMatrixNode()
 std::string BaseMatrix::getMatrixNodeInXML()
 {
     ostringstream outStr;
-#if 0
-    outStr << "<" ;
-    outStr << this->getTokenName();
-    outStr << "  value=\"";
-    outStr << os_dtoa_format(value);
-    outStr << "\"";
-    outStr << " type=\"";
-    outStr << type ;
-    outStr << "\"";
-    if(id.length() > 0)
-    {
-        outStr << "  id=\"";
-        outStr << id ;
-        outStr << "\"";
-    }
-    outStr << "/>";
-#endif
+    outStr << "<baseMatrix";
+    outStr << " baseMatrixIdx=\"" << baseMatrixIdx << "\"";
+    outStr << " baseMatrixStartRow=\"" << baseMatrixStartRow << "\"";
+    outStr << " baseMatrixStartCol=\"" << baseMatrixStartCol << "\"";
+    outStr << " baseMatrixEndRow=\"" << baseMatrixEndRow << "\"";
+    outStr << " baseMatrixEndCol=\"" << baseMatrixEndCol << "\"";
+    outStr << " baseTranspose=\"" << baseTranspose << "\"";
+    outStr << " scalarMultiplier=\"" << scalarMultiplier << "\"";
+    outStr << " targetMatrixFirstRow=\"" << targetMatrixFirstRow << "\"";
+    outStr << " targetMatrixFirstCol=\"" << targetMatrixFirstCol << "\"";
+    outStr << "/>" << std::endl;
     return outStr.str();
 }// end of BaseMatrix::getMatrixNodeInXML()
 bool BaseMatrix::IsEqual(BaseMatrix *that)
@@ -2230,23 +2225,27 @@ MatrixElements* MatrixElements::cloneMatrixNode()
 std::string MatrixElements::getMatrixNodeInXML()
 {
     ostringstream outStr;
-#if 0
-    outStr << "<" ;
-    outStr << this->getTokenName();
-    outStr << "  value=\"";
-    outStr << os_dtoa_format(value);
-    outStr << "\"";
-    outStr << " type=\"";
-    outStr << type ;
-    outStr << "\"";
-    if(id.length() > 0)
-    {
-        outStr << "  id=\"";
-        outStr << id ;
-        outStr << "\"";
-    }
-    outStr << "/>";
-#endif
+    outStr << "<elements>" << std::endl;
+    if (constantElements != NULL)
+        outStr << "<constantElements>" << std::endl;
+        outStr << "</constantElements>" << std::endl;
+    if (varReferenceElements != NULL)
+        outStr << "<varReferenceElements>" << std::endl;
+        outStr << "</varReferenceElements>" << std::endl;
+    if (linearElements != NULL)
+        outStr << "<linearElements>" << std::endl;
+        outStr << "</linearElements>" << std::endl;
+    if (generalElements != NULL)
+        outStr << "<generalElements>" << std::endl;
+        outStr << "</generalElements>" << std::endl;
+    if (objReferenceElements != NULL)
+        outStr << "<objReferenceElements>" << std::endl;
+        outStr << "</objReferenceElements>" << std::endl;
+    if (conReferenceElements != NULL)
+        outStr << "<conReferenceElements>" << std::endl;
+        outStr << "</conReferenceElements>" << std::endl;
+
+    outStr << "</elements>" << std::endl;
     return outStr.str();
 }// end of MatrixElements::getMatrixNodeInXML()
 
@@ -2386,23 +2385,18 @@ MatrixBlocks* MatrixBlocks::cloneMatrixNode()
 std::string MatrixBlocks::getMatrixNodeInXML()
 {
     ostringstream outStr;
-#if 0
-    outStr << "<" ;
-    outStr << this->getTokenName();
-    outStr << "  value=\"";
-    outStr << os_dtoa_format(value);
-    outStr << "\"";
-    outStr << " type=\"";
-    outStr << type ;
-    outStr << "\"";
-    if(id.length() > 0)
-    {
-        outStr << "  id=\"";
-        outStr << id ;
-        outStr << "\"";
-    }
-    outStr << "/>";
-#endif
+    outStr << "<blocks numberOfBlocks=\"" << numberOfBlocks << "\">" << std::endl;
+    outStr << "<colOffsets numberOfEl=\"" << colOffsets->numberOfEl     << "\">" << std::endl;
+    outStr << writeIntVectorData(colOffsets, true, false);
+    outStr << "</colOffsets>" << std::endl;
+    outStr << "<rowOffsets numberOfEl=\"" << rowOffsets->numberOfEl     << "\">" << std::endl; 
+    outStr << writeIntVectorData(rowOffsets, true, false);
+    outStr << "</rowOffsets>" << std::endl;
+
+    for (int i=0; i < numberOfBlocks; i++)
+        outStr << m_mChildren[i]->getMatrixNodeInXML();
+
+    outStr << "</blocks>" << std::endl;
     return outStr.str();
 }// end of MatrixBlocks::getMatrixNodeInXML()
 
@@ -2492,14 +2486,17 @@ OSMatrix* OSMatrix::createConstructorTreeFromPrefix(std::vector<MatrixNode*> mtx
 {
     std::vector<MatrixNode*> stackVec;
     int kount =  mtxConstructorVec.size() - 1;
+std::cout << "creating constructor tree from  a list of " << kount << std::endl;
     while(kount >= 0)
     {
         int numkids = mtxConstructorVec[kount]->inumberOfChildren;
+std::cout << "matrix constructor " << kount << " has type " << mtxConstructorVec[kount]->getNodeName() << " and " << numkids << " children" << std::endl;
         if(numkids > 0)
         {
             for(int i = 0; i < numkids;  i++)
             {
-                mtxConstructorVec[kount]->m_mChildren[i] = stackVec.back()	;
+                mtxConstructorVec[kount]->m_mChildren[i] = stackVec.back();
+std::cout << "moved constructor " << mtxConstructorVec[kount]->m_mChildren[i]->getNodeName() << std::endl;
                 stackVec.pop_back();
             }
         }
@@ -2507,29 +2504,27 @@ OSMatrix* OSMatrix::createConstructorTreeFromPrefix(std::vector<MatrixNode*> mtx
         kount--;
     }
     stackVec.clear();
+std::cout << "finished processing matrix " << ((OSMatrix*)mtxConstructorVec[ 0])->name << std::endl;    
     return (OSMatrix*)mtxConstructorVec[ 0];
 }//end OSMatrix::createExpressionTreeFromPrefix
 
 std::string OSMatrix::getMatrixNodeInXML()
 {
     ostringstream outStr;
-#if 0
-    outStr << "<" ;
-    outStr << this->getTokenName();
-    outStr << "  value=\"";
-    outStr << os_dtoa_format(value);
-    outStr << "\"";
-    outStr << " type=\"";
-    outStr << type ;
-    outStr << "\"";
-    if(id.length() > 0)
-    {
-        outStr << "  id=\"";
-        outStr << id ;
-        outStr << "\"";
-    }
-    outStr << "/>";
-#endif
+    outStr << "<matrix";
+    outStr << " numberOfRows=\""    << numberOfRows    << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    outStr << " symmetry=\"" << symmetry << "\"";
+    if (name != "") 
+        outStr << " name=\"" << name << "\"";
+//    if (matrixType != "") 
+        outStr << " type=\"" << matrixType << "\"";
+    outStr << ">" << std::endl;
+
+    for (int i=0; i < inumberOfChildren; i++)
+        outStr << m_mChildren[i]->getMatrixNodeInXML() << std::endl;
+
+    outStr << "</matrix>" << std::endl;
     return outStr.str();
 }// end of OSMatrix::getMatrixNodeInXML()
 
@@ -2577,23 +2572,18 @@ MatrixBlock* MatrixBlock::cloneMatrixNode()
 std::string MatrixBlock::getMatrixNodeInXML()
 {
     ostringstream outStr;
-#if 0
-    outStr << "<" ;
-    outStr << this->getTokenName();
-    outStr << "  value=\"";
-    outStr << os_dtoa_format(value);
-    outStr << "\"";
-    outStr << " type=\"";
-    outStr << type ;
-    outStr << "\"";
-    if(id.length() > 0)
-    {
-        outStr << "  id=\"";
-        outStr << id ;
-        outStr << "\"";
-    }
-    outStr << "/>";
-#endif
+    outStr << "<block";
+    outStr << " blockRowIdx=\"" << blockRowIdx    << "\"";
+    outStr << " blockColIdx=\"" << blockColIdx << "\"";
+    outStr << " symmetry=\"" << symmetry << "\"";
+//    if (matrixType != "") 
+        outStr << " type=\"" << matrixType << "\"";
+    outStr << ">" << std::endl;
+
+    for (int i=0; i < inumberOfChildren; i++)
+        outStr << m_mChildren[i]->getMatrixNodeInXML() << std::endl;
+
+    outStr << "</block>" << std::endl;
     return outStr.str();
 }// end of MatrixBlock::getMatrixNodeInXML()
 

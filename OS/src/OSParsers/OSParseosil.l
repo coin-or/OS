@@ -16,7 +16,7 @@
  */
 %{
 
-//#define OSILPARSERDEBUG
+#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
 	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext);
@@ -566,8 +566,8 @@ return(DOUBLE);}
  <xmldeclaration>\n ;
  <xmldeclaration>"?>" BEGIN 0;
 
-<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); /*yylval->sval = yytext;*/ printf("attributetext: |%s| -- |%s|\n",yytext,yylval->sval); return(ATTRIBUTETEXT);}
-<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
 
 . {  
 	std::string error;

@@ -5278,13 +5278,13 @@ case 349:
 /* rule 349 can match eol */
 YY_RULE_SETUP
 #line 569 "../../../../OS/src/OSParsers/OSParseosil.l"
-{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); /*yylval->sval = yytext;*/ printf("attributetext: |%s| -- |%s|\n",yytext,yylval->sval); return(ATTRIBUTETEXT);}
+{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 350:
 /* rule 350 can match eol */
 YY_RULE_SETUP
 #line 570 "../../../../OS/src/OSParsers/OSParseosil.l"
-{YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
+{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 351:
 YY_RULE_SETUP

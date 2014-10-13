@@ -30,7 +30,7 @@ OSnLParserData::OSnLParserData() :
     variableidxattON(false),
     variablecoefattON(false),
     includeDiagonalAttributePresent(false),
-    includeDiagonalAttribute("")
+    includeDiagonalAttribute(true)
 {
 
 }//OSnLParserData

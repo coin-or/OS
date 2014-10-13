@@ -100,7 +100,12 @@ public:
     std::vector<MatrixNode*> mtxConstructorVec;
     std::vector<MatrixNode*> mtxBlkVec;
 
-    
+    /** 
+     *  Vectors to hold rowOffset and colOffset arrays in a place where they
+     *  are easily accessible while the <block> children are processed 
+     */
+    std::vector<int*> rowOffsets;
+    std::vector<int*> colOffsets;
 
     /** other data structures to temporarily hold a matrix and its subordinate elements */
     std::string  symmetryAttribute;
@@ -137,7 +142,6 @@ public:
     bool blockRowIdxAttributePresent;
     int  blockColIdx;
     bool blockColIdxAttributePresent;
-    bool osglNumberOfVarIdxPresent;
     bool osglConstantPresent;
     bool osglCoefPresent;
     double osglCoef;
@@ -152,6 +156,9 @@ public:
     int  numberOfEl;
     int  osglNumberOfNonzeros;
     int  osglNonzeroCounter;
+
+    int* matrixBlockNumberOfRows;
+    int* matrixBlockNumberOfCols;
     
 
 };//OSgLParserData

@@ -190,7 +190,7 @@ public:
 
     /**  Attributes and other data items associated with parsing the OSnLMNodes */
     bool includeDiagonalAttributePresent;
-    std::string includeDiagonalAttribute;
+    bool includeDiagonalAttribute;
 
     /** if the parser finds invalid text it is held here and we delete
      *  if the file was not valid

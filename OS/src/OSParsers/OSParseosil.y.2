@@ -152,7 +152,10 @@ matricesContent: matricesEmpty | matricesLaden;
 
 matricesEmpty: ENDOFELEMENT;
 
-matricesLaden: GREATERTHAN matrixList MATRICESEND;
+matricesLaden: GREATERTHAN matrixList MATRICESEND
+{
+std::cout << "Finished matrices section" << std::endl;
+};
 
 /**
  *  Note: A matrix is essentially a list of constructors.
@@ -172,7 +175,10 @@ conesContent: conesEmpty | conesLaden;
 
 conesEmpty: ENDOFELEMENT;
 
-conesLaden: GREATERTHAN coneList CONESEND;
+conesLaden: GREATERTHAN coneList CONESEND
+{
+    std::cout << "finished cones section" << std::endl;
+};
 
 coneList: | coneList cone;
 
