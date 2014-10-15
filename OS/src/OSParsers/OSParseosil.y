@@ -494,7 +494,7 @@ matrices: | matricesStart matricesAttributes matricesContent
 
 matricesStart: MATRICESSTART
 {
-    osinstance->instanceData->matrices = new Matrices();
+//    osinstance->instanceData->matrices = new Matrices();
 };
 
 matricesAttributes: osilNumberOfMatricesATT
@@ -505,8 +505,8 @@ matricesAttributes: osilNumberOfMatricesATT
     else
     {
         osinstance->instanceData->matrices->matrix = new OSMatrix*[osglData->numberOfMatrices];
-        for (int i=0; i < osglData->numberOfMatrices; i++)
-            osinstance->instanceData->matrices->matrix[i] = new OSMatrix();
+//        for (int i=0; i < osglData->numberOfMatrices; i++)
+//            osinstance->instanceData->matrices->matrix[i] = new OSMatrix();
     }
 };
 
@@ -1025,7 +1025,7 @@ STAGESTART osilStagenameATT stageend { /* set defaults for next stage */
 
 osilStagenameATT: 
         | NAMEATT ATTRIBUTETEXT QUOTE {
-          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = $2;};
+          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = $2; free($2);};
         
 stageend: ENDOFELEMENT
         | GREATERTHAN stagecontent STAGEEND;
@@ -1381,6 +1381,7 @@ osilNameATT: NAMEATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->namePresent = true;
     parserData->name = $2; 
+    free($2);
 };
 
 
@@ -1390,6 +1391,7 @@ osilShapeATT: SHAPEATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "shape attribute previously set");
     parserData->shapePresent = true;
     parserData->shape = $2; 
+    free($2);
 };
 
 osilNormScaleFactorATT: NORMSCALEFACTORATT QUOTE aNumber QUOTE 
@@ -1457,6 +1459,7 @@ osilSemidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "semidefiniteness must be either \"true\" or \"false \"");
     else
         parserData->semidefiniteness = $2; 
+    free($2);
 };
 
 matrixIdxATT: MATRIXIDXATT QUOTE INTEGER QUOTE 
@@ -1557,6 +1560,8 @@ varTypeATT: VARTYPEATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varType must be one of C, B, I, S, D, J");
     else
         parserData->varType = *($2);
+    free($2);
+
 std::cout << "default var type: " << parserData->varType << std::endl;
 };
 
@@ -2011,7 +2016,7 @@ osglMatrix: matrixStart matrixAttributes matrixContent
         ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
     osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
 std::cout << "XML representation:" << std::endl;
-    osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->getMatrixNodeInXML();
+    std::cout << osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->getMatrixNodeInXML();
     osglData->matrixCounter++;
 };
  
@@ -2076,7 +2081,7 @@ std::cout << "symmetry attribute stored: |" << ts << "|" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one symmetry attribute in <matrix> element");
     osglData->symmetryAttributePresent = true;   
     osglData->symmetryAttribute = $2; 
-//    free($2);
+    free($2);
 };
 
 osglMatrixNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
@@ -2088,7 +2093,7 @@ std::cout << "matrix name attribute stored: |" << ts << "|" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one name attribute in <matrix> element");
     osglData->matrixNameAttributePresent = true;   
     osglData->matrixNameAttribute = $2; 
-//    free($2);
+    free($2);
 };
 
 osglMatrixTypeATT: TYPEATT ATTRIBUTETEXT QUOTE 
@@ -2100,7 +2105,7 @@ std::cout << "matrix type attribute stored: |" << ts << "|" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one type attribute in <matrix> element");
     osglData->matrixTypeAttributePresent = true;   
     osglData->matrixTypeAttribute = $2; 
-//    free($2);
+    free($2);
 };
 
 matrixContent: matrixEmpty | matrixLaden;
@@ -2363,6 +2368,7 @@ constantElementsStartVector: constantElementsStartVectorStart constantElementsSt
     ((MatrixElements*)osglData->tempC)->constantElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->constantElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->constantElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2393,6 +2399,7 @@ constantElementsIndexes: constantElementsIndexesStart constantElementsIndexesCon
     ((MatrixElements*)osglData->tempC)->constantElements->indexes->numberOfEl
         = ((MatrixElements*)osglData->tempC)->constantElements->numberOfValues;
     ((MatrixElements*)osglData->tempC)->constantElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2419,6 +2426,7 @@ constantElementsValues: constantElementsValuesStart constantElementsValuesConten
     ((MatrixElements*)osglData->tempC)->constantElements->values = new DoubleVector();
     ((MatrixElements*)osglData->tempC)->constantElements->values->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->constantElements->values->el = osglData->osglDblArray;
+    osglData->osglDblArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2496,6 +2504,7 @@ varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferen
     ((MatrixElements*)osglData->tempC)->varReferenceElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->varReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->varReferenceElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2524,6 +2533,7 @@ varReferenceElementsIndexes: varReferenceElementsIndexesStart varReferenceElemen
     ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2550,6 +2560,7 @@ varReferenceElementsValues: varReferenceElementsValuesStart varReferenceElements
     ((MatrixElements*)osglData->tempC)->varReferenceElements->values = new IntVector();
     ((MatrixElements*)osglData->tempC)->varReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->varReferenceElements->values->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2635,6 +2646,7 @@ linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVec
     ((MatrixElements*)osglData->tempC)->linearElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->linearElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->linearElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2665,6 +2677,7 @@ linearElementsIndexes: linearElementsIndexesStart linearElementsIndexesContent
     ((MatrixElements*)osglData->tempC)->linearElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->linearElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->linearElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2771,7 +2784,7 @@ linearElementsValuesStart: VALUESSTART
     for (int i=0; i < ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues; i++)
         ((MatrixElements*)osglData->tempC)->linearElements->values->el[i]
             = new LinearMatrixElement(); 
-    osglData->osglDblArray = new double[osglData->osglNumberOfEl];
+//    osglData->osglDblArray = new double[osglData->osglNumberOfEl]; //valgrind: this leaks 40 bytes of memory
     osglData->osglCounter = 0;
     osglData->numberOfVarIdxAttributePresent = false;
 std::cout << "values vector has length " << osglData->osglNumberOfEl << std::endl;  
@@ -2808,7 +2821,8 @@ linearElementsValuesElAttributes: linearElementsValuesElAttList
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->numberOfVarIdx
         = osglData->numberOfVarIdx;
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx
-        = new LinearMatrixElementTerm*[osglData->numberOfVarIdx];
+        = new LinearMatrixElementTerm*[osglData->numberOfVarIdx]; //valgrind: this creates error in OSGeneral.cpp:1950
+    osglData->osglCounter = 0;
 };
 
 linearElementsValuesElAttList: | linearElementsValuesElAttList linearElementsValuesElAtt;
@@ -2845,7 +2859,8 @@ linearElementsValuesVarIdxStart: VARIDXSTART
     osglData->osglCoefPresent = false;
     osglData->osglCoef = 1.0;
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]
-        = new LinearMatrixElementTerm();
+        = new LinearMatrixElementTerm(); //valgrind: this leaks 32 bytes of memory
+std::cout << "create term " << osglData->osglCounter << " in linear elements nonzero " << osglData->osglNonzeroCounter << std::endl;
 };
 
 osglLinearElementsValuesVarIdxCoefATT: | COEFATT QUOTE aNumber QUOTE
@@ -2856,6 +2871,7 @@ osglLinearElementsValuesVarIdxCoefATT: | COEFATT QUOTE aNumber QUOTE
 linearElementsValuesVarIdxContent: GREATERTHAN INTEGER VARIDXEND
 {
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->idx = $2;
+    osglData->osglCounter++;
 };
 
 
@@ -2897,6 +2913,7 @@ generalElementsStartVector: generalElementsStartVectorStart generalElementsStart
     ((MatrixElements*)osglData->tempC)->generalElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->generalElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->generalElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -2927,6 +2944,7 @@ generalElementsIndexes: generalElementsIndexesStart generalElementsIndexesConten
     ((MatrixElements*)osglData->tempC)->generalElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->generalElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->generalElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -3037,7 +3055,7 @@ generalElementsEl: generalElementsElStart generalElementsElContent;
 
 generalElementsElStart: ELSTART
     {
-        if (osglData->osglNumberOfNonzeros >= osglData->osglNonzeroCounter) 
+        if (osglData->osglNonzeroCounter >= osglData->osglNumberOfNonzeros) 
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> terms greater than expected");
 std::cout << "expected " << osglData->osglNumberOfNonzeros << " general elements; got " << osglData->osglNonzeroCounter << std::endl; 
         osnlData->nlNodeVec.clear();
@@ -3099,6 +3117,7 @@ conReferenceElementsStartVector: conReferenceElementsStartVectorStart conReferen
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -3128,6 +3147,7 @@ conReferenceElementsIndexes: conReferenceElementsIndexesStart conReferenceElemen
     ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -3154,6 +3174,7 @@ conReferenceElementsValues: conReferenceElementsValuesStart conReferenceElements
     ((MatrixElements*)osglData->tempC)->conReferenceElements->values = new IntVector();
     ((MatrixElements*)osglData->tempC)->conReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->conReferenceElements->values->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -3239,6 +3260,7 @@ objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferen
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -3269,6 +3291,7 @@ objReferenceElementsIndexes: objReferenceElementsIndexesStart objReferenceElemen
     ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -3295,6 +3318,7 @@ objReferenceElementsValues: objReferenceElementsValuesStart objReferenceElements
     ((MatrixElements*)osglData->tempC)->objReferenceElements->values = new IntVector();
     ((MatrixElements*)osglData->tempC)->objReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->objReferenceElements->values->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -3355,7 +3379,7 @@ negativePatternAttContent: NEGATIVEPATTERNATT ATTRIBUTETEXT quote
     if      ($2 == "false") osglData->negativePatternAttribute = false;
     else if ($2 == "true")  osglData->negativePatternAttribute = true;
     else parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "negativePattern attribute in <baseMatrix> element must be \"true\" or \"false\"");
-//    free($2);
+    free($2);
 };
 
 patternElementsContent: GREATERTHAN patternElementsStartVector patternElementsNonzeros;
@@ -3433,13 +3457,18 @@ matrixTransformationStart: TRANSFORMATIONSTART
 std::cout << "push back a constructor - MatrixTransformation" << std::endl;
 };
 
-matrixTransformationEnd: TRANSFORMATIONEND;
+matrixTransformationEnd: TRANSFORMATIONEND
+{
+    // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+    ((MatrixTransformation*)osglData->tempC)->transformation = 
+        ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+};
 
 matrixBlocks: matrixBlocksStart matrixBlocksAttributes matrixBlocksContent
 {
     // clean up temporary arrays without deleting the information
     osglData->rowOffsets.back() = NULL;
-    osglData->colOffsets.back() = NULL;    
+    osglData->colOffsets.back() = NULL;
 std::cout << "pop back rowOffsets" << std::endl;
     osglData->rowOffsets.pop_back();
 std::cout << "pop back colOffsets" << std::endl;
@@ -3451,13 +3480,14 @@ matrixBlocksStart: BLOCKSSTART
     osglData->tempC = new MatrixBlocks();
 std::cout << "push back a constructor - MatrixBlocks" << std::endl;
     osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->numberOfBlocksAttributePresent = false;
 };
 
 matrixBlocksAttributes: osglNumberOfBlocksATT
 {
-    ((MatrixBlocks*)osglData->tempC)->numberOfBlocks = osglData->numberOfBlocks;
-//    osglData->mtxBlkVec.back()->m_mChildren = 
-//        new MatrixNode*[osglData->numberOfBlocks];
+    ((MatrixBlocks*)osglData->tempC)->numberOfBlocks    = osglData->numberOfBlocks;
+    ((MatrixBlocks*)osglData->tempC)->inumberOfChildren = osglData->numberOfBlocks;
+    ((MatrixBlocks*)osglData->tempC)->m_mChildren       = new MatrixNode*[osglData->numberOfBlocks];
 //std::cout << "pop back mtxBlkVec" << std::endl;
 //    osglData->mtxBlkVec.pop_back();
 };
@@ -3469,10 +3499,10 @@ matrixBlocksContent: GREATERTHAN colOffsets rowOffsets blockList matrixBlocksEnd
 
 matrixBlocksEnd: BLOCKSEND
 {
-    delete [] osglData->matrixBlockNumberOfRows;
-    delete [] osglData->matrixBlockNumberOfCols;
-    osglData->matrixBlockNumberOfRows = NULL;
-    osglData->matrixBlockNumberOfCols = NULL;
+//    delete [] osglData->matrixBlockNumberOfRows;
+//    delete [] osglData->matrixBlockNumberOfCols;
+//    osglData->matrixBlockNumberOfRows = NULL;
+//    osglData->matrixBlockNumberOfCols = NULL;
 };
 
 colOffsets: colOffsetsStart colOffsetsNumberOfElAttribute colOffsetsContent
@@ -3498,7 +3528,7 @@ colOffsetsNumberOfElAttribute: osglNumberOfElATT
 {
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->matrixBlockNumberOfCols = new int[osglData->osglNumberOfEl];
+//    osglData->matrixBlockNumberOfCols = new int[osglData->osglNumberOfEl]; //valgrind: this leaks 48 bytes of memory
 }; 
 
 colOffsetsContent: colOffsetsEmpty | colOffsetsLaden;
@@ -3535,7 +3565,7 @@ rowOffsetsNumberOfElAttribute: osglNumberOfElATT
 {
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->matrixBlockNumberOfRows = new int[osglData->osglNumberOfEl];
+//    osglData->matrixBlockNumberOfRows = new int[osglData->osglNumberOfEl]; //valgrind: this leaks 48 bytes of memory
 }; 
 
 rowOffsetsContent: rowOffsetsEmpty | rowOffsetsLaden;
@@ -3762,7 +3792,7 @@ nonlinearExpressions:
 
 nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
 {               
-    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
+//    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
 };
 
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
@@ -3988,6 +4018,7 @@ numbertypeATT: TYPEATT ATTRIBUTETEXT
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many number type attributes"); 
     osnlData->numbertypeattON = true;
     osnlData->nlNodeNumberPoint->type = $2;
+    free($2);
 } QUOTE;
 
 numberidATT:   IDATT   ATTRIBUTETEXT 
@@ -3996,6 +4027,7 @@ numberidATT:   IDATT   ATTRIBUTETEXT
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,"too many number id attributes"); 
     osnlData->numberidattON = true;
     osnlData->nlNodeNumberPoint->id = $2;
+    free($2);
 } QUOTE;
 
 numbervalueATT: VALUEATT QUOTE aNumber QUOTE 
@@ -4164,7 +4196,7 @@ OSnLMNode: matrixReference
 
 matrixReference: MATRIXREFERENCESTART
 {
-    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
+    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference(); //valgrind: this leaks 1872 bytes of memory
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixRef);
 } matrixIdxATT matrixreferenceend {osnlData->matrixidxattON = false;} ;
 

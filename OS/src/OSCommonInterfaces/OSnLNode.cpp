@@ -700,7 +700,6 @@ std::string OSnLNodePlus::getTokenName()
     return "plus";
 }// end OSnLNodePlus::getTokenName()
 
-
 double OSnLNodePlus::calculateFunction(double *x)
 {
     m_dFunctionValue = m_mChildren[0]->calculateFunction(x) + m_mChildren[1]->calculateFunction(x);
@@ -714,13 +713,13 @@ ADdouble OSnLNodePlus::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodePlus::constructADTape
 
-
 OSnLNode* OSnLNodePlus::cloneExprNode()
 {
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodePlus();
     return  nlNodePoint;
 }//end OSnLNodePlus::cloneExprNode
+
 
 //
 // OSnLNodeSum Methods
@@ -787,7 +786,6 @@ OSnLNodeAllDiff::OSnLNodeAllDiff()
     inodeType = -1;
 }//end OSnLNodeAllDiff
 
-
 OSnLNodeAllDiff::~OSnLNodeAllDiff()
 {
 #ifndef NDEBUG
@@ -843,7 +841,6 @@ OSnLNode* OSnLNodeAllDiff::cloneExprNode()
     return  nlNodePoint;
 }//end OSnLNodeAllDiff::cloneExprNode
 //end OSnLNodeAllDiff methods
-
 
 
 //
@@ -904,8 +901,6 @@ OSnLNode* OSnLNodeMax::cloneExprNode()
     nlNodePoint = new OSnLNodeMax();
     return  nlNodePoint;
 }//end OSnLNodeMax::cloneExprNode
-//
-
 
 
 //
@@ -967,10 +962,8 @@ OSnLNode* OSnLNodeMin::cloneExprNode()
     nlNodePoint = new OSnLNodeMin();
     return  nlNodePoint;
 }//end OSnLNodeMin::cloneExprNode
-//
 
 
-//
 //
 // OSnLNodeMinus Methods
 OSnLNodeMinus::OSnLNodeMinus()
@@ -1017,8 +1010,6 @@ OSnLNode* OSnLNodeMinus::cloneExprNode()
     nlNodePoint = new OSnLNodeMinus();
     return  nlNodePoint;
 }//end OSnLNodeMinus::cloneExprNode
-//
-//
 
 
 //
@@ -1059,14 +1050,12 @@ ADdouble OSnLNodeNegate::constructADTape(std::map<int, int> *ADIdx, ADvector *XA
     return m_ADTape;
 }// end OSnLNodeNegate::constructADTape
 
-
 OSnLNode* OSnLNodeNegate::cloneExprNode()
 {
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeNegate();
     return  nlNodePoint;
 }//end OSnLNodeNegate::cloneExprNode
-
 
 
 // OSnLNodeTimes Methods
@@ -1114,7 +1103,7 @@ OSnLNode* OSnLNodeTimes::cloneExprNode()
     return  nlNodePoint;
 }//end OSnLNodeTimes::cloneExprNode
 
-//
+
 //
 // OSnLNodeDivide Methods
 OSnLNodeDivide::OSnLNodeDivide()
@@ -1204,7 +1193,7 @@ ADdouble OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD
     if( this->m_mChildren[1]->inodeInt == 5001 )
     {
         OSnLNodeNumber *numberNode  =  (OSnLNodeNumber*)m_mChildren[1];
-        // we have a number node see if interger
+        // we have a number node see if integer
         if( (numberNode->value) == int( numberNode->value))
         {
             m_ADTape =  pow(m_mChildren[0]->constructADTape( ADIdx, XAD) ,  int( numberNode->value));
@@ -1219,14 +1208,10 @@ ADdouble OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD
 }// end OSnLNodePower::constructADTape
 
 
-
 //ADdouble OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD){
 //        m_ADTape = AD::pow(m_mChildren[0]->constructADTape( ADIdx, XAD) , m_mChildren[1]->constructADTape( ADIdx, XAD) );
 //    return m_ADTape;
 //}// end OSnLNodePower::constructADTape
-
-
-
 
 
 OSnLNode* OSnLNodePower::cloneExprNode()
@@ -1235,8 +1220,6 @@ OSnLNode* OSnLNodePower::cloneExprNode()
     nlNodePoint = new OSnLNodePower();
     return  nlNodePoint;
 }//end OSnLNodePower::cloneExprNode
-//
-//
 
 
 //
@@ -1293,8 +1276,6 @@ OSnLNode* OSnLNodeProduct::cloneExprNode()
     nlNodePoint = new OSnLNodeProduct();
     return  nlNodePoint;
 }//end OSnLNodeProduct::cloneExprNode
-//
-//
 
 
 //
@@ -1343,9 +1324,6 @@ OSnLNode* OSnLNodeLn::cloneExprNode()
 }//end OSnLNodeLn::cloneExprNode
 
 
-
-
-
 //
 // OSnLNodeSqrt Methods
 OSnLNodeSqrt::OSnLNodeSqrt()
@@ -1392,8 +1370,6 @@ OSnLNode* OSnLNodeSqrt::cloneExprNode()
 }//end OSnLNodeSqrt::cloneExprNode
 
 
-
-//
 //
 // OSnLNodeSquare Methods
 OSnLNodeSquare::OSnLNodeSquare()
@@ -1439,7 +1415,7 @@ OSnLNode* OSnLNodeSquare::cloneExprNode()
     return  nlNodePoint;
 }//end OSnLNodeSquare::cloneExprNode
 
-//
+
 //
 // OSnLNodeSin Methods
 OSnLNodeSin::OSnLNodeSin()
@@ -1487,7 +1463,6 @@ OSnLNode* OSnLNodeSin::cloneExprNode()
 
 
 //
-//
 // OSnLNodeCos Methods
 OSnLNodeCos::OSnLNodeCos()
 {
@@ -1533,9 +1508,6 @@ OSnLNode* OSnLNodeCos::cloneExprNode()
 }//end OSnLNodeCos::cloneExprNode
 
 
-
-
-//
 //
 // OSnLNodeExp Methods
 OSnLNodeExp::OSnLNodeExp()
@@ -1580,9 +1552,6 @@ OSnLNode* OSnLNodeExp::cloneExprNode()
     nlNodePoint = new OSnLNodeExp();
     return  nlNodePoint;
 }//end OSnLNodeExp::cloneExprNode
-//
-//
-
 
 
 //
@@ -1632,6 +1601,7 @@ OSnLNode* OSnLNodeAbs::cloneExprNode()
 // end OSnLNodeAbs methods
 
 
+//
 // OSnLNodeErf Methods
 OSnLNodeErf::OSnLNodeErf()
 {
@@ -1753,7 +1723,7 @@ OSnLNode* OSnLNodeIf::cloneExprNode()
 // end OSnLNodeIf methods
 
 
-
+//
 // OSnLNodeNumber Methods
 OSnLNodeNumber::OSnLNodeNumber()
 {
@@ -1854,7 +1824,6 @@ OSnLNodeE::OSnLNodeE()
     //value = 0.0;
     //type = "real";
     //id = "";
-
 }//end OSnLNodeE
 
 OSnLNodeE::~OSnLNodeE()
@@ -1863,7 +1832,6 @@ OSnLNodeE::~OSnLNodeE()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeE destructor");
 #endif
 }//end ~OSnLNodeE
-
 
 
 std::string OSnLNodeE::getTokenNumber()
@@ -1921,8 +1889,6 @@ OSnLNodePI::OSnLNodePI()
     inumberOfChildren = 0;
     m_mChildren = NULL;
     inodeType = 0;
-
-
 }//end OSnLNodePI
 
 
@@ -1977,8 +1943,8 @@ OSnLNode* OSnLNodePI::cloneExprNode()
     nlNodePoint = new OSnLNodePI();
     return  nlNodePoint;
 }//end OSnLNodePI::cloneExprNode
-
 //end OSnLNodePI methods
+
 
 // OSnLNodeVariable Methods
 OSnLNodeVariable::OSnLNodeVariable()
@@ -2327,19 +2293,29 @@ std::vector<OSnLNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<OSnLNod
     (*postfixVector).push_back( this);
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
+#endif
 
-OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec)
+OSnLMNode* OSnLMNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
 {
-    std::vector<OSnLNode*> stackVec;
+    std::vector<ExprNode*> stackVec;
     int kount =  nlNodeVec.size() - 1;
     while(kount >= 0)
     {
+        int mtxkids = nlNodeVec[kount]->inumberOfMatrixChildren;
+        if(mtxkids > 0)
+        {
+            for(int i = 0; i < mtxkids;  i++)
+            {
+                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
         int numkids = nlNodeVec[kount]->inumberOfChildren;
         if(numkids > 0)
         {
             for(int i = 0; i < numkids;  i++)
             {
-                nlNodeVec[kount]->m_mChildren[i] = stackVec.back()    ;
+                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
                 stackVec.pop_back();
             }
         }
@@ -2347,9 +2323,10 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNode
         kount--;
     }
     stackVec.clear();
-    return nlNodeVec[ 0];
+    return (OSnLMNode*)nlNodeVec[ 0];
 }//end createExpressionTreeFromPrefix
 
+#if 0
 std::vector<OSnLNode*> OSnLNode::getPrefixFromExpressionTree()
 {
     std::vector<OSnLNode*> prefixVector;
@@ -2508,6 +2485,7 @@ std::string OSnLMNode::getNonlinearExpressionInXML()
         }
     }
     if(inumberOfChildren > 0)
+
     {
         outStr << "</" ;
         outStr << this->getTokenName() ;

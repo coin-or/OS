@@ -474,10 +474,8 @@ enum ENUM_MATRIX_TYPE
     ENUM_MATRIX_TYPE_objref,          // matrix elements contain indexes of constraints in the core
     ENUM_MATRIX_TYPE_mixedref,        // mixed reference to objectives and constraints
 
-    ENUM_MATRIX_TYPE_pospattern = 30, // matrix contains ones for matrix elements that should be included
-    ENUM_MATRIX_TYPE_negpattern,      // matrix contains ones for matrix elements that should be zeroed out
+    ENUM_MATRIX_TYPE_jumbled = 30,    // mixture of matrix elements that is unsuited for further use
 
-    ENUM_MATRIX_TYPE_jumbled = 40,    // mixture of matrix elements that is unsuited for further use
     ENUM_MATRIX_TYPE_unknown = 99
 
 };
@@ -495,13 +493,26 @@ inline int returnMatrixType(std::string type)
     if (type == "objref"    ) return ENUM_MATRIX_TYPE_objref;
     if (type == "mixedref"  ) return ENUM_MATRIX_TYPE_mixedref;
 
-    if (type == "pospattern") return ENUM_MATRIX_TYPE_pospattern;
-    if (type == "negpattern") return ENUM_MATRIX_TYPE_negpattern;
-
     if (type == "jumbled"   ) return ENUM_MATRIX_TYPE_jumbled;
     if (type == "unknown"   ) return ENUM_MATRIX_TYPE_unknown;
     return 0;
 }//returnMatrixType
+
+inline std::string returnMatrixTypeString(ENUM_MATRIX_TYPE type)
+{
+    if (type == ENUM_MATRIX_TYPE_zero)      return "zero";
+    if (type == ENUM_MATRIX_TYPE_constant)  return "constant";
+    if (type == ENUM_MATRIX_TYPE_varref)    return "varref";
+    if (type == ENUM_MATRIX_TYPE_linear)    return "linear";
+    if (type == ENUM_MATRIX_TYPE_quadratic) return "quadratic";
+    if (type == ENUM_MATRIX_TYPE_general)   return "general";
+    if (type == ENUM_MATRIX_TYPE_conref)    return "conref";
+    if (type == ENUM_MATRIX_TYPE_objref)    return "objref";
+    if (type == ENUM_MATRIX_TYPE_mixedref)  return "mixedref";
+    if (type == ENUM_MATRIX_TYPE_jumbled)   return "jumbled";
+    if (type == ENUM_MATRIX_TYPE_unknown)   return "unknown";
+    return "unknown";
+}//returnMatrixTypeString
 
 inline bool verifyMatrixType(std::string type)
 {
@@ -524,12 +535,6 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
     if (type2 == ENUM_MATRIX_TYPE_unknown) return type2;
     if (type1 == ENUM_MATRIX_TYPE_zero) return type2;
     if (type2 == ENUM_MATRIX_TYPE_zero) return type1;
-
-    // pattern matrices do not mix with any other types (NOTE: type1 and type2 are now different!)
-    if (type1 == ENUM_MATRIX_TYPE_pospattern || type2 == ENUM_MATRIX_TYPE_pospattern) 
-        return ENUM_MATRIX_TYPE_jumbled;
-    if (type1 == ENUM_MATRIX_TYPE_negpattern || type2 == ENUM_MATRIX_TYPE_negpattern) 
-        return ENUM_MATRIX_TYPE_jumbled;
 
     // column and objective references can be mixed  --- in some circumstances 
     if (type1 >= ENUM_MATRIX_TYPE_conref) // row reference (objective or constraint)
@@ -564,9 +569,21 @@ enum ENUM_MATRIX_SYMMETRY
     ENUM_MATRIX_SYMMETRY_symmetricLower,
     ENUM_MATRIX_SYMMETRY_skewSymmetricUpper,
     ENUM_MATRIX_SYMMETRY_skewSymmetricLower,
-    ENUM_MATRIX_SYMMETRY_hermitianLower,
-    ENUM_MATRIX_SYMMETRY_hermitianUpper
+    ENUM_MATRIX_SYMMETRY_HermitianLower,
+    ENUM_MATRIX_SYMMETRY_HermitianUpper
 };
+
+inline std::string returnMatrixSymmetryString(ENUM_MATRIX_SYMMETRY symmetry)
+{
+    if (symmetry == ENUM_MATRIX_SYMMETRY_none              ) return "none";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_symmetricUpper    ) return "symmetricUpper";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_symmetricLower    ) return "symmetricLower";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_skewSymmetricUpper) return "skewSymmetricUpper";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_skewSymmetricLower) return "skewSymmetricLower";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower    ) return "HermitianLower";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower    ) return "HermitianLower";
+    return "none";
+}//returnMatrixSymmetryString
 
 inline int returnMatrixSymmetry(std::string symmetry)
 {
@@ -575,8 +592,8 @@ inline int returnMatrixSymmetry(std::string symmetry)
     if (symmetry == "symmetricLower"    ) return ENUM_MATRIX_SYMMETRY_symmetricLower;
     if (symmetry == "skewSymmetricUpper") return ENUM_MATRIX_SYMMETRY_skewSymmetricUpper;
     if (symmetry == "skewSymmetricLower") return ENUM_MATRIX_SYMMETRY_skewSymmetricLower;
-    if (symmetry == "hermitianLower"    ) return ENUM_MATRIX_SYMMETRY_hermitianLower;
-    if (symmetry == "hermitianLower"    ) return ENUM_MATRIX_SYMMETRY_hermitianLower;
+    if (symmetry == "HermitianLower"    ) return ENUM_MATRIX_SYMMETRY_HermitianLower;
+    if (symmetry == "HermitianLower"    ) return ENUM_MATRIX_SYMMETRY_HermitianLower;
     return 0;
 }//returnMatrixSymmetry
 
@@ -1369,6 +1386,11 @@ class OSExpressionTree;
 class MatrixNode
 {
 public:
+    /**
+     *  matrixType tracks the type of elements contained in this MatrixNode,
+     *  which may be useful in solver selection
+     */
+    ENUM_MATRIX_TYPE matrixType;
 
     /**
      *  nType is a unique integer assigned to each type of matrix node
@@ -1411,7 +1433,7 @@ public:
      *
      * @return the MatrixNode and its children as an OSgL string.
      */
-    virtual std::string getMatrixNodeInXML();
+    virtual std::string getMatrixNodeInXML() = 0;
 
     /**
      * <p>
@@ -2446,7 +2468,6 @@ public:
     int numberOfRows;
     int numberOfColumns;
     ENUM_MATRIX_SYMMETRY symmetry;
-    ENUM_MATRIX_TYPE  matrixType;
 
     MatrixType();
     ~MatrixType();

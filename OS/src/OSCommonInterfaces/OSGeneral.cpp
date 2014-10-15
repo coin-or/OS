@@ -1717,6 +1717,7 @@ bool TimeSpan::deepCopyFrom(TimeSpan *that)
  ***************************************************************/
  
 MatrixNode::MatrixNode():
+    matrixType(ENUM_MATRIX_TYPE_unknown), 
     nType(ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown),
     inumberOfChildren(),
     m_mChildren(NULL)
@@ -1782,6 +1783,7 @@ BaseMatrix::BaseMatrix():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the BaseMatrix Constructor");
 #endif
+     nType = ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
 } // end of BaseMatrix
 
 BaseMatrix::~BaseMatrix()
@@ -1813,14 +1815,22 @@ std::string BaseMatrix::getMatrixNodeInXML()
     ostringstream outStr;
     outStr << "<baseMatrix";
     outStr << " baseMatrixIdx=\"" << baseMatrixIdx << "\"";
-    outStr << " baseMatrixStartRow=\"" << baseMatrixStartRow << "\"";
-    outStr << " baseMatrixStartCol=\"" << baseMatrixStartCol << "\"";
-    outStr << " baseMatrixEndRow=\"" << baseMatrixEndRow << "\"";
-    outStr << " baseMatrixEndCol=\"" << baseMatrixEndCol << "\"";
-    outStr << " baseTranspose=\"" << baseTranspose << "\"";
-    outStr << " scalarMultiplier=\"" << scalarMultiplier << "\"";
-    outStr << " targetMatrixFirstRow=\"" << targetMatrixFirstRow << "\"";
-    outStr << " targetMatrixFirstCol=\"" << targetMatrixFirstCol << "\"";
+    if (baseMatrixStartRow != 0)
+        outStr << " baseMatrixStartRow=\"" << baseMatrixStartRow << "\"";
+    if (baseMatrixStartCol != 0)
+        outStr << " baseMatrixStartCol=\"" << baseMatrixStartCol << "\"";
+    if (baseMatrixEndRow >= 0)
+        outStr << " baseMatrixEndRow=\"" << baseMatrixEndRow << "\"";
+    if (baseMatrixEndCol >= 0)
+        outStr << " baseMatrixEndCol=\"" << baseMatrixEndCol << "\"";
+    if (baseTranspose)
+        outStr << " baseTranspose=\"true\"";
+    if (scalarMultiplier != 1)
+        outStr << " scalarMultiplier=\"" << scalarMultiplier << "\"";
+    if (targetMatrixFirstRow != 0)
+        outStr << " targetMatrixFirstRow=\"" << targetMatrixFirstRow << "\"";
+    if (targetMatrixFirstCol != 0)
+        outStr << " targetMatrixFirstCol=\"" << targetMatrixFirstCol << "\"";
     outStr << "/>" << std::endl;
     return outStr.str();
 }// end of BaseMatrix::getMatrixNodeInXML()
@@ -1925,7 +1935,7 @@ LinearMatrixElement::~LinearMatrixElement()
     outStr << "NUMBER OF VARIDX = " << numberOfVarIdx << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-    if(numberOfVarIdx > 0 && varIdx != NULL)
+    if (varIdx != NULL)
     {
         for (int i=0; i < numberOfVarIdx; i++)
         {
@@ -1935,16 +1945,10 @@ LinearMatrixElement::~LinearMatrixElement()
             outStr << "DESTROYING VARIDX " << i << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-            if(varIdx != NULL)
-            {
-                if (varIdx[i] != NULL)
-                    delete varIdx[i];
-                varIdx[i] = NULL;
-            }
+            if (varIdx[i] != NULL) //valgrind: jump depends on uninitialised value
+                delete varIdx[i];
+            varIdx[i] = NULL;
         }
-    }
-    if(varIdx != NULL)
-    {
         delete [] varIdx;
         varIdx = NULL;
     }
@@ -1973,7 +1977,7 @@ LinearMatrixValues::~LinearMatrixValues()
 //    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
 
-    if (numberOfEl > 0 && el != NULL)
+    if (el != NULL)
     {
         for (int i=0; i < numberOfEl; i++)
         {
@@ -2173,6 +2177,7 @@ MatrixElements::MatrixElements():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixElements Constructor");
 #endif
+    nType = ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
 }// end of MatrixElements::MatrixElements()
 
 MatrixElements::~MatrixElements()
@@ -2226,24 +2231,149 @@ std::string MatrixElements::getMatrixNodeInXML()
 {
     ostringstream outStr;
     outStr << "<elements>" << std::endl;
+
+    // write <constantElements> (if present)
     if (constantElements != NULL)
-        outStr << "<constantElements>" << std::endl;
+    {
+        outStr << "<constantElements";
+        if (constantElements->rowMajor)
+            outStr << " rowMajor=\"true\"";
+        outStr << " numberOfValues=\"" << constantElements->numberOfValues << "\"";
+        outStr << ">" << std::endl;
+
+        outStr << "<start>" << std::endl;
+        outStr << writeIntVectorData(constantElements->start, true, false);
+        outStr << "</start>" << std::endl;
+
+        if (constantElements->numberOfValues > 0)
+        {
+            outStr << "<indexes>" << std::endl;
+            outStr << writeIntVectorData(constantElements->indexes, true, false);
+            outStr << "</indexes>" << std::endl;
+
+            outStr << "<values>" << std::endl;
+            outStr << writeDblVectorData(constantElements->values, true, false);
+            outStr << "</values>" << std::endl;
+        }
+
         outStr << "</constantElements>" << std::endl;
+    }
+
     if (varReferenceElements != NULL)
-        outStr << "<varReferenceElements>" << std::endl;
+    {
+        outStr << "<varReferenceElements";
+        if (varReferenceElements->rowMajor)
+            outStr << " rowMajor=\"true\"";
+        outStr << " numberOfValues=\"" << varReferenceElements->numberOfValues << "\"";
+        outStr << ">" << std::endl;
+
+        outStr << "<start>" << std::endl;
+        outStr << writeIntVectorData(varReferenceElements->start, true, false);
+        outStr << "</start>" << std::endl;
+
+        if (varReferenceElements->numberOfValues > 0)
+        {
+            outStr << "<indexes>" << std::endl;
+            outStr << writeIntVectorData(varReferenceElements->indexes, true, false);
+            outStr << "</indexes>" << std::endl;
+        }
+
         outStr << "</varReferenceElements>" << std::endl;
+    }
+
     if (linearElements != NULL)
-        outStr << "<linearElements>" << std::endl;
+    {
+        outStr << "<linearElements";
+        if (linearElements->rowMajor)
+            outStr << " rowMajor=\"true\"";
+        outStr << " numberOfValues=\"" << linearElements->numberOfValues << "\"";
+        outStr << ">" << std::endl;
+ 
+        outStr << "<start>" << std::endl;
+        outStr << writeIntVectorData(linearElements->start, true, false);
+        outStr << "</start>" << std::endl;
+
+        if (linearElements->numberOfValues > 0)
+        {
+            outStr << "<indexes>" << std::endl;
+            outStr << writeIntVectorData(linearElements->indexes, true, false);
+            outStr << "</indexes>" << std::endl;
+        }
+
         outStr << "</linearElements>" << std::endl;
+    }
     if (generalElements != NULL)
-        outStr << "<generalElements>" << std::endl;
+    {
+        outStr << "<generalElements";
+        if (generalElements->rowMajor)
+            outStr << " rowMajor=\"true\"";
+        outStr << " numberOfValues=\"" << generalElements->numberOfValues << "\"";
+        outStr << ">" << std::endl;
+ 
+        outStr << "<start>" << std::endl;
+        outStr << writeIntVectorData(generalElements->start, true, false);
+        outStr << "</start>" << std::endl;
+
+        if (generalElements->numberOfValues > 0)
+        {
+            outStr << "<indexes>" << std::endl;
+            outStr << writeIntVectorData(generalElements->indexes, true, false);
+            outStr << "</indexes>" << std::endl;
+        }
+
         outStr << "</generalElements>" << std::endl;
+    }
     if (objReferenceElements != NULL)
-        outStr << "<objReferenceElements>" << std::endl;
+    {
+        outStr << "<objReferenceElements";
+        if (objReferenceElements->rowMajor)
+            outStr << " rowMajor=\"true\"";
+        outStr << " numberOfValues=\"" << objReferenceElements->numberOfValues << "\"";
+        outStr << ">" << std::endl;
+
+        outStr << "<start>" << std::endl;
+        outStr << writeIntVectorData(objReferenceElements->start, true, false);
+        outStr << "</start>" << std::endl;
+
+        if (objReferenceElements->numberOfValues > 0)
+        {
+            outStr << "<indexes>" << std::endl;
+            outStr << writeIntVectorData(objReferenceElements->indexes, true, false);
+            outStr << "</indexes>" << std::endl;
+
+            outStr << "<values>" << std::endl;
+            outStr << writeIntVectorData(objReferenceElements->values, true, false);
+            outStr << "</values>" << std::endl;
+        }
+
         outStr << "</objReferenceElements>" << std::endl;
+    }
     if (conReferenceElements != NULL)
-        outStr << "<conReferenceElements>" << std::endl;
+    {
+        outStr << "<conReferenceElements";
+        if (conReferenceElements->rowMajor)
+            outStr << " rowMajor=\"true\"";
+        outStr << " numberOfValues=\"" << conReferenceElements->numberOfValues << "\"";
+        outStr << ">" << std::endl;
         outStr << "</conReferenceElements>" << std::endl;
+
+        outStr << "<start>" << std::endl;
+        outStr << writeIntVectorData(conReferenceElements->start, true, false);
+        outStr << "</start>" << std::endl;
+
+        if (conReferenceElements->numberOfValues > 0)
+        {
+            outStr << "<indexes>" << std::endl;
+            outStr << writeIntVectorData(conReferenceElements->indexes, true, false);
+            outStr << "</indexes>" << std::endl;
+
+            outStr << "<values>" << std::endl;
+            outStr << writeIntVectorData(conReferenceElements->values, true, false);
+            outStr << "</values>" << std::endl;
+        }
+
+        outStr << "</conReferenceElements>" << std::endl;
+    }
 
     outStr << "</elements>" << std::endl;
     return outStr.str();
@@ -2263,6 +2393,7 @@ MatrixTransformation::MatrixTransformation():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixTransformation Constructor");
 #endif
+    nType = ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
 }// end of MatrixTransformation::MatrixTransformation()
 
 MatrixTransformation::~MatrixTransformation()
@@ -2295,23 +2426,8 @@ MatrixTransformation* MatrixTransformation::cloneMatrixNode()
 std::string MatrixTransformation::getMatrixNodeInXML()
 {
     ostringstream outStr;
-#if 0
-    outStr << "<" ;
-    outStr << this->getTokenName();
-    outStr << "  value=\"";
-    outStr << os_dtoa_format(value);
-    outStr << "\"";
-    outStr << " type=\"";
-    outStr << type ;
-    outStr << "\"";
-    if(id.length() > 0)
-    {
-        outStr << "  id=\"";
-        outStr << id ;
-        outStr << "\"";
-    }
-    outStr << "/>";
-#endif
+    outStr <<  "<transformation>" << std::endl;
+    outStr << "</transformation>" << std::endl;
     return outStr.str();
 }// end of MatrixTransformation::getMatrixNodeInXML()
 
@@ -2331,6 +2447,7 @@ MatrixBlocks::MatrixBlocks():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlocks Constructor");
 #endif
+    nType = ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
 }// end of MatrixBlocks::MatrixBlocks()
 
 MatrixBlocks::~MatrixBlocks()
@@ -2386,10 +2503,10 @@ std::string MatrixBlocks::getMatrixNodeInXML()
 {
     ostringstream outStr;
     outStr << "<blocks numberOfBlocks=\"" << numberOfBlocks << "\">" << std::endl;
-    outStr << "<colOffsets numberOfEl=\"" << colOffsets->numberOfEl     << "\">" << std::endl;
+    outStr << "<colOffsets numberOfEl=\"" << colOffsets->numberOfEl << "\">" << std::endl;
     outStr << writeIntVectorData(colOffsets, true, false);
     outStr << "</colOffsets>" << std::endl;
-    outStr << "<rowOffsets numberOfEl=\"" << rowOffsets->numberOfEl     << "\">" << std::endl; 
+    outStr << "<rowOffsets numberOfEl=\"" << rowOffsets->numberOfEl << "\">" << std::endl; 
     outStr << writeIntVectorData(rowOffsets, true, false);
     outStr << "</rowOffsets>" << std::endl;
 
@@ -2427,10 +2544,10 @@ MatrixConstructor::~MatrixConstructor()
 
 // methods for MatrixType
 MatrixType::MatrixType():
+    MatrixNode(),
     numberOfRows(0),
     numberOfColumns(0),
-    symmetry(ENUM_MATRIX_SYMMETRY_none),
-    matrixType(ENUM_MATRIX_TYPE_unknown)
+    symmetry(ENUM_MATRIX_SYMMETRY_none)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Constructor");
@@ -2448,14 +2565,14 @@ MatrixType::~MatrixType()
 
 // methods for OSMatrix ------------------------------------------------
 OSMatrix::OSMatrix():
-//    numberOfRows(0),
-//    numberOfColumns(0),
+    MatrixType(),
     idx(-1),
     name("")
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrix Constructor");
 #endif
+    nType = ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
 }// end of OSMatrix
 
 OSMatrix::~OSMatrix()
@@ -2514,15 +2631,16 @@ std::string OSMatrix::getMatrixNodeInXML()
     outStr << "<matrix";
     outStr << " numberOfRows=\""    << numberOfRows    << "\"";
     outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
-    outStr << " symmetry=\"" << symmetry << "\"";
+    if (symmetry != ENUM_MATRIX_SYMMETRY_none)
+        outStr << " symmetry=\"" << returnMatrixSymmetryString(symmetry) << "\"";
     if (name != "") 
         outStr << " name=\"" << name << "\"";
-//    if (matrixType != "") 
-        outStr << " type=\"" << matrixType << "\"";
+    if (matrixType != ENUM_MATRIX_TYPE_unknown) 
+        outStr << " type=\"" << returnMatrixTypeString(matrixType) << "\"";
     outStr << ">" << std::endl;
 
     for (int i=0; i < inumberOfChildren; i++)
-        outStr << m_mChildren[i]->getMatrixNodeInXML() << std::endl;
+        outStr << m_mChildren[i]->getMatrixNodeInXML();
 
     outStr << "</matrix>" << std::endl;
     return outStr.str();
@@ -2543,6 +2661,7 @@ MatrixBlock::MatrixBlock():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlock Constructor");
 #endif
+    nType = ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
 }// end of MatrixBlock
 
 MatrixBlock::~MatrixBlock()
@@ -2573,15 +2692,16 @@ std::string MatrixBlock::getMatrixNodeInXML()
 {
     ostringstream outStr;
     outStr << "<block";
-    outStr << " blockRowIdx=\"" << blockRowIdx    << "\"";
+    outStr << " blockRowIdx=\"" << blockRowIdx << "\"";
     outStr << " blockColIdx=\"" << blockColIdx << "\"";
-    outStr << " symmetry=\"" << symmetry << "\"";
-//    if (matrixType != "") 
-        outStr << " type=\"" << matrixType << "\"";
+    if (symmetry != ENUM_MATRIX_SYMMETRY_none)
+        outStr << " symmetry=\"" << returnMatrixSymmetryString(symmetry) << "\"";
+    if (matrixType != ENUM_MATRIX_TYPE_unknown) 
+        outStr << " type=\"" << returnMatrixTypeString(matrixType) << "\"";
     outStr << ">" << std::endl;
 
     for (int i=0; i < inumberOfChildren; i++)
-        outStr << m_mChildren[i]->getMatrixNodeInXML() << std::endl;
+        outStr << m_mChildren[i]->getMatrixNodeInXML();
 
     outStr << "</block>" << std::endl;
     return outStr.str();

@@ -38,7 +38,7 @@ nonlinearExpressions:
 
 nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
 {               
-    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
+//    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
 };
 
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
@@ -264,6 +264,7 @@ numbertypeATT: TYPEATT ATTRIBUTETEXT
         addErrorMsg( NULL, parserObjects, "too many number type attributes"); 
     osnlData->numbertypeattON = true;
     osnlData->nlNodeNumberPoint->type = $2;
+    free($2);
 } QUOTE;
 
 numberidATT:   IDATT   ATTRIBUTETEXT 
@@ -272,6 +273,7 @@ numberidATT:   IDATT   ATTRIBUTETEXT
         addErrorMsg( NULL, parserObjects,"too many number id attributes"); 
     osnlData->numberidattON = true;
     osnlData->nlNodeNumberPoint->id = $2;
+    free($2);
 } QUOTE;
 
 numbervalueATT: VALUEATT QUOTE aNumber QUOTE 
@@ -440,7 +442,7 @@ OSnLMNode: matrixReference
 
 matrixReference: MATRIXREFERENCESTART
 {
-    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
+    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference(); //valgrind: this leaks 1872 bytes of memory
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixRef);
 } matrixIdxATT matrixreferenceend {osnlData->matrixidxattON = false;} ;
 

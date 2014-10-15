@@ -1730,8 +1730,8 @@ InstanceData::InstanceData()
     constraints = new Constraints();
     linearConstraintCoefficients = new LinearConstraintCoefficients();
     quadraticCoefficients = new QuadraticCoefficients();
-    nonlinearExpressions = new NonlinearExpressions();
-    matrices = new Matrices();
+    nonlinearExpressions = new NonlinearExpressions(); //valgrind: this leaks 16 bytes
+    matrices = new Matrices(); //valgrind: this leaks 16 bytes
     cones = new Cones();
     matrixProgramming = new MatrixProgramming();
     timeDomain = NULL;
@@ -2606,6 +2606,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx)
 {
     if( m_bProcessExpressionTreesMod == false )
     {
+
 
 
         getAllNonlinearExpressionTreesMod();
@@ -3962,6 +3963,7 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
     }
 
     if (instanceData->nonlinearExpressions == NULL)
+
         instanceData->nonlinearExpressions = new NonlinearExpressions(); 
     instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nexpr;
     instanceData->nonlinearExpressions->nl = new Nl*[nexpr];

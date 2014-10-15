@@ -132,7 +132,7 @@ matrices: | matricesStart matricesAttributes matricesContent
 
 matricesStart: MATRICESSTART
 {
-    osinstance->instanceData->matrices = new Matrices();
+//    osinstance->instanceData->matrices = new Matrices();
 };
 
 matricesAttributes: osilNumberOfMatricesATT
@@ -143,8 +143,8 @@ matricesAttributes: osilNumberOfMatricesATT
     else
     {
         osinstance->instanceData->matrices->matrix = new OSMatrix*[osglData->numberOfMatrices];
-        for (int i=0; i < osglData->numberOfMatrices; i++)
-            osinstance->instanceData->matrices->matrix[i] = new OSMatrix();
+//        for (int i=0; i < osglData->numberOfMatrices; i++)
+//            osinstance->instanceData->matrices->matrix[i] = new OSMatrix();
     }
 };
 
@@ -663,7 +663,7 @@ STAGESTART osilStagenameATT stageend { /* set defaults for next stage */
 
 osilStagenameATT: 
         | NAMEATT ATTRIBUTETEXT QUOTE {
-          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = $2;};
+          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = $2; free($2);};
         
 stageend: ENDOFELEMENT
         | GREATERTHAN stagecontent STAGEEND;
@@ -1019,6 +1019,7 @@ osilNameATT: NAMEATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->namePresent = true;
     parserData->name = $2; 
+    free($2);
 };
 
 
@@ -1028,6 +1029,7 @@ osilShapeATT: SHAPEATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "shape attribute previously set");
     parserData->shapePresent = true;
     parserData->shape = $2; 
+    free($2);
 };
 
 osilNormScaleFactorATT: NORMSCALEFACTORATT QUOTE aNumber QUOTE 
@@ -1095,6 +1097,7 @@ osilSemidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "semidefiniteness must be either \"true\" or \"false \"");
     else
         parserData->semidefiniteness = $2; 
+    free($2);
 };
 
 matrixIdxATT: MATRIXIDXATT QUOTE INTEGER QUOTE 
@@ -1195,6 +1198,8 @@ varTypeATT: VARTYPEATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varType must be one of C, B, I, S, D, J");
     else
         parserData->varType = *($2);
+    free($2);
+
 std::cout << "default var type: " << parserData->varType << std::endl;
 };
 

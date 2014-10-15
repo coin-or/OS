@@ -67,99 +67,146 @@ std::string runSolver(std::string solverName, std::string osol,
                         OSInstance *osinstance)
 {
     DefaultSolver *solverType = NULL;
-    solverType = selectSolver(solverName, osinstance);
-    if (solverType == NULL)  
-        throw ErrorClass("No appropriate solver found");
+    try
+    {
+        solverType = selectSolver(solverName, osinstance);
+        if (solverType == NULL)  
+            throw ErrorClass("No appropriate solver found");
+    
+        solverType->osinstance = osinstance;
+        solverType->osol = osol;
+        solverType->buildSolverInstance();
+        solverType->setSolverOptions();
+        solverType->solve();
+        std::string resultString = solverType->osrl;
 
-    solverType->osinstance = osinstance;
-    solverType->osol = osol;
-    solverType->buildSolverInstance();
-    solverType->setSolverOptions();
-    solverType->solve();
-    std::string resultString = solverType->osrl;
-
-    delete solverType;
-    solverType = NULL;
-    return resultString;
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
+        return resultString;
+    }
+    catch (const ErrorClass& eclass)
+    {
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
+        throw eclass;
+        return "";
+    }
 } //runSolver (osinstance, osol)      
 
 
 std::string runSolver(std::string solverName, OSOption* osoption,
-                        OSInstance *osinstance)
+                            OSInstance *osinstance)
 {
     DefaultSolver *solverType = NULL;
-    solverType = selectSolver(solverName, osinstance);
-    if (solverType == NULL)  
-        throw ErrorClass("No appropriate solver found");
-
-    solverType->osinstance = osinstance;
-    solverType->osoption = osoption;
-    solverType->buildSolverInstance();
-    solverType->setSolverOptions();
-    solverType->solve();
-    std::string resultString = solverType->osrl;
-    if (solverType != NULL)
-        delete solverType;
-    solverType = NULL;
-    return resultString;
+    try
+    {
+        solverType = selectSolver(solverName, osinstance);
+        if (solverType == NULL)  
+            throw ErrorClass("No appropriate solver found");
+    
+        solverType->osinstance = osinstance;
+        solverType->osoption = osoption;
+        solverType->buildSolverInstance();
+        solverType->setSolverOptions();
+        solverType->solve();
+        std::string resultString = solverType->osrl;
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
+        return resultString;
+    }
+    catch (const ErrorClass& eclass)
+    {
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
+        throw eclass;
+        return "";
+    }
 } //runSolver (osinstance, osoption)
 
 
 std::string runSolver(std::string solverName, std::string osol,
                         std::string osil)
 {
-    OSInstance* osinstance = new OSInstance();
     OSiLReader* osilreader = new OSiLReader();
-
+    OSInstance* osinstance = new OSInstance();
     DefaultSolver *solverType = NULL;
 
-    osinstance = osilreader->readOSiL(osil);
+    try
+    {
+        osinstance = osilreader->readOSiL(osil);
 
-    solverType = selectSolver(solverName, osinstance);
-    if (solverType == NULL)  
-        throw ErrorClass("No appropriate solver found");
+        solverType = selectSolver(solverName, osinstance);
+        if (solverType == NULL)  
+            throw ErrorClass("No appropriate solver found");
 
-    solverType->osinstance = osinstance;
-    solverType->osol = osol;
-    solverType->buildSolverInstance();
-    solverType->setSolverOptions();
-    solverType->solve();
-    std::string resultString = solverType->osrl;
-    if (solverType != NULL)
-        delete solverType;
-    solverType = NULL;
-    delete osilreader;
-    osilreader = NULL;
-    return resultString;
+        solverType->osinstance = osinstance;
+        solverType->osol = osol;
+        solverType->buildSolverInstance();
+        solverType->setSolverOptions();
+        solverType->solve();
+        std::string resultString = solverType->osrl;
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
+        delete osilreader;
+        osilreader = NULL;
+        return resultString;
+    }
+    catch (const ErrorClass& eclass)
+    {
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
+        delete osilreader;
+        osilreader = NULL;
+        throw eclass;
+        return "";
+    }
 } //runSolver (osil, osol)      
 
 
 std::string runSolver(std::string solverName, OSOption* osoption,
                         std::string osil)
 {
-    OSInstance* osinstance = new OSInstance();
     OSiLReader* osilreader = new OSiLReader();
-
+    OSInstance* osinstance = new OSInstance();
     DefaultSolver *solverType = NULL;
 
-    osinstance = osilreader->readOSiL(osil);
+    try
+    {
+        osinstance = osilreader->readOSiL(osil);
 
-    solverType = selectSolver(solverName, osinstance);
-    if (solverType == NULL)  
-        throw ErrorClass("No appropriate solver found");
+        solverType = selectSolver(solverName, osinstance);
+        if (solverType == NULL)  
+            throw ErrorClass("No appropriate solver found");
 
-    solverType->osinstance = osinstance;
-    solverType->osoption = osoption;
-    solverType->buildSolverInstance();
-    solverType->setSolverOptions();
-    solverType->solve();
-    std::string resultString = solverType->osrl;
-    if (solverType != NULL)
-        delete solverType;
-    solverType = NULL;
-    delete osilreader;
-    osilreader = NULL;
-    return resultString;
+        solverType->osinstance = osinstance;
+        solverType->osoption = osoption;
+        solverType->buildSolverInstance();
+        solverType->setSolverOptions();
+        solverType->solve();
+        std::string resultString = solverType->osrl;
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
+        delete osilreader;
+        osilreader = NULL;
+        return resultString;
+    }
+    catch (const ErrorClass& eclass)
+    {
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
+        delete osilreader;
+        osilreader = NULL;
+        throw eclass;
+        return "";
+    }
 } //runSolver (osil, osoption)
 
 

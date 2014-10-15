@@ -96,8 +96,9 @@ public:
     /** This matrix constructor is needed in order to properly push the constructor vector */
     MatrixNode* tempC;
 
-    /** Two vectors to process the matrix nodes into the right order */
+    /** Several vectors to process the matrix nodes into the right order */
     std::vector<MatrixNode*> mtxConstructorVec;
+    std::vector<MatrixNode*> mtxBlocksVec;
     std::vector<MatrixNode*> mtxBlkVec;
 
     /** 

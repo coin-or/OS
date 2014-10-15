@@ -605,8 +605,8 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
 };//end OSnLNodeMinus
+
 
 /*! \class OSnLNodeNegate
  *  \brief The OSnLNodeNegate Class.
@@ -734,9 +734,7 @@ public:
      */
     ~OSnLNodeDivide();
 
-
     /**
-     *
      * @return the value of operator name
      */
     virtual std::string getTokenName();
@@ -759,6 +757,7 @@ public:
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 };//end OSnLNodeDivide
+
 
 /*! \class OSnLNodePower
  *  \brief The OSnLNodePower Class.
@@ -785,7 +784,6 @@ public:
     ~OSnLNodePower();
 
     /**
-     *
      * @return the value of operator name
      */
     virtual std::string getTokenName();
@@ -807,8 +805,8 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
 };//end OSnLNodePower
+
 
 /*! \class OSnLNodeProduct
  *  \brief The OSnLNodeProduct Class.
@@ -835,7 +833,6 @@ public:
     ~OSnLNodeProduct();
 
     /**
-     *
      * @return the value of operator name
      */
     virtual std::string getTokenName();
@@ -857,7 +854,6 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
 };//end OSnLNodeProduct
 
 
@@ -886,7 +882,6 @@ public:
     ~OSnLNodeLn();
 
     /**
-     *
      * @return the value of operator name
      */
     virtual std::string getTokenName();
@@ -908,9 +903,8 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
-
 };//end OSnLNodeLn
+
 
 /*! \class OSnLNodeSqrt
  *  \brief The OSnLNodeSqrt Class.
@@ -937,7 +931,6 @@ public:
     ~OSnLNodeSqrt();
 
     /**
-     *
      * @return the value of operator name
      */
     virtual std::string getTokenName();

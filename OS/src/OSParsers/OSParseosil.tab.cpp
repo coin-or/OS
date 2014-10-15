@@ -1639,66 +1639,66 @@ static const yytype_uint16 yyrline[] =
     1189,  1191,  1207,  1214,  1219,  1220,  1222,  1223,  1225,  1225,
     1228,  1237,  1238,  1243,  1243,  1251,  1252,  1254,  1255,  1257,
     1261,  1267,  1275,  1279,  1284,  1293,  1304,  1315,  1326,  1337,
-    1345,  1353,  1361,  1369,  1378,  1387,  1395,  1406,  1417,  1429,
-    1440,  1451,  1462,  1473,  1484,  1495,  1506,  1517,  1528,  1539,
-    1551,  1563,  1574,  1585,  1598,  1599,  1606,  1608,  1608,  1610,
-    1611,  1612,  1613,  1778,  1787,  1789,  1789,  1791,  1793,  1802,
-    1804,  1804,  1806,  1806,  1808,  1825,  1828,  1828,  1830,  1830,
-    1833,  1864,  1872,  1874,  1874,  1876,  1878,  1886,  1886,  1888,
-    1905,  1907,  1907,  1909,  1909,  1911,  2007,  2018,  2042,  2060,
-    2060,  2063,  2064,  2065,  2066,  2067,  2070,  2082,  2094,  2106,
-    2106,  2108,  2110,  2120,  2122,  2122,  2127,  2146,  2170,  2170,
-    2173,  2174,  2175,  2176,  2177,  2178,  2179,  2180,  2181,  2183,
-    2198,  2208,  2218,  2228,  2238,  2250,  2262,  2269,  2269,  2271,
-    2276,  2284,  2292,  2292,  2294,  2294,  2299,  2299,  2299,  2301,
-    2307,  2317,  2317,  2319,  2321,  2324,  2326,  2326,  2328,  2338,
-    2344,  2344,  2347,  2351,  2357,  2359,  2359,  2361,  2370,  2381,
-    2381,  2383,  2385,  2387,  2390,  2400,  2408,  2408,  2410,  2412,
-    2414,  2417,  2426,  2434,  2434,  2436,  2438,  2440,  2461,  2461,
-    2463,  2471,  2477,  2477,  2480,  2484,  2490,  2492,  2492,  2494,
-    2503,  2514,  2514,  2516,  2518,  2520,  2522,  2531,  2539,  2539,
-    2541,  2543,  2545,  2548,  2557,  2565,  2565,  2567,  2569,  2571,
-    2600,  2600,  2602,  2610,  2616,  2616,  2619,  2623,  2629,  2631,
-    2631,  2633,  2642,  2654,  2654,  2656,  2658,  2660,  2663,  2672,
-    2680,  2680,  2682,  2684,  2686,  2745,  2750,  2762,  2780,  2780,
-    2782,  2784,  2786,  2788,  2788,  2790,  2798,  2804,  2814,  2814,
-    2817,  2818,  2820,  2832,  2832,  2834,  2836,  2838,  2838,  2841,
-    2843,  2851,  2851,  2856,  2862,  2862,  2864,  2872,  2878,  2878,
-    2881,  2885,  2891,  2893,  2893,  2895,  2904,  2916,  2916,  2918,
-    2920,  2922,  2925,  2934,  2942,  2942,  2944,  2946,  2948,  3010,
-    3011,  3013,  3028,  3028,  3030,  3032,  3034,  3034,  3036,  3038,
-    3050,  3050,  3052,  3054,  3064,  3064,  3066,  3074,  3080,  3080,
-    3083,  3087,  3093,  3095,  3095,  3097,  3106,  3118,  3118,  3120,
-    3122,  3124,  3126,  3135,  3143,  3143,  3145,  3147,  3149,  3152,
-    3161,  3169,  3169,  3171,  3173,  3175,  3204,  3204,  3206,  3214,
-    3220,  3220,  3223,  3227,  3233,  3235,  3235,  3237,  3246,  3258,
-    3258,  3260,  3262,  3264,  3267,  3276,  3284,  3284,  3286,  3288,
-    3290,  3293,  3302,  3310,  3310,  3312,  3314,  3316,  3424,  3429,
-    3436,  3438,  3449,  3456,  3465,  3470,  3478,  3491,  3497,  3504,
-    3504,  3506,  3508,  3510,  3512,  3528,  3534,  3541,  3541,  3543,
-    3545,  3547,  3549,  3549,  3551,  3557,  3570,  3572,  3572,  3575,
-    3576,  3577,  3584,  3598,  3612,  3612,  3614,  3616,  3622,  3624,
-    3633,  3642,  3651,  3660,  3669,  3678,  3683,  3691,  3700,  3700,
-    3702,  3711,  3756,  3757,  3763,  3768,  3787,  3788,  3790,  3798,
-    3812,  3822,  3823,  3824,  3825,  3826,  3827,  3828,  3829,  3830,
-    3831,  3832,  3833,  3834,  3835,  3836,  3837,  3838,  3839,  3840,
-    3841,  3842,  3843,  3844,  3845,  3847,  3848,  3849,  3853,  3853,
-    3856,  3857,  3859,  3859,  3862,  3863,  3867,  3867,  3872,  3872,
-    3877,  3877,  3882,  3882,  3887,  3887,  3892,  3892,  3897,  3897,
-    3902,  3902,  3907,  3907,  3912,  3912,  3917,  3917,  3922,  3922,
-    3927,  3927,  3934,  3934,  3940,  3940,  3949,  3949,  3954,  3954,
-    3959,  3959,  3969,  3969,  3974,  3975,  3977,  3978,  3980,  3981,
-    3982,  3986,  3985,  3994,  3993,  4001,  4011,  4010,  4017,  4018,
-    4020,  4019,  4026,  4027,  4030,  4036,  4044,  4051,  4071,  4071,
-    4082,  4082,  4085,  4085,  4097,  4098,  4101,  4101,  4112,  4113,
-    4116,  4116,  4127,  4128,  4131,  4131,  4141,  4142,  4148,  4149,
-    4150,  4151,  4152,  4153,  4154,  4155,  4156,  4157,  4158,  4159,
-    4160,  4161,  4162,  4166,  4165,  4172,  4173,  4175,  4183,  4185,
-    4191,  4193,  4195,  4201,  4203,  4205,  4211,  4213,  4215,  4221,
-    4223,  4225,  4231,  4231,  4233,  4235,  4237,  4243,  4243,  4245,
-    4247,  4256,  4258,  4263,  4263,  4265,  4267,  4273,  4275,  4277,
-    4283,  4285,  4287,  4293,  4296,  4296,  4306,  4307,  4311,  4313,
-    4319,  4321,  4323,  4329,  4331,  4333,  4339
+    1345,  1353,  1361,  1369,  1378,  1388,  1397,  1408,  1419,  1431,
+    1442,  1453,  1465,  1476,  1487,  1498,  1509,  1520,  1531,  1542,
+    1554,  1568,  1579,  1590,  1603,  1604,  1611,  1613,  1613,  1615,
+    1616,  1617,  1618,  1783,  1792,  1794,  1794,  1796,  1798,  1807,
+    1809,  1809,  1811,  1811,  1813,  1830,  1833,  1833,  1835,  1835,
+    1838,  1869,  1877,  1879,  1879,  1881,  1883,  1891,  1891,  1893,
+    1910,  1912,  1912,  1914,  1914,  1916,  2012,  2023,  2047,  2065,
+    2065,  2068,  2069,  2070,  2071,  2072,  2075,  2087,  2099,  2111,
+    2111,  2113,  2115,  2125,  2127,  2127,  2132,  2151,  2175,  2175,
+    2178,  2179,  2180,  2181,  2182,  2183,  2184,  2185,  2186,  2188,
+    2203,  2213,  2223,  2233,  2243,  2255,  2267,  2274,  2274,  2276,
+    2281,  2289,  2297,  2297,  2299,  2299,  2304,  2304,  2304,  2306,
+    2312,  2322,  2322,  2324,  2326,  2329,  2331,  2331,  2333,  2343,
+    2349,  2349,  2352,  2356,  2362,  2364,  2364,  2366,  2376,  2387,
+    2387,  2389,  2391,  2393,  2396,  2407,  2415,  2415,  2417,  2419,
+    2421,  2424,  2434,  2442,  2442,  2444,  2446,  2448,  2469,  2469,
+    2471,  2479,  2485,  2485,  2488,  2492,  2498,  2500,  2500,  2502,
+    2512,  2523,  2523,  2525,  2527,  2529,  2531,  2541,  2549,  2549,
+    2551,  2553,  2555,  2558,  2568,  2576,  2576,  2578,  2580,  2582,
+    2611,  2611,  2613,  2621,  2627,  2627,  2630,  2634,  2640,  2642,
+    2642,  2644,  2654,  2666,  2666,  2668,  2670,  2672,  2675,  2685,
+    2693,  2693,  2695,  2697,  2699,  2758,  2763,  2775,  2793,  2793,
+    2795,  2797,  2799,  2801,  2801,  2803,  2811,  2817,  2828,  2828,
+    2831,  2832,  2834,  2846,  2846,  2848,  2850,  2852,  2852,  2855,
+    2857,  2866,  2866,  2871,  2878,  2878,  2880,  2888,  2894,  2894,
+    2897,  2901,  2907,  2909,  2909,  2911,  2921,  2933,  2933,  2935,
+    2937,  2939,  2942,  2952,  2960,  2960,  2962,  2964,  2966,  3028,
+    3029,  3031,  3046,  3046,  3048,  3050,  3052,  3052,  3054,  3056,
+    3068,  3068,  3070,  3072,  3082,  3082,  3084,  3092,  3098,  3098,
+    3101,  3105,  3111,  3113,  3113,  3115,  3125,  3137,  3137,  3139,
+    3141,  3143,  3145,  3155,  3163,  3163,  3165,  3167,  3169,  3172,
+    3182,  3190,  3190,  3192,  3194,  3196,  3225,  3225,  3227,  3235,
+    3241,  3241,  3244,  3248,  3254,  3256,  3256,  3258,  3268,  3280,
+    3280,  3282,  3284,  3286,  3289,  3299,  3307,  3307,  3309,  3311,
+    3313,  3316,  3326,  3334,  3334,  3336,  3338,  3340,  3448,  3453,
+    3460,  3467,  3478,  3486,  3495,  3500,  3508,  3521,  3527,  3534,
+    3534,  3536,  3538,  3540,  3542,  3558,  3564,  3571,  3571,  3573,
+    3575,  3577,  3579,  3579,  3581,  3587,  3600,  3602,  3602,  3605,
+    3606,  3607,  3614,  3628,  3642,  3642,  3644,  3646,  3652,  3654,
+    3663,  3672,  3681,  3690,  3699,  3708,  3713,  3721,  3730,  3730,
+    3732,  3741,  3786,  3787,  3793,  3798,  3817,  3818,  3820,  3828,
+    3842,  3852,  3853,  3854,  3855,  3856,  3857,  3858,  3859,  3860,
+    3861,  3862,  3863,  3864,  3865,  3866,  3867,  3868,  3869,  3870,
+    3871,  3872,  3873,  3874,  3875,  3877,  3878,  3879,  3883,  3883,
+    3886,  3887,  3889,  3889,  3892,  3893,  3897,  3897,  3902,  3902,
+    3907,  3907,  3912,  3912,  3917,  3917,  3922,  3922,  3927,  3927,
+    3932,  3932,  3937,  3937,  3942,  3942,  3947,  3947,  3952,  3952,
+    3957,  3957,  3964,  3964,  3970,  3970,  3979,  3979,  3984,  3984,
+    3989,  3989,  3999,  3999,  4004,  4005,  4007,  4008,  4010,  4011,
+    4012,  4016,  4015,  4025,  4024,  4033,  4043,  4042,  4049,  4050,
+    4052,  4051,  4058,  4059,  4062,  4068,  4076,  4083,  4103,  4103,
+    4114,  4114,  4117,  4117,  4129,  4130,  4133,  4133,  4144,  4145,
+    4148,  4148,  4159,  4160,  4163,  4163,  4173,  4174,  4180,  4181,
+    4182,  4183,  4184,  4185,  4186,  4187,  4188,  4189,  4190,  4191,
+    4192,  4193,  4194,  4198,  4197,  4204,  4205,  4207,  4215,  4217,
+    4223,  4225,  4227,  4233,  4235,  4237,  4243,  4245,  4247,  4253,
+    4255,  4257,  4263,  4263,  4265,  4267,  4269,  4275,  4275,  4277,
+    4279,  4288,  4290,  4295,  4295,  4297,  4299,  4305,  4307,  4309,
+    4315,  4317,  4319,  4325,  4328,  4328,  4338,  4339,  4343,  4345,
+    4351,  4353,  4355,  4361,  4363,  4365,  4371
 };
 #endif
 
@@ -4155,7 +4155,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
   case 29:
 
     {
-    osinstance->instanceData->matrices = new Matrices();
+//    osinstance->instanceData->matrices = new Matrices();
 }
     break;
 
@@ -4168,8 +4168,8 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     else
     {
         osinstance->instanceData->matrices->matrix = new OSMatrix*[osglData->numberOfMatrices];
-        for (int i=0; i < osglData->numberOfMatrices; i++)
-            osinstance->instanceData->matrices->matrix[i] = new OSMatrix();
+//        for (int i=0; i < osglData->numberOfMatrices; i++)
+//            osinstance->instanceData->matrices->matrix[i] = new OSMatrix();
     }
 }
     break;
@@ -4302,7 +4302,7 @@ std::cout << "Finished matrices section" << std::endl;
   case 283:
 
     {
-          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = (yyvsp[(2) - (3)].sval);}
+          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 288:
@@ -4701,6 +4701,7 @@ std::cout << "Finished matrices section" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->namePresent = true;
     parserData->name = (yyvsp[(2) - (3)].sval); 
+    free((yyvsp[(2) - (3)].sval));
 }
     break;
 
@@ -4711,6 +4712,7 @@ std::cout << "Finished matrices section" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "shape attribute previously set");
     parserData->shapePresent = true;
     parserData->shape = (yyvsp[(2) - (3)].sval); 
+    free((yyvsp[(2) - (3)].sval));
 }
     break;
 
@@ -4789,6 +4791,7 @@ std::cout << "Finished matrices section" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "semidefiniteness must be either \"true\" or \"false \"");
     else
         parserData->semidefiniteness = (yyvsp[(2) - (3)].sval); 
+    free((yyvsp[(2) - (3)].sval));
 }
     break;
 
@@ -4906,6 +4909,8 @@ std::cout << "Finished matrices section" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varType must be one of C, B, I, S, D, J");
     else
         parserData->varType = *((yyvsp[(2) - (3)].sval));
+    free((yyvsp[(2) - (3)].sval));
+
 std::cout << "default var type: " << parserData->varType << std::endl;
 }
     break;
@@ -5101,7 +5106,7 @@ std::cout << "DblVec: expected " << osglData->osglNumberOfEl << " elements; got 
         ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
     osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
 std::cout << "XML representation:" << std::endl;
-    osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->getMatrixNodeInXML();
+    std::cout << osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->getMatrixNodeInXML();
     osglData->matrixCounter++;
 }
     break;
@@ -5162,7 +5167,7 @@ std::cout << "symmetry attribute stored: |" << ts << "|" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one symmetry attribute in <matrix> element");
     osglData->symmetryAttributePresent = true;   
     osglData->symmetryAttribute = (yyvsp[(2) - (3)].sval); 
-//    free($2);
+    free((yyvsp[(2) - (3)].sval));
 }
     break;
 
@@ -5176,7 +5181,7 @@ std::cout << "matrix name attribute stored: |" << ts << "|" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one name attribute in <matrix> element");
     osglData->matrixNameAttributePresent = true;   
     osglData->matrixNameAttribute = (yyvsp[(2) - (3)].sval); 
-//    free($2);
+    free((yyvsp[(2) - (3)].sval));
 }
     break;
 
@@ -5190,7 +5195,7 @@ std::cout << "matrix type attribute stored: |" << ts << "|" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one type attribute in <matrix> element");
     osglData->matrixTypeAttributePresent = true;   
     osglData->matrixTypeAttribute = (yyvsp[(2) - (3)].sval); 
-//    free($2);
+    free((yyvsp[(2) - (3)].sval));
 }
     break;
 
@@ -5450,6 +5455,7 @@ std::cout << "push back a constructor - MatrixElements" << std::endl;
     ((MatrixElements*)osglData->tempC)->constantElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->constantElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->constantElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5475,6 +5481,7 @@ std::cout << "start vector has length " << osglData->osglNumberOfEl << std::endl
     ((MatrixElements*)osglData->tempC)->constantElements->indexes->numberOfEl
         = ((MatrixElements*)osglData->tempC)->constantElements->numberOfValues;
     ((MatrixElements*)osglData->tempC)->constantElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5496,6 +5503,7 @@ std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::en
     ((MatrixElements*)osglData->tempC)->constantElements->values = new DoubleVector();
     ((MatrixElements*)osglData->tempC)->constantElements->values->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->constantElements->values->el = osglData->osglDblArray;
+    osglData->osglDblArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5549,6 +5557,7 @@ std::cout << "values vector has length " << osglData->osglNumberOfEl << std::end
     ((MatrixElements*)osglData->tempC)->varReferenceElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->varReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->varReferenceElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5573,6 +5582,7 @@ std::cout << "start vector has length " << osglData->osglNumberOfEl << std::endl
     ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5594,6 +5604,7 @@ std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::en
     ((MatrixElements*)osglData->tempC)->varReferenceElements->values = new IntVector();
     ((MatrixElements*)osglData->tempC)->varReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->varReferenceElements->values->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5647,6 +5658,7 @@ std::cout << "values vector has length " << osglData->osglNumberOfEl << std::end
     ((MatrixElements*)osglData->tempC)->linearElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->linearElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->linearElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5672,6 +5684,7 @@ std::cout << "start vector has length " << osglData->osglNumberOfEl << std::endl
     ((MatrixElements*)osglData->tempC)->linearElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->linearElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->linearElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5722,7 +5735,7 @@ std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::en
     for (int i=0; i < ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues; i++)
         ((MatrixElements*)osglData->tempC)->linearElements->values->el[i]
             = new LinearMatrixElement(); 
-    osglData->osglDblArray = new double[osglData->osglNumberOfEl];
+//    osglData->osglDblArray = new double[osglData->osglNumberOfEl]; //valgrind: this leaks 40 bytes of memory
     osglData->osglCounter = 0;
     osglData->numberOfVarIdxAttributePresent = false;
 std::cout << "values vector has length " << osglData->osglNumberOfEl << std::endl;  
@@ -5755,7 +5768,8 @@ std::cout << "values vector has length " << osglData->osglNumberOfEl << std::end
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->numberOfVarIdx
         = osglData->numberOfVarIdx;
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx
-        = new LinearMatrixElementTerm*[osglData->numberOfVarIdx];
+        = new LinearMatrixElementTerm*[osglData->numberOfVarIdx]; //valgrind: this creates error in OSGeneral.cpp:1950
+    osglData->osglCounter = 0;
 }
     break;
 
@@ -5779,7 +5793,8 @@ std::cout << "values vector has length " << osglData->osglNumberOfEl << std::end
     osglData->osglCoefPresent = false;
     osglData->osglCoef = 1.0;
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]
-        = new LinearMatrixElementTerm();
+        = new LinearMatrixElementTerm(); //valgrind: this leaks 32 bytes of memory
+std::cout << "create term " << osglData->osglCounter << " in linear elements nonzero " << osglData->osglNonzeroCounter << std::endl;
 }
     break;
 
@@ -5794,6 +5809,7 @@ std::cout << "values vector has length " << osglData->osglNumberOfEl << std::end
 
     {
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->idx = (yyvsp[(2) - (3)].ival);
+    osglData->osglCounter++;
 }
     break;
 
@@ -5835,6 +5851,7 @@ std::cout << "values vector has length " << osglData->osglNumberOfEl << std::end
     ((MatrixElements*)osglData->tempC)->generalElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->generalElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->generalElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5860,6 +5877,7 @@ std::cout << "start vector has length " << osglData->osglNumberOfEl << std::endl
     ((MatrixElements*)osglData->tempC)->generalElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->generalElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->generalElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5895,7 +5913,7 @@ std::cout << "values vector has length " << osglData->osglNumberOfNonzeros << st
   case 639:
 
     {
-        if (osglData->osglNumberOfNonzeros >= osglData->osglNonzeroCounter) 
+        if (osglData->osglNonzeroCounter >= osglData->osglNumberOfNonzeros) 
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> terms greater than expected");
 std::cout << "expected " << osglData->osglNumberOfNonzeros << " general elements; got " << osglData->osglNonzeroCounter << std::endl; 
         osnlData->nlNodeVec.clear();
@@ -5955,6 +5973,7 @@ std::cout << "expected " << osglData->osglNumberOfNonzeros << " general elements
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->conReferenceElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -5980,6 +5999,7 @@ std::cout << "start vector has length " << osglData->osglNumberOfEl << std::endl
     ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->conReferenceElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -6001,6 +6021,7 @@ std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::en
     ((MatrixElements*)osglData->tempC)->conReferenceElements->values = new IntVector();
     ((MatrixElements*)osglData->tempC)->conReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->conReferenceElements->values->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -6054,6 +6075,7 @@ std::cout << "values vector has length " << osglData->osglNumberOfEl << std::end
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start = new IntVector();
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->objReferenceElements->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -6079,6 +6101,7 @@ std::cout << "start vector has length " << osglData->osglNumberOfEl << std::endl
     ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes = new IntVector();
     ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->objReferenceElements->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -6100,6 +6123,7 @@ std::cout << "indexes vector has length " << osglData->osglNumberOfEl << std::en
     ((MatrixElements*)osglData->tempC)->objReferenceElements->values = new IntVector();
     ((MatrixElements*)osglData->tempC)->objReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixElements*)osglData->tempC)->objReferenceElements->values->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
@@ -6131,12 +6155,21 @@ std::cout << "push back a constructor - MatrixTransformation" << std::endl;
 }
     break;
 
+  case 710:
+
+    {
+    // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+    ((MatrixTransformation*)osglData->tempC)->transformation = 
+        ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+}
+    break;
+
   case 711:
 
     {
     // clean up temporary arrays without deleting the information
     osglData->rowOffsets.back() = NULL;
-    osglData->colOffsets.back() = NULL;    
+    osglData->colOffsets.back() = NULL;
 std::cout << "pop back rowOffsets" << std::endl;
     osglData->rowOffsets.pop_back();
 std::cout << "pop back colOffsets" << std::endl;
@@ -6150,15 +6183,16 @@ std::cout << "pop back colOffsets" << std::endl;
     osglData->tempC = new MatrixBlocks();
 std::cout << "push back a constructor - MatrixBlocks" << std::endl;
     osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->numberOfBlocksAttributePresent = false;
 }
     break;
 
   case 713:
 
     {
-    ((MatrixBlocks*)osglData->tempC)->numberOfBlocks = osglData->numberOfBlocks;
-//    osglData->mtxBlkVec.back()->m_mChildren = 
-//        new MatrixNode*[osglData->numberOfBlocks];
+    ((MatrixBlocks*)osglData->tempC)->numberOfBlocks    = osglData->numberOfBlocks;
+    ((MatrixBlocks*)osglData->tempC)->inumberOfChildren = osglData->numberOfBlocks;
+    ((MatrixBlocks*)osglData->tempC)->m_mChildren       = new MatrixNode*[osglData->numberOfBlocks];
 //std::cout << "pop back mtxBlkVec" << std::endl;
 //    osglData->mtxBlkVec.pop_back();
 }
@@ -6174,10 +6208,10 @@ std::cout << "push back a constructor - MatrixBlocks" << std::endl;
   case 715:
 
     {
-    delete [] osglData->matrixBlockNumberOfRows;
-    delete [] osglData->matrixBlockNumberOfCols;
-    osglData->matrixBlockNumberOfRows = NULL;
-    osglData->matrixBlockNumberOfCols = NULL;
+//    delete [] osglData->matrixBlockNumberOfRows;
+//    delete [] osglData->matrixBlockNumberOfCols;
+//    osglData->matrixBlockNumberOfRows = NULL;
+//    osglData->matrixBlockNumberOfCols = NULL;
 }
     break;
 
@@ -6209,7 +6243,7 @@ std::cout << "push back a colOffsets vector" << std::endl;
     {
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->matrixBlockNumberOfCols = new int[osglData->osglNumberOfEl];
+//    osglData->matrixBlockNumberOfCols = new int[osglData->osglNumberOfEl]; //valgrind: this leaks 48 bytes of memory
 }
     break;
 
@@ -6244,7 +6278,7 @@ std::cout << "push back a rowOffsets vector" << std::endl;
     {
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->matrixBlockNumberOfRows = new int[osglData->osglNumberOfEl];
+//    osglData->matrixBlockNumberOfRows = new int[osglData->osglNumberOfEl]; //valgrind: this leaks 48 bytes of memory
 }
     break;
 
@@ -6452,7 +6486,7 @@ std::cout << "push back a mtxBlkVec" << std::endl;
   case 764:
 
     {               
-    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
+//    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
 }
     break;
 
@@ -6705,6 +6739,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osEx
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many number type attributes"); 
     osnlData->numbertypeattON = true;
     osnlData->nlNodeNumberPoint->type = (yyvsp[(2) - (2)].sval);
+    free((yyvsp[(2) - (2)].sval));
 }
     break;
 
@@ -6715,6 +6750,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osEx
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,"too many number id attributes"); 
     osnlData->numberidattON = true;
     osnlData->nlNodeNumberPoint->id = (yyvsp[(2) - (2)].sval);
+    free((yyvsp[(2) - (2)].sval));
 }
     break;
 
@@ -6905,7 +6941,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osEx
   case 903:
 
     {
-    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
+    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference(); //valgrind: this leaks 1872 bytes of memory
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixRef);
 }
     break;
