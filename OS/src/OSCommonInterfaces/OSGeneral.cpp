@@ -2298,10 +2298,34 @@ std::string MatrixElements::getMatrixNodeInXML()
             outStr << "<indexes>" << std::endl;
             outStr << writeIntVectorData(linearElements->indexes, true, false);
             outStr << "</indexes>" << std::endl;
-        }
 
+            int i,j;
+            outStr << "<values>" << std::endl;
+            for (i=0; i < linearElements->numberOfValues; i++)
+            {
+                outStr << "<el";
+                outStr << " numberOfVarIdx=\"" << linearElements->values->el[i]->numberOfVarIdx << "\"";
+                if (linearElements->values->el[i]->constant != 0.0)
+                    outStr << " constant=\"" << linearElements->values->el[i]->constant << "\"";
+                outStr << ">" << std::endl;
+
+                for (j=0; j < linearElements->values->el[i]->numberOfVarIdx; j++)
+                {
+                    outStr << "<varIdx";
+                    if (linearElements->values->el[i]->varIdx[j]->coef != 1.0)
+                        outStr << " coef=\"" << linearElements->values->el[i]->varIdx[j]->coef << "\"";
+                    outStr << ">";
+                    outStr << linearElements->values->el[i]->varIdx[j]->idx; 
+                    outStr << "</varIdx>" << std::endl;
+                }
+
+                outStr << "</el>" << std::endl;
+            }
+            outStr << "</values>" << std::endl;
+        }
         outStr << "</linearElements>" << std::endl;
     }
+
     if (generalElements != NULL)
     {
         outStr << "<generalElements";
@@ -2319,6 +2343,15 @@ std::string MatrixElements::getMatrixNodeInXML()
             outStr << "<indexes>" << std::endl;
             outStr << writeIntVectorData(generalElements->indexes, true, false);
             outStr << "</indexes>" << std::endl;
+
+            outStr << "<values>" << std::endl;
+            for (int i=0; i < generalElements->numberOfValues; i++)
+            {
+                outStr << "<el>";
+                outStr << generalElements->values->el[i]->m_treeRoot->getNonlinearExpressionInXML();
+                outStr << "</el>" << std::endl;
+            }
+            outStr << "</values>" << std::endl;
         }
 
         outStr << "</generalElements>" << std::endl;
@@ -2427,6 +2460,9 @@ std::string MatrixTransformation::getMatrixNodeInXML()
 {
     ostringstream outStr;
     outStr <<  "<transformation>" << std::endl;
+    
+    outStr <<    transformation->getNonlinearExpressionInXML() << std::endl; 
+
     outStr << "</transformation>" << std::endl;
     return outStr.str();
 }// end of MatrixTransformation::getMatrixNodeInXML()

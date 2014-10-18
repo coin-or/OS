@@ -1728,9 +1728,10 @@ OSnLNode* OSnLNodeIf::cloneExprNode()
 OSnLNodeNumber::OSnLNodeNumber()
 {
     inodeInt = OS_NUMBER;
-    inumberOfMatrixChildren = 0;
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
     inodeType = 0;
     value = 0.0;
 
@@ -1820,6 +1821,7 @@ OSnLNodeE::OSnLNodeE()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
     inodeType = 0;
     //value = 0.0;
     //type = "real";
@@ -1885,9 +1887,10 @@ OSnLNode* OSnLNodeE::cloneExprNode()
 OSnLNodePI::OSnLNodePI()
 {
     inodeInt = OS_PI;
-    inumberOfMatrixChildren = 0;
     inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
     inodeType = 0;
 }//end OSnLNodePI
 
@@ -1952,6 +1955,7 @@ OSnLNodeVariable::OSnLNodeVariable()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
     inodeInt = OS_VARIABLE;
     inodeType = -1;
     coef = 1.0;
@@ -2027,9 +2031,7 @@ std::string OSnLNodeVariable::getNonlinearExpressionInXML()
         {
             outStr << m_mChildren[i]->getNonlinearExpressionInXML();
         }
-    }
-    if(inumberOfChildren > 0)
-    {
+
         outStr << "</" ;
         outStr << "variable" ;
         outStr << ">" ;
@@ -2206,7 +2208,70 @@ OSnLNode* OSnLNodeMatrixTrace::cloneExprNode()
 }//end OSnLNodeMatrixTrace::cloneExprNode
 
 
+//
+// OSnLNodeMatrixToScalar Methods
+OSnLNodeMatrixToScalar::OSnLNodeMatrixToScalar()
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 1;
+    m_mMatrixChildren = new OSnLMNode*[1];
+    inodeInt = OS_MATRIX_TO_SCALAR;
+    inodeType = 0;
+}//end OSnLNodeMatrixToScalar
 
+OSnLNodeMatrixToScalar::~OSnLNodeMatrixToScalar()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixToScalar destructor");
+#endif
+}//end ~OSnLNodeMatrixToScalar
+
+double OSnLNodeMatrixToScalar::calculateFunction(double *x)
+{
+    m_dFunctionValue = -OSDBL_MAX;
+
+    for(unsigned int i = 0; i < inumberOfChildren; i++)
+    {
+        if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
+        {
+            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
+        }
+    }
+    return m_dFunctionValue;
+}// end OSnLNodeMatrixToScalar::calculate
+
+std::string OSnLNodeMatrixToScalar::getTokenName()
+{
+    return "matrixToScalar";
+}// end OSnLNodeMatrixToScalar::getTokenName(
+
+
+ADdouble OSnLNodeMatrixToScalar::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
+{
+    //if not support in AD, throw an exception
+    try
+    {
+        throw ErrorClass("Matrix-to-scalar conversion not supported by current Algorithmic Differentiation implementation");
+        return m_ADTape;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end OSnLNodeMatrixToScalar::constructADTape
+
+
+OSnLNode* OSnLNodeMatrixToScalar::cloneExprNode()
+{
+    OSnLNode *nlNodePoint;
+    nlNodePoint = new OSnLNodeMatrixToScalar();
+    return  nlNodePoint;
+}//end OSnLNodeMatrixToScalar::cloneExprNode
+
+
+/***********************************************************
+ *    Implementation of OSnLMNode and inheriting classes   * 
+ ***********************************************************/
 OSnLMNode::OSnLMNode():
     ExprNode(),
     idx(0)
@@ -2599,7 +2664,7 @@ OSnLMNodeMatrixPlus::OSnLMNodeMatrixPlus()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 2;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[2];
     inodeInt = OS_MATRIX_PLUS;
     inodeType = 2;
 }//end OSnLMNodeMatrixPlus
@@ -2624,6 +2689,7 @@ OSnLMNode* OSnLMNodeMatrixPlus::cloneExprNode()
     nlMNodePoint = new OSnLMNodeMatrixPlus();
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixPlus::cloneExprNode
+
 
 // OSnLMNodeMatrixSum Methods
 OSnLMNodeMatrixSum::OSnLMNodeMatrixSum()
@@ -2663,7 +2729,7 @@ OSnLMNodeMatrixMinus::OSnLMNodeMatrixMinus()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 2;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[2];
     inodeInt = OS_MATRIX_MINUS;
     inodeType = 2;
 }//end OSnLMNodeMatrixMinus
@@ -2695,7 +2761,7 @@ OSnLMNodeMatrixNegate::OSnLMNodeMatrixNegate()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 1;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_NEGATE;
     inodeType = 1;
 }//end OSnLMNodeMatrixNegate
@@ -2727,7 +2793,7 @@ OSnLMNodeMatrixTimes::OSnLMNodeMatrixTimes()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 2;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[2];
     inodeInt = OS_MATRIX_TIMES;
     inodeType = 2;
 }//end OSnLMNodeMatrixTimes
@@ -2759,7 +2825,7 @@ OSnLMNodeMatrixInverse::OSnLMNodeMatrixInverse()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 1;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_INVERSE;
     inodeType = 1;
 }//end OSnLMNodeMatrixInverse
@@ -2784,14 +2850,15 @@ OSnLMNode* OSnLMNodeMatrixInverse::cloneExprNode()
     nlMNodePoint = new OSnLMNodeMatrixInverse();
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixInverse::cloneExprNode
-#define    OS_MATRIX_TRANSPOSE    8515
+
+
 // OSnLMNodeMatrixTranspose Methods
 OSnLMNodeMatrixTranspose::OSnLMNodeMatrixTranspose()
 {
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 1;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_TRANSPOSE;
     inodeType = 1;
 }//end OSnLMNodeMatrixTranspose
@@ -2822,8 +2889,8 @@ OSnLMNodeMatrixScalarTimes::OSnLMNodeMatrixScalarTimes()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 1;
-    m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mChildren = new OSnLNode*[1];
+    m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_SCALARTIMES;
     inodeType = 1;
 }//end OSnLMNodeMatrixScalarTimes
@@ -2855,7 +2922,7 @@ OSnLMNodeMatrixDotTimes::OSnLMNodeMatrixDotTimes()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 2;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[2];
     inodeInt = OS_MATRIX_DOTTIMES;
     inodeType = 2;
 }//end OSnLMNodeMatrixDotTimes
@@ -2885,9 +2952,9 @@ OSnLMNode* OSnLMNodeMatrixDotTimes::cloneExprNode()
 // OSnLMNodeIdentityMatrix Methods
 OSnLMNodeIdentityMatrix::OSnLMNodeIdentityMatrix()
 {
-    inumberOfChildren = 0;
+    inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = NULL;
+    m_mChildren = new OSnLNode*[1];
     m_mMatrixChildren = NULL;
     inodeInt = OS_IDENTITY_MATRIX;
     inodeType = -1;
@@ -2921,7 +2988,7 @@ OSnLMNodeMatrixLowerTriangle::OSnLMNodeMatrixLowerTriangle()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 1;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_LOWERTRIANGLE;
     inodeType = 1;
 }//end OSnLMNodeMatrixLowerTriangle
@@ -2953,7 +3020,7 @@ OSnLMNodeMatrixUpperTriangle::OSnLMNodeMatrixUpperTriangle()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 1;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_UPPERTRIANGLE;
     inodeType = 1;
 }//end OSnLMNodeMatrixUpperTriangle
@@ -2985,7 +3052,7 @@ OSnLMNodeMatrixDiagonal::OSnLMNodeMatrixDiagonal()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 1;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_DIAGONAL;
     inodeType = 1;
 }//end OSnLMNodeMatrixDiagonal
@@ -3016,9 +3083,9 @@ OSnLMNode* OSnLMNodeMatrixDiagonal::cloneExprNode()
 OSnLMNodeDiagonalMatrixFromVector::OSnLMNodeDiagonalMatrixFromVector()
 {
     inumberOfChildren = 0;
-    inumberOfMatrixChildren = 0;
+    inumberOfMatrixChildren = 1;
     m_mChildren = NULL;
-    m_mMatrixChildren = NULL;
+    m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_DIAGONAL_MATRIX_FROM_VECTOR;
     inodeType = -1;
 }//end OSnLMNodeDiagonalMatrixFromVector
@@ -3043,6 +3110,39 @@ OSnLMNode* OSnLMNodeDiagonalMatrixFromVector::cloneExprNode()
     nlMNodePoint = new OSnLMNodeDiagonalMatrixFromVector();
     return  nlMNodePoint;
 }//end OSnLMNodeDiagonalMatrixFromVector::cloneExprNode
+
+
+// OSnLMNodeMatrixSubmatrixAt Methods
+OSnLMNodeMatrixSubmatrixAt::OSnLMNodeMatrixSubmatrixAt()
+{
+    inumberOfChildren = 4;
+    inumberOfMatrixChildren = 1;
+    m_mChildren = new OSnLNode*[4];
+    m_mMatrixChildren = new OSnLMNode*[1];
+    inodeInt = OS_MATRIX_SUBMATRIX_AT;
+    inodeType = 1;
+}//end OSnLMNodeMatrixSubmatrixAt
+
+OSnLMNodeMatrixSubmatrixAt::~OSnLMNodeMatrixSubmatrixAt()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLMNodeMatrixSubmatrixAt destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLMNodeMatrixSubmatrixAt
+
+std::string OSnLMNodeMatrixSubmatrixAt::getTokenName()
+{
+    return "matrixSubmatrixAt";
+}// end OSnLMNodeMatrixSubmatrixAt::getTokenName()
+
+OSnLMNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixSubmatrixAt();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixSubmatrixAt::cloneExprNode
 
 
 // OSnLMNodeMatrixReference Methods
@@ -3083,6 +3183,13 @@ std::string OSnLMNodeMatrixReference::getTokenName()
     return "matrixReference";
 }// end OSnLMNodeMatrixReference::getTokenName()
 
+
+std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixReference idx=\"" << idx << "\"/>" << std::endl;
+    return outStr.str();
+}//OSnLMNodeMatrixReference::getNonlinearExpressionInXML
 
 #if 0
 double OSnLMNodeMatrixReference::calculateFunction(double *x)

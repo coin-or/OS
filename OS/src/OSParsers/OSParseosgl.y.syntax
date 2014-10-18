@@ -1438,11 +1438,15 @@ generalElementsElStart: ELSTART
         if (osglData->osglNonzeroCounter >= osglData->osglNumberOfNonzeros) 
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <el> terms greater than expected");
 std::cout << "expected " << osglData->osglNumberOfNonzeros << " general elements; got " << osglData->osglNonzeroCounter << std::endl; 
+        // clear the vectors of pointers
         osnlData->nlNodeVec.clear();
         osnlData->sumVec.clear();
+        osnlData->allDiffVec.clear();
         osnlData->maxVec.clear();
         osnlData->minVec.clear();
         osnlData->productVec.clear();
+        osnlData->matrixSumVec.clear();
+        osnlData->matrixProductVec.clear();
     };
 
 generalElementsElContent: generalElementsElEmpty | generalElementsElLaden;
@@ -1835,6 +1839,15 @@ matrixTransformationStart: TRANSFORMATIONSTART
     osglData->tempC = new MatrixTransformation();
     osglData->mtxConstructorVec.push_back(osglData->tempC);
 std::cout << "push back a constructor - MatrixTransformation" << std::endl;
+        // clear the vectors of pointers
+        osnlData->nlNodeVec.clear();
+        osnlData->sumVec.clear();
+        osnlData->allDiffVec.clear();
+        osnlData->maxVec.clear();
+        osnlData->minVec.clear();
+        osnlData->productVec.clear();
+        osnlData->matrixSumVec.clear();
+        osnlData->matrixProductVec.clear();
 };
 
 matrixTransformationEnd: TRANSFORMATIONEND
@@ -1995,12 +2008,16 @@ osglBlockRowIdxATT: BLOCKROWIDXATT quote INTEGER quote
 {
     if (osglData->blockRowIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockRowIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockRowIdx cannot be negative");
-    osglData->blockRowIdxAttributePresent = true;        
-    osglData->blockRowIdx = $3;
+    else
+    {
+        if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockRowIdx cannot be negative");
+        osglData->blockRowIdxAttributePresent = true;        
+        osglData->blockRowIdx = $3;       
+        ((MatrixBlock*)osglData->tempC)->blockRowIdx = $3;
+    }
 
     // compute the size of the block
-    ((MatrixType*)osglData->tempC)->numberOfRows 
+    ((MatrixBlock*)osglData->tempC)->numberOfRows 
         = osglData->rowOffsets.back()[osglData->blockRowIdx+1] 
         - osglData->rowOffsets.back()[osglData->blockRowIdx];
 };
@@ -2009,12 +2026,16 @@ osglBlockColIdxATT: BLOCKCOLIDXATT quote INTEGER quote
 {
     if (osglData->blockColIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockColIdx attribute previously set");
-    if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockColIdx cannot be negative");
-    osglData->blockColIdxAttributePresent = true;        
-    osglData->blockColIdx = $3;
+    else
+    {
+        if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockColIdx cannot be negative");
+        osglData->blockColIdxAttributePresent = true;
+        osglData->blockColIdx = $3;       
+        ((MatrixBlock*)osglData->tempC)->blockColIdx = $3;
+    }
 
     // compute the size of the block
-    ((MatrixType*)osglData->tempC)->numberOfColumns 
+    ((MatrixBlock*)osglData->tempC)->numberOfColumns 
         = osglData->colOffsets.back()[osglData->blockColIdx+1] 
         - osglData->colOffsets.back()[osglData->blockColIdx];
 };

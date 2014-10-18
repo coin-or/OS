@@ -79,10 +79,12 @@ nlstart: NLSTART
         // clear the vectors of pointers
         osnlData->nlNodeVec.clear();
         osnlData->sumVec.clear();
-        //osnlData->allDiffVec.clear();
+        osnlData->allDiffVec.clear();
         osnlData->maxVec.clear();
         osnlData->minVec.clear();
         osnlData->productVec.clear();
+        osnlData->matrixSumVec.clear();
+        osnlData->matrixProductVec.clear();
     };
 
 nlIdxATT:  IDXATT QUOTE INTEGER QUOTE 
@@ -233,12 +235,12 @@ matrixTrace: MATRIXTRACESTART {
 } OSnLMNode MATRIXTRACEEND;
 
 matrixToScalar: MATRIXTOSCALARSTART {
-//    osnlData->nlNodePoint = new OSnLNodeMatrixToScalar();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLNodeMatrixToScalar();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } OSnLMNode MATRIXTOSCALAREND;
 
 
-/** These next two numbers have attributes
+/** These next two nodes have attributes
  *  In addition <variable> has an optional OSnLNode descendant 
  *  (for variable index expressions) --- not implemented yet.
  */
@@ -431,6 +433,7 @@ OSnLMNode: matrixReference
          | matrixUpperTriangle
          | matrixMerge
          | matrixMinus
+         | matrixNegate
          | matrixPlus
          | matrixTimes
          | matrixProduct
@@ -440,11 +443,16 @@ OSnLMNode: matrixReference
          | identityMatrix
 ;
 
-matrixReference: MATRIXREFERENCESTART
+matrixReference: matrixReferenceStart matrixIdxATT matrixreferenceend 
 {
-    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference(); //valgrind: this leaks 1872 bytes of memory
+    osnlData->matrixidxattON = false;
+};
+
+matrixReferenceStart: MATRIXREFERENCESTART
+{
+    osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixRef);
-} matrixIdxATT matrixreferenceend {osnlData->matrixidxattON = false;} ;
+};
 
               
 matrixreferenceend: ENDOFELEMENT
@@ -462,8 +470,8 @@ matrixDiagonal: matrixDiagonalStart matrixDiagonalContent;
 
 matrixDiagonalStart: MATRIXDIAGONALSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixDiagonal();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixDiagonalContent: OSnLMNode MATRIXDIAGONALEND;
@@ -472,8 +480,8 @@ matrixDotTimes: matrixDotTimesStart matrixDotTimesContent;
 
 matrixDotTimesStart: MATRIXDOTTIMESSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixDotTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixDotTimesContent: OSnLMNode OSnLMNode MATRIXDOTTIMESEND;
@@ -482,8 +490,8 @@ identityMatrix: identityMatrixStart identityMatrixContent;
 
 identityMatrixStart: IDENTITYMATRIXSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeIdentityMatrix();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 identityMatrixContent: nlnode IDENTITYMATRIXEND;
@@ -492,8 +500,8 @@ matrixInverse: matrixInverseStart matrixInverseContent;
 
 matrixInverseStart: MATRIXINVERSESTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixInverse();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixInverseContent: OSnLMNode MATRIXINVERSEEND;
@@ -502,8 +510,8 @@ matrixLowerTriangle: matrixLowerTriangleStart matrixLowerTriangleAttribute GREAT
 
 matrixLowerTriangleStart: MATRIXLOWERTRIANGLESTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixLowerTriangle();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixLowerTriangleAttribute: | includeDiagonalATT;
@@ -514,8 +522,8 @@ matrixUpperTriangle: matrixUpperTriangleStart matrixUpperTriangleAttribute GREAT
 
 matrixUpperTriangleStart: MATRIXUPPERTRIANGLESTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixUpperTriangle();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixUpperTriangleAttribute: | includeDiagonalATT;
@@ -544,28 +552,41 @@ matrixMinus: matrixMinusStart matrixMinusContent;
 
 matrixMinusStart: MATRIXMINUSSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixMinus();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixMinusContent: OSnLMNode OSnLMNode MATRIXMINUSEND;
+
+
+matrixNegate: matrixNegateStart matrixNegateContent;
+
+matrixNegateStart: MATRIXNEGATESTART 
+{
+    osnlData->nlNodePoint = new OSnLMNodeMatrixNegate();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+matrixNegateContent: OSnLMNode MATRIXNEGATEEND;
+
 
 matrixPlus: matrixPlusStart matrixPlusContent;
 
 matrixPlusStart: MATRIXPLUSSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixPlus();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixPlusContent: OSnLMNode OSnLMNode MATRIXPLUSEND;
+
 
 matrixTimes: matrixTimesStart matrixTimesContent;
 
 matrixTimesStart: MATRIXTIMESSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
@@ -590,8 +611,8 @@ matrixScalarTimes: matrixScalarTimesStart matrixScalarTimesContent;
 
 matrixScalarTimesStart: MATRIXSCALARTIMESSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixScalarTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixScalarTimesContent: nlnode OSnLMNode MATRIXSCALARTIMESEND;
@@ -600,18 +621,19 @@ matrixSubMatrixAt: matrixSubMatrixAtStart matrixSubMatrixAtContent;
 
 matrixSubMatrixAtStart: MATRIXSUBMATRIXATSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixSubmatrixAt();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixSubMatrixAtContent: OSnLMNode nlnode nlnode nlnode nlnode MATRIXSUBMATRIXATEND;
+matrixSubMatrixAtContent: nlnode nlnode nlnode nlnode OSnLMNode MATRIXSUBMATRIXATEND;
+
 
 matrixTranspose: matrixTransposeStart matrixTransposeContent;
 
 matrixTransposeStart: MATRIXTRANSPOSESTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeTimes();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixTranspose();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
 matrixTransposeContent: OSnLMNode MATRIXTRANSPOSEEND;
