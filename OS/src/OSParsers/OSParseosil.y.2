@@ -154,7 +154,6 @@ matricesEmpty: ENDOFELEMENT;
 
 matricesLaden: GREATERTHAN matrixList MATRICESEND
 {
-std::cout << "Finished matrices section" << std::endl;
 };
 
 /**
@@ -177,10 +176,12 @@ conesEmpty: ENDOFELEMENT;
 
 conesLaden: GREATERTHAN coneList CONESEND
 {
-    std::cout << "finished cones section" << std::endl;
 };
 
-coneList: | coneList cone;
+coneList: | coneList cone
+{
+std::cout << "finished next cone " << std::endl;
+};
 
 cone: nonnegativeCone
     | nonpositiveCone
@@ -203,7 +204,12 @@ cone: nonnegativeCone
 
 nonnegativeCone: nonnegativeConeStart nonnegativeConeAttributes nonnegativeConeEnd;
 
-nonnegativeConeStart: NONNEGATIVECONESTART;
+nonnegativeConeStart: NONNEGATIVECONESTART
+{
+    parserData->numberOfRowsPresent = false;
+    parserData->numberOfColumnsPresent = false;
+    parserData->namePresent = false;
+};
 
 nonnegativeConeAttributes: nonnegativeConeAttList;
 
@@ -218,7 +224,12 @@ nonnegativeConeEnd: ENDOFELEMENT | GREATERTHAN NONNEGATIVECONEEND;
 
 nonpositiveCone: nonpositiveConeStart nonpositiveConeAttributes nonpositiveConeEnd;
 
-nonpositiveConeStart: NONPOSITIVECONESTART;
+nonpositiveConeStart: NONPOSITIVECONESTART
+{
+    parserData->numberOfRowsPresent = false;
+    parserData->numberOfColumnsPresent = false;
+    parserData->namePresent = false;
+};
 
 nonpositiveConeAttributes: nonpositiveConeAttList;
 
@@ -235,7 +246,15 @@ nonpositiveConeEnd: ENDOFELEMENT | GREATERTHAN NONPOSITIVECONEEND;
 
 quadraticCone: quadraticConeStart quadraticConeAttributes quadraticConeEnd;
 
-quadraticConeStart: QUADRATICCONESTART;
+quadraticConeStart: QUADRATICCONESTART
+{
+    parserData->numberOfRowsPresent = false;
+    parserData->numberOfColumnsPresent = false;
+    parserData->namePresent = false;
+    parserData->normScaleFactorPresent = false;
+    parserData->distortionMatrixPresent = false;
+    parserData->axisDirectionPresent = false;
+};
 
 quadraticConeAttributes: quadraticConeAttList;
 
@@ -254,7 +273,16 @@ quadraticConeEnd: ENDOFELEMENT | GREATERTHAN QUADRATICCONEEND;
 
 rotatedQuadraticCone:  rotatedQuadraticConeStart rotatedQuadraticConeAttributes rotatedQuadraticConeEnd;
 
-rotatedQuadraticConeStart: ROTATEDQUADRATICCONESTART;
+rotatedQuadraticConeStart: ROTATEDQUADRATICCONESTART
+{
+    parserData->numberOfRowsPresent = false;
+    parserData->numberOfColumnsPresent = false;
+    parserData->namePresent = false;
+    parserData->normScaleFactorPresent = false;
+    parserData->distortionMatrixPresent = false;
+    parserData->firstAxisDirectionPresent = false;
+    parserData->secondAxisDirectionPresent = false;
+};
 
 rotatedQuadraticConeAttributes: rotatedQuadraticConeAttList;
 
@@ -276,7 +304,13 @@ rotatedQuadraticConeEnd: ENDOFELEMENT | GREATERTHAN ROTATEDQUADRATICCONEEND;
 
 semidefiniteCone:  semidefiniteConeStart semidefiniteConeAttributes semidefiniteConeEnd;
 
-semidefiniteConeStart: SEMIDEFINITECONESTART;
+semidefiniteConeStart: SEMIDEFINITECONESTART
+{
+    parserData->numberOfRowsPresent = false;
+    parserData->numberOfColumnsPresent = false;
+    parserData->namePresent = false;
+    parserData->semidefinitenessPresent = false;
+};
 
 semidefiniteConeAttributes: semidefiniteConeAttList;
 
@@ -305,7 +339,12 @@ semidefiniteConeEnd: ENDOFELEMENT | GREATERTHAN SEMIDEFINITECONEEND;
 
 productCone:  productConeStart productConeAttributes productConeContent;
 
-productConeStart: PRODUCTCONESTART;
+productConeStart: PRODUCTCONESTART
+{
+    parserData->numberOfRowsPresent = false;
+    parserData->numberOfColumnsPresent = false;
+    parserData->namePresent = false;
+};
 
 productConeAttributes: productConeAttList;
 
@@ -339,7 +378,12 @@ productConeEnd: PRODUCTCONEEND;
 
 intersectionCone:  intersectionConeStart intersectionConeAttributes intersectionConeContent;
 
-intersectionConeStart: INTERSECTIONCONESTART;
+intersectionConeStart: INTERSECTIONCONESTART
+{
+    parserData->numberOfRowsPresent = false;
+    parserData->numberOfColumnsPresent = false;
+    parserData->namePresent = false;
+};
 
 intersectionConeAttributes: intersectionConeAttList;
 
@@ -681,7 +725,10 @@ anotherstagevarATT:
 stagevaratt: osilNumberofstagevariablesATT
       | osilStagevarstartidxATT;
            
-osilNumberofstagevariablesATT: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE  {
+osilNumberofstagevariablesATT: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE  
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of variables cannot be negative");
     if ($3 > osinstance->instanceData->variables->numberOfVariables)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variables in this stage");         
@@ -697,7 +744,10 @@ osilNumberofstagevariablesATT: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE  {
     };
 };
 
-osilStagevarstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
+osilStagevarstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->stageVariablesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
     if ($3 < 0 && $3 >= osinstance->instanceData->variables->numberOfVariables)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index out of range");
@@ -726,8 +776,11 @@ stagevarlist: stagevar
 stagevar: {if (parserData->stageVariablesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no varlist expected");}
         VARSTART osilStagevaridxATT stagevarend;
 
-osilStagevaridxATT: IDXATT QUOTE INTEGER QUOTE {
-    if ($3 < 0 && $3 >= osinstance->instanceData->variables->numberOfVariables)
+osilStagevaridxATT: IDXATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if ($3 < 0 || $3 >= osinstance->instanceData->variables->numberOfVariables)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index out of range");         
     if (parserData->stagevarcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variables in this stage");
@@ -749,7 +802,10 @@ anotherstageconATT:
 stageconatt: osilNumberofstageconstraintsATT
            | osilStageconstartidxATT;
            
-osilNumberofstageconstraintsATT: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE {
+osilNumberofstageconstraintsATT: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of constraints cannot be negative");
     if ($3 > osinstance->instanceData->constraints->numberOfConstraints)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many constraints in this stage");         
@@ -765,7 +821,10 @@ osilNumberofstageconstraintsATT: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE {
     };
 };
 
-osilStageconstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
+osilStageconstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->stageConstraintsOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
     if ($3 < 0 && $3 >= osinstance->instanceData->constraints->numberOfConstraints)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint index out of range");
@@ -794,8 +853,11 @@ stageconlist: stagecon
 stagecon: {if (parserData->stageConstraintsOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no conlist expected");}
         CONSTART osilStageconidxATT stageconend;
 
-osilStageconidxATT: IDXATT QUOTE INTEGER QUOTE {
-    if ($3 < 0 && $3 >= osinstance->instanceData->constraints->numberOfConstraints)
+osilStageconidxATT: IDXATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if ($3 < 0 || $3 >= osinstance->instanceData->constraints->numberOfConstraints)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint index out of range");         
     if (parserData->stageconcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many constraints in this stage");
@@ -826,7 +888,10 @@ anotherstageobjATT:
 stageobjatt: osilNumberofstageobjectivesATT
            | osilStageobjstartidxATT;
            
-osilNumberofstageobjectivesATT: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE {
+osilNumberofstageobjectivesATT: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of objectives cannot be negative");
     if ($3 > osinstance->instanceData->objectives->numberOfObjectives)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many objectives in this stage");         
@@ -863,8 +928,11 @@ stageobjlist: stageobj
 stageobj: {if (parserData->stageObjectivesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no objlist expected");}
         OBJSTART osilStageobjidxATT stageobjend;
 
-osilStageobjidxATT: IDXATT QUOTE INTEGER QUOTE {
-    if ($3 >= 0 && $3 >= -osinstance->instanceData->objectives->numberOfObjectives - 1)
+osilStageobjidxATT: IDXATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if ($3 >= 0 || $3 >= -osinstance->instanceData->objectives->numberOfObjectives - 1)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");         
     if (parserData->stageobjcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many objectives in this stage");
@@ -902,7 +970,10 @@ intervalatt: osilIntervalhorizonATT
         parserData->intervalstartON = true; }
 
 
-osilStageobjstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
+osilStageobjstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->stageObjectivesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
     if ($3 >= 0 && $3 <= -osinstance->instanceData->objectives->numberOfObjectives - 1)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");
@@ -910,7 +981,8 @@ osilStageobjstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
     parserData->stageObjectiveStartIdx = $3;
 };
 
-osilIntervalhorizonATT: HORIZONATT QUOTE aNumber QUOTE {
+osilIntervalhorizonATT: HORIZONATT QUOTE aNumber QUOTE 
+{
         if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
         parserData->intervalhorizon = parserData->tempVal;};
 
@@ -919,8 +991,10 @@ osilIntervalstartATT: STARTATT QUOTE aNumber QUOTE {
         parserData->intervalstart = parserData->tempVal;};
 
 
-osilNumberOfElATT: NUMBEROFELATT quote INTEGER quote 
+osilNumberOfElATT: NUMBEROFELATT QUOTE INTEGER QUOTE 
 {
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (osglData->osglNumberOfElPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfEl attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> cannot be negative");
@@ -941,7 +1015,7 @@ osilNumberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE
 
 osilNumberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->numberOfConesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfCones attribute previously set");
@@ -952,7 +1026,7 @@ osilNumberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE
 
 osilNumberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->numberOfRowsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfRows attribute previously set");
@@ -963,7 +1037,7 @@ osilNumberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE
 
 osilNumberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->numberOfColumnsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfColumns attribute previously set");
@@ -974,7 +1048,7 @@ osilNumberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE
 
 numberOfMatrixVarATT: NUMBEROFMATRIXVARATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix variables cannot be negative");
     parserData->numberOfMatrixVar = $3; 
@@ -982,7 +1056,7 @@ numberOfMatrixVarATT: NUMBEROFMATRIXVARATT QUOTE INTEGER QUOTE
 
 numberOfMatrixObjATT: NUMBEROFMATRIXOBJATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix objectives cannot be negative");
     parserData->numberOfMatrixObj = $3; 
@@ -990,7 +1064,7 @@ numberOfMatrixObjATT: NUMBEROFMATRIXOBJATT QUOTE INTEGER QUOTE
 
 numberOfMatrixConATT: NUMBEROFMATRIXCONATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix constraints cannot be negative");
     parserData->numberOfMatrixCon = $3; 
@@ -998,7 +1072,7 @@ numberOfMatrixConATT: NUMBEROFMATRIXCONATT QUOTE INTEGER QUOTE
 
 numberOfMatrixTermsATT: NUMBEROFMATRIXTERMSATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix terms cannot be negative");
     parserData->numberOfMatrixTerms = $3; 
@@ -1006,7 +1080,7 @@ numberOfMatrixTermsATT: NUMBEROFMATRIXTERMSATT QUOTE INTEGER QUOTE
 
 numberOfMatrixExprATT: NUMBEROFMATRIXEXPRATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of expressions cannot be negative");
     parserData->numberOfMatrixExpr = $3; 
@@ -1034,7 +1108,7 @@ osilShapeATT: SHAPEATT ATTRIBUTETEXT QUOTE
 
 osilNormScaleFactorATT: NORMSCALEFACTORATT QUOTE aNumber QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->normScaleFactorPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "normScaleFactor attribute previously set");
@@ -1045,7 +1119,7 @@ osilNormScaleFactorATT: NORMSCALEFACTORATT QUOTE aNumber QUOTE
 
 osilDistortionMatrixIdxATT: DISTORTIONMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->distortionMatrixPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "distortionMatrixIdx attribute previously set");
@@ -1056,7 +1130,7 @@ osilDistortionMatrixIdxATT: DISTORTIONMATRIXIDXATT QUOTE INTEGER QUOTE
  
 osilAxisDirectionATT: AXISDIRECTIONATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->axisDirectionPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axisDirection attribute previously set");
@@ -1068,7 +1142,7 @@ osilAxisDirectionATT: AXISDIRECTIONATT QUOTE INTEGER QUOTE
 
 osilFirstAxisDirectionATT: FIRSTAXISDIRECTIONATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->firstAxisDirectionPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "firstAxisDirection attribute previously set");
@@ -1079,7 +1153,7 @@ osilFirstAxisDirectionATT: FIRSTAXISDIRECTIONATT QUOTE INTEGER QUOTE
 
 osilSecondAxisDirectionATT: SECONDAXISDIRECTIONATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->secondAxisDirectionPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "secondAxisDirection attribute previously set");
@@ -1102,7 +1176,7 @@ osilSemidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE
 
 matrixIdxATT: MATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->matrixIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrixIdx attribute previously set");
@@ -1113,7 +1187,7 @@ matrixIdxATT: MATRIXIDXATT QUOTE INTEGER QUOTE
 
 lbMatrixIdxATT: LBMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->lbMatrixIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "lbMatrixIdx attribute previously set");
@@ -1124,7 +1198,7 @@ lbMatrixIdxATT: LBMATRIXIDXATT QUOTE INTEGER QUOTE
 
 constantMatrixIdxATT: CONSTANTMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->constantMatrixIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constantMatrixIdx attribute previously set");
@@ -1135,7 +1209,7 @@ constantMatrixIdxATT: CONSTANTMATRIXIDXATT QUOTE INTEGER QUOTE
 
 lbConeIdxATT: LBCONEIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->lbConeIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "lbConeIdx attribute previously set");
@@ -1146,7 +1220,7 @@ lbConeIdxATT: LBCONEIDXATT QUOTE INTEGER QUOTE
 
 ubMatrixIdxATT: UBMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->ubMatrixIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "ubMatrixIdx attribute previously set");
@@ -1157,7 +1231,7 @@ ubMatrixIdxATT: UBMATRIXIDXATT QUOTE INTEGER QUOTE
 
 ubConeIdxATT: UBCONEIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->ubConeIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "ubConeIdx attribute previously set");
@@ -1168,7 +1242,7 @@ ubConeIdxATT: UBCONEIDXATT QUOTE INTEGER QUOTE
 
 orderConeIdxATT: ORDERCONEIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->orderConeIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "ubConeIdx attribute previously set");
@@ -1179,7 +1253,7 @@ orderConeIdxATT: ORDERCONEIDXATT QUOTE INTEGER QUOTE
 
 templateMatrixIdxATT: TEMPLATEMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->templateMatrixIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "templateMatrixIdx attribute previously set");
@@ -1199,13 +1273,11 @@ varTypeATT: VARTYPEATT ATTRIBUTETEXT QUOTE
     else
         parserData->varType = *($2);
     free($2);
-
-std::cout << "default var type: " << parserData->varType << std::endl;
 };
 
 varReferenceMatrixIdxATT: VARREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->varReferenceMatrixIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "varReferenceMatrixIdx attribute previously set");
@@ -1216,7 +1288,7 @@ varReferenceMatrixIdxATT: VARREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE
 
 objReferenceMatrixIdxATT: OBJREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->objReferenceMatrixIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objReferenceMatrixIdx attribute previously set");
@@ -1227,7 +1299,7 @@ objReferenceMatrixIdxATT: OBJREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE
 
 conReferenceMatrixIdxATT: CONREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
-    if ($2 != $4) 
+    if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->conReferenceMatrixIdxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "conReferenceMatrixIdx attribute previously set");

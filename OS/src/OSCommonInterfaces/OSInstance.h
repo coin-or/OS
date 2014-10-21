@@ -590,10 +590,11 @@ public:
     int numberOfRows;
     int numberOfColumns;
 
-    /** Multidimensional tensors can also form cones
+    /** Cones can also be formed by Multidimensional tensors.
      *  (the Kronecker product, for instance, can be
      *   thought of as a four-dimensional tensor).
-     *  We therefore allow additional dimensions.
+     *  We therefore allow additional dimensions,
+     *  although they have not yet been implemented.
      */
     int numberOfOtherIndexes;
     int* otherIndexes;
@@ -795,7 +796,7 @@ public:
 /*! \class QuadraticCone
  * \brief The in-memory representation of a quadratic cone 
  */
-class QuadraticCone
+class QuadraticCone : public Cone
 {
 public:
 
@@ -826,9 +827,10 @@ public:
     int idx;
 
     /** quadratic cones normally are of the form x0 >= x1^2 + x2^2 + ...
-     *  However, the appearance can be modified using a norm factor p 
+     *  However, the appearance can be modified using a norm factor k 
      *  and a distortion matrix M to the form
      *  x0 >= p (x1, x2, ...) M (x1, x2, ...)'
+     *  @default: k= 1, M = -1.
      */
     double normFactor;
     int distortionMatrixIdx;
@@ -840,6 +842,7 @@ public:
      *  i0 = 0, 1, ..., n0 -1, where n0 is the number of rows,
      *  i1 = 0, 1, ..., n1 -1, where n1 is the number of columns,
      *  and so on for higher dimensions (if any)
+     *  (@default: 0)
      */
     int axisDirectionIndex;
 
@@ -876,7 +879,7 @@ public:
 /*! \class RotatedQuadraticCone
  * \brief The in-memory representation of a rotated quadratic cone 
  */
-class RotatedQuadraticCone
+class RotatedQuadraticCone : public Cone
 {
 public:
 
@@ -907,9 +910,10 @@ public:
     int idx;
 
     /** rotated quadratic cones normally are of the form x0x1 >= x2^2 + x3^2 + ...
-     *  However, the appearance can be modified using a norm factor p 
+     *  However, the appearance can be modified using a norm factor k 
      *  and a distortion matrix M to the form
      *  x0x1 >= p (x2, x3, ...) M (x2, x3, ...)'
+     *  @default: k= 1, M = -1.
      */
     double normFactor;
     int distortionMatrixIdx;
@@ -921,6 +925,7 @@ public:
      *  i0 = 0, 1, ..., n0 -1, where n0 is the number of rows,
      *  i1 = 0, 1, ..., n1 -1, where n1 is the number of columns,
      *  and so on for higher dimensions (if any)
+     *  @default: i0 = 0, i1 = 1.
      */
     int firstAxisDirectionIndex;
     int secondAxisDirectionIndex;
@@ -961,7 +966,7 @@ public:
 /*! \class SemidefiniteCone
  * \brief The in-memory representation of a cone of semidefinite matrices 
  */
-class SemidefiniteCone
+class SemidefiniteCone : public Cone
 {
 public:
 
@@ -1037,7 +1042,7 @@ public:
 /*! \class ProductCone
  * \brief The in-memory representation of a product cone 
  */
-class ProductCone
+class ProductCone : public Cone
 {
 public:
 
@@ -1096,6 +1101,7 @@ public:
 
 
 
+
     /**
      * A function to make a deep copy of an instance of this class
      * @param that: the instance from which information is to be copied
@@ -1107,7 +1113,7 @@ public:
 /*! \class IntersectionCone
  * \brief The in-memory representation of an intersection cone 
  */
-class IntersectionCone
+class IntersectionCone : public Cone
 {
 public:
 
@@ -1176,7 +1182,7 @@ public:
 /*! \class DualCone
  * \brief The in-memory representation of a dual cone 
  */
-class DualCone
+class DualCone : public Cone
 {
 public:
 
@@ -1241,7 +1247,7 @@ public:
 /*! \class PolarCone
  * \brief The in-memory representation of a polar cone 
  */
-class PolarCone
+class PolarCone : public Cone
 {
 public:
 
@@ -1301,7 +1307,7 @@ public:
      * @return whether the copy was created successfully
      */    
     bool deepCopyFrom(PolarCone *that);
-}; // Cone
+}; // PolarCone
 
 
 /*! \class Cones
@@ -1626,6 +1632,30 @@ public:
 
     /** a pointer to the matrixExpressions object */
     MatrixExpressions* matrixExpressions;
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixProgramming *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+
+     */    
+    bool deepCopyFrom(MatrixProgramming *that);
 }; // MatrixProgramming
 
 
@@ -3252,6 +3282,7 @@ public:
      */
     bool setVariables(int number, std::string* names, double* lowerBounds,
                       double* upperBounds, char* types);
+
 
     /**
      * set the objective number.

@@ -2260,6 +2260,11 @@ class OSnLMNodeMatrixLowerTriangle : public OSnLMNode
 {
 public:
     /**
+     *  A boolean to express whether the diagonal is to be part of the upper triangle or not
+     */
+    bool includeDiagonal;
+
+    /**
      * default constructor.
      */
     OSnLMNodeMatrixLowerTriangle();
@@ -2285,7 +2290,7 @@ public:
      *
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
-//    virtual std::string getNonlinearExpressionInXML();
+    virtual std::string getNonlinearExpressionInXML();
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2297,6 +2302,11 @@ public:
 class OSnLMNodeMatrixUpperTriangle : public OSnLMNode
 {
 public:
+    /**
+     *  A boolean to express whether the diagonal is to be part of the upper triangle or not
+     */
+    bool includeDiagonal;
+
     /**
      * default constructor.
      */
@@ -2323,7 +2333,7 @@ public:
      *
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
-//    virtual std::string getNonlinearExpressionInXML();
+    virtual std::string getNonlinearExpressionInXML();
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.

@@ -1799,7 +1799,7 @@ static const yytype_uint16 yyrline[] =
     4266,  4272,  4280,  4280,  4282,  4282,  4284,  4290,  4298,  4298,
     4300,  4300,  4302,  4308,  4316,  4316,  4318,  4318,  4320,  4332,
     4341,  4343,  4343,  4345,  4347,  4356,  4358,  4358,  4360,  4360,
-    4362,  4379,  4382,  4382,  4384,  4384,  4387,  6278,  6283,  6291
+    4362,  4379,  4382,  4382,  4384,  4384,  4387,  6243,  6250,  6260
 };
 #endif
 
@@ -8051,13 +8051,17 @@ std::cout << "IntVec: expected " << osglData->osglNumberOfEl << " elements; got 
   case 1197:
 
     {
+    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osglData->osglSize = (yyvsp[(3) - (4)].ival);
 }
     break;
 
   case 1198:
 
-    {    
+    {
+    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->osglIncrPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "only one incr attribute allowed");
     osglData->osglIncrPresent = true;
@@ -8067,7 +8071,9 @@ std::cout << "IntVec: expected " << osglData->osglNumberOfEl << " elements; got 
 
   case 1199:
 
-    {    
+    {
+    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->osglMultPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "only one mult attribute allowed");
     if ((yyvsp[(3) - (4)].ival) <= 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "mult must be positive");

@@ -2276,6 +2276,10 @@ std::string MatrixElements::getMatrixNodeInXML()
             outStr << "<indexes>" << std::endl;
             outStr << writeIntVectorData(varReferenceElements->indexes, true, false);
             outStr << "</indexes>" << std::endl;
+
+            outStr << "<values>" << std::endl;
+            outStr << writeIntVectorData(varReferenceElements->values, true, false);
+            outStr << "</values>" << std::endl;
         }
 
         outStr << "</varReferenceElements>" << std::endl;
@@ -2388,7 +2392,6 @@ std::string MatrixElements::getMatrixNodeInXML()
             outStr << " rowMajor=\"true\"";
         outStr << " numberOfValues=\"" << conReferenceElements->numberOfValues << "\"";
         outStr << ">" << std::endl;
-        outStr << "</conReferenceElements>" << std::endl;
 
         outStr << "<start>" << std::endl;
         outStr << writeIntVectorData(conReferenceElements->start, true, false);
@@ -2639,17 +2642,14 @@ OSMatrix* OSMatrix::createConstructorTreeFromPrefix(std::vector<MatrixNode*> mtx
 {
     std::vector<MatrixNode*> stackVec;
     int kount =  mtxConstructorVec.size() - 1;
-std::cout << "creating constructor tree from  a list of " << kount << std::endl;
     while(kount >= 0)
     {
         int numkids = mtxConstructorVec[kount]->inumberOfChildren;
-std::cout << "matrix constructor " << kount << " has type " << mtxConstructorVec[kount]->getNodeName() << " and " << numkids << " children" << std::endl;
         if(numkids > 0)
         {
             for(int i = 0; i < numkids;  i++)
             {
                 mtxConstructorVec[kount]->m_mChildren[i] = stackVec.back();
-std::cout << "moved constructor " << mtxConstructorVec[kount]->m_mChildren[i]->getNodeName() << std::endl;
                 stackVec.pop_back();
             }
         }
@@ -2657,7 +2657,6 @@ std::cout << "moved constructor " << mtxConstructorVec[kount]->m_mChildren[i]->g
         kount--;
     }
     stackVec.clear();
-std::cout << "finished processing matrix " << ((OSMatrix*)mtxConstructorVec[ 0])->name << std::endl;    
     return (OSMatrix*)mtxConstructorVec[ 0];
 }//end OSMatrix::createExpressionTreeFromPrefix
 

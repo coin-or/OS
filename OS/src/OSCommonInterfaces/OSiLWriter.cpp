@@ -570,6 +570,23 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
             outStr << "</nonlinearExpressions>";
             if( m_bWhiteSpace == true) outStr << endl;
         }
+        // Now the matrices element
+        if(m_OSInstance->instanceData->matrices != NULL && m_OSInstance->instanceData->matrices->numberOfMatrices > 0)
+        {
+            outStr << "<matrices";
+            outStr << " numberOfMatrices=\"";
+            outStr << m_OSInstance->instanceData->matrices->numberOfMatrices ;
+            outStr << "\"" ;
+            outStr << ">" ;
+            if( m_bWhiteSpace == true) outStr << endl;
+            for (i = 0; i < m_OSInstance->instanceData->matrices->numberOfMatrices;i++)
+            {
+                if (m_OSInstance->instanceData->matrices->matrix[i] != NULL)
+                outStr << m_OSInstance->instanceData->matrices->matrix[i]->getMatrixNodeInXML();  
+            }
+            if( m_bWhiteSpace == true) outStr << endl;
+            outStr << "</matrices>";
+        }
         if( m_bWhiteSpace == true) outStr << endl;
     } // end instanceData if
     outStr << "</instanceData>"  ;

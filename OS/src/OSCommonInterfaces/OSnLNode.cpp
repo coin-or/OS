@@ -435,19 +435,19 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNode
     {
         int numMtxKids = nlNodeVec[kount]->inumberOfMatrixChildren;
         int numkids    = nlNodeVec[kount]->inumberOfChildren;
-        if(numMtxKids > 0)
-        {
-            for(int i = 0; i < numMtxKids; i++)
-            {
-                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
-                stackVec.pop_back();
-            }
-        }
         if(numkids > 0)
         {
             for(int i = 0; i < numkids; i++)
             {
                 nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+        if(numMtxKids > 0)
+        {
+            for(int i = 0; i < numMtxKids; i++)
+            {
+                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
                 stackVec.pop_back();
             }
         }
@@ -2991,6 +2991,7 @@ OSnLMNodeMatrixLowerTriangle::OSnLMNodeMatrixLowerTriangle()
     m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_LOWERTRIANGLE;
     inodeType = 1;
+    includeDiagonal = true;
 }//end OSnLMNodeMatrixLowerTriangle
 
 OSnLMNodeMatrixLowerTriangle::~OSnLMNodeMatrixLowerTriangle()
@@ -3014,6 +3015,21 @@ OSnLMNode* OSnLMNodeMatrixLowerTriangle::cloneExprNode()
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixLowerTriangle::cloneExprNode
 
+std::string OSnLMNodeMatrixLowerTriangle::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixLowerTriangle";
+    if (includeDiagonal == false)
+        outStr << " includeDiagonal=\"false\""; 
+    outStr << ">" << std::endl;
+
+    outStr << m_mMatrixChildren[0]->getNonlinearExpressionInXML();
+
+    outStr << "</matrixLowerTriangle>";
+    return outStr.str();
+}//OSnLMNodeMatrixLowerTriangle::getNonlinearExpressionInXML
+
+
 // OSnLMNodeMatrixUpperTriangle Methods
 OSnLMNodeMatrixUpperTriangle::OSnLMNodeMatrixUpperTriangle()
 {
@@ -3023,6 +3039,8 @@ OSnLMNodeMatrixUpperTriangle::OSnLMNodeMatrixUpperTriangle()
     m_mMatrixChildren = new OSnLMNode*[1];
     inodeInt = OS_MATRIX_UPPERTRIANGLE;
     inodeType = 1;
+
+    includeDiagonal = true;
 }//end OSnLMNodeMatrixUpperTriangle
 
 OSnLMNodeMatrixUpperTriangle::~OSnLMNodeMatrixUpperTriangle()
@@ -3045,6 +3063,21 @@ OSnLMNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
     nlMNodePoint = new OSnLMNodeMatrixUpperTriangle();
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixUpperTriangle::cloneExprNode
+
+std::string OSnLMNodeMatrixUpperTriangle::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixUpperTriangle";
+    if (includeDiagonal == false)
+        outStr << " includeDiagonal=\"false\""; 
+    outStr << ">" << std::endl;
+
+    outStr << m_mMatrixChildren[0]->getNonlinearExpressionInXML();
+
+    outStr << "</matrixUpperTriangle>";
+    return outStr.str();
+}//OSnLMNodeMatrixUpperTriangle::getNonlinearExpressionInXML
+
 
 // OSnLMNodeMatrixDiagonal Methods
 OSnLMNodeMatrixDiagonal::OSnLMNodeMatrixDiagonal()
@@ -3201,10 +3234,6 @@ double OSnLMNodeMatrixReference::calculateFunction(double *x)
 ADdouble OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
 {
     m_ADTape = coef;
-    //std::cout << "Inside OSnLMNodeMatrixReference "<<  std::endl;
-    //std::cout << "Value of OSiL index = " << idx << std::endl;
-    //std::cout << "Value of AD index = " << (*varIdx)[ idx] << std::endl;
-    //std::cout << "Value of AD variable = " << (*XAD)[ (*varIdx)[ idx] ] << std::endl;
     m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
     return m_ADTape;
 }// end OSnLMNodeMatrixReference::constructADTape

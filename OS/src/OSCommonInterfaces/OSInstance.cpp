@@ -6587,6 +6587,12 @@ bool InstanceData::IsEqual(InstanceData *that)
                 return false;
             if (!this->nonlinearExpressions->IsEqual(that->nonlinearExpressions))
                 return false;
+            if (!this->matrices->IsEqual(that->matrices))
+                return false;
+            if (!this->cones->IsEqual(that->cones))
+                return false;
+            if (!this->matrixProgramming->IsEqual(that->matrixProgramming))
+                return false;
 
             return true;
         }
@@ -7109,5 +7115,538 @@ bool Nl::IsEqual(Nl *that)
         }
     }
 }//Nl::IsEqual
+
+bool Matrices::IsEqual(Matrices *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Matrices");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->numberOfMatrices != that->numberOfMatrices)
+                return false;
+            for (int i=0; i<this->numberOfMatrices; i++)
+                if (!this->matrix[i]->IsEqual(that->matrix[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//Matrices::IsEqual
+
+bool Cones::IsEqual(Cones *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Cones");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->numberOfCones != that->numberOfCones)
+                return false;
+            for (int i=0; i<this->numberOfCones; i++)
+                if (!this->cone[i]->IsEqual(that->cone[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//Cones::IsEqual
+
+bool Cone::IsEqual(Cone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Cone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+#if 0
+            // first check the elements common to all cone types
+            if (this->coneType != that->coneType)
+                return false;
+            if (this->numberOfColumns != that->numberOfColumns)
+                return false;
+            if (this->numberOfRows != that->numberOfRows)
+                return false;
+            if (this->numberOfOtherIndexes != that->numberOfOtherIndexes)
+                return false;
+            for (int i=0; i<this->numberOfOtherIndexes; i++)
+                if (this->otherIndexes[i] != that->otherIndexes[i])
+                    return false;
+
+            // next check for specific cone elements
+/* not implemented yet
+            if (this->coneType = ENUM_CONE_TYPE_orthant)
+            {
+                if (!this->ub->IsEqual(that->ub))
+                    return false;    
+                if (!this->lb->IsEqual(that->lb))
+                    return false;    
+            }
+*/
+            else if (this->coneType = ENUM_CONE_TYPE_quadratic)
+            {
+                if ((quadraticCone*)this->normFactor != (quadraticCone*)that->normFactor)
+                    return false;    
+                if ((quadraticCone*)this->distortionMatrixIdx != (quadraticCone*)that->distortionMatrixIdx)
+                    return false;    
+                if ((quadraticCone*)this->axisDirectionIndex != (quadraticCone*)that->axisDirectionIndex)
+                    return false;
+            }
+            else if (this->coneType = ENUM_CONE_TYPE_rotatedQuadratic)
+            {
+                if (this->normFactor != that->normFactor)
+                    return false;
+                if (this->distortionMatrixIdx != that->distortionMatrixIdx)
+                    return false;
+                if (this->firstAxisDirectionIndex != that->firstAxisDirectionIndex)
+                    return false;
+                if (this->secondAxisDirectionIndex != that->secondAxisDirectionIndex)
+                    return false;
+            }
+/* not implemented yet
+            else if (this->coneType = ENUM_CONE_TYPE_normed)
+            {
+
+            }
+*/
+            else if (this->coneType = ENUM_CONE_TYPE_semidefinite)
+            {
+                if (this->semidefiniteness != that->semidefiniteness)
+                    return false;
+            }
+
+/* not implemented yet:
+    ENUM_CONE_TYPE_copositiveMatrices,
+    ENUM_CONE_TYPE_completelyPositiveMatrices,
+    ENUM_CONE_TYPE_hyperbolicity,
+    ENUM_CONE_TYPE_nonnegativePolynomials,
+    ENUM_CONE_TYPE_moments,
+*/
+            else if (this->coneType = ENUM_CONE_TYPE_product)
+            {
+                if (this->numberOfFactors != that->numberOfFactors)
+                    return false;
+                for (int i=0; i < numberOfFactors; i++)
+                    if (this->factor[i] != that->factor[i])
+                        return false;
+            }
+            else if (this->coneType = ENUM_CONE_TYPE_intersection)
+            {
+                if (this->numberOfComponents != that->numberOfComponents)
+                    return false;
+                for (int i=0; i < numberOfComponents; i++)
+                    if (this->component[i] != that->component[i])
+                        return false;
+            }
+            else if (this->coneType = ENUM_CONE_TYPE_dual)
+            {
+                if (this->referenceConeIdx != that->referenceConeIdx)
+                    return false;
+            }
+            else if (this->coneType = ENUM_CONE_TYPE_polar)
+            {
+                if (this->referenceConeIdx != that->referenceConeIdx)
+                    return false;
+            }
+            return true;
+#endif
+        }
+    }
+}//Cone::IsEqual
+
+bool QuadraticCone::IsEqual(QuadraticCone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in QuadraticCone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->normFactor != that->normFactor)
+                return false;    
+            if (this->distortionMatrixIdx != that->distortionMatrixIdx)
+                return false;    
+            if (this->axisDirectionIndex != that->axisDirectionIndex)
+                return false;
+
+            return this->Cone::IsEqual(that);
+        }
+    }
+}//QuadraticCone::IsEqual
+
+
+
+bool RotatedQuadraticCone::IsEqual(RotatedQuadraticCone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in RotatedQuadraticCone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->normFactor != that->normFactor)
+                return false;    
+            if (this->distortionMatrixIdx != that->distortionMatrixIdx)
+                return false;    
+            if (this->firstAxisDirectionIndex != that->firstAxisDirectionIndex)
+                return false;
+            if (this->secondAxisDirectionIndex != that->secondAxisDirectionIndex)
+                return false;
+
+            return this->Cone::IsEqual(that);
+        }
+    }
+}//RotatedQuadraticCone::IsEqual
+
+bool SemidefiniteCone::IsEqual(SemidefiniteCone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SemidefiniteCone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->semidefiniteness != that->semidefiniteness)
+                return false;
+
+            return this->Cone::IsEqual(that);
+        }
+    }
+}//SemidefiniteCone::IsEqual
+
+bool ProductCone::IsEqual(ProductCone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ProductCone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->numberOfFactors != that->numberOfFactors)
+                return false;
+            for (int i=0; i < numberOfFactors; i++)
+                if (this->factor[i] != that->factor[i])
+                    return false;
+
+            return this->Cone::IsEqual(that);
+        }
+    }
+}//ProductCone::IsEqual
+
+bool IntersectionCone::IsEqual(IntersectionCone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in IntersectionCone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->numberOfComponents != that->numberOfComponents)
+                return false;
+            for (int i=0; i < numberOfComponents; i++)
+                if (this->component[i] != that->component[i])
+                    return false;
+
+            return this->Cone::IsEqual(that);
+        }
+    }
+}//IntersectionCone::IsEqual
+
+bool DualCone::IsEqual(DualCone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in DualCone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->referenceConeIdx != that->referenceConeIdx)
+                return false;
+
+            return this->Cone::IsEqual(that);
+        }
+    }
+}//DualCone::IsEqual
+
+
+bool PolarCone::IsEqual(PolarCone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in PolarCone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->referenceConeIdx != that->referenceConeIdx)
+                return false;
+
+            return this->Cone::IsEqual(that);
+        }
+    }
+}//PolarCone::IsEqual
+
+
+bool MatrixProgramming::IsEqual(MatrixProgramming *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MatrixProgramming");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_always, "MatrixProgramming: Awaiting implementation");
+#endif
+
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+
+
+
+            return true;
+        }
+    }
+}//MatrixProgramming::IsEqual
 
 

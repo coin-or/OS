@@ -372,6 +372,7 @@ int main(int argC, char* argV[])
     OSmps2OS *mps2osil = NULL;
     DefaultSolver *solver  = NULL;
     OSiLReader *osilreader = NULL;
+    OSiLReader *osilreader2 = NULL;
     OSiLWriter *osilwriter = NULL;
     OSoLReader *osolreader = NULL;
     OSoLReader *osolreader2 = NULL;
@@ -414,7 +415,7 @@ int main(int argC, char* argV[])
 #endif
 
 
-
+// BASIC_TESTS include file-handling, numerical calculations and algorithmic differentiation
 if(BASIC_TESTS == true){
 
     //first make sure we can read files
@@ -446,7 +447,7 @@ if(BASIC_TESTS == true){
         osilwriter = NULL;
     }
     catch(const ErrorClass& eclass){
-        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": Reading from file "  + eclass.errormsg<< endl; 
+        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": Reading from file " + eclass.errormsg << endl; 
         //no point continuing -- we can't even read a file
         unitTestResultFailure << "Since we can't read files we are terminating"  << endl; 
         cout << unitTestResultFailure.str() << endl << endl;
@@ -476,7 +477,6 @@ if(BASIC_TESTS == true){
         osilwriter = new OSiLWriter();
         osilreader = new OSiLReader();
 
-        //mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
         mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
         mps2osil = new OSmps2OS( mpsFileName);
 
@@ -503,7 +503,6 @@ if(BASIC_TESTS == true){
                 theMax = theDiff;
                 theIndex = i;
             }
-            //std::cout << theDiff << std::endl;
         }
         std::cout << "MAXIMUM DIFF = " << theMax << std::endl;
         if(theMax > 0) 
@@ -551,7 +550,7 @@ if(BASIC_TESTS == true){
         ok = true;
         std::string operatorTest =  dataDir  + "osilFiles" + dirsep + "testOperators.osil";
         osil = fileUtil->getFileAsString( operatorTest.c_str() );
-//        cout << "Read testOperators.osil...";
+        cout << "Read testOperators.osil...";
         osinstance = osilreader->readOSiL( osil);
         
         cout << "Done" << endl;
@@ -567,14 +566,10 @@ if(BASIC_TESTS == true){
             std::cout << "   matrix kids = " << postfixVec[i]->inumberOfMatrixChildren << std::endl;
             nodeNames1[i] = postfixVec[i]->getTokenName();
         }
-//        std::cout << std::endl << std::endl;
-//        std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
         // now test value
         x = new double[2];
         x[0] = 1;
         x[1] = 2;
-//        double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
-//        std::cout << "ParserTest Val = " << parserTestVal << std::endl;
         check = 11;
         ok = ( fabs(check -  expTree->m_treeRoot->calculateFunction( x))/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
         delete[] x;
@@ -630,9 +625,6 @@ if(BASIC_TESTS == true){
         is part of the nl node
         */
         osil = fileUtil->getFileAsString( expTreeTest.c_str() );
-        //OSInstance *osinstance = NULL;
-        //osinstance = new OSInstance();
-        //OSiLReader *osilreader = NULL;
         //create an osinstance
         osinstance = osilreader->readOSiL( osil);
         double *x;
@@ -645,21 +637,15 @@ if(BASIC_TESTS == true){
         // get the gradient for constraint 1
         osinstance->getJacobianSparsityPattern();
         sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
-//        for(int i = 0; i < sp->number; i++){
-//            std::cout << "gradient value " << sp->values[i] << std::endl;
-//        }
         ok = true;
         //check gradient for constraint with index 1
         double checkPartial2Con1 = 7.0 ;
-        //ok &= NearEqual( sp->values[ 0], checkPartial2Con1, 1e-10, 1e-10); 
         ok = ( fabs(checkPartial2Con1 - sp->values[ 0] )/(fabs( checkPartial2Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
         if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
         double checkPartial0Con1 = (1./x[0])  ;
-        //ok &= NearEqual(sp->values[ 1], checkPartial0Con1, 1e-10, 1e-10); 
         ok = ( fabs(checkPartial0Con1 - sp->values[ 1] )/(fabs( checkPartial0Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
         if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
         double checkPartial3Con1 = (1./x[3]) ;
-        //ok &= NearEqual( sp->values[ 2], checkPartial3Con1, 1e-10, 1e-10); 
         ok = ( fabs(checkPartial3Con1 - sp->values[ 2] )/(fabs( checkPartial3Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
         if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
         delete sp;
@@ -668,16 +654,10 @@ if(BASIC_TESTS == true){
         // calcuate Hessian of objective function (index = -1)
         osinstance->getLagrangianHessianSparsityPattern( );
         sh = osinstance->calculateHessian(x, -1, true);
-//        for(int i = 0; i < sh->hessDimension; i++){
-//            std::cout << "Hessian value " << sh->hessValues[i] << std::endl;
-//        }
-        //ok &= NearEqual( sh->hessValues[ 0], 2., 1e-10, 1e-10);
         ok = ( fabs(2. - sh->hessValues[0] )/(2. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
         if(ok == false) throw ErrorClass(" Fail testing Hessian calculation"); 
-        //ok &= NearEqual( sh->hessValues[ 1], 0., 1e-10, 1e-10);
         ok = ( fabs(0. - sh->hessValues[ 1] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
         if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-        //ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
         ok = ( fabs(0. - sh->hessValues[2] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
         if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
         delete[] x; 
@@ -705,11 +685,9 @@ if(BASIC_TESTS == true){
 } // end of if (BASIC_TESTS)
 
 
-    //
-    // Now test the parsers --- OSiL parser first
-if (PARSER_TESTS){
-
-//#if 0   //!!!  OSrL parser development
+//  PARSER_TESTS: OSiL, OSoL, OSrL and various set() and get() methods
+if (PARSER_TESTS)
+{
     try{ 
         cout << endl << "TEST " << ++nOfTest << ": Test parsing an OSiL file (parincLinear.osil)" << endl << endl;
 
@@ -761,49 +739,6 @@ if (PARSER_TESTS){
         fileUtil = NULL;
     }    
 
-#if 0
-    if( THOROUGH == true){
-        try{ 
-            cout << endl << "TEST " << ++nOfTest << ": Test parsing another OSiL file (testMatricesAndCones.osil)" << endl << endl;
-
-            fileUtil = new FileUtil();
-            osilreader = new OSiLReader(); 
-            osilwriter = new OSiLWriter();
-    
-            cout << "First read the file into a string" << endl;
-            osilFileName = dataDir  + "osilFiles" + dirsep + "testMatricesAndCones.osil";
-            osil = fileUtil->getFileAsString( osilFileName.c_str());
-            cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
-            osilreader->readOSiL( osil);
-            //cout << osilwriter->writeOSiL( osilreader->readOSiL( osil)) << endl;
-
-            delete osilreader;
-            osilreader = NULL;
-            delete osilwriter;
-            osilwriter = NULL;
-            delete fileUtil;
-            fileUtil = NULL;
-
-            unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem testMatricesAndCones.osil" << std::endl;
-            cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-        }    
-        catch(const ErrorClass& eclass){
-            cout << endl << endl << endl;
-            cout << eclass.errormsg << endl;
-            unitTestResultFailure << "Sorry Unit Test Failed Testing OSiL <matrix> Parser (Test " << nOfTest << ")" << endl;
-
-            if (osilreader != NULL)
-                delete osilreader;
-            osilreader = NULL;
-            if (osilwriter != NULL)
-                delete osilwriter;
-            osilwriter = NULL;
-            if (fileUtil != NULL)
-                delete fileUtil;
-        fileUtil = NULL;
-        }    
-    }
-#endif
 
     // now test the get() and set() methods in OSInstance
     // use get() and set() methods to create a second OSInstance object (deep copy)
@@ -944,8 +879,6 @@ if (PARSER_TESTS){
                 throw ErrorClass("Error duplicating nonlinear expressions");
         }
 
-        // remaining elements have not yet been finalized, so ignore
-
         // now compare the two instances
         if (!osinstance2->IsEqual(osinstance)) throw ErrorClass("Loss of data during duplication");
 
@@ -987,9 +920,72 @@ if (PARSER_TESTS){
         fileUtil = NULL;
     }    
 
+
+// Here we test extensions to the "core": <matrices>, <cones>, stochastic programming, etc.
+    if( THOROUGH == true)
+    {
+        try{ 
+            cout << endl << "TEST " << ++nOfTest << ": Test parsing another OSiL file (testMatricesAndCones.osil)" << endl << endl;
+
+            fileUtil = new FileUtil();
+            osilreader = new OSiLReader(); 
+            osilwriter = new OSiLWriter();
+
+            OSInstance *instance1, *instance2;
+
+            cout << "First read the file into a string" << endl;
+            osilFileName = dataDir  + "osilFiles" + dirsep + "testMatricesAndCones.osil";
+            osil = fileUtil->getFileAsString( osilFileName.c_str());
+            cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
+            instance1 = osilreader->readOSiL( osil);
+
+            cout << "Write the OSInstance object to a temporary file (i.e., string)" << endl;
+            std::string temposil = osilwriter->writeOSiL(instance1);
+
+            std::cout << std::endl << std::endl << "the OSiL string:" << std::endl << temposil << std::endl << std::endl;
+
+            cout << "Parse the temporary string again" << endl;
+            osilreader2 = new OSiLReader;
+            instance2 = osilreader2->readOSiL( temposil);
+
+            cout << "compare the two objects" << endl;
+            if (!instance2->IsEqual(instance1))
+                throw ErrorClass("<matrices> and <cones> not processed correctly");
+            delete osilreader;
+            osilreader = NULL;
+            delete osilreader2;
+            osilreader2 = NULL;
+            delete osilwriter;
+            osilwriter = NULL;
+            delete fileUtil;
+            fileUtil = NULL;
+
+            unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem testMatricesAndCones.osil" << std::endl;
+            cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+        }
+        catch(const ErrorClass& eclass){
+            cout << endl << endl << endl;
+            cout << eclass.errormsg << endl;
+            unitTestResultFailure << "Sorry Unit Test Failed Testing OSiL <matrix> Parser (Test " << nOfTest << ")" << endl;
+
+            if (osilreader != NULL)
+                delete osilreader;
+            osilreader = NULL;
+            if (osilreader2 != NULL)
+                delete osilreader2;
+            osilreader2 = NULL;
+            if (osilwriter != NULL)
+                delete osilwriter;
+            osilwriter = NULL;
+            if (fileUtil != NULL)
+                delete fileUtil;
+        fileUtil = NULL;
+        }    
+    }
+
+
 #if 0
-    //
-    // Now test the extensions to the OSiL format: <timeDomain>, etc.
+    // Now test the extensions to the OSiL format: <timeDomain> and stochastic programming
 
     // some pointer declarations
     std::string *sncheck = new std::string[6];
@@ -2536,7 +2532,7 @@ if (PARSER_TESTS){
 
     // Now test the deep copy of an OSOption object
 
-    OSOption *osoption2 = NULL;
+    /*OSOption * */ osoption2 = NULL;
 
     try{ 
         cout << endl << "TEST " << ++nOfTest << ": Test deep copy of OSOption object" << endl << endl;
@@ -5761,8 +5757,9 @@ if (PARSER_TESTS){
         delete fileUtil;
         fileUtil = NULL;
 
-
-/*        // now a second example
+if (THOROUGH)
+{
+        // now a second example -- this one has errors. Make sure they are reported correctly
         cout << endl << "Test parsing another OSrL file" << endl;
         osrlwriter = new OSrLWriter();
         osrlreader = new OSrLReader();
@@ -5783,250 +5780,7 @@ if (PARSER_TESTS){
         osrlwriter = NULL;
         delete osrlreader;
         osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest1.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest1.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest2.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest2.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest3.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest3.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest4.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest4.osrl"; 
-        start = clock();
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest5.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest5.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest6.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest6.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest7.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest7.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest8.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest8.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-        // ... and another
-        cout << endl << "parserTest9.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest9.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-
-
-
-
-        // ... last file...
-        cout << endl << "parserTest10.osrl" << endl;
-        osrlwriter = new OSrLWriter();
-        osrlreader = new OSrLReader();
-        cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-        //errorExample.osrl -- check to see if we read an error message correctly;
-        osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest10.osrl"; 
-        osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
-        finish = clock();
-        duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        cout << "Reading the file into a string took (seconds): "<< duration << endl;
-        cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osresult = osrlreader->readOSrL( osrl);
-        cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
-        tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-        delete osrlreader;
-        osrlreader = new OSrLReader();
-        cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-        osrlreader->readOSrL( tmpOSrL);
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete osrlreader;
-        osrlreader = NULL;
-*/
+}
         unitTestResult << 
              "TEST " << nOfTest << ": Successful test of OSrL parser on file parserTest.osrl" 
               << std::endl;

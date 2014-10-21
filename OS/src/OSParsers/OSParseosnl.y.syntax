@@ -514,7 +514,10 @@ matrixLowerTriangleStart: MATRIXLOWERTRIANGLESTART
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixLowerTriangleAttribute: | includeDiagonalATT;
+matrixLowerTriangleAttribute: | includeDiagonalATT
+{
+    ((OSnLMNodeMatrixLowerTriangle*)osnlData->nlNodeVec.back())->includeDiagonal = osnlData->includeDiagonalAttribute;
+};
 
 matrixLowerTriangleContent: OSnLMNode MATRIXLOWERTRIANGLEEND;
 
@@ -526,7 +529,10 @@ matrixUpperTriangleStart: MATRIXUPPERTRIANGLESTART
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixUpperTriangleAttribute: | includeDiagonalATT;
+matrixUpperTriangleAttribute: | includeDiagonalATT
+{
+    ((OSnLMNodeMatrixUpperTriangle*)osnlData->nlNodeVec.back())->includeDiagonal = osnlData->includeDiagonalAttribute;
+};
 
 matrixUpperTriangleContent: OSnLMNode MATRIXUPPERTRIANGLEEND;
 
