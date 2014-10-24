@@ -602,6 +602,9 @@ public:
     /** The type of the cone */
     ENUM_CONE_TYPE coneType;
 
+    /** The cone can have a name for easier identification */
+    std::string name;
+
     /** cones are referenced by an (automatically created) index */
     int idx;
 
@@ -609,6 +612,15 @@ public:
      * @return the type of cone as a string
      */
     virtual std::string getConeName();
+
+    /**
+     * Write a Cone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML() = 0;
+
 
     /**
      * A function to check for the equality of two objects
@@ -660,6 +672,14 @@ public:
     virtual std::string getConeName();
 
     /**
+     * Write a NonnegativeCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
+
+    /**
      * A function to check for the equality of two objects
      */
     bool IsEqual(NonnegativeCone *that);
@@ -708,6 +728,14 @@ public:
      * @return the type of cone as a string
      */
     virtual std::string getConeName();
+
+    /**
+     * Write a NonpositiveCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
 
     /**
      * A function to check for the equality of two objects
@@ -766,6 +794,14 @@ public:
      * @return the type of cone as a string
      */
     virtual std::string getConeName();
+
+    /**
+     * Write an OrthantCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    //virtual std::string getConeInXML();
 
     /**
      * A function to check for the equality of two objects
@@ -832,7 +868,7 @@ public:
      *  x0 >= p (x1, x2, ...) M (x1, x2, ...)'
      *  @default: k= 1, M = -1.
      */
-    double normFactor;
+    double normScaleFactor;
     int distortionMatrixIdx;
 
     /** The index of the first component can be changed
@@ -844,12 +880,20 @@ public:
      *  and so on for higher dimensions (if any)
      *  (@default: 0)
      */
-    int axisDirectionIndex;
+    int axisDirection;
 
     /**
      * @return the type of cone as a string
      */
     virtual std::string getConeName();
+
+    /**
+     * Write a QuadraticCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
 
     /**
      * A function to check for the equality of two objects
@@ -915,7 +959,7 @@ public:
      *  x0x1 >= p (x2, x3, ...) M (x2, x3, ...)'
      *  @default: k= 1, M = -1.
      */
-    double normFactor;
+    double normScaleFactor;
     int distortionMatrixIdx;
 
     /** The indices of the first two component can be changed
@@ -927,13 +971,21 @@ public:
      *  and so on for higher dimensions (if any)
      *  @default: i0 = 0, i1 = 1.
      */
-    int firstAxisDirectionIndex;
-    int secondAxisDirectionIndex;
+    int firstAxisDirection;
+    int secondAxisDirection;
 
     /**
      * @return the type of cone as a string
      */
     virtual std::string getConeName();
+
+    /**
+     * Write a RotatedQuadraticCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
 
     /**
      * A function to check for the equality of two objects
@@ -1000,12 +1052,20 @@ public:
     std::string semidefiniteness;
 
     /** information about semidefiniteness is also tracked in a boolean variable */
-    bool isPosSemiDefinite;
+    bool isPositiveSemiDefinite;
 
     /**
      * @return the type of cone as a string
      */
     virtual std::string getConeName();
+
+    /**
+     * Write a SemidefiniteCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
 
     /**
      * A function to check for the equality of two objects
@@ -1073,15 +1133,22 @@ public:
     int idx;
 
     /** the list of "factors" contributing to the product 
-     *  each factor contains a refrence to a previously defined cone
+     *  each factor contains a reference to a previously defined cone
      */
-    int numberOfFactors;
-    int* factor;
+    IntVector* factors;
 
     /**
      * @return the type of cone as a string
      */
     virtual std::string getConeName();
+
+    /**
+     * Write a ProductCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
 
     /**
      * A function to check for the equality of two objects
@@ -1098,8 +1165,6 @@ public:
      * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
      */
     bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-
 
 
     /**
@@ -1144,15 +1209,22 @@ public:
     int idx;
 
     /** the list of components contributing to the intersection 
-     *  each component contains a refrence to a previously defined cone
+     *  each component contains a reference to a previously defined cone
      */
-    int numberOfComponents;
-    int* component;
+    IntVector* components;
 
     /**
      * @return the type of cone as a string
      */
     virtual std::string getConeName();
+
+    /**
+     * Write an IntersectionCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
 
     /**
      * A function to check for the equality of two objects
@@ -2488,6 +2560,7 @@ private:
     /**
      * m_mapExpressionTreesInPostfix holds a hash map of expression trees in postfix format, with the key being the row index
      * and value being the expression tree representing the nonlinear expression of that row.
+
      */
     std::map<int, std::vector<OSnLNode*> > m_mapExpressionTreesInPostfix ;
 

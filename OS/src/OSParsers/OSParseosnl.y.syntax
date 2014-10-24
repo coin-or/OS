@@ -458,11 +458,14 @@ matrixReferenceStart: MATRIXREFERENCESTART
 matrixreferenceend: ENDOFELEMENT
            | GREATERTHAN MATRIXREFERENCEEND;
                            
-matrixIdxATT: IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+matrixIdxATT: IDXATT QUOTE INTEGER QUOTE 
+{
+    if ( *$2 != *$4 )
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= osglData->numberOfMatrices){
-         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "matrix index exceeds number of matrices");
-     }
+    if( $3 >= osglData->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "matrix index exceeds number of matrices");
+    
 }; 
 
 

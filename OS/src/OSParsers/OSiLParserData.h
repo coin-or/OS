@@ -234,6 +234,7 @@ public:
     bool numberOfMatricesPresent; 
     bool numberOfConesPresent; 
     int  numberOfCones;
+    int  coneCounter;
     bool numberOfRowsPresent; 
     int  numberOfRows;
     bool numberOfColumnsPresent; 
@@ -241,6 +242,7 @@ public:
 
     int  numberOfEl;
     int  numberOf;
+    int  elCounter;
 
     bool namePresent;
     std::string name;

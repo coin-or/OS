@@ -21,6 +21,7 @@
 #include "OSErrorClass.h"
 #include "OSParameters.h"
 #include "OSOutput.h"
+#include "OSgLWriter.h"
 
 #include <cstdlib>
 #include <stack>
@@ -902,12 +903,40 @@ Cone::~Cone()
 std::string Cone::getConeName()
 {
     return "genericCone";
-}// end NonnegativeCone::getConeName()
+}// end Cone::getConeName()
+
+NonnegativeCone::NonnegativeCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the NonnegativeCone Constructor");
+#endif
+}//end NonnegativeCone()
+
+NonnegativeCone::~NonnegativeCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the NonnegativeCone Destructor");
+#endif
+}//end ~NonnegativeCone()
 
 std::string NonnegativeCone::getConeName()
 {
     return "nonnegativeCone";
 }// end NonnegativeCone::getConeName()
+
+NonpositiveCone::NonpositiveCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the NonpositiveCone Constructor");
+#endif
+}//end NonnegativeCone()
+
+NonpositiveCone::~NonpositiveCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the NonpositiveCone Destructor");
+#endif
+}//end ~NonpositiveCone()
 
 std::string NonpositiveCone::getConeName()
 {
@@ -915,8 +944,8 @@ std::string NonpositiveCone::getConeName()
 }// end NonpositiveCone::getConeName()
 
 OrthantCone::OrthantCone():
-    lb(NULL),
-    ub(NULL)
+    ub(NULL),
+    lb(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OrthantCone Constructor");
@@ -928,15 +957,15 @@ OrthantCone::~OrthantCone()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OrthantCone Destructor");
 #endif
-    if(lb != NULL)
-    {
-        delete[] lb;
-        lb = NULL;
-    }
     if(ub != NULL)
     {
         delete[] ub;
         ub = NULL;
+    }
+    if(lb != NULL)
+    {
+        delete[] lb;
+        lb = NULL;
     }
 }//end ~OrthantCone()
 
@@ -946,9 +975,9 @@ std::string OrthantCone::getConeName()
 }// end OrthantCone::getConeName()
 
 QuadraticCone::QuadraticCone():
-    normFactor(1.0),
+    normScaleFactor(1.0),
     distortionMatrixIdx(-1),
-    axisDirectionIndex(0)
+    axisDirection(0)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the QuadraticCone Constructor");
@@ -969,10 +998,10 @@ std::string QuadraticCone::getConeName()
 
 
 RotatedQuadraticCone::RotatedQuadraticCone():
-    normFactor(1.0),
+    normScaleFactor(1.0),
     distortionMatrixIdx(-1),
-    firstAxisDirectionIndex(0),
-    secondAxisDirectionIndex(1)
+    firstAxisDirection(0),
+    secondAxisDirection(1)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the RotatedQuadraticCone Constructor");
@@ -994,7 +1023,7 @@ std::string RotatedQuadraticCone::getConeName()
 
 SemidefiniteCone::SemidefiniteCone():
     semidefiniteness("positive"),
-    isPosSemiDefinite(true)
+    isPositiveSemiDefinite(true)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the SemidefiniteCone Constructor");
@@ -1015,8 +1044,7 @@ std::string SemidefiniteCone::getConeName()
 
 
 ProductCone::ProductCone():
-    numberOfFactors(0),
-    factor(NULL)
+    factors(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ProductCone Constructor");
@@ -1028,6 +1056,9 @@ ProductCone::~ProductCone()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ProductCone Destructor");
 #endif
+    if (factors != NULL)
+        delete factors;
+    factors = NULL;
 }//end ~ProductCone()
 
 std::string ProductCone::getConeName()
@@ -1037,8 +1068,7 @@ std::string ProductCone::getConeName()
 
 
 IntersectionCone::IntersectionCone():
-    numberOfComponents(0),
-    component(NULL)
+    components(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the IntersectionCone Constructor");
@@ -1050,6 +1080,9 @@ IntersectionCone::~IntersectionCone()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the IntersectionCone Destructor");
 #endif
+    if (components != NULL)
+        delete components;
+    components = NULL;
 }//end ~IntersectionCone()
 
 std::string IntersectionCone::getConeName()
@@ -2579,6 +2612,7 @@ int OSInstance::getNumberOfNonlinearObjectives()
 {
     if( m_bProcessExpressionTrees == false )
         getAllNonlinearExpressionTrees();
+
     return m_iObjectiveNumberNonlinear;
 }//getNumberOfNonlinearObjectivess
 
@@ -6215,6 +6249,7 @@ bool OSInstance::setTimeDomainStageObjectivesOrdered(int numberOfStages, int *nu
     if (instanceData->timeDomain->interval != NULL)
         return false;
     if (instanceData->timeDomain->stages == NULL)
+
         instanceData->timeDomain->stages = new TimeDomainStages();
     if (instanceData->timeDomain->stages != NULL)
     {
@@ -6498,6 +6533,132 @@ int  OSInstance::getADSparsityHessian()
     }
 }//end getADSparsityHessian()
 
+
+/***************************************************
+ * methods to print out cone objects as XML strings
+ ***************************************************/
+std::string Cone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<cone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    outStr << "/>" << std::endl;   
+    return outStr.str();
+}// end of Cone::getConeInXML()
+
+std::string NonnegativeCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<nonnegativeCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    outStr << "/>" << std::endl;   
+    return outStr.str();
+}// end of NonnegativeCone::getConeInXML()
+
+std::string NonpositiveCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<nonpositiveCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    outStr << "/>" << std::endl;   
+    return outStr.str();
+}// end of NonpositiveCone::getConeInXML()
+
+std::string QuadraticCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<quadraticCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    if (normScaleFactor != 1.0)
+        outStr << " normScaleFactor=\"" << normScaleFactor << "\"";
+    if (distortionMatrixIdx != -1)
+        outStr << " distortionMatrixIdx=\"" << distortionMatrixIdx << "\"";
+    if (axisDirection != 0)
+        outStr << " axisDirection=\"" << axisDirection << "\"";
+    outStr << "/>" << std::endl;   
+    return outStr.str();
+}// end of QuadraticCone::getConeInXML()
+
+std::string RotatedQuadraticCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<rotatedQuadraticCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    if (normScaleFactor != 1.0)
+        outStr << " normScaleFactor=\"" << normScaleFactor << "\"";
+    if (distortionMatrixIdx != -1)
+        outStr << " distortionMatrixIdx=\"" << distortionMatrixIdx << "\"";
+    if (firstAxisDirection != 0)
+        outStr << " firstAxisDirection=\"" << firstAxisDirection << "\"";
+    if (secondAxisDirection != 1)
+        outStr << " secondAxisDirection=\"" << secondAxisDirection << "\"";
+    outStr << "/>" << std::endl;   
+    return outStr.str();
+}// end of RotatedQuadraticCone::getConeInXML()
+
+std::string SemidefiniteCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<semidefiniteCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (semidefiniteness != "positive")
+        outStr << " semidefiniteness=\"" << semidefiniteness << "\"";
+    outStr << "/>" << std::endl;
+
+    return outStr.str();
+}// end of SemidefiniteCone::getConeInXML()
+
+std::string ProductCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<productCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    outStr << ">" << std::endl;
+
+    outStr << "<factors numberOfEl=\"" << factors->numberOfEl << "\">" << std::endl;
+    outStr << writeIntVectorData(factors, true, false);
+    outStr << "</factors>" << std::endl;
+
+    outStr << "</productCone>" << std::endl;
+    return outStr.str();
+}// end of ProductCone::getConeInXML()
+
+std::string IntersectionCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<intersectionCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    outStr << ">" << std::endl;
+
+    outStr << "<components numberOfEl=\"" << components->numberOfEl << "\">";
+    outStr << writeIntVectorData(components, true, false);
+    outStr << "</components>" << std::endl;
+
+    outStr << "</intersectionCone>" << std::endl;
+    return outStr.str();
+}// end of IntersectionCone::getConeInXML()
 
 
 /***************************************************
@@ -7228,8 +7389,6 @@ bool Cone::IsEqual(Cone *that)
         }
         else
         {
-#if 0
-            // first check the elements common to all cone types
             if (this->coneType != that->coneType)
                 return false;
             if (this->numberOfColumns != that->numberOfColumns)
@@ -7241,86 +7400,9 @@ bool Cone::IsEqual(Cone *that)
             for (int i=0; i<this->numberOfOtherIndexes; i++)
                 if (this->otherIndexes[i] != that->otherIndexes[i])
                     return false;
-
-            // next check for specific cone elements
-/* not implemented yet
-            if (this->coneType = ENUM_CONE_TYPE_orthant)
-            {
-                if (!this->ub->IsEqual(that->ub))
-                    return false;    
-                if (!this->lb->IsEqual(that->lb))
-                    return false;    
-            }
-*/
-            else if (this->coneType = ENUM_CONE_TYPE_quadratic)
-            {
-                if ((quadraticCone*)this->normFactor != (quadraticCone*)that->normFactor)
-                    return false;    
-                if ((quadraticCone*)this->distortionMatrixIdx != (quadraticCone*)that->distortionMatrixIdx)
-                    return false;    
-                if ((quadraticCone*)this->axisDirectionIndex != (quadraticCone*)that->axisDirectionIndex)
-                    return false;
-            }
-            else if (this->coneType = ENUM_CONE_TYPE_rotatedQuadratic)
-            {
-                if (this->normFactor != that->normFactor)
-                    return false;
-                if (this->distortionMatrixIdx != that->distortionMatrixIdx)
-                    return false;
-                if (this->firstAxisDirectionIndex != that->firstAxisDirectionIndex)
-                    return false;
-                if (this->secondAxisDirectionIndex != that->secondAxisDirectionIndex)
-                    return false;
-            }
-/* not implemented yet
-            else if (this->coneType = ENUM_CONE_TYPE_normed)
-            {
-
-            }
-*/
-            else if (this->coneType = ENUM_CONE_TYPE_semidefinite)
-            {
-                if (this->semidefiniteness != that->semidefiniteness)
-                    return false;
-            }
-
-/* not implemented yet:
-    ENUM_CONE_TYPE_copositiveMatrices,
-    ENUM_CONE_TYPE_completelyPositiveMatrices,
-    ENUM_CONE_TYPE_hyperbolicity,
-    ENUM_CONE_TYPE_nonnegativePolynomials,
-    ENUM_CONE_TYPE_moments,
-*/
-            else if (this->coneType = ENUM_CONE_TYPE_product)
-            {
-                if (this->numberOfFactors != that->numberOfFactors)
-                    return false;
-                for (int i=0; i < numberOfFactors; i++)
-                    if (this->factor[i] != that->factor[i])
-                        return false;
-            }
-            else if (this->coneType = ENUM_CONE_TYPE_intersection)
-            {
-                if (this->numberOfComponents != that->numberOfComponents)
-                    return false;
-                for (int i=0; i < numberOfComponents; i++)
-                    if (this->component[i] != that->component[i])
-                        return false;
-            }
-            else if (this->coneType = ENUM_CONE_TYPE_dual)
-            {
-                if (this->referenceConeIdx != that->referenceConeIdx)
-                    return false;
-            }
-            else if (this->coneType = ENUM_CONE_TYPE_polar)
-            {
-                if (this->referenceConeIdx != that->referenceConeIdx)
-                    return false;
-            }
-            return true;
-#endif
         }
     }
+    return true;
 }//Cone::IsEqual
 
 bool QuadraticCone::IsEqual(QuadraticCone *that)
@@ -7353,11 +7435,11 @@ bool QuadraticCone::IsEqual(QuadraticCone *that)
         }
         else
         {
-            if (this->normFactor != that->normFactor)
+            if (this->normScaleFactor != that->normScaleFactor)
                 return false;    
             if (this->distortionMatrixIdx != that->distortionMatrixIdx)
                 return false;    
-            if (this->axisDirectionIndex != that->axisDirectionIndex)
+            if (this->axisDirection != that->axisDirection)
                 return false;
 
             return this->Cone::IsEqual(that);
@@ -7397,13 +7479,13 @@ bool RotatedQuadraticCone::IsEqual(RotatedQuadraticCone *that)
         }
         else
         {
-            if (this->normFactor != that->normFactor)
+            if (this->normScaleFactor != that->normScaleFactor)
                 return false;    
             if (this->distortionMatrixIdx != that->distortionMatrixIdx)
                 return false;    
-            if (this->firstAxisDirectionIndex != that->firstAxisDirectionIndex)
+            if (this->firstAxisDirection != that->firstAxisDirection)
                 return false;
-            if (this->secondAxisDirectionIndex != that->secondAxisDirectionIndex)
+            if (this->secondAxisDirection != that->secondAxisDirection)
                 return false;
 
             return this->Cone::IsEqual(that);
@@ -7443,10 +7525,10 @@ bool SemidefiniteCone::IsEqual(SemidefiniteCone *that)
         {
             if (this->semidefiniteness != that->semidefiniteness)
                 return false;
-
             return this->Cone::IsEqual(that);
         }
     }
+    return true;
 }//SemidefiniteCone::IsEqual
 
 bool ProductCone::IsEqual(ProductCone *that)
@@ -7479,15 +7561,12 @@ bool ProductCone::IsEqual(ProductCone *that)
         }
         else
         {
-            if (this->numberOfFactors != that->numberOfFactors)
+            if (!this->factors->IsEqual(that->factors))
                 return false;
-            for (int i=0; i < numberOfFactors; i++)
-                if (this->factor[i] != that->factor[i])
-                    return false;
-
             return this->Cone::IsEqual(that);
         }
     }
+    return true;
 }//ProductCone::IsEqual
 
 bool IntersectionCone::IsEqual(IntersectionCone *that)
@@ -7520,15 +7599,12 @@ bool IntersectionCone::IsEqual(IntersectionCone *that)
         }
         else
         {
-            if (this->numberOfComponents != that->numberOfComponents)
+            if (!this->components->IsEqual(that->components))
                 return false;
-            for (int i=0; i < numberOfComponents; i++)
-                if (this->component[i] != that->component[i])
-                    return false;
-
             return this->Cone::IsEqual(that);
         }
     }
+    return true;
 }//IntersectionCone::IsEqual
 
 bool DualCone::IsEqual(DualCone *that)

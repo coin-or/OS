@@ -585,7 +585,49 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                 outStr << m_OSInstance->instanceData->matrices->matrix[i]->getMatrixNodeInXML();  
             }
             if( m_bWhiteSpace == true) outStr << endl;
-            outStr << "</matrices>";
+            outStr << "</matrices>" << endl;
+        }
+        // Now the cones element
+        if(m_OSInstance->instanceData->cones != NULL && m_OSInstance->instanceData->cones->numberOfCones > 0)
+        {
+            outStr << "<cones";
+            outStr << " numberOfCones=\"";
+            outStr << m_OSInstance->instanceData->cones->numberOfCones ;
+            outStr << "\"" ;
+            outStr << ">" ;
+            if( m_bWhiteSpace == true) outStr << endl;
+            for (i = 0; i < m_OSInstance->instanceData->cones->numberOfCones;i++)
+            {
+                if (m_OSInstance->instanceData->cones->cone[i] != NULL)
+                {
+                    switch ( m_OSInstance->instanceData->cones->cone[i]->coneType )
+                    {
+                        case ENUM_CONE_TYPE_nonnegative: 
+                            outStr << ((NonnegativeCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
+                            break;
+                        case ENUM_CONE_TYPE_nonpositive: 
+                            outStr << ((NonpositiveCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
+                            break;
+                        case ENUM_CONE_TYPE_quadratic: 
+                            outStr << ((QuadraticCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
+                            break;
+                        case ENUM_CONE_TYPE_rotatedQuadratic: 
+                            outStr << ((RotatedQuadraticCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
+                            break;
+                        case ENUM_CONE_TYPE_semidefinite: 
+                            outStr << ((SemidefiniteCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
+                            break;
+                        case ENUM_CONE_TYPE_product: 
+                            outStr << ((ProductCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
+                            break;
+                        case ENUM_CONE_TYPE_intersection: 
+                            outStr << ((IntersectionCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
+                            break;
+                    }
+                }
+            }
+            if( m_bWhiteSpace == true) outStr << endl;
+            outStr << "</cones>" << endl;
         }
         if( m_bWhiteSpace == true) outStr << endl;
     } // end instanceData if

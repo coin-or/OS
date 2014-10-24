@@ -75,12 +75,14 @@ $(srcdir)/OSParseosil.y: \
 		$(srcdir)/OSParseosgl.y.syntax \
 		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosil.y.3
+	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosil.y.2      >osiltemp.tmp
 	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
 	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 	cat $(srcdir)/OSParseosil.y.1 \
 		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
-		$(srcdir)/OSParseosil.y.2 osgltemp.tmp osnltemp.tmp \
+		osiltemp.tmp osgltemp.tmp osnltemp.tmp \
 		$(srcdir)/OSParseosil.y.3 >$(srcdir)/OSParseosil.y
+	rm -f osiltemp.tmp
 	rm -f osgltemp.tmp
 	rm -f osnltemp.tmp
 endif
@@ -116,12 +118,14 @@ $(srcdir)/OSParseosol.y: \
 		$(srcdir)/OSParseosgl.y.syntax \
 		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosol.y.3
+	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosol.y.2      >osoltemp.tmp
 	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
 	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 	cat $(srcdir)/OSParseosol.y.1 \
 		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
-		$(srcdir)/OSParseosol.y.2 osgltemp.tmp osnltemp.tmp \
+		osoltemp.tmp osgltemp.tmp osnltemp.tmp \
 		$(srcdir)/OSParseosol.y.3 >$(srcdir)/OSParseosol.y
+	rm -f osoltemp.tmp
 	rm -f osgltemp.tmp
 	rm -f osnltemp.tmp
 endif
@@ -157,12 +161,14 @@ $(srcdir)/OSParseosrl.y: \
 		$(srcdir)/OSParseosgl.y.syntax \
 		$(srcdir)/OSParseosnl.y.syntax \
 		$(srcdir)/OSParseosrl.y.3
+	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosrl.y.2      >osrltemp.tmp
 	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
 	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
 	cat $(srcdir)/OSParseosrl.y.1 \
 		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
-		$(srcdir)/OSParseosrl.y.2 osgltemp.tmp osnltemp.tmp \
+		osrltemp.tmp osgltemp.tmp osnltemp.tmp \
 		$(srcdir)/OSParseosrl.y.3 >$(srcdir)/OSParseosrl.y
+	rm -f osrltemp.tmp
 	rm -f osgltemp.tmp
 	rm -f osnltemp.tmp
 endif

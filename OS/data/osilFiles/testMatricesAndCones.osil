@@ -1104,7 +1104,6 @@
                 </elements>
             </matrix>
         </matrices>
-<!--
         <cones numberOfCones="10">
             <nonnegativeCone numberOfColumns="2" numberOfRows="2"></nonnegativeCone>
             <nonpositiveCone numberOfColumns="2" numberOfRows="2"/>
@@ -1114,12 +1113,12 @@
             <rotatedQuadraticCone numberOfColumns="2" numberOfRows="2" distortionMatrixIdx="6" normScaleFactor="2.0" firstAxisDirection="1"  secondAxisDirection="2"/>
             <semidefiniteCone numberOfColumns="2" numberOfRows="2"></semidefiniteCone>
             <semidefiniteCone numberOfColumns="4" numberOfRows="4"></semidefiniteCone>
-<!- - leave out for the moment
+<!-- leave out for the moment
             <generalOrthantCone numberOfColumns="1" numberOfRows="5">
                 <direction ub="INF" lb="0" mult="3"></direction>
                 <direction lb="-INF" ub="0" mult="2"/>
             </generalOrthantCone>
-- ->
+-->
             <productCone numberOfColumns="2" numberOfRows="10">
                 <factors numberOfEl="2">
                     <el mult="2" incr="1">2</el>
@@ -1133,7 +1132,7 @@
                 </components>
             </intersectionCone>
         </cones>
-<!- -
+<!--
         <matrixProgramming>
             <matrixVariables numberOfMatrixVar="9">
                 <matrixVar numberOfRows="2" numberOfColumns="2" lbConeIdx="0"></matrixVar>

@@ -1445,7 +1445,7 @@ public:
      */
     std::vector<MatrixNode*> getPrefixFromNodeTree();
 
-    /**
+    /*
      * <p>
      * Called by getPrefixFromNodeTree().  
      * This method calls itself recursively and
@@ -2279,14 +2279,14 @@ class MatrixBlock; //forward desclaration
 /*! \class MatrixBlocks
  * \brief a data structure to represent the nonzeroes of a matrix 
  *  in a blockwise fashion. Each block can be given elementwise, 
- *  through transformation, or nested blocks, and so on, recursively.
+ *  through transformation, or by nested blocks, and so on, recursively.
  */
 class MatrixBlocks : public MatrixConstructor
 {
 public:
     /**
      *  An array listing the leftmost column of each block within the larger matrix
-     *  It is assumed thst the blocks are neatly "stacked"
+     *  It is assumed that the blocks are neatly "stacked"
      */
     IntVector *colOffsets;
 

@@ -86,8 +86,8 @@ public:
     bool ignoreDataAfterErrors;
     bool suppressFurtherErrorMessages;
 
-    /** We need to hold a <matrix> element temporarily */
-    OSMatrix* matrix;
+    /** We need to hold an array of <matrix> elements temporarily */
+    OSMatrix** matrix;
 
     /** We also need to keep track locally of the number of matrices */
     int numberOfMatrices;

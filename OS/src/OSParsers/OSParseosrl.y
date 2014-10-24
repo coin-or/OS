@@ -4328,7 +4328,7 @@ fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
  *  ==========================================================================
  */
 
-osglIntArrayData: 
+osglIntArrayData:
     osglIntVectorElArray 
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
@@ -4558,17 +4558,18 @@ osglSparseIntVectorValues:  VALUESSTART  GREATERTHAN osglIntVectorElArray VALUES
  */
 osglMatrix: matrixStart matrixAttributes matrixContent
 {
-//	IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
-    osinstance->instanceData->matrices->matrix[osglData->matrixCounter] = 
+//  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osglData->matrix[osglData->matrixCounter] = 
         ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
-    osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
     osglData->matrixCounter++;
 };
  
 matrixStart: MATRIXSTART
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more matrices than specified");
+
     osglData->symmetryAttributePresent = false;
     osglData->matrixTypeAttributePresent = false;
     osglData->numberOfRowsAttributePresent = false;
@@ -4725,8 +4726,7 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
     if ($3 > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
     ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
-        mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
-                   osinstance->instanceData->matrices->matrix[$3]->matrixType);
+        mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType, osglData->matrix[$3]->matrixType);
     osglData->baseMatrixIdxAttributePresent = true;   
     osglData->baseMatrixIdxAttribute = $3; 
 };
@@ -4848,10 +4848,7 @@ matrixConstructorList: | matrixConstructorList matrixConstructor
 
 matrixConstructor: matrixElements | matrixTransformation | matrixBlocks;
 
-matrixElements: matrixElementsStart /*matrixElementsAttributes*/ matrixElementsContent
-{
-//    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
-};
+matrixElements: matrixElementsStart matrixElementsContent;
 
 
 matrixElementsStart: ELEMENTSSTART
@@ -6053,7 +6050,6 @@ colOffsetsNumberOfElAttribute: osglNumberOfElATT
 {
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-//    osglData->matrixBlockNumberOfCols = new int[osglData->osglNumberOfEl]; //valgrind: this leaks 48 bytes of memory
 }; 
 
 colOffsetsContent: colOffsetsEmpty | colOffsetsLaden;
@@ -6753,11 +6749,14 @@ matrixReferenceStart: MATRIXREFERENCESTART
 matrixreferenceend: ENDOFELEMENT
            | GREATERTHAN MATRIXREFERENCEEND;
                            
-matrixIdxATT: IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+matrixIdxATT: IDXATT QUOTE INTEGER QUOTE 
+{
+    if ( *$2 != *$4 )
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= osglData->numberOfMatrices){
-         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
-     }
+    if( $3 >= osglData->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
+    
 }; 
 
 

@@ -488,35 +488,27 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 matrices: | matricesStart matricesAttributes matricesContent
 {
-    if (osglData->matrixCounter < osglData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer matrices than specified");
+    if (osglData->matrixCounter < osglData->numberOfMatrices) parserData->parser_errors += 
+        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer matrices than specified");
+    osinstance->instanceData->matrices->numberOfMatrices = osglData->numberOfMatrices;
+    osinstance->instanceData->matrices->matrix = osglData->matrix;
 };
 
-matricesStart: MATRICESSTART
-{
-//    osinstance->instanceData->matrices = new Matrices();
-};
+matricesStart: MATRICESSTART;
 
 matricesAttributes: osilNumberOfMatricesATT
 {
-    osinstance->instanceData->matrices->numberOfMatrices = osglData->numberOfMatrices;
-    if (osglData->numberOfMatrices < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices cannot be negative");
+    if (osglData->numberOfMatrices < 0) parserData->parser_errors +=
+        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices cannot be negative");
     else
-    {
-        osinstance->instanceData->matrices->matrix = new OSMatrix*[osglData->numberOfMatrices];
-//        for (int i=0; i < osglData->numberOfMatrices; i++)
-//            osinstance->instanceData->matrices->matrix[i] = new OSMatrix();
-    }
+        osglData->matrix = new OSMatrix*[osglData->numberOfMatrices];
 };
 
 matricesContent: matricesEmpty | matricesLaden;
 
 matricesEmpty: ENDOFELEMENT;
 
-matricesLaden: GREATERTHAN matrixList MATRICESEND
-{
-};
+matricesLaden: GREATERTHAN matrixList MATRICESEND;
 
 /**
  *  Note: A matrix is essentially a list of constructors.
@@ -526,11 +518,24 @@ matricesLaden: GREATERTHAN matrixList MATRICESEND
 matrixList: | matrixList osglMatrix;
 
 
-cones: | conesStart conesAttributes conesContent;
+cones: | conesStart conesAttributes conesContent
+{
+    if (parserData->coneCounter < parserData->numberOfCones) parserData->parser_errors += 
+        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer cones than specified");
+};
 
-conesStart: CONESSTART;
+conesStart: CONESSTART
+{
+    parserData->coneCounter = 0;
+};
 
-conesAttributes: osilNumberOfConesATT;
+conesAttributes: osilNumberOfConesATT
+{
+    if (parserData->numberOfCones < 0) parserData->parser_errors +=
+        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfCones cannot be negative");
+    else
+        osinstance->instanceData->cones->cone = new Cone*[parserData->numberOfCones];
+};
 
 conesContent: conesEmpty | conesLaden;
 
@@ -542,7 +547,8 @@ conesLaden: GREATERTHAN coneList CONESEND
 
 coneList: | coneList cone
 {
-std::cout << "finished next cone " << std::endl;
+    parserData->coneCounter++;
+    osinstance->instanceData->cones->numberOfCones = parserData->coneCounter;
 };
 
 cone: nonnegativeCone
@@ -571,6 +577,8 @@ nonnegativeConeStart: NONNEGATIVECONESTART
     parserData->numberOfRowsPresent = false;
     parserData->numberOfColumnsPresent = false;
     parserData->namePresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new NonnegativeCone();
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_nonnegative;    
 };
 
 nonnegativeConeAttributes: nonnegativeConeAttList;
@@ -579,8 +587,19 @@ nonnegativeConeAttList: | nonnegativeConeAttList nonnegativeConeAtt;
 
 nonnegativeConeAtt: 
       osilNumberOfRowsATT
+        {
+            ((NonnegativeCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = parserData->numberOfRows;
+        }
     | osilNumberOfColumnsATT
-    | osilNameATT;
+        {
+            ((NonnegativeCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = parserData->numberOfColumns;
+        }
+    | osilNameATT
+        {
+            ((NonnegativeCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = parserData->name;
+        };
 
 nonnegativeConeEnd: ENDOFELEMENT | GREATERTHAN NONNEGATIVECONEEND;
 
@@ -591,6 +610,8 @@ nonpositiveConeStart: NONPOSITIVECONESTART
     parserData->numberOfRowsPresent = false;
     parserData->numberOfColumnsPresent = false;
     parserData->namePresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new NonpositiveCone();    
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_nonpositive;    
 };
 
 nonpositiveConeAttributes: nonpositiveConeAttList;
@@ -599,8 +620,19 @@ nonpositiveConeAttList: | nonpositiveConeAttList nonpositiveConeAtt;
 
 nonpositiveConeAtt: 
       osilNumberOfRowsATT
+        {
+            ((NonpositiveCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = parserData->numberOfRows;
+        }
     | osilNumberOfColumnsATT
-    | osilNameATT;
+        {
+            ((NonpositiveCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = parserData->numberOfColumns;
+        }
+    | osilNameATT
+        {
+            ((NonpositiveCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = parserData->name;
+        };
 
 nonpositiveConeEnd: ENDOFELEMENT | GREATERTHAN NONPOSITIVECONEEND;
 
@@ -616,6 +648,8 @@ quadraticConeStart: QUADRATICCONESTART
     parserData->normScaleFactorPresent = false;
     parserData->distortionMatrixPresent = false;
     parserData->axisDirectionPresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new QuadraticCone();    
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_quadratic;    
 };
 
 quadraticConeAttributes: quadraticConeAttList;
@@ -624,11 +658,34 @@ quadraticConeAttList: | quadraticConeAttList quadraticConeAtt;
 
 quadraticConeAtt: 
       osilNumberOfRowsATT
+        {
+            ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = parserData->numberOfRows;
+        }
     | osilNumberOfColumnsATT
+        {
+            ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = parserData->numberOfColumns;
+        }
     | osilNameATT
+        {
+            ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = parserData->name;
+        }
     | osilDistortionMatrixIdxATT
+        {
+            ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->distortionMatrixIdx
+                = parserData->distortionMatrix;
+        }
     | osilNormScaleFactorATT
+        {
+            ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->normScaleFactor
+                = parserData->normScaleFactor;
+        }
     | osilAxisDirectionATT
+        {
+            ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->axisDirection
+                = parserData->axisDirection;
+        }
 ;
 
 quadraticConeEnd: ENDOFELEMENT | GREATERTHAN QUADRATICCONEEND;
@@ -644,6 +701,8 @@ rotatedQuadraticConeStart: ROTATEDQUADRATICCONESTART
     parserData->distortionMatrixPresent = false;
     parserData->firstAxisDirectionPresent = false;
     parserData->secondAxisDirectionPresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new RotatedQuadraticCone();    
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_rotatedQuadratic;    
 };
 
 rotatedQuadraticConeAttributes: rotatedQuadraticConeAttList;
@@ -652,12 +711,40 @@ rotatedQuadraticConeAttList: | rotatedQuadraticConeAttList rotatedQuadraticConeA
 
 rotatedQuadraticConeAtt: 
       osilNumberOfRowsATT
+        {
+            ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = parserData->numberOfRows;
+        }
     | osilNumberOfColumnsATT
+        {
+            ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = parserData->numberOfColumns;
+        }
     | osilNameATT
+        {
+            ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name
+                = parserData->name;
+        }
     | osilDistortionMatrixIdxATT
+        {
+            ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->distortionMatrixIdx
+                = parserData->distortionMatrix;
+        }
     | osilNormScaleFactorATT
+        {
+            ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->normScaleFactor
+                = parserData->normScaleFactor;
+        }
     | osilFirstAxisDirectionATT
+        {
+            ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->firstAxisDirection
+                = parserData->firstAxisDirection;
+        }
     | osilSecondAxisDirectionATT
+        {
+            ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->secondAxisDirection
+                = parserData->secondAxisDirection;
+        }
 ;
 
 rotatedQuadraticConeEnd: ENDOFELEMENT | GREATERTHAN ROTATEDQUADRATICCONEEND;
@@ -672,6 +759,8 @@ semidefiniteConeStart: SEMIDEFINITECONESTART
     parserData->numberOfColumnsPresent = false;
     parserData->namePresent = false;
     parserData->semidefinitenessPresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new SemidefiniteCone();    
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_semidefinite;    
 };
 
 semidefiniteConeAttributes: semidefiniteConeAttList;
@@ -680,9 +769,24 @@ semidefiniteConeAttList: | semidefiniteConeAttList semidefiniteConeAtt;
 
 semidefiniteConeAtt: 
       osilNumberOfRowsATT
+        {
+            ((SemidefiniteCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = parserData->numberOfRows;
+        }
     | osilNumberOfColumnsATT
+        {
+            ((SemidefiniteCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = parserData->numberOfColumns;
+        }
     | osilNameATT
+        {
+            ((SemidefiniteCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = parserData->name;
+        }
     | osilSemidefinitenessATT
+        {
+            ((SemidefiniteCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->semidefiniteness
+                = parserData->semidefiniteness;
+        }
 ;
 
 semidefiniteConeEnd: ENDOFELEMENT | GREATERTHAN SEMIDEFINITECONEEND;
@@ -706,6 +810,8 @@ productConeStart: PRODUCTCONESTART
     parserData->numberOfRowsPresent = false;
     parserData->numberOfColumnsPresent = false;
     parserData->namePresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new ProductCone();
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_product;    
 };
 
 productConeAttributes: productConeAttList;
@@ -714,17 +820,35 @@ productConeAttList: | productConeAttList productConeAtt;
 
 productConeAtt: 
       osilNumberOfRowsATT
+        {
+            ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = parserData->numberOfRows;
+        }
     | osilNumberOfColumnsATT
+        {
+            ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = parserData->numberOfColumns;
+        }
     | osilNameATT
-;
+        {
+            ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = parserData->name;
+        };
 
 productConeContent: GREATERTHAN productConeFactors productConeEnd;
 
 productConeFactors: productConeFactorsStart productConeFactorsAttributes productConeFactorsContent;
 
-productConeFactorsStart: FACTORSSTART;
+productConeFactorsStart: FACTORSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent = false;
+};
 
-productConeFactorsAttributes: osilNumberOfElATT;
+productConeFactorsAttributes: osglNumberOfElATT
+{
+    osglData->osglCounter = 0; 
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+}; 
 
 productConeFactorsContent: productConeFactorsEmpty | productConeFactorsLaden;
 
@@ -734,7 +858,18 @@ productConeFactorsLaden: GREATERTHAN productConeFactorList productConeFactorsEnd
 
 productConeFactorList: osglIntArrayData;
 
-productConeFactorsEnd: FACTORSEND;
+productConeFactorsEnd: FACTORSEND
+{
+    if (osglData->osglCounter != osglData->osglNumberOfEl)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of factors does not match numberOfEl");
+    ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->factors = new IntVector();
+    ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->factors->numberOfEl
+        = osglData->osglNumberOfEl;
+    ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->factors ->el 
+        = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
 
 productConeEnd: PRODUCTCONEEND;
 
@@ -745,6 +880,8 @@ intersectionConeStart: INTERSECTIONCONESTART
     parserData->numberOfRowsPresent = false;
     parserData->numberOfColumnsPresent = false;
     parserData->namePresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new IntersectionCone();    
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_intersection;    
 };
 
 intersectionConeAttributes: intersectionConeAttList;
@@ -753,17 +890,35 @@ intersectionConeAttList: | intersectionConeAttList intersectionConeAtt;
 
 intersectionConeAtt: 
       osilNumberOfRowsATT
+        {
+            ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = parserData->numberOfRows;
+        }
     | osilNumberOfColumnsATT
+        {
+            ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = parserData->numberOfColumns;
+        }
     | osilNameATT
-;
+        {
+            ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = parserData->name;
+        };
 
 intersectionConeContent: GREATERTHAN intersectionConeComponents intersectionConeEnd;
 
 intersectionConeComponents: intersectionConeComponentsStart intersectionConeComponentsAttributes intersectionConeComponentsContent;
 
-intersectionConeComponentsStart: COMPONENTSSTART;
+intersectionConeComponentsStart: COMPONENTSSTART
+{
+    osglData->osglNumberOfEl = 0;
+    osglData->osglNumberOfElPresent = false;
+};
 
-intersectionConeComponentsAttributes: osilNumberOfElATT;
+intersectionConeComponentsAttributes: osglNumberOfElATT
+{
+    osglData->osglCounter = 0; 
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+};
 
 intersectionConeComponentsContent: intersectionConeComponentsEmpty | intersectionConeComponentsLaden;
 
@@ -773,7 +928,18 @@ intersectionConeComponentsLaden: GREATERTHAN intersectionConeComponentList inter
 
 intersectionConeComponentList: osglIntArrayData;
 
-intersectionConeComponentsEnd: COMPONENTSEND;
+intersectionConeComponentsEnd: COMPONENTSEND
+{
+    if (osglData->osglCounter != osglData->osglNumberOfEl)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of components does not match numberOfEl");
+    ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->components = new IntVector();
+    ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->components->numberOfEl
+        = osglData->osglNumberOfEl;
+    ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->components ->el 
+        = osglData->osglIntArray;
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
 
 intersectionConeEnd: INTERSECTIONCONEEND;
 
@@ -1360,7 +1526,6 @@ osilNumberOfElATT: NUMBEROFELATT QUOTE INTEGER QUOTE
     if (osglData->osglNumberOfElPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfEl attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> cannot be negative");
-    osglData->osglNumberOfElPresent = true;
     parserData->numberOfEl = $3; 
 }; 
 
@@ -1372,7 +1537,7 @@ osilNumberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <matrix> elements cannot be negative");
     parserData->numberOfMatricesPresent = true;
-    osglData->numberOfMatrices = $3; 
+    osglData->numberOfMatrices = $3;
 }; 
 
 osilNumberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE 
@@ -1529,8 +1694,8 @@ osilSemidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE
     if (parserData->semidefinitenessPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->semidefinitenessPresent = true;
-    if ($2 != "true" && $2 != "false")
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "semidefiniteness must be either \"true\" or \"false \"");
+    if ($2 != "positive" && $2 != "negative")
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "semidefiniteness must be either \"positive\" or \"negative\"");
     else
         parserData->semidefiniteness = $2; 
     free($2);
@@ -1851,7 +2016,7 @@ fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
  *  ==========================================================================
  */
 
-osglIntArrayData: 
+osglIntArrayData:
     osglIntVectorElArray 
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
@@ -2081,10 +2246,10 @@ osglSparseIntVectorValues:  VALUESSTART  GREATERTHAN osglIntVectorElArray VALUES
  */
 osglMatrix: matrixStart matrixAttributes matrixContent
 {
-//	IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
-    osinstance->instanceData->matrices->matrix[osglData->matrixCounter] = 
+//  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osglData->matrix[osglData->matrixCounter] = 
         ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
-    osinstance->instanceData->matrices->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
     osglData->matrixCounter++;
 };
  
@@ -2092,6 +2257,7 @@ matrixStart: MATRIXSTART
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+
     osglData->symmetryAttributePresent = false;
     osglData->matrixTypeAttributePresent = false;
     osglData->numberOfRowsAttributePresent = false;
@@ -2248,8 +2414,7 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
     if ($3 > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
     ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
-        mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
-                   osinstance->instanceData->matrices->matrix[$3]->matrixType);
+        mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType, osglData->matrix[$3]->matrixType);
     osglData->baseMatrixIdxAttributePresent = true;   
     osglData->baseMatrixIdxAttribute = $3; 
 };
@@ -2371,10 +2536,7 @@ matrixConstructorList: | matrixConstructorList matrixConstructor
 
 matrixConstructor: matrixElements | matrixTransformation | matrixBlocks;
 
-matrixElements: matrixElementsStart /*matrixElementsAttributes*/ matrixElementsContent
-{
-//    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
-};
+matrixElements: matrixElementsStart matrixElementsContent;
 
 
 matrixElementsStart: ELEMENTSSTART
@@ -3576,7 +3738,6 @@ colOffsetsNumberOfElAttribute: osglNumberOfElATT
 {
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-//    osglData->matrixBlockNumberOfCols = new int[osglData->osglNumberOfEl]; //valgrind: this leaks 48 bytes of memory
 }; 
 
 colOffsetsContent: colOffsetsEmpty | colOffsetsLaden;
@@ -4276,11 +4437,14 @@ matrixReferenceStart: MATRIXREFERENCESTART
 matrixreferenceend: ENDOFELEMENT
            | GREATERTHAN MATRIXREFERENCEEND;
                            
-matrixIdxATT: IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+matrixIdxATT: IDXATT QUOTE INTEGER QUOTE 
+{
+    if ( *$2 != *$4 )
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= osglData->numberOfMatrices){
-         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
-     }
+    if( $3 >= osglData->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
+    
 }; 
 
 
@@ -5046,290 +5210,9 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 return true;
 
             default:
-                {osilerror_wrapper( pchar,osillineno,"improperly formed <name> element"); return false;}
+                {osilerror_wrapper( pchar,osillineno,"tag not recognized"); return false;}
         }
     }
-
-#if 0
-    // process the <name> element which is optional
-    //
-    // first burn any whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
-    // if present, we should be pointing to <name element if there -- it is not required
-    //remember where we are
-    *p = pchar;
-    while(*startName++  == *pchar) pchar++;
-    if( (pchar - *p)  != 5) {
-        //reset pchar
-        pchar = *p;
-    }
-    else{
-    // we have a name element, process the text
-    // burn the whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-        if( *pchar == '/'){
-            pchar++;
-            // better point to a '>'
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <name> element"); return false;}
-            pchar++;
-        }
-        else{
-            // pchar better be '>' or there is an error
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <name> element"); return false;}
-            pchar++;
-            // process <name> element text
-            // there better be a </name
-            ptemp = strstr( pchar, endName);
-            if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </name> element"); return false;}
-            elementSize = ptemp - pchar;
-            pelementText = new char[ elementSize + 1];
-            strncpy(pelementText, pchar, elementSize);
-            pelementText[ elementSize] = '\0';
-            osinstance->instanceHeader->name = pelementText;
-            //garbage collection
-            delete [] pelementText;
-            // move pchar up to the end of </name
-            while(elementSize-- > 0){
-                if(*pchar++ == '\n') (*osillineno)++;
-            }
-            // pchar should now be pointing to the start of </name
-            // move to first char after </name
-            pchar += 6;
-            // get rid of the whitespace
-            for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-            // we better have the '>' for the end of name
-            if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </name> element"); return false;}
-        }
-    }// end of else after discovering a name element
-    //done processing name element
-    //
-    //
-    // process the <source> element which is optional
-    //
-    // first burn any whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
-    // if present, we should be pointing to <source element if there -- it is not required
-    *p = pchar;
-    while(*startSource++  == *pchar) pchar++;
-    if(pchar - *p != 7) {
-        //reset pchar
-        pchar = *p;
-    }
-    else{
-    // we have a source element, process the text
-    // burn the whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-        if( *pchar == '/'){
-            pchar++;
-            // better point to a '>'
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <source> element"); return false;}
-            pchar++;
-        }
-        else{
-            // pchar better be '>' or there is an error
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <source> element"); return false;}
-            pchar++;
-            // process <source> element text
-            // there better be a </source
-            ptemp = strstr( pchar, endSource);
-            if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </source> element"); return false;}
-            elementSize = ptemp - pchar;
-            pelementText = new char[ elementSize + 1];
-            strncpy(pelementText, pchar, elementSize);
-            pelementText[ elementSize] = '\0';
-            osinstance->instanceHeader->source = pelementText;
-            //garbage collection
-            delete [] pelementText;
-            // move pchar up to the end of </source
-            while(elementSize-- > 0){
-                if(*pchar++ == '\n') (*osillineno)++;
-            }
-            // pchar should now be pointing to the start of </source
-            // move to first char after </source
-            pchar += 8;
-            // get rid of the whitespace
-            for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-            // we better have the '>' for the end of source
-            if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </source> element"); return false;}
-        }
-    }// end of else after discovering a source element
-    //done processing <source> element
-    //
-    //
-    //process the <description> element
-    //
-    // first burn any whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
-    // if present, we should be pointing to <description element if there -- it is not required
-    *p = pchar;
-    while(*startDescription++  == *pchar) pchar++;
-    if( (pchar - *p) != 12) {
-        //reset pchar
-        pchar = *p;
-    }
-    else{
-    // we have a description element, process the text
-    // burn the whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-        if( *pchar == '/'){
-            pchar++;
-            // better point to a '>'
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <description> element"); return false;}
-            pchar++;
-        }
-        else{
-            // pchar better be '>' or there is an error
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <description> element"); return false;}
-            pchar++;
-            // process <description> element text
-            // there better be a </description
-            ptemp = strstr( pchar, endDescription);
-            if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </description> element"); return false;}
-            elementSize = ptemp - pchar;
-            pelementText = new char[ elementSize + 1];
-            strncpy(pelementText, pchar, elementSize);
-            pelementText[ elementSize] = '\0';
-            osinstance->instanceHeader->description = pelementText;
-            //garbage collection
-            delete [] pelementText;
-            // move pchar up to the end of </description
-            while(elementSize-- > 0){
-                if(*pchar++ == '\n') (*osillineno)++;
-            }
-            // pchar should now be pointing to the start of </description
-            // move to first char after </description
-            pchar += 13;
-            // get rid of the whitespace
-            for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-            // we better have the '>' for the end of </description>
-            if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </description> element"); return false;}
-        }
-    }// end of else after discovering a description element
-    //done processing <description> element
-
-    //
-    //
-    //process the <fileCreator> element
-    //
-    // first burn any whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
-    // if present, we should be pointing to <fileCreator element if there -- it is not required
-    *p = pchar;
-    while(*startFileCreator++  == *pchar) pchar++;
-    if( (pchar - *p) != 12) {
-        //reset pchar
-        pchar = *p;
-    }
-    else{
-    // we have a fileCreator element, process the text
-    // burn the whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-        if( *pchar == '/'){
-            pchar++;
-            // better point to a '>'
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <fileCreator> element"); return false;}
-            pchar++;
-        }
-        else{
-            // pchar better be '>' or there is an error
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <fileCreator> element"); return false;}
-            pchar++;
-            // process <fileCreator> element text
-            // there better be a </fileCreator
-            ptemp = strstr( pchar, endFileCreator);
-            if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </fileCreator> element"); return false;}
-            elementSize = ptemp - pchar;
-            pelementText = new char[ elementSize + 1];
-            strncpy(pelementText, pchar, elementSize);
-            pelementText[ elementSize] = '\0';
-            osinstance->instanceHeader->fileCreator = pelementText;
-            //garbage collection
-            delete [] pelementText;
-            // move pchar up to the end of </description
-            while(elementSize-- > 0){
-                if(*pchar++ == '\n') (*osillineno)++;
-            }
-            // pchar should now be pointing to the start of </fileCreator
-            // move to first char after </fileCreator
-            pchar += 13;
-            // get rid of the whitespace
-            for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-            // we better have the '>' for the end of </fileCreator>
-            if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </fileCreator> element"); return false;}
-        }
-    }// end of else after discovering a fileCreator element
-    //done processing <fileCreator> element
-    //
-    //
-    //process the <licence> element
-    //
-    // first burn any whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
-    // if present, we should be pointing to <licence element if there -- it is not required
-    *p = pchar;
-    while(*startLicence++  == *pchar) pchar++;
-    if( (pchar - *p) != 8) {
-        //reset pchar
-        pchar = *p;
-    }
-    else{
-    // we have a licence element, process the text
-    // burn the whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-        if( *pchar == '/'){
-            pchar++;
-            // better point to a '>'
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <licence> element"); return false;}
-            pchar++;
-        }
-        else{
-            // pchar better be '>' or there is an error
-            if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <licence> element"); return false;}
-            pchar++;
-            // process <licence> element text
-            // there better be a </licence
-            ptemp = strstr( pchar, endLicence);
-            if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </licence> element"); return false;}
-            elementSize = ptemp - pchar;
-            pelementText = new char[ elementSize + 1];
-            strncpy(pelementText, pchar, elementSize);
-            pelementText[ elementSize] = '\0';
-            osinstance->instanceHeader->licence = pelementText;
-            //garbage collection
-            delete [] pelementText;
-            // move pchar up to the end of </licence
-            while(elementSize-- > 0){
-                if(*pchar++ == '\n') (*osillineno)++;
-            }
-            // pchar should now be pointing to the start of </licence
-            // move to first char after </licence
-            pchar += 9;
-            // get rid of the whitespace
-            for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-            // we better have the '>' for the end of </description>
-            if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </licence> element"); return false;}
-        }
-    }// end of else after discovering a licence element
-    //done processing <licence> element
-
-
-    //
-    // if we are here there must be an </instanceHeader > element
-    // burn the whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-    // we should be pointing to </instanceHeader
-    *p = pchar;
-    while(*endInstanceHeader++  == *pchar) pchar++;
-    if( (pchar - *p) != 16) {  osilerror_wrapper( pchar,osillineno,"improperly formed </instanceHeader> element"); return false;}    
-    // pchar now points to the first character after </instanceHeader
-    // get rid of white space
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
-    // pchar must point to '>' or there is an error
-    if(*pchar != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </instanceHeader> element"); return false;}    
-    pchar++;
-    *p = pchar;
-    return true;
-#endif
     return false;
 }//end parseInstanceHeader
 

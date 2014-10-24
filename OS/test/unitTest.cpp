@@ -949,6 +949,8 @@ if (PARSER_TESTS)
             instance2 = osilreader2->readOSiL( temposil);
 
             cout << "compare the two objects" << endl;
+bool ok = instance2->IsEqual(instance1);
+std::cout << "Comparing the two instances: " << ok << std::endl;
             if (!instance2->IsEqual(instance1))
                 throw ErrorClass("<matrices> and <cones> not processed correctly");
             delete osilreader;
