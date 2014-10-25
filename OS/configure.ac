@@ -197,7 +197,6 @@ AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[OSLib])
 #                            OPENMP defs                                     #
 ##############################################################################
 
-
 AC_ARG_ENABLE([openmp],
 [AC_HELP_STRING([--enable-openmp],
                 [compile in OpenMP features])],
@@ -209,23 +208,39 @@ AC_ARG_ENABLE([openmp],
    *) AC_MSG_ERROR(Bad value ${enableval} for --enable-openmp)
    ;;
 esac],
-[os_openmp=false])
+[os_openmp=auto])
 
-if test $os_openmp = true; then
-   AC_MSG_CHECKING([G++ version])
-   fopenmp_version=4.2
-   gcc_required_version=`echo ${fopenmp_version} | sed -e 's/\./0/g'`
-   get_gcc_version=`$CXX -dumpversion`
-   gcc_version=`echo ${get_gcc_version} | sed -e 's/\./0/g'`
-   major_gcc_version=`echo ${gcc_version:0:3}`
-   AC_MSG_RESULT([$get_gcc_version])
-   if test ${major_gcc_version} -lt ${gcc_required_version}; then
-       AC_MSG_ERROR(OpenMP feautures are supported by G++ 4.2.0 or higher.)
-   fi
+if test $os_openmp = auto; then 
+   AC_MSG_CHECKING([whether compiler supports OpenMP])
+   case "$CXX" in
+     clang*) 
+       AC_MSG_RESULT([no])
+       os_openmp=false
+       ;;
+     cl* | *\cl* | */cl*)
+       AC_MSG_RESULT([yes])
+       os_openmp=true
+       ;;
+     g++*)
+        os_openmp=true
+   	fopenmp_version=4.2
+   	gcc_required_version=`echo ${fopenmp_version} | sed -e 's/\./0/g'`
+   	get_gcc_version=`$CXX -dumpversion`
+   	gcc_version=`echo ${get_gcc_version} | sed -e 's/\./0/g'`
+   	major_gcc_version=`echo ${gcc_version:0:3}`
+   	#AC_MSG_RESULT([$get_gcc_version])
+   	if test ${major_gcc_version} -lt ${gcc_required_version}; then
+       	   AC_MSG_RESULT([no])
+           os_openmp=false
+        else
+       	   AC_MSG_RESULT([yes])
+           os_openmp=true
+	fi
+        ;;
+   esac
 fi
 
 AM_CONDITIONAL(OPENMP, [test $os_openmp = true])
-
 
 ###########################################################################
 # check to see if we turn off dtoa
@@ -313,18 +328,27 @@ AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
     [Define the path to the OS root])
 
 # The following one is for the example makefiles
-case $CXX in
-  cl*)
-    oslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOS.lib';;
+case "$CXX" in
+  clang*) 
+     if test $os_openmp = true; then
+         CXXFLAGS="$CXXFLAGS -fopenmp"
+     fi
+     oslib="-L\$(INSTALLIBDIR) -lOS"
+  ;; 
+  cl* | *\cl* | */cl*)
+     oslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOS.lib'
+     if test $os_openmp = true; then
+         CXXFLAGS="$CXXFLAGS /openmp"
+     fi
+  ;;
   g++* | *\g++* | */g++*)
      if test $os_openmp = true; then
          CXXFLAGS="$CXXFLAGS -fopenmp"
      fi
      oslib="-L\$(INSTALLIBDIR) -lOS"
-  ;;
-  *)
-   ;;
+   ;; 
 esac
+
 AC_SUBST(oslib)
 
 #############################################################################
