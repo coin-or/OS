@@ -1151,6 +1151,11 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="polyhedralCone" type="PolyhedralCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="copositiveMatricesCone" type="CopositiveMatricesCone">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
@@ -1166,12 +1171,12 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="nonnegativePolynomialsCone" type="NonnegativePolynomialsCone">
+			<xs:element name="sumOfSquaresPolynomialsCone" type="SumOfSquaresPolynomialsCone">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="sumOfSquaresPolynomialsCone" type="SumOfSquaresPolynomialsCone">
+			<xs:element name="nonnegativePolynomialsCone" type="NonnegativePolynomialsCone">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -1387,6 +1392,16 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PolyhedralCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:attribute name="referenceMatrixIdx" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
