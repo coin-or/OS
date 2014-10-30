@@ -942,15 +942,11 @@ if (PARSER_TESTS)
             cout << "Write the OSInstance object to a temporary file (i.e., string)" << endl;
             std::string temposil = osilwriter->writeOSiL(instance1);
 
-            std::cout << std::endl << std::endl << "the OSiL string:" << std::endl << temposil << std::endl << std::endl;
-
             cout << "Parse the temporary string again" << endl;
             osilreader2 = new OSiLReader;
             instance2 = osilreader2->readOSiL( temposil);
 
             cout << "compare the two objects" << endl;
-bool ok = instance2->IsEqual(instance1);
-std::cout << "Comparing the two instances: " << ok << std::endl;
             if (!instance2->IsEqual(instance1))
                 throw ErrorClass("<matrices> and <cones> not processed correctly");
             delete osilreader;
