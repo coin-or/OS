@@ -339,7 +339,8 @@
 			</xs:annotation>
 			<xs:element name="nl" type="Nl" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>since version 1.0</xs:documentation>
+					<xs:documentation>since version 1.0
+can only contain references to OSnL nodes</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -353,11 +354,21 @@
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
 		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<!--MatrixProgramming: draft-->
 	<xs:complexType name="MatrixProgramming">
 		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
+			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
@@ -369,7 +380,7 @@
 -->
 			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>For scalar-valued expressions  in "core" objectives and constraints</xs:documentation>
+					<xs:documentation>For scalar-valued expressions  in "core" objectives and constraints that contain matrix references</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -653,15 +664,13 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="shape" default="nonlinear">
-			<xs:annotation>
-				<xs:documentation>linear/nonlinear</xs:documentation>
-			</xs:annotation>
+		<xs:attribute name="shape" default="general">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="linear"/>
 					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="nonlinear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -719,12 +728,13 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 				<xs:documentation>refers to existing (i.e., core) objectives (if negative) or constraints (if nonnegative)</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="shape">
+		<xs:attribute name="shape" default="general">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="linear"/>
 					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="nonlinear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -899,15 +909,13 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="shape" default="nonlinear">
-			<xs:annotation>
-				<xs:documentation>linear/nonlinear</xs:documentation>
-			</xs:annotation>
+		<xs:attribute name="shape" default="general">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="linear"/>
 					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="nonlinear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -1126,6 +1134,11 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="polyhedralCone" type="PolyhedralCone">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="quadraticCone" type="QuadraticCone">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -1147,11 +1160,6 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="semidefiniteCone" type="SemidefiniteCone">
-				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="polyhedralCone" type="PolyhedralCone">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>

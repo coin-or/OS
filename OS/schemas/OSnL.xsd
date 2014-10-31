@@ -212,7 +212,7 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Elementary Functions Node: since version 1.0.0-->
+	<!--Elementary Function Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeAbs">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -621,7 +621,7 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Trigonometric Functions Node: since version 1.0.0-->
+	<!--Trigonometric Function Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeSin">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
