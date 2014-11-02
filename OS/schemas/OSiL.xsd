@@ -1154,11 +1154,6 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="rotatedNormedCone" type="RotatedNormedCone">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="semidefiniteCone" type="SemidefiniteCone">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
@@ -1189,7 +1184,7 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="momentsCone" type="MomentsCone">
+			<xs:element name="momentCone" type="MomentsCone">
 				<xs:annotation>
 					<xs:documentation>experiment. The cone of moments is the _dual_ of a corresponding cone of nonnegative polynomials</xs:documentation>
 				</xs:annotation>
@@ -1204,29 +1199,15 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="dualCone">
+			<xs:element name="dualCone" type="DualCone">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="GenericCone">
-							<xs:attribute name="referenceConeIdx" type="xs:nonNegativeInteger"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="polarCone">
+			<xs:element name="polarCone" type="PolarCone">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="GenericCone">
-							<xs:attribute name="referenceConeIdx" type="xs:nonNegativeInteger"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
 			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
@@ -1578,6 +1559,26 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="coneId" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DualCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:attribute name="referenceConeIdx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PolarCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:attribute name="referenceConeIdx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<!--Modifications: experiment -->
 	<xs:complexType name="Modifications">
