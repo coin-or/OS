@@ -526,13 +526,16 @@ enum ENUM_CONE_TYPE
     ENUM_CONE_TYPE_nonnegative = 1,
     ENUM_CONE_TYPE_nonpositive,
     ENUM_CONE_TYPE_orthant,
+    ENUM_CONE_TYPE_polyhedral,
     ENUM_CONE_TYPE_quadratic,
     ENUM_CONE_TYPE_rotatedQuadratic,
     ENUM_CONE_TYPE_normed,
+    ENUM_CONE_TYPE_rotatedNormed,
     ENUM_CONE_TYPE_semidefinite,
     ENUM_CONE_TYPE_copositiveMatrices,
     ENUM_CONE_TYPE_completelyPositiveMatrices,
     ENUM_CONE_TYPE_hyperbolicity,
+    ENUM_CONE_TYPE_sumOfSquaresPolynomials,
     ENUM_CONE_TYPE_nonnegativePolynomials,
     ENUM_CONE_TYPE_moments,
     ENUM_CONE_TYPE_product,
@@ -547,13 +550,16 @@ inline int returnConeType(std::string type)
     if (type == "nonnegative"               ) return ENUM_CONE_TYPE_nonnegative;
     if (type == "nonpositive"               ) return ENUM_CONE_TYPE_nonpositive;
     if (type == "orthant"                   ) return ENUM_CONE_TYPE_orthant;
+    if (type == "polyhedral"                ) return ENUM_CONE_TYPE_polyhedral;
     if (type == "quadratic"                 ) return ENUM_CONE_TYPE_quadratic;
     if (type == "rotatedQuadratic"          ) return ENUM_CONE_TYPE_rotatedQuadratic;
     if (type == "normed"                    ) return ENUM_CONE_TYPE_normed;
+    if (type == "rotatedNormed"             ) return ENUM_CONE_TYPE_rotatedNormed;
     if (type == "semidefinite"              ) return ENUM_CONE_TYPE_semidefinite;
     if (type == "copositiveMatrices"        ) return ENUM_CONE_TYPE_copositiveMatrices;
     if (type == "completelyPositiveMatrices") return ENUM_CONE_TYPE_completelyPositiveMatrices;
     if (type == "hyperbolicity"             ) return ENUM_CONE_TYPE_hyperbolicity;
+    if (type == "sumOfSquaresPolynomials"   ) return ENUM_CONE_TYPE_sumOfSquaresPolynomials;
     if (type == "nonnegativePolynomials"    ) return ENUM_CONE_TYPE_nonnegativePolynomials;
     if (type == "moments"                   ) return ENUM_CONE_TYPE_moments;
     if (type == "product"                   ) return ENUM_CONE_TYPE_product;
@@ -825,8 +831,80 @@ public:
      * @return whether the copy was created successfully
      */    
     bool deepCopyFrom(OrthantCone *that);
-
 };//end OrthantCone
+
+/*! \class PolyhedralCone
+ * \brief The in-memory representation of a polyhedral cone 
+ */
+class PolyhedralCone : public Cone
+{
+public:
+
+    /** The PolyhedralCone class constructor */
+    PolyhedralCone();
+
+    /** The PolyhedralCone class destructor */
+    ~PolyhedralCone();
+
+    /** Every cone has (at least) two dimensions; no distinction
+     *  is made between vector cones and matrix cones
+     */
+    int numberOfRows;
+    int numberOfColumns;
+
+    /** Multidimensional tensors can also form cones
+     *  (the Kronecker product, for instance, can be
+     *   thought of as a four-dimensional tensor).
+     *  We therefore allow additional dimensions.
+     */
+    int numberOfOtherIndexes;
+    int* otherIndexes;
+
+    /** The type of the cone (one of the values in ENUM_CONE_TYPE) */
+    int coneType;
+
+    /** cones are referenced by an (automatically created) index */
+    int idx;
+
+    /** Polyhedral cones use a reference to a previously defined matrix for the extreme rays */
+    int referenceMatrixIdx;
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * Write a PolyhedralCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(PolyhedralCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(PolyhedralCone *that);
+}; // PolyhedralCone
 
 
 /*! \class QuadraticCone
@@ -3167,7 +3245,8 @@ public:
 
 
     /**
-    * Get all the nonlinear expression tree indexes, i.e., indexes of rows (objectives or constraints) that contain nonlinear expressions
+    * Get all the nonlinear expression tree indexes, i.e., indexes of rows 
+    * (objectives or constraints) that contain nonlinear expressions
     * after modifying the expression tree to contain quadratic terms.
     *
     * @return a pointer to an integer array of nonlinear expression tree indexes (including quadratic terms).
@@ -3271,7 +3350,7 @@ public:
      * set the instance name.
      *
      * @param name holds the instance name.
-     * @return whether the instance name is set successfully.
+     * @return whether the instance name was set successfully.
      */
     bool setInstanceName(std::string name);
 
@@ -3279,7 +3358,7 @@ public:
      * set the instance source.
      *
      * @param source holds the instance source.
-     * @return whether the instance source is set successfully.
+     * @return whether the instance source was set successfully.
      */
     bool setInstanceSource(std::string source);
 
@@ -3287,7 +3366,7 @@ public:
      * set the instance description.
      *
      * @param description holds the instance description.
-     * @return whether the instance description is set successfully.
+     * @return whether the instance description was set successfully.
      */
     bool setInstanceDescription(std::string description);
 
@@ -3295,7 +3374,7 @@ public:
      * set the instance creator.
      *
      * @param fileCreator holds the instance creator.
-     * @return whether the instance creator is set successfully.
+     * @return whether the instance creator was set successfully.
      */
     bool setInstanceCreator(std::string fileCreator);
 
@@ -3303,35 +3382,33 @@ public:
      * set the instance licence.
      *
      * @param licence holds the instance licence.
-     * @return whether the instance licence is set successfully.
+     * @return whether the instance licence was set successfully.
      */
     bool setInstanceLicence(std::string licence);
 
 
     /**
-     * set the variable number.
+     * set the number of variables.
      *
-     * @param number holds the variable number.
-     * @return whether the variable number is set successfully.
+     * @param number holds the number of variables.
+     * @return whether the number was set successfully.
      */
     bool setVariableNumber(int number);
 
     /**
      * add a variable. In order to use the add method, the setVariableNumber must first be called
-     * so that the variable number is known ahead of time to assign appropriate memory.
+     * so that the number of variables is known ahead of time to allocate appropriate memory.
      * If a variable with the given variable index already exists, the old variable will be replaced.
      *
      * <p>
      *
      * @param index holds the variable index. It is required.
      * @param name holds the variable name; use null or empty std::string ("") if no variable name.
-     * @param lowerBound holds the variable lower bound; use Double.NEGATIVE_INFINITY if no lower bound.
-     * @param upperBound holds the variable upper bound; use Double.POSITIVE_INFINITY if no upper bound.
-     * @param type holds the variable type character, B for Binary, I for Integer, S for String, C or any other char for Continuous)
-     * @param init holds the double variable initial value; use Double.NaN if no initial value -- deprecated
-     * @param initString holds the std::string variable initial value; use null or empty std::string ("")
-     * if no initial std::string value -- deprecated
-     * @return whether the variable is added successfully.
+     * @param lowerBound holds the variable lower bound; use -OSDBL_MAX if no lower bound.
+     * @param upperBound holds the variable upper bound; use  OSDBL_MAX if no upper bound.
+     * @param type holds the variable type character: C for Continuous, B for Binary, I for Integer, 
+     *        S for String, D for semi-continuous, J for semi-integer (i.e., either 0 or integer >=n). 
+     * @return whether the variable was added successfully.
      */
     bool addVariable(int index, std::string name, double lowerBound, double upperBound, char type);
 
@@ -3343,31 +3420,32 @@ public:
      * @param number holds the number of variables. It is required.
      * @param names holds a std::string array of variable names; use null if no variable names.
      * @param lowerBounds holds a double array of variable lower bounds; use null if all lower bounds are 0;
-     *  use Double.NEGATIVE_INFINITY if no lower bound for a specific variable in the array.
+     *  use -OSDBL_MAX if no lower bound for a specific variable in the array.
      * @param upperBounds holds a double array of variable upper bounds; use null if no upper bounds;
-     *  use Double.POSITIVE_INFINITY if no upper bound for a specific variable in the array.
+     *  use OSDBL_MAX if no upper bound for a specific variable in the array.
      * @param types holds a char array of variable types; use null if all variables are continuous;
-     * for a specfic variable in the array use B for Binary, I for Integer, S for String, C or any other char for Continuous,)
+     *        for a specfic variable in the array use C for Continuous, B for Binary, I for Integer, 
+     *        S for String, D for semi-continuous, J for semi-integer (i.e., either 0 or integer >=n). 
      * @param inits holds a double array of varible initial values; use null if no initial values. -- deprecated
      * @param initsString holds a std::string array of varible initial values; use null
-     *  if no initial std::string values.  -- deprecated
-     * @return whether the variables are set successfully.
+     *        if no initial std::string values.  -- deprecated
+     * @return whether the variables were set successfully.
      */
     bool setVariables(int number, std::string* names, double* lowerBounds,
                       double* upperBounds, char* types);
 
 
     /**
-     * set the objective number.
+     * set the number of objectives.
      *
-     * @param number holds the objective number.
-     * @return whether the objective number is set successfully.
+     * @param number holds the number of objectives.
+     * @return whether the number of objectives was set successfully.
      */
     bool setObjectiveNumber(int number);
 
     /**
      * add an objective. In order to use the add method, the setObjectiveNumber must first be called
-     * so that the objective number is known ahead of time to assign appropriate memory.
+     * so that the objective number is known ahead of time to allocate appropriate memory.
      * If a objective with the given objective index already exists, the old objective will be replaced.
      * Objective index will start from -1, -2, -3, ... down, with -1 corresponding to the first objective.
      *
@@ -3378,9 +3456,9 @@ public:
      * @param maxOrMin holds the objective sense or direction; it can only take two values: "max" or "min".
      * @param constant holds the objective constant; use 0.0 if no objective constant.
      * @param weight holds the objective weight; use 1.0 if no objective weight.
-     * @param objectiveCoefficients holds the objective coefficients (null if no objective coefficients) in a sparse
-     * representation that holds two arrays: index array and a value array.
-     * @return whether the objective is added successfully.
+     * @param objectiveCoefficients holds the objective coefficients (null if no objective coefficients)
+     *        in a sparse representation that holds two arrays: index array and a value array.
+     * @return whether the objective was added successfully.
      */
     bool addObjective(int index, std::string name, std::string maxOrMin, double constant, double weight, SparseVector* objectiveCoefficients);
 
@@ -3394,34 +3472,33 @@ public:
      * @param maxOrMins holds a std::string array of objective objective senses or directions: "max" or "min"; use null if all objectives are "min".
      * @param constants holds a double array of objective constants; use null if all objective constants are 0.0.
      * @param weights holds a double array of objective weights; use null if all objective weights are 1.0.
-     * @param objectitiveCoefficients holds an array of objective coefficients, (null if no objective have any coefficeints)
+     * @param objectiveCoefficients holds an array of objective coefficients, (null if no objective has any coefficients)
      * For each objective, the coefficients are stored in a sparse representation that holds two arrays: index array and a value array.
-     * If for a specific objective, there are no objecitve coefficients, use null for the corresponding array member.
-     * @return whether the objectives are set successfully.
+     * If for a specific objective, there are no objective coefficients, use null for the corresponding array member.
+     * @return whether the objectives were set successfully.
      */
-
     bool setObjectives(int number, std::string *names, std::string *maxOrMins, double *constants, double *weights, SparseVector **objectitiveCoefficients);
 
     /**
-     * set the constraint number.
+     * set the number of constraints.
      *
-     * @param number holds the constraint number.
-     * @return whether the constraint number is set successfully.
+     * @param number holds the number of constraints.
+     * @return whether the number of constraints was set successfully.
      */
     bool setConstraintNumber(int number);
 
     /**
      * add a constraint. In order to use the add method, the setConstraintNumber must first be called
-     * so that the constraint number is known ahead of time to assign appropriate memory.
+     * so that the constraint number is known ahead of time to allocate appropriate memory.
      * If a constraint with the given constraint index already exists, the old constraint will be replaced.
      *
      * <p>
      *
      * @param index holds the constraint index. It is required.
      * @param name holds the constraint name; use null or empty std::string ("") if no constraint name.
-     * @param lowerBound holds the constraint lower bound; use Double.NEGATIVE_INFINITY if no lower bound.
-     * @param upperBound holds the constraint upper bound; use Double.POSITIVE_INFINITY if no upper bound.
-     * @return whether the constraint is added successfully.
+     * @param lowerBound holds the constraint lower bound; use -OSDBL_MAX if no lower bound.
+     * @param upperBound holds the constraint upper bound; use  OSDBL_MAX if no upper bound.
+     * @return whether the constraint was added successfully.
      */
     bool addConstraint(int index, std::string name, double lowerBound, double upperBound, double constant);
 
@@ -3432,9 +3509,11 @@ public:
      *
      * @param number holds the number of constraints. It is required.
      * @param names holds a std::string array of constraint names; use null if no constraint names.
-     * @param lowerBounds holds a double array of constraint lower bounds; use null if no lower bounds; use Double.NEGATIVE_INFINITY if no lower bound for a specific constraint in the array.
-     * @param upperBounds holds a double array of constraint upper bounds; use null if no upper bounds; use Double.POSITIVE_INFINITY if no upper bound for a specific constraint in the array.
-     * @return whether the constraints are set successfully.
+     * @param lowerBounds holds a double array of constraint lower bounds; use null if no lower bounds;
+     *        use -OSDBL_MAX if no lower bound for a specific constraint in the array.
+     * @param upperBounds holds a double array of constraint upper bounds; use null if no upper bounds;
+     *        use  OSDBL_MAX if no upper bound for a specific constraint in the array.
+     * @return whether the constraints were set successfully.
      */
     bool setConstraints(int number, std::string* names, double* lowerBounds, double* upperBounds, double* constants);
 
@@ -3454,7 +3533,7 @@ public:
      * @param starts holds an integer array start indexes in the matrix; the first value of starts should always be 0.
      * @param startsBegin holds the begin index of the starts array to copy from (usually 0).
      * @param startsEnd holds the end index of the starts array to copy till (usually starts.length - 1).
-     * @return whether the linear constraint coefficients are set successfully.
+     * @return whether the linear constraint coefficients were set successfully.
      */
     bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
                                          double* values, int valuesBegin, int valuesEnd,
@@ -3478,7 +3557,7 @@ public:
      * @param starts holds an integer array start indexes in the matrix; the first value of starts should always be 0.
      * @param startsBegin holds the begin index of the starts array to copy from (usually 0).
      * @param startsEnd holds the end index of the starts array to copy till (usually starts.length - 1).
-     * @return whether the linear constraint coefficients are copied successfully.
+     * @return whether the linear constraint coefficients were copied successfully.
      */
     bool copyLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
                                          double* values, int valuesBegin, int valuesEnd,
@@ -3502,13 +3581,13 @@ public:
      *
      * @param number holds the number of quadratic terms.
      * @param rowIndexes holds an integer array of row indexes of all the quadratic terms.
-     * A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
+     *        A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
      * @param varOneIndexes holds an integer array of the first  variable indexes of all the quadratic terms.
      * @param varTwoIndexes holds an integer array of the second variable indexes of all the quadratic terms.
      * @param coefficients holds an array of double containing all the quadratic term coefficients.
      * @param begin holds the begin index of all the arrays to copy from (usually = 0).
      * @param end holds the end index of all the arrays to copy till (usually = array length -1).
-     * @return whether the quadratic terms are set successfully.
+     * @return whether the quadratic terms were set successfully.
      *
      */
     bool setQuadraticCoefficients(int number,
@@ -3522,11 +3601,11 @@ public:
      *
      * @param number holds the number of quadratic terms.
      * @param rowIndexes holds an integer array of row indexes of all the quadratic terms.
-     * A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
+     *        A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
      * @param varOneIndexes holds an integer array of the first  variable indexes of all the quadratic terms.
      * @param varTwoIndexes holds an integer array of the second variable indexes of all the quadratic terms.
      * @param coefficients holds a double array all the quadratic term coefficients.
-     * @return whether the quadratic terms are set successfully.
+     * @return whether the quadratic terms were set successfully.
      */
     bool setQuadraticTermsInNonlinearExpressions(int number,
             int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients);
@@ -3538,9 +3617,294 @@ public:
      *
      * @param nexpr holds the number of nonlinear expressions.
      * @param root holds a pointer array to the root nodes of all the nonlinear expressions.
-     * @return whether the nonlinear expressions are set successfully.
+     * @return whether the nonlinear expressions were set successfully.
      */
     bool setNonlinearExpressions(int nexpr, Nl** root);
+
+
+    /**
+     * set the number of matrices
+     *
+     * @param number holds the number of matrices
+     * @return whether the number of matrices was set successfully.
+     */
+    bool setMatrixNumber(int number);
+
+    /**
+     * add a matrix. In order to use the add method, the setMatrixNumber must first be called
+     * so that the number of matrices is known ahead of time to allocate appropriate memory.
+     * If a matrix with the given matrix index already exists, the old matrix will be replaced.
+     *
+     * <p>
+     *
+     * @param index holds the matrix index. It is required.
+     * @param name holds the matrix name; use null or empty std::string ("") if no matrix name.
+     * @param numberOfRows holds the number of rows. It is required. Use 1 for column vectors.
+     * @param numberOfColumns holds the number of columns. It is required. Use 1 for row vectors.
+     * @param symmetry holds the type of symmetry used in the definition of the matrix. 
+     *        For more information  see the enumeration ENUM_MATRIX_SYMMETRY in OSGeneral.h.
+     *        If no symmetry, use ENUM_MATRIX_SYMMETRY_none.
+     * @param matrixType tracks the type of elements contained in this matrix.
+     *        For more information  see the enumeration ENUM_MATRIX_TYPE in OSGeneral.h.
+     *        If unsure, use ENUM_MATRIX_TYPE_unknown.
+     * @param inumberOfChildren is the number of MatrixNode child elements,
+     *        i.e., the number of matrix constructors in the m_mChildren array. 
+     * @param m_mChildren is the array of matrix constructors used in the definition of this matrix.
+     * @return whether the matrix was added successfully.
+     */
+    bool addMatrix(int index, std::string name, int numberOfRows, int numberOfColumns, 
+                   ENUM_MATRIX_SYMMETRY symmetry, ENUM_MATRIX_TYPE matrixType, 
+                   unsigned int inumberOfChildren, MatrixNode **m_mChildren);
+
+
+
+    /**
+     * set the number of cones
+     *
+     * @param number holds the number of cones
+     * @return whether the number of cones was set successfully.
+     */
+    bool setConeNumber(int number);
+
+    /**
+     * add a cone. In order to use the add method, the setConeNumber must first be called
+     * so that the number of cones is known ahead of time to allocate appropriate memory.
+     * If a cone with the given cone index already exists, the old cone will be replaced.
+     *
+     * @remark This method has different signatures to cater for different types of cones.
+     *         This signature is used for cones that require basic information only.
+     *
+     * @param index holds the cone index. It is required.
+     * @param numberOfRows holds the number of rows. It is required.
+     * @param numberOfColumns holds the number of columns. It is required.
+     * @param coneType holds the cone type. For more information consult the enumeration ENUM_CONE_TYPE
+     *        further up in this file. This argument is required and must be one of
+     *            ENUM_CONE_TYPE_nonnegative, 
+     *            ENUM_CONE_TYPE_nonpositive, 
+     *            ENUM_CONE_TYPE_copositiveMatrices,
+     *            ENUM_CONE_TYPE_completelyPositiveMatrices.
+     *
+     * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     *
+     * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to 0.
+     * @param otherIndexes holds the array of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to null.
+     * @return whether the cone was added successfully.
+     */
+    bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
+                 std::string name, int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+
+    /**
+     * add a cone. In order to use the add method, the setConeNumber must first be called
+     * so that the number of cones is known ahead of time to allocate appropriate memory.
+     * If a cone with the given cone index already exists, the old cone will be replaced.
+     *
+     * @remark This method has different signatures to cater for different types of cones.
+     *         This signature is used for product and intersection cones.
+     *
+     * @param index holds the cone index. It is required.
+     * @param numberOfRows holds the number of rows. It is required.
+     * @param numberOfColumns holds the number of columns. It is required.
+     * @param coneType holds the cone type. For more information consult the enumeration ENUM_CONE_TYPE
+     *        further up in this file. This argument is required and must be one of
+     *            ENUM_CONE_TYPE_product, 
+     *            ENUM_CONE_TYPE_intersection. 
+     *
+     * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     * @param components holds the indexes of the components of this cone.
+     *
+     * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to 0.
+     * @param otherIndexes holds the array of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to null.
+     * @return whether the cone was added successfully.
+     */
+    bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
+                 std::string name, int* components, int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+
+    /**
+     * add a cone. In order to use the add method, the setConeNumber must first be called
+     * so that the number of cones is known ahead of time to allocate appropriate memory.
+     * If a cone with the given cone index already exists, the old cone will be replaced.
+     *
+     * @remark This method has different signatures to cater for different types of cones.
+     *         This signature is used for positive or negative cones that reference another cone or matrix.
+     *
+     * @param index holds the cone index. It is required.
+     * @param numberOfRows holds the number of rows. It is required.
+     * @param numberOfColumns holds the number of columns. It is required.
+     * @param coneType holds the cone type. For more information consult the enumeration ENUM_CONE_TYPE
+     *        further up in this file. This argument is required and must be one of
+     *            ENUM_CONE_TYPE_dual, 
+     *            ENUM_CONE_TYPE_polar, 
+     *            ENUM_CONE_TYPE_polyhedral. 
+     *
+     * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     * @param referenceIdx holds the index of a cone or matrix used in the definition of this cone.
+     *
+     * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to 0.
+     * @param otherIndexes holds the array of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to null.
+     * @return whether the cone was added successfully.
+     */
+    bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
+                 std::string name, int referenceIdx, int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+
+    /**
+     * add a cone. In order to use the add method, the setConeNumber must first be called
+     * so that the number of cones is known ahead of time to allocate appropriate memory.
+     * If a cone with the given cone index already exists, the old cone will be replaced.
+     *
+     * @remark This method has different signatures to cater for different types of cones.
+     *         This signature is used for positive or negative semidefinite cones.
+     *
+     * @param index holds the cone index. It is required.
+     * @param numberOfRows holds the number of rows. It is required.
+     * @param numberOfColumns holds the number of columns. It is required.
+     * @param coneType holds the cone type. For more information consult the enumeration ENUM_CONE_TYPE
+     *        further up in this file. This argument is required and must be
+     *            ENUM_CONE_TYPE_semidefinite. 
+     *
+     * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     * @param semidefiniteness distinguishes positive and negative semidefinite cones.
+     *        It must be either "positive" or "negative".
+     *
+     * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to 0.
+     * @param otherIndexes holds the array of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to null.
+     * @return whether the cone was added successfully.
+     */
+    bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
+                 std::string name, std::string semidefiniteness, int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+
+    /**
+     * add a cone. In order to use the add method, the setConeNumber must first be called
+     * so that the number of cones is known ahead of time to allocate appropriate memory.
+     * If a cone with the given cone index already exists, the old cone will be replaced.
+     *
+     * @remark This method has different signatures to cater for different types of cones.
+     *         This signature is used for quadratic cones.
+     *
+     * @param index holds the cone index. It is required.
+     * @param numberOfRows holds the number of rows. It is required.
+     * @param numberOfColumns holds the number of columns. It is required.
+     * @param coneType holds the cone type. For more information consult the enumeration ENUM_CONE_TYPE
+     *        further up in this file. This argument is required and must be
+     *            ENUM_CONE_TYPE_quadratic. 
+     *
+     * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     * @param distortionMatrixIdx holds the index of a distortion matrix. Use -1 if there is none.
+     * @param normFactor holds a scale factor for the norm. Use 1 if there is none.
+     * @param axisDirection holds the index of the axis direction. The most usual value is 0.
+     *
+     * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to 0.
+     * @param otherIndexes holds the array of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to null.
+     * @return whether the cone was added successfully.
+     */
+    bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
+                 std::string name, int distortionMatrixIdx, double normFactor, int axisDirection, 
+                 int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+
+    /**
+     * add a cone. In order to use the add method, the setConeNumber must first be called
+     * so that the number of cones is known ahead of time to allocate appropriate memory.
+     * If a cone with the given cone index already exists, the old cone will be replaced.
+     *
+     * @remark This method has different signatures to cater for different types of cones.
+     *         This signature is used for rotated quadratic cones.
+     *
+     * @param index holds the cone index. It is required.
+     * @param numberOfRows holds the number of rows. It is required.
+     * @param numberOfColumns holds the number of columns. It is required.
+     * @param coneType holds the cone type. For more information consult the enumeration ENUM_CONE_TYPE
+     *        further up in this file. This argument is required and must be
+     *            ENUM_CONE_TYPE_rotatedQuadratic. 
+     *
+     * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     * @param distortionMatrixIdx holds the index of a distortion matrix. Use -1 if there is none.
+     * @param normFactor holds a scale factor for the norm. Use 1 if there is none.
+     * @param  firstAxisDirection holds the index of the  first axis direction. The most usual value is 0.
+     * @param secondAxisDirection holds the index of the second axis direction. The most usual value is 1.
+     *
+     * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to 0.
+     * @param otherIndexes holds the array of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to null.
+     * @return whether the cone was added successfully.
+     */
+    bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
+                 std::string name, int distortionMatrixIdx, double normFactor, int firstAxisDirection, 
+                 int secondAxisDirection, int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+
+    /**
+     * add a cone. In order to use the add method, the setConeNumber must first be called
+     * so that the number of cones is known ahead of time to allocate appropriate memory.
+     * If a cone with the given cone index already exists, the old cone will be replaced.
+     *
+     * @remark This method has different signatures to cater for different types of cones.
+     *         This signature is used for normed cones.
+     *
+     * @param index holds the cone index. It is required.
+     * @param numberOfRows holds the number of rows. It is required.
+     * @param numberOfColumns holds the number of columns. It is required.
+     * @param coneType holds the cone type. For more information consult the enumeration ENUM_CONE_TYPE
+     *        further up in this file. This argument is required and must be
+     *            ENUM_CONE_TYPE_normed. 
+     *
+     * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     * @param distortionMatrixIdx holds the index of a distortion matrix. Use -1 if there is none.
+     * @param normFactor holds a scale factor for the norm. Use 1 if there is none.
+     * @param pNorm holds the norm descriptor. It must be greater than or equal to 1.
+     *
+     * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to 0.
+     * @param otherIndexes holds the array of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to null.
+     * @return whether the cone was added successfully.
+     */
+    bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
+                 std::string name, int distortionMatrixIdx, double normFactor, double pNorm, 
+                 int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+
+    /**
+     * add a cone. In order to use the add method, the setConeNumber must first be called
+     * so that the number of cones is known ahead of time to allocate appropriate memory.
+     * If a cone with the given cone index already exists, the old cone will be replaced.
+     *
+     * @remark This method has different signatures to cater for different types of cones.
+     *         This signature is used for cones of nonnegative polynomials and similar cones.
+     *
+     * @param index holds the cone index. It is required.
+     * @param numberOfRows holds the number of rows. It is required.
+     * @param numberOfColumns holds the number of columns. It is required.
+     * @param coneType holds the cone type. For more information consult the enumeration ENUM_CONE_TYPE
+     *        further up in this file. This argument is required and must be
+     *            ENUM_CONE_TYPE_nonnegativePolynomials. 
+     *            ENUM_CONE_TYPE_sumOfSquaresPolynomials. 
+     *            ENUM_CONE_TYPE_moment. 
+     *
+     * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     * @param maxDegree holds the maximum degree of the polynomials. Use 1, 2, 3, ..., INF.
+     * @param numberOfUB holds the number of (box-type) upper bound constraints. Use 0 if there are none.
+     * @param ub holds the upper bound values. Use null if there are no upper bounds.
+     * @param numberOfLB holds the number of (box-type) lower bound constraints. Use 0 if there are none.
+     * @param lb holds the lower bound values. Use null if there are no lower bounds.
+     *
+     * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to 0.
+     * @param otherIndexes holds the array of other indexes if the cone contains higher-dimensional tensors.
+     *        This argument is optional and can be omitted. It defaults to null.
+     * @return whether the cone was added successfully.
+     */
+    bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
+                 std::string name, int maxDegree, int numberOfUB, double* ub, int numberOfLB, double* lb,
+                 int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+
 
     // methods to print the current model or parts of it
 

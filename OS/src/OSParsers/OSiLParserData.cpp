@@ -90,6 +90,8 @@ OSiLParserData::OSiLParserData() :
     numberOf(0), 
     namePresent(false),
     name(""),
+    referenceMatrixIdxAttributePresent(false),
+    referenceMatrixIdx(-1),
     normScaleFactorPresent(false),
     normScaleFactor(1.0),
     distortionMatrixPresent(false),

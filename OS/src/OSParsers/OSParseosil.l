@@ -181,6 +181,7 @@ return(DOUBLE);}
 ({xmlwhitespace}+ubMatrixIdx{equality}) {YY_PRINT;  return(UBMATRIXIDXATT);}
 ({xmlwhitespace}+ubConeIdx{equality}) {YY_PRINT;  return(UBCONEIDXATT);}
 ({xmlwhitespace}+templateMatrixIdx{equality}) {YY_PRINT;  return(TEMPLATEMATRIXIDXATT);}
+({xmlwhitespace}+referenceMatrixIdx{equality}) {YY_PRINT;  return(REFERENCEMATRIXIDXATT);}
 ({xmlwhitespace}+varReferenceMatrixIdx{equality}) {YY_PRINT;  return(VARREFERENCEMATRIXIDXATT);}
 ({xmlwhitespace}+objReferenceMatrixIdx{equality}) {YY_PRINT;  return(OBJREFERENCEMATRIXIDXATT);}
 ({xmlwhitespace}+conReferenceMatrixIdx{equality}) {YY_PRINT;  return(CONREFERENCEMATRIXIDXATT);}
@@ -244,6 +245,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/nonpositiveCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(NONPOSITIVECONEEND);}
 {xmlwhitespace}*\<generalOrthantCone {YY_PRINT;  return(ORTHANTCONESTART);}
 {xmlwhitespace}*\<\/generalOrthantCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ORTHANTCONEEND);}
+{xmlwhitespace}*\<polyhedralCone {YY_PRINT;  return(POLYHEDRALCONESTART);}
+{xmlwhitespace}*\<\/polyhedralCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(POLYHEDRALCONEEND);}
 {xmlwhitespace}*\<quadraticCone {YY_PRINT;  return(QUADRATICCONESTART);}
 {xmlwhitespace}*\<\/quadraticCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(QUADRATICCONEEND);}
 {xmlwhitespace}*\<rotatedQuadraticCone {YY_PRINT;  return(ROTATEDQUADRATICCONESTART);}

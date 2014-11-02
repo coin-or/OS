@@ -221,8 +221,8 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token CONESSTART CONESEND NUMBEROFCONESATT
 
 %token NONNEGATIVECONESTART NONNEGATIVECONEEND NONPOSITIVECONESTART NONPOSITIVECONEEND
-%token ORTHANTCONESTART ORTHANTCONEEND QUADRATICCONESTART QUADRATICCONEEND
-%token ROTATEDQUADRATICCONESTART ROTATEDQUADRATICCONEEND
+%token ORTHANTCONESTART ORTHANTCONEEND POLYHEDRALCONESTART POLYHEDRALCONEEND
+%token QUADRATICCONESTART QUADRATICCONEEND ROTATEDQUADRATICCONESTART ROTATEDQUADRATICCONEEND
 %token SEMIDEFINITECONESTART SEMIDEFINITECONEEND
 %token PRODUCTCONESTART PRODUCTCONEEND INTERSECTIONCONESTART INTERSECTIONCONEEND
 %token DUALCONESTART DUALCONEEND POLARCONESTART POLARCONEEND
@@ -230,13 +230,14 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token FACTORSSTART FACTORSEND COMPONENTSSTART COMPONENTSEND
 %token NORMSCALEFACTORATT DISTORTIONMATRIXIDXATT
 %token AXISDIRECTIONATT FIRSTAXISDIRECTIONATT SECONDAXISDIRECTIONATT
-%token EMPTYSEMIDEFINITENESSATT SEMIDEFINITENESSATT
+%token EMPTYSEMIDEFINITENESSATT SEMIDEFINITENESSATT REFERENCEMATRIXIDXATT
 
 %token MATRIXPROGRAMMINGSTART MATRIXPROGRAMMINGEND
 %token VARTYPEATT
 %token MATRIXVARIABLESSTART   MATRIXVARIABLESEND   NUMBEROFMATRIXVARATT MATRIXVARSTART MATRIXVAREND
 %token MATRIXOBJECTIVESSTART  MATRIXOBJECTIVESEND  NUMBEROFMATRIXOBJATT MATRIXOBJSTART MATRIXOBJEND
 %token MATRIXCONSTRAINTSSTART MATRIXCONSTRAINTSEND NUMBEROFMATRIXCONATT MATRIXCONSTART MATRIXCONEND
+
 %token NUMBEROFMATRIXTERMSATT MATRIXTERMSTART MATRIXTERMEND
 %token MATRIXEXPRESSIONSSTART MATRIXEXPRESSIONSEND NUMBEROFMATRIXEXPRATT MATRIXEXPRSTART MATRIXEXPREND
 
@@ -554,6 +555,7 @@ coneList: | coneList cone
 cone: nonnegativeCone
     | nonpositiveCone
 /*    | generalOrthantCone */
+    | polyhedralCone
     | quadraticCone
     | rotatedQuadraticCone
 /*    | normedCone */
@@ -561,9 +563,9 @@ cone: nonnegativeCone
 /*    | copositiveMatricesCone */
 /*    | completelyPositiveMatricesCone */
 /*    | hyperbolicityCone */
-/*    | nonnegativePolynomialsCone */
 /*    | sumOfSquaresPolynomialsCone */
-/*    | momentsCone */
+/*    | nonnegativePolynomialsCone */
+/*    | momentCone */
     | productCone
     | intersectionCone
 /*    | dualCone */
@@ -637,6 +639,57 @@ nonpositiveConeAtt:
 nonpositiveConeEnd: ENDOFELEMENT | GREATERTHAN NONPOSITIVECONEEND;
 
 /* generalOrthantCone:  conesStart conesAttributes conesContent; */
+
+polyhedralCone: polyhedralConeStart polyhedralConeAttributes polyhedralConeEnd;
+
+polyhedralConeStart: POLYHEDRALCONESTART
+{
+    parserData->numberOfRowsPresent = false;
+    parserData->numberOfColumnsPresent = false;
+    parserData->namePresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new PolyhedralCone();
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_polyhedral;    
+};
+
+polyhedralConeAttributes: polyhedralConeAttList;
+
+polyhedralConeAttList: | polyhedralConeAttList polyhedralConeAtt;
+
+polyhedralConeAtt: 
+      osilNumberOfRowsATT
+        {
+            ((PolyhedralCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = parserData->numberOfRows;
+        }
+    | osilNumberOfColumnsATT
+        {
+            ((PolyhedralCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = parserData->numberOfColumns;
+        }
+    | referenceMatrixATT
+        {
+            ((PolyhedralCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->referenceMatrixIdx
+                = parserData->referenceMatrixIdx;
+        }
+    | osilNameATT
+        {
+            ((PolyhedralCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = parserData->name;
+        };
+
+referenceMatrixATT: REFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE 
+{
+    if (*$2 != *$4) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+    if (parserData->referenceMatrixIdxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "polyhedral cone referenceMatrixIdx attribute previously set");
+    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "polyhedral cone reference matrix index cannot be negative");
+    parserData->referenceMatrixIdxAttributePresent = true;
+    parserData->referenceMatrixIdx = $3; 
+};
+
+polyhedralConeEnd: ENDOFELEMENT | GREATERTHAN POLYHEDRALCONEEND;
+
+
 
 quadraticCone: quadraticConeStart quadraticConeAttributes quadraticConeEnd;
 

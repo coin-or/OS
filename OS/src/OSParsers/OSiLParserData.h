@@ -246,6 +246,10 @@ public:
 
     bool namePresent;
     std::string name;
+
+    bool referenceMatrixIdxAttributePresent;
+    int  referenceMatrixIdx;
+
     bool normScaleFactorPresent;
     double normScaleFactor;
     bool distortionMatrixPresent;

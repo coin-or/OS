@@ -974,6 +974,27 @@ std::string OrthantCone::getConeName()
     return "orthantCone";
 }// end OrthantCone::getConeName()
 
+PolyhedralCone::PolyhedralCone():
+    referenceMatrixIdx(0)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the PolyhedralCone Constructor");
+#endif
+}//end PolyhedralCone()
+
+PolyhedralCone::~PolyhedralCone()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the PolyhedralCone Destructor");
+#endif
+}//end ~PolyhedralCone()
+
+std::string PolyhedralCone::getConeName()
+{
+    return "polyhedralCone";
+}// end PolyhedralCone::getConeName()
+
+
 QuadraticCone::QuadraticCone():
     normScaleFactor(1.0),
     distortionMatrixIdx(-1),
@@ -6573,6 +6594,19 @@ std::string NonpositiveCone::getConeInXML()
     return outStr.str();
 }// end of NonpositiveCone::getConeInXML()
 
+std::string PolyhedralCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<polyhedralCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    outStr << " referenceMatrixIdx=\"" << referenceMatrixIdx << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    outStr << "/>" << std::endl;   
+    return outStr.str();
+}// end of PolyhedralCone::getConeInXML()
+
 std::string QuadraticCone::getConeInXML()
 {
     ostringstream outStr;
@@ -7404,6 +7438,45 @@ bool Cone::IsEqual(Cone *that)
     }
     return true;
 }//Cone::IsEqual
+
+bool PolyhedralCone::IsEqual(PolyhedralCone *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in PolyhedralCone");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->referenceMatrixIdx != that->referenceMatrixIdx)
+                return false;
+
+            return this->Cone::IsEqual(that);
+        }
+    }
+}//PolyhedralCone::IsEqual
+
 
 bool QuadraticCone::IsEqual(QuadraticCone *that)
 {
