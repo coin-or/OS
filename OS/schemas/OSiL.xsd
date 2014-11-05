@@ -1263,25 +1263,13 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="lb" use="required">
-			<xs:annotation>
-				<xs:documentation>must be either 0 or -INF</xs:documentation>
-			</xs:annotation>
+		<xs:attribute name="type" use="required">
 			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:enumeration value="0.0"/>
-					<xs:enumeration value="-INF"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="ub" use="required">
-			<xs:annotation>
-				<xs:documentation>must be either 0 or INF</xs:documentation>
-			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:enumeration value="0.0"/>
-					<xs:enumeration value="INF"/>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="nonnegative"/>
+					<xs:enumeration value="nonpositive"/>
+					<xs:enumeration value="free"/>
+					<xs:enumeration value="zero"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>

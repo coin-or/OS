@@ -532,17 +532,17 @@
 	</xs:complexType>
 	<xs:complexType name="MatrixVariableValues">
 		<xs:sequence>
-			<xs:element name="mtx" type="MtxValue" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixVar" type="MatrixVarValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMtx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="MtxValue">
+	<xs:complexType name="MatrixVarValue">
 		<xs:sequence>
-			<xs:element name="values" type="OSMatrix"/>
+			<xs:element name="matrixValue" type="OSMatrix"/>
 		</xs:sequence>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>must refer to a varReferenceMatrix</xs:documentation>
+				<xs:documentation>must refer to a matrixVar</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
@@ -581,7 +581,7 @@
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixVariableResult">
 		<xs:choice>
-			<xs:element name="mtx" type="OtherMtxResult" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="matrixVar" type="OtherMtxResult" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfMtx must be set in parent, and the number of entries must agree with numberOfMtx</xs:documentation>
 				</xs:annotation>
