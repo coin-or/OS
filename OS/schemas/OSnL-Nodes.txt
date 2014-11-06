@@ -234,16 +234,16 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks
 233		7015	logicCount	>=1		
 234		7016	allDiff	0 or more		
 235		7017	allDisjoint	>=1		
-236		7018	atMost	>=2		
-237		7019	atLeast	>=2		
-238		7020	exactly	>=2		
-239		7021	inSet	>=2		
-240		7022	inRealSet	1		
-241		7023	inPositiveRealSet	1		
-242		7024	inNonnegativeRealSet	1		
-243		7025	inIntegerSet	1		
-244		7026	inPositiveIntegerSet	1		
-245		7027	inNonnegativeIntegerSet	1		
+236		7018	atMost	>=2		"1st is k, others are conditions"
+237		7019	atLeast	>=2		"1st is k, others are conditions"
+238		7020	exactly	>=2		"1st is k, others are conditions"
+239		7021	inSet	>=2		1 if 1st argument is equal to one of the others
+240		7022	inRealSet	1		returns 1 if argument is a real number
+241		7023	inPositiveRealSet	1		returns 1 if argument is a positive real
+242		7024	inNonnegativeRealSet	1		returns 1 if argument is a nonnegative real
+243		7025	inIntegerSet	1		returns 1 if argument is an integer
+244		7026	inPositiveIntegerSet	1		returns 1 if argument is a positive integer
+245		7027	inNonnegativeIntegerSet	1		returns 1 if argument is a nonnegative integer
 246	scalar-valued matrix functions	8001	matrixDeterminant		1	
 247		8002	matrixTrace		1	
 248		8003	matrixToScalar		1	
@@ -311,7 +311,7 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks
 310		8538	matrixUpperTriangle		1	one attribute
 311		8539	matrixDiagonal		1	
 312		8540	diagonalMatrixFromVector		1	
-313		8541	matrixReference		1	one attribute
+313		8541	matrixReference		0	one attribute: existing matrix
 314		8542	matrixBlock		1	two attributes
 315		8543	matrixMerge		>=1*	"matrixBlock objects, plus four attributes"
 316		8544	matrixSubmatrixAt	4	1	
@@ -322,3 +322,6 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks
 321		8549	matrixNot		1	1 wherever the matrix has a zero
 322		8550	matrixForAll		>=1	1 wherever every matrix has a nonzero
 323		8551	matrixExists		>=1	1 wherever at least one matrix has a nonzero
+324		8601	matrixVar		0	one attribute: existing matrixVar
+325		8602	matrixObj		0	one attribute: existing matrixObj
+326		8603	matrixCon		0	one attribute: existing matrixCon
