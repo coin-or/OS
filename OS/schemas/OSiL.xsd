@@ -96,6 +96,16 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="matrixProgramming_alt1" type="MatrixProgramming_alt1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal - first alternative form: matrix expressions removed from matrixObj and matrixCon  </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixProgramming_alt2" type="MatrixProgramming_alt2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal -  second alternative form: in addition remove scalar-valued expressions (and put into nonlinearExpressions)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="complexProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
@@ -479,6 +489,171 @@ If missing, all variables indicated  by the use of the template matrix are creat
 		</xs:sequence>
 	</xs:complexType>
 -->
+	<!-- alternative MatrixProgramming types -->
+	<xs:complexType name="MatrixProgramming_alt1">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
+			<xs:element name="matrixObjectives" type="MatrixObjectives_alt" minOccurs="0"/>
+			<xs:element name="matrixConstraints" type="MatrixConstraints_alt" minOccurs="0"/>
+			<!--
+			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
+			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
+-->
+			<xs:element name="matrixExpressions">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="scalarValued" type="MatrixExpressions" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>For scalar-valued expressions  in "core" objectives and constraints that contain matrix references</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="matrixValued" type="MatrixExpressions" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--   -->
+	<xs:complexType name="MatrixProgramming_alt2">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
+			<xs:element name="matrixObjectives" type="MatrixObjectives_alt" minOccurs="0"/>
+			<xs:element name="matrixConstraints" type="MatrixConstraints_alt" minOccurs="0"/>
+			<!--
+			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
+			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
+-->
+			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions are contained in nonlinearExpressions</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--   -->
+	<xs:complexType name="MatrixObjectives_alt">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="matrixObj" type="MatrixObj_alt" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfMatrixObj</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixObj_alt">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>matrix objective has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="objReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
+Note: only where template matrix indicates a nonzero.
+If missing, all objectives indicated  by the use of the template matrix are created fresh. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses only core objectives, orderConeIdx can be omitted and defaults to the corresponding orthant cone</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>added to objective;        zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="MatrixConstraints_alt">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="matrixCon" type="MatrixCon_alt" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfMatrixCon</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixCon_alt">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>matrix constraint has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="conReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
+Note: only where template matrix indicates a nonzero.
+If missing, all constraints indicated  by the use of the template matrix are created fresh.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains mtx expr - lbMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<!--   -->
 	<xs:complexType name="LinearConstraintMatrixOperators">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -816,53 +991,6 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<!--
-	<xs:complexType name="MatrixCon">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="matrixTerm" type="MatrixTransformation" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixTerms; all dimensions must be conformal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="shape" default="nonlinear">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="linear"/>
-					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="nonlinear"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>contains mtx expr - lbMtx; assumed all R^n if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-	</xs:complexType>
--->
 	<xs:complexType name="MatrixCon">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
