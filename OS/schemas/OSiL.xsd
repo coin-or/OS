@@ -89,21 +89,9 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<!-- Note: matrixProgramming is intentionally different from scalar programming because there are four different types of "rows" that need to be distinguished: scalar objectives, scalar constraints, matrix objectives and matrix constraints. A simple numbering convention won't do that, so there are no separate sections for linear and nonlinear expressions.
-			-->
 			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="matrixProgramming_alt1" type="MatrixProgramming_alt1" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal - first alternative form: matrix expressions removed from matrixObj and matrixCon  </xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="matrixProgramming_alt2" type="MatrixProgramming_alt2" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal -  second alternative form: in addition remove scalar-valued expressions (and put into nonlinearExpressions)</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="complexProgramming" minOccurs="0">
@@ -349,8 +337,7 @@
 			</xs:annotation>
 			<xs:element name="nl" type="Nl" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>since version 1.0
-can only contain references to OSnL nodes</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -376,7 +363,7 @@ can only contain references to OSnL nodes</xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<!--MatrixProgramming: draft-->
-	<xs:complexType name="MatrixProgramming">
+	<xs:complexType name="MatrixProgramming_old">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -410,6 +397,11 @@ can only contain references to OSnL nodes</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="symmetry" type="SymmetryType" default="none">
+			<xs:annotation>
+				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>matrix variable has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
@@ -489,42 +481,14 @@ If missing, all variables indicated  by the use of the template matrix are creat
 		</xs:sequence>
 	</xs:complexType>
 -->
-	<!-- alternative MatrixProgramming types -->
-	<xs:complexType name="MatrixProgramming_alt1">
+	<xs:complexType name="MatrixProgramming">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
-			<xs:element name="matrixObjectives" type="MatrixObjectives_alt" minOccurs="0"/>
-			<xs:element name="matrixConstraints" type="MatrixConstraints_alt" minOccurs="0"/>
-			<!--
-			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
-			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
--->
-			<xs:element name="matrixExpressions">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="scalarValued" type="MatrixExpressions" minOccurs="0">
-							<xs:annotation>
-								<xs:documentation>For scalar-valued expressions  in "core" objectives and constraints that contain matrix references</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-						<xs:element name="matrixValued" type="MatrixExpressions" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
-	<!--   -->
-	<xs:complexType name="MatrixProgramming_alt2">
-		<xs:annotation>
-			<xs:documentation>proposal</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
-			<xs:element name="matrixObjectives" type="MatrixObjectives_alt" minOccurs="0"/>
-			<xs:element name="matrixConstraints" type="MatrixConstraints_alt" minOccurs="0"/>
+			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0"/>
+			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
 			<!--
 			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
 			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
@@ -537,12 +501,12 @@ If missing, all variables indicated  by the use of the template matrix are creat
 		</xs:sequence>
 	</xs:complexType>
 	<!--   -->
-	<xs:complexType name="MatrixObjectives_alt">
+	<xs:complexType name="MatrixObjectives">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixObj" type="MatrixObj_alt" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="matrixObj" type="MatrixObj" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must match numberOfMatrixObj</xs:documentation>
 				</xs:annotation>
@@ -550,12 +514,17 @@ If missing, all variables indicated  by the use of the template matrix are creat
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="MatrixObj_alt">
+	<xs:complexType name="MatrixObj">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="symmetry" type="SymmetryType" default="none">
+			<xs:annotation>
+				<xs:documentation>e.g., if symmetry = "upper", only objectives in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>matrix objective has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
@@ -590,12 +559,12 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="MatrixConstraints_alt">
+	<xs:complexType name="MatrixConstraints">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixCon" type="MatrixCon_alt" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="matrixCon" type="MatrixCon" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must match numberOfMatrixCon</xs:documentation>
 				</xs:annotation>
@@ -603,12 +572,17 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="MatrixCon_alt">
+	<xs:complexType name="MatrixCon">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="symmetry" type="SymmetryType" default="none">
+			<xs:annotation>
+				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation>matrix constraint has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
@@ -790,7 +764,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:attribute name="objIdx" type="xs:negativeInteger" default="-1"/>
 		<xs:attribute name="numberOfMatrixTerms" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="MatrixObjectives">
+	<xs:complexType name="MatrixObjectives_old">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -803,7 +777,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="MatrixObj">
+	<xs:complexType name="MatrixObj_old">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -896,7 +870,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="OSnLNode"/>
+			<xs:element ref="OSnLMNode"/>
 		</xs:sequence>
 		<xs:attribute name="idx" type="xs:int" use="required">
 			<xs:annotation>
@@ -978,7 +952,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		<xs:attribute name="numberOfMatrixTerms" use="required"/>
 		<xs:attribute name="orderConeID" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="MatrixConstraints">
+	<xs:complexType name="MatrixConstraints_old">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -991,7 +965,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="MatrixCon">
+	<xs:complexType name="MatrixCon_old">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -3932,4 +3906,15 @@ In an SOS2, adjacency usually means that nonzero variables must be consecutive w
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:simpleType name="SymmetryType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="none"/>
+			<xs:enumeration value="upper"/>
+			<xs:enumeration value="lower"/>
+			<xs:enumeration value="skewUpper"/>
+			<xs:enumeration value="skewLower"/>
+			<xs:enumeration value="HermitianUpper"/>
+			<xs:enumeration value="HermitianLower"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>

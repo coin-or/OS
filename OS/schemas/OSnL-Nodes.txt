@@ -261,7 +261,7 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks
 260		8015	matrixRank		1	
 261		8016	matrixColumnRank		1	
 262		8017	matrixRowRank		1	
-263		8018	matrixNonsingular		1	
+263		8018	matrixNonsingular		1	"returns 1 if matrix is nonsingular, 0 otherwise"
 264		8019	matrixPositiveDefinite		1	
 265		8020	matrixPositiveSemidefinite		1	
 266		8021	matrixNegativeDefinite		1	
@@ -271,57 +271,58 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks
 270		8025	matrixFullColumnRank		1	
 271		8026	matrixFullRowRank		1	
 272		8027	matrixIdentical		2	
-273	matrix-valued functions	8501	matrixPlus		2	
-274		8502	matrixSum		0 or more	
-275		8503	matrixMinus		2	
-276		8504	matrixNegate		1	
-277		8505	matrixTimes		2	
-278		8506	matrixProduct		0 or more	
-279		8507	matrixLeftDivide		2	
-280		8508	matrixRightDivide		2	
-281		8509	matrixPower	1	1	
-282		8510	matrixInverse		1	
-283		8511	matrixGeneralizedInverse		1	one attribute
-284		8512	matrixExp		1	
-285		8513	matrixSquareRoot		1	
-286		8514	matrixLog		1	
-287		8515	matrixTranspose		1	
-288		8516	matrixScalarPlus	1	1	
-289		8517	matrixScalarMinus	1	1	
-290		8518	matrixScalarTimes	1	1	
-291		8519	matrixScalarDivide	1	1	
-292		8520	matrixDotTimes		2	
-293		8521	matrixDotDivide		2	
-294		8522	matrixDotPower		2	
-295		8523	matrixDotExp		1	
-296		8524	matrixEigenValues		1	
-297		8525	matrixLeftEigenVectors		1	
-298		8526	matrixRightEigenVectors		1	
-299		8527	matrixCholeskyDecomposition		1	
-300		8528	matrixLDLDecomposition		1	one attribute
-301		8529	matrixLUDecomposition		1	one attribute
-302		8530	matrixColumnSpace		1	
-303		8531	matrixRowSpace		1	
-304		8532	matrixNullSpace		1	
-305		8533	matrixLeftNullSpace		1	
-306		8534	matrixRightNullSpace		1	
-307		8535	matrixReducedRowEchelon		1	
-308		8536	identityMatrix	1	0	dimension!
-309		8537	matrixLowerTriangle		1	one attribute
-310		8538	matrixUpperTriangle		1	one attribute
-311		8539	matrixDiagonal		1	
-312		8540	diagonalMatrixFromVector		1	
-313		8541	matrixReference		0	one attribute: existing matrix
-314		8542	matrixBlock		1	two attributes
-315		8543	matrixMerge		>=1*	"matrixBlock objects, plus four attributes"
-316		8544	matrixSubmatrixAt	4	1	
-317		8545	matrixAnd		2	1 wherever both matrices have a nonzero
-318		8546	matrixOr		2	1 wherever either matrix has a nonzero
-319		8547	matrixXor		2	1 wherever exactly one matrix has a nonzero
-320		8548	matrixPattern		1	1 wherever the matrix has a nonzero
-321		8549	matrixNot		1	1 wherever the matrix has a zero
-322		8550	matrixForAll		>=1	1 wherever every matrix has a nonzero
-323		8551	matrixExists		>=1	1 wherever at least one matrix has a nonzero
-324		8601	matrixVar		0	one attribute: existing matrixVar
-325		8602	matrixObj		0	one attribute: existing matrixObj
-326		8603	matrixCon		0	one attribute: existing matrixCon
+273		8028	matrixSymmetric		1	
+274	matrix-valued functions	8501	matrixPlus		2	
+275		8502	matrixSum		0 or more	
+276		8503	matrixMinus		2	
+277		8504	matrixNegate		1	
+278		8505	matrixTimes		2	
+279		8506	matrixProduct		0 or more	
+280		8507	matrixLeftDivide		2	
+281		8508	matrixRightDivide		2	
+282		8509	matrixPower	1	1	
+283		8510	matrixInverse		1	
+284		8511	matrixGeneralizedInverse		1	one attribute
+285		8512	matrixExp		1	
+286		8513	matrixSquareRoot		1	
+287		8514	matrixLog		1	
+288		8515	matrixTranspose		1	
+289		8516	matrixScalarPlus	1	1	
+290		8517	matrixScalarMinus	1	1	
+291		8518	matrixScalarTimes	1	1	
+292		8519	matrixScalarDivide	1	1	
+293		8520	matrixDotTimes		2	
+294		8521	matrixDotDivide		2	
+295		8522	matrixDotPower		2	
+296		8523	matrixDotExp		1	
+297		8524	matrixEigenValues		1	
+298		8525	matrixLeftEigenVectors		1	
+299		8526	matrixRightEigenVectors		1	
+300		8527	matrixCholeskyDecomposition		1	
+301		8528	matrixLDLDecomposition		1	one attribute
+302		8529	matrixLUDecomposition		1	one attribute
+303		8530	matrixColumnSpace		1	
+304		8531	matrixRowSpace		1	
+305		8532	matrixNullSpace		1	
+306		8533	matrixLeftNullSpace		1	
+307		8534	matrixRightNullSpace		1	
+308		8535	matrixReducedRowEchelon		1	
+309		8536	identityMatrix	1	0	dimension!
+310		8537	matrixLowerTriangle		1	one attribute
+311		8538	matrixUpperTriangle		1	one attribute
+312		8539	matrixDiagonal		1	
+313		8540	diagonalMatrixFromVector		1	
+314		8541	matrixReference		0	one attribute: existing matrix
+315		8542	matrixBlock		1	two attributes
+316		8543	matrixMerge		>=1*	"matrixBlock objects, plus four attributes"
+317		8544	matrixSubmatrixAt	4	1	
+318		8545	matrixAnd		2	1 wherever both matrices have a nonzero
+319		8546	matrixOr		2	1 wherever either matrix has a nonzero
+320		8547	matrixXor		2	1 wherever exactly one matrix has a nonzero
+321		8548	matrixPattern		1	1 wherever the matrix has a nonzero
+322		8549	matrixNot		1	1 wherever the matrix has a zero
+323		8550	matrixForAll		>=1	1 wherever every matrix has a nonzero
+324		8551	matrixExists		>=1	1 wherever at least one matrix has a nonzero
+325		8601	matrixVar		0	one attribute: existing matrixVar
+326		8602	matrixObj		0	one attribute: existing matrixObj
+327		8603	matrixCon		0	one attribute: existing matrixCon

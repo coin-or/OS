@@ -5045,6 +5045,23 @@
 			<xs:documentation>draft. returns 1 if the two matrices are identical, 0 otherwise.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixSymmetric">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixSymmetric" type="OSnLNodeMatrixSymmetric" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if the matrix is symmetric, 0 otherwise. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixPlus">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -5793,7 +5810,7 @@
 	</xs:complexType>
 	<xs:element name="matrixVar" type="OSnLNodeMatrixVar" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. Must refer to a valid index of a matrixVar object. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixObj">
@@ -5808,7 +5825,7 @@
 	</xs:complexType>
 	<xs:element name="matrixObj" type="OSnLNodeMatrixObj" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. Must refer to a valid index of a matrixObj object.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixCon">
@@ -5823,7 +5840,7 @@
 	</xs:complexType>
 	<xs:element name="matrixCon" type="OSnLNodeMatrixCon" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. Must refer to a valid index of a matrixcon object. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixBlock">
@@ -6018,23 +6035,6 @@
 	<xs:element name="matrixForAll" type="OSnLMNodeMatrixForAll" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>result matrix has a 1 wherever all argument matrices have a nonzero value</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLMNodeMatrixExists">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence maxOccurs="unbounded">
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixExists" type="OSnLMNodeMatrixExists" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>result matrix has a 1 wherever at least one of the argument matrices has a nonzero</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:simpleType name="NlNodeEnumeration">
@@ -6302,6 +6302,7 @@
 			<xs:enumeration value="matrixFullColumnRank"/>
 			<xs:enumeration value="matrixFullRowRank"/>
 			<xs:enumeration value="matrixIdentical"/>
+			<xs:enumeration value="matrixSymmetric"/>
 			<xs:enumeration value="matrixPlus"/>
 			<xs:enumeration value="matrixSum"/>
 			<xs:enumeration value="matrixMinus"/>

@@ -810,21 +810,10 @@
 				</xs:element>
 			</xs:choice>
 		</xs:sequence>
-		<xs:attribute name="symmetry" use="optional" default="none">
+		<xs:attribute name="symmetry" type="SymmetryType" use="optional" default="none">
 			<xs:annotation>
 				<xs:documentation>If symmetry is "upper" or "skewUpper", any elements below the main diagonal are ignored and inferred from the upper triangle. If symmetry is "lower" or "skewLower", any elements above the main diagonal are ignored and inferred from the lower triangle.</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="none"/>
-					<xs:enumeration value="upper"/>
-					<xs:enumeration value="lower"/>
-					<xs:enumeration value="skewUpper"/>
-					<xs:enumeration value="skewLower"/>
-					<xs:enumeration value="HermitianUpper"/>
-					<xs:enumeration value="HermitianLower"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="type">
 			<xs:annotation>
