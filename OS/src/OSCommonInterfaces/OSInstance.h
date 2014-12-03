@@ -26,8 +26,6 @@
  *</ol>
  */
 
-
-
 #ifndef OSINSTANCE_H
 #define OSINSTANCE_H
 #include "OSConfig.h"
@@ -37,7 +35,6 @@
 #include "OSExpressionTree.h"
 #include <string>
 #include <map>
-
 
 
 /*! \class Variable
@@ -52,23 +49,23 @@ public:
     /** The Variable class destructor */
     ~Variable();
 
-    /** lb corresponds to the optional attribute that holds the variable lower bound,
-     * the default value is 0
+    /** lb corresponds to the optional attribute that holds the variable lower bound.
+     *  The default value is 0
      */
     double lb;
 
-    /** ub corresponds to the optional attribute that holds the variable upper bound,
-     * the default value is OSINFINITY
+    /** ub corresponds to the optional attribute that holds the variable upper bound.
+     *  The default value is OSINFINITY
      */
     double ub;
 
     /** type corresponds to the attribute that holds the variable type: C (Continuous),
-     * B (binary), I (general integer), or S (string). The default is C
+     *  B (binary), I (general integer), or S (string). The default is C
      */
     char type;
 
     /** name corresponds to the optional attribute that holds the variable name, the
-     * default value is empty
+     *  default value is empty
      */
     std::string name;
 
@@ -302,6 +299,8 @@ public:
      */
     int numberOfValues;
 
+
+
     /** a pointer to the start of each row or column stored in
      * sparse format
      */
@@ -374,8 +373,6 @@ public:
 }; // QuadraticTerm
 
 
-
-
 /*! \class QuadraticCoefficients
  * \brief The in-memory representation of the
  * <b><quadraticCoefficients></b> element.
@@ -417,6 +414,12 @@ public:
     /** idx holds the row index of the nonlinear expression */
     int idx;
 
+    /** shape holds the shape of the nonlinear expression 
+     *  (linear/quadratic/convex/general) (see further up in this file).
+     *  this might be useful in guiding solver selection.
+     */
+    ENUM_NL_EXPR_SHAPE shape;
+
     /** m_bDeleteExpressionTree is true, if in garbage collection, we
      * should delete the osExpression tree object, if the OSInstance class
      * created a map of the expression trees this should be false since the
@@ -424,8 +427,8 @@ public:
      */
     bool m_bDeleteExpressionTree;
 
-    /** osExpressionTree contains the root of the OSExpressionTree */
-    OSExpressionTree *osExpressionTree;
+    /** osExpressionTree contains the root of the ScalarExpressionTree */
+    ScalarExpressionTree *osExpressionTree;
 
     /**
      * default constructor.
@@ -519,61 +522,6 @@ public:
      */    
     bool deepCopyFrom(Matrices *that);
 }; // Matrices
-
-
-enum ENUM_CONE_TYPE
-{
-    ENUM_CONE_TYPE_nonnegative = 1,
-    ENUM_CONE_TYPE_nonpositive,
-    ENUM_CONE_TYPE_orthant,
-    ENUM_CONE_TYPE_polyhedral,
-    ENUM_CONE_TYPE_quadratic,
-    ENUM_CONE_TYPE_rotatedQuadratic,
-    ENUM_CONE_TYPE_normed,
-    ENUM_CONE_TYPE_rotatedNormed,
-    ENUM_CONE_TYPE_semidefinite,
-    ENUM_CONE_TYPE_copositiveMatrices,
-    ENUM_CONE_TYPE_completelyPositiveMatrices,
-    ENUM_CONE_TYPE_hyperbolicity,
-    ENUM_CONE_TYPE_sumOfSquaresPolynomials,
-    ENUM_CONE_TYPE_nonnegativePolynomials,
-    ENUM_CONE_TYPE_moments,
-    ENUM_CONE_TYPE_product,
-    ENUM_CONE_TYPE_intersection,
-    ENUM_CONE_TYPE_dual,
-    ENUM_CONE_TYPE_polar,
-    ENUM_CONE_TYPE_unknown
-};
-
-inline int returnConeType(std::string type)
-{
-    if (type == "nonnegative"               ) return ENUM_CONE_TYPE_nonnegative;
-    if (type == "nonpositive"               ) return ENUM_CONE_TYPE_nonpositive;
-    if (type == "orthant"                   ) return ENUM_CONE_TYPE_orthant;
-    if (type == "polyhedral"                ) return ENUM_CONE_TYPE_polyhedral;
-    if (type == "quadratic"                 ) return ENUM_CONE_TYPE_quadratic;
-    if (type == "rotatedQuadratic"          ) return ENUM_CONE_TYPE_rotatedQuadratic;
-    if (type == "normed"                    ) return ENUM_CONE_TYPE_normed;
-    if (type == "rotatedNormed"             ) return ENUM_CONE_TYPE_rotatedNormed;
-    if (type == "semidefinite"              ) return ENUM_CONE_TYPE_semidefinite;
-    if (type == "copositiveMatrices"        ) return ENUM_CONE_TYPE_copositiveMatrices;
-    if (type == "completelyPositiveMatrices") return ENUM_CONE_TYPE_completelyPositiveMatrices;
-    if (type == "hyperbolicity"             ) return ENUM_CONE_TYPE_hyperbolicity;
-    if (type == "sumOfSquaresPolynomials"   ) return ENUM_CONE_TYPE_sumOfSquaresPolynomials;
-    if (type == "nonnegativePolynomials"    ) return ENUM_CONE_TYPE_nonnegativePolynomials;
-    if (type == "moments"                   ) return ENUM_CONE_TYPE_moments;
-    if (type == "product"                   ) return ENUM_CONE_TYPE_product;
-    if (type == "intersection"              ) return ENUM_CONE_TYPE_intersection;
-    if (type == "dual"                      ) return ENUM_CONE_TYPE_dual;
-    if (type == "polar"                     ) return ENUM_CONE_TYPE_polar;
-    if (type == "unknown"                   ) return ENUM_CONE_TYPE_unknown;
-    return 0;
-}//returnConeType
-
-inline bool verifyConeType(std::string type)
-{
-    return (returnConeType(type) > 0);
-}//verifyConeType
 
 
 /*! \class Cone
@@ -1169,9 +1117,128 @@ public:
     bool deepCopyFrom(SemidefiniteCone *that);
 }; // SemidefiniteCone
 
+
+/*! \class CopositiveMatricesCone
+ *  \brief The CopositiveMatricesCone Class.
+ *
+ * \remarks
+ * The in-memory representation of the OSiL element <copositiveMatricesCone>
+ *
+ */
+class CopositiveMatricesCone : public Cone
+{
+public:
+    /**
+     * default constructor.
+     */
+    CopositiveMatricesCone();
+
+    /**
+     * default destructor.
+     */
+    ~CopositiveMatricesCone();
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+     * Write a CopositiveMatricesCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(CopositiveMatricesCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(CopositiveMatricesCone *that);
+
+};//end CopositiveMatricesCone
+
+
+/*! \class CompletelyPositiveMatricesCone
+ *  \brief The CompletelyPositiveMatricesCone Class.
+ *
+ * \remarks
+ * The in-memory representation of the OSiL element <completelyPositiveMatricesCone>
+ *
+ */
+class CompletelyPositiveMatricesCone : public Cone
+{
+public:
+    /**
+
+     * default constructor.
+     */
+    CompletelyPositiveMatricesCone();
+
+    /**
+     * default destructor.
+     */
+    ~CompletelyPositiveMatricesCone();
+
+    /**
+     * @return the type of cone as a string
+     */
+    virtual std::string getConeName();
+
+    /**
+
+     * Write a CompletelyPositiveMatricesCone object in XML format. 
+     * This is used by OSiLWriter to write a <cone> element.
+     *
+     * @return the cone and its children as an XML string.
+     */
+    virtual std::string getConeInXML();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(CompletelyPositiveMatricesCone *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(CompletelyPositiveMatricesCone *that);
+
+};//end CompletelyPositiveMatricesCone
+
 /*  Not yet implemented: 
-    ENUM_CONE_TYPE_copositiveMatrices,
-    ENUM_CONE_TYPE_completelyPositiveMatrices,
     ENUM_CONE_TYPE_hyperbolicity,
     ENUM_CONE_TYPE_nonnegativePolynomials,
     ENUM_CONE_TYPE_moments,
@@ -1522,8 +1589,21 @@ public:
     /** The MatrixVar class destructor */
     ~MatrixVar();
 
-    /** matrixIdx gives the reference to a matrix on which this matrix variable is based */
-    int matrixIdx;
+    /** numberOfRows gives the number of rows of this matrix */
+    int numberOfRows;
+
+    /** numberOfColumns gives the number of columns of this matrix */
+    int numberOfColumns;
+
+    /** templateMatrixIdx refers to a matrix that describes the
+     *  locations in this matrixVar that are allowed to be nonzero
+     */
+    int templateMatrixIdx;
+
+    /** varReferenceMatrixIdx allows some or all of the components of this matrix variable to be
+     *  copied from variables defined in the core
+     */
+    int varReferenceMatrixIdx;
 
     /** lbMatrixIdx gives a lower bound for this matrixVar */
     int lbMatrixIdx;
@@ -1537,12 +1617,11 @@ public:
     /** ubConeIdx gives a cone that must contain ubMatrix - matrixVar */
     int ubConeIdx;
 
-    /** patternMatrixIdx refers to a pattern matrix that describes the
-     *  locations in this matrixVar that are allowed to be nonzero */
-    int patternMatrixIdx;
-
     /** an optional name to this matrixVar */
     std::string name;
+
+    /** an optional type for each component of this matrixVar */ 
+    char varType;
 }; // MatrixVar
 
 
@@ -1583,8 +1662,21 @@ public:
     /** The MatrixVar class destructor */
     ~MatrixObj();
 
-    /** matrixIdx gives the reference to a matrix on which this multidimensional objective is based */
-    int matrixIdx;
+    /** numberOfRows gives the number of rows of this matrix */
+    int numberOfRows;
+
+    /** numberOfColumns gives the number of columns of this matrix */
+    int numberOfColumns;
+
+    /** templateMatrixIdx refers to a matrix that describes the
+     *  locations in this matrixObj that are allowed to be nonzero
+     */
+    int templateMatrixIdx;
+
+    /** objReferenceMatrixIdx allows some or all of the components 
+     *  of this matrixObj to be copied from objectives defined in the core
+     */
+    int objReferenceMatrixIdx;
 
     /** orderConeIdx gives a cone that expresses preferences during the optimization 
      *  x is (weakly) preferred to y if obj(x) - obj(y) lies in the cone. 
@@ -1593,10 +1685,6 @@ public:
 
     /** constantMatrixIdx gives a constant added to the matrixObj */
     int constantMatrixIdx;
-
-    /** patternMatrixIdx refers to a pattern matrix that describes the
-     *  locations in this matrixObj that are allowed to be nonzero */
-    int patternMatrixIdx;
 
     /** an optional name to this matrixObj */
     std::string name;
@@ -1653,8 +1741,21 @@ public:
     /** The MatrixCon class destructor */
     ~MatrixCon();
 
-    /** matrixIdx gives the reference to a matrix on which this matrix constraint is based */
-    int matrixIdx;
+    /** numberOfRows gives the number of rows of this matrix */
+    int numberOfRows;
+
+    /** numberOfColumns gives the number of columns of this matrix */
+    int numberOfColumns;
+
+    /** templateMatrixIdx refers to a matrix that describes the
+     *  locations in this matrixVar that are allowed to be nonzero
+     */
+    int templateMatrixIdx;
+
+    /** conReferenceMatrixIdx allows some or all of the components of this matrixCon to be
+     *  copied from constraints defined in the core
+     */
+    int conReferenceMatrixIdx;
 
     /** lbMatrixIdx gives a lower bound for this matrixCon */
     int lbMatrixIdx;
@@ -1667,10 +1768,6 @@ public:
 
     /** ubConeIdx gives a cone that must contain ubMatrix - matrixCon */
     int ubConeIdx;
-
-    /** patternMatrixIdx refers to a pattern matrix that describes the
-     *  locations in this matrixCon that are allowed to be nonzero */
-    int patternMatrixIdx;
 
     /** an optional name to this MatrixCon */
     std::string name;
@@ -1708,10 +1805,9 @@ public:
     int numberOfMatrixCon;
 
     /** matrixCon is an array of pointers to the <matrixCon> children */
-    MatrixObj** matrixCon;
+    MatrixCon** matrixCon;
 
 }; // MatrixConstraints
-
 
 /*! \class MatrixExpression
  * \brief The in-memory representation of the <b><expr></b> element,
@@ -1719,9 +1815,27 @@ public:
  * the expression could be linear, so a "shape" attribute is added
  * to distinguish linear and nonlinear expressions.
  */
-class MatrixExpression: Nl
+class MatrixExpression
 {
 public:
+    /** idx holds the row index of the nonlinear expression */
+    int idx;
+
+    /** shape holds the shape of the nonlinear expression 
+     *  (linear/quadratic/convex/general) (see further up in this file).
+     *  this might be useful in guiding solver selection.
+     */
+    ENUM_NL_EXPR_SHAPE shape;
+
+    /** m_bDeleteExpressionTree is true, if in garbage collection, we
+     * should delete the osExpression tree object, if the OSInstance class
+     * created a map of the expression trees this should be false since the
+     * osExpressionTree is deleted by the OSInstance object
+     */
+    bool m_bDeleteExpressionTree;
+
+    /** matrixExpressionTree contains the root of the MatrixExpressionTree */
+    MatrixExpressionTree *matrixExpressionTree;
 
     /** The MatrixExpression class constructor */
     MatrixExpression();
@@ -1729,8 +1843,10 @@ public:
     /** The MatrixExpression class destructor */
     ~MatrixExpression();
 
-    /** shape is used to track whether the expression is linear or nonlinear */
-    std::string shape;
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixExpression *that);
 }; // MatrixExpression
 
 
@@ -1751,11 +1867,16 @@ public:
     /** numberOfExpr gives the number of expressions */
     int numberOfExpr;
 
-    /** a pointer to an array of expr object pointers */
+    /** a pointer to an array of linear and nonlinear
+     *  expressions that evaluate to matrices
+     */
     MatrixExpression **expr;
 
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixExpressions *that);
 }; // MatrixExpressions
-
 
 /*! \class MatrixProgramming
  * \brief The in-memory representation of the 
@@ -2152,7 +2273,9 @@ public:
     /** The OSInstance class destructor */
     ~OSInstance();
 
-    /** the instanceHeader is implemented as a general file header object to allow sharing of classes between schemas */
+    /** the instanceHeader is implemented as a general file header object 
+     *  to allow sharing of classes between schemas 
+     */
     GeneralFileHeader *instanceHeader;
 
     /** A pointer to an InstanceData object */
@@ -2166,24 +2289,22 @@ public:
     /**
      * bVariablesModified is true if the variables data has been modified.
      */
-    bool bVariablesModified ;
+    bool bVariablesModified;
 
     /**
      * bObjectivesModified is true if the objective function data has been modified.
      */
-    bool bObjectivesModified ;
+    bool bObjectivesModified;
 
     /**
      * bConstraintsModified is true if the constraints data has been modified.
      */
-    bool bConstraintsModified ;
+    bool bConstraintsModified;
 
     /**
      * bAMatrixModified is true if the A matrix data has been modified.
      */
-    bool bAMatrixModified ;
-
-
+    bool bAMatrixModified;
 
 private:
     /**
@@ -2253,40 +2374,45 @@ private:
     bool m_bQuadraticRowIndexesProcessed;
 
     /**
-     * m_miQuadRowIndexes is an integer pointer to the distinct rows indexes with a quadratic term.
+     * m_miQuadRowIndexes is an integer pointer to the distinct row indexes with a quadratic term.
      */
     int *m_miQuadRowIndexes;
 
     /**
-     * m_iNumberOfNonlinearExpressionTreeIndexes holds the number of distinct rows and objectives with nonlinear terms.
+     * m_iNumberOfNonlinearExpressionTreeIndexes holds the number of 
+     * distinct rows and objectives with nonlinear terms.
      */
     int m_iNumberOfNonlinearExpressionTreeIndexes;
-
+  
     /**
-     * m_bNonlinearExpressionTreeIndexesProcessed is true if getNonlinearExpressionTreeIndexes has been called.
+     * m_bNonlinearExpressionTreeIndexesProcessed is true 
+     * if getNonlinearExpressionTreeIndexes has been called.
      */
     bool m_bNonlinearExpressionTreeIndexesProcessed;
 
     /**
-     * m_miNonlinearExpressionTreeIndexes is an integer pointer to the distinct rows indexes in the nonlinear expression
+     * m_miNonlinearExpressionTreeIndexes is an integer pointer 
+     * to the distinct rows indexes in the nonlinear expression
      * tree map.
      */
     int *m_miNonlinearExpressionTreeIndexes;
 
     /**
-     * m_iNumberOfNonlinearExpressionTreeModIndexes holds the number of distinct rows and objectives with nonlinear terms
-     * including quadratic terms added to the nonlinear expression trees.
+     * m_iNumberOfNonlinearExpressionTreeModIndexes holds the number of distinct
+     * rows and objectives with nonlinear terms including quadratic terms 
+     * added to the nonlinear expression trees.
      */
     int m_iNumberOfNonlinearExpressionTreeModIndexes;
 
     /**
-     * m_bNonlinearExpressionTreeModIndexesProcessed is true if getNonlinearExpressionTreeModIndexes has been called.
+     * m_bNonlinearExpressionTreeModIndexesProcessed is true 
+    *  if getNonlinearExpressionTreeModIndexes has been called.
      */
     bool m_bNonlinearExpressionTreeModIndexesProcessed;
 
     /**
-     * m_miNonlinearExpressionTreeModIndexes is an integer pointer to the distinct rows indexes in the modified
-     * expression tree map.
+     * m_miNonlinearExpressionTreeModIndexes is an integer pointer to
+     * the distinct rows indexes in the modified  expression tree map.
      */
     int *m_miNonlinearExpressionTreeModIndexes;
 
@@ -2337,7 +2463,7 @@ private:
     std::string* m_msMaxOrMins;
 
     /**
-     * m_miNumberOfObjCoef holds an integer array of number of objective coefficients (default = 0.0).
+     * m_miNumberOfObjCoef holds an integer array of number of objective coefficients (default = 0).
      */
     int* m_miNumberOfObjCoef;
 
@@ -2411,7 +2537,8 @@ private:
     char* m_mcConstraintTypes;
 
     /**
-     * m_bProcessLinearConstraintCoefficients holds whether the linear constraint coefficients are processed.
+     * m_bProcessLinearConstraintCoefficients holds whether 
+     * the linear constraint coefficients are processed.
      */
     bool m_bProcessLinearConstraintCoefficients;
 
@@ -2422,24 +2549,27 @@ private:
     int m_iLinearConstraintCoefficientNumber;
 
     /**
-     * m_bColumnMajor holds whether the linear constraint coefficients are stored in column major.
+     * m_bColumnMajor holds whether the linear constraint coefficients
+     * are stored in column major (if m_bColumnMajor = true) or row major.
      */
     bool m_bColumnMajor;
 
     /**
-     * m_binitForAlgDiff  is true if initForAlgDiff() has been called.
+     * m_binitForAlgDiff is true if initForAlgDiff() has been called.
      */
     bool m_binitForAlgDiff;
 
 
     /**
-     * m_linearConstraintCoefficientsInColumnMajor holds the standard 3 array data structure for linear constraint coefficients
+     * m_linearConstraintCoefficientsInColumnMajor holds the standard 
+     * three-array data structure for linear constraint coefficients
      * (starts, indexes and values) in column major.
      */
     SparseMatrix* m_linearConstraintCoefficientsInColumnMajor;
 
     /**
-     * m_linearConstraintCoefficientsInRowMajor holds the standard 3 array data structure for linear constraint coefficients
+     * m_linearConstraintCoefficientsInRowMajor holds the standard 
+     * three-array data structure for linear constraint coefficients
      * (starts, indexes and values) in row major.
      */
     SparseMatrix* m_linearConstraintCoefficientsInRowMajor;
@@ -2457,12 +2587,14 @@ private:
     int m_iQuadraticTermNumber;
 
     /**
-     * m_mdConstraintFunctionValues holds a double array of constraint function values -- the size of the array is equal to getConstraintNumber().
+     * m_mdConstraintFunctionValues holds a double array of constraint function values
+     * -- the size of the array is equal to getConstraintNumber().
      */
     double *m_mdConstraintFunctionValues;
 
     /**
-     * m_mdObjectiveFunctionValues holds a double array of objective function values -- the size of the array is equal to getObjectiveNumber().
+     * m_mdObjectiveFunctionValues holds a double array of objective function values
+     * -- the size of the array is equal to getObjectiveNumber().
      */
     double *m_mdObjectiveFunctionValues;
 
@@ -2505,7 +2637,7 @@ private:
     int m_iHighestTaylorCoeffOrder;
 
     /**
-     * m_quadraticTerms the data structure for all the quadratic terms in the instance. `
+     * m_quadraticTerms holds the data structure for all the quadratic terms in the instance. `
      * (rowIdx, varOneIdx, varTwoIdx, coef)
      */
     QuadraticTerms* m_quadraticTerms;
@@ -2547,25 +2679,42 @@ private:
     bool m_bProcessExpressionTreesMod;
 
     /**
-     * m_mapExpressionTrees holds a hash map of expression tree pointers, with the key being the row index
-     * and value being the expression tree representing the nonlinear expression of that row.
+     * m_mapExpressionTrees holds a hash map of scalar-valued expression tree pointers. 
+     * The key is the row index and the value is the (single) expression tree 
+     * representing the nonlinear expression of that row.
+     *
+     * @remark For this to work all nonlinear expressions (including quadratic ones)
+     *         must be combined into a single expression.
      */
-    std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
-
-
-
-    std::map<int, int> m_mapOSADFunRangeIndex ;
+    std::map<int, ScalarExpressionTree*> m_mapExpressionTrees;
 
     /**
-     * m_LagrangianExpTree is an OSExpressionTree object that is the expression tree
+     * m_mapOSADFunRangeIndex is an inverse of the previous map. The key is the number of the
+     * scalar-valued expression tree, and the value is the row to which this tree belongs. 
+     */
+    std::map<int, int> m_mapOSADFunRangeIndex;
+
+
+    /**
+     * m_mapMatrixExpressionTrees holds a hash map of matrix-valued expression tree pointers. 
+     * The key is the "row" index (multivariate cone objective or cone constraint) 
+     * and the value is the (single) expression tree representing the expression of that row.
+     *
+     * @remark For this to work all matrix expressions (including linear and quadratic ones)
+     *         must be combined into a single expression.
+     */
+    std::map<int, MatrixExpressionTree*> m_mapMatrixExpressionTrees;
+
+    /**
+     * m_LagrangianExpTree is an ScalarExpressionTree object that is the expression tree
      * for the Lagrangian function.
      */
-    OSExpressionTree *m_LagrangianExpTree ;
+    ScalarExpressionTree *m_LagrangianExpTree;
 
     /**
      * m_bLagrangianHessionCreated is true if a Lagrangian function for the Hessian has been created
      */
-    bool m_bLagrangianExpTreeCreated ;
+    bool m_bLagrangianExpTreeCreated;
 
     /**
      *m_LagrangianSparseHessian is the Hessian Matrix of the Lagrangian function in sparse format
@@ -2600,7 +2749,7 @@ private:
      * We incorporate the linear and quadratic term for a variable into the corresponding expression tree before
      * gradient and Hessian calculations
      */
-    std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
+    std::map<int, ScalarExpressionTree*> m_mapExpressionTreesMod ;
 
     /**
      * m_bOSADFunIsCreated is true if we have created the OSInstanc
@@ -2638,7 +2787,6 @@ private:
     /**
      * m_mapExpressionTreesInPostfix holds a hash map of expression trees in postfix format, with the key being the row index
      * and value being the expression tree representing the nonlinear expression of that row.
-
      */
     std::map<int, std::vector<OSnLNode*> > m_mapExpressionTreesInPostfix ;
 
@@ -2659,51 +2807,43 @@ private:
 
     /**
      * m_vdX is a vector of primal variables at each iteration
-     *
      */
     std::vector<double> m_vdX;
 
     /**
      * m_vdYval is a vector of function values
-     *
      */
     std::vector<double> m_vdYval;
 
     /**
      * m_vbLagHessNonz is a boolean vector holding the nonzero pattern
      * of the Lagrangian of the Hessian
-     *
      */
     std::vector<bool> m_vbLagHessNonz;
 
     /**
      * m_vdYval is a vector equal to a column or row of the Jacobian
-     *
      */
     std::vector<double> m_vdYjacval;
 
     /**
      * m_vdYval is a vector of derivatives -- output  from a reverse sweep
-     *
      */
     std::vector<double> m_vdw;
 
     /**
      * m_vdYval is a vector of Lagrange multipliers
-     *
      */
     std::vector<double> m_vdLambda;
 
 
     /**
      * m_vdDomainUnitVec is a unit vector in the domain space
-     *
      */
     std::vector<double> m_vdDomainUnitVec;
 
     /**
      * m_vdRangeUnitVec is a unit vector in the range space
-     *
      */
     std::vector<double> m_vdRangeUnitVec;
 
@@ -2740,43 +2880,36 @@ private:
 
     /**
      * m_msTimeDomainStageNames holds the names of the time stages.
-     *
      */
     std::string* m_msTimeDomainStageNames;
 
     /**
      * m_miTimeDomainStageVariableNumber holds the number of variables in each stage.
-     *
      */
     int* m_miTimeDomainStageVariableNumber;
 
     /**
      * m_mmiTimeDomainStageVarList holds the list of variables in each stage.
-     *
      */
     int** m_mmiTimeDomainStageVarList;
 
     /**
      * m_miTimeDomainStageConstraintNumber holds the number of constraints in each stage.
-     *
      */
     int* m_miTimeDomainStageConstraintNumber;
 
     /**
      * m_mmiTimeDomainStageConList holds the list of constraints in each stage.
-     *
      */
     int** m_mmiTimeDomainStageConList;
 
     /**
      * m_miTimeDomainStageObjectiveNumber holds the number of objectives in each stage.
-     *
      */
     int* m_miTimeDomainStageObjectiveNumber;
 
     /**
      * m_mmiTimeDomainStageObjList holds the list of objectives in each stage.
-     *
      */
     int** m_mmiTimeDomainStageObjList;
 
@@ -2787,7 +2920,7 @@ private:
      * @return true if the variables are processed.
      * @throws Exception if the elements in variables are logically inconsistent.
      */
-    bool processVariables()    ;
+    bool processVariables();
 
     /**
      * process objectives.
@@ -2967,6 +3100,7 @@ public:
      */
     std::string* getObjectiveMaxOrMins();
 
+
     /**
      * Get objective coefficient number. One number for each objective.
      *
@@ -3133,6 +3267,16 @@ public:
      */
     int getNumberOfQuadraticRowIndexes();
 
+
+/*********************************************************************
+ *                                                                   *
+ * Here we have a number of methods for dealing with                 *
+ * scalar-valued expression trees.                                   *
+ * Even though the tree can contain OSnLMNodes (e.g., to compute     *
+ * the trace of a matrix), the root of the tree is of type OSnLNode. *
+ *                                                                   *
+ *********************************************************************/
+
     /**
      * Get number of nonlinear expressions.
      *
@@ -3152,7 +3296,7 @@ public:
      *
      * @return an expression tree
      */
-    OSExpressionTree* getNonlinearExpressionTree(int rowIdx);
+    ScalarExpressionTree* getNonlinearExpressionTree(int rowIdx);
 
     /**
      * Get the expression tree for a given row index for
@@ -3160,32 +3304,34 @@ public:
      *
      * @return an expression tree
      */
-    OSExpressionTree* getNonlinearExpressionTreeMod(int rowIdx);
+    ScalarExpressionTree* getNonlinearExpressionTreeMod(int rowIdx);
 
     /**
      * Get the postfix tokens for a given row index.
      *
-     * @return a vector of pointers to OSnLNodes in postfix, if rowIdx
+     * @return a vector of pointers to ExprNodes in postfix, if rowIdx
      * does not index a row with a nonlinear term throw an exception
+     *
+     * @remark The root node of the expression tree is of type OSnLNode
      */
-    std::vector<OSnLNode*> getNonlinearExpressionTreeInPostfix( int rowIdx);
+    std::vector<ExprNode*> getNonlinearExpressionTreeInPostfix( int rowIdx);
 
     /**
      * Get the postfix tokens for a given row index for the modified
      * Expression Tree (quadratic terms added).
      *
-     * @return a vector of pointers to OSnLNodes in postfix, if rowIdx
+     * @return a vector of pointers to ExprNodes in postfix, if rowIdx
      * does not index a row with a nonlinear term throw an exception
      */
-    std::vector<OSnLNode*> getNonlinearExpressionTreeModInPostfix( int rowIdx);
+    std::vector<ExprNode*> getNonlinearExpressionTreeModInPostfix( int rowIdx);
 
     /**
      * Get the prefix tokens for a given row index.
      *
-     * @return a vector of pointers to OSnLNodes in prefix, if rowIdx
+     * @return a vector of pointers to ExprNodes in prefix, if rowIdx
      * does not index a row with a nonlinear term throw an exception
      */
-    std::vector<OSnLNode*> getNonlinearExpressionTreeInPrefix( int rowIdx);
+    std::vector<ExprNode*> getNonlinearExpressionTreeInPrefix( int rowIdx);
 
     /**
      * Get the infix representation for a given row (or objective function) index.
@@ -3201,10 +3347,10 @@ public:
      * Get the prefix tokens for a given row index for the modified
      * Expression Tree (quadratic terms added).
      *
-     * @return a vector of pointers to OSnLNodes in prefix, if rowIdx
+     * @return a vector of pointers to ExprNodes in prefix, if rowIdx
      * does not index a row with a nonlinear term throw an exception
      */
-    std::vector<OSnLNode*> getNonlinearExpressionTreeModInPrefix( int rowIdx);
+    std::vector<ExprNode*> getNonlinearExpressionTreeModInPrefix( int rowIdx);
 
 
     /**
@@ -3219,17 +3365,17 @@ public:
 
     /**
      * @return a map: the key is the row index and the value is the corresponding expression tree
+     * \remark If there are several expressions in a single row, this method combines them by adding OSnLPlus nodes 
      */
-    std::map<int, OSExpressionTree* > getAllNonlinearExpressionTrees();
-
+    std::map<int, ScalarExpressionTree* > getAllNonlinearExpressionTrees();
 
     /**
      * @return a map: the key is the row index and the value is the corresponding expression tree
      */
-    std::map<int, OSExpressionTree* > getAllNonlinearExpressionTreesMod();
+    std::map<int, ScalarExpressionTree* > getAllNonlinearExpressionTreesMod();
 
     /**
-    * Get all the nonlinear expression tree indexes, i.e. indexes of rows (objectives or constraints) that contain nonlinear expressions.
+    * Get all the nonlinear expression tree indexes, i.e., indexes of rows (objectives or constraints) that contain nonlinear expressions.
     *
     * @return a pointer to an integer array of nonlinear expression tree indexes.
     */
@@ -3262,6 +3408,107 @@ public:
     */
     int getNumberOfNonlinearExpressionTreeModIndexes();
 
+/***********************************************************************
+ *                                                                     *
+ * Here we have a number of methods for dealing with                   *
+ * matrix-valued expression trees.                                     *
+ * Even though the tree can contain OSnLNodes (e.g., to compute the    *
+ * scalar multiple of a matrix), the root of the tree is an OSnLMNode. *
+ *                                                                     *
+ ***********************************************************************/
+
+    /**
+     * Get the pointers to the roots of all matrix expression trees
+     *
+     * @return an array of pointers to MatrixExpression objects
+     */
+    MatrixExpression** getMatrixExpressions();
+
+    /**
+     * Get the matrix expression tree for a given row index
+     *
+     * @return a matrix expression tree
+     */
+    MatrixExpressionTree* getMatrixExpressionTree(int rowIdx);
+
+    /**
+     * Get the postfix tokens for a given row index.
+     *
+     * @return a vector of pointers to OSnLNodes in postfix, if rowIdx
+     * does not index a row with a nonlinear term throw an exception
+     */
+    std::vector<ExprNode*> getMatrixExpressionTreeInPostfix( int rowIdx);
+
+    /**
+     * Get the postfix tokens for a given row index for the modified
+     * Expression Tree (quadratic terms added).
+     *
+     * @return a vector of pointers to OSnLNodes in postfix, if rowIdx
+     * does not index a row with a nonlinear term throw an exception
+     */
+    std::vector<ExprNode*> getMatrixExpressionTreeModInPostfix( int rowIdx);
+
+    /**
+     * Get the prefix tokens for a given row index.
+     *
+     * @return a vector of pointers to OSnLNodes in prefix, if rowIdx
+     * does not index a row with a nonlinear term throw an exception
+     */
+    std::vector<ExprNode*> getMatrixExpressionTreeInPrefix( int rowIdx);
+
+    /**
+     * Get the infix representation for a given row (or objective function) index.
+     *
+     * @param rowIdx is the index of the row we want to express in infix.
+     * @return a string representation of the tree, if rowIdx
+     * does not index a row with a nonlinear term throw an exception
+     */
+    std::string getMatrixExpressionTreeInInfix( int rowIdx);
+
+
+    /**
+     * @return the number of matrix variables
+     */
+    int getNumberOfMatrixVariables();
+
+    /**
+     * @return the number of matrix objectives
+     */
+    int getNumberOfMatrixObjectives();
+
+    /**
+     * @return the number of matrix constraints
+     */
+    int getNumberOfMatrixConstraints();
+
+    /**
+     * @return a map: the key is the row index and the value is the corresponding expression tree
+     */
+    std::map<int, MatrixExpressionTree* > getAllMatrixExpressionTrees();
+
+
+    /**
+     * @return a map: the key is the row index and the value is the corresponding expression tree
+     */
+    std::map<int, MatrixExpressionTree* > getAllMatrixExpressionTreesMod();
+
+    /**
+    * Get all the matrix expression tree indexes, i.e. indexes of matrix objectives 
+    * or matrix constraints that contain matrix expressions.
+    *
+    * @return a pointer to an integer array of matrix expression tree indexes.
+    */
+    int* getMatrixExpressionTreeIndexes();
+
+
+    /**
+    * Get the number of unique matrix expression tree indexes.
+    *
+    * @return the number of unique matrix expression tree indexes.
+    */
+    int getNumberOfMatrixExpressionTreeIndexes();
+
+//===============================================
 
     /**
     * Get the format of the time domain ("stages"/"interval")
@@ -3541,7 +3788,6 @@ public:
                                          int* starts, int startsBegin, int startsEnd);
 
     /**
-
      * copy linear constraint coefficients: perform a deep copy of the sparse matrix
      *
      * <p>
@@ -3621,6 +3867,44 @@ public:
      */
     bool setNonlinearExpressions(int nexpr, Nl** root);
 
+    /**
+     * expand nonlinear expressions array
+     *
+     * <p>
+     *
+     * @remark due to the structure of the OSiL file, which facilitates one-pass parsing,
+     *         nonlinear expressions involving non-core entities (such as matrices) can
+     *         only be read outside of the core, once the <matrices> etc. sections have
+     *         been processed. They must then be added to the data structure.
+     *         This method allows the user to extend the array of nonlinear expressions
+     *         in order to later add them at the end of the existing array.
+     *
+     * <p>
+     *
+     * @param nexpr holds the number of nonlinear expressions to be added.
+     * @return whether the pointer arrays were expanded successfully.
+     */
+    bool expandNonlinearExpressions(int nexpr);
+
+    /**
+     * add nonlinear expressions 
+     *
+     * <p>
+     *
+     * @remark due to the structure of the OSiL file, which facilitates one-pass parsing,
+     *         nonlinear expressions involving non-core entities (such as matrices) can
+     *         only be read outside of the core, once the <matrices> etc. sections have
+     *         been processed. They must then be added to the data structure.
+     *         This method allows the user to extend the array of nonlinear
+     *         expressions by adding them at the end of the existing array.
+     *
+     * <p>
+     *
+     * @param nexpr holds the number of nonlinear expressions to be added.
+     * @param root holds a pointer array to the root nodes of the nonlinear expressions to be added.
+     * @return whether the nonlinear expressions were added successfully.
+     */
+    bool appendNonlinearExpressions(int nexpr, Nl** root);
 
     /**
      * set the number of matrices
@@ -3657,8 +3941,7 @@ public:
                    unsigned int inumberOfChildren, MatrixNode **m_mChildren);
 
 
-
-    /**
+   /**
      * set the number of cones
      *
      * @param number holds the number of cones
@@ -3712,6 +3995,7 @@ public:
      *            ENUM_CONE_TYPE_intersection. 
      *
      * @param name holds the cone name; use null or empty std::string ("") if no cone name.
+     * @param numberOfComponents holds the number of components of this cone.
      * @param components holds the indexes of the components of this cone.
      *
      * @param numberOfOtherIndexes holds the number of other indexes if the cone contains higher-dimensional tensors.
@@ -3721,7 +4005,8 @@ public:
      * @return whether the cone was added successfully.
      */
     bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
-                 std::string name, int* components, int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
+                 std::string name, int numberOfComponents, int* components, 
+                 int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
 
     /**
      * add a cone. In order to use the add method, the setConeNumber must first be called
@@ -3868,7 +4153,7 @@ public:
      * @return whether the cone was added successfully.
      */
     bool addCone(int index, int numberOfRows, int numberOfColumns, ENUM_CONE_TYPE coneType,
-                 std::string name, int distortionMatrixIdx, double normFactor, double pNorm, 
+                 std::string name, int distortionMatrixIdx, double normFactor, int axisDirection, double pNorm, 
                  int numberOfOtherIndexes = 0, int* otherIndexes = NULL);
 
     /**
@@ -4168,7 +4453,7 @@ public:
      * @return a pointer to the ExpressionTree for the Lagrangian function of current instance
      * we only take the Lagrangian of the rows with nonlinear terms
      */
-    OSExpressionTree* getLagrangianExpTree( );
+    ScalarExpressionTree* getLagrangianExpTree( );
 
     /**
      * @return a pointer to a map of the indices of all of the variables
@@ -4191,6 +4476,8 @@ public:
     bool addQTermsToExressionTree();
 
     /**
+     * This method adds quadratic terms into the array of expression trees.
+     * There is at most one expression tree per row (see getAllNonlinearExpressionTrees)
      *
      * @return true if successful in adding the qTerms to the ExpressionTree.
      */

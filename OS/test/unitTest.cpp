@@ -265,9 +265,7 @@ using std::string;
 
 int main(int argC, char* argV[])
 {
-//#ifdef HAVE_WINDOWS_H
-//   SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
-//#endif 
+
     WindowsErrorPopupBlocker();
     double getObjVal(std::string osrl);
     int   getItCount(std::string osrl);
@@ -554,8 +552,8 @@ if(BASIC_TESTS == true){
         osinstance = osilreader->readOSiL( osil);
         
         cout << "Done" << endl;
-        OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
-        std::vector<OSnLNode*> postfixVec;
+        ScalarExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+        std::vector<ExprNode*> postfixVec;
         postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
         int n = postfixVec.size();
         nodeNames1 = new std::string[ n];
@@ -571,7 +569,7 @@ if(BASIC_TESTS == true){
         x[0] = 1;
         x[1] = 2;
         check = 11;
-        ok = ( fabs(check -  expTree->m_treeRoot->calculateFunction( x))/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        ok = ( fabs(check - expTree->m_treeRoot->calculateFunction( x))/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
         delete[] x;
         x = NULL;
         delete[] nodeNames1;
@@ -587,7 +585,9 @@ if(BASIC_TESTS == true){
         unitTestResult << "TEST " << nOfTest << ": Successful test of nonlinear operators using file testOperators.osil" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
+        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": nonlinear operators " + eclass.errormsg << endl; 
         cout << endl << endl << endl;
         unitTestResultFailure << eclass.errormsg << endl;
         if (x != NULL)
@@ -669,7 +669,9 @@ if(BASIC_TESTS == true){
         unitTestResult << "TEST " << nOfTest << ": Successful test of AD gradient and Hessian calculations" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
+        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": Automatic differentiation " + eclass.errormsg << endl; 
         cout << endl << endl << endl;
         unitTestResultFailure << "Failed test " << nOfTest << endl << eclass.errormsg << endl;
         if (x != NULL)
@@ -723,7 +725,9 @@ if (PARSER_TESTS)
         unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem parincLinear.osil" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
+        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": OSiL parser " + eclass.errormsg << endl; 
         cout << endl << endl << endl;
         cout << eclass.errormsg << endl;
         unitTestResultFailure << "Sorry Unit Test Failed Testing An OSiL Parser (Test " << nOfTest << ")" << endl;
@@ -780,7 +784,7 @@ if (PARSER_TESTS)
             double *varlb = osinstance->getVariableLowerBounds();
             double *varub = osinstance->getVariableUpperBounds();
 
-//            osinstance2->instanceData->variables = new Variables();
+            osinstance2->instanceData->variables = new Variables();
             osinstance2->instanceData->variables->numberOfVariables = nvar;
             osinstance2->instanceData->variables->var = new Variable*[nvar];
 
@@ -798,7 +802,7 @@ if (PARSER_TESTS)
             double *objweight       = osinstance->getObjectiveWeights();
             SparseVector **objcoeff = osinstance->getObjectiveCoefficients();
 
-//            osinstance2->instanceData->objectives = new Objectives();
+            osinstance2->instanceData->objectives = new Objectives();
             osinstance2->instanceData->objectives->numberOfObjectives = nobj;
             osinstance2->instanceData->objectives->obj = new Objective*[nobj];
 
@@ -815,7 +819,7 @@ if (PARSER_TESTS)
             double *conub = osinstance->getConstraintUpperBounds();
             double *con_c = osinstance->getConstraintConstants();
 
-//            osinstance2->instanceData->constraints = new Constraints();
+            osinstance2->instanceData->constraints = new Constraints();
             osinstance2->instanceData->constraints->numberOfConstraints = ncon;
             osinstance2->instanceData->constraints->con = new Constraint*[ncon];
 
@@ -903,7 +907,8 @@ if (PARSER_TESTS)
             root = NULL;
         }
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Unit Test Failed OSInstance get() and set() methods (Test " 
                               << nOfTest << "): "  + eclass.errormsg<< endl; 
         if (osinstance2 != NULL)
@@ -920,7 +925,7 @@ if (PARSER_TESTS)
         fileUtil = NULL;
     }    
 
-
+#if 0
 // Here we test extensions to the "core": <matrices>, <cones>, stochastic programming, etc.
     if( THOROUGH == true)
     {
@@ -980,7 +985,7 @@ if (PARSER_TESTS)
         fileUtil = NULL;
         }    
     }
-
+#endif
 
 #if 0
     // Now test the extensions to the OSiL format: <timeDomain> and stochastic programming
@@ -1311,7 +1316,8 @@ if (PARSER_TESTS)
         unitTestResult << "TEST " << nOfTest << ": Successful test of osinstance get() and set() methods" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << endl << endl << endl;
         cout << eclass.errormsg << endl;
         unitTestResultFailure << "Sorry Unit Test Failed osinstance get() and set() Methods (Test "<< nOfTest << ")" << endl;        
@@ -2300,7 +2306,8 @@ if (PARSER_TESTS)
               << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << endl << endl << endl;
         cout << eclass.errormsg << endl;
         unitTestResultFailure << "Sorry Unit Test Failed OSoL set() and get() methods (Test " << nOfTest << ")" << endl;        
@@ -2563,7 +2570,7 @@ if (PARSER_TESTS)
     
     catch(const ErrorClass& eclass)
     {
-
+        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": Deep copy of OSOoption object " + eclass.errormsg << endl; 
         if(osolreader != NULL) 
             delete osolreader;
         osolreader = NULL;
@@ -5682,7 +5689,8 @@ if (PARSER_TESTS)
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    
     
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << endl << endl << endl;
         if (osrlwriter != NULL) delete osrlwriter;
         osrlwriter = NULL;
@@ -5894,7 +5902,8 @@ if (SOLVER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinearByRow.osil with Clp" << std::endl;
         cout << endl   << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing Clp Solver:" 
                               << endl << eclass.errormsg<< endl;
 
@@ -6220,7 +6229,8 @@ if (SOLVER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Warmstarts for problem parincLinear.osil with Clp" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing Clp Solver Warmstarts:" 
                               << endl << eclass.errormsg<< endl;
 
@@ -6274,7 +6284,8 @@ if (SOLVER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Clp" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Clp Solver:" 
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -6339,7 +6350,8 @@ if (SOLVER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with Cbc" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing Cbc Solver:" 
                               << endl << eclass.errormsg<< endl;
         if (solver != NULL)
@@ -6407,7 +6419,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033MULT.osil with Cbc" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing Cbc Solver:" 
                               << endl << eclass.errormsg<< endl;
         if (solver != NULL)
@@ -6465,7 +6478,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with Cbc node limit" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing Cbc Solver:" 
                               << endl << eclass.errormsg<< endl;
         if (solver != NULL)
@@ -6525,7 +6539,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0201.osil with Cbc" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing Cbc Solver:" 
                               << endl << eclass.errormsg<< endl;
         if (solver != NULL)
@@ -6589,7 +6604,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincInteger.osil with Cbc" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing Cbc Solver:" 
                               << endl << eclass.errormsg<< endl;
         if (solver != NULL)
@@ -6652,7 +6668,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with SYMPHONY" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the SYMPHONY Solver:" 
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -6712,7 +6729,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinear.osil with DyLP" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the DyLP Solver:"
@@ -6774,7 +6792,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem volumeTest.osil with Vol" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Vol Solver:"
@@ -6837,7 +6856,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with GLPK" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass) 
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Glpk Solver:" 
@@ -6898,7 +6918,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with CPLEX" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Cplex Solver:"
@@ -6953,7 +6974,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Cplex" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Cplex Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7011,7 +7033,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with Gurobi" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Gurobi Solver:"
@@ -7066,7 +7089,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Gurobi" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Gurobi Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7123,7 +7147,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with MOSEK" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the MOSEK Solver:"
@@ -7178,7 +7203,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with MOSEK" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the MOSEK Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7233,7 +7259,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinear.osil with SoPlex" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the SoPlex Solver:"
@@ -7288,7 +7315,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with XPRESS" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the XPRESS Solver:"
@@ -7343,7 +7371,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with XPRESS" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the XPRESS Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7412,7 +7441,8 @@ if( THOROUGH == true){
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7479,7 +7509,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem HS071.osil with Ipopt" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7545,7 +7576,8 @@ if(THOROUGH == true){
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
         //return 0;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7610,7 +7642,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Ipopt" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7675,7 +7708,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinear.osil with Ipopt" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7740,7 +7774,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem callBackTest.osil with Ipopt" << std::endl;    
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7806,7 +7841,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7878,7 +7914,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Ipopt" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -7953,7 +7990,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Correctly solved problem HS071_feas with Ipopt" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -8015,7 +8053,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Correctly diagnosed problem HS071_no-obj with Ipopt" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
                               << endl << eclass.errormsg<< endl; 
         if (osilreader != NULL)
@@ -8084,7 +8123,8 @@ if(THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1.osil with Bonmin" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Bonmin Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8144,7 +8184,8 @@ if (THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Bonmin Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8204,7 +8245,8 @@ if (THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Bonmin Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8262,7 +8304,8 @@ if (THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Bonmin" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Bonmin Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8314,7 +8357,8 @@ if (THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorigInt.osil with Bonmin" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Bonmin Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8385,7 +8429,8 @@ if (THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1.osil with Couenne" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Couenne Solver:"
@@ -8457,7 +8502,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1_Nonlinear with Couenne" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+{
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Couenne Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8525,7 +8571,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem nonconvex.osil with Couenne" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Couenne Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8594,7 +8641,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Couenne" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Couenne Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8664,7 +8712,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Couenne (default settings)" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Couenne Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8735,7 +8784,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Correctly diagnosed wayneQuadratic.osil with Couenne (limit exceeded)" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Couenne Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8801,7 +8851,8 @@ if( THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem lindoapiaddins.osil with Lindo" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         //cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the LINDO Solver:"
@@ -8858,7 +8909,8 @@ if (THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockmod.osil with Lindo" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Lindo Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8912,7 +8964,8 @@ if (THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Lindo" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the LINDO Solver:"
                               << endl << eclass.errormsg << endl;
         if (solver != NULL)
@@ -8965,7 +9018,8 @@ if (THOROUGH == true){
         unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Lindo" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the LINDO Solver:"
                               << endl << eclass.errormsg << endl;    
         if (solver != NULL)
@@ -9030,7 +9084,8 @@ if (OTHER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Test the MPS -> OSiL converter on parinc.mps using Cbc" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the MPS converter:"
@@ -9091,8 +9146,9 @@ if (OTHER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.mps with Ipopt" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }
-    catch(const ErrorClass& eclass){
-        unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Ipopt Solver:"
+    catch(const ErrorClass& eclass)
+    {
+        unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the quadratic MPS converter:"
                               << endl << eclass.errormsg<< endl; 
         if (solver != NULL)
             delete solver;
@@ -9121,7 +9177,8 @@ if (OTHER_TESTS){
         delete gams2osil;
         gams2osil = NULL;
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the GAMS interface:"
                               << endl << eclass.errormsg << endl;
 
@@ -9192,10 +9249,11 @@ if (OTHER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Test the AMPL nl -> OSiL converter on parinc.nl using Cbc" << std::endl; 
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << "OSrL =  " <<  solver->osrl <<  endl;
         cout << endl << endl << endl;
-        unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing AMPL:"
+        unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the AMPL interface:"
                               << endl << eclass.errormsg << endl;
 
         if (solver != NULL)
@@ -9244,7 +9302,7 @@ if (OTHER_TESTS){
 
 // transfer suffix information from osol to osrl
  
-        std::cout << std::endl << "transfer suffix information from osol to osrl" << std::endl << std::endl;
+        std::cout << "transfer suffix information from osol to osrl" << std::endl;
 
         int nVars = nl2osil->osinstance->getVariableNumber();
         int nObjs = nl2osil->osinstance->getObjectiveNumber();
@@ -9276,7 +9334,7 @@ if (OTHER_TESTS){
             if (nvar > 0)
             {
  
-                std::cout << std::endl << "transfer basis info for variables" << std::endl << std::endl;
+                std::cout << "transfer basis info for variables - " << returnBasisStatusString((ENUM_BASIS_STATUS)status) << std::endl;
 
                 IBS = new int[nvar];
                 if (!nl2osil->osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, status, IBS) )
@@ -9293,7 +9351,7 @@ if (OTHER_TESTS){
             if (ncon > 0)
             {
  
-                std::cout << std::endl << "transfer basis info for slacks" << std::endl << std::endl;
+                std::cout << "transfer basis info for slacks - " << returnBasisStatusString((ENUM_BASIS_STATUS)status) << std::endl;
 
                 IBS = new int[ncon];
                 if (!nl2osil->osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, status, IBS) )
@@ -9314,7 +9372,7 @@ if (OTHER_TESTS){
             OtherVariableOption *otherVar = nl2osil->osoption->getOtherVariableOption(i);
 
  
-            std::cout << std::endl << "transfer variable suffix " << otherVar->name << std::endl << std::endl;
+            std::cout << "transfer variable suffix " << otherVar->name << std::endl;
 
 
             if (!osresult->setOtherVariableResultNumberOfVar(0, i, otherVar->numberOfVar))
@@ -9359,7 +9417,7 @@ if (OTHER_TESTS){
 
         // add three special results. The first is "morevarinteger", mentioned in the .mod file with kind=OUT 
 
-        std::cout << std::endl << "add variable suffix morevarinteger" << std::endl << std::endl;
+        std::cout << "add variable suffix morevarinteger" << std::endl;
 
 
         if (!osresult->setOtherVariableResultNumberOfVar(0, nOther, nVars))
@@ -9392,7 +9450,7 @@ if (OTHER_TESTS){
 
         // add one more result, this time with an enumeration, just to be sure...
 
-        std::cout << std::endl << "add variable suffix with enumeration" << std::endl << std::endl;
+        std::cout << "add variable suffix with enumeration" << std::endl;
 
 
         if (!osresult->setOtherVariableResultNumberOfVar(0, nOther + 1, 0))
@@ -9428,7 +9486,7 @@ if (OTHER_TESTS){
 
         // ...and another with just a single value
 
-        std::cout << std::endl << "add variable suffix with value only" << std::endl << std::endl;
+        std::cout << "add variable suffix with value only" << std::endl;
 
 
             if (!osresult->setOtherVariableResultNumberOfVar(0, nOther + 2, 0))
@@ -9457,7 +9515,7 @@ if (OTHER_TESTS){
         {
             OtherConstraintOption *otherCon = nl2osil->osoption->getOtherConstraintOption(i);
 
-        std::cout << std::endl << "transfer constraint suffix " << otherCon->name  << std::endl << std::endl;
+        std::cout << "transfer constraint suffix " << otherCon->name  << std::endl;
 
 
             if (!osresult->setOtherConstraintResultNumberOfCon(0, i, otherCon->numberOfCon))
@@ -9502,7 +9560,7 @@ if (OTHER_TESTS){
 
         // add three special results. The first is "moreconinteger", mentioned in the .mod file with kind=OUT 
 
-        std::cout << std::endl << "add variable suffix moreconinteger" << std::endl << std::endl;
+        std::cout << "add variable suffix moreconinteger" << std::endl;
 
 
         if (!osresult->setOtherConstraintResultNumberOfCon(0, nOther, nCons))
@@ -9533,7 +9591,7 @@ if (OTHER_TESTS){
 
         // add one more result, this time with an enumeration, just to be sure...
 
-        std::cout << std::endl << "add constraint suffix with enumeration"  << std::endl << std::endl;
+        std::cout << "add constraint suffix with enumeration"  << std::endl;
 
 
             if (!osresult->setOtherConstraintResultNumberOfCon(0, nOther+1, 0))
@@ -9567,7 +9625,7 @@ if (OTHER_TESTS){
 
         // ...and another with just a single value
 
-        std::cout << std::endl << "add constraint suffix with value only"  << std::endl << std::endl;
+        std::cout << "add constraint suffix with value only"  << std::endl;
 
 
             if (!osresult->setOtherConstraintResultNumberOfCon(0, nOther + 2, 0))
@@ -9597,7 +9655,7 @@ if (OTHER_TESTS){
         {
             OtherObjectiveOption *otherObj = nl2osil->osoption->getOtherObjectiveOption(i);
 
-            std::cout << std::endl << "transfer objective suffix " << otherObj->name << std::endl << std::endl;
+            std::cout << "transfer objective suffix " << otherObj->name << std::endl;
 
 
             if (!osresult->setOtherObjectiveResultNumberOfObj(0, i, otherObj->numberOfObj))
@@ -9643,7 +9701,7 @@ if (OTHER_TESTS){
 
         // add three special results. The first is "moreobjinteger", mentioned in the .mod file with kind=OUT 
 
-        std::cout << std::endl << "add variable suffix moreobjinteger" << std::endl << std::endl;
+        std::cout << "add variable suffix moreobjinteger" << std::endl;
 
 
         if (!osresult->setOtherObjectiveResultNumberOfObj(0, nOther, nObjs))
@@ -9673,7 +9731,7 @@ if (OTHER_TESTS){
 
         // add one more result, this time with an enumeration, just to be sure...
 
-        std::cout << std::endl << "add objective suffix with enumeration" << std::endl << std::endl;
+        std::cout << "add objective suffix with enumeration" << std::endl;
 
 
             if (!osresult->setOtherObjectiveResultNumberOfObj(0, nOther + 1, 0))
@@ -9701,7 +9759,7 @@ if (OTHER_TESTS){
 
         // ...and another with just a single value
 
-        std::cout << std::endl << "add objective suffix with value only" << std::endl << std::endl;
+        std::cout << "add objective suffix with value only" << std::endl;
 
 
             if (!osresult->setOtherObjectiveResultNumberOfObj(0, nOther + 2, 0))
@@ -9872,7 +9930,8 @@ if (OTHER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Test a problem written in b64 and then converted to OSInstance" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << endl << endl;
         cout << eclass.errormsg <<  endl << endl;
         cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -9887,7 +9946,7 @@ if (OTHER_TESTS){
         mps2osil = NULL;
     }  
 
-
+#if 0
     // now test postfix and prefix routines
     try{
         cout << endl << "TEST " << ++nOfTest << ": postfix and prefix routines" << endl << endl;
@@ -9901,7 +9960,7 @@ if (OTHER_TESTS){
         osinstance = osilreader->readOSiL( osil);
         OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
         if(expTree == NULL) throw ErrorClass(" Null expression tree when testing prefix and postfix routines");
-        std::vector<OSnLNode*> postfixVec;
+        std::vector<ExprNode*> postfixVec;
         //postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
         postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
     
@@ -9918,7 +9977,7 @@ if (OTHER_TESTS){
         expTree->m_treeRoot = postfixVec[ n - 1]->createExpressionTreeFromPostfix( postfixVec);
     
         // now get in prefix
-        std::vector<OSnLNode*> prefixVec;
+        std::vector<ExprNode*> prefixVec;
         //prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
         prefixVec = osinstance->getNonlinearExpressionTreeInPrefix( -1);
         
@@ -9947,7 +10006,8 @@ if (OTHER_TESTS){
         unitTestResult << "TEST " << nOfTest << ": Successful test of prefix and postfix conversion routines" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;        
     }
-    catch(const ErrorClass& eclass){
+    catch(const ErrorClass& eclass)
+    {
         cout << endl << endl << endl;
         unitTestResultFailure << "Test " << nOfTest << ": prefix and postfix conversion"
                               << endl << eclass.errormsg << endl;
@@ -9964,7 +10024,7 @@ if (OTHER_TESTS){
             delete fileUtil;
         fileUtil = NULL;
     }
-
+#endif
 } //end of if (OTHER_TESTS)
   
     if(unitTestResultFailure.str().length() > 0){

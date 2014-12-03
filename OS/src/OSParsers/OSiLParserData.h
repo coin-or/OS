@@ -75,89 +75,6 @@ public:
     bool qtermcoefattON;
 
 
-#if 0
-    /** These entities are used for parsing <nonlinearExpressions> */
-
-    /** a pointer to an OSnLNode object */
-    OSnLNode *nlNodePoint;
-
-    /** a pointer to an OSnLNode object that is a variable */
-    OSnLNodeVariable *nlNodeVariablePoint;
-
-    /** a pointer to an OSnLNode object that is a number */
-    OSnLNodeNumber *nlNodeNumberPoint;
-
-    /** nlnodecount is the number of nl nodes in the instance*/
-    int nlnodecount;
-
-    /** tmpnlcount counts the number of nl nodes actually found, if this
-     * number differs from nlnodecount, then an exception is thrown
-     */
-    int tmpnlcount;
-
-    /** numbertypeattON is set to true if the type attribute has been parsed
-     * for an OSnLNodeNumber object, an exception is thrown if there is more than
-     * one type attribute
-     */
-    bool numbertypeattON ;
-
-    /** numbervalueattON is set to true if the value attribute has been parsed
-     * for an OSnLNodeNumber object, an exception is thrown if there is more than
-     * one value attribute
-     */
-    bool numbervalueattON;
-
-    /** numberidattON is set to true if the id attribute has been parsed
-     * for an OSnLNodeNumber object, an exception is thrown if there is more than
-     * one id attribute
-     */
-    bool numberidattON;
-
-    /** variableidxattON is set to true if the idx attribute has been parsed
-     * for an OSnLNodeVariable, an exception is thrown if there is more than
-     * one idx attribute
-     */
-    bool variableidxattON ;
-
-    /** variablecoefattON is set to true if the coeff attribute has been parsed
-     * for an OSnLNodeVariable, an exception is thrown if there is more than
-     * one coeff attribute
-     */
-    bool variablecoefattON ;
-
-    /** nlNodeVec holds a vector of pointers to OSnLNodes */
-    std::vector<OSnLNode*> nlNodeVec;
-
-    /** the OSnLNodeSum node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
-     */
-    std::vector<OSnLNode*> sumVec;
-
-    /** the OSnLNodeallDiff node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
-     */
-    std::vector<OSnLNode*> allDiffVec;
-
-    /** the OSnLNodeProduct node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
-     */
-    std::vector<OSnLNode*> productVec;
-
-    /** the OSnLNodeMax node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
-     */
-    std::vector<OSnLNode*> maxVec;
-
-    /** the OSnLNodeMin node can have any number of children, including
-     * other children with an indeterminate number of children so when
-     * parsing we need to temporarily store all of its children
-     */
-    std::vector<OSnLNode*> minVec;
-#endif
 
     /** These variables are used to parse the <timeDomain> element */
 
@@ -232,6 +149,7 @@ public:
 
     /** some elements to hold matrices and cones */
     bool numberOfMatricesPresent; 
+    int  numberOfMatrices;
     bool numberOfConesPresent; 
     int  numberOfCones;
     int  coneCounter;
@@ -247,7 +165,7 @@ public:
     bool namePresent;
     std::string name;
 
-    bool referenceMatrixIdxAttributePresent;
+    bool referenceMatrixIdxPresent;
     int  referenceMatrixIdx;
 
     bool normScaleFactorPresent;
@@ -263,24 +181,27 @@ public:
     bool semidefinitenessPresent;
     std::string semidefiniteness;
 
+    /* some elements to hold <matrixProgramming> constructs */
     int numberOfMatrixVar;
     int numberOfMatrixObj;
     int numberOfMatrixCon;
     int numberOfMatrixTerms;
     int numberOfMatrixExpr;
 
-    bool matrixIdxAttributePresent;
-    bool lbMatrixIdxAttributePresent;
-    bool lbConeIdxAttributePresent;
-    bool ubMatrixIdxAttributePresent;
-    bool ubConeIdxAttributePresent;
-    bool orderConeIdxAttributePresent;
-    bool templateMatrixIdxAttributePresent;
-    bool constantMatrixIdxAttributePresent;
-    bool varReferenceMatrixIdxAttributePresent;
-    bool objReferenceMatrixIdxAttributePresent;
-    bool conReferenceMatrixIdxAttributePresent;
-    bool varTypeAttributePresent;
+    bool numberOfMatrixTermsPresent;
+
+    bool matrixIdxPresent;
+    bool lbMatrixIdxPresent;
+    bool lbConeIdxPresent;
+    bool ubMatrixIdxPresent;
+    bool ubConeIdxPresent;
+    bool orderConeIdxPresent;
+    bool templateMatrixIdxPresent;
+    bool constantMatrixIdxPresent;
+    bool varReferenceMatrixIdxPresent;
+    bool objReferenceMatrixIdxPresent;
+    bool conReferenceMatrixIdxPresent;
+    bool varTypePresent;
 
     int  matrixIdx;
     int  lbMatrixIdx;   
@@ -298,6 +219,10 @@ public:
     bool shapePresent;
     std::string shape;
 
+    bool matrixTermInObj;
+
+    int kounter;
+    int kount2;
     double tempVal;
 
     /** if the parser finds invalid text it is held here and we delete

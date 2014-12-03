@@ -57,7 +57,9 @@ public:
     std::string solverAttribute;
     bool unitAttributePresent;
     std::string unitAttribute;
+    bool idxAttributePresent;
     int  idxAttribute;
+    bool shapeAttributePresent;
 
     /** some temporary items to facilitate code sharing */
     int tempInt;
@@ -89,11 +91,11 @@ public:
     /** a pointer to an OSnLMNode object that is a simple matrix reference */
     OSnLMNodeMatrixReference *nlMNodeMatrixRef;
 
-    /** nlnodecount is the number of nl nodes in the instance*/
-    int nlnodecount;
+    /** nlnodenumber is the number of nl nodes in the instance*/
+    int nlnodenumber;
 
     /** tmpnlcount counts the number of nl nodes actually found. 
-     *  If this number differs from nlnodecount, then an exception is thrown
+     *  If this number differs from nlnodenumber, then an exception is thrown
      */
     int tmpnlcount;
 
@@ -101,7 +103,7 @@ public:
      * for an OSnLNodeNumber object, an exception is thrown if there is more than
      * one number attribute
      */
-    bool numbertypeattON ;
+    bool numbertypeattON;
 
     /** numbervalueattON is set to true if the value attribute has been parsed
      *  for an OSnLNodeNumber object, an exception is thrown if there is more than

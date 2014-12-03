@@ -75,8 +75,7 @@ public:
     unsigned int inumberOfChildren;
 
     /**  inumberOfMatrixChildren is the number of OSnLMNode child elements
-     *   (e.g. for computation of a determinant or matrix norm) 
-     *   if there ever is a case where this number is not fixed, it is temporarily set to 0
+     *   If this number is not fixed, e.g., for a matrixProduct node, it is temporarily set to 0
      */
     unsigned int inumberOfMatrixChildren;
 
@@ -114,24 +113,24 @@ public:
 
     /**
      * <p>
-     * The following method writes an OSnLNode or OSnLMNode
-     * in OSiL format. it is used by OSiLWriter to take
-     * an OSInstance and write the corresponding OSiL.
+     * The following method writes an OSnLNode or OSnLMNode in OSiL format.
+     * It is used by OSiLWriter to assist in writing an OSiL file 
+     * from a corresponding OSInstance.
      * </p>
      *
-     * @return the OSnLNode and its children as an OSiL string.
+     * @return the ExprNode and its children as an OSiL string.
      */
     virtual std::string getNonlinearExpressionInXML();
 
     /**
      * <p>
      * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
-     * the OSExpressionTree in prefix format.
+     * the (scalar-valued or matrix-valued) expression tree in prefix format.
      * </p>
      *
      * @return the expression tree as a vector of ExprNodes in prefix.
      */
-    std::vector<ExprNode*> getPrefixFromExpressionTree();
+    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
 
     /**
      * <p>
@@ -142,17 +141,17 @@ public:
      * @param a pointer prefixVector to a vector of pointers of ExprNodes
      * @return a vector of pointers to ExprNode in prefix.
      */
-    std::vector<ExprNode*> preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector);
+    virtual std::vector<ExprNode*> preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector);
 
     /**
      * <p>
      * Get a vector of pointers to ExprNodes that correspond to
-     * the OSExpressionTree in postfix format
+     * the expression tree in postfix format
      * </p>
      *
      * @return the expression tree as a vector of ExprNodes in postfix.
      */
-    std::vector<ExprNode*> getPostfixFromExpressionTree();
+    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
 
     /**
      * <p>
@@ -163,7 +162,7 @@ public:
      * @param a pointer postfixVector to a vector of pointers of ExprNodes
      * @return a vector of pointers to ExprNodes in postfix.
      */
-    std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
+    virtual std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
 
     /**
      * <p>
@@ -250,46 +249,6 @@ public:
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
 
-
-    /**
-     * <p>
-     * Take a vector of OSnLNodes in postfix format 
-     * and create an OSExpressionTree root node
-     * </p>
-     * @param nlNodeVec holds a vector of pointers to OSnLNodes
-     * in postfix format
-     * @return a pointer to an OSnLNode which is the root of
-     * an OSExpressionTree.
-     */
-    OSnLNode* createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec);
-
-
-    /**
-     * <p>
-     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes)in postfix format 
-     * and create a scalar-valued OSExpressionTree root node
-     * </p>
-     * @param nlNodeVec holds a vector of pointers to OSnLNodes
-     * in postfix format
-     * @return a pointer to an OSnLNode which is the root of
-     * an OSExpressionTree.
-     */
-    OSnLNode* createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec);
-
-
-    /**
-     * <p>
-     * Take a vector of OSnLNodes in prefix format
-     * and create an OSExpressionTree root node
-     * </p>
-     * @param nlNodeVec holds a vector of pointers to OSnLNodes
-     * in prefix format
-     * @return a pointer to an OSnLNode which is the root of
-     * an OSExpressionTree.
-     */
-    OSnLNode* createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec);
-
-
     /**
      * <p>
      * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
@@ -304,46 +263,57 @@ public:
 
     /**
      * <p>
-     * Get a vector of pointers to OSnLNodes that correspond to
-     * the OSExpressionTree in prefix format
+     * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
+     * the (scalar-valued or matrix-valued) expression tree in prefix format.
      * </p>
      *
-     * @return the expression tree as a vector of OSnLNodes in prefix.
+     * @return the expression tree as a vector of ExprNodes in prefix.
      */
-    std::vector<OSnLNode*> getPrefixFromExpressionTree();
+    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
 
     /**
      * <p>
-     * Called by getPrefixFromExpressionTree().  This method calls
-     * itself recursively and
-     * generates a vector of pointers to OSnLNodes in prefix
+     * Called by getPrefixFromExpressionTree().  
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNode in prefix
      * </p>
-     * @param a pointer prefixVector to a vector of pointers of OSnLNodes
-     * @return a vector of pointers to OSnLNodes in prefix.
+     * @param a pointer prefixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNode in prefix.
      */
-    std::vector<OSnLNode*> preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector);
-
+    virtual std::vector<ExprNode*> preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector);
 
     /**
      * <p>
-     * Get a vector of pointers to OSnLNodes that correspond to
-     * the OSExpressionTree in postfix format
+     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in postfix format 
+     * and create a scalar-valued OSExpressionTree root node
+     * </p>
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes
+     * in postfix format
+     * @return a pointer to an OSnLNode which is the root of
+     * an OSExpressionTree.
+     */
+    OSnLNode* createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec);
+
+    /**
+     * <p>
+     * Get a vector of pointers to ExprNodes that correspond to
+     * the expression tree in postfix format
      * </p>
      *
-     * @return the expression tree as a vector of OSnLNodes in postfix.
+     * @return the expression tree as a vector of ExprNodes in postfix.
      */
-    std::vector<OSnLNode*> getPostfixFromExpressionTree();
+    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
 
     /**
      * <p>
-     * Called by getPostfixFromExpressionTree().  This method calls
-     * itself recursively and
-     * generates a vector of pointers to OSnLNodes in postfix
+     * Called by getPostfixFromExpressionTree(). 
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNodes in postfix.
      * </p>
-     * @param a pointer postfixVector to a vector of pointers of OSnLNodes
-     * @return a vector of pointers to OSnLNodes in postfix.
+     * @param a pointer postfixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNodes in postfix.
      */
-    std::vector<OSnLNode*> postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector);
+    virtual std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
 
     /**
      * make a copy of this node and all its descendants
@@ -546,6 +516,7 @@ public:
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNode of the proper type.
      */
+
     virtual OSnLNode *cloneExprNode();
 
     /*! \fn double OSnLNodeMin::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
@@ -951,9 +922,8 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
-
 };//end OSnLNodeSqrt
+
 
 /*! \class OSnLNodeSquare
  *  \brief The OSnLNodeSquare Class.
@@ -1004,6 +974,7 @@ public:
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 };//end OSnLNodeSquare
 
+
 /*! \class OSnLNodeCos
  *  \brief The OSnLNodeCos Class.
  *
@@ -1052,6 +1023,7 @@ public:
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 };//end OSnLNodeCos
+
 
 /*! \class OSnLNodeSin
  *  \brief The OSnLNodeSin Class.
@@ -1102,6 +1074,7 @@ public:
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 };//end OSnLNodeSin
 
+
 /*! \class OSnLNodeExp
  *  \brief The OSnLNodeExp Class.
  *
@@ -1149,8 +1122,8 @@ public:
      *  \return a pointer to a new OSnLNode of the proper type.
      */
     virtual OSnLNode *cloneExprNode();
-
 };//end OSnLNodeExp
+
 
 /*! \class OSnLNodeAbs
  *  \brief The OSnLNodeAbs Class.
@@ -1199,7 +1172,6 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
 };//end OSnLNodeAbs
 
 
@@ -1253,8 +1225,6 @@ public:
 };//end OSnLNodeErf
 
 
-
-
 /*! \class OSnLNodeIf
  *  \brief The OSnLNodeIf Class.
  *
@@ -1302,8 +1272,8 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
 };//end OSnLNodeIf
+
 
 /*! \class OSnLNodeNumber
  *  \brief The OSnLNodeNumber Class.
@@ -1376,8 +1346,6 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
-
 };//end OSnLNodeNumber
 
 
@@ -1444,9 +1412,8 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
-
 };//end OSnLNodeE
+
 
 /*! \class OSnLNodePI
  *  \brief The OSnLNodePI Class.
@@ -1511,8 +1478,6 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
-
 };//end OSnLNodePI
 
 
@@ -1549,25 +1514,19 @@ public:
      */
     ~OSnLNodeVariable();
 
-
-
     virtual void getVariableIndexMap(std::map<int, int> *varIdx);
 
     /**
-     *
      * @return a string token that corresponds to the OSnLNode.
      */
     virtual std::string getTokenNumber();
 
-
     /**
-     *
      * @return a std::string token that corresponds to the OSnLNode.
      */
     virtual std::string getTokenName();
 
     /**
-     *
      * @return the OSiL XML for the variable node.
      */
     virtual std::string getNonlinearExpressionInXML();
@@ -1589,9 +1548,8 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
-
 };//end OSnLNodeVariable
+
 
 /*! \class OSnLNodeAllDiff
  *  \brief The OSnLNodeAllDiff Class.
@@ -1641,7 +1599,6 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-
 };//end OSnLNodeAllDiff
 
 
@@ -1744,9 +1701,7 @@ public:
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNodeMatrixTrace of the proper type.
      */
-
     virtual OSnLNode *cloneExprNode();
-
 };//end OSnLNodeMatrixToScalar
 
 /*! \class OSnLNodeMatrixToScalar
@@ -1796,9 +1751,7 @@ public:
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLNodeMatrixTrace of the proper type.
      */
-
     virtual OSnLNode *cloneExprNode();
-
 };//end OSnLNodeMatrixToScalar
 
 
@@ -1813,8 +1766,50 @@ public:
 class OSnLMNode: public ExprNode
 {
 public:
-    /** idx is the index of the matrix */
-    int idx;
+
+    /**
+     * default constructor.
+     */
+    OSnLMNode();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLMNode();
+
+
+    /**
+     * <p>
+     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
+     * and create a matrix-valued OSExpressionTree root node
+     * </p>
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes and OSnLMNodes
+     * in prefix format
+     * @return a pointer to an OSnLMNode which is the root of
+     * an OSExpressionTree.
+     */
+    OSnLMNode* createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec);
+
+    /**
+     * <p>
+     * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
+     * the (matrix-valued) expression tree in prefix format.
+     * </p>
+     *
+     * @return the expression tree as a vector of ExprNodes in prefix.
+     */
+    std::vector<ExprNode*> getPrefixFromExpressionTree();
+
+    /**
+     * <p>
+     * Called by getPrefixFromExpressionTree().  
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNode in prefix
+     * </p>
+     * @param a pointer prefixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNode in prefix.
+     */
+    std::vector<ExprNode*> preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector);
 
     /**
      * <p>
@@ -1830,25 +1825,24 @@ public:
 
     /**
      * <p>
-     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
-     * and create a matrix-valued OSExpressionTree root node
+     * Get a vector of pointers to ExprNodes that correspond to
+     * the expression tree in postfix format
      * </p>
-     * @param nlNodeVec holds a vector of pointers to OSnLNodes and OSnLMNodes
-     * in prefix format
-     * @return a pointer to an OSnLMNode which is the root of
-     * an OSExpressionTree.
+     *
+     * @return the expression tree as a vector of ExprNodes in postfix.
      */
-    OSnLMNode* createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec);
+    std::vector<ExprNode*> getPostfixFromExpressionTree();
 
     /**
-     * default constructor.
+     * <p>
+     * Called by getPostfixFromExpressionTree(). 
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNodes in postfix.
+     * </p>
+     * @param a pointer postfixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNodes in postfix.
      */
-    OSnLMNode();
-
-    /**
-     * default destructor.
-     */
-    virtual ~OSnLMNode();
+    std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
 
 
     /**
@@ -1950,10 +1944,6 @@ public:
 class OSnLMNodeMatrixMinus : public OSnLMNode
 {
 public:
-
-    /** idx is the index of the matrix */
-    int idx;
-
     /**
      * default constructor.
      */
@@ -2462,6 +2452,11 @@ public:
 class OSnLMNodeMatrixReference : public OSnLMNode
 {
 public:
+    /**
+     *  The index of the matrix
+     */
+     int idx;
+
     /**
      * default constructor.
      */

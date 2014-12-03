@@ -33,53 +33,6 @@
 # endif
 #endif
 
-/**
- *  Enumeration for the different verbosity levels that can be used in producing output.
- *  The last three levels are used only in debug mode.
- */
-enum ENUM_OUTPUT_LEVEL
-{
-     ENUM_OUTPUT_LEVEL_always = 0,
-     ENUM_OUTPUT_LEVEL_error,
-     ENUM_OUTPUT_LEVEL_summary,
-     ENUM_OUTPUT_LEVEL_warning,
-     ENUM_OUTPUT_LEVEL_info,
-     ENUM_OUTPUT_LEVEL_debug,
-     ENUM_OUTPUT_LEVEL_trace,
-     ENUM_OUTPUT_LEVEL_detailed_trace,
-
-     ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS    // insert other values above this one...
-};
-
-#define DEFAULT_OUTPUT_LEVEL ENUM_OUTPUT_LEVEL_error
-
-/**
- *  Enumeration for the different areas that can produce output.
- *  The last entry ENUM_OUTPUT_AREA_NUMBER_OF_AREAS
- *  gives a convenient way to count them and to allocate space
- */
-enum ENUM_OUTPUT_AREA
-{
-     ENUM_OUTPUT_AREA_main = 1,
-     ENUM_OUTPUT_AREA_OSAgent,
-     ENUM_OUTPUT_AREA_Command_line_parser,
-     ENUM_OUTPUT_AREA_OSiL_parser,
-     ENUM_OUTPUT_AREA_OSoL_parser,
-     ENUM_OUTPUT_AREA_OSrL_parser,
-     ENUM_OUTPUT_AREA_OSGeneral,
-     ENUM_OUTPUT_AREA_OSInstance,
-     ENUM_OUTPUT_AREA_OSOption,
-     ENUM_OUTPUT_AREA_OSResult,
-     ENUM_OUTPUT_AREA_OSExpressionTree,
-     ENUM_OUTPUT_AREA_OSiLwriter,
-     ENUM_OUTPUT_AREA_OSoLwriter,
-     ENUM_OUTPUT_AREA_OSrLwriter,
-     ENUM_OUTPUT_AREA_OSModelInterfaces,
-     ENUM_OUTPUT_AREA_OSSolverInterfaces,
-     ENUM_OUTPUT_AREA_OSUtils,
-
-     ENUM_OUTPUT_AREA_NUMBER_OF_AREAS    // insert other values above this one...
-};
 
 /*! \class OSOutputChannel
  * \brief a class that holds information about one output channel

@@ -636,7 +636,7 @@ bool OSnl2OS::createOSObjects()
                 Nl nl;
                 expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
                 nl.idx = osNLIdx;
-                nl.osExpressionTree = new OSExpressionTree();
+                nl.osExpressionTree = new ScalarExpressionTree();
                 nl.osExpressionTree->m_treeRoot = walkTree (e);
                 nl.m_bDeleteExpressionTree = false;
                 /*
@@ -703,7 +703,7 @@ bool OSnl2OS::createOSObjects()
                 Nl nl;
                 expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
                 nl.idx = osNLIdx;
-                nl.osExpressionTree = new OSExpressionTree();
+                nl.osExpressionTree = new ScalarExpressionTree();
                 nl.osExpressionTree->m_treeRoot = walkTree (e);
                 nl.m_bDeleteExpressionTree = false;
                 /*
@@ -723,9 +723,11 @@ bool OSnl2OS::createOSObjects()
                 ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
                 ppsNl[i]->m_bDeleteExpressionTree = true;
             }
+            if (osinstance->instanceData->nonlinearExpressions == NULL)
+                osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions(); 
             osinstance->instanceData->nonlinearExpressions->nl = ppsNl;
+            osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
         }
-        osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
         if (fidxs.size())
         {
             osinstance->setQuadraticCoefficients((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);

@@ -221,7 +221,7 @@ std::string ExprNode::getTokenNumber()
 std::string ExprNode::getNonlinearExpressionInXML()
 {
     ostringstream outStr, logStr;
-    outStr << "<" ;
+    outStr << "<";
     outStr << this->getTokenName();
 #ifndef NDEBUG
     logStr << "nonlinear node " << this->getTokenName() << endl;
@@ -248,12 +248,19 @@ std::string ExprNode::getNonlinearExpressionInXML()
                 outStr << m_mMatrixChildren[i]->getNonlinearExpressionInXML();
             }
         }
-        outStr << "</" ;
-        outStr << this->getTokenName() ;
-        outStr << ">" ;
+        outStr << "</";
+        outStr << this->getTokenName();
+        outStr << ">";
     }
     return outStr.str();
 }//getNonlinearExpressionInXML()
+
+
+std::vector<ExprNode*> ExprNode::getPrefixFromExpressionTree()
+{
+    std::vector<ExprNode*> prefixVector;
+    return preOrderOSnLNodeTraversal( &prefixVector);
+}//getPrefixFromExpressionTree
 
 
 std::vector<ExprNode*> ExprNode::preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector)
@@ -272,6 +279,13 @@ std::vector<ExprNode*> ExprNode::preOrderOSnLNodeTraversal( std::vector<ExprNode
     return *prefixVector;
 }//end preOrderOSnLNodeTraversal
 
+std::vector<ExprNode*> ExprNode::getPostfixFromExpressionTree( )
+{
+    std::vector<ExprNode*> postfixVector;
+    return postOrderOSnLNodeTraversal( &postfixVector);
+}//getPostfixFromExpressionTree
+
+
 std::vector<ExprNode*> ExprNode::postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector)
 {
     if(inumberOfChildren > 0)
@@ -289,6 +303,39 @@ std::vector<ExprNode*> ExprNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
     (*postfixVector).push_back( this);
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
+
+#if 0
+ExprNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
+{
+    std::vector<ExprNode*> stackVec;
+    int kount =  nlNodeVec.size() - 1;
+    while(kount >= 0)
+    {
+        int numMtxKids = nlNodeVec[kount]->inumberOfMatrixChildren;
+        int numkids    = nlNodeVec[kount]->inumberOfChildren;
+        if(numkids > 0)
+        {
+            for(int i = 0; i < numkids; i++)
+            {
+                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+        if(numMtxKids > 0)
+        {
+            for(int i = 0; i < numMtxKids; i++)
+            {
+                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+        stackVec.push_back( nlNodeVec[kount]);
+        kount--;
+    }
+    stackVec.clear();
+    return (OSnLNode*)nlNodeVec[ 0];
+}//end createExpressionTreeFromPrefix
+#endif
 
 bool ExprNode::IsEqual(ExprNode *that)
 {
@@ -363,70 +410,6 @@ OSnLNode::~OSnLNode()
 #endif
 }//end ~OSnLNode
 
-OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec)
-{
-    std::vector<OSnLNode*> stackVec ;
-    unsigned int kount =  0;
-    while(kount <= nlNodeVec.size() - 1)
-    {
-        int numkids = nlNodeVec[kount]->inumberOfChildren;
-        if(numkids  > 0)
-        {
-            for(int i = numkids - 1; i >= 0;  i--)
-            {
-                nlNodeVec[kount]->m_mChildren[i] = stackVec.back()    ;
-                stackVec.pop_back();
-            }
-        }
-        stackVec.push_back( nlNodeVec[kount]);
-        kount++;
-    }
-    stackVec.clear();
-    return nlNodeVec[ kount - 1];
-}//end createExpressionTreeFromPostfix
-
-std::vector<OSnLNode*> OSnLNode::getPostfixFromExpressionTree( )
-{
-    std::vector<OSnLNode*> postfixVector;
-    return postOrderOSnLNodeTraversal( &postfixVector);
-}//getPostfixFromExpressionTree
-
-std::vector<OSnLNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector)
-{
-    if(inumberOfChildren > 0)
-    {
-        unsigned int i;
-        for(i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
-    }
-    (*postfixVector).push_back( this);
-    return *postfixVector;
-}//end postOrderOSnLNodeTraversal()
-
-
-OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec)
-{
-    std::vector<OSnLNode*> stackVec;
-    int kount =  nlNodeVec.size() - 1;
-    while(kount >= 0)
-    {
-        int numkids = nlNodeVec[kount]->inumberOfChildren;
-        if(numkids > 0)
-        {
-            for(int i = 0; i < numkids;  i++)
-            {
-                nlNodeVec[kount]->m_mChildren[i] = stackVec.back();
-                stackVec.pop_back();
-            }
-        }
-        stackVec.push_back( nlNodeVec[kount]);
-        kount--;
-    }
-    stackVec.clear();
-    return nlNodeVec[ 0];
-}//end createExpressionTreeFromPrefix
-
-
 OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
 {
     std::vector<ExprNode*> stackVec;
@@ -458,126 +441,85 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNode
     return (OSnLNode*)nlNodeVec[ 0];
 }//end createExpressionTreeFromPrefix
 
-
-std::vector<OSnLNode*> OSnLNode::getPrefixFromExpressionTree()
+OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec)
 {
-    std::vector<OSnLNode*> prefixVector;
+    std::vector<ExprNode*> stackVec;
+    int kount = nlNodeVec.size() - 1;
+
+    while(kount >= 0)
+    {
+        int numMtxKids = nlNodeVec[kount]->inumberOfMatrixChildren;
+         if(numMtxKids  > 0)
+        {
+            for(int i = numMtxKids - 1; i >= 0;  i--)
+            {
+                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+       int numkids = nlNodeVec[kount]->inumberOfChildren;
+        if(numkids  > 0)
+        {
+            for(int i = numkids - 1; i >= 0;  i--)
+            {
+                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+        stackVec.push_back( nlNodeVec[kount]);
+        kount--;
+    }
+    stackVec.clear();
+    return (OSnLNode*)nlNodeVec[ kount - 1];
+}//end createExpressionTreeFromPostfix
+
+
+std::vector<ExprNode*> OSnLNode::getPrefixFromExpressionTree()
+{
+    std::vector<ExprNode*> prefixVector;
     return preOrderOSnLNodeTraversal( &prefixVector);
 }//getPrefixFromExpressionTree
 
-std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector)
+std::vector<ExprNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector)
 {
-    (*prefixVector).push_back( this);
+    (*prefixVector).push_back( (OSnLNode*)this);
     if(inumberOfChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+            m_mChildren[i]->OSnLNode::preOrderOSnLNodeTraversal( prefixVector);
+    }
+    if(inumberOfMatrixChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
+            m_mMatrixChildren[i]->OSnLMNode::preOrderOSnLNodeTraversal( prefixVector);
     }
     return *prefixVector;
 }//end preOrderOSnLNodeTraversal
 
-/*
-OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
-// kipp possibly make this a static method or put it somewhere else
-    OSnLNode *nlNodePoint;
-    int nodeID ;
-    int pos1, pos2;
-    std::string str1, str2;
-    // convert the std::string tokens into the appropriate objects
-        // kipp -- put in error check -- make sure > 0 and < 10001
-    nodeID = atoi(  &sToken.substr(0, 4)[0]);
-    switch (nodeID){
-        case OS_SUM:  // the sum token
-            pos1 = sToken.find('[');
-            pos2 = sToken.find(']');
-            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-                // throw error
-            }
-            OSnLNodeSum *nlNodePointSum;
-            nlNodePointSum = new OSnLNodeSum();
-            nlNodePointSum->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-            nlNodePointSum->m_mChildren = new OSnLNode*[ nlNodePointSum->inumberOfChildren];
-            return nlNodePointSum;
-        break;
-        case OS_MAX:  // the max token
-            pos1 = sToken.find('[');
-            pos2 = sToken.find(']');
-            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-                // throw error
-            }
-            OSnLNodeMax *nlNodePointMax;
-            nlNodePointMax = new OSnLNodeMax();
-            nlNodePointMax->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-            nlNodePointMax->m_mChildren = new OSnLNode*[ nlNodePointMax->inumberOfChildren];
-            return nlNodePointMax;
-        break;
-        case OS_PRODUCT:  // the product token
-            pos1 = sToken.find('[');
-            pos2 = sToken.find(']');
-            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-                // throw error
-            }
-            OSnLNodeProduct *nlNodePointProduct;
-            nlNodePointProduct = new OSnLNodeProduct();
-            nlNodePointProduct->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-            nlNodePointProduct->m_mChildren = new OSnLNode*[ nlNodePointProduct->inumberOfChildren];
-            return nlNodePointProduct;
-        break;
-        case OS_NUMBER:  // the number token
-            pos1 = sToken.find(':');
-            if(pos1 != 4){
-                //throw error
-            }
-            // now get the second semicolon, the one that should be after value
-            pos2 = sToken.find(':', pos1 + 1);
-            if(pos2 != std::string::npos) {
-            }
-            else{
-                //throw error
-            }
-            OSnLNodeNumber *nlNodePointNumber;
-            nlNodePointNumber = new OSnLNodeNumber();
-            nlNodePointNumber->value = atof(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-            return nlNodePointNumber;
-        break;
-        case OS_VARIABLE:  // the variable token
-            pos1 = sToken.find('[');
-            pos2 = sToken.find(']');
-            if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
-                // throw error
-            }
-            OSnLNodeVariable *nlNodePointVariable;
-            nlNodePointVariable = new OSnLNodeVariable();
-            nlNodePointVariable->inumberOfChildren = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-            nlNodePointVariable->m_mChildren = new OSnLNode*[ nlNodePointVariable->inumberOfChildren];
-            // throw error if there is more than one child
-            // now get the index and the coefficient
-            pos1 = sToken.find(':');
-            if(pos1 != 4){
-                //throw error
-            }
-            // now get the second semicolon, the one that should be after idx
-            pos2 = sToken.find(':', pos1 + 1);
-            if(pos2 == std::string::npos) {
-                //throw error
-            }
-            nlNodePointVariable->idx = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
-            // now get the coefficient
-            str1 = sToken;
-            str2 = sToken.substr(pos2 + 1, str1.length() - pos2 - 1);
-            nlNodePointVariable->coef = atof(&str2[0]);
-            return nlNodePointVariable;
-        break;
-        default:
-            nlNodePoint = nlNodeArray[ nlNodeIdxMap[ nodeID]]->cloneExprNode();
+std::vector<ExprNode*> OSnLNode::getPostfixFromExpressionTree( )
+{
+    std::vector<ExprNode*> postfixVector;
+    return postOrderOSnLNodeTraversal( &postfixVector);
+}//getPostfixFromExpressionTree
 
-        break;
+
+std::vector<ExprNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector)
+{
+    if(inumberOfChildren > 0)
+    {
+        unsigned int i;
+        for(i = 0; i < inumberOfChildren; i++)
+            m_mChildren[i]->OSnLNode::postOrderOSnLNodeTraversal( postfixVector);
     }
-    return nlNodePoint;
-}//end getOSnLNodeFromToken
-*/
-
-
+    if(inumberOfMatrixChildren > 0)
+    {
+        unsigned int i;
+        for(i = 0; i < inumberOfMatrixChildren; i++)
+            m_mMatrixChildren[i]->OSnLMNode::postOrderOSnLNodeTraversal( postfixVector);
+    }
+    (*postfixVector).push_back( (OSnLNode*)this);
+    return *postfixVector;
+}//end postOrderOSnLNodeTraversal()
 
 void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
 {
@@ -1907,6 +1849,7 @@ std::string OSnLNodePI::getTokenNumber()
 {
     ostringstream outStr;
     outStr << inodeInt;
+    return outStr.str();
 }//getTokenNumber
 
 
@@ -2177,6 +2120,7 @@ double OSnLNodeMatrixTrace::calculateFunction(double *x)
     }
     return m_dFunctionValue;
 #endif
+    return 0.0;
 }// end OSnLNodeMatrixTrace::calculate
 
 std::string OSnLNodeMatrixTrace::getTokenName()
@@ -2273,8 +2217,7 @@ OSnLNode* OSnLNodeMatrixToScalar::cloneExprNode()
  *    Implementation of OSnLMNode and inheriting classes   * 
  ***********************************************************/
 OSnLMNode::OSnLMNode():
-    ExprNode(),
-    idx(0)
+    ExprNode()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNode constructor");
@@ -2366,21 +2309,21 @@ OSnLMNode* OSnLMNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNo
     int kount =  nlNodeVec.size() - 1;
     while(kount >= 0)
     {
-        int mtxkids = nlNodeVec[kount]->inumberOfMatrixChildren;
-        if(mtxkids > 0)
-        {
-            for(int i = 0; i < mtxkids;  i++)
-            {
-                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
-                stackVec.pop_back();
-            }
-        }
         int numkids = nlNodeVec[kount]->inumberOfChildren;
         if(numkids > 0)
         {
             for(int i = 0; i < numkids;  i++)
             {
                 nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+        int mtxkids = nlNodeVec[kount]->inumberOfMatrixChildren;
+        if(mtxkids > 0)
+        {
+            for(int i = 0; i < mtxkids;  i++)
+            {
+                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
                 stackVec.pop_back();
             }
         }
@@ -2391,28 +2334,92 @@ OSnLMNode* OSnLMNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNo
     return (OSnLMNode*)nlNodeVec[ 0];
 }//end createExpressionTreeFromPrefix
 
-#if 0
-std::vector<OSnLNode*> OSnLNode::getPrefixFromExpressionTree()
+OSnLMNode* OSnLMNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec)
 {
-    std::vector<OSnLNode*> prefixVector;
+    std::vector<ExprNode*> stackVec;
+    int kount =  nlNodeVec.size() - 1;
+
+    while(kount >= 0)
+    {
+        int numMtxKids = nlNodeVec[kount]->inumberOfMatrixChildren;
+         if(numMtxKids  > 0)
+        {
+            for(int i = numMtxKids - 1; i >= 0;  i--)
+            {
+                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+       int numkids = nlNodeVec[kount]->inumberOfChildren;
+        if(numkids  > 0)
+        {
+            for(int i = numkids - 1; i >= 0;  i--)
+            {
+                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+        stackVec.push_back( nlNodeVec[kount]);
+        kount++;
+    }
+    stackVec.clear();
+    return (OSnLMNode*)nlNodeVec[ kount - 1];
+}//end createExpressionTreeFromPostfix
+
+
+std::vector<ExprNode*> OSnLMNode::getPrefixFromExpressionTree()
+{
+    std::vector<ExprNode*> prefixVector;
     return preOrderOSnLNodeTraversal( &prefixVector);
 }//getPrefixFromExpressionTree
 
-std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector)
+std::vector<ExprNode*> OSnLMNode::preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector)
 {
-    (*prefixVector).push_back( this);
+    (*prefixVector).push_back( (OSnLMNode*)this);
     if(inumberOfChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+            m_mChildren[i]->OSnLNode::preOrderOSnLNodeTraversal( prefixVector);
+    }
+    if(inumberOfMatrixChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
+            m_mMatrixChildren[i]->OSnLMNode::preOrderOSnLNodeTraversal( prefixVector);
     }
     return *prefixVector;
 }//end preOrderOSnLNodeTraversal
 
+std::vector<ExprNode*> OSnLMNode::getPostfixFromExpressionTree( )
+{
+    std::vector<ExprNode*> postfixVector;
+    return postOrderOSnLNodeTraversal( &postfixVector);
+}//getPostfixFromExpressionTree
+
+
+std::vector<ExprNode*> OSnLMNode::postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector)
+{
+    if(inumberOfChildren > 0)
+    {
+        unsigned int i;
+        for(i = 0; i < inumberOfChildren; i++)
+            m_mChildren[i]->OSnLNode::postOrderOSnLNodeTraversal( postfixVector);
+    }
+    if(inumberOfMatrixChildren > 0)
+    {
+        unsigned int i;
+        for(i = 0; i < inumberOfMatrixChildren; i++)
+            m_mMatrixChildren[i]->OSnLMNode::postOrderOSnLNodeTraversal( postfixVector);
+    }
+    (*postfixVector).push_back( (OSnLMNode*)this);
+    return *postfixVector;
+}//end postOrderOSnLNodeTraversal()
+
+#if 0
 std::string OSnLMNode::getTokenNumber()
 {
     ostringstream outStr;
     outStr << inodeInt;
+
     // when I create an OSnLNode from a token number, I need to know how many children there are
 //    if(inodeType == -1){
     outStr << "[";
@@ -2570,6 +2577,8 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
         {
             m_mChildren[ i]->getVariableIndexMap( varIdx);
         }
+
+
     }
 }//getVariableIndexMap
 #endif
@@ -3179,7 +3188,8 @@ OSnLMNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
 
 
 // OSnLMNodeMatrixReference Methods
-OSnLMNodeMatrixReference::OSnLMNodeMatrixReference()
+OSnLMNodeMatrixReference::OSnLMNodeMatrixReference():
+    idx(0)
 {
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
@@ -3203,11 +3213,11 @@ std::string OSnLMNodeMatrixReference::getTokenNumber()
     ostringstream outStr;
     outStr << inodeInt;
     outStr << "[";
-    outStr << inumberOfChildren ;
+    outStr << inumberOfChildren;
     outStr << "]";
-    outStr << ":" ;
+    outStr << ":";
     outStr << idx;
-    outStr << ":" ;
+    outStr << ":";
     return outStr.str();
 }//getTokenNumber
 

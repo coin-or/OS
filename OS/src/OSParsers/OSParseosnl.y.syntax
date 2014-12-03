@@ -32,26 +32,29 @@
 nonlinearExpressions:  
                 | nonlinearExpressionsStart nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
     {  
-        if (osnlData->nlnodecount < osnlData->tmpnlcount)  
+        if (osnlData->tmpnlcount < osnlData->nlnodenumber)  
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "actual number of nl terms less than number attribute");   
     };
 
 nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
-{               
-//    osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
-};
+    {               
+        osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
+        osnlData->tmpnlcount = 0;
+    };
 
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
     { 
         if ( *$2 != *$4 ) 
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-        osnlData->tmpnlcount = $3;
+        if ($3 < 0) parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of expressions cannot be negative");
+        osnlData->nlnodenumber = $3;
         osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
         if (osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) 
             osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
         for (int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
         {
-            osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
+            osinstance->instanceData->nonlinearExpressions->nl[i] = new Nl();
         }
     };
 
@@ -63,19 +66,22 @@ nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN
 nlnodes: 
         | nlnodes scalarExpressionTree;
 
-scalarExpressionTree: nlstart nlIdxATT  GREATERTHAN nlnode NLEND
+scalarExpressionTree: nlstart nlAttributes GREATERTHAN nlnode NLEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->m_treeRoot = 
+        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
             ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
-        osnlData->nlnodecount++;
+        osnlData->tmpnlcount++;
     };
 
 nlstart: NLSTART
     {
-        if (osnlData->nlnodecount >= osnlData->tmpnlcount) 
+        if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
             parserData->parser_errors += 
                 addErrorMsg( NULL, parserObjects, "actual number of nl terms greater than number attribute");
+        osglData->idxPresent = false;
+        osglData->shapePresent = false;   
+
         // clear the vectors of pointers
         osnlData->nlNodeVec.clear();
         osnlData->sumVec.clear();
@@ -87,15 +93,26 @@ nlstart: NLSTART
         osnlData->matrixProductVec.clear();
     };
 
-nlIdxATT:  IDXATT QUOTE INTEGER QUOTE 
-    { 
-        if ( *$2 != *$4 ) 
-            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-        //osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount] = new Nl();
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->idx = $3;
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree = new OSExpressionTree();
-    };
+nlAttributes: nlAttributeList
+{
+    if (osglData->idxPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute idx is missing");    
+};
 
+
+nlAttributeList: | nlAttributeList nlAttribute;
+
+nlAttribute: 
+      osglIdxATT 
+    { 
+        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
+        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
+            = new ScalarExpressionTree();
+    }
+    | osglShapeATT
+    {
+        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->shape = osglData->shape;
+    };
 
 nlnode: number
       | variable 
@@ -206,7 +223,7 @@ abs: ABSSTART {
     osnlData->nlNodePoint = new OSnLNodeAbs();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode ABSEND {
-osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 };
 
 erf: ERFSTART {
@@ -219,7 +236,7 @@ if: IFSTART {
     osnlData->nlNodePoint = new OSnLNodeIf();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode nlnode nlnode IFEND {
-osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 };
 
 
@@ -371,7 +388,7 @@ anotherallDiffnlnode ALLDIFFEND {
     ((OSnLNode*)osnlData->allDiffVec.back())->m_mChildren 
         = new OSnLNode*[ ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren];
     osnlData->allDiffVec.pop_back();
-    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 };
 
 anotherallDiffnlnode: 
@@ -386,7 +403,7 @@ max: MAXSTART {
 anothermaxnlnode MAXEND {
     osnlData->maxVec.back()->m_mChildren = new OSnLNode*[ osnlData->maxVec.back()->inumberOfChildren];
     osnlData->maxVec.pop_back();
-    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 };
 
 anothermaxnlnode: 
@@ -401,7 +418,7 @@ min: MINSTART {
 anotherminnlnode MINEND {
     osnlData->minVec.back()->m_mChildren = new OSnLNode*[ osnlData->minVec.back()->inumberOfChildren];
     osnlData->minVec.pop_back();
-    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 };
 
 anotherminnlnode: 
@@ -601,18 +618,22 @@ matrixTimesStart: MATRIXTIMESSTART
 matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
 
             
-matrixProduct: MATRIXPRODUCTSTART {
+matrixProduct: MATRIXPRODUCTSTART 
+{
 //    osnlData->nlNodePoint = new OSnLNodeProduct();
 //    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 //    osnlData->mtxProdVec.push_back( osnlData->nlNodePoint);
 }
-anothermatrixproductnode MATRIXPRODUCTEND {
+anothermatrixproductnode MATRIXPRODUCTEND 
+{
 //    osnlData->mtxProdVec.back()->m_mChildren = new OSnLNode*[ osnlData->mtxProdVec.back()->inumberOfMatrixChildren];
 //    osnlData->mtxProdVec.pop_back();
 };
 
-anothermatrixproductnode: 
-            | anothermatrixproductnode OSnLMNode { /*osnlData->mtxProdVec.back()->inumberOfMatrixChildren++; */};
+anothermatrixproductnode: | anothermatrixproductnode OSnLMNode 
+{ 
+//    osnlData->mtxProdVec.back()->inumberOfMatrixChildren++; 
+};
 
 
 
@@ -646,4 +667,97 @@ matrixTransposeStart: MATRIXTRANSPOSESTART
 };
 
 matrixTransposeContent: OSnLMNode MATRIXTRANSPOSEEND;
+
+
+
+/**
+ *  Here we have the parser for the <matrixExpressions> <expr> element,
+ *  which is essentially the same as a nonlinear expression, except that
+ *  the root node returns a matrix. We reuse as much of the code and
+ *  data structures as possible. 
+ */
+matrixExpressions: | matrixExpressionsStart matrixExpressionsAtt matrixExpressionsContent
+    {  
+        if (osnlData->tmpnlcount < osnlData->nlnodenumber)  
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "actual number of matrix expressions less than number attribute");   
+    };
+
+matrixExpressionsStart: MATRIXEXPRESSIONSSTART
+    {               
+        osinstance->instanceData->matrixProgramming->matrixExpressions = new MatrixExpressions();
+        osnlData->tmpnlcount = 0;
+    };
+
+matrixExpressionsAtt: numberOfExprATT;
+
+numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE 
+    {
+        if (*$2 != *$4) 
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+                        "mismatched quotes");
+        if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+                        "number of expressions cannot be negative");
+        osnlData->nlnodenumber = $3;
+        osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr = $3;  
+        if (osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr > 0 ) 
+            osinstance->instanceData->matrixProgramming->matrixExpressions->expr = new MatrixExpression*[ $3 ];
+        for (int i = 0; i < osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr; i++)
+            osinstance->instanceData->matrixProgramming->matrixExpressions->expr[i] = new MatrixExpression();
+}; 
+
+matrixExpressionsContent: matrixExpressionsEmpty | matrixExpressionsLaden;
+
+matrixExpressionsEmpty: ENDOFELEMENT;
+
+matrixExpressionsLaden: GREATERTHAN matrixExprList MATRIXEXPRESSIONSEND;
+
+matrixExprList: | matrixExprList matrixExpr;
+
+matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN nlnode EXPREND
+    {
+    // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+        osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
+            ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        osnlData->tmpnlcount++;
+    };
+
+matrixExprStart: EXPRSTART
+    {
+        if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
+            parserData->parser_errors += 
+                addErrorMsg( NULL, parserObjects, "actual number of matrix expressions greater than number attribute");
+        osnlData->idxAttributePresent = false;
+        osnlData->shapeAttributePresent = false;   
+
+        // clear the vectors of pointers
+        osnlData->nlNodeVec.clear();
+        osnlData->sumVec.clear();
+        osnlData->allDiffVec.clear();
+        osnlData->maxVec.clear();
+        osnlData->minVec.clear();
+        osnlData->productVec.clear();
+        osnlData->matrixSumVec.clear();
+        osnlData->matrixProductVec.clear();
+    };
+
+matrixExprAttributes: matrixExprAttributeList
+{
+    if (osnlData->idxAttributePresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute idx is missing");    
+};
+
+matrixExprAttributeList: | matrixExprAttributeList exprAttribute;
+
+exprAttribute: 
+      osglIdxATT 
+    { 
+        osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->idx = osglData->idx;
+        osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree
+            = new MatrixExpressionTree();
+    }
+    | osglShapeATT
+    {
+        osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->shape = osglData->shape;
+    };
+
 

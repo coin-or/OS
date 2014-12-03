@@ -612,8 +612,8 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
         for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
         // we should be pointing to the '<' char in <variables>
         *p = pchar;
-        if( parseVariables( p, osinstance, osillineno) != true) {throw ErrorClass("error in parseVariables");}
-        if( parseObjectives( p, osinstance, osillineno) != true)  throw ErrorClass("error in parseObjectives");
+        if( parseVariables  ( p, osinstance, osillineno) != true) throw ErrorClass("error in parseVariables");
+        if( parseObjectives ( p, osinstance, osillineno) != true) throw ErrorClass("error in parseObjectives");
         if( parseConstraints( p, osinstance, osillineno) != true) throw ErrorClass("error in parseConstraints");
         if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parseLinearConstraintCoefficients");
     }else{
@@ -670,6 +670,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     while(*startVariables++  == *ch) ch++;
     //if( (ch - *p) != 10) {  osilerror_wrapper( ch,osillineno,"incorrect <variables tag>"); return false;}
     if( (ch - *p) != 10) {   return true;}
+
+    osinstance->instanceData->variables = new Variables();
+
     // find numberOfVariables attribute
     // eat the white space
     for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
@@ -772,7 +775,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     vt = returnVarType(attText[0]);
                     if( vt == 0 ) {  osilerror_wrapper( ch,osillineno,"variable type not recognized"); return false;}
                     osinstance->instanceData->variables->var[varcount]->type = attText[0];
-                    if (vt == ENUM_VARTYPE_BINARY) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
+                    if (vt == ENUM_VARTYPE_binary) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
                     delete [] attText;
                     break;
                 case 'l':
@@ -985,6 +988,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         //  note if we are here even though ch > *p we want to return *p
         return true;
     }
+
+    osinstance->instanceData->objectives = new Objectives();
+
     // find numberOfObjectives attribute -- it is valid for this attribute to be missing. 
     // However if the  number attribute is missing assume it is    1 
     // eat the white space
@@ -1313,6 +1319,9 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
         //  *p is the correct value for the pointer
         return true;
     }
+
+    osinstance->instanceData->constraints = new Constraints();
+
     // find numberOfConstraints attribute
     // eat the white space
     for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
@@ -1567,6 +1576,9 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
         ch = *p;
         return true;
     }
+
+    osinstance->instanceData->linearConstraintCoefficients = new LinearConstraintCoefficients();
+
     // find numberOfValues attribute
     // eat the white space
     for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;

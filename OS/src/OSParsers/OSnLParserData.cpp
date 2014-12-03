@@ -22,7 +22,7 @@ OSnLParserData::~OSnLParserData()
 
 
 OSnLParserData::OSnLParserData() :
-    nlnodecount(0),
+    nlnodenumber(0),
     tmpnlcount(0),
     numbertypeattON(false),
     numbervalueattON(false),

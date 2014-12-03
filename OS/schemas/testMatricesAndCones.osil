@@ -1132,7 +1132,6 @@
                 </components>
             </intersectionCone>
         </cones>
-<!--
         <matrixProgramming>
             <matrixVariables numberOfMatrixVar="9">
                 <matrixVar numberOfRows="2" numberOfColumns="2" lbConeIdx="0"></matrixVar>
@@ -1176,6 +1175,5 @@
                 </expr>
             </matrixExpressions>
         </matrixProgramming>
--->
     </instanceData>
 </osil>

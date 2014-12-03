@@ -401,11 +401,11 @@ matrixStart: MATRIXSTART
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more matrices than specified");
 
-    osglData->symmetryAttributePresent = false;
-    osglData->matrixTypeAttributePresent = false;
-    osglData->numberOfRowsAttributePresent = false;
-    osglData->numberOfColumnsAttributePresent = false;
-    osglData->matrixNameAttributePresent = false;
+    osglData->symmetryPresent = false;
+    osglData->typePresent = false;
+    osglData->numberOfRowsPresent = false;
+    osglData->numberOfColumnsPresent = false;
+    osglData->namePresent = false;
     osglData->mtxConstructorVec.clear();
     osglData->mtxBlkVec.clear();
 
@@ -420,20 +420,20 @@ matrixStart: MATRIXSTART
 
 matrixAttributes: matrixAttributeList
 {
-    if (osglData->numberOfRowsAttributePresent == false)
+    if (osglData->numberOfRowsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute numberOfRows is missing");    
     else
         ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
-    if (osglData->numberOfColumnsAttributePresent == false)
+    if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute numberOfColumns is missing");
     else
         ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
-    if (osglData->symmetryAttributePresent == true)
-        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetryAttribute);
-    if (osglData->matrixNameAttributePresent == true)
-        ((OSMatrix*)osglData->tempC)->name = osglData->matrixNameAttribute;
-    if (osglData->matrixTypeAttributePresent == true)
-        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->matrixTypeAttribute);
+    if (osglData->symmetryPresent == true)
+        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    if (osglData->namePresent == true)
+        ((OSMatrix*)osglData->tempC)->name = osglData->name;
+    if (osglData->typePresent == true)
+        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
 };
 
 matrixAttributeList: | matrixAttributeList matrixAttribute;
@@ -448,28 +448,28 @@ matrixAttribute:
 
 osglSymmetryATT: SYMMETRYATT ATTRIBUTETEXT QUOTE 
 { 
-    if (osglData->symmetryAttributePresent == true)
+    if (osglData->symmetryPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one symmetry attribute in <matrix> element");
-    osglData->symmetryAttributePresent = true;   
-    osglData->symmetryAttribute = $2; 
+    osglData->symmetryPresent = true;   
+    osglData->symmetry = $2; 
     free($2);
 };
 
 osglMatrixNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
 { 
-    if (osglData->matrixNameAttributePresent == true)
+    if (osglData->namePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one name attribute in <matrix> element");
-    osglData->matrixNameAttributePresent = true;   
-    osglData->matrixNameAttribute = $2; 
+    osglData->namePresent = true;   
+    osglData->name = $2; 
     free($2);
 };
 
 osglMatrixTypeATT: TYPEATT ATTRIBUTETEXT QUOTE 
 {
-    if (osglData->matrixTypeAttributePresent == true)
+    if (osglData->typePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one type attribute in <matrix> element");
-    osglData->matrixTypeAttributePresent = true;   
-    osglData->matrixTypeAttribute = $2; 
+    osglData->typePresent = true;
+    osglData->type = $2; 
     free($2);
 };
 
@@ -496,41 +496,41 @@ baseMatrixStart: BASEMATRIXSTART
     osglData->tempC = new BaseMatrix();
     osglData->mtxConstructorVec.push_back(osglData->tempC);
 
-    osglData->baseMatrixIdxAttributePresent = false;
-    osglData->targetMatrixFirstRowAttributePresent = false;
-    osglData->targetMatrixFirstColAttributePresent = false;
-    osglData->baseMatrixStartRowAttributePresent = false;
-    osglData->baseMatrixStartColAttributePresent = false;
-    osglData->baseMatrixEndRowAttributePresent = false;
-    osglData->baseMatrixEndColAttributePresent = false;
-    osglData->baseTransposeAttributePresent = false;
-    osglData->scalarMultiplierAttributePresent = false;
-    osglData->baseMatrixEndRowAttribute = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows;
-    osglData->baseMatrixEndColAttribute = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns;
+    osglData->baseMatrixIdxPresent = false;
+    osglData->targetMatrixFirstRowPresent = false;
+    osglData->targetMatrixFirstColPresent = false;
+    osglData->baseMatrixStartRowPresent = false;
+    osglData->baseMatrixStartColPresent = false;
+    osglData->baseMatrixEndRowPresent = false;
+    osglData->baseMatrixEndColPresent = false;
+    osglData->baseTransposePresent = false;
+    osglData->scalarMultiplierPresent = false;
+    osglData->baseMatrixEndRow = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows;
+    osglData->baseMatrixEndCol = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns;
 };
 
 baseMatrixAttributes: baseMatrixAttList
 {
-    if (osglData->baseMatrixIdxAttributePresent == false)
+    if (osglData->baseMatrixIdxPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute baseMatrixIdx is missing");
     else
-        ((BaseMatrix*)osglData->tempC)->baseMatrixIdx = osglData->baseMatrixIdxAttribute;
-    if (osglData->targetMatrixFirstRowAttributePresent == true)
-        ((BaseMatrix*)osglData->tempC)->targetMatrixFirstRow = osglData->targetMatrixFirstRowAttribute;
-    if (osglData->targetMatrixFirstColAttributePresent == true)
-        ((BaseMatrix*)osglData->tempC)->targetMatrixFirstCol = osglData->targetMatrixFirstColAttribute;
-    if (osglData->baseMatrixStartRowAttributePresent == true)
-        ((BaseMatrix*)osglData->tempC)->baseMatrixStartRow = osglData->baseMatrixStartRowAttribute;
-    if (osglData->baseMatrixStartColAttributePresent == true)
-        ((BaseMatrix*)osglData->tempC)->baseMatrixStartCol = osglData->baseMatrixStartColAttribute;
-    if (osglData->baseMatrixEndRowAttributePresent == true)
-        ((BaseMatrix*)osglData->tempC)->baseMatrixEndRow = osglData->baseMatrixEndRowAttribute;
-    if (osglData->baseMatrixEndColAttributePresent == true)
-        ((BaseMatrix*)osglData->tempC)->baseMatrixEndCol = osglData->baseMatrixEndColAttribute;
-    if (osglData->baseTransposeAttributePresent == true)
-        ((BaseMatrix*)osglData->tempC)->baseTranspose = osglData->baseTransposeAttribute;
-    if (osglData->scalarMultiplierAttributePresent == true)
-        ((BaseMatrix*)osglData->tempC)->scalarMultiplier = osglData->scalarMultiplierAttribute;
+        ((BaseMatrix*)osglData->tempC)->baseMatrixIdx = osglData->baseMatrixIdx;
+    if (osglData->targetMatrixFirstRowPresent == true)
+        ((BaseMatrix*)osglData->tempC)->targetMatrixFirstRow = osglData->targetMatrixFirstRow;
+    if (osglData->targetMatrixFirstColPresent == true)
+        ((BaseMatrix*)osglData->tempC)->targetMatrixFirstCol = osglData->targetMatrixFirstCol;
+    if (osglData->baseMatrixStartRowPresent == true)
+        ((BaseMatrix*)osglData->tempC)->baseMatrixStartRow = osglData->baseMatrixStartRow;
+    if (osglData->baseMatrixStartColPresent == true)
+        ((BaseMatrix*)osglData->tempC)->baseMatrixStartCol = osglData->baseMatrixStartCol;
+    if (osglData->baseMatrixEndRowPresent == true)
+        ((BaseMatrix*)osglData->tempC)->baseMatrixEndRow = osglData->baseMatrixEndRow;
+    if (osglData->baseMatrixEndColPresent == true)
+        ((BaseMatrix*)osglData->tempC)->baseMatrixEndCol = osglData->baseMatrixEndCol;
+    if (osglData->baseTransposePresent == true)
+        ((BaseMatrix*)osglData->tempC)->baseTranspose = osglData->baseTranspose;
+    if (osglData->scalarMultiplierPresent == true)
+        ((BaseMatrix*)osglData->tempC)->scalarMultiplier = osglData->scalarMultiplier;
 };
 
 baseMatrixAttList: | baseMatrixAttList baseMatrixAtt;
@@ -550,7 +550,7 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
 { 
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->baseMatrixIdxAttributePresent == true)
+    if (osglData->baseMatrixIdxPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixIdx attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix idx cannot be negative");
@@ -558,104 +558,104 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix idx exceeds number of matrices so far");
     ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
         mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType, osglData->matrix[$3]->matrixType);
-    osglData->baseMatrixIdxAttributePresent = true;   
-    osglData->baseMatrixIdxAttribute = $3; 
+    osglData->baseMatrixIdxPresent = true;   
+    osglData->baseMatrixIdx = $3; 
 };
 
 osglTargetMatrixFirstRowATT: TARGETMATRIXFIRSTROWATT QUOTE INTEGER QUOTE 
 { 
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->targetMatrixFirstRowAttributePresent == true)
+    if (osglData->targetMatrixFirstRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one targetMatrixFirstRow attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "targetMatrix first row cannot be negative");
-    osglData->targetMatrixFirstRowAttributePresent = true;   
-    osglData->targetMatrixFirstRowAttribute = $3; 
+    osglData->targetMatrixFirstRowPresent = true;   
+    osglData->targetMatrixFirstRow = $3; 
 };
 
 osglTargetMatrixFirstColATT: TARGETMATRIXFIRSTCOLATT QUOTE INTEGER QUOTE
 { 
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->targetMatrixFirstColAttributePresent == true)
+    if (osglData->targetMatrixFirstColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one targetMatrixFirstCol attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "targetMatrix first col cannot be negative");
-    osglData->targetMatrixFirstColAttributePresent = true;   
-    osglData->targetMatrixFirstColAttribute = $3; 
+    osglData->targetMatrixFirstColPresent = true;   
+    osglData->targetMatrixFirstCol = $3; 
 };
 
 osglBaseMatrixStartRowATT: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
 { 
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->baseMatrixStartRowAttributePresent == true)
+    if (osglData->baseMatrixStartRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixStartRow attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix first row cannot be negative");
-    osglData->baseMatrixStartRowAttributePresent = true;   
-    osglData->baseMatrixStartRowAttribute = $3; 
+    osglData->baseMatrixStartRowPresent = true;   
+    osglData->baseMatrixStartRow = $3; 
 };
 
 osglBaseMatrixStartColATT: BASEMATRIXSTARTCOLATT QUOTE INTEGER QUOTE
 { 
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->baseMatrixStartColAttributePresent == true)
+    if (osglData->baseMatrixStartColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixStartCol attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix first col cannot be negative");
-    osglData->baseMatrixStartColAttributePresent = true;   
-    osglData->baseMatrixStartColAttribute = $3; 
+    osglData->baseMatrixStartColPresent = true;   
+    osglData->baseMatrixStartCol = $3; 
 };
 
 osglBaseMatrixEndRowATT: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
 {
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->baseMatrixEndRowAttributePresent == true)
+    if (osglData->baseMatrixEndRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix last row cannot be negative");
     if ($3 > ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix last row exceeds matrix dimensions");
-    osglData->baseMatrixEndRowAttributePresent = true;   
-    osglData->baseMatrixEndRowAttribute = $3; 
+    osglData->baseMatrixEndRowPresent = true;   
+    osglData->baseMatrixEndRow = $3; 
 };
 
 osglBaseMatrixEndColATT: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
 { 
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->baseMatrixEndColAttributePresent == true)
+    if (osglData->baseMatrixEndColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ($3 < 0)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix last col cannot be negative");
     if ($3 > ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseMatrix last col exceeds matrix dimensions");
-    osglData->baseMatrixEndColAttributePresent = true;   
-    osglData->baseMatrixEndColAttribute = $3; 
+    osglData->baseMatrixEndColPresent = true;   
+    osglData->baseMatrixEndCol = $3; 
 };
 
 baseTransposeAttribute: osglBaseTransposeATT
 { 
-    if (osglData->baseTransposeAttributePresent == true)
+    if (osglData->baseTransposePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one baseTranspose attribute in <baseMatrix> element");
-    osglData->baseTransposeAttributePresent = true;   
+    osglData->baseTransposePresent = true;   
 };
 
 osglBaseTransposeATT: baseTransposeAttEmpty | baseTransposeAttContent;
 
 baseTransposeAttEmpty: EMPTYBASETRANSPOSEATT
 {
-    osglData->baseTransposeAttribute = true;
+    osglData->baseTranspose = true;
 };
 
 baseTransposeAttContent: BASETRANSPOSEATT ATTRIBUTETEXT quote 
 {
-    if      (strcmp($2,"false") == 0) osglData->baseTransposeAttribute = false;
-    else if (strcmp($2,"true" ) == 0) osglData->baseTransposeAttribute = true;
+    if      (strcmp($2,"false") == 0) osglData->baseTranspose = false;
+    else if (strcmp($2,"true" ) == 0) osglData->baseTranspose = true;
     else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
     free($2);
 };
@@ -664,10 +664,10 @@ osglScalarMultiplierATT: SCALARMULTIPLIERATT QUOTE aNumber QUOTE
 {
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->scalarMultiplierAttributePresent == true)
+    if (osglData->scalarMultiplierPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one scalar multiplier attribute in <baseMatrix> element");
-    osglData->scalarMultiplierAttributePresent = true;   
-    osglData->scalarMultiplierAttribute = parserData->tempVal;
+    osglData->scalarMultiplierPresent = true;   
+    osglData->scalarMultiplier = parserData->tempVal;
 };
 
 baseMatrixEnd: GREATERTHAN BASEMATRIXEND | ENDOFELEMENT;
@@ -688,8 +688,6 @@ matrixElementsStart: ELEMENTSSTART
     osglData->mtxConstructorVec.push_back(osglData->tempC);
 };
 
-//matrixElementsAttributes: | osglRowMajorATT; 
-
 
 matrixElementsContent: matrixElementsEmpty | matrixElementsLaden;
 
@@ -705,16 +703,14 @@ constantElements: | constantElementsStart constantElementsAttributes GREATERTHAN
 constantElementsStart: CONSTANTELEMENTSSTART
 {
     ((MatrixElements*)osglData->tempC)->constantElements = new ConstantMatrixElements(); 
-    osglData->numberOfValuesAttributePresent = false;        
-    osglData->rowMajorAttributePresent = false;
-    osglData->rowMajorAttribute = false;
+    osglData->numberOfValuesPresent = false;        
+    osglData->rowMajorPresent = false;
+    osglData->rowMajor = false;
 };
-
-/*    ((MatrixElements*)osglData->tempC)->constantElements->rowMajor = true; */
 
 constantElementsAttributes: constantElementsAttList
 {
-    if (osglData->numberOfValuesAttributePresent == false)
+    if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "<constantElements>: numberOfValues attribute missing");    
 };
 
@@ -727,7 +723,7 @@ constantElementsAtt:
     }
   | osglRowMajorATT
     {
-        ((MatrixElements*)osglData->tempC)->constantElements->rowMajor = osglData->rowMajorAttribute;
+        ((MatrixElements*)osglData->tempC)->constantElements->rowMajor = osglData->rowMajor;
     }
 ;
 
@@ -747,7 +743,7 @@ constantElementsStartVector: constantElementsStartVectorStart constantElementsSt
 
 constantElementsStartVectorStart: STARTVECTORSTART
 {
-    if (osglData->rowMajorAttribute == false)
+    if (osglData->rowMajor == false)
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
     else
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
@@ -816,38 +812,19 @@ constantElementsValuesLaden: GREATERTHAN constantElementsValuesBody VALUESEND;
 
 constantElementsValuesBody: osglDblArrayData;
 
-/*
-constantElementsNonzeros: constantElementsNonzerosStart osglSparseVector NONZEROSEND
-{
-    ((MatrixElements*)osglData->tempC)->constantElements->nonzeros = new SparseVector();
-    ((MatrixElements*)osglData->tempC)->constantElements->nonzeros->number  = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->constantElements->nonzeros->indexes = osglData->osglIntArray;
-    ((MatrixElements*)osglData->tempC)->constantElements->nonzeros->values  = osglData->osglDblArray;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-constantElementsNonzerosStart: NONZEROSSTART
-{
-    osglData->osglCounter = 0;
-    osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent = false;
-};
-*/
-
 varReferenceElements: | varReferenceElementsStart varReferenceElementsAttributes GREATERTHAN varReferenceElementsContent; 
 
 varReferenceElementsStart: VARREFERENCEELEMENTSSTART
 {
     ((MatrixElements*)osglData->tempC)->varReferenceElements = new VarReferenceMatrixElements();
-    osglData->numberOfValuesAttributePresent = false;        
-    osglData->rowMajorAttributePresent = false;
-    osglData->rowMajorAttribute = false;
+    osglData->numberOfValuesPresent = false;        
+    osglData->rowMajorPresent = false;
+    osglData->rowMajor = false;
 };
 
 varReferenceElementsAttributes: varReferenceElementsAttList
 {
-    if (osglData->numberOfValuesAttributePresent == false)
+    if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "<varReferenceElements>: numberOfValues attribute missing");    
 };
 
@@ -860,7 +837,7 @@ varReferenceElementsAtt:
     }
   | osglRowMajorATT
     {
-        ((MatrixElements*)osglData->tempC)->varReferenceElements->rowMajor = osglData->rowMajorAttribute;
+        ((MatrixElements*)osglData->tempC)->varReferenceElements->rowMajor = osglData->rowMajor;
     }
 ;
 
@@ -880,7 +857,7 @@ varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferen
 
 varReferenceElementsStartVectorStart: STARTVECTORSTART
 {
-    if (osglData->rowMajorAttribute == false)
+    if (osglData->rowMajor == false)
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
     else
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
@@ -947,46 +924,19 @@ varReferenceElementsValuesLaden: GREATERTHAN varReferenceElementsValuesBody VALU
 
 varReferenceElementsValuesBody: osglIntArrayData;
 
-/*
-varReferenceElementsNonzeros: varReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
-{
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
-//    delete[] osglData->osglValArray;
-//    osglData->osglValArray = NULL;
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->nonzeros = new SparseIntVector();
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->nonzeros->number  = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->nonzeros->indexes = osglData->osglIntArray;
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->nonzeros->values  = osglData->osglValArray;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-    osglData->osglCounter = 0;
-};
-
-varReferenceElementsNonzerosStart: NONZEROSSTART
-{
-    osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent = false;
-    osglData->osglCounter = 0;
-};
-*/
-
 linearElements: | linearElementsStart linearElementsAttributes GREATERTHAN linearElementsContent; 
 
 linearElementsStart: LINEARELEMENTSSTART
 {
     ((MatrixElements*)osglData->tempC)->linearElements = new LinearMatrixElements();
-    osglData->numberOfValuesAttributePresent = false;        
-    osglData->rowMajorAttributePresent = false;
-    osglData->rowMajorAttribute = false;
+    osglData->numberOfValuesPresent = false;        
+    osglData->rowMajorPresent = false;
+    osglData->rowMajor = false;
 };
 
 linearElementsAttributes: linearElementsAttList
 {
-    if (osglData->numberOfValuesAttributePresent == false)
+    if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "<linearElements>: numberOfValues attribute missing");    
 };
 
@@ -999,7 +949,7 @@ linearElementsAtt:
     }
   | osglRowMajorATT
     {
-        ((MatrixElements*)osglData->tempC)->linearElements->rowMajor = osglData->rowMajorAttribute;
+        ((MatrixElements*)osglData->tempC)->linearElements->rowMajor = osglData->rowMajor;
     }
 ;
 
@@ -1019,7 +969,7 @@ linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVec
 
 linearElementsStartVectorStart: STARTVECTORSTART
 {
-    if (osglData->rowMajorAttribute == false)
+    if (osglData->rowMajor == false)
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
     else
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
@@ -1062,61 +1012,6 @@ linearElementsIndexesLaden: GREATERTHAN linearElementsIndexesBody INDEXESEND;
 
 linearElementsIndexesBody: osglIntArrayData;
 
-/*
-linearElementsNonzeros: linearElementsNonzerosStart linearElementsNonzerosContent
-{
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-linearElementsNonzerosStart: NONZEROSSTART
-{
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros = new LinearMatrixNonzeros();
-    osglData->osglCounter = 0;
-};
-
-linearElementsNonzerosContent: GREATERTHAN linearElementsNonzerosBody NONZEROSEND;
-
-linearElementsNonzerosBody: linearElementsNonzerosIndexes linearElementsNonzerosValues;
-
-linearElementsNonzerosIndexes:
-    | linearElementsNonzerosIndexesStart linearElementsNonzerosIndexesContent
-{
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
-//    delete[] osglData->osglValArray;
-//    osglData->osglValArray = NULL;
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->indexes->el = osglData->osglIntArray;
-    ((MatrixElements*)osglData->tempC)->linearElements->nonzeros->indexes->numberOfEl 
-        = ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-linearElementsNonzerosIndexesStart: INDEXESSTART
-{
-    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->osglCounter = 0;
-};
-
-linearElementsNonzerosIndexesContent: linearElementsNonzerosIndexesEmpty | linearElementsNonzerosIndexesLaden;
-
-linearElementsNonzerosIndexesEmpty: ENDOFELEMENT;
-
-linearElementsNonzerosIndexesLaden: GREATERTHAN linearElementsNonzerosIndexesBody INDEXESEND;
-
-linearElementsNonzerosIndexesBody:  osglIntArrayData;
-*/
-
-
 linearElementsValues:
     {
         if (osglData->osglNumberOfNonzeros > 0)
@@ -1130,7 +1025,6 @@ linearElementsValues:
         else if (osglData->osglNumberOfNonzeros < osglData->osglNonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "too many <el> elements");        
         ((MatrixElements*)osglData->tempC)->linearElements->values->numberOfEl = osglData->osglNumberOfEl;
-//        ((MatrixElements*)osglData->tempC)->linearElements->values->el = osglData->osglDblArray;
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     };
@@ -1147,9 +1041,8 @@ linearElementsValuesStart: VALUESSTART
     for (int i=0; i < ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues; i++)
         ((MatrixElements*)osglData->tempC)->linearElements->values->el[i]
             = new LinearMatrixElement(); 
-//    osglData->osglDblArray = new double[osglData->osglNumberOfEl]; //valgrind: this leaks 40 bytes of memory
     osglData->osglCounter = 0;
-    osglData->numberOfVarIdxAttributePresent = false;
+    osglData->numberOfVarIdxPresent = false;
 };
 
 linearElementsValuesContent: linearElementsValuesEmpty | linearElementsValuesLaden;
@@ -1172,18 +1065,18 @@ linearElementsValuesEl: linearElementsValuesElStart linearElementsValuesElAttrib
 
 linearElementsValuesElStart: ELSTART
 {
-    osglData->numberOfVarIdxAttributePresent = false;
+    osglData->numberOfVarIdxPresent = false;
     osglData->osglConstantPresent = false;
 };  
 
 linearElementsValuesElAttributes: linearElementsValuesElAttList
 {
-    if (!osglData->numberOfVarIdxAttributePresent)
+    if (!osglData->numberOfVarIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfVarIdx attribute missing");
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->numberOfVarIdx
         = osglData->numberOfVarIdx;
     ((MatrixElements*)osglData->tempC)->linearElements->values->el[osglData->osglNonzeroCounter]->varIdx
-        = new LinearMatrixElementTerm*[osglData->numberOfVarIdx]; //valgrind: this creates error in OSGeneral.cpp:1950
+        = new LinearMatrixElementTerm*[osglData->numberOfVarIdx];
     osglData->osglCounter = 0;
 };
 
@@ -1245,14 +1138,14 @@ generalElements: | generalElementsStart generalElementsAttributes GREATERTHAN ge
 generalElementsStart: GENERALELEMENTSSTART
 {
     ((MatrixElements*)osglData->tempC)->generalElements = new GeneralMatrixElements();
-    osglData->numberOfValuesAttributePresent = false;        
-    osglData->rowMajorAttributePresent = false;
-    osglData->rowMajorAttribute = false;
+    osglData->numberOfValuesPresent = false;        
+    osglData->rowMajorPresent = false;
+    osglData->rowMajor = false;
 };
 
 generalElementsAttributes: generalElementsAttList
 {
-    if (osglData->numberOfValuesAttributePresent == false)
+    if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "<generalElements>: numberOfValues attribute missing");    
 };
 
@@ -1265,7 +1158,7 @@ generalElementsAtt:
     }
   | osglRowMajorATT
     {
-        ((MatrixElements*)osglData->tempC)->generalElements->rowMajor = osglData->rowMajorAttribute;
+        ((MatrixElements*)osglData->tempC)->generalElements->rowMajor = osglData->rowMajor;
     }
 ;
 
@@ -1285,7 +1178,7 @@ generalElementsStartVector: generalElementsStartVectorStart generalElementsStart
 
 generalElementsStartVectorStart: STARTVECTORSTART
 {
-    if (osglData->rowMajorAttribute == false)
+    if (osglData->rowMajor == false)
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
     else
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
@@ -1328,66 +1221,6 @@ generalElementsIndexesLaden: GREATERTHAN generalElementsIndexesBody INDEXESEND;
 
 generalElementsIndexesBody: osglIntArrayData;
 
-
-/*
-generalElementsNonzeros: generalElementsNonzerosStart generalElementsNonzerosNumberOfElAttribute generalElementsNonzerosContent
-{
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-    delete[] osglData->osglIntArray;
-    osglData->osglIntArray = NULL;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-generalElementsNonzerosStart: NONZEROSSTART
-{
-    osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent = false;
-};
-
-generalElementsNonzerosNumberOfElAttribute: osglNumberOfElATT
-{
-    osglData->osglCounter = 0; 
-    osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
-}; 
-
-generalElementsNonzerosContent: GREATERTHAN generalElementsNonzerosBody NONZEROSEND;
-
-generalElementsNonzerosBody: generalElementsNonzerosIndexes generalElementsNonzerosValues;
-
-generalElementsNonzerosIndexes:
-    | generalElementsNonzerosIndexesStart generalElementsNonzerosIndexesContent
-{
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-    delete[] osglData->osglIntArray;
-    osglData->osglIntArray = NULL;
-    delete[] osglData->osglValArray;
-    osglData->osglValArray = NULL;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-generalElementsNonzerosIndexesStart: INDEXESSTART
-{
-//    osglData->osglNumberOfEl = 0;
-//    osglData->osglNumberOfElPresent = false;
-};
-
-
-generalElementsNonzerosIndexesContent: generalElementsNonzerosIndexesEmpty | generalElementsNonzerosIndexesLaden;
-
-generalElementsNonzerosIndexesEmpty: ENDOFELEMENT;
-
-generalElementsNonzerosIndexesLaden: GREATERTHAN generalElementsNonzerosIndexesBody INDEXESEND;
-
-generalElementsNonzerosIndexesBody:  osglIntArrayData;
-*/
-
 generalElementsValues:
     | generalElementsValuesStart generalElementsValuesContent;
 
@@ -1397,12 +1230,13 @@ generalElementsValuesStart: VALUESSTART
     osglData->osglNumberOfNonzeros = ((MatrixElements*)osglData->tempC)->generalElements->numberOfValues;
 
     ((MatrixElements*)osglData->tempC)->generalElements->values = new GeneralMatrixValues();
-    ((MatrixElements*)osglData->tempC)->generalElements->values->numberOfEl = osglData->osglNumberOfNonzeros;
+    ((MatrixElements*)osglData->tempC)->generalElements->values->numberOfEl
+        = osglData->osglNumberOfNonzeros;
     ((MatrixElements*)osglData->tempC)->generalElements->values->el
-        = new OSExpressionTree*[osglData->osglNumberOfNonzeros];
+        = new ScalarExpressionTree*[osglData->osglNumberOfNonzeros];
 
     for (int i=0; i<osglData->osglNumberOfNonzeros; i++)
-        ((MatrixElements*)osglData->tempC)->generalElements->values->el[i] = new OSExpressionTree();
+        ((MatrixElements*)osglData->tempC)->generalElements->values->el[i] = new ScalarExpressionTree();
 };
 
 generalElementsValuesContent: generalElementsValuesEmpty | generalElementsValuesLaden;
@@ -1449,14 +1283,14 @@ conReferenceElements: | conReferenceElementsStart conReferenceElementsAttributes
 conReferenceElementsStart: CONREFERENCEELEMENTSSTART
 {
     ((MatrixElements*)osglData->tempC)->conReferenceElements = new ConReferenceMatrixElements();
-    osglData->numberOfValuesAttributePresent = false;        
-    osglData->rowMajorAttributePresent = false;
-    osglData->rowMajorAttribute = false;
+    osglData->numberOfValuesPresent = false;        
+    osglData->rowMajorPresent = false;
+    osglData->rowMajor = false;
 };
 
 conReferenceElementsAttributes: conReferenceElementsAttList
 {
-    if (osglData->numberOfValuesAttributePresent == false)
+    if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "<conReferenceElements>: numberOfValues attribute missing");    
 };
 
@@ -1469,7 +1303,7 @@ conReferenceElementsAtt:
     }
   | osglRowMajorATT
     {
-        ((MatrixElements*)osglData->tempC)->conReferenceElements->rowMajor = osglData->rowMajorAttribute;
+        ((MatrixElements*)osglData->tempC)->conReferenceElements->rowMajor = osglData->rowMajor;
     }
 ;
 
@@ -1489,7 +1323,7 @@ conReferenceElementsStartVector: conReferenceElementsStartVectorStart conReferen
 
 conReferenceElementsStartVectorStart: STARTVECTORSTART
 {
-    if (osglData->rowMajorAttribute == false)
+    if (osglData->rowMajor == false)
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
     else
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
@@ -1557,46 +1391,19 @@ conReferenceElementsValuesLaden: GREATERTHAN conReferenceElementsValuesBody VALU
 
 conReferenceElementsValuesBody: osglIntArrayData;
 
-/*
-conReferenceElementsNonzeros: conReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
-{
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
-//    delete[] osglData->osglValArray;
-//    osglData->osglValArray = NULL;
-    ((MatrixElements*)osglData->tempC)->conReferenceElements->nonzeros = new SparseIntVector();
-    ((MatrixElements*)osglData->tempC)->conReferenceElements->nonzeros->number  = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->conReferenceElements->nonzeros->indexes = osglData->osglIntArray;
-    ((MatrixElements*)osglData->tempC)->conReferenceElements->nonzeros->values  = osglData->osglValArray;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-    osglData->osglCounter = 0;
-};
-
-conReferenceElementsNonzerosStart: NONZEROSSTART
-{
-    osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent = false;
-    osglData->osglCounter = 0;
-};
-*/
-
 objReferenceElements: | objReferenceElementsStart objReferenceElementsAttributes GREATERTHAN objReferenceElementsContent; 
 
 objReferenceElementsStart: OBJREFERENCEELEMENTSSTART
 {
     ((MatrixElements*)osglData->tempC)->objReferenceElements = new ObjReferenceMatrixElements();
-    osglData->numberOfValuesAttributePresent = false;        
-    osglData->rowMajorAttributePresent = false;
-    osglData->rowMajorAttribute = false;
+    osglData->numberOfValuesPresent = false;        
+    osglData->rowMajorPresent = false;
+    osglData->rowMajor = false;
 };
 
 objReferenceElementsAttributes: objReferenceElementsAttList
 {
-    if (osglData->numberOfValuesAttributePresent == false)
+    if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "<objReferenceElements>: numberOfValues attribute missing");    
 };
 
@@ -1609,7 +1416,7 @@ objReferenceElementsAtt:
     }
   | osglRowMajorATT
     {
-        ((MatrixElements*)osglData->tempC)->objReferenceElements->rowMajor = osglData->rowMajorAttribute;
+        ((MatrixElements*)osglData->tempC)->objReferenceElements->rowMajor = osglData->rowMajor;
     }
 ;
 
@@ -1629,7 +1436,7 @@ objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferen
 
 objReferenceElementsStartVectorStart: STARTVECTORSTART
 {
-    if (osglData->rowMajorAttribute == false)
+    if (osglData->rowMajor == false)
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
     else
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
@@ -1699,111 +1506,6 @@ objReferenceElementsValuesLaden: GREATERTHAN objReferenceElementsValuesBody VALU
 objReferenceElementsValuesBody: osglIntArrayData;
 
 
-/*
-objReferenceElementsNonzeros: objReferenceElementsNonzerosStart osglSparseIntVector NONZEROSEND
-{
-    ((MatrixElements*)osglData->tempC)->objReferenceElements->nonzeros = new SparseIntVector();
-    ((MatrixElements*)osglData->tempC)->objReferenceElements->nonzeros->number  = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->objReferenceElements->nonzeros->indexes = osglData->osglIntArray;
-    ((MatrixElements*)osglData->tempC)->objReferenceElements->nonzeros->values  = osglData->osglValArray;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-    osglData->osglCounter = 0;
-};
-
-objReferenceElementsNonzerosStart: NONZEROSSTART
-{
-    osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent = false;
-    osglData->osglCounter = 0;
-};
-*/
-
-/*
-patternElements: | patternElementsStart patternElementsAttributes patternElementsContent PATTERNELEMENTSEND; 
-
-patternElementsStart: PATTERNELEMENTSSTART;
-
-patternElementsAttributes: | osglNegativePatternATT; 
-
-osglNegativePatternATT: negativePatternAttEmpty | negativePatternAttContent;
-
-negativePatternAttEmpty: EMPTYNEGATIVEPATTERNATT
-{
-    osglData->negativePatternAttribute = true;
-};
-
-negativePatternAttContent: NEGATIVEPATTERNATT ATTRIBUTETEXT quote 
-{ 
-    if      ($2 == "false") osglData->negativePatternAttribute = false;
-    else if ($2 == "true")  osglData->negativePatternAttribute = true;
-    else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "negativePattern attribute in <baseMatrix> element must be \"true\" or \"false\"");
-    free($2);
-};
-
-patternElementsContent: GREATERTHAN patternElementsStartVector patternElementsNonzeros;
-
-patternElementsStartVector: patternElementsStartVectorStart patternElementsStartVectorContent
-{
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
-    parserData->suppressFurtherErrorMessages = false;
-    ((MatrixElements*)osglData->tempC)->patternElements->start = new IntVector();
-    ((MatrixElements*)osglData->tempC)->patternElements->start->numberOfEl = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->patternElements->start->el = osglData->osglIntArray;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-patternElementsStartVectorStart: STARTVECTORSTART
-{
-    if (osglData->rowMajorAttribute == false)
-        osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
-    else
-        osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
-    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->osglNumberOfElPresent = false;
-};
-
-patternElementsStartVectorNumberOfElATT: osglNumberOfElATT
-{
-    osglData->osglCounter = 0; 
-    osglData->osglNumberOfEl = parserData->numberOf;
-    osglData->osglIntArray = new int[parserData->numberOf];
-}; 
-
-patternElementsStartVectorContent: patternElementsStartVectorEmpty | patternElementsStartVectorLaden;
-
-patternElementsStartVectorEmpty: ENDOFELEMENT;
-
-patternElementsStartVectorLaden: GREATERTHAN patternElementsStartVectorBody STARTVECTOREND;
-
-patternElementsStartVectorBody:  osglIntArrayData;
-
-patternElementsNonzeros: patternElementsNonzerosStart osglNumberOfElATT GREATERTHAN osglIntArrayData NONZEROSEND
-{
-//    if (!parserData->ignoreDataAfterErrors)
-//        if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-//            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "set variables basic failed");    
-//    delete[] osglData->osglIntArray;
-//    osglData->osglIntArray = NULL;
-//    delete[] osglData->osglValArray;
-//    osglData->osglValArray = NULL;
-    ((MatrixElements*)osglData->tempC)->patternElements->nonzeros = new IntVector();
-    ((MatrixElements*)osglData->tempC)->patternElements->nonzeros->numberOfEl = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->patternElements->nonzeros->el = osglData->osglIntArray;
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-patternElementsNonzerosStart: NONZEROSSTART
-{
-    osglData->osglNumberOfElPresent = false;
-};
-*/
-
 matrixTransformation: matrixTransformationStart GREATERTHAN OSnLMNode matrixTransformationEnd
 {
 //    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
@@ -1845,7 +1547,7 @@ matrixBlocksStart: BLOCKSSTART
 {
     osglData->tempC = new MatrixBlocks();
     osglData->mtxConstructorVec.push_back(osglData->tempC);
-    osglData->numberOfBlocksAttributePresent = false;
+    osglData->numberOfBlocksPresent = false;
 };
 
 matrixBlocksAttributes: osglNumberOfBlocksATT
@@ -1934,9 +1636,9 @@ matrixBlockStart: BLOCKSTART
     osglData->mtxConstructorVec.push_back(osglData->tempC);
     osglData->mtxBlkVec.push_back(osglData->tempC);
 
-    osglData->symmetryAttributePresent = false;
-    osglData->blockRowIdxAttributePresent = false;
-    osglData->blockColIdxAttributePresent = false;   
+    osglData->symmetryPresent = false;
+    osglData->blockRowIdxPresent = false;
+    osglData->blockColIdxPresent = false;   
 }; 
 
 matrixBlockAttributes: matrixBlockAttList;
@@ -1948,19 +1650,19 @@ matrixBlockAtt:
     | osglBlockColIdxATT 
     | osglSymmetryATT
     {
-        if (verifyMatrixSymmetry(osglData->symmetryAttribute) == false)
+        if (verifyMatrixSymmetry(osglData->symmetry) == false)
             parserData->parser_errors += addErrorMsg( NULL, parserObjects, "symmetry type not recognized");
         parserData->errorText = NULL;
     };
 
 osglBlockRowIdxATT: BLOCKROWIDXATT quote INTEGER quote
 {
-    if (osglData->blockRowIdxAttributePresent)
+    if (osglData->blockRowIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockRowIdx attribute previously set");
     else
     {
         if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockRowIdx cannot be negative");
-        osglData->blockRowIdxAttributePresent = true;        
+        osglData->blockRowIdxPresent = true;        
         osglData->blockRowIdx = $3;       
         ((MatrixBlock*)osglData->tempC)->blockRowIdx = $3;
     }
@@ -1973,12 +1675,12 @@ osglBlockRowIdxATT: BLOCKROWIDXATT quote INTEGER quote
 
 osglBlockColIdxATT: BLOCKCOLIDXATT quote INTEGER quote
 {
-    if (osglData->blockColIdxAttributePresent)
+    if (osglData->blockColIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockColIdx attribute previously set");
     else
     {
         if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "blockColIdx cannot be negative");
-        osglData->blockColIdxAttributePresent = true;
+        osglData->blockColIdxPresent = true;
         osglData->blockColIdx = $3;       
         ((MatrixBlock*)osglData->tempC)->blockColIdx = $3;
     }
@@ -1991,7 +1693,7 @@ osglBlockColIdxATT: BLOCKCOLIDXATT quote INTEGER quote
 
 matrixBlockContent: blockEmpty | blockLaden;
 
-blockEmpty: /*GREATERTHAN BLOCKEND |*/ ENDOFELEMENT;
+blockEmpty: ENDOFELEMENT;
 
 blockLaden: GREATERTHAN blockBody BLOCKEND
 {
@@ -2005,10 +1707,10 @@ osglNumberOfBlocksATT: NUMBEROFBLOCKSATT QUOTE INTEGER QUOTE
 {
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->numberOfBlocksAttributePresent)
+    if (osglData->numberOfBlocksPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfBlocks attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <blocks> cannot be negative");
-    osglData->numberOfBlocksAttributePresent = true;        
+    osglData->numberOfBlocksPresent = true;        
     osglData->numberOfBlocks = $3;
 };
 
@@ -2016,10 +1718,10 @@ osglNumberOfColumnsATT: NUMBEROFCOLUMNSATT QUOTE INTEGER QUOTE
 {
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->numberOfColumnsAttributePresent)
+    if (osglData->numberOfColumnsPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfColumns attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <blocks> cannot be negative");
-    osglData->numberOfColumnsAttributePresent = true;        
+    osglData->numberOfColumnsPresent = true;        
     osglData->numberOfColumns = $3;
 };
 
@@ -2038,10 +1740,10 @@ osglNumberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE
 {
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->numberOfRowsAttributePresent)
+    if (osglData->numberOfRowsPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfRows attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <rows> cannot be negative");
-    osglData->numberOfRowsAttributePresent = true;        
+    osglData->numberOfRowsPresent = true;        
     osglData->numberOfRows = $3;
 };
 
@@ -2049,10 +1751,10 @@ osglNumberOfValuesATT: NUMBEROFVALUESATT QUOTE INTEGER QUOTE
 {
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->numberOfValuesAttributePresent)
+    if (osglData->numberOfValuesPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfValues attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <values> cannot be negative");
-    osglData->numberOfValuesAttributePresent = true;        
+    osglData->numberOfValuesPresent = true;        
     osglData->numberOfValues = $3;
 };
 
@@ -2060,10 +1762,10 @@ osglNumberOfVarIdxATT: NUMBEROFVARIDXATT QUOTE INTEGER QUOTE
 {
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osglData->numberOfVarIdxAttributePresent)
+    if (osglData->numberOfVarIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "numberOfVarIdx attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <varIdx> cannot be negative");
-    osglData->numberOfVarIdxAttributePresent = true;        
+    osglData->numberOfVarIdxPresent = true;        
     osglData->numberOfVarIdx = $3;
 };
 
@@ -2095,28 +1797,56 @@ osglMultATT: MULTATT QUOTE INTEGER QUOTE
     osglData->osglMult = $3;
 };
 
+osglNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
+{ 
+    if (osglData->namePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one name attribute");
+    osglData->namePresent = true;   
+    osglData->name = $2; 
+    free($2);
+};
+
+osglIdxATT: IDXATT QUOTE INTEGER QUOTE 
+    { 
+        if (osglData->idxPresent == true)
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one idx attribute");
+        osglData->idxPresent = true;
+        if ( *$2 != *$4 ) 
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+        osglData->idx = $3;
+    };
+
+osglShapeATT: SHAPEATT ATTRIBUTETEXT QUOTE 
+{
+    if (osglData->shapePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one shape attribute");
+    osglData->shapePresent = true;   
+    osglData->shape = (ENUM_NL_EXPR_SHAPE)returnNlExprShape($2);
+    free($2);
+};
+
 osglRowMajorATT: rowMajorAttEmpty | rowMajorAttContent;
 
 rowMajorAttEmpty: EMPTYROWMAJORATT
 {
-    if (osglData->rowMajorAttributePresent)
+    if (osglData->rowMajorPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "rowMajor attribute encountered more than once");
     else
-        osglData->rowMajorAttribute = true;
-    osglData->rowMajorAttributePresent = true;
+        osglData->rowMajor = true;
+    osglData->rowMajorPresent = true;
 };
 
 rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT QUOTE 
 {
-    if (osglData->rowMajorAttributePresent)
+    if (osglData->rowMajorPresent)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "rowMajor attribute encountered more than once");
     else
     {
-        if      (strcmp($2,"false") == 0) osglData->rowMajorAttribute = false;
-        else if (strcmp($2,"true" ) == 0) osglData->rowMajorAttribute = true;
+        if      (strcmp($2,"false") == 0) osglData->rowMajor = false;
+        else if (strcmp($2,"true" ) == 0) osglData->rowMajor = true;
         else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "rowMajor attribute must be \"true\" or \"false\"");
     }
-    osglData->rowMajorAttributePresent = true;
+    osglData->rowMajorPresent = true;
     free($2);
 };
 

@@ -21,7 +21,8 @@ using std::cout;
 using std::endl;
 
 OSExpressionTree::OSExpressionTree():
-    m_treeRoot( NULL),
+//    m_treeRoot( NULL),
+//    m_bIsVectorValued(false),
     mapVarIdx( NULL),
     m_bIndexMapGenerated( false),
     bADMustReTape( false),
@@ -36,11 +37,11 @@ OSExpressionTree::~OSExpressionTree()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the OSExpressionTree Destructor");
 #endif
-    if( bDestroyNlNodes == true)
-    {
-        if(m_treeRoot != NULL) delete m_treeRoot;
-        m_treeRoot = NULL;
-    }
+//    if( bDestroyNlNodes == true)
+//    {
+//        if(m_treeRoot != NULL) delete m_treeRoot;
+//        m_treeRoot = NULL;
+//    }
     if(mapVarIdx != NULL)
     {
         delete mapVarIdx;
@@ -48,20 +49,20 @@ OSExpressionTree::~OSExpressionTree()
     }
 }//end ~OSExpressionTree
 
-
-std::vector<OSnLNode*> OSExpressionTree::getPostfixFromExpressionTree()
-{
-    return m_treeRoot->getPostfixFromExpressionTree();
-}//getPostfixFromExpressionTree
-
-
-std::vector<OSnLNode*> OSExpressionTree::getPrefixFromExpressionTree()
+#if 0
+std::vector<ExprNode*> OSExpressionTree::getPrefixFromExpressionTree()
 {
     return m_treeRoot->getPrefixFromExpressionTree();
 }//getPrefixFromExpressionTree
 
 
+std::vector<ExprNode*> OSExpressionTree::getPostfixFromExpressionTree()
+{
+    return m_treeRoot->getPostfixFromExpressionTree();
+}//getPostfixFromExpressionTree
+#endif
 
+#if 0
 double OSExpressionTree::calculateFunction( double *x, bool new_x)
 {
     //calculateFunctionAD( x, functionEvaluated);
@@ -75,13 +76,91 @@ double OSExpressionTree::calculateFunction( double *x, bool new_x)
         return  m_dTreeRootValue;
     }
 }//calculateFunction
+#endif
 
-std::map<int, int> *OSExpressionTree::getVariableIndiciesMap()     //obsolescent --- 
+bool OSExpressionTree::IsEqual(OSExpressionTree *that)
 {
-	return getVariableIndicesMap();
-}
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSExpressionTree");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+//            if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
+//                return false;
+            if (this->m_bIndexMapGenerated != that->m_bIndexMapGenerated)
+                return false;
+            if (this->bADMustReTape        != that->bADMustReTape)
+                return false;
+            if (this->bDestroyNlNodes      != that->bDestroyNlNodes)
+                return false;
+            return true;
+        }
+    }
+}//OSExpressionTree::IsEqual
 
-std::map<int, int> *OSExpressionTree::getVariableIndicesMap()
+
+ScalarExpressionTree::ScalarExpressionTree():
+    m_treeRoot( NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+        "Inside the ScalarExpressionTree Constructor");
+#endif
+}//end ScalarExpressionTree
+
+
+ScalarExpressionTree::~ScalarExpressionTree()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+        "Inside the ScalarExpressionTree Destructor");
+#endif
+    if( bDestroyNlNodes == true)
+    {
+        if(m_treeRoot != NULL) delete m_treeRoot;
+        m_treeRoot = NULL;
+    }
+//    if(mapVarIdx != NULL)
+//    {
+//        delete mapVarIdx;
+//        mapVarIdx = NULL;
+//    }
+}//end ~ScalarExpressionTree
+
+std::vector<ExprNode*> ScalarExpressionTree::getPrefixFromExpressionTree()
+{
+    return m_treeRoot->/*OSnLNode::*/getPrefixFromExpressionTree();
+}//getPrefixFromExpressionTree
+
+
+std::vector<ExprNode*> ScalarExpressionTree::getPostfixFromExpressionTree()
+{
+    return m_treeRoot->/*OSnLNode::*/getPostfixFromExpressionTree();
+}//getPostfixFromExpressionTree
+
+
+std::map<int, int> *ScalarExpressionTree::getVariableIndicesMap()
 {
     if( m_bIndexMapGenerated == true) return mapVarIdx;
     mapVarIdx = new std::map<int, int>();
@@ -95,12 +174,28 @@ std::map<int, int> *OSExpressionTree::getVariableIndicesMap()
     //}
     m_bIndexMapGenerated = true;
     return mapVarIdx;
-}//getVariableIndices
+}//getVariableIndicesMap
 
-bool OSExpressionTree::IsEqual(OSExpressionTree *that)
+
+double ScalarExpressionTree::calculateFunction( double *x, bool new_x)
+{
+    //calculateFunctionAD( x, functionEvaluated);
+    if( new_x == false)
+    {
+        return m_dTreeRootValue;
+    }
+    else
+    {
+        m_dTreeRootValue = m_treeRoot->calculateFunction( x);
+        return  m_dTreeRootValue;
+    }
+}//calculateFunction
+
+
+bool ScalarExpressionTree::IsEqual(ScalarExpressionTree *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSExpressionTree");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ScalarExpressionTree");
 #endif
     if (this == NULL)
     {
@@ -131,6 +226,83 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
             return true;
         }
     }
-}//OSExpressionTree::IsEqual
+}//ScalarExpressionTree::IsEqual
 
+
+MatrixExpressionTree::MatrixExpressionTree():
+    m_treeRoot( NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+        "Inside the MatrixExpressionTree Constructor");
+#endif
+}//end MatrixExpressionTree
+
+
+MatrixExpressionTree::~MatrixExpressionTree()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+        "Inside the MatrixExpressionTree Destructor");
+#endif
+    if( bDestroyNlNodes == true)
+    {
+        if(m_treeRoot != NULL) delete m_treeRoot;
+        m_treeRoot = NULL;
+    }
+//    if(mapVarIdx != NULL)
+//    {
+//        delete mapVarIdx;
+//        mapVarIdx = NULL;
+//    }
+}//end ~MatrixExpressionTree
+
+
+std::vector<ExprNode*> MatrixExpressionTree::getPrefixFromExpressionTree()
+{
+    return m_treeRoot->/*OSnLMNode::*/getPrefixFromExpressionTree();
+}//getPrefixFromExpressionTree
+
+
+std::vector<ExprNode*> MatrixExpressionTree::getPostfixFromExpressionTree()
+{
+    return m_treeRoot->/*OSnLMNode::*/getPostfixFromExpressionTree();
+}//getPostfixFromExpressionTree
+
+
+bool MatrixExpressionTree::IsEqual(MatrixExpressionTree *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MatrixExpressionTree");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
+                return false;
+
+            return true;
+        }
+    }
+}//MatrixExpressionTree::IsEqual
 

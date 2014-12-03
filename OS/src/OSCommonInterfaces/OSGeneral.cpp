@@ -2626,6 +2626,21 @@ std::string OSMatrix::getNodeName()
     return "matrix";
 }// end of OSMatrix::getNodeName()
 
+bool OSMatrix::setMatrix(std::string name, int numberOfRows, int numberOfColumns, 
+                         ENUM_MATRIX_SYMMETRY symmetry, ENUM_MATRIX_TYPE matrixType, 
+                         unsigned int inumberOfChildren, MatrixNode **m_mChildren)
+{
+    this->name              = name;
+    this->numberOfRows      = numberOfRows;
+    this->numberOfColumns   = numberOfColumns;
+    this->symmetry          = symmetry;
+    this->matrixType        = matrixType;
+    this->inumberOfChildren = inumberOfChildren;
+    this->m_mChildren       = m_mChildren;
+    return true;
+}//setMatrix
+
+
 ENUM_MATRIX_CONSTRUCTOR_TYPE OSMatrix::getNodeType()
 {
     return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;

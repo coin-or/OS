@@ -235,7 +235,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
         }
 
 
-        OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
+        ScalarExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
         if (exptree != NULL)
         {
             expression** nl = new expression*[1];
@@ -279,7 +279,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
                 con_lin[j].second = sm->values[ kount];
                 kount++;
             }
-            OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( i);
+            ScalarExpressionTree* exptree = osinstance->getNonlinearExpressionTree( i);
             if (exptree != NULL)
             {
                 expression** nl = new expression*[1];
