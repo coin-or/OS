@@ -830,8 +830,6 @@
 					<xs:enumeration value="linear"/>
 					<xs:enumeration value="quadratic"/>
 					<xs:enumeration value="general"/>
-					<xs:enumeration value="additivePattern"/>
-					<xs:enumeration value="subtractingPattern"/>
 					<xs:enumeration value="jumbled"/>
 					<xs:enumeration value="unknown"/>
 				</xs:restriction>

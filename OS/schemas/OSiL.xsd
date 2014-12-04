@@ -71,7 +71,8 @@
 			</xs:element>
 			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>recommendation</xs:documentation>
+					<xs:documentation>recommendation
+We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin in "Studies on Graphs and Discrete Programming", 1981. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrices" type="Matrices" minOccurs="0">
@@ -1061,8 +1062,17 @@ convexity row to the solver, which might speed up the execution time.
 In an SOS2, adjacency usually means that nonzero variables must be consecutive within the set. They are used to model piecewise linear functions of one variable, and what is adjacent should be reasonably clear. In an SOS3 the adjacent points are the vertices of a triangle (a two-dimensional simplex), and one cannot infer the adjacency from the order of the variables in the SOS. One also cannot infer  the size of the triangulation. That's why one needs to specify adjacency lists here. Since it is possible to omit such lists for SOS2 (and certainly for SOS1), it makes sense to allow for 0 adjacencySets. (And each triangle forms its own set, hence the plural.)-->
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="type" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="convexityRowIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="type" type="xs:positiveInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>"type = k" means at most k of the variables in this SOS can be nonzero, and the nonzeros must be "adjacent"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="convexityRowIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>if present must refer to a previously defined constraint of the form 
+x_i1 + x_i2 + ... = 1. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SOSAdjacentVariableSets">
 		<xs:annotation>
