@@ -875,7 +875,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		</xs:sequence>
 		<xs:attribute name="idx" type="xs:int" use="required">
 			<xs:annotation>
-				<xs:documentation>refers to existing (i.e., core) objectives (if negative) or constraints (if nonnegative)</xs:documentation>
+				<xs:documentation>refers to existing matrix objectives (if negative) or matrix constraints (if nonnegative)</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="shape" default="general">
