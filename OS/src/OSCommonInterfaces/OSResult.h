@@ -1,7 +1,6 @@
 /* $Id$ */
 /** @file OSResult.h
  *
- *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks

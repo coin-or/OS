@@ -31,6 +31,7 @@
 #include "OSConfig.h"
 #include "OSParameters.h"
 #include "OSGeneral.h"
+#include "OSMatrix.h"
 #include "OSnLNode.h"
 #include "OSExpressionTree.h"
 #include <string>
@@ -496,7 +497,7 @@ public:
      */
     int numberOfMatrices;
 
-    /** matrix is pointer to an array of OSMatrix object pointers */
+    /** matrix is a pointer to an array of OSMatrix object pointers */
     OSMatrix **matrix;
 
     /**
@@ -731,8 +732,8 @@ public:
      *  The upper bound can be only zero or +infty,
      *  the lower bound can be only zero or -infty,
      */
-    double** ub;  
-    double** lb;  
+    double* ub;
+    double* lb;
 
     /**
      * default constructor.
@@ -755,7 +756,7 @@ public:
      *
      * @return the cone and its children as an XML string.
      */
-    //virtual std::string getConeInXML();
+    virtual std::string getConeInXML();
 
     /**
      * A function to check for the equality of two objects
@@ -1688,19 +1689,6 @@ public:
 
     /** an optional name to this matrixObj */
     std::string name;
-
-    /** this component expresses the shape of the objective
-     * (linear/quadratic/nonlinear)
-     */
-    std::string shape;
-
-    /** numberOfMatrixTerms gives the number of matrix-valued terms that are added
-     *  to form this objective
-     */
-    int numberOfMatrixTerms;
-
-    /** This array gives the terms making up the matrix objective */
-    MatrixTransformation **matrixTerm;
 }; // MatrixObj
 
 
@@ -1771,19 +1759,6 @@ public:
 
     /** an optional name to this MatrixCon */
     std::string name;
-
-    /** this component expresses the shape of the constraint
-     * (linear/quadratic/nonlinear)
-     */
-    std::string shape;
-
-    /** numberOfMatrixTerms gives the number of matrix-valued terms that are added
-     *  to form the body of this constraint
-     */
-    int numberOfMatrixTerms;
-
-    /** This array gives the terms making up the matrix constraint */
-    MatrixTransformation **matrixTerm;
 }; // MatrixCon
 
 
@@ -2754,6 +2729,7 @@ private:
     /**
      * m_bOSADFunIsCreated is true if we have created the OSInstanc
      * OSAD Function
+
      */
     bool m_bOSADFunIsCreated;
 
@@ -3840,6 +3816,7 @@ public:
                                   int* rowIndexes, int* varOneIndexes, int* varTwoIndexes,
                                   double* coefficients, int begin, int end);
 
+
     /**
      * set quadratic terms in nonlinearExpressions
      *
@@ -3866,45 +3843,6 @@ public:
      * @return whether the nonlinear expressions were set successfully.
      */
     bool setNonlinearExpressions(int nexpr, Nl** root);
-
-    /**
-     * expand nonlinear expressions array
-     *
-     * <p>
-     *
-     * @remark due to the structure of the OSiL file, which facilitates one-pass parsing,
-     *         nonlinear expressions involving non-core entities (such as matrices) can
-     *         only be read outside of the core, once the <matrices> etc. sections have
-     *         been processed. They must then be added to the data structure.
-     *         This method allows the user to extend the array of nonlinear expressions
-     *         in order to later add them at the end of the existing array.
-     *
-     * <p>
-     *
-     * @param nexpr holds the number of nonlinear expressions to be added.
-     * @return whether the pointer arrays were expanded successfully.
-     */
-    bool expandNonlinearExpressions(int nexpr);
-
-    /**
-     * add nonlinear expressions 
-     *
-     * <p>
-     *
-     * @remark due to the structure of the OSiL file, which facilitates one-pass parsing,
-     *         nonlinear expressions involving non-core entities (such as matrices) can
-     *         only be read outside of the core, once the <matrices> etc. sections have
-     *         been processed. They must then be added to the data structure.
-     *         This method allows the user to extend the array of nonlinear
-     *         expressions by adding them at the end of the existing array.
-     *
-     * <p>
-     *
-     * @param nexpr holds the number of nonlinear expressions to be added.
-     * @param root holds a pointer array to the root nodes of the nonlinear expressions to be added.
-     * @return whether the nonlinear expressions were added successfully.
-     */
-    bool appendNonlinearExpressions(int nexpr, Nl** root);
 
     /**
      * set the number of matrices

@@ -34,77 +34,67 @@
                 <el>2.5</el>
             </value>
         </linearConstraintCoefficients>
-        <nonlinearExpressions numberOfNonlinearExpressions="6">
+        <nonlinearExpressions numberOfNonlinearExpressions="5">
             <nl idx="-1">
-                <sum>
-                    <ln>
-                        <sum>
-                            <variable idx="0"></variable>
-                            <variable idx="1" coef="2"></variable>
-                        </sum>
-                    </ln>
-                </sum> 
+                <plus> 
+                    <power>
+                        <minus>
+                            <number type="real" value="1.0 "/>
+                            <variable coef="1.0" idx="0"/>
+                        </minus>
+                        <number type="real"  value="2.0"/>
+                    </power>
+                    <times>
+                        <number type="real" value="100"/>
+                        <power>
+                            <minus>
+                                <variable coef="1.0" idx="1"/>
+                                <power>
+                                    <variable  coef="1.0" idx="0"/>
+                                    <number type="real" value="2.0"/>    
+                                </power>
+                            </minus>
+                            <number type="real" value="2.0"/>
+                        </power>
+                    </times>
+                </plus>
+            </nl   >
+            <nl idx="1"> 
+                <ln>
+                    <times>
+                        <variable coef="1.0" idx="0"/>
+                        <variable coef="1.0" idx="1"/>
+                    </times>
+                </ln>
             </nl>
-            <nl idx="-1">
-                <sum>
-                    <sum>
-                        <ln>
-                            <variable idx="0"></variable>
-                        </ln>
-                        <ln>
-                            <variable idx="1" coef="2"></variable>
-                        </ln>
-                    </sum>
-                </sum> 
+            <nl idx="-1"> 
+                <matrixDeterminant>
+                    <matrixReference idx="8"/>
+                </matrixDeterminant>
             </nl>
-            
-            <nl idx="0">
-                <sum>
-                    <ln>
-                        <sum>
-                            <variable idx="0" coef="3.0"></variable>
-                            <variable idx="1" coef="1.2"></variable>
-                        </sum>
-                    </ln>
-                </sum> 
+            <nl idx="0"> 
+                <matrixTrace>
+                    <matrixProduct>
+                        <matrixReference idx="9"/>
+                        <identityMatrix>
+                            <number value="2"/>
+                        </identityMatrix>
+                        <matrixReference idx="24"/>
+                    </matrixProduct>
+                </matrixTrace>
             </nl>
-            <nl idx="0">
-                <sum>
-                    <sum>
-                        <ln>
-                            <variable idx="0" coef="3.0"></variable>
-                        </ln>
-                        <ln>
-                            <variable idx="1" coef="1.2"></variable>
-                        </ln>
-                    </sum>
-                </sum> 
-            </nl>
-            
-            <nl idx="1">
-                <sum>
-                    <ln>
-                        <sum>
-                            <variable idx="0" coef="4.5"></variable>
-                            <variable idx="1" coef="-0.2"></variable>
-                        </sum>
-                    </ln>
-                </sum> 
-            </nl>
-            <nl idx="1">
-                <sum>
-                    <sum>
-                        <ln>
-                            <variable idx="0" coef="4.5"></variable>
-                        </ln>
-                        <ln>
-                            <variable idx="1" coef="2.5"></variable>
-                        </ln>
-                    </sum>
-                </sum> 
+            <nl idx="1"> 
+                <ln>
+                    <times>
+                        <matrixToScalar>
+                            <matrixReference idx="31"/>
+                        </matrixToScalar>                    
+                        <variable coef="1.0" idx="1"/>
+                    </times>
+                </ln>
             </nl>
         </nonlinearExpressions>
-        <matrices numberOfMatrices= " 31 " >
+        <matrices numberOfMatrices= " 32 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <elements>
                     <constantElements numberOfValues="4">
@@ -1103,6 +1093,22 @@
                     </varReferenceElements>
                 </elements>
             </matrix>
+            <matrix numberOfColumns="1" numberOfRows="1" name="31-scalarConversionTest">
+                <elements>
+                    <constantElements numberOfValues="1">
+                        <start>
+                            <el>0</el>
+                            <el>1</el>
+                        </start>
+                        <indexes>
+                            <el>0</el>
+                        </indexes>
+                        <values>
+                            <el>1.4142</el>
+                        </values>
+                    </constantElements>
+                </elements>
+            </matrix>
         </matrices>
         <cones numberOfCones="10">
             <nonnegativeCone numberOfColumns="2" numberOfRows="2"></nonnegativeCone>
@@ -1113,12 +1119,12 @@
             <rotatedQuadraticCone numberOfColumns="2" numberOfRows="2" distortionMatrixIdx="6" normScaleFactor="2.0" firstAxisDirection="1"  secondAxisDirection="2"/>
             <semidefiniteCone numberOfColumns="2" numberOfRows="2"></semidefiniteCone>
             <semidefiniteCone numberOfColumns="4" numberOfRows="4"></semidefiniteCone>
-<!-- leave out for the moment
             <generalOrthantCone numberOfColumns="1" numberOfRows="5">
-                <direction ub="INF" lb="0" mult="3"></direction>
-                <direction lb="-INF" ub="0" mult="2"/>
+                <direction type="nonnegative" mult="2"></direction>
+                <direction type="nonpositive"/>
+                <direction type="free"></direction>
+                <direction type="zero"  />
             </generalOrthantCone>
--->
             <productCone numberOfColumns="2" numberOfRows="10">
                 <factors numberOfEl="2">
                     <el mult="2" incr="1">2</el>
@@ -1145,33 +1151,26 @@
                 <matrixVar numberOfRows="4" numberOfColumns="4" lbConeIdx="7" varReferenceMatrixIdx="29" templateMatrixIdx="28"/>                
             </matrixVariables>
             <matrixObjectives numberOfMatrixObj="1">
-                <matrixObj numberOfRows="2" numberOfColumns="2" numberOfMatrixTerms="1" objReferenceMatrixIdx="12" orderConeIdx="6">
-                    <matrixTerm>
-                        <matrixDotTimes>
-                            <matrixReference idx="25"/>
-                            <matrixReference idx="0"/>
-                        </matrixDotTimes>
-                    </matrixTerm>
-                </matrixObj>
+                <matrixObj numberOfRows="2" numberOfColumns="2"  objReferenceMatrixIdx="12" orderConeIdx="6"/>
             </matrixObjectives>
             <matrixConstraints numberOfMatrixCon="1">
-                <matrixCon numberOfRows="2" numberOfColumns="2" lbConeIdx="6" numberOfMatrixTerms="1" conReferenceMatrixIdx="11">
-                    <matrixTerm>
-                        <matrixProduct>
-                            <matrixReference idx="9"/>
-                            <identityMatrix>
-                                <number value="2"/>
-                            </identityMatrix>
-                            <matrixReference idx="24"/>
-                        </matrixProduct>
-                    </matrixTerm>
-                </matrixCon> 
+                <matrixCon numberOfRows="2" numberOfColumns="2" lbConeIdx="6"  conReferenceMatrixIdx="11"/>
             </matrixConstraints>
-            <matrixExpressions numberOfExpr="1">
+            <matrixExpressions numberOfExpr="2">
                 <expr idx="-1">
-                    <matrixTrace>
-                        <matrixReference idx="8"/>
-                    </matrixTrace>
+                    <matrixDotTimes>
+                        <matrixReference idx="25"/>
+                        <matrixReference idx="0"/>
+                    </matrixDotTimes>
+                </expr>
+                <expr idx="0">
+                    <matrixProduct>
+                        <matrixReference idx="9"/>
+                        <identityMatrix>
+                            <number value="2"/>
+                        </identityMatrix>
+                        <matrixReference idx="24"/>
+                    </matrixProduct>
                 </expr>
             </matrixExpressions>
         </matrixProgramming>

@@ -5514,9 +5514,8 @@ osglMatrix: matrixStart matrixAttributes matrixContent
  
 matrixStart: MATRIXSTART
 {
-    if (osglData->matrixCounter >= osglData->numberOfMatrices)
+    if (osglData->matrixCounter >= parserData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more matrices than specified");
-
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -6346,12 +6345,13 @@ generalElementsValuesStart: VALUESSTART
     osglData->osglNumberOfNonzeros = ((MatrixElements*)osglData->tempC)->generalElements->numberOfValues;
 
     ((MatrixElements*)osglData->tempC)->generalElements->values = new GeneralMatrixValues();
-    ((MatrixElements*)osglData->tempC)->generalElements->values->numberOfEl = osglData->osglNumberOfNonzeros;
+    ((MatrixElements*)osglData->tempC)->generalElements->values->numberOfEl
+        = osglData->osglNumberOfNonzeros;
     ((MatrixElements*)osglData->tempC)->generalElements->values->el
-        = new OSExpressionTree*[osglData->osglNumberOfNonzeros];
+        = new ScalarExpressionTree*[osglData->osglNumberOfNonzeros];
 
     for (int i=0; i<osglData->osglNumberOfNonzeros; i++)
-        ((MatrixElements*)osglData->tempC)->generalElements->values->el[i] = new OSExpressionTree();
+        ((MatrixElements*)osglData->tempC)->generalElements->values->el[i] = new ScalarExpressionTree();
 };
 
 generalElementsValuesContent: generalElementsValuesEmpty | generalElementsValuesLaden;
@@ -6921,6 +6921,15 @@ osglNameATT: NAMEATT ATTRIBUTETEXT QUOTE
     free($2);
 };
 
+osglTypeATT: TYPEATT ATTRIBUTETEXT QUOTE 
+{ 
+    if (osglData->typePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one type attribute");
+    osglData->typePresent = true;
+    osglData->type = $2; 
+    free($2);
+};
+
 osglIdxATT: IDXATT QUOTE INTEGER QUOTE 
     { 
         if (osglData->idxPresent == true)
@@ -7062,7 +7071,7 @@ nlstart: NLSTART
 
 nlAttributes: nlAttributeList
 {
-    if (osnlData->idxAttributePresent == false)
+    if (osglData->idxPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "mandatory attribute idx is missing");    
 };
 
@@ -7074,7 +7083,7 @@ nlAttribute:
     { 
         osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
         osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
-            = new OSExpressionTree();
+            = new ScalarExpressionTree();
     }
     | osglShapeATT
     {
@@ -7447,9 +7456,6 @@ matrixIdxATT: IDXATT QUOTE INTEGER QUOTE
     if ( *$2 != *$4 )
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= osglData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
-    
 }; 
 
 
@@ -7587,19 +7593,19 @@ matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
             
 matrixProduct: MATRIXPRODUCTSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeProduct();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-//    osnlData->mtxProdVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixProduct();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->matrixProductVec.push_back( osnlData->nlNodePoint);
 }
 anothermatrixproductnode MATRIXPRODUCTEND 
 {
-//    osnlData->mtxProdVec.back()->m_mChildren = new OSnLNode*[ osnlData->mtxProdVec.back()->inumberOfMatrixChildren];
-//    osnlData->mtxProdVec.pop_back();
+    osnlData->matrixProductVec.back()->m_mMatrixChildren = new OSnLMNode*[ osnlData->matrixProductVec.back()->inumberOfMatrixChildren];
+    osnlData->matrixProductVec.pop_back();
 };
 
 anothermatrixproductnode: | anothermatrixproductnode OSnLMNode 
 { 
-//    osnlData->mtxProdVec.back()->inumberOfMatrixChildren++; 
+    osnlData->matrixProductVec.back()->inumberOfMatrixChildren++; 
 };
 
 
@@ -7680,7 +7686,7 @@ matrixExpressionsLaden: GREATERTHAN matrixExprList MATRIXEXPRESSIONSEND;
 
 matrixExprList: | matrixExprList matrixExpr;
 
-matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN nlnode EXPREND
+matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN OSnLMNode EXPREND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
@@ -7693,8 +7699,8 @@ matrixExprStart: EXPRSTART
         if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
             parserData->parser_errors += 
                 addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "actual number of matrix expressions greater than number attribute");
-        osnlData->idxAttributePresent = false;
-        osnlData->shapeAttributePresent = false;   
+        osglData->idxPresent = false;
+        osglData->shapePresent = false;   
 
         // clear the vectors of pointers
         osnlData->nlNodeVec.clear();
@@ -7709,7 +7715,7 @@ matrixExprStart: EXPRSTART
 
 matrixExprAttributes: matrixExprAttributeList
 {
-    if (osnlData->idxAttributePresent == false)
+    if (osglData->idxPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "mandatory attribute idx is missing");    
 };
 

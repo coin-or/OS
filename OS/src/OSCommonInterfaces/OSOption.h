@@ -1,8 +1,7 @@
 /* $Id$ */
 /** @file OSOption.h
  *
- *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -2738,6 +2737,7 @@ public:
      * @param other: the array of <other> elements that are to be set
      */
     bool setOther(int numberOfOptions, OtherObjectiveOption  **other);
+
 
 
     /**

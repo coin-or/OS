@@ -1,7 +1,7 @@
 /* $Id: OSParseosil.y.1 4813 2014-06-30 18:03:02Z Gassmann $ */
 /** @file OSParseosil.y.1
  * 
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -227,6 +227,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token PRODUCTCONESTART PRODUCTCONEEND INTERSECTIONCONESTART INTERSECTIONCONEEND
 %token DUALCONESTART DUALCONEEND POLARCONESTART POLARCONEEND
 
+%token DIRECTIONSTART DIRECTIONEND
 %token FACTORSSTART FACTORSEND COMPONENTSSTART COMPONENTSEND
 %token NORMSCALEFACTORATT DISTORTIONMATRIXIDXATT
 %token AXISDIRECTIONATT FIRSTAXISDIRECTIONATT SECONDAXISDIRECTIONATT

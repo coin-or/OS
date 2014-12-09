@@ -1,11 +1,10 @@
 /* $Id$ */
 /** @file OSExpressionTree.cpp
  *
- *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2014, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -223,7 +222,7 @@ bool ScalarExpressionTree::IsEqual(ScalarExpressionTree *that)
             if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
                 return false;
 
-            return true;
+            return this->OSExpressionTree::IsEqual(that);
         }
     }
 }//ScalarExpressionTree::IsEqual
@@ -301,7 +300,7 @@ bool MatrixExpressionTree::IsEqual(MatrixExpressionTree *that)
             if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
                 return false;
 
-            return true;
+            return this->OSExpressionTree::IsEqual(that);
         }
     }
 }//MatrixExpressionTree::IsEqual

@@ -1,7 +1,7 @@
 /* $Id$ */
 /** @file OSParseosil.y.1
  * 
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -43,7 +43,7 @@
 
 //#define CHECK_PARSE_TIME
 
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 #define YYDEBUG 1
@@ -227,6 +227,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token PRODUCTCONESTART PRODUCTCONEEND INTERSECTIONCONESTART INTERSECTIONCONEEND
 %token DUALCONESTART DUALCONEEND POLARCONESTART POLARCONEEND
 
+%token DIRECTIONSTART DIRECTIONEND
 %token FACTORSSTART FACTORSEND COMPONENTSSTART COMPONENTSEND
 %token NORMSCALEFACTORATT DISTORTIONMATRIXIDXATT
 %token AXISDIRECTIONATT FIRSTAXISDIRECTIONATT SECONDAXISDIRECTIONATT
@@ -395,7 +396,7 @@ osilEnd: osilEnding
     {
         if (parserData->parser_errors != "")
         {
-            parserData->parser_errors += ("\n\nOSiL input is either not valid or well formed.\n"); 
+            parserData->parser_errors += ("\n\nOSiL input is either invalid or not well-formed.\n"); 
             osilerror( NULL, osinstance, parserData, osglData, osnlData, parserData->parser_errors);
         }
     };
@@ -494,9 +495,9 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 matrices: | matricesStart matricesAttributes matricesContent
 {
-    if (osglData->matrixCounter < osglData->numberOfMatrices) parserData->parser_errors += 
+    if (osglData->matrixCounter < parserData->numberOfMatrices) parserData->parser_errors += 
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer matrices than specified");
-    osinstance->instanceData->matrices->numberOfMatrices = osglData->numberOfMatrices;
+    osinstance->instanceData->matrices->numberOfMatrices = parserData->numberOfMatrices;
     osinstance->instanceData->matrices->matrix = osglData->matrix;
 };
 
@@ -510,7 +511,7 @@ matricesAttributes: numberOfMatricesATT
     if (parserData->numberOfMatrices < 0) parserData->parser_errors +=
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices cannot be negative");
     else
-        osglData->matrix = new OSMatrix*[osglData->numberOfMatrices];
+        osglData->matrix = new OSMatrix*[parserData->numberOfMatrices];
 };
 
 matricesContent: matricesEmpty | matricesLaden;
@@ -563,7 +564,7 @@ coneList: | coneList cone
 
 cone: nonnegativeCone
     | nonpositiveCone
-/*    | generalOrthantCone */
+    | generalOrthantCone
     | polyhedralCone
     | quadraticCone
     | rotatedQuadraticCone
@@ -616,6 +617,7 @@ nonnegativeConeEnd: ENDOFELEMENT | GREATERTHAN NONNEGATIVECONEEND;
 
 nonpositiveCone: nonpositiveConeStart nonpositiveConeAttributes nonpositiveConeEnd;
 
+
 nonpositiveConeStart: NONPOSITIVECONESTART
 {
     osglData->numberOfRowsPresent = false;
@@ -647,7 +649,116 @@ nonpositiveConeAtt:
 
 nonpositiveConeEnd: ENDOFELEMENT | GREATERTHAN NONPOSITIVECONEEND;
 
-/* general orthant cone */
+
+generalOrthantCone: generalOrthantConeStart generalOrthantConeAttributes generalOrthantConeContent;
+
+generalOrthantConeStart: ORTHANTCONESTART
+{
+    osglData->numberOfRowsPresent = false;
+    osglData->numberOfColumnsPresent = false;
+    osglData->namePresent = false;
+    osinstance->instanceData->cones->cone[parserData->coneCounter] = new OrthantCone();
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_orthant;
+};
+
+generalOrthantConeAttributes: generalOrthantConeAttList
+{
+    osglData->osglNumberOfEl = (osglData->numberOfRows)*(osglData->numberOfColumns);
+    ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->ub 
+        = new double[osglData->osglNumberOfEl];  
+    ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->lb
+        = new double[osglData->osglNumberOfEl];   
+    osglData->osglCounter = 0;
+};
+
+generalOrthantConeAttList: | generalOrthantConeAttList generalOrthantConeAtt;
+
+generalOrthantConeAtt: 
+      osglNumberOfRowsATT
+        {
+            ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
+                = osglData->numberOfRows;
+        }
+    | osglNumberOfColumnsATT
+        {
+            ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
+                = osglData->numberOfColumns;
+        }
+    | osglNameATT
+        {
+            ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
+        };
+
+
+generalOrthantConeContent: ENDOFELEMENT | GREATERTHAN generalOrthantConeDirectionList generalOrthantConeEnd
+{
+    if (osglData->osglCounter != osglData->osglNumberOfEl)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of directions does not match");
+};
+
+generalOrthantConeDirectionList: generalOrthantConeDirections;
+
+generalOrthantConeDirections: | generalOrthantConeDirections generalOrthantConeDirection;
+
+generalOrthantConeDirection: generalOrthantConeDirectionStart generalOrthantConeDirectionAttributes generalOrthantConeDirectionEnd;
+
+generalOrthantConeDirectionStart: DIRECTIONSTART
+{
+    osglData->typePresent = false;
+    osglData->osglMultPresent = false;
+    osglData->osglMult = 1;
+};
+
+generalOrthantConeDirectionAttributes: generalOrthantConeDirectionAttributeList
+{
+    double ubt;
+    double lbt;
+    if (osglData->type == "nonnegative")
+    {
+        ubt = OSDBL_MAX;
+        lbt = 0.0;
+std::cout << "found nonnegative direction in orthant cone" << std::endl; 
+    }
+    else if (osglData->type == "nonpositive")
+    {
+        ubt = 0.0;
+        lbt = -OSDBL_MAX;
+std::cout << "found nonpositive direction in orthant cone" << std::endl; 
+    }
+    else if (osglData->type == "free")
+    {
+        ubt =  OSDBL_MAX;
+        lbt = -OSDBL_MAX;
+std::cout << "found free direction in orthant cone" << std::endl; 
+    }
+    else if (osglData->type == "zero")
+    {
+        ubt = 0.0;
+        lbt = 0.0;
+std::cout << "found zero direction in orthant cone" << std::endl; 
+    }
+    else
+    {
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "unrecognized direction type");
+        osglData->osglMult = 0;
+std::cout << "found unrecognized direction: " << osglData->type << std::endl;
+    }
+    for (int i=0; i < osglData->osglMult; i++)
+    {
+        ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->ub[osglData->osglCounter+i] = ubt;
+        ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->lb[osglData->osglCounter+i] = lbt;
+    }
+    osglData->osglCounter += osglData->osglMult;
+};
+
+generalOrthantConeDirectionAttributeList: 
+    | generalOrthantConeDirectionAttributeList generalOrthantConeDirectionAtt;
+
+generalOrthantConeDirectionAtt: osglTypeATT | osglMultATT;
+
+generalOrthantConeDirectionEnd: ENDOFELEMENT | GREATERTHAN DIRECTIONEND;
+
+generalOrthantConeEnd: ORTHANTCONEEND;
 
 polyhedralCone: polyhedralConeStart polyhedralConeAttributes polyhedralConeEnd;
 
@@ -935,6 +1046,7 @@ productConeFactorsEnd: FACTORSEND
 
 productConeEnd: PRODUCTCONEEND;
 
+
 intersectionCone:  intersectionConeStart intersectionConeAttributes intersectionConeContent;
 
 intersectionConeStart: INTERSECTIONCONESTART
@@ -1090,22 +1202,30 @@ matrixVarAttributes: matrixVarAttList
         = osglData->numberOfRows;
     osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->numberOfColumns
         = osglData->numberOfColumns;
-    osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->name
-        = osglData->name;
-    osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->templateMatrixIdx
-        = parserData->templateMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->varReferenceMatrixIdx
-        = parserData->varReferenceMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->lbMatrixIdx
-        = parserData->lbMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->lbConeIdx
-        = parserData->lbConeIdx;
-    osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->ubMatrixIdx
-        = parserData->ubMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->ubConeIdx
-        = parserData->ubConeIdx;
-    osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->varType
-        = parserData->varType;
+    if (osglData->namePresent)
+        osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->name
+            = osglData->name;
+    if (parserData->templateMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->templateMatrixIdx
+            = parserData->templateMatrixIdx;
+    if (parserData->varReferenceMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->varReferenceMatrixIdx
+            = parserData->varReferenceMatrixIdx;
+    if (parserData->lbMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->lbMatrixIdx
+            = parserData->lbMatrixIdx;
+    if (parserData->lbConeIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->lbConeIdx
+            = parserData->lbConeIdx;
+    if (parserData->ubMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->ubMatrixIdx
+            = parserData->ubMatrixIdx;
+    if (parserData->ubConeIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->ubConeIdx
+            = parserData->ubConeIdx;
+    if (parserData->varTypePresent)
+        osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter]->varType
+            = parserData->varType;
 };
 
 matrixVarAttList: | matrixVarAttList matrixVarAtt;
@@ -1157,7 +1277,7 @@ matrixObjectivesEnd: MATRIXOBJECTIVESEND;
 
 matrixObjList: | matrixObjList matrixObj;
 
-matrixObj: matrixObjStart matrixObjAttributes matrixObjEnd //matrixObjContent
+matrixObj: matrixObjStart matrixObjAttributes matrixObjEnd 
 {
     parserData->kounter++;
 };
@@ -1170,53 +1290,39 @@ matrixObjStart: MATRIXOBJSTART
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
-    osglData->shapePresent = false;
     parserData->templateMatrixIdxPresent = false;
     parserData->objReferenceMatrixIdxPresent = false;
     parserData->orderConeIdxPresent = false;
     parserData->constantMatrixIdxPresent = false;
-    parserData->numberOfMatrixTermsPresent = false;
 };
 
-matrixObjAttributes: matrixObjAttList;
-
-matrixObjAttList: | matrixObjAttList matrixObjAtt{
+matrixObjAttributes: matrixObjAttList{
     if (osglData->numberOfRowsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfRows\" missing");
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
-    if (parserData->numberOfMatrixTermsPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfMatrixTerms\" missing");
     osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->numberOfRows
         = osglData->numberOfRows;
     osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->numberOfColumns
-        = osglData->numberOfColumns;
-    osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->name
-        = osglData->name;
-    osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->shape
-        = osglData->shape;
-    osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->templateMatrixIdx
-        = parserData->templateMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->objReferenceMatrixIdx
-        = parserData->objReferenceMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->orderConeIdx
-        = parserData->orderConeIdx;
-    osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->constantMatrixIdx
-        = parserData->constantMatrixIdx;
-
-    osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->numberOfMatrixTerms
-        = parserData->numberOfMatrixTerms;
-    if (parserData->numberOfMatrixTerms > 0)
-    {
-        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->matrixTerm
-            = new MatrixTransformation*[parserData->numberOfMatrixTerms];
-        for (int i=0; i < parserData->numberOfMatrixTerms; i++)
-            osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->matrixTerm[i]
-                = new MatrixTransformation();
-    }
-    parserData->kount2 = 0;
-    parserData->matrixTermInObj = true;
+            = osglData->numberOfColumns;
+    if (osglData->namePresent)
+        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->name
+            = osglData->name;
+    if (parserData->templateMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->templateMatrixIdx
+            = parserData->templateMatrixIdx;
+    if (parserData->objReferenceMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->objReferenceMatrixIdx
+            = parserData->objReferenceMatrixIdx;
+    if (parserData->orderConeIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->orderConeIdx
+            = parserData->orderConeIdx;
+    if (parserData->constantMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter]->constantMatrixIdx
+            = parserData->constantMatrixIdx;
 };
+
+matrixObjAttList: | matrixObjAttList matrixObjAtt;
 
 matrixObjAtt: 
       osglNumberOfRowsATT
@@ -1226,31 +1332,115 @@ matrixObjAtt:
     | orderConeIdxATT
     | constantMatrixIdxATT
     | osglNameATT
-    | osglShapeATT
-//    | numberOfMatrixTermsATT
 ;
 
 matrixObjEnd: ENDOFELEMENT
             | GREATERTHAN MATRIXOBJEND;
 
-/*
-matrixObjContent: matrixObjEmpty | matrixObjLaden;
 
-matrixObjEmpty: ENDOFELEMENT;
+matrixConstraints: | matrixConstraintsStart matrixConstraintsAttributes matrixConstraintsContent
+    {  
+        if (parserData->kounter < parserData->numberOfMatrixCon)  
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixCon less than number attribute");   
+    };
 
-matrixObjLaden: GREATERTHAN matrixObjTerms matrixObjEnd
+matrixConstraintsStart: MATRIXCONSTRAINTSSTART
+{
+    osinstance->instanceData->matrixProgramming->matrixConstraints = new MatrixConstraints(); 
+};
+
+matrixConstraintsAttributes: numberOfMatrixConATT
+{
+    osinstance->instanceData->matrixProgramming->matrixConstraints->numberOfMatrixCon = parserData->numberOfMatrixCon;
+    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon
+        = new MatrixCon*[parserData->numberOfMatrixCon];
+    for (int i=0; i < parserData->numberOfMatrixCon; i++)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i] = new MatrixCon();
+    parserData->kounter = 0;
+};
+
+matrixConstraintsContent: matrixConstraintsEmpty | matrixConstraintsLaden; 
+
+matrixConstraintsEmpty: ENDOFELEMENT;
+
+matrixConstraintsLaden: GREATERTHAN matrixConList matrixConstraintsEnd;
+
+matrixConstraintsEnd: MATRIXCONSTRAINTSEND;
+
+matrixConList: | matrixConList matrixCon;
+
+matrixCon: matrixConStart matrixConAttributes matrixConEnd 
 {
     parserData->kounter++;
 };
 
-matrixObjTerms: matrixTermList
-    {  
-        if (parserData->kount2 < parserData->numberOfMatrixTerms)  
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrix terms less than number attribute");   
-    };
+matrixConStart: MATRIXCONSTART
+{
+    if (parserData->kounter >= parserData->numberOfMatrixCon) 
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixCon greater than number attribute");
+    osglData->numberOfRowsPresent = false;
+    osglData->numberOfColumnsPresent = false;
+    osglData->namePresent = false;
+    parserData->templateMatrixIdxPresent = false;
+    parserData->conReferenceMatrixIdxPresent = false;
+    parserData->lbMatrixIdxPresent = false;
+    parserData->lbConeIdxPresent = false;
+    parserData->ubMatrixIdxPresent = false;
+    parserData->ubConeIdxPresent = false;
+};
 
-matrixObjEnd: MATRIXOBJEND;
-*/
+matrixConAttributes: matrixConAttList
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfRows\" missing");
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
+    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->numberOfRows
+        = osglData->numberOfRows;
+    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->numberOfColumns
+        = osglData->numberOfColumns;
+    if (osglData->namePresent)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->name
+            = osglData->name;
+    if (parserData->templateMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->templateMatrixIdx
+            = parserData->templateMatrixIdx;
+    if (parserData->conReferenceMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->conReferenceMatrixIdx
+            = parserData->conReferenceMatrixIdx;
+    if (parserData->lbMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->lbMatrixIdx
+            = parserData->lbMatrixIdx;
+    if (parserData->lbConeIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->lbConeIdx
+            = parserData->lbConeIdx;
+    if (parserData->ubMatrixIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->ubMatrixIdx
+            = parserData->ubMatrixIdx;
+    if (parserData->ubConeIdxPresent)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->ubConeIdx
+            = parserData->ubConeIdx;
+};
+
+matrixConAttList: | matrixConAttList matrixConAtt;
+
+matrixConAtt:
+      osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | templateMatrixIdxATT
+    | conReferenceMatrixIdxATT
+    | lbMatrixIdxATT
+    | lbConeIdxATT
+    | ubMatrixIdxATT
+    | ubConeIdxATT
+    | osglNameATT
+;
+
+matrixConEnd: ENDOFELEMENT
+            | GREATERTHAN MATRIXCONEND;
+
+
 
 /* matrixTermList is used in both matrixObjectives and matrixConstraints */
 
@@ -1287,138 +1477,9 @@ matrixTermEnd: MATRIXTERMEND
     };
 */
 
-matrixConstraints: | matrixConstraintsStart matrixConstraintsAttributes matrixConstraintsContent
-    {  
-        if (parserData->kounter < parserData->numberOfMatrixCon)  
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixCon less than number attribute");   
-    };
 
-matrixConstraintsStart: MATRIXCONSTRAINTSSTART
-{
-    osinstance->instanceData->matrixProgramming->matrixConstraints = new MatrixConstraints(); 
-};
 
-matrixConstraintsAttributes: numberOfMatrixConATT
-{
-    osinstance->instanceData->matrixProgramming->matrixConstraints->numberOfMatrixCon = parserData->numberOfMatrixCon;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon
-        = new MatrixCon*[parserData->numberOfMatrixCon];
-    for (int i=0; i < parserData->numberOfMatrixCon; i++)
-        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i] = new MatrixCon();
-    parserData->kounter = 0;
-};
 
-matrixConstraintsContent: matrixConstraintsEmpty | matrixConstraintsLaden; 
-
-matrixConstraintsEmpty: ENDOFELEMENT;
-
-matrixConstraintsLaden: GREATERTHAN matrixConList matrixConstraintsEnd;
-
-matrixConstraintsEnd: MATRIXCONSTRAINTSEND;
-
-matrixConList: | matrixConList matrixCon;
-
-matrixCon: matrixConStart matrixConAttributes matrixConEnd //matrixConContent
-{
-    parserData->kounter++;
-};
-
-matrixConStart: MATRIXCONSTART
-{
-    if (parserData->kounter >= parserData->numberOfMatrixCon) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixCon greater than number attribute");
-    osglData->numberOfRowsPresent = false;
-    osglData->numberOfColumnsPresent = false;
-    osglData->namePresent = false;
-    osglData->shapePresent = false;
-    parserData->templateMatrixIdxPresent = false;
-    parserData->conReferenceMatrixIdxPresent = false;
-    parserData->lbMatrixIdxPresent = false;
-    parserData->lbConeIdxPresent = false;
-    parserData->ubMatrixIdxPresent = false;
-    parserData->ubConeIdxPresent = false;
-    parserData->numberOfMatrixTermsPresent = false;
-};
-
-matrixConAttributes: matrixConAttList
-{
-    if (osglData->numberOfRowsPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfRows\" missing");
-    if (osglData->numberOfColumnsPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
-    if (parserData->numberOfMatrixTermsPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfMatrixTerms\" missing");
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->numberOfRows
-        = osglData->numberOfRows;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->numberOfColumns
-        = osglData->numberOfColumns;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->name
-        = osglData->name;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->shape
-        = osglData->shape;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->templateMatrixIdx
-        = parserData->templateMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->conReferenceMatrixIdx
-        = parserData->conReferenceMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->lbMatrixIdx
-        = parserData->lbMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->lbConeIdx
-        = parserData->lbConeIdx;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->ubMatrixIdx
-        = parserData->ubMatrixIdx;
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->ubConeIdx
-        = parserData->ubConeIdx;
-/*
-    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->numberOfMatrixTerms
-        = parserData->numberOfMatrixTerms;
-    if (parserData->numberOfMatrixTerms > 0)
-    {
-        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->matrixTerm
-            = new MatrixTransformation*[parserData->numberOfMatrixTerms];
-        for (int i=0; i < parserData->numberOfMatrixTerms; i++)
-            osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter]->matrixTerm[i]
-                = new MatrixTransformation();
-    }
-    parserData->kount2 = 0;
-    parserData->matrixTermInObj = false;
-*/
-};
-
-matrixConAttList: | matrixConAttList matrixConAtt;
-
-matrixConAtt:
-      osglNumberOfRowsATT
-    | osglNumberOfColumnsATT
-    | templateMatrixIdxATT
-    | conReferenceMatrixIdxATT
-    | lbMatrixIdxATT
-    | lbConeIdxATT
-    | ubMatrixIdxATT
-    | ubConeIdxATT
-    | osglNameATT
-    | osglShapeATT
-//    | numberOfMatrixTermsATT
-;
-
-/*
-matrixConContent: matrixConEmpty | matrixConLaden;
-
-matrixConEmpty: ENDOFELEMENT;
-
-matrixConLaden: GREATERTHAN matrixConTerms matrixConEnd;
-
-matrixConTerms: matrixTermList
-    {  
-        if (parserData->kount2 < parserData->numberOfMatrixTerms)  
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrix terms less than number attribute");   
-    };
-
-matrixConEnd: MATRIXCONEND;
-*/
-
-matrixConEnd: ENDOFELEMENT
-            | GREATERTHAN MATRIXCONEND;
 
 timeDomain: | timeDomainStart timeDomainContent;
 
@@ -1966,7 +2027,7 @@ lbMatrixIdxATT: LBMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->lbMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one lbMatrix attribute allowed");
-    if ($3 <0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ($3 < 0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for lbMatrix attribute");
     parserData->lbMatrixIdxPresent = true;
     parserData->lbMatrixIdx = $3;
@@ -1978,7 +2039,7 @@ ubMatrixIdxATT: UBMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->ubMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one ubMatrix attribute allowed");
-    if ($3 <0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ($3 < 0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for ubMatrix attribute");
     parserData->ubMatrixIdxPresent = true;
     parserData->ubMatrixIdx = $3;
@@ -1990,7 +2051,7 @@ constantMatrixIdxATT: CONSTANTMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->constantMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one constant matrix attribute allowed");
-    if ($3 <0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ($3 < 0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for constant matrix attribute");
     parserData->constantMatrixIdxPresent = true;
     parserData->constantMatrixIdx = $3;
@@ -2026,7 +2087,7 @@ objReferenceMatrixIdxATT: OBJREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->objReferenceMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one objReference matrix attribute allowed");
-    if ($3 <0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ($3 < 0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for objReference matrix attribute");
     parserData->objReferenceMatrixIdxPresent = true;
     parserData->objReferenceMatrixIdx = $3;
@@ -2038,7 +2099,7 @@ conReferenceMatrixIdxATT: CONREFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->conReferenceMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one conReference matrix attribute allowed");
-    if ($3 <0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ($3 < 0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for conReference matrix attribute");
     parserData->conReferenceMatrixIdxPresent = true;
     parserData->conReferenceMatrixIdx = $3;
@@ -2050,7 +2111,7 @@ lbConeIdxATT: LBCONEIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->lbConeIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one lbCone attribute allowed");
-    if ($3 <0 || $3 >= osinstance->instanceData->cones->numberOfCones)
+    if ($3 < 0 || $3 >= osinstance->instanceData->cones->numberOfCones)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for lbCone attribute");
     parserData->lbConeIdxPresent = true;
     parserData->lbConeIdx = $3;
@@ -2062,7 +2123,7 @@ ubConeIdxATT: UBCONEIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->ubConeIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one ubCone attribute allowed");
-    if ($3 <0 || $3 >= osinstance->instanceData->cones->numberOfCones)
+    if ($3 < 0 || $3 >= osinstance->instanceData->cones->numberOfCones)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for ubCone attribute");
     parserData->ubConeIdxPresent = true;
     parserData->ubConeIdx = $3;
@@ -2074,7 +2135,7 @@ orderConeIdxATT: ORDERCONEIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->orderConeIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one orderCone attribute allowed");
-    if ($3 <0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ($3 < 0 || $3 >= osinstance->instanceData->cones->numberOfCones)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for orderCone attribute");
     parserData->orderConeIdxPresent = true;
     parserData->orderConeIdx = $3;
@@ -2513,9 +2574,8 @@ osglMatrix: matrixStart matrixAttributes matrixContent
  
 matrixStart: MATRIXSTART
 {
-    if (osglData->matrixCounter >= osglData->numberOfMatrices)
+    if (osglData->matrixCounter >= parserData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
-
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -3921,6 +3981,15 @@ osglNameATT: NAMEATT ATTRIBUTETEXT QUOTE
     free($2);
 };
 
+osglTypeATT: TYPEATT ATTRIBUTETEXT QUOTE 
+{ 
+    if (osglData->typePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one type attribute");
+    osglData->typePresent = true;
+    osglData->type = $2; 
+    free($2);
+};
+
 osglIdxATT: IDXATT QUOTE INTEGER QUOTE 
     { 
         if (osglData->idxPresent == true)
@@ -4447,9 +4516,6 @@ matrixIdxATT: IDXATT QUOTE INTEGER QUOTE
     if ( *$2 != *$4 )
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
-    if( $3 >= osglData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index exceeds number of matrices");
-    
 }; 
 
 
@@ -4587,19 +4653,19 @@ matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
             
 matrixProduct: MATRIXPRODUCTSTART 
 {
-//    osnlData->nlNodePoint = new OSnLNodeProduct();
-//    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-//    osnlData->mtxProdVec.push_back( osnlData->nlNodePoint);
+    osnlData->nlNodePoint = new OSnLMNodeMatrixProduct();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->matrixProductVec.push_back( osnlData->nlNodePoint);
 }
 anothermatrixproductnode MATRIXPRODUCTEND 
 {
-//    osnlData->mtxProdVec.back()->m_mChildren = new OSnLNode*[ osnlData->mtxProdVec.back()->inumberOfMatrixChildren];
-//    osnlData->mtxProdVec.pop_back();
+    osnlData->matrixProductVec.back()->m_mMatrixChildren = new OSnLMNode*[ osnlData->matrixProductVec.back()->inumberOfMatrixChildren];
+    osnlData->matrixProductVec.pop_back();
 };
 
 anothermatrixproductnode: | anothermatrixproductnode OSnLMNode 
 { 
-//    osnlData->mtxProdVec.back()->inumberOfMatrixChildren++; 
+    osnlData->matrixProductVec.back()->inumberOfMatrixChildren++; 
 };
 
 
@@ -4680,7 +4746,7 @@ matrixExpressionsLaden: GREATERTHAN matrixExprList MATRIXEXPRESSIONSEND;
 
 matrixExprList: | matrixExprList matrixExpr;
 
-matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN nlnode EXPREND
+matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN OSnLMNode EXPREND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
@@ -4693,8 +4759,8 @@ matrixExprStart: EXPRSTART
         if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
             parserData->parser_errors += 
                 addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrix expressions greater than number attribute");
-        osnlData->idxAttributePresent = false;
-        osnlData->shapeAttributePresent = false;   
+        osglData->idxPresent = false;
+        osglData->shapePresent = false;   
 
         // clear the vectors of pointers
         osnlData->nlNodeVec.clear();
@@ -4709,7 +4775,7 @@ matrixExprStart: EXPRSTART
 
 matrixExprAttributes: matrixExprAttributeList
 {
-    if (osnlData->idxAttributePresent == false)
+    if (osglData->idxPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute idx is missing");    
 };
 

@@ -398,9 +398,8 @@ osglMatrix: matrixStart matrixAttributes matrixContent
  
 matrixStart: MATRIXSTART
 {
-    if (osglData->matrixCounter >= osglData->numberOfMatrices)
+    if (osglData->matrixCounter >= parserData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more matrices than specified");
-
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -1803,6 +1802,15 @@ osglNameATT: NAMEATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one name attribute");
     osglData->namePresent = true;   
     osglData->name = $2; 
+    free($2);
+};
+
+osglTypeATT: TYPEATT ATTRIBUTETEXT QUOTE 
+{ 
+    if (osglData->typePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one type attribute");
+    osglData->typePresent = true;
+    osglData->type = $2; 
     free($2);
 };
 

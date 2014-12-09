@@ -2510,6 +2510,57 @@ public:
 };//end OSnLMNodeMatrixReference
 
 
+/*! \class OSnLMNodeMatrixProduct
+ *  \brief The OSnLMNodeMatrixProduct Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 08/Dec/2014
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <matrixProduct>
+ *
+ */
+class OSnLMNodeMatrixProduct : public OSnLMNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLMNodeMatrixProduct();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLMNodeMatrixProduct();
+
+    /**
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn double OSnLNodeProduct::double(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a double.
+     */    
+    //virtual double calculateFunction( double *x);
+
+    /*! \fn OSnLNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLMNode of the proper type.
+     */
+    virtual OSnLMNode *cloneExprNode();
+
+    /*! \fn double OSnLMNodeMatrixProduct::constructADTape(std::map<int, int> *ADIdx, 
+     *                                                     vector< ADdouble > *XAD)
+     *  \brief The implementation of the virtual functions.
+     *  \return a ADdouble.
+     */
+    //virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD); 
+};//end OSnLNodeProduct
+
+
+
 /*
 TO DO:
 

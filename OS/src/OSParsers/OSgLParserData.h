@@ -1,7 +1,7 @@
 /* $Id: OSgLParserData.h 2698 2009-06-09 04:14:07Z kmartin $ */
 /** @file OSgLParserData.h
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -15,6 +15,7 @@
 #define OSGLPARSERDATA_H
 
 #include "OSGeneral.h"
+#include "OSMatrix.h"
 
 #include <stdio.h>
 #include <string>

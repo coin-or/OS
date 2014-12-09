@@ -434,8 +434,6 @@ if(BASIC_TESTS == true){
         //osinstance->initForAlgDiff();
         unitTestResult << "TEST " << nOfTest << ": Reading files successfully" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-        osilwriter->m_bWhiteSpace = true;
-        std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
 
         delete fileUtil;
         fileUtil = NULL;
@@ -925,7 +923,6 @@ if (PARSER_TESTS)
         fileUtil = NULL;
     }    
 
-#if 0
 // Here we test extensions to the "core": <matrices>, <cones>, stochastic programming, etc.
     if( THOROUGH == true)
     {
@@ -946,7 +943,7 @@ if (PARSER_TESTS)
 
             cout << "Write the OSInstance object to a temporary file (i.e., string)" << endl;
             std::string temposil = osilwriter->writeOSiL(instance1);
-
+cout << temposil << endl;
             cout << "Parse the temporary string again" << endl;
             osilreader2 = new OSiLReader;
             instance2 = osilreader2->readOSiL( temposil);
@@ -985,10 +982,9 @@ if (PARSER_TESTS)
         fileUtil = NULL;
         }    
     }
-#endif
 
 #if 0
-    // Now test the extensions to the OSiL format: <timeDomain> and stochastic programming
+    // Now test <timeDomain> and stochastic programming
 
     // some pointer declarations
     std::string *sncheck = new std::string[6];
@@ -9958,7 +9954,7 @@ if (OTHER_TESTS){
         osil = fileUtil->getFileAsString( expTreeTest.c_str() ) ;
         //create an osinstance
         osinstance = osilreader->readOSiL( osil);
-        OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+        ScalarExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
         if(expTree == NULL) throw ErrorClass(" Null expression tree when testing prefix and postfix routines");
         std::vector<ExprNode*> postfixVec;
         //postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
@@ -9974,7 +9970,7 @@ if (OTHER_TESTS){
         }
         
         // now create back the expression tree 
-        expTree->m_treeRoot = postfixVec[ n - 1]->createExpressionTreeFromPostfix( postfixVec);
+        expTree->m_treeRoot = ((OSnLNode*)postfixVec[ n - 1])->createExpressionTreeFromPostfix( postfixVec);
     
         // now get in prefix
         std::vector<ExprNode*> prefixVec;
@@ -9982,7 +9978,7 @@ if (OTHER_TESTS){
         prefixVec = osinstance->getNonlinearExpressionTreeInPrefix( -1);
         
         // now create back the expression tree
-        expTree->m_treeRoot = prefixVec[ 0]->createExpressionTreeFromPrefix( prefixVec);
+        expTree->m_treeRoot = ((OSnLNode*)prefixVec[ 0])->createExpressionTreeFromPrefix( prefixVec);
         
         // now get postfix vector again and compare with original
         postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
@@ -10025,6 +10021,8 @@ if (OTHER_TESTS){
         fileUtil = NULL;
     }
 #endif
+
+
 } //end of if (OTHER_TESTS)
   
     if(unitTestResultFailure.str().length() > 0){

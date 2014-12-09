@@ -2732,6 +2732,65 @@ OSnLMNode* OSnLMNodeMatrixSum::cloneExprNode()
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixSum::cloneExprNode
 
+//
+// OSnLMNodeMatrixProduct Methods
+OSnLMNodeMatrixProduct::OSnLMNodeMatrixProduct()
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
+    inodeInt = OS_MATRIX_PRODUCT;
+    inodeType = -1;
+}//end OSnLMNodeMatrixProduct
+
+
+OSnLMNodeMatrixProduct::~OSnLMNodeMatrixProduct()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNodeMatrixProduct destructor");
+#endif
+}//end ~OSnLMNodeMatrixProduct
+
+std::string OSnLMNodeMatrixProduct::getTokenName()
+{
+    return "matrixProduct";
+}// end OSnLMNodeMatrixProduct::getTokenName(
+
+#if 0
+double OSnLMNodeMatrixProduct::calculateFunction(double *x)
+{
+    // kipp throw error if operation not defined
+    m_dFunctionValue = 1.0;
+    unsigned int i;
+    for(i = 0; i < inumberOfChildren; i++)
+    {
+        m_dFunctionValue = m_dFunctionValue*m_mChildren[i]->calculateFunction(x);
+    }
+    return m_dFunctionValue;
+}// end OSnLMNodeMatrixProduct::calculate
+
+
+ADdouble OSnLMNodeMatrixProduct::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
+{
+    m_ADTape = 1.0;
+    unsigned int i;
+    for(i = 0; i < inumberOfChildren; i++)
+    {
+        m_ADTape = m_ADTape*m_mChildren[i]->constructADTape( ADIdx, XAD);
+    }
+    return m_ADTape;
+}// end OSnLMNodeMatrixProduct::constructADTape
+#endif
+
+OSnLMNode* OSnLMNodeMatrixProduct::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixProduct();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixProduct::cloneExprNode
+
+
 // OSnLMNodeMatrixMinus Methods
 OSnLMNodeMatrixMinus::OSnLMNodeMatrixMinus()
 {

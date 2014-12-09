@@ -59,6 +59,7 @@
 #define OS_MATRIX_MINUS                  8503
 #define OS_MATRIX_NEGATE                 8504
 #define OS_MATRIX_TIMES                  8505
+#define OS_MATRIX_PRODUCT                8506
 #define OS_MATRIX_INVERSE                8510
 #define OS_MATRIX_TRANSPOSE              8515
 #define OS_MATRIX_SCALARTIMES            8518
@@ -778,7 +779,8 @@ enum ENUM_COMBINE_ARRAYS
 /* An enumeration to track the shape of a nonlinear expression */
 enum ENUM_NL_EXPR_SHAPE
 {
-    ENUM_NL_EXPR_SHAPE_general = 1,
+    ENUM_NL_EXPR_SHAPE_unknown = 0,
+    ENUM_NL_EXPR_SHAPE_general,
     ENUM_NL_EXPR_SHAPE_convex,
     ENUM_NL_EXPR_SHAPE_quadratic,
     ENUM_NL_EXPR_SHAPE_linear
@@ -791,7 +793,21 @@ inline int returnNlExprShape(std::string shape)
     if (shape == "quadratic") return ENUM_NL_EXPR_SHAPE_quadratic;
     if (shape == "linear"   ) return ENUM_NL_EXPR_SHAPE_linear;
     return 1;
-}//returnNlExprShape
+}//returnNlExprShape 
+
+inline std::string returnExprShapeString(ENUM_NL_EXPR_SHAPE shape)
+{
+    if (shape == ENUM_NL_EXPR_SHAPE_general  ) return "general";
+    if (shape == ENUM_NL_EXPR_SHAPE_convex   ) return "convex";
+    if (shape == ENUM_NL_EXPR_SHAPE_quadratic) return "quadratic";
+    if (shape == ENUM_NL_EXPR_SHAPE_linear   ) return "linear";
+    return "";
+}//returnExprShapeString 
+ 
+inline bool verifyNlExprShape(std::string shape)
+{
+    return (returnNlExprShape(shape) > 0);
+}//verifyNlExprShape
 
 
 enum ENUM_CONE_TYPE

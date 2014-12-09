@@ -17,6 +17,7 @@
 #include "OSGeneral.h"
 #include "OSInstance.h"
 #include "OSMathUtil.h"
+#include "OSMatrix.h"
 #include "OSErrorClass.h"
 #include "OSParameters.h"
 #include "OSOutput.h"
@@ -820,13 +821,10 @@ Matrices::~Matrices()
             outStr << "DESTROYING MATRIX " << i << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-            if(matrix != NULL)
+            if(matrix[i] != NULL)
             {
-                if(matrix[i] != NULL)
-                {
-                    delete matrix[i];
-                    matrix[i] = NULL;
-                }
+                delete matrix[i];
+                matrix[i] = NULL;
             }
         }
     }
@@ -1205,8 +1203,8 @@ std::string PolarCone::getConeName()
 MatrixProgramming::MatrixProgramming():
     matrixVariables(NULL),
     matrixObjectives(NULL),
-    matrixConstraints(NULL)
-//    matrixExpressions(NULL)
+    matrixConstraints(NULL),
+    matrixExpressions(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixProgramming Constructor");
@@ -1227,9 +1225,9 @@ MatrixProgramming::~MatrixProgramming()
     if (matrixConstraints != NULL)
         delete matrixConstraints;
     matrixConstraints = NULL;
-//    if (matrixExpressions != NULL)
-//        delete matrixExpressions;
-//   matrixExpressions = NULL;
+    if (matrixExpressions != NULL)
+        delete matrixExpressions;
+   matrixExpressions = NULL;
 }//end ~MatrixProgramming()
 
 
@@ -1458,8 +1456,7 @@ MatrixObj::MatrixObj():
     objReferenceMatrixIdx(-1),
     orderConeIdx(-1),
     constantMatrixIdx(-1),
-    name(""),
-    shape("")
+    name("")
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixObj Constructor");
@@ -1483,8 +1480,7 @@ MatrixCon::MatrixCon():
     lbConeIdx(-1),
     ubMatrixIdx(-1),
     ubConeIdx(-1),
-    name(""),
-    shape("")
+    name("")
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixCon Constructor");
@@ -2591,6 +2587,7 @@ int* OSInstance::getNonlinearExpressionTreeIndexes()
     m_bNonlinearExpressionTreeIndexesProcessed = true;
     std::map<int, ScalarExpressionTree*> expTrees;
     expTrees = getAllNonlinearExpressionTrees();
+
     std::map<int, ScalarExpressionTree*>::iterator pos;
     try
     {
@@ -2955,6 +2952,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         outStr << ")";
                         tmpStack.push( outStr.str() );
                         break;
+
 
                     case OS_MAX :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing max operator");
@@ -3514,6 +3512,7 @@ std::string OSInstance::getMatrixExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_EXP :
+
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing exp operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
@@ -4632,85 +4631,6 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
     return true;
 }//setNonlinearExpressions
 
-bool OSInstance::expandNonlinearExpressions(int nexpr)
-{
-    if(nexpr < 0) return false;
-
-    if(nexpr == 0) return true;
-
-    try
-    {
-        int nprev;
-
-        if (instanceData->nonlinearExpressions == NULL)
-            nprev = 0;
-        else
-            nprev = instanceData->nonlinearExpressions->numberOfNonlinearExpressions;
-
-        Nl** temp = new Nl*[nprev+nexpr]; //allocate new pointers
-
-        for (int i=0; i < nprev; i++)
-            temp[i] = instanceData->nonlinearExpressions->nl[i]; //copy old expression pointers
-
-        delete[] instanceData->nonlinearExpressions->nl; //delete old expression pointers
-
-        instanceData->nonlinearExpressions->nl = temp;   //hook the new pointers into the data structure
-    
-        instanceData->nonlinearExpressions->numberOfNonlinearExpressions += nexpr;
-        return true;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
-        return false;
-    }
-}//expandNonlinearExpressions
-
-bool OSInstance::appendNonlinearExpressions(int nexpr, Nl** root)
-{
-    if(nexpr < 0) return false;
-
-    if(nexpr == 0) return true;
-
-    try
-    {
-        int nprev;
-
-        if (instanceData->nonlinearExpressions == NULL)
-            nprev = 0;
-        else
-            nprev = instanceData->nonlinearExpressions->numberOfNonlinearExpressions;
-
-        Nl** temp = new Nl*[nprev+nexpr]; //allocate new pointers
-
-        for (int i=0; i < nprev; i++)
-            temp[i] = instanceData->nonlinearExpressions->nl[i]; //copy old expression pointers
-
-        delete[] instanceData->nonlinearExpressions->nl; //delete old expression pointers
-
-//	add in the new expressions
-        for (int i=0; i < nexpr; i++)
-        {
-            temp[nprev+i] = new Nl();
-            temp[nprev+i]->idx = root[i]->idx;
-            temp[nprev+i]->osExpressionTree = new ScalarExpressionTree();
-            temp[nprev+i]->osExpressionTree->m_treeRoot
-                = (OSnLNode*)root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
-        }
-
-        instanceData->nonlinearExpressions->nl = temp;   //hook the new pointers into the data structure
-    
-        instanceData->nonlinearExpressions->numberOfNonlinearExpressions += nexpr;
-        return true;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_error, eclass.errormsg);
-        return false;
-    }
-}//appendNonlinearExpressions
-
-
 bool OSInstance::initializeNonLinearStructures( )
 {
     std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
@@ -5063,6 +4983,7 @@ bool OSInstance::addCone(int arrayIndex, int numberOfRows, int numberOfColumns, 
     if (instanceData->cones->cone == NULL) return false;
 
     switch (coneType)
+
     {
 /*
         case ENUM_CONE_TYPE_dual: 
@@ -5894,6 +5815,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
 {
     std::ostringstream outStr;
 
+
     // we assume column major matrix
     if( m_bColumnMajor == false) return false;
     int iNumRowStarts = getConstraintNumber() + 1;
@@ -6268,6 +6190,7 @@ ScalarExpressionTree* OSInstance::getLagrangianExpTree( )
             nlNodeVariable->idx = instanceData->variables->numberOfVariables +
                                   instanceData->constraints->numberOfConstraints + (abs(rowIdx) - 1);
         }
+
         // now create a times multiply the new variable times the root of the expression tree
         nlNodeTimes = new OSnLNodeTimes();
         nlNodeTimes->m_mChildren[ 0] = nlNodeVariable;
@@ -7441,6 +7364,7 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
         }
         //create the function and stop recording
 //        std::cout << "create the function and stop recording"  << std::endl;
+
         Fad = new CppAD::ADFun<double>(vdaX, m_vFG);
 //        std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
         // no forward sweeps done yet
@@ -7610,6 +7534,50 @@ std::string NonpositiveCone::getConeInXML()
     outStr << "/>" << std::endl;   
     return outStr.str();
 }// end of NonpositiveCone::getConeInXML()
+
+std::string OrthantCone::getConeInXML()
+{
+    ostringstream outStr;
+    outStr << "<generalOrthantCone";
+    outStr << " numberOfRows=\"" << numberOfRows << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    if (name != "")
+        outStr << " name=\"" << name << "\"";
+    outStr << ">" << std::endl;
+    int i = 0;
+    int mult = 1;
+    double ubt;
+    double lbt;
+    while (i < numberOfRows*numberOfColumns)
+    {
+        ubt = ub[i];
+        lbt = lb[i];
+        if (ubt == ub[i+mult] && lbt == lb[i+mult])
+        {
+            mult++;
+        }
+        else
+        {
+            outStr << "<direction";
+            if (ubt == 0.0)
+                if (lbt == 0.0)
+                    outStr << " type=\"zero\"";
+                else
+                    outStr << " type=\"nonpositive\"";
+            else if(lbt == 0.0) 
+                    outStr << " type=\"nonnegative\"";
+                else
+                    outStr << " type=\"free\"";
+            if (mult > 1)
+                outStr <<" mult=\"" << mult << "\"";
+            outStr << "/>";
+            i += mult;
+            mult = 1;
+        }
+    }
+    outStr << "</generalOrthantCone>" << std::endl;   
+    return outStr.str();
+}// end of OrthantCone::getConeInXML()
 
 std::string PolyhedralCone::getConeInXML()
 {
@@ -7839,6 +7807,7 @@ bool Variables::IsEqual(Variables *that)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Variables");
+
 #endif
     if (this == NULL)
     {

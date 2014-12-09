@@ -28,6 +28,8 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSGeneral.h \
 	OSInstance.cpp \
 	OSInstance.h \
+	OSMatrix.cpp \
+	OSMatrix.h \
 	OSResult.cpp \
 	OSResult.h \
 	OSgLWriter.cpp \
@@ -86,6 +88,7 @@ includecoin_HEADERS = \
 	OSExpressionTree.h \
         OSGeneral.h \
 	OSInstance.h \
+	OSMatrix.h \
 	OSResult.h \
 	OSgLWriter.h \
 	OSiLReader.h \

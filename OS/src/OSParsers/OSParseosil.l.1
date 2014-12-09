@@ -249,6 +249,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/dualCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DUALCONEEND);}
 {xmlwhitespace}*\<polarCone {YY_PRINT;  return(POLARCONESTART);}
 {xmlwhitespace}*\<\/polarCone{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(POLARCONEEND);}
+{xmlwhitespace}*\<direction {YY_PRINT;  return(DIRECTIONSTART);}
+{xmlwhitespace}*\<\/direction{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DIRECTIONEND);}
 {xmlwhitespace}*\<factors {YY_PRINT;  return(FACTORSSTART);}
 {xmlwhitespace}*\<\/factors{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(FACTORSEND);}
 {xmlwhitespace}*\<components {YY_PRINT;  return(COMPONENTSSTART);}

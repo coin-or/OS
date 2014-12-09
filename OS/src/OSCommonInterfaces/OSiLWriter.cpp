@@ -545,6 +545,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
             outStr << "</quadraticCoefficients>";
             if( m_bWhiteSpace == true) outStr << endl;
         }
+        //Now the nonlinear expressions
         if(m_OSInstance->instanceData->nonlinearExpressions != NULL && m_OSInstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0)
         {
             outStr << "<nonlinearExpressions";
@@ -560,6 +561,14 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                     // the following attribute is required
                     outStr << "  idx=\"";
                     outStr << m_OSInstance->instanceData->nonlinearExpressions->nl[i]->idx;
+                    outStr << "\"";
+
+                    // shape is an optional attribute, new since stable 2.9
+                    std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->nonlinearExpressions->nl[i]->shape);
+                    if (tempStr != "");
+                    {
+                        outStr << "  shape=\"" << tempStr;
+                    }
                     outStr << "\">";
                     if(m_OSInstance->instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot != NULL)
                         outStr << m_OSInstance->instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot->getNonlinearExpressionInXML();
@@ -608,6 +617,9 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                         case ENUM_CONE_TYPE_nonpositive: 
                             outStr << ((NonpositiveCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
                             break;
+                        case ENUM_CONE_TYPE_orthant: 
+                            outStr << ((OrthantCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
+                            break;
                         case ENUM_CONE_TYPE_quadratic: 
                             outStr << ((QuadraticCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
                             break;
@@ -629,9 +641,225 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
             if( m_bWhiteSpace == true) outStr << endl;
             outStr << "</cones>" << endl;
         }
+        // Now the matrixProgramming element
+        if (m_OSInstance->instanceData->matrixProgramming != NULL)
+        {
+            outStr << "<matrixProgramming>";
+
+            if (m_OSInstance->instanceData->matrixProgramming->matrixVariables != NULL)
+            {
+                outStr << "<matrixVariables";
+                outStr << " numberOfMatrixVar=\"";         
+                outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->numberOfMatrixVar << "\">";
+                for (int i=0; i < m_OSInstance->instanceData->matrixProgramming->matrixVariables->numberOfMatrixVar; i++)
+                {
+                    outStr << "<matrixVar";
+                    outStr << " numberOfRows=\"";         
+                    outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->numberOfRows << "\"";
+                    outStr << " numberOfColumns=\"";         
+                    outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->numberOfColumns << "\"";
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->templateMatrixIdx >= 0)
+                    {
+                        outStr << " templateMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->templateMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->varReferenceMatrixIdx >= 0)
+                    {
+                        outStr << " varReferenceMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->varReferenceMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->lbMatrixIdx >= 0)
+                    {
+                        outStr << " lbMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->lbMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->lbConeIdx >= 0)
+                    {
+                        outStr << " lbConeIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->lbConeIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->ubMatrixIdx >= 0)
+                    {
+                        outStr << " ubMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->ubMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->ubConeIdx >= 0)
+                    {
+                        outStr << " ubConeIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->ubConeIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->name != "")
+                    {
+                        outStr << " name=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->name << "\"";
+                    }
+
+                    if (verifyVarType(m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->varType) && m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->varType != 'C')
+                    {
+                        outStr << " varType=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i]->varType << "\"";
+                    }
+
+                    outStr << "/>" << endl;                
+                }
+                outStr << "</matrixVariables>" << endl;                
+            }
+
+            if (m_OSInstance->instanceData->matrixProgramming->matrixObjectives != NULL)
+            {
+                outStr << "<matrixObjectives";
+                outStr << " numberOfMatrixObj=\"";         
+                outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->numberOfMatrixObj << "\">";
+                for (int i=0; i < m_OSInstance->instanceData->matrixProgramming->matrixObjectives->numberOfMatrixObj; i++)
+                {
+                    outStr << "<matrixObj";
+                    outStr << " numberOfRows=\""; 
+                    outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->numberOfRows << "\"";
+                    outStr << " numberOfColumns=\"";         
+                    outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->numberOfColumns << "\"";
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->templateMatrixIdx >= 0)
+                    {
+                        outStr << " templateMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->templateMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->objReferenceMatrixIdx >= 0)
+                    {
+                        outStr << " objReferenceMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->objReferenceMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->orderConeIdx >= 0)
+                    {
+                        outStr << " orderConeIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->orderConeIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->constantMatrixIdx >= 0)
+                    {
+                        outStr << " constantMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->constantMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->name != "")
+                    {
+                        outStr << " name=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->name << "\"";
+                    }
+
+                    outStr << "/>" << endl;                
+                }
+                outStr << "</matrixObjectives>" << endl;                
+            }
+
+            if (m_OSInstance->instanceData->matrixProgramming->matrixConstraints != NULL)
+            {
+                outStr << "<matrixConstraints";
+                outStr << " numberOfMatrixCon=\"";         
+                outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->numberOfMatrixCon << "\">";
+                for (int i=0; i < m_OSInstance->instanceData->matrixProgramming->matrixConstraints->numberOfMatrixCon; i++)
+                {
+                    outStr << "<matrixCon";
+                    outStr << " numberOfRows=\"";         
+                    outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->numberOfRows << "\"";
+                    outStr << " numberOfColumns=\"";         
+                    outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->numberOfColumns << "\"";
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->templateMatrixIdx >= 0)
+                    {
+                        outStr << " templateMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->templateMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->conReferenceMatrixIdx >= 0)
+                    {
+                        outStr << " conReferenceMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->conReferenceMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->lbMatrixIdx >= 0)
+                    {
+                        outStr << " lbMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->lbMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->lbConeIdx >= 0)
+                    {
+                        outStr << " lbConeIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->lbConeIdx << "\"";
+                    }
+    
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->ubMatrixIdx >= 0)
+                    {
+                        outStr << " ubMatrixIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->ubMatrixIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->ubConeIdx >= 0)
+                    {
+                        outStr << " ubConeIdx=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->ubConeIdx << "\"";
+                    }
+
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->name != "")
+                    {
+                        outStr << " name=\"";         
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i]->name << "\"";
+                    }
+
+                    outStr << "/>" << endl;                
+                }
+                outStr << "</matrixConstraints>" << endl;                
+            }
+
+            if (m_OSInstance->instanceData->matrixProgramming->matrixExpressions != NULL)
+            {
+                outStr << "<matrixExpressions";
+                outStr << " numberOfExpr=\"";         
+                outStr << m_OSInstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr << "\">";
+                if( m_bWhiteSpace == true) outStr << endl;
+                for (int i=0; i < m_OSInstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr; i++)
+                {
+                    if (m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i] != NULL)
+                    {
+                        outStr << "<expr";
+
+                        // the following attribute is required
+                        outStr << "  idx=\"";
+                        outStr << m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->idx;
+                        outStr << "\"";
+
+                        // shape is an optional attribute, new since stable 2.9
+                        std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->shape);
+                        if (tempStr != "");
+                        {
+                            outStr << "  shape=\"" << tempStr;
+                        }
+
+                        outStr << "\">";
+                        if(m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->matrixExpressionTree->m_treeRoot != NULL)
+                            outStr << m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->matrixExpressionTree->m_treeRoot->getNonlinearExpressionInXML();
+                        outStr << "</expr>";
+                        if( m_bWhiteSpace == true) outStr << endl;                
+                    }
+                }
+                outStr << "</matrixExpressions>";
+                if( m_bWhiteSpace == true) outStr << endl;                
+            }
+
+            outStr << "</matrixProgramming>" << endl;
+        }
         if( m_bWhiteSpace == true) outStr << endl;
     } // end instanceData if
-    outStr << "</instanceData>"  ;
+    outStr << "</instanceData>";
     outStr << "</osil>" ;
     if( m_bWhiteSpace == true) outStr << endl;
     outStr << endl;

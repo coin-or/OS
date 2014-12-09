@@ -930,6 +930,8 @@ void solve(OSCommandLine *oscommandline)
             osrl = eclass.errormsg;
         }
 
+std::cout << std::endl << std::endl << osrl << std::endl;
+
         osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
 
         //catch garbage collection
