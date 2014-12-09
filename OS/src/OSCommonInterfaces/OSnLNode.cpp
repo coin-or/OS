@@ -426,6 +426,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNode
                 stackVec.pop_back();
             }
         }
+
         if(numMtxKids > 0)
         {
             for(int i = 0; i < numMtxKids; i++)
@@ -444,12 +445,12 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNode
 OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec)
 {
     std::vector<ExprNode*> stackVec;
-    int kount = nlNodeVec.size() - 1;
 
-    while(kount >= 0)
+    int kount =  0;
+    while(kount <= nlNodeVec.size() - 1)
     {
         int numMtxKids = nlNodeVec[kount]->inumberOfMatrixChildren;
-         if(numMtxKids  > 0)
+        if (numMtxKids > 0)
         {
             for(int i = numMtxKids - 1; i >= 0;  i--)
             {
@@ -458,7 +459,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNod
             }
         }
        int numkids = nlNodeVec[kount]->inumberOfChildren;
-        if(numkids  > 0)
+       if (numkids  > 0)
         {
             for(int i = numkids - 1; i >= 0;  i--)
             {
@@ -467,7 +468,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNod
             }
         }
         stackVec.push_back( nlNodeVec[kount]);
-        kount--;
+        kount++;
     }
     stackVec.clear();
     return (OSnLNode*)nlNodeVec[ kount - 1];
@@ -2337,12 +2338,12 @@ OSnLMNode* OSnLMNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNo
 OSnLMNode* OSnLMNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec)
 {
     std::vector<ExprNode*> stackVec;
-    int kount =  nlNodeVec.size() - 1;
+    int kount = 0;
 
-    while(kount >= 0)
+    while(kount <= nlNodeVec.size() - 1)
     {
         int numMtxKids = nlNodeVec[kount]->inumberOfMatrixChildren;
-         if(numMtxKids  > 0)
+        if (numMtxKids  > 0)
         {
             for(int i = numMtxKids - 1; i >= 0;  i--)
             {
@@ -2351,7 +2352,7 @@ OSnLMNode* OSnLMNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlN
             }
         }
        int numkids = nlNodeVec[kount]->inumberOfChildren;
-        if(numkids  > 0)
+       if (numkids  > 0)
         {
             for(int i = numkids - 1; i >= 0;  i--)
             {

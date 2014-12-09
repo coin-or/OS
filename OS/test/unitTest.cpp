@@ -9942,7 +9942,7 @@ if (OTHER_TESTS){
         mps2osil = NULL;
     }  
 
-#if 0
+
     // now test postfix and prefix routines
     try{
         cout << endl << "TEST " << ++nOfTest << ": postfix and prefix routines" << endl << endl;
@@ -10020,9 +10020,6 @@ if (OTHER_TESTS){
             delete fileUtil;
         fileUtil = NULL;
     }
-#endif
-
-
 } //end of if (OTHER_TESTS)
   
     if(unitTestResultFailure.str().length() > 0){

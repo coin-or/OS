@@ -1051,6 +1051,7 @@ std::string RotatedQuadraticCone::getConeName()
 }// end RotatedQuadraticCone::getConeName()
 
 
+
 SemidefiniteCone::SemidefiniteCone():
     semidefiniteness("positive"),
     isPositiveSemiDefinite(true)
@@ -3184,7 +3185,6 @@ std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(
     {
         if(pos->first < 0)
         {
-
             m_iObjectiveNumberNonlinear++;
         }
         else

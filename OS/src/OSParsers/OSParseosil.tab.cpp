@@ -95,7 +95,7 @@
 
 //#define CHECK_PARSE_TIME
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define YYDEBUG 1
