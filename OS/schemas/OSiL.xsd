@@ -372,10 +372,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
 			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0"/>
 			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
-			<!--
-			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
-			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
--->
 			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>For scalar-valued expressions  in "core" objectives and constraints that contain matrix references</xs:documentation>
@@ -441,47 +437,7 @@ If missing, all variables indicated  by the use of the template matrix are creat
 				<xs:documentation>same type for every newly created variable</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<!-- No need for a name. a <matrix> can have a name; two names might lead to confusion
-		<xs:attribute name="name" type="xs:string" use="optional"/>
-		-->
 	</xs:complexType>
-	<!-- save this stuff in case I need it later - HIG 13 July 2014 -->
-	<!--
-	<xs:complexType name="MatrixProgrammingObjectives">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="coreObjectives" type="MatrixProgrammingScalarObjectives" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>used to add matrix expressions to scalar objectives defined in core</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>defines new objectives (possibly multidimensional)</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="MatrixProgrammingConstraints">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="scalarConstraints" type="MatrixProgrammingScalarConstraints" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>used to add matrix expressions to scalar  constraints defined in core</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>defines new constraints (possibly multidimensional)</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
--->
 	<xs:complexType name="MatrixProgramming">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
@@ -490,10 +446,6 @@ If missing, all variables indicated  by the use of the template matrix are creat
 			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
 			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0"/>
 			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
-			<!--
-			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
-			<xs:element name="constraints" type="MatrixProgrammingConstraints" minOccurs="0"/>
--->
 			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions are contained in nonlinearExpressions</xs:documentation>
@@ -501,7 +453,6 @@ If missing, all variables indicated  by the use of the template matrix are creat
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<!--   -->
 	<xs:complexType name="MatrixObjectives">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -549,16 +500,6 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="shape" default="general">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="linear"/>
-					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="convex"/>
-					<xs:enumeration value="general"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="MatrixConstraints">
 		<xs:annotation>
@@ -617,18 +558,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="shape" default="general">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="linear"/>
-					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="convex"/>
-					<xs:enumeration value="general"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
-	<!--   -->
 	<xs:complexType name="LinearConstraintMatrixOperators">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -889,45 +819,6 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<!--	
-	<xs:complexType name="MatrixProgrammingScalarConstraints">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="con" type="MatrixProgrammingScalarTerm" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Number must agree with numberOfCon</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
--->
-	<!--	
-	<xs:complexType name="MatrixProgrammingScalarTerm">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="matrixTerm" type="MatrixTransformation" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixTerms</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="rowIdx" type="xs:integer" use="required"/>
-		<xs:attribute name="shape">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="linear"/>
-					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="nonlinear"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-	</xs:complexType>
--->
 	<xs:complexType name="MatrixProgrammingScalarCon">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1024,7 +915,6 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		</xs:attribute>
 		<xs:attribute name="numberOfMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<!-- ================================================= -->
 	<xs:complexType name="SpecialOrderedSets">
 		<xs:annotation>
 			<xs:documentation>recommendation</xs:documentation>
@@ -2232,7 +2122,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfUncertaintySets" use="required"/>
 	</xs:complexType>
-	<!-- -->
 	<xs:complexType name="UncertaintySet">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
@@ -2275,7 +2164,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<!-- -->
 	<!--RealTimeData: recommendation-->
 	<xs:complexType name="RealTimeData">
 		<xs:annotation>
