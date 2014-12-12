@@ -37,19 +37,6 @@ class OSnLMNode;
 class OSExpressionTree
 {
 public:
-
-    /**
-     * m_treeRoot holds the root node of the expression tree.
-     */
-    //ExprNode *m_treeRoot;
-
-    /**
-     * m_bIsVectorValued is used to distinguish between ScalarExpressionTrees (if false)
-     * and MatrixExpressionTrees (if true) so that the appropriate constructor and
-     * destructor methods can be called.
-     */
-    //bool m_bIsVectorValued;
-
     /**
      * default constructor.
      */
@@ -60,27 +47,6 @@ public:
      */
     ~OSExpressionTree();
 
-#if 0
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * the OSExpressionTree in prefix format
-     *
-     * </p>
-     *
-     * @return the expression tree as a vector of OSnLNodes in prefix.
-     */
-    std::vector<ExprNode*> getPrefixFromExpressionTree();
-
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * the OSExpressionTree in postfix format
-     *
-     * </p>
-     *
-     * @return the expression tree as a vector of OSnLNodes in postfix.
-     */
-    std::vector<ExprNode*> getPostfixFromExpressionTree();
-#endif
 
     /**
      * m_mvarIdx is a map used by
@@ -214,7 +180,6 @@ public:
 
     /**
      * Calculate the expression tree function value given the current variable
-
      * values using the calculateFunction method of OSnLNode.
      * If the function has been calculated, the method will retrieve it.
      *
@@ -231,7 +196,6 @@ private:
      * m_dTreeRootValue is the function value of the root node
      */
     double m_dTreeRootValue;
-
 };//end ScalarExpressionTree
 
 
@@ -345,7 +309,6 @@ private:
      * m_dTreeRootValue is the function value of the root node
      */
     //double m_dTreeRootValue;
-
 };//end MatrixExpressionTree
 
 #endif

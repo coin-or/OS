@@ -409,7 +409,7 @@ public:
 
 
 /*! \class LinearMatrixValues
- * \brief a data structure to represent the linear expressions in a LinearMatrixNonzeros element
+ * \brief a data structure to represent the linear expressions in a LinearMatrixElement object
  */
 class LinearMatrixValues
 {
@@ -445,7 +445,7 @@ public:
     bool deepCopyFrom(LinearMatrixValues *that);
 };//class LinearMatrixValues
 
-
+#if 0
 /*! \class LinearMatrixNonzeros
  * \brief a data structure to represent the nonzeros in a linearMatrix element
  */
@@ -493,6 +493,7 @@ public:
      */
     bool deepCopyFrom(LinearMatrixNonzeros *that);
 };//class LinearMatrixNonzeros
+#endif
 
 /*! \class LinearMatrixElements
  * \brief a data structure to represent the nonzero values in a linearMatrix element
@@ -525,7 +526,7 @@ public:
     /**
      *  The values are expressions of the form
      *  a_0 + a_1 x_{i_1} * a_2 x_{i_2} + ...
-     *  Each term in this sum is stored as a separate LinearMatrixElementTerm object
+     *  Each term in this sum is stored as a separate LinearMatrixValues object
      */
     LinearMatrixValues *values;     
 

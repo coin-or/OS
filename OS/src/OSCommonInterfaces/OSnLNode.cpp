@@ -304,38 +304,6 @@ std::vector<ExprNode*> ExprNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
 
-#if 0
-ExprNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
-{
-    std::vector<ExprNode*> stackVec;
-    int kount =  nlNodeVec.size() - 1;
-    while(kount >= 0)
-    {
-        int numMtxKids = nlNodeVec[kount]->inumberOfMatrixChildren;
-        int numkids    = nlNodeVec[kount]->inumberOfChildren;
-        if(numkids > 0)
-        {
-            for(int i = 0; i < numkids; i++)
-            {
-                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
-                stackVec.pop_back();
-            }
-        }
-        if(numMtxKids > 0)
-        {
-            for(int i = 0; i < numMtxKids; i++)
-            {
-                nlNodeVec[kount]->m_mMatrixChildren[i] = (OSnLMNode*)stackVec.back();
-                stackVec.pop_back();
-            }
-        }
-        stackVec.push_back( nlNodeVec[kount]);
-        kount--;
-    }
-    stackVec.clear();
-    return (OSnLNode*)nlNodeVec[ 0];
-}//end createExpressionTreeFromPrefix
-#endif
 
 bool ExprNode::IsEqual(ExprNode *that)
 {

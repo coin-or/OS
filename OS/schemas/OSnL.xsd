@@ -310,6 +310,11 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:element name="sqrt" type="OSnLNodeSquareRoot" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:element name="squareRoot" type="OSnLNodeSquareRoot" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -4109,6 +4114,7 @@
 							<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 						</xs:complexType>
 					</xs:element>
+
 					<xs:element name="operators">
 						<xs:complexType mixed="true">
 							<xs:sequence>
@@ -6057,6 +6063,7 @@
 			<xs:enumeration value="ceiling"/>
 			<xs:enumeration value="percent"/>
 			<xs:enumeration value="square"/>
+			<xs:enumeration value="sqrt"/>
 			<xs:enumeration value="squareRoot"/>
 			<xs:enumeration value="ln"/>
 			<xs:enumeration value="log"/>

@@ -548,8 +548,14 @@ if(BASIC_TESTS == true){
         osil = fileUtil->getFileAsString( operatorTest.c_str() );
         cout << "Read testOperators.osil...";
         osinstance = osilreader->readOSiL( osil);
-        
         cout << "Done" << endl;
+
+        std::string osil2 = osilwriter->writeOSiL( osinstance);
+        std::cout << osil2 << endl;
+        cout << "Read osil again...";
+        osilreader->readOSiL( osil2);       
+        cout << "Done" << endl;
+
         ScalarExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
         std::vector<ExprNode*> postfixVec;
         postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();

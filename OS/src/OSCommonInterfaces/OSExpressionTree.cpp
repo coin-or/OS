@@ -105,8 +105,6 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
         }
         else
         {
-//            if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
-//                return false;
             if (this->m_bIndexMapGenerated != that->m_bIndexMapGenerated)
                 return false;
             if (this->bADMustReTape        != that->bADMustReTape)
@@ -140,22 +138,17 @@ ScalarExpressionTree::~ScalarExpressionTree()
         if(m_treeRoot != NULL) delete m_treeRoot;
         m_treeRoot = NULL;
     }
-//    if(mapVarIdx != NULL)
-//    {
-//        delete mapVarIdx;
-//        mapVarIdx = NULL;
-//    }
 }//end ~ScalarExpressionTree
 
 std::vector<ExprNode*> ScalarExpressionTree::getPrefixFromExpressionTree()
 {
-    return m_treeRoot->/*OSnLNode::*/getPrefixFromExpressionTree();
+    return m_treeRoot->getPrefixFromExpressionTree();
 }//getPrefixFromExpressionTree
 
 
 std::vector<ExprNode*> ScalarExpressionTree::getPostfixFromExpressionTree()
 {
-    return m_treeRoot->/*OSnLNode::*/getPostfixFromExpressionTree();
+    return m_treeRoot->getPostfixFromExpressionTree();
 }//getPostfixFromExpressionTree
 
 
@@ -249,11 +242,6 @@ MatrixExpressionTree::~MatrixExpressionTree()
         if(m_treeRoot != NULL) delete m_treeRoot;
         m_treeRoot = NULL;
     }
-//    if(mapVarIdx != NULL)
-//    {
-//        delete mapVarIdx;
-//        mapVarIdx = NULL;
-//    }
 }//end ~MatrixExpressionTree
 
 
