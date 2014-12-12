@@ -283,14 +283,14 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-    <xs:attribute name="name" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
@@ -345,14 +345,14 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-    <xs:attribute name="name" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
@@ -430,14 +430,14 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-    <xs:attribute name="name" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
@@ -484,14 +484,14 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-    <xs:attribute name="name" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
@@ -502,34 +502,34 @@
 		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherSOSOption">
-  <xs:choice>
-    <xs:element name="var" type="OptionElementString" minOccurs="0" maxOccurs="unbounded">
-      <xs:annotation>
-        <xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
-      </xs:annotation>
-    </xs:element>
-    <xs:element name="enumeration" type="OtherOptionOrResultEnumeration" minOccurs="0" maxOccurs="unbounded">
-      <xs:annotation>
-        <xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
-      </xs:annotation>
-    </xs:element>
-  </xs:choice>
-  <xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-  <xs:attribute name="name" type="xs:string" use="optional"/>
-  <xs:attribute name="description" type="xs:string" use="optional"/>
-  <xs:attribute name="value" type="xs:string" use="optional"/>
-  <xs:attribute name="type" type="xs:string" use="optional"/>
-  <xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
-  <xs:attribute name="varType" type="xs:string" use="optional"/>
-  <xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
-  <xs:attribute name="enumType" type="xs:string" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="MatrixProgrammingOption">
+		<xs:choice>
+			<xs:element name="var" type="OptionElementString" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherOptionOrResultEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="varType" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixProgrammingOption">
 		<xs:sequence>
 			<xs:element name="matrixVariables" type="MatrixVariableOption" minOccurs="0"/>
-      <xs:element name="matrixObjectives" type="MatrixObjectiveOption" minOccurs="0"/>
-      <xs:element name="matrixConstraints" type="MatrixConstraintOption" minOccurs="0"/>
-      <xs:element name="other" type="SolverOption" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixObjectives" type="MatrixObjectiveOption" minOccurs="0"/>
+			<xs:element name="matrixConstraints" type="MatrixConstraintOption" minOccurs="0"/>
+			<xs:element name="other" type="SolverOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherMatrixProgrammingOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -557,7 +557,7 @@
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 	</xs:complexType>
-  <xs:complexType name="OtherMatrixVariableOption">
+	<xs:complexType name="OtherMatrixVariableOption">
 		<xs:choice>
 			<xs:element name="matrixVar" type="OtherMatrixVarOption" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
@@ -570,14 +570,14 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-    <xs:attribute name="name" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
@@ -594,123 +594,142 @@
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
-  <xs:complexType name="MatrixObjectiveOption">
-    <xs:sequence>
-      <xs:element name="initialMatrixObjectiveValues" type="InitMatrixObjectiveValues" minOccurs="0"/>
-      <xs:element name="other" type="OtherMatrixObjectiveOption" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="numberOfOtherMatrixObjectiveOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
-  </xs:complexType>
-  <xs:complexType name="InitMatrixObjectiveValues">
-    <xs:sequence>
-      <xs:element name="matrixObj" type="MatrixValue" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
-  </xs:complexType>
-  <xs:complexType name="OtherMatrixObjectiveOption">
-    <xs:choice>
-      <xs:element name="matrixObj" type="OtherMatrixObjOption" minOccurs="0" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>If present, numberOfMatrixObj must be set in parent, and the number of entries must agree with numberOfMatrixObj</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="enumeration" type="OtherOptionOrResultEnumeration" minOccurs="0" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:choice>
-    <xs:attribute name="name" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="description" type="xs:string" use="optional"/>
-    <xs:attribute name="value" type="xs:string" use="optional"/>
-    <xs:attribute name="type" type="xs:string" use="optional"/>
-    <xs:attribute name="solver" type="xs:string" use="optional"/>
-    <xs:attribute name="category" type="xs:string" use="optional"/>
-    <xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
-    <xs:attribute name="matrixType" type="xs:string" use="optional"/>
-    <xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
-    <xs:attribute name="enumType" type="xs:string" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="OtherMatrixObjOption">
-    <xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-    <xs:attribute name="name" type="xs:string" use="optional"/>
-    <xs:attribute name="value" type="xs:string" use="optional"/>
-    <xs:attribute name="lbValue" type="xs:string" use="optional"/>
-    <xs:attribute name="ubValue" type="xs:string" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="MatrixConstraintOption">
-    <xs:sequence>
-      <xs:element name="initialMatrixConstraintValues" type="InitMatrixConstraintValues" minOccurs="0"/>
-      <xs:element name="other" type="OtherMatrixVariableOption" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="numberOfOtherMatrixConstraintOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
-  </xs:complexType>
-  <xs:complexType name="InitMatrixConstraintValues">
-    <xs:sequence>
-      <xs:element name="matrixCon" type="MatrixValue" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
-  </xs:complexType>
-  <xs:complexType name="OtherMatrixConstraintOption">
-    <xs:choice>
-      <xs:element name="matrixCon" type="OtherMatrixConOption" minOccurs="0" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>If present, numberOfMatrixCon must be set in parent, and the number of entries must agree with numberOfMatrixCon</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="enumeration" type="OtherOptionOrResultEnumeration" minOccurs="0" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:choice>
-    <xs:attribute name="name" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="description" type="xs:string" use="optional"/>
-    <xs:attribute name="value" type="xs:string" use="optional"/>
-    <xs:attribute name="type" type="xs:string" use="optional"/>
-    <xs:attribute name="solver" type="xs:string" use="optional"/>
-    <xs:attribute name="category" type="xs:string" use="optional"/>
-    <xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
-    <xs:attribute name="matrixType" type="xs:string" use="optional"/>
-    <xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
-    <xs:attribute name="enumType" type="xs:string" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="OtherMatrixConOption">
-    <xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-    <xs:attribute name="name" type="xs:string" use="optional"/>
-    <xs:attribute name="value" type="xs:string" use="optional"/>
-    <xs:attribute name="lbValue" type="xs:string" use="optional"/>
-    <xs:attribute name="ubValue" type="xs:string" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="OtherMatrixProgrammingOption">
-    <xs:sequence>
-      <xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
-        <xs:annotation>
-          <xs:documentation>number must agree with numberOfItems</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="description" type="xs:string" use="optional"/>
-    <xs:attribute name="value" type="xs:string" use="optional"/>
-    <xs:attribute name="type" type="xs:string" use="optional"/>
-    <xs:attribute name="solver" type="xs:string" use="optional"/>
-    <xs:attribute name="category" type="xs:string" use="optional"/>
-    <xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="optional" default="0"/>
-  </xs:complexType>
-  <xs:complexType name="SolverOption">
+	<xs:complexType name="MatrixObjectiveOption">
+		<xs:sequence>
+			<xs:element name="initialMatrixObjectiveValues" type="InitMatrixObjectiveValues" minOccurs="0"/>
+			<xs:element name="other" type="OtherMatrixObjectiveOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfOtherMatrixObjectiveOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="InitMatrixObjectiveValues">
+		<xs:sequence>
+			<xs:element name="matrixObj" type="MatrixValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OtherMatrixObjectiveOption">
+		<xs:choice>
+			<xs:element name="matrixObj" type="OtherMatrixObjOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfMatrixObj must be set in parent, and the number of entries must agree with numberOfMatrixObj</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherOptionOrResultEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="matrixType" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherMatrixObjOption">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixConstraintOption">
+		<xs:sequence>
+			<xs:element name="initialMatrixConstraintValues" type="InitMatrixConstraintValues" minOccurs="0"/>
+			<xs:element name="other" type="OtherMatrixConstraintOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfOtherMatrixConstraintOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="InitMatrixConstraintValues">
+		<xs:sequence>
+			<xs:element name="matrixCon" type="MatrixValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OtherMatrixConstraintOption">
+		<xs:choice>
+			<xs:element name="matrixCon" type="OtherMatrixConOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfMatrixCon must be set in parent, and the number of entries must agree with numberOfMatrixCon</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherOptionOrResultEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="otherOptionType"/>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="matrixType" type="xs:string" use="optional"/>
+		<!--
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
+-->
+	</xs:complexType>
+	<xs:attributeGroup name="otherOptionType">
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
+	</xs:attributeGroup>
+	<xs:complexType name="OtherMatrixConOption">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherMatrixProgrammingOption">
+		<xs:sequence>
+			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfItems</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="SolverOption">
 		<xs:sequence>
 			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
@@ -732,18 +751,18 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-  <xs:complexType name="OptionElementValue">
-    <xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-    <xs:attribute name="name" type="xs:string" use="optional"/>
-    <xs:attribute name="value" type="xs:double" use="optional"/>
-    <xs:attribute name="lbValue" type="xs:double" use="optional"/>
-    <xs:attribute name="ubValue" type="xs:double" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="OptionElementString">
-    <xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-    <xs:attribute name="name" type="xs:string" use="optional"/>
-    <xs:attribute name="value" type="xs:string" use="optional"/>
-    <xs:attribute name="lbValue" type="xs:string" use="optional"/>
-    <xs:attribute name="ubValue" type="xs:string" use="optional"/>
-  </xs:complexType>
+	<xs:complexType name="OptionElementValue">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:double" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OptionElementString">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
 </xs:schema>

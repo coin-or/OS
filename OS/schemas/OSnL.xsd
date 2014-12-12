@@ -310,12 +310,12 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="sqrt" type="OSnLNodeSquareRoot" substitutionGroup="OSnLNode">
+	<xs:element name="squareRoot" type="OSnLNodeSquareRoot" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0 --- deprecated (use sqrt instead) </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="squareRoot" type="OSnLNodeSquareRoot" substitutionGroup="OSnLNode">
+	<xs:element name="sqrt" type="OSnLNodeSquareRoot" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -4114,7 +4114,6 @@
 							<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 						</xs:complexType>
 					</xs:element>
-
 					<xs:element name="operators">
 						<xs:complexType mixed="true">
 							<xs:sequence>
