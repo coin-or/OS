@@ -1277,7 +1277,7 @@ OSnLNodeSqrt::~OSnLNodeSqrt()
 
 std::string OSnLNodeSqrt::getTokenName()
 {
-    return "sqrt";
+    return "squareRoot";
 }// end OSnLNodeSqrt::getTokenName(
 
 double OSnLNodeSqrt::calculateFunction(double *x)
@@ -1720,6 +1720,7 @@ OSnLNodeNumber::OSnLNodeNumber()
     m_mChildren = NULL;
     inodeType = 0;
     value = 0.0;
+
     type = "real";
     id = "";
 

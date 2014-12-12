@@ -801,7 +801,7 @@ public:
  * @since   OS1.0
  *
  * \remarks
- * The in-memory representation of the OSnL element <sqrt>
+ * The in-memory representation of the OSnL element <squareRoot>
  *
  */
 class OSnLNodeSqrt : public OSnLNode
