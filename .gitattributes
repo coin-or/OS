@@ -601,6 +601,8 @@ OS/src/OSCommonInterfaces/OSGeneral.cpp -text
 OS/src/OSCommonInterfaces/OSGeneral.h -text
 OS/src/OSCommonInterfaces/OSInstance.cpp -text
 OS/src/OSCommonInterfaces/OSInstance.h -text
+OS/src/OSCommonInterfaces/OSMatrix.cpp -text
+OS/src/OSCommonInterfaces/OSMatrix.h -text
 OS/src/OSCommonInterfaces/OSOption.cpp -text
 OS/src/OSCommonInterfaces/OSOption.h -text
 OS/src/OSCommonInterfaces/OSResult.cpp -text
