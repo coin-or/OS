@@ -326,7 +326,15 @@ fi
 AC_PROG_LEX
 # if lex and flex are not found, LEX is set to :
 
-AM_CONDITIONAL(HAVE_LEXYACC, test -n "`$LEX --version`" && test -n "$YACC")
+AC_MSG_CHECKING([whether user wants to run flex and bison])
+AC_ARG_WITH([flex-bison],
+[AC_HELP_STRING([--with-flex-bison],
+                [use flex and bison])],
+		[os_flex_bison=$withval],[os_flex_bison=no])
+AC_MSG_RESULT([$os_flex_bison])
+
+AM_CONDITIONAL(HAVE_LEXYACC, test -n "`$LEX --version`" && test -n "$YACC" && 
+			     test $os_flex_bison = yes)
 
 #############################################################################
 # Define the root of the OS project                                         #
