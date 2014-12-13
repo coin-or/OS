@@ -436,14 +436,18 @@ The typical OS user will have no need to edit either {\tt OSParseosil.l} or {\tt
 and therefore will not have to worry about running either {\tt flex} or {\tt bison} to generate the parsers.
 \ifdevelop 
 The generated parser code from {\tt flex} and {\tt bison} is distributed with the project and works on all 
-of the platforms listed in Table~\ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} 
-or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with 
-{\tt flex} and {\tt bison}. If these programs are present, in the OS directory  execute
+of the platforms listed in Table~\ref{table:testedplatforms}.  If the user does edit either {\tt OSParseosil.l} 
+or {\tt OSParseosil.y} (or any of their constituent parts --- see comments in the opening sections of these files), then {\tt OSParseosil.cpp} and {\tt OSParseosil.tab.cpp} need to be regenerated with 
+{\tt flex} and {\tt bison}. In order to make this work, the {\tt configure} step must be run with the
+option {\tt --with-flex-bison} (see the notes on page~\pageref{itemize:unixBuildNotes}).
+\iffalse
+If these programs are present, in the OS directory  execute
 %
 \index{make run_parsers@{\tt make run\_parsers}}
 \begin{verbatim}
 make  run_parsers
 \end{verbatim}
+\fi
 %
 (This requires Unix or a unix-like environment (Cygwin, MinGW, MSYS, etc.) under Windows.)
 \fi

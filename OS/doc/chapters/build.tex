@@ -41,7 +41,7 @@ as COIN-OR's {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} and
 projects currently use Fortran to compile some of its dependent libraries.
 
 \vskip 8pt
-\noindent {\bf Notes:}
+\noindent {\bf Notes:}\label{itemize:unixBuildNotes}
 
 \begin{itemize}
 \item If {\tt gfortran} is not present and you  wish to build the nonlinear solver {\tt Ipopt} see the instructions 
@@ -50,6 +50,12 @@ in Section~\ref{section:ipopt}.
 \item When using {\tt configure} you may wish to use the {\tt -C} option. This
 instructs {\tt configure} to use a cache file, {\tt config.cache}\index{configure!cache file}, to speed up configuration
 by remembering and reusing the results of tests already performed.
+
+\ifdevelop
+\item The option {\tt --enable-debug} is used to build a debug version of the code.
+\item The option {\tt --with-flex-bison} can be used to control whether the parser files should be rebuilt. This requires  {\tt flex} and {\tt bison} (see Section~\ref{section:flex}) and has caused problems on some systems, so the default is
+not to use the parsers. Only parser developers should need this option, since the {\tt flex} and {\tt bison} output is part of the standard distribution.
+\fi
 
 \item For more information and options on the {\tt ./configure} script see
 
