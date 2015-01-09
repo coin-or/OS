@@ -37198,7 +37198,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
   CFLAGS=`echo $CFLAGS | sed -e 's/-pedantic-errors//'`
   ac_coin_found_socket_libraries=no
   case "$CC" in
-    cl* | */cl* | CL* | */CL* | icl*)
+    cl | */cl | CL* | */CL* | icl*)
       if test x$ac_cv_header_winsock_h = xyes ; then
 	LIBS="wsock32.lib"
 	echo "$as_me:$LINENO: checking with \"$LIBS\"" >&5
