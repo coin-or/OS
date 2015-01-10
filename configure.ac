@@ -15,7 +15,7 @@ AC_PREREQ(2.59)
 # use this to provide a package name, version number --- make sure it is "trunk" for trunk versions
 # an email address for bug reports, and a shortened version of the package name for the tarball
 # Note that there is a second configure.ac file in the OS directory -- make sure to synchronize
-AC_INIT([OS],[2.8],[coin-os@lists.coin-or.org])
+AC_INIT([OS],[2.8.5],[coin-os@lists.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
