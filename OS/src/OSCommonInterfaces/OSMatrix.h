@@ -53,17 +53,19 @@ public:
     /**
      *  matrixType tracks the type of elements contained in this MatrixNode,
      *  which may be useful in solver selection
+     *  For an enumeration of the possible types see OSParameters.h 
      */
     ENUM_MATRIX_TYPE matrixType;
 
     /**
      *  nType is a unique integer assigned to each type of matrix node
+     *  (see OSParameters.h)
      */
     ENUM_MATRIX_CONSTRUCTOR_TYPE nType;
 
-    /**  inumberOfChildren is the number of MatrixNode child elements
-     *   For the matrix types (OSMatrix and MatrixBlock) this number
-     *   is not fixed and is temporarily set to 0
+    /** inumberOfChildren is the number of MatrixNode child elements
+     *  For the matrix types (OSMatrix and MatrixBlock) this number
+     *  is not fixed and is temporarily set to 0
      */
     unsigned int inumberOfChildren;
 
@@ -72,12 +74,16 @@ public:
      * in the definition or construction of the current node.
      */
     MatrixNode **m_mChildren;
-
     /** default constructor */
     MatrixNode();
 
     /** destructor */
     virtual ~MatrixNode();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
 
     /**
      * @return the value of nType
@@ -220,14 +226,16 @@ public:
 };//class MatrixConstructor
 
 
-/*! \class ConstantMatrixElements
- * \brief a data structure to represent the constant elements in a MatrixType object
+/*! \class MatrixElementValues
+ * \brief an abstract class to help represent the elements in a MatrixType object
+ * From this we derive concrete classes that are used to store specific types of values,
+ * such as constant values, variable refeences, general nonlinear expressions, etc.
  */
-class ConstantMatrixElements
+class MatrixElementValues
 {
 public:
     /**
-     *  To indicate whether the constant matrix elements are stored 
+     *  To indicate whether the matrix elements are stored 
      *  in row major form or column major form
      */
     bool rowMajor;
@@ -243,8 +251,45 @@ public:
      */
     IntVector *start;
 
-    /** The indices and values of the (nonzero) constant elements */
+    /** The indices of the (nonzero) elements */
     IntVector *indexes;
+
+
+    MatrixElementValues();
+    ~MatrixElementValues();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixElementValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixElementValues *that);
+};//class MatrixElementValues
+
+
+/*! \class ConstantMatrixElements
+ * \brief a data structure to represent the constant elements in a MatrixType object
+ */
+class ConstantMatrixElements: public MatrixElementValues
+{
+public:
+    /** The values of the (nonzero) constant elements */
     DoubleVector *values;
 
 
@@ -279,28 +324,10 @@ public:
  * \brief a data structure to represent variable reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of a variable
  */
-class VarReferenceMatrixElements
+class VarReferenceMatrixElements: public MatrixElementValues
 {
 public:
-    /**
-     *  numberOfValues records the number of entries in the arrays
-     *  that make up the instance of nonzeros
-     */
-    int numberOfValues;
- 
-    /**
-     *  To indicate whether the varReference matrix elements are stored 
-     *  in row major form or column major form
-     */
-    bool rowMajor;
-
-    /**
-     *  A vector listing the row or column starts
-     */
-    IntVector *start;
-
-    /** The row (or column) indices and variable references of the elements */
-    IntVector *indexes;
+    /** The variable references (indexes of core variables) of the elements */
     IntVector *values;
 
     VarReferenceMatrixElements();
@@ -498,31 +525,9 @@ public:
 /*! \class LinearMatrixElements
  * \brief a data structure to represent the nonzero values in a linearMatrix element
  */
-class LinearMatrixElements
+class LinearMatrixElements: public MatrixElementValues
 {
 public:
-    /**
-     *  numberOfValues records the number of entries in the arrays
-     *  that make up the instance of nonzeros
-     */
-    int numberOfValues;
- 
-    /**
-     *  To indicate whether the linear matrix elements are stored 
-     *  in row major form or column major form
-     */
-    bool rowMajor;
-
-    /**
-     *  A vector listing the row or column starts
-     */
-    IntVector *start;
-
-    /** 
-     *  The indexes of the (nonzero) linear matrix elements
-     *  row or column indexes, depending on rowMajor */
-    IntVector *indexes;
-
     /**
      *  The values are expressions of the form
      *  a_0 + a_1 x_{i_1} * a_2 x_{i_2} + ...
@@ -598,31 +603,9 @@ public:
 /*! \class GeneralMatrixElements
  * \brief a data structure to represent the nonzero values in a generalMatrix element
  */
-class GeneralMatrixElements
+class GeneralMatrixElements: public MatrixElementValues
 {
 public:
-    /**
-     *  numberOfValues records the number of entries in the arrays
-     *  that make up the instance of nonzeros
-     */
-    int numberOfValues;
- 
-    /**
-     *  To indicate whether the general matrix elements are stored 
-     *  in row major form or column major form
-     */
-    bool rowMajor;
-
-    /**
-     *  A vector listing the row or column starts
-     */
-    IntVector *start;
-
-    /** 
-     *  The indexes of the (nonzero) linear matrix elements
-     *  row or column indexes, depending on rowMajor */
-    IntVector *indexes;
-
     /**
      *  The values are general nonlinear expressions 
      */
@@ -659,28 +642,10 @@ public:
  * \brief a data structure to represent objective reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of an objective (i.e., less than zero)
  */
-class ObjReferenceMatrixElements
+class ObjReferenceMatrixElements: public MatrixElementValues
 {
 public:
-    /**
-     *  numberOfValues records the number of entries in the arrays
-     *  that make up the instance of nonzeros
-     */
-    int numberOfValues;
- 
-    /**
-     *  To indicate whether the objReference matrix elements are stored 
-     *  in row major form or column major form
-     */
-    bool rowMajor;
-
-    /**
-     *  A vector listing the row or column starts
-     */
-    IntVector *start;
-
-    /** The row (or column) indices and objective references of the elements */
-    IntVector *indexes;
+    /** The objective references (indexes of core objectives) of the elements */
     IntVector *values;
 
     ObjReferenceMatrixElements();
@@ -715,28 +680,10 @@ public:
  * \brief a data structure to represent constraint reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of a constraint
  */
-class ConReferenceMatrixElements
+class ConReferenceMatrixElements: public MatrixElementValues
 {
 public:
-    /**
-     *  numberOfValues records the number of entries in the arrays
-     *  that make up the instance of nonzeros
-     */
-    int numberOfValues;
- 
-    /**
-     *  To indicate whether the conReference matrix elements are stored 
-     *  in row major form or column major form
-     */
-    bool rowMajor;
-
-    /**
-     *  A vector listing the row or column starts
-     */
-    IntVector *start;
-
-    /** The row (or column) indices and constraint references of the elements */
-    IntVector *indexes;
+    /** The constraint references (indexes of core constraints) of the elements */
     IntVector *values;
 
     ConReferenceMatrixElements();
@@ -793,6 +740,10 @@ public:
      */
     virtual std::string getNodeName();
 
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
 
     /*! \fn MatrixElements *cloneMatrixNode()
      *  \brief The implementation of the virtual functions.
@@ -862,6 +813,11 @@ public:
      */
     virtual std::string getNodeName();
 
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
 
     /**
      * <p>
@@ -948,6 +904,11 @@ public:
 
 
     /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
      * <p>
      * The following method writes a matrix node in OSgL format. 
      * it is used by OSgLWriter to write a <matrix> element.
@@ -1000,6 +961,11 @@ public:
     int baseMatrixIdx;
 
     /**
+     * a pointer to the base matrix
+     */
+    OSMatrix* baseMatrix;
+
+    /**
      * to pinpoint the position of the upper left corner of the base matrix within the target matrix
      */
     int targetMatrixFirstRow;
@@ -1029,7 +995,7 @@ public:
      */
     double scalarMultiplier;
 
-
+    /** Standard constructor and destructor methods */
     BaseMatrix();
     ~BaseMatrix();
 
@@ -1043,6 +1009,11 @@ public:
      */
     virtual std::string getNodeName();
 
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
 
     /**
      * <p>
@@ -1096,19 +1067,62 @@ class MatrixType : public MatrixNode
 public:
     int numberOfRows;
     int numberOfColumns;
+
+    /** 
+     *  to track whether the expanded form of the matrix is available
+     */
+    bool haveExpandedForm;
+
+    /**
+     *  The expanded form of the matrix is held in four sparse matrix objects:
+     *  m_mmConstantElements
+     *  m_mmVariableReferences
+     *  m_mmGeneralElements
+     *  m_mmObjAndConReferences
+     */
+ 
     ENUM_MATRIX_SYMMETRY symmetry;
 
     MatrixType();
     ~MatrixType();
 
     /**
-     *
-     * A function to check for the equality of two objects
+     *  A method to check whether a matrix or block is diagonal
+     */
+    bool isDiagonal();
+
+    /** 
+     *  A method to expand a matrix or block
+     *  The result is a sparse matrix object, depending on the matrixType, 
+     *  of constant matrix elements, variable references, linear or nonlinear expressions, 
+     *  or objective and constraint references (possibly mixed).
+     *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
+     *  @param rowMajor can be used to store the objects in row major form.
+     *  @return whether the operation was successful or not.
+     */
+    bool expandMatrixType(bool rowMajor);
+
+    /** 
+     *  A method to extract a block from a larger matrix
+     *  The result is a sparse matrix object, depending on the matrixType, 
+     *  of constant matrix elements, variable references, linear or nonlinear expressions, 
+     *  or objective and constraint references (possibly mixed).
+     *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
+     *  @param firstrow gives the first row of the block
+     *  @param firstcol gives the first column of the block
+     *  @param nrows gives the number of rows in the block  
+     *  @param ncols gives the number of columns in the block  
+     *  @param rowMajor can be used to store the objects in row major form.
+     *  @return whether the operation was successful or not.
+     */
+    bool extractBlock(int firstrow, int firstcol, int nrows, int ncols, bool rowMajor);
+
+    /**
+     *  A function to check for the equality of two objects
      */
     bool IsEqual(MatrixType *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1120,7 +1134,7 @@ public:
 
     /**
      * A function to make a deep copy of an instance of this class
-
+     *
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
@@ -1139,6 +1153,35 @@ class OSMatrix : public MatrixType
 public:
     int idx;
     std::string name;
+
+private:
+    /** m_miRowPartition is the partition vector of the matrix rows into blocks
+     *  @remark This only tracks the top-level partition and does not recurse
+     */
+    int* m_miRowPartition;
+
+    /** m_iRowPartitionSize gives the number of entries
+     *  in the m_miRowPartition array, which is one more than the number of blocks
+     */
+    int m_iRowPartitionSize;
+
+    /** m_miColumnPartition is the partition vector of the matrix columns into blocks
+     *  @remark This only tracks the top-level partition and does not recurse
+     */
+    int* m_miColumnPartition;
+
+    /** m_iColumnPartitionSize gives the number of entries
+     *  in the m_miColumnPartition array, which is one more than the number of blocks
+     */
+    int m_iColumnPartitionSize;
+
+    /** m_bBlockPartitionProcessed tracks whether the block partition
+     *  has been determined (by rows as well as by columns) from the constructor list 
+     *  and stored in m_miRowPartition and m_miColumnPartition
+     */
+    bool m_bBlockPartitionProcessed; 
+
+public:
 
     OSMatrix();
     ~OSMatrix();
@@ -1164,6 +1207,58 @@ public:
      * @return the name of the operator
      */
     virtual std::string getNodeName();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     *  get the size of the row partition of a matrix
+     *
+     *  @return an corresponding to the number of partition points
+     *  of the rows of this matrix (which is one more than the number
+     *  of blocks in one row)
+     */
+    int  getRowPartitionSize();
+
+    /**
+     *  get the row partition of the matrix
+     *
+     *  @return a vector of int corresponding to the partition points
+     *  of the rows of this matrix
+     */
+    int* getRowPartition();
+
+    /**
+     *  get the size of the column partition of a matrix
+     *
+     *  @return an corresponding to the number of partition points
+     *  of the columns of this matrix (which is one more than the number
+     *  of blocks in one column)
+     */
+    int  getColumnPartitionSize();
+
+    /**
+     *  get the column partition of the matrix
+     *
+     *  @return a vector of int corresponding to the partition points
+     *  of the columns of this matrix
+     */
+    int* getColumnPartition();
+
+    /**
+     *  process the dimensions of blocks found in the constructors of the matrix
+     *  (Note that there could be several block structures, potentially conflicting)
+     *
+     *  @remark This method is called by the previous four methods
+     */
+    bool processBlocks();
+
+    /**
+     *  A method to check whether a matrix is block-diagonal
+     */
+    bool isBlockDiagonal();
 
     /**
      * add values to this matrix.
@@ -1228,7 +1323,6 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(OSMatrix *that);
-
 };// class OSMatrix
 
 
@@ -1255,6 +1349,11 @@ public:
      */
     virtual std::string getNodeName();
 
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
 
     /**
      * <p>
@@ -1297,5 +1396,163 @@ public:
     bool deepCopyFrom(MatrixBlock *that);
 };// class MatrixBlock
 
+
+/*! \class GeneralSparseMatrix
+ * \brief a sparse matrix data structure for matrices that can hold nonconstant values
+ */
+class GeneralSparseMatrix
+{
+public:
+
+    /**
+     * bDeleteArrays is true if we delete the arrays in garbage collection
+     * set to true by default
+     */
+    bool bDeleteArrays;
+
+    /**
+     * isColumnMajor holds whether the matrix is stored by column. 
+     * If false, the matrix is stored by row.
+     */
+    bool isColumnMajor;
+
+    /**
+     * startSize is the dimension of the starts array
+     */
+    int startSize;
+
+    /**
+     * valueSize is the dimension of the indexes and values arrays
+     */
+    int valueSize;
+
+    /**
+     * starts holds an integer array of start elements in the matrix,
+     * which points to the start of a column (row) of nonzero elements.
+     */
+    int* starts;
+
+    /**
+     * indexes holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
+     * If the matrix is stored by column (row), rowIdx (colIdx) is the array of row (column) indices.
+     */
+    int* indexes;
+
+    /**
+     * values holds a general array of value elements in the matrix,
+     * which could be constants, linear expressions, general nonlinear expressions,
+     * variable, constraint or objective references, etc. If mixed types are
+     * encountered (e.g., constant and nonlinear expression), they are converted 
+     * to the most general form found.
+     */
+    MatrixElementValues** values;
+
+    /**
+     *
+     * Default constructor.
+     */
+    GeneralSparseMatrix();
+
+    /**
+     * Constructor.
+     *
+     * @param isColumnMajor holds whether the matrix is stored by column. 
+     * If false, the matrix is stored by row.
+     * @param startSize holds the size of the start array.
+     * @param valueSize holds the size of the value and index arrays.
+     * @param type describes the type of values held in the matrix (see OSParameters.h).
+     */
+    GeneralSparseMatrix(bool isColumnMajor_, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
+    /**
+     *
+     * Default destructor.
+     */
+    ~GeneralSparseMatrix();
+
+    /**
+     * This method displays data structure in the matrix format.
+     * </p>
+     * @return
+     */
+    bool display(int secondaryDim);
+
+}; //GeneralSparseMatrix
+
+/** \class ExpandedMatrixBlocks
+ *  \brief a sparse matrix data structure for matrices
+ *  that can hold nonconstant values and have block structure
+ *  In addition it is assumed that all nesting of blocks
+ *  has been resolved.
+ */
+class ExpandedMatrixBlocks
+{
+public:
+    /**
+     * bDeleteArrays is true if we delete the arrays in garbage collection
+     * set to true by default
+     */
+    bool bDeleteArrays;
+
+    /**
+     * isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
+     * data is stored by column. If false, the matrix is stored by row.
+     */
+    bool isColumnMajor;
+
+    /**
+     * blockNumber gives the number of blocks (which is the size of the blockRows and blockColumns arrays)
+     */
+    int blockNumber;
+
+    /**
+     * blockRows holds an integer array of the row to which a block belongs.
+     * It is assumed that all blocks in a row have the same number of rows 
+     * (while the number of columns is allowed to vary).
+     */
+    int* blockRows;
+
+    /**
+     * blockColumns holds an integer array of the column to which a block belongs.
+     * It is assumed that all blocks in a column have the same number of columns
+     * (while the number of rows is allowed to vary).
+     */
+    int* blockColumns;
+
+    /**
+     * blocks holds the blocks that make up the matrix.
+     * All blocks have the same type of values, which corresponds to the most
+     * general form found.
+     */
+    GeneralSparseMatrix** blocks;
+
+    /**
+     *
+     * Default constructor.
+     */
+    ExpandedMatrixBlocks();
+
+    /**
+     * Constructor.
+     *
+     * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
+     * data is stored by column. If false, the matrix is stored by row.
+     * @param startSize holds the size of the start array.
+     * @param valueSize holds the size of the value and index arrays.
+     */
+    ExpandedMatrixBlocks(bool isColumnMajor_, int startSize, int valueSize);
+    /**
+     *
+     * Default destructor.
+     */
+    ~ExpandedMatrixBlocks();
+
+    /**
+     * This method displays data structure in the matrix format.
+     * </p>
+     * @return
+     */
+    bool display(int secondaryDim);
+
+}; //ExpandedMatrixBlocks
 
 #endif

@@ -2563,7 +2563,7 @@ osglSparseIntVectorValues:  VALUESSTART  GREATERTHAN osglIntVectorElArray VALUES
  */
 
 /**
- *  Note: A matrix is essentially a list of constructors.
+ *  Note: An OSMatrix is essentially a list of constructors.
  *  This is very similar to parsing an expression tree.
  */
 osglMatrix: matrixStart matrixAttributes matrixContent
@@ -2692,7 +2692,10 @@ baseMatrixAttributes: baseMatrixAttList
     if (osglData->baseMatrixIdxPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute baseMatrixIdx is missing");
     else
+    {
         ((BaseMatrix*)osglData->tempC)->baseMatrixIdx = osglData->baseMatrixIdx;
+        ((BaseMatrix*)osglData->tempC)->baseMatrix = (OSMatrix*)osglData->matrix[osglData->baseMatrixIdx];
+    }
     if (osglData->targetMatrixFirstRowPresent == true)
         ((BaseMatrix*)osglData->tempC)->targetMatrixFirstRow = osglData->targetMatrixFirstRow;
     if (osglData->targetMatrixFirstColPresent == true)
@@ -2898,6 +2901,10 @@ constantElementsAtt:
     osglNumberOfValuesATT
     {
         ((MatrixElements*)osglData->tempC)->constantElements->numberOfValues = osglData->numberOfValues;
+        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
+                mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
+                    ENUM_MATRIX_TYPE_constant);
     }
   | osglRowMajorATT
     {
@@ -3012,6 +3019,10 @@ varReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((MatrixElements*)osglData->tempC)->varReferenceElements->numberOfValues = osglData->numberOfValues;
+        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
+                mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
+                    ENUM_MATRIX_TYPE_varref);
     }
   | osglRowMajorATT
     {
@@ -3124,6 +3135,10 @@ linearElementsAtt:
     osglNumberOfValuesATT
     {
         ((MatrixElements*)osglData->tempC)->linearElements->numberOfValues = osglData->numberOfValues;
+        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
+                mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
+                    ENUM_MATRIX_TYPE_linear);
     }
   | osglRowMajorATT
     {
@@ -3333,6 +3348,10 @@ generalElementsAtt:
     osglNumberOfValuesATT
     {
         ((MatrixElements*)osglData->tempC)->generalElements->numberOfValues = osglData->numberOfValues;
+        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
+                mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
+                    ENUM_MATRIX_TYPE_general);
     }
   | osglRowMajorATT
     {
@@ -3478,6 +3497,10 @@ conReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((MatrixElements*)osglData->tempC)->conReferenceElements->numberOfValues = osglData->numberOfValues;
+        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
+                mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
+                    ENUM_MATRIX_TYPE_conref);
     }
   | osglRowMajorATT
     {
@@ -3591,6 +3614,10 @@ objReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((MatrixElements*)osglData->tempC)->objReferenceElements->numberOfValues = osglData->numberOfValues;
+        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
+                mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
+                    ENUM_MATRIX_TYPE_objref);
     }
   | osglRowMajorATT
     {
@@ -3684,10 +3711,7 @@ objReferenceElementsValuesLaden: GREATERTHAN objReferenceElementsValuesBody VALU
 objReferenceElementsValuesBody: osglIntArrayData;
 
 
-matrixTransformation: matrixTransformationStart GREATERTHAN OSnLMNode matrixTransformationEnd
-{
-//    osglData->matrix->matrixConstructor.push_back(osglData->tempC);
-};
+matrixTransformation: matrixTransformationStart GREATERTHAN OSnLMNode matrixTransformationEnd;
 
 matrixTransformationStart: TRANSFORMATIONSTART
 {

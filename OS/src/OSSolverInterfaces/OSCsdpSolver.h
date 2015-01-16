@@ -197,11 +197,11 @@ public:
     virtual void  setSolverOptions() throw(ErrorClass);
 
     /*! \fn  verifyForm()
-     *  \brief Use to verify that the solver is appropriate 
+     *  \brief Use to verify that the solver is appropriate. 
      *         CSDP requires a very special type of problem 
      *  \return void.
      */
-    void verifyForm() throw(ErrorClass);
+    //void verifyForm() throw(ErrorClass);
 
     /**
      * use this for debugging, print out the instance that

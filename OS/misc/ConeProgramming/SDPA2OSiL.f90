@@ -12,9 +12,11 @@
 !
 ! (P)    min c1*x1 + c2*x2 + ... + cm*xm
 !        st  F1*x1 + F2*x2 + ... + Fm*xm - F0 = X
-!            X symmetric and positive definite
+!            X symmetric and positive definite.
 !
-!     If the data matrices F are block-diagonal, this can be further decomposed into:
+!     Each of the data matrices F are assumed block-diagonal, with identical block sizes.
+!     (The nonzero structure within each block is allowed to vary.) Thus the problem
+!     could be further decomposed into:
 !
 ! (P)    min  c1*x1 +  c2*x2 + ... +  cm*xm
 !        st  F11*x1 + F21*x2 + ... + Fm1*xm - F01 - X1 = 0
@@ -22,31 +24,71 @@
 !            ...
 !            Xi symmetric and positive definite
 !
+!     The same data requirements also define the dual problem
+!
+! (D)    max tr(F0*X)
+!        st  tr(F1*X) = c1
+!            tr(F2*X) = c2
+!               ...   
+!            tr(Fm*X) = cm
+!            X symmetric and positive definite.
+!
+!     Usage;
+!         SDPA2OSiL -p|-d <inputFileName> [<outputFileName>]
+! 
+!      If outputFileName is missing, it is created from inputFileName by appending ".osil". 
+!
 !---------------------------------------------------------------------------
 !
       implicit none
       integer,parameter :: maxline=31768
-      character(LEN=maxline) :: nextl
+      character(LEN=maxline) :: nextl,infilenm,outfilenm
       integer lineno, ierr
       integer nmatrices, nblocks, nvar, nsize, nvar0, stride, start
       integer imtx, iblk, irow, icol
       integer,allocatable :: blksize(:)
-      double  precision, allocatable :: cost(:)
+      double precision, allocatable :: cost(:)
       integer matno,blkno,i,j,k,l,n,maxblk
-      double  precision value,vmark
+      double precision value,vmark
       integer,allocatable :: row(:), next(:), trow(:), tnext(:)
       integer,allocatable :: first(:), last(:)
       integer,allocatable :: blkstart(:,:), blkelem(:,:), colstart(:)
-      double  precision, allocatable :: coef(:), tcoef(:)
+      double precision, allocatable :: coef(:), tcoef(:)
       integer nv, ncol, ncoef, nelem, nzeroblk, mult, incr, mark
+      integer narg
+      logical dual
+      character*2 primaldual
+!
+!     command line handling
+!
+      narg = iargc()
+      if (narg .le. 1) then
+          write (6, 9999)
+          stop
+      endif
+      call getarg(1, primaldual)
+      if (primaldual(2:2) .eq. 'd' .OR. primaldual(2:2) .eq. 'D') then
+          dual =.true.
+      endif
+!
+      call getarg(2, infilenm)
+!
+      if (narg .ge. 3) then
+          call getarg(3, outfilenm)
+      else
+          outfilenm = trim(adjustl(infilenm)) // ".osil"
+      endif
+!
+      open (15, file=infilenm,  err=9015)
+      open (16, file=outfilenm, err=9016)
 !
 !     First put the header information
 !
-      write (6,1001)
-      write (6,1002)
-      write (6,1003)
-      write (6,1004)
-      write (6,1005)
+      write (16,1001)
+      write (16,1002)
+      write (16,1003) trim(adjustl(infilenm))
+      write (16,1004)
+      write (16,1005)
 !
 !     Now process the comments from the SDPA file. There could be
 !     arbitrarily many lines, all starting with '"' or '*'. We
@@ -55,12 +97,12 @@
       lineno = 0
       do
           lineno = lineno  + 1
-          read(5,1100) nextl
+          read(15,1100) nextl
           nextl = adjustl(nextl)
           if (nextl(1:1) .ne. '"' .and. nextl(1:1) .ne. '*') exit
-              write (6,*) trim(adjustl(nextl(2:)))
+              write (16,*) trim(adjustl(nextl(2:)))
       end do
-      write (6,1006)
+      write (16,1006)
 !
 !     At this point nextl does not start with a comment indicator. 
 !     This means it must contain the number of constraint matrices.
@@ -69,11 +111,11 @@
 !
       read (nextl,*,err=900) nmatrices
       lineno = lineno + 1
-      read (5,*) nblocks
+      read (15,*) nblocks
       allocate(blksize(nblocks))
       allocate(   cost(nmatrices))
-      read (5,*) (blksize(i),i=1,nblocks) 
-      read (5,*) (   cost(i),i=1,nmatrices) 
+      read (15,*) (blksize(i),i=1,nblocks) 
+      read (15,*) (   cost(i),i=1,nmatrices) 
 !
 !     Now write this information 
 !
@@ -87,15 +129,15 @@
             nvar = nvar - blksize(i)
          endif
       end do
-      write (6,1007) nvar,nvar
+      write (16,1007) nvar,nvar
 !
 !     Now the cost coefficients
 !
-      write (6,1008) nmatrices
+      write (16,1008) nmatrices
       do i=1,nmatrices
-         write (6,1009) i-1,cost(i)
+         write (16,1009) i-1,cost(i)
       end do
-      write (6,1010)
+      write (16,1010)
 !
 !     Now the <matrices> section.  
 !     The description of the format is silent on whether the coefficients must be ordered,
@@ -140,7 +182,7 @@
 !     Read the elements
 !
       do
-         read (5,*,err=900, end=200) imtx, iblk, irow, icol, value
+         read (15,*,err=900, end=200) imtx, iblk, irow, icol, value
          if (imtx .lt. 0 .or. imtx .gt. nmatrices) goto 900
          if (iblk .le. 0 .or. iblk .gt. nblocks  ) goto 900
          if (irow .le. 0 .or. irow .gt. abs(blksize(iblk))) goto 900
@@ -215,11 +257,11 @@
 !
 !     The X blocks are easier; deal with them first.
 !
-      write (6,1011) (nmatrices+2)*nblocks
+      write (16,1011) (nmatrices+2)*nblocks
       nvar0 = nblocks
       do i=1,nblocks
-         write (6,1012) abs(blksize(i)), abs(blksize(i)),                &
-     &                  abs(blksize(i)) + 1
+         write (16,1012) abs(blksize(i)), abs(blksize(i)),                &
+     &                   abs(blksize(i)) + 1
 !
 !     Variable blocks inherit their structure (diagonal or full upper triangular)
 !     from the structure of the underlying data matrices
@@ -228,20 +270,20 @@
          if (blksize(i) .gt. 0) then
             start  = 0
             do j=0,abs(blksize(i))
-               write (6,1013) start
+               write (16,1013) start
                start = start + j + 1
             end do
 !
             nv = blksize(i)*(blksize(i)+1)/2
-            write (6,1014) nv
+            write (16,1014) nv
 !
             do j=0,abs(blksize(i))-1
                if     (j .eq. 0) then
-                  write (6,1015)
+                  write (16,1015)
                elseif (j .eq. 1) then
-                  write (6,1016)
+                  write (16,1016)
                else 
-                  write (6,1017) j + 1
+                  write (16,1017) j + 1
                endif
             end do
 !
@@ -249,24 +291,24 @@
 !
          else
             if (blksize(i) .eq. -1) then
-               write (6,1016)
+               write (16,1016)
             else
-               write (6,1017) 1 - blksize(i)
+               write (16,1017) 1 - blksize(i)
             endif
 !
             nv = -blksize(i)
-            write (6,1014) nv
+            write (16,1014) nv
 !
             if     (blksize(i) .eq. -1) then
-               write (6,1015)
+               write (16,1015)
             elseif (blksize(i) .eq. -2) then
-               write (6,1016)
+               write (16,1016)
             else 
-               write (6,1017) -blksize(i)
+               write (16,1017) -blksize(i)
             endif
          endif
 !
-         write (6,1018) nv, nvar0
+         write (16,1018) nv, nvar0
          nvar0 = nvar0 + nv
       end do
 !
@@ -293,19 +335,19 @@
 !     For a run of three or more, use mult and incr.
 !     Index counting is easier if all matrices --- even zero ones --- are mentioned
 !
-            write (6,1019) abs(blksize(i)),abs(blksize(i))
+            write (16,1019) abs(blksize(i)),abs(blksize(i))
 !
 !     Write the <start> element
 !
             if (nelem .gt. 0) then
-               write (6,1020) abs(blksize(i)) + 1
+               write (16,1020) abs(blksize(i)) + 1
                k = 1
                do 
                   mult = 1
                   incr = 0
                   mark = colstart(k)
                   if (k .eq. abs(blksize(i))+1) then
-                     write (6,1021) colstart(k)
+                     write (16,1021) colstart(k)
                      exit
                   else
                      k = k + 1
@@ -315,11 +357,11 @@
                            k = k + 1
                      end do
                      if (mult .gt. 1) then
-                        write (6,1045) mult, mark
+                        write (16,1045) mult, mark
                      else
                         if (k .eq. abs(blksize(i))+2) then
-                           write (6,1021) mark
-                           write (6,1021) colstart(k-1)
+                           write (16,1021) mark
+                           write (16,1021) colstart(k-1)
                            exit
                         else
                            mult = 2
@@ -330,9 +372,9 @@
                                  k = k + 1
                            end do
                            if (mult .eq. 2) then
-                              write (6,1021) mark
+                              write (16,1021) mark
                            else
-                              write (6,1046) mult, incr, mark
+                              write (16,1046) mult, incr, mark
                               k = k + 1
                            endif
                         endif
@@ -340,7 +382,7 @@
                      if (k .gt. abs(blksize(i))+1) exit
                   endif
                end do
-               write (6,1022) nelem
+               write (16,1022) nelem
 !
 !    Put the <indexes> element
 !
@@ -359,12 +401,12 @@
                             mult = mult + 1
                          else
                             if (incr .eq. 0) then
-                               write (6, 1045) mult, mark - 1
+                               write (16, 1045) mult, mark - 1
                             elseif (mult .eq. 2) then
-                               write (6, 1021) mark - 1
-                               write (6, 1021) mark + incr - 1
+                               write (16, 1021) mark - 1
+                               write (16, 1021) mark + incr - 1
                             else
-                               write (6, 1046) mult, incr, mark - 1
+                               write (16, 1046) mult, incr, mark - 1
                             endif
                             mult = 1
                             mark = row(n)
@@ -375,17 +417,17 @@
                end do
                if (mult .gt. 0) then
                   if (mult .eq. 1) then
-                     write (6, 1021) mark - 1
+                     write (16, 1021) mark - 1
                   elseif (incr .eq. 0) then
-                     write (6, 1045) mult, mark - 1
+                     write (16, 1045) mult, mark - 1
                   elseif (mult .eq. 2) then
-                     write (6, 1021) mark - 1
-                     write (6, 1021) mark + incr - 1
+                     write (16, 1021) mark - 1
+                     write (16, 1021) mark + incr - 1
                   else
-                     write (6, 1046) mult, incr, mark - 1
+                     write (16, 1046) mult, incr, mark - 1
                   endif
                endif
-               write (6,1023)
+               write (16,1023)
 !
 !     Put the <value> element
 !
@@ -401,9 +443,9 @@
                             mult = mult + 1
                          else
                             if (mult .eq. 1) then
-                                write (6, 1024) vmark
+                                write (16, 1024) vmark
                             else
-                                write (6, 1047) mult, vmark
+                                write (16, 1047) mult, vmark
                             endif
                             mult = 1
                             vmark = coef(n)
@@ -414,49 +456,49 @@
                end do
                if (mult .gt. 0) then
                   if (mult .eq. 1) then
-                     write (6, 1024) vmark
+                     write (16, 1024) vmark
                   else
-                     write (6, 1047) mult, vmark
+                     write (16, 1047) mult, vmark
                   endif
                endif
-               write (6,1025)
+               write (16,1025)
 !
             endif
-            write (6,1026)
+            write (16,1026)
          end do
       end do
-      write (6,1027)
+      write (16,1027)
 !
 !     Next we write the cones, two for each block. Since different blocks 
 !     may have the same size, we might get away with fewer cones, but it does
 !     not seem worth the trouble to detect this redundancy.
 !
-      write (6,1028) 2*nblocks
+      write (16,1028) 2*nblocks
       do i=1,nblocks
-         write (6,1029)  i,abs(blksize(i)),abs(blksize(i))
-         write (6,1030) i,abs(blksize(i)),abs(blksize(i))
+         write (16,1029)  i,abs(blksize(i)),abs(blksize(i))
+         write (16,1030) i,abs(blksize(i)),abs(blksize(i))
       end do
-      write (6,1031)
+      write (16,1031)
 !
 !     Last major element: the <matrixProgramming> element. 
 !
-      write (6,1032) nblocks
+      write (16,1032) nblocks
       do i=1,nblocks
-         write (6,1033) i-1, i
+         write (16,1033) i-1, i
       end do
-      write (6,1034)
+      write (16,1034)
 !
 !        st  F11*x1 + F21*x2 + ... + Fm1*xm - X1 = F01 
 !
-      write (6,1035) nblocks
+      write (16,1035) nblocks
       do i=1,nblocks
-         write (6,1036) nblocks + i -1, nblocks + i -1, i, i, nmatrices+1
+         write (16,1036) nblocks + i -1, nblocks + i -1, i, i, nmatrices+1
          do j=1,nmatrices
-            write (6,1037) j-1, (j+1)*nblocks + i - 1 	
+            write (16,1037) j-1, (j+1)*nblocks + i - 1 	
          end do   
-         write (6,1038) i-1
+         write (16,1038) i-1
       end do
-      write (6,1039)
+      write (16,1039)
 !
 !     Last component: <linearConstraintMatrixOperators>
 !
@@ -473,13 +515,23 @@
 !
 !     And that's it. Sew 'er up.
 !
-      write (6,1044)
+      write (16,1044)
       stop
 !
 !     Input file has errors
 !
   900 continue
       write (6,1900)
+      stop
+!
+!     File handling error
+!
+ 9015 continue
+      write (6, 9915)
+      stop
+!
+ 9016 continue
+      write (6, 9916)
       stop
 !
 !     Insufficient memory
@@ -497,11 +549,11 @@
 !     &       ' http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">')
      &       'C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">')
  1002 format('<instanceHeader>')
- 1003 format('<name>SDPA problem</name>')
- 1004 format('<source>Translated from SDPA format using SDPA2OSiL',/,       &
-     &       '       (C) H.I. Gassmann 2010-2013</source>')
- 1005 format('<description>')
- 1006 format('</description>',/,'</instanceHeader>')
+ 1003 format('<name>SDPA problem ',A,'</name>')
+ 1004 format('<description>Translated from SDPA format using SDPA2OSiL',/,  &
+     &       '       (C) H.I. Gassmann 2010-2014')
+ 1005 format('/<description>')
+ 1006 format('</instanceHeader>')
  1007 format('<instanceData>',/,                                            &
      &       '<variables numberOfVariables="',I0,'">',/,                    &
      &       '<var lb="-INF" ub="INF" mult="',I0,'"></var>',/,              &
@@ -576,4 +628,9 @@
  1100 format(a)
  1900 format(' ERROR: Input file improperly formed')
  1999 format(' ERROR: Could not allocate sufficient memory')
+!
+ 9915 format(' ERROR: Could not open input file')
+ 9916 format(' ERROR: Could not open output file')
+ 9999 format(' ERROR: Missing command line arguments',//,                   &
+     &       '        Usage: SDPA2OSiL -p|-d <infile> [<outfile>]')
       end

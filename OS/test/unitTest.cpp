@@ -9273,7 +9273,7 @@ if (OTHER_TESTS){
     OSrLWriter *temp_writer = NULL;
     double *xval = NULL;
     double *zval = NULL;
-    int* IBS;
+    int* IBS = NULL;
 
     try
     {

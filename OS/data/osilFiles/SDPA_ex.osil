@@ -44,7 +44,7 @@ The problem is (as described in CSDP/example/example.c):
 	</instanceHeader>
 	<instanceData>
 		<objectives>
-			<obj maxOrMin="max" numberOfObjCoef="0"/>
+			<obj maxOrMin="min" numberOfObjCoef="0"/>
 		</objectives>
 		<constraints numberOfConstraints="2">
 			<con lb="1.0000000000000" ub="1.0000000000000"/>

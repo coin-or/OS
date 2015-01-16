@@ -5,7 +5,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2014, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -3217,7 +3217,7 @@ OSnLMNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
 
 // OSnLMNodeMatrixReference Methods
 OSnLMNodeMatrixReference::OSnLMNodeMatrixReference():
-    idx(0)
+    idx(-1)
 {
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
@@ -3295,11 +3295,299 @@ void OSnLMNodeMatrixReference::getVariableIndexMap(std::map<int, int> *varIdx)
 }//getVariableIndexMap
 #endif
 
-
 OSnLMNode* OSnLMNodeMatrixReference::cloneExprNode()
 {
     OSnLMNode *nlMNodePoint;
     nlMNodePoint = new OSnLMNodeMatrixReference();
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixReference::cloneExprNode
+
+bool OSnLMNodeMatrixReference::IsEqual(OSnLMNodeMatrixReference* that)
+{
+    if (this->idx != that->idx) return false;
+    return (this->OSnLMNode::IsEqual(that));
+}//end OSnLMNodeMatrixReference::IsEqual
+
+
+// OSnLMNodeMatrixVar Methods
+OSnLMNodeMatrixVar::OSnLMNodeMatrixVar():
+    idx(-1)
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
+    inodeInt = OS_MATRIX_VAR;
+    inodeType = -1;
+}//end OSnLMNodeMatrixVar
+
+OSnLMNodeMatrixVar::~OSnLMNodeMatrixVar()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLMNodeMatrixVar destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLMNodeMatrixVar
+
+std::string OSnLMNodeMatrixVar::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    outStr << "[";
+    outStr << inumberOfChildren;
+    outStr << "]";
+    outStr << ":";
+    outStr << idx;
+    outStr << ":";
+    return outStr.str();
+}//getTokenNumber
+
+std::string OSnLMNodeMatrixVar::getTokenName()
+{
+    return "matrixVar";
+}// end OSnLMNodeMatrixVar::getTokenName()
+
+
+std::string OSnLMNodeMatrixVar::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixVar idx=\"" << idx << "\"/>" << std::endl;
+    return outStr.str();
+}//OSnLMNodeMatrixVar::getNonlinearExpressionInXML
+
+#if 0
+double OSnLMNodeMatrixVar::calculateFunction(double *x)
+{
+    m_dFunctionValue = coef*x[idx];
+    return m_dFunctionValue;
+}// end OSnLMNodeMatrixVar::calculate
+
+ADdouble OSnLMNodeMatrixVar::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
+{
+    m_ADTape = coef;
+    m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
+    return m_ADTape;
+}// end OSnLMNodeMatrixVar::constructADTape
+
+
+void OSnLMNodeMatrixVar::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    int numVars;
+    if( (*varIdx).find( idx) != (*varIdx).end() )
+    {
+        //std::cout  << "Index already in the map " << idx <<  std::endl;
+    }
+    else  // variable to map with variable index as the key
+    {
+        //std::cout << "Found a new index to add to the map " << idx << std::endl;
+        numVars = (*varIdx).size();
+        //std::cout << "numVars =  " << numVars << std::endl;
+        (*varIdx)[ idx] = numVars;
+    }
+    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+}//getVariableIndexMap
+#endif
+
+
+OSnLMNode* OSnLMNodeMatrixVar::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixVar();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixVar::cloneExprNode
+
+bool OSnLMNodeMatrixVar::IsEqual(OSnLMNodeMatrixVar* that)
+{
+    if (this->idx != that->idx) return false;
+    return (this->OSnLMNode::IsEqual(that));
+}//end OSnLMNodeMatrixVar::IsEqual
+
+
+// OSnLMNodeMatrixObj Methods
+OSnLMNodeMatrixObj::OSnLMNodeMatrixObj():
+    idx(-1)
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
+    inodeInt = OS_MATRIX_OBJ;
+    inodeType = -1;
+}//end OSnLMNodeMatrixObj
+
+OSnLMNodeMatrixObj::~OSnLMNodeMatrixObj()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLMNodeMatrixObj destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLMNodeMatrixObj
+
+std::string OSnLMNodeMatrixObj::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    outStr << "[";
+    outStr << inumberOfChildren;
+    outStr << "]";
+    outStr << ":";
+    outStr << idx;
+    outStr << ":";
+    return outStr.str();
+}//getTokenNumber
+
+std::string OSnLMNodeMatrixObj::getTokenName()
+{
+    return "matrixObj";
+}// end OSnLMNodeMatrixVar::getTokenName()
+
+
+std::string OSnLMNodeMatrixObj::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixObj idx=\"" << idx << "\"/>" << std::endl;
+    return outStr.str();
+}//OSnLMNodeMatrixObj::getNonlinearExpressionInXML
+
+#if 0
+double OSnLMNodeMatrixObj::calculateFunction(double *x)
+{
+    m_dFunctionValue = coef*x[idx];
+    return m_dFunctionValue;
+}// end OSnLMNodeMatrixObj::calculate
+
+ADdouble OSnLMNodeMatrixObj::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
+{
+    m_ADTape = coef;
+    m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
+    return m_ADTape;
+}// end OSnLMNodeMatrixObj::constructADTape
+
+void OSnLMNodeMatrixObj::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    int numVars;
+    if( (*varIdx).find( idx) != (*varIdx).end() )
+    {
+        //std::cout  << "Index already in the map " << idx <<  std::endl;
+    }
+    else  // variable to map with variable index as the key
+    {
+        //std::cout << "Found a new index to add to the map " << idx << std::endl;
+        numVars = (*varIdx).size();
+        //std::cout << "numVars =  " << numVars << std::endl;
+        (*varIdx)[ idx] = numVars;
+    }
+    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+}//getVariableIndexMap
+#endif
+
+OSnLMNode* OSnLMNodeMatrixObj::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixObj();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixObj::cloneExprNode
+
+bool OSnLMNodeMatrixObj::IsEqual(OSnLMNodeMatrixObj* that)
+{
+    if (this->idx != that->idx) return false;
+    return (this->OSnLMNode::IsEqual(that));
+}//end OSnLMNodeMatrixObj::IsEqual
+
+
+// OSnLMNodeMatrixCon Methods
+OSnLMNodeMatrixCon::OSnLMNodeMatrixCon():
+    idx(-1)
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
+    inodeInt = OS_MATRIX_CON;
+    inodeType = -1;
+}//end OSnLMNodeMatrixCon
+
+OSnLMNodeMatrixCon::~OSnLMNodeMatrixCon()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLMNodeMatrixCon destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLMNodeMatrixCon
+
+std::string OSnLMNodeMatrixCon::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    outStr << "[";
+    outStr << inumberOfChildren;
+    outStr << "]";
+    outStr << ":";
+    outStr << idx;
+    outStr << ":";
+    return outStr.str();
+}//getTokenNumber
+
+std::string OSnLMNodeMatrixCon::getTokenName()
+{
+    return "matrixCon";
+}// end OSnLMNodeMatrixCon::getTokenName()
+
+
+std::string OSnLMNodeMatrixCon::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixCon idx=\"" << idx << "\"/>" << std::endl;
+    return outStr.str();
+}//OSnLMNodeMatrixCon::getNonlinearExpressionInXML
+
+#if 0
+double OSnLMNodeMatrixCon::calculateFunction(double *x)
+{
+    m_dFunctionValue = coef*x[idx];
+    return m_dFunctionValue;
+}// end OSnLMNodeMatrixCon::calculate
+
+ADdouble OSnLMNodeMatrixCon::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
+{
+    m_ADTape = coef;
+    m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
+    return m_ADTape;
+}// end OSnLMNodeMatrixCon::constructADTape
+
+
+void OSnLMNodeMatrixCon::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    int numVars;
+    if( (*varIdx).find( idx) != (*varIdx).end() )
+    {
+        //std::cout  << "Index already in the map " << idx <<  std::endl;
+    }
+    else  // variable to map with variable index as the key
+    {
+        //std::cout << "Found a new index to add to the map " << idx << std::endl;
+        numVars = (*varIdx).size();
+        //std::cout << "numVars =  " << numVars << std::endl;
+        (*varIdx)[ idx] = numVars;
+    }
+    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+}//getVariableIndexMap
+#endif
+
+
+OSnLMNode* OSnLMNodeMatrixCon::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixCon();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixCon::cloneExprNode
+
+bool OSnLMNodeMatrixCon::IsEqual(OSnLMNodeMatrixCon* that)
+{
+    if (this->idx != that->idx) return false;
+    return (this->OSnLMNode::IsEqual(that));
+}//end OSnLMNodeMatrixVar::IsEqual
 

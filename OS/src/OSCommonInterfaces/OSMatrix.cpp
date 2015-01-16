@@ -39,8 +39,7 @@ MatrixNode::MatrixNode():
     matrixType(ENUM_MATRIX_TYPE_unknown), 
     nType(ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown),
     inumberOfChildren(),
-    m_mChildren(NULL)
-{
+    m_mChildren(NULL){
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "in MatrixNode constructor");
 #endif
@@ -70,10 +69,6 @@ MatrixNode::~MatrixNode()
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
 }
 
-ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixNode::getNodeType()
-{
-    return nType;
-}// end of MatrixNode::getNodeType()
 
 bool MatrixNode::IsEqual(MatrixNode *that)
 {
@@ -128,6 +123,7 @@ std::string MatrixNode::getMatrixNodeInXML()
 // methods for BaseMatrix ----------------------------------------
 BaseMatrix::BaseMatrix():
     baseMatrixIdx(-1),
+    baseMatrix(NULL),
     targetMatrixFirstRow(0),
     targetMatrixFirstCol(0),
     baseMatrixStartRow(0),
@@ -154,6 +150,11 @@ std::string BaseMatrix::getNodeName()
 {
     return "baseMatrix";
 }// end of BaseMatrix::getNodeName()
+
+ENUM_MATRIX_TYPE BaseMatrix::getMatrixType()
+{
+    return ((OSMatrix*)baseMatrix)->getMatrixType();
+}// end of BaseMatrix::getMatrixType()
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE BaseMatrix::getNodeType()
 {
@@ -238,12 +239,32 @@ bool BaseMatrix::IsEqual(BaseMatrix *that)
 }// end of BaseMatrix::IsEqual()
 // end of methods for BaseMatrix
 
-
-ConstantMatrixElements::ConstantMatrixElements():
+MatrixElementValues::MatrixElementValues():
     rowMajor(false),
     numberOfValues(-1),
     start(NULL),
-    indexes(NULL),
+    indexes(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixElementValues Constructor");
+#endif
+}// end of MatrixElementValues::MatrixElementValues()
+
+MatrixElementValues::~MatrixElementValues()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixElementValues Destructor");
+#endif
+    if (start != NULL)
+        delete start;
+    start = NULL;
+    if (indexes != NULL)
+        delete indexes;
+    indexes = NULL;
+}// end of MatrixElementValues::~MatrixElementValues()
+
+
+ConstantMatrixElements::ConstantMatrixElements():
     values(NULL)
 {
 #ifndef NDEBUG
@@ -256,12 +277,6 @@ ConstantMatrixElements::~ConstantMatrixElements()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConstantMatrixElements Destructor");
 #endif
-    if (start != NULL)
-        delete start;
-    start = NULL;
-    if (indexes != NULL)
-        delete indexes;
-    indexes = NULL;
     if (values != NULL)
         delete values;
     values = NULL;
@@ -312,10 +327,6 @@ bool ConstantMatrixElements::IsEqual(ConstantMatrixElements *that)
 
 
 VarReferenceMatrixElements::VarReferenceMatrixElements():
-    rowMajor(false),
-    numberOfValues(-1),
-    start(NULL),
-    indexes(NULL),
     values(NULL)
 {
 #ifndef NDEBUG
@@ -328,12 +339,6 @@ VarReferenceMatrixElements::~VarReferenceMatrixElements()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the VarReferenceMatrixElements Destructor");
 #endif
-    if (start != NULL)
-        delete start;
-    start = NULL;
-    if (indexes != NULL)
-        delete indexes;
-    indexes = NULL;
     if (values != NULL)
         delete values;
     values = NULL;
@@ -624,10 +629,6 @@ LinearMatrixNonzeros::~LinearMatrixNonzeros()
 #endif
 
 LinearMatrixElements::LinearMatrixElements():
-    rowMajor(false),
-    numberOfValues(-1),
-    start(NULL),
-    indexes(NULL),
     values(NULL)
 {
 #ifndef NDEBUG
@@ -641,12 +642,6 @@ LinearMatrixElements::~LinearMatrixElements()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElements Destructor");
 #endif
-    if(start != NULL)
-        delete start;
-    start = NULL;
-    if (indexes != NULL)
-        delete indexes;
-    indexes = NULL;
     if (values != NULL)
         delete values;
     values = NULL;
@@ -770,10 +765,6 @@ bool GeneralMatrixValues::IsEqual(GeneralMatrixValues *that)
 }// end of GeneralMatrixValues::IsEqual()
 
 GeneralMatrixElements::GeneralMatrixElements():
-    rowMajor(false),
-    numberOfValues(-1),
-    start(NULL),
-    indexes(NULL),
     values(NULL)
 {
 #ifndef NDEBUG
@@ -786,12 +777,6 @@ GeneralMatrixElements::~GeneralMatrixElements()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixElements Destructor");
 #endif
-    if (start != NULL)
-        delete start;
-    start = NULL;
-    if (indexes != NULL)
-        delete indexes;
-    indexes = NULL;
     if (values != NULL)
         delete values;
     values = NULL;
@@ -841,10 +826,6 @@ bool GeneralMatrixElements::IsEqual(GeneralMatrixElements *that)
 
 
 ObjReferenceMatrixElements::ObjReferenceMatrixElements():
-    rowMajor(false),
-    numberOfValues(-1),
-    start(NULL),
-    indexes(NULL),
     values(NULL)
 {
 #ifndef NDEBUG
@@ -857,12 +838,6 @@ ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjReferenceMatrixElements Destructor");
 #endif
-    if (start != NULL)
-        delete start;
-    start = NULL;
-    if (indexes != NULL)
-        delete indexes;
-    indexes = NULL;
     if (values != NULL)
         delete values;
     values = NULL;
@@ -912,10 +887,6 @@ bool ObjReferenceMatrixElements::IsEqual(ObjReferenceMatrixElements *that)
 
 
 ConReferenceMatrixElements::ConReferenceMatrixElements():
-    rowMajor(false),
-    numberOfValues(-1),
-    start(NULL),
-    indexes(NULL),
     values(NULL)
 {
 #ifndef NDEBUG
@@ -928,12 +899,6 @@ ConReferenceMatrixElements::~ConReferenceMatrixElements()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConReferenceMatrixElements Destructor");
 #endif
-    if (start != NULL)
-        delete start;
-    start = NULL;
-    if (indexes != NULL)
-        delete indexes;
-    indexes = NULL;
     if (values != NULL)
         delete values;
     values = NULL;
@@ -1031,10 +996,448 @@ std::string MatrixElements::getNodeName()
     return "elements";
 }// end of MatrixElements::getNodeName()
 
+ENUM_MATRIX_TYPE MatrixElements::getMatrixType()
+{
+    if (matrixType == ENUM_MATRIX_TYPE_unknown)
+    {
+        matrixType = ENUM_MATRIX_TYPE_zero;
+        if (constantElements != NULL && constantElements->numberOfValues > 0)
+            matrixType = mergeMatrixType(matrixType, ENUM_MATRIX_TYPE_constant);
+        if (varReferenceElements != NULL && varReferenceElements->numberOfValues > 0)
+            matrixType = mergeMatrixType(matrixType, ENUM_MATRIX_TYPE_varref);
+        if (linearElements != NULL && linearElements->numberOfValues > 0)
+            matrixType = mergeMatrixType(matrixType, ENUM_MATRIX_TYPE_linear);
+        if (generalElements != NULL && constantElements->numberOfValues > 0)
+            matrixType = mergeMatrixType(matrixType, ENUM_MATRIX_TYPE_general);
+        if (objReferenceElements != NULL && objReferenceElements->numberOfValues > 0)
+            matrixType = mergeMatrixType(matrixType, ENUM_MATRIX_TYPE_objref);
+        if (conReferenceElements != NULL && conReferenceElements->numberOfValues > 0)
+            matrixType = mergeMatrixType(matrixType, ENUM_MATRIX_TYPE_conref);
+    }
+    return matrixType;
+}// end of OSMatrix::getMatrixType()
+
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixElements::getNodeType()
 {
     return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
 }// end of MatrixElements::getNodeType()
+
+bool OSMatrix::processBlocks()
+{
+    bool haveBlocks;
+    bool haveTemp;
+    bool mustSynchronize;
+    int* temp;
+    int  tempSize;
+    int  iconst;
+
+    // check if empty
+    if (inumberOfChildren == 0)
+    {
+        m_miRowPartition = new int[2];
+        m_miColumnPartition = new int[2];
+        m_iRowPartitionSize = 2;
+        m_iColumnPartitionSize = 2;
+        m_miRowPartition[0] = 0;
+        m_miRowPartition[1] = numberOfRows;
+        m_miColumnPartition[0] = 0;
+        m_miColumnPartition[1] = numberOfColumns;
+        m_bBlockPartitionProcessed = true;
+        return true;
+    }
+
+    // initialize for row partition
+    haveBlocks = false;
+    haveTemp = false;
+    mustSynchronize = false;
+
+    if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+    {
+        tempSize = ((BaseMatrix*)m_mChildren[0])->baseMatrix->getRowPartitionSize();
+        if (tempSize > 2)
+        {
+            m_miRowPartition = ((BaseMatrix*)m_mChildren[0])->baseMatrix->getRowPartition();            
+            m_iRowPartitionSize = tempSize;
+            mustSynchronize = true;
+            haveBlocks = true;
+        }
+        iconst = 1;
+    }
+    else
+        iconst = 0;
+
+    // process remaining constructors
+    int jproc;
+    int jcand;
+    int nsync;
+
+    for (int i=iconst; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+        {
+            if (((MatrixBlocks*)m_mChildren[i])->rowOffsets->el[0] != 0)
+                return false;
+
+            if (haveBlocks == false)
+            {
+                m_miRowPartition    = ((MatrixBlocks*)m_mChildren[i])->rowOffsets->el;            
+                m_iRowPartitionSize = ((MatrixBlocks*)m_mChildren[i])->rowOffsets->numberOfEl;
+                mustSynchronize = true;
+                haveBlocks = true;
+            }
+            else
+            {
+                // check if we have to synchronize
+                jproc = 0;
+                jcand = 0;
+                nsync = 0;
+                for (;;)
+                {
+                    if (m_miRowPartition[jproc] == ((MatrixBlocks*)m_mChildren[i])->rowOffsets->el[jcand])
+                    {
+                        if (haveTemp)
+                            temp[nsync] = m_miRowPartition[jproc];
+                        jproc++;
+                        jcand++;
+                        nsync++;
+                    }
+                    else
+                    {
+                        if (!haveTemp)
+                        {
+                            haveTemp = true;
+                            tempSize = min (((MatrixBlocks*)m_mChildren[i])->rowOffsets->numberOfEl,
+                                            m_iRowPartitionSize);
+                            temp = new int[tempSize];
+                            for (int l=0; l < nsync; l++)
+                                temp[l] = m_miRowPartition[l];
+                        }
+                        if (m_miRowPartition[jproc] < 
+                                ((MatrixBlocks*)m_mChildren[i])->rowOffsets->el[jcand])
+                            jproc++;
+                        else
+                            jcand++;
+                    }
+                    if (jproc >= m_iRowPartitionSize || 
+                        jcand >= ((MatrixBlocks*)m_mChildren[i])->rowOffsets->numberOfEl)
+                        break;
+                }
+            }
+
+            if (haveTemp && temp[nsync-1] < numberOfRows)
+            {
+                temp[nsync] = numberOfRows;
+                nsync++;
+            }
+        }
+
+        if (haveTemp)
+        {
+            if (m_miRowPartition != NULL) delete m_miRowPartition;
+            m_miRowPartition = new int[nsync];
+            for (int l=0; l<nsync; l++)
+                m_miRowPartition[l] = temp[l];
+            delete [] temp;
+        }
+        m_iRowPartitionSize = nsync;
+        if (nsync == 2) break;
+    }
+
+    if (haveBlocks == false)
+    {
+        m_miRowPartition = new int[2];
+        m_iRowPartitionSize = 2;
+        m_miRowPartition[0] = 0;
+        m_miRowPartition[1] = numberOfRows;
+    }
+
+    // here we do the same thing for the columns
+
+
+
+    return true;
+}// end of OSMatrix::processBlocks()
+
+bool OSMatrix::isBlockDiagonal()
+{
+    bool isDiagonal;
+    int  haveBaseBlocks = false;
+    int  nBlocks;
+    int  iconst;
+
+    // check if empty
+    if (inumberOfChildren == 0)
+        return true;
+
+    // check for blocks in baseMatrix --- if any
+    if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+    {
+        int tempSize = ((BaseMatrix*)m_mChildren[0])->baseMatrix->getRowPartitionSize();
+        if (tempSize > 2)
+        {
+            haveBaseBlocks = true;
+            isDiagonal = ((BaseMatrix*)m_mChildren[0])->baseMatrix->isBlockDiagonal();
+            if (!isDiagonal) return false;
+        }
+        else
+            isDiagonal = true; 
+        iconst = 1;
+    }
+    else
+        iconst = 0;
+
+    // process remaining constructors
+    int  jproc;
+    int  jcand;
+    int  nsync;
+    int* rowPartition     = getRowPartition();
+    int  rowPartitionSize = getRowPartitionSize();
+    int* colPartition     = getColumnPartition();
+    int  colPartitionSize = getColumnPartitionSize();
+
+    for (int i=iconst; i < inumberOfChildren; i++)
+        if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+            for (int j=0; j < ((MatrixBlocks*)m_mChildren[i])->numberOfBlocks; j++)
+                if ( ((MatrixBlock*)((MatrixBlocks*)m_mChildren[i])->block[j])->blockRowIdx !=
+                     ((MatrixBlock*)((MatrixBlocks*)m_mChildren[i])->block[j])->blockColIdx)
+                    return false;
+
+    // Now check if there are other constructors that might introduce elements outside the block diagonal
+    if (iconst == 1 && !haveBaseBlocks) return false;
+    for (int i=iconst; i < inumberOfChildren; i++)
+        if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements)
+        {
+            if (((MatrixElements*)m_mChildren[i])->constantElements != NULL)
+            {
+                if (((MatrixElements*)m_mChildren[i])->constantElements->rowMajor)
+                {
+                    for (int j=1; j < colPartitionSize; j++)
+                        for (int  k = colPartition[j-1]; k < colPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->constantElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->constantElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->constantElements->indexes->el[l]
+                                     <  rowPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->constantElements->indexes->el[l]
+                                     >= rowPartition[j] )
+                                return false;
+                }
+                else
+                {
+                    for (int j=1; j < rowPartitionSize; j++)
+                        for (int  k = rowPartition[j-1]; k < rowPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->constantElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->constantElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->constantElements->indexes->el[l]
+                                     <  colPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->constantElements->indexes->el[l]
+                                     >= colPartition[j] )
+                                return false;
+                }
+            }
+
+
+            if (((MatrixElements*)m_mChildren[i])->varReferenceElements != NULL)
+            {
+                if (((MatrixElements*)m_mChildren[i])->varReferenceElements->rowMajor)
+                {
+                    for (int j=1; j < colPartitionSize; j++)
+                        for (int  k = colPartition[j-1]; k < colPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->varReferenceElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->varReferenceElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->varReferenceElements->indexes->el[l]
+                                     <  rowPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->varReferenceElements->indexes->el[l]
+                                     >= rowPartition[j] )
+                                return false;
+                }
+                else
+                {
+                    for (int j=1; j < rowPartitionSize; j++)
+                        for (int  k = rowPartition[j-1]; k < rowPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->varReferenceElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->varReferenceElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->varReferenceElements->indexes->el[l]
+                                     <  colPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->varReferenceElements->indexes->el[l]
+                                     >= colPartition[j] )
+                                return false;
+                }
+            }
+
+
+            if (((MatrixElements*)m_mChildren[i])->linearElements != NULL)
+            {
+                if (((MatrixElements*)m_mChildren[i])->linearElements->rowMajor)
+                {
+                    for (int j=1; j < colPartitionSize; j++)
+                        for (int  k = colPartition[j-1]; k < colPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->linearElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->linearElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->linearElements->indexes->el[l]
+                                     <  rowPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->linearElements->indexes->el[l]
+                                     >= rowPartition[j] )
+                                return false;
+                }
+                else
+                {
+                    for (int j=1; j < rowPartitionSize; j++)
+                        for (int  k = rowPartition[j-1]; k < rowPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->linearElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->linearElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->linearElements->indexes->el[l]
+                                     <  colPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->linearElements->indexes->el[l]
+                                     >= colPartition[j] )
+                                return false;
+                }
+            }
+
+
+            if (((MatrixElements*)m_mChildren[i])->generalElements != NULL)
+            {
+                if (((MatrixElements*)m_mChildren[i])->generalElements->rowMajor)
+                {
+                    for (int j=1; j < colPartitionSize; j++)
+                        for (int  k = colPartition[j-1]; k < colPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->generalElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->generalElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->generalElements->indexes->el[l]
+                                     <  rowPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->generalElements->indexes->el[l]
+                                     >= rowPartition[j] )
+                                return false;
+                }
+                else
+                {
+                    for (int j=1; j < rowPartitionSize; j++)
+                        for (int  k = rowPartition[j-1]; k < rowPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->generalElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->generalElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->generalElements->indexes->el[l]
+                                     <  colPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->generalElements->indexes->el[l]
+                                     >= colPartition[j] )
+                                return false;
+                }
+            }
+
+
+            if (((MatrixElements*)m_mChildren[i])->objReferenceElements != NULL)
+            {
+                if (((MatrixElements*)m_mChildren[i])->objReferenceElements->rowMajor)
+                {
+                    for (int j=1; j < colPartitionSize; j++)
+                        for (int  k = colPartition[j-1]; k < colPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->objReferenceElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->objReferenceElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->objReferenceElements->indexes->el[l]
+                                     <  rowPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->objReferenceElements->indexes->el[l]
+                                     >= rowPartition[j] )
+                                return false;
+                }
+                else
+                {
+                    for (int j=1; j < rowPartitionSize; j++)
+                        for (int  k = rowPartition[j-1]; k < rowPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->objReferenceElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->objReferenceElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->objReferenceElements->indexes->el[l]
+                                     <  colPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->objReferenceElements->indexes->el[l]
+                                     >= colPartition[j] )
+                                return false;
+                }
+            }
+
+
+            if (((MatrixElements*)m_mChildren[i])->conReferenceElements != NULL)
+            {
+                if (((MatrixElements*)m_mChildren[i])->conReferenceElements->rowMajor)
+                {
+                    for (int j=1; j < colPartitionSize; j++)
+                        for (int  k = colPartition[j-1]; k < colPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->conReferenceElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->conReferenceElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->conReferenceElements->indexes->el[l]
+                                     <  rowPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->conReferenceElements->indexes->el[l]
+                                     >= rowPartition[j] )
+                                return false;
+                }
+                else
+                {
+                    for (int j=1; j < rowPartitionSize; j++)
+                        for (int  k = rowPartition[j-1]; k < rowPartition[j]; j++)
+                           for (int l = ((MatrixElements*)m_mChildren[i])->conReferenceElements->start->el[k];
+                                    l < ((MatrixElements*)m_mChildren[i])->conReferenceElements->start->el[k+1];
+                                    l++)
+                            if ( ((MatrixElements*)m_mChildren[i])->conReferenceElements->indexes->el[l]
+                                     <  colPartition[j-1] ||
+                                 ((MatrixElements*)m_mChildren[i])->conReferenceElements->indexes->el[l]
+                                     >= colPartition[j] )
+                                return false;
+                }
+            }
+        }
+        else if  (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+            return false;
+
+    return true;
+}// end of OSMatrix::isBlockDiagonal()
+
+int OSMatrix::getRowPartitionSize()
+{
+    if (!m_bBlockPartitionProcessed) 
+    {
+        bool OK = processBlocks();
+        if (!OK) throw ErrorClass("Error processing blocks");
+    }
+    return m_iRowPartitionSize;
+}// end of OSMatrix::getRowPartitionSize()
+
+int* OSMatrix::getRowPartition()
+{
+    if (!m_bBlockPartitionProcessed) 
+    {
+        bool OK = processBlocks();
+        if (!OK) throw ErrorClass("Error processing blocks");
+    }
+    return m_miRowPartition;
+}// end of OSMatrix::getRowPartition()
+
+int OSMatrix::getColumnPartitionSize()
+{
+    if (!m_bBlockPartitionProcessed) 
+    {
+        bool OK = processBlocks();
+        if (!OK) throw ErrorClass("Error processing blocks");
+    }
+    return m_iColumnPartitionSize;
+}// end of OSMatrix::getColumnPartitionSize()
+
+int* OSMatrix::getColumnPartition()
+{
+    if (!m_bBlockPartitionProcessed) 
+    {
+        bool OK = processBlocks();
+        if (!OK) throw ErrorClass("Error processing blocks");
+    }
+    return m_miColumnPartition;
+}// end of OSMatrix::getColumnPartition()
+
 
 MatrixElements* MatrixElements::cloneMatrixNode()
 {
@@ -1300,6 +1703,14 @@ std::string MatrixTransformation::getNodeName()
     return "transformation";
 }// end of MatrixTransformation::getNodeName()
 
+ENUM_MATRIX_TYPE MatrixTransformation::getMatrixType()
+{
+    if (matrixType != ENUM_MATRIX_TYPE_unknown)
+        return matrixType;
+    else
+        return ENUM_MATRIX_TYPE_general;
+}// end of MatrixTransformation::getMatrixType()
+
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixTransformation::getNodeType()
 {
     return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
@@ -1411,6 +1822,17 @@ std::string MatrixBlocks::getNodeName()
 {
     return "blocks";
 }// end of MatrixBlocks::getNodeName()
+
+ENUM_MATRIX_TYPE MatrixBlocks::getMatrixType()
+{
+    if (matrixType == ENUM_MATRIX_TYPE_unknown)
+    {
+        matrixType == ENUM_MATRIX_TYPE_zero;
+        for (int i=0; i<inumberOfChildren; i++)
+            matrixType = mergeMatrixType(matrixType, m_mChildren[i]->getMatrixType());
+    }
+    return matrixType;
+}// end of MatrixBlocks::getMatrixType()
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixBlocks::getNodeType()
 {
@@ -1532,7 +1954,13 @@ MatrixType::~MatrixType()
 OSMatrix::OSMatrix():
     MatrixType(),
     idx(-1),
-    name("")
+    name(""),
+    m_miRowPartition(NULL),
+    m_iRowPartitionSize(0),
+    m_miColumnPartition(NULL),
+    m_iColumnPartitionSize(0),
+    m_bBlockPartitionProcessed(false) 
+
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrix Constructor");
@@ -1551,6 +1979,18 @@ std::string OSMatrix::getNodeName()
 {
     return "matrix";
 }// end of OSMatrix::getNodeName()
+
+ENUM_MATRIX_TYPE OSMatrix::getMatrixType()
+{
+    if (matrixType == ENUM_MATRIX_TYPE_unknown)
+    {
+        matrixType == ENUM_MATRIX_TYPE_zero;
+        for (int i=0; i<inumberOfChildren; i++)
+            matrixType = mergeMatrixType(matrixType, m_mChildren[i]->getMatrixType());
+    }
+    return matrixType;
+}// end of OSMatrix::getMatrixType()
+
 
 bool OSMatrix::setMatrix(std::string name, int numberOfRows, int numberOfColumns, 
                          ENUM_MATRIX_SYMMETRY symmetry, ENUM_MATRIX_TYPE matrixType, 
@@ -1685,6 +2125,18 @@ std::string MatrixBlock::getNodeName()
 {
     return "block";
 }// end of MatrixBlock::getNodeName()
+
+ENUM_MATRIX_TYPE MatrixBlock::getMatrixType()
+{
+    if (matrixType == ENUM_MATRIX_TYPE_unknown)
+    {
+        matrixType == ENUM_MATRIX_TYPE_zero;
+        for (int i=0; i<inumberOfChildren; i++)
+            matrixType = mergeMatrixType(matrixType, m_mChildren[i]->getMatrixType());
+    }
+    return matrixType;
+}// end of MatrixBlock::getMatrixType()
+
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixBlock::getNodeType()
 {

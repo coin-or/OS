@@ -123,6 +123,27 @@ OSInstance::OSInstance():
     m_bSparseJacobianCalculated( false),
     m_iHighestOrderEvaluated( -1),
     m_mmdObjGradient( NULL),
+
+    m_bProcessMatrices( false),
+    m_iMatrixNumber (-1),
+    m_miMatrixSymmetry(NULL),
+    m_miMatrixType(NULL),
+//    m_miMatrixNumberOfBlocks(NULL),
+    m_miMatrixNumberOfColumns(NULL),
+    m_miMatrixNumberOfRows(NULL),
+//    m_miMatrixNumberOfValues(NULL),
+    m_msMatrixNames(NULL),
+    m_mMatrix(NULL),
+//    m_mExpandedMatricesInColumnMajor(NULL),
+//    m_mExpandedMatricesInRowMajor(NULL),
+//    m_mMatrixBlocksInColumnMajor(NULL),
+//    m_mMatrixTransformation(NULL),
+
+    m_iMatrixVarNumber(-1),
+    m_iMatrixObjNumber(-1),
+    m_iMatrixConNumber(-1),
+    m_iMatrixExpressionNumber(-1),
+
     m_bProcessTimeDomain( false),
     m_bProcessTimeStages( false),
     m_bProcessTimeInterval( false),
@@ -136,7 +157,6 @@ OSInstance::OSInstance():
     m_miTimeDomainStageObjectiveNumber(NULL),
     m_mmiTimeDomainStageObjList(NULL),
     bUseExpTreeForFunEval( false)
-
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside OSInstance Constructor");
@@ -237,9 +257,6 @@ OSInstance::~OSInstance()
             delete[] m_mmdDenseObjectiveCoefficients;
         m_mmdDenseObjectiveCoefficients = NULL;
     }
-
-    //if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == true) delete m_linearConstraintCoefficientsInColumnMajor;
-    //if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == false) delete m_linearConstraintCoefficientsInRowMajor;
 
     if( m_linearConstraintCoefficientsInColumnMajor != NULL) 
         delete m_linearConstraintCoefficientsInColumnMajor;
@@ -391,10 +408,95 @@ OSInstance::~OSInstance()
             throw ErrorClass( eclass.errormsg);
         }
     }
+
+    if (this->instanceData->matrices != NULL && 
+        this->instanceData->matrices->numberOfMatrices > 0 && 
+        m_bProcessMatrices == true)
+    {
+        if (m_miMatrixSymmetry != NULL) delete[] m_miMatrixSymmetry;
+        m_miMatrixSymmetry = NULL;
+        if (m_miMatrixType != NULL) delete[] m_miMatrixType;
+        m_miMatrixType = NULL;
+//        if (m_miMatrixNumberOfBlocks != NULL) delete[] m_miMatrixNumberOfBlocks;
+//        m_miMatrixNumberOfBlocks = NULL;
+        if (m_miMatrixNumberOfColumns != NULL) delete[] m_miMatrixNumberOfColumns;
+        m_miMatrixNumberOfColumns = NULL;
+        if (m_miMatrixNumberOfRows != NULL) delete[] m_miMatrixNumberOfRows;
+        m_miMatrixNumberOfRows = NULL;
+//        if (m_miMatrixNumberOfValues != NULL) delete[] m_miMatrixNumberOfValues;
+//        m_miMatrixNumberOfValues = NULL;
+        if (m_msMatrixNames != NULL) delete[] m_msMatrixNames;
+        m_msMatrixNames = NULL;
+
+        if (m_mMatrix != NULL) 
+        {
+            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
+            {
+                if (m_mMatrix[i] != NULL) 
+                    delete m_mMatrix[i];
+                m_mMatrix[i] = NULL;
+            }
+            delete[] m_mMatrix;
+            m_mMatrix = NULL;
+        }
+
+#if 0
+        if (m_mExpandedMatricesInColumnMajor != NULL) 
+        {
+            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
+            {
+                if (m_mExpandedMatricesInColumnMajor[i] != NULL) 
+                    delete m_mExpandedMatricesInColumnMajor[i];
+                m_mExpandedMatricesInColumnMajor[i] = NULL;
+            }
+            delete[] m_mExpandedMatricesInColumnMajor;
+            m_mExpandedMatricesInColumnMajor = NULL;
+        }
+
+        if (m_mExpandedMatricesInRowMajor != NULL) 
+        {
+            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
+            {
+                if (m_mExpandedMatricesInRowMajor[i] != NULL) 
+                    delete m_mExpandedMatricesInRowMajor[i];
+                m_mExpandedMatricesInRowMajor[i] = NULL;
+            }
+            delete[] m_mExpandedMatricesInRowMajor;
+            m_mExpandedMatricesInRowMajor = NULL;
+        }
+
+        if (m_mMatrixBlocksInColumnMajor != NULL) 
+        {
+            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
+            {
+                if (m_mMatrixBlocksInColumnMajor[i] != NULL) 
+                    delete m_mMatrixBlocksInColumnMajor[i];
+                m_mMatrixBlocksInColumnMajor[i] = NULL;
+            }
+            delete[] m_mMatrixBlocksInColumnMajor;
+            m_mMatrixBlocksInColumnMajor = NULL;
+        }
+    }
+
+        if (m_mMatrixTransformation != NULL) 
+        {
+            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
+            {
+                if (m_mMatrixTransformation[i] != NULL) 
+                    delete m_mMatrixTransformation[i];
+                m_mMatrixTransformation[i] = NULL;
+            }
+            delete[] m_mMatrixTransformation;
+            m_mMatrixTransformation = NULL;
+        }
+    }
+#endif
+
+
 //    if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
 //        delete m_Stages;
 //        m_Stages = NULL;
-//    }
+    }
 
     if (m_msTimeDomainStageNames != NULL)
     {
@@ -1049,6 +1151,7 @@ std::string RotatedQuadraticCone::getConeName()
 {
     return "rotatedQuadraticCone";
 }// end RotatedQuadraticCone::getConeName()
+
 
 
 
@@ -1937,9 +2040,9 @@ bool OSInstance::processVariables()
     int n = getVariableNumber();
     try
     {
-        m_iNumberOfBinaryVariables = 0;
+        m_iNumberOfBinaryVariables  = 0;
         m_iNumberOfIntegerVariables = 0;
-        m_iNumberOfStringVariables = 0;
+        m_iNumberOfStringVariables  = 0;
         if(n > 0)
         {
             if(m_bProcessVariables != true )
@@ -2176,6 +2279,7 @@ double* OSInstance::getObjectiveWeights()
 {
     processObjectives();
     return m_mdObjectiveWeights;
+
 }//getObjectiveWeights
 
 SparseVector** OSInstance::getObjectiveCoefficients()
@@ -3204,6 +3308,212 @@ std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTreesM
     if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
     return m_mapExpressionTreesMod;
 }// getAllNonlinearExpressionTreesMod
+
+
+
+int OSInstance::getMatrixNumber()
+{
+    if(m_iMatrixNumber == -1)
+    {
+        if (instanceData == NULL)
+            throw ErrorClass("data object undefined in method getMatrixNumber()");
+        if (instanceData->matrices == NULL)
+            m_iMatrixNumber = 0;    
+        else
+            m_iMatrixNumber = instanceData->matrices->numberOfMatrices;
+    }
+    return m_iMatrixNumber;
+}//getMatrixNumber
+
+bool OSInstance::processMatrices()
+{
+    if (m_bProcessMatrices == true) return true;
+    //m_bProcessMatrices = true;
+    int n = getMatrixNumber();
+    if((instanceData->matrices == NULL ) || (n == 0) ) return true;
+
+    try
+    {
+//        bool haveElements;
+//        bool haveBlocks;
+//        bool haveTransformation;
+//        bool rowMajor;
+
+        if (n > 0)
+        {
+            if(m_bProcessMatrices != true)
+            {
+                //allocate space
+                m_miMatrixType = new ENUM_MATRIX_TYPE[n];
+                m_miMatrixSymmetry = new ENUM_MATRIX_SYMMETRY[n];
+//                m_miMatrixNumberOfBlocks = new int[n];
+                m_miMatrixNumberOfColumns = new int[n];
+                m_miMatrixNumberOfRows = new int[n];
+//                m_miMatrixNumberOfValues = new int[n];
+                m_msMatrixNames = new std::string[n];
+                m_mMatrix = new OSMatrix*[n];
+//                m_mExpandedMatricesInColumnMajor = new GeneralSparseMatrix*[n];
+//                m_mExpandedMatricesInRowMajor = new GeneralSparseMatrix*[n];
+//                m_mMatrixBlocksInColumnMajor = new ExpandedMatrixBlocks*[n];
+//                m_mMatrixTransformation = new OSnLMNode*[n];
+                m_bProcessMatrices = true;
+            }
+
+            //process each matrix
+            for (int i=0; i < n; i++)
+            {
+                int nCh = ((OSMatrix*)instanceData->matrices->matrix[i])->inumberOfChildren;
+
+                for (int j=0; j < nCh; j++)
+                {
+                    m_miMatrixSymmetry[i] = instanceData->matrices->matrix[i]->symmetry;
+                    m_miMatrixType[i] = mergeMatrixType(ENUM_MATRIX_TYPE_unknown, 
+                                        instanceData->matrices->matrix[i]->getMatrixType());
+                    m_miMatrixNumberOfColumns[i] = instanceData->matrices->matrix[i]->numberOfColumns;
+                    m_miMatrixNumberOfRows[i] = instanceData->matrices->matrix[i]->numberOfRows;
+                    m_msMatrixNames[i] = instanceData->matrices->matrix[i]->name;
+                    m_mMatrix[i] = (OSMatrix*)instanceData->matrices->matrix[i];
+
+#if 0
+/*
+Find the most suitable representation of the matrix.
+a matrix is essentially a sequence of constructors. The shape of each matrix depends on the shape of the constructors.
+If all constructors are elements, matrix form is elements
+    if first constructor is column-wise, matrix is column-wise, else row-wise
+    if any constructor is given as symmetric, check if other constructors are symmetric as well
+        if all constructors are symmetric, matrix is symmetric, else it is not
+If all constructors are blocks, matrix form is blocks (assume column-wise for now)
+    if any constructor is given as symmetric, check if other constructors are symmetric as well
+        if all constructors are symmetric, matrix is symmetric blocks, else it is not
+If all constructors are transformations, matrix is a single transformation: combine transformations by superposition(?)
+NOTE: question of symmetry and/or rowMajor does not arise in this case.
+Mixed constructors.
+a. Elements and blocks: convert elements to block-wise representation. 
+b. Elements and transformations: process elements and combine with transformations using matrixPlus
+c. transformations and blocks: 
+    if the transformation has block structure (check how?) combine into blockwise transformations (how?)
+    else convert blocks to elements and combine using matrixPlus
+If there is a baseMatrix in addition to this
+i. baseMatrix would have been processed before
+ */
+                    if (nCh == 0)
+                    {
+                        m_miMatrixNumberOfValues[i] = 0;
+                        m_miMatrixNumberOfBlocks[i] = 0;
+                        break;
+                    }
+
+                    if (instanceData->matrices->matrix[i]->m_mChildren[j]->nType
+                           == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+                    {
+                        int bm;
+                        bm = (BaseMatrix*)instanceData->matrices->matrix[i]->m_mChildren[j])->baseMatrixIdx;
+                        if (bm >= i)
+                            throw ErrorClass("Illegal reference to baseMatrix while processing matrices");
+                        else
+                        {
+                            if (m_mExpandedMatricesInColumnMajor[bm] != NULL)
+                                haveElements = true;
+                            if (m_mExpandedMatricesInRowMajor[bm] != NULL)
+                            { 
+                                rowMajor = true;
+                                haveElements = true;
+                            }
+                            if (m_mMatrixBlocksInColumnMajor != NULL)
+                                haveBlocks = true;
+                            if (m_mMatrixTransformation != NULL)
+                                haveTransformation = true;
+                        }
+                    }
+                    else if (instanceData->matrices->matrix[i]->m_mChildren[j]->nType
+                            == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements)
+                    {
+                        haveElements = true;
+                    }
+                    else if (instanceData->matrices->matrix[i]->m_mChildren[j]->nType
+                            == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+                        haveTransformation = true;
+                    else if (instanceData->matrices->matrix[i]->m_mChildren[j]->nType
+                            == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+                        haveBlocks = true;
+                    }
+                    m_miMatrixNumberOfValues[i] = new int[n];
+                    m_miMatrixNumberOfBlocks[i] = new int[n];
+#endif
+
+                }//end for j (number of the matrix constructor)
+
+            }// end for on i (number of the matrix)
+        }// end if (n > 0)
+    return true;
+    }// end try
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}//processLinearConstraintCoefficients
+
+
+int OSInstance::getNumberOfMatrixVariables()
+{
+    if(m_iMatrixVarNumber == -1)
+    {
+        if (instanceData == NULL)
+            throw ErrorClass("data object undefined in method getNumberOfMatrixVariables()");
+        if (instanceData->matrixProgramming == NULL || 
+            instanceData->matrixProgramming->matrixVariables == NULL)
+            m_iMatrixVarNumber = 0;
+        else
+            m_iMatrixVarNumber = instanceData->matrixProgramming->matrixVariables->numberOfMatrixVar;
+    }
+    return m_iMatrixVarNumber;
+}//getNumberOfMatrixVariables
+
+int OSInstance::getNumberOfMatrixObjectives()
+{
+    if(m_iMatrixObjNumber == -1)
+    {
+        if (instanceData == NULL)
+            throw ErrorClass("data object undefined in method getNumberOfMatrixObjectives()");
+        if (instanceData->matrixProgramming == NULL || 
+            instanceData->matrixProgramming->matrixObjectives == NULL)
+            m_iMatrixObjNumber = 0;
+        else
+            m_iMatrixObjNumber = instanceData->matrixProgramming->matrixObjectives->numberOfMatrixObj;
+    }
+    return m_iMatrixObjNumber;
+}//getNumberOfMatrixObjectives
+
+int OSInstance::getNumberOfMatrixConstraints()
+{
+    if(m_iMatrixObjNumber == -1)
+    {
+        if (instanceData == NULL)
+            throw ErrorClass("data object undefined in method getNumberOfMatrixConstraints()");
+        if (instanceData->matrixProgramming == NULL || 
+            instanceData->matrixProgramming->matrixConstraints == NULL)
+            m_iMatrixConNumber = 0;
+        else
+            m_iMatrixConNumber = instanceData->matrixProgramming->matrixConstraints->numberOfMatrixCon;
+    }
+    return m_iMatrixConNumber;
+}//getNumberOfMatrixConstraints
+
+int OSInstance::getNumberOfMatrixExpressions()
+{
+    if(m_iMatrixExpressionNumber == -1)
+    {
+        if (instanceData == NULL)
+            throw ErrorClass("data object undefined in method getNumberOfMatrixExpressions()");
+        if (instanceData->matrixProgramming == NULL|| 
+            instanceData->matrixProgramming->matrixExpressions == NULL)
+            m_iMatrixExpressionNumber = 0;
+        else
+            m_iMatrixExpressionNumber = instanceData->matrixProgramming->matrixExpressions->numberOfExpr;
+    }
+    return m_iMatrixExpressionNumber;
+}//getNumberOfMatrixExpressions
+
 
 //--------------------------------------------------------
 #if 0

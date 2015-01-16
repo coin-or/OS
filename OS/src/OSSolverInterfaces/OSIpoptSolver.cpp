@@ -4,7 +4,7 @@
  * \brief This file defines the IpoptSolver class.
  * \detail Read an OSInstance object and convert to Ipopt data structures
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -852,6 +852,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass)
 {
+    std::ostringstream outStr;
     try
     {
         if(osinstance->getObjectiveNumber() <= 0) 
@@ -888,7 +889,14 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
 
         if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 )
         {
-//            std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "number of solver options ";
+            outStr << osoption->getNumberOfSolverOptions();
+            outStr << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
             std::vector<SolverOption*> optionsVector;
             optionsVector = osoption->getSolverOptions( "ipopt",true);
             char *pEnd;
@@ -896,20 +904,48 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             int num_ipopt_options = optionsVector.size();
             for(i = 0; i < num_ipopt_options; i++)
             {
-//                std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "ipopt solver option  ";
+                outStr << optionsVector[ i]->name;
+                outStr << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
                 if(optionsVector[ i]->type == "numeric" )
                 {
-//                    std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "FOUND A NUMERIC OPTION  ";
+                    outStr << os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
                     app->Options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
                 }
                 else if(optionsVector[ i]->type == "integer" )
                 {
-//                    std::cout << "FOUND AN INTEGER OPTION  "  << atoi( optionsVector[ i]->value.c_str() ) << std::endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "FOUND AN INTEGER OPTION  ";
+                    outStr << atoi( optionsVector[ i]->value.c_str() );
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
                     app->Options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
                 }
                 else if(optionsVector[ i]->type == "string" )
                 {
-//                    std::cout << "FOUND A STRING OPTION  "  <<  optionsVector[ i]->value.c_str() << std::endl;
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "FOUND A STRING OPTION  ";
+                    outStr << optionsVector[ i]->value.c_str();
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
                     app->Options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
                 }
             }
@@ -917,7 +953,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "THERE IS AN ERROR\n");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "Error while setting options in IpoptSolver\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -1006,12 +1042,11 @@ void IpoptSolver::solve() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-#ifndef NDEBUG
         outStr.str("");
         outStr.clear();
-        outStr << "error in OSIpoptSolver, line 775:\n" << eclass.errormsg << endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
+        outStr << "error in OSIpoptSolver routine solve():\n" << eclass.errormsg << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, outStr.str());
+
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
