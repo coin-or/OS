@@ -1947,6 +1947,88 @@ MatrixType::~MatrixType()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Destructor");
 #endif
 }// end of ~MatrixType
+
+bool MatrixType::matrixHasBase()
+{
+    return (inumberOfChildren > 0 && m_mChildren != NULL 
+                                  && m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix);
+}// end of matrixHasBase
+
+bool MatrixType::matrixHasElements()
+{
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return false;
+    for (int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements) return true;
+    }
+    return false;
+}// end of matrixHasElements
+
+bool MatrixType::matrixHasTransformations()
+{
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return false;
+    for (int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) return true;
+    }
+    return false;
+}// end of matrixHasTransformations
+
+bool MatrixType::matrixHasBlocks()
+{
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return false;
+    for (int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks) return true;
+    }
+    return false;
+}// end of matrixHasBlocks
+
+int  MatrixType::getNumberOfElementConstructors()
+{
+    int k = 0;
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
+    for (int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements) k++;
+    }
+    return k++;
+}// end of getNumberOfElementConstructors
+
+int  MatrixType::getNumberOfTransformationConstructors()
+{
+    int k = 0;
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
+    for (int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) k++;
+    }
+    return k++;
+}// end of getNumberOfTransformationConstructors
+
+int  MatrixType::getNumberOfBlocksConstructors()
+{
+    int k = 0;
+    if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
+    for (int i=0; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks) k++;
+    }
+    return k++;
+}// end of getNumberOfBlocksConstructors
+
+GeneralSparseMatrix* MatrixType::getMatrixInColumnMajorForm()
+{
+}// end of getMatrixInColumnMajorForm
+
+GeneralSparseMatrix* MatrixType::getMatrixInRowMajorForm()
+{
+}// end of getMatrixInRowMajorForm
+
+GeneralSparseMatrix* MatrixType::getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx)
+{
+}// end of getMatrixBlockInColumnMajorForm
+
 // end of methods for MatrixType
 
 

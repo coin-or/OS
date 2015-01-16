@@ -3600,6 +3600,20 @@ public:
     std::string getMatrixName(int n);
 
     /**
+     *  Several tools to parse the constructor list of a matrix
+     *
+     * @param n is the index number associated with the matrix.
+     *
+     */
+    bool matrixHasBase(int n);
+    bool matrixHasElements(int n);
+    bool matrixHasTransformations(int n);
+    bool matrixHasBlocks(int n);
+    int  getNumberOfElementConstructors(int n);
+    int  getNumberOfTransformationConstructors(int n);
+    int  getNumberOfBlocksConstructors(int n);
+
+    /**
      * Get the list of constructors of the matrix.
      *
      * @param n is the index number associated with the matrix.
@@ -3615,7 +3629,7 @@ public:
      *
      * @return the (nonzero) matrix elements.
      */
-//    GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor(int n);
+    GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor(int n);
 
     /**
      * Get the (nonzero) elements of the matrix in row major form.
@@ -3624,7 +3638,7 @@ public:
      *
      * @return the (nonzero) matrix elements.
      */
-//    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor(int n);
+    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor(int n);
 
     /**
      * Get the (nonzero) elements of the matrix in symmetric block form.
@@ -3636,13 +3650,18 @@ public:
 //    SymmetricMatrixBlocks* getSymmetricMatrixBlocks(int n);
 
     /**
-     * Get the block of the matrix (in symmetric column major form).
+     * Get a block of the matrix (in symmetric column major form).
      *
      * @param n is the index number associated with the matrix.
+     * @param columnIdx is the column index of the block's location
+     * @param rowIdx is the row index of the block's location
      *
-     * @return the (nonzero) matrix elements.
+     * @return the (nonzero) matrix elements on column major form.
+     *
+     * @remark if the block in this location is empty, return NULL.
      */
-//    GeneralSparseMatrix* getMatrixBlock(int n, int blockRow, int blockColumn);
+    GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int n, int columnIdx, int rowIdx);
+
 
 /***********************************************************************
  *                                                                     *

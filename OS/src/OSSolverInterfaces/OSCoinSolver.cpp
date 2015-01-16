@@ -7,7 +7,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -242,7 +242,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         else
             throw ErrorClass("Solver selected is not supported by this version of OSSolverService");
 
-        // first check the various solvers and see if they are of the proper problem type
+        // first check the various solvers and see if they support the given problem type
         if ( (osinstance->getNumberOfNonlinearExpressions() > 0) )
         {
             throw ErrorClass( "This COIN-OR Solver is not configured for nonlinear programming");
@@ -280,7 +280,8 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         osiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(),
                                osinstance->getVariableUpperBounds(),
                                osinstance->getDenseObjectiveCoefficients()[0],
-                               osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds()
+                               osinstance->getConstraintLowerBounds(), 
+                               osinstance->getConstraintUpperBounds()
                               );
 #ifndef NDEBUG
         //dataEchoCheck();
@@ -304,7 +305,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
                     intIndex[k++] = i;
                 }
             }
-            osiSolver->setInteger( intIndex,  numOfIntVars);
+            osiSolver->setInteger( intIndex, numOfIntVars);
 
             delete[] intIndex;
             intIndex = NULL;
@@ -318,7 +319,6 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
             {
                 // must get the quadratic data, verify objective terms only, and convert to sparse matrix format
                 QuadraticTerms* qterms = osinstance->getQuadraticTerms();
-
 
 #ifndef NDEBUG
                 outStr.str("");
@@ -336,9 +336,9 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
                 for (int i=0; i<nq; i++)
                     outStr << "  " << qterms->coefficients[i];
                 outStr << std::endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                                  ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-
 
                 int  ncols = osinstance->getVariableNumber(); 
                 int* colStarts = new int[ncols+1];
@@ -402,7 +402,8 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
                                 for (int i=0; i<nq; i++)
                                     outStr << "  " << qterms->coefficients[i];
                                 outStr << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str()); 
+                                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                                                  ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str()); 
 #endif
                             }
                             else
@@ -426,7 +427,8 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
                 for (int i=0; i<nq; i++)
                     outStr << "  " << qterms->coefficients[i];
                 outStr << std::endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str()); 
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, 
+                                  ENUM_OUTPUT_LEVEL_trace, outStr.str()); 
 #endif
 
                 //osiSolver->loadQuadraticObjective(ncols, colStarts, qterms->varTwoIndexes, qterms->coefficients);

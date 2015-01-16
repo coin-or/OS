@@ -1485,13 +1485,13 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
  * A full enumeration of available options is required
  */
 
-//    struct paramstruc params;
+    struct paramstruc params;
 
     std::ostringstream outStr;
 
     try
     {
-        init_params(params);
+        initparams(&params,0);
 
         /* now get options from OSoL */
         if(osoption == NULL && osol.length() > 0)

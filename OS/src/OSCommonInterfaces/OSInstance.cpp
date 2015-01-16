@@ -2819,6 +2819,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
     unsigned int n;
     ostringstream outStr;
     std::vector<ExprNode*> postfixVec;
+
     int rowIdx = rowIdx_;
     ExprNode *nlnode = NULL ;
     OSnLNodeNumber *nlnodeNum = NULL;
@@ -3452,6 +3453,63 @@ i. baseMatrix would have been processed before
         throw ErrorClass( eclass.errormsg);
     }
 }//processLinearConstraintCoefficients
+
+
+bool OSInstance::matrixHasBase(int n)
+{
+    int nMatrices = getMatrixNumber();
+    if ( (instanceData->matrices == NULL) || (nMatrices == 0) ) return false;
+    if ( (n < 0) || (n >= nMatrices) ) return false;
+    return instanceData->matrices->matrix[n]->matrixHasBase();
+}//matrixHasBase
+
+bool OSInstance::matrixHasElements(int n)
+{
+    int nMatrices = getMatrixNumber();
+    if ( (instanceData->matrices == NULL) || (nMatrices == 0) ) return false;
+    if ( (n < 0) || (n >= nMatrices) ) return false;
+    return instanceData->matrices->matrix[n]->matrixHasElements();
+}//matrixHasElements
+
+bool OSInstance::matrixHasTransformations(int n)
+{
+    int nMatrices = getMatrixNumber();
+    if ( (instanceData->matrices == NULL) || (nMatrices == 0) ) return false;
+    if ( (n < 0) || (n >= nMatrices) ) return false;
+    return instanceData->matrices->matrix[n]->matrixHasTransformations();
+}//matrixHasTransformations
+
+bool OSInstance::matrixHasBlocks(int n)
+{
+    int nMatrices = getMatrixNumber();
+    if ( (instanceData->matrices == NULL) || (nMatrices == 0) ) return false;
+    if ( (n < 0) || (n >= nMatrices) ) return false;
+    return instanceData->matrices->matrix[n]->matrixHasBlocks();
+}//matrixHasBlocks
+
+int  OSInstance::getNumberOfElementConstructors(int n)
+{
+    int nMatrices = getMatrixNumber();
+    if ( (instanceData->matrices == NULL) || (nMatrices == 0) ) return 0;
+    if ( (n < 0) || (n >= nMatrices) ) return false;
+    return instanceData->matrices->matrix[n]->matrixHasBase();
+}//getNumberOfElementConstructors
+
+int  OSInstance::getNumberOfTransformationConstructors(int n)
+{
+    int nMatrices = getMatrixNumber();
+    if ( (instanceData->matrices == NULL) || (nMatrices == 0) ) return 0;
+    if ( (n < 0) || (n >= nMatrices) ) return false;
+    return instanceData->matrices->matrix[n]->getNumberOfTransformationConstructors();
+}//getNumberOfTransformationConstructors
+
+int  OSInstance::getNumberOfBlocksConstructors(int n)
+{
+    int nMatrices = getMatrixNumber();
+    if ( (instanceData->matrices == NULL) || (nMatrices == 0) ) return 0;
+    if ( (n < 0) || (n >= nMatrices) ) return false;
+    return instanceData->matrices->matrix[n]->getNumberOfBlocksConstructors();
+}//getNumberOfBlocksConstructors
 
 
 int OSInstance::getNumberOfMatrixVariables()
@@ -7237,6 +7295,7 @@ bool OSInstance::setTimeDomainStages(int number, std::string *names)
                 {
                     delete instanceData->timeDomain->stages->stage[i]->constraints;
                     instanceData->timeDomain->stages->stage[i]->constraints = NULL;
+
                 }
                 if (instanceData->timeDomain->stages->stage[i]->objectives != NULL)
                 {

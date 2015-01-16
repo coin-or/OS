@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2010-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2010-2015, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -902,7 +902,6 @@ public:
      */
     virtual std::string getNodeName();
 
-
     /**
      *  @return the type of the matrix elements
      */
@@ -1058,6 +1057,163 @@ public:
 };//class BaseMatrix
 
 
+/*! \class GeneralSparseMatrix
+ * \brief a sparse matrix data structure for matrices that can hold nonconstant values
+ */
+class GeneralSparseMatrix
+{
+public:
+
+    /**
+     * bDeleteArrays is true if we delete the arrays in garbage collection
+     * set to true by default
+     */
+    bool bDeleteArrays;
+
+    /**
+     * isColumnMajor holds whether the matrix is stored by column. 
+     * If false, the matrix is stored by row.
+     */
+    bool isColumnMajor;
+
+    /**
+     * startSize is the dimension of the starts array
+     */
+    int startSize;
+
+    /**
+     * valueSize is the dimension of the indexes and values arrays
+     */
+    int valueSize;
+
+    /**
+     * starts holds an integer array of start elements in the matrix,
+     * which points to the start of a column (row) of nonzero elements.
+     */
+    int* starts;
+
+    /**
+     * indexes holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
+     * If the matrix is stored by column (row), rowIdx (colIdx) is the array of row (column) indices.
+     */
+    int* indexes;
+
+    /**
+     * values holds a general array of value elements in the matrix,
+     * which could be constants, linear expressions, general nonlinear expressions,
+     * variable, constraint or objective references, etc. If mixed types are
+     * encountered (e.g., constant and nonlinear expression), they are converted 
+     * to the most general form found.
+     */
+    MatrixElementValues** values;
+
+    /**
+     *
+     * Default constructor.
+     */
+    GeneralSparseMatrix();
+
+    /**
+     * Constructor.
+     *
+     * @param isColumnMajor holds whether the matrix is stored by column. 
+     * If false, the matrix is stored by row.
+     * @param startSize holds the size of the start array.
+     * @param valueSize holds the size of the value and index arrays.
+     * @param type describes the type of values held in the matrix (see OSParameters.h).
+     */
+    GeneralSparseMatrix(bool isColumnMajor_, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
+    /**
+     *
+     * Default destructor.
+     */
+    ~GeneralSparseMatrix();
+
+    /**
+     * This method displays data structure in the matrix format.
+     * </p>
+     * @return
+     */
+    bool display(int secondaryDim);
+
+}; //GeneralSparseMatrix
+
+/** \class ExpandedMatrixBlocks
+ *  \brief a sparse matrix data structure for matrices
+ *  that can hold nonconstant values and have block structure
+ *  In addition it is assumed that all nesting of blocks
+ *  has been resolved.
+ */
+class ExpandedMatrixBlocks
+{
+public:
+    /**
+     * bDeleteArrays is true if we delete the arrays in garbage collection
+     * set to true by default
+     */
+    bool bDeleteArrays;
+
+    /**
+     * isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
+     * data is stored by column. If false, the matrix is stored by row.
+     */
+    bool isColumnMajor;
+
+    /**
+     * blockNumber gives the number of blocks (which is the size of the blockRows and blockColumns arrays)
+     */
+    int blockNumber;
+
+    /**
+     * blockRows holds an integer array of the row to which a block belongs.
+     * It is assumed that all blocks in a row have the same number of rows 
+     * (while the number of columns is allowed to vary).
+     */
+    int* blockRows;
+
+    /**
+     * blockColumns holds an integer array of the column to which a block belongs.
+     * It is assumed that all blocks in a column have the same number of columns
+     * (while the number of rows is allowed to vary).
+     */
+    int* blockColumns;
+
+    /**
+     * blocks holds the blocks that make up the matrix.
+     * All blocks have the same type of values, which corresponds to the most
+     * general form found.
+     */
+    GeneralSparseMatrix** blocks;
+
+    /**
+     *
+     * Default constructor.
+     */
+    ExpandedMatrixBlocks();
+
+    /**
+     * Constructor.
+     *
+     * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
+     * data is stored by column. If false, the matrix is stored by row.
+     * @param startSize holds the size of the start array.
+     * @param valueSize holds the size of the value and index arrays.
+     */
+    ExpandedMatrixBlocks(bool isColumnMajor_, int startSize, int valueSize);
+    /**
+     *
+     * Default destructor.
+     */
+    ~ExpandedMatrixBlocks();
+
+    /**
+     * This method displays data structure in the matrix format.
+     * </p>
+     * @return
+     */
+    bool display(int secondaryDim);
+}; //ExpandedMatrixBlocks
+
 /*! \class MatrixType
  * \brief a data structure to represent a MatrixType object (from which we derive OSMatrix and MatrixBlock)
  *
@@ -1116,6 +1272,21 @@ public:
      *  @return whether the operation was successful or not.
      */
     bool extractBlock(int firstrow, int firstcol, int nrows, int ncols, bool rowMajor);
+
+    /**
+     *  Several tools to parse the constructor list of a matrix
+     */
+    bool matrixHasBase();
+    bool matrixHasElements();
+    bool matrixHasTransformations();
+    bool matrixHasBlocks();
+    int  getNumberOfElementConstructors();
+    int  getNumberOfTransformationConstructors();
+    int  getNumberOfBlocksConstructors();
+
+    GeneralSparseMatrix* getMatrixInColumnMajorForm();
+    GeneralSparseMatrix* getMatrixInRowMajorForm();
+    GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx);
 
     /**
      *  A function to check for the equality of two objects
@@ -1395,164 +1566,4 @@ public:
      */
     bool deepCopyFrom(MatrixBlock *that);
 };// class MatrixBlock
-
-
-/*! \class GeneralSparseMatrix
- * \brief a sparse matrix data structure for matrices that can hold nonconstant values
- */
-class GeneralSparseMatrix
-{
-public:
-
-    /**
-     * bDeleteArrays is true if we delete the arrays in garbage collection
-     * set to true by default
-     */
-    bool bDeleteArrays;
-
-    /**
-     * isColumnMajor holds whether the matrix is stored by column. 
-     * If false, the matrix is stored by row.
-     */
-    bool isColumnMajor;
-
-    /**
-     * startSize is the dimension of the starts array
-     */
-    int startSize;
-
-    /**
-     * valueSize is the dimension of the indexes and values arrays
-     */
-    int valueSize;
-
-    /**
-     * starts holds an integer array of start elements in the matrix,
-     * which points to the start of a column (row) of nonzero elements.
-     */
-    int* starts;
-
-    /**
-     * indexes holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
-     * If the matrix is stored by column (row), rowIdx (colIdx) is the array of row (column) indices.
-     */
-    int* indexes;
-
-    /**
-     * values holds a general array of value elements in the matrix,
-     * which could be constants, linear expressions, general nonlinear expressions,
-     * variable, constraint or objective references, etc. If mixed types are
-     * encountered (e.g., constant and nonlinear expression), they are converted 
-     * to the most general form found.
-     */
-    MatrixElementValues** values;
-
-    /**
-     *
-     * Default constructor.
-     */
-    GeneralSparseMatrix();
-
-    /**
-     * Constructor.
-     *
-     * @param isColumnMajor holds whether the matrix is stored by column. 
-     * If false, the matrix is stored by row.
-     * @param startSize holds the size of the start array.
-     * @param valueSize holds the size of the value and index arrays.
-     * @param type describes the type of values held in the matrix (see OSParameters.h).
-     */
-    GeneralSparseMatrix(bool isColumnMajor_, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
-    /**
-     *
-     * Default destructor.
-     */
-    ~GeneralSparseMatrix();
-
-    /**
-     * This method displays data structure in the matrix format.
-     * </p>
-     * @return
-     */
-    bool display(int secondaryDim);
-
-}; //GeneralSparseMatrix
-
-/** \class ExpandedMatrixBlocks
- *  \brief a sparse matrix data structure for matrices
- *  that can hold nonconstant values and have block structure
- *  In addition it is assumed that all nesting of blocks
- *  has been resolved.
- */
-class ExpandedMatrixBlocks
-{
-public:
-    /**
-     * bDeleteArrays is true if we delete the arrays in garbage collection
-     * set to true by default
-     */
-    bool bDeleteArrays;
-
-    /**
-     * isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
-     * data is stored by column. If false, the matrix is stored by row.
-     */
-    bool isColumnMajor;
-
-    /**
-     * blockNumber gives the number of blocks (which is the size of the blockRows and blockColumns arrays)
-     */
-    int blockNumber;
-
-    /**
-     * blockRows holds an integer array of the row to which a block belongs.
-     * It is assumed that all blocks in a row have the same number of rows 
-     * (while the number of columns is allowed to vary).
-     */
-    int* blockRows;
-
-    /**
-     * blockColumns holds an integer array of the column to which a block belongs.
-     * It is assumed that all blocks in a column have the same number of columns
-     * (while the number of rows is allowed to vary).
-     */
-    int* blockColumns;
-
-    /**
-     * blocks holds the blocks that make up the matrix.
-     * All blocks have the same type of values, which corresponds to the most
-     * general form found.
-     */
-    GeneralSparseMatrix** blocks;
-
-    /**
-     *
-     * Default constructor.
-     */
-    ExpandedMatrixBlocks();
-
-    /**
-     * Constructor.
-     *
-     * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
-     * data is stored by column. If false, the matrix is stored by row.
-     * @param startSize holds the size of the start array.
-     * @param valueSize holds the size of the value and index arrays.
-     */
-    ExpandedMatrixBlocks(bool isColumnMajor_, int startSize, int valueSize);
-    /**
-     *
-     * Default destructor.
-     */
-    ~ExpandedMatrixBlocks();
-
-    /**
-     * This method displays data structure in the matrix format.
-     * </p>
-     * @return
-     */
-    bool display(int secondaryDim);
-
-}; //ExpandedMatrixBlocks
-
 #endif
