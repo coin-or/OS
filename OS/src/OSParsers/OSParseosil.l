@@ -21,7 +21,7 @@
  */
 %{ 
 
-//#define OSILPARSERDEBUG
+#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
 	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext);

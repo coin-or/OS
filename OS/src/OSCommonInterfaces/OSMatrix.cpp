@@ -70,6 +70,11 @@ MatrixNode::~MatrixNode()
 }
 
 
+ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixNode::getNodeType()
+{
+    return nType;
+}// end of OSMatrix::getNodeType()
+
 bool MatrixNode::IsEqual(MatrixNode *that)
 {
 #ifndef NDEBUG
@@ -117,6 +122,11 @@ std::string MatrixNode::getMatrixNodeInXML()
 {
     return "";
 }// end of MatrixNode::getMatrixNodeInXML()
+
+bool MatrixNode::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    return false;
+}// end of MatrixNode::alignsOnBlockBoundary()
 // end of methods for MatrixNode
 
 
@@ -160,6 +170,11 @@ ENUM_MATRIX_CONSTRUCTOR_TYPE BaseMatrix::getNodeType()
 {
     return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
 }// end of BaseMatrix::getNodeType()
+
+bool BaseMatrix::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    return ((OSMatrix*)baseMatrix)->alignsOnBlockBoundary(firstRow, firstColumn, nRows, nCols);
+}// end of BaseMatrix::alignsOnBlockBoundary()
 
 BaseMatrix* BaseMatrix::cloneMatrixNode()
 {
@@ -991,6 +1006,11 @@ MatrixElements::~MatrixElements()
     conReferenceElements = NULL;
 }// end of MatrixElements::~MatrixElements()
 
+bool MatrixElements::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    return false;
+}// end of MatrixElements::alignsOnBlockBoundary()
+
 std::string MatrixElements::getNodeName()
 {
     return "elements";
@@ -1015,7 +1035,7 @@ ENUM_MATRIX_TYPE MatrixElements::getMatrixType()
             matrixType = mergeMatrixType(matrixType, ENUM_MATRIX_TYPE_conref);
     }
     return matrixType;
-}// end of OSMatrix::getMatrixType()
+}// end of MatrixElements::getMatrixType()
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixElements::getNodeType()
 {
@@ -1398,6 +1418,21 @@ bool OSMatrix::isBlockDiagonal()
     return true;
 }// end of OSMatrix::isBlockDiagonal()
 
+bool OSMatrix::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    bool accumulator = true;
+    for (int i=0; i < inumberOfChildren; i++)
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+            accumulator &= m_mChildren[i]->alignsOnBlockBoundary(firstRow, firstColumn, nRows, nCols);
+        else if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements)
+            return false;
+        else if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+            return false;
+        else if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+            accumulator &= m_mChildren[i]->alignsOnBlockBoundary(firstRow, firstColumn, nRows, nCols);
+    return accumulator;
+}// end of OSMatrix::alignsOnBlockBoundary()
+
 int OSMatrix::getRowPartitionSize()
 {
     if (!m_bBlockPartitionProcessed) 
@@ -1698,6 +1733,11 @@ MatrixTransformation::~MatrixTransformation()
     transformation = NULL;
 }// end of MatrixTransformation::~MatrixTransformation()
 
+bool MatrixTransformation::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    return false;
+}// end of MatrixTransformation::~alignsOnBlockBoundary()
+
 std::string MatrixTransformation::getNodeName()
 {
     return "transformation";
@@ -1705,10 +1745,9 @@ std::string MatrixTransformation::getNodeName()
 
 ENUM_MATRIX_TYPE MatrixTransformation::getMatrixType()
 {
-    if (matrixType != ENUM_MATRIX_TYPE_unknown)
-        return matrixType;
-    else
-        return ENUM_MATRIX_TYPE_general;
+    if (matrixType == ENUM_MATRIX_TYPE_unknown)
+        matrixType =  ENUM_MATRIX_TYPE_general;
+    return matrixType;
 }// end of MatrixTransformation::getMatrixType()
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixTransformation::getNodeType()
@@ -1817,6 +1856,27 @@ MatrixBlocks::~MatrixBlocks()
         delete [] block;
     block = NULL;
 }// end of MatrixBlocks::~MatrixBlocks()
+
+bool MatrixBlocks::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    bool accumulator = false;
+    int  nrBlocks = rowOffsets->numberOfEl - 1;
+    int  ncBlocks = colOffsets->numberOfEl - 1;
+    for (int i=0; i < nrBlocks; i++)
+        if ( (rowOffsets->el[i] == firstRow) && ((firstRow+nRows) == rowOffsets->el[i+1]) )
+        {
+            accumulator = true;
+            break;
+        }
+    if (!accumulator) return false;
+    for (int i=0; i < ncBlocks; i++)
+        if ( (colOffsets->el[i] == firstColumn) && ((firstColumn+nCols) == colOffsets->el[i+1]) )
+        {
+            accumulator = true;
+            break;
+        }
+    return accumulator;
+}// end of MatrixTransformation::~alignsOnBlockBoundary()
 
 std::string MatrixBlocks::getNodeName()
 {
@@ -2029,6 +2089,32 @@ GeneralSparseMatrix* MatrixType::getMatrixBlockInColumnMajorForm(int columnIdx, 
 {
 }// end of getMatrixBlockInColumnMajorForm
 
+bool MatrixType::extractBlock(int firstrow, int firstcol, int nrows, int ncols, bool rowMajor,
+                      ENUM_MATRIX_SYMMETRY symmetry)
+{
+    bool mustCopy = false;
+    int n = inumberOfChildren;
+    for (int i=0; i < n; i++)
+        if (m_mChildren[i]->nType != ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+        {
+            mustCopy = true;
+            break;
+        }
+        else
+        {
+//            for (int j=0; j < 
+        }
+
+return NULL;
+}// end of MatrixType::extractBlock
+
+bool MatrixType::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    return false;
+}// end of MatrixType::alignsOnBlockBoundary()
+
+
+
 // end of methods for MatrixType
 
 
@@ -2212,12 +2298,22 @@ ENUM_MATRIX_TYPE MatrixBlock::getMatrixType()
 {
     if (matrixType == ENUM_MATRIX_TYPE_unknown)
     {
+        ENUM_MATRIX_TYPE temp;
         matrixType == ENUM_MATRIX_TYPE_zero;
         for (int i=0; i<inumberOfChildren; i++)
-            matrixType = mergeMatrixType(matrixType, m_mChildren[i]->getMatrixType());
+        {
+            temp = m_mChildren[i]->getMatrixType();
+            matrixType = mergeMatrixType(matrixType, temp);
+//            matrixType = mergeMatrixType(matrixType, m_mChildren[i]->getMatrixType());
+        }
     }
     return matrixType;
 }// end of MatrixBlock::getMatrixType()
+
+bool MatrixBlock::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    return (firstRow == 0 && firstColumn == 0 && nRows == numberOfRows && nCols == numberOfColumns);
+}// end of MatrixBlock::alignsOnBlockBoundary()
 
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixBlock::getNodeType()

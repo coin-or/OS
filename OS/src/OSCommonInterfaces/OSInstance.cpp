@@ -2820,6 +2820,8 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
     ostringstream outStr;
     std::vector<ExprNode*> postfixVec;
 
+
+
     int rowIdx = rowIdx_;
     ExprNode *nlnode = NULL ;
     OSnLNodeNumber *nlnodeNum = NULL;
@@ -7588,6 +7590,7 @@ bool OSInstance::setTimeDomainStageObjectivesOrdered(int numberOfStages, int *nu
             return false;
     }
     if (instanceData->timeDomain->stages->numberOfStages == 0)
+
     {
         instanceData->timeDomain->stages->numberOfStages = numberOfStages;
         if (instanceData->timeDomain->stages->stage == NULL)

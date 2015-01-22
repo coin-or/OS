@@ -187,7 +187,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         //Check the form of the objective
         tempTree = osinstance->getNonlinearExpressionTree(-1);
         if (tempTree == NULL) throw ErrorClass("Expecting matrixTrace in objective row");
-        tr = tempTree->m_treeNode; 
+        tr = tempTree->m_treeRoot; 
         if (tr->inodeInt != OS_MATRIX_TRACE)
             throw ErrorClass("Expecting matrixTrace in objective row");
         mt = tr->m_mMatrixChildren[0];
@@ -199,16 +199,18 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
             throw ErrorClass("Unsupported expression in objective row");
 
         // Analyze A0 matrix: Verify existence, block-diagonal structure, get block dimensions, etc.
-        int mtxRef = (OSnLMNodeMatrixReference*)mr->idx;
-        if (osinstance->instanceData->matrices == NULL) throw ErrorClass("<matrices> section was never defined");
+        int mtxRef = ((OSnLMNodeMatrixReference*)mr)->idx;
+        if (osinstance->instanceData->matrices == NULL) 
+            throw ErrorClass("<matrices> section was never defined");
         if (mtxRef < 0 || mtxRef >= osinstance->getMatrixNumber())
             throw ErrorClass("Illegal matrix reference");
-        tempMtx = osinstance->matrices->matrix[mtxRef];
+        tempMtx = osinstance->instanceData->matrices->matrix[mtxRef];
         if (tempMtx == NULL) throw ErrorClass("A0 matrix was never defined");
         if (tempMtx->numberOfRows != tempMtx->numberOfColumns) 
            throw ErrorClass("A0 matrix must be square and symmetric"); 
         if (tempMtx->getMatrixType() != ENUM_MATRIX_TYPE_constant) 
            throw ErrorClass("A0 matrix must be of type \"constant\"");
+
         int*    rowOffsets = tempMtx->getRowPartition();
         int     nRowBlocks = tempMtx->getRowPartitionSize();
         int* columnOffsets = tempMtx->getColumnPartition();
@@ -217,10 +219,143 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         if (!tempMtx->isBlockDiagonal())
            throw ErrorClass("A0 matrix must be block-diagonal");
 
+        int* tempRowOffsets;
+        int  tempNRowBlocks;
+        int* tempColumnOffsets;
+        int  tempNColumnBlocks;
+
+        int i0, itemp, imerge;
+
+        //do the same for all constraints
+        for (int i=0; i < osinstance->getConstraintNumber(); i++)
+        {
+            tempTree = osinstance->getNonlinearExpressionTree(i);
+            if (tempTree == NULL) throw ErrorClass("Expecting matrixTrace in constraint row");
+            tr = tempTree->m_treeRoot; 
+            if (tr->inodeInt != OS_MATRIX_TRACE)
+                throw ErrorClass("Expecting matrixTrace in constraint row");
+            mt = tr->m_mMatrixChildren[0];
+            if (mt->inodeInt != OS_MATRIX_TIMES)
+                throw ErrorClass("Unsupported expression in constraint row");
+            mr = mt->m_mMatrixChildren[0];
+            mv = mt->m_mMatrixChildren[1];
+            if (mr->inodeInt != OS_MATRIX_REFERENCE || mv->inodeInt != OS_MATRIX_VAR)
+                throw ErrorClass("Unsupported expression in constraint row");
+
+            // Analyze Ai matrix: Verify existence, block-diagonal structure, get block dimensions, etc.
+            int mtxRef = ((OSnLMNodeMatrixReference*)mr)->idx;
+            if (mtxRef < 0 || mtxRef >= osinstance->getMatrixNumber())
+                throw ErrorClass("Illegal matrix reference");
+            tempMtx = osinstance->instanceData->matrices->matrix[mtxRef];
+            if (tempMtx == NULL) throw ErrorClass("Matrix in constraint was never defined");
+            if (tempMtx->numberOfRows != tempMtx->numberOfColumns) 
+                throw ErrorClass("Constraint matrix must be square and symmetric"); 
+            if (tempMtx->getMatrixType() != ENUM_MATRIX_TYPE_constant) 
+                throw ErrorClass("Constraint matrix must be of type \"constant\"");
+
+             tempRowOffsets = tempMtx->getRowPartition();
+             tempNRowBlocks = tempMtx->getRowPartitionSize();
+             tempColumnOffsets = tempMtx->getColumnPartition();
+             tempNColumnBlocks = tempMtx->getColumnPartitionSize();
+
+            if (!tempMtx->isBlockDiagonal())
+                throw ErrorClass("Constraint matrix must be block-diagonal");
+
+            // merge row partitions
+
+std::cout << "Merge row partitions" << std::endl;
+std::cout << "    ";
+for (int k=0;k<nRowBlocks;k++)
+    std::cout << " " << rowOffsets[k];
+std::cout << std::endl;
+std::cout << "    ";
+for (int k=0;k<tempNRowBlocks;k++)
+    std::cout << " " << tempRowOffsets[k];
+std::cout << std::endl << std::endl;
+            i0 = 0;
+            itemp = 0;
+            imerge = 0;
+            for (;;)
+            {
+                if (rowOffsets[i0] == tempRowOffsets[itemp])
+                {
+                    if (imerge != i0) rowOffsets[imerge] = rowOffsets[i0];
+                    i0++;
+                    itemp++;
+                    imerge++;
+                }
+                else
+                {
+                    if (rowOffsets[i0] < tempRowOffsets[itemp])
+                        i0++;
+                    else
+                        itemp++;
+                }
+                if (i0 >= nRowBlocks || itemp >= tempNRowBlocks)
+                    break;
+            }
+            nRowBlocks = imerge;
+
+std::cout << "Result:" << std::endl;
+std::cout << "    ";
+for (int k=0;k<nRowBlocks;k++)
+    std::cout << " " << rowOffsets[k];
+std::cout << std::endl;
+
+            // merge column partititons
+std::cout << "Merge column partitions" << std::endl;
+std::cout << "    ";
+for (int k=0;k<nColumnBlocks;k++)
+    std::cout << " " << columnOffsets[k];
+std::cout << std::endl;
+std::cout << "    ";
+for (int k=0;k<tempNColumnBlocks;k++)
+    std::cout << " " << tempColumnOffsets[k];
+std::cout << std::endl << std::endl;
+            i0 = 0;
+            itemp = 0;
+            imerge = 0;
+            for (;;)
+            {
+                if (columnOffsets[i0] == tempColumnOffsets[itemp])
+                {
+                    if (imerge != i0) columnOffsets[imerge] = columnOffsets[i0];
+                    i0++;
+                    itemp++;
+                    imerge++;
+                }
+                else
+                {
+                    if (columnOffsets[i0] < tempColumnOffsets[itemp])
+                        i0++;
+                    else
+                        itemp++;
+                }
+                if (i0 >= nColumnBlocks || itemp >= tempNColumnBlocks)
+                    break;
+            }
+            nColumnBlocks = imerge;
+
+std::cout << "Result:" << std::endl;
+std::cout << "    ";
+for (int k=0;k<nColumnBlocks;k++)
+    std::cout << " " << columnOffsets[k];
+std::cout << std::endl;
+        }
+
         int  nBlocks;
         int* blockOffset = new int[nRowBlocks];
 
         // make sure the row and column blocks are synchronized and compute block sizes
+std::cout << "Merge row and column partitions" << std::endl;
+std::cout << "    ";
+for (int k=0;k<nRowBlocks;k++)
+    std::cout << " " << rowOffsets[k];
+std::cout << std::endl;
+std::cout << "    ";
+for (int k=0;k<nColumnBlocks;k++)
+    std::cout << " " << columnOffsets[k];
+std::cout << std::endl << std::endl;
         int jrow = 0;
         int jcol = 0;
         nBlocks  = 0;
@@ -249,14 +384,12 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         for (int i=1; i < nBlocks; i++)
             blockSize[i] = blockOffset[i] - blockOffset[i-1]; 
 
-/*
- Must check: 
- Each constraint and objective must have one nonlinear expression
-      of the form trace(AiX), where Ai is constant and X is matrixVar;
- each Ai must be symmetric and block-diagonal, i.e. rowOffsets = colOffsets
-      with each block having blockRowIdx = blockColumnIdx
- block sizes must be conformal for all matrices
- */
+std::cout << "Final block partition:" << std::endl;
+std::cout << "    ";
+for (int k=0;k<nBlocks;k++)
+    std::cout << " " << blockOffset[k];
+std::cout << std::endl;
+
 
 #if 0
 int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
@@ -326,7 +459,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
    * Keep track of which blocks have off-diagonal entries. 
    */
   bool* isdiag = new bool[nBlocks+1];
-  for (int i=1; i<=nblocks; i++)
+  for (int i=1; i<=nBlocks; i++)
     isdiag[i] = true;
 
 #ifndef NOSHORTS

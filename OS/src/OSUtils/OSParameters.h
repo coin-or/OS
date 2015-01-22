@@ -667,8 +667,8 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
     if (type1 == ENUM_MATRIX_TYPE_jumbled || type2 == ENUM_MATRIX_TYPE_jumbled) 
         return ENUM_MATRIX_TYPE_jumbled;
 
-    if (type1 == ENUM_MATRIX_TYPE_unknown) return type1;
-    if (type2 == ENUM_MATRIX_TYPE_unknown) return type2;
+    if (type1 == ENUM_MATRIX_TYPE_unknown) return type2;
+    if (type2 == ENUM_MATRIX_TYPE_unknown) return type1;
     if (type1 == ENUM_MATRIX_TYPE_zero) return type2;
     if (type2 == ENUM_MATRIX_TYPE_zero) return type1;
 

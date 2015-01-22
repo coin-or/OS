@@ -83,7 +83,7 @@ public:
     /**
      *  @return the type of the matrix elements
      */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
+    virtual ENUM_MATRIX_TYPE getMatrixType() = 0;
 
     /**
      * @return the value of nType
@@ -155,6 +155,19 @@ public:
      * </p>
      */
     virtual MatrixNode *cloneMatrixNode() = 0;
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) = 0;
 
     /**
      * A function to check for the equality of two objects
@@ -788,6 +801,17 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixElements *that);
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };//class MatrixElements
 
 
@@ -857,6 +881,17 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixTransformation *that);
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };//class MatrixTransformation
 
 class MatrixBlock; //forward desclaration
@@ -944,6 +979,17 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixBlocks *that);
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };//class MatrixBlocks
 
 
@@ -1054,6 +1100,17 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(BaseMatrix *that);
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };//class BaseMatrix
 
 
@@ -1269,9 +1326,12 @@ public:
      *  @param nrows gives the number of rows in the block  
      *  @param ncols gives the number of columns in the block  
      *  @param rowMajor can be used to store the objects in row major form.
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
      *  @return whether the operation was successful or not.
      */
-    bool extractBlock(int firstrow, int firstcol, int nrows, int ncols, bool rowMajor);
+    bool extractBlock(int firstrow, int firstcol, int nrows, int ncols, bool rowMajor,
+                      ENUM_MATRIX_SYMMETRY symmetry);
 
     /**
      *  Several tools to parse the constructor list of a matrix
@@ -1311,6 +1371,16 @@ public:
      */
     bool deepCopyFrom(MatrixType *that);
 
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };// class MatrixType
 
 
@@ -1494,6 +1564,17 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(OSMatrix *that);
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };// class OSMatrix
 
 
@@ -1565,5 +1646,16 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixBlock *that);
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
 };// class MatrixBlock
 #endif

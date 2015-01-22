@@ -1898,7 +1898,7 @@ public:
     virtual OSnLMNode *cloneExprNode();
 
 #if 0
-    /*! \fn double OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
+    /*! \fn double OSnLMNodeMatrixPlus::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
      *  \return a ADdouble.
      */
