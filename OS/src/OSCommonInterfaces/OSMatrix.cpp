@@ -1158,9 +1158,9 @@ bool OSMatrix::processBlocks()
             for (int l=0; l<nsync; l++)
                 m_miRowPartition[l] = temp[l];
             delete [] temp;
+            m_iRowPartitionSize = nsync;
+            if (nsync == 2) break;
         }
-        m_iRowPartitionSize = nsync;
-        if (nsync == 2) break;
     }
 
     if (haveBlocks == false)
@@ -1172,8 +1172,105 @@ bool OSMatrix::processBlocks()
     }
 
     // here we do the same thing for the columns
+    haveBlocks = false;
+    haveTemp = false;
+    mustSynchronize = false;
 
+    if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+    {
+        tempSize = ((BaseMatrix*)m_mChildren[0])->baseMatrix->getColumnPartitionSize();
+        if (tempSize > 2)
+        {
+            m_miColumnPartition = ((BaseMatrix*)m_mChildren[0])->baseMatrix->getColumnPartition();            
+            m_iColumnPartitionSize = tempSize;
+            mustSynchronize = true;
+            haveBlocks = true;
+        }
+        iconst = 1;
+    }
+    else
+        iconst = 0;
 
+    // process remaining constructors
+    for (int i=iconst; i < inumberOfChildren; i++)
+    {
+        if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+        {
+            if (((MatrixBlocks*)m_mChildren[i])->colOffsets->el[0] != 0)
+                return false;
+
+            if (haveBlocks == false)
+            {
+                m_miColumnPartition    = ((MatrixBlocks*)m_mChildren[i])->colOffsets->el;            
+                m_iColumnPartitionSize = ((MatrixBlocks*)m_mChildren[i])->colOffsets->numberOfEl;
+                mustSynchronize = true;
+                haveBlocks = true;
+            }
+            else
+            {
+                // check if we have to synchronize
+                jproc = 0;
+                jcand = 0;
+                nsync = 0;
+                for (;;)
+                {
+                    if (m_miColumnPartition[jproc] == ((MatrixBlocks*)m_mChildren[i])->colOffsets->el[jcand])
+                    {
+                        if (haveTemp)
+                            temp[nsync] = m_miColumnPartition[jproc];
+                        jproc++;
+                        jcand++;
+                        nsync++;
+                    }
+                    else
+                    {
+                        if (!haveTemp)
+                        {
+                            haveTemp = true;
+                            tempSize = min (((MatrixBlocks*)m_mChildren[i])->colOffsets->numberOfEl,
+                                            m_iColumnPartitionSize);
+                            temp = new int[tempSize];
+                            for (int l=0; l < nsync; l++)
+                                temp[l] = m_miColumnPartition[l];
+                        }
+                        if (m_miColumnPartition[jproc] < 
+                                ((MatrixBlocks*)m_mChildren[i])->colOffsets->el[jcand])
+                            jproc++;
+                        else
+                            jcand++;
+                    }
+                    if (jproc >= m_iColumnPartitionSize || 
+                        jcand >= ((MatrixBlocks*)m_mChildren[i])->colOffsets->numberOfEl)
+                        break;
+                }
+            }
+
+            if (haveTemp && temp[nsync-1] < numberOfColumns)
+            {
+                temp[nsync] = numberOfColumns;
+                nsync++;
+            }
+        }
+
+        if (haveTemp)
+        {
+            if (m_miColumnPartition != NULL) delete m_miColumnPartition;
+            m_miColumnPartition = new int[nsync];
+            for (int l=0; l<nsync; l++)
+                m_miColumnPartition[l] = temp[l];
+            delete [] temp;
+            m_iColumnPartitionSize = nsync;
+            if (nsync == 2) break;
+        }
+    }
+
+    if (haveBlocks == false)
+    {
+        m_miColumnPartition = new int[2];
+        m_iColumnPartitionSize = 2;
+        m_miColumnPartition[0] = 0;
+        m_miColumnPartition[1] = numberOfRows;
+    }
 
     return true;
 }// end of OSMatrix::processBlocks()
@@ -1218,8 +1315,8 @@ bool OSMatrix::isBlockDiagonal()
     for (int i=iconst; i < inumberOfChildren; i++)
         if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
             for (int j=0; j < ((MatrixBlocks*)m_mChildren[i])->numberOfBlocks; j++)
-                if ( ((MatrixBlock*)((MatrixBlocks*)m_mChildren[i])->block[j])->blockRowIdx !=
-                     ((MatrixBlock*)((MatrixBlocks*)m_mChildren[i])->block[j])->blockColIdx)
+                if ( ((MatrixBlock*)((MatrixBlocks*)m_mChildren[i])->m_mChildren[j])->blockRowIdx !=
+                     ((MatrixBlock*)((MatrixBlocks*)m_mChildren[i])->m_mChildren[j])->blockColIdx)
                     return false;
 
     // Now check if there are other constructors that might introduce elements outside the block diagonal
@@ -2199,6 +2296,32 @@ OSMatrix* OSMatrix::createConstructorTreeFromPrefix(std::vector<MatrixNode*> mtx
             for(int i = 0; i < numkids;  i++)
             {
                 mtxConstructorVec[kount]->m_mChildren[i] = stackVec.back();
+#if 0
+                switch ( stackVec.back()->nType )
+                {
+                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix:
+                        mtxConstructorVec[kount]->m_mChildren[i] = (BaseMatrix*)stackVec.back();
+                        break;
+                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_elements:
+                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixElements*)stackVec.back();
+                        break;
+                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation:
+                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixTransformation*)stackVec.back();
+                        break;
+                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks:
+                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixBlocks*)stackVec.back();
+                        break;
+                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_block:
+                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixBlock*)stackVec.back();
+                        break;
+                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix:
+                        mtxConstructorVec[kount]->m_mChildren[i] = (OSMatrix*)stackVec.back();
+                        break;
+                    default:
+                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixNode*)stackVec.back();
+                        break;
+                }
+#endif
                 stackVec.pop_back();
             }
         }

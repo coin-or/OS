@@ -6002,8 +6002,8 @@ std::cout << "DblVec: expected " << osglData->osglNumberOfEl << " elements; got 
      *  so we also initial the storage vectors here
      */
     osglData->tempC = new OSMatrix();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
-    osglData->mtxBlkVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((OSMatrix*)osglData->tempC);
+    osglData->mtxBlkVec.push_back((OSMatrix*)osglData->tempC);
 }
     break;
 
@@ -6080,7 +6080,7 @@ std::cout << "DblVec: expected " << osglData->osglNumberOfEl << " elements; got 
 
     {
     osglData->tempC = new BaseMatrix();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((BaseMatrix*)osglData->tempC);
 
     osglData->baseMatrixIdxPresent = false;
     osglData->targetMatrixFirstRowPresent = false;
@@ -6280,7 +6280,7 @@ std::cout << "DblVec: expected " << osglData->osglNumberOfEl << " elements; got 
 
     {
     osglData->tempC = new MatrixElements();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((MatrixElements*)osglData->tempC);
 }
     break;
 
@@ -7021,7 +7021,7 @@ std::cout << "DblVec: expected " << osglData->osglNumberOfEl << " elements; got 
 
     {
     osglData->tempC = new MatrixTransformation();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((MatrixTransformation*)osglData->tempC);
 
     // clear the vectors of pointers
     osnlData->nlNodeVec.clear();
@@ -7059,7 +7059,7 @@ std::cout << "DblVec: expected " << osglData->osglNumberOfEl << " elements; got 
 
     {
     osglData->tempC = new MatrixBlocks();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((MatrixBlocks*)osglData->tempC);
     osglData->numberOfBlocksPresent = false;
 }
     break;
@@ -7142,7 +7142,7 @@ std::cout << "DblVec: expected " << osglData->osglNumberOfEl << " elements; got 
 
     {
     osglData->tempC = new MatrixBlock();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((MatrixBlock*)osglData->tempC);
     osglData->mtxBlkVec.push_back(osglData->tempC);
 
     osglData->symmetryPresent = false;

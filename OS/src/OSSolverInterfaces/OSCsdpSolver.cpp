@@ -344,7 +344,7 @@ std::cout << std::endl;
         }
 
         int  nBlocks;
-        int* blockOffset = new int[nRowBlocks];
+        int* blockOffset = new int[nRowBlocks]; //leaks 12 bytes of memory
 
         // make sure the row and column blocks are synchronized and compute block sizes
 std::cout << "Merge row and column partitions" << std::endl;
@@ -380,7 +380,7 @@ std::cout << std::endl << std::endl;
         }
 
         // Note: blockSize is 1-based, due to issues of Fortran compatibility
-        int* blockSize = new int[nBlocks];
+        int* blockSize = new int[nBlocks]; //leaks 8 bytes of memory
         for (int i=1; i < nBlocks; i++)
             blockSize[i] = blockOffset[i] - blockOffset[i-1]; 
 
@@ -458,7 +458,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
   /*
    * Keep track of which blocks have off-diagonal entries. 
    */
-  bool* isdiag = new bool[nBlocks+1];
+  bool* isdiag = new bool[nBlocks+1]; // leaks 3 bytes of memory
   for (int i=1; i<=nBlocks; i++)
     isdiag[i] = true;
 
@@ -1621,10 +1621,11 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
     struct paramstruc params;
 
     std::ostringstream outStr;
+    int printlevel = 0;
 
     try
     {
-        initparams(&params,0);
+        initparams(&params,&printlevel);
 
         /* now get options from OSoL */
         if(osoption == NULL && osol.length() > 0)

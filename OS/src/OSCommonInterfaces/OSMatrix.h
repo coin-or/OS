@@ -74,6 +74,7 @@ public:
      * in the definition or construction of the current node.
      */
     MatrixNode **m_mChildren;
+
     /** default constructor */
     MatrixNode();
 
@@ -212,7 +213,7 @@ public:
     MatrixConstructor();
 
     /** destructor */
-    ~MatrixConstructor();
+    virtual ~MatrixConstructor();
 
     /**
      *
@@ -1297,7 +1298,7 @@ public:
     ENUM_MATRIX_SYMMETRY symmetry;
 
     MatrixType();
-    ~MatrixType();
+    virtual ~MatrixType();
 
     /**
      *  A method to check whether a matrix or block is diagonal

@@ -2592,8 +2592,8 @@ matrixStart: MATRIXSTART
      *  so we also initial the storage vectors here
      */
     osglData->tempC = new OSMatrix();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
-    osglData->mtxBlkVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((OSMatrix*)osglData->tempC);
+    osglData->mtxBlkVec.push_back((OSMatrix*)osglData->tempC);
 };
 
 matrixAttributes: matrixAttributeList
@@ -2672,7 +2672,7 @@ baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd
 baseMatrixStart: BASEMATRIXSTART
 {
     osglData->tempC = new BaseMatrix();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((BaseMatrix*)osglData->tempC);
 
     osglData->baseMatrixIdxPresent = false;
     osglData->targetMatrixFirstRowPresent = false;
@@ -2866,7 +2866,7 @@ matrixElements: matrixElementsStart matrixElementsContent;
 matrixElementsStart: ELEMENTSSTART
 {
     osglData->tempC = new MatrixElements();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((MatrixElements*)osglData->tempC);
 };
 
 
@@ -3716,7 +3716,7 @@ matrixTransformation: matrixTransformationStart GREATERTHAN OSnLMNode matrixTran
 matrixTransformationStart: TRANSFORMATIONSTART
 {
     osglData->tempC = new MatrixTransformation();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((MatrixTransformation*)osglData->tempC);
 
     // clear the vectors of pointers
     osnlData->nlNodeVec.clear();
@@ -3748,7 +3748,7 @@ matrixBlocks: matrixBlocksStart matrixBlocksAttributes matrixBlocksContent
 matrixBlocksStart: BLOCKSSTART
 {
     osglData->tempC = new MatrixBlocks();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((MatrixBlocks*)osglData->tempC);
     osglData->numberOfBlocksPresent = false;
 };
 
@@ -3835,7 +3835,7 @@ matrixBlock: matrixBlockStart matrixBlockAttributes matrixBlockContent
 matrixBlockStart: BLOCKSTART
 {
     osglData->tempC = new MatrixBlock();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->mtxConstructorVec.push_back((MatrixBlock*)osglData->tempC);
     osglData->mtxBlkVec.push_back(osglData->tempC);
 
     osglData->symmetryPresent = false;

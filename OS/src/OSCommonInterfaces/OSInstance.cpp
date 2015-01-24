@@ -2319,7 +2319,7 @@ double** OSInstance::getDenseObjectiveCoefficients()
         for(j = 0; j < numobjcoef; j++)
         {
             m_mmdDenseObjectiveCoefficients[i][ sparsevec->indexes[ j]]
-                = sparsevec->values[ j];
+                += sparsevec->values[ j];
         }
     }
     return m_mmdDenseObjectiveCoefficients;
@@ -2819,6 +2819,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
     unsigned int n;
     ostringstream outStr;
     std::vector<ExprNode*> postfixVec;
+
 
 
 
