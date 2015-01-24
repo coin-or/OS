@@ -1052,6 +1052,7 @@ std::string RotatedQuadraticCone::getConeName()
 
 
 
+
 SemidefiniteCone::SemidefiniteCone():
     semidefiniteness("positive"),
     isPositiveSemiDefinite(true)
@@ -2215,7 +2216,7 @@ double** OSInstance::getDenseObjectiveCoefficients()
         for(j = 0; j < numobjcoef; j++)
         {
             m_mmdDenseObjectiveCoefficients[i][ sparsevec->indexes[ j]]
-                = sparsevec->values[ j];
+                += sparsevec->values[ j];
         }
     }
     return m_mmdDenseObjectiveCoefficients;

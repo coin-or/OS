@@ -3616,7 +3616,7 @@ public:
      * @param licence: licence information if applicable
      */
     bool setHeader(std::string name, std::string source,
-                         std::string fileCreator, std::string description, std::string licence);
+                         std::string description, std::string fileCreator, std::string licence);
 
 private:
     /**
