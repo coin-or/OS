@@ -6178,9 +6178,6 @@ if (SOLVER_TESTS){
         cSolver->osoption->optimization->constraints = new ConstraintOption();
         cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
 
-        int* vbasis;
-        int retCode;
-
         bv = new int[2];
         bv[0] = 0;
         bv[1] = 1;
@@ -9273,7 +9270,7 @@ if (OTHER_TESTS){
     OSrLWriter *temp_writer = NULL;
     double *xval = NULL;
     double *zval = NULL;
-    int* IBS;
+    int* IBS = NULL;
 
     try
     {
