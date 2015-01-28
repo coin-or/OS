@@ -605,16 +605,41 @@
 			</xs:element>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>There can be arbitrarily many matrix constructors in arbitrary order. Information specified later replaces information specified earlier.</xs:documentation>
+					<xs:documentation>There can be arbitrarily many matrix constructors in arbitrary order. If a location is specfied more than once in the child elements, later information replaces earlier information. </xs:documentation>
 				</xs:annotation>
-				<xs:element name="elements" type="MatrixElements" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>If a location is specfied more than once in the child elements, later information replaces earlier information. </xs:documentation>
-					</xs:annotation>
-				</xs:element>
 				<xs:element name="transformation" type="MatrixTransformation" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>The result of this transformation is aligned with the top left corner of the target matrix and is truncated or filled with zeros if sizes are not conformal.</xs:documentation>
+						<xs:documentation>To express the matrix M in terms of previously defined elements, e.g., M = a a'. The result of this transformation is aligned with the top left corner of the target matrix and is truncated or filled with zeros if sizes are not conformal.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="constantElements" type="ConstantMatrixElements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>For elements that are constant values, e.g., 5</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="varReferenceElements" type="VarReferenceMatrixElements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>For elements that reference scalar variables, e.g., x1</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="linearElements" type="LinearMatrixElements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>For elements that are linear combinations of scalar variables, e.g., 3x1 + x5 + 4</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="generalElements" type="GeneralMatrixElements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>For elements that are general expressions involving scalar variables, e.g., sin(x3)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="objReferenceElements" type="ObjReferenceMatrixElements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>For elements that reference scalar objectives. (First ojective has index -1, second objective -2, etc.)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="conReferenceElements" type="ConReferenceMatrixElements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>For elements that reference data items associated with scalar constraints, e.g., value, surplus, etc.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="blocks" type="MatrixBlocks" minOccurs="0">
@@ -922,6 +947,16 @@ Each value must refer to an existing (core) constraint index</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="valueType" use="optional" default="value">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="value"/>
+					<xs:enumeration value="status"/>
+					<xs:enumeration value="surplus"/>
+					<xs:enumeration value="shortage"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElements">
 		<xs:sequence>
@@ -972,14 +1007,7 @@ Each nonzero is a general nonlinear expression</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="constantElements" type="ConstantMatrixElements" minOccurs="0"/>
-			<xs:element name="varReferenceElements" type="VarReferenceMatrixElements" minOccurs="0"/>
-			<xs:element name="linearElements" type="LinearMatrixElements" minOccurs="0"/>
-			<xs:element name="generalElements" type="GeneralMatrixElements" minOccurs="0"/>
-			<xs:element name="objReferenceElements" type="ObjReferenceMatrixElements" minOccurs="0"/>
-			<xs:element name="conReferenceElements" type="ConReferenceMatrixElements" minOccurs="0"/>
-		</xs:sequence>
+		<xs:sequence/>
 	</xs:complexType>
 	<xs:complexType name="ValueMatrixElements">
 		<xs:annotation>
@@ -1010,6 +1038,17 @@ Each nonzero is a general nonlinear expression</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLMNode"/>
 		</xs:sequence>
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="constant"/>
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="MatrixBlocks">
 		<xs:annotation>
