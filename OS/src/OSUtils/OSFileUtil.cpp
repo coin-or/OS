@@ -46,7 +46,7 @@ std::string FileUtil::getFileAsString( const char* fname)
         std::ifstream inFile( fname);
         if( !inFile)
         {
-            throw ErrorClass(" Could not read the given file: " + fileName.str());
+            throw ErrorClass(" Could not open the given file: " + fileName.str());
         }
         //std::cout << "Inside FileUtil:getFileAsString, file read put into ostringstream" << std::endl;
         //while((ch = inFile.get() ) != EOF){
@@ -133,16 +133,6 @@ char* FileUtil::getFileAsChar(const  char* fname)
 
 bool FileUtil::writeFileFromString(char* fname, std::string sname)
 {
-    //std::ofstream outFile;
-    //std::fstream outFile;
-    //outFile.open( fname);
-    //if(!outFile.is_open()){
-    //	return false;
-    //}
-    //outFile << sname;
-    //outFile.close();
-    //return true;
-
     std::ostringstream fileName;
     fileName << fname << std::endl;
     FILE *ft ;
