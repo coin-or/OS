@@ -411,7 +411,6 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
 #endif
         }
 
-#if 
         else if (solverName.find("csdp") != std::string::npos)
         {
 #ifdef COIN_HAS_CSDP
