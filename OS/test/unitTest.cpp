@@ -5948,8 +5948,6 @@ if (SOLVER_TESTS){
 
         ok = true; 
 
-
-
         std::cout << "simply size the warmstart" << std::endl;
         osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
 
@@ -5968,7 +5966,8 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
-        ok &= ( getItCount(cSolver->osrl) == 3);
+        std::cout << "initial solution took " << getItCount(cSolver->osrl) << " iterations" << std::endl;
+        ok &= ( getItCount(cSolver->osrl) == 2);
         if (ok)
         {    
             cout << "COIN clp solver interface passes initial warmstart test." << endl;        
@@ -5982,9 +5981,7 @@ if (SOLVER_TESTS){
         if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
         delete cSolver;
 
-
-
-        std::cout << "put a complete advanced basis" << std::endl;
+        std::cout << std::endl << "put a complete advanced basis" << std::endl;
         cSolver = new CoinSolver();
         cSolver->sSolverName = "clp";
         cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -5994,7 +5991,6 @@ if (SOLVER_TESTS){
         cSolver->osoption->optimization->variables->initialBasisStatus = new BasisStatus();
         cSolver->osoption->optimization->constraints = new ConstraintOption();
         cSolver->osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
-
 
         bv = new int[2];
         bv[0] = 0;
@@ -6017,6 +6013,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        std::cout << "warmstart solution took " << getItCount(cSolver->osrl) << " iterations" << std::endl;
         ok &= ( getItCount(cSolver->osrl) == 3);
 
         if (ok)
@@ -6033,8 +6030,7 @@ if (SOLVER_TESTS){
         delete cSolver;
 
 
-
-        std::cout << "put a partial basis" << std::endl;
+        std::cout << std::endl << "put a partial basis" << std::endl;
         cSolver = new CoinSolver();
         cSolver->sSolverName = "clp";
         cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -6058,6 +6054,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        std::cout << "warmstart solution took " << getItCount(cSolver->osrl) << " iterations" << std::endl;
         ok &= ( getItCount(cSolver->osrl) == 4);
         if (ok)
         {    
@@ -6073,8 +6070,7 @@ if (SOLVER_TESTS){
         delete cSolver;
 
 
-
-        std::cout << "test unusual basis statuses" << std::endl;
+        std::cout << std::endl << "test unusual basis statuses" << std::endl;
         cSolver = new CoinSolver();
         cSolver->sSolverName = "clp";
         cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -6105,7 +6101,8 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
-        ok &= ( getItCount(cSolver->osrl) == 3);
+        std::cout << "warmstart solution took " << getItCount(cSolver->osrl) << " iterations" << std::endl;
+        ok &= ( getItCount(cSolver->osrl) == 2);
         if (ok)
         {    
             cout << "COIN clp solver interface passes unusual basis warmstart test." << endl;        
@@ -6119,9 +6116,7 @@ if (SOLVER_TESTS){
         if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
         delete cSolver;
 
-
-
-        std::cout << "test over-saturated basis" << std::endl;
+        std::cout << std::endl << "test over-saturated basis" << std::endl;
         cSolver = new CoinSolver();
         cSolver->sSolverName = "clp";
         cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -6151,6 +6146,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        std::cout << "warmstart solution took " << getItCount(cSolver->osrl) << " iterations" << std::endl;
         ok &= ( getItCount(cSolver->osrl) == 3);
         if (ok)
         {    
@@ -6161,13 +6157,10 @@ if (SOLVER_TESTS){
             cout << "COIN clp solver interface warmstart error:" << endl;
             cout << cSolver->osrl << endl;
         }
-        cout << cSolver->osrl << endl;
         if(ok == false) throw ErrorClass(" Fail unit test with clp warmstarts on parincLinear.osil");
         delete cSolver;
 
-
-
-        std::cout << "test using optimal basis" << std::endl;
+        std::cout << std::endl << "test using optimal basis" << std::endl;
         cSolver = new CoinSolver();
         cSolver->sSolverName = "clp";
         cSolver->osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -6202,6 +6195,7 @@ if (SOLVER_TESTS){
         std::cout << "returned from solver" << std::endl;
         check = 7668;
         ok &= ( fabs(check - getObjVal( cSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL);
+        std::cout << "solve from optimal solution took " << getItCount(cSolver->osrl) << " iterations" << std::endl;
         ok &= ( getItCount(cSolver->osrl) == 0);
 
         if (ok)
