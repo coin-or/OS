@@ -4820,21 +4820,6 @@ exprAttribute:
 
 // user defined functions
 
-#if 0
-void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, const char* errormsg ) {
-    std::ostringstream outStr;
-    std::string error = errormsg;
-    error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
-    outStr << error << endl;
-    outStr << endl; 
-    outStr << "See line number: " << osilget_lineno( scanner) << endl; 
-    outStr << "The offending text is: " << osilget_text ( scanner ) << endl; 
-    error = outStr.str();
-    //osillex_destroy(scanner);
-    throw ErrorClass( error);
-}//end osilerror()
-#endif 
-
 void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg )
 {
     osil_empty_vectors( parserData);
@@ -4936,7 +4921,6 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
         *p = strstr(pchar, startInstanceData);
         return true;
     }
-    //if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
     // increment the line number counter if there are any newlines between the start of
     // the osil string and pinstanceHeadStart
     int    kount = pinstanceHeadStart - pchar;
@@ -5419,9 +5403,7 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
         //osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); 
         return true;
     }
-    //for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
     // we should be pointing to the '<' char in <variables>
-    //*p = pchar;    
     return true;
 }// end parseInstanceData
 
@@ -5509,12 +5491,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             else {  osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
         startVar -= 5;
         while(foundVar){
-            varlbattON  = false;
-            varubattON = false ;
-            vartypeattON  = false;
-            varnameattON = false ;
-            //varinitattON = false ; 
-            //varinitStringattON = false ;
+            varlbattON   = false;
+            varubattON   = false;
+            vartypeattON = false;
+            varnameattON = false;
             varmultattON = false;
             varmult = 1;
             foundVar = false;
@@ -5535,34 +5515,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     delete [] attText;
                     //printf("ATTRIBUTE = %s\n", attText);
                     break;
-                    /*
-                case 'i':
-                    *p = ch;
-                    while(*initString++  == *ch) ch++;
-                    // if i < 4 there is an error
-                    // if i = 4 we matched init
-                    // if i = 10 we matched initString
-                    if( ( (ch - *p) != 4)  && ( (ch - *p) != 10)) {  osilerror_wrapper( ch,osillineno,"error in variables init or initString attribute"); return false;}
-                    if((ch - *p) == 4){
-                        if(varinitattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable init attributes"); return false;}
-                        varinitattON = true;
-                        GETATTRIBUTETEXT;
-                        //printf("ATTRIBUTE = %s\n", attText);
-                        osinstance->instanceData->variables->var[varcount]->init=atofmod1( osillineno,attText, attTextEnd);
-                        delete [] attText;
-                        initString -= 5;
-                    }
-                    else{
-                        if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable initString attributes"); return false;}
-                        varinitStringattON = true;
-                        GETATTRIBUTETEXT;
-                        //printf("ATTRIBUTE = %s\n", attText);
-                        osinstance->instanceData->variables->var[varcount]->initString=attText;
-                        delete [] attText;
-                        initString -= 11;
-                    }
-                    break;
-                    */
                 case 't':
                     *p = ch;
                     while(*type++  == *ch) ch++;
@@ -5574,7 +5526,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     vt = returnVarType(attText[0]);
                     if( vt == 0 ) {  osilerror_wrapper( ch,osillineno,"variable type not recognized"); return false;}
                     osinstance->instanceData->variables->var[varcount]->type = attText[0];
-                    if (vt == ENUM_VARTYPE_binary) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
+//                    if (vt == ENUM_VARTYPE_binary) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
                     delete [] attText;
                     break;
                 case 'l':
@@ -5622,6 +5574,18 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     osilerror_wrapper( ch,osillineno,"invalid attribute character"); 
                     return false;
                     break;
+                }
+                // verify bounds for binary variables
+                if (vt == ENUM_VARTYPE_binary) 
+                {
+                    if (osinstance->instanceData->variables->var[varcount]->ub == OSDBL_MAX)
+                        osinstance->instanceData->variables->var[varcount]->ub = 1.0;
+                    if (osinstance->instanceData->variables->var[varcount]->ub > 1.0 ||
+                        osinstance->instanceData->variables->var[varcount]->ub < 0.0)
+                        osilerror_wrapper( ch,osillineno,"invalid upper bound on binary variable");
+                    if (osinstance->instanceData->variables->var[varcount]->lb > 1.0 ||
+                        osinstance->instanceData->variables->var[varcount]->lb < 0.0)
+                        osilerror_wrapper( ch,osillineno,"invalid lower bound on binary variable");
                 }
                 ch++;
             }
