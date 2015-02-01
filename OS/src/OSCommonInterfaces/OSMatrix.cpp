@@ -1,10 +1,11 @@
 /* $Id: OSMatrix.cpp 3186 2010-02-06 23:38:35Z Gassmann $ */
 /** @file OSMatrix.cpp
+ * \brief This file defines the OSMatrix class along with its supporting classes.
  *
  * @author Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2015, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -2191,10 +2192,16 @@ bool MatrixType::extractBlock(int firstrow, int firstcol, int nrows, int ncols, 
 {
     bool mustCopy = false;
     int n = inumberOfChildren;
+    if (n > 1)
+        mustCopy = true;
+    else
+    {
+        if (
+    }
     for (int i=0; i < n; i++)
         if (m_mChildren[i]->nType != ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
         {
-            mustCopy = true;
+            
             break;
         }
         else
@@ -2296,32 +2303,6 @@ OSMatrix* OSMatrix::createConstructorTreeFromPrefix(std::vector<MatrixNode*> mtx
             for(int i = 0; i < numkids;  i++)
             {
                 mtxConstructorVec[kount]->m_mChildren[i] = stackVec.back();
-#if 0
-                switch ( stackVec.back()->nType )
-                {
-                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix:
-                        mtxConstructorVec[kount]->m_mChildren[i] = (BaseMatrix*)stackVec.back();
-                        break;
-                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_elements:
-                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixElements*)stackVec.back();
-                        break;
-                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation:
-                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixTransformation*)stackVec.back();
-                        break;
-                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks:
-                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixBlocks*)stackVec.back();
-                        break;
-                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_block:
-                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixBlock*)stackVec.back();
-                        break;
-                    case ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix:
-                        mtxConstructorVec[kount]->m_mChildren[i] = (OSMatrix*)stackVec.back();
-                        break;
-                    default:
-                        mtxConstructorVec[kount]->m_mChildren[i] = (MatrixNode*)stackVec.back();
-                        break;
-                }
-#endif
                 stackVec.pop_back();
             }
         }
@@ -2475,3 +2456,44 @@ bool MatrixBlock::IsEqual(MatrixBlock *that)
     return true;
 }// end of MatrixBlock::IsEqual()
 // end of methods for MatrixBlock ----------------------------------------------
+
+// methods for GeneralSparseMatrix --------------------------------------
+
+GeneralSparseMatrix::GeneralSparseMatrix
+    bDeleteArrays(true),
+    isColumnMajor(true),
+    startSize(-1),
+    valueSize(-1),
+    vType(ENUM_MATRIX_TYPE_unknown),
+    starts(NULL),
+    indexes(NULL),
+    values(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralSparseMatrix Constructor");
+#endif
+}// end of ~GeneralSparseMatrix
+
+GeneralSparseMatrix::~GeneralSparseMatrix
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralSparseMatrix Destructor");
+#endif
+    if (bDeleteArrays)
+    {
+        if (starts != NULL) delete [] starts;
+        starts = NULL;
+        if (indexes != NULL) delete [] indexes;
+        indexes = NULL;
+        if (values != NULL)
+            if (vType == ENUM_MATRIX_TYPE_linear || vType == ENUM_MATRIX_TYPE_general),
+            {
+                for (int i=0; i < valueSize; i++)
+                    delete values[i];
+                delete [] values;
+                values = NULL;
+            }
+    }
+}// end of ~GeneralSparseMatrix
+
+

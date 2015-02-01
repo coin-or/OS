@@ -310,16 +310,8 @@ int main(int argC, const char* argV[])
             osss_scan_string(configFileOptions.c_str(), scanner);
             ossslex(scanner);
             ossslex_destroy(scanner);
-            scannerActive = false;
-            
-            
-            /** new -- added on September 19, 2011
-             * If we are here, then the command line had a configure file.
-             * Command line options should override the config file so go
-             * back and get these options again
-             */
-            
-            scannerActive = true;
+
+            // Now read command line again to override information in config file
             ossslex_init(&scanner);
 
 #ifndef NDEBUG
@@ -344,9 +336,6 @@ int main(int argC, const char* argV[])
             ossslex(scanner);
             ossslex_destroy(scanner);
             scannerActive = false;           
-            
-            
-            /** end of new code added on September 19, 2011 */
         }
     }
     catch (const ErrorClass& eclass)
@@ -356,7 +345,6 @@ int main(int argC, const char* argV[])
                 tempBuffer[i] << eclass.errormsg << std::endl;
 #endif
 
-        //new stuff on April 17, 2010
         OSResult *osresult = NULL;
         OSrLWriter *osrlwriter = NULL;
         osrlwriter = new OSrLWriter();
@@ -380,12 +368,7 @@ int main(int argC, const char* argV[])
         }
         else
         {
-#ifndef NDEBUG
-            for (int i=ENUM_OUTPUT_LEVEL_debug; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
-                tempBuffer[i] << eclass.errormsg << std::endl;
-#endif
-            for (int i=ENUM_OUTPUT_LEVEL_error; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
-                tempBuffer[i] << osrl << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, osrl);
         }
         //catch garbage collection
         delete osresult;

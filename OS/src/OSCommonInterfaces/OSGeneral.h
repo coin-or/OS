@@ -223,7 +223,6 @@ public:
 class SparseMatrix
 {
 public:
-
     /**
      * bDeleteArrays is true if we delete the arrays in garbage collection
      * set to true by default
@@ -242,7 +241,7 @@ public:
     int startSize;
 
     /**
-     * valueSize is the dimension of the starts array
+     * valueSize is the dimension of the indexes and values arrays
      */
     int valueSize;
 

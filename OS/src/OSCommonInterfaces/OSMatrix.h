@@ -197,9 +197,9 @@ public:
 /*! \class MatrixConstructor
  *  \brief a data structure to describe one step in the construction of a matrix.
  *  To facilitate parsing of complicated matrix constructors and the recursion
- *  implicit in the block structure, we distinguish the following six types:
+ *  implicit in the block structure, we distinguish the following types:
  *  1 - BaseMatrix
- *  2 - Elements   
+ *  2 - several types of Elements (e.g., constant, var reference, etc.)
  *  3 - Transformation
  *  4 - MatrixBlocks
  *  5 - MatrixBlock
@@ -240,12 +240,12 @@ public:
 };//class MatrixConstructor
 
 
-/*! \class MatrixElementValues
+/*! \class MatrixElements
  * \brief an abstract class to help represent the elements in a MatrixType object
  * From this we derive concrete classes that are used to store specific types of values,
- * such as constant values, variable refeences, general nonlinear expressions, etc.
+ * such as constant values, variable references, general nonlinear expressions, etc.
  */
-class MatrixElementValues
+class MatrixElements: public MatrixConstructor
 {
 public:
     /**
@@ -269,14 +269,14 @@ public:
     IntVector *indexes;
 
 
-    MatrixElementValues();
-    ~MatrixElementValues();
+    MatrixElements();
+    ~MatrixElements();
 
     /**
      *
      * A function to check for the equality of two objects
      */
-    bool IsEqual(MatrixElementValues *that);
+    bool IsEqual(MatrixElements *that);
 
     /**
      * A function to make a random instance of this class
@@ -293,14 +293,14 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(MatrixElementValues *that);
-};//class MatrixElementValues
+    bool deepCopyFrom(MatrixElements *that);
+};//class MatrixElements
 
 
 /*! \class ConstantMatrixElements
  * \brief a data structure to represent the constant elements in a MatrixType object
  */
-class ConstantMatrixElements: public MatrixElementValues
+class ConstantMatrixElements: public MatrixElements
 {
 public:
     /** The values of the (nonzero) constant elements */
@@ -338,7 +338,7 @@ public:
  * \brief a data structure to represent variable reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of a variable
  */
-class VarReferenceMatrixElements: public MatrixElementValues
+class VarReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The variable references (indexes of core variables) of the elements */
@@ -486,60 +486,11 @@ public:
     bool deepCopyFrom(LinearMatrixValues *that);
 };//class LinearMatrixValues
 
-#if 0
-/*! \class LinearMatrixNonzeros
- * \brief a data structure to represent the nonzeros in a linearMatrix element
- */
-class LinearMatrixNonzeros
-{
-public:
-    /**
-     *  numberOfEl gives the number of nonzero elements, which is the dimension
-     *  of both the indexes and values element
-     */
-    //int numberOfEl;
-
-    /** row or column indices, depending on rowMajor */
-    IntVector *indexes;
-
-    /**
-     *  The values are expressions of the form
-     *  a_0 + a_1 x_{i_1} * a_2 x_{i_2} + ...
-     *  Each term in this sum is stored as a separate LinearMatrixElementTerm object
-     */
-    LinearMatrixValues *values;     
-    
-    LinearMatrixNonzeros();
-    ~LinearMatrixNonzeros();
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(LinearMatrixNonzeros *that);
-
-    /**
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */
-    bool deepCopyFrom(LinearMatrixNonzeros *that);
-};//class LinearMatrixNonzeros
-#endif
 
 /*! \class LinearMatrixElements
  * \brief a data structure to represent the nonzero values in a linearMatrix element
  */
-class LinearMatrixElements: public MatrixElementValues
+class LinearMatrixElements: public MatrixElements
 {
 public:
     /**
@@ -617,7 +568,7 @@ public:
 /*! \class GeneralMatrixElements
  * \brief a data structure to represent the nonzero values in a generalMatrix element
  */
-class GeneralMatrixElements: public MatrixElementValues
+class GeneralMatrixElements: public MatrixElements
 {
 public:
     /**
@@ -656,7 +607,7 @@ public:
  * \brief a data structure to represent objective reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of an objective (i.e., less than zero)
  */
-class ObjReferenceMatrixElements: public MatrixElementValues
+class ObjReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The objective references (indexes of core objectives) of the elements */
@@ -694,7 +645,7 @@ public:
  * \brief a data structure to represent constraint reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of a constraint
  */
-class ConReferenceMatrixElements: public MatrixElementValues
+class ConReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The constraint references (indexes of core constraints) of the elements */
@@ -727,7 +678,7 @@ public:
     bool deepCopyFrom(ConReferenceMatrixElements *that);
 };//class ConReferenceMatrixElements
 
-
+#if 0
 /*! \class MatrixElements
  * \brief a data structure to represent the nonzeroes of a matrix explicitly element by element
  */
@@ -814,7 +765,7 @@ public:
      */
     virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };//class MatrixElements
-
+#endif
 
 /*! \class MatrixTransformation
  * \brief a data structure to represent the nonzeroes of a matrix 
@@ -1157,6 +1108,12 @@ public:
     int* indexes;
 
     /**
+     * vType holds the type of values found in the vlaues array.
+     * @remark See OSParameters.h for a list f possible types
+     */
+    ENUM_MATRIX_TYPE vType;
+
+    /**
      * values holds a general array of value elements in the matrix,
      * which could be constants, linear expressions, general nonlinear expressions,
      * variable, constraint or objective references, etc. If mixed types are
@@ -1329,10 +1286,10 @@ public:
      *  @param rowMajor can be used to store the objects in row major form.
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
-     *  @return whether the operation was successful or not.
+     *  @return the block as a general sparse matrix
      */
-    bool extractBlock(int firstrow, int firstcol, int nrows, int ncols, bool rowMajor,
-                      ENUM_MATRIX_SYMMETRY symmetry);
+    GeneralSparseMatrix* extractBlock(int firstrow, int firstcol, int nrows, int ncols,
+                                      bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
     /**
      *  Several tools to parse the constructor list of a matrix

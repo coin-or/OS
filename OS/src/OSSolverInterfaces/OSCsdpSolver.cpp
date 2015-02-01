@@ -2,7 +2,7 @@
 /** @file OSCsdpSolver.cpp
  *
  * \brief This file defines the CsdpSolver class.
- * \detail Read an OSInstance object and convert to CSDP data structures
+ * \detail Read an OSInstance object and convert to CSDP data structures; write solution to OSResult
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
@@ -20,6 +20,7 @@
 
 #include "OSCsdpSolver.h"
 #include "OSInstance.h"
+#include "OSOption.h"
 #include "OSFileUtil.h"
 #include "OSOutput.h"
 #include "CoinTime.hpp"
@@ -148,6 +149,10 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
     OSnLMNode *mv;
     OSMatrix* tempMtx;
 
+    int*  blockOffset = NULL;
+    int*  blockSize   = NULL;
+    int*  mtxRef      = NULL;
+    bool* isdiag      = NULL;
     try
     {
         if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
@@ -181,8 +186,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
             if (cType[i] != 'E') throw ErrorClass("Only equality constraints are supported");
 
         std::string* oType = osinstance->getObjectiveMaxOrMins();
-        for (int i=0; i < osinstance->getObjectiveNumber(); i++)
-            if (oType[i] != "max") throw ErrorClass("The problem must be of \"max\" type");
+        if (oType[0] != "max") throw ErrorClass("The problem must be of \"max\" type");
 
         //Check the form of the objective
         tempTree = osinstance->getNonlinearExpressionTree(-1);
@@ -198,13 +202,15 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         if (mr->inodeInt != OS_MATRIX_REFERENCE || mv->inodeInt != OS_MATRIX_VAR)
             throw ErrorClass("Unsupported expression in objective row");
 
+        mtxRef = new int[osinstance->getObjectiveNumber()+1];
+
         // Analyze A0 matrix: Verify existence, block-diagonal structure, get block dimensions, etc.
-        int mtxRef = ((OSnLMNodeMatrixReference*)mr)->idx;
+        mtxRef[0] = ((OSnLMNodeMatrixReference*)mr)->idx;
         if (osinstance->instanceData->matrices == NULL) 
             throw ErrorClass("<matrices> section was never defined");
-        if (mtxRef < 0 || mtxRef >= osinstance->getMatrixNumber())
+        if (mtxRef[0] < 0 || mtxRef[0] >= osinstance->getMatrixNumber())
             throw ErrorClass("Illegal matrix reference");
-        tempMtx = osinstance->instanceData->matrices->matrix[mtxRef];
+        tempMtx = osinstance->instanceData->matrices->matrix[mtxRef[0]];
         if (tempMtx == NULL) throw ErrorClass("A0 matrix was never defined");
         if (tempMtx->numberOfRows != tempMtx->numberOfColumns) 
            throw ErrorClass("A0 matrix must be square and symmetric"); 
@@ -243,35 +249,25 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
                 throw ErrorClass("Unsupported expression in constraint row");
 
             // Analyze Ai matrix: Verify existence, block-diagonal structure, get block dimensions, etc.
-            int mtxRef = ((OSnLMNodeMatrixReference*)mr)->idx;
-            if (mtxRef < 0 || mtxRef >= osinstance->getMatrixNumber())
+            mtxRef[i+1] = ((OSnLMNodeMatrixReference*)mr)->idx;
+            if (mtxRef[i+1] < 0 || mtxRef[i+1] >= osinstance->getMatrixNumber())
                 throw ErrorClass("Illegal matrix reference");
-            tempMtx = osinstance->instanceData->matrices->matrix[mtxRef];
+            tempMtx = osinstance->instanceData->matrices->matrix[mtxRef[i+1]];
             if (tempMtx == NULL) throw ErrorClass("Matrix in constraint was never defined");
             if (tempMtx->numberOfRows != tempMtx->numberOfColumns) 
                 throw ErrorClass("Constraint matrix must be square and symmetric"); 
             if (tempMtx->getMatrixType() != ENUM_MATRIX_TYPE_constant) 
                 throw ErrorClass("Constraint matrix must be of type \"constant\"");
 
-             tempRowOffsets = tempMtx->getRowPartition();
-             tempNRowBlocks = tempMtx->getRowPartitionSize();
-             tempColumnOffsets = tempMtx->getColumnPartition();
-             tempNColumnBlocks = tempMtx->getColumnPartitionSize();
+            tempRowOffsets = tempMtx->getRowPartition();
+            tempNRowBlocks = tempMtx->getRowPartitionSize();
+            tempColumnOffsets = tempMtx->getColumnPartition();
+            tempNColumnBlocks = tempMtx->getColumnPartitionSize();
 
             if (!tempMtx->isBlockDiagonal())
                 throw ErrorClass("Constraint matrix must be block-diagonal");
 
             // merge row partitions
-
-std::cout << "Merge row partitions" << std::endl;
-std::cout << "    ";
-for (int k=0;k<nRowBlocks;k++)
-    std::cout << " " << rowOffsets[k];
-std::cout << std::endl;
-std::cout << "    ";
-for (int k=0;k<tempNRowBlocks;k++)
-    std::cout << " " << tempRowOffsets[k];
-std::cout << std::endl << std::endl;
             i0 = 0;
             itemp = 0;
             imerge = 0;
@@ -296,22 +292,7 @@ std::cout << std::endl << std::endl;
             }
             nRowBlocks = imerge;
 
-std::cout << "Result:" << std::endl;
-std::cout << "    ";
-for (int k=0;k<nRowBlocks;k++)
-    std::cout << " " << rowOffsets[k];
-std::cout << std::endl;
-
             // merge column partititons
-std::cout << "Merge column partitions" << std::endl;
-std::cout << "    ";
-for (int k=0;k<nColumnBlocks;k++)
-    std::cout << " " << columnOffsets[k];
-std::cout << std::endl;
-std::cout << "    ";
-for (int k=0;k<tempNColumnBlocks;k++)
-    std::cout << " " << tempColumnOffsets[k];
-std::cout << std::endl << std::endl;
             i0 = 0;
             itemp = 0;
             imerge = 0;
@@ -335,27 +316,12 @@ std::cout << std::endl << std::endl;
                     break;
             }
             nColumnBlocks = imerge;
-
-std::cout << "Result:" << std::endl;
-std::cout << "    ";
-for (int k=0;k<nColumnBlocks;k++)
-    std::cout << " " << columnOffsets[k];
-std::cout << std::endl;
         }
 
-        int  nBlocks;
-        int* blockOffset = new int[nRowBlocks]; //leaks 12 bytes of memory
+        blockOffset = new int[nRowBlocks];
 
         // make sure the row and column blocks are synchronized and compute block sizes
-std::cout << "Merge row and column partitions" << std::endl;
-std::cout << "    ";
-for (int k=0;k<nRowBlocks;k++)
-    std::cout << " " << rowOffsets[k];
-std::cout << std::endl;
-std::cout << "    ";
-for (int k=0;k<nColumnBlocks;k++)
-    std::cout << " " << columnOffsets[k];
-std::cout << std::endl << std::endl;
+        int nBlocks;
         int jrow = 0;
         int jcol = 0;
         nBlocks  = 0;
@@ -380,18 +346,38 @@ std::cout << std::endl << std::endl;
         }
 
         // Note: blockSize is 1-based, due to issues of Fortran compatibility
-        int* blockSize = new int[nBlocks]; //leaks 8 bytes of memory
+        blockSize = new int[nBlocks];
         for (int i=1; i < nBlocks; i++)
             blockSize[i] = blockOffset[i] - blockOffset[i-1]; 
 
-std::cout << "Final block partition:" << std::endl;
-std::cout << "    ";
-for (int k=0;k<nBlocks;k++)
-    std::cout << " " << blockOffset[k];
-std::cout << std::endl;
+#ifndef NOSHORTS
+        /** If we're using unsigned shorts, make sure that the problem isn't too big. */
+        if (osinstance->getConstraintNumber() >= USHRT_MAX) 
+            throw ErrorClass("This problem is too large to be solved by this version of the code!\n"
+                           + "Recompile without -DUSERSHORTINDS to fix the problem.\n");
 
+        if (nBlocks >= USHRT_MAX)
+            throw ErrorClass("This problem is too large to be solved by this version of the code!\n"
+                           + "Recompile without -DUSERSHORTINDS to fix the problem.\n");
+#endif
+
+#ifndef BIT64
+        /*
+         * If operating in 32 bit mode, make sure that the dimension mDIM isn't
+         * too big for 32 bits.  If we don't do this check, then integer overflow
+         * won't be detected, and we'll allocate a bogus amount of storage.
+         */
+        if (osinstance->getConstraintNumber() > 23169)
+            throw ErrorClass("This problem is too large to be solved in 32 bit mode!\n");
+#endif
+
+        /** Keep track of which blocks have off-diagonal entries. */
+        isdiag = new bool[nBlocks+1];
+        for (int i=1; i<=nBlocks; i++)
+            isdiag[i] = true;
 
 #if 0
+// this is the signature of read_prob, which reads the SDPA problem from a file
 int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
      char *fname;   // this is the name of the file
      int *pn;       // pointer to n, the dimension of the matrices
@@ -400,7 +386,8 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
      double **pa;   // for RHS values
      struct constraintmatrix **pconstraints;  // the matrices Ai
      int printlevel;  // for printing error messages and such
-     
+
+//these declarations are used in example.c     
 {
   struct constraintmatrix *myconstraints;
   FILE *fid;
@@ -424,94 +411,33 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
   struct sparseblock *prev;
   int *isdiag;
   double *tempdiag;
+}
 #endif
 
-#ifndef NOSHORTS
-    /*
-     * If we're using unsigned shorts, make sure that the problem isn't
-     * too big.
-     */
-//  if (*pk >= USHRT_MAX) // pointer to k, the number of constraints
-    if (tempMtx->numberOfRows >= USHRT_MAX) 
-    {
-        throw ErrorClass("This problem is too large to be solved by this version of the code!\n"
-                       + "Recompile without -DUSERSHORTINDS to fix the problem.\n");
-    };
-#endif
+        /** Allocate space for the C matrix. */
+        pC->nblocks=nBlocks;
+        pC->blocks=(struct blockrec *)malloc((nBlocks+1)*sizeof(struct blockrec));
+        if (pC->blocks == NULL)
+            throw ErrorClass("Storage allocation failed!\n");
 
-#ifndef BIT64
-  /*
-   * If operating in 32 bit mode, make sure that the dimension mDIM isn't
-   * too big for 32 bits.  If we don't do this check, then integer overflow
-   * won't be detected, and we'll allocate a bogus amount of storage for
-   * O.
-   */
+        /** Allocate space for the constraints. */
+        myconstraints = 
+            (struct constraintmatrix *)malloc((tempMtx->numberOfRows+1)*sizeof(struct constraintmatrix));
 
-//    if (*pk > 23169)
-    if (tempMtx->numberOfRows > 23169)
-    {
-        throw ErrorClass("This problem is too large to be solved in 32 bit mode!\n");
-    };
-#endif
-//-----------------------------------
+        if (myconstraints == NULL)
+            throw ErrorClass("Storage allocation failed!\n");
+  
+        /** Null out all pointers in constraints. */
+        for (i=1; i<=*pk; i++)
+            myconstraints[i].blocks=NULL;
 
-  /*
-   * Keep track of which blocks have off-diagonal entries. 
-   */
-  bool* isdiag = new bool[nBlocks+1]; // leaks 3 bytes of memory
-  for (int i=1; i<=nBlocks; i++)
-    isdiag[i] = true;
+        *pa=(double *)malloc((*pk+1)*sizeof(double));
 
-#ifndef NOSHORTS
-  /*
-   * If we're using unsigned shorts, make sure that the problem isn't
-   * too big.
-   */
+        if (*pa == NULL)
+            throw ErrorClass("Storage allocation failed!\n");
 
-  if (nBlocks >= USHRT_MAX)
-    {
-        throw ErrorClass("This problem is too large to be solved by this version of the code!\n"
-                       + "Recompile without -DUSERSHORTINDS to fix the problem.\n");
-    };
-#endif
 
 #if 0
-  /*
-   * Allocate space for the C matrix.
-   */
-  pC->nblocks=nBlocks;
-  pC->blocks=(struct blockrec *)malloc((nBlocks+1)*sizeof(struct blockrec));
-  if (pC->blocks == NULL)
-    {
-        throw ErrorClass("Storage allocation failed!\n");
-    }
-
-  /*
-   * Allocate space for the constraints.
-   */
-  myconstraints=(struct constraintmatrix *)malloc((tempMtx->numberOfRows+1)*sizeof(struct constraintmatrix));
-
-  if (myconstraints == NULL)
-    {
-        throw ErrorClass("Storage allocation failed!\n");
-    };
-  
-  /*
-   * Null out all pointers in constraints.
-   */
-  for (i=1; i<=*pk; i++)
-    {
-      myconstraints[i].blocks=NULL;
-    };
-
-  *pa=(double *)malloc((*pk+1)*sizeof(double));
-
-  if (*pa == NULL)
-    {
-      printf("Storage allocation failed!\n");
-      exit(10);
-    };
-
   /*
    * And read the block structure.
    */
@@ -1029,42 +955,10 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
   return(0);
 }
 
-//+++++++++++++++++++++++++++++++++++
-        if (osinstance->getNumberOfMatrixVariables() != 1)
-            throw ErrorClass("There must be one matrixVar object");
-        if (osinstance->getNumberOfNonlinearExpressions() != osinstance->getConstraintNumber() + 1)
-            throw ErrorClass("There must be one nonlinear expression for each constraint and objective");
-        if (osinstance->getLinearConstraintCoefficientNumber() > 0)
-            throw ErrorClass("Additional linear constraint coefficients are not supported");
-        if (osinstance->getNumberOfQuadraticTerms() > 0)
-            throw ErrorClass("Additional quadratic terms are not supported");
-
-        char* cType = osinstance->getConstraintTypes();
-        for (int i=0; i < osinstance->getConstraintNumber(); i++)
-            if (cType[i] != 'E') throw ErrorClass("Only equality constraints are supported");
-
-        std::string* oType = getObjectiveMaxOrMins();
-        for (int i=0; i < osinstance->getObjectiveNumber(); i++)
-            if (oType[i] != "max") throw ErrorClass("The problem must be of \"max\" type");
-/*
- Must check: 
- Each constraint and objective must have one nonlinear expression
-      of the form trace(AiX), where Ai is constant and X is matrixVar;
- each Ai must be symmetric and block-diagonal, i.e. rowOffsets = colOffsets
-      with each block having blockRowIdx = blockColumnIdx
- block sizes must be conformal for all matrices
- */
-    }    
-#endif
-//===================================
-        //if (!verifyForm()) throw ErrorClass("instance does not fit CSDP requirements");
-
         /*
          * The problem and solution data.
          */
-
-// disable Csdp stuff for now
-#if 0
+//===========================================================================
         struct blockmatrix C;
         double *b;
         struct constraintmatrix *constraints;
@@ -1594,10 +1488,20 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
 
   free_prob(7,2,C,b,constraints,X,y,Z);  
 #endif
+        //garbage collection
+        if (blockOffset != NULL) delete [] blockOffset;
+        if (blockSize   != NULL) delete [] blockSize;
+        if (mtxRef      != NULL) delete [] mtxRef;
+        if (isdiag      != NULL) delete [] isdiag;
     }
 
     catch(const ErrorClass& eclass)
     {
+        if (blockOffset != NULL) delete [] blockOffset;
+        if (blockSize   != NULL) delete [] blockSize;
+        if (mtxRef      != NULL) delete [] mtxRef;
+        if (isdiag      != NULL) delete [] isdiag;
+
         osresult = new OSResult();
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
@@ -1606,7 +1510,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
     }
 
 }// end buildSolverInstance()
-
+ 
 void  CsdpSolver::solve() throw (ErrorClass)
 {
 }
@@ -1691,7 +1595,7 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
                 else if (optionsVector[ i]->name == "fastmode" )
                     params.fastmode = atoi( optionsVector[ i]->value.c_str() );
                 else 
-                    throw ErrorClass("Error setting options for solver csdp");
+                    throw ErrorClass("Unrecognized option for solver csdp");
             }
         }
     }

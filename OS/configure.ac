@@ -165,7 +165,7 @@ AC_COIN_CHECK_USER_LIBRARY([Csdp],  [CSDP],  [blockmat.h],,, [OSLib])
 #############################################################################
 
 
-  case $build in
+  case $host in
      *-mingw*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
       *-cygwin*)

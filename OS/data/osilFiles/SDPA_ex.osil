@@ -91,7 +91,7 @@ The problem is (as described in CSDP/example/example.c):
 						<el>5</el>
 						<el>7</el>
 					</rowOffsets>
-					<block blockRowIdx="1" blockColIdx="1">
+					<block blockRowIdx="0" blockColIdx="0">
 						<elements>
 							<constantElements numberOfValues="3">
 								<start>
@@ -112,7 +112,7 @@ The problem is (as described in CSDP/example/example.c):
 							</constantElements>
 						</elements>
 					</block>
-					<block blockRowIdx="2" blockColIdx="2">
+					<block blockRowIdx="1" blockColIdx="1">
 						<elements>
 							<constantElements numberOfValues="4">
 								<start>
@@ -136,7 +136,7 @@ The problem is (as described in CSDP/example/example.c):
 							</constantElements>
 						</elements>
 					</block>
-					<block blockRowIdx="3" blockColIdx="3">
+					<block blockRowIdx="3" blockColIdx="2">
 						<elements>
 							<constantElements numberOfValues="0">
 								<start>
@@ -161,7 +161,7 @@ The problem is (as described in CSDP/example/example.c):
 						<el>5</el>
 						<el>7</el>
 					</rowOffsets>
-					<block blockRowIdx="1" blockColIdx="1">
+					<block blockRowIdx="0" blockColIdx="0">
 						<elements>
 							<constantElements numberOfValues="3">
 								<start>
@@ -182,7 +182,7 @@ The problem is (as described in CSDP/example/example.c):
 							</constantElements>
 						</elements>
 					</block>
-					<block blockRowIdx="2" blockColIdx="2">
+					<block blockRowIdx="1" blockColIdx="1">
 						<elements>
 							<constantElements numberOfValues="0">
 								<start>
@@ -194,7 +194,7 @@ The problem is (as described in CSDP/example/example.c):
 							</constantElements>
 						</elements>
 					</block>
-					<block blockRowIdx="3" blockColIdx="3">
+					<block blockRowIdx="2" blockColIdx="2">
 						<elements>
 							<constantElements numberOfValues="1">
 								<start>
@@ -227,8 +227,8 @@ The problem is (as described in CSDP/example/example.c):
 						<el>5</el>
 						<el>7</el>
 					</rowOffsets>
-					<block blockRowIdx="1" blockColIdx="1"/>
-					<block blockRowIdx="2" blockColIdx="2">
+					<block blockRowIdx="0" blockColIdx="0"/>
+					<block blockRowIdx="1" blockColIdx="1">
 						<elements>
 							<constantElements numberOfValues="4">
 								<start>
@@ -252,7 +252,7 @@ The problem is (as described in CSDP/example/example.c):
 							</constantElements>
 						</elements>
 					</block>
-					<block blockRowIdx="3" blockColIdx="3">
+					<block blockRowIdx="2" blockColIdx="2">
 						<elements>
 							<constantElements numberOfValues="1">
 								<start>

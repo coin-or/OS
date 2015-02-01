@@ -743,7 +743,12 @@ enum ENUM_MATRIX_CONSTRUCTOR_TYPE
 {
     ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown = 0,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_elements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_block,
@@ -752,12 +757,17 @@ enum ENUM_MATRIX_CONSTRUCTOR_TYPE
 
 inline int returnMatrixConstructorType(std::string cType)
 {
-    if (cType == "baseMatrix"    ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
-    if (cType == "elements"      ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
-    if (cType == "transformation") return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
-    if (cType == "blocks"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
-    if (cType == "block"         ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
-    if (cType == "matrix"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
+    if (cType == "baseMatrix"       ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
+    if (cType == "constantElements" ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements;
+    if (cType == "varRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements;
+    if (cType == "linearElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements;
+    if (cType == "generalElements"  ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements;
+    if (cType == "objRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements;
+    if (cType == "conRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements;
+    if (cType == "transformation"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
+    if (cType == "blocks"           ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
+    if (cType == "block"            ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
+    if (cType == "matrix"           ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
     return 0;
 }//returnMatrixConstructorType
 
