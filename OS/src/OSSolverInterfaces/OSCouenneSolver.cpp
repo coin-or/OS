@@ -90,7 +90,6 @@ using namespace Couenne;
 
 using namespace Bonmin;
 using namespace Couenne;
-using std::cout;
 using std::endl;
 using std::ostringstream;
 
@@ -114,12 +113,6 @@ CouenneSolver::~CouenneSolver()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "inside CouenneSolver destructor\n");
 #endif
 
-    if(couenne != NULL)
-    {
-        //cout << "start delete of couenne problem" << endl;
-        ///delete couenne;
-        //cout << "finish delete of couenne problem" << endl;
-    }
     if(con_body != NULL)
     {
         //delete con_body;
@@ -669,30 +662,54 @@ void CouenneSolver::solve() throw (ErrorClass)
         //And we will output file with information on what has been changed in the problem to make it fail.
         //Now depending on what algorithm has been called (B-BB or other) the failed problem may be at different place.
         //    const OsiSolverInterface &si1 = (algo > 0) ? nlpSolver : *model.solver();
+
+        osresult->setGeneralMessage("Ipopt has failed to solve a problem");
+        osresult->setGeneralStatusType( "error");
+        osrl = osrlwriter->writeOSrL( osresult);
+        throw ErrorClass( osrl) ;
     }
 
     catch(OsiTMINLPInterface::SimpleError &E)
     {
-        std::cerr<<E.className()<<"::"<<E.methodName()
-                 <<std::endl
-                 <<E.message()<<std::endl;
+        ostringstream outStr;
+        outStr << E.className() << "::"<< E.methodName() << std::endl << E.message() << std::endl;
+
+        osresult->setGeneralMessage(outStr.str());
+        osresult->setGeneralStatusType( "error");
+        osrl = osrlwriter->writeOSrL( osresult);
+        throw ErrorClass( osrl) ;
     }
 
     catch(CoinError &E)
     {
-        std::cerr<<E.className()<<"::"<<E.methodName()
-                 <<std::endl
-                 <<E.message()<<std::endl;
+        ostringstream outStr;
+        outStr << E.className() << "::"<< E.methodName() << std::endl << E.message() << std::endl;
+
+        osresult->setGeneralMessage(outStr.str());
+        osresult->setGeneralStatusType( "error");
+        osrl = osrlwriter->writeOSrL( osresult);
+        throw ErrorClass( osrl);
     }
 
     catch (Ipopt::OPTION_INVALID &E)
     {
-        std::cerr<<"Ipopt exception : "<<E.Message()<<std::endl;
+        ostringstream outStr;
+        outStr << "Ipopt exception : " << E.Message() << std::endl;
+
+        osresult->setGeneralMessage(outStr.str());
+        osresult->setGeneralStatusType( "error");
+        osrl = osrlwriter->writeOSrL( osresult);
+        throw ErrorClass( osrl);
     }
     catch (int generic_error)
     {
         if (generic_error == infeasible)
-            printf ("problem infeasible\n");
+        {
+            osresult->setGeneralMessage("generic error: problem infeasible");
+            osresult->setGeneralStatusType("error");
+            osrl = osrlwriter->writeOSrL( osresult);
+            throw ErrorClass( osrl);
+        }
     }
 
 }//end solve()

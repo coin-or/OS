@@ -1,7 +1,7 @@
 /* $Id$ */
 /** @file OSMatlab.cpp
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -29,7 +29,6 @@
 #endif
 
 
-using std::cout;
 using std::endl;
 using std::ostringstream;
 
@@ -135,14 +134,11 @@ std::string OSMatlab::solve()
                                     {
 #ifdef COIN_HAS_IPOPT
                                         bIpoptIsPresent = true;
-                                        //std::cout << "Create an Ipopt solver and optimize"<< std::endl;
                                         IpoptSolver *ipoptSolver  = new IpoptSolver();
                                         ipoptSolver->osol = osol;
                                         ipoptSolver->osinstance = osinstance;
                                         ipoptSolver->solve();
-                                        //std::cout << "Done optimizing with Ipopt"<< std::endl;
                                         return  ipoptSolver->osrl ;
-                                        //std::cout << "Have Ipopt writ out osrl"<< std::endl;
 #endif
                                         if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
                                     }
@@ -195,53 +191,10 @@ std::string OSMatlab::solve()
         osilwriter = new OSiLWriter();
         std::string  osil = osilwriter->writeOSiL( osinstance);
         osagent = new OSSolverAgent( sAgentAddress);
-        //cout << "Place remote synchronous call" << endl;
         return osagent->solve(osil, osol);
     }
     return "";
 
-//
-//
-//
-//	DefaultSolver *solver  = NULL;
-//	try{
-//		if(osinstance != NULL){
-//			OSiLWriter *osilwriter;
-//			osilwriter = new OSiLWriter();
-//			osilwriter->m_bWhiteSpace = true;
-//			osil =  osilwriter->writeOSiL( osinstance);
-//			solver = new CoinSolver();
-//			solver->sSolverName = "cbc";
-//			//SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();
-//			//outStr << osil;
-//			//outStr << endl;
-//			//outStr << "Now Solve remotely with  LINDO" << endl;
-//			//outStr << "create a new LINDO Solver for OSiL string solution" << endl;
-//			// below for solving on a remote machine
-//			//
-//			//
-//			//OSSolverAgent* osagent = NULL;
-//			//osagent = new OSSolverAgent( "http://128.135.130.17:8080/os/OSSolverService.jws" );
-//			//outStr << osagent->solve(osil, osol);
-//			///
-//			//
-//			// do the garbage collection
-//			//delete osilwriter;
-//			//delete osagent;
-//			solver->osinstance = NULL;
-//			solver->osol = osol;
-//			solver->osil = osil;
-//			solver->solve();
-//			outStr << solver->osrl;
-//			return outStr.str();
-//			//return osil;
-//		}else{
-//			return "there was no instance";
-//		}
-//	}
-//	catch(const ErrorClass& eclass){
-//		return eclass.errormsg;
-//	}
 }//end solve
 
 void OSMatlab::createOSInstance()
@@ -270,9 +223,7 @@ void OSMatlab::createOSInstance()
         osinstance->addVariable(i, varNames[ i] , vl[ i], vu[ i], varType[ i]);
         outStr.str("");
     }
-    //
-    //osinstance->setVariables(numVar, varNames, vl, vu, varType, NULL, NULL);
-    //
+
     // now add the objective function
     osinstance->setObjectiveNumber( 1);
     // now the coefficient
@@ -287,11 +238,9 @@ void OSMatlab::createOSInstance()
     }
     std::string maxOrMin = "min";
     if( objType == true) maxOrMin = "max";
-    //bool addObjective(int index, string name, string maxOrMin, double constant, double weight, SparseVector* objectiveCoefficients);
     osinstance->addObjective(-1, "objfunction", maxOrMin, 0.0, 1.0, objcoeff);
-    //
-    // now the constraints
 
+    // now the constraints
     std::string *conNames;
     conNames = new std::string[ numCon];
     outStr.str("");
@@ -305,19 +254,6 @@ void OSMatlab::createOSInstance()
 
         outStr.str("");
     }
-    //osinstance->addConstraint(0, "row0", -OSDBL_MAX, 4, 0);
-    //osinstance->addConstraint(1, "row1", -OSDBL_MAX, 6, 0);
-    //osinstance->addConstraint(2, "row2", -OSDBL_MAX, 0, 0);
-    //osinstance->addConstraint(3, "row3", 0 , OSDBL_MAX, 0);
-
-
-    //osinstance->setConstraints( numCon, conNames, bl, bu, NULL);
-    //
-    // now add the <linearConstraintCoefficients>
-    //bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
-    //double* values, int valuesBegin, int valuesEnd,
-    //int* indexes, int indexesBegin, int indexesEnd,
-    //int* starts, int startsBegin, int startsEnd);
     osinstance->setLinearConstraintCoefficients(sparseMat->valueSize, true, sparseMat->values, 0, sparseMat->valueSize - 1,
             sparseMat->indexes, 0, sparseMat->valueSize - 1, sparseMat->starts, 0, sparseMat->startSize - 1);
     if(numQTerms > 0)

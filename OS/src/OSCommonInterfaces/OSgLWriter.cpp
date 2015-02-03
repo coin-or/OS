@@ -23,7 +23,6 @@
 
 #include <sstream>
 
-using std::cout;
 using std::endl;
 using std::ostringstream;
 

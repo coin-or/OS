@@ -16,7 +16,6 @@
 #include "OSExpressionTree.h"
 #include <vector>
 
-using std::cout;
 using std::endl;
 
 OSExpressionTree::OSExpressionTree():
@@ -158,12 +157,6 @@ std::map<int, int> *ScalarExpressionTree::getVariableIndicesMap()
     mapVarIdx = new std::map<int, int>();
     std::map<int, int>::iterator m_mPosVarIdx;
     m_treeRoot->getVariableIndexMap( mapVarIdx);
-    //std::cout << "SIZE OF MAP =  "  << (*mapVarIdx).size() << std::endl;
-    //for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
-    //	m_mPosVarIdx->second = kount++;
-    //std::cout <<  "POSITION FIRST =  "  << m_mPosVarIdx->first ;
-    //std::cout <<  "    POSITION SECOND = "  << m_mPosVarIdx->second << std::endl;
-    //}
     m_bIndexMapGenerated = true;
     return mapVarIdx;
 }//getVariableIndicesMap

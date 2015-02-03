@@ -1,7 +1,7 @@
 /* $Id$ */
 /** @file LindoSolver.cpp
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -40,7 +40,7 @@
 #include <sstream>
 #include<vector>
 #include <map>
-
+pri
 using std::cout;
 using std::endl;
 using std::ostringstream;
@@ -174,9 +174,10 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass)
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
                 "HERE I AM 2 !!!!!!!!!!!!!!!!!!!\n");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, 
+                osilwriter.writeOSiL( osinstance));
 #endif
         }
-        //cout << osilwriter.writeOSiL( osinstance) << endl;
         if(osinstance->getVariableNumber() <  0)throw ErrorClass("Cannot have a negative number of decision variables");
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, 
@@ -253,7 +254,6 @@ void LindoSolver::solve()
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
-        //std::cout << osrl << std::endl;
         throw ErrorClass( osrl) ;
     }
 }// end solve
@@ -484,6 +484,7 @@ bool LindoSolver::generateLindoModel()
             outStr << "LinearConstraintCoefficientNumber =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, outStr.str());
             //
+
             int iNumFakeNonz = 1;
             // fake index array
             int *paiArrayIdx;
@@ -567,17 +568,6 @@ bool LindoSolver::optimize()
     try
     {
         if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("LINDO NEEDS AN OBJECTIVE FUNCTION");
-        //
-        //if(LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
-        //if(LSsolveMIP( pModel_,  &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
-        //LSwriteMPIFile(pModel_, "/Users/kmartin/temp/hs71.mpi");
-        // some testing //
-        //cout << "NUMBER OF NEW SLACKS = " <<  m_iNumberNewSlacks << endl;
-        //for(int kj = 0; kj < osinstance->getConstraintNumber(); kj++){
-        //	cout << "Constraint Type: " << m_mcRowType[ kj] << endl;
-        //	cout << "RHS VALUE: " << m_mdRhsValue[ kj] << endl;
-        //}
-        //
 
         if( isNonlinear == true )
         {
@@ -595,13 +585,6 @@ bool LindoSolver::optimize()
             m_iLindoErrorCode = LSsolveMIP( pModel_,  &nSolStatus);
             lindoAPIErrorCheck("There was an ERROR in the call to the MIP solver");
         }
-        /* Report the status of solution */
-        // if (nSolStatus==LS_STATUS_OPTIMAL || nSolStatus==LS_STATUS_BASIC_OPTIMAL)
-        // printf("\nSolution Status: Globally Optimal\n");
-        // else if (nSolStatus==LS_STATUS_LOCAL_OPTIMAL)
-        // printf("\nSolution Status: Locally Optimal\n\n");
-        // else if (nSolStatus==LS_STATUS_INFEASIBLE)
-        //  printf("\nSolution Status: Infeasible\n\n");
         // set basic problem parameters
         if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
             throw ErrorClass("OSResult error: setVariableNumer");
@@ -646,6 +629,7 @@ bool LindoSolver::optimize()
                 m_iLindoErrorCode = LSgetMIPPrimalSolution( pModel_, x);
                 lindoAPIErrorCheck("Error trying to obtain primal solution with integer variables present");
             }
+
             else
             {
                 m_iLindoErrorCode = LSgetPrimalSolution( pModel_, x);

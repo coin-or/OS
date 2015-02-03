@@ -38,7 +38,6 @@
 
 
 using std::ostringstream;
-using std::cout;
 using std::endl;
 
 
@@ -1543,7 +1542,6 @@ double OSnLNodeErf::calculateFunction(double *x)
     const double b =  (89./880.);
     //m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
     m_dFunctionValue = tanh( (a + b * m_mChildren[0]->calculateFunction( x) * m_mChildren[0]->calculateFunction( x)) * m_mChildren[0]->calculateFunction( x) );
-    //std::cout << "function value =   " << m_dFunctionValue << std::endl;
     return m_dFunctionValue;
 }// end OSnLNodeErf::calculate
 
@@ -1960,10 +1958,6 @@ double OSnLNodeVariable::calculateFunction(double *x)
 ADdouble OSnLNodeVariable::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
 {
     m_ADTape = coef;
-    //std::cout << "Inside OSnLNodeVariable "<<  std::endl;
-    //std::cout << "Value of OSiL index = " << idx << std::endl;
-    //std::cout << "Value of AD index = " << (*varIdx)[ idx] << std::endl;
-    //std::cout << "Value of AD variable = " << (*XAD)[ (*varIdx)[ idx] ] << std::endl;
     m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
     return m_ADTape;
 }// end OSnLNodeVariable::constructADTape
@@ -1972,18 +1966,11 @@ ADdouble OSnLNodeVariable::constructADTape(std::map<int, int> *varIdx, ADvector 
 void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx)
 {
     int numVars;
-    if( (*varIdx).find( idx) != (*varIdx).end() )
+    if( (*varIdx).find( idx) == (*varIdx).end() )  // variable to map with variable index as the key
     {
-        //std::cout  << "Index already in the map " << idx <<  std::endl;
-    }
-    else  // variable to map with variable index as the key
-    {
-        //std::cout << "Found a new index to add to the map " << idx << std::endl;
         numVars = (*varIdx).size();
-        //std::cout << "numVars =  " << numVars << std::endl;
         (*varIdx)[ idx] = numVars;
     }
-    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
 }//getVariableIndexMap
 
 
@@ -3262,38 +3249,6 @@ std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
     return outStr.str();
 }//OSnLMNodeMatrixReference::getNonlinearExpressionInXML
 
-#if 0
-double OSnLMNodeMatrixReference::calculateFunction(double *x)
-{
-    m_dFunctionValue = coef*x[idx];
-    return m_dFunctionValue;
-}// end OSnLMNodeMatrixReference::calculate
-
-ADdouble OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
-{
-    m_ADTape = coef;
-    m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
-    return m_ADTape;
-}// end OSnLMNodeMatrixReference::constructADTape
-
-
-void OSnLMNodeMatrixReference::getVariableIndexMap(std::map<int, int> *varIdx)
-{
-    int numVars;
-    if( (*varIdx).find( idx) != (*varIdx).end() )
-    {
-        //std::cout  << "Index already in the map " << idx <<  std::endl;
-    }
-    else  // variable to map with variable index as the key
-    {
-        //std::cout << "Found a new index to add to the map " << idx << std::endl;
-        numVars = (*varIdx).size();
-        //std::cout << "numVars =  " << numVars << std::endl;
-        (*varIdx)[ idx] = numVars;
-    }
-    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
-}//getVariableIndexMap
-#endif
 
 
 OSnLMNode* OSnLMNodeMatrixReference::cloneExprNode()

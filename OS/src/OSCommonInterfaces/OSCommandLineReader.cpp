@@ -2,7 +2,7 @@
 /** @file OSCommandLineReader.cpp
  *
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2011-2013, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -22,7 +22,6 @@
 
 #include <stdio.h>
 
-using std::cout;
 using std::endl;
 using std::ostringstream;
 using std::string;

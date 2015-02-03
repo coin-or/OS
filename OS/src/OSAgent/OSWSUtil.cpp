@@ -2,7 +2,7 @@
 /** @file WSUtil.cpp
  *
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -10,7 +10,6 @@
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- *
  */
 
 #include "OSConfig.h"
@@ -27,8 +26,10 @@
 #include <netdb.h>
 #endif
 
-// need to include OSParameters.h after winsock.h, because it may include unistd.h, which needs to know that winsock.h has already been included
-// unfortunately, the windows stuff defines a macro named "max", and maybe also "min"? so undefine these first
+// need to include OSParameters.h after winsock.h, because it may include unistd.h, 
+// which needs to know that winsock.h has already been included
+// unfortunately, the windows stuff defines a macro named "max", 
+// and maybe also "min"? so undefine these first
 #ifdef min
 #undef min
 #endif
@@ -129,14 +130,6 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
             outStr << "Message size =  " << recvMsgSize << endl;
             outStr << httpBuffer << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-//            printf("%s\n", httpBuffer);
-//            if(recvMsgSize < (RCVBUFSIZE - 1) )
-//            {
-//                for(n = 0; n < recvMsgSize; n++)
-//                {
-//                    char_val = httpBuffer[ n];
-//                }
-//            }
 #endif
             ret_message << httpBuffer;
             // clear the buffer
@@ -253,9 +246,10 @@ std::string WSUtil::createFormDataUpload(std::string solverAddress, std::string 
 
 string WSUtil::SOAPify(std::string inputstring, bool useCDATA)
 {
-    /* replace all occurrences of "<" with "&lt;"  all
-    occurrences of ">" with "&gt;" and all occurrences of " or ' with &quote;
-    */
+    /** replace all occurrences of "<" with "&lt;"  
+     *  all occurrences of ">" with "&gt;" 
+     *  and all occurrences of " or ' with &quote;
+     */
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_detailed_trace, "prepare the XML for a SOAP envelope\n");
 #endif
@@ -297,9 +291,9 @@ string WSUtil::SOAPify(std::string inputstring, bool useCDATA)
 
 string WSUtil::deSOAPify(std::string inputstring, bool useCDATA)
 {
-    /** replace all occurances of "&lt;" with "<",
-     *  all occurances of "&gt;" with ">" 
-     *  and all occurances of "&quote;" with "
+    /** replace all occurrences of "&lt;" with "<",
+     *  all occurrences of "&gt;" with ">" 
+     *  and all occurrences of "&quote;" with "
      */
     ostringstream body;
     int i = 0;
@@ -379,8 +373,8 @@ unsigned long ResolveName(char *name)
 
 string WSUtil::getOSxL(string soapstring, string serviceMethod)
 {
-    /*  get the string that starts with <osxl
-     * inside the soap envelope
+    /** get the string that starts with <osxl
+     *  inside the soap envelope
      */
     string result = "";
     // strip off the return header information

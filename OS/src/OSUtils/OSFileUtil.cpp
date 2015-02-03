@@ -20,7 +20,6 @@
 #include "OSErrorClass.h"
 #include "OSOutput.h"
 
-using std::cout;
 using std::endl;
 
 
@@ -42,30 +41,21 @@ std::string FileUtil::getFileAsString( const char* fname)
         fileName << fname << std::endl;
         std::string soutString;
         char ch;
-        //std::cout << "Inside FileUtil:getFileAsString and calling inFile " << fname << std::endl;
         std::ifstream inFile( fname);
         if( !inFile)
         {
             throw ErrorClass(" Could not open the given file: " + fileName.str());
         }
-        //std::cout << "Inside FileUtil:getFileAsString, file read put into ostringstream" << std::endl;
-        //while((ch = inFile.get() ) != EOF){
-        //	outStr << ch;
-        //	std::cout << ch ;
-        //}
 
         while( inFile.get( ch ) )
         {
             outStr << ch;
-            //std::cout << ch ;
         }
 
         if( !inFile.eof() )
         {
             throw ErrorClass(" There was a problem reading the file: " + fileName.str() );
         }
-        //std::cout << std::endl;
-        //std::cout << "Inside FileUtil:getFileAsString, convert to a string" << std::endl;
         soutString = outStr.str();
         inFile.close();
         return soutString;
@@ -75,7 +65,6 @@ std::string FileUtil::getFileAsString( const char* fname)
         throw ErrorClass( eclass.errormsg) ;
     }
 } // end getFileAsString
-
 
 
 char* FileUtil::getFileAsChar(const  char* fname)
@@ -115,10 +104,6 @@ char* FileUtil::getFileAsChar(const  char* fname)
         {
             throw ErrorClass(" There was a problem reading the file: " + fileName.str());
         }
-        //while((ch = inFile.get()) != EOF ){
-        //	xml[ bufsize] = ch;
-        //	bufsize++;
-        //}
         return xml;
     }
     catch(const ErrorClass& eclass)
@@ -126,9 +111,6 @@ char* FileUtil::getFileAsChar(const  char* fname)
         throw ErrorClass( eclass.errormsg) ;
     }
 } // end getFileAsChar
-
-
-
 
 
 bool FileUtil::writeFileFromString(char* fname, std::string sname)
@@ -166,7 +148,6 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname)
 
 bool FileUtil::writeFileFromString(std::string  fname, std::string sname)
 {
-
     std::ostringstream fileName;
     fileName << fname << std::endl;
     FILE *ft ;
@@ -185,7 +166,6 @@ bool FileUtil::writeFileFromString(std::string  fname, std::string sname)
         {
             if(cstr[ i] != '\0')     fputc ( cstr[ i], ft )  ;
         }
-//	    fputc( '\n', ft);
         fclose ( ft);
         delete[] cstr;
         cstr = NULL;
@@ -196,6 +176,7 @@ bool FileUtil::writeFileFromString(std::string  fname, std::string sname)
         throw ErrorClass( eclass.errormsg) ;
     }
 } // end writeFileFromString
+
 
 bool FileUtil::writeFileFromChar(char* fname, char* ch)
 {

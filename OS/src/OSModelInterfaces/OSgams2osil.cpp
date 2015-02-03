@@ -51,24 +51,20 @@ bool OSgams2osil::initGMO(const char* datfile)
     char msg[1024];
     int rc;
 
-    //if (!gmoCreate(&gmo, msg, sizeof(msg))) {
-    //		fprintf(stderr, "%s\n",msg);
-    //		return false;
-    //	}
-
-
-//	if (!gmoCreateD(&gmo, GAMSIO_PATH, msg, sizeof(msg))) {
     if (!gmoCreate(&gmo, msg, sizeof(msg)))
     {
-        fprintf(stderr, "%s\n",msg);
-        return false;
+            osresult->setGeneralMessage(msg);
+            osresult->setGeneralStatusType("error");
+            osrl = osrlwriter->writeOSrL( osresult);
+            throw ErrorClass( osrl);
     }
-//	}
 
     if (!gevCreate(&gev, msg, sizeof(msg)))
     {
-        fprintf(stderr, "%s\n",msg);
-        return EXIT_FAILURE;
+            osresult->setGeneralMessage(msg);
+            osresult->setGeneralStatusType("error");
+            osrl = osrlwriter->writeOSrL( osresult);
+            throw ErrorClass( osrl);
     }
 
 
@@ -77,34 +73,34 @@ bool OSgams2osil::initGMO(const char* datfile)
     // load control file
     if ((rc = gevInitEnvironmentLegacy(gev, datfile)))
     {
-        fprintf(stderr, "Could not init gams environment: %s Rc = %d\n", datfile, rc);
+        ostringstream outStr;
+        outStr << "Could not initialize GAMS environment: " << datfile << " Rc = " << rc << std::endl;
+        osresult->setGeneralMessage(outStr.str());
+        osresult->setGeneralStatusType("error");
+        osrl = osrlwriter->writeOSrL( osresult);
         gmoFree(&gmo);
         gevFree(&gev);
-        return false;
+        throw ErrorClass( osrl);
     }
 
     if ((rc = gmoRegisterEnvironment(gmo, gev, msg)))
     {
-        gevLogStat(gev, "Could not register environment.");
+        osresult->setGeneralMessage("Could not register GAMS environment.");
+        osresult->setGeneralStatusType("error");
+        osrl = osrlwriter->writeOSrL( osresult);
         gmoFree(&gmo);
         gevFree(&gev);
-        return false;
+        throw ErrorClass( osrl);
     }
-
-    // setup GAMS output channels
-//	if ((rc = gmoOpenGms( gmo))) {
-//		fprintf(stderr, "Could not open GAMS environment. Rc = %d\n", rc);
-//		gmoFree(&gmo);
-//		return false;
-//	}
 
     if ((rc = gmoLoadDataLegacy(gmo, msg)))
     {
-        gevLogStat(gev, "Could not load model data.");
-//		gmoCloseGms(gmo);
+        osresult->setGeneralMessage("Could not load model data.");
+        osresult->setGeneralStatusType("error");
+        osrl = osrlwriter->writeOSrL( osresult);
         gmoFree(&gmo);
         gevFree(&gev);
-        return false;
+        throw ErrorClass( osrl);
     }
 
     gmoMinfSet(gmo, -OSDBL_MAX);
@@ -201,9 +197,6 @@ bool OSgams2osil::createOSInstance()
         delete[] dummy;
 
         std::string objname = "objective"; //TODO
-//		if (dict.haveNames() && dict.getObjName(buffer, 256))
-//			objname = buffer;
-//		std::cout << "gmo obj con: " << gmoObjConst(gmo) << std::endl;
         if (!osinstance->addObjective(-1, objname, gmoSense(gmo) == Obj_Min ? "min" : "max", gmoObjConst(gmo), 1., objectiveCoefficients))
         {
             delete objectiveCoefficients;
@@ -704,7 +697,7 @@ OSnLNode* OSgams2osil::parseGamsInstructions(int codelen, int* opcodes, int* fie
             case fnpoly: /* simple polynomial */
             default :
             {
-                if (debugoutput) std::cerr << "nr. " << func << " - unsuppored. Error." << std::endl;
+                if (debugoutput) std::cerr << "nr. " << func << " - unsupported. Error." << std::endl;
                 return NULL;
             }
             }
