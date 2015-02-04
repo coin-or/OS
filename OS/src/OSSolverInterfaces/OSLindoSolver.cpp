@@ -40,7 +40,7 @@
 #include <sstream>
 #include<vector>
 #include <map>
-pri
+
 using std::cout;
 using std::endl;
 using std::ostringstream;
