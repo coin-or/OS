@@ -826,7 +826,7 @@ varReferenceElements: | varReferenceElementsStart varReferenceElementsAttributes
 
 varReferenceElementsStart: VARREFERENCEELEMENTSSTART
 {
-    ((MatrixElements*)osglData->tempC)->varReferenceElements = new VarReferenceMatrixElements();
+    (VarReferenceMatrixElements*)osglData->tempC = new VarReferenceMatrixElements();
     osglData->numberOfValuesPresent = false;        
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
@@ -843,7 +843,7 @@ varReferenceElementsAttList: | varReferenceElementsAttList varReferenceElementsA
 varReferenceElementsAtt: 
     osglNumberOfValuesATT
     {
-        ((MatrixElements*)osglData->tempC)->varReferenceElements->numberOfValues = osglData->numberOfValues;
+        (VarReferenceMatrixElements*)osglData->tempC->numberOfValues = osglData->numberOfValues;
         if (osglData->numberOfValues > 0)
             ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
                 mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType,
@@ -851,7 +851,7 @@ varReferenceElementsAtt:
     }
   | osglRowMajorATT
     {
-        ((MatrixElements*)osglData->tempC)->varReferenceElements->rowMajor = osglData->rowMajor;
+        (VarReferenceMatrixElements*)osglData->tempC->rowMajor = osglData->rowMajor;
     }
 ;
 
@@ -861,9 +861,9 @@ varReferenceElementsNonzeros: | varReferenceElementsIndexes varReferenceElements
 
 varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferenceElementsStartVectorContent
 {
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->start = new IntVector();
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->start->numberOfEl = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->start->el = osglData->osglIntArray;
+    (VarReferenceMatrixElements*)osglData->tempC->start = new IntVector();
+    (VarReferenceMatrixElements*)osglData->tempC->start->numberOfEl = osglData->osglNumberOfEl;
+    (VarReferenceMatrixElements*)osglData->tempC->start->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
@@ -889,9 +889,9 @@ varReferenceElementsStartVectorBody:  osglIntArrayData;
 
 varReferenceElementsIndexes: varReferenceElementsIndexesStart varReferenceElementsIndexesContent
 {
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes = new IntVector();
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes->numberOfEl = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->indexes->el = osglData->osglIntArray;
+    (VarReferenceMatrixElements*)osglData->tempC->indexes = new IntVector();
+    (VarReferenceMatrixElements*)osglData->tempC->indexes->numberOfEl = osglData->osglNumberOfEl;
+    (VarReferenceMatrixElements*)osglData->tempC->indexes->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
@@ -899,7 +899,7 @@ varReferenceElementsIndexes: varReferenceElementsIndexesStart varReferenceElemen
 
 varReferenceElementsIndexesStart: INDEXESSTART
 {
-    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->varReferenceElements->numberOfValues;
+    osglData->osglNumberOfEl = (VarReferenceMatrixElements*)osglData->tempC->numberOfValues;
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
     osglData->osglCounter = 0;
 };
@@ -915,9 +915,9 @@ varReferenceElementsIndexesBody: osglIntArrayData;
 
 varReferenceElementsValues: varReferenceElementsValuesStart varReferenceElementsValuesContent
 {
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->values = new IntVector();
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->values->numberOfEl = osglData->osglNumberOfEl;
-    ((MatrixElements*)osglData->tempC)->varReferenceElements->values->el = osglData->osglIntArray;
+    (VarReferenceMatrixElements*)osglData->tempC->values = new IntVector();
+    (VarReferenceMatrixElements*)osglData->tempC->values->numberOfEl = osglData->osglNumberOfEl;
+    (VarReferenceMatrixElements*)osglData->tempC->values->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
@@ -925,7 +925,7 @@ varReferenceElementsValues: varReferenceElementsValuesStart varReferenceElements
 
 varReferenceElementsValuesStart: VALUESSTART
 {
-    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->varReferenceElements->numberOfValues;
+    osglData->osglNumberOfEl = (VarReferenceMatrixElements*)osglData->tempC->numberOfValues;
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
     osglData->osglCounter = 0;
 };

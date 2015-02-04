@@ -2,7 +2,7 @@
 /** @file OSStringUtil.cpp
  *
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -21,8 +21,6 @@
 
 #include <sstream>
 
-//using std::cout;
-//using std::endl;
 using std::ostringstream;
 
 

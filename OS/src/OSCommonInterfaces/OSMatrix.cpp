@@ -962,7 +962,7 @@ bool ConReferenceMatrixElements::IsEqual(ConReferenceMatrixElements *that)
     }
 }// end of ConReferenceMatrixElements::IsEqual()
 
-
+#if 0
 MatrixElements::MatrixElements():
     constantElements(NULL),
     varReferenceElements(NULL),
@@ -1037,11 +1037,13 @@ ENUM_MATRIX_TYPE MatrixElements::getMatrixType()
     }
     return matrixType;
 }// end of MatrixElements::getMatrixType()
+#endif
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixElements::getNodeType()
 {
     return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
 }// end of MatrixElements::getNodeType()
+
 
 bool OSMatrix::processBlocks()
 {
@@ -1571,7 +1573,7 @@ int* OSMatrix::getColumnPartition()
     return m_miColumnPartition;
 }// end of OSMatrix::getColumnPartition()
 
-
+#if 0
 MatrixElements* MatrixElements::cloneMatrixNode()
 {
     MatrixElements *nodePtr;
@@ -1809,7 +1811,7 @@ bool MatrixElements::IsEqual(MatrixElements *that)
     }
 }// end of MatrixElements::IsEqual()
 // end of methods for MatrixElements
-
+#endif
 
 // methods for MatrixTransformation --------------------------------------------
 MatrixTransformation::MatrixTransformation():

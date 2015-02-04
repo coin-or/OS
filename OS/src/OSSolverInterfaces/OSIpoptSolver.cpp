@@ -135,9 +135,7 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
         }
         else
         {
-            //std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
             SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
-            //std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
             if(sparseHessian != NULL)
             {
                 nnz_h_lag = sparseHessian->hessDimension;
@@ -182,7 +180,6 @@ bool  IpoptProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
 {
     int i;
     double * mdVarLB = osinstance->getVariableLowerBounds();
-    //std::cout << "GET BOUNDS INFORMATION FOR IPOPT !!!!!!!!!!!!!!!!!" << std::endl;
     // variables upper bounds
     double * mdVarUB = osinstance->getVariableUpperBounds();
 
@@ -190,8 +187,6 @@ bool  IpoptProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
     {
         x_l[ i] = mdVarLB[ i];
         x_u[ i] = mdVarUB[ i];
-        //cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
-        //cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
     }
     // Ipopt interprets any number greater than nlp_upper_bound_inf as
     // infinity. The default value of nlp_upper_bound_inf and nlp_lower_bound_inf
@@ -207,8 +202,6 @@ bool  IpoptProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
     {
         g_l[ i] = mdConLB[ i];
         g_u[ i] = mdConUB[ i];
-        //cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
-        //cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
     }
     return true;
 }//get_bounds_info
@@ -449,12 +442,6 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
     SparseJacobianMatrix *sparseJacobian;
     if (values == NULL)
     {
-        // return the values of the jacobian of the constraints
-
-
-        //cout << "n: " << n << endl;
-        //cout << "m: " << m << endl;
-        //cout << "nele_jac: " <<  nele_jac << endl;
         // return the structure of the jacobian
         try
         {
@@ -479,15 +466,12 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
             {
                 iRow[i] = idx;
                 jCol[i] = *(sparseJacobian->indexes + k);
-                //cout << "ROW IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
-                //cout << "COL IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
                 i++;
             }
         }
     }
     else
     {
-        //std::cout << "EVALUATING JACOBIAN" << std::endl;
         try
         {
             sparseJacobian = osinstance->calculateAllConstraintFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1);
@@ -507,9 +491,6 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
         for(int i = 0; i < nele_jac; i++)
         {
             values[ i] = sparseJacobian->values[i];
-            //values[ i] = osinstance->m_mdJacValue[ i];
-            //cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;
-            //cout << "m_mdJacValue[ i]:!!!!!!!!!!!!  " <<  osinstance->m_mdJacValue[ i] << endl;
         }
     }
     return true;
@@ -530,7 +511,6 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
     if (values == NULL)
     {
         // return the structure. This is a symmetric matrix, fill the lower left triangle only.
-        //cout << "get structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
         try
         {
             sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
@@ -541,18 +521,14 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
             *ipoptErrorMsg = eclass.errormsg;
             throw;
         }
-//        cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
         for(i = 0; i < nele_hess; i++)
         {
             iRow[i] = *(sparseHessian->hessColIdx + i);
             jCol[i] = *(sparseHessian->hessRowIdx + i);
-            //cout << "ROW HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
-            //cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
         }
     }
     else
     {
-        //std::cout << "EVALUATING HESSIAN" << std::endl;
         // return the values. This is a symmetric matrix, fill the lower left triangle only
         double* objMultipliers = new double[1];
         objMultipliers[0] = obj_factor;
@@ -610,31 +586,38 @@ void IpoptProblem::finalize_solution(SolverReturn status,
         obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), true)[ 0];
     OSrLWriter *osrlwriter ;
     osrlwriter = new OSrLWriter();
+
+    ostringstream outStr;
 #ifdef DEBUG
-    printf("\n\nSolution of the primal variables, x\n");
+
+    outStr << std::endl << std::endl << "Solution of the primal variables, x" << std::endl;
     for (Index i=0; i<n; i++)
     {
-        printf("x[%d] = %e\n", i, x[i]);
+        outStr << "x[" << i << "] = " << x[i] << std::endl;
     }
 
-    printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+    outStr << std::endl << std::endl << "Solution of the bound multipliers, z_L and z_U" << std::endl;
     for (Index i=0; i<n; i++)
     {
-        printf("z_L[%d] = %e\n", i, z_L[i]);
+        outStr << "z_L[" << i << "] = " << z_L[i] << std::endl;
     }
     for (Index i=0; i<n; i++)
     {
-        printf("z_U[%d] = %e\n", i, z_U[i]);
+        outStr << "z_U[" << i << "] = " << z_U[i] << std::endl;
     }
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+    outStr.str("");
+    outStr.clear();
 #endif
-    if(osinstance->getObjectiveNumber() > 0) printf("\nObjective value f(x*) = %e\n", obj_value  );
-
+    if(osinstance->getObjectiveNumber() > 0)   
+    {
+        outStr << std::endl << "Objective value f(x*) = " << os_dtoa_format(obj_value) << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_summary, outStr.str());
+    }
     int solIdx = 0;
     int numberOfOtherVariableResults;
     int otherIdx;
     int numCon = osinstance->getConstraintNumber();
-    ostringstream outStr;
-
 
     //make sure the sign on the dual values is correct
     double *dualValue = NULL;
@@ -671,9 +654,6 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             throw ErrorClass("OSResult error: setConstraintNumber");
         if(osresult->setSolutionNumber(  1) != true)
             throw ErrorClass("OSResult error: setSolutionNumer");
-
-
-
         if(osresult->setGeneralMessage( message) != true)
             throw ErrorClass("OSResult error: setGeneralMessage");
 
@@ -682,7 +662,6 @@ void IpoptProblem::finalize_solution(SolverReturn status,
         case SUCCESS:
             solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
             osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
-
 
             if(osinstance->getVariableNumber() > 0) osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
 
@@ -889,6 +868,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
 
         if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 )
         {
+<<<<<<< .working
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
@@ -897,6 +877,8 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             outStr << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
+=======
+>>>>>>> .merge-right.r4941
             std::vector<SolverOption*> optionsVector;
             optionsVector = osoption->getSolverOptions( "ipopt",true);
             char *pEnd;
@@ -904,6 +886,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             int num_ipopt_options = optionsVector.size();
             for(i = 0; i < num_ipopt_options; i++)
             {
+<<<<<<< .working
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
@@ -912,8 +895,11 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                 outStr << std::endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+=======
+>>>>>>> .merge-right.r4941
                 if(optionsVector[ i]->type == "numeric" )
                 {
+<<<<<<< .working
 #ifndef NDEBUG
                     outStr.str("");
                     outStr.clear();
@@ -922,10 +908,13 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                     outStr << std::endl;
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+=======
+>>>>>>> .merge-right.r4941
                     app->Options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
                 }
                 else if(optionsVector[ i]->type == "integer" )
                 {
+<<<<<<< .working
 #ifndef NDEBUG
                     outStr.str("");
                     outStr.clear();
@@ -934,10 +923,13 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                     outStr << std::endl;
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+=======
+>>>>>>> .merge-right.r4941
                     app->Options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
                 }
                 else if(optionsVector[ i]->type == "string" )
                 {
+<<<<<<< .working
 #ifndef NDEBUG
                     outStr.str("");
                     outStr.clear();
@@ -946,6 +938,8 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                     outStr << std::endl;
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+=======
+>>>>>>> .merge-right.r4941
                     app->Options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
                 }
             }
@@ -1010,31 +1004,9 @@ void IpoptSolver::solve() throw (ErrorClass)
     if( this->bSetSolverOptions == false) setSolverOptions();
     try
     {
-        //clock_t start, finish;
-        //double duration;
-        //start = clock();
-        //OSiLWriter osilwriter;
-        //cout << osilwriter.writeOSiL( osinstance) << endl;
-        //if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
-        //finish = clock();
-        //duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        //cout << "Parsing took (seconds): " << duration << endl;
-        //dataEchoCheck();
-        /***************now the ipopt invokation*********************/
-        // see if we have a linear program
-        //if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
-        // Intialize the IpoptApplication and process the options
-//        std::cout << "Call Ipopt Initialize" << std::endl;
         app->Initialize();
-//        std::cout << "Finished Ipopt Initialize" << std::endl;
-        //nlp->osinstance = this->osinstance;
-        // Ask Ipopt to solve the problem
-//        std::cout << "Call Ipopt Optimize" << std::endl;
         ApplicationReturnStatus status = app->OptimizeTNLP( nlp);
-//        std::cout << "Finish Ipopt Optimize" << std::endl;
         osrl = osrlwriter->writeOSrL( osresult);
-//        std::cout << "Finish writing the osrl" << std::endl;
-        //if (status != Solve_Succeeded) {
         if (status < -2)
         {
             throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + *ipoptErrorMsg);

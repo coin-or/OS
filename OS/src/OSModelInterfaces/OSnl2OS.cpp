@@ -57,8 +57,6 @@
 #include <asl.h>
 //#include "sufinfo.h"
 
-using std::cerr;
-using std::cout;
 using std::endl;
 
 #ifdef HAVE_STDINT_H
@@ -214,19 +212,14 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
     expr **ep;
     int opnum;
     int i;
-    //std::cout << "Variable Index " << varIdx << std::endl;
     int j = ((expr_v *)e - VAR_E) - osinstance->getVariableNumber() ;
-    //std::cout << "GET OPERATOR NUMBER" << std::endl;
     op = e->op;
     opnum = Intcast op;
-    //std::cout << "OPERATOR NUMBER = " << opnum << std::endl;
-    //Printf ("op %d  optype %d  ", opnum, optype[opnum]);
     try
     {
         switch( opnum)
         {
         case OPPLUS:
-            //cout << "FOUND  PLUS NODE"  << endl;
             nlNodePoint = new OSnLNodePlus();
             nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
             nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
@@ -235,7 +228,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
 
         case OPSUMLIST:
             i = 0;
-            //cout << "INSIDE SUM OPERATOR" << endl;
             nlNodePoint = new OSnLNodeSum();
             nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
             nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
@@ -245,7 +237,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
 
         case MAXLIST:
             i = 0;
-            //cout << "INSIDE MAX OPERATOR" << endl;
             nlNodePoint = new OSnLNodeMax();
             nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
             nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
@@ -268,7 +259,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             return nlNodePoint;
 
         case OPMULT:
-            //cout << "FOUND MULT NODE"  << endl;
             nlNodePoint = new OSnLNodeTimes();
             nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
             nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
@@ -282,7 +272,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             return nlNodePoint;
 
         case OPPOW:
-            //cout << "FOUND OPPOW NODE"  << endl;
             nlNodePoint = new OSnLNodePower();
             nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
             nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
@@ -291,8 +280,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
 
 
         case OP1POW:
-            //cout << "FOUND OP1POW NODE"  << endl;
-            //cout << "OP1POW EXPONENT =  "  << e->R.en->v<<  endl;
             nlNodePoint = new OSnLNodePower();
 
 
@@ -312,12 +299,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             return nlNodePoint;
 
         case OP2POW:
-            //cout << "FOUND OP2POW NODE"  << endl;
-            //nlNodePoint = new OSnLNodePower();
-            //nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-            //nlNodeNumberPoint = new OSnLNodeNumber();
-            //nlNodeNumberPoint->value = 2;
-            //nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
             nlNodePoint = new OSnLNodeSquare();
 
             nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
@@ -325,8 +306,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             return nlNodePoint;
 
         case OPCPOW:
-            //cout << "FOUND OPCPOW NODE"  << endl;
-            //cout << "OPCPOW EXPONENT =  "  << e->R.en->v<<  endl;
             nlNodePoint = new OSnLNodePower();
             nlNodeNumberPoint = new OSnLNodeNumber();
             nlNodeNumberPoint->value = e->L.en->v;
@@ -366,9 +345,7 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             return nlNodePoint;
 
         case OPNUM:
-            //cout << "found a number node" << endl;
             nlNodeNumberPoint = new OSnLNodeNumber;
-            //cout << "THE NUMBER" << (double) ((expr_n*)e)->v << endl;
             nlNodeNumberPoint->value = (double) ((expr_n*)e)->v;
             op_type.push_back( "NUMBER");
             op_type.push_back( os_dtoa_format(  numkount ) );
@@ -380,20 +357,9 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             return nlNodeNumberPoint;
 
         case OPVARVAL:
-            //cout << "found a variable node" << endl;
             // treat the common expression or defined variables
             if( j >= 0 )
             {
-                // process common expression
-                /*
-                std::cout << "como = "  << como  << std::endl;
-                std::cout << "comc = "  << comc  << std::endl;
-                std::cout << "comb = "  << comb  << std::endl;
-                std::cout << "como1 = "  << como1  << std::endl;
-                std::cout << "comc1 = "  << comc1  << std::endl;
-                std::cout << "ncom0 = "  << ncom0  << std::endl;
-                std::cout << "jjjjjjjjjjjjjjjjjj = "  << j  << std::endl;
-                */
 
                 // Orban: http://www.gerad.ca/~orban/drampl/def-vars.html
                 if(j < ncom0)
@@ -403,7 +369,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
 
                     // now add the linear terms
                     int nlin = common -> nlin;
-                    //std::cout << "Number of linear terms in common expression " << nlin << std::endl;
 
                     if( nlin > 0)
                     {
@@ -415,12 +380,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
                         linpart *L = common -> L;
                         for(int kj = 0; kj < nlin; kj++)
                         {
-
-                            // get the coefficient
-                            //std::cout << "Linear coefficient  "  << L [kj].fac << std::endl;
-
-                            // get the index
-                            //std::cout  << "Variable index  "  << ((uintptr_t) (L [kj].v.rp) - (uintptr_t) VAR_E) / sizeof (expr_v) << std::endl;
                             // add an OSnLSumNode with the linear terms
                             nlNodePoint->m_mChildren[ kj] = new OSnLNodeVariable;
                             nlNodeVariablePoint = (OSnLNodeVariable*)nlNodePoint->m_mChildren[ kj];
@@ -439,7 +398,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
 
                     // now add the linear terms
                     int nlin = common -> nlin;
-                    //std::cout << "Number of linear terms in common expression " << nlin << std::endl;
 
                     if( nlin > 0)
                     {
@@ -451,12 +409,6 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
                         linpart *L = common -> L;
                         for(int kj = 0; kj < nlin; kj++)
                         {
-
-                            // get the coefficient
-                            //std::cout << "Linear coefficient  "  << L [kj].fac << std::endl;
-
-                            // get the index
-                            //std::cout  << "Variable index  "  << ((uintptr_t) (L [kj].v.rp) - (uintptr_t) VAR_E) / sizeof (expr_v) << std::endl;
                             // add an OSnLSumNode with the linear terms
                             nlNodePoint->m_mChildren[ kj] = new OSnLNodeVariable;
                             nlNodeVariablePoint = (OSnLNodeVariable*)nlNodePoint->m_mChildren[ kj];
