@@ -51,7 +51,7 @@
 # include <stack>
 #include <string>
 #ifdef OS_HAS_CPPAD
-//# include <cppad/cppad.hpp>
+# include <cppad/cppad.hpp>
 #endif
 #include<iostream>
 
