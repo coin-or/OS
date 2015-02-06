@@ -30,6 +30,9 @@
 #include "OSErrorClass.h"
 #include "OSResult.h"
 #include "OSOption.h"
+#ifdef OS_HAS_CPPAD
+# include <cppad/cppad.hpp>
+#endif
 
 //Couenne stuff
 namespace Couenne
