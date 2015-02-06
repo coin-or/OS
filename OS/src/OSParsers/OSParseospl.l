@@ -46,9 +46,9 @@
 #include "OSErrorClass.h"
 #include "OSpLParserData.h"
 #ifdef PARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
+	#define YY_PRINT  printf("%s", yytext)
 #else     
-	#define YY_PRINT ;
+	#define YY_PRINT
 #endif
 
 #ifdef WIN_

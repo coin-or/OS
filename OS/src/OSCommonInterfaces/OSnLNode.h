@@ -31,7 +31,6 @@
 #include <vector>
 #include <map>
 
-
 #ifdef OS_HAS_CPPAD
 # include <cppad/cppad.hpp>
 typedef CppAD::AD<double>  ADdouble;

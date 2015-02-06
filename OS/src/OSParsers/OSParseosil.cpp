@@ -2682,9 +2682,9 @@ static yyconst flex_int16_t yy_rule_linenum[357] =
 //#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
-	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext);
+	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext)
 #else     
-	#define YY_PRINT;
+	#define YY_PRINT
 #endif
 
 #include <iostream>

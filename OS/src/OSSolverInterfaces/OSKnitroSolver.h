@@ -50,7 +50,9 @@
 # include <cassert>
 # include <stack>
 #include <string>
-# include <cppad/cppad.hpp>
+#ifdef OS_HAS_CPPAD
+//# include <cppad/cppad.hpp>
+#endif
 #include<iostream>
 
 
