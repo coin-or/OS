@@ -679,6 +679,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             if(osinstance->getObjectiveNumber() > 0)
             {
 
+
                 mdObjValues[0] = obj_value ;
                 osresult->setObjectiveValuesDense(solIdx, mdObjValues);
             }
@@ -832,6 +833,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass)
 {
+    std::ostringstream outStr;
     try
     {
         if(osinstance->getObjectiveNumber() <= 0) 
