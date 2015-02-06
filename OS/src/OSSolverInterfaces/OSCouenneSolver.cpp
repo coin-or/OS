@@ -24,8 +24,6 @@
 #include "OSOutput.h"
 #include "OSCouenneSolver.h"
 #include "BonBonminSetup.hpp"
-#include <cppad/cppad.hpp>
-#include <cppad/configure.hpp>
 //end OS stuff
 
 
