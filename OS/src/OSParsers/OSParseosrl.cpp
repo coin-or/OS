@@ -2878,9 +2878,9 @@ using std::ostringstream;
 //#define OSRLPARSERDEBUG
 
 #ifdef OSRLPARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
+	#define YY_PRINT  printf("%s", yytext)
 #else     
-	#define YY_PRINT;
+	#define YY_PRINT
 #endif
      
 

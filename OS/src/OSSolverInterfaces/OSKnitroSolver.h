@@ -48,8 +48,9 @@
 # include <cassert>
 # include <stack>
 #include <string>
-#include <cppad/cppad.hpp>
-#include <cppad/configure.hpp>
+#ifdef OS_HAS_CPPAD
+# include <cppad/cppad.hpp>
+#endif
 #include<iostream>
 
 

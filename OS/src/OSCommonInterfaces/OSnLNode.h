@@ -31,10 +31,8 @@
 #include <vector>
 #include <map>
 
-
 #ifdef OS_HAS_CPPAD
 # include <cppad/cppad.hpp>
-# include <cppad/configure.hpp>
 typedef CppAD::AD<double>  ADdouble;
 typedef CppAD::vector<ADdouble> ADvector;
 #else

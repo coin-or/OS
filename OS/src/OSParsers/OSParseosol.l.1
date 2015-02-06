@@ -85,9 +85,9 @@ using std::ostringstream;
 //#define OSOLPARSERDEBUG
 
 #ifdef OSOLPARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
+	#define YY_PRINT  printf("%s", yytext)
 #else     
-	#define YY_PRINT;
+	#define YY_PRINT
 #endif
 
 %}
