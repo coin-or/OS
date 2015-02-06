@@ -1,9 +1,7 @@
 /* $Id$ */
 /** @file KnitroSolver.h
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin,
- * @version 1.0, 05/01/2007
- * @since   OS1.0
+ * @author  Robert Fourer,  Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Jun Ma, Kipp Martin,
@@ -50,7 +48,8 @@
 # include <cassert>
 # include <stack>
 #include <string>
-# include <cppad/cppad.hpp>
+#include <cppad/cppad.hpp>
+#include <cppad/configure.hpp>
 #include<iostream>
 
 
