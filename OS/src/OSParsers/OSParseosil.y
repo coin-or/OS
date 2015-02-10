@@ -562,6 +562,8 @@ conesLaden: GREATERTHAN coneList CONESEND
 coneList: | coneList cone
 {
     parserData->coneCounter++;
+    if (parserData->coneCounter > parserData->numberOfCones) parserData->parser_errors +=
+        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "encountered more cones than specified");
     osinstance->instanceData->cones->numberOfCones = parserData->coneCounter;
 };
 
