@@ -227,3 +227,4 @@ inline void osnl_empty_vectors( OSnLParserData* osnlData)
 
 
 #endif /*OSNLPARSERDATA_H_*/
+

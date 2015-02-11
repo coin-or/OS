@@ -609,7 +609,8 @@
 				</xs:annotation>
 				<xs:element name="transformation" type="MatrixTransformation" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>To express the matrix M in terms of previously defined elements, e.g., M = a a'. The result of this transformation is aligned with the top left corner of the target matrix and is truncated or filled with zeros if sizes are not conformal.</xs:documentation>
+						<xs:documentation>To express the matrix M in terms of previously defined matrices, e.g., M = a a'. 
+The result of this transformation is aligned with the top left corner of the target matrix and is truncated or filled with zeros if sizes are not conformal.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="constantElements" type="ConstantMatrixElements" minOccurs="0">
@@ -938,25 +939,14 @@ Each value must refer to an existing (core) objective index</xs:documentation>
 					<xs:documentation>number of "el" children must equal numberOfValues, after "mult" is considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="values" type="SizelessNonNegativeIntVector" minOccurs="0">
+			<xs:element name="values" type="ConReferenceMatrixValues" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfValues, after "mult" is considered.
-Each value must refer to an existing (core) constraint index</xs:documentation>
+					<xs:documentation>number of "el" children must equal numberOfValues.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="valueType" use="optional" default="value">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="value"/>
-					<xs:enumeration value="status"/>
-					<xs:enumeration value="surplus"/>
-					<xs:enumeration value="shortage"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElements">
 		<xs:sequence>
@@ -972,7 +962,7 @@ Each value must refer to an existing (core) constraint index</xs:documentation>
 			</xs:element>
 			<xs:element name="values" type="LinearMatrixValues" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfValues, after "mult" is considered.
+					<xs:documentation>number of "el" children must equal numberOfValues.
 Each nonzero is a linear expression of the form 
 a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				</xs:annotation>
@@ -995,7 +985,7 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			</xs:element>
 			<xs:element name="values" type="GeneralMatrixValues" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>number of "el" children must equal numberOfValues, after "mult" is considered.
+					<xs:documentation>number of "el" children must equal numberOfValues.
 Each nonzero is a general nonlinear expression</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -1138,11 +1128,7 @@ Each nonzero is a general nonlinear expression</xs:documentation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Number must agree with numberOfEl</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixBlocks">
@@ -1241,6 +1227,34 @@ Each nonzero is a general nonlinear expression</xs:documentation>
 		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ConReferenceMatrixValues">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="el" type="ConReferenceMatrixElement" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Each el must refer to an existing (core) constraint index.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConReferenceMatrixElement">
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="valueType" use="optional" default="value">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="value"/>
+							<xs:enumeration value="status"/>
+							<xs:enumeration value="surplus"/>
+							<xs:enumeration value="shortage"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="Tensors">
 		<xs:annotation>

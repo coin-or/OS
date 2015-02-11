@@ -4,9 +4,7 @@
  * \brief This file defines the KnitroSolver class.
  * \detail Read an OSInstance object and convert in Knitro data structures
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin,
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer,  Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Jun Ma, Kipp Martin,

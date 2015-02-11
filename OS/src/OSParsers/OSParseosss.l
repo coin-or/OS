@@ -49,9 +49,9 @@ using std::ostringstream;
 
 //#define PARSERDEBUG
 #ifdef PARSERDEBUG
-    #define YY_PRINT  printf("Found option:  %s\n", yytext);
+    #define YY_PRINT  printf("Found option:  %s\n", yytext)
 #else     
-    #define YY_PRINT  ;
+    #define YY_PRINT
 #endif
 
 

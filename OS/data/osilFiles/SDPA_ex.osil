@@ -44,7 +44,7 @@ The problem is (as described in CSDP/example/example.c):
 	</instanceHeader>
 	<instanceData>
 		<objectives>
-			<obj maxOrMin="min" numberOfObjCoef="0"/>
+			<obj maxOrMin="max" numberOfObjCoef="0"/>
 		</objectives>
 		<constraints numberOfConstraints="2">
 			<con lb="1.0000000000000" ub="1.0000000000000"/>
@@ -77,7 +77,7 @@ The problem is (as described in CSDP/example/example.c):
 			</nl>
 		</nonlinearExpressions>
 		<matrices numberOfMatrices="3">
-			<matrix numberOfColumns="7" numberOfRows="7" symmetry="upper" name="C">   
+			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="C">   
 				<blocks numberOfBlocks="3">
 					<colOffsets numberOfEl="4">
 						<el>0</el>
@@ -92,128 +92,116 @@ The problem is (as described in CSDP/example/example.c):
 						<el>7</el>
 					</rowOffsets>
 					<block blockRowIdx="0" blockColIdx="0">
-						<elements>
-							<constantElements numberOfValues="3">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>3</el>
-								</start>
-								<indexes>
-									<el>0</el>
-									<el>0</el>
-									<el>1</el>
-								</indexes>
-								<values>
-									<el>2</el>
-									<el>1</el>
-									<el>2</el>
-								</values>
-							</constantElements>
-						</elements>
+						<constantElements numberOfValues="3">
+							<start>
+								<el>0</el>
+								<el>1</el>
+								<el>3</el>
+							</start>
+							<indexes>
+								<el>0</el>
+								<el>0</el>
+								<el>1</el>
+							</indexes>
+							<values>
+								<el>2</el>
+								<el>1</el>
+								<el>2</el>
+							</values>
+						</constantElements>
 					</block>
 					<block blockRowIdx="1" blockColIdx="1">
-						<elements>
-							<constantElements numberOfValues="4">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>2</el>
-									<el>4</el>
-								</start>
-								<indexes>
-									<el>0</el>
-									<el>1</el>
-									<el>0</el>
-									<el>2</el>
-								</indexes>
-								<values>
-									<el>3</el>
-									<el>2</el>
-									<el>1</el>
-									<el>3</el>
-								</values>
-							</constantElements>
-						</elements>
-					</block>
-					<block blockRowIdx="3" blockColIdx="2">
-						<elements>
-							<constantElements numberOfValues="0">
-								<start>
-									<el mult="3">0</el>
-								</start>
-							</constantElements>
-						</elements>
-					</block>			
-				</blocks>
-			</matrix>
-			<matrix numberOfColumns="7" numberOfRows="7" symmetry="upper" name="A1">   
-				<blocks numberOfBlocks="3">
-					<colOffsets numberOfEl="4">
-						<el>0</el>
-						<el>2</el>
-						<el>5</el>
-						<el>7</el>
-					</colOffsets>
-					<rowOffsets numberOfEl="4">
-						<el>0</el>
-						<el>2</el>
-						<el>5</el>
-						<el>7</el>
-					</rowOffsets>
-					<block blockRowIdx="0" blockColIdx="0">
-						<elements>
-							<constantElements numberOfValues="3">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>3</el>
-								</start>
-								<indexes>
-									<el>0</el>
-									<el>0</el>
-									<el>1</el>
-								</indexes>
-								<values>
-									<el>3</el>
-									<el>1</el>
-									<el>3</el>
-								</values>
-							</constantElements>
-						</elements>
-					</block>
-					<block blockRowIdx="1" blockColIdx="1">
-						<elements>
-							<constantElements numberOfValues="0">
-								<start>
-									<el mult="4">0</el>
-								</start>
-								<indexes>
-								</indexes>
-								<values/>
-							</constantElements>
-						</elements>
+						<constantElements numberOfValues="4">
+							<start>
+								<el>0</el>
+								<el>1</el>
+								<el>2</el>
+								<el>4</el>
+							</start>
+							<indexes>
+								<el>0</el>
+								<el>1</el>
+								<el>0</el>
+								<el>2</el>
+							</indexes>
+							<values>
+								<el>3</el>
+								<el>2</el>
+								<el>1</el>
+								<el>3</el>
+							</values>
+						</constantElements>
 					</block>
 					<block blockRowIdx="2" blockColIdx="2">
-						<elements>
-							<constantElements numberOfValues="1">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>1</el>
-								</start>
-								<indexes>
-									<el>0</el>
-								</indexes>
-								<values>
-									<el>1</el>
-								</values>
-							</constantElements>
-						</elements>
+						<constantElements numberOfValues="0">
+							<start>
+								<el mult="3">0</el>
+							</start>
+						</constantElements>
 					</block>			
 				</blocks>
 			</matrix>
-			<matrix numberOfColumns="7" numberOfRows="7" symmetry="upper" name="A2">
+			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="A1">   
+				<blocks numberOfBlocks="3">
+					<colOffsets numberOfEl="4">
+						<el>0</el>
+						<el>2</el>
+						<el>5</el>
+						<el>7</el>
+					</colOffsets>
+					<rowOffsets numberOfEl="4">
+						<el>0</el>
+						<el>2</el>
+						<el>5</el>
+						<el>7</el>
+					</rowOffsets>
+					<block blockRowIdx="0" blockColIdx="0">
+						<constantElements numberOfValues="3">
+							<start>
+								<el>0</el>
+								<el>1</el>
+								<el>3</el>
+							</start>
+							<indexes>
+								<el>0</el>
+								<el>0</el>
+								<el>1</el>
+							</indexes>
+							<values>
+								<el>3</el>
+								<el>1</el>
+								<el>3</el>
+							</values>
+						</constantElements>
+					</block>
+					<block blockRowIdx="1" blockColIdx="1">
+						<constantElements numberOfValues="0">
+							<start>
+								<el mult="4">0</el>
+							</start>
+							<indexes>
+							</indexes>
+							<values/>
+						</constantElements>
+					</block>
+					<block blockRowIdx="2" blockColIdx="2">
+						<constantElements numberOfValues="1">
+							<start>
+								<el>0</el>
+								<el>1</el>
+								<el>1</el>
+							</start>
+							<indexes>
+								<el>0</el>
+							</indexes>
+							<values>
+								<el>1</el>
+							</values>
+						</constantElements>
+					</block>			
+				</blocks>
+			</matrix>
+			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="A2">
 				<blocks numberOfBlocks="3">
 					<colOffsets numberOfEl="4">
 						<el>0</el>
@@ -229,45 +217,41 @@ The problem is (as described in CSDP/example/example.c):
 					</rowOffsets>
 					<block blockRowIdx="0" blockColIdx="0"/>
 					<block blockRowIdx="1" blockColIdx="1">
-						<elements>
-							<constantElements numberOfValues="4">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>2</el>
-									<el>4</el>
-								</start>
-								<indexes>
-									<el>0</el>
-									<el>1</el>
-									<el>0</el>
-									<el>2</el>
-								</indexes>
-								<values>
-									<el>3</el>
-									<el>4</el>
-									<el>1</el>
-									<el>5</el>
-								</values>
-							</constantElements>
-						</elements>
+						<constantElements numberOfValues="4">
+							<start>
+								<el>0</el>
+								<el>1</el>
+								<el>2</el>
+								<el>4</el>
+							</start>
+							<indexes>
+								<el>0</el>
+								<el>1</el>
+								<el>0</el>
+								<el>2</el>
+							</indexes>
+							<values>
+								<el>3</el>
+								<el>4</el>
+								<el>1</el>
+								<el>5</el>
+							</values>
+						</constantElements>
 					</block>
 					<block blockRowIdx="2" blockColIdx="2">
-						<elements>
-							<constantElements numberOfValues="1">
-								<start>
-									<el>0</el>
-									<el>0</el>
-									<el>1</el>
-								</start>
-								<indexes>
-									<el>1</el>
-								</indexes>
-								<values>
-									<el>1</el>
-								</values>
-							</constantElements>
-						</elements>
+						<constantElements numberOfValues="1">
+							<start>
+								<el>0</el>
+								<el>0</el>
+								<el>1</el>
+							</start>
+							<indexes>
+								<el>1</el>
+							</indexes>
+							<values>
+								<el>1</el>
+							</values>
+						</constantElements>
 					</block>			
 				</blocks>
 			</matrix>
