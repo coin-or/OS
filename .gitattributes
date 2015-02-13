@@ -489,6 +489,7 @@ OS/misc/ConeProgramming/SDPA2OSiL.f90 -text
 OS/misc/ConeProgramming/SDPA_Format.txt -text
 OS/misc/ConeProgramming/gpp100.dat-s -text
 OS/misc/ConeProgramming/gpp100.osil -text
+OS/misc/ConeProgramming/sample.osil -text
 OS/misc/ConeProgramming/sample.sdpa -text
 OS/misc/ConeProgramming/sampleMatrixProgramming-v5_5.osil -text
 OS/misc/ConeProgramming/sampleMatrixProgramming-v6.osil -text

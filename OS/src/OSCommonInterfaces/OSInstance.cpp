@@ -5355,6 +5355,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         outStr <<  m_miJacNumConTerms[ i ] << "  ";
     }
     outStr << std::endl << std::endl;
+
+
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     return true;
@@ -5923,7 +5925,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                 }
             }
         }
-        else
+       else
         {
             // calculate the gradients using a forward sweep over all the variables.
             for(i = 0; i < m_iNumberOfNonlinearVariables; i++)
@@ -5958,7 +5960,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                 //
                 m_vdDomainUnitVec[i] = 0.;
             }
-        }
+        }            
 #ifndef NDEBUG
         outStr.str("");
         outStr.clear();
@@ -6682,6 +6684,7 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
                 // count which nonlinear obj/constraint this is
                 m_mapOSADFunRangeIndex[ posMapExpTree->first] = kount;
                 kount++;
+
             }
         }
         //create the function and stop recording
@@ -6862,7 +6865,7 @@ std::string OrthantCone::getConeInXML()
     {
         ubt = ub[i];
         lbt = lb[i];
-        if (ubt == ub[i+mult] && lbt == lb[i+mult])
+        if (ubt == ub[i+mult] && lbt == lb[i+mult] && i+mult < numberOfRows*numberOfColumns)
         {
             mult++;
         }

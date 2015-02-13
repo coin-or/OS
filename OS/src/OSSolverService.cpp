@@ -403,8 +403,10 @@ int main(int argC, const char* argV[])
 #endif
 
 //Now process the accumulated output
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always,
-                tempBuffer[oscommandline->printLevel].str());
+        int printArea = (oscommandline->printLevel) / 100;
+        if (printArea == 0 || printArea == ENUM_OUTPUT_AREA_main)
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always,
+               tempBuffer[(oscommandline->printLevel)%100].str());
         delete[] tempBuffer;
 
         if (oscommandline->logFile != "")
