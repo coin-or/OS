@@ -5,7 +5,7 @@
 !     The SDPA format is explained in a text document at 
 !     http://plato.asu.edu/ftp/sdpa_format.html
 !
-!     This version dated 10 January 2013
+!     This version dated 10 January 2015
 !     written by H.I. Gassmann
 !
 !     Approach: This program sets up what Brian Borchers calls the dual problem:
@@ -20,7 +20,7 @@
 !     Each of the data matrices F are assumed block-diagonal, with identical block sizes.
 !     (The nonzero structure within each block is allowed to vary.) 
 !
-!     The same data requirements also define the dual problem
+!     The same data requirements also define the primal problem
 !
 ! (P)    min c1*x1 + c2*x2 + ... + cm*xm
 !        st  F1*x1 + F2*x2 + ... + Fm*xm - F0 = X
@@ -70,6 +70,8 @@
       call getarg(1, primaldual)
       if (primaldual(2:2) .eq. 'd' .OR. primaldual(2:2) .eq. 'D') then
           dual =.true.
+      else
+          dual = .false.
       endif
 !
       call getarg(2, infilenm)
@@ -113,7 +115,7 @@
       read (nextl,*,err=900) nmatrices
       lineno = lineno + 1
       read (15,*) nblocks
-      allocate(blksize(nblocks))
+      allocate(blksize(nblocks  ))
       allocate(   cost(nmatrices))
       read (15,*) (blksize(i),i=1,nblocks) 
       read (15,*) (   cost(i),i=1,nmatrices) 
@@ -122,7 +124,7 @@
 !
       if (.not. dual) then
 !
-!     Count the variables --- The X matrix is structured and uses the upper triangle only
+!     First the scalar variables --- primal problem only
 !
          write (16, 1007) nmatrices,nmatrices
 !
@@ -397,14 +399,20 @@
 !     Next we write the cones section. 
 !     The primal problem has two cones, the dual problem has only one
 !
-      write (16, 1230) ncol,ncol
-      if (.not. dual) then
-         write (16, 1230) ncol,ncol
+      if (dual) then
+         write (16, 1230) 1
+      else
+         write (16, 1230) 2
       endif
-      write (16, 1232)
+      write (16, 1231) ncol,ncol
+      if (.not. dual) then
+         write (16, 1232) ncol,ncol
+      endif
+      write (16, 1233)
 !
 !     Last major element: the <matrixProgramming> element.
-!     There are differences between the primal and dual problems.
+!     There are again differences between the primal and dual problems:
+!     The primal problem has a matrix-valued constraint A1x1 + A2x2 + ... + Anxn - A0 - X = 0
 !
       write (16, 1240) ncol,ncol
       if (.not. dual) then
@@ -571,12 +579,12 @@
  1220 format('</matrix>')
  1221 format('</matrices>')
  1223 format('<el>',G30.15,'</el>')
- 1230 format('<cones numberOfCones="1">',/,                                 &
-     &       '<semidefiniteCone numberOfColumns="',I0,                      &
+ 1230 format('<cones numberOfCones="',I0,'">')
+ 1231 format('<semidefiniteCone numberOfColumns="',I0,                      &
      &       '" numberOfRows="',I0,'"/>')
- 1231 format('<nonnegativeCone numberOfColumns="',I0,                       &
+ 1232 format('<nonnegativeCone numberOfColumns="',I0,                       &
      &       '" numberOfRows="',I0,'"/>')
- 1232 format('</cones>')
+ 1233 format('</cones>')
  1240 format('<matrixProgramming>',/,                                       &
      &       '<matrixVariables numberOfMatrixVar="1">',/,                   &
      &       '<matrixVar numberOfColumns="',I0,'" numberOfRows="',I0,       &
