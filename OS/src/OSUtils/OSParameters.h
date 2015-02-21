@@ -134,7 +134,7 @@ enum ENUM_OUTPUT_AREA
      ENUM_OUTPUT_AREA_OSInstance,
      ENUM_OUTPUT_AREA_OSOption,
      ENUM_OUTPUT_AREA_OSResult,
-     ENUM_OUTPUT_AREA_OSExpressionTree,
+     ENUM_OUTPUT_AREA_OSMatrix,
      ENUM_OUTPUT_AREA_OSiLwriter,
      ENUM_OUTPUT_AREA_OSoLwriter,
      ENUM_OUTPUT_AREA_OSrLwriter,

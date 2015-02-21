@@ -2775,7 +2775,7 @@ private:
 
     /**
      * m_mdObjGradient holds an array of pointers, each pointer points
-     * to gradient of each objective function
+     * to gradient of one objective function (as a dense array of double)
      */
     double **m_mmdObjGradient;
 

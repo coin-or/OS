@@ -8996,6 +8996,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             varmultattON = false;
             varmult = 1;
             foundVar = false;
+            vt = 0;
             // assume we are pointing to the first character after the r in <var
             // it should be whitespace
             for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
