@@ -1057,6 +1057,7 @@ ADdouble OSnLNodeDivide::constructADTape(std::map<int, int> *ADIdx, ADvector *XA
 }// end OSnLNodeDivide::constructADTape
 
 
+
 OSnLNode* OSnLNodeDivide::cloneExprNode()
 {
     OSnLNode *nlNodePoint;
@@ -1968,19 +1969,14 @@ ADdouble OSnLNodeVariable::constructADTape(std::map<int, int> *varIdx, ADvector 
 void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx)
 {
     int numVars;
-#ifndef NDEBUG
-        std::ostringstream outStr;
-        outStr << "found variable " << idx << std::endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
-#endif
     if( (*varIdx).find( idx) == (*varIdx).end() )  // variable to map with variable index as the key
     {
-        numVars = (*varIdx).size();
-        (*varIdx)[ idx] = numVars;
+        //just put a placeholder for now to record the key.
+        // The value will be added once we know the location within the sparse Jacobian
+        (*varIdx)[ idx] = 1;
 #ifndef NDEBUG
-        outStr.str("");
-        outStr.clear();
-        outStr << "add variable " << idx << " to varIdx map in position " << numVars << std::endl;
+        ostringstream outStr;
+        outStr << "add variable " << idx << " to the map" << std::endl;
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     }

@@ -51,8 +51,6 @@ public:
      * m_mapVarIdx is a map used to generate the infix expression for AD   
      * the key is idx, a variable number;
      * the value of the map is the location of the corresponding entry in the sparse Jacobian
-     * (*** ticket 55 ***)  
-     * //corresponding variable count in sparse representation
      */
     std::map<int, int> *mapVarIdx;
 

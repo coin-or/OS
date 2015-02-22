@@ -5423,7 +5423,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
             {
                 m_miJacIndex[ iTemp] = posVarIdx->first;
                 m_mdJacValue[ iTemp] = 0;
-/* ticket 55 */ posVarIdx->second = iTemp;
+                //at this point we know where the original variable appears in the Jacobian; store location
+                posVarIdx->second = iTemp;
                 iTemp++;
             }
         }
@@ -5595,7 +5596,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
             {
                 m_miJacIndex[ k] = posVarIdx->first;
                 m_mdJacValue[ k] = 0;
-/* ticket 55 */ posVarIdx->second = k;
+                //at this point we know where the original variable appears in the Jacobian; store location
+                posVarIdx->second = k;
                 k++;
             }
         }
@@ -6004,8 +6006,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
          * columns we get the Jacobian by column
          */
 
-//        if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() )
-/*        {
+        if (m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() )
+        {
             // calculate the gradient by doing a reverse sweep over each row
             // loop over the constraints that have a nonlinear term and get their gradients
             for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
@@ -6028,7 +6030,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                             != m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx)
                     {
                         // we are working with variable posVarIdx->first in the original variable space
-                        // we need to see which variable this is in the individual constraint map
+                        // we need to see whether this shows up in the sparse Jacobian
                         if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( posVarIdx->first) != (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end())
                         {
                             m_mdJacValue[ jstart] = m_vdYjacval[ jacIndex];
@@ -6047,8 +6049,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                 }
             }
         }
-       else
-*/        {
+        else
+        {
             // calculate the gradients using a forward sweep over all the variables.
             for(i = 0; i < m_iNumberOfNonlinearVariables; i++)
             {
@@ -6088,16 +6090,12 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
                         //figure out original variable this corresponds to
-                        //then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
+                        //then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out its location
                         expTree = m_mapExpressionTreesMod[ idx];
                         if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  )
                         {
-
                             jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
-/* ticket 55 */             //jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
                             // kipp change 1 to number of objective functions
-                            //m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
-
                             m_mdJacValue[jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
 #ifndef NDEBUG
                             outStr.str("");
@@ -6107,13 +6105,12 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                             outStr << "; number of constant terms: " << m_miJacNumConTerms[idx] << std::endl;
                             outStr << "index of current variable: " << m_miNonLinearVarsReverseMap[ i];
                             outStr << " which is at offset " << jacIndex << std::endl;
-/* ticket 55 */             //outStr << "Store value " << m_mdJacValue[ jstart + jacIndex];
                             outStr << "Store value " << m_mdJacValue[jacIndex];
                             outStr << " from location " << m_iObjectiveNumberNonlinear + rowNum;
-/* ticket 55 */             //outStr << " in m_vdYjacval into location " << jstart + jacIndex;
                             outStr << " in m_vdYjacval into location " << jacIndex;
                             outStr << " of m_mdJacValue" << std::endl << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance,
+                                ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
                         }
                         rowNum++;
@@ -6198,14 +6195,11 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
                 if(idx >= 0)
                 {
                     //figure out original variable this corresponds to
-                    //then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
-                    //m_mapAllNonlinearVariablesIndex
+                    //then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out its location
                     expTree = m_mapExpressionTreesMod[ idx];
                     if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  )
                     {
                         jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
-/* ticket 55 */         //jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
-                        //m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
                         m_mdJacValue[jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
                     }
                     rowNum++;
