@@ -286,7 +286,20 @@ Each of these should produce a list of files, indicating a ``successful run'' fo
 \index{parsingTest|)}
 
 
+\subdivision{Version numbers}{\label{section:VersionNumbering}
+
+The version number is defined in the file {\tt configure.ac}. There are actually two versions of this file,
+in the root directory as well as the top OS directory. Each of them contains a call to {\tt AC\_INIT}, 
+in which the second parameter is the version number. Change this number appropriately as follows:
+For trunk versions, use {\bf trunk}, so that {\tt OSgetVersionNumber()} can print the correct svn revision number in the header of the output; for stable and release versions use the proper number ({\tt n.n} for stable versions, {\tt n.n.n} for releases).
+
+Releases are numbered {\tt n.n.n}. 
+If there are bug fixes only, the third digit is incremented. Feature changes lead to updating the second digit. If the API changes, update the first digit. Stable versions are numbered {\tt n.n}. The first two digits of the most current release correspond to the latest stable version. Thus if feature changes are implemented, a new stable version must also be prepared first.
+
 \subdivision{Preparing the release}\label{section:ReleasePrep}
+
+Before preparing the release, edit the {\tt Dependencies} file to point to the latest available stable versions for all the external packages and edit {\tt configure.ac} to store the correct version
+(see Section~\ref{section:VersionNumbering}.)
 
 There are four scripts in the {\tt BuildTools} directory that help with the release, namely
 
@@ -306,7 +319,7 @@ The first of these, {\tt prepare\_new\_stable}, prepares a new stable version. T
 \end{verbatim}
 
 where {\tt loc} is the location on the svn server that forms the basis of the new stable version, e.g., {\tt OS/trunk}. (The leading {\tt https://projects.coin-or.org/svn/} can optionally be added.)
-{\tt prepare\_new\_stable} uses svn to check out the code, making sure to locate the latest stable versions of all the dependencies, even if the basis uses trunk versions.
+{\tt prepare\_new\_stable} uses svn to check out the code and should be instructed to locate the latest stable versions of all the dependencies, even if the basis uses trunk versions.
 
 Some command line options (from comments in the script):
 
@@ -347,15 +360,14 @@ examine the output.
 
 The script {\tt commit\_new\_stable} commits the new stable revision. It should be run only after 
 {\tt prepare\_new\_stable} has been processed correctly.  
-
 The simplest form of invoking it is
 
 \begin{verbatim}
-($BUILDTOOLSDIR)/commit_new_stable <loc>
+($BUILDTOOLSDIR)/commit_new_stable <dir>
 \end{verbatim}
 
 \noindent
-where {\tt loc} is the location that forms the basis of the new stable version, e.g., {\tt OS/trunk}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter {\tt -c} to do the commit.
+where {\tt dir} is the local directory that contains the new stable version, e.g., {\tt ./OS-2.9}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter {\tt -c} to do the commit.
 
 
 
@@ -375,13 +387,3 @@ Make sure to resolve any conflicts and commit the merged version.
 
 After that, {\tt prepare\_new\_release} and {\tt commit\_new\_release}, as described just previously.
  
-
-\subdivision{Version numbers}{\label{section:VersionNumbering}
-
-The version number is defined in the file {\tt configure.ac}. There are actually two versions of this file,
-in the root directory as well as the top OS directory. Each of them contains a call to {\tt AC\_INIT}, 
-in which the second parameter is the version number. Change this number appropriately as follows:
-For trunk versions, use {\bf trunk}, so that {\tt OSgetVersionNumber()} can print the correct svn revision number in the header of the output; for stable and release versions use the proper number ({\tt n.n} for stable versions, {\tt n.n.n} for releases).
-
-Releases are numbered {\tt n.n.n}. 
-If there are bug fixes only, the third digit is incremented. Feature changes lead to updating the second digit. If the API changes, update the first digit. Stable versions are numbered {\tt n.n}. The first two digits of the most current release correspond to the latest stable version. Thus if feature changes are implemented, a new stable version must also be prepared first.

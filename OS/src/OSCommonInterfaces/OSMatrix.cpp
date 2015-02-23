@@ -52,7 +52,7 @@ MatrixNode::~MatrixNode()
     std::ostringstream outStr;
     outStr << "inside MatrixNode destructor" << std::endl;
     outStr << "number of kids = " <<  inumberOfChildren << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     if (inumberOfChildren > 0 && m_mChildren != NULL)
     {
@@ -67,7 +67,7 @@ MatrixNode::~MatrixNode()
         inumberOfChildren = 0;
     }
     else if (inumberOfChildren > 0 || m_mChildren != NULL)
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
 }
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixNode::getNodeType()
@@ -78,7 +78,7 @@ ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixNode::getNodeType()
 bool MatrixNode::IsEqual(MatrixNode *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MatrixNode");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MatrixNode");
 #endif
     if (this == NULL)
     {
@@ -87,7 +87,7 @@ bool MatrixNode::IsEqual(MatrixNode *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -98,7 +98,7 @@ bool MatrixNode::IsEqual(MatrixNode *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -195,7 +195,7 @@ std::string BaseMatrix::getMatrixNodeInXML()
 bool BaseMatrix::IsEqual(BaseMatrix *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in BaseMatrix");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in BaseMatrix");
 #endif
     if (this == NULL)
     {
@@ -204,7 +204,7 @@ bool BaseMatrix::IsEqual(BaseMatrix *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -215,7 +215,7 @@ bool BaseMatrix::IsEqual(BaseMatrix *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -271,7 +271,7 @@ ConstantMatrixElements::~ConstantMatrixElements()
 bool ConstantMatrixElements::IsEqual(ConstantMatrixElements *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in BaseMatrix");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in BaseMatrix");
 #endif
     if (this == NULL)
     {
@@ -280,7 +280,7 @@ bool ConstantMatrixElements::IsEqual(ConstantMatrixElements *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -291,7 +291,7 @@ bool ConstantMatrixElements::IsEqual(ConstantMatrixElements *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -342,7 +342,7 @@ VarReferenceMatrixElements::~VarReferenceMatrixElements()
 bool VarReferenceMatrixElements::IsEqual(VarReferenceMatrixElements *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VarReferenceMatrixElements");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in VarReferenceMatrixElements");
 #endif
     if (this == NULL)
     {
@@ -351,7 +351,7 @@ bool VarReferenceMatrixElements::IsEqual(VarReferenceMatrixElements *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -362,7 +362,7 @@ bool VarReferenceMatrixElements::IsEqual(VarReferenceMatrixElements *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -401,7 +401,7 @@ LinearMatrixElementTerm::~LinearMatrixElementTerm()
 bool LinearMatrixElementTerm::IsEqual(LinearMatrixElementTerm *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixElementTerm");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixElementTerm");
 #endif
     if (this == NULL)
     {
@@ -410,7 +410,7 @@ bool LinearMatrixElementTerm::IsEqual(LinearMatrixElementTerm *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -421,7 +421,7 @@ bool LinearMatrixElementTerm::IsEqual(LinearMatrixElementTerm *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -480,7 +480,7 @@ LinearMatrixElement::~LinearMatrixElement()
 bool LinearMatrixElement::IsEqual(LinearMatrixElement *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixElement");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixElement");
 #endif
     if (this == NULL)
     {
@@ -489,7 +489,7 @@ bool LinearMatrixElement::IsEqual(LinearMatrixElement *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -500,7 +500,7 @@ bool LinearMatrixElement::IsEqual(LinearMatrixElement *that)
         if (that == NULL || that->numberOfVarIdx == 0)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -559,7 +559,7 @@ LinearMatrixValues::~LinearMatrixValues()
 bool LinearMatrixValues::IsEqual(LinearMatrixValues *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixValues");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixValues");
 #endif
     if (this == NULL)
     {
@@ -568,7 +568,7 @@ bool LinearMatrixValues::IsEqual(LinearMatrixValues *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -579,7 +579,7 @@ bool LinearMatrixValues::IsEqual(LinearMatrixValues *that)
         if (that == NULL || that->numberOfEl == 0)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -655,7 +655,7 @@ LinearMatrixElements::~LinearMatrixElements()
 bool LinearMatrixElements::IsEqual(LinearMatrixElements *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixElements");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in LinearMatrixElements");
 #endif
     if (this == NULL)
     {
@@ -664,7 +664,7 @@ bool LinearMatrixElements::IsEqual(LinearMatrixElements *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -675,7 +675,7 @@ bool LinearMatrixElements::IsEqual(LinearMatrixElements *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -732,7 +732,7 @@ GeneralMatrixValues::~GeneralMatrixValues()
 bool GeneralMatrixValues::IsEqual(GeneralMatrixValues *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralMatrixValues");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralMatrixValues");
 #endif
     if (this == NULL)
     {
@@ -741,7 +741,7 @@ bool GeneralMatrixValues::IsEqual(GeneralMatrixValues *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -752,7 +752,7 @@ bool GeneralMatrixValues::IsEqual(GeneralMatrixValues *that)
         if (that == NULL || that->numberOfEl == 0)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -800,7 +800,7 @@ GeneralMatrixElements::~GeneralMatrixElements()
 bool GeneralMatrixElements::IsEqual(GeneralMatrixElements *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralMatrixElements");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralMatrixElements");
 #endif
     if (this == NULL)
     {
@@ -809,7 +809,7 @@ bool GeneralMatrixElements::IsEqual(GeneralMatrixElements *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -820,7 +820,7 @@ bool GeneralMatrixElements::IsEqual(GeneralMatrixElements *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -871,7 +871,7 @@ ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
 bool ObjReferenceMatrixElements::IsEqual(ObjReferenceMatrixElements *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ObjReferenceMatrixElements");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ObjReferenceMatrixElements");
 #endif
     if (this == NULL)
     {
@@ -880,7 +880,7 @@ bool ObjReferenceMatrixElements::IsEqual(ObjReferenceMatrixElements *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -891,7 +891,7 @@ bool ObjReferenceMatrixElements::IsEqual(ObjReferenceMatrixElements *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -942,7 +942,7 @@ ConReferenceMatrixElements::~ConReferenceMatrixElements()
 bool ConReferenceMatrixElements::IsEqual(ConReferenceMatrixElements *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ConReferenceMatrixElements");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ConReferenceMatrixElements");
 #endif
     if (this == NULL)
     {
@@ -951,7 +951,7 @@ bool ConReferenceMatrixElements::IsEqual(ConReferenceMatrixElements *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -962,7 +962,7 @@ bool ConReferenceMatrixElements::IsEqual(ConReferenceMatrixElements *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -1234,7 +1234,7 @@ std::string MatrixElements::getMatrixNodeInXML()
 bool MatrixElements::IsEqual(MatrixElements *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in BaseMatrix");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in BaseMatrix");
 #endif
     if (this == NULL)
     {
@@ -1243,7 +1243,7 @@ bool MatrixElements::IsEqual(MatrixElements *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -1254,7 +1254,7 @@ bool MatrixElements::IsEqual(MatrixElements *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;

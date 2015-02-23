@@ -13,7 +13,6 @@
  *
  */
 
-
 #include "OSGeneral.h"
 #include "OSInstance.h"
 #include "OSMathUtil.h"
@@ -198,25 +197,33 @@ OSInstance::~OSInstance()
             m_mObjectiveCoefficients[i] = NULL;
         }
 #ifndef NDEBUG
-        outStr.str("");
-        outStr.clear();
-        outStr <<  "Delete m_msObjectiveNames" << std::endl;
-        outStr <<  "Delete m_msMaxOrMins" << std::endl;
-        outStr <<  "Delete m_miNumberOfObjCoef" << std::endl;
-        outStr <<  "Delete m_mdObjectiveConstants" << std::endl;
-        outStr <<  "Delete m_mdObjectiveWeights" << std::endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Delete m_msObjectiveNames");
 #endif
         if (m_msObjectiveNames != NULL) delete[] m_msObjectiveNames;
         m_msObjectiveNames = NULL;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Delete m_msMaxOrMins");
+#endif
         if (m_msMaxOrMins != NULL) delete[] m_msMaxOrMins;
         m_msMaxOrMins = NULL;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Delete m_miNumberOfObjCoef");
+#endif
         if (m_miNumberOfObjCoef != NULL) delete[] m_miNumberOfObjCoef;
         m_miNumberOfObjCoef = NULL;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Delete m_mdObjectiveConstants");
+#endif
         if (m_mdObjectiveConstants != NULL) delete[] m_mdObjectiveConstants;
         m_mdObjectiveConstants = NULL;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Delete m_mdObjectiveWeights");
+#endif
         if (m_mdObjectiveWeights != NULL) delete[] m_mdObjectiveWeights;
         m_mdObjectiveWeights = NULL;
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "Delete m_mObjectiveCoefficients]");
+#endif
         if (m_mObjectiveCoefficients != NULL) delete[] m_mObjectiveCoefficients;
         m_mObjectiveCoefficients = NULL;
     }
@@ -278,7 +285,6 @@ OSInstance::~OSInstance()
     }
 
     // garbage collection for the gradient
-    //std::cout << "Do garbage collection for the nonlinear API" << std::endl;
     if(m_bNonLinearStructuresInitialized == true )
     {
         if (m_mdObjectiveFunctionValues != NULL) delete[] m_mdObjectiveFunctionValues;
@@ -1049,6 +1055,7 @@ std::string RotatedQuadraticCone::getConeName()
 {
     return "rotatedQuadraticCone";
 }// end RotatedQuadraticCone::getConeName()
+
 
 
 
@@ -1943,6 +1950,7 @@ bool OSInstance::processVariables()
         m_iNumberOfStringVariables = 0;
         if(n > 0)
         {
+
             if(m_bProcessVariables != true )
             {
                 m_mcVariableTypes = new char[n];
@@ -2751,16 +2759,12 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                 {
                     nlnode =  postfixVec[ n - 1 - i];
                     opStack.push( nlnode);
-
-                    //std::cout << postfixVec[ i]->snodeName << std::endl;
                 }
 
                 n = opStack.size();
                 for(i = 0; i < n; i++)
                 {
-                    //std::cout << "NUMBER OF NODES LEFT =  " << operatorVec.size() << std::endl;
                     nlnode = opStack.top();
-                    //std::cout << "EVALUATING NODE: " << nlnode->snodeName << std::endl;
                     switch (nlnode->inodeInt)
                     {
                     case OS_NUMBER:
@@ -2789,14 +2793,12 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                             outStr << nlnodeVar->idx;
                             outStr << ")";
                             tmpStack.push(outStr.str() );
-                            //std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
                         }
                         else
                         {
                             outStr << "x_";
                             outStr << nlnodeVar->idx;
                             tmpStack.push(outStr.str() );
-                            //std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
                         }
                         break;
 
@@ -2811,7 +2813,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
 
                     case OS_SUM :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sum operator");
-                        //std::cout << "INSIDE SUM NODE " << std::endl;
                         nlnodeSum = (OSnLNodeSum*)nlnode;
                         outStr.str("");
                         for(j = 0; j < nlnodeSum->inumberOfChildren; j++)
@@ -2828,7 +2829,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         }
                         outStr << ")";
                         tmpStack.push( outStr.str() );
-                        //std::cout << outStr.str() << std::endl;
                         break;
 
                     case OS_MINUS :
@@ -2936,7 +2936,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
 
                     case OS_MIN :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing min operator");
-                        //std::cout << "INSIDE Min NODE " << std::endl;
                         nlnodeMin = (OSnLNodeMin*)nlnode;
                         outStr.str("");
                         for(j = 0; j < nlnodeMin->inumberOfChildren; j++)
@@ -2958,7 +2957,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
 
                     case OS_MAX :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing max operator");
-                        //std::cout << "INSIDE Max NODE " << std::endl;
                         nlnodeMax = (OSnLNodeMax*)nlnode;
                         outStr.str("");
                         for(j = 0; j < nlnodeMax->inumberOfChildren; j++)
@@ -2993,7 +2991,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
 
                     case OS_PRODUCT :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing product operator");
-                        //std::cout << "INSIDE Product NODE " << std::endl;
                         nlnodeProduct = (OSnLNodeProduct*)nlnode;
                         outStr.str("");
                         for(j = 0; j < nlnodeProduct->inumberOfChildren; j++)
@@ -3010,7 +3007,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         }
                         outStr << ")";
                         tmpStack.push( outStr.str() );
-                        //std::cout << outStr.str() << std::endl;
                         break;
 
                     default:
@@ -3022,7 +3018,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                 postfixVec.clear();
                 if(tmpStack.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree -- stack size should be 1 at end");
                 resultString = tmpStack.top();
-                //std::cout << resultString << std::endl;
                 tmpStack.pop();
 
                 return resultString;
@@ -3123,6 +3118,13 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int ro
 
 std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTrees()
 {
+#ifndef NDEBUG
+    ostringstream outStr;
+#endif
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "in getAllNonlinearExpressionTrees");
+#endif
+
     //if( m_binitForAlgDiff == false) this->initForAlgDiff();
     if(m_bProcessExpressionTrees == true) return m_mapExpressionTrees;
     std::map<int, int> foundIdx;
@@ -3150,17 +3152,9 @@ std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(
             index = instanceData->nonlinearExpressions->nl[ i]->idx;
             if(foundIdx.find( index) != foundIdx.end() )
             {
-                //if(foundIdx[ index] > 0 ){
-                //std::cout << "OLD INDEX FOUND " << index << std::endl;
-                //std::cout << "foundIdx[ index] " << index << std::endl;
-                // found an existing index
-                // important -- at this time m_mapExpressionTrees[ index] points to
-                // the last OSExpressionTree with this index, it does not point to the
-                // the just found OSExpressionTree with this index
+                // there was a previous expression tree in this row; combine by adding
                 nlNodePlus = new OSnLNodePlus();
-                //expTree = new OSExpressionTree();
                 expTree =  instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
-                // set left child to old index and right child to new one
                 nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
                 nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
                 // we must delete the Expression tree corresponding to the old index value but not the nl nodes
@@ -3170,6 +3164,12 @@ std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(
                 m_mapExpressionTrees[ index] = expTree;
                 m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus;
                 foundIdx[ index] = i;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Found a duplicate expression tree in row " << index << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
             }
             else
             {
@@ -3177,6 +3177,12 @@ std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(
                 m_mapExpressionTrees[ index] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
                 m_mapExpressionTrees[ index]->m_treeRoot = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
                 foundIdx[ index] = i;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Found an expression tree in row " << index << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
             }
             //foundIdx[ index]++;
         }
@@ -3206,599 +3212,6 @@ std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTreesM
     return m_mapExpressionTreesMod;
 }// getAllNonlinearExpressionTreesMod
 
-//--------------------------------------------------------
-#if 0
-int OSInstance::getNumberOfMatrixExpressions()
-{
-    if(m_iMatrixExpressionNumber == -1)
-    {
-        if (instanceData == NULL || instanceData->matrixProgramming == NULL 
-                                 || instanceData->matrixProgramming->matrixExpressions == NULL)
-            throw ErrorClass("data object undefined in method getNumberOfMatrixExpressions()");
-        m_iMatrixExpressionNumber = instanceData->matrixProgramming->matrixExpressions->numberOfExpr;
-    }
-    return m_iMatrixExpressionNumber;
-}//getNumberOfMatrixExpressions
-
-MatrixExpressions** OSInstance::getMatrixExpressions()
-{
-    MatrixExpressions** root = new MatrixExpressions*[getNumberOfMatrixExpressions()];
-    for (int i=0; i < getNumberOfMatrixExpressions(); i++)
-    {
-        root[i] = instanceData->matrixProgramming->matrixExpressions->expr[i];
-    }
-    return root;
-}//getNonlinearExpressions
-
-
-int OSInstance::getNumberOfMatrixExpressionTreeIndexes()
-{
-    if(m_bMatrixExpressionTreeIndexesProcessed == false) getMatrixExpressionTreeIndexes();
-    return m_iNumberOfMatrixExpressionTreeIndexes;
-}//getNumberOfMatrixExpressionTreeIndexes
-
-int* OSInstance::getMatrixExpressionTreeIndexes()
-{
-    if(m_bMatrixExpressionTreeIndexesProcessed == true) return m_miMatrixExpressionTreeIndexes;
-    m_bMatrixExpressionTreeIndexesProcessed = true;
-    std::map<int, MatrixExpressionTree*> expTrees;
-    expTrees = getAllMatrixExpressionTrees();
-    std::map<int, MatrixExpressionTree*>::iterator pos;
-    try
-    {
-        // now put the term into an array
-        m_iNumberOfMatrixExpressionTreeIndexes = expTrees.size();
-        m_miMatrixExpressionTreeIndexes = new int[ m_iNumberOfMatrixExpressionTreeIndexes ]    ;
-        int i = 0;
-        for(pos = expTrees.begin(); pos != expTrees.end(); ++pos)
-        {
-            m_miMatrixExpressionTreeIndexes[ i++] = pos->first;
-        }
-        expTrees.clear();
-        return m_miMatrixExpressionTreeIndexes;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        throw ErrorClass( eclass.errormsg);
-    }
-}//getMatrixExpressionTreeIndexes
-
-MatrixExpressionTree* OSInstance::getMatrixExpressionTree(int rowIdx)
-{
-    // check to make sure rowIdx has a nonlinear term and is in the map
-    if( m_bProcessMatrixExpressionTrees == false )
-    {
-        getAllMatrixExpressionTrees();
-    }
-    if( m_mapMatrixExpressionTrees.find( rowIdx) != m_mapMatrixExpressionTrees.end())
-        return m_mapMatrixExpressionTrees[ rowIdx];
-    else return NULL ;
-}// getMatrixExpressionTree for a specific index
-
-MatrixExpressionTree* OSInstance::getMatrixExpressionTreeMod(int rowIdx)
-{
-    // check to make sure rowIdx has a nonlinear term and is in the map
-    if( m_bProcessMatrixExpressionTreesMod == false )
-    {
-        getAllMatrixExpressionTreesMod();
-    }
-    if( m_mapMatrixExpressionTreesMod.find( rowIdx) != m_mapMatrixExpressionTreesMod.end()) 
-        return m_mapMatrixExpressionTreesMod[ rowIdx];
-    else return NULL ;
-}// getMatrixExpressionTreeMod for a specific index
-
-std::vector<ExprNode*> OSInstance::getMatrixExpressionTreeInPostfix( int rowIdx)
-{
-    //if( m_binitForAlgDiff == false) this->initForAlgDiff();
-    if( m_bProcessMatrixExpressionTrees == false ) getAllMatrixExpressionTrees();
-    std::vector<ExprNode*> postfixVec;
-    try
-    {
-        if( m_mapMatrixExpressionTrees.find( rowIdx) != m_mapMatrixExpressionTrees.end())
-        {
-            MatrixExpressionTree* expTree = getMatrixExpressionTree( rowIdx);
-            postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
-        }
-        else
-        {
-            throw ErrorClass("Error in getMatrixExpressionTreeInPostfix, rowIdx not valid");
-        }
-        return postfixVec;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        throw ErrorClass( eclass.errormsg);
-    }
-}//getMatrixExpressionTreeInPostfix
-
-std::string OSInstance::getMatrixExpressionTreeInInfix( int rowIdx_)
-{
-    if( m_binitForAlgDiff == false) this->initForAlgDiff();
-    if( m_bProcessExpressionTrees == false ) getAllMatrixExpressionTrees();
-    std::string resultString;
-    resultString = "";
-    unsigned int i;
-    unsigned int j;
-    unsigned int n;
-    ostringstream outStr;
-    std::vector<ExprNode*> postfixVec;
-    int rowIdx = rowIdx_;
-    OSnLNode *nlnode = NULL ;
-    OSnLNodeNumber *nlnodeNum = NULL;
-    OSnLNodeVariable *nlnodeVar = NULL;
-    OSnLNodeSum *nlnodeSum = NULL;
-    OSnLNodeProduct *nlnodeProduct = NULL;
-    OSnLNodeMin *nlnodeMin = NULL;
-    OSnLNodeMax *nlnodeMax = NULL;
-    std::string tmp1 = "";
-    std::string tmp2 = "";
-    std::string tmp3 = "";
-    std::stack<OSnLNode*> opStack;
-    std::stack<std::string> tmpStack;
-    std::stack<std::string> sumStack;
-    std::stack<std::string> productStack;
-    std::stack<std::string> minStack;
-    std::stack<std::string> maxStack;
-
-    try
-    {
-        if( m_mapMatrixExpressionTrees.find( rowIdx) != m_mapMatrixExpressionTrees.end())
-        {
-            // get the nodes and separate into operators and operands,
-            // for now only the number and variable nodes are operator nodes
-
-            MatrixExpressionTree* exptree = this->getMatrixExpressionTree( rowIdx);
-            if(exptree != NULL)
-            {
-                postfixVec = this->getMatrixExpressionTreeInPostfix( rowIdx);
-                n  = postfixVec.size();
-                //put vector in reverse order
-                for (i = 0 ; i < n; i++)
-                {
-                    nlnode =  postfixVec[ n - 1 - i];
-                    opStack.push( nlnode);
-
-                    //std::cout << postfixVec[ i]->snodeName << std::endl;
-                }
-
-                n = opStack.size();
-                for(i = 0; i < n; i++)
-                {
-                    //std::cout << "NUMBER OF NODES LEFT =  " << operatorVec.size() << std::endl;
-                    nlnode = opStack.top();
-                    //std::cout << "EVALUATING NODE: " << nlnode->snodeName << std::endl;
-                    switch (nlnode->inodeInt)
-                    {
-                    case OS_NUMBER:
-                        nlnodeNum = (OSnLNodeNumber*)nlnode;
-                        tmpStack.push( os_dtoa_format(nlnodeNum->value) );
-                        break;
-
-                    case OS_PI:
-                        tmpStack.push( "PI" );
-                        break;
-
-                    case OS_E:
-                        tmpStack.push( "E" );
-                        break;
-
-                    case OS_VARIABLE:
-                        outStr.str("");
-                        // handle a variable
-                        nlnodeVar = (OSnLNodeVariable*)nlnode;
-                        // see if the coefficient is specified
-                        if( (nlnodeVar->coef > 1.0) ||  (nlnodeVar->coef < 1.0) )
-                        {
-                            outStr << "(";
-                            outStr <<  os_dtoa_format(nlnodeVar->coef);
-                            outStr << "*x_";
-                            outStr << nlnodeVar->idx;
-                            outStr << ")";
-                            tmpStack.push(outStr.str() );
-                            //std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
-                        }
-                        else
-                        {
-                            outStr << "x_";
-                            outStr << nlnodeVar->idx;
-                            tmpStack.push(outStr.str() );
-                            //std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
-                        }
-                        break;
-
-                    case OS_PLUS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing plus operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmp2 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push("(" + tmp2 +  " + "  + tmp1 + ")");
-                        break;
-
-                    case OS_SUM :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sum operator");
-                        //std::cout << "INSIDE SUM NODE " << std::endl;
-                        nlnodeSum = (OSnLNodeSum*)nlnode;
-                        outStr.str("");
-                        for(j = 0; j < nlnodeSum->inumberOfChildren; j++)
-                        {
-                            sumStack.push( tmpStack.top() );
-                            tmpStack.pop();
-                        }
-                        outStr << "(";
-                        for(j = 0; j < nlnodeSum->inumberOfChildren; j++)
-                        {
-                            outStr << sumStack.top();
-                            if (j < nlnodeSum->inumberOfChildren - 1) outStr << " + ";
-                            sumStack.pop();
-                        }
-                        outStr << ")";
-                        tmpStack.push( outStr.str() );
-                        //std::cout << outStr.str() << std::endl;
-                        break;
-
-                    case OS_MINUS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing minus operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmp2 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push("(" + tmp2 +  " - "  + tmp1 + ")");
-                        break;
-
-                    case OS_NEGATE :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing negate operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "-"+ tmp1 );
-
-
-                        break;
-
-                    case OS_TIMES :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing times operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmp2 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push("(" + tmp2 +  "*"  + tmp1 + ")");
-                        break;
-
-                    case OS_DIVIDE :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing divide operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmp2 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push("(" + tmp2 +  " / "  + tmp1 + ")");
-                        break;
-
-                    case OS_POWER :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing power operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmp2 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push("(" + tmp2 +  " ^ "  + tmp1 + ")");
-                        break;
-
-
-                    case OS_ABS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing abs operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "abs( "+ tmp1  + ")");
-                        break;
-
-                    case OS_ERF :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing erf operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "erf( "+ tmp1  + ")");
-                        break;
-
-
-                    case OS_SQUARE :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing square operator ");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "("+ tmp1  + ")^2");
-                        break;
-
-                    case OS_LN :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing ln operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "ln( "+ tmp1  + ")");
-                        break;
-
-                    case OS_EXP :
-
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing exp operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "exp( "+ tmp1  + ")");
-                        break;
-
-                    case OS_SIN :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sin operator");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "sin( "+ tmp1  + ")");
-                        break;
-
-                    case OS_COS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing cos operator ");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "cos( "+ tmp1  + ")");
-                        break;
-
-                    case OS_SQRT :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sqrt operator ");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "sqrt( "+ tmp1  + ")");
-                        break;
-
-                    case OS_MIN :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing min operator");
-                        //std::cout << "INSIDE Min NODE " << std::endl;
-                        nlnodeMin = (OSnLNodeMin*)nlnode;
-                        outStr.str("");
-                        for(j = 0; j < nlnodeMin->inumberOfChildren; j++)
-                        {
-                            minStack.push( tmpStack.top() );
-                            tmpStack.pop();
-                        }
-                        outStr << "min(";
-                        for(j = 0; j < nlnodeMin->inumberOfChildren; j++)
-                        {
-                            outStr << minStack.top();
-                            if (j < nlnodeMin->inumberOfChildren - 1) outStr << " , ";
-                            minStack.pop();
-                        }
-                        outStr << ")";
-                        tmpStack.push( outStr.str() );
-                        break;
-
-                    case OS_MAX :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing max operator");
-                        //std::cout << "INSIDE Max NODE " << std::endl;
-                        nlnodeMax = (OSnLNodeMax*)nlnode;
-                        outStr.str("");
-                        for(j = 0; j < nlnodeMax->inumberOfChildren; j++)
-                        {
-                            maxStack.push( tmpStack.top() );
-                            tmpStack.pop();
-                        }
-                        outStr << "max(";
-                        for(j = 0; j < nlnodeMax->inumberOfChildren; j++)
-                        {
-                            outStr << maxStack.top();
-                            if (j < nlnodeMax->inumberOfChildren - 1) outStr << " , ";
-                            maxStack.pop();
-                        }
-                        outStr << ")";
-                        tmpStack.push( outStr.str() );
-                        break;
-
-                    case OS_IF :
-
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing if operator ");
-                        if(nlnode->inumberOfChildren != 3)throw  ErrorClass("The if node must have three children");
-                        tmp1 = tmpStack.top();
-                        tmpStack.pop();
-                        tmp2 = tmpStack.top();
-                        tmpStack.pop();
-                        tmp3 = tmpStack.top();
-                        tmpStack.pop();
-                        tmpStack.push( "if(" + tmp3 + "," + tmp2 + "," + tmp1 +")" );
-                        break;
-
-                    case OS_PRODUCT :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing product operator");
-                        //std::cout << "INSIDE Product NODE " << std::endl;
-                        nlnodeProduct = (OSnLNodeProduct*)nlnode;
-                        outStr.str("");
-                        for(j = 0; j < nlnodeProduct->inumberOfChildren; j++)
-                        {
-                            productStack.push( tmpStack.top() );
-                            tmpStack.pop();
-                        }
-                        outStr << "(";
-                        for(j = 0; j < nlnodeProduct->inumberOfChildren; j++)
-                        {
-                            outStr << productStack.top();
-                            if (j < nlnodeProduct->inumberOfChildren - 1) outStr << " * ";
-                            productStack.pop();
-                        }
-                        outStr << ")";
-                        tmpStack.push( outStr.str() );
-                        //std::cout << outStr.str() << std::endl;
-                        break;
-
-                    default:
-                        throw  ErrorClass("operator " + nlnode->getTokenName() + " not supported");
-                        break;
-                    }
-                    opStack.pop();
-                }
-                postfixVec.clear();
-                if(tmpStack.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree -- stack size should be 1 at end");
-                resultString = tmpStack.top();
-                //std::cout << resultString << std::endl;
-                tmpStack.pop();
-
-                return resultString;
-            }
-            else
-            {
-                //throw ErrorClass("Error in getNonlinearExpressionTreeInInfix, there is no expression tree for this index");
-                return "";
-            }
-        }
-        else
-        {
-            throw ErrorClass("Error in getNonlinearExpressionTreeInInfix, rowIdx not valid");
-        }
-        return resultString;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        throw ErrorClass( eclass.errormsg);
-    }
-}//getMatrixExpressionTreeInInfix
-
-
-std::vector<ExprNode*> OSInstance::getMatrixExpressionTreeModInPostfix( int rowIdx)
-{
-    //if( m_binitForAlgDiff == false) this->initForAlgDiff();
-    if( m_bProcessMatrixExpressionTreesMod == false ) getAllMatrixExpressionTreesMod();
-    std::vector<ExprNode*> postfixVec;
-    try
-    {
-        if( m_mapMatrixExpressionTreesMod.find( rowIdx) != m_mapMatrixExpressionTreesMod.end())
-        {
-            MatrixExpressionTree* expTree = getMatrixExpressionTreeMod( rowIdx);
-            postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
-
-        }
-        else
-        {
-            throw ErrorClass("Error in getMatrixExpressionTreeModInPostfix, rowIdx not valid");
-        }
-        return postfixVec;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        throw ErrorClass( eclass.errormsg);
-    }
-}//getMatrixExpressionTreeModInPostfix
-
-
-std::vector<ExprNode*> OSInstance::getMatrixExpressionTreeInPrefix( int rowIdx)
-{
-    //if( m_binitForAlgDiff == false) this->initForAlgDiff();
-    if( m_bProcessMatrixExpressionTrees == false ) getAllMatrixExpressionTrees();
-    std::vector<ExprNode*> prefixVec;
-    try
-    {
-        if( m_mapMatrixExpressionTrees.find( rowIdx) != m_mapMatrixExpressionTrees.end())
-        {
-            MatrixExpressionTree* expTree = getMatrixExpressionTree( rowIdx);
-            prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
-        }
-        else
-        {
-            throw ErrorClass("Error in getMatrixExpressionTreeInPrefix, rowIdx not valid");
-        }
-        return prefixVec;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        throw ErrorClass( eclass.errormsg);
-    }
-}//getMatrixExpressionTreeInPrefix
-
-std::vector<ExprNode*> OSInstance::getMatrixExpressionTreeModInPrefix( int rowIdx)
-{
-
-    //if( m_binitForAlgDiff == false) this->initForAlgDiff();
-    if( m_bProcessMatrixExpressionTreesMod == false ) getAllMatrixExpressionTreesMod();
-    std::vector<ExprNode*> prefixVec;
-    try
-    {
-        if( m_mapMatrixExpressionTreesMod.find( rowIdx) != m_mapMatrixExpressionTreesMod.end())
-        {
-            MatrixExpressionTree* expTree = getMatrixExpressionTreeMod( rowIdx);
-            prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
-        }
-        else
-        {
-            throw ErrorClass("Error in getMatrixExpressionTreeInPrefix, rowIdx not valid");
-        }
-        return prefixVec;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        throw ErrorClass( eclass.errormsg);
-    }
-}//getMatrixExpressionTreeInPrefix
-
-std::map<int, MatrixExpressionTree*> OSInstance::getAllMatrixExpressionTrees()
-{
-    //if( m_binitForAlgDiff == false) this->initForAlgDiff();
-    if(m_bProcessMatrixExpressionTrees == true) return m_mapMatrixExpressionTrees;
-    std::map<int, int> foundIdx;
-    std::map<int, int>::iterator pos;
-    OSnLNodePlus *nlNodePlus;
-    MatrixExpressionTree *expTree;
-    m_iObjectiveNumberNonlinear = 0;
-    m_iConstraintNumberNonlinear = 0;
-    int i;
-    // important -- tell the nl nodes not to destroy the OSExpression Objects
-    if( instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 && instanceData->nonlinearExpressions->nl != NULL)
-    {
-        for( i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
-        {
-            instanceData->nonlinearExpressions->nl[i]->m_bDeleteExpressionTree = false;
-        }
-    }
-    int index;
-    // kipp -- what should we return if instanceData->nonlinearExpressions->numberOfNonlinearExpressions is zero
-    for(i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
-    {
-        index = instanceData->nonlinearExpressions->nl[ i]->idx;
-        if(foundIdx.find( index) != foundIdx.end() )
-        {
-            //if(foundIdx[ index] > 0 ){
-            //std::cout << "OLD INDEX FOUND " << index << std::endl;
-            //std::cout << "foundIdx[ index] " << index << std::endl;
-            // found an existing index
-            // important -- at this time m_mapExpressionTrees[ index] points to
-            // the last OSExpressionTree with this index, it does not point to the
-            // the just found OSExpressionTree with this index
-            nlNodePlus = new OSnLNodePlus();
-            //expTree = new OSExpressionTree();
-            expTree =  instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
-            // set left child to old index and right child to new one
-            nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
-            nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
-            // we must delete the Expression tree corresponding to the old index value but not the nl nodes
-            instanceData->nonlinearExpressions->nl[ foundIdx[ index]  ]->m_bDeleteExpressionTree = true;
-            instanceData->nonlinearExpressions->nl[ foundIdx[ index]  ]->osExpressionTree->bDestroyNlNodes = false;
-            //point to the new expression tree
-            m_mapExpressionTrees[ index] = expTree;
-            m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus;
-            foundIdx[ index] = i;
-        }
-        else
-        {
-            // we have a new index
-            m_mapExpressionTrees[ index] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
-            m_mapExpressionTrees[ index]->m_treeRoot = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
-            foundIdx[ index] = i;
-        }
-        //foundIdx[ index]++;
-    }
-    // count the number of constraints and objective functions with nonlinear terms.
-    for(pos = foundIdx.begin(); pos != foundIdx.end(); ++pos)
-    {
-        if(pos->first < 0)
-        {
-            m_iMatrixObjectiveNumberNonlinear++;
-        }
-        else
-        {
-            m_iMatrixConstraintNumberNonlinear++;
-        }
-    }
-    m_bProcessMatrixExpressionTrees = true;
-    return m_mapMatrixExpressionTrees;
-}// getAllMatrixExpressionTrees
-#endif
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 std::string OSInstance::getTimeDomainFormat()
 {
@@ -4634,6 +4047,9 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
 
 bool OSInstance::initializeNonLinearStructures( )
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "in initializeNonLinearStructures");
+#endif
     std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
     if( m_bNonLinearStructuresInitialized == true) return true;
     if( m_bProcessVariables == false) processVariables();
@@ -4649,12 +4065,17 @@ bool OSInstance::initializeNonLinearStructures( )
     // now create all of the variable maps for each expression tree
     for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
     {
-        (posMapExpTree->second)->getVariableIndicesMap() ;
+#ifndef NDEBUG
+        ostringstream outStr;
+        outStr << "Determine variable map for expression tree " << posMapExpTree->first;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+        (posMapExpTree->second)->getVariableIndicesMap();
     }
     // add the quadratic terms if necessary
     if(getNumberOfQuadraticTerms() > 0) addQTermsToExpressionTree();
     // now get the map of all nonlinear variables
-    getAllNonlinearVariablesIndexMap( );
+    getAllNonlinearVariablesIndexMap();
     getDenseObjectiveCoefficients();
     m_mdConstraintFunctionValues = new double[ this->getConstraintNumber()];
     m_mdObjectiveFunctionValues = new double[ this->getObjectiveNumber()];
@@ -4670,14 +4091,10 @@ bool OSInstance::initializeNonLinearStructures( )
 
 SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( )
 {
-    //if(this->getVariableNumber() == 0 || this->getConstraintNumber() == 0) return NULL;
-    // if already called return the sparse Jacobian
-    // it is important that this method NOT get called twice -- if
-    // there are linear terms in <linearConstraintCoefficients> that
-    // also appear in <nonlinearExpressions> then they will keep getting added
-    // to the modified expession tree with each call to this method
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "in getJacobianSparsityPattern");
+#endif
     if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
-    //std::cout << "INSIDE GET JACOBIAN SPARSITY PATTERN" << std::endl;
     // determine if we are in column or row major
     getLinearConstraintCoefficientMajor();
     // make sure the data structures have been inialized
@@ -4718,6 +4135,9 @@ bool OSInstance::addQTermsToExressionTree() // obsolescent --- replaced by addQT
 
 bool OSInstance::addQTermsToExpressionTree()
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "in addQTermsToExpressionTree");
+#endif
     std::ostringstream outStr;
     int i, k, idx;
     // get the number of qTerms
@@ -4729,22 +4149,25 @@ bool OSInstance::addQTermsToExpressionTree()
     OSnLNodePlus* nlNodePlus;
     ScalarExpressionTree* expTree;
     getQuadraticTerms();
-    //std::cout << "PROCESSING QUADRATIC TERMS" << std::endl;
     for(i = 0; i < numQTerms; i++)
     {
         idx = m_quadraticTerms->rowIndexes[ i];
-        //std::cout << "PROCESSING QTERM  = "  << i <<std::endl;
         // see if row idx is in the expression tree
         if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() )
         {
             // row idx is in the expression tree
             // add the qTerm in row idx  to the expression tree
-            // define two new OSnLVariable nodes, an OSnLnodeTimes, and OSnLnodePlus
+            // define two new OSnLVariable nodes, an OSnLNodeTimes, and OSnLNodePlus
             nlNodeVariableOne = new OSnLNodeVariable();
             nlNodeVariableOne->idx = m_quadraticTerms->varOneIndexes[ i];
             // see if the variable indexed by nlNodeVariableOne->idx is in the expression tree for row idx
             // if not, add to mapVarIdx
             expTree = m_mapExpressionTreesMod[ idx];
+#ifndef NDEBUG
+        ostringstream outStr;
+        outStr << "In addQTermsToExpressionTree --- call getVariableIndicesMap";
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
             if(  expTree->m_bIndexMapGenerated == false) expTree->getVariableIndicesMap();
             if( (*expTree->mapVarIdx).find( nlNodeVariableOne->idx) == (*expTree->mapVarIdx).end()  )
             {
@@ -4799,7 +4222,8 @@ bool OSInstance::addQTermsToExpressionTree()
         }
         else
         {
-            // create the quadratic expression to add to the expression tree
+            //row idx is already in the expression tree
+            // create the quadratic expression to add to the tree
             nlNodeVariableOne = new OSnLNodeVariable();
             nlNodeVariableOne->idx = m_quadraticTerms->varOneIndexes[ i];
             nlNodeVariableOne->coef = m_quadraticTerms->coefficients[ i];
@@ -4812,7 +4236,13 @@ bool OSInstance::addQTermsToExpressionTree()
             nlNodeTimes->m_mChildren[ 1] = nlNodeVariableTwo;
             // create a new expression tree corresponding to row idx.
             expTree = new ScalarExpressionTree();
-            expTree->m_treeRoot = nlNodeTimes ;
+            expTree->m_treeRoot = nlNodeTimes;
+#ifndef NDEBUG
+        ostringstream outStr;
+        outStr << "In addQTermsToExpressionTree --- call getVariableIndicesMap again";
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+
             expTree->mapVarIdx = expTree->getVariableIndicesMap();
             m_mapExpressionTreesMod[ idx ] = expTree;
             if(idx < 0)
@@ -4836,7 +4266,7 @@ bool OSInstance::addQTermsToExpressionTree()
         // if there were no nonlinear terms make this the expression tree
         if(m_iNonlinearExpressionNumber <= 0) m_mapExpressionTrees = m_mapExpressionTreesMod;
         m_bQTermsAdded =true;
-    }
+    } // end of loop on numQTerms
     return true;
 } //addQTermsToExpressionTree
 
@@ -4986,6 +4416,7 @@ bool OSInstance::addCone(int arrayIndex, int numberOfRows, int numberOfColumns, 
     switch (coneType)
 
     {
+
 /*
         case ENUM_CONE_TYPE_dual: 
             instanceData->cones->cone[arrayIndex] = new DualCone();
@@ -5257,7 +4688,6 @@ std::string OSInstance::printModel(int rowIdx )
 {
     std::string resultString = "";
 
-
     ostringstream outStr;
     outStr << "";
     //loop over the constraints first;
@@ -5404,8 +4834,6 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool new_x)
             //while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
             while ( (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] )
             {
-                //std::cout << "m_sparseJacMatrix->values[ i] " << m_sparseJacMatrix->values[ i] << std::endl;
-                //std::cout << "m_sparseJacMatrix->indexes[ i] " << m_sparseJacMatrix->indexes[ i] << std::endl;
                 dvalue += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
                 i++;
             }
@@ -5530,7 +4958,7 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
     try
 
     {
-        if(highestOrder < 1 ) throw ErrorClass("When calling calculateAllConstraintFunctionGradients highestOrder should be 1 or 2");
+        if (highestOrder < 1 ) throw ErrorClass("When calling calculateAllConstraintFunctionGradients highestOrder should be 1 or 2");
         if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  )
             getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
     }//end try
@@ -5547,9 +4975,16 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, double 
 {
     try
     {
-        if(highestOrder < 1 ) throw ErrorClass("When calling calculateConstraintFunctionGradient highestOrder should be 1 or 2");
+        ostringstream outStr;
+
+        if (highestOrder < 1 ) throw ErrorClass("When calling calculateConstraintFunctionGradient highestOrder should be 1 or 2");
         if(idx < 0 || idx >= instanceData->constraints->numberOfConstraints )
             throw ErrorClass("invalid index passed to calculateConstraintFunctionGrad");
+
+#ifndef NDEBUG
+        outStr << "Calculate gradient for constraint " << idx << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str()); 
+#endif
         SparseVector *sp;
         sp = new SparseVector();
         sp->bDeleteArrays = true;
@@ -5561,8 +4996,16 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, double 
         sp->indexes = new int[ sp->number];
         for(i = 0; i < sp->number; i++)
         {
-            sp->values[ i] = m_mdJacValue[ m_miJacStart[ idx] +  i];
-            sp->indexes[ i] = m_miJacIndex[ m_miJacStart[ idx] +  i];
+            sp->values[ i] = m_mdJacValue[ m_miJacStart[ idx] + i];
+            sp->indexes[i] = m_miJacIndex[ m_miJacStart[ idx] + i];
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "store into sp at location " << i;
+            outStr << " from Jacobian vector element " << m_miJacStart[ idx] + i;
+            outStr << " value=" << sp->values[ i] << "; index=" << sp->indexes[i] << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
         }
         return sp;
     }
@@ -5577,8 +5020,14 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, int idx
 {
     try
     {
+        ostringstream outStr;
+
         if(idx < 0 || idx >= instanceData->constraints->numberOfConstraints )
             throw ErrorClass("invalid index passed to calculateConstraintFunctionGrad");
+#ifndef NDEBUG
+        outStr << "Calculate gradient for constraint " << idx << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str()); 
+#endif
         SparseVector *sp;
         sp = new SparseVector();
         sp->bDeleteArrays = true;
@@ -5592,6 +5041,14 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, int idx
         {
             sp->values[ i] = m_mdJacValue[ m_miJacStart[ idx] + i];
             sp->indexes[i] = m_miJacIndex[ m_miJacStart[ idx] + i];
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "store into sp at location " << i;
+            outStr << " from Jacobian vector element " << m_miJacStart[ idx] + i;
+            outStr << " value=" << sp->values[ i] << "; index=" << sp->indexes[i] << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
         }
         return sp;
     }
@@ -5636,7 +5093,14 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
      */
     try
     {
+        ostringstream outStr;
+
         if(highestOrder < 1 ) throw ErrorClass("When calling calculateObjectiveFunctionGradient highestOrder should be 1 or 2");
+
+#ifndef NDEBUG
+        outStr << "Calculate gradient for objective " << abs(objIdx) - 1 << " (row " << objIdx << ")" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str()); 
+#endif
         if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  )
         {
             int domainIdx = 0;
@@ -5673,6 +5137,15 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
                         {
                             m_mmdObjGradient[ abs( objIdx) - 1 ][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ i] +
                                     m_mmdDenseObjectiveCoefficients[  abs( objIdx) - 1][ m_miNonLinearVarsReverseMap[ i]];
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "store into gradient data structure at location [";
+                            outStr << abs( objIdx) - 1 << "," << m_miNonLinearVarsReverseMap[ i] << "]";
+                            outStr << "; value=" << m_mmdObjGradient[ abs( objIdx) - 1 ][ m_miNonLinearVarsReverseMap[ i]] << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance,
+                                ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                         }
                     }
                     m_iHighestOrderEvaluated = iHighestOrderEvaluatedStore;
@@ -5754,7 +5227,6 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *
         if(highestOrder != 2 ) throw ErrorClass("When calling calculateLagrangianHessian highestOrder should be 2");
         if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  )
         {
-            //std::cout  << "CALL getIterateResults() FROM calculateLagrangianHessain" << std::endl;
             getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
         }
     }
@@ -5773,8 +5245,6 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
             throw ErrorClass("invalid index passed to calculateHessian");
         double *objLambda = new double[ getObjectiveNumber() ];
         double *conLambda = new double[ getConstraintNumber() ];
-        //std::cout << "NUMBER OF OBJECTIVES = " << getObjectiveNumber() << std::endl;
-        //std::cout << "NUMBER OF CONSTRAINTS = " << getConstraintNumber() << std::endl;
         int i;
         // initialize all to zero
         for(i = 0; i < getObjectiveNumber(); i++)
@@ -5799,7 +5269,6 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
         if( new_x == true || (2 > m_iHighestOrderEvaluated)  )
         {
             getIterateResults(x, objLambda, conLambda, new_x,  2);
-//            std::cout  << "CALL getIterateResults() FROM calculateHessian" << std::endl;
         }
         delete[] objLambda;
         delete[] conLambda;
@@ -5815,7 +5284,6 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
 bool OSInstance::getSparseJacobianFromColumnMajor( )
 {
     std::ostringstream outStr;
-
 
     // we assume column major matrix
     if( m_bColumnMajor == false) return false;
@@ -5841,10 +5309,15 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
     for ( i = 0; i < iNumRowStarts; i++)
     {
         m_miJacStart [ i ] = 0;
-        // map the variables  in the nonlinear rows
+        // map the variables in the nonlinear rows
         if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() )
         {
             // the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
+#ifndef NDEBUG
+        ostringstream outStr;
+        outStr << "In getSparseJacobianFromColumnMajor --- call getVariableIndicesMap for i=" << i;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
             m_mapExpressionTreesMod[ i]->getVariableIndicesMap();
 
         }
@@ -5853,7 +5326,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
     if (this->instanceData->linearConstraintCoefficients != NULL &&
         this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
     {
-        // i is indexing columns (variables) and j is indexing row numbers
+        // i is index to columns (variables) and j is index to row numbers
         for (i = 0; i < iNumVariableStarts; i++)
         {
             for (j = start[i]; j < start[ i + 1 ]; j++)
@@ -5867,9 +5340,9 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
                 if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
                         ( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) )
                 {
-                    // variable i is appears in the expression tree for row index[ j]
+                    // variable i appears in the expression tree for row index[ j]
                     // add the coefficient corresponding to variable i in row index[ j] to the expression tree
-                    // define a new OSnLVariable and OSnLnodePlus
+                    // define a new OSnLVariable and OSnLNodePlus
                     // don't add a zero
                     if( value[j] > 0 || value[j] < 0)
                     {
@@ -5891,7 +5364,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         }
     }
     // at this point, m_miJacStart[ i] holds the number of columns with a linear/constant nonzero in row i - 1
-    // we are not done with the start indices, if we are here, and we
+    // we are not done with the start indices. If we are here, and we
     // knew the correct starting point of row i -1, the correct starting point
     // for row i is m_miJacStart[i] + m_miJacStart [i - 1]
     m_miJacStart[0] = 0;
@@ -5950,6 +5423,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
             {
                 m_miJacIndex[ iTemp] = posVarIdx->first;
                 m_mdJacValue[ iTemp] = 0;
+                //at this point we know where the original variable appears in the Jacobian; store location
+                posVarIdx->second = iTemp;
                 iTemp++;
             }
         }
@@ -5983,6 +5458,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         outStr <<  m_miJacNumConTerms[ i ] << "  ";
     }
     outStr << std::endl << std::endl;
+
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     return true;
@@ -6022,8 +5498,12 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
         if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() )
         {
             // the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
+#ifndef NDEBUG
+        ostringstream outStr;
+        outStr << "In getSparseJacobianFromRowMajor --- call getVariableIndicesMap for i=" << i;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
             m_mapExpressionTreesMod[ i]->getVariableIndicesMap();
-
         }
     }
     int loopLimit =  getConstraintNumber();
@@ -6032,21 +5512,21 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
     if (this->instanceData->linearConstraintCoefficients != NULL &&
         this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
     {
-        // i is indexing rows (constrains) and j is indexing column numbers
+        // i is index to rows (constraints) and j is index to column numbers
         for (i = 0; i < loopLimit; i++)
         {
             m_miJacNumConTerms[ i] = 0;
             for (j = start[i]; j < start[ i + 1 ]; j++)
             {
-                // determine if variable index[j] appears in the Expression Tree for row i
-                // if we pass if test below then variable i is in the expresssion tree and we add
-                // the linear term to the expession tree
+                // determine if variable index[j] appears in the expression Tree for row i
+                // if we pass if test below then variable i is in the expression tree and we add
+                // the linear term to the expression tree
                 if( (m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() ) &&
                         ( (*m_mapExpressionTreesMod[ i]->mapVarIdx).find( index[ j]) != (*m_mapExpressionTreesMod[ i]->mapVarIdx).end()) )
                 {
                     // variable index[ j] appears in the expression tree for row i
                     // add the coefficient corresponding to variable index[j] in row i to the expression tree
-                    // define a new OSnLVariable and OSnLnodePlus
+                    // define a new OSnLVariable and OSnLNodePlus
                     if(value[ j] > 0 || value[j] < 0)
                     {
                         nlNodeVariable = new OSnLNodeVariable();
@@ -6080,8 +5560,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
         }
     }
     // we know how many constant terms and size of arrays
-    // dimension miIndex and mdValue here
-    m_iJacValueSize =     m_miJacStart[ iNumJacRowStarts - 1];
+    // dimension m_miJacIndex and m_mdJacValue here
+    m_iJacValueSize = m_miJacStart[ iNumJacRowStarts - 1];
     m_miJacIndex = new int[  m_iJacValueSize];
     m_mdJacValue = new double[ m_iJacValueSize ];
     // now loop again and put in values and indices
@@ -6116,6 +5596,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
             {
                 m_miJacIndex[ k] = posVarIdx->first;
                 m_mdJacValue[ k] = 0;
+                //at this point we know where the original variable appears in the Jacobian; store location
+                posVarIdx->second = k;
                 k++;
             }
         }
@@ -6201,11 +5683,13 @@ ScalarExpressionTree* OSInstance::getLagrangianExpTree( )
         numChildren++;
     }
     // get a variable index map for the expression tree
+#ifndef NDEBUG
+        ostringstream outStr;
+        outStr << "In getLagrangianExpTree --- call getVariableIndicesMap";
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
     m_LagrangianExpTree->getVariableIndicesMap();
     // print out the XML for this puppy
-    //std::cout << "Here comes the Lagrangian Tree" << std::endl;
-    //std::cout << m_LagrangianExpTree->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
-    //
     m_bLagrangianExpTreeCreated = true;
     return m_LagrangianExpTree;
 }//getLagrangianExpTree
@@ -6225,20 +5709,32 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( )
         // get the index map for the expression tree
 
         expTree = posMapExpTree->second;
-        if(expTree->m_bIndexMapGenerated == false)expTree->getVariableIndicesMap();
+#ifndef NDEBUG
+        ostringstream outStr;
+        outStr << "In getAllNonlinearVariablesIndexMap --- call getVariableIndicesMap";
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+        if(expTree->m_bIndexMapGenerated == false) expTree->getVariableIndicesMap();
         for(posVarIdx = (*expTree->mapVarIdx).begin(); posVarIdx != (*expTree->mapVarIdx).end(); ++posVarIdx)
         {
             if( m_mapAllNonlinearVariablesIndex.find( posVarIdx->first) == m_mapAllNonlinearVariablesIndex.end() )
             {
                 // add the variable to the Lagragian map
                 m_mapAllNonlinearVariablesIndex[ posVarIdx->first] = 1;
+#ifndef NDEBUG
+                ostringstream outStr;
+                outStr << "Add variable " << posVarIdx->first << " to m_mapAllNonlinearVariablesIndex";
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
             }
         }
     }
     m_miNonLinearVarsReverseMap = new int[m_mapAllNonlinearVariablesIndex.size()];
     // now order appropriately
+#ifndef NDEBUG
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "compute reverse map of nonlinear vars");
+#endif
     int kount = 0;
-    //std::cout << "HERE IS THE LAGRANGIANN VARIABLE MAPPING" << std::endl;
     for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx !=m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx)
     {
         posVarIdx->second = kount;
@@ -6247,13 +5743,12 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( )
 #ifndef NDEBUG
         outStr.str("");
         outStr.clear();
-        outStr <<  "POSITION FIRST =  "  << posVarIdx->first ;
+        outStr <<  "POSITION FIRST =  "  << posVarIdx->first;
         outStr <<  "   POSITION SECOND = "  << posVarIdx->second << std::endl;
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     }
     m_iNumberOfNonlinearVariables = kount;
-    //std::cout <<  "NUMBER OF NONLINEAR VARIABLES =  "  << kount ;
     m_bAllNonlinearVariablesIndex = true;
     return m_mapAllNonlinearVariablesIndex;
 }//getAllNonlinearVariablesIndexMap
@@ -6282,42 +5777,9 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
         createOSADFun( vx);
     }
 
-
-    /*
-    //
-    // Use CppAD to do a forward sparsity calculation
-    std::vector<bool> r(m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables);
-    unsigned int j;
-    for(i = 0; i < m_iNumberOfNonlinearVariables; i++) {
-        for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
-            r[ i * m_iNumberOfNonlinearVariables + j ] = false;
-            r[ i * m_iNumberOfNonlinearVariables + i] = true;
-    }
-    // compute sparsity pattern for J(x) = F^{(1)} (x)
-    (*Fad).ForSparseJac(m_iNumberOfNonlinearVariables, r);
-    //
-    //now the second derivative
-    unsigned int m = m_mapExpressionTreesMod.size();
-    std::vector<bool> e( m);
-    //Vector s(m);
-    for(i = 0; i < m; i++) e[i] = true;
-    //std::cout << "Computing Sparse Hessian" << std::endl;
-    //m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
-    m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
-    for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-        //std::cout << "Row " << i << "  of Hessian " << std::endl;
-        for(j = i; j < m_iNumberOfNonlinearVariables; j++){
-            if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j]  == true) numNonz++;
-            //std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
-        }
-        //std::cout << std::endl;
-    }
-
-    */
     // note this function call also fills in m_vbLagHessNonz
     numNonz = getADSparsityHessian();
 
-    //std::cout << "Lagrangian Hessian Nonzeros = " << numNonz << std::endl;
     i = 0;
     // now that we have the dimension create SparseHessianMatrix (upper triangular)
     m_LagrangianSparseHessian = new SparseHessianMatrix();
@@ -6327,22 +5789,18 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
     m_LagrangianSparseHessian->hessRowIdx = new int[m_LagrangianSparseHessian->hessDimension];
     m_LagrangianSparseHessian->hessColIdx = new int[m_LagrangianSparseHessian->hessDimension];
     m_LagrangianSparseHessian->hessValues = new double[m_LagrangianSparseHessian->hessDimension];
-    //std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
     numNonz = 0;
     for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1)
     {
-        //std::cout << "posMap1->first  " << posMap1->first << std::endl;
         j = i;
         for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2)
         {
-            //std::cout << "posMap2->first  " << posMap2->first << std::endl;
             if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] == true)
             {
                 *(m_LagrangianSparseHessian->hessRowIdx + numNonz) = posMap1->first;
                 *(m_LagrangianSparseHessian->hessColIdx + numNonz) = posMap2->first;
                 numNonz++;
             }
-            //std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " << std::endl;
             j++;
         }
         i++;
@@ -6367,7 +5825,6 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
 
 void OSInstance::duplicateExpressionTreesMap()
 {
-    //std::cout << "I AM IN DUPLICATE EXPRSSION TREES MAP" << std::endl;
     // we do this so that we can keep the integrity of the original formulation
     if(m_bDuplicateExpressionTreesMap == false)
     {
@@ -6382,7 +5839,6 @@ void OSInstance::duplicateExpressionTreesMap()
         return;
     }
 }//duplicateExpressionTreesMap
-
 
 
 bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMultipliers,
@@ -6434,7 +5890,6 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
                 {
                     getZeroOrderResults(x, objLambda, conMultipliers);
                 }
-
             }
             break;
         case 1:
@@ -6527,10 +5982,12 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 }//end getZeroOrderResults
 
 
-
 bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conMultipliers)
 {
     std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "in getFirstOrderResults");
+#endif
 
     try
     {
@@ -6549,7 +6006,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
          * columns we get the Jacobian by column
          */
 
-        if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() )
+        if (m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() )
         {
             // calculate the gradient by doing a reverse sweep over each row
             // loop over the constraints that have a nonlinear term and get their gradients
@@ -6572,11 +6029,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                     for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx
                             != m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx)
                     {
-                        //std::cout << "Constraint Function Jacobian Values" << "For Constraint  " << idx  << std::endl;
-                        //std::cout << "Jac Val for index " << posVarIdx->first  << " = " << m_vdYjacval[ jacIndex] << std::endl;
-                        //if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
                         // we are working with variable posVarIdx->first in the original variable space
-                        // we need to see which variable this is in the individual constraint map
+                        // we need to see whether this shows up in the sparse Jacobian
                         if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( posVarIdx->first) != (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end())
                         {
                             m_mdJacValue[ jstart] = m_vdYjacval[ jacIndex];
@@ -6591,8 +6045,6 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                 }
                 else     // we have an objective function
                 {
-
-
                     domainIdx++;
                 }
             }
@@ -6603,30 +6055,63 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
             for(i = 0; i < m_iNumberOfNonlinearVariables; i++)
             {
                 m_vdDomainUnitVec[i] = 1.;
-                rowNum = 0;
                 if( m_mapExpressionTreesMod.size() > 0)
                 {
                     m_vdYjacval = this->forwardAD(1, m_vdDomainUnitVec);
                 }
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "Column " << i << " of the Jacobian:" << std::endl;
+                for (int k=0; k < m_vdYjacval.size(); k++)
+                    outStr << "   Row " << k << ": " << m_vdYjacval[k] << std::endl;
+                outStr << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+                rowNum = 0;
                 // fill in Jacobian here, we have column i
                 // start Jacobian calculation
                 for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
                 {
                     idx = posMapExpTree->first;
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "next expression tree belongs to row " << idx << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                     // we are considering only constraints, not objective function
                     if(idx >= 0)
                     {
+#ifndef NDEBUG
+                        outStr.str("");
+                        outStr.clear();
+                        outStr << "tree corresponds to constraint " << idx;
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                         //figure out original variable this corresponds to
-                        //then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
-                        //m_mapAllNonlinearVariablesIndex
-                        //std::cout << "This is the following variable in the expression tree  " <<  (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]]<< std::endl;
+                        //then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out its location
                         expTree = m_mapExpressionTreesMod[ idx];
                         if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  )
                         {
                             jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
-                            jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
                             // kipp change 1 to number of objective functions
-                            m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
+                            m_mdJacValue[jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
+#ifndef NDEBUG
+                            outStr.str("");
+                            outStr.clear();
+                            outStr << "which contains variable " << i << std::endl;
+                            outStr << "Start of Jacobian row: " << m_miJacStart[idx];
+                            outStr << "; number of constant terms: " << m_miJacNumConTerms[idx] << std::endl;
+                            outStr << "index of current variable: " << m_miNonLinearVarsReverseMap[ i];
+                            outStr << " which is at offset " << jacIndex << std::endl;
+                            outStr << "Store value " << m_mdJacValue[jacIndex];
+                            outStr << " from location " << m_iObjectiveNumberNonlinear + rowNum;
+                            outStr << " in m_vdYjacval into location " << jacIndex;
+                            outStr << " of m_mdJacValue" << std::endl << std::endl;
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance,
+                                ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                         }
                         rowNum++;
                     }//end Jacobian calculation
@@ -6648,7 +6133,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                           << " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
             }
         }
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
         return true;
     }//end try
@@ -6662,6 +6147,9 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *conMultipliers)
 {
     std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "in getSecondOrderResults");
+#endif
 
     try
     {
@@ -6707,15 +6195,12 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
                 if(idx >= 0)
                 {
                     //figure out original variable this corresponds to
-                    //then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
-                    //m_mapAllNonlinearVariablesIndex
-                    //std::cout << "This is the following variable in the expression tree  " <<  (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]]<< std::endl;
+                    //then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out its location
                     expTree = m_mapExpressionTreesMod[ idx];
                     if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  )
                     {
                         jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
-                        jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
-                        m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
+                        m_mdJacValue[jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
                     }
                     rowNum++;
                 }//end Jacobian calculation
@@ -6776,10 +6261,19 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 bool OSInstance::initForAlgDiff()
 {
     std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "in initForAlgDiff");
+#endif
 
     if( m_binitForAlgDiff == true ) return true;
-    initializeNonLinearStructures( );
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "call initializeNonLinearStructures");
+#endif
+    initializeNonLinearStructures();
     initObjGradients();
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, "call getAllNonlinearVariablesIndexMap");
+#endif
     getAllNonlinearVariablesIndexMap( );
     //if(m_bSparseJacobianCalculated  == false) getJacobianSparsityPattern();
     //see if we need to retape
@@ -6812,6 +6306,9 @@ bool OSInstance::initForAlgDiff()
 bool OSInstance::initObjGradients()
 {
     std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "in initObjGradients");
+#endif
 
     int i, j;
     int m, n;
@@ -7341,7 +6838,6 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
         for(i = 0; i < n; i++)
         {
             vdaX[ i] = vdX[ i];
-            //std::cout << "vdX =  " << vdX[ i] << std::endl;
         }
         // declare the independent variables and start recording
         CppAD::Independent( vdaX);
@@ -7355,19 +6851,17 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
         for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
         {
             m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
-            //std::cout << "PUSHING BACK EXPRESSION NUMBER " << posMapExpTree->first << std::endl;
             if( m_mapOSADFunRangeIndex.find( posMapExpTree->first) == m_mapOSADFunRangeIndex.end() )
             {
                 // count which nonlinear obj/constraint this is
                 m_mapOSADFunRangeIndex[ posMapExpTree->first] = kount;
                 kount++;
+
             }
         }
         //create the function and stop recording
-//        std::cout << "create the function and stop recording"  << std::endl;
 
         Fad = new CppAD::ADFun<double>(vdaX, m_vFG);
-//        std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
         // no forward sweeps done yet
         m_iHighestTaylorCoeffOrder = -1;
         m_bOSADFunIsCreated = true;
@@ -7395,9 +6889,6 @@ std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX)
         // adjust the order of the Taylor coefficient
         m_iHighestTaylorCoeffOrder = p;
         m_iHighestOrderEvaluated = p;
-        //for(int i  = 0; i < vdX.size(); i++){
-        //std::cout << "ForwardAD Primal Variables " << i   << " " << vdX[ i] << std::endl;
-        //}
 #ifdef COIN_HAS_CPPAD
         return (*Fad).Forward(p, vdX);
 #else
@@ -7423,9 +6914,6 @@ std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda)
             ErrorClass( "reverseAD must have p >= 1");
         if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw
             ErrorClass( "trying to calculate a p order reverse when p-1 Taylor coefficient not available");
-        //for(int i  = 0; i < vdlambda.size(); i++){
-        //    std::cout << "ReverseAD Multiplier " << i   << " " << vdlambda[ i] << std::endl;
-        //}
         m_iHighestOrderEvaluated = p;
 #ifdef COIN_HAS_CPPAD
         return (*Fad).Reverse(p, vdlambda);
@@ -7470,7 +6958,6 @@ int  OSInstance::getADSparsityHessian()
         std::vector<bool> e( m);
         //Vector s(m);
         for(i = 0; i < m; i++) e[i] = true;
-//        std::cout << "Computing Sparse Hessian" << std::endl;
         //m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
 #ifdef COIN_HAS_CPPAD
         m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
@@ -7480,13 +6967,10 @@ int  OSInstance::getADSparsityHessian()
 
         for(i = 0; i < m_iNumberOfNonlinearVariables; i++)
         {
-            //std::cout << "Row " << i << "  of Hessian " << std::endl;
             for(j = i; j < m_iNumberOfNonlinearVariables; j++)
             {
                 if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j]  == true) numNonz++;
-                //std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
             }
-            //std::cout << std::endl;
         }
         return numNonz;
     }
@@ -7553,7 +7037,7 @@ std::string OrthantCone::getConeInXML()
     {
         ubt = ub[i];
         lbt = lb[i];
-        if (ubt == ub[i+mult] && lbt == lb[i+mult])
+        if (ubt == ub[i+mult] && lbt == lb[i+mult] && i+mult < numberOfRows*numberOfColumns)
         {
             mult++;
         }

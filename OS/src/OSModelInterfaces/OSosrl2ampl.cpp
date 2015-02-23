@@ -49,8 +49,6 @@
 #include <asl.h>
 //#include "sufinfo.h"
 
-using std::cerr;
-using std::cout;
 using std::endl;
 
 #ifdef HAVE_STDINT_H
@@ -86,7 +84,6 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
     }
     else
     {
-        std::cout << std::endl << osrl << std::endl << std::endl << std::endl;
 #ifndef NDEBUG
         outStr.str("");
         outStr.clear();
@@ -112,7 +109,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
             osresult = osrlreader->readOSrL( osrl);
             // do the following so output is not written twice
             // see page 23 of hooking solver to AMPL
-            //need_nl = printf( sReport.c_str());
+            // need_nl = printf( sReport.c_str());
 
 /** First check if there is a solution
  *  (There might not be if some error condition was set)

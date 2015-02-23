@@ -47,12 +47,10 @@ public:
      */
     ~OSExpressionTree();
 
-
     /**
-     * m_mvarIdx is a map used by
-     * constructADTape(std::map<int, int> *varIdx, AD::vector< AD<double> > *XAD)
-     * to generate the infix expression for AD -- the key is idx, a variable number;
-     * the value of the map is the corresponding variable count in sparse representation
+     * m_mapVarIdx is a map used to generate the infix expression for AD   
+     * the key is idx, a variable number;
+     * the value of the map is the location of the corresponding entry in the sparse Jacobian
      */
     std::map<int, int> *mapVarIdx;
 
@@ -141,14 +139,6 @@ public:
      * @return the expression tree as a vector of ExprNodes in postfix.
      */
     std::vector<ExprNode*> getPostfixFromExpressionTree();
-
-    /**
-     * m_mvarIdx is a map used by
-     * constructADTape(std::map<int, int> *varIdx, AD::vector< AD<double> > *XAD)
-     * to generate the infix expression for AD -- the key is idx, a variable number;
-     * the value of the map is the corresponding variable count in sparse representation
-     */
-    //std::map<int, int> *mapVarIdx;
 
     /**
      * Retrieve a map of the indices of the variables
@@ -250,17 +240,6 @@ public:
      * @return the expression tree as a vector of ExprNodes in postfix.
      */
     std::vector<ExprNode*> getPostfixFromExpressionTree();
-
-
-#if 0
-    /**
-     * m_mvarIdx is a map used by
-     * constructADTape(std::map<int, int> *varIdx, AD::vector< AD<double> > *XAD)
-     * to generate the infix expression for AD -- the key is idx, a variable number;
-     * the value of the map is the corresponding variable count in sparse representation
-     */
-    std::map<int, int> *mapVarIdx;
-#endif
 
     /**
      * Retrieve a map of the indices of the variables

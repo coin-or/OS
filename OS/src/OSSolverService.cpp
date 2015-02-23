@@ -403,8 +403,10 @@ int main(int argC, const char* argV[])
 #endif
 
 //Now process the accumulated output
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always,
-                tempBuffer[oscommandline->printLevel].str());
+        int printArea = (oscommandline->printLevel) / 100;
+        if (printArea == 0 || printArea == ENUM_OUTPUT_AREA_main)
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always,
+               tempBuffer[(oscommandline->printLevel)%100].str());
         delete[] tempBuffer;
 
         if (oscommandline->logFile != "")
@@ -701,33 +703,6 @@ void solve(OSCommandLine *oscommandline)
             // call a method here to get OSiL if we have an nl or mps file
             if (oscommandline->osil == "")
                getOS(oscommandline);
-/*
-            {
-                //we better have an nl file present or mps file or osol file
-                if (oscommandline->nlFile != "")
-                {
-                    getOSFromNl(oscommandline);
-                }
-                else
-                {
-                    if (oscommandline->mpsFile != "")
-                    {
-                        getOSFromMps(oscommandline);
-                    }
-                    else
-                    {
-                        if (oscommandline->gamsControlFile != "")
-                        {
-                            getOSFromGams(oscommandline);
-                        }
-                        else    // send an empty osil string
-                        {
-                            oscommandline->osil = "";
-                        }
-                    }
-                }
-            }
-*/
 
             if (oscommandline->printModel)
                 doPrintModel(oscommandline);
@@ -764,7 +739,7 @@ void solve(OSCommandLine *oscommandline)
                     std::system(ch);
                 }
                 else
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_summary, 
                         "Results written to file " + oscommandline->osrlFile);
             }
             else
@@ -864,7 +839,7 @@ void solve(OSCommandLine *oscommandline)
                     std::system(ch);
                 }
                 else
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_summary, 
                         "Results written to file " + oscommandline->osrlFile);
             }
             else
@@ -912,8 +887,6 @@ void solve(OSCommandLine *oscommandline)
         {
             osrl = eclass.errormsg;
         }
-
-std::cout << std::endl << std::endl << osrl << std::endl;
 
         osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, osrl);
 
@@ -1048,38 +1021,7 @@ void knock(OSCommandLine *oscommandline)
             // if a jobID was given on the command line, use it
             if(oscommandline->jobID != "")
                 merge_CL_options(oscommandline);
-/*
-            {
-                OSOption *osOption = NULL;
-                if (oscommandline->osol == "")
-                {
-                    osOption = new OSOption();
-                }
-                else
-                {
-                    OSoLReader *osolReader = new OSoLReader();
-                    try
-                    {
-                        osOption = osolReader->readOSoL(oscommandline->osol);
-                        delete osolReader;
-                        osolReader = NULL;
-                    }
-                    catch (const ErrorClass& eclass)
-                    {
-                        if (osolReader != NULL) delete osolReader;
-                        osolReader = NULL;
-                        throw ErrorClass(eclass.errormsg);
-                    }
-                }
-                osOption->setJobID( oscommandline->jobID);
-                OSoLWriter *osolWriter = new OSoLWriter();
-                oscommandline->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-*/
+
             osplOutput = osagent->knock(oscommandline->osplInput, oscommandline->osol);
             if (oscommandline->osplOutputFile != "")
                 fileUtil->writeFileFromString(oscommandline->osplOutputFile,
@@ -1145,26 +1087,7 @@ void send(OSCommandLine *oscommandline)
         // call a method here to get OSiL if we have an nl or mps file
         if (oscommandline->osil == "")
             getOS(oscommandline);
-/*
-        {
-            //we better have an nl file present or mps file
-            if (oscommandline->nlFile != "")
-            {
-                getOSFromNl(oscommandline);
-            }
-            else
-            {
-                if (oscommandline->mpsFile != "")
-                {
-                    getOSFromMps(oscommandline);
-                }
-                else    // send an empty osil string
-                {
-                    oscommandline->osil = "";
-                }
-            }
-        }
-*/
+
         if (oscommandline->serviceLocation != "")
         {
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
@@ -1172,39 +1095,8 @@ void send(OSCommandLine *oscommandline)
             // if a jobID was given on the command line, use it
             if(oscommandline->jobID != "" || oscommandline->solverName != "") 
                 merge_CL_options(oscommandline);
-/*
-            {
-                OSOption *osOption = NULL;
-                if (oscommandline->osol == "")
-                {
-                    osOption = new OSOption();
-                }
-                else
-                {
-                    OSoLReader *osolReader = new OSoLReader();
-                    try
-                    {
-                        osOption = osolReader->readOSoL(oscommandline->osol);
-                        delete osolReader;
-                        osolReader = NULL;
-                    }
-                    catch (const ErrorClass& eclass)
-                    {
-                        if (osolReader != NULL) delete osolReader;
-                        osolReader = NULL;
-                        throw ErrorClass(eclass.errormsg);
-                    }
-                }
-                osOption->setJobID( oscommandline->jobID);
-                OSoLWriter *osolWriter = new OSoLWriter();
-                oscommandline->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-*/
             bSend = osagent->send(oscommandline->osil, oscommandline->osol);
+
             if(bSend == true)
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_info, "Successful send");
             else
@@ -1245,7 +1137,7 @@ void send(OSCommandLine *oscommandline)
         if (oscommandline->osrlFile != "")
         {
             fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_error, 
                 "Results written to file " + oscommandline->osrlFile);
         }
         else
@@ -1281,38 +1173,7 @@ void retrieve(OSCommandLine *oscommandline)
             // if a jobID was given on the command line, use it
             if(oscommandline->jobID != "")
                 merge_CL_options(oscommandline);
-/*
-            {
-                OSOption *osOption = NULL;
-                if (oscommandline->osol == "")
-                {
-                    osOption = new OSOption();
-                }
-                else
-                {
-                    OSoLReader *osolReader = new OSoLReader();
-                    try
-                    {
-                        osOption = osolReader->readOSoL(oscommandline->osol);
-                        delete osolReader;
-                        osolReader = NULL;
-                    }
-                    catch (const ErrorClass& eclass)
-                    {
-                        if (osolReader != NULL) delete osolReader;
-                        osolReader = NULL;
-                        throw ErrorClass(eclass.errormsg);
-                    }
-                }
-                osOption->setJobID( oscommandline->jobID);
-                OSoLWriter *osolWriter = new OSoLWriter();
-                oscommandline->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-*/
+
             osrl = osagent->retrieve(oscommandline->osol);
 
             if (oscommandline->osrlFile != "")
@@ -1333,7 +1194,7 @@ void retrieve(OSCommandLine *oscommandline)
                     std::system(ch);
                 }
                 else
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_summary, 
                         "Results written to file " + oscommandline->osrlFile);
             }
             else
@@ -1401,44 +1262,13 @@ void kill(OSCommandLine *oscommandline)
             // if a jobID was given on the command line, use it
             if(oscommandline->jobID != "")
                 merge_CL_options(oscommandline);
-/*
-            {
-                OSOption *osOption = NULL;
-                if (oscommandline->osol == "")
-                {
-                    osOption = new OSOption();
-                }
-                else
-                {
-                    OSoLReader *osolReader = new OSoLReader();
-                    try
-                    {
-                        osOption = osolReader->readOSoL(oscommandline->osol);
-                        delete osolReader;
-                        osolReader = NULL;
-                    }
-                    catch (const ErrorClass& eclass)
-                    {
-                        if (osolReader != NULL) delete osolReader;
-                        osolReader = NULL;
-                        throw ErrorClass(eclass.errormsg);
-                    }
-                }
-                osOption->setJobID( oscommandline->jobID);
-                OSoLWriter *osolWriter = new OSoLWriter();
-                oscommandline->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-*/
+
             osplOutput = osagent->kill(oscommandline->osol);
 
             if (oscommandline->osplOutputFile != "")
             {
                 fileUtil->writeFileFromString(oscommandline->osplOutputFile, osplOutput);
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_always, 
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_main, ENUM_OUTPUT_LEVEL_summary, 
                     "Results written to file " + oscommandline->osplOutputFile);
             }
             else

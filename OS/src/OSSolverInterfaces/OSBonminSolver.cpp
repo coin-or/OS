@@ -30,7 +30,6 @@
 using namespace Bonmin;
 using namespace Ipopt;
 
-using std::cout;
 using std::endl;
 using std::ostringstream;
 
@@ -59,7 +58,6 @@ BonminSolver::~BonminSolver()
     {
         delete osresult;
         osresult = NULL;
-        //cout << "DELETING OS RESULT" << endl;
     }
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "leaving BonminSolver destructor\n");
@@ -203,19 +201,16 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
     }
     // use the OS Expression tree for function evaluations instead of CppAD
     osinstance->bUseExpTreeForFunEval = true;
-    //std::cout << "Call sparse jacobian" << std::endl;
     SparseJacobianMatrix *sparseJacobian = NULL;
     try
     {
         sparseJacobian = osinstance->getJacobianSparsityPattern();
-        //cout << "Get sparse Jacobian pattern" << std::endl;
     }
     catch(const ErrorClass& eclass)
     {
         bonminErrorMsg = eclass.errormsg;
         throw;
     }
-    //std::cout << "Done calling sparse jacobian" << std::endl;
     nnz_jac_g = sparseJacobian->valueSize;
 #ifndef NDEBUG
     outStr.str("");
@@ -232,9 +227,7 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
     }
     else
     {
-        //std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
         SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
-        //std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
         nnz_h_lag = sparseHessian->hessDimension;
     }
 #ifndef NDEBUG
@@ -257,7 +250,6 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
     int i;
 
     double * mdVarLB = osinstance->getVariableLowerBounds();
-    //std::cout << "GET BOUNDS INFORMATION FOR BONMIN !!!!!!!!!!!!!!!!!" << std::endl;
     // variables upper bounds
     double * mdVarUB = osinstance->getVariableUpperBounds();
 
@@ -478,8 +470,6 @@ bool BonminProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gr
     {
         try
         {
-            //objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
-            //std::cout << "Calculate Objective function gradient " << std::endl;
             // we assume we are doing the objective function indexed by -1
             objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
         }
@@ -499,10 +489,8 @@ bool BonminProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gr
             {
                 grad_f[ i]  = -objGrad[ i];
             }
-            //std::cout << grad_f[ i]  << std::endl;
         }
     }
-//std::cout << "DONE WITH Calculate Objective function gradient " << std::endl;
     return true;
 }//eval_grad_f
 
@@ -536,10 +524,6 @@ bool BonminProblem::eval_jac_g(Index n, const Number* x, bool new_x,
     SparseJacobianMatrix *sparseJacobian;
     if (values == NULL)
     {
-        // return the values of the jacobian of the constraints
-        //cout << "n: " << n << endl;
-        //cout << "m: " << m << endl;
-        //cout << "nele_jac: " <<  nele_jac << endl;
         // return the structure of the jacobian
         try
         {
@@ -558,15 +542,12 @@ bool BonminProblem::eval_jac_g(Index n, const Number* x, bool new_x,
             {
                 iRow[i] = idx;
                 jCol[i] = *(sparseJacobian->indexes + k);
-                //cout << "ROW IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
-                //cout << "COL IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
                 i++;
             }
         }
     }
     else
     {
-        //std::cout << "EVALUATING JACOBIAN" << std::endl;
         try
         {
             sparseJacobian = osinstance->calculateAllConstraintFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1);
@@ -581,8 +562,6 @@ bool BonminProblem::eval_jac_g(Index n, const Number* x, bool new_x,
         {
             values[ i] = sparseJacobian->values[i];
             //values[ i] = osinstance->m_mdJacValue[ i];
-            //cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;
-            //cout << "m_mdJacValue[ i]:!!!!!!!!!!!!  " <<  osinstance->m_mdJacValue[ i] << endl;
         }
     }
     return true;
@@ -595,14 +574,12 @@ bool BonminProblem::eval_h(Index n, const Number* x, bool new_x,
                            Index* jCol, Number* values)
 {
 
-//////
     SparseHessianMatrix *sparseHessian;
 
     int i;
     if (values == NULL)
     {
         // return the structure. This is a symmetric matrix, fill the lower left triangle only.
-        //cout << "get structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
         try
         {
             sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
@@ -612,18 +589,14 @@ bool BonminProblem::eval_h(Index n, const Number* x, bool new_x,
             bonminErrorMsg = eclass.errormsg;
             throw;
         }
-        //cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
         for(i = 0; i < nele_hess; i++)
         {
             iRow[i] = *(sparseHessian->hessColIdx + i);
             jCol[i] = *(sparseHessian->hessRowIdx + i);
-            //cout << "ROW HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
-            //cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
         }
     }
     else
     {
-        //std::cout << "EVALUATING HESSIAN" << std::endl;
         // return the values. This is a symmetric matrix, fill the lower left triangle only
         double* objMultipliers = new double[1];
         objMultipliers[0] = obj_factor;
@@ -871,37 +844,39 @@ void BonminSolver::solve() throw (ErrorClass)
     if( this->bSetSolverOptions == false) setSolverOptions();
     try
     {
-
-        //if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");
-        //double start = CoinCpuTime();
-        //OSiLWriter osilwriter;
-        //cout << osilwriter.writeOSiL( osinstance) << endl;
-        //if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Bonmin requires decision variables");
-        //double duration = CoinCpuTime() - start;
-
         try
         {
             bonminSetup.initialize( GetRawPtr(tminlp) );
             // bb is a Bonmin BonCbc object;;
             bb(  bonminSetup);  //process parameter file using Ipopt and do branch and bound using Cbc
-
         }
         catch(TNLPSolver::UnsolvedError *E)
         {
             //There has been a failure to solve a problem with Ipopt.
-            std::cerr<<"Ipopt has failed to solve a problem"<<std::endl;
+            osresult->setGeneralMessage("Ipopt has failed to solve a problem");
+            osresult->setGeneralStatusType( "error");
+            osrl = osrlwriter->writeOSrL( osresult);
+            throw ErrorClass( osrl) ;
         }
         catch(OsiTMINLPInterface::SimpleError &E)
         {
-            std::cerr<<E.className()<<"::"<<E.methodName()
-                     <<std::endl
-                     <<E.message()<<std::endl;
+            ostringstream outStr;
+            outStr << E.className() << "::"<< E.methodName() << std::endl << E.message() << std::endl;
+
+            osresult->setGeneralMessage(outStr.str());
+            osresult->setGeneralStatusType( "error");
+            osrl = osrlwriter->writeOSrL( osresult);
+            throw ErrorClass( osrl) ;
         }
         catch(CoinError &E)
         {
-            std::cerr<<E.className()<<"::"<<E.methodName()
-                     <<std::endl
-                     <<E.message()<<std::endl;
+            ostringstream outStr;
+            outStr << E.className() << "::"<< E.methodName() << std::endl << E.message() << std::endl;
+
+            osresult->setGeneralMessage(outStr.str());
+            osresult->setGeneralStatusType( "error");
+            osrl = osrlwriter->writeOSrL( osresult);
+            throw ErrorClass( osrl);
         }
 
         if(( bb.model().isContinuousUnbounded() == true) && (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() <= 0) )
@@ -1017,7 +992,6 @@ void BonminSolver::writeResult()
         {
         case  TMINLP::SUCCESS:
             solutionDescription = "SUCCESS[BONMIN]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
-            //std::cout << solutionDescription << std::endl;
             osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
             /* Retrieve the solution */
             if(osinstance->getObjectiveNumber() > 0)
@@ -1030,7 +1004,6 @@ void BonminSolver::writeResult()
                 for(i=0; i < osinstance->getVariableNumber(); i++)
                 {
                     *(x + i) = bb.bestSolution()[i];
-                    //std::cout <<  *(x + i)  << std::endl;
                 }
                 osresult->setPrimalVariableValuesDense(solIdx, x);
             }
@@ -1038,7 +1011,6 @@ void BonminSolver::writeResult()
 
         case TMINLP::LIMIT_EXCEEDED:
             solutionDescription = "LIMIT_EXCEEDED[BONMIN]: A resource limit was exceeded, we provide the current solution.";
-            //std::cout << solutionDescription << std::endl;
             osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
             //osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
             //osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));
@@ -1053,7 +1025,6 @@ void BonminSolver::writeResult()
                 for(i=0; i < osinstance->getVariableNumber(); i++)
                 {
                     *(x + i) = bb.bestSolution()[i];
-                    //std::cout <<  *(x + i)  << std::endl;
                 }
                 osresult->setPrimalVariableValuesDense(solIdx, x);
             }
@@ -1061,14 +1032,12 @@ void BonminSolver::writeResult()
 
         case TMINLP::MINLP_ERROR:
             solutionDescription = "MINLP_ERROR [BONMIN]: Algorithm stopped with unspecified error.";
-            //std::cout << solutionDescription << std::endl;
             osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 
             break;
 
         case TMINLP::CONTINUOUS_UNBOUNDED:
             solutionDescription = "CONTINUOUS_UNBOUNDED [BONMIN]: The continuous relaxation is unbounded, the MINLP may or may not be unbounded.";
-            //std::cout << solutionDescription << std::endl;
             osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 
             break;
@@ -1076,14 +1045,12 @@ void BonminSolver::writeResult()
 
         case TMINLP::INFEASIBLE:
             solutionDescription = "INFEASIBLE [BONMIN]: Problem may be infeasible.";
-            //std::cout << solutionDescription << std::endl;
             osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
             break;
 
 
         default:
             solutionDescription = "OTHER[BONMIN]: other unknown solution status from Bonmin solver";
-            //std::cout << solutionDescription << std::endl;
             osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
         }//switch end
         osresult->setGeneralStatusType("normal");

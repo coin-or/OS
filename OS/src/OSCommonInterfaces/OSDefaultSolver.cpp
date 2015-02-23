@@ -1,7 +1,7 @@
 /* $Id$ */
 /** @file DefaultSolver.cpp
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -18,7 +18,6 @@
 
 #include<iostream>
 
-using std::cout;
 using std::endl;
 
 DefaultSolver::DefaultSolver():

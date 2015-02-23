@@ -1,9 +1,7 @@
 /* $Id$ */
 /** @file KnitroSolver.h
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin,
- * @version 1.0, 05/01/2007
- * @since   OS1.0
+ * @author  Robert Fourer,  Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Jun Ma, Kipp Martin,
@@ -41,21 +39,19 @@
 #include "OSErrorClass.h"
 
 #ifndef KNITRO_H__
-#include  "knitro.h"
+# include  "knitro.h"
 #endif
 
-# include <cstddef>
-# include <cstdlib>
-# include <cctype>
-# include <cassert>
-# include <stack>
+#include <cstddef>
+#include <cstdlib>
+#include <cctype>
+#include <cassert>
+#include <stack>
 #include <string>
 #ifdef OS_HAS_CPPAD
 # include <cppad/cppad.hpp>
 #endif
 #include<iostream>
-
-
 
 
 #ifdef HAVE_CTIME

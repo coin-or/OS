@@ -36,7 +36,6 @@
 
 using std::string;
 using std::ostringstream;
-using std::cout;
 using std::endl;
 
 extern const OSSmartPtr<OSOutput> osoutput;

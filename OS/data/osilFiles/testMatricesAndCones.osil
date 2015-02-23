@@ -1110,7 +1110,7 @@
                 </elements>
             </matrix>
         </matrices>
-        <cones numberOfCones="10">
+        <cones numberOfCones="11">
             <nonnegativeCone numberOfColumns="2" numberOfRows="2"></nonnegativeCone>
             <nonpositiveCone numberOfColumns="2" numberOfRows="2"/>
             <quadraticCone numberOfColumns="1" numberOfRows="5"></quadraticCone>

@@ -1,7 +1,7 @@
 /* $Id: OSRunSolver.cpp 4263 2011-09-09 20:19:26Z Martin $ */
 /** @file OSRunSolver.cpp
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2013, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -55,7 +55,6 @@
 #include <map>
 
 
-using std::cout;
 using std::endl;
 using std::ostringstream;
 using std::string;

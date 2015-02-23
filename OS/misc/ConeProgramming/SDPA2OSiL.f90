@@ -5,16 +5,28 @@
 !     The SDPA format is explained in a text document at 
 !     http://plato.asu.edu/ftp/sdpa_format.html
 !
-!     This version dated 10 January 2013
+!     This version dated 10 January 2015
 !     written by H.I. Gassmann
 !
-!     Approach: This program sets up what Brian Borchers calls the primal problem:
+!     Approach: This program sets up what Brian Borchers calls the dual problem:
+!
+! (D)    max tr(F0*X)
+!        st  tr(F1*X) = c1
+!            tr(F2*X) = c2
+!               ...   
+!            tr(Fm*X) = cm
+!            X symmetric and positive definite.
+!
+!     Each of the data matrices F are assumed block-diagonal, with identical block sizes.
+!     (The nonzero structure within each block is allowed to vary.) 
+!
+!     The same data requirements also define the primal problem
 !
 ! (P)    min c1*x1 + c2*x2 + ... + cm*xm
 !        st  F1*x1 + F2*x2 + ... + Fm*xm - F0 = X
-!            X symmetric and positive definite
+!            X symmetric and positive definite.
 !
-!     If the data matrices F are block-diagonal, this can be further decomposed into:
+!     This problem could be further decomposed into:
 !
 ! (P)    min  c1*x1 +  c2*x2 + ... +  cm*xm
 !        st  F11*x1 + F21*x2 + ... + Fm1*xm - F01 - X1 = 0
@@ -22,31 +34,63 @@
 !            ...
 !            Xi symmetric and positive definite
 !
+!     Usage;
+!         SDPA2OSiL -p|-d <inputFileName> [<outputFileName>]
+! 
+!      If outputFileName is missing, it is created from inputFileName by appending ".osil". 
+!
 !---------------------------------------------------------------------------
 !
       implicit none
       integer,parameter :: maxline=31768
-      character(LEN=maxline) :: nextl
+      character(LEN=maxline) :: nextl,infilenm,outfilenm
       integer lineno, ierr
       integer nmatrices, nblocks, nvar, nsize, nvar0, stride, start
       integer imtx, iblk, irow, icol
       integer,allocatable :: blksize(:)
-      double  precision, allocatable :: cost(:)
+      double precision, allocatable :: cost(:)
       integer matno,blkno,i,j,k,l,n,maxblk
-      double  precision value,vmark
+      double precision value,vmark
       integer,allocatable :: row(:), next(:), trow(:), tnext(:)
       integer,allocatable :: first(:), last(:)
       integer,allocatable :: blkstart(:,:), blkelem(:,:), colstart(:)
-      double  precision, allocatable :: coef(:), tcoef(:)
+      double precision, allocatable :: coef(:), tcoef(:)
       integer nv, ncol, ncoef, nelem, nzeroblk, mult, incr, mark
+      integer narg, iloc, clen, istart, lmn
+      logical dual
+      character*2 primaldual
+!
+!     command line handling
+!
+      narg = iargc()
+      if (narg .le. 1) then
+          write (6, 9999)
+          stop
+      endif
+      call getarg(1, primaldual)
+      if (primaldual(2:2) .eq. 'd' .OR. primaldual(2:2) .eq. 'D') then
+          dual =.true.
+      else
+          dual = .false.
+      endif
+!
+      call getarg(2, infilenm)
+!
+      if (narg .ge. 3) then
+          call getarg(3, outfilenm)
+      else
+          outfilenm = trim(adjustl(infilenm)) // ".osil"
+      endif
+!
+      open (15, file=infilenm,  err=9015)
+      open (16, file=outfilenm, err=9016)
 !
 !     First put the header information
 !
-      write (6,1001)
-      write (6,1002)
-      write (6,1003)
-      write (6,1004)
-      write (6,1005)
+      write (16, 1001)
+      write (16, 1002)
+      write (16, 1003) trim(adjustl(infilenm))
+      write (16, 1004)
 !
 !     Now process the comments from the SDPA file. There could be
 !     arbitrarily many lines, all starting with '"' or '*'. We
@@ -55,12 +99,13 @@
       lineno = 0
       do
           lineno = lineno  + 1
-          read(5,1100) nextl
+          read(15, 1100) nextl
           nextl = adjustl(nextl)
           if (nextl(1:1) .ne. '"' .and. nextl(1:1) .ne. '*') exit
-              write (6,*) trim(adjustl(nextl(2:)))
+              write (16,*) trim(adjustl(nextl(2:)))
       end do
-      write (6,1006)
+      write (16, 1005)
+      write (16, 1006)
 !
 !     At this point nextl does not start with a comment indicator. 
 !     This means it must contain the number of constraint matrices.
@@ -69,33 +114,47 @@
 !
       read (nextl,*,err=900) nmatrices
       lineno = lineno + 1
-      read (5,*) nblocks
-      allocate(blksize(nblocks))
+      read (15,*) nblocks
+      allocate(blksize(nblocks  ))
       allocate(   cost(nmatrices))
-      read (5,*) (blksize(i),i=1,nblocks) 
-      read (5,*) (   cost(i),i=1,nmatrices) 
+      read (15,*) (blksize(i),i=1,nblocks) 
+      read (15,*) (   cost(i),i=1,nmatrices) 
 !
-!     Now write this information 
+!     Now write this information
 !
-!     Count the variables --- The X matrix is structured and uses the upper triangle only
+      if (.not. dual) then
 !
-      nvar = nblocks
-      do i=1,nblocks
-         if (blksize(i) .gt. 0) then
-            nvar = nvar + blksize(i)*(blksize(i)+1)/2
-         else
-            nvar = nvar - blksize(i)
-         endif
-      end do
-      write (6,1007) nvar,nvar
+!     First the scalar variables --- primal problem only
+!
+         write (16, 1007) nmatrices,nmatrices
 !
 !     Now the cost coefficients
 !
-      write (6,1008) nmatrices
-      do i=1,nmatrices
-         write (6,1009) i-1,cost(i)
-      end do
-      write (6,1010)
+         write (16, 1008) nmatrices
+         do i=1,nmatrices
+            write (16, 1009) i-1,cost(i)
+         end do
+         write (16, 1010)
+!
+!     The dual problem uses implicit variables and matrix expressions in the objective,
+!     but there is a constraints section containing nonlinear expressions
+!      
+      else
+         write (16, 1107)
+         write (16, 1108) nmatrices
+         do i=1,nmatrices
+            write (16, 1109) cost(i),cost(i)
+         end do   
+         write (16, 1110)
+!
+!     Write the nonlinear expressions for the objective and the body for each constraint
+!
+         write (16, 1111) nmatrices+1
+         do i=0,nmatrices
+            write (16, 1112) i-1,i
+         end do   
+         write (16, 1113)
+      endif
 !
 !     Now the <matrices> section.  
 !     The description of the format is silent on whether the coefficients must be ordered,
@@ -104,7 +163,12 @@
 !     In order to process the coefficient matrices, we build a number of linked lists,
 !     one for each column and one set for each matrix and each block. The linked lists 
 !     are maintained as allocatable arrays, which may have to be re-sized if the original 
-!     allocation proves insufficient. 
+!     allocation proves insufficient.
+!
+!     blkstart is a pointer into the array of column starts. 
+!     It essentially gives colOffsets for each matrix block in one long array
+!
+!     blkelem counts the number of elements in each block 
 !
       allocate(blkstart(0:nmatrices,nblocks),blkelem(0:nmatrices,nblocks))
       ncol = 0
@@ -124,13 +188,20 @@
 !     The number of nonzeroes is not available yet, so make a guess
 !     and resize later if this proves necessary
 !
-      nsize = max(1000, ((nmatrices+1)*nblocks*5) )
+      nsize = max(1000, ((nmatrices+1)*ncol*5) )
+! 
+!     row gives the row indices, value the coefficients, next is a pointer to the next element
+!
       allocate(row(nsize), coef(nsize), next(nsize), stat=ierr)
       if (ierr .ne. 0) goto 999
 !
       row  = -1
       next = 0
       coef = 0.d0
+!
+!     first points to the first element in each column, last to the last element
+!     This allows access to the entries in the row and coef arrays
+!
       allocate(first((nmatrices+1)*ncol), last((nmatrices+1)*ncol), stat=ierr)
       if (ierr .ne. 0) goto 999
       first = 0
@@ -138,41 +209,42 @@
       ncoef = 0
 !
 !     Read the elements
+!     Matrices are assumed symmetric and seem to contain (in the examples available to me)
+!     only elements in the lower triangular part. Therefore ignore other elements. 
 !
       do
-         read (5,*,err=900, end=200) imtx, iblk, irow, icol, value
+         read (15,*,err=900, end=200) imtx, iblk, icol, irow, value
          if (imtx .lt. 0 .or. imtx .gt. nmatrices) goto 900
          if (iblk .le. 0 .or. iblk .gt. nblocks  ) goto 900
          if (irow .le. 0 .or. irow .gt. abs(blksize(iblk))) goto 900
          if (icol .le. 0 .or. icol .gt. abs(blksize(iblk))) goto 900
-         if (irow .gt. icol) goto 900
+         if (irow .lt. icol) cycle
 !
 !     When putting the coefficients into the data structure,
-!     make sure nonzeroes in each column are sorted by increasing row number 
+!     make sure nonzeroes in each column are sorted by increasing row number.
 !
          ncoef = ncoef + 1
          k = first(blkstart(imtx,iblk)+icol)
          l =  last(blkstart(imtx,iblk)+icol)
          if (k .eq. 0) then
-             first(blkstart(imtx,iblk)+icol) = ncoef
-              last(blkstart(imtx,iblk)+icol) = ncoef
+            first(blkstart(imtx,iblk)+icol) = ncoef
+             last(blkstart(imtx,iblk)+icol) = ncoef
          else
-             if (irow .ge. row(l)) then
-             if (irow .eq. row(l)) goto 900
-                next(l)                        = ncoef
-                last(blkstart(imtx,iblk)+icol) = ncoef
-             else
-                if (irow .lt. row(k)) then
-                   first(blkstart(imtx,iblk)+icol) = ncoef
-                   next(ncoef) = k
-                else
-                   do while (irow .lt. row(next(k)))
-                      k = next(k)
-                   end do
-                   next(ncoef) = next(k)
-                   next(k) = ncoef
-                endif
-             endif
+            if (irow .ge. row(l)) then
+               next(l)                        = ncoef
+               last(blkstart(imtx,iblk)+icol) = ncoef
+            else
+               if (irow .lt. row(k)) then
+                  first(blkstart(imtx,iblk)+icol) = ncoef
+                  next(ncoef) = k
+               else
+                  do while (irow .lt. row(next(k)))
+                     k = next(k)
+                  end do
+                  next(ncoef) = next(k)
+                  next(k) = ncoef
+               endif
+            endif
          endif
 !
 !     Resize arrays if necessary
@@ -202,290 +274,182 @@
           row(ncoef) = irow
       end do
 !
-!     Now write the blocks one at a time. Including F0 and X there are 
-!     (nmatrices+2)*nblocks of them, including the blocks that have no elements.
+!     Now write the matrices and blocks one at a time. 
+!     There are (nmatrices+1) of them, including some blocks that may be empty.
+!     This section is the same for primal and dual problems.
 !
   200 continue
-      nzeroblk = 0
+      write (16, 1200) nmatrices+1
       do j=0,nmatrices
+!
+!     Write column and row offsets
+!
+         write (16, 1201) ncol,ncol,j 
+         nzeroblk = 0
          do i=1,nblocks
             if (blkelem(j,i) .eq. 0) nzeroblk = nzeroblk + 1 
          end do
-      end do 
+         write (16, 1202) nblocks-nzeroblk
+         write (16, 1203) nblocks+1
+         lmn = 0
+         mark = -1
+         mult = 0
+         incr = 0
+         call iprint0(mark,lmn,mult,incr)
+!         write (16, 1205) lmn
 !
-!     The X blocks are easier; deal with them first.
-!
-      write (6,1011) (nmatrices+2)*nblocks
-      nvar0 = nblocks
-      do i=1,nblocks
-         write (6,1012) abs(blksize(i)), abs(blksize(i)),                &
-     &                  abs(blksize(i)) + 1
-!
-!     Variable blocks inherit their structure (diagonal or full upper triangular)
-!     from the structure of the underlying data matrices
-!     (diagonal if blksize(i) > 0 and full upper triangular otherwise)
-!
-         if (blksize(i) .gt. 0) then
-            start  = 0
-            do j=0,abs(blksize(i))
-               write (6,1013) start
-               start = start + j + 1
-            end do
-!
-            nv = blksize(i)*(blksize(i)+1)/2
-            write (6,1014) nv
-!
-            do j=0,abs(blksize(i))-1
-               if     (j .eq. 0) then
-                  write (6,1015)
-               elseif (j .eq. 1) then
-                  write (6,1016)
-               else 
-                  write (6,1017) j + 1
-               endif
-            end do
-!
-!     Here we have diagonal matrices
-!
-         else
-            if (blksize(i) .eq. -1) then
-               write (6,1016)
-            else
-               write (6,1017) 1 - blksize(i)
-            endif
-!
-            nv = -blksize(i)
-            write (6,1014) nv
-!
-            if     (blksize(i) .eq. -1) then
-               write (6,1015)
-            elseif (blksize(i) .eq. -2) then
-               write (6,1016)
-            else 
-               write (6,1017) -blksize(i)
-            endif
-         endif
-!
-         write (6,1018) nv, nvar0
-         nvar0 = nvar0 + nv
-      end do
-!
-!     For other blocks we have to establish the column starts. 
-!
-      allocate(colstart(maxblk+1), stat=ierr)
-      if (ierr .ne. 0) goto 999
-!
-      do j=0,nmatrices
          do i=1,nblocks
-            nelem = 0
-            do k=1,abs(blksize(i))
-               colstart(k) = nelem
-               n = first(blkstart(j,i)+k)
-               do while (n .gt. 0)
-                  nelem = nelem + 1
-                  n = next(n)
-               end do
-            end do
-            colstart(abs(blksize(i))+1) = nelem
+            lmn = lmn + abs(blksize(i))
+!            write (16, 1205) lmn
+            call iprint0(mark,lmn,mult,incr)
+         enddo
+         call iflush(mark,mult,incr)
+         write (16, 1206)
+         write (16, 1204) nblocks+1
+         lmn = 0
+         mark = -1
+         mult = 0
+         incr = 0
+         call iprint0(mark,lmn,mult,incr)
+!         write (16, 1205) lmn
+         do i=1,nblocks
+            lmn = lmn + abs(blksize(i))
+!            write (16, 1205) lmn
+            call iprint0(mark,lmn,mult,incr)
+         enddo
+         call iflush(mark,mult,incr)
+         write (16, 1207)
 !
-!     Try to compress using mult and incr. 
-!     If two or more consecutive numbers are the same, use mult.
-!     For a run of three or more, use mult and incr.
-!     Index counting is easier if all matrices --- even zero ones --- are mentioned
+         do i=1,nblocks
+            if (blkelem(j,i) .gt. 0) then
+               write (16, 1208) i-1,i-1
+               write (16, 1209) blkelem(j,i)
 !
-            write (6,1019) abs(blksize(i)),abs(blksize(i))
+!     Write the column starts in the current block (<start> element)
 !
-!     Write the <start> element
-!
-            if (nelem .gt. 0) then
-               write (6,1020) abs(blksize(i)) + 1
-               k = 1
-               do 
-                  mult = 1
-                  incr = 0
-                  mark = colstart(k)
-                  if (k .eq. abs(blksize(i))+1) then
-                     write (6,1021) colstart(k)
-                     exit
+               write (16, 1210)
+               istart = 0
+               mark = -1
+               mult = 0
+               incr = 0
+               call iprint0(mark,istart,mult,incr)
+               do k=1,abs(blksize(i))
+                  iloc = first(blkstart(j,i)+k)
+                  if (iloc .eq. 0) then
+                     clen = 0
                   else
-                     k = k + 1
-                     do while (k .le. abs(blksize(i))+1 )
-                        if (colstart(k) .ne. mark) exit
-                           mult = mult + 1
-                           k = k + 1
+                     clen = 1
+                     do while (next(iloc) .gt. 0)
+                        iloc = next(iloc)
+                        clen = clen + 1
                      end do
-                     if (mult .gt. 1) then
-                        write (6,1045) mult, mark
-                     else
-                        if (k .eq. abs(blksize(i))+2) then
-                           write (6,1021) mark
-                           write (6,1021) colstart(k-1)
-                           exit
-                        else
-                           mult = 2
-                           incr = colstart(k) - mark
-                           do while (k .le. abs(blksize(i)))
-                              if (colstart(k+1) - colstart(k) .ne. incr) exit
-                                 mult = mult + 1
-                                 k = k + 1
-                           end do
-                           if (mult .eq. 2) then
-                              write (6,1021) mark
-                           else
-                              write (6,1046) mult, incr, mark
-                              k = k + 1
-                           endif
-                        endif
-                     endif
-                     if (k .gt. abs(blksize(i))+1) exit
+                  endif
+                  istart = istart + clen
+                  call iprint0(mark,istart,mult,incr)
+!                  write (16, 1205) istart
+               end do
+               call iflush(mark,mult,incr)
+               write (16, 1211)
+!
+!     Write the row indices (<indexes> element)
+!
+               write (16, 1212)
+               mark = -1
+               mult = 0
+               incr = 0
+               do k=1,abs(blksize(i))
+                  iloc = first(blkstart(j,i)+k)
+                  if (iloc .gt. 0) then
+                     do while (iloc .gt. 0)
+!                        write (16, 1213) row(iloc) - 1
+                        call iprint0(mark,row(iloc) - 1,mult,incr)
+                        iloc = next(iloc)
+                     end do
                   endif
                end do
-               write (6,1022) nelem
+               call iflush(mark,mult,incr)
+               write (16, 1214)
+               write (16, 1215)
 !
-!    Put the <indexes> element
+!     Write the coefficients (<values> element)
 !
                mult = 0
                do k=1,abs(blksize(i))
-                  n = first(blkstart(j,i)+k)
-                  do while (n .gt. 0)
-                     if (mult .eq. 0) then
-                         mult = 1
-                         mark = row(n)
-                     elseif (mult .eq. 1) then
-                         incr = row(n) - mark
-                         mult = 2
-                     else
-                         if (row(n) .eq. mark + mult*incr) then
-                            mult = mult + 1
-                         else
-                            if (incr .eq. 0) then
-                               write (6, 1045) mult, mark - 1
-                            elseif (mult .eq. 2) then
-                               write (6, 1021) mark - 1
-                               write (6, 1021) mark + incr - 1
-                            else
-                               write (6, 1046) mult, incr, mark - 1
-                            endif
-                            mult = 1
-                            mark = row(n)
-                         endif
-                     endif
-                     n = next(n)
-                  end do
-               end do
-               if (mult .gt. 0) then
-                  if (mult .eq. 1) then
-                     write (6, 1021) mark - 1
-                  elseif (incr .eq. 0) then
-                     write (6, 1045) mult, mark - 1
-                  elseif (mult .eq. 2) then
-                     write (6, 1021) mark - 1
-                     write (6, 1021) mark + incr - 1
-                  else
-                     write (6, 1046) mult, incr, mark - 1
+                  iloc = first(blkstart(j,i)+k)
+                  if (iloc .gt. 0) then
+                     do while (iloc .gt. 0)
+!                        write (16, 1223) coef(iloc)
+                        call dprint0(vmark,coef(iloc),mult)
+                        iloc = next(iloc)
+                     end do
                   endif
-               endif
-               write (6,1023)
-!
-!     Put the <value> element
-!
-               mult = 0
-               do k=1,abs(blksize(i))
-                  n = first(blkstart(j,i)+k)
-                  do while (n .gt. 0)
-                     if (mult .eq. 0) then
-                         mult = 1
-                         vmark = coef(n)  
-                     else                 
-                         if (coef(n) .eq. vmark) then
-                            mult = mult + 1
-                         else
-                            if (mult .eq. 1) then
-                                write (6, 1024) vmark
-                            else
-                                write (6, 1047) mult, vmark
-                            endif
-                            mult = 1
-                            vmark = coef(n)
-                         endif
-                     endif
-                     n = next(n)
-                  end do
                end do
-               if (mult .gt. 0) then
-                  if (mult .eq. 1) then
-                     write (6, 1024) vmark
-                  else
-                     write (6, 1047) mult, vmark
-                  endif
-               endif
-               write (6,1025)
-!
+               call dflush(vmark,mult)
+               write (16, 1216)
+               write (16, 1217)
+               write (16, 1218)
+
             endif
-            write (6,1026)
          end do
-      end do
-      write (6,1027)
+         write (16, 1219)
+         write (16, 1220)
+      end do 
+      write (16, 1221)
 !
-!     Next we write the cones, two for each block. Since different blocks 
-!     may have the same size, we might get away with fewer cones, but it does
-!     not seem worth the trouble to detect this redundancy.
+!     Next we write the cones section. 
+!     The primal problem has two cones, the dual problem has only one
 !
-      write (6,1028) 2*nblocks
-      do i=1,nblocks
-         write (6,1029)  i,abs(blksize(i)),abs(blksize(i))
-         write (6,1030) i,abs(blksize(i)),abs(blksize(i))
-      end do
-      write (6,1031)
+      if (dual) then
+         write (16, 1230) 1
+      else
+         write (16, 1230) 2
+      endif
+      write (16, 1231) ncol,ncol
+      if (.not. dual) then
+         write (16, 1232) ncol,ncol
+      endif
+      write (16, 1233)
 !
-!     Last major element: the <matrixProgramming> element. 
+!     Last major element: the <matrixProgramming> element.
+!     There are again differences between the primal and dual problems:
+!     The primal problem has a matrix-valued constraint A1x1 + A2x2 + ... + Anxn - A0 - X = 0
 !
-      write (6,1032) nblocks
-      do i=1,nblocks
-         write (6,1033) i-1, i
-      end do
-      write (6,1034)
-!
-!        st  F11*x1 + F21*x2 + ... + Fm1*xm - X1 = F01 
-!
-      write (6,1035) nblocks
-      do i=1,nblocks
-         write (6,1036) nblocks + i -1, nblocks + i -1, i, i, nmatrices+1
+      write (16, 1240) ncol,ncol
+      if (.not. dual) then
+         write (16, 1241) ncol,ncol
+         write (16, 1242)
          do j=1,nmatrices
-            write (6,1037) j-1, (j+1)*nblocks + i - 1 	
-         end do   
-         write (6,1038) i-1
-      end do
-      write (6,1039)
-!
-!     Last component: <linearConstraintMatrixOperators>
-!
-!      write (6,1040) nblocks*(nmatrices+1) - nzeroblk
-!      do i=1,nblocks
-!         write (6,1041) i-1, i-1
-!         do j=1,nmatrices
-!            if (blkelem(j,i) .gt. 0) then
-!               write (6,1042) j-1, i-1, j, i
-!            endif
-!         end do
-!      end do
-!      write (6,1043)
-!
+            write (16, 1243) j-1,j
+         end do
+         write (16, 1244)
+      endif
+      write (16, 1245)
+!   
 !     And that's it. Sew 'er up.
 !
-      write (6,1044)
+      write (16, 1044)
       stop
 !
 !     Input file has errors
 !
   900 continue
-      write (6,1900)
+      write (6, 1900)
+      stop
+!
+!     File handling error
+!
+ 9015 continue
+      write (6, 9915)
+      stop
+!
+ 9016 continue
+      write (6, 9916)
       stop
 !
 !     Insufficient memory
 !
   999 continue
-      write (6,1999)
+      write (6, 1999)
       stop
 !
  1001 format('<?xml version="1.0" encoding="UTF-8"?>',/,                    &
@@ -497,19 +461,36 @@
 !     &       ' http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">')
      &       'C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">')
  1002 format('<instanceHeader>')
- 1003 format('<name>SDPA problem</name>')
- 1004 format('<source>Translated from SDPA format using SDPA2OSiL',/,       &
-     &       '       (C) H.I. Gassmann 2010-2013</source>')
- 1005 format('<description>')
- 1006 format('</description>',/,'</instanceHeader>')
+ 1003 format('<name>SDPA problem ',A,'</name>')
+ 1004 format('<description>Translated from SDPA format using SDPA2OSiL',/,  &
+     &       '       (C) H.I. Gassmann 2010-2015')
+ 1005 format('/<description>')
+ 1006 format('</instanceHeader>')
  1007 format('<instanceData>',/,                                            &
      &       '<variables numberOfVariables="',I0,'">',/,                    &
-     &       '<var lb="-INF" ub="INF" mult="',I0,'"></var>',/,              &
-     &       '</variables>')                                        
+     &       '<var lb="-INF" ub="INF" mult="',I0,'"/>',/,                   &
+     &       '</variables>')
  1008 format('<objectives>',/,                                              &
      &       '<obj maxOrMin="min" numberOfObjCoef="',I0,'">')
  1009 format('<coef idx="',I0,'">',G30.15,'</coef>')
  1010 format('</obj>',/,'</objectives>')
+
+ 1107 format('<objectives>',/,                                              &
+     &       '<obj maxOrMin="max" numberOfObjCoef="0"/>')
+ 1108 format('<constraints numberOfConstraints="',I0,'">')
+ 1109 format('<con lb="',G30.15,'" ub="',G30.15,'"/>')
+ 1110 format('</constraints>')
+ 1111 format('<nonlinearExpressions numberOfNonlinearExpressions="',I0,'">')
+ 1112 format('<nl idx="',I0,'">',/,                                         &
+     &       '<matrixTrace>',/,                                             &
+     &       '<matrixTimes>',/,                                             &
+     &       '<matrixReference idx="',I0,'"/>',/,                           &
+     &       '<matrixVar idx="0"/>',/,                                      &
+     &       '</matrixTimes>',/,                                            &
+     &       '</matrixTrace>',/,                                            &
+     &       '</nl>')
+ 1113 format('</nonlinearExpressions>')
+
  1011 format('<matrices numberOfMatrices="',I0,'">')
  1012 format('<matrix numberOfColumns="',I0,                                &
      &       '" numberOfRows="',I0,'" symmetric="true">',/,                 &
@@ -568,12 +549,209 @@
      &       '" matrixID="F',I0,':',I0,'"/>')
  1043 format('</linearConstraintMatrixOperators>')
 
- 1044 format('</matrixProgramming_new>',/,'</instanceData>',/,'</osil>')
+ 1044 format('</instanceData>',/,'</osil>')
  1045 format('<el mult="',I0,'">',I0,'</el>')
  1046 format('<el mult="',I0,'" incr="',I0,'">',I0,'</el>')
  1047 format('<el mult="',I0,'">',G30.15,'</el>')
 !
  1100 format(a)
+ 1200 format('<matrices numberOfMatrices="',I0,'">')
+ 1201 format('<matrix numberOfColumns="',I0,'" numberOfRows="',I0,          &
+     &     '" symmetry="lower" name="F',I0,'">')
+ 1202 format('<blocks numberOfBlocks="',I0,'">')
+ 1203 format('<colOffsets numberOfEl="',I0,'">')   
+ 1204 format('<rowOffsets numberOfEl="',I0,'">')
+ 1205 format('<el>',I0,'</el>')
+ 1206 format('</colOffsets>')
+ 1207 format('</rowOffsets>')
+ 1208 format('<block blockRowIdx="',I0,'" blockColIdx="',I0,'">')
+ 1209 format('<constantElements numberOfValues="',I0,'">')
+ 1210 format('<start>')
+ 1211 format('</start>')
+ 1212 format('<indexes>')
+ 1213 format('<el>',I0,'</el>')
+ 1214 format('</indexes>')
+ 1215 format('<values>')
+ 1216 format('</values>')
+ 1217 format('</constantElements>')
+ 1218 format('</block>')
+ 1219 format('</blocks>')
+ 1220 format('</matrix>')
+ 1221 format('</matrices>')
+ 1223 format('<el>',G30.15,'</el>')
+ 1230 format('<cones numberOfCones="',I0,'">')
+ 1231 format('<semidefiniteCone numberOfColumns="',I0,                      &
+     &       '" numberOfRows="',I0,'"/>')
+ 1232 format('<nonnegativeCone numberOfColumns="',I0,                       &
+     &       '" numberOfRows="',I0,'"/>')
+ 1233 format('</cones>')
+ 1240 format('<matrixProgramming>',/,                                       &
+     &       '<matrixVariables numberOfMatrixVar="1">',/,                   &
+     &       '<matrixVar numberOfColumns="',I0,'" numberOfRows="',I0,       &
+     &       '" lbConeIdx="0"/>',/,'</matrixVariables>')
+ 1241 format('<matrixConstraints numberOfMatrixCon="1">',/,                 &
+     &       '<matrixVar numberOfColumns="',I0,'" numberOfRows="',I0,       &
+     &       '" lbConeIdx="1" ubConeIdx="1"/>',/,'</matrixConstraints>')
+ 1242 format('<matrixExpressions numberOfExpr="1">',/,                      &
+     &       '<expr idx="0" shape="linear">',/,'<matrixSum>')
+ 1243 format('<matrixScalarTimes>',/,                                       &
+     &       '<variable idx="',i0,'">',/,                                   &
+     &       '<matrixReference idx="',i0,'">',/,                            &
+     &       '</matrixScalarTimes>')
+ 1244 format('<matrixNegate>',/,                                            &
+     &       '<matrixReference idx="0">',/,                                 &
+     &       '</matrixNegate>',/,                                           &
+     &       '<matrixNegate>',/,                                            &
+     &       '<matrixVar idx="0">',/,                                       &
+     &       '</matrixNegate>',/,                                           &
+     &       '</matrixSum>',/,                                              &
+     &       '</expr>',/,                                                   &
+     &       '</matrixExpressions>')
+ 1245 format('</matrixProgramming>')
  1900 format(' ERROR: Input file improperly formed')
  1999 format(' ERROR: Could not allocate sufficient memory')
+!
+ 9915 format(' ERROR: Could not open input file')
+ 9916 format(' ERROR: Could not open output file')
+ 9999 format(' ERROR: Missing command line arguments',//,                   &
+     &       '        Usage: SDPA2OSiL -p|-d <infile> [<outfile>]')
       end
+!
+!     Four subroutines to compress the output further (using mult and incr)
+!
+!     iprint0 prints nonnegative integers, possibly holding back one value
+!     iflush  makes sure that any values not printed by iprint0 get flushed at the end
+!     dprint0 prints real numbers (using mult only)
+!     dflush  makes sure that any values not printed by dprint0 get flushed at the end
+!
+      subroutine iprint0(prev, ival, mult, incr)
+!
+      integer prev, ival, mult, incr
+      integer itmp
+!
+      if (mult .eq. 0) then
+         mult = 1
+         prev = ival
+      else if (mult .eq. 1) then
+         incr = ival - prev
+         mult = 2
+      else if (ival .eq. prev + mult*incr) then
+            mult = mult + 1
+!
+!     Here we print something and reset
+!
+      else
+         if (incr .eq. 0) then
+            if (mult .eq. 1) then
+               write (16, 1601) prev
+            else
+               write (16, 1602) mult, prev
+            endif
+            prev = ival
+            mult = 1   
+         else
+            if (mult .eq. 2) then
+               write (16, 1601) prev
+               prev = prev + incr
+               mult = 2   
+               incr = ival - prev
+            else
+               if (mult .eq. 1) then
+                  write (16, 1601) prev
+               else
+                  write (16, 1603) mult, incr, prev
+               endif
+               prev = ival
+               mult = 1   
+               incr = 0
+            endif
+         endif
+      endif
+      return
+!
+ 1601 format('<el>',i0,'</el>')
+ 1602 format('<el mult="',i0,'">',i0,'</el>')
+ 1603 format('<el mult="',i0,'" incr="',i0,'">',i0,'</el>')
+      end
+!
+      subroutine iflush( prev, mult, incr)
+!
+      integer prev, mult, incr
+!
+!     Here we just print and reset
+!
+      if (incr .eq. 0) then
+         if (mult .eq. 1) then
+            write (16, 1601) prev
+         else
+            write (16, 1602) mult, prev
+         endif
+         prev = -1
+         mult = 0   
+      else
+         if (mult .eq. 1) then
+            write (16, 1601) prev
+         elseif (mult .eq. 2) then
+            write (16, 1601) prev
+            write (16, 1601) prev + incr
+         else
+            write (16, 1603) mult, incr, prev
+         endif
+         prev = -1
+         mult = 0   
+         incr = 0
+      endif
+      return
+!
+ 1601 format('<el>',i0,'</el>')
+ 1602 format('<el mult="',i0,'">',i0,'</el>')
+ 1603 format('<el mult="',i0,'" incr="',i0,'">',i0,'</el>')
+      end
+!
+      subroutine dprint0(prev, dval, mult, incr)
+!
+      integer mult, incr
+      double precision prev, dval
+!
+      if (mult .eq. 0) then
+         mult = 1
+         prev = dval
+      else if (prev .eq. dval) then
+         mult = mult + 1
+!
+!     Here we print something and reset
+!
+      else
+         if (mult .eq. 1) then
+            write (16, 1601) prev
+         else
+            write (16, 1602) mult, prev
+         endif
+         prev = dval
+         mult = 1
+      endif
+      return
+!
+ 1601 format('<el>',G30.15,'</el>')
+ 1602 format('<el mult="',i0,'">',G30.15,'</el>')
+      end
+!
+      subroutine dflush( prev, mult)
+!
+      integer mult
+      double precision prev
+!
+!     Here we just print and reset
+!
+      if (mult .eq. 1) then
+         write (16, 1601) prev
+      else
+         write (16, 1602) mult, prev
+      endif
+      mult = 0   
+      return
+!
+ 1601 format('<el>',G30.15,'</el>')
+ 1602 format('<el mult="',i0,'">',G30.15,'</el>')
+      end
+

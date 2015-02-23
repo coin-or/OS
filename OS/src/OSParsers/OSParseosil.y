@@ -562,6 +562,8 @@ conesLaden: GREATERTHAN coneList CONESEND
 coneList: | coneList cone
 {
     parserData->coneCounter++;
+    if (parserData->coneCounter > parserData->numberOfCones) parserData->parser_errors +=
+        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "encountered more cones than specified");
     osinstance->instanceData->cones->numberOfCones = parserData->coneCounter;
 };
 
@@ -4820,21 +4822,6 @@ exprAttribute:
 
 // user defined functions
 
-#if 0
-void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, const char* errormsg ) {
-    std::ostringstream outStr;
-    std::string error = errormsg;
-    error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
-    outStr << error << endl;
-    outStr << endl; 
-    outStr << "See line number: " << osilget_lineno( scanner) << endl; 
-    outStr << "The offending text is: " << osilget_text ( scanner ) << endl; 
-    error = outStr.str();
-    //osillex_destroy(scanner);
-    throw ErrorClass( error);
-}//end osilerror()
-#endif 
-
 void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, OSgLParserData* osglData, OSnLParserData* osnlData, std::string errormsg )
 {
     osil_empty_vectors( parserData);
@@ -4936,7 +4923,6 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
         *p = strstr(pchar, startInstanceData);
         return true;
     }
-    //if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
     // increment the line number counter if there are any newlines between the start of
     // the osil string and pinstanceHeadStart
     int    kount = pinstanceHeadStart - pchar;
@@ -5419,9 +5405,7 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
         //osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); 
         return true;
     }
-    //for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
     // we should be pointing to the '<' char in <variables>
-    //*p = pchar;    
     return true;
 }// end parseInstanceData
 
@@ -5509,15 +5493,14 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             else {  osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
         startVar -= 5;
         while(foundVar){
-            varlbattON  = false;
-            varubattON = false ;
-            vartypeattON  = false;
-            varnameattON = false ;
-            //varinitattON = false ; 
-            //varinitStringattON = false ;
+            varlbattON   = false;
+            varubattON   = false;
+            vartypeattON = false;
+            varnameattON = false;
             varmultattON = false;
             varmult = 1;
             foundVar = false;
+            vt = 0;
             // assume we are pointing to the first character after the r in <var
             // it should be whitespace
             for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -5533,36 +5516,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     osinstance->instanceData->variables->var[varcount]->name=attText;
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
-                    /*
-                case 'i':
-                    *p = ch;
-                    while(*initString++  == *ch) ch++;
-                    // if i < 4 there is an error
-                    // if i = 4 we matched init
-                    // if i = 10 we matched initString
-                    if( ( (ch - *p) != 4)  && ( (ch - *p) != 10)) {  osilerror_wrapper( ch,osillineno,"error in variables init or initString attribute"); return false;}
-                    if((ch - *p) == 4){
-                        if(varinitattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable init attributes"); return false;}
-                        varinitattON = true;
-                        GETATTRIBUTETEXT;
-                        //printf("ATTRIBUTE = %s\n", attText);
-                        osinstance->instanceData->variables->var[varcount]->init=atofmod1( osillineno,attText, attTextEnd);
-                        delete [] attText;
-                        initString -= 5;
-                    }
-                    else{
-                        if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable initString attributes"); return false;}
-                        varinitStringattON = true;
-                        GETATTRIBUTETEXT;
-                        //printf("ATTRIBUTE = %s\n", attText);
-                        osinstance->instanceData->variables->var[varcount]->initString=attText;
-                        delete [] attText;
-                        initString -= 11;
-                    }
-                    break;
-                    */
                 case 't':
                     *p = ch;
                     while(*type++  == *ch) ch++;
@@ -5574,7 +5528,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     vt = returnVarType(attText[0]);
                     if( vt == 0 ) {  osilerror_wrapper( ch,osillineno,"variable type not recognized"); return false;}
                     osinstance->instanceData->variables->var[varcount]->type = attText[0];
-                    if (vt == ENUM_VARTYPE_binary) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
                     delete [] attText;
                     break;
                 case 'l':
@@ -5585,7 +5538,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     osinstance->instanceData->variables->var[varcount]->lb = atofmod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case 'u':
                     ch++;
@@ -5595,7 +5547,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     osinstance->instanceData->variables->var[varcount]->ub = atofmod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case 'm':
                     *p = ch;
@@ -5607,7 +5558,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     varmult = atoimod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case ' ':
                     break;
@@ -5622,6 +5572,13 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     osilerror_wrapper( ch,osillineno,"invalid attribute character"); 
                     return false;
                     break;
+                }
+                // reset default upper bound for binary variables
+                if (vt == ENUM_VARTYPE_binary) 
+                {
+                    if (osinstance->instanceData->variables->var[varcount]->ub == OSDBL_MAX
+			&& varubattON == false)
+                        osinstance->instanceData->variables->var[varcount]->ub = 1.0;
                 }
                 ch++;
             }
@@ -5730,7 +5687,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}    
             ch++;
         }
-
     }
     finish = clock();
     #ifdef CHECK_PARSE_TIME
@@ -5860,7 +5816,6 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
                         if(objnumberOfObjCoefattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj numberOfObjCoef attributes"); return false;}
                         objnumberOfObjCoefattON = true;
                         GETATTRIBUTETEXT;
-                        //printf("ATTRIBUTE = %s\n", attText);
                         osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef=atoimod1( osillineno,attText, attTextEnd);
                         if(osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef > 0 && osinstance->instanceData->variables->numberOfVariables == 0){  osilerror_wrapper( ch,osillineno,"we have zero variables, but have objective function coefficients"); return false;}
                         osinstance->instanceData->objectives->obj[objcount]->coef = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
@@ -5877,7 +5832,6 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
                         if(objnameattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj name attributes"); return false;}
                         objnameattON = true;
                         GETATTRIBUTETEXT;
-                        //printf("ATTRIBUTE = %s\n", attText);
                         osinstance->instanceData->objectives->obj[objcount]->name=attText;
                         delete [] attText;
                     }
@@ -5892,7 +5846,6 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
                     if(objconstantattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj constant attributes"); return false;}
                     objconstantattON = true;
                     GETATTRIBUTETEXT;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     osinstance->instanceData->objectives->obj[objcount]->constant=atofmod1( osillineno,attText, attTextEnd);
                     delete [] attText;
                 }
@@ -5906,7 +5859,6 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
                     if(objweightattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj weight attributes"); return false;}
                     objweightattON = true;
                     GETATTRIBUTETEXT;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     osinstance->instanceData->objectives->obj[objcount]->weight=atofmod1( osillineno,attText, attTextEnd);
                     delete [] attText;
                 }
@@ -5921,7 +5873,6 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
                         if(objmaxOrMinattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj maxOrMin attributes"); return false;}
                         objmaxOrMinattON = true;
                         GETATTRIBUTETEXT;
-                        //printf("ATTRIBUTE = %s\n", attText);
                         if( (strcmp("max", attText) != 0 ) && (strcmp("min", attText) != 0 ) ){osilerror_wrapper( ch,osillineno,"maxOrMin attribute in objective must be a max or min"); return false;}
                         osinstance->instanceData->objectives->obj[objcount]->maxOrMin = attText;
                         delete [] attText;
@@ -5937,8 +5888,6 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
                         objmultattON = true;
                         GETATTRIBUTETEXT;
                         objmult = atoimod1( osillineno,attText, attTextEnd);
-                        //printf("ATTRIBUTE = %s\n", attText);
-                        //osinstance->instanceData->objectives->obj[objcount]->name=attText;
                         delete [] attText;
                     }
                 }
@@ -6175,7 +6124,6 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
                 GETATTRIBUTETEXT;
                 osinstance->instanceData->constraints->con[concount]->name=attText;
                 delete [] attText;
-                //printf("ATTRIBUTE = %s\n", attText);
                 break;
             case 'c':
                 *p = ch;
@@ -6185,7 +6133,6 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
                 constant -= 9;
                 conconstantattON = true;
                 GETATTRIBUTETEXT;
-                //printf("ATTRIBUTE = %s\n", attText);
                 osinstance->instanceData->constraints->con[concount]->constant=atofmod1( osillineno,attText, attTextEnd);
                 delete [] attText;
                 break;
@@ -6197,7 +6144,6 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
                 GETATTRIBUTETEXT;
                 osinstance->instanceData->constraints->con[concount]->lb = atofmod1( osillineno,attText, attTextEnd);
                 delete [] attText;
-                //printf("ATTRIBUTE = %s\n", attText);
                 break;
             case 'u':
                 ch++;
@@ -6207,7 +6153,6 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
                 GETATTRIBUTETEXT;
                 osinstance->instanceData->constraints->con[concount]->ub = atofmod1( osillineno,attText, attTextEnd);
                 delete [] attText;
-                //printf("ATTRIBUTE = %s\n", attText);
                 break;
             case 'm':
                 *p = ch;
@@ -6219,7 +6164,6 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
                 GETATTRIBUTETEXT;
                 conmult = atoimod1( osillineno,attText, attTextEnd);
                 delete [] attText;
-                //printf("ATTRIBUTE = %s\n", attText);
                 break;
             case ' ':
                 break;
@@ -6539,7 +6483,6 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     elincr = atoimod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case 'm':
                     *p = ch;
@@ -6551,7 +6494,6 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case ' ':
                     break;
@@ -6598,7 +6540,6 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
                 = osinstance->instanceData->linearConstraintCoefficients->start->el[ kount] + k*elincr;
             }
             kount += elmult;
-            //printf("number = %s\n", *p);
             // we are pointing to <, make sure there is /el
             *p = ch;
             while( *endEl++  == *ch) ch++;
@@ -6749,7 +6690,6 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     elincr = atoimod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case 'm':
                     *p = ch;
@@ -6761,7 +6701,6 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case ' ':
                     break;
@@ -6807,7 +6746,6 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
                 = osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount] + k*elincr;
             }
             kount += elmult;
-            //printf("number = %s\n", *p);
             // we are pointing to <, make sure there is /el
             *p = ch;
             while( *endEl++  == *ch) ch++;
@@ -6954,7 +6892,6 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     elincr = atoimod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case 'm':
                     *p = ch;
@@ -6966,7 +6903,6 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case ' ':
                     break;
@@ -7011,7 +6947,6 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
                 = osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] + k*elincr;
             }
             kount += elmult;
-            //printf("number = %s\n", *p);
             // we are pointing to <, make sure there is /el
             *p = ch;
             while( *endEl++  == *ch) ch++;
@@ -7161,7 +7096,6 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     elincr = atofmod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case 'm':
                     *p = ch;
@@ -7173,7 +7107,6 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
                     delete [] attText;
-                    //printf("ATTRIBUTE = %s\n", attText);
                     break;
                 case ' ':
                     break;
@@ -7217,7 +7150,6 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
                 = osinstance->instanceData->linearConstraintCoefficients->value->el[ kount] + k*elincr;
             }
             kount += elmult;
-            //printf("number = %s\n", *p);
             // we are pointing to <, make sure there is /el
             *p = ch;
             while( *endEl++  == *ch) ch++;
@@ -7388,86 +7320,6 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
     // pEnd should now point to numberend, if not we have an error
     if(pEnd != numberend) osilerror_wrapper( pEnd,   osillineno, "error in parsing an XSD:double");
     return val;
-    /**
-    double power;
-    int i;
-    int sign = 1;
-    int expsign, exppower, exptest;
-    int endWhiteSpace;
-    // modified atof from Kernighan and Ritchie
-    for(i = 0;  ISWHITESPACE( number[ i]) || isnewline( number[ i], osillineno) ; i++);
-    sign = (number[ i] == '-') ? -1 : 1;
-    if (number[ i] == '+' || number[ i] == '-') i++;
-    endWhiteSpace = i;
-    for(val = 0.0; ISDIGIT( number[ i]); i++){
-        val = 10.0 *val + (number[ i] - '0') ;
-    }
-    if (number[ i] == '.') {
-        i++;
-        for (power = 1.0; ISDIGIT(number[ i]); i++){
-            val = 10.0*val + (number[ i] - '0');
-            power *= 10.0;
-        }
-        val = val/power;
-    }
-    if(i == endWhiteSpace) {
-    // we better have INF or NaN
-        switch (number[ i]){
-        case 'I':
-            i++;
-            if(number[ i++] == 'N' && number[i++] == 'F'){
-                val = OSDBL_MAX;
-                break;
-            }
-            else{
-                  
-                osilerror_wrapper( number,osillineno, "error in parsing an XSD:double");
-            }
-        case 'N':
-            i++;
-            if(number[ i-2] != '+' &&  number[ i-2] != '-' && number[ i++] == 'a' && number[i++] == 'N'){
-                val = OSNaN();
-                break;
-            }
-            else{
-                  
-                osilerror_wrapper( number,osillineno, "error in parsing an XSD:double");
-                
-            }
-
-        default:
-              
-            osilerror_wrapper( number,osillineno, "error in parsing an XSD:double");
-            
-            break;
-        }
-    }
-    else{
-        if(number[i] == 'e' || number[i] == 'E' ){
-            i++;
-            // process exponential part of the term
-            // we have ([eE][-+]?[0-9]+)?
-            // we are not going to process a NAN or INF
-            expsign = (number[ i] == '-') ? -1 : 1;
-            if (number[ i] == '+' || number[ i] == '-') i++;
-            // get the exponent power 
-            //
-            exptest = i;
-            for(exppower = 0 ; ISDIGIT( number[ i]); i++){
-                exppower = 10 *exppower + (number[ i] - '0') ;
-            }
-            if(i == exptest) {  osilerror_wrapper( number,osillineno, "error in parsing an XSD:double");     }
-            val = val*pow(10.0, expsign*exppower);
-            //printf("number = %f\n", val);
-        }
-    }
-    // if we are here we should having nothing but white space until the end of the number
-    for( ; ISWHITESPACE( number[ i]) || isnewline( number[ i], osillineno) ; i++);
-    if(number[i] == *numberend){
-        return sign*val;
-    }
-    else {  osilerror_wrapper( number,osillineno,"error in parsing an XSD:double");     return OSNaN();}
-    */
 }//end atofmod
 
 
