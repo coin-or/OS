@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -26,15 +26,19 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -145,7 +149,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSCommandLine.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSCommandLineReader.cpp" />
-
     <ClCompile Include="..\..\..\src\OSUtils\OSBase64.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSdtoa.cpp" />
@@ -160,7 +163,9 @@
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSiLWriter.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSInstance.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSMathUtil.cpp" />
+    <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSMatrix.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSnLNode.cpp" />
+    <ClInclude Include="..\..\..\src\OSParsers\OSnLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSParsers\OSoLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSoLReader.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSoLWriter.cpp" />
@@ -183,7 +188,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSCommandLine.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSCommandLineReader.h" />
-
     <ClInclude Include="..\..\..\src\OSUtils\OSBase64.h" />
     <ClInclude Include="..\..\..\src\OSConfig.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.h" />
@@ -202,7 +206,9 @@
     <ClInclude Include="..\..\..\src\OSUtils\OSIpReferenced.hpp" />
     <ClInclude Include="..\..\..\src\OSUtils\OSIpSmartPtr.hpp" />
     <ClInclude Include="..\..\..\src\OSUtils\OSMathUtil.h" />
+    <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSMatrix.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSnLNode.h" />
+    <ClInclude Include="..\..\..\src\OSParsers\OSnLParserData.h" />
     <ClInclude Include="..\..\..\src\OSParsers\OSoLParserData.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSoLReader.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSoLWriter.h" />
