@@ -204,8 +204,8 @@
     <ClInclude Include="..\..\..\src\OSUtils\OSIpReferenced.hpp" />
     <ClInclude Include="..\..\..\src\OSUtils\OSIpSmartPtr.hpp" />
     <ClInclude Include="..\..\..\src\OSUtils\OSMathUtil.h" />
-    <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSMatrix.h" />
-    <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSnLNode.h" />
+    <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSMatrix.h" />
+    <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSnLNode.h" />
     <ClInclude Include="..\..\..\src\OSParsers\OSnLParserData.h" />
     <ClInclude Include="..\..\..\src\OSParsers\OSoLParserData.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSoLReader.h" />
@@ -226,4 +226,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project
+</Project>
