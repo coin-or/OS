@@ -162,7 +162,7 @@
     <ClCompile Include="..\..\..\src\OSUtils\OSMathUtil.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSMatrix.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSnLNode.cpp" />
-    <ClInclude Include="..\..\..\src\OSParsers\OSnLParserData.cpp" />
+    <ClCompile Include="..\..\..\src\OSParsers\OSnLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSParsers\OSoLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSoLReader.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSoLWriter.cpp" />
