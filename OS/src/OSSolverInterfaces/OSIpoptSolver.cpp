@@ -679,6 +679,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             if(osinstance->getObjectiveNumber() > 0)
             {
 
+
                 mdObjValues[0] = obj_value ;
                 osresult->setObjectiveValuesDense(solIdx, mdObjValues);
             }
@@ -869,7 +870,6 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
 
         if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 )
         {
-<<<<<<< .working
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
@@ -878,8 +878,6 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             outStr << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-=======
->>>>>>> .merge-right.r4941
             std::vector<SolverOption*> optionsVector;
             optionsVector = osoption->getSolverOptions( "ipopt",true);
             char *pEnd;
@@ -887,7 +885,6 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             int num_ipopt_options = optionsVector.size();
             for(i = 0; i < num_ipopt_options; i++)
             {
-<<<<<<< .working
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
@@ -896,11 +893,8 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                 outStr << std::endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-=======
->>>>>>> .merge-right.r4941
                 if(optionsVector[ i]->type == "numeric" )
                 {
-<<<<<<< .working
 #ifndef NDEBUG
                     outStr.str("");
                     outStr.clear();
@@ -909,13 +903,10 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                     outStr << std::endl;
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-=======
->>>>>>> .merge-right.r4941
                     app->Options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
                 }
                 else if(optionsVector[ i]->type == "integer" )
                 {
-<<<<<<< .working
 #ifndef NDEBUG
                     outStr.str("");
                     outStr.clear();
@@ -924,13 +915,10 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                     outStr << std::endl;
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-=======
->>>>>>> .merge-right.r4941
                     app->Options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
                 }
                 else if(optionsVector[ i]->type == "string" )
                 {
-<<<<<<< .working
 #ifndef NDEBUG
                     outStr.str("");
                     outStr.clear();
@@ -939,8 +927,6 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                     outStr << std::endl;
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-=======
->>>>>>> .merge-right.r4941
                     app->Options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
                 }
             }
@@ -1111,6 +1097,4 @@ IpoptProblem::~IpoptProblem()
 {
 
 }
-
-
 

@@ -717,7 +717,6 @@ DoubleVector::DoubleVector():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Inside the DoubleVector Constructor");
 #endif
-
 }
 
 

@@ -85,9 +85,9 @@ using std::ostringstream;
 //#define OSOLPARSERDEBUG
 
 #ifdef OSOLPARSERDEBUG
-	#define YY_PRINT  printf("%s", yytext);
+	#define YY_PRINT  printf("%s", yytext)
 #else     
-	#define YY_PRINT;
+	#define YY_PRINT
 #endif
 
 %}
@@ -501,6 +501,9 @@ return(DOUBLE);}
 ({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
+
+({xmlwhitespace}+valueType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUETYPEATT);}
+({xmlwhitespace}+valueType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUETYPEATT);}
 
  /* tokens for the <matrix> element */
 

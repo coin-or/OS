@@ -21,12 +21,12 @@
  */
 %{ 
 
-#define OSILPARSERDEBUG
+//#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
-	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext);
+	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext)
 #else     
-	#define YY_PRINT;
+	#define YY_PRINT
 #endif
 
 #include <iostream>
@@ -302,7 +302,6 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/param{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(PARAMEND);}
 */
 
-
  /* include file OSParseosgl.l.patterns --- patterns for OSgL schema elements */
 
 {xmlwhitespace}*\<base64BinaryData {YY_PRINT; return(BASE64START);}
@@ -402,6 +401,9 @@ return(DOUBLE);}
 ({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
+
+({xmlwhitespace}+valueType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUETYPEATT);}
+({xmlwhitespace}+valueType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUETYPEATT);}
 
  /* tokens for the <matrix> element */
 

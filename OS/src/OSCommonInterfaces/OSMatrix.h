@@ -82,14 +82,14 @@ public:
     virtual ~MatrixNode();
 
     /**
-     *  @return the type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType() = 0;
-
-    /**
      * @return the value of nType
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType() = 0;
 
     /**
      * @return the name of the matrix constructor
@@ -219,7 +219,7 @@ public:
      *
      * A function to check for the equality of two objects
      */
-    bool IsEqual(MatrixConstructor *that);
+    //bool IsEqual(MatrixConstructor *that);
 
     /**
      * A function to make a random instance of this class
@@ -229,14 +229,14 @@ public:
      * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
      * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
      */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
+    //bool setRandom(double density, bool conformant, int iMin, int iMax);
 
     /**
      * A function to make a deep copy of an instance of this class
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(MatrixConstructor *that);
+    //bool deepCopyFrom(MatrixConstructor *that);
 };//class MatrixConstructor
 
 
@@ -270,14 +270,29 @@ public:
 
 
     MatrixElements();
-    ~MatrixElements();
+    virtual ~MatrixElements();
 
     /**
+     * Returns whether the matrix is stored row-wise or column-wise
+     */
+    bool getRowMajor();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
      *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    //virtual std::string getMatrixElementsInXML() = 0;
+
+    /**
      * A function to check for the equality of two objects
      */
     bool IsEqual(MatrixElements *that);
 
+#if 0
     /**
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
@@ -294,27 +309,41 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixElements *that);
+#endif
 };//class MatrixElements
 
 
-/*! \class ConstantMatrixElements
- * \brief a data structure to represent the constant elements in a MatrixType object
+/*! \class MatrixElementValues
+ * \brief an abstract class to help represent the elements in a MatrixType object
+ * From this we derive concrete classes that are used to store specific types of values,
+ * such as constant values, variable references, general nonlinear expressions, etc.
  */
-class ConstantMatrixElements: public MatrixElements
+class MatrixElementValues
 {
 public:
-    /** The values of the (nonzero) constant elements */
-    DoubleVector *values;
+    /** each type of values is stored as an array named "el". 
+     *  numberOfEl records the size of this array.
+     */
+    int numberOfEl;
 
+    MatrixElementValues();
+    virtual ~MatrixElementValues();
 
-    ConstantMatrixElements();
-    ~ConstantMatrixElements();
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    //virtual std::string getMatrixValuesInXML() = 0;
 
     /**
      *
      * A function to check for the equality of two objects
      */
-    bool IsEqual(ConstantMatrixElements *that);
+    //bool IsEqual(MatrixElementValues *that);
 
     /**
      * A function to make a random instance of this class
@@ -324,52 +353,17 @@ public:
      * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
      * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
      */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
+    //bool setRandom(double density, bool conformant, int iMin, int iMax);
 
     /**
      * A function to make a deep copy of an instance of this class
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(ConstantMatrixElements *that);
-};//class ConstantMatrixElements
+    //bool deepCopyFrom(MatrixElementValues *that);
+};//class MatrixElementValues
 
-/*! \class VarReferenceMatrixElements
- * \brief a data structure to represent variable reference elements in a MatrixType object
- *  Each nonzero element is of the form x_{k} where k is the index of a variable
- */
-class VarReferenceMatrixElements: public MatrixElements
-{
-public:
-    /** The variable references (indexes of core variables) of the elements */
-    IntVector *values;
-
-    VarReferenceMatrixElements();
-    ~VarReferenceMatrixElements();
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(VarReferenceMatrixElements *that);
-
-    /**
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */
-    bool deepCopyFrom(VarReferenceMatrixElements *that);
-};//class VarReferenceMatrixElements
-
+// ------------------ concrete classes start here ------------------------------
 
 /*! \class LinearMatrixElementTerm
  * \brief a data structure to represent a term in a linearMatrix element
@@ -449,13 +443,166 @@ public:
 };//class LinearMatrixElement
 
 
+/*! \class ConReferenceMatrixElement
+ *  \brief a data structure to represent an entry in a conReferenceMatrix element,
+ *  which consists of a constraint reference as well as a value type.
+ *  @remark We use the same class to describe rowReferenceMatrix elements.
+ *  A rowReferenceMatrix is obtained by combining objReferenceMatrix elements
+ *  and conReferenceMatrix elements into a single matrix constructor.
+ */
+class ConReferenceMatrixElement
+{
+public:
+    /** 
+     *  contains a reference to a row of the problem (objective if negative, constraint otherwise) 
+     *  @remark If used in a ConReferenceMatrix, the nonnegativity required is verified and enforced
+     */
+    int conReference;
+
+    /**
+     *  Several different types of values can be derived from a problem constraint. 
+     *  (See OSParameters.h for an enumeration.) 
+     */
+    ENUM_CONREFERENCE_VALUETYPE valueType;
+
+    /** This element contains the value */
+    double value;
+
+    ConReferenceMatrixElement();
+    ~ConReferenceMatrixElement();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ConReferenceMatrixElement *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ConReferenceMatrixElement *that);
+};//class ConReferenceMatrixElement
+
+
+/*! \class ConstantMatrixValues
+ *  \brief to represent the nonzeros in a constantMatrix element
+ */
+class ConstantMatrixValues : public MatrixElementValues
+{
+public:
+    double *el;
+
+    ConstantMatrixValues();
+    ~ConstantMatrixValues();
+
+    /**
+     * @return the value of nType
+     */
+    //virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    //virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    //virtual std::string getNodeName();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    //virtual std::string getMatrixValuesInXML();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ConstantMatrixValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ConstantMatrixValues *that);
+};//class ConstantMatrixValues
+
+
+/*! \class VarReferenceMatrixValues
+ * \brief an abstract class to help represent the elements in a MatrixType object
+ * From this we derive concrete classes that are used to store specific types of values,
+ * such as constant values, variable references, general nonlinear expressions, etc.
+ */
+class VarReferenceMatrixValues : public MatrixElementValues
+{
+public:
+    /**
+     * Each el is a reference to a constraint defined in the <constraints> section of the OSiL file
+     */
+    int *el;
+
+    VarReferenceMatrixValues();
+    ~VarReferenceMatrixValues();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(VarReferenceMatrixValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(VarReferenceMatrixValues *that);
+};//class VarReferenceMatrixValues
+
+
 /*! \class LinearMatrixValues
  * \brief a data structure to represent the linear expressions in a LinearMatrixElement object
  */
-class LinearMatrixValues
+class LinearMatrixValues : public MatrixElementValues
 {
 public:
-    int numberOfEl;
     LinearMatrixElement **el;     
     
     LinearMatrixValues();
@@ -487,6 +634,284 @@ public:
 };//class LinearMatrixValues
 
 
+/*! \class GeneralMatrixValues
+ * \brief a data structure to represent the nonzeros in a generalMatrix element
+ */
+class GeneralMatrixValues : public MatrixElementValues
+{
+public:
+    ScalarExpressionTree **el;
+
+    GeneralMatrixValues();
+    ~GeneralMatrixValues();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(GeneralMatrixValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(GeneralMatrixValues *that);
+};//class GeneralMatrixValues
+
+
+/*! \class ObjReferenceMatrixValues
+ *  \brief to represent the nonzeros in an objReferenceMatrix element
+ */
+class ObjReferenceMatrixValues : public MatrixElementValues
+{
+public:
+    int *el;
+
+    ObjReferenceMatrixValues();
+    ~ObjReferenceMatrixValues();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ObjReferenceMatrixValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ObjReferenceMatrixValues *that);
+};//class ObjReferenceMatrixValues
+
+
+/*! \class ConReferenceMatrixValues
+ *  \brief a data structure to represent the nonzeros in a conReferenceMatrix element
+ */
+class ConReferenceMatrixValues : public MatrixElementValues
+{
+public:
+    /** 
+     *  el contains the indices of the matrix constraints along with the valueType.
+     */  
+    ConReferenceMatrixElement **el;
+
+    ConReferenceMatrixValues();
+    ~ConReferenceMatrixValues();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ConReferenceMatrixValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ConReferenceMatrixValues *that);
+};//class ConReferenceMatrixValues
+
+
+/*! \class ConstantMatrixElements
+ * \brief a data structure to represent the constant elements in a MatrixType object
+ */
+class ConstantMatrixElements: public MatrixElements
+{
+public:
+    /** The values of the (nonzero) constant elements */
+    ConstantMatrixValues *values;
+
+    ConstantMatrixElements();
+    ~ConstantMatrixElements();
+
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual ConstantMatrixElements *cloneMatrixNode();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ConstantMatrixElements *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ConstantMatrixElements *that);
+};//class ConstantMatrixElements
+
+
+/*! \class VarReferenceMatrixElements
+ * \brief a data structure to represent variable reference elements in a MatrixType object
+ *  Each nonzero element is of the form x_{k} where k is the index of a variable
+ */
+class VarReferenceMatrixElements: public MatrixElements
+{
+public:
+    /** The variable references (indexes of core variables) of the elements */
+    VarReferenceMatrixValues *values;
+
+    VarReferenceMatrixElements();
+    ~VarReferenceMatrixElements();
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual VarReferenceMatrixElements *cloneMatrixNode();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(VarReferenceMatrixElements *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(VarReferenceMatrixElements *that);
+};//class VarReferenceMatrixElements
+
+
 /*! \class LinearMatrixElements
  * \brief a data structure to represent the nonzero values in a linearMatrix element
  */
@@ -502,6 +927,53 @@ public:
 
     LinearMatrixElements();
     ~LinearMatrixElements();
+
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual LinearMatrixElements *cloneMatrixNode();
 
     /**
      *
@@ -528,43 +1000,6 @@ public:
 };//class LinearMatrixElements
 
 
-/*! \class GeneralMatrixValues
- * \brief a data structure to represent the nonzeros in a generalMatrix element
- */
-class GeneralMatrixValues
-{
-public:
-    int numberOfEl;
-    ScalarExpressionTree **el;
-
-    GeneralMatrixValues();
-    ~GeneralMatrixValues();
-
-    /**
-     *
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(GeneralMatrixValues *that);
-
-    /**
-     *
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */
-    bool deepCopyFrom(GeneralMatrixValues *that);
-};//class GeneralMatrixValues
-
 /*! \class GeneralMatrixElements
  * \brief a data structure to represent the nonzero values in a generalMatrix element
  */
@@ -578,6 +1013,53 @@ public:
 
     GeneralMatrixElements();
     ~GeneralMatrixElements();
+
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual GeneralMatrixElements *cloneMatrixNode();
 
     /**
      * A function to check for the equality of two objects
@@ -616,6 +1098,54 @@ public:
     ObjReferenceMatrixElements();
     ~ObjReferenceMatrixElements();
 
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual ObjReferenceMatrixElements *cloneMatrixNode();
+
     /**
      *
      * A function to check for the equality of two objects
@@ -642,17 +1172,65 @@ public:
 
 
 /*! \class ConReferenceMatrixElements
- * \brief a data structure to represent constraint reference elements in a MatrixType object
+ * \brief a data structure to represent row reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of a constraint
  */
 class ConReferenceMatrixElements: public MatrixElements
 {
 public:
-    /** The constraint references (indexes of core constraints) of the elements */
-    IntVector *values;
+    /** The constraint references (indexes of core constraints and value types) of the elements */
+    ConReferenceMatrixValues *values;
 
     ConReferenceMatrixElements();
     ~ConReferenceMatrixElements();
+
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual ConReferenceMatrixElements *cloneMatrixNode();
 
     /**
      *
@@ -678,22 +1256,28 @@ public:
     bool deepCopyFrom(ConReferenceMatrixElements *that);
 };//class ConReferenceMatrixElements
 
-#if 0
-/*! \class MatrixElements
- * \brief a data structure to represent the nonzeroes of a matrix explicitly element by element
+
+/*! \class RowReferenceMatrixElements
+ * \brief a data structure to represent row reference elements in a MatrixType object
+ *  Each nonzero element references a row (if index is negative) or constraint (otherwise)
+ *  This class allows the combining of row and constraint references in a single matrix constructor.
  */
-class MatrixElements : public MatrixConstructor
+class RowReferenceMatrixElements: public MatrixElements
 {
 public:
-    ConstantMatrixElements         *constantElements;
-    VarReferenceMatrixElements *varReferenceElements;
-    LinearMatrixElements             *linearElements;
-    GeneralMatrixElements           *generalElements;
-    ObjReferenceMatrixElements *objReferenceElements;
-    ConReferenceMatrixElements *conReferenceElements;
+    /** The row references (indexes of core rows plus value type) of the elements.
+     *  This information is recycled from the ConReferenceMatrix class.
+     *  Negative indices describe objectives (in which case the value type must
+     *  be ENUM_CONREFERENCE_VALUETYPE_value).
+     *  <p>
+     *  Row reference elements are not part of the OSiL schema; they only exist 
+     *  in the consolidated form of a matrix (where they are the ONLY constructor).
+     */  
+    ConReferenceMatrixValues *values;
 
-    MatrixElements();
-    virtual ~MatrixElements();
+    RowReferenceMatrixElements();
+    ~RowReferenceMatrixElements();
+
 
     /**
      * @return the value of nType
@@ -701,41 +1285,53 @@ public:
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
     /**
-     * @return the name of the operator
-     */
-    virtual std::string getNodeName();
-
-    /**
      *  @return the type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
 
-    /*! \fn MatrixElements *cloneMatrixNode()
-     *  \brief The implementation of the virtual functions.
-     *  \return a pointer to a new MatrixNode of the proper type.
-     */
-    virtual MatrixElements *cloneMatrixNode();
-
     /**
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
+     * @return the name of the matrix constructor
      */
-    MatrixElements* copyNodeAndDescendants();
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixElements *that);
+    virtual std::string getNodeName();
 
     /**
      * <p>
-     * The following method writes a matrix node in OSgL format. 
+     * The following method writes the row reference elements in OSgL format. 
      * it is used by OSgLWriter to write a <matrix> element.
      * </p>
      *
      * @return the MatrixNode and its children as an OSgL string.
+     * @remark Since row reference elements do not exist in the schema,
+     * they must be separated into objective and constraint references.
      */
     virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual RowReferenceMatrixElements *cloneMatrixNode();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(RowReferenceMatrixElements *that);
 
     /**
      * A function to make a random instance of this class
@@ -752,20 +1348,9 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(MatrixElements *that);
+    bool deepCopyFrom(RowReferenceMatrixElements *that);
+};//class RowReferenceMatrixElements
 
-    /** 
-     *  Check whether a submatrix aligns with the block partition of a matrix
-     *  or block or other constructor
-     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
-     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
-     *  @param nRows gives the number of rows in the submatrix
-     *  @param nColumns gives the number of columns in the submatrix
-     *  @return true if the submatrix aligns with the boundaries of a block
-     */
-    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
-};//class MatrixElements
-#endif
 
 /*! \class MatrixTransformation
  * \brief a data structure to represent the nonzeroes of a matrix 
@@ -774,7 +1359,16 @@ public:
 class MatrixTransformation : public MatrixConstructor
 {
 public:
+    /**
+     *  A transformation is essentially an expression tree that evaluates to a matrix
+     */
     OSnLMNode *transformation;
+
+    /**
+     *  shape can be used to specify linearity etc. of an expression
+     *  For possible values, see OSParamaters.h
+     */
+    ENUM_NL_EXPR_SHAPE shape;
 
     MatrixTransformation();
     ~MatrixTransformation();
@@ -805,6 +1399,17 @@ public:
      */
     virtual std::string getMatrixNodeInXML();
 
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
     /*! \fn MatrixTransformation *cloneMatrixNode()
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new MatrixNode of the proper type.
@@ -833,17 +1438,6 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixTransformation *that);
-
-    /** 
-     *  Check whether a submatrix aligns with the block partition of a matrix
-     *  or block or other constructor
-     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
-     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
-     *  @param nRows gives the number of rows in the submatrix
-     *  @param nColumns gives the number of columns in the submatrix
-     *  @return true if the submatrix aligns with the boundaries of a block
-     */
-    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };//class MatrixTransformation
 
 class MatrixBlock; //forward desclaration
@@ -904,6 +1498,17 @@ public:
      */
     virtual std::string getMatrixNodeInXML();
 
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
+
     /*! \fn MatrixBlocks *cloneMatrixNode()
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new MatrixNode of the proper type.
@@ -931,17 +1536,6 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixBlocks *that);
-
-    /** 
-     *  Check whether a submatrix aligns with the block partition of a matrix
-     *  or block or other constructor
-     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
-     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
-     *  @param nRows gives the number of rows in the submatrix
-     *  @param nColumns gives the number of columns in the submatrix
-     *  @return true if the submatrix aligns with the boundaries of a block
-     */
-    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };//class MatrixBlocks
 
 
@@ -1006,7 +1600,6 @@ public:
      */
     virtual std::string getNodeName();
 
-
     /**
      *  @return the type of the matrix elements
      */
@@ -1022,6 +1615,17 @@ public:
      */
     virtual std::string getMatrixNodeInXML();
 
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
+
     /*! \fn BaseMatrix *cloneMatrixNode()
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new MatrixNode of the proper type.
@@ -1029,13 +1633,12 @@ public:
     virtual BaseMatrix *cloneMatrixNode();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(BaseMatrix *that);
 
+#if 0
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1048,21 +1651,10 @@ public:
     /**
      * A function to make a deep copy of an instance of this class
      * @param that: the instance from which information is to be copied
-
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(BaseMatrix *that);
-
-    /** 
-     *  Check whether a submatrix aligns with the block partition of a matrix
-     *  or block or other constructor
-     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
-     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
-     *  @param nRows gives the number of rows in the submatrix
-     *  @param nColumns gives the number of columns in the submatrix
-     *  @return true if the submatrix aligns with the boundaries of a block
-     */
-    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
+#endif
 };//class BaseMatrix
 
 
@@ -1108,8 +1700,8 @@ public:
     int* indexes;
 
     /**
-     * vType holds the type of values found in the vlaues array.
-     * @remark See OSParameters.h for a list f possible types
+     * vType holds the type of values found in the values array.
+     * @remark See OSParameters.h for a list of possible types
      */
     ENUM_MATRIX_TYPE vType;
 
@@ -1129,7 +1721,7 @@ public:
     GeneralSparseMatrix();
 
     /**
-     * Constructor.
+     * Alternate constructor.
      *
      * @param isColumnMajor holds whether the matrix is stored by column. 
      * If false, the matrix is stored by row.
@@ -1138,6 +1730,7 @@ public:
      * @param type describes the type of values held in the matrix (see OSParameters.h).
      */
     GeneralSparseMatrix(bool isColumnMajor_, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
+
     /**
      *
      * Default destructor.
@@ -1145,12 +1738,11 @@ public:
     ~GeneralSparseMatrix();
 
     /**
-     * This method displays data structure in the matrix format.
+     * This method displays the data contained in the matrix.
      * </p>
      * @return
      */
     bool display(int secondaryDim);
-
 }; //GeneralSparseMatrix
 
 /** \class ExpandedMatrixBlocks
@@ -1181,14 +1773,16 @@ public:
 
     /**
      * blockRows holds an integer array of the row to which a block belongs.
-     * It is assumed that all blocks in a row have the same number of rows 
+     * It must be of dimension blockNumber.
+     * @Remark It is assumed that all blocks in a row have the same number of rows 
      * (while the number of columns is allowed to vary).
      */
     int* blockRows;
 
     /**
      * blockColumns holds an integer array of the column to which a block belongs.
-     * It is assumed that all blocks in a column have the same number of columns
+     * It must be of dimension blockNumber.
+     * @RemarkIt is assumed that all blocks in a column have the same number of columns
      * (while the number of rows is allowed to vary).
      */
     int* blockColumns;
@@ -1207,7 +1801,7 @@ public:
     ExpandedMatrixBlocks();
 
     /**
-     * Constructor.
+     * Alternate constructor.
      *
      * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
      * data is stored by column. If false, the matrix is stored by row.
@@ -1215,6 +1809,7 @@ public:
      * @param valueSize holds the size of the value and index arrays.
      */
     ExpandedMatrixBlocks(bool isColumnMajor_, int startSize, int valueSize);
+
     /**
      *
      * Default destructor.
@@ -1257,10 +1852,38 @@ public:
     MatrixType();
     virtual ~MatrixType();
 
+
     /**
      *  A method to check whether a matrix or block is diagonal
      */
-    bool isDiagonal();
+    //virtual bool isDiagonal();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
+
+    /**
+     *  Several tools to parse the constructor list of a matrix
+     */
+    bool matrixHasBase();
+    bool matrixHasElements();
+    bool matrixHasTransformations();
+    bool matrixHasBlocks();
+    int  getNumberOfElementConstructors();
+    int  getNumberOfTransformationConstructors();
+    int  getNumberOfBlocksConstructors();
+
+    GeneralSparseMatrix* getMatrixInColumnMajorForm();
+    GeneralSparseMatrix* getMatrixInRowMajorForm();
+    GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx);
+
 
     /** 
      *  A method to expand a matrix or block
@@ -1271,7 +1894,7 @@ public:
      *  @param rowMajor can be used to store the objects in row major form.
      *  @return whether the operation was successful or not.
      */
-    bool expandMatrixType(bool rowMajor);
+    //virtual bool expandMatrixType(bool rowMajor);
 
     /** 
      *  A method to extract a block from a larger matrix
@@ -1290,22 +1913,6 @@ public:
      */
     GeneralSparseMatrix* extractBlock(int firstrow, int firstcol, int nrows, int ncols,
                                       bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
-
-    /**
-     *  Several tools to parse the constructor list of a matrix
-     */
-    bool matrixHasBase();
-    bool matrixHasElements();
-    bool matrixHasTransformations();
-    bool matrixHasBlocks();
-    int  getNumberOfElementConstructors();
-    int  getNumberOfTransformationConstructors();
-    int  getNumberOfBlocksConstructors();
-
-    GeneralSparseMatrix* getMatrixInColumnMajorForm();
-    GeneralSparseMatrix* getMatrixInRowMajorForm();
-    GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx);
-
     /**
      *  A function to check for the equality of two objects
      */
@@ -1328,19 +1935,7 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixType *that);
-
-    /** 
-     *  Check whether a submatrix aligns with the block partition of a matrix
-     *  or block or other constructor
-     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
-     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
-     *  @param nRows gives the number of rows in the submatrix
-     *  @param nColumns gives the number of columns in the submatrix
-     *  @return true if the submatrix aligns with the boundaries of a block
-     */
-    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };// class MatrixType
-
 
 
 /*! \class OSMatrix
@@ -1454,6 +2049,17 @@ public:
      */
     bool processBlocks();
 
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
+
     /**
      *  A method to check whether a matrix is block-diagonal
      */
@@ -1522,17 +2128,6 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(OSMatrix *that);
-
-    /** 
-     *  Check whether a submatrix aligns with the block partition of a matrix
-     *  or block or other constructor
-     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
-     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
-     *  @param nRows gives the number of rows in the submatrix
-     *  @param nColumns gives the number of columns in the submatrix
-     *  @return true if the submatrix aligns with the boundaries of a block
-     */
-    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols) ;
 };// class OSMatrix
 
 
@@ -1575,6 +2170,17 @@ public:
      */
     virtual std::string getMatrixNodeInXML();
 
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
     /*! \fn MatrixBlock *cloneMatrixNode()
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new MatrixNode of the proper type.
@@ -1604,16 +2210,5 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(MatrixBlock *that);
-
-    /** 
-     *  Check whether a submatrix aligns with the block partition of a matrix
-     *  or block or other constructor
-     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
-     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
-     *  @param nRows gives the number of rows in the submatrix
-     *  @param nColumns gives the number of columns in the submatrix
-     *  @return true if the submatrix aligns with the boundaries of a block
-     */
-    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
 };// class MatrixBlock
 #endif

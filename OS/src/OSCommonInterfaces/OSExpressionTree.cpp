@@ -32,7 +32,7 @@ OSExpressionTree::OSExpressionTree():
 OSExpressionTree::~OSExpressionTree()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the OSExpressionTree Destructor");
 #endif
 //    if( bDestroyNlNodes == true)
@@ -79,7 +79,7 @@ double OSExpressionTree::calculateFunction( double *x, bool new_x)
 bool OSExpressionTree::IsEqual(OSExpressionTree *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSExpressionTree");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSExpressionTree");
 #endif
     if (this == NULL)
     {
@@ -88,7 +88,7 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -98,7 +98,7 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -120,7 +120,7 @@ ScalarExpressionTree::ScalarExpressionTree():
     m_treeRoot( NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the ScalarExpressionTree Constructor");
 #endif
 }//end ScalarExpressionTree
@@ -129,7 +129,7 @@ ScalarExpressionTree::ScalarExpressionTree():
 ScalarExpressionTree::~ScalarExpressionTree()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the ScalarExpressionTree Destructor");
 #endif
     if( bDestroyNlNodes == true)
@@ -180,7 +180,7 @@ double ScalarExpressionTree::calculateFunction( double *x, bool new_x)
 bool ScalarExpressionTree::IsEqual(ScalarExpressionTree *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ScalarExpressionTree");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ScalarExpressionTree");
 #endif
     if (this == NULL)
     {
@@ -189,7 +189,7 @@ bool ScalarExpressionTree::IsEqual(ScalarExpressionTree *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -199,7 +199,7 @@ bool ScalarExpressionTree::IsEqual(ScalarExpressionTree *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
 #endif
             return false;
         }
@@ -218,7 +218,7 @@ MatrixExpressionTree::MatrixExpressionTree():
     m_treeRoot( NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the MatrixExpressionTree Constructor");
 #endif
 }//end MatrixExpressionTree
@@ -227,7 +227,7 @@ MatrixExpressionTree::MatrixExpressionTree():
 MatrixExpressionTree::~MatrixExpressionTree()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_debug, 
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the MatrixExpressionTree Destructor");
 #endif
     if( bDestroyNlNodes == true)
@@ -253,7 +253,7 @@ std::vector<ExprNode*> MatrixExpressionTree::getPostfixFromExpressionTree()
 bool MatrixExpressionTree::IsEqual(MatrixExpressionTree *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MatrixExpressionTree");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MatrixExpressionTree");
 #endif
     if (this == NULL)
     {
@@ -262,7 +262,7 @@ bool MatrixExpressionTree::IsEqual(MatrixExpressionTree *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -272,7 +272,7 @@ bool MatrixExpressionTree::IsEqual(MatrixExpressionTree *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
 #endif
             return false;
         }

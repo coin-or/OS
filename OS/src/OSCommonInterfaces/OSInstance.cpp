@@ -3257,13 +3257,6 @@ std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(
             index = instanceData->nonlinearExpressions->nl[ i]->idx;
             if(foundIdx.find( index) != foundIdx.end() )
             {
-                //if(foundIdx[ index] > 0 ){
-                //std::cout << "OLD INDEX FOUND " << index << std::endl;
-                //std::cout << "foundIdx[ index] " << index << std::endl;
-                // found an existing index
-                // important -- at this time m_mapExpressionTrees[ index] points to
-                // the last OSExpressionTree with this index, it does not point to the
-                // the just found OSExpressionTree with this index
                 nlNodePlus = new OSnLNodePlus();
                 //expTree = new OSExpressionTree();
                 expTree =  instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
@@ -5040,12 +5033,14 @@ bool OSInstance::initializeNonLinearStructures( )
 
 SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( )
 {
-    //if(this->getVariableNumber() == 0 || this->getConstraintNumber() == 0) return NULL;
-    // if already called return the sparse Jacobian
     // it is important that this method NOT get called twice -- if
     // there are linear terms in <linearConstraintCoefficients> that
     // also appear in <nonlinearExpressions> then they will keep getting added
     // to the modified expession tree with each call to this method
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "in getJacobianSparsityPattern");
+#endif
     if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
     //std::cout << "INSIDE GET JACOBIAN SPARSITY PATTERN" << std::endl;
     // determine if we are in column or row major
@@ -5118,9 +5113,8 @@ bool OSInstance::addQTermsToExpressionTree()
             if(  expTree->m_bIndexMapGenerated == false) expTree->getVariableIndicesMap();
             if( (*expTree->mapVarIdx).find( nlNodeVariableOne->idx) == (*expTree->mapVarIdx).end()  )
             {
-                // add to map
-                k = (*expTree->mapVarIdx).size();
-                (*expTree->mapVarIdx)[ nlNodeVariableOne->idx] =  k + 1;
+                // add placeholder to map
+                (*expTree->mapVarIdx)[ nlNodeVariableOne->idx] = 1;
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();

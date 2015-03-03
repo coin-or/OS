@@ -137,7 +137,7 @@ enum ENUM_OUTPUT_AREA
      ENUM_OUTPUT_AREA_OSInstance,
      ENUM_OUTPUT_AREA_OSOption,
      ENUM_OUTPUT_AREA_OSResult,
-     ENUM_OUTPUT_AREA_OSExpressionTree,
+     ENUM_OUTPUT_AREA_OSMatrix,
      ENUM_OUTPUT_AREA_OSiLwriter,
      ENUM_OUTPUT_AREA_OSoLwriter,
      ENUM_OUTPUT_AREA_OSrLwriter,
@@ -608,7 +608,7 @@ enum ENUM_MATRIX_TYPE
 
     ENUM_MATRIX_TYPE_conref = 20,     // matrix elements contain indexes of objectives in the core
     ENUM_MATRIX_TYPE_objref,          // matrix elements contain indexes of constraints in the core
-//    ENUM_MATRIX_TYPE_mixedref,        // mixed reference to objectives and constraints
+    ENUM_MATRIX_TYPE_mixedref,        // mixed reference to objectives and constraints
 
     ENUM_MATRIX_TYPE_jumbled = 30,    // mixture of matrix elements that is unsuited for further use
 
@@ -627,7 +627,7 @@ inline int returnMatrixType(std::string type)
 
     if (type == "conref"    ) return ENUM_MATRIX_TYPE_conref;
     if (type == "objref"    ) return ENUM_MATRIX_TYPE_objref;
-//    if (type == "mixedref"  ) return ENUM_MATRIX_TYPE_mixedref;
+    if (type == "mixedref"  ) return ENUM_MATRIX_TYPE_mixedref;
 
     if (type == "jumbled"   ) return ENUM_MATRIX_TYPE_jumbled;
     if (type == "unknown"   ) return ENUM_MATRIX_TYPE_unknown;
@@ -644,7 +644,7 @@ inline std::string returnMatrixTypeString(ENUM_MATRIX_TYPE type)
     if (type == ENUM_MATRIX_TYPE_general)   return "general";
     if (type == ENUM_MATRIX_TYPE_conref)    return "conref";
     if (type == ENUM_MATRIX_TYPE_objref)    return "objref";
-//    if (type == ENUM_MATRIX_TYPE_mixedref)  return "mixedref";
+    if (type == ENUM_MATRIX_TYPE_mixedref)  return "mixedref";
     if (type == ENUM_MATRIX_TYPE_jumbled)   return "jumbled";
     if (type == ENUM_MATRIX_TYPE_unknown)   return "unknown";
     return "unknown";
@@ -673,14 +673,14 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
     if (type2 == ENUM_MATRIX_TYPE_zero) return type1;
 
     // column and objective references can be mixed  --- in some circumstances 
-//    if (type1 >= ENUM_MATRIX_TYPE_conref) // row reference (objective or constraint)
-//    {
-//        if (type2 >= ENUM_MATRIX_TYPE_conref)
-//            return ENUM_MATRIX_TYPE_mixedref;
-//        else
-//            return ENUM_MATRIX_TYPE_jumbled;
-//    }                                  
-//    else // linear or nonlinear expression   
+    if (type1 >= ENUM_MATRIX_TYPE_conref) // row reference (objective or constraint)
+    {
+        if (type2 >= ENUM_MATRIX_TYPE_conref)
+            return ENUM_MATRIX_TYPE_mixedref;
+        else
+            return ENUM_MATRIX_TYPE_jumbled;
+    }                                  
+    else // linear or nonlinear expression   
     {
         if (type2 >= ENUM_MATRIX_TYPE_conref) return ENUM_MATRIX_TYPE_jumbled;  
         else // varref must be treated like linear if it is mixed with any other remaining type
@@ -697,6 +697,41 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
     }
     return ENUM_MATRIX_TYPE_unknown;
 }//returnMatrixType
+
+/**
+ *  An enum to track the type of value contained in a reference to a constraint 
+ */
+enum ENUM_CONREFERENCE_VALUETYPE
+{
+    ENUM_CONREFERENCE_VALUETYPE_value = 1,
+    ENUM_CONREFERENCE_VALUETYPE_status,
+    ENUM_CONREFERENCE_VALUETYPE_surplus,
+    ENUM_CONREFERENCE_VALUETYPE_shortage
+};
+
+inline std::string returnConReferenceValueTypeString(ENUM_CONREFERENCE_VALUETYPE valueType)
+{
+    if (valueType == ENUM_CONREFERENCE_VALUETYPE_value   ) return "none";
+    if (valueType == ENUM_CONREFERENCE_VALUETYPE_status  ) return "status";
+    if (valueType == ENUM_CONREFERENCE_VALUETYPE_surplus ) return "surplus";
+    if (valueType == ENUM_CONREFERENCE_VALUETYPE_shortage) return "shortage";
+    return "none";
+}//returnConReferenceValueTypeString
+
+inline int returnConReferenceValueType(std::string valueType)
+{
+    if (valueType == "value"    ) return ENUM_CONREFERENCE_VALUETYPE_value;
+    if (valueType == "status"   ) return ENUM_CONREFERENCE_VALUETYPE_status;
+    if (valueType == "surplus"  ) return ENUM_CONREFERENCE_VALUETYPE_surplus;
+    if (valueType == "shortage" ) return ENUM_CONREFERENCE_VALUETYPE_shortage;
+    return 0;
+}//returnConReferenceValueType
+
+inline bool verifyConReferenceValueType(std::string valueType)
+{
+    return (returnConReferenceValueType(valueType) > 0);
+}//verifyConReferenceValueType
+
 
 enum ENUM_MATRIX_SYMMETRY
 {
@@ -749,6 +784,7 @@ enum ENUM_MATRIX_CONSTRUCTOR_TYPE
     ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_rowRefElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_block,
@@ -792,11 +828,11 @@ enum ENUM_COMBINE_ARRAYS
 /* An enumeration to track the shape of a nonlinear expression */
 enum ENUM_NL_EXPR_SHAPE
 {
-    ENUM_NL_EXPR_SHAPE_unknown = 0,
-    ENUM_NL_EXPR_SHAPE_general,
+    ENUM_NL_EXPR_SHAPE_general = 1,
     ENUM_NL_EXPR_SHAPE_convex,
     ENUM_NL_EXPR_SHAPE_quadratic,
-    ENUM_NL_EXPR_SHAPE_linear
+    ENUM_NL_EXPR_SHAPE_linear,
+    ENUM_NL_EXPR_SHAPE_constant
 };
 
 inline int returnNlExprShape(std::string shape)
@@ -805,6 +841,7 @@ inline int returnNlExprShape(std::string shape)
     if (shape == "convex"   ) return ENUM_NL_EXPR_SHAPE_convex;
     if (shape == "quadratic") return ENUM_NL_EXPR_SHAPE_quadratic;
     if (shape == "linear"   ) return ENUM_NL_EXPR_SHAPE_linear;
+    if (shape == "constant" ) return ENUM_NL_EXPR_SHAPE_constant;
     return 1;
 }//returnNlExprShape 
 
@@ -814,6 +851,7 @@ inline std::string returnExprShapeString(ENUM_NL_EXPR_SHAPE shape)
     if (shape == ENUM_NL_EXPR_SHAPE_convex   ) return "convex";
     if (shape == ENUM_NL_EXPR_SHAPE_quadratic) return "quadratic";
     if (shape == ENUM_NL_EXPR_SHAPE_linear   ) return "linear";
+    if (shape == ENUM_NL_EXPR_SHAPE_constant ) return "constant";
     return "";
 }//returnExprShapeString 
  

@@ -160,7 +160,7 @@ ExprNode::ExprNode():
     m_mMatrixChildren(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside ExprNode constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside ExprNode constructor");
 #endif
 }//end ExprNode
 
@@ -171,7 +171,7 @@ ExprNode::~ExprNode()
     outStr << "inside ExprNode destructor" << std::endl;
     outStr << "scalar kids = " <<  inumberOfChildren << std::endl;
     outStr << "matrix kids = " <<  inumberOfMatrixChildren << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     if (inumberOfChildren > 0 && m_mChildren != NULL)
     {
@@ -186,7 +186,7 @@ ExprNode::~ExprNode()
         inumberOfChildren = 0;
     }
     else if (inumberOfChildren > 0 || m_mChildren != NULL)
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
         
     if (inumberOfMatrixChildren > 0 && m_mMatrixChildren != NULL)
     {
@@ -201,7 +201,7 @@ ExprNode::~ExprNode()
         inumberOfMatrixChildren = 0;
     }
     else if (inumberOfMatrixChildren > 0 || m_mMatrixChildren != NULL)
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_warning, "Warning: Possible memory leak");
 }//end ~ExprNode
 
 
@@ -225,7 +225,7 @@ std::string ExprNode::getNonlinearExpressionInXML()
     outStr << this->getTokenName();
 #ifndef NDEBUG
     logStr << "nonlinear node " << this->getTokenName() << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, logStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, logStr.str());
 #endif
     if(inumberOfChildren == 0 && inumberOfMatrixChildren == 0)
     {
@@ -308,7 +308,7 @@ std::vector<ExprNode*> ExprNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
 bool ExprNode::IsEqual(ExprNode *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ExprNode");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ExprNode");
 #endif
     if (this == NULL)
     {
@@ -317,7 +317,7 @@ bool ExprNode::IsEqual(ExprNode *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -328,7 +328,7 @@ bool ExprNode::IsEqual(ExprNode *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -367,14 +367,14 @@ OSnLNode::OSnLNode():
     m_dFunctionValue( OSNaN())
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNode constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNode constructor");
 #endif
 }//end OSnLNode
 
 OSnLNode::~OSnLNode()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNode destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNode destructor");
 #endif
 }//end ~OSnLNode
 
@@ -534,7 +534,7 @@ OSnLNode* OSnLNode::copyNodeAndDescendants()
 bool OSnLNode::IsEqual(OSnLNode *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLNode");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLNode");
 #endif
     if (this == NULL)
     {
@@ -543,7 +543,7 @@ bool OSnLNode::IsEqual(OSnLNode *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -554,7 +554,7 @@ bool OSnLNode::IsEqual(OSnLNode *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -602,7 +602,7 @@ OSnLNodePlus::~OSnLNodePlus()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLNodePlus destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLNodePlus
 
@@ -645,7 +645,7 @@ OSnLNodeSum::OSnLNodeSum()
 OSnLNodeSum::~OSnLNodeSum()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSum destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSum destructor");
 #endif
 }//end ~OSnLNodeSum
 
@@ -700,7 +700,7 @@ OSnLNodeAllDiff::OSnLNodeAllDiff()
 OSnLNodeAllDiff::~OSnLNodeAllDiff()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeAllDiff destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeAllDiff destructor");
 #endif
 }//end ~OSnLNodeAllDiff
 
@@ -767,7 +767,7 @@ OSnLNodeMax::OSnLNodeMax()
 OSnLNodeMax::~OSnLNodeMax()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMax destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMax destructor");
 #endif
 }//end ~OSnLNodeMax
 
@@ -827,7 +827,7 @@ OSnLNodeMin::OSnLNodeMin()
 OSnLNodeMin::~OSnLNodeMin()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMin destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMin destructor");
 #endif
 }//end ~OSnLNodeMin
 
@@ -892,7 +892,7 @@ OSnLNodeMinus::OSnLNodeMinus()
 OSnLNodeMinus::~OSnLNodeMinus()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMinus destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMinus destructor");
 #endif
 }//end ~OSnLNodeMinus
 
@@ -940,7 +940,7 @@ OSnLNodeNegate::OSnLNodeNegate()
 OSnLNodeNegate::~OSnLNodeNegate()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeNegate destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeNegate destructor");
 #endif
 }//end ~OSnLNodeNegate
 
@@ -985,7 +985,7 @@ OSnLNodeTimes::OSnLNodeTimes()
 OSnLNodeTimes::~OSnLNodeTimes()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeTimes destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeTimes destructor");
 #endif
 }//end ~OSnLNodeTimes
 
@@ -1032,7 +1032,7 @@ OSnLNodeDivide::OSnLNodeDivide()
 OSnLNodeDivide::~OSnLNodeDivide()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeDivide destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeDivide destructor");
 #endif
 }//end ~OSnLNodeDivide
 
@@ -1081,7 +1081,7 @@ OSnLNodePower::OSnLNodePower()
 OSnLNodePower::~OSnLNodePower()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePower destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePower destructor");
 #endif
 }//end ~OSnLNodePower
 
@@ -1147,7 +1147,7 @@ OSnLNodeProduct::OSnLNodeProduct()
 OSnLNodeProduct::~OSnLNodeProduct()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeProduct destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeProduct destructor");
 #endif
 }//end ~OSnLNodeProduct
 
@@ -1205,7 +1205,7 @@ OSnLNodeLn::OSnLNodeLn()
 OSnLNodeLn::~OSnLNodeLn()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeLn destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeLn destructor");
 #endif
 }//end ~OSnLNodeLn
 
@@ -1251,7 +1251,7 @@ OSnLNodeSqrt::OSnLNodeSqrt()
 OSnLNodeSqrt::~OSnLNodeSqrt()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSqrt destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSqrt destructor");
 #endif
 }//end ~OSnLNodeSqrt
 
@@ -1297,7 +1297,7 @@ OSnLNodeSquare::OSnLNodeSquare()
 OSnLNodeSquare::~OSnLNodeSquare()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSquare destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSquare destructor");
 #endif
 }//end ~OSnLNodeSquare
 
@@ -1343,7 +1343,7 @@ OSnLNodeSin::OSnLNodeSin()
 OSnLNodeSin::~OSnLNodeSin()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSin destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeSin destructor");
 #endif
 }//end ~OSnLNodeSin
 
@@ -1389,7 +1389,7 @@ OSnLNodeCos::OSnLNodeCos()
 OSnLNodeCos::~OSnLNodeCos()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeCos destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeCos destructor");
 #endif
 }//end ~OSnLNodeCos
 
@@ -1435,7 +1435,7 @@ OSnLNodeExp::OSnLNodeExp()
 OSnLNodeExp::~OSnLNodeExp()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeExp destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeExp destructor");
 #endif
 }//end ~OSnLNodeExp
 
@@ -1481,7 +1481,7 @@ OSnLNodeAbs::OSnLNodeAbs()
 OSnLNodeAbs::~OSnLNodeAbs()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeAbs destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeAbs destructor");
 #endif
 }//end ~OSnLNodeAbs
 
@@ -1528,7 +1528,7 @@ OSnLNodeErf::OSnLNodeErf()
 OSnLNodeErf::~OSnLNodeErf()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeErf destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeErf destructor");
 #endif
 }//end ~OSnLNodeErf
 
@@ -1595,7 +1595,7 @@ OSnLNodeIf::OSnLNodeIf()
 OSnLNodeIf::~OSnLNodeIf()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeIf destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeIf destructor");
 #endif
 }//end ~OSnLNodeIf
 
@@ -1654,7 +1654,7 @@ OSnLNodeNumber::OSnLNodeNumber()
 OSnLNodeNumber::~OSnLNodeNumber()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeNumber destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeNumber destructor");
 #endif
 }//end ~OSnLNodeNumber
 
@@ -1742,7 +1742,7 @@ OSnLNodeE::OSnLNodeE()
 OSnLNodeE::~OSnLNodeE()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeE destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeE destructor");
 #endif
 }//end ~OSnLNodeE
 
@@ -1809,7 +1809,7 @@ OSnLNodePI::OSnLNodePI()
 OSnLNodePI::~OSnLNodePI()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePI destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodePI destructor");
 #endif
 }//end ~OSnLNodePI
 
@@ -1879,7 +1879,7 @@ OSnLNodeVariable::~OSnLNodeVariable()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLNodeVariable destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLNodeVariable
 
@@ -1972,18 +1972,17 @@ ADdouble OSnLNodeVariable::constructADTape(std::map<int, int> *varIdx, ADvector 
 void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx)
 {
     int numVars;
-    if( (*varIdx).find( idx) != (*varIdx).end() )
+    if( (*varIdx).find( idx) == (*varIdx).end() )  // variable to map with variable index as the key
     {
-        //std::cout  << "Index already in the map " << idx <<  std::endl;
+        //just put a placeholder for now to record the key.
+        // The value will be added once we know the location within the sparse Jacobian
+        (*varIdx)[ idx] = 1;
+#ifndef NDEBUG
+        ostringstream outStr;
+        outStr << "add variable " << idx << " to the map" << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
     }
-    else  // variable to map with variable index as the key
-    {
-        //std::cout << "Found a new index to add to the map " << idx << std::endl;
-        numVars = (*varIdx).size();
-        //std::cout << "numVars =  " << numVars << std::endl;
-        (*varIdx)[ idx] = numVars;
-    }
-    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
 }//getVariableIndexMap
 
 
@@ -2011,7 +2010,7 @@ OSnLNodeMatrixDeterminant::OSnLNodeMatrixDeterminant()
 OSnLNodeMatrixDeterminant::~OSnLNodeMatrixDeterminant()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixDeterminant destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixDeterminant destructor");
 #endif
 }//end ~OSnLNodeMatrixDeterminant
 
@@ -2071,7 +2070,7 @@ OSnLNodeMatrixTrace::OSnLNodeMatrixTrace()
 OSnLNodeMatrixTrace::~OSnLNodeMatrixTrace()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixTrace destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixTrace destructor");
 #endif
 }//end ~OSnLNodeMatrixDeterminant
 
@@ -2135,7 +2134,7 @@ OSnLNodeMatrixToScalar::OSnLNodeMatrixToScalar()
 OSnLNodeMatrixToScalar::~OSnLNodeMatrixToScalar()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixToScalar destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixToScalar destructor");
 #endif
 }//end ~OSnLNodeMatrixToScalar
 
@@ -2189,14 +2188,14 @@ OSnLMNode::OSnLMNode():
     ExprNode()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNode constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNode constructor");
 #endif
 }//end OSnLMNode
 
 OSnLMNode::~OSnLMNode()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNode destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNode destructor");
 #endif
 }//end ~OSnLNode
 
@@ -2508,7 +2507,7 @@ std::string OSnLMNode::getNonlinearExpressionInXML()
     outStr << this->getTokenName();
 #ifndef NDEBUG
     logStr << "nonlinear node " << this->getTokenName() << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, logStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, logStr.str());
 #endif
     if(inumberOfChildren > 0)
     {
@@ -2555,7 +2554,7 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
 bool OSnLMNode::IsEqual(OSnLMNode *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNode");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNode");
 #endif
     if (this == NULL)
     {
@@ -2564,7 +2563,7 @@ bool OSnLMNode::IsEqual(OSnLMNode *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
                 "First object is NULL, second is not");
 #endif
             return false;
@@ -2575,7 +2574,7 @@ bool OSnLMNode::IsEqual(OSnLMNode *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, 
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
                 "Second object is NULL, first is not");
 #endif
             return false;
@@ -2652,7 +2651,7 @@ OSnLMNodeMatrixPlus::~OSnLMNodeMatrixPlus()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixPlus destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixPlus
 
@@ -2685,7 +2684,7 @@ OSnLMNodeMatrixSum::~OSnLMNodeMatrixSum()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixSum destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixSum
 
@@ -2717,7 +2716,7 @@ OSnLMNodeMatrixProduct::OSnLMNodeMatrixProduct()
 OSnLMNodeMatrixProduct::~OSnLMNodeMatrixProduct()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNodeMatrixProduct destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLMNodeMatrixProduct destructor");
 #endif
 }//end ~OSnLMNodeMatrixProduct
 
@@ -2776,7 +2775,7 @@ OSnLMNodeMatrixMinus::~OSnLMNodeMatrixMinus()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixMinus destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixMinus
 
@@ -2808,7 +2807,7 @@ OSnLMNodeMatrixNegate::~OSnLMNodeMatrixNegate()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixNegate destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixNegate
 
@@ -2840,7 +2839,7 @@ OSnLMNodeMatrixTimes::~OSnLMNodeMatrixTimes()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixTimes destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixTimes
 
@@ -2872,7 +2871,7 @@ OSnLMNodeMatrixInverse::~OSnLMNodeMatrixInverse()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixInverse destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixInverse
 
@@ -2905,7 +2904,7 @@ OSnLMNodeMatrixTranspose::~OSnLMNodeMatrixTranspose()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixTranspose destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixTranspose
 
@@ -2937,7 +2936,7 @@ OSnLMNodeMatrixScalarTimes::~OSnLMNodeMatrixScalarTimes()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixScalarTimes destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixScalarTimes
 
@@ -2969,7 +2968,7 @@ OSnLMNodeMatrixDotTimes::~OSnLMNodeMatrixDotTimes()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixDotTimes destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixDotTimes
 
@@ -3002,7 +3001,7 @@ OSnLMNodeIdentityMatrix::~OSnLMNodeIdentityMatrix()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeIdentityMatrix destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeIdentityMatrix
 
@@ -3036,7 +3035,7 @@ OSnLMNodeMatrixLowerTriangle::~OSnLMNodeMatrixLowerTriangle()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixLowerTriangle destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixLowerTriangle
 
@@ -3068,6 +3067,7 @@ std::string OSnLMNodeMatrixLowerTriangle::getNonlinearExpressionInXML()
 
 
 // OSnLMNodeMatrixUpperTriangle Methods
+
 OSnLMNodeMatrixUpperTriangle::OSnLMNodeMatrixUpperTriangle()
 {
     inumberOfChildren = 0;
@@ -3085,7 +3085,7 @@ OSnLMNodeMatrixUpperTriangle::~OSnLMNodeMatrixUpperTriangle()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixUpperTriangle destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixUpperTriangle
 
@@ -3132,7 +3132,7 @@ OSnLMNodeMatrixDiagonal::~OSnLMNodeMatrixDiagonal()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixDiagonal destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixDiagonal
 
@@ -3165,7 +3165,7 @@ OSnLMNodeDiagonalMatrixFromVector::~OSnLMNodeDiagonalMatrixFromVector()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeDiagonalMatrixFromVector destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeDiagonalMatrixFromVector
 
@@ -3198,7 +3198,7 @@ OSnLMNodeMatrixSubmatrixAt::~OSnLMNodeMatrixSubmatrixAt()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixSubmatrixAt destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixSubmatrixAt
 
@@ -3232,7 +3232,7 @@ OSnLMNodeMatrixReference::~OSnLMNodeMatrixReference()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixReference destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixReference
 
@@ -3326,7 +3326,7 @@ OSnLMNodeMatrixVar::~OSnLMNodeMatrixVar()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixVar destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixVar
 
@@ -3421,7 +3421,7 @@ OSnLMNodeMatrixObj::~OSnLMNodeMatrixObj()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixObj destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixObj
 
@@ -3514,7 +3514,7 @@ OSnLMNodeMatrixCon::~OSnLMNodeMatrixCon()
     std::ostringstream outStr;
 #ifndef NDEBUG
     outStr << "inside OSnLMNodeMatrixCon destructor" << endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }//end ~OSnLMNodeMatrixCon
 
