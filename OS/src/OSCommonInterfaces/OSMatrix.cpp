@@ -154,7 +154,8 @@ MatrixType::MatrixType():
     MatrixNode(),
     numberOfRows(0),
     numberOfColumns(0),
-    symmetry(ENUM_MATRIX_SYMMETRY_none)
+    symmetry(ENUM_MATRIX_SYMMETRY_none),
+    type(ENUM_MATRIX_TYPE_unknown)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Constructor");
@@ -1248,7 +1249,10 @@ ENUM_MATRIX_TYPE MatrixTransformation::getMatrixType()
 std::string MatrixTransformation::getMatrixNodeInXML()
 {
     ostringstream outStr;
-    outStr <<  "<transformation>" << std::endl;
+    outStr <<  "<transformation";
+    if (shape != ENUM_NL_EXPR_SHAPE_general)
+        outStr << " shape=\"" << returnExprShapeString(shape) << "\"";
+    outStr <<  ">" << std::endl;
     
     outStr <<    transformation->getNonlinearExpressionInXML() << std::endl; 
 
@@ -1347,7 +1351,7 @@ ENUM_MATRIX_TYPE ConstantMatrixElements::getMatrixType()
 std::string ConstantMatrixElements::getMatrixNodeInXML()
 {
     ostringstream outStr;
-    outStr <<  "<constantElements>" << std::endl;
+    outStr <<  "<constantElements";
     if (rowMajor)
         outStr << " rowMajor=\"true\"";
     outStr << " numberOfValues=\"" << numberOfValues << "\"";
@@ -1557,7 +1561,7 @@ std::string VarReferenceMatrixElements::getMatrixNodeInXML()
 {
     int mult, incr;
     ostringstream outStr;
-    outStr <<  "<varReferenceElements>" << std::endl;
+    outStr <<  "<varReferenceElements";
     if (rowMajor)
         outStr << " rowMajor=\"true\"";
     outStr << " numberOfValues=\"" << numberOfValues << "\"";
@@ -1769,7 +1773,7 @@ ENUM_MATRIX_TYPE LinearMatrixElements::getMatrixType()
 std::string LinearMatrixElements::getMatrixNodeInXML()
 {
     ostringstream outStr;
-    outStr <<  "<linearElements>" << std::endl;
+    outStr <<  "<linearElements";
     if (rowMajor)
         outStr << " rowMajor=\"true\"";
     outStr << " numberOfValues=\"" << numberOfValues << "\"";
@@ -2157,7 +2161,7 @@ ENUM_MATRIX_TYPE GeneralMatrixElements::getMatrixType()
 std::string GeneralMatrixElements::getMatrixNodeInXML()
 {
     ostringstream outStr;
-    outStr <<  "<generalElements>" << std::endl;
+    outStr <<  "<generalElements";
     if (rowMajor)
         outStr << " rowMajor=\"true\"";
     outStr << " numberOfValues=\"" << numberOfValues << "\"";
@@ -2366,7 +2370,7 @@ ENUM_MATRIX_TYPE ObjReferenceMatrixElements::getMatrixType()
 std::string ObjReferenceMatrixElements::getMatrixNodeInXML()
 {
     ostringstream outStr;
-    outStr <<  "<objReferenceElements>" << std::endl;
+    outStr <<  "<objReferenceElements";
     if (rowMajor)
         outStr << " rowMajor=\"true\"";
     outStr << " numberOfValues=\"" << numberOfValues << "\"";
@@ -2578,7 +2582,7 @@ ENUM_MATRIX_TYPE ConReferenceMatrixElements::getMatrixType()
 std::string ConReferenceMatrixElements::getMatrixNodeInXML()
 {
     ostringstream outStr;
-    outStr <<  "<conReferenceElements>" << std::endl;
+    outStr <<  "<conReferenceElements";
     if (rowMajor)
         outStr << " rowMajor=\"true\"";
     outStr << " numberOfValues=\"" << numberOfValues << "\"";
@@ -2870,7 +2874,7 @@ std::string RowReferenceMatrixElements::getMatrixNodeInXML()
 
     if (tmpNum > 0)
     {
-        outStr <<  "<objReferenceElements" << std::endl;
+        outStr <<  "<objReferenceElements";
         if (rowMajor)
             outStr << " rowMajor=\"true\"";
         outStr << " numberOfValues=\"" << tmpNum << "\"";
@@ -2914,7 +2918,7 @@ std::string RowReferenceMatrixElements::getMatrixNodeInXML()
             outStr << "</values>" << std::endl;
             outStr << "</objReferenceElements>" << std::endl;
 
-            outStr <<  "<conReferenceElements" << std::endl;
+            outStr <<  "<conReferenceElements";
             if (rowMajor)
                 outStr << " rowMajor=\"true\"";
             outStr << " numberOfValues=\"" << numberOfValues - tmpNum << "\"";
@@ -2994,7 +2998,7 @@ std::string RowReferenceMatrixElements::getMatrixNodeInXML()
     }
     else // there are only conReferenceElements
     {
-        outStr <<  "<conReferenceElements" << std::endl;
+        outStr <<  "<conReferenceElements";
         if (rowMajor)
             outStr << " rowMajor=\"true\"";
         outStr << " numberOfValues=\"" << numberOfValues << "\"";

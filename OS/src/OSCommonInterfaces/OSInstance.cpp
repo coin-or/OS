@@ -4106,6 +4106,7 @@ std::map<int, MatrixExpressionTree*> OSInstance::getAllMatrixExpressionTrees()
         for( i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
         {
             instanceData->nonlinearExpressions->nl[i]->m_bDeleteExpressionTree = false;
+
         }
     }
     int index;
@@ -6278,6 +6279,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
     // now get the values of the constant terms if there are any
     if (this->instanceData->linearConstraintCoefficients != NULL &&
         this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
+
     {
         // loop over variables
         for (i = 0; i < iNumVariableStarts; i++)
@@ -7596,6 +7598,7 @@ bool OSInstance::setTimeDomainStageObjectivesOrdered(int numberOfStages, int *nu
     for (int i = 0; i < numberOfStages; i++)
         //initial or empty vars, cons, objectives and set default to all objectives
     {
+
         if (instanceData->timeDomain->stages->stage[i]->objectives != NULL)
         {
             delete instanceData->timeDomain->stages->stage[i]->objectives;
@@ -8333,7 +8336,7 @@ bool Objective::IsEqual(Objective *that)
                 return false;
             if (this->constant != that->constant)
                 return false;
-            if (!isEqual(this->weight, that->weight))
+            if (!OSIsEqual(this->weight, that->weight))
                 return false;
             if (this->numberOfObjCoef != that->numberOfObjCoef)
                 return false;

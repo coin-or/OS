@@ -5,7 +5,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2014, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2015, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -1687,7 +1687,7 @@ std::string OSnLNodeNumber::getNonlinearExpressionInXML()
     ostringstream outStr;
     outStr << "<" ;
     outStr << this->getTokenName();
-    outStr << "  value=\"";
+    outStr << " value=\"";
     outStr << os_dtoa_format(value);
     outStr << "\"";
     outStr << " type=\"";
@@ -1695,7 +1695,7 @@ std::string OSnLNodeNumber::getNonlinearExpressionInXML()
     outStr << "\"";
     if(id.length() > 0)
     {
-        outStr << "  id=\"";
+        outStr << " id=\"";
         outStr << id ;
         outStr << "\"";
     }
@@ -1921,32 +1921,29 @@ std::string OSnLNodeVariable::getTokenName()
 std::string OSnLNodeVariable::getNonlinearExpressionInXML()
 {
     ostringstream outStr;
-    outStr << "<" ;
+    outStr << "<";
     outStr << "variable";
-    outStr << "  idx=\"";
-    outStr << idx ;
+    outStr << " idx=\"";
+    outStr << idx;
     outStr << "\"";
-    outStr << "  coef=\"";
-    outStr << os_dtoa_format(coef);
-    outStr << "\"";
-    if(inumberOfChildren > 0)
+    if (coef < 1 || coef > 1)
+    {
+        outStr << " coef=\"";
+        outStr << os_dtoa_format(coef);
+        outStr << "\"";
+    }
+    if (inumberOfChildren > 0)
     {
         outStr << ">";
-    }
-    else
-    {
-        outStr << "/>";
-    }
-    if(inumberOfChildren > 0)
-    {
         for(unsigned int i = 0; i < inumberOfChildren; i++)
         {
             outStr << m_mChildren[i]->getNonlinearExpressionInXML();
         }
-
-        outStr << "</" ;
-        outStr << "variable" ;
-        outStr << ">" ;
+        outStr << "</variable>";
+    }
+    else
+    {
+        outStr << "/>";
     }
     return outStr.str();
 }//getPrefix
@@ -2515,6 +2512,7 @@ std::string OSnLMNode::getNonlinearExpressionInXML()
     }
     else
     {
+
         outStr << "/>";
     }
     if(inumberOfChildren > 0)

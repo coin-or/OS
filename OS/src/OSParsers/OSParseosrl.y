@@ -4592,6 +4592,8 @@ matrixStart: MATRIXSTART
     osglData->tempC = new OSMatrix();
     osglData->mtxConstructorVec.push_back((OSMatrix*)osglData->tempC);
     osglData->mtxBlkVec.push_back((OSMatrix*)osglData->tempC);
+std::cout << "push back a matrix" << std::endl;
+
 };
 
 matrixAttributes: matrixAttributeList
@@ -4658,6 +4660,7 @@ matrixLaden: GREATERTHAN matrixBody MATRIXEND
     osglData->mtxBlkVec.back()->m_mChildren = 
         new MatrixNode*[osglData->mtxBlkVec.back()->inumberOfChildren];
     osglData->mtxBlkVec.pop_back();
+std::cout << "pop back mtxBlkVec" << std::endl;
 }; 
 
 matrixBody: baseMatrix matrixConstructorList;
@@ -4665,6 +4668,7 @@ matrixBody: baseMatrix matrixConstructorList;
 baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd
 {
     osglData->mtxBlkVec.back()->inumberOfChildren++; 
+std::cout << "record a baseMatrix" << std::endl;
 };
 
 baseMatrixStart: BASEMATRIXSTART
@@ -4854,16 +4858,19 @@ baseMatrixEnd: GREATERTHAN BASEMATRIXEND | ENDOFELEMENT;
 matrixConstructorList: | matrixConstructorList matrixConstructor
 {
     osglData->mtxBlkVec.back()->inumberOfChildren++; 
+std::cout << "add another child; numberOfChildren now " << osglData->mtxBlkVec.back()->inumberOfChildren << std::endl;
+if (osglData->mtxBlkVec.back()->inumberOfChildren > 1000) return(100);
 };
 
-matrixConstructor: constantElements | varReferenceElements | linearElements | generalElements 
+matrixConstructor: constantElements | varReferenceElements | linearElements | generalElements |
                    objReferenceElements | conReferenceElements | matrixTransformation | matrixBlocks;
 
-constantElements: | constantElementsStart constantElementsAttributes GREATERTHAN constantElementsContent; 
+constantElements: constantElementsStart constantElementsAttributes GREATERTHAN constantElementsContent; 
 
 constantElementsStart: CONSTANTELEMENTSSTART
 {
     osglData->tempC = new ConstantMatrixElements(); 
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
     osglData->numberOfValuesPresent = false;        
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
@@ -4976,11 +4983,12 @@ constantElementsValuesLaden: GREATERTHAN constantElementsValuesBody VALUESEND;
 constantElementsValuesBody: osglDblArrayData;
 
 
-varReferenceElements: | varReferenceElementsStart varReferenceElementsAttributes GREATERTHAN varReferenceElementsContent; 
+varReferenceElements: varReferenceElementsStart varReferenceElementsAttributes GREATERTHAN varReferenceElementsContent; 
 
 varReferenceElementsStart: VARREFERENCEELEMENTSSTART
 {
     osglData->tempC = new VarReferenceMatrixElements();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
     osglData->numberOfValuesPresent = false;        
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
@@ -5090,11 +5098,12 @@ varReferenceElementsValuesLaden: GREATERTHAN varReferenceElementsValuesBody VALU
 
 varReferenceElementsValuesBody: osglIntArrayData;
 
-linearElements: | linearElementsStart linearElementsAttributes GREATERTHAN linearElementsContent; 
+linearElements: linearElementsStart linearElementsAttributes GREATERTHAN linearElementsContent; 
 
 linearElementsStart: LINEARELEMENTSSTART
 {
     osglData->tempC = new LinearMatrixElements();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
     osglData->numberOfValuesPresent = false;        
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
@@ -5227,7 +5236,6 @@ linearElementsValuesEl: linearElementsValuesElStart linearElementsValuesElAttrib
     osglData->osglNonzeroCounter++;
     if (osglData->osglNonzeroCounter > osglData->osglNumberOfNonzeros)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "linear matrix elements: too many nonzeros");    
-        
 };
 
 linearElementsValuesElStart: ELSTART
@@ -5300,11 +5308,12 @@ linearElementsValuesVarIdxContent: GREATERTHAN INTEGER VARIDXEND
 };
 
 
-generalElements: | generalElementsStart generalElementsAttributes GREATERTHAN generalElementsContent; 
+generalElements: generalElementsStart generalElementsAttributes GREATERTHAN generalElementsContent; 
 
 generalElementsStart: GENERALELEMENTSSTART
 {
     osglData->tempC = new GeneralMatrixElements();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
     osglData->numberOfValuesPresent = false;        
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
@@ -5447,11 +5456,12 @@ generalElementsElLaden: GREATERTHAN nlnode ELEND
     };
 
 
-conReferenceElements: | conReferenceElementsStart conReferenceElementsAttributes GREATERTHAN conReferenceElementsContent; 
+conReferenceElements: conReferenceElementsStart conReferenceElementsAttributes GREATERTHAN conReferenceElementsContent; 
 
 conReferenceElementsStart: CONREFERENCEELEMENTSSTART
 {
     osglData->tempC = new ConReferenceMatrixElements();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
     osglData->numberOfValuesPresent = false;        
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
@@ -5537,24 +5547,32 @@ conReferenceElementsIndexesLaden: GREATERTHAN conReferenceElementsIndexesBody IN
 conReferenceElementsIndexesBody: osglIntArrayData;
 
 
-conReferenceElementsValues: conReferenceElementsValuesStart conReferenceElementsValuesContent
-{
-    ((ConReferenceMatrixElements*)osglData->tempC)->values = new ConReferenceMatrixValues();
-    ((ConReferenceMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
-//    ((ConReferenceMatrixElements*)osglData->tempC)->values->el = osglData->osglIntArray;
-    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
+conReferenceElementsValues: 
+    {
+        if (osglData->osglNumberOfNonzeros > 0)
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "expected <values> element");
+    };    
+
+  | conReferenceElementsValuesStart conReferenceElementsValuesContent
+    {
+        if (osglData->osglNumberOfNonzeros > osglData->osglNonzeroCounter)
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too few <el> elements");
+        else if (osglData->osglNumberOfNonzeros < osglData->osglNonzeroCounter)
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many <el> elements");        
+        ((ConReferenceMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
+        parserData->suppressFurtherErrorMessages = false;
+        parserData->ignoreDataAfterErrors = false;        
+    };
 
 conReferenceElementsValuesStart: VALUESSTART
 {
-    osglData->osglNonzeroCounter = 0;
     osglData->osglNumberOfNonzeros = ((ConReferenceMatrixElements*)osglData->tempC)->numberOfValues;
+    osglData->osglNonzeroCounter = 0;
 
     ((ConReferenceMatrixElements*)osglData->tempC)->values = new ConReferenceMatrixValues();
     ((ConReferenceMatrixElements*)osglData->tempC)->values->numberOfEl
         = osglData->osglNumberOfNonzeros;
+std::cout << "new conreference elements of size " << osglData->osglNumberOfNonzeros << std::endl;
     ((ConReferenceMatrixElements*)osglData->tempC)->values->el
         = new ConReferenceMatrixElement*[osglData->osglNumberOfNonzeros];
 
@@ -5571,7 +5589,12 @@ conReferenceElementsValuesLaden: GREATERTHAN conReferenceElementsElList VALUESEN
 conReferenceElementsElList: | conReferenceElementsElList conReferenceElementsEl;
 
 conReferenceElementsEl: conReferenceElementsElStart conReferenceElementsElAttributeList
-                        conReferenceElementsElContent;
+                        conReferenceElementsElContent
+{
+//    osglData->osglNonzeroCounter++;
+//    if (osglData->osglNonzeroCounter > osglData->osglNumberOfNonzeros)
+//        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "conReference matrix elements: too many nonzeros");
+};    
 
 conReferenceElementsElStart: ELSTART
     {
@@ -5621,6 +5644,7 @@ conReferenceElementsElContent: GREATERTHAN INTEGER ELEND
     else
         for (int i=0; i<osglData->osglMult; i++)
         {
+std::cout << "Add a conreference element" << std::endl;
             ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter + i]->conReference
                 = $2;
             ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->valueType
@@ -5630,11 +5654,12 @@ conReferenceElementsElContent: GREATERTHAN INTEGER ELEND
     };
 
 
-objReferenceElements: | objReferenceElementsStart objReferenceElementsAttributes GREATERTHAN objReferenceElementsContent; 
+objReferenceElements: objReferenceElementsStart objReferenceElementsAttributes GREATERTHAN objReferenceElementsContent; 
 
 objReferenceElementsStart: OBJREFERENCEELEMENTSSTART
 {
     osglData->tempC = new ObjReferenceMatrixElements();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
     osglData->numberOfValuesPresent = false;        
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
@@ -5874,6 +5899,7 @@ blockList: | blockList matrixBlock;
 
 matrixBlock: matrixBlockStart matrixBlockAttributes matrixBlockContent
 {
+std::cout << "pop back mtxBlkVec" << std::endl;
     osglData->mtxBlkVec.pop_back();
 };
 
@@ -5882,8 +5908,10 @@ matrixBlockStart: BLOCKSTART
     osglData->tempC = new MatrixBlock();
     osglData->mtxConstructorVec.push_back((MatrixBlock*)osglData->tempC);
     osglData->mtxBlkVec.push_back(osglData->tempC);
+std::cout << "push back a block" << std::endl;
 
     osglData->symmetryPresent = false;
+    osglData->typePresent = false;
     osglData->blockRowIdxPresent = false;
     osglData->blockColIdxPresent = false;   
 }; 
@@ -5900,7 +5928,15 @@ matrixBlockAtt:
         if (verifyMatrixSymmetry(osglData->symmetry) == false)
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "symmetry type not recognized");
         parserData->errorText = NULL;
-    };
+        ((MatrixBlock*)osglData->tempC)->symmetry
+            = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    }
+    | osglMatrixTypeATT
+    {
+        ((MatrixBlock*)osglData->tempC)->type
+            = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+    }
+;
 
 osglBlockRowIdxATT: BLOCKROWIDXATT quote INTEGER quote
 {
@@ -5910,7 +5946,7 @@ osglBlockRowIdxATT: BLOCKROWIDXATT quote INTEGER quote
     {
         if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "blockRowIdx cannot be negative");
         osglData->blockRowIdxPresent = true;        
-        osglData->blockRowIdx = $3;       
+        osglData->blockRowIdx = $3;
         ((MatrixBlock*)osglData->tempC)->blockRowIdx = $3;
     }
 

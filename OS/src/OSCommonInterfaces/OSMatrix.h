@@ -1831,13 +1831,20 @@ public:
 class MatrixType : public MatrixNode
 {
 public:
+    /**
+     *  To track the type of symmetry present in the matrix or block
+     *  @remark for definitions, see OSParameters.h
+     */
+    ENUM_MATRIX_SYMMETRY symmetry;
+
+    /**
+     *  To track the type of values present in the matrix or block
+     *  @remark for definitions, see OSParameters.h
+     */
+    ENUM_MATRIX_TYPE type;
+
     int numberOfRows;
     int numberOfColumns;
-
-    /** 
-     *  to track whether the expanded form of the matrix is available
-     */
-    bool haveExpandedForm;
 
     /**
      *  The expanded form of the matrix is held in four sparse matrix objects:
@@ -1846,8 +1853,11 @@ public:
      *  m_mmGeneralElements
      *  m_mmObjAndConReferences
      */
- 
-    ENUM_MATRIX_SYMMETRY symmetry;
+
+    /** 
+     *  to track whether the expanded form of the matrix is available
+     */
+    bool haveExpandedForm;
 
     MatrixType();
     virtual ~MatrixType();

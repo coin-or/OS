@@ -775,7 +775,7 @@ bool DoubleVector::IsEqual(DoubleVector *that)
             }
             for (int i=0; i<this->numberOfEl; i++)
             {
-                if (!isEqual(this->el[i], that->el[i]))
+                if (!OSIsEqual(this->el[i], that->el[i]))
                 {
 
 #ifndef NDEBUG
@@ -1395,7 +1395,7 @@ bool StorageCapacity::IsEqual(StorageCapacity *that)
         {
             if ( (this->unit        != that->unit)        ||
                  (this->description != that->description) ||
-                 !isEqual(this->value, that->value))
+                 !OSIsEqual(this->value, that->value))
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -1490,7 +1490,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
         {
             if ((this->unit        != that->unit)        ||
                 (this->description != that->description) ||
-                !isEqual(this->value, that->value))
+                !OSIsEqual(this->value, that->value))
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -1661,8 +1661,8 @@ bool TimeSpan::IsEqual(TimeSpan *that)
         }
         else
         {
-            if (!isEqual(this->value,  that->value) ||
-                         this->unit != that->unit )
+            if (!OSIsEqual(this->value,  that->value) ||
+                           this->unit != that->unit )
 
             {
 #ifndef NDEBUG

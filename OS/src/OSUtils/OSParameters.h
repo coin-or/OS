@@ -2,10 +2,10 @@
 /** @file OSParameters.h
  *
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2015, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -892,6 +892,7 @@ inline int returnConeType(std::string type)
     if (type == "orthant"                   ) return ENUM_CONE_TYPE_orthant;
     if (type == "polyhedral"                ) return ENUM_CONE_TYPE_polyhedral;
     if (type == "quadratic"                 ) return ENUM_CONE_TYPE_quadratic;
+
     if (type == "rotatedQuadratic"          ) return ENUM_CONE_TYPE_rotatedQuadratic;
     if (type == "normed"                    ) return ENUM_CONE_TYPE_normed;
     if (type == "rotatedNormed"             ) return ENUM_CONE_TYPE_rotatedNormed;
