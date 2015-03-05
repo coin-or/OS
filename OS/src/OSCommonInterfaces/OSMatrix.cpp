@@ -1026,12 +1026,16 @@ std::string OSMatrix::getMatrixNodeInXML()
         outStr << " name=\"" << name << "\"";
     if (matrixType != ENUM_MATRIX_TYPE_unknown) 
         outStr << " type=\"" << returnMatrixTypeString(matrixType) << "\"";
-    outStr << ">" << std::endl;
 
-    for (int i=0; i < inumberOfChildren; i++)
-        outStr << m_mChildren[i]->getMatrixNodeInXML();
-
-    outStr << "</matrix>" << std::endl;
+    if (inumberOfChildren > 0)
+    {
+        outStr << ">" << std::endl;
+        for (int i=0; i < inumberOfChildren; i++)
+            outStr << m_mChildren[i]->getMatrixNodeInXML();
+        outStr << "</matrix>" << std::endl;
+    }
+    else
+        outStr << "/>" << std::endl;
     return outStr.str();
 }// end of OSMatrix::getMatrixNodeInXML()
 
@@ -3313,12 +3317,16 @@ std::string MatrixBlock::getMatrixNodeInXML()
         outStr << " symmetry=\"" << returnMatrixSymmetryString(symmetry) << "\"";
     if (matrixType != ENUM_MATRIX_TYPE_unknown) 
         outStr << " type=\"" << returnMatrixTypeString(matrixType) << "\"";
-    outStr << ">" << std::endl;
 
-    for (int i=0; i < inumberOfChildren; i++)
-        outStr << m_mChildren[i]->getMatrixNodeInXML();
-
-    outStr << "</block>" << std::endl;
+    if (inumberOfChildren > 0)
+    {
+        outStr << ">" << std::endl;
+        for (int i=0; i < inumberOfChildren; i++)
+            outStr << m_mChildren[i]->getMatrixNodeInXML();
+        outStr << "</block>" << std::endl;
+    }
+    else
+        outStr << "/>" << std::endl;
     return outStr.str();
 }// end of MatrixBlock::getMatrixNodeInXML()
 

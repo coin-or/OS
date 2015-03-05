@@ -6990,7 +6990,7 @@ std::cout << "new conreference elements of size " << osglData->osglNumberOfNonze
         {
 std::cout << "Add a conreference element" << std::endl;
             ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter + i]->conReference
-                = (yyvsp[(2) - (3)].ival);
+                = (yyvsp[(2) - (3)].ival) + i*osglData->osglIncr;
             ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->valueType
                 = osglData->valueType; 
         }

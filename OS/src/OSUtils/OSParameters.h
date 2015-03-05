@@ -696,7 +696,7 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
                     return type1;
     }
     return ENUM_MATRIX_TYPE_unknown;
-}//returnMatrixType
+}//end of mergeMatrixType
 
 /**
  *  An enum to track the type of value contained in a reference to a constraint 

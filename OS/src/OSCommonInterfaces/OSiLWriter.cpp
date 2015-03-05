@@ -831,15 +831,15 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                         outStr << "<expr";
 
                         // the following attribute is required
-                        outStr << "  idx=\"";
+                        outStr << " idx=\"";
                         outStr << m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->idx;
                         outStr << "\"";
 
                         // shape is an optional attribute, new since stable 2.9
                         std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->shape);
-                        if (tempStr != "");
+                        if (tempStr != "" && tempStr != "general");
                         {
-                            outStr << "  shape=\"" << tempStr;
+                            outStr << " shape=\"" << tempStr;
                         }
 
                         outStr << "\">";

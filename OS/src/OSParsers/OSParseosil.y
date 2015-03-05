@@ -3650,7 +3650,7 @@ conReferenceElementsElContent: GREATERTHAN INTEGER ELEND
         {
 std::cout << "Add a conreference element" << std::endl;
             ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter + i]->conReference
-                = $2;
+                = $2 + i*osglData->osglIncr;
             ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->valueType
                 = osglData->valueType; 
         }

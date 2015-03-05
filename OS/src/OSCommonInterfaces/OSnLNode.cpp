@@ -1690,9 +1690,12 @@ std::string OSnLNodeNumber::getNonlinearExpressionInXML()
     outStr << " value=\"";
     outStr << os_dtoa_format(value);
     outStr << "\"";
-    outStr << " type=\"";
-    outStr << type ;
-    outStr << "\"";
+    if (type != "real")
+    { 
+        outStr << " type=\"";
+        outStr << type ;
+        outStr << "\"";
+    }
     if(id.length() > 0)
     {
         outStr << " id=\"";
