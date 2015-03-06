@@ -6150,8 +6150,8 @@ std::cout << "record a baseMatrix" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
     if ((yyvsp[(3) - (4)].ival) > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
-    ((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
-        mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType, osglData->matrix[(yyvsp[(3) - (4)].ival)]->matrixType);
+    //((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
+    //    mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType, osglData->matrix[$3]->matrixType);
     osglData->baseMatrixIdxPresent = true;   
     osglData->baseMatrixIdx = (yyvsp[(3) - (4)].ival); 
 }

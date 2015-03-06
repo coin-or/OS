@@ -1580,13 +1580,6 @@ public:
 class MatrixVar
 {
 public:
-
-    /** The MatrixVar class constructor */
-    MatrixVar();
-
-    /** The MatrixVar class destructor */
-    ~MatrixVar();
-
     /** numberOfRows gives the number of rows of this matrix */
     int numberOfRows;
 
@@ -1618,8 +1611,21 @@ public:
     /** an optional name to this matrixVar */
     std::string name;
 
-    /** an optional type for each component of this matrixVar */ 
+    /** an optional variable type (C, B, I, D, J, S).
+     *  @remark must be the same for each component of this matrixVar
+     */ 
     char varType;
+
+    /** The MatrixVar class constructor */
+    MatrixVar();
+
+    /** The MatrixVar class destructor */
+    ~MatrixVar();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixVar *that);
 }; // MatrixVar
 
 
@@ -1630,6 +1636,11 @@ public:
 class MatrixVariables
 {
 public:
+    /** numberOfMatrixVar gives the number of <matrixVar> children */
+    int numberOfMatrixVar;
+
+    /** matrixVar is an array of pointers to the <matrixVar> children */
+    MatrixVar** matrixVar;
 
     /** The MatrixVariables class constructor */
     MatrixVariables();
@@ -1637,12 +1648,10 @@ public:
     /** The MatrixVariables class destructor */
     ~MatrixVariables();
 
-    /** numberOfMatrixVar gives the number of <matrixVar> children */
-    int numberOfMatrixVar;
-
-    /** matrixVar is an array of pointers to the <matrixVar> children */
-    MatrixVar** matrixVar;
-
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixVariables *that);
 }; // MatrixVariables
 
 
@@ -1653,13 +1662,6 @@ public:
 class MatrixObj
 {
 public:
-
-    /** The MatrixVar class constructor */
-    MatrixObj();
-
-    /** The MatrixVar class destructor */
-    ~MatrixObj();
-
     /** numberOfRows gives the number of rows of this matrix */
     int numberOfRows;
 
@@ -1686,6 +1688,17 @@ public:
 
     /** an optional name to this matrixObj */
     std::string name;
+
+    /** The MatrixVar class constructor */
+    MatrixObj();
+
+    /** The MatrixVar class destructor */
+    ~MatrixObj();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixObj *that);
 }; // MatrixObj
 
 
@@ -1709,6 +1722,11 @@ public:
     /** matrixObj is an array of pointers to the <matrixObj> children */
     MatrixObj** matrixObj;
 
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixObjectives *that);
 }; // MatrixObjectives
 
 
@@ -1719,13 +1737,6 @@ public:
 class MatrixCon
 {
 public:
-
-    /** The MatrixCon class constructor */
-    MatrixCon();
-
-    /** The MatrixCon class destructor */
-    ~MatrixCon();
-
     /** numberOfRows gives the number of rows of this matrix */
     int numberOfRows;
 
@@ -1756,6 +1767,17 @@ public:
 
     /** an optional name to this MatrixCon */
     std::string name;
+
+    /** The MatrixCon class constructor */
+    MatrixCon();
+
+    /** The MatrixCon class destructor */
+    ~MatrixCon();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixCon *that);
 }; // MatrixCon
 
 
@@ -1779,6 +1801,11 @@ public:
     /** matrixCon is an array of pointers to the <matrixCon> children */
     MatrixCon** matrixCon;
 
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixConstraints *that);
 }; // MatrixConstraints
 
 /*! \class MatrixExpression
@@ -1799,15 +1826,15 @@ public:
      */
     ENUM_NL_EXPR_SHAPE shape;
 
-    /** m_bDeleteExpressionTree is true, if in garbage collection, we
-     * should delete the osExpression tree object, if the OSInstance class
-     * created a map of the expression trees this should be false since the
-     * osExpressionTree is deleted by the OSInstance object
-     */
-    bool m_bDeleteExpressionTree;
-
     /** matrixExpressionTree contains the root of the MatrixExpressionTree */
     MatrixExpressionTree *matrixExpressionTree;
+
+    /** if m_bDeleteExpressionTree is true during garbage collection,
+     *  we should delete the osExpression tree object, 
+     *  if the OSInstance class created a map of the expression trees,
+     *  this should be false since the osExpressionTree is deleted by the OSInstance object
+     */
+    bool m_bDeleteExpressionTree;
 
     /** The MatrixExpression class constructor */
     MatrixExpression();
@@ -1829,13 +1856,6 @@ public:
 class MatrixExpressions
 {
 public:
-
-    /** The MatrixExpressions class constructor */
-    MatrixExpressions();
-
-    /** The MatrixExpressions class destructor */
-    ~MatrixExpressions();
-
     /** numberOfExpr gives the number of expressions */
     int numberOfExpr;
 
@@ -1843,6 +1863,12 @@ public:
      *  expressions that evaluate to matrices
      */
     MatrixExpression **expr;
+
+    /** The MatrixExpressions class constructor */
+    MatrixExpressions();
+
+    /** The MatrixExpressions class destructor */
+    ~MatrixExpressions();
 
     /**
      * A function to check for the equality of two objects
@@ -1857,7 +1883,6 @@ public:
 class MatrixProgramming
 {
 public:
-
     /** The MatrixProgramming class constructor */
     MatrixProgramming();
 
@@ -1875,6 +1900,7 @@ public:
 
     /** a pointer to the matrixExpressions object */
     MatrixExpressions* matrixExpressions;
+
 
     /**
      * A function to check for the equality of two objects

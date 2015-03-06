@@ -1262,12 +1262,12 @@ public:
 class OSnLNodeNumber : public OSnLNode
 {
 public:
-
-
     /** value is the value of the number */
     double value;
+
     /** in the C++ type is real */
     std::string type;
+
     /** later, e.g. stochastic programming, we may wish
      * to give an id to a number
      */
@@ -1319,6 +1319,11 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    virtual bool IsEqual(OSnLNodeNumber *that);
 };//end OSnLNodeNumber
 
 
@@ -1521,6 +1526,11 @@ public:
      *  \return a ADdouble.
      */
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    virtual bool IsEqual(OSnLNodeVariable *that);
 };//end OSnLNodeVariable
 
 
@@ -2252,6 +2262,11 @@ public:
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual OSnLMNode *cloneExprNode();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    virtual bool IsEqual(OSnLMNodeMatrixLowerTriangle *that);
 };//end OSnLMNodeMatrixLowerTriangle
 
 class OSnLMNodeMatrixUpperTriangle : public OSnLMNode
@@ -2295,6 +2310,11 @@ public:
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual OSnLMNode *cloneExprNode();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    virtual bool IsEqual(OSnLMNodeMatrixUpperTriangle *that);
 };//end OSnLMNodeMatrixUpperTriangle
 
 
