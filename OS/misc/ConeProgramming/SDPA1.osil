@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org"
-xmlns:os="os.optimizationservices.org"
-xmlns:xs="http://www.w3.org/2001/XMLSchema"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="os.optimizationservices.org
-C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
+<osil xmlns="os.optimizationservices.org" 
+xmlns:os="os.optimizationservices.org" 
+xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="os.optimizationservices.org 
+http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 <instanceHeader>
 <name>SDPA problem SDPA1.sdpa</name>
 <description>Translated from SDPA format using SDPA2OSiL
