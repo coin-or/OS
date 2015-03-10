@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -160,7 +160,9 @@
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSiLWriter.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSInstance.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSMathUtil.cpp" />
+    <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSMatrix.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSnLNode.cpp" />
+    <ClCompile Include="..\..\..\src\OSParsers\OSnLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSParsers\OSoLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSoLReader.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSoLWriter.cpp" />
@@ -202,7 +204,9 @@
     <ClInclude Include="..\..\..\src\OSUtils\OSIpReferenced.hpp" />
     <ClInclude Include="..\..\..\src\OSUtils\OSIpSmartPtr.hpp" />
     <ClInclude Include="..\..\..\src\OSUtils\OSMathUtil.h" />
+    <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSMatrix.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSnLNode.h" />
+    <ClInclude Include="..\..\..\src\OSParsers\OSnLParserData.h" />
     <ClInclude Include="..\..\..\src\OSParsers\OSoLParserData.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSoLReader.h" />
     <ClInclude Include="..\..\..\src\OSCommonInterfaces\OSoLWriter.h" />

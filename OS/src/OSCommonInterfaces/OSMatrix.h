@@ -1729,7 +1729,7 @@ public:
      * @param valueSize holds the size of the value and index arrays.
      * @param type describes the type of values held in the matrix (see OSParameters.h).
      */
-    GeneralSparseMatrix(bool isColumnMajor_, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
+    GeneralSparseMatrix(bool isColumnMajor, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
 
     /**
      *
@@ -1744,6 +1744,7 @@ public:
      */
     bool display(int secondaryDim);
 }; //GeneralSparseMatrix
+
 
 /** \class ExpandedMatrixBlocks
  *  \brief a sparse matrix data structure for matrices
@@ -1761,15 +1762,32 @@ public:
     bool bDeleteArrays;
 
     /**
-     * isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
-     * data is stored by column. If false, the matrix is stored by row.
+     * isColumnMajor holds whether the (nonzero) values holding the
+     * data are stored by column. If false, the matrix is stored by row.
      */
     bool isColumnMajor;
 
     /**
-     * blockNumber gives the number of blocks (which is the size of the blockRows and blockColumns arrays)
+     * blockNumber gives the number of blocks (which is the size of
+     * the blockRows and blockColumns arrays).
      */
     int blockNumber;
+
+    /** 
+     * rowOffsets gives the row offsets of the block decomposition
+     * It does not have to correspond to the row offsets in the matrix's 
+     * <blocks> element (indeed there does not have to be such an element
+     * at all, or there may be several, possibly incompatible).
+     */
+    int* rowOffsets;
+
+    /** 
+     * colOffsets gives the column offsets of the block decomposition
+     * It does not have to correspond to the column offsets in the matrix's 
+     * <blocks> element (indeed there does not have to be such an element
+     * at all, or there may be several, possibly incompatible).
+     */
+    int* colOffsets;
 
     /**
      * blockRows holds an integer array of the row to which a block belongs.
@@ -1790,7 +1808,7 @@ public:
     /**
      * blocks holds the blocks that make up the matrix.
      * All blocks have the same type of values, which corresponds to the most
-     * general form found.
+     * general form found, and the same row/column major form.
      */
     GeneralSparseMatrix** blocks;
 
@@ -1897,14 +1915,30 @@ public:
 
     /** 
      *  A method to expand a matrix or block
-     *  The result is a sparse matrix object, depending on the matrixType, 
-     *  of constant matrix elements, variable references, linear or nonlinear expressions, 
-     *  or objective and constraint references (possibly mixed).
+     *  The result is a GeneralSparseMatrix object of constant matrix elements,
+     *  variable references, linear or nonlinear expressions, or objective and 
+     *  constraint references (possibly mixed). (Values depend on the matrixType.)
      *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
      *  @param rowMajor can be used to store the objects in row major form.
      *  @return whether the operation was successful or not.
      */
-    //virtual bool expandMatrixType(bool rowMajor);
+    virtual bool expandMatrixType(bool rowMajor);
+
+    /**
+     *  A method to process a matrixType into a specific block structure.
+     *  @param rowOffsets defines a partition of the matrix rows into the blocks
+     *  @param colOffsets defines a partition of the matrix columns into the blocks
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @return whether the operation was successful
+     *
+     *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
+     *          so that they can be retrieved later using extractBlock (see below).
+     *          It is possible (though probably not advisable) to maintain multiple
+     *          decompositions with different row and column partitions
+     */
+     bool processBlocks(int* rowOffsets, int* colOffsets,
+                                      bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
     /** 
      *  A method to extract a block from a larger matrix
@@ -1923,6 +1957,7 @@ public:
      */
     GeneralSparseMatrix* extractBlock(int firstrow, int firstcol, int nrows, int ncols,
                                       bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+
     /**
      *  A function to check for the equality of two objects
      */

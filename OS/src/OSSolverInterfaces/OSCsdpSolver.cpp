@@ -7,7 +7,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2014-2015, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -67,8 +67,8 @@ using std::ostringstream;
 
 
 /*
-   An example showing how to call the easy_sdp() interface to CSDP.  In
-   this example, we solve the problem
+   An example showing how to call the easy_sdp() interface to CSDP.
+   In this example, we solve the problem
  
       max tr(C*X)
           tr(A1*X)=1
@@ -104,13 +104,15 @@ using std::ostringstream;
   Notice that all of the matrices have block diagonal structure.  The first
   block is of size 2x2.  The second block is of size 3x3.  The third block
   is a diagonal block of size 2.  
-
  */
 
 
 
 CsdpSolver::CsdpSolver()
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "inside CsdpSolver constructor\n");
+#endif
     osrlwriter = new OSrLWriter();
     osresult = new OSResult();
     m_osilreader = NULL;
@@ -167,7 +169,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         finish = clock();
         duration = (double) (finish - start) / CLOCKS_PER_SEC;
 
-        /* Process the osinstance into the --- somewhat peculiar --- CSDP data structures
+        /* Process the osinstance into the --- rather tricky --- CSDP data structures
          * and verify that the solver is appropriate - CSDP requires a very special type of problem 
          */
 
@@ -376,6 +378,15 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         for (int i=1; i<=nBlocks; i++)
             isdiag[i] = true;
 
+/*
+        at this point we know the dimensions of all blocks. We need to extract
+        the blocks from the data structure, perhaps by simply moving pointers,
+        perhaps by combining several blocks into one, perhaps by going deeper
+        into the data structure and the constructor list
+        we should also keep track of diagonal blocks (no column has length more than 1
+        and the single nonzero is on the diagonal)
+ */
+
 #if 0
 // this is the signature of read_prob, which reads the SDPA problem from a file
 int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
@@ -414,7 +425,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
 }
 #endif
 
-        /** Allocate space for the C matrix. */
+        /** Allocate space for the C matrix (A0). */
         pC->nblocks=nBlocks;
         pC->blocks=(struct blockrec *)malloc((nBlocks+1)*sizeof(struct blockrec));
         if (pC->blocks == NULL)
@@ -1465,11 +1476,19 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
 
   initsoln(7,2,C,b,constraints,&X,&y,&Z);
 
-  /*
+  /* (This is from example.c)
    * Solve the problem.
    */
 
   ret=easy_sdp(7,2,C,b,constraints,0.0,&X,&y,&Z,&pobj,&dobj);
+
+
+  /* (This is from csdp.c)
+   * Call the solver.
+   */
+
+  ret=easy_sdp(n,k,C,a,constraints,0.0,&X,&y,&Z,&pobj,&dobj);
+
 
   if (ret == 0)
     printf("The objective value is %.7e \n",(dobj+pobj)/2);
