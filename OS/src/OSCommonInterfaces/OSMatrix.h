@@ -1922,7 +1922,7 @@ public:
      *  @param rowMajor can be used to store the objects in row major form.
      *  @return whether the operation was successful or not.
      */
-    virtual bool expandMatrixType(bool rowMajor);
+    //virtual bool expandMatrixType(bool rowMajor);
 
     /**
      *  A method to process a matrixType into a specific block structure.
