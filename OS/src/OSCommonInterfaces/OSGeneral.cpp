@@ -4,7 +4,7 @@
  * @author Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -717,7 +717,6 @@ DoubleVector::DoubleVector():
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Inside the DoubleVector Constructor");
 #endif
-
 }
 
 
@@ -776,7 +775,7 @@ bool DoubleVector::IsEqual(DoubleVector *that)
             }
             for (int i=0; i<this->numberOfEl; i++)
             {
-                if (!isEqual(this->el[i], that->el[i]))
+                if (!OSIsEqual(this->el[i], that->el[i]))
                 {
 
 #ifndef NDEBUG
@@ -1396,7 +1395,7 @@ bool StorageCapacity::IsEqual(StorageCapacity *that)
         {
             if ( (this->unit        != that->unit)        ||
                  (this->description != that->description) ||
-                 !isEqual(this->value, that->value))
+                 !OSIsEqual(this->value, that->value))
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -1491,7 +1490,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
         {
             if ((this->unit        != that->unit)        ||
                 (this->description != that->description) ||
-                !isEqual(this->value, that->value))
+                !OSIsEqual(this->value, that->value))
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -1662,8 +1661,8 @@ bool TimeSpan::IsEqual(TimeSpan *that)
         }
         else
         {
-            if (!isEqual(this->value,  that->value) ||
-                         this->unit != that->unit )
+            if (!OSIsEqual(this->value,  that->value) ||
+                           this->unit != that->unit )
 
             {
 #ifndef NDEBUG
