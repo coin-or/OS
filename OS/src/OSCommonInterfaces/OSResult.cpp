@@ -7003,7 +7003,7 @@ bool ServiceResult::IsEqual(ServiceResult *that)
                     this->currentJobCount    != that->currentJobCount ||
                     this->totalJobsSoFar     != that->totalJobsSoFar  ||
                     this->timeServiceStarted != that->timeServiceStarted ||
-                    !isEqual(this->serviceUtilization, that->serviceUtilization) )
+                    !OSIsEqual(this->serviceUtilization, that->serviceUtilization) )
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -7150,65 +7150,6 @@ bool TimingInformation::IsEqual(TimingInformation *that)
         }
     }
 }//TimingInformation::IsEqual
-
-#if 0
-bool Time::IsEqual(Time *that)
-{
-    std::ostringstream outStr;
-
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Start comparing in Time");
-#endif
-    if (this == NULL)
-    {
-        if (that == NULL)
-            return true;
-        else
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in Time");
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
-#endif
-            return false;
-        }
-    }
-    else
-    {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Differences in Time");
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (!isEqual(this->value,         that->value)    ||
-                    this->unit        != that->unit      ||
-                    this->type        != that->type      ||
-                    this->category    != that->category  ||
-                    this->description != that->description  )
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "Differences in Time" << endl;
-                outStr << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-                outStr << "type:        " << this->type        << " vs. " << that->type        << endl;
-                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
-                outStr << "category:    " << this->category    << " vs. " << that->category    << endl;
-                outStr << "description: " << this->description << " vs. " << that->description << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
-    }
-}//Time::IsEqual
-#endif
-
 
 
 bool TimeMeasurement::IsEqual(TimeMeasurement *that)
@@ -7694,7 +7635,7 @@ bool VarValue::IsEqual(VarValue *that)
         else
         {
             if (this->idx != that->idx || this->name != that->name ||
-                    !isEqual(this->value, that->value) )
+                    !OSIsEqual(this->value, that->value) )
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -8418,7 +8359,7 @@ bool DualVarValue::IsEqual(DualVarValue *that)
         else
         {
             if (this->idx != that->idx  || this->name != that->name ||
-                    !isEqual(this->value, that->value) )
+                    !OSIsEqual(this->value, that->value) )
             {
 #ifndef NDEBUG
                 outStr.str("");

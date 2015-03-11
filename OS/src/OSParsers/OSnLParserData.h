@@ -91,6 +91,15 @@ public:
     /** a pointer to an OSnLMNode object that is a simple matrix reference */
     OSnLMNodeMatrixReference *nlMNodeMatrixRef;
 
+    /** a pointer to an OSnLMNode object that is a matrixVar reference */
+    OSnLMNodeMatrixVar *nlMNodeMatrixVar;
+
+    /** a pointer to an OSnLMNode object that is a matrixObj reference */
+    OSnLMNodeMatrixObj *nlMNodeMatrixObj;
+
+    /** a pointer to an OSnLMNode object that is a matrixCon reference */
+    OSnLMNodeMatrixCon *nlMNodeMatrixCon;
+
     /** nlnodenumber is the number of nl nodes in the instance*/
     int nlnodenumber;
 
@@ -218,3 +227,4 @@ inline void osnl_empty_vectors( OSnLParserData* osnlData)
 
 
 #endif /*OSNLPARSERDATA_H_*/
+

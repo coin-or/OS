@@ -775,8 +775,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 // reset default upper bound for binary variables
                 if (vt == ENUM_VARTYPE_binary) 
                 {
-                    if (osinstance->instanceData->variables->var[varcount]->ub == OSDBL_MAX
-			&& varubattON == false)
+                    if (varubattON == false)
                         osinstance->instanceData->variables->var[varcount]->ub = 1.0;
                 }
                 ch++;

@@ -109,9 +109,9 @@ OSgLParserData::OSgLParserData() :
     matrixBlockNumberOfRows(NULL),
     matrixBlockNumberOfCols(NULL),
     shape(ENUM_NL_EXPR_SHAPE_general),
-    shapePresent(false)
-
+    shapePresent(false),
+    valueType(ENUM_CONREFERENCE_VALUETYPE_value),
+    valueTypePresent(false)
 {
-
 }//OSgLParserData
 

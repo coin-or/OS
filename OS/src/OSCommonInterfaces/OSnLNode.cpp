@@ -5,7 +5,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2015, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -447,8 +447,6 @@ std::vector<ExprNode*> OSnLNode::getPrefixFromExpressionTree()
     std::vector<ExprNode*> prefixVector;
     return preOrderOSnLNodeTraversal( &prefixVector);
 }//getPrefixFromExpressionTree
-
-
 
 std::vector<ExprNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector)
 {
@@ -1688,15 +1686,18 @@ std::string OSnLNodeNumber::getNonlinearExpressionInXML()
     ostringstream outStr;
     outStr << "<" ;
     outStr << this->getTokenName();
-    outStr << "  value=\"";
+    outStr << " value=\"";
     outStr << os_dtoa_format(value);
     outStr << "\"";
-    outStr << " type=\"";
-    outStr << type ;
-    outStr << "\"";
+    if (type != "real")
+    { 
+        outStr << " type=\"";
+        outStr << type ;
+        outStr << "\"";
+    }
     if(id.length() > 0)
     {
-        outStr << "  id=\"";
+        outStr << " id=\"";
         outStr << id ;
         outStr << "\"";
     }
@@ -1723,6 +1724,65 @@ OSnLNode* OSnLNodeNumber::cloneExprNode()
     nlNodePoint = new OSnLNodeNumber();
     return  nlNodePoint;
 }//end OSnLNodeNumber::cloneExprNode
+
+
+bool OSnLNodeNumber::IsEqual(OSnLNodeNumber *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLNodeNumber");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            if (this->value != that->value)
+                return false;
+            if (this->type != that->type)
+                return false;
+            if (this->id != that->id)
+                return false;
+            return true;
+        }
+    }
+}//OSnLNodeNumber::IsEqual
 // end OSnLNodeNumber methods
 
 
@@ -1916,41 +1976,38 @@ std::string OSnLNodeVariable::getTokenName()
     outStr << coef;
     outStr << ":real:" ;
     return outStr.str();
-}//getTokenNumber
+}//getTokenName
 
 
 std::string OSnLNodeVariable::getNonlinearExpressionInXML()
 {
     ostringstream outStr;
-    outStr << "<" ;
+    outStr << "<";
     outStr << "variable";
-    outStr << "  idx=\"";
-    outStr << idx ;
+    outStr << " idx=\"";
+    outStr << idx;
     outStr << "\"";
-    outStr << "  coef=\"";
-    outStr << os_dtoa_format(coef);
-    outStr << "\"";
-    if(inumberOfChildren > 0)
+    if (coef < 1 || coef > 1)
+    {
+        outStr << " coef=\"";
+        outStr << os_dtoa_format(coef);
+        outStr << "\"";
+    }
+    if (inumberOfChildren > 0)
     {
         outStr << ">";
+        for(unsigned int i = 0; i < inumberOfChildren; i++)
+        {
+            outStr << m_mChildren[i]->getNonlinearExpressionInXML();
+        }
+        outStr << "</variable>";
     }
     else
     {
         outStr << "/>";
     }
-    if(inumberOfChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-        {
-            outStr << m_mChildren[i]->getNonlinearExpressionInXML();
-        }
-
-        outStr << "</" ;
-        outStr << "variable" ;
-        outStr << ">" ;
-    }
     return outStr.str();
-}//getPrefix
+}//getNonlinearExpressionInXML
 
 double OSnLNodeVariable::calculateFunction(double *x)
 {
@@ -1990,6 +2047,63 @@ OSnLNode* OSnLNodeVariable::cloneExprNode()
     return  nlNodePoint;
 }//end OSnLNodeVariable::cloneExprNode
 
+bool OSnLNodeVariable::IsEqual(OSnLNodeVariable *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLNodeVariable");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            if (this->coef != that->coef)
+                return false;
+            if (this->idx != that->idx)
+                return false;
+            return true;
+        }
+    }
+}//OSnLNodeVariable::IsEqual
+
+
 
 /** OSnLNode objects with matrix arguments **/
 
@@ -2010,6 +2124,7 @@ OSnLNodeMatrixDeterminant::~OSnLNodeMatrixDeterminant()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixDeterminant destructor");
 #endif
 }//end ~OSnLNodeMatrixDeterminant
+
 
 double OSnLNodeMatrixDeterminant::calculateFunction(double *x)
 {
@@ -2508,10 +2623,12 @@ std::string OSnLMNode::getNonlinearExpressionInXML()
 #endif
     if(inumberOfChildren > 0)
     {
+
         outStr << ">";
     }
     else
     {
+
         outStr << "/>";
     }
     if(inumberOfChildren > 0)
@@ -3062,8 +3179,64 @@ std::string OSnLMNodeMatrixLowerTriangle::getNonlinearExpressionInXML()
     return outStr.str();
 }//OSnLMNodeMatrixLowerTriangle::getNonlinearExpressionInXML
 
+bool OSnLMNodeMatrixLowerTriangle::IsEqual(OSnLMNodeMatrixLowerTriangle *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixLowerTriangle");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+
+            if (this->includeDiagonal != that->includeDiagonal)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//OSnLMNodeMatrixLowerTriangle::IsEqual
+
 
 // OSnLMNodeMatrixUpperTriangle Methods
+
 OSnLMNodeMatrixUpperTriangle::OSnLMNodeMatrixUpperTriangle()
 {
     inumberOfChildren = 0;
@@ -3085,18 +3258,6 @@ OSnLMNodeMatrixUpperTriangle::~OSnLMNodeMatrixUpperTriangle()
 #endif
 }//end ~OSnLMNodeMatrixUpperTriangle
 
-std::string OSnLMNodeMatrixUpperTriangle::getTokenName()
-{
-    return "matrixUpperTriangle";
-}// end OSnLMNodeMatrixUpperTriangle::getTokenName()
-
-OSnLMNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
-{
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixUpperTriangle();
-    return  nlMNodePoint;
-}//end OSnLMNodeMatrixUpperTriangle::cloneExprNode
-
 std::string OSnLMNodeMatrixUpperTriangle::getNonlinearExpressionInXML()
 {
     ostringstream outStr;
@@ -3110,6 +3271,73 @@ std::string OSnLMNodeMatrixUpperTriangle::getNonlinearExpressionInXML()
     outStr << "</matrixUpperTriangle>";
     return outStr.str();
 }//OSnLMNodeMatrixUpperTriangle::getNonlinearExpressionInXML
+
+std::string OSnLMNodeMatrixUpperTriangle::getTokenName()
+{
+    return "matrixUpperTriangle";
+}// end OSnLMNodeMatrixUpperTriangle::getTokenName()
+
+OSnLMNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixUpperTriangle();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixUpperTriangle::cloneExprNode
+
+bool OSnLMNodeMatrixUpperTriangle::IsEqual(OSnLMNodeMatrixUpperTriangle *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixUpperTriangle");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+
+            if (this->includeDiagonal != that->includeDiagonal)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//OSnLMNodeMatrixUpperTriangle::IsEqual
 
 
 // OSnLMNodeMatrixDiagonal Methods
@@ -3213,7 +3441,7 @@ OSnLMNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
 
 // OSnLMNodeMatrixReference Methods
 OSnLMNodeMatrixReference::OSnLMNodeMatrixReference():
-    idx(0)
+    idx(-1)
 {
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
@@ -3258,12 +3486,499 @@ std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
     return outStr.str();
 }//OSnLMNodeMatrixReference::getNonlinearExpressionInXML
 
-
-
 OSnLMNode* OSnLMNodeMatrixReference::cloneExprNode()
 {
     OSnLMNode *nlMNodePoint;
     nlMNodePoint = new OSnLMNodeMatrixReference();
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixReference::cloneExprNode
+
+bool OSnLMNodeMatrixReference::IsEqual(OSnLMNodeMatrixReference *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixReference");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+
+            if (this->idx != that->idx)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//OSnLMNodeMatrixReference::IsEqual
+
+
+// OSnLMNodeMatrixVar Methods
+OSnLMNodeMatrixVar::OSnLMNodeMatrixVar():
+    idx(-1)
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
+    inodeInt = OS_MATRIX_VAR;
+    inodeType = -1;
+}//end OSnLMNodeMatrixVar
+
+OSnLMNodeMatrixVar::~OSnLMNodeMatrixVar()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLMNodeMatrixVar destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLMNodeMatrixVar
+
+std::string OSnLMNodeMatrixVar::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    outStr << "[";
+    outStr << inumberOfChildren;
+    outStr << "]";
+    outStr << ":";
+    outStr << idx;
+    outStr << ":";
+    return outStr.str();
+}//getTokenNumber
+
+std::string OSnLMNodeMatrixVar::getTokenName()
+{
+    return "matrixVar";
+}// end OSnLMNodeMatrixVar::getTokenName()
+
+
+std::string OSnLMNodeMatrixVar::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+
+    outStr << "<matrixVar idx=\"" << idx << "\"/>" << std::endl;
+    return outStr.str();
+}//OSnLMNodeMatrixVar::getNonlinearExpressionInXML
+
+#if 0
+double OSnLMNodeMatrixVar::calculateFunction(double *x)
+{
+    m_dFunctionValue = coef*x[idx];
+    return m_dFunctionValue;
+}// end OSnLMNodeMatrixVar::calculate
+
+ADdouble OSnLMNodeMatrixVar::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
+{
+    m_ADTape = coef;
+    m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
+    return m_ADTape;
+}// end OSnLMNodeMatrixVar::constructADTape
+
+
+void OSnLMNodeMatrixVar::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    int numVars;
+    if( (*varIdx).find( idx) != (*varIdx).end() )
+    {
+        //std::cout  << "Index already in the map " << idx <<  std::endl;
+    }
+    else  // variable to map with variable index as the key
+    {
+        //std::cout << "Found a new index to add to the map " << idx << std::endl;
+        numVars = (*varIdx).size();
+        //std::cout << "numVars =  " << numVars << std::endl;
+        (*varIdx)[ idx] = numVars;
+    }
+    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+}//getVariableIndexMap
+#endif
+
+
+OSnLMNode* OSnLMNodeMatrixVar::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixVar();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixVar::cloneExprNode
+
+
+bool OSnLMNodeMatrixVar::IsEqual(OSnLMNodeMatrixVar *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixVar");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+
+            if (this->idx != that->idx)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//OSnLMNodeMatrixVar::IsEqual
+
+
+// OSnLMNodeMatrixObj Methods
+OSnLMNodeMatrixObj::OSnLMNodeMatrixObj():
+    idx(-1)
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
+    inodeInt = OS_MATRIX_OBJ;
+    inodeType = -1;
+}//end OSnLMNodeMatrixObj
+
+OSnLMNodeMatrixObj::~OSnLMNodeMatrixObj()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLMNodeMatrixObj destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLMNodeMatrixObj
+
+std::string OSnLMNodeMatrixObj::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    outStr << "[";
+    outStr << inumberOfChildren;
+    outStr << "]";
+    outStr << ":";
+    outStr << idx;
+    outStr << ":";
+    return outStr.str();
+}//getTokenNumber
+
+std::string OSnLMNodeMatrixObj::getTokenName()
+{
+    return "matrixObj";
+}// end OSnLMNodeMatrixVar::getTokenName()
+
+
+std::string OSnLMNodeMatrixObj::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixObj idx=\"" << idx << "\"/>" << std::endl;
+    return outStr.str();
+}//OSnLMNodeMatrixObj::getNonlinearExpressionInXML
+
+#if 0
+double OSnLMNodeMatrixObj::calculateFunction(double *x)
+{
+    m_dFunctionValue = coef*x[idx];
+    return m_dFunctionValue;
+}// end OSnLMNodeMatrixObj::calculate
+
+ADdouble OSnLMNodeMatrixObj::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
+{
+    m_ADTape = coef;
+    m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
+    return m_ADTape;
+}// end OSnLMNodeMatrixObj::constructADTape
+
+void OSnLMNodeMatrixObj::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    int numVars;
+    if( (*varIdx).find( idx) != (*varIdx).end() )
+    {
+        //std::cout  << "Index already in the map " << idx <<  std::endl;
+    }
+    else  // variable to map with variable index as the key
+    {
+        //std::cout << "Found a new index to add to the map " << idx << std::endl;
+        numVars = (*varIdx).size();
+        //std::cout << "numVars =  " << numVars << std::endl;
+        (*varIdx)[ idx] = numVars;
+    }
+    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+}//getVariableIndexMap
+#endif
+
+OSnLMNode* OSnLMNodeMatrixObj::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixObj();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixObj::cloneExprNode
+
+
+bool OSnLMNodeMatrixObj::IsEqual(OSnLMNodeMatrixObj *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixObj");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+
+            if (this->idx != that->idx)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//OSnLMNodeMatrixObj::IsEqual
+
+
+// OSnLMNodeMatrixCon Methods
+OSnLMNodeMatrixCon::OSnLMNodeMatrixCon():
+    idx(-1)
+{
+    inumberOfChildren = 0;
+    inumberOfMatrixChildren = 0;
+    m_mChildren = NULL;
+    m_mMatrixChildren = NULL;
+    inodeInt = OS_MATRIX_CON;
+    inodeType = -1;
+}//end OSnLMNodeMatrixCon
+
+OSnLMNodeMatrixCon::~OSnLMNodeMatrixCon()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLMNodeMatrixCon destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLMNodeMatrixCon
+
+std::string OSnLMNodeMatrixCon::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    outStr << "[";
+    outStr << inumberOfChildren;
+    outStr << "]";
+    outStr << ":";
+    outStr << idx;
+    outStr << ":";
+    return outStr.str();
+}//getTokenNumber
+
+std::string OSnLMNodeMatrixCon::getTokenName()
+{
+    return "matrixCon";
+}// end OSnLMNodeMatrixCon::getTokenName()
+
+
+std::string OSnLMNodeMatrixCon::getNonlinearExpressionInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixCon idx=\"" << idx << "\"/>" << std::endl;
+    return outStr.str();
+}//OSnLMNodeMatrixCon::getNonlinearExpressionInXML
+
+#if 0
+double OSnLMNodeMatrixCon::calculateFunction(double *x)
+{
+    m_dFunctionValue = coef*x[idx];
+    return m_dFunctionValue;
+}// end OSnLMNodeMatrixCon::calculate
+
+ADdouble OSnLMNodeMatrixCon::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
+{
+    m_ADTape = coef;
+    m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
+    return m_ADTape;
+}// end OSnLMNodeMatrixCon::constructADTape
+
+
+void OSnLMNodeMatrixCon::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    int numVars;
+    if( (*varIdx).find( idx) != (*varIdx).end() )
+    {
+        //std::cout  << "Index already in the map " << idx <<  std::endl;
+    }
+    else  // variable to map with variable index as the key
+    {
+        //std::cout << "Found a new index to add to the map " << idx << std::endl;
+        numVars = (*varIdx).size();
+        //std::cout << "numVars =  " << numVars << std::endl;
+        (*varIdx)[ idx] = numVars;
+    }
+    //std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+}//getVariableIndexMap
+#endif
+
+
+OSnLMNode* OSnLMNodeMatrixCon::cloneExprNode()
+{
+    OSnLMNode *nlMNodePoint;
+    nlMNodePoint = new OSnLMNodeMatrixCon();
+    return  nlMNodePoint;
+}//end OSnLMNodeMatrixCon::cloneExprNode
+
+
+bool OSnLMNodeMatrixCon::IsEqual(OSnLMNodeMatrixCon *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in OSnLMNodeMatrixCon");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->inodeInt != that->inodeInt)
+                return false;
+            if (this->inodeType != that->inodeType)
+                return false;
+            if (this->inumberOfChildren != that->inumberOfChildren)
+                return false;
+            if (this->inumberOfMatrixChildren != that->inumberOfMatrixChildren)
+                return false;
+
+            if (this->idx != that->idx)
+                return false;
+
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
+                if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+                    return false;
+
+            for (unsigned int i = 0; i < this->inumberOfMatrixChildren; i++)
+                if (!this->m_mMatrixChildren[i]->IsEqual(that->m_mMatrixChildren[i]))
+                    return false;
+
+            return true;
+        }
+    }
+}//OSnLMNodeMatrixCon::IsEqual
 
