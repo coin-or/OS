@@ -1,45 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org" xmlns:os="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org
-C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
+<osil xmlns="os.optimizationservices.org" 
+	    xmlns:os="os.optimizationservices.org" 
+	    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	    xsi:schemaLocation="os.optimizationservices.org 
+	    http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
-		<name>SDPA problem</name>
-		<source>
-       </source>
-		<description>
-		Hand-translation from SDPA format
-		
-The problem is (as described in CSDP/example/example.c):		
-		
-    max tr(C*X)
-          tr(A1*X)=1
-          tr(A2*X)=2
-         X >= 0       (X is PSD)
-
-    where 
- 
-    C=[2 1
-       1 2
-           3 0 1
-           0 2 0
-           1 0 3
-                 0
-                   0]
-
-   A1=[3 1
-       1 3
-           0 0 0
-           0 0 0
-           0 0 0
-                 1
-                   0] 
-
-   A2=[0 0
-       0 0
-           3 0 1
-           0 4 0
-           1 0 5
-                 0
-                   1] 
+		<name>SDPA problem sample.sdpa</name>
+		<description>Translated from SDPA format using SDPA2OSiL
+		       (C) H.I. Gassmann 2010-2015
 		</description>
 	</instanceHeader>
 	<instanceData>
@@ -47,8 +16,8 @@ The problem is (as described in CSDP/example/example.c):
 			<obj maxOrMin="max" numberOfObjCoef="0"/>
 		</objectives>
 		<constraints numberOfConstraints="2">
-			<con lb="1.0000000000000" ub="1.0000000000000"/>
-			<con lb="2.0000000000000" ub="2.0000000000000"/>
+			<con lb="1." ub="1."/>
+			<con lb="2." ub="2."/>
 		</constraints>
 		<nonlinearExpressions numberOfNonlinearExpressions="3">
 			<nl idx="-1">
@@ -77,8 +46,110 @@ The problem is (as described in CSDP/example/example.c):
 			</nl>
 		</nonlinearExpressions>
 		<matrices numberOfMatrices="3">
-			<matrix numberOfColumns="7" numberOfRows="7" symmetry="upper" name="C">   
-				<blocks numberOfBlocks="3">
+			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F0">
+				<blocks numberOfBlocks="2">
+					<colOffsets numberOfEl="4">
+						<el>0</el>
+						<el>2</el>
+						<el>5</el>
+						<el>7</el>
+					</colOffsets>
+					<rowOffsets numberOfEl="4">
+						<el>0</el>
+						<el>2</el>
+						<el>5</el>
+						<el>7</el>
+					</rowOffsets>
+					<block blockRowIdx="0" blockColIdx="0">
+						<constantElements numberOfValues="3">
+							<start>
+								<el>0</el>
+								<el>2</el>
+								<el>3</el>
+							</start>
+							<indexes>
+								<el>0</el>
+								<el mult="2">1</el>
+							</indexes>
+							<values>
+								<el>2.</el>
+								<el>1.</el>
+								<el>2.</el>
+							</values>
+						</constantElements>
+					</block>
+					<block blockRowIdx="1" blockColIdx="1">
+						<constantElements numberOfValues="4">
+							<start>
+								<el>0</el>
+								<el mult="3" incr="1">2</el>
+							</start>
+							<indexes>
+								<el>0</el>
+								<el>2</el>
+								<el>1</el>
+								<el>2</el>
+							</indexes>
+							<values>
+								<el>3.</el>
+								<el>1.</el>
+								<el>2.</el>
+								<el>3.</el>
+							</values>
+						</constantElements>
+					</block>
+				</blocks>
+			</matrix>
+			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F1">
+				<blocks numberOfBlocks="2">
+					<colOffsets numberOfEl="4">
+						<el>0</el>
+						<el>2</el>
+						<el>5</el>
+						<el>7</el>
+					</colOffsets>
+					<rowOffsets numberOfEl="4">
+						<el>0</el>
+						<el>2</el>
+						<el>5</el>
+						<el>7</el>
+					</rowOffsets>
+					<block blockRowIdx="0" blockColIdx="0">
+						<constantElements numberOfValues="3">
+							<start>
+								<el>0</el>
+								<el>2</el>
+								<el>3</el>
+							</start>
+							<indexes>
+								<el>0</el>
+								<el mult="2">1</el>
+							</indexes>
+							<values>
+								<el>3.</el>
+								<el>1.</el>
+								<el>3.</el>
+							</values>
+						</constantElements>
+					</block>
+					<block blockRowIdx="2" blockColIdx="2">
+						<constantElements numberOfValues="1">
+							<start>
+								<el>0</el>
+								<el mult="2">1</el>
+							</start>
+							<indexes>
+								<el>0</el>
+							</indexes>
+							<values>
+								<el>1.</el>
+							</values>
+						</constantElements>
+					</block>
+				</blocks>
+			</matrix>
+			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F2">
+				<blocks numberOfBlocks="2">
 					<colOffsets numberOfEl="4">
 						<el>0</el>
 						<el>2</el>
@@ -92,183 +163,39 @@ The problem is (as described in CSDP/example/example.c):
 						<el>7</el>
 					</rowOffsets>
 					<block blockRowIdx="1" blockColIdx="1">
-						<elements>
-							<constantElements numberOfValues="3">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>3</el>
-								</start>
-								<indexes>
-									<el>0</el>
-									<el>0</el>
-									<el>1</el>
-								</indexes>
-								<values>
-									<el>2</el>
-									<el>1</el>
-									<el>2</el>
-								</values>
-							</constantElements>
-						</elements>
+						<constantElements numberOfValues="4">
+							<start>
+								<el>0</el>
+								<el mult="3" incr="1">2</el>
+							</start>
+							<indexes>
+								<el>0</el>
+								<el>2</el>
+								<el>1</el>
+								<el>2</el>
+							</indexes>
+							<values>
+								<el>3.</el>
+								<el>1.</el>
+								<el>4.</el>
+								<el>5.</el>
+							</values>
+						</constantElements>
 					</block>
 					<block blockRowIdx="2" blockColIdx="2">
-						<elements>
-							<constantElements numberOfValues="4">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>2</el>
-									<el>4</el>
-								</start>
-								<indexes>
-									<el>0</el>
-									<el>1</el>
-									<el>0</el>
-									<el>2</el>
-								</indexes>
-								<values>
-									<el>3</el>
-									<el>2</el>
-									<el>1</el>
-									<el>3</el>
-								</values>
-							</constantElements>
-						</elements>
+						<constantElements numberOfValues="1">
+							<start>
+								<el mult="2">0</el>
+								<el>1</el>
+							</start>
+							<indexes>
+								<el>1</el>
+							</indexes>
+							<values>
+								<el>1.</el>
+							</values>
+						</constantElements>
 					</block>
-					<block blockRowIdx="3" blockColIdx="3">
-						<elements>
-							<constantElements numberOfValues="0">
-								<start>
-									<el mult="3">0</el>
-								</start>
-							</constantElements>
-						</elements>
-					</block>			
-				</blocks>
-			</matrix>
-			<matrix numberOfColumns="7" numberOfRows="7" symmetry="upper" name="A1">   
-				<blocks numberOfBlocks="3">
-					<colOffsets numberOfEl="4">
-						<el>0</el>
-						<el>2</el>
-						<el>5</el>
-						<el>7</el>
-					</colOffsets>
-					<rowOffsets numberOfEl="4">
-						<el>0</el>
-						<el>2</el>
-						<el>5</el>
-						<el>7</el>
-					</rowOffsets>
-					<block blockRowIdx="1" blockColIdx="1">
-						<elements>
-							<constantElements numberOfValues="3">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>3</el>
-								</start>
-								<indexes>
-									<el>0</el>
-									<el>0</el>
-									<el>1</el>
-								</indexes>
-								<values>
-									<el>3</el>
-									<el>1</el>
-									<el>3</el>
-								</values>
-							</constantElements>
-						</elements>
-					</block>
-					<block blockRowIdx="2" blockColIdx="2">
-						<elements>
-							<constantElements numberOfValues="0">
-								<start>
-									<el mult="4">0</el>
-								</start>
-								<indexes>
-								</indexes>
-								<values/>
-							</constantElements>
-						</elements>
-					</block>
-					<block blockRowIdx="3" blockColIdx="3">
-						<elements>
-							<constantElements numberOfValues="1">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>1</el>
-								</start>
-								<indexes>
-									<el>0</el>
-								</indexes>
-								<values>
-									<el>1</el>
-								</values>
-							</constantElements>
-						</elements>
-					</block>			
-				</blocks>
-			</matrix>
-			<matrix numberOfColumns="7" numberOfRows="7" symmetry="upper" name="A2">
-				<blocks numberOfBlocks="3">
-					<colOffsets numberOfEl="4">
-						<el>0</el>
-						<el>2</el>
-						<el>5</el>
-						<el>7</el>
-					</colOffsets>
-					<rowOffsets numberOfEl="4">
-						<el>0</el>
-						<el>2</el>
-						<el>5</el>
-						<el>7</el>
-					</rowOffsets>
-					<block blockRowIdx="1" blockColIdx="1"/>
-					<block blockRowIdx="2" blockColIdx="2">
-						<elements>
-							<constantElements numberOfValues="4">
-								<start>
-									<el>0</el>
-									<el>1</el>
-									<el>2</el>
-									<el>4</el>
-								</start>
-								<indexes>
-									<el>0</el>
-									<el>1</el>
-									<el>0</el>
-									<el>2</el>
-								</indexes>
-								<values>
-									<el>3</el>
-									<el>4</el>
-									<el>1</el>
-									<el>5</el>
-								</values>
-							</constantElements>
-						</elements>
-					</block>
-					<block blockRowIdx="3" blockColIdx="3">
-						<elements>
-							<constantElements numberOfValues="1">
-								<start>
-									<el>0</el>
-									<el>0</el>
-									<el>1</el>
-								</start>
-								<indexes>
-									<el>1</el>
-								</indexes>
-								<values>
-									<el>1</el>
-								</values>
-							</constantElements>
-						</elements>
-					</block>			
 				</blocks>
 			</matrix>
 		</matrices>
@@ -277,7 +204,7 @@ The problem is (as described in CSDP/example/example.c):
 		</cones>
 		<matrixProgramming>
 			<matrixVariables numberOfMatrixVar="1">
-				<matrixVar numberOfColumns="7" numberOfRows="7" lbConeIdx="0"></matrixVar>
+				<matrixVar numberOfColumns="7" numberOfRows="7" lbConeIdx="0"/>
 			</matrixVariables>
 		</matrixProgramming>
 	</instanceData>

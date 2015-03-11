@@ -497,7 +497,7 @@
  1003 format('<name>SDPA problem ',A,'</name>')
  1004 format('<description>Translated from SDPA format using SDPA2OSiL',/,  &
      &       '       (C) H.I. Gassmann 2010-2015')
- 1005 format('/<description>')
+ 1005 format('</description>')
  1006 format('</instanceHeader>')
  1007 format('<instanceData>',/,                                            &
      &       '<variables numberOfVariables="',I0,'">',/,                    &
@@ -508,10 +508,12 @@
  1009 format('<coef idx="',I0,'">',A,'</coef>')
  1010 format('</obj>',/,'</objectives>')
 
- 1107 format('<objectives>',/,                                              &
-     &       '<obj maxOrMin="max" numberOfObjCoef="0"/>')
+ 1107 format('<instanceData>',/,                                            &
+     &       '<objectives>',/,                                              &
+     &       '<obj maxOrMin="max" numberOfObjCoef="0"/>',                   &
+     &       '</objectives>')
  1108 format('<constraints numberOfConstraints="',I0,'">')
- 1109 format('<con lb="',A,'" ub="',A,'"/>')
+ 1109 format('<con lb="',A,'" ub="',A,'"/>') 
 11095 format('<con lb="',A,'" ub="',A,'" mult="',I0,'"/>')
  1110 format('</constraints>')
  1111 format('<nonlinearExpressions numberOfNonlinearExpressions="',I0,'">')

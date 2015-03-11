@@ -83,346 +83,312 @@
 				</times>
 			</nl>
 		</nonlinearExpressions>
-		<matrices numberOfMatrices="10">
+		<matrices numberOfMatrices="11">
+			<matrix name="lbMtx" numberOfColumns="1" numberOfRows="3">
+				<constantElements numberOfValues="1">
+					<start>
+						<el>0</el>
+						<el>1</el>
+					</start>
+					<indexes>
+						<el>0</el>
+					</indexes>
+					<values>
+						<el>-0.44721359549995793928183473374626</el>
+					</values>
+				</constantElements>
+			</matrix>
 			<matrix name="link1" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>22</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">0</varIdx>
-										<varIdx>1</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">11</varIdx>
-										<varIdx>12</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="1">
+								<varIdx>22</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">0</varIdx>
+								<varIdx>1</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">11</varIdx>
+								<varIdx>12</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link2" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>23</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">1</varIdx>
-										<varIdx>2</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">12</varIdx>
-										<varIdx>13</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="1">
+								<varIdx>23</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">1</varIdx>
+								<varIdx>2</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">12</varIdx>
+								<varIdx>13</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link3" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>24</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">2</varIdx>
-										<varIdx>3</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">13</varIdx>
-										<varIdx>14</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="1">
+								<varIdx>24</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">2</varIdx>
+								<varIdx>3</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">13</varIdx>
+								<varIdx>14</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link4" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>25</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">3</varIdx>
-										<varIdx>4</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">14</varIdx>
-										<varIdx>15</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="1">
+								<varIdx>25</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">3</varIdx>
+								<varIdx>4</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">14</varIdx>
+								<varIdx>15</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link5" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>26</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">4</varIdx>
-										<varIdx>5</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">15</varIdx>
-										<varIdx>16</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="1">
+								<varIdx>26</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">4</varIdx>
+								<varIdx>5</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">15</varIdx>
+								<varIdx>16</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link6" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>27</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">5</varIdx>
-										<varIdx>6</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">16</varIdx>
-										<varIdx>17</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="1">
+								<varIdx>27</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">5</varIdx>
+								<varIdx>6</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">16</varIdx>
+								<varIdx>17</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link7" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>28</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">6</varIdx>
-										<varIdx>7</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">17</varIdx>
-										<varIdx>18</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="1">
+								<varIdx>28</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">6</varIdx>
+								<varIdx>7</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">17</varIdx>
+								<varIdx>18</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link8" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>29</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">7</varIdx>
-										<varIdx>8</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">18</varIdx>
-										<varIdx>19</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="1">
+								<varIdx>29</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">7</varIdx>
+								<varIdx>8</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">18</varIdx>
+								<varIdx>19</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link9" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>30</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">8</varIdx>
-										<varIdx>9</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">19</varIdx>
-										<varIdx>20</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="1">
+							<varIdx>30</varIdx>
+						</el>
+						<el numberOfVarIdx="2">
+							<varIdx coef="-1">8</varIdx>
+							<varIdx>9</varIdx>
+						</el>
+						<el numberOfVarIdx="2">
+							<varIdx coef="-1">19</varIdx>
+							<varIdx>20</varIdx>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 			<matrix name="link10" numberOfColumns="1" numberOfRows="3">
-				<elements>
-					<linearElements>
-						<start numberOfEl="2">
-							<el>0</el>
-							<el>3</el>
-						</start>
-						<nonzeros numberOfEl="3">
-							<indexes>
-								<el mult="3" incr="1">0</el>
-							</indexes>
-							<values>
-								<el>
-									<expr numberOfVarIdx="1" constant="0.44721359549995793928183473374626">
-										<varIdx>31</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">9</varIdx>
-										<varIdx>10</varIdx>
-									</expr>
-								</el>
-								<el>
-									<expr numberOfVarIdx="2">
-										<varIdx coef="-1">20</varIdx>
-										<varIdx>21</varIdx>
-									</expr>
-								</el>
-							</values>
-						</nonzeros>
-					</linearElements>
-				</elements>
+				<linearElements numberOfValues="3">
+					<start>
+						<el>0</el>
+						<el>3</el>
+					</start>
+					<indexes>
+						<el mult="3" incr="1">0</el>
+					</indexes>
+					<values>
+						<el numberOfVarIdx="1">
+							<varIdx>31</varIdx>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">9</varIdx>
+								<varIdx>10</varIdx>
+							</expr>
+						</el>
+						<el numberOfVarIdx="2">
+							<expr numberOfVarIdx="2">
+								<varIdx coef="-1">20</varIdx>
+								<varIdx>21</varIdx>
+							</expr>
+						</el>
+					</values>
+				</linearElements>
 			</matrix>
 		</matrices>
 		<cones numberOfCones="1">
@@ -430,40 +396,40 @@
 		</cones>
 		<matrixProgramming>
 			<matrixConstraints numberOfMatrixCon="10">
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeId="C0" mult="10"/>
+				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0" mult="10"/>
 			</matrixConstraints>
-			<nonlinearMatrixExpressions numberOfMatrixNL="10">
-				<matrixNL matrixConIdx="0">
-					<matrix id="0"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="1"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="2"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="3"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="4"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="5"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="6"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="7"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="8"/>
-				</matrixNL>
-				<matrixNL matrixConIdx="0">
-					<matrix id="9"/>
-				</matrixNL>
-			</nonlinearMatrixExpressions>
+			<matrixExpressions numberOfExpr="10">
+				<expr idx="0" shape="linear">
+					<matrixReference idx="0"/>
+				</expr>
+				<expr idx="1" shape="linear">
+					<matrixReference idx="1"/>
+				</expr>
+				<expr idx="2" shape="linear">
+					<matrixReference idx="2"/>
+				</expr>
+				<expr idx="3" shape="linear">
+					<matrixReference idx="3"/>
+				</expr>
+				<expr idx="4" shape="linear">
+					<matrixReference idx="4"/>
+				</expr>
+				<expr idx="5" shape="linear">
+					<matrixReference idx="5"/>
+				</expr>
+				<expr idx="6" shape="linear">
+					<matrixReference idx="6"/>
+				</expr>
+				<expr idx="7" shape="linear">
+					<matrixReference idx="7"/>
+				</expr>
+				<expr idx="8" shape="linear">
+					<matrixReference idx="8"/>
+				</expr>
+				<expr idx="9" shape="linear">
+					<matrixReference idx="9"/>
+				</expr>
+			</matrixExpressions>
 		</matrixProgramming>
 	</instanceData>
 </osil>
