@@ -443,9 +443,6 @@ anotherproductnlnode:
 /** OSnLMNodes are parsed in essentially the same way as OSnLNodes */
 
 OSnLMNode: matrixReference
-         | matrixVarReference
-         | matrixObjReference
-         | matrixConReference
          | matrixDiagonal
          | matrixDotTimes
          | matrixInverse
@@ -463,7 +460,7 @@ OSnLMNode: matrixReference
          | identityMatrix
 ;
 
-matrixReference: matrixReferenceStart matrixIdxATT matrixReferenceEnd 
+matrixReference: matrixReferenceStart matrixIdxATT matrixreferenceend 
 {
     osnlData->matrixidxattON = false;
 };
@@ -475,7 +472,7 @@ matrixReferenceStart: MATRIXREFERENCESTART
 };
 
               
-matrixReferenceEnd: ENDOFELEMENT
+matrixreferenceend: ENDOFELEMENT
            | GREATERTHAN MATRIXREFERENCEEND;
                            
 matrixIdxATT: IDXATT QUOTE INTEGER QUOTE 
@@ -485,72 +482,6 @@ matrixIdxATT: IDXATT QUOTE INTEGER QUOTE
     osnlData->nlMNodeMatrixRef->idx = $3;
 }; 
 
-
-matrixVarReference: matrixVarReferenceStart matrixVarIdxATT matrixVarReferenceEnd 
-{
-    osnlData->matrixidxattON = false;
-};
-
-matrixVarReferenceStart: MATRIXVARSTART
-{
-    osnlData->nlMNodeMatrixVar = new OSnLMNodeMatrixVar();
-    osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixVar);
-};
-
-              
-matrixVarReferenceEnd: ENDOFELEMENT
-           | GREATERTHAN MATRIXVAREND;
-                           
-matrixVarIdxATT: IDXATT QUOTE INTEGER QUOTE 
-{
-    if ( *$2 != *$4 )
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlMNodeMatrixVar->idx = $3;
-}; 
-
-matrixObjReference: matrixObjReferenceStart matrixObjIdxATT matrixObjReferenceEnd 
-{
-    osnlData->matrixidxattON = false;
-};
-
-matrixObjReferenceStart: MATRIXOBJSTART
-{
-    osnlData->nlMNodeMatrixObj = new OSnLMNodeMatrixObj();
-    osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixObj);
-};
-
-              
-matrixObjReferenceEnd: ENDOFELEMENT
-           | GREATERTHAN MATRIXOBJEND;
-                           
-matrixObjIdxATT: IDXATT QUOTE INTEGER QUOTE 
-{
-    if ( *$2 != *$4 )
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlMNodeMatrixObj->idx = $3;
-}; 
-
-matrixConReference: matrixConReferenceStart matrixConIdxATT matrixConReferenceEnd 
-{
-    osnlData->matrixidxattON = false;
-};
-
-matrixConReferenceStart: MATRIXCONSTART
-{
-    osnlData->nlMNodeMatrixCon = new OSnLMNodeMatrixCon();
-    osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixCon);
-};
-
-              
-matrixConReferenceEnd: ENDOFELEMENT
-           | GREATERTHAN MATRIXCONEND;
-                           
-matrixConIdxATT: IDXATT QUOTE INTEGER QUOTE 
-{
-    if ( *$2 != *$4 )
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    osnlData->nlMNodeMatrixCon->idx = $3;
-}; 
 
 matrixDiagonal: matrixDiagonalStart matrixDiagonalContent;
 

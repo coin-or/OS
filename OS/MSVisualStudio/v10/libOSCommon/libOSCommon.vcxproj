@@ -161,7 +161,6 @@
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSInstance.cpp" />
     <ClCompile Include="..\..\..\src\OSUtils\OSMathUtil.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSnLNode.cpp" />
-    <ClCompile Include="..\..\..\src\OSParsers\OSnLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSParsers\OSoLParserData.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSoLReader.cpp" />
     <ClCompile Include="..\..\..\src\OSCommonInterfaces\OSoLWriter.cpp" />

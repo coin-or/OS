@@ -300,6 +300,8 @@ public:
      */
     int numberOfValues;
 
+
+
     /** a pointer to the start of each row or column stored in
      * sparse format
      */
@@ -1555,6 +1557,7 @@ public:
     bool IsEqual(Cones *that);
 
     /**
+     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1580,6 +1583,13 @@ public:
 class MatrixVar
 {
 public:
+
+    /** The MatrixVar class constructor */
+    MatrixVar();
+
+    /** The MatrixVar class destructor */
+    ~MatrixVar();
+
     /** numberOfRows gives the number of rows of this matrix */
     int numberOfRows;
 
@@ -1611,21 +1621,8 @@ public:
     /** an optional name to this matrixVar */
     std::string name;
 
-    /** an optional variable type (C, B, I, D, J, S).
-     *  @remark must be the same for each component of this matrixVar
-     */ 
+    /** an optional type for each component of this matrixVar */ 
     char varType;
-
-    /** The MatrixVar class constructor */
-    MatrixVar();
-
-    /** The MatrixVar class destructor */
-    ~MatrixVar();
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixVar *that);
 }; // MatrixVar
 
 
@@ -1636,11 +1633,6 @@ public:
 class MatrixVariables
 {
 public:
-    /** numberOfMatrixVar gives the number of <matrixVar> children */
-    int numberOfMatrixVar;
-
-    /** matrixVar is an array of pointers to the <matrixVar> children */
-    MatrixVar** matrixVar;
 
     /** The MatrixVariables class constructor */
     MatrixVariables();
@@ -1648,10 +1640,12 @@ public:
     /** The MatrixVariables class destructor */
     ~MatrixVariables();
 
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixVariables *that);
+    /** numberOfMatrixVar gives the number of <matrixVar> children */
+    int numberOfMatrixVar;
+
+    /** matrixVar is an array of pointers to the <matrixVar> children */
+    MatrixVar** matrixVar;
+
 }; // MatrixVariables
 
 
@@ -1662,6 +1656,13 @@ public:
 class MatrixObj
 {
 public:
+
+    /** The MatrixVar class constructor */
+    MatrixObj();
+
+    /** The MatrixVar class destructor */
+    ~MatrixObj();
+
     /** numberOfRows gives the number of rows of this matrix */
     int numberOfRows;
 
@@ -1688,17 +1689,6 @@ public:
 
     /** an optional name to this matrixObj */
     std::string name;
-
-    /** The MatrixVar class constructor */
-    MatrixObj();
-
-    /** The MatrixVar class destructor */
-    ~MatrixObj();
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixObj *that);
 }; // MatrixObj
 
 
@@ -1722,11 +1712,6 @@ public:
     /** matrixObj is an array of pointers to the <matrixObj> children */
     MatrixObj** matrixObj;
 
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixObjectives *that);
 }; // MatrixObjectives
 
 
@@ -1737,6 +1722,13 @@ public:
 class MatrixCon
 {
 public:
+
+    /** The MatrixCon class constructor */
+    MatrixCon();
+
+    /** The MatrixCon class destructor */
+    ~MatrixCon();
+
     /** numberOfRows gives the number of rows of this matrix */
     int numberOfRows;
 
@@ -1767,17 +1759,6 @@ public:
 
     /** an optional name to this MatrixCon */
     std::string name;
-
-    /** The MatrixCon class constructor */
-    MatrixCon();
-
-    /** The MatrixCon class destructor */
-    ~MatrixCon();
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixCon *that);
 }; // MatrixCon
 
 
@@ -1801,11 +1782,6 @@ public:
     /** matrixCon is an array of pointers to the <matrixCon> children */
     MatrixCon** matrixCon;
 
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixConstraints *that);
 }; // MatrixConstraints
 
 /*! \class MatrixExpression
@@ -1826,15 +1802,15 @@ public:
      */
     ENUM_NL_EXPR_SHAPE shape;
 
-    /** matrixExpressionTree contains the root of the MatrixExpressionTree */
-    MatrixExpressionTree *matrixExpressionTree;
-
-    /** if m_bDeleteExpressionTree is true during garbage collection,
-     *  we should delete the osExpression tree object, 
-     *  if the OSInstance class created a map of the expression trees,
-     *  this should be false since the osExpressionTree is deleted by the OSInstance object
+    /** m_bDeleteExpressionTree is true, if in garbage collection, we
+     * should delete the osExpression tree object, if the OSInstance class
+     * created a map of the expression trees this should be false since the
+     * osExpressionTree is deleted by the OSInstance object
      */
     bool m_bDeleteExpressionTree;
+
+    /** matrixExpressionTree contains the root of the MatrixExpressionTree */
+    MatrixExpressionTree *matrixExpressionTree;
 
     /** The MatrixExpression class constructor */
     MatrixExpression();
@@ -1856,6 +1832,13 @@ public:
 class MatrixExpressions
 {
 public:
+
+    /** The MatrixExpressions class constructor */
+    MatrixExpressions();
+
+    /** The MatrixExpressions class destructor */
+    ~MatrixExpressions();
+
     /** numberOfExpr gives the number of expressions */
     int numberOfExpr;
 
@@ -1863,12 +1846,6 @@ public:
      *  expressions that evaluate to matrices
      */
     MatrixExpression **expr;
-
-    /** The MatrixExpressions class constructor */
-    MatrixExpressions();
-
-    /** The MatrixExpressions class destructor */
-    ~MatrixExpressions();
 
     /**
      * A function to check for the equality of two objects
@@ -1883,6 +1860,7 @@ public:
 class MatrixProgramming
 {
 public:
+
     /** The MatrixProgramming class constructor */
     MatrixProgramming();
 
@@ -1900,7 +1878,6 @@ public:
 
     /** a pointer to the matrixExpressions object */
     MatrixExpressions* matrixExpressions;
-
 
     /**
      * A function to check for the equality of two objects
@@ -2305,7 +2282,6 @@ public:
     bool bAMatrixModified;
 
 private:
-    /** ------- data items for InstanceHeader ------- **/
     /**
      * m_sInstanceName holds the instance name.
      */
@@ -2327,8 +2303,6 @@ private:
      */
     std::string m_sInstanceLicence;
 
-
-    /** ------- data items for Variables ------- **/
     /**
      * m_bProcessVariables holds whether the variables are processed.
      */
@@ -2365,6 +2339,59 @@ private:
     int m_iNumberOfStringVariables;
 
     /**
+     * m_iNumberOfQuadraticRowIndexes holds the number of distinct rows and objectives with quadratic terms.
+     */
+    int m_iNumberOfQuadraticRowIndexes;
+
+    /**
+     * m_bQuadraticRowIndexesProcessed is true if getQuadraticRowIndexes() has been called.
+     */
+    bool m_bQuadraticRowIndexesProcessed;
+
+    /**
+     * m_miQuadRowIndexes is an integer pointer to the distinct row indexes with a quadratic term.
+     */
+    int *m_miQuadRowIndexes;
+
+    /**
+     * m_iNumberOfNonlinearExpressionTreeIndexes holds the number of 
+     * distinct rows and objectives with nonlinear terms.
+     */
+    int m_iNumberOfNonlinearExpressionTreeIndexes;
+  
+    /**
+     * m_bNonlinearExpressionTreeIndexesProcessed is true 
+     * if getNonlinearExpressionTreeIndexes has been called.
+     */
+    bool m_bNonlinearExpressionTreeIndexesProcessed;
+
+    /**
+     * m_miNonlinearExpressionTreeIndexes is an integer pointer 
+     * to the distinct rows indexes in the nonlinear expression
+     * tree map.
+     */
+    int *m_miNonlinearExpressionTreeIndexes;
+
+    /**
+     * m_iNumberOfNonlinearExpressionTreeModIndexes holds the number of distinct
+     * rows and objectives with nonlinear terms including quadratic terms 
+     * added to the nonlinear expression trees.
+     */
+    int m_iNumberOfNonlinearExpressionTreeModIndexes;
+
+    /**
+     * m_bNonlinearExpressionTreeModIndexesProcessed is true 
+    *  if getNonlinearExpressionTreeModIndexes has been called.
+     */
+    bool m_bNonlinearExpressionTreeModIndexesProcessed;
+
+    /**
+     * m_miNonlinearExpressionTreeModIndexes is an integer pointer to
+     * the distinct rows indexes in the modified  expression tree map.
+     */
+    int *m_miNonlinearExpressionTreeModIndexes;
+
+    /**
      * m_msVariableNames holds an array of variable names.
      */
     std::string* m_msVariableNames;
@@ -2385,8 +2412,6 @@ private:
      */
     double* m_mdVariableUpperBounds;
 
-
-    /** ------- data items for Objectives ------- **/
     /**
      * m_bProcessObjectives holds whether the objectives are processed.
      */
@@ -2444,8 +2469,6 @@ private:
      */
     double** m_mmdDenseObjectiveCoefficients;
 
-
-    /** ------- data items for Constraints ------- **/
     /**
      * m_bProcessConstraints holds whether the constraints are processed.
      */
@@ -2488,11 +2511,9 @@ private:
      */
     char* m_mcConstraintTypes;
 
-
-    /** ------- data items for linear constraint coefficients ------- **/
     /**
      * m_bProcessLinearConstraintCoefficients holds whether 
-     * the linear constraint coefficients have been processed.
+     * the linear constraint coefficients are processed.
      */
     bool m_bProcessLinearConstraintCoefficients;
 
@@ -2509,6 +2530,12 @@ private:
     bool m_bColumnMajor;
 
     /**
+     * m_binitForAlgDiff is true if initForAlgDiff() has been called.
+     */
+    bool m_binitForAlgDiff;
+
+
+    /**
      * m_linearConstraintCoefficientsInColumnMajor holds the standard 
      * three-array data structure for linear constraint coefficients
      * (starts, indexes and values) in column major.
@@ -2523,22 +2550,6 @@ private:
     SparseMatrix* m_linearConstraintCoefficientsInRowMajor;
 
 
-    /** ------- data items for quadratic coefficients ------- **/
-    /**
-     * m_iNumberOfQuadraticRowIndexes holds the number of distinct rows and objectives with quadratic terms.
-     */
-    int m_iNumberOfQuadraticRowIndexes;
-
-    /**
-     * m_bQuadraticRowIndexesProcessed is true if getQuadraticRowIndexes() has been called.
-     */
-    bool m_bQuadraticRowIndexesProcessed;
-
-    /**
-     * m_miQuadRowIndexes is an integer pointer to the distinct row indexes with a quadratic term.
-     */
-    int *m_miQuadRowIndexes;
-
     /**
      * m_bProcessQuadraticTerms holds whether the quadratic terms are processed.
      */
@@ -2551,61 +2562,64 @@ private:
     int m_iQuadraticTermNumber;
 
     /**
+     * m_mdConstraintFunctionValues holds a double array of constraint function values
+     * -- the size of the array is equal to getConstraintNumber().
+     */
+    double *m_mdConstraintFunctionValues;
+
+    /**
+     * m_mdObjectiveFunctionValues holds a double array of objective function values
+     * -- the size of the array is equal to getObjectiveNumber().
+     */
+    double *m_mdObjectiveFunctionValues;
+
+    /**
+     * m_iJacValueSize is the number of nonzero partial derivates in the Jacobian.
+     */
+    int m_iJacValueSize;
+
+    /**
+     * m_miJacStart holds a int array of starts for the Jacobian matrix in sparse form (row major).
+     */
+    int *m_miJacStart;
+
+    /**
+    * m_miJacIndex holds a int array of variable indices for the Jacobian matrix in sparse form (row major).
+    */
+    int *m_miJacIndex;
+
+    /**
+    * m_mdJacValue holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).
+    */
+    double *m_mdJacValue;
+
+
+    /**
+     * m_miJacNumConTerms holds a int array of the number of constant
+     * terms (gradient does not change) for the Jacobian matrix in sparse form (row major).
+     */
+    int *m_miJacNumConTerms;
+
+    /**
+     * m_sparseJacMatrix is the Jacobian matrix stored in sparse matrix format
+     */
+    SparseJacobianMatrix *m_sparseJacMatrix;
+
+    /**
+     * m_iHighestTaylorCoeffOrder is the order of highest calculated
+     * Taylor coefficient
+     */
+    int m_iHighestTaylorCoeffOrder;
+
+    /**
      * m_quadraticTerms holds the data structure for all the quadratic terms in the instance. `
      * (rowIdx, varOneIdx, varTwoIdx, coef)
      */
     QuadraticTerms* m_quadraticTerms;
 
-    /** m_bQTermsAdded is true if we added the quadratic terms to the expression tree
+    /** m_bQTermsAdded is true if we add the quadratic terms to the expression tree
      */
     bool m_bQTermsAdded;
-
-
-    /** ------- data items for nonlinear expressions ------- **/
-    /**
-     * m_iNumberOfNonlinearExpressionTreeIndexes holds the number of 
-     * distinct rows and objectives with nonlinear terms.
-     */
-    int m_iNumberOfNonlinearExpressionTreeIndexes;
-  
-    /**
-     * m_bNonlinearExpressionTreeIndexesProcessed is true 
-     * if getNonlinearExpressionTreeIndexes() has been called.
-     */
-    bool m_bNonlinearExpressionTreeIndexesProcessed;
-
-    /**
-     * m_miNonlinearExpressionTreeIndexes is an integer pointer 
-     * to the distinct rows indexes in the nonlinear expression
-     * tree map.
-     */
-    int *m_miNonlinearExpressionTreeIndexes;
-
-    /**
-     * m_iNumberOfNonlinearExpressionTreeModIndexes holds the number of distinct
-     * rows and objectives with nonlinear terms including quadratic terms 
-     * added to the nonlinear expression trees.
-     */
-    int m_iNumberOfNonlinearExpressionTreeModIndexes;
-
-    /**
-     * m_bNonlinearExpressionTreeModIndexesProcessed is true 
-     *  if getNonlinearExpressionTreeModIndexes has been called.
-     */
-    bool m_bNonlinearExpressionTreeModIndexesProcessed;
-
-    /**
-     * m_miNonlinearExpressionTreeModIndexes is an integer pointer to
-     * the distinct rows indexes in the modified  expression tree map.
-     */
-    int *m_miNonlinearExpressionTreeModIndexes;
-
-
-    /** ------- data items for automatic differentiation ------- **/
-    /**
-     * m_binitForAlgDiff is true if initForAlgDiff() has been called.
-     */
-    bool m_binitForAlgDiff;
 
     /**
      * m_iNumberOfNonlinearVariables is the number of variables that appear
@@ -2640,55 +2654,6 @@ private:
     bool m_bProcessExpressionTreesMod;
 
     /**
-     * m_mdConstraintFunctionValues holds a double array of constraint function values
-     * -- the size of the array is equal to getConstraintNumber().
-     */
-    double *m_mdConstraintFunctionValues;
-
-    /**
-     * m_mdObjectiveFunctionValues holds a double array of objective function values
-     * -- the size of the array is equal to getObjectiveNumber().
-     */
-    double *m_mdObjectiveFunctionValues;
-
-    /**
-     * m_iJacValueSize is the number of nonzero partial derivates in the Jacobian.
-     */
-    int m_iJacValueSize;
-
-    /**
-     * m_miJacStart holds a int array of starts for the Jacobian matrix in sparse form (row major).
-     */
-    int *m_miJacStart;
-
-    /**
-    * m_miJacIndex holds a int array of variable indices for the Jacobian matrix in sparse form (row major).
-    */
-    int *m_miJacIndex;
-
-    /**
-    * m_mdJacValue holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).
-    */
-    double *m_mdJacValue;
-
-    /**
-     * m_miJacNumConTerms holds a int array of the number of constant
-     * terms (gradient does not change) for the Jacobian matrix in sparse form (row major).
-     */
-    int *m_miJacNumConTerms;
-
-    /**
-     * m_sparseJacMatrix is the Jacobian matrix stored in sparse matrix format
-     */
-    SparseJacobianMatrix *m_sparseJacMatrix;
-
-    /**
-     * m_iHighestTaylorCoeffOrder is the order of highest calculated
-     * Taylor coefficient
-     */
-    int m_iHighestTaylorCoeffOrder;
-
-    /**
      * m_mapExpressionTrees holds a hash map of scalar-valued expression tree pointers. 
      * The key is the row index and the value is the (single) expression tree 
      * representing the nonlinear expression of that row.
@@ -2703,6 +2668,7 @@ private:
      * scalar-valued expression tree, and the value is the row to which this tree belongs. 
      */
     std::map<int, int> m_mapOSADFunRangeIndex;
+
 
     /**
      * m_mapMatrixExpressionTrees holds a hash map of matrix-valued expression tree pointers. 
@@ -2742,8 +2708,7 @@ private:
     std::map<int, int> m_mapAllNonlinearVariablesIndex;
 
     /**
-     * m_miNonLinearVarsReverseMap maps the nonlinear variable number
-     * back into the original variable space
+     * m_miNonLinearVarsReverseMap maps the nonlinear variable number back into the original variable space
      */
     int *m_miNonLinearVarsReverseMap;
 
@@ -2754,11 +2719,10 @@ private:
     bool m_bAllNonlinearVariablesIndex;
 
     /**
-     * m_mapExpressionTreesMod holds a map of expression trees, 
-     * with the key being the row index and value being the expression tree 
-     * representing a modification of the nonlinear expression of that row.
-     * We incorporate the linear and quadratic term for a variable 
-     * into the corresponding expression tree before gradient and Hessian calculations
+     * m_mapExpressionTreesMod holds a map of expression trees, with the key being the row index
+     * and value being the expression tree representing a modification of the nonlinear expression of that row.
+     * We incorporate the linear and quadratic term for a variable into the corresponding expression tree before
+     * gradient and Hessian calculations
      */
     std::map<int, ScalarExpressionTree*> m_mapExpressionTreesMod ;
 
@@ -2787,7 +2751,7 @@ private:
     bool m_bDuplicateExpressionTreesMap;
 
     /**
-     * m_bNonLinearStructuresInitialized is true if initializeNonLinearStructures() has been called.
+     * m_bNonLinearStructuresInitialized is true if initializeNonLinearStructures( ) has been called.
      */
     bool m_bNonLinearStructuresInitialized;
 
@@ -2797,11 +2761,11 @@ private:
     bool m_bSparseJacobianCalculated;
 
     /**
-     * m_mapExpressionTreesInPostfix holds a hash map of expression trees
-     * in postfix format, with the key being the row index and value being  
-     * the expression tree representing the nonlinear expression of that row.
+     * m_mapExpressionTreesInPostfix holds a hash map of expression trees in postfix format, with the key being the row index
+     * and value being the expression tree representing the nonlinear expression of that row.
      */
     std::map<int, std::vector<OSnLNode*> > m_mapExpressionTreesInPostfix ;
+
 
     /**
      * m_iHighestOrderEvaluated is the highest order derivative
@@ -2815,8 +2779,8 @@ private:
      */
     double **m_mmdObjGradient;
 
+    //define the vectors
 
-    /** ------- data vectors for nonlinear optimization ------- **/
     /**
      * m_vdX is a vector of primal variables at each iteration
      */
@@ -2848,6 +2812,7 @@ private:
      */
     std::vector<double> m_vdLambda;
 
+
     /**
      * m_vdDomainUnitVec is a unit vector in the domain space
      */
@@ -2859,131 +2824,6 @@ private:
     std::vector<double> m_vdRangeUnitVec;
 
 
-    /** ------- data items for matrices ------- **/
-    /**
-     * m_bProcessMatrices holds whether the matrices have been processed.
-     */
-    bool m_bProcessMatrices;
-
-    /**
-     * m_iMatrixNumber holds the number of matrices
-     */
-    int m_iMatrixNumber;
-
-    /**
-     * m_miMatrixSymmetry holds the symmetry property of each matrix.
-     * @remark for more information see the enumeration ENUM_MATRIX_SYMMETRY in OSParameters.h
-     */
-    ENUM_MATRIX_SYMMETRY* m_miMatrixSymmetry;
-
-    /**
-     * m_miMatrixType holds the type of each matrix.
-     * @remark for more information see the enumeration ENUM_MATRIX_TYPE in OSParameters.h
-     */
-    ENUM_MATRIX_TYPE* m_miMatrixType;
-
-    /**
-     * m_miMatrixNumberOfBlocks holds the number of blocks for each matrix.
-     */
-//    int* m_miMatrixNumberOfBlocks;
-
-    /**
-     * m_miMatrixNumberOfColumns holds the number of columns for each matrix.
-     */
-    int* m_miMatrixNumberOfColumns;
-
-    /**
-     * m_miMatrixNumberOfRows holds the number of rows for each matrix.
-     */
-    int* m_miMatrixNumberOfRows;
-
-    /**
-     * m_miMatrixNumberOfValues holds the number of values for each matrix.
-     */
-    int* m_miMatrixNumberOfValues;
-
-    /**
-     * m_msMatrixNames holds the names of the matrices
-     */
-    std::string* m_msMatrixNames;
-
-	/**
-     * m_mMatrix holds the list of constructors for each matrix.
-	 * Each solver interface must access the list of matrices,
-	 * check that the data as given can be handled by the solver
-	 * and perform whatever transformations are necessary to 
-	 * send the data to the solver.
-	 */
-	OSMatrix** m_mMatrix;
-
-#if 0
-    /**
-     * This and the following definitions are placeholders for the representation
-     * of the matrices in different formats. For now three formats are provided:
-     * column major format, row major format, and a symmetric block representation 
-     * needed for the CSDP interface.
-     *
-     * Additional placeholders may be defined (and implemented!) as the need arises.
-     *
-     * In each case the values are stored in sparse matrix format (start, index, value)
-     * and all values are converted to the most general form encountered. 
-     * (The form is also available in m_miMatrixType.)
-     *
-     * For instance, in the matrix
-     *
-     *     |  5      x1   |
-     *     | x2^2  ln(x3) |
-     * 
-     * every (nonzero) entry would be converted to a nonlinear expression, and 
-     * m_miMatrixType would be set to ENUM_MATRIX_TYPE_general.
-     * 
-     * m_mExpandedMatricesInColumnMajor holds each matrix in column major format
-     */
-    GeneralSparseMatrix** m_mExpandedMatricesInColumnMajor;
-
-    /**
-     * m_mExpandedMatricesInRowMajor holds each matrix in row major format
-     */
-    GeneralSparseMatrix** m_mExpandedMatricesInRowMajor;
-
-    /**
-     * m_mMatrixBlocksInColumnMajor holds each matrix in a block partition form.
-     * In addition, this format assumes that the matrix is stored in.
-	 * column major form and that all nesting has been resolved.
-     */
-    ExpandedMatrixBlocks** m_mMatrixBlocksInColumnMajor;
-
-    /**
-     * m_mMatrixTransformation holds each matrix as a single transformation.
-     * Any other matrix constructors are concatenated by superposition.
-	 * HIG: More work needed here!!! For now only allow transformation as single constructor
-     */
-    OSnLMNode *m_mMatrixTransformation;
-#endif
-
-    /** ------- data items for matrix programming ------- **/
-    /**
-     * m_iMatrixVarNumber holds the number of matrix variables
-     */
-    int m_iMatrixVarNumber;
-
-    /**
-     * m_iMatrixObjNumber holds the number of matrix objectives
-     */
-    int m_iMatrixObjNumber;
-
-    /**
-     * m_iMatrixConNumber holds the number of matrix constraints
-     */
-    int m_iMatrixConNumber;
-
-    /**
-     * m_iMatrixExpressionNumber holds the number of matrix expressions
-     */
-    int m_iMatrixExpressionNumber;
-
-
-    /** ------- data items for time domain ------- **/
     /**
      * m_bProcessTimeDomain holds whether the time domain has been processed.
      */
@@ -3066,6 +2906,7 @@ private:
      */
     bool processObjectives();
 
+
     /**
      * process constraints.
      *
@@ -3073,6 +2914,7 @@ private:
      * @throws Exception if the elements in constraints are logically inconsistent.
      */
     bool processConstraints();
+
 
     /**
      * process linear constraint coefficients.
@@ -3082,13 +2924,6 @@ private:
      */
     bool processLinearConstraintCoefficients();
 
-    /**
-     * process matrices.
-     *
-     * @return true if the matrices have been processed.
-     * @throws Exception if the declaration of any matrix is logically inconsistent.
-     */
-    bool processMatrices();
 
 public:
 
@@ -3328,7 +3163,7 @@ public:
     double *getConstraintConstants();
 
     /**
-     * Get constraint types. The constraint types are not part of the OSiL schema,
+     * Get constraint types. The contraint types are not part of the OSiL schema,
      * but they are used in solver interfaces such as OSLindoSolver.cpp.
      * <ul>
      * <li>R for range constraint lb <= constraint <= ub </li>
@@ -3540,191 +3375,23 @@ public:
     */
     int* getNonlinearExpressionTreeModIndexes();
 
+
     /**
-     * Get the number of unique nonlinear expression tree indexes after
-     * modifying the expression tree to contain quadratic terms.
-     *
-     * @return the number of unique nonlinear expression tree indexes (including quadratic terms).
-     */
+    * Get the number of unique nonlinear expression tree indexes after
+    * modifying the expression tree to contain quadratic terms.
+    *
+    * @return the number of unique nonlinear expression tree indexes (including quadratic terms).
+    */
     int getNumberOfNonlinearExpressionTreeModIndexes();
-
-    /**
-     * Get the number of matrices.
-     *
-     * @return the number of matrices.
-     */
-    int getMatrixNumber();
-
-    /**
-     * Get the matrix type.
-     *
-     * @return the type of elements contained in the matrix.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @remark only the most general element type is returned.
-     * (e.g., if matrix contains both constants and general expressions, 
-     * matrix type is ENUM_MATRIX_TYPE_general
-     * @remark for possible types see OSParameters.h
-     */
-    ENUM_MATRIX_TYPE getMatrixType(int n);
-
-    /**
-     * Get the matrix symmetry.
-     *
-     * @return the type of symmetry found in the matrix.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @remark for possible symmetry types see OSParameters.h
-     */
-    ENUM_MATRIX_SYMMETRY getMatrixSymmetry(int n);
-
-    /**
-     * Get the number of blocks in the matrix.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the number of blocks.
-     */
-//    int getNumberOfBlocksForMatrix(int n);
-
-    /**
-     * Get the number of columns in the matrix.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the number of columns.
-     */
-    int getNumberOfColumnsForMatrix(int n);
-
-    /**
-     * Get the number of rows in the matrix.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the number of rows.
-     */
-    int getNumberOfRowsForMatrix(int n);
-
-    /**
-     * Get the number of (nonzero) values in the matrix.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the number of values.
-     */
-//    int getNumberOfValuesForMatrix(int n);
-
-    /**
-     * Get the name of the matrix.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the matrix name.
-     */
-    std::string getMatrixName(int n);
-
-    /**
-     *  Several tools to parse the constructor list of a matrix
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     */
-    bool matrixHasBase(int n);
-    bool matrixHasElements(int n);
-    bool matrixHasTransformations(int n);
-    bool matrixHasBlocks(int n);
-    int  getNumberOfElementConstructors(int n);
-    int  getNumberOfTransformationConstructors(int n);
-    int  getNumberOfBlocksConstructors(int n);
-
-    /**
-     * Get the list of constructors of the matrix.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the matrix constructors.
-     */
-    OSMatrix* getMatrix(int n);
-
-    /**
-     * Get the (nonzero) elements of the matrix in column major form.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the (nonzero) matrix elements.
-     */
-    GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor(int n);
-
-    /**
-     * Get the (nonzero) elements of the matrix in row major form.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the (nonzero) matrix elements.
-     */
-    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor(int n);
-
-    /**
-     * Get the (nonzero) elements of the matrix in symmetric block form.
-     *
-     * @param n is the index number associated with the matrix.
-     *
-     * @return the (nonzero) matrix elements.
-     */
-//    SymmetricMatrixBlocks* getSymmetricMatrixBlocks(int n);
-
-    /**
-     * Get a block of the matrix (in symmetric column major form).
-     *
-     * @param n is the index number associated with the matrix.
-     * @param columnIdx is the column index of the block's location
-     * @param rowIdx is the row index of the block's location
-     *
-     * @return the (nonzero) matrix elements on column major form.
-     *
-     * @remark if the block in this location is empty, return NULL.
-     */
-    GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int n, int columnIdx, int rowIdx);
-
 
 /***********************************************************************
  *                                                                     *
  * Here we have a number of methods for dealing with                   *
- * matrix programming and matrix-valued expression trees.              *
+ * matrix-valued expression trees.                                     *
  * Even though the tree can contain OSnLNodes (e.g., to compute the    *
  * scalar multiple of a matrix), the root of the tree is an OSnLMNode. *
  *                                                                     *
  ***********************************************************************/
-
-    /**
-     * Get the number of matrix variables
-     *
-     * @return the number of matrix variables
-     */
-    int getNumberOfMatrixVariables();
-
-    /**
-     * Get the number of matrix objectives
-     *
-     * @return the number of matrix objectives
-     */
-    int getNumberOfMatrixObjectives();
-
-    /**
-     * Get the number of matrix constraints
-     *
-     * @return the number of matrix constraints
-     */
-    int getNumberOfMatrixConstraints();
-
-    /**
-     * Get the number of matrix-valued expressions
-     *
-     * @return the number of matrix-valued variables
-     */
-    int getNumberOfMatrixExpressions();
 
     /**
      * Get the pointers to the roots of all matrix expression trees
@@ -3774,6 +3441,21 @@ public:
      */
     std::string getMatrixExpressionTreeInInfix( int rowIdx);
 
+
+    /**
+     * @return the number of matrix variables
+     */
+    int getNumberOfMatrixVariables();
+
+    /**
+     * @return the number of matrix objectives
+     */
+    int getNumberOfMatrixObjectives();
+
+    /**
+     * @return the number of matrix constraints
+     */
+    int getNumberOfMatrixConstraints();
 
     /**
      * @return a map: the key is the row index and the value is the corresponding expression tree

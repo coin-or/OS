@@ -502,9 +502,6 @@ return(DOUBLE);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
 
-({xmlwhitespace}+valueType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUETYPEATT);}
-({xmlwhitespace}+valueType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUETYPEATT);}
-
  /* tokens for the <matrix> element */
 
 {xmlwhitespace}*\<matrix {YY_PRINT;  return(MATRIXSTART);}
@@ -548,7 +545,6 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/varIdx{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(VARIDXEND);}
 {xmlwhitespace}*\<transformation {YY_PRINT;  return(TRANSFORMATIONSTART);}
 {xmlwhitespace}*\<\/transformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TRANSFORMATIONEND);}
-
 
  /* include file OSParseosnl.l.patterns --- patterns for OSnL schema elements */
 

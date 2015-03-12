@@ -982,12 +982,11 @@ class OSGeneral
  * We sometimes want (NaN == NaN) to evaluate to true
  *
  *************************************************/
-inline bool OSIsEqual(double x, double y)
+inline bool isEqual(double x, double y)
 {
     if (OSIsnan(x) && OSIsnan(y)) return true;
     if (x == y) return true;
     return false;
 }
-
 
 #endif

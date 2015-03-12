@@ -54,12 +54,13 @@ MathUtil::~MathUtil()
 }
 
 
+
 SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
     bool isColumnMajor, int startSize, int valueSize, int* start, int* index,
     double* value, int dimension)
 {
-    if ( !start || startSize <= 1 ) return NULL;
-    if ( !value || !index ) return NULL;
+    if(!start || startSize <= 1 ) return NULL;
+    if(!value  || !index  ) return NULL;
 
     int iStartSize = dimension + 1;
     SparseMatrix *matrix ;
@@ -208,7 +209,7 @@ std::string os_dtoa_format(double  x)
             {
                 // put in all of the characters from charResult
                 outStr << charResult[ 0];
-                if(decimalPointPos <= 5)  //hey for more than 5 zeros go for e notation
+                if(decimalPointPos <= 5)  //hey for than 5 zeros go for e notataion
                 {
                     for(k = strLength; k < decimalPointPos; k++) outStr <<  "0";
                 }
@@ -280,5 +281,3 @@ double OSiRand(int iMin, int iMax)
 {
     return iMin + rand()%(iMax - iMin + 1);
 }
-
-

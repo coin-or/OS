@@ -2,10 +2,10 @@
 /** @file OSParameters.h
  *
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2015, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -71,9 +71,6 @@
 #define OS_DIAGONAL_MATRIX_FROM_VECTOR   8540
 #define OS_MATRIX_REFERENCE              8541
 #define OS_MATRIX_SUBMATRIX_AT           8544
-#define OS_MATRIX_VAR                    8601
-#define OS_MATRIX_OBJ                    8602
-#define OS_MATRIX_CON                    8603
 
 
 
@@ -667,8 +664,8 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
     if (type1 == ENUM_MATRIX_TYPE_jumbled || type2 == ENUM_MATRIX_TYPE_jumbled) 
         return ENUM_MATRIX_TYPE_jumbled;
 
-    if (type1 == ENUM_MATRIX_TYPE_unknown) return type2;
-    if (type2 == ENUM_MATRIX_TYPE_unknown) return type1;
+    if (type1 == ENUM_MATRIX_TYPE_unknown) return type1;
+    if (type2 == ENUM_MATRIX_TYPE_unknown) return type2;
     if (type1 == ENUM_MATRIX_TYPE_zero) return type2;
     if (type2 == ENUM_MATRIX_TYPE_zero) return type1;
 
@@ -696,42 +693,7 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
                     return type1;
     }
     return ENUM_MATRIX_TYPE_unknown;
-}//end of mergeMatrixType
-
-/**
- *  An enum to track the type of value contained in a reference to a constraint 
- */
-enum ENUM_CONREFERENCE_VALUETYPE
-{
-    ENUM_CONREFERENCE_VALUETYPE_value = 1,
-    ENUM_CONREFERENCE_VALUETYPE_status,
-    ENUM_CONREFERENCE_VALUETYPE_surplus,
-    ENUM_CONREFERENCE_VALUETYPE_shortage
-};
-
-inline std::string returnConReferenceValueTypeString(ENUM_CONREFERENCE_VALUETYPE valueType)
-{
-    if (valueType == ENUM_CONREFERENCE_VALUETYPE_value   ) return "none";
-    if (valueType == ENUM_CONREFERENCE_VALUETYPE_status  ) return "status";
-    if (valueType == ENUM_CONREFERENCE_VALUETYPE_surplus ) return "surplus";
-    if (valueType == ENUM_CONREFERENCE_VALUETYPE_shortage) return "shortage";
-    return "none";
-}//returnConReferenceValueTypeString
-
-inline int returnConReferenceValueType(std::string valueType)
-{
-    if (valueType == "value"    ) return ENUM_CONREFERENCE_VALUETYPE_value;
-    if (valueType == "status"   ) return ENUM_CONREFERENCE_VALUETYPE_status;
-    if (valueType == "surplus"  ) return ENUM_CONREFERENCE_VALUETYPE_surplus;
-    if (valueType == "shortage" ) return ENUM_CONREFERENCE_VALUETYPE_shortage;
-    return 0;
-}//returnConReferenceValueType
-
-inline bool verifyConReferenceValueType(std::string valueType)
-{
-    return (returnConReferenceValueType(valueType) > 0);
-}//verifyConReferenceValueType
-
+}//returnMatrixType
 
 enum ENUM_MATRIX_SYMMETRY
 {
@@ -778,13 +740,7 @@ enum ENUM_MATRIX_CONSTRUCTOR_TYPE
 {
     ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown = 0,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_rowRefElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_elements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_block,
@@ -793,17 +749,12 @@ enum ENUM_MATRIX_CONSTRUCTOR_TYPE
 
 inline int returnMatrixConstructorType(std::string cType)
 {
-    if (cType == "baseMatrix"       ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
-    if (cType == "constantElements" ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements;
-    if (cType == "varRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements;
-    if (cType == "linearElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements;
-    if (cType == "generalElements"  ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements;
-    if (cType == "objRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements;
-    if (cType == "conRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements;
-    if (cType == "transformation"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
-    if (cType == "blocks"           ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
-    if (cType == "block"            ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
-    if (cType == "matrix"           ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
+    if (cType == "baseMatrix"    ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
+    if (cType == "elements"      ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_elements;
+    if (cType == "transformation") return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
+    if (cType == "blocks"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
+    if (cType == "block"         ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
+    if (cType == "matrix"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
     return 0;
 }//returnMatrixConstructorType
 
@@ -828,11 +779,11 @@ enum ENUM_COMBINE_ARRAYS
 /* An enumeration to track the shape of a nonlinear expression */
 enum ENUM_NL_EXPR_SHAPE
 {
-    ENUM_NL_EXPR_SHAPE_general = 1,
+    ENUM_NL_EXPR_SHAPE_unknown = 0,
+    ENUM_NL_EXPR_SHAPE_general,
     ENUM_NL_EXPR_SHAPE_convex,
     ENUM_NL_EXPR_SHAPE_quadratic,
-    ENUM_NL_EXPR_SHAPE_linear,
-    ENUM_NL_EXPR_SHAPE_constant
+    ENUM_NL_EXPR_SHAPE_linear
 };
 
 inline int returnNlExprShape(std::string shape)
@@ -841,7 +792,6 @@ inline int returnNlExprShape(std::string shape)
     if (shape == "convex"   ) return ENUM_NL_EXPR_SHAPE_convex;
     if (shape == "quadratic") return ENUM_NL_EXPR_SHAPE_quadratic;
     if (shape == "linear"   ) return ENUM_NL_EXPR_SHAPE_linear;
-    if (shape == "constant" ) return ENUM_NL_EXPR_SHAPE_constant;
     return 1;
 }//returnNlExprShape 
 
@@ -851,7 +801,6 @@ inline std::string returnExprShapeString(ENUM_NL_EXPR_SHAPE shape)
     if (shape == ENUM_NL_EXPR_SHAPE_convex   ) return "convex";
     if (shape == ENUM_NL_EXPR_SHAPE_quadratic) return "quadratic";
     if (shape == ENUM_NL_EXPR_SHAPE_linear   ) return "linear";
-    if (shape == ENUM_NL_EXPR_SHAPE_constant ) return "constant";
     return "";
 }//returnExprShapeString 
  
@@ -892,7 +841,6 @@ inline int returnConeType(std::string type)
     if (type == "orthant"                   ) return ENUM_CONE_TYPE_orthant;
     if (type == "polyhedral"                ) return ENUM_CONE_TYPE_polyhedral;
     if (type == "quadratic"                 ) return ENUM_CONE_TYPE_quadratic;
-
     if (type == "rotatedQuadratic"          ) return ENUM_CONE_TYPE_rotatedQuadratic;
     if (type == "normed"                    ) return ENUM_CONE_TYPE_normed;
     if (type == "rotatedNormed"             ) return ENUM_CONE_TYPE_rotatedNormed;

@@ -5,7 +5,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2015, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -39,6 +39,7 @@ OSiLWriter::~OSiLWriter()
 
 std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
 {
+
     m_OSInstance = theosinstance;
     ostringstream outStr;
     int i, j, k, kk;
@@ -48,6 +49,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
     double tmplb, tmpub, tmpconst, tmpweight;
     char tmptype;
     int tmpnum;
+
 
     if(m_OSInstance == NULL)  return outStr.str();
     outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ;
@@ -183,7 +185,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                             if (tmpname   != m_OSInstance->instanceData->objectives->obj[k]->name) break;
                             if (tmpsense  != m_OSInstance->instanceData->objectives->obj[k]->maxOrMin) break;
                             if (tmpconst  != m_OSInstance->instanceData->objectives->obj[k]->constant) break;
-                            if (!OSIsEqual(tmpweight, m_OSInstance->instanceData->objectives->obj[k]->weight)) break;
+                            if (tmpweight != m_OSInstance->instanceData->objectives->obj[k]->weight) break;
                             if (tmpnum    != m_OSInstance->instanceData->objectives->obj[k]->numberOfObjCoef) break;
                             for (kk=0; kk < tmpnum; kk++)
                             {
@@ -209,7 +211,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                         outStr <<  os_dtoa_format(m_OSInstance->instanceData->objectives->obj[j]->constant)  ;
                         outStr <<  "\"";
                     }
-                    if (!OSIsEqual(m_OSInstance->instanceData->objectives->obj[j]->weight,OSNaN()))
+                    if(m_OSInstance->instanceData->objectives->obj[j]->weight != 1.0)
                     {
                         outStr << " weight=\"" ;
                         outStr <<  os_dtoa_format(m_OSInstance->instanceData->objectives->obj[j]->weight)  ;
@@ -557,17 +559,17 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                 {
                     outStr << "<nl" ;
                     // the following attribute is required
-                    outStr << " idx=\"";
+                    outStr << "  idx=\"";
                     outStr << m_OSInstance->instanceData->nonlinearExpressions->nl[i]->idx;
                     outStr << "\"";
 
                     // shape is an optional attribute, new since stable 2.9
                     std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->nonlinearExpressions->nl[i]->shape);
-                    if (tempStr != "" && tempStr != "general")
+                    if (tempStr != "");
                     {
-                        outStr << " shape=\"" << tempStr << "\"";
+                        outStr << "  shape=\"" << tempStr;
                     }
-                    outStr << ">";
+                    outStr << "\">";
                     if(m_OSInstance->instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot != NULL)
                         outStr << m_OSInstance->instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot->getNonlinearExpressionInXML();
                     outStr << "</nl>";
@@ -831,15 +833,15 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                         outStr << "<expr";
 
                         // the following attribute is required
-                        outStr << " idx=\"";
+                        outStr << "  idx=\"";
                         outStr << m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->idx;
                         outStr << "\"";
 
                         // shape is an optional attribute, new since stable 2.9
                         std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->shape);
-                        if (tempStr != "" && tempStr != "general");
+                        if (tempStr != "");
                         {
-                            outStr << " shape=\"" << tempStr;
+                            outStr << "  shape=\"" << tempStr;
                         }
 
                         outStr << "\">";

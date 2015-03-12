@@ -1253,8 +1253,6 @@ Each nonzero is a general nonlinear expression</xs:documentation>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="mult" type="xs:int"/>
-				<xs:attribute name="incr" type="xs:int" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

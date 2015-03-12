@@ -1,10 +1,10 @@
 /* $Id$ */
 /** @file MathUtil.h
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2015, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -96,7 +96,6 @@ public:
     	return  x - Math.floor(x / y) * y;
     }//mod
     */
-
     /**
      *
      * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
@@ -304,5 +303,6 @@ double OSRand();
  * and should be replaced by a serious random number generator for serious work.
  */
 double OSiRand(int iMin, int iMax);
+
 
 #endif

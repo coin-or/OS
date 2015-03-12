@@ -7548,8 +7548,6 @@ bool OSOption::setServiceURI( std::string serviceURI)
 bool OSOption::setServiceName( std::string serviceName)
 {
     if (this->general == NULL)
-
-
         this->general = new GeneralOption();
     this->general->serviceName = serviceName;
     return true;
@@ -8993,7 +8991,6 @@ bool OSOption::setInitObjBounds(int numberOfObj, int* idx, double* lbValue, doub
         this->optimization = new OptimizationOption();
     if (this->optimization->objectives == NULL)
         this->optimization->objectives = new ObjectiveOption();
-
     if (this->optimization->objectives->initialObjectiveBounds != NULL)
         return false;
 
@@ -10196,7 +10193,7 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
         else
         {
             if ((this->unit        != that->unit)  ||
-                    !OSIsEqual(this->value, that->value) ||
+                    !isEqual(this->value, that->value) ||
                     (this->description != that->description) )
             {
 #ifndef NDEBUG
@@ -10245,7 +10242,7 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
         else
         {
             if ((this->unit        != that->unit)  ||
-                    !OSIsEqual(this->value, that->value) ||
+                    !isEqual(this->value, that->value) ||
                     (this->description != that->description) )
             {
 #ifndef NDEBUG
@@ -10293,7 +10290,7 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
         else
         {
             if ((this->unit        != that->unit)  ||
-                    !OSIsEqual(this->value, that->value) ||
+                    !isEqual(this->value, that->value) ||
                     (this->description != that->description) )
             {
 #ifndef NDEBUG
@@ -10777,8 +10774,8 @@ bool InitVarValue::IsEqual(InitVarValue *that)
         }
         else
         {
-            if ((this->idx != that->idx) || this->name != that->name 
-                                         || !OSIsEqual(this->value, that->value))
+            if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
+
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -11120,7 +11117,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
         else
         {
             if ((this->sosIdx != that->sosIdx) ||
-                    !OSIsEqual(this->groupWeight, that->groupWeight))
+                    !isEqual(this->groupWeight, that->groupWeight))
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -11185,7 +11182,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
         }
         else
         {
-            if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
+            if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -11471,7 +11468,7 @@ bool InitObjValue::IsEqual(InitObjValue *that)
         }
         else
         {
-            if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
+            if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -11568,8 +11565,8 @@ bool InitObjBound::IsEqual(InitObjBound *that)
         {
             if ((this->idx  != that->idx) ||
                     this->name != that->name ||
-                    !OSIsEqual(this->lbValue, that->lbValue) ||
-                    !OSIsEqual(this->ubValue, that->ubValue) )
+                    !isEqual(this->lbValue, that->lbValue) ||
+                    !isEqual(this->ubValue, that->ubValue) )
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -11841,7 +11838,7 @@ bool InitConValue::IsEqual(InitConValue *that)
         }
         else
         {
-            if ((this->idx != that->idx) || this->name != that->name || !OSIsEqual(this->value, that->value))
+            if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
             {
 #ifndef NDEBUG
                 outStr.str("");
@@ -11937,8 +11934,8 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
         else
         {
             if ((this->idx != that->idx) || this->name != that->name ||
-                    !OSIsEqual(this->lbDualValue, that->lbDualValue) ||
-                    !OSIsEqual(this->ubDualValue, that->ubDualValue))
+                    !isEqual(this->lbDualValue, that->lbDualValue) ||
+                    !isEqual(this->ubDualValue, that->ubDualValue))
             {
 #ifndef NDEBUG
                 outStr.str("");

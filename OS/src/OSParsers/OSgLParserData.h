@@ -165,8 +165,6 @@ public:
     
     ENUM_NL_EXPR_SHAPE shape;
     bool shapePresent;
-    ENUM_CONREFERENCE_VALUETYPE valueType;
-    bool valueTypePresent;
 
 };//OSgLParserData
 
