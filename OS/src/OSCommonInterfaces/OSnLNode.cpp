@@ -38,6 +38,7 @@
 
 
 using std::ostringstream;
+using std::cout;
 using std::endl;
 
 
@@ -1055,7 +1056,6 @@ ADdouble OSnLNodeDivide::constructADTape(std::map<int, int> *ADIdx, ADvector *XA
 }// end OSnLNodeDivide::constructADTape
 
 
-
 OSnLNode* OSnLNodeDivide::cloneExprNode()
 {
     OSnLNode *nlNodePoint;
@@ -1541,8 +1541,8 @@ double OSnLNodeErf::calculateFunction(double *x)
 {
     const double a = (993./880.);
     const double b =  (89./880.);
-    //m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
     m_dFunctionValue = tanh( (a + b * m_mChildren[0]->calculateFunction( x) * m_mChildren[0]->calculateFunction( x)) * m_mChildren[0]->calculateFunction( x) );
+    //std::cout << "function value =   " << m_dFunctionValue << std::endl;
     return m_dFunctionValue;
 }// end OSnLNodeErf::calculate
 
@@ -2017,7 +2017,6 @@ double OSnLNodeVariable::calculateFunction(double *x)
 
 ADdouble OSnLNodeVariable::constructADTape(std::map<int, int> *varIdx, ADvector *XAD)
 {
-    m_ADTape = coef;
     m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
     return m_ADTape;
 }// end OSnLNodeVariable::constructADTape
@@ -2791,6 +2790,8 @@ OSnLMNodeMatrixSum::OSnLMNodeMatrixSum()
     m_mMatrixChildren = NULL;
     inodeInt = OS_MATRIX_SUM;
     inodeType = -1;
+
+
 }//end OSnLMNodeMatrixSum
 
 OSnLMNodeMatrixSum::~OSnLMNodeMatrixSum()

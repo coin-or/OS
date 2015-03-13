@@ -255,14 +255,17 @@ int  MatrixType::getNumberOfBlocksConstructors()
 
 GeneralSparseMatrix* MatrixType::getMatrixInColumnMajorForm()
 {
+    return NULL;
 }// end of getMatrixInColumnMajorForm
 
 GeneralSparseMatrix* MatrixType::getMatrixInRowMajorForm()
 {
+    return NULL;
 }// end of getMatrixInRowMajorForm
 
 GeneralSparseMatrix* MatrixType::getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx)
 {
+    return NULL;
 }// end of getMatrixBlockInColumnMajorForm
 
 GeneralSparseMatrix* MatrixType::extractBlock(int firstrow, int firstcol, int nrows, int ncols,
@@ -461,7 +464,7 @@ ENUM_MATRIX_TYPE OSMatrix::getMatrixType()
 {
     if (matrixType == ENUM_MATRIX_TYPE_unknown)
     {
-        matrixType == ENUM_MATRIX_TYPE_zero;
+        matrixType =  ENUM_MATRIX_TYPE_zero;
         for (int i=0; i<inumberOfChildren; i++)
             matrixType = mergeMatrixType(matrixType, m_mChildren[i]->getMatrixType());
     }
@@ -3165,7 +3168,7 @@ ENUM_MATRIX_TYPE MatrixBlocks::getMatrixType()
 {
     if (matrixType == ENUM_MATRIX_TYPE_unknown)
     {
-        matrixType == ENUM_MATRIX_TYPE_zero;
+        matrixType =  ENUM_MATRIX_TYPE_zero;
         for (int i=0; i<inumberOfChildren; i++)
             matrixType = mergeMatrixType(matrixType, m_mChildren[i]->getMatrixType());
     }
@@ -3297,8 +3300,7 @@ ENUM_MATRIX_TYPE MatrixBlock::getMatrixType()
 {
     if (matrixType == ENUM_MATRIX_TYPE_unknown)
     {
-        ENUM_MATRIX_TYPE temp;
-        matrixType == ENUM_MATRIX_TYPE_zero;
+        matrixType =  ENUM_MATRIX_TYPE_zero;
         for (int i=0; i<inumberOfChildren; i++)
         {
             matrixType = mergeMatrixType(matrixType, m_mChildren[i]->getMatrixType());
