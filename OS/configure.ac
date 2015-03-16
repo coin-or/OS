@@ -681,7 +681,8 @@ AC_CONFIG_FILES([Makefile
           applications/columnGen/code/Makefile
           applications/parsingTest/Makefile
           os.pc
-	  os-uninstalled.pc])
+	  os-uninstalled.pc
+	  doxydoc/doxygen.conf])
 
 # Here put the location and name of the configuration header file
 AC_CONFIG_HEADER([src/config.h src/config_os.h])
