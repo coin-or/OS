@@ -54,13 +54,25 @@ run_parsers:
 	cd src/OSParsers; make run_parsers
 	make
 
-clean-local:
-	if test -r test/Makefile; then cd test; make clean; fi
+# Doxygen documentation
+
+doxydoc:
+	doxygen doxydoc/doxygen.conf
+
+clean-doxydoc:
+	( cd doxydoc ; rm -rf html *.log *.tag )
+
+clean-local: clean-doxydoc
+	if test -r test/Makefile; then cd test; $(MAKE) clean; fi
 
 distclean-local:
-	if test -r test/Makefile; then cd test; make distclean; fi
+	if test -r test/Makefile; then cd test; $(MAKE) distclean; fi
 
-.PHONY: test unitTest run_parsers
+install-exec-local: install-doc
+
+uninstall-local: uninstall-doc
+
+.PHONY: test unitTest run_parsers doxydoc
 
 ########################################################################
 #                  Installation of the addlibs file                    #
@@ -71,7 +83,7 @@ pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = os.pc 
 
 addlibsdir = $(DESTDIR)$(datadir)/coin/doc/OS
-	
+
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
 if COIN_HAS_PKGCONFIG
