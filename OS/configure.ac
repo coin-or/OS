@@ -660,6 +660,12 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 ##
 
 
+#############################################################################
+#                  Check for doxygen                                        #
+#############################################################################
+
+AC_COIN_DOXYGEN(CoinUtils Osi Clp CyLP Vol Bcp Cgl Cbc Ipopt Bonmin Couenne)
+
 ##############################################################################
 #                   Finishing up by writing all the output                   #
 ##############################################################################
@@ -681,7 +687,8 @@ AC_CONFIG_FILES([Makefile
           applications/columnGen/code/Makefile
           applications/parsingTest/Makefile
           os.pc
-	  os-uninstalled.pc])
+	  os-uninstalled.pc
+	  doxydoc/doxygen.conf])
 
 # Here put the location and name of the configuration header file
 AC_CONFIG_HEADER([src/config.h src/config_os.h])

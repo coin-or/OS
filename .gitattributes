@@ -479,6 +479,7 @@ OS/doc/osUsersManual.ind -text
 OS/doc/osUsersManual.pdf -text
 OS/doc/osUsersManual.tex -text
 OS/doc/own.sty -text
+OS/doxydoc/doxygen.conf.in -text
 OS/install-sh -text
 OS/ltmain.sh -text
 OS/m4/ac_coin_socket_libs.m4 -text
