@@ -5,16 +5,16 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define OS_VERSION      "trunk"
+#define OS_VERSION "2.9.2"
 
 /* Major Version number of project */
-#define OS_VERSION_MAJOR   9999
+#define OS_VERSION_MAJOR 2
 
 /* Minor Version number of project */
-#define OS_VERSION_MINOR   9999
+#define OS_VERSION_MINOR 9
 
 /* Release Version number of project */
-#define OS_VERSION_RELEASE 9999
+#define OS_VERSION_RELEASE 2
 
 /* Define to 1 if OS uses CppAD */
 #define OS_HAS_CPPAD
