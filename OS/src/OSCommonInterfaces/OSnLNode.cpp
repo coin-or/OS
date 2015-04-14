@@ -504,6 +504,13 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
 
 OSnLNode* OSnLNode::copyNodeAndDescendants()
 {
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
     OSnLNode* ndcopy = (OSnLNode*)cloneExprNode();
     ndcopy->inumberOfChildren = inumberOfChildren;
     ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
@@ -512,7 +519,7 @@ OSnLNode* OSnLNode::copyNodeAndDescendants()
     
     if (inumberOfChildren > 0)
     {
-        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
         for (int i=0; i < inumberOfChildren; i++)
         {
             ndcopy->m_mChildren[i] = /*(OSnLNode)*/m_mChildren[i]->copyNodeAndDescendants();
@@ -521,7 +528,7 @@ OSnLNode* OSnLNode::copyNodeAndDescendants()
 
     if (inumberOfMatrixChildren > 0)
     {
-        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
         for (int i=0; i < inumberOfMatrixChildren; i++)
         {
             ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
@@ -726,6 +733,7 @@ double OSnLNodeAllDiff::calculateFunction(double *x)
             }
         }
     }
+
     return m_dFunctionValue;
 }// end OSnLNodeAllDiff::calculate
 
@@ -1726,6 +1734,45 @@ OSnLNode* OSnLNodeNumber::cloneExprNode()
 }//end OSnLNodeNumber::cloneExprNode
 
 
+OSnLNode* OSnLNodeNumber::copyNodeAndDescendants()
+{
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    OSnLNodeNumber* ndcopy = (OSnLNodeNumber*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    ndcopy->value = value;
+    ndcopy->type = type;
+    ndcopy->id = id;
+    
+    if (inumberOfChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    return ndcopy;
+}// end OSnLNodeNumber::copyNodeAndDescendants
+
 bool OSnLNodeNumber::IsEqual(OSnLNodeNumber *that)
 {
 #ifndef NDEBUG
@@ -2038,13 +2085,52 @@ void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx)
     }
 }//getVariableIndexMap
 
-
 OSnLNode* OSnLNodeVariable::cloneExprNode()
 {
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeVariable();
     return  nlNodePoint;
 }//end OSnLNodeVariable::cloneExprNode
+
+
+OSnLNode* OSnLNodeVariable::copyNodeAndDescendants()
+{
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    OSnLNodeVariable* ndcopy = (OSnLNodeVariable*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    ndcopy->coef = coef;
+    ndcopy->idx = idx;
+    
+    if (inumberOfChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = /*(OSnLNode)*/m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    return ndcopy;
+}// end OSnLNodeVariable::copyNodeAndDescendants
+
 
 bool OSnLNodeVariable::IsEqual(OSnLNodeVariable *that)
 {
@@ -2312,6 +2398,13 @@ OSnLMNode::~OSnLMNode()
 
 OSnLMNode* OSnLMNode::copyNodeAndDescendants()
 {
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
     OSnLMNode* ndcopy = (OSnLMNode*)cloneExprNode();
     ndcopy->inumberOfChildren = inumberOfChildren;
     ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
@@ -2320,7 +2413,7 @@ OSnLMNode* OSnLMNode::copyNodeAndDescendants()
     
     if (inumberOfChildren > 0)
     {
-        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
         for (int i=0; i < inumberOfChildren; i++)
         {
             ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
@@ -2329,7 +2422,7 @@ OSnLMNode* OSnLMNode::copyNodeAndDescendants()
 
     if (inumberOfMatrixChildren > 0)
     {
-        //ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
         for (int i=0; i < inumberOfMatrixChildren; i++)
         {
             ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
@@ -3166,6 +3259,43 @@ OSnLMNode* OSnLMNodeMatrixLowerTriangle::cloneExprNode()
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixLowerTriangle::cloneExprNode
 
+OSnLMNode* OSnLMNodeMatrixLowerTriangle::copyNodeAndDescendants()
+{
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    OSnLMNodeMatrixLowerTriangle* ndcopy = (OSnLMNodeMatrixLowerTriangle*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    ndcopy->includeDiagonal = includeDiagonal;
+
+    if (inumberOfChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    return ndcopy;
+}// end copyNodeAndDescendants
+
 std::string OSnLMNodeMatrixLowerTriangle::getNonlinearExpressionInXML()
 {
     ostringstream outStr;
@@ -3284,6 +3414,43 @@ OSnLMNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
     nlMNodePoint = new OSnLMNodeMatrixUpperTriangle();
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixUpperTriangle::cloneExprNode
+
+OSnLMNode* OSnLMNodeMatrixUpperTriangle::copyNodeAndDescendants()
+{
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    OSnLMNodeMatrixUpperTriangle* ndcopy = (OSnLMNodeMatrixUpperTriangle*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    ndcopy->includeDiagonal = includeDiagonal;
+
+    if (inumberOfChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    return ndcopy;
+}// end copyNodeAndDescendants
 
 bool OSnLMNodeMatrixUpperTriangle::IsEqual(OSnLMNodeMatrixUpperTriangle *that)
 {
@@ -3494,6 +3661,43 @@ OSnLMNode* OSnLMNodeMatrixReference::cloneExprNode()
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixReference::cloneExprNode
 
+OSnLMNode* OSnLMNodeMatrixReference::copyNodeAndDescendants()
+{
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    OSnLMNodeMatrixReference* ndcopy = (OSnLMNodeMatrixReference*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    ndcopy->idx = idx;
+
+    if (inumberOfChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    return ndcopy;
+}// end copyNodeAndDescendants
+
 bool OSnLMNodeMatrixReference::IsEqual(OSnLMNodeMatrixReference *that)
 {
 #ifndef NDEBUG
@@ -3639,6 +3843,42 @@ OSnLMNode* OSnLMNodeMatrixVar::cloneExprNode()
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixVar::cloneExprNode
 
+OSnLMNode* OSnLMNodeMatrixVar::copyNodeAndDescendants()
+{
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    OSnLMNodeMatrixVar* ndcopy = (OSnLMNodeMatrixVar*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    ndcopy->idx = idx;
+
+    if (inumberOfChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    return ndcopy;
+}// end copyNodeAndDescendants
 
 bool OSnLMNodeMatrixVar::IsEqual(OSnLMNodeMatrixVar *that)
 {
@@ -3782,6 +4022,42 @@ OSnLMNode* OSnLMNodeMatrixObj::cloneExprNode()
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixObj::cloneExprNode
 
+OSnLMNode* OSnLMNodeMatrixObj::copyNodeAndDescendants()
+{
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    OSnLMNodeMatrixObj* ndcopy = (OSnLMNodeMatrixObj*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    ndcopy->idx = idx;
+
+    if (inumberOfChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    return ndcopy;
+}// end copyNodeAndDescendants
 
 bool OSnLMNodeMatrixObj::IsEqual(OSnLMNodeMatrixObj *that)
 {
@@ -3926,6 +4202,43 @@ OSnLMNode* OSnLMNodeMatrixCon::cloneExprNode()
     nlMNodePoint = new OSnLMNodeMatrixCon();
     return  nlMNodePoint;
 }//end OSnLMNodeMatrixCon::cloneExprNode
+
+OSnLMNode* OSnLMNodeMatrixCon::copyNodeAndDescendants()
+{
+#ifndef NDEBUG
+    ostringstream outStr;
+    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
+    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    OSnLMNodeMatrixCon* ndcopy = (OSnLMNodeMatrixCon*)cloneExprNode();
+    ndcopy->inumberOfChildren = inumberOfChildren;
+    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
+    ndcopy->inodeInt = inodeInt;
+    ndcopy->inodeType = inodeType;
+    ndcopy->idx = idx;
+
+    if (inumberOfChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
+        }
+    }
+
+    return ndcopy;
+}// end copyNodeAndDescendants
 
 
 bool OSnLMNodeMatrixCon::IsEqual(OSnLMNodeMatrixCon *that)

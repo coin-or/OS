@@ -934,7 +934,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "THERE IS AN ERROR\n");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "Error while setting options in IpoptSolver\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -1001,12 +1001,11 @@ void IpoptSolver::solve() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-#ifndef NDEBUG
         outStr.str("");
         outStr.clear();
-        outStr << "error in OSIpoptSolver, line 775:\n" << eclass.errormsg << endl;
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
+        outStr << "error in OSIpoptSolver routine solve():\n" << eclass.errormsg << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, outStr.str());
+
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -1098,6 +1097,4 @@ IpoptProblem::~IpoptProblem()
 {
 
 }
-
-
 

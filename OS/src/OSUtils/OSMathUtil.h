@@ -101,6 +101,8 @@ public:
      *
      * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
      * data is stored by column. If false, the matrix is stored by row.
+     * @param startSize holds the size of the start array
+     * @param valueSize holds the size of the index and value arrays
      * @param start holds an integer array of start elements in coefMatrix (AMatrix),
      * which points to the start of a column (row) of nonzero elements in coefMatrix (AMatrix).
      * @param index holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
@@ -108,7 +110,7 @@ public:
      * @param value holds a double array of value elements in coefMatrix (AMatrix),
      * which contains nonzero elements.
      * @param dimension holds the column count if the input matrix is row major (row count = start.length-1)
-     * or the row number if the input matrix is column major (columnh count = start.length -1)
+     * or the row number if the input matrix is column major (column count = start.length -1)
      * @return Linear constraint coefficient matrix in the other major of the input matrix. Return null if input matrix not valid.
      */
     static SparseMatrix* convertLinearConstraintCoefficientMatrixToTheOtherMajor(

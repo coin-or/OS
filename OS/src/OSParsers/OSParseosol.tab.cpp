@@ -1884,9 +1884,9 @@ static const yytype_uint16 yyrline[] =
     5182,  5183,  5184,  5185,  5187,  5195,  5195,  5197,  5197,  5199,
     5205,  5213,  5213,  5215,  5215,  5217,  5223,  5231,  5231,  5233,
     5233,  5235,  5241,  5249,  5249,  5251,  5251,  5253,  5259,  5267,
-    5267,  5269,  5269,  5271,  5283,  5292,  5294,  5294,  5296,  5298,
-    5307,  5309,  5309,  5311,  5311,  5313,  5330,  5333,  5333,  5335,
-    5335,  5338,  6998,  7005,  7015
+    5267,  5269,  5269,  5271,  5283,  5291,  5293,  5293,  5295,  5297,
+    5306,  5308,  5308,  5310,  5310,  5312,  5328,  5331,  5331,  5333,
+    5333,  5336,  6985,  6992,  7002
 };
 #endif
 
@@ -8989,7 +8989,6 @@ yyreduce:
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
         {
-std::cout << "expected " << osglData->osglNumberOfEl << " elements; got " << osglData->osglCounter << std::endl;
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer data elements than specified");
             parserData->ignoreDataAfterErrors = true;
         }
@@ -9011,7 +9010,6 @@ std::cout << "expected " << osglData->osglNumberOfEl << " elements; got " << osg
     {
     if (osglData->osglCounter + osglData->osglMult > osglData->osglNumberOfEl)
     {
-std::cout << "IntVec: expected " << osglData->osglNumberOfEl << " elements; got " << osglData->osglCounter + osglData->osglMult << std::endl;
         if (!parserData->suppressFurtherErrorMessages)
         {
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more data elements than specified");

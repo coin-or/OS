@@ -94,7 +94,7 @@
                 </ln>
             </nl>
         </nonlinearExpressions>
-        <matrices numberOfMatrices= " 32 " >
+        <matrices numberOfMatrices= " 40 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -1035,6 +1035,464 @@
                         <el>1.4142</el>
                     </values>
                 </constantElements>
+            </matrix>
+            <matrix numberOfColumns="6" numberOfRows="7" name="32-Expansion test 1: nested blocks">
+                <blocks numberOfBlocks="4"> <!-- top level -->
+                    <colOffsets numberOfEl="3">
+                        <el>0</el> 
+                        <el>2</el> 
+                        <el>6</el> 
+                    </colOffsets>
+                    <rowOffsets numberOfEl="3">
+                        <el>0</el> 
+                        <el>3</el> 
+                        <el>7</el> 
+                    </rowOffsets>
+                    <block blockRowIdx="0" blockColIdx="0"> <!-- top level -->
+                        <constantElements numberOfValues="3">
+                            <start>
+                                <el>0</el> 
+                                <el>2</el> 
+                                <el>3</el> 
+                            </start>
+                            <indexes>
+                                <el>0</el> 
+                                <el>2</el> 
+                                <el>1</el> 
+                            </indexes>
+                            <values>
+                                <el>8</el> 
+                                <el>-3</el> 
+                                <el>5</el> 
+                            </values>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1"> <!-- top level -->
+                        <blocks numberOfBlocks="3">   <!-- level 2 -->
+                            <colOffsets numberOfEl="3">
+                                <el>0</el> 
+                                <el>2</el> 
+                                <el>4</el> 
+                            </colOffsets>
+                            <rowOffsets numberOfEl="3">
+                                <el>0</el> 
+                                <el>2</el> 
+                                <el>4</el> 
+                            </rowOffsets>
+                            <block blockRowIdx="1" blockColIdx="0"/>  <!-- level 2 - empty!-->
+                            <block blockRowIdx="1" blockColIdx="1">   <!-- level 2 -->
+                                <blocks numberOfBlocks="2">   <!-- level 3 - two rows stacked vertically -->
+                                    <colOffsets numberOfEl="2">
+                                        <el>0</el> 
+                                        <el>2</el> 
+                                    </colOffsets>
+                                    <rowOffsets numberOfEl="3">
+                                        <el>0</el> 
+                                        <el>1</el> 
+                                        <el>2</el> 
+                                    </rowOffsets>
+                                    <block blockRowIdx="1" blockColIdx="0"> <!-- bottom row, level 3 -->
+                                        <constantElements numberOfValues="1" rowMajor="true">
+                                            <start>
+                                                <el>0</el> 
+                                                <el>1</el> 
+                                            </start>
+                                            <indexes>
+                                                <el>0</el> 
+                                            </indexes>
+                                            <values>
+                                                <el>7</el> 
+                                            </values>
+                                       </constantElements>
+                                   </block>
+                                    <block blockRowIdx="0" blockColIdx="0"> <!-- top row, level 3 -->
+                                        <blocks numberOfBlocks="2">  <!-- bottom layer - two 1x1 blocks -->
+                                            <colOffsets numberOfEl="3">
+                                                <el>0</el> 
+                                                <el>1</el> 
+                                                <el>2</el> 
+                                            </colOffsets>
+                                            <rowOffsets numberOfEl="2">
+                                                <el>0</el> 
+                                                <el>1</el> 
+                                            </rowOffsets>
+                                            <block blockRowIdx="0" blockColIdx="1"> <!--layer 4 right-->
+                                                <constantElements numberOfValues="1">
+                                                    <start>
+                                                        <el>0</el>
+                                                        <el>1</el>
+                                                    </start>
+                                                    <indexes>
+                                                        <el>0</el>
+                                                    </indexes>
+                                                    <values>
+                                                        <el>3</el>
+                                                    </values>
+                                                </constantElements>
+                                            </block>
+                                            <block blockRowIdx="0" blockColIdx="0"> <!--layer 4 left-->
+                                                <constantElements numberOfValues="1">
+                                                    <start>
+                                                        <el>0</el>
+                                                        <el>1</el>
+                                                    </start>
+                                                    <indexes>
+                                                        <el>0</el>
+                                                    </indexes>
+                                                    <values>
+                                                        <el>-5</el>
+                                                    </values>
+                                                </constantElements>
+                                            </block>
+                                        </blocks>
+                                    </block>
+                                </blocks>
+                            </block>
+                            <block blockRowIdx="0" blockColIdx="0">   <!-- level 2 -->
+                                <constantElements numberOfValues="2" rowMajor="true">
+                                    <start>
+                                        <el>0</el> 
+                                        <el>1</el> 
+                                        <el>2</el> 
+                                    </start>
+                                    <indexes>
+                                        <el>0</el> 
+                                        <el>1</el> 
+                                    </indexes>
+                                    <values>
+                                        <el>2</el> 
+                                        <el>3</el> 
+                                    </values>
+                                </constantElements>
+                            </block>
+                        </blocks>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="0"> <!-- top level -->
+                        <constantElements numberOfValues="2">
+                            <start>
+                                <el>0</el> 
+                                <el>1</el> 
+                                <el>2</el> 
+                            </start>
+                            <indexes>
+                                <el>2</el> 
+                                <el>1</el> 
+                            </indexes>
+                            <values>
+                                <el>-1</el> 
+                                <el>3</el> 
+                            </values>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="1"> <!-- top level -->
+                        <constantElements numberOfValues="7" rowMajor="true">
+                            <start>
+                                <el>0</el> 
+                                <el>2</el> 
+                                <el>5</el> 
+                                <el>7</el> 
+                            </start>
+                            <indexes>
+                                <el>0</el> 
+                                <el>3</el> 
+                                <el>1</el> 
+                                <el>2</el> 
+                                <el>3</el> 
+                                <el>2</el> 
+                                <el>3</el> 
+                            </indexes>
+                            <values>
+                                <el>1</el> 
+                                <el>-2</el> 
+                                <el>-3</el> 
+                                <el>-4</el> 
+                                <el>5</el> 
+                                <el>6</el> 
+                                <el>7</el> 
+                            </values>
+                        </constantElements>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfRows="2" numberOfColumns="4" name="33-BaseMatrix 1 for Expansion test">
+                <constantElements rowMajor="false" numberOfValues="5">
+                    <start>
+                        <el>0</el>
+                        <el incr="1" mult="4">2</el>
+                    </start>
+                    <indexes>
+                        <el>1</el>
+                        <el mult="4">0</el>
+                    </indexes>
+                    <values>
+                        <el>21</el>
+                        <el>11</el>
+                        <el>12</el>
+                        <el>13</el>
+                        <el>14</el>
+                    </values>
+                </constantElements>
+            </matrix> 
+            <matrix numberOfRows="4" numberOfColumns="2" name="34-BaseMatrix 2 for Expansion test">
+                <constantElements rowMajor="true" numberOfValues="5">
+                    <start>
+                        <el>0</el>
+                        <el incr="1" mult="4">2</el>
+                    </start>
+                    <indexes>
+                        <el>1</el>
+                        <el mult="4">0</el>
+                    </indexes>
+                    <values>
+                        <el>112</el>
+                        <el>111</el>
+                        <el>121</el>
+                        <el>131</el>
+                        <el>141</el>
+                    </values>
+                </constantElements>
+            </matrix>
+            <matrix numberOfRows="30" numberOfColumns="24" name="35-Expansion test 2 - Base matrices">
+                <blocks numberOfBlocks="20">
+                    <colOffsets numberOfEl="5">
+                        <el mult="5" incr="6">0</el> 
+                    </colOffsets>
+                    <rowOffsets numberOfEl="6">
+                        <el mult="6" incr="5">0</el> 
+                    </rowOffsets>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="33"/>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="33" baseTranspose="true"/>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="34"/>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="3">
+                        <baseMatrix baseMatrixIdx="34" baseTranspose="true"/>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="33" scalarMultiplier="2"/>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="33" baseTranspose="true" scalarMultiplier="2"/>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="34" scalarMultiplier="2"/>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="3">
+                        <baseMatrix baseMatrixIdx="34" baseTranspose="true" scalarMultiplier="2"/>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="33" scalarMultiplier="2"
+                            targetMatrixFirstRow="2" targetMatrixFirstCol="3"/>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="33" baseTranspose="true" scalarMultiplier="2"
+                            targetMatrixFirstRow="2" targetMatrixFirstCol="3"/>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="34" scalarMultiplier="2"
+                            targetMatrixFirstRow="2" targetMatrixFirstCol="3"/>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="3">
+                        <baseMatrix baseMatrixIdx="34" baseTranspose="true" scalarMultiplier="2"
+                            targetMatrixFirstRow="2" targetMatrixFirstCol="3"/>
+                    </block>
+                    <block blockRowIdx="3" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="33" scalarMultiplier="2"
+                            targetMatrixFirstRow="2" targetMatrixFirstCol="3"
+                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                    </block>
+                    <block blockRowIdx="3" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="33" baseTranspose="true" scalarMultiplier="2"
+                            targetMatrixFirstRow="2" targetMatrixFirstCol="3"
+                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                    </block>
+                    <block blockRowIdx="3" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="34" scalarMultiplier="2"
+                            targetMatrixFirstRow="2" targetMatrixFirstCol="3"
+                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                    </block>
+                    <block blockRowIdx="3" blockColIdx="3">
+                        <baseMatrix baseMatrixIdx="34" baseTranspose="true" scalarMultiplier="2"
+                            targetMatrixFirstRow="2" targetMatrixFirstCol="3"
+                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                    </block>
+                    <block blockRowIdx="4" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="33" scalarMultiplier="2"
+                            targetMatrixFirstRow="3" targetMatrixFirstCol="4"
+                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                    </block>
+                    <block blockRowIdx="4" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="33" baseTranspose="true" scalarMultiplier="2"
+                            targetMatrixFirstRow="3" targetMatrixFirstCol="4"
+                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                    </block>
+                    <block blockRowIdx="4" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="34" scalarMultiplier="2"
+                            targetMatrixFirstRow="3" targetMatrixFirstCol="4"
+                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                    </block>
+                    <block blockRowIdx="4" blockColIdx="3">
+                        <baseMatrix baseMatrixIdx="34" baseTranspose="true" scalarMultiplier="2"
+                            targetMatrixFirstRow="3" targetMatrixFirstCol="4"
+                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfRows="2" numberOfColumns="2" name="36-Base matrix for Expansion test 3">
+                <varReferenceElements numberOfValues="2">
+                    <start>
+                        <el incr="1" mult="3">0</el>
+                    </start>
+                    <indexes>
+                        <el mult="2">0</el>
+                    </indexes>
+                    <values>
+                        <el>0</el>
+                        <el>1</el>
+                    </values>
+                </varReferenceElements>
+            </matrix>
+            <matrix numberOfRows="6" numberOfColumns="6" name="37-Expansion test 3 - mixed elements">
+                <blocks numberOfBlocks="8">
+                    <colOffsets numberOfEl="4">
+                        <el mult="4" incr="2">0</el> 
+                    </colOffsets>
+                    <rowOffsets numberOfEl="4">
+                        <el mult="4" incr="2">0</el> 
+                    </rowOffsets>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <constantElements numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <indexes>
+                                <el mult="2 " incr=" 1 ">0</el>
+                                <el mult="2 " incr=" 1 ">0</el>
+                            </indexes>
+                            <values>
+                                <el> 1.0 </el>
+                                <el>-2.0 </el>
+                                <el>-3.0</el>
+                                <el> 4.0</el>
+                            </values>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="1">
+                        <varReferenceElements numberOfValues="2" rowMajor="true">
+                            <start>
+                                <el incr="1" mult="3">0</el>
+                            </start>
+                            <indexes>
+                                <el mult="2">1</el>
+                            </indexes>
+                            <values>
+                                <el>0</el>
+                                <el>1</el>
+                            </values>
+                        </varReferenceElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="0">
+                        <linearElements numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <indexes>
+                                <el>0</el>   <el>1</el>
+                                <el>0</el>   <el>1</el>
+                            </indexes>
+                            <values>
+                                <el numberOfVarIdx="1" constant="2">
+                                    <varIdx coef="0.5">0</varIdx>
+                                </el>
+                                <el numberOfVarIdx="2">
+                                    <varIdx>0</varIdx>
+                                    <varIdx>1</varIdx>
+                                </el>
+                                <el numberOfVarIdx="0" constant="-1"/>
+                                <el numberOfVarIdx="2" constant="1">
+                                    <varIdx coef="2">0</varIdx>
+                                    <varIdx coef="3">1</varIdx>
+                                </el>
+                            </values>
+                        </linearElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="0">
+                        <generalElements numberOfValues="2" rowMajor="true">
+                            <start>
+                                <el mult="3" incr="1">0</el>
+                            </start>
+                            <indexes>
+                                <el>0</el>    <el>1</el>
+                            </indexes>
+                            <values>
+                                <el>
+                                    <plus>
+                                        <power>
+                                            <E/>
+                                            <variable idx="0"/>
+                                        </power>
+                                        <ln>
+                                            <variable idx="1"/>
+                                        </ln>
+                                    </plus>
+                                </el>
+                                <el>
+                                    <sin>
+                                        <variable idx="1" coef="5.0"/>
+                                    </sin>
+                                </el>
+                            </values>
+                        </generalElements>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="0"/>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="36"/>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="8"/>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="9"/>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfRows="4" numberOfColumns="4" name="38-Expansion test 4 - mixed references">
+                <blocks numberOfBlocks="2">
+                    <colOffsets numberOfEl="3">
+                        <el mult="3" incr="2">0</el> 
+                    </colOffsets>
+                    <rowOffsets numberOfEl="3">
+                        <el mult="3" incr="2">0</el> 
+                    </rowOffsets>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="11"/>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="12"/>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfRows="4" numberOfColumns="4" name="39-Expansion test 5 - jumbled references">
+                <blocks numberOfBlocks="2">
+                    <colOffsets numberOfEl="3">
+                        <el mult="3" incr="2">0</el> 
+                    </colOffsets>
+                    <rowOffsets numberOfEl="3">
+                        <el mult="3" incr="2">0</el> 
+                    </rowOffsets>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="36"/>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="12"/>
+                    </block>
+                </blocks>
             </matrix>
         </matrices>
         <cones numberOfCones="11">

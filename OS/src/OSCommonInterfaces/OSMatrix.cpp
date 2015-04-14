@@ -152,10 +152,19 @@ MatrixConstructor::~MatrixConstructor()
 // methods for MatrixType
 MatrixType::MatrixType():
     MatrixNode(),
+    symmetry(ENUM_MATRIX_SYMMETRY_none),
+    type(ENUM_MATRIX_TYPE_unknown),
     numberOfRows(0),
     numberOfColumns(0),
-    symmetry(ENUM_MATRIX_SYMMETRY_none),
-    type(ENUM_MATRIX_TYPE_unknown)
+    ExpandedMatrixInRowMajorForm(NULL),
+    ExpandedMatrixInColumnMajorForm(NULL),
+    ExpandedMatrixByBlocks(NULL),
+    m_miRowPartition(NULL),
+    m_iRowPartitionSize(0),
+    m_miColumnPartition(NULL),
+    m_iColumnPartitionSize(0),
+    m_bHaveRowPartition(false),
+    m_bHaveColumnPartition(false)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Constructor");
@@ -185,12 +194,12 @@ bool MatrixType::matrixHasElements()
     if (inumberOfChildren == 0 || m_mChildren == NULL) return false;
     for (int i=0; i < inumberOfChildren; i++)
     {
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements) return true;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements  ) return true;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements  ) return true;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements ) return true;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements  ) return true;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements  ) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements  ) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements  ) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements ) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements  ) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements  ) return true;
     }
     return false;
 }// end of matrixHasElements
@@ -200,7 +209,7 @@ bool MatrixType::matrixHasTransformations()
     if (inumberOfChildren == 0 || m_mChildren == NULL) return false;
     for (int i=0; i < inumberOfChildren; i++)
     {
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) return true;
     }
     return false;
 }// end of matrixHasTransformations
@@ -210,7 +219,7 @@ bool MatrixType::matrixHasBlocks()
     if (inumberOfChildren == 0 || m_mChildren == NULL) return false;
     for (int i=0; i < inumberOfChildren; i++)
     {
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks) return true;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks) return true;
     }
     return false;
 }// end of matrixHasBlocks
@@ -221,12 +230,12 @@ int  MatrixType::getNumberOfElementConstructors()
     if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
     for (int i=0; i < inumberOfChildren; i++)
     {
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements) k++;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements)   k++;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements)   k++;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements)  k++;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements)   k++;
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements)   k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements) k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements)   k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements)   k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements)  k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements)   k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements)   k++;
     }
     return k++;
 }// end of getNumberOfElementConstructors
@@ -237,7 +246,7 @@ int  MatrixType::getNumberOfTransformationConstructors()
     if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
     for (int i=0; i < inumberOfChildren; i++)
     {
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation) k++;
     }
     return k++;
 }// end of getNumberOfTransformationConstructors
@@ -248,29 +257,2567 @@ int  MatrixType::getNumberOfBlocksConstructors()
     if (inumberOfChildren == 0 || m_mChildren == NULL) return 0;
     for (int i=0; i < inumberOfChildren; i++)
     {
-        if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks) k++;
+        if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks) k++;
     }
     return k++;
 }// end of getNumberOfBlocksConstructors
 
-GeneralSparseMatrix* MatrixType::getMatrixInColumnMajorForm()
+GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
 {
-    return NULL;
-}// end of getMatrixInColumnMajorForm
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside getMatrixCoefficientsInColumnMajor()");
+#endif
+    try
+    {
+        //Check if previous expansion available
+        if (ExpandedMatrixInColumnMajorForm != NULL)
+            return ExpandedMatrixInColumnMajorForm;
+        if (ExpandedMatrixInRowMajorForm != NULL)
+        {
+            ExpandedMatrixInColumnMajorForm = convertToOtherMajor(false);
+            return ExpandedMatrixInColumnMajorForm;
+        }
 
-GeneralSparseMatrix* MatrixType::getMatrixInRowMajorForm()
+        // The complexity increases with the number of constructors
+        // Start by checking for empty matrix
+        if (inumberOfChildren == 0)
+        {
+            ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
+            ExpandedMatrixInColumnMajorForm->symmetry = symmetry;
+            ExpandedMatrixInColumnMajorForm->valueSize = 0;
+            ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+            ExpandedMatrixInColumnMajorForm->starts = new int[numberOfColumns + 1];
+            for (int i=0; i <= numberOfColumns; i++)
+                ExpandedMatrixInColumnMajorForm->starts[i] = 0;
+            return ExpandedMatrixInColumnMajorForm;
+        }
+
+        // single constructor --- process by type 
+        else if (inumberOfChildren == 1)
+        {
+            if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+            {
+                int  baseMtxIdx = ((BaseMatrix*)m_mChildren[0])->baseMatrixIdx;
+                OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
+
+                int iroff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
+                int icoff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+
+                int base_r0, base_c0, base_rN, base_cN;
+
+                GeneralSparseMatrix* baseMtx;
+                if (((BaseMatrix*)m_mChildren[0])->baseTranspose)
+                {
+                    baseMtx = baseMtxPtr->getMatrixCoefficientsInRowMajor();
+//                    iroff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+//                    icoff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
+                    base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
+                    base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
+                    base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
+                    base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
+                    if (base_cN < 0)
+                        base_cN = baseMtxPtr->numberOfRows - 1;
+                    if (base_rN < 0)
+                        base_rN = baseMtxPtr->numberOfColumns - 1;
+                }
+                else
+                {
+                    baseMtx = baseMtxPtr->getMatrixCoefficientsInColumnMajor();
+//                    iroff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
+//                    icoff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+                    base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
+                    base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
+                    base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
+                    base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
+                    if (base_rN < 0)
+                        base_rN = baseMtxPtr->numberOfRows - 1;
+                    if (base_cN < 0)
+                        base_cN = baseMtxPtr->numberOfColumns - 1;
+                }
+//                base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
+//                base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
+//                base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
+//                base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
+//                if (base_rN < 0)
+//                    base_rN = baseMtxPtr->numberOfRows - 1;
+//                if (base_cN < 0)
+//                    base_cN = baseMtxPtr->numberOfColumns - 1;
+
+                double scaleMult = ((BaseMatrix*)m_mChildren[0])->scalarMultiplier;
+
+                ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
+                ExpandedMatrixInColumnMajorForm->symmetry  = symmetry;
+                ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+
+                // position and other options can affect what arrays need to be duplicated
+                bool isShifted = (iroff > 0 || icoff > 0);
+                bool isCropped = (base_c0 > 0 || base_r0 > 0 || 
+                                  base_rN < baseMtxPtr->numberOfRows - 1 ||
+                                  base_cN < baseMtxPtr->numberOfColumns - 1);
+                bool isClipped = (iroff + base_rN - base_r0 >= numberOfRows ||
+                                  icoff + base_cN - base_c0 >= numberOfColumns);
+                bool isScaled  = (scaleMult != 1);
+                bool reTyped   = (getMatrixType() != baseMtx->vType);
+                bool hasGap    = (icoff + base_cN - base_c0 < numberOfColumns - 1);
+
+                //default position without cropping, scaling or retyping is easiest
+                if ( !isShifted && !isCropped && !isClipped && !isScaled && !reTyped )
+                {
+                    ExpandedMatrixInColumnMajorForm->b_deleteStartArray = hasGap;
+                    ExpandedMatrixInColumnMajorForm->b_deleteIndexArray = false;
+                    ExpandedMatrixInColumnMajorForm->b_deleteValueArray = false;
+                    ExpandedMatrixInColumnMajorForm->isRowMajor = false;
+                    ExpandedMatrixInColumnMajorForm->valueSize = baseMtx->valueSize;
+                    ExpandedMatrixInColumnMajorForm->vType     = baseMtx->vType;
+                    ExpandedMatrixInColumnMajorForm->indexes   = baseMtx->indexes;
+                    ExpandedMatrixInColumnMajorForm->values    = baseMtx->values;
+
+                    // even in default layout the baseMatrix may still have different dimensions...
+                    if (!hasGap)
+                        ExpandedMatrixInColumnMajorForm->starts = baseMtx->starts;
+                    else
+                    {
+                        ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+                        ExpandedMatrixInColumnMajorForm->starts =
+                            new int[ExpandedMatrixInColumnMajorForm->startSize];
+                        for (int i=0; i < baseMtx->startSize; i++)
+                            ExpandedMatrixInColumnMajorForm->starts[i] = baseMtx->starts[i];
+                        int lastStart = baseMtx->valueSize;
+                        for (int i=baseMtx->startSize; 
+                                 i < ExpandedMatrixInColumnMajorForm->startSize; i++)
+                            ExpandedMatrixInColumnMajorForm->starts[i] = lastStart;
+                    }
+
+                    return ExpandedMatrixInColumnMajorForm; 
+                }
+                else
+                {
+                    // cropping, positioning or scaling all require a deep copy
+                    if ( !isShifted && !isCropped && !isClipped )
+                    {
+                        // it's a bit easier if we are just scaling
+                        ExpandedMatrixInColumnMajorForm->b_deleteStartArray = hasGap;
+                        ExpandedMatrixInColumnMajorForm->b_deleteIndexArray = false;
+                        ExpandedMatrixInColumnMajorForm->b_deleteValueArray = true;
+                        ExpandedMatrixInColumnMajorForm->isRowMajor = false;
+                        ExpandedMatrixInColumnMajorForm->valueSize  = baseMtx->valueSize;
+                        ExpandedMatrixInColumnMajorForm->vType      = baseMtx->vType;
+                        ExpandedMatrixInColumnMajorForm->indexes    = baseMtx->indexes;
+
+                        // even in default layout the baseMatrix may still have different dimensions...
+                        if (!hasGap)
+                            ExpandedMatrixInColumnMajorForm->starts = baseMtx->starts;
+                        else
+                        {
+                            ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+                            ExpandedMatrixInColumnMajorForm->starts =
+                                new int[ExpandedMatrixInColumnMajorForm->startSize];
+                            for (int i=0; i < baseMtx->startSize; i++)
+                                ExpandedMatrixInColumnMajorForm->starts[i] = baseMtx->starts[i];
+                            int lastStart = baseMtx->valueSize;
+                            for (int i=baseMtx->startSize; 
+                                     i < ExpandedMatrixInColumnMajorForm->startSize; i++)
+                                ExpandedMatrixInColumnMajorForm->starts[i] = lastStart;
+                        }
+
+                        // the values are a bit more difficult ...
+                        if ( baseMtx->vType == ENUM_MATRIX_TYPE_constant)
+                        {
+                            ExpandedMatrixInColumnMajorForm->values = new ConstantMatrixValues();
+                            ((ConstantMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el
+                                = new double[baseMtx->valueSize];
+                            for (int i = 0; i < baseMtx->valueSize; i++)
+                                ((ConstantMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[i]
+                                    = scaleMult*((ConstantMatrixValues*)baseMtx->values)->el[i];
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_varref)
+                        {
+                            // must convert to linear elements
+                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
+                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
+                            for (int i = 0; i < baseMtx->valueSize; i++)
+                            {
+                                tmpValues->el[i] = new LinearMatrixElement();
+                                tmpValues->el[i]->numberOfVarIdx = 1; 
+                                tmpValues->el[i]->varIdx    = new LinearMatrixElementTerm*[1];
+                                tmpValues->el[i]->varIdx[0] = new LinearMatrixElementTerm();
+                                tmpValues->el[i]->varIdx[0]->coef = scaleMult;
+                                tmpValues->el[i]->varIdx[0]->idx  
+                                    = ((VarReferenceMatrixValues*)baseMtx->values)->el[i];
+                            }
+                            ExpandedMatrixInColumnMajorForm->values = tmpValues;
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_linear)
+                        {
+                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
+                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
+                            for (int i = 0; i < baseMtx->valueSize; i++)
+                            {
+                                tmpValues->el[i] = new LinearMatrixElement();
+                                if (!(tmpValues->el[i]
+                                        ->deepCopyFrom(((LinearMatrixValues*)baseMtx->values)->el[i])))
+                                    throw ErrorClass("failed copying linear element values in method getMatrixCoefficientsInColumnMajor()");
+                                for (int j=0; j<tmpValues->el[i]->numberOfVarIdx; j++)
+                                    tmpValues->el[i]->varIdx[j]->coef *= scaleMult;
+                            }
+                            ExpandedMatrixInColumnMajorForm->values = tmpValues;
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_general)
+                        {
+                            // add scalar multiple as a product
+                            GeneralMatrixValues* tmpValues = new GeneralMatrixValues();
+                            tmpValues->el = new ScalarExpressionTree*[baseMtx->valueSize];
+                            for (int i = 0; i < baseMtx->valueSize; i++)
+                            {
+                                tmpValues->el[i] = new ScalarExpressionTree();
+                                tmpValues->el[i]->m_treeRoot = new OSnLNodeTimes();
+                                tmpValues->el[i]->m_treeRoot->m_mChildren[0] = new OSnLNodeNumber();
+                                ((OSnLNodeNumber*)tmpValues->el[i]->m_treeRoot->m_mChildren[0])->value = scaleMult;
+                                tmpValues->el[i]->m_treeRoot->m_mChildren[1]
+                                     = ((GeneralMatrixValues*)baseMtx->values)->el[i]->m_treeRoot
+                                        ->copyNodeAndDescendants();
+                            }
+                            ExpandedMatrixInColumnMajorForm->values = tmpValues;
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_objref)
+                        {
+                            throw ErrorClass("scalar multiple not defined for objref elements in  getMatrixCoefficientsInColumnMajor()");
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_conref)
+                        {
+                            throw ErrorClass("scalar multiple not defined for conref elements in  getMatrixCoefficientsInColumnMajor()");
+                        }
+                        return ExpandedMatrixInColumnMajorForm; 
+                    }
+                    else // repositioned Basematrix with cropping
+                    {
+                        ExpandedMatrixInColumnMajorForm->b_deleteStartArray = true;
+                        ExpandedMatrixInColumnMajorForm->b_deleteIndexArray = true;
+                        ExpandedMatrixInColumnMajorForm->b_deleteValueArray = true;
+                        ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+                        ExpandedMatrixInColumnMajorForm->isRowMajor = false;
+                        ExpandedMatrixInColumnMajorForm->vType      = baseMtx->vType;
+
+                        int  startSize = numberOfColumns + 1; 
+                        int* tmpStarts = new int[startSize];
+                        for (int i=0; i < startSize; i++)
+                            tmpStarts[i] = 0;
+
+                        int adjc = icoff - base_c0;
+                        int lastcol = icoff + base_cN - base_c0 + 1;
+                        if (lastcol > numberOfColumns)
+                            lastcol = numberOfColumns;
+
+                        // count elements in each column and calculate starts
+                        for (int i=icoff; i<lastcol; i++)
+                            for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                            {
+                                if (baseMtx->indexes[j] >= base_r0 &&
+                                    baseMtx->indexes[j] <= base_rN &&
+                                    baseMtx->indexes[j] <  numberOfRows + base_r0 - iroff)
+                                tmpStarts[i+1]++; 
+                            }
+                        for (int i=icoff+1; i <= startSize; i++) 
+                            tmpStarts[i] += tmpStarts[i-1];
+ 
+                        int valueSize = tmpStarts[startSize-1];
+                        int* tmpIndexes = new int[valueSize];
+
+                        ExpandedMatrixInColumnMajorForm->valueSize  = valueSize;
+                        ExpandedMatrixInColumnMajorForm->starts     = tmpStarts;
+
+                        // to get the values, go through the base matrix a second time
+                        if ( baseMtx->vType == ENUM_MATRIX_TYPE_constant)
+                        {
+                            MatrixElementValues* tmpValues = new ConstantMatrixValues();
+                            ((ConstantMatrixValues*)tmpValues)->el = new double[valueSize];
+
+                            int ival = 0;
+                            for (int i=icoff; i<lastcol; i++)
+                                for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                {
+                                    if (baseMtx->indexes[j] >= base_r0 &&
+                                        baseMtx->indexes[j] <= base_rN &&
+                                        baseMtx->indexes[j] <  numberOfRows + base_r0 - iroff)
+                                    {
+                                        tmpIndexes[ival] = baseMtx->indexes[j] - base_r0 + iroff; 
+                                        ((ConstantMatrixValues*)tmpValues)->el[ival]
+                                            = scaleMult*((ConstantMatrixValues*)baseMtx->values)->el[j];
+                                        ival++;
+                                    }    
+                                }
+                            ExpandedMatrixInColumnMajorForm->indexes = tmpIndexes;
+                            ExpandedMatrixInColumnMajorForm->values  = tmpValues;
+                        }
+
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_varref)
+                        {
+                            if (scaleMult == 1)
+                            {
+                                MatrixElementValues* tmpValues = new VarReferenceMatrixValues();
+                                ((VarReferenceMatrixValues*)tmpValues)->el = new int[valueSize];
+
+                                int ival = 0;
+                                for (int i=icoff; i<lastcol; i++)
+                                    for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                    {
+                                        if (baseMtx->indexes[j] >= base_r0 &&
+                                            baseMtx->indexes[j] <  numberOfRows + base_r0 - iroff)
+                                        {
+                                            tmpIndexes[ival] = baseMtx->indexes[j] - base_r0 + iroff; 
+                                            ((VarReferenceMatrixValues*)tmpValues)->el[ival]
+                                                = ((VarReferenceMatrixValues*)baseMtx->values)->el[j];
+                                            ival++;
+                                        }    
+                                    }
+                                ExpandedMatrixInColumnMajorForm->indexes = tmpIndexes;
+                                ExpandedMatrixInColumnMajorForm->values  = tmpValues;
+                            }
+                            else
+                            {
+                                // must convert to linear elements
+                                MatrixElementValues* tmpValues = new LinearMatrixValues();
+                                ((LinearMatrixValues*)tmpValues)->el 
+                                    = new LinearMatrixElement*[valueSize];
+
+                                int ival = 0;
+                                for (int i=icoff; i<lastcol; i++)
+                                    for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                    {
+                                        if (baseMtx->indexes[j] >= base_r0 &&
+                                            baseMtx->indexes[j] <  numberOfRows + base_r0 - iroff)
+                                        {
+                                            ((LinearMatrixValues*)tmpValues)->el[ival] 
+                                                = new LinearMatrixElement();
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->numberOfVarIdx = 1; 
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx 
+                                                = new LinearMatrixElementTerm*[1];
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0] 
+                                                = new LinearMatrixElementTerm();
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0]->coef 
+                                                = scaleMult;
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0]->idx  
+                                                = ((VarReferenceMatrixValues*)baseMtx->values)->el[j];
+                                            ival++;
+                                        }
+                                    }
+                                ExpandedMatrixInColumnMajorForm->indexes = tmpIndexes;
+                                ExpandedMatrixInColumnMajorForm->values  = tmpValues;
+                            }
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_linear)
+                        {
+                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
+                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
+
+                            int ival = 0;
+                            for (int i=icoff; i<lastcol; i++)
+                                for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                {
+                                    if (baseMtx->indexes[j] >= base_r0 &&
+                                        baseMtx->indexes[j] <  numberOfRows + base_r0 - iroff)
+                                    {
+                                        tmpValues->el[ival] = new LinearMatrixElement();
+                                        if (!(tmpValues->el[ival]
+                                                ->deepCopyFrom(((LinearMatrixValues*)baseMtx->values)->el[j])))
+                                        throw ErrorClass("failed copying linear element values in method getMatrixCoefficientsInColumnMajor()");
+                                    for (int k=0; k<tmpValues->el[ival]->numberOfVarIdx; k++)
+                                        tmpValues->el[ival]->varIdx[k]->coef *= scaleMult;
+                                    ival++;
+                                    }
+                                }
+                            ExpandedMatrixInColumnMajorForm->indexes = tmpIndexes;
+                            ExpandedMatrixInColumnMajorForm->values  = tmpValues;
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_general)
+                        {
+                            if (scaleMult == 1)
+                            {
+                                GeneralMatrixValues* tmpValues = new GeneralMatrixValues();
+                                tmpValues->el = new ScalarExpressionTree*[baseMtx->valueSize];
+
+                                int ival = 0;
+                                for (int i=icoff; i<lastcol; i++)
+                                    for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                    {
+                                        if (baseMtx->indexes[j] >= base_r0 &&
+                                            baseMtx->indexes[j] <  numberOfRows + base_r0 - iroff)
+                                        {
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival] 
+                                                = new ScalarExpressionTree();
+//                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot 
+//                                                = new OSnLNode();
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot 
+                                                = ((GeneralMatrixValues*)baseMtx->values)->el[j]->m_treeRoot
+                                                    ->copyNodeAndDescendants();
+                                            ival++;
+                                        }
+                                    }
+                                ExpandedMatrixInColumnMajorForm->indexes = tmpIndexes;
+                                ExpandedMatrixInColumnMajorForm->values  = tmpValues;
+                            }
+                            else
+                            {
+                                // add scalar multiple as a product
+                                GeneralMatrixValues* tmpValues = new GeneralMatrixValues();
+                                tmpValues->el = new ScalarExpressionTree*[baseMtx->valueSize];
+                                int ival = 0;
+                                for (int i=icoff; i<lastcol; i++)
+                                    for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                    {
+                                        if (baseMtx->indexes[j] >= base_r0 &&
+                                            baseMtx->indexes[j] <  numberOfRows + base_r0 - iroff)
+                                        {
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival] 
+                                                = new ScalarExpressionTree();
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot 
+                                                = new OSnLNodeTimes();
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot->m_mChildren[0] 
+                                                = new OSnLNodeNumber();
+                                            ((OSnLNodeNumber*)tmpValues->el[ival]->m_treeRoot->m_mChildren[0])->value = scaleMult;
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot->m_mChildren[1]
+                                                = ((GeneralMatrixValues*)baseMtx->values)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                                            ival++;
+
+                                        }
+                                    }
+                                ExpandedMatrixInColumnMajorForm->indexes = tmpIndexes;
+                                ExpandedMatrixInColumnMajorForm->values  = tmpValues;
+                            }
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_objref)
+                        {
+                                    throw ErrorClass("scalar multiple not defined for objref elements in  getMatrixCoefficientsInColumnMajor()");
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_conref)
+                        {
+                                    throw ErrorClass("scalar multiple not defined for conref elements in  getMatrixCoefficientsInColumnMajor()");
+                        }
+                    }
+                    return ExpandedMatrixInColumnMajorForm; 
+                }
+            }
+
+            else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+            {
+                //make sure the blocks have been expanded, then retrieve them 
+                if (!processBlocks(false, symmetry))
+                    throw ErrorClass("error processing blocks in getMatrixCoefficientsInColumnMajor()");
+                
+                ExpandedMatrixBlocks* currentBlocks
+                    = getBlocks(m_miRowPartition, m_iRowPartitionSize, m_miColumnPartition,
+                                m_iColumnPartitionSize, false, true);
+                //ExpandedMatrixByBlocks.push_back(currentBlocks);
+
+                ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
+                ExpandedMatrixInColumnMajorForm->b_deleteStartArray = true;
+                ExpandedMatrixInColumnMajorForm->b_deleteIndexArray = true;
+                ExpandedMatrixInColumnMajorForm->b_deleteValueArray = true;
+                ExpandedMatrixInColumnMajorForm->vType = getMatrixType();
+                ExpandedMatrixInColumnMajorForm->isRowMajor = false;
+                ExpandedMatrixInColumnMajorForm->symmetry = symmetry;
+                ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+                ExpandedMatrixInColumnMajorForm->starts = new int[numberOfColumns + 1];
+                for (int i=0; i <= numberOfColumns; i++)
+                    ExpandedMatrixInColumnMajorForm->starts[i] = 0;
+
+                // augment column lengths block by block
+                for (int i=0; i < currentBlocks->blockNumber; i++)
+                {
+                    int c0 = currentBlocks->colOffsets[currentBlocks->blockColumns[i]];
+                    int cN = currentBlocks->colOffsets[currentBlocks->blockColumns[i]+1];
+                    for (int j = c0; j < cN; j++)
+                    {
+                        ExpandedMatrixInColumnMajorForm->starts[j+1] += 
+                            ( currentBlocks->blocks[i]->starts[j+1-c0] 
+                            - currentBlocks->blocks[i]->starts[j  -c0] );
+                    } 
+                }
+
+                for (int i=1; i <= numberOfColumns; i++)
+                    ExpandedMatrixInColumnMajorForm->starts[i] +=
+                        ExpandedMatrixInColumnMajorForm->starts[i-1];
+                ExpandedMatrixInColumnMajorForm->valueSize = 
+                    ExpandedMatrixInColumnMajorForm->starts[numberOfColumns];
+                int* tmpIndexes = new int[ExpandedMatrixInColumnMajorForm->valueSize];
+
+                // go through the blocks a second time to store values --- based on type
+                if (currentBlocks->blocks[0]->vType == ENUM_MATRIX_TYPE_constant)
+                {
+                    ConstantMatrixValues* tmpValues = new ConstantMatrixValues();
+                    tmpValues->el
+                        = new double[ExpandedMatrixInColumnMajorForm->valueSize];
+
+                    for (int i=0; i < currentBlocks->blockNumber; i++)
+                    {
+                        int c0 = currentBlocks->colOffsets[currentBlocks->blockColumns[i]];
+                        int cN = currentBlocks->colOffsets[currentBlocks->blockColumns[i]+1];
+                        int row_adj = currentBlocks->rowOffsets[currentBlocks->blockRows[i]];
+
+                        for (int j = c0; j < cN; j++)
+                        {
+                            int loc = ExpandedMatrixInColumnMajorForm->starts[j];
+                            for (int k = currentBlocks->blocks[i]->starts[j-c0];
+                                     k < currentBlocks->blocks[i]->starts[j-c0+1]; k++)
+                            {
+                                tmpIndexes[loc] = currentBlocks->blocks[i]->indexes[k] + row_adj;
+                                ((ConstantMatrixValues*)tmpValues)->el[loc] 
+                                    = ((ConstantMatrixValues*)currentBlocks->blocks[i]->values)->el[k];
+                                loc++;
+                            }
+                            ExpandedMatrixInColumnMajorForm->starts[j] = loc;
+                        }
+                    }
+                    ExpandedMatrixInColumnMajorForm->indexes = tmpIndexes;
+                    ExpandedMatrixInColumnMajorForm->values  = tmpValues;
+                }
+                else
+                    throw ErrorClass("getMatrixCoefficientsInColumnMajor: Can only handle constant values so far in blocks");
+                for (int i=numberOfColumns; i > 0; i--)
+                    ExpandedMatrixInColumnMajorForm->starts[i] =
+                        ExpandedMatrixInColumnMajorForm->starts[i-1];
+                ExpandedMatrixInColumnMajorForm->starts[0] = 0;
+            }
+
+            else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+            {
+//              transformation: see if we can do at least AB, A'B, AB'
+//              for now:
+                throw ErrorClass("transformations not yet implemented in getMatrixCoefficientsInColumnMajor()");
+            }
+            else // some kind of elements --- if given column-wise, just copy pointers
+            {
+                if (!((MatrixElements*)m_mChildren[0])->rowMajor)
+                {
+                    ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
+                    ExpandedMatrixInColumnMajorForm->symmetry = symmetry;
+                    ExpandedMatrixInColumnMajorForm->b_deleteStartArray = false;
+                    ExpandedMatrixInColumnMajorForm->b_deleteIndexArray = false;
+                    ExpandedMatrixInColumnMajorForm->b_deleteValueArray = false;
+                    ExpandedMatrixInColumnMajorForm->isRowMajor = false;
+                    ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+                    ExpandedMatrixInColumnMajorForm->valueSize
+                        = ((MatrixElements*)m_mChildren[0])->numberOfValues;
+                    ExpandedMatrixInColumnMajorForm->starts
+                        = ((MatrixElements*)m_mChildren[0])->start->el;
+                    ExpandedMatrixInColumnMajorForm->vType     
+                        = getMatrixType();
+                    ExpandedMatrixInColumnMajorForm->indexes   
+                        = ((MatrixElements*)m_mChildren[0])->indexes->el;
+                    if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_constant)
+                        ExpandedMatrixInColumnMajorForm->values    
+                            = ((ConstantMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_varref)
+                        ExpandedMatrixInColumnMajorForm->values    
+                            = ((VarReferenceMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_linear)
+                        ExpandedMatrixInColumnMajorForm->values    
+                            = ((LinearMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_general)
+                        ExpandedMatrixInColumnMajorForm->values    
+                            = ((GeneralMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_objref)
+                        ExpandedMatrixInColumnMajorForm->values    
+                            = ((ObjReferenceMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_conref)
+                        ExpandedMatrixInColumnMajorForm->values    
+                            = ((ConReferenceMatrixElements*)m_mChildren[0])->values;
+                    else
+                        throw ErrorClass("Unknown element type in getMatrixCoefficientsInColumnMajor()");
+
+                    return ExpandedMatrixInColumnMajorForm; 
+                }
+                else // elements are given row-wise and must be "turned" 
+                {
+                    MatrixElements* refMtx = (MatrixElements*)m_mChildren[0];
+
+                    ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
+                    ExpandedMatrixInColumnMajorForm->symmetry = symmetry;
+                    ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+                    ExpandedMatrixInColumnMajorForm->vType = getMatrixType();
+                    ExpandedMatrixInColumnMajorForm->starts = new int[numberOfColumns + 1];
+                    for (int i=0; i <= numberOfColumns; i++)
+                        ExpandedMatrixInColumnMajorForm->starts[i] = 0;
+
+                    //if <values> is empty, return an empty matrix
+                    if (refMtx == NULL || refMtx->numberOfValues == 0)
+                    {
+                        ExpandedMatrixInColumnMajorForm->valueSize = 0;
+                        return ExpandedMatrixInColumnMajorForm;
+                    }                        
+
+                    ExpandedMatrixInColumnMajorForm->valueSize = refMtx->numberOfValues;
+                    ExpandedMatrixInColumnMajorForm->indexes = new int[refMtx->numberOfValues];
+
+                    int i, j, iTemp;
+                    int iNumSource = numberOfRows;
+
+                    for (i = 0; i < numberOfRows; i++)
+                    {
+                        for (j = refMtx->start->el[i]; j < refMtx->start->el[i + 1]; j++)
+                        {
+                            ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j] + 1] ++;
+                        }
+                    }
+                    ExpandedMatrixInColumnMajorForm->starts[0] = 0;
+
+                    for (i = 1; i <= numberOfColumns; i++ )
+                    {
+                        ExpandedMatrixInColumnMajorForm->starts[i] 
+                            += ExpandedMatrixInColumnMajorForm->starts [i - 1] ;
+                    }
+
+                    // store the elements, by type
+                    if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_constant)
+                    {
+                        ExpandedMatrixInColumnMajorForm->values = new ConstantMatrixValues();
+                        ((ConstantMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el
+                            = new double[refMtx->numberOfValues];
+
+                        for (i = 0; i < numberOfRows; i++)
+                        {
+                            // get row indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInColumnMajorForm->indexes [ iTemp] = i;
+                                ((ConstantMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[ iTemp] 
+                                    = ((ConstantMatrixValues*)((ConstantMatrixElements*)refMtx)->values)->el[j];
+                                ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_varref)
+                    {
+                        ExpandedMatrixInColumnMajorForm->values = new VarReferenceMatrixValues();
+                        ((VarReferenceMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el
+                            = new int[refMtx->numberOfValues];
+
+                        for (i = 0; i < numberOfRows; i++)
+                        {
+                            // get row indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInColumnMajorForm->indexes [ iTemp] = i;
+                                ((VarReferenceMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[ iTemp] 
+                                    = ((VarReferenceMatrixValues*)((VarReferenceMatrixElements*)refMtx)->values)->el[j];
+                                ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_linear)
+                    {
+                        ExpandedMatrixInColumnMajorForm->values = new LinearMatrixValues();
+                        ((LinearMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el 
+                            = new LinearMatrixElement*[refMtx->numberOfValues];
+                        for (i = 0; i < refMtx->numberOfValues; i++)
+                            ((LinearMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[i]
+                                = new LinearMatrixElement(); 
+
+                        for (i = 0; i < numberOfRows; i++)
+                        {
+                            // get row indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInColumnMajorForm->indexes [ iTemp] = i;
+                                if (!((LinearMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->
+                                    el[ iTemp]->deepCopyFrom(((LinearMatrixValues*)
+                                        ((LinearMatrixElements*)refMtx)->values)->el[j]))
+                                    return NULL;
+                                ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_general)
+                    {
+                        ExpandedMatrixInColumnMajorForm->values = new GeneralMatrixValues();
+                        ((GeneralMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el 
+                            = new ScalarExpressionTree*[refMtx->numberOfValues];
+                        for (i = 0; i < refMtx->numberOfValues; i++)
+                        {
+                            ((GeneralMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[i]
+                                = new ScalarExpressionTree();
+//                            ((GeneralMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[i]->m_treeRoot
+//                                = new OSnLNode(); 
+                        }
+
+                        for (i = 0; i < numberOfRows; i++)
+                        {
+                            // get row indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInColumnMajorForm->indexes [ iTemp] = i;
+                                ((GeneralMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[ iTemp]->m_treeRoot
+                                    = ((GeneralMatrixValues*)((GeneralMatrixElements*)refMtx)->values)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                                ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_objref)
+                    {
+                        ExpandedMatrixInColumnMajorForm->values = new ObjReferenceMatrixValues();
+                        ((ObjReferenceMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el
+                            = new int[refMtx->numberOfValues];
+
+                        for (i = 0; i < numberOfRows; i++)
+                        {
+                            // get row indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInColumnMajorForm->indexes [ iTemp] = i;
+                                ((ObjReferenceMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[ iTemp] 
+                                    = ((ObjReferenceMatrixValues*)((ObjReferenceMatrixElements*)refMtx)->values)->el[j];
+                                ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInColumnMajorForm->vType == ENUM_MATRIX_TYPE_conref)
+                    {
+                        ExpandedMatrixInColumnMajorForm->values = new ConReferenceMatrixValues();
+                        ((ConReferenceMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el 
+                            = new ConReferenceMatrixElement*[refMtx->numberOfValues];
+                        for (i = 0; i < refMtx->numberOfValues; i++)
+                            ((ConReferenceMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[i]
+                                = new ConReferenceMatrixElement(); 
+
+                        for (i = 0; i < numberOfRows; i++)
+                        {
+                            // get row indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInColumnMajorForm->indexes [ iTemp] = i;
+                                if (!((ConReferenceMatrixValues*)ExpandedMatrixInColumnMajorForm->values)->el[ iTemp]->deepCopyFrom(((ConReferenceMatrixValues*)((ConReferenceMatrixElements*)refMtx)->values)->el[j]))
+                                    return NULL;
+                                ExpandedMatrixInColumnMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+
+                    // readjust the starts
+                    for (i = numberOfColumns; i >= 1; i-- )
+                    {
+                        ExpandedMatrixInColumnMajorForm->starts[i]
+                            = ExpandedMatrixInColumnMajorForm->starts [i - 1] ;
+                    }
+
+                    ExpandedMatrixInColumnMajorForm->starts[0] = 0;
+                    return ExpandedMatrixInColumnMajorForm;
+                }
+            }
+        }
+
+        else // two or more constructors --- worry about overwriting and number of elements
+        {
+/* 
+        (basematrix plus) elements should be ok
+        maybe transformation (product) plus elements
+        others: throw error
+*/
+            throw ErrorClass("Multiple constructors not yet implemented in getMatrixCoefficientsInColumnMajor()");
+        }
+        return NULL;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of getMatrixCoefficientsInColumnMajor
+
+GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside getMatrixCoefficientsInRowMajor()");
+#endif
+    try
+    {
+        //Check if previous expansion available
+        if (ExpandedMatrixInRowMajorForm != NULL)
+            return ExpandedMatrixInRowMajorForm;
+        if (ExpandedMatrixInColumnMajorForm != NULL)
+        {
+            ExpandedMatrixInRowMajorForm = convertToOtherMajor(true);
+            return ExpandedMatrixInRowMajorForm;
+        }
+
+        // The complexity increases with the number of constructors
+        // Start by checking for empty matrix
+        if (inumberOfChildren == 0)
+        {
+            ExpandedMatrixInRowMajorForm = new GeneralSparseMatrix();
+            ExpandedMatrixInRowMajorForm->symmetry = symmetry;
+            ExpandedMatrixInRowMajorForm->valueSize = 0;
+            ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+            ExpandedMatrixInRowMajorForm->starts = new int[numberOfRows + 1];
+            for (int i=0; i <= numberOfRows; i++)
+                ExpandedMatrixInRowMajorForm->starts[i] = 0;
+            return ExpandedMatrixInRowMajorForm;
+        }
+
+        // single constructor --- process by type 
+        else if (inumberOfChildren == 1)
+        {
+            if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+            {
+                int  baseMtxIdx = ((BaseMatrix*)m_mChildren[0])->baseMatrixIdx;
+                OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
+
+                int iroff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
+                int icoff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+                int base_r0, base_c0, base_rN, base_cN;
+
+                GeneralSparseMatrix* baseMtx;
+                if (((BaseMatrix*)m_mChildren[0])->baseTranspose)
+                {
+                    baseMtx = baseMtxPtr->getMatrixCoefficientsInColumnMajor();
+//                    iroff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+//                    icoff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
+                    base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
+                    base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
+                    base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
+                    base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
+                    if (base_cN < 0)
+                        base_cN = baseMtxPtr->numberOfColumns - 1;
+                    if (base_rN < 0)
+                        base_rN = baseMtxPtr->numberOfRows - 1;
+                }
+                else
+                {
+                    baseMtx = baseMtxPtr->getMatrixCoefficientsInRowMajor();
+//                    iroff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
+//                    icoff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
+                    base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
+                    base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
+                    base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
+                    base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
+                    if (base_cN < 0)
+                        base_cN = baseMtxPtr->numberOfRows - 1;
+                    if (base_rN < 0)
+                        base_rN = baseMtxPtr->numberOfColumns - 1;
+                }
+
+                double scaleMult = ((BaseMatrix*)m_mChildren[0])->scalarMultiplier;
+
+                ExpandedMatrixInRowMajorForm = new GeneralSparseMatrix();
+                ExpandedMatrixInRowMajorForm->symmetry  = symmetry;
+                ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+
+                // position and other options can affect what arrays need to be duplicated
+                bool isShifted = (iroff > 0 || icoff > 0);
+                bool isCropped = (base_c0 > 0 || base_r0 > 0 || 
+                                  base_rN < baseMtxPtr->numberOfRows - 1 ||
+                                  base_cN < baseMtxPtr->numberOfColumns - 1);
+                bool isClipped = (iroff + base_rN - base_r0 >= numberOfRows ||
+                                  icoff + base_cN - base_c0 >= numberOfColumns);
+                bool isScaled  = (scaleMult != 1);
+                bool reTyped   = (getMatrixType() != baseMtx->vType);
+                bool hasGap    = (icoff + base_cN - base_c0 < numberOfColumns - 1);
+
+                //default position without cropping, scaling or retyping is easiest
+                if ( !isShifted && !isCropped && !isClipped && !isScaled && !reTyped )
+                {
+                    ExpandedMatrixInRowMajorForm->b_deleteStartArray = false;
+                    ExpandedMatrixInRowMajorForm->b_deleteIndexArray = hasGap;
+                    ExpandedMatrixInRowMajorForm->b_deleteValueArray = false;
+                    ExpandedMatrixInRowMajorForm->isRowMajor = false;
+                    ExpandedMatrixInRowMajorForm->valueSize = baseMtx->valueSize;
+                    ExpandedMatrixInRowMajorForm->vType     = baseMtx->vType;
+                    ExpandedMatrixInRowMajorForm->indexes   = baseMtx->indexes;
+                    ExpandedMatrixInRowMajorForm->values    = baseMtx->values;
+
+                    // even in default layout the baseMatrix may still have different dimensions...
+                    if (!hasGap)
+                        ExpandedMatrixInColumnMajorForm->starts = baseMtx->starts;
+                    else
+                    {
+                        ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+                        ExpandedMatrixInRowMajorForm->starts =
+                            new int[ExpandedMatrixInRowMajorForm->startSize];
+                        for (int i=0; i < baseMtx->startSize; i++)
+                            ExpandedMatrixInRowMajorForm->starts[i] = baseMtx->starts[i];
+                        int lastStart = baseMtx->valueSize;
+                        for (int i=baseMtx->startSize; 
+                                 i < ExpandedMatrixInRowMajorForm->startSize; i++)
+                            ExpandedMatrixInRowMajorForm->starts[i] = lastStart;
+                    }
+                    return ExpandedMatrixInRowMajorForm; 
+                }
+                else
+                {
+                    // cropping, positioning or scaling all require a deep copy
+                    if ( !isShifted && !isCropped && !isClipped )
+                    {
+                        // it's a bit easier if we are just scaling
+                        ExpandedMatrixInRowMajorForm->b_deleteStartArray = hasGap;
+                        ExpandedMatrixInRowMajorForm->b_deleteIndexArray = false;
+                        ExpandedMatrixInRowMajorForm->b_deleteValueArray = true;
+                        ExpandedMatrixInRowMajorForm->isRowMajor = false;
+                        ExpandedMatrixInRowMajorForm->valueSize  = baseMtx->valueSize;
+                        ExpandedMatrixInRowMajorForm->vType      = baseMtx->vType;
+                        ExpandedMatrixInRowMajorForm->indexes    = baseMtx->indexes;
+
+                        // even in default layout the baseMatrix may still have different dimensions...
+                        if (!hasGap)
+                            ExpandedMatrixInRowMajorForm->starts = baseMtx->starts;
+                        else
+                        {
+                            ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+                            ExpandedMatrixInRowMajorForm->starts =
+                                new int[ExpandedMatrixInRowMajorForm->startSize];
+                            for (int i=0; i < baseMtx->startSize; i++)
+                                ExpandedMatrixInRowMajorForm->starts[i] = baseMtx->starts[i];
+                            int lastStart = baseMtx->valueSize;
+                            for (int i=baseMtx->startSize; 
+                                     i < ExpandedMatrixInRowMajorForm->startSize; i++)
+                                ExpandedMatrixInRowMajorForm->starts[i] = lastStart;
+                        }
+
+                        // the values are a bit more difficult ...
+                        if ( baseMtx->vType == ENUM_MATRIX_TYPE_constant)
+                        {
+                            ExpandedMatrixInRowMajorForm->values = new ConstantMatrixValues();
+                            ((ConstantMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el
+                                = new double[baseMtx->valueSize];
+                            for (int i = 0; i < baseMtx->valueSize; i++)
+                                ((ConstantMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[i]
+                                    = scaleMult*((ConstantMatrixValues*)baseMtx->values)->el[i];
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_varref)
+                        {
+                            // must convert to linear elements
+                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
+                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
+                            for (int i = 0; i < baseMtx->valueSize; i++)
+                            {
+                                tmpValues->el[i] = new LinearMatrixElement();
+                                tmpValues->el[i]->numberOfVarIdx = 1; 
+                                tmpValues->el[i]->varIdx    = new LinearMatrixElementTerm*[1];
+                                tmpValues->el[i]->varIdx[0] = new LinearMatrixElementTerm();
+                                tmpValues->el[i]->varIdx[0]->coef = scaleMult;
+                                tmpValues->el[i]->varIdx[0]->idx  
+                                    = ((VarReferenceMatrixValues*)baseMtx->values)->el[i];
+                            }
+                            ExpandedMatrixInRowMajorForm->values = tmpValues;
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_linear)
+                        {
+                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
+                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
+                            for (int i = 0; i < baseMtx->valueSize; i++)
+                            {
+                                tmpValues->el[i] = new LinearMatrixElement();
+                                if (!(tmpValues->el[i]
+                                        ->deepCopyFrom(((LinearMatrixValues*)baseMtx->values)->el[i])))
+                                    throw ErrorClass("failed copying linear element values in method getMatrixCoefficientsInRowMajor()");
+                                for (int j=0; j<tmpValues->el[i]->numberOfVarIdx; j++)
+                                    tmpValues->el[i]->varIdx[j]->coef *= scaleMult;
+                            }
+                            ExpandedMatrixInRowMajorForm->values = tmpValues;
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_general)
+                        {
+                            // add scalar multiple as a product
+                            GeneralMatrixValues* tmpValues = new GeneralMatrixValues();
+                            tmpValues->el = new ScalarExpressionTree*[baseMtx->valueSize];
+                            for (int i = 0; i < baseMtx->valueSize; i++)
+                            {
+                                tmpValues->el[i] = new ScalarExpressionTree();
+                                tmpValues->el[i]->m_treeRoot = new OSnLNodeTimes();
+                                tmpValues->el[i]->m_treeRoot->m_mChildren[0] = new OSnLNodeNumber();
+                                ((OSnLNodeNumber*)tmpValues->el[i]->m_treeRoot->m_mChildren[0])->value = scaleMult;
+                                tmpValues->el[i]->m_treeRoot->m_mChildren[1]
+                                     = ((GeneralMatrixValues*)baseMtx->values)->el[i]->m_treeRoot
+                                        ->copyNodeAndDescendants();
+                            }
+                            ExpandedMatrixInRowMajorForm->values = tmpValues;
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_objref)
+                        {
+                            throw ErrorClass("scalar multiple not defined for objref elements in  getMatrixCoefficientsInRowMajor()");
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_conref)
+                        {
+                            throw ErrorClass("scalar multiple not defined for conref elements in  getMatrixCoefficientsInRowMajor()");
+                        }
+                        return ExpandedMatrixInColumnMajorForm; 
+                    }
+                    else // repositioned Basematrix with cropping
+                    {
+                        ExpandedMatrixInRowMajorForm->b_deleteStartArray = true;
+                        ExpandedMatrixInRowMajorForm->b_deleteIndexArray = true;
+                        ExpandedMatrixInRowMajorForm->b_deleteValueArray = true;
+                        ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+                        ExpandedMatrixInRowMajorForm->isRowMajor = false;
+                        ExpandedMatrixInRowMajorForm->vType      = baseMtx->vType;
+
+                        int  startSize = numberOfRows + 1; 
+                        int* tmpStarts = new int[startSize];
+                        for (int i=0; i < startSize; i++)
+                            tmpStarts[i] = 0;
+
+                        int adjc = icoff - base_c0;
+                        int lastcol = icoff + base_cN - base_c0 + 1;
+                        if (lastcol > numberOfRows)
+                            lastcol = numberOfRows;
+
+                        // count elements in each column and calculate starts
+                        for (int i=icoff; i<lastcol; i++)
+                            for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                            {
+                                if (baseMtx->indexes[j] >= base_r0 &&
+                                    baseMtx->indexes[j] <= base_rN &&
+                                    baseMtx->indexes[j] <  numberOfColumns + base_r0 - iroff)
+                                tmpStarts[i+1]++; 
+                            }
+                        for (int i=icoff+1; i <= startSize; i++)
+                            tmpStarts[i] += tmpStarts[i-1];
+ 
+                        int valueSize = tmpStarts[startSize-1];
+                        int* tmpIndexes = new int[valueSize];
+
+                        ExpandedMatrixInRowMajorForm->valueSize  = valueSize;
+                        ExpandedMatrixInRowMajorForm->starts     = tmpStarts;
+
+                        // to get the values, go through the base matrix a second time
+                        if ( baseMtx->vType == ENUM_MATRIX_TYPE_constant)
+                        {
+                            MatrixElementValues* tmpValues = new ConstantMatrixValues();
+                            ((ConstantMatrixValues*)tmpValues)->el = new double[valueSize];
+
+                            int ival = 0;
+                            for (int i=icoff; i<lastcol; i++)
+                                for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                {
+                                    if (baseMtx->indexes[j] >= base_r0 &&
+                                        baseMtx->indexes[j] <= base_rN &&
+                                        baseMtx->indexes[j] <  numberOfColumns + base_r0 - iroff)
+                                    {
+                                        tmpIndexes[ival] = baseMtx->indexes[j] - base_r0 + iroff; 
+                                        ((ConstantMatrixValues*)tmpValues)->el[ival]
+                                            = scaleMult*((ConstantMatrixValues*)baseMtx->values)->el[j];
+                                        ival++;
+                                    }    
+                                }
+                            ExpandedMatrixInRowMajorForm->indexes = tmpIndexes;
+                            ExpandedMatrixInRowMajorForm->values  = tmpValues;
+                        }
+
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_varref)
+                        {
+                            if (scaleMult == 1)
+                            {
+                                MatrixElementValues* tmpValues = new VarReferenceMatrixValues();
+                                ((VarReferenceMatrixValues*)tmpValues)->el = new int[valueSize];
+
+                                int ival = 0;
+                                for (int i=icoff; i<lastcol; i++)
+                                    for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                    {
+                                        if (baseMtx->indexes[j] >= base_r0 &&
+                                            baseMtx->indexes[j] <  numberOfColumns + base_r0 - iroff)
+                                        {
+                                            tmpIndexes[ival] = baseMtx->indexes[j] + base_r0 - iroff; 
+                                            ((ConstantMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[ival]
+                                                = scaleMult*((ConstantMatrixValues*)baseMtx->values)->el[j];
+                                            ival++;
+                                        }    
+                                    }
+                                ExpandedMatrixInRowMajorForm->indexes = tmpIndexes;
+                                ExpandedMatrixInRowMajorForm->values  = tmpValues;
+                            }
+                            else
+                            {
+                                // must convert to linear elements
+                                MatrixElementValues* tmpValues = new LinearMatrixValues();
+                                ((LinearMatrixValues*)tmpValues)->el 
+                                    = new LinearMatrixElement*[valueSize];
+
+                                int ival = 0;
+                                for (int i=icoff; i<lastcol; i++)
+                                    for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                    {
+                                        if (baseMtx->indexes[j] >= base_r0 &&
+                                            baseMtx->indexes[j] <  numberOfColumns + base_r0 - iroff)
+                                        {
+                                            ((LinearMatrixValues*)tmpValues)->el[ival] 
+                                                = new LinearMatrixElement();
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->numberOfVarIdx = 1; 
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx 
+                                                = new LinearMatrixElementTerm*[1];
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0] 
+                                                = new LinearMatrixElementTerm();
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0]->coef 
+                                                = scaleMult;
+                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0]->idx  
+                                                = ((VarReferenceMatrixValues*)baseMtx->values)->el[j];
+                                            ival++;
+                                        }
+                                    }
+                                ExpandedMatrixInRowMajorForm->indexes = tmpIndexes;
+                                ExpandedMatrixInRowMajorForm->values  = tmpValues;
+                            }
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_linear)
+                        {
+                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
+                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
+
+                            int ival = 0;
+                            for (int i=icoff; i<lastcol; i++)
+                                for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                {
+                                    if (baseMtx->indexes[j] >= base_r0 &&
+                                        baseMtx->indexes[j] <  numberOfColumns + base_r0 - iroff)
+                                    {
+                                        tmpValues->el[ival] = new LinearMatrixElement();
+                                        if (!(tmpValues->el[ival]
+                                                ->deepCopyFrom(((LinearMatrixValues*)baseMtx->values)->el[j])))
+                                        throw ErrorClass("failed copying linear element values in method getMatrixCoefficientsInRowMajor()");
+                                    for (int k=0; k<tmpValues->el[ival]->numberOfVarIdx; k++)
+                                        tmpValues->el[ival]->varIdx[k]->coef *= scaleMult;
+                                    ival++;
+                                    }
+                                }
+                            ExpandedMatrixInRowMajorForm->indexes = tmpIndexes;
+                            ExpandedMatrixInRowMajorForm->values  = tmpValues;
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_general)
+                        {
+                            if (scaleMult == 1)
+                            {
+                                GeneralMatrixValues* tmpValues = new GeneralMatrixValues();
+                                tmpValues->el = new ScalarExpressionTree*[baseMtx->valueSize];
+
+                                int ival = 0;
+                                for (int i=icoff; i<lastcol; i++)
+                                    for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                    {
+                                        if (baseMtx->indexes[j] >= base_r0 &&
+                                            baseMtx->indexes[j] <  numberOfColumns + base_r0 - iroff)
+                                        {
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival] 
+                                                = new ScalarExpressionTree();
+//                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot 
+//                                                = new OSnLNode();
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot 
+                                                = ((GeneralMatrixValues*)baseMtx->values)->el[j]->m_treeRoot
+                                                    ->copyNodeAndDescendants();
+                                            ival++;
+                                        }
+                                    }
+                                ExpandedMatrixInRowMajorForm->indexes = tmpIndexes;
+                                ExpandedMatrixInRowMajorForm->values  = tmpValues;
+                            }
+                            else
+                            {
+                                // add scalar multiple as a product
+                                GeneralMatrixValues* tmpValues = new GeneralMatrixValues();
+                                tmpValues->el = new ScalarExpressionTree*[baseMtx->valueSize];
+                                int ival = 0;
+                                for (int i=icoff; i<lastcol; i++)
+                                    for (int j=baseMtx->starts[i-adjc]; j<baseMtx->starts[i-adjc+1]; j++)
+                                    {
+                                        if (baseMtx->indexes[j] >= base_r0 &&
+                                            baseMtx->indexes[j] <  numberOfColumns + base_r0 - iroff)
+                                        {
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival] 
+                                                = new ScalarExpressionTree();
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot 
+                                                = new OSnLNodeTimes();
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot->m_mChildren[0] 
+                                                = new OSnLNodeNumber();
+                                            ((OSnLNodeNumber*)tmpValues->el[ival]->m_treeRoot->m_mChildren[0])->value = scaleMult;
+                                            ((GeneralMatrixValues*)tmpValues)->el[ival]->m_treeRoot->m_mChildren[1]
+                                                = ((GeneralMatrixValues*)baseMtx->values)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                                            ival++;
+
+                                        }
+                                    }
+                                ExpandedMatrixInRowMajorForm->indexes = tmpIndexes;
+                                ExpandedMatrixInRowMajorForm->values  = tmpValues;
+                            }
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_objref)
+                        {
+                                    throw ErrorClass("scalar multiple not defined for objref elements in  getMatrixCoefficientsInRowMajor()");
+                        }
+                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_conref)
+                        {
+                                    throw ErrorClass("scalar multiple not defined for conref elements in  getMatrixCoefficientsInRowMajor()");
+                        }
+                    }
+                    return ExpandedMatrixInRowMajorForm; 
+                }
+            }
+
+            else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+            {
+                //make sure the blocks have been expanded, then retrieve them 
+                if (!processBlocks(true, symmetry))
+                    throw ErrorClass("error processing blocks in getMatrixCoefficientsInRowMajor()");
+                
+                ExpandedMatrixBlocks* currentBlocks 
+                    = getBlocks(m_miRowPartition, m_iRowPartitionSize, m_miColumnPartition,
+                                m_iColumnPartitionSize, true, true);
+                //ExpandedMatrixByBlocks.push_back(currentBlocks);
+
+                ExpandedMatrixInRowMajorForm = new GeneralSparseMatrix();
+                ExpandedMatrixInRowMajorForm->b_deleteStartArray = true;
+                ExpandedMatrixInRowMajorForm->b_deleteIndexArray = true;
+                ExpandedMatrixInRowMajorForm->b_deleteValueArray = true;
+                ExpandedMatrixInRowMajorForm->vType = getMatrixType();
+                ExpandedMatrixInRowMajorForm->isRowMajor = false;
+                ExpandedMatrixInRowMajorForm->symmetry = symmetry;
+                ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+                ExpandedMatrixInRowMajorForm->starts = new int[numberOfRows + 1];
+                for (int i=0; i <= numberOfRows; i++)
+                    ExpandedMatrixInRowMajorForm->starts[i] = 0;
+
+                // augment column lengths block by block
+                for (int i=0; i < currentBlocks->blockNumber; i++)
+                {
+                    int c0 = currentBlocks->colOffsets[currentBlocks->blockColumns[i]];
+                    int cN = currentBlocks->colOffsets[currentBlocks->blockColumns[i]+1];
+                    for (int j = c0; j < cN; j++)
+                    {
+                        ExpandedMatrixInRowMajorForm->starts[j+1] += 
+                            ( currentBlocks->blocks[i]->starts[j+1-c0] 
+                            - currentBlocks->blocks[i]->starts[j  -c0] );
+                    } 
+                }
+
+                for (int i=1; i <= numberOfRows; i++)
+                    ExpandedMatrixInRowMajorForm->starts[i] +=
+                        ExpandedMatrixInRowMajorForm->starts[i-1];
+                ExpandedMatrixInRowMajorForm->valueSize = 
+                    ExpandedMatrixInRowMajorForm->starts[numberOfRows];
+                int* tmpIndexes = new int[ExpandedMatrixInRowMajorForm->valueSize];
+
+                // go through the blocks a second time to store values --- based on type
+                if (currentBlocks->blocks[0]->vType == ENUM_MATRIX_TYPE_constant)
+                {
+                    ConstantMatrixValues* tmpValues = new ConstantMatrixValues();
+                    tmpValues->el
+                        = new double[ExpandedMatrixInRowMajorForm->valueSize];
+
+                    for (int i=0; i < currentBlocks->blockNumber; i++)
+                    {
+                        int c0 = currentBlocks->rowOffsets[currentBlocks->blockRows[i]];
+                        int cN = currentBlocks->rowOffsets[currentBlocks->blockRows[i]+1];
+                        int row_adj = currentBlocks->colOffsets[currentBlocks->blockColumns[i]];
+
+                        for (int j = c0; j < cN; j++)
+                        {
+                            int loc = ExpandedMatrixInRowMajorForm->starts[j];
+                            for (int k = currentBlocks->blocks[i]->starts[j-c0];
+                                     k < currentBlocks->blocks[i]->starts[j-c0+1]; k++)
+                            {
+                                tmpIndexes[loc] = currentBlocks->blocks[i]->indexes[k] + row_adj;
+                                ((ConstantMatrixValues*)tmpValues)->el[loc] 
+                                    = ((ConstantMatrixValues*)currentBlocks->blocks[i]->values)->el[k];
+                                loc++;
+                            }
+                            ExpandedMatrixInRowMajorForm->starts[j] = loc;
+                        }
+                    }
+                    ExpandedMatrixInRowMajorForm->indexes = tmpIndexes;
+                    ExpandedMatrixInRowMajorForm->values  = tmpValues;
+                }
+                else
+                    throw ErrorClass("getMatrixCoefficientsInRowMajor: Can only handle constant values so far in blocks");
+                for (int i=numberOfColumns; i > 0; i--)
+                    ExpandedMatrixInRowMajorForm->starts[i] =
+                        ExpandedMatrixInRowMajorForm->starts[i-1];
+                ExpandedMatrixInRowMajorForm->starts[0] = 0;
+            }
+
+            else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+            {
+//              transformation: see if we can do at least AB, A'B, AB'
+//              for now:
+                throw ErrorClass("transformations not yet implemented in getMatrixCoefficientsInColumnMajor()");
+            }
+            else // some kind of elements --- if given row-wise, just copy pointers
+            {
+                if (((MatrixElements*)m_mChildren[0])->rowMajor)
+                {
+                    ExpandedMatrixInRowMajorForm = new GeneralSparseMatrix();
+                    ExpandedMatrixInRowMajorForm->symmetry = symmetry;
+                    ExpandedMatrixInRowMajorForm->b_deleteStartArray = false;
+                    ExpandedMatrixInRowMajorForm->b_deleteIndexArray = false;
+                    ExpandedMatrixInRowMajorForm->b_deleteValueArray = false;
+                    ExpandedMatrixInRowMajorForm->isRowMajor = false;
+                    ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+                    ExpandedMatrixInRowMajorForm->valueSize
+                        = ((MatrixElements*)m_mChildren[0])->numberOfValues;
+                    ExpandedMatrixInRowMajorForm->starts
+                        = ((MatrixElements*)m_mChildren[0])->start->el;
+                    ExpandedMatrixInRowMajorForm->vType     
+                        = getMatrixType();
+                    ExpandedMatrixInRowMajorForm->indexes   
+                        = ((MatrixElements*)m_mChildren[0])->indexes->el;
+                    if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_constant)
+                        ExpandedMatrixInRowMajorForm->values    
+                            = ((ConstantMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_varref)
+                        ExpandedMatrixInRowMajorForm->values    
+                            = ((VarReferenceMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_linear)
+                        ExpandedMatrixInRowMajorForm->values    
+                            = ((LinearMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_general)
+                        ExpandedMatrixInRowMajorForm->values    
+                            = ((GeneralMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_objref)
+                        ExpandedMatrixInRowMajorForm->values    
+                            = ((ObjReferenceMatrixElements*)m_mChildren[0])->values;
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_conref)
+                        ExpandedMatrixInRowMajorForm->values    
+                            = ((ConReferenceMatrixElements*)m_mChildren[0])->values;
+                    else
+                        throw ErrorClass("Unknown element type in getMatrixCoefficientsInRowMajor()");
+
+                    return ExpandedMatrixInRowMajorForm; 
+                }
+
+                else // elements are given column-wise and must be "turned" 
+                {
+                    MatrixElements* refMtx = (MatrixElements*)m_mChildren[0];
+
+                    ExpandedMatrixInRowMajorForm = new GeneralSparseMatrix();
+                    ExpandedMatrixInRowMajorForm->symmetry = symmetry;
+                    ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+                    ExpandedMatrixInRowMajorForm->vType = getMatrixType();
+                    ExpandedMatrixInRowMajorForm->starts = new int[numberOfRows + 1];
+                    for (int i=0; i <= numberOfRows; i++)
+                        ExpandedMatrixInRowMajorForm->starts[i] = 0;
+
+                    //if <values> is empty, return an empty matrix
+                    if (refMtx == NULL || refMtx->numberOfValues == 0)
+                    {
+                        ExpandedMatrixInRowMajorForm->valueSize = 0;
+                        return ExpandedMatrixInRowMajorForm;
+                    }                        
+
+                    ExpandedMatrixInRowMajorForm->valueSize = refMtx->numberOfValues;
+                    ExpandedMatrixInRowMajorForm->indexes = new int[refMtx->numberOfValues];
+
+                    int i, j, iTemp;
+                    int iNumSource = numberOfColumns;
+
+                    for (i = 0; i < numberOfColumns; i++)
+                    {
+                        for (j = refMtx->start->el[i]; j < refMtx->start->el[i + 1]; j++)
+                        {
+                            ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j] + 1] ++;
+                        }
+                    }
+                    ExpandedMatrixInRowMajorForm->starts[0] = 0;
+
+                    for (i = 1; i <= numberOfRows; i++ )
+                    {
+                        ExpandedMatrixInRowMajorForm->starts[i] 
+                            += ExpandedMatrixInRowMajorForm->starts [i - 1] ;
+                    }
+
+                    // store the elements, by type
+                    if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_constant)
+                    {
+                        ExpandedMatrixInRowMajorForm->values = new ConstantMatrixValues();
+                        ((ConstantMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el
+                            = new double[refMtx->numberOfValues];
+
+                        for (i = 0; i < numberOfColumns; i++)
+                        {
+                            // get column indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInRowMajorForm->indexes [ iTemp] = i;
+                                ((ConstantMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[ iTemp] 
+                                    = ((ConstantMatrixValues*)((ConstantMatrixElements*)refMtx)->values)->el[j];
+                                ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_varref)
+                    {
+                        ExpandedMatrixInRowMajorForm->values = new VarReferenceMatrixValues();
+                        ((VarReferenceMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el
+                            = new int[refMtx->numberOfValues];
+
+                        for (i = 0; i < numberOfColumns; i++)
+                        {
+                            // get column indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInRowMajorForm->indexes [ iTemp] = i;
+                                ((VarReferenceMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[ iTemp] 
+                                    = ((VarReferenceMatrixValues*)((VarReferenceMatrixElements*)refMtx)->values)->el[j];
+                                ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_linear)
+                    {
+                        ExpandedMatrixInRowMajorForm->values = new LinearMatrixValues();
+                        ((LinearMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el 
+                            = new LinearMatrixElement*[refMtx->numberOfValues];
+                        for (i = 0; i < refMtx->numberOfValues; i++)
+                            ((LinearMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[i]
+                                = new LinearMatrixElement(); 
+
+                        for (i = 0; i < numberOfColumns; i++)
+                        {
+                            // get column indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInRowMajorForm->indexes [ iTemp] = i;
+                                if (!((LinearMatrixValues*)ExpandedMatrixInRowMajorForm->values)->
+                                    el[ iTemp]->deepCopyFrom(((LinearMatrixValues*)
+                                        ((LinearMatrixElements*)refMtx)->values)->el[j]))
+                                    return NULL;
+                                ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_general)
+                    {
+                        ExpandedMatrixInRowMajorForm->values = new GeneralMatrixValues();
+                        ((GeneralMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el 
+                            = new ScalarExpressionTree*[refMtx->numberOfValues];
+                        for (i = 0; i < refMtx->numberOfValues; i++)
+                        {
+                            ((GeneralMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[i]
+                                = new ScalarExpressionTree();
+//                            ((GeneralMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[i]->m_treeRoot
+//                                = new OSnLNode(); 
+                        }
+
+                        for (i = 0; i < numberOfColumns; i++)
+                        {
+                            // get column indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInRowMajorForm->indexes [ iTemp] = i;
+                                ((GeneralMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[ iTemp]->m_treeRoot
+                                    = ((GeneralMatrixValues*)((GeneralMatrixElements*)refMtx)->values)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                                ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_objref)
+                    {
+                        ExpandedMatrixInRowMajorForm->values = new ObjReferenceMatrixValues();
+                        ((ObjReferenceMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el
+                            = new int[refMtx->numberOfValues];
+
+                        for (i = 0; i < numberOfColumns; i++)
+                        {
+                            // get column indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInRowMajorForm->indexes [ iTemp] = i;
+                                ((ObjReferenceMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[ iTemp] 
+                                    = ((ObjReferenceMatrixValues*)((ObjReferenceMatrixElements*)refMtx)->values)->el[j];
+                                ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+                    else if (ExpandedMatrixInRowMajorForm->vType == ENUM_MATRIX_TYPE_conref)
+                    {
+                        ExpandedMatrixInRowMajorForm->values = new ConReferenceMatrixValues();
+                        ((ConReferenceMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el 
+                            = new ConReferenceMatrixElement*[refMtx->numberOfValues];
+                        for (i = 0; i < refMtx->numberOfValues; i++)
+                            ((ConReferenceMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[i]
+                                = new ConReferenceMatrixElement(); 
+
+                        for (i = 0; i < numberOfColumns; i++)
+                        {
+                            // get column indices and values of the matrix
+                            for (j = refMtx->start->el[i]; j < refMtx->start->el[ i + 1 ]; j++)
+                            {
+                                iTemp = ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]];
+                                ExpandedMatrixInRowMajorForm->indexes [ iTemp] = i;
+                                if (!((ConReferenceMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[ iTemp]->deepCopyFrom(((ConReferenceMatrixValues*)((ConReferenceMatrixElements*)refMtx)->values)->el[j]))
+                                    return NULL;
+                                ExpandedMatrixInRowMajorForm->starts[refMtx->indexes->el[j]] ++;
+                            }
+                        }
+                    }
+
+                    // readjust the starts
+                    for (i = numberOfRows; i >= 1; i-- )
+                    {
+                        ExpandedMatrixInRowMajorForm->starts[i]
+                            = ExpandedMatrixInRowMajorForm->starts [i - 1] ;
+                    }
+
+                    ExpandedMatrixInRowMajorForm->starts[0] = 0;
+                    return ExpandedMatrixInRowMajorForm;
+                }
+            }
+        }
+
+        else // two or more constructors --- worry about overwriting and number of elements
+        {
+/* 
+        (basematrix plus) elements should be ok
+        maybe transformation (product) plus elements
+        others: throw error
+*/
+            throw ErrorClass("Multiple constructors not yet implemented in getMatrixCoefficientsInRowMajor()");
+        }
+        return NULL;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of getMatrixCoefficientsInRowMajor
+
+bool MatrixType::expandElements(bool rowMajor)
 {
     return NULL;
-}// end of getMatrixInRowMajorForm
+}// end of expandElements
+
+bool MatrixType::printExpandedMatrix(bool rowMajor_)
+{
+    try
+    {
+        GeneralSparseMatrix* tmp;
+
+        if (rowMajor_)
+        {
+            if (ExpandedMatrixInRowMajorForm == NULL)
+                return false;
+            tmp = ExpandedMatrixInRowMajorForm;
+        }
+        else
+        {
+            if (ExpandedMatrixInColumnMajorForm == NULL)
+                return false;
+            tmp = ExpandedMatrixInColumnMajorForm;
+        }
+        
+        std::ostringstream outStr;
+    
+        ENUM_MATRIX_CONSTRUCTOR_TYPE type;
+
+        if (getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix)
+        {
+            outStr << "matrix " << ((OSMatrix*)this)->idx;
+            if (((OSMatrix*)this)->name != "")
+                outStr << " ("  << ((OSMatrix*)this)->name << ")";
+            outStr << std::endl;
+        }
+        else if (getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_block)
+            outStr << "matrix block" << std::endl;
+        else
+            throw ErrorClass("matrix type unknown or not set");
+
+        outStr << "number of rows     " << numberOfRows << std::endl;
+        outStr << "number of columns  " << numberOfColumns << std::endl;
+        outStr << "number of nonzeros " << tmp->valueSize << std::endl;
+        outStr << "type of nonzeros   " << returnMatrixTypeString(tmp->vType) << std::endl;
+        outStr << "symmetry           " << returnMatrixSymmetryString(symmetry) << std::endl;
+
+        outStr << std::endl << "These matrix arrays are organized ";             
+        if (rowMajor_)
+            outStr << "by rows" << std::endl;
+        else
+            outStr << "by columns" << std::endl;
+
+        outStr << std::endl << "starts:";
+        for (int i=0; i < tmp->startSize; i++)
+            outStr << "  " << tmp->starts[i];
+        outStr << std::endl;
+
+        outStr << std::endl << "indexes:";
+        for (int i=0; i < tmp->valueSize; i++)
+            outStr << "  " << tmp->indexes[i];
+        outStr << std::endl;
+
+        outStr << std::endl << "values:";
+        if (tmp->vType == ENUM_MATRIX_TYPE_constant)
+        {
+            for (int i=0; i < tmp->valueSize; i++)
+                outStr << "  " << ((ConstantMatrixValues*)tmp->values)->el[i];
+            outStr << std::endl;
+        }
+        else if (tmp->vType == ENUM_MATRIX_TYPE_varref)
+        {
+            for (int i=0; i < tmp->valueSize; i++)
+                outStr << "  " << ((VarReferenceMatrixValues*)tmp->values)->el[i];
+            outStr << std::endl;
+        }
+        else if (tmp->vType == ENUM_MATRIX_TYPE_objref) 
+        {
+            for (int i=0; i < tmp->valueSize; i++)
+                outStr << "  " << ((ObjReferenceMatrixValues*)tmp->values)->el[i];
+            outStr << std::endl;
+        }
+        else if (tmp->vType == ENUM_MATRIX_TYPE_conref) 
+        {
+            for (int i=0; i < tmp->valueSize; i++)
+                outStr << "  " << ((ConReferenceMatrixValues*)tmp->values)->el[i]->conReference;
+            outStr << std::endl;
+        }
+        else if (tmp->vType == ENUM_MATRIX_TYPE_general) 
+        {
+            outStr << std::endl;
+            for (int i=0; i < tmp->valueSize; i++)
+                outStr << "element " << i << ": (general expression; not yet implemented)" << std::endl;
+            outStr << std::endl;
+        }
+        else if (tmp->vType == ENUM_MATRIX_TYPE_linear) 
+        {
+            outStr << std::endl;
+            for (int i=0; i < tmp->valueSize; i++)
+            {
+                outStr << "element " << i << ": ";
+
+                double c = ((LinearMatrixElement*)((LinearMatrixValues*)tmp->values)->el[i])->constant;
+                int    m = ((LinearMatrixElement*)((LinearMatrixValues*)tmp->values)->el[i])->numberOfVarIdx;
+                if (c != 0)
+                {
+                    outStr << c;
+                    if (m > 0) 
+                        outStr << " + ";
+                }
+
+                LinearMatrixElementTerm* temp;
+                for (int j=0; j<m; j++)
+                {
+                    if (j > 0) 
+                        outStr << " + ";
+                    temp = ((LinearMatrixElement*)((LinearMatrixValues*)tmp->values)->el[i])->varIdx[j];
+                    if (temp->coef != 1)
+                        outStr << temp->coef << "*";
+                    outStr << "x[" << temp->idx << "]";
+                }
+                outStr << std::endl;
+            }
+            outStr << std::endl;
+        }
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of printExpandedMatrix
+
+GeneralSparseMatrix* MatrixType::convertToOtherMajor(bool isColumnMajor)
+//    bool isColumnMajor, int startSize, int valueSize, int* start, int* index,
+//    double* value, int dimension)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside convertToOtherMajor()");
+#endif
+    GeneralSparseMatrix* refMtx;
+    if (isColumnMajor)
+    {
+        refMtx = ExpandedMatrixInColumnMajorForm;
+        if (ExpandedMatrixInRowMajorForm != NULL) return ExpandedMatrixInRowMajorForm;
+    }
+    else
+    {
+        refMtx = ExpandedMatrixInRowMajorForm;
+        if (ExpandedMatrixInColumnMajorForm != NULL) return ExpandedMatrixInColumnMajorForm;
+    }
+    if (refMtx == NULL ) return NULL;
+    if (refMtx->starts == NULL || refMtx->startSize <= 1 ) return NULL;
+
+    int iStartSize = isColumnMajor ? numberOfRows+1 : numberOfColumns+1;
+    GeneralSparseMatrix *matrix
+        = new GeneralSparseMatrix( !isColumnMajor, iStartSize, refMtx->valueSize, refMtx->vType);
+
+    int i,j, iTemp;
+    int iNumSource = refMtx->startSize - 1;
+
+    int* miStart = matrix->starts;
+    int* miIndex = matrix->indexes;
+
+    for ( i = 1; i < iStartSize; i++)
+    {
+        miStart [ i ] = 0;
+    }
+    // for illustration assume we are converting from column to row major
+    // i is indexing columns and j is indexing row numbers
+    for (i = 0; i < iNumSource; i++)
+    {
+        for (j = refMtx->starts[i]; j < refMtx->starts[ i + 1 ]; j++)
+        {
+            // index[ j] is a row index, we have just found an occurance of row index[j]
+            // therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1,
+            // i.e. the start of the next row
+            miStart[refMtx->indexes[j] + 1] ++;
+        }
+    }
+    // at this point, miStart[ i] holds the number of columns with a nonzero in row i - 1
+    // if we knew the correct starting point of row i -1, the correct starting point
+    // for row i is miStart[i] + miStart [i - 1]
+    miStart[0] = 0;
+    for (i = 1; i < iStartSize; i++ )
+    {
+        miStart[i] += miStart [i - 1] ;
+    }
+
+    // now get the correct values
+    // again assume we are converting column major to row major
+    // loop over columns
+    // this is a bit tedious, since different types of elements need to be treated differently
+    if ( refMtx->vType == ENUM_MATRIX_TYPE_constant)
+    {
+        matrix->values = new ConstantMatrixValues();
+        ((ConstantMatrixValues*)matrix->values)->el = new double[refMtx->valueSize];
+
+        for (i = 0; i < iNumSource; i++)
+        {
+            // get row indices and values of the matrix
+            for (j = refMtx->starts[i]; j < refMtx->starts[ i + 1 ]; j++)
+            {
+                iTemp = miStart[refMtx->indexes[j]];
+                miIndex [ iTemp] = i;
+                ((ConstantMatrixValues*)matrix->values)->el[ iTemp] 
+                    = ((ConstantMatrixValues*)refMtx->values)->el[j];
+                miStart[refMtx->indexes[j]] ++;
+            }
+        }
+    }
+    else if (refMtx->vType == ENUM_MATRIX_TYPE_varref)
+    {
+        matrix->values = new VarReferenceMatrixValues();
+        ((VarReferenceMatrixValues*)matrix->values)->el = new int[refMtx->valueSize];
+
+        for (i = 0; i < iNumSource; i++)
+        {
+            // get row indices and values of the matrix
+            for (j = refMtx->starts[i]; j < refMtx->starts[ i + 1 ]; j++)
+            {
+                iTemp = miStart[refMtx->indexes[j]];
+                miIndex [ iTemp] = i;
+                ((VarReferenceMatrixValues*)matrix->values)->el[ iTemp] 
+                    = ((VarReferenceMatrixValues*)refMtx->values)->el[j];
+                miStart[refMtx->indexes[j]] ++;
+            }
+        }
+    }
+    else if (refMtx->vType == ENUM_MATRIX_TYPE_linear)
+    {
+        matrix->values = new LinearMatrixValues();
+        ((LinearMatrixValues*)matrix->values)->el = new LinearMatrixElement*[refMtx->valueSize];
+        for (i = 0; i < refMtx->valueSize; i++)
+            ((LinearMatrixValues*)matrix->values)->el[i] = new LinearMatrixElement();
+
+        for (i = 0; i < iNumSource; i++)
+        {
+            // get row indices and values of the matrix
+            for (j = refMtx->starts[i]; j < refMtx->starts[ i + 1 ]; j++)
+            {
+                iTemp = miStart[refMtx->indexes[j]];
+                miIndex [ iTemp] = i;
+                if (!((LinearMatrixValues*)matrix->values)->el[ iTemp]->deepCopyFrom(((LinearMatrixValues*)refMtx->values)->el[j]))
+                    return NULL;
+                miStart[refMtx->indexes[j]] ++;
+            }
+        }
+    }
+    else if (refMtx->vType == ENUM_MATRIX_TYPE_general)
+    {
+        matrix->values = new GeneralMatrixValues();
+        ((GeneralMatrixValues*)matrix->values)->el = new ScalarExpressionTree*[refMtx->valueSize];
+        for (i = 0; i < refMtx->valueSize; i++)
+        {
+            ((GeneralMatrixValues*)matrix->values)->el[i] = new ScalarExpressionTree();
+//            ((GeneralMatrixValues*)matrix->values)->el[i]->m_treeRoot = new OSnLNode();
+        }
+        for (i = 0; i < iNumSource; i++)
+        {
+            // get row indices and values of the matrix
+            for (j = refMtx->starts[i]; j < refMtx->starts[ i + 1 ]; j++)
+            {
+                iTemp = miStart[refMtx->indexes[j]];
+                miIndex [ iTemp] = i;
+                ((GeneralMatrixValues*)matrix->values)->el[ iTemp]->m_treeRoot
+                    = ((GeneralMatrixValues*)refMtx->values)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                miStart[refMtx->indexes[j]] ++;
+            }
+        }
+    }
+    else if (refMtx->vType == ENUM_MATRIX_TYPE_objref)
+    {
+        matrix->values = new ObjReferenceMatrixValues();
+        ((ObjReferenceMatrixValues*)matrix->values)->el = new int[refMtx->valueSize];
+
+        for (i = 0; i < iNumSource; i++)
+        {
+            // get row indices and values of the matrix
+            for (j = refMtx->starts[i]; j < refMtx->starts[ i + 1 ]; j++)
+            {
+                iTemp = miStart[refMtx->indexes[j]];
+                miIndex [ iTemp] = i;
+                ((ObjReferenceMatrixValues*)matrix->values)->el[ iTemp] 
+                    = ((ObjReferenceMatrixValues*)refMtx->values)->el[j];
+                miStart[refMtx->indexes[j]] ++;
+            }
+        }
+    }
+    else if (refMtx->vType == ENUM_MATRIX_TYPE_conref)
+    {
+        matrix->values = new ConReferenceMatrixValues();
+        ((ConReferenceMatrixValues*)matrix->values)->el 
+            = new ConReferenceMatrixElement*[refMtx->valueSize];
+        for (i = 0; i < refMtx->valueSize; i++)
+            ((ConReferenceMatrixValues*)matrix->values)->el[i] = new ConReferenceMatrixElement();
+
+        for (i = 0; i < iNumSource; i++)
+        {
+            // get row indices and values of the matrix
+            for (j = refMtx->starts[i]; j < refMtx->starts[ i + 1 ]; j++)
+            {
+                iTemp = miStart[refMtx->indexes[j]];
+                miIndex [ iTemp] = i;
+                if (!((ConReferenceMatrixValues*)matrix->values)->el[ iTemp]->deepCopyFrom(((ConReferenceMatrixValues*)refMtx->values)->el[j]))
+                    return NULL;
+                miStart[refMtx->indexes[j]] ++;
+            }
+        }
+    }
+
+    // miStart[ i] is now equal to miStart[ i + 1], so readjust
+    for (i = iStartSize - 1; i >= 1; i-- )
+    {
+        miStart[i] = miStart [i - 1] ;
+    }
+
+    miStart[0] = 0;
+    return matrix;
+}//end of MatrixType::convertToOtherMajor
+
+int MatrixType::getRowPartitionSize()
+{
+    if (!m_bHaveRowPartition) 
+    {
+        bool OK = processBlockPartition();
+        if (!OK) throw ErrorClass("Error processing blocks");
+    }
+    return m_iRowPartitionSize;
+}// end of MatrixType::getRowPartitionSize()
+
+int* MatrixType::getRowPartition()
+{
+    if (!m_bHaveRowPartition) 
+    {
+        bool OK = processBlockPartition();
+        if (!OK) throw ErrorClass("Error processing blocks");
+    }
+    return m_miRowPartition;
+}// end of MatrixType::getRowPartition()
+
+int MatrixType::getColumnPartitionSize()
+{
+    if (!m_bHaveColumnPartition) 
+    {
+        bool OK = processBlockPartition();
+        if (!OK) throw ErrorClass("Error processing blocks");
+    }
+    return m_iColumnPartitionSize;
+}// end of MatrixType::getColumnPartitionSize()
+
+int* MatrixType::getColumnPartition()
+{
+    if (!m_bHaveColumnPartition) 
+    {
+        bool OK = processBlockPartition();
+        if (!OK) throw ErrorClass("Error processing blocks");
+    }
+    return m_miColumnPartition;
+}// end of MatrixType::getColumnPartition()
+
+
+bool MatrixType::processBlockPartition()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside processBlockPartition()");
+#endif
+    if (matrixHasBlocks())
+    {
+        int nPartitions = 0;
+        int imerge_R;
+        int imerge_C;
+
+        for (int i=0; i < inumberOfChildren; i++)
+        {
+            if (m_mChildren[i]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+            {
+                if (nPartitions == 0)
+                {
+                    // first blocks constructor. Set up data structures
+                    nPartitions++;
+                    m_iRowPartitionSize = ((MatrixBlocks*)m_mChildren[i])->rowOffsets->numberOfEl;
+                    m_miRowPartition = new int[m_iRowPartitionSize];
+                    for (int j=0; j<m_iRowPartitionSize; j++)
+                        m_miRowPartition[j] = ((MatrixBlocks*)m_mChildren[i])->rowOffsets->el[j];
+                    m_iColumnPartitionSize = ((MatrixBlocks*)m_mChildren[i])->colOffsets->numberOfEl;
+                    m_miColumnPartition = new int[m_iColumnPartitionSize];
+                    for (int j=0; j<m_iColumnPartitionSize; j++)
+                        m_miColumnPartition[j] = ((MatrixBlocks*)m_mChildren[i])->colOffsets->el[j];
+                }
+                else
+                {
+                    //another block constructor. merge row partitions
+                    nPartitions++;
+                    int i0 = 0;
+                    int itemp = 0;
+                    imerge_R = 0;
+                    for (;;)
+                    {
+                        if (m_miRowPartition[i0] == ((MatrixBlocks*)m_mChildren[i])->rowOffsets->el[itemp])
+                        {
+                            if (imerge_R != i0) m_miRowPartition[imerge_R] = m_miRowPartition[i0];
+                            i0++;
+                            itemp++;
+                            imerge_R++;
+                        }
+                        else
+                        {
+                            if (m_miRowPartition[i0] < 
+                                    ((MatrixBlocks*)m_mChildren[i])->rowOffsets->el[itemp])
+                                i0++;
+                            else
+                                itemp++;
+                        }
+                        if (i0 >= m_iRowPartitionSize || 
+                                itemp >= ((MatrixBlocks*)m_mChildren[i])->rowOffsets->numberOfEl)
+                            break;
+                    }
+                    m_iRowPartitionSize = imerge_R;
+
+                    // merge column partitions
+                    i0 = 0;
+                    itemp = 0;
+                    imerge_C = 0;
+                    for (;;)
+                    {
+                        if (m_miColumnPartition[i0] == 
+                                ((MatrixBlocks*)m_mChildren[i])->colOffsets->el[itemp])
+                        {
+                            if (imerge_C != i0) m_miColumnPartition[imerge_C] = m_miColumnPartition[i0];
+                            i0++;
+                            itemp++;
+                            imerge_C++;
+                        }
+                        else
+                        {
+                            if (m_miColumnPartition[i0] < 
+                                    ((MatrixBlocks*)m_mChildren[i])->colOffsets->el[itemp])
+                                i0++;
+                            else
+                                itemp++;
+                        }
+                        if (i0 >= m_iColumnPartitionSize || 
+                                itemp >= ((MatrixBlocks*)m_mChildren[i])->colOffsets->numberOfEl)
+                            break;
+                    }
+                    m_iColumnPartitionSize = imerge_C;
+                }
+            }
+        }
+        if (nPartitions > 1)
+        {
+            int* tempPartition = new int[imerge_R];
+            for (int i=0; i < imerge_R; i++)
+                tempPartition[i] = m_miRowPartition[i];
+            delete [] m_miRowPartition;
+            m_miRowPartition = tempPartition;
+
+            tempPartition = new int[imerge_C];
+            for (int i=0; i < imerge_C; i++)
+                tempPartition[i] = m_miColumnPartition[i];
+            delete [] m_miColumnPartition;
+            m_miColumnPartition = tempPartition;
+        }
+    }
+    else
+    {
+        m_iRowPartitionSize = 2;
+        m_miRowPartition = new int[2];
+        m_miRowPartition[0] = 0;
+        m_miRowPartition[1] = numberOfRows;
+        m_iColumnPartitionSize = 2;
+        m_miColumnPartition = new int[2];
+        m_miColumnPartition[0] = 0;
+        m_miColumnPartition[1] = numberOfColumns;
+    }
+    m_bHaveRowPartition = true;
+    m_bHaveColumnPartition = true;
+    return true;
+}// end of processBlockPartition
 
 GeneralSparseMatrix* MatrixType::getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside getMatrixBlockInColumnMajorForm()");
+#endif
     return NULL;
-}// end of getMatrixBlockInColumnMajorForm
+}// end of MatrixType::getMatrixBlockInColumnMajorForm
+
+ExpandedMatrixBlocks* MatrixType::getBlocks(int* rowPartition, int rowPartitionSize, 
+                                            int* colPartition, int colPartitionSize, 
+                                            bool rowMajor, bool appendToBlockArray)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside getBlocks()");
+#endif
+
+    // Try to find a collection of blocks that matches the criteria 
+    for (int kount = 0; kount < ExpandedMatrixByBlocks.size(); kount++)
+    {
+        if (rowPartitionSize != ExpandedMatrixByBlocks[kount]->rowOffsetSize ||       
+            colPartitionSize != ExpandedMatrixByBlocks[kount]->colOffsetSize ||
+            rowMajor         != ExpandedMatrixByBlocks[kount]->isRowMajor)
+            continue;
+        
+        for (int i=0; i < rowPartitionSize; i++)
+            if (rowPartition[i] != ExpandedMatrixByBlocks[kount]->rowOffsets[i])
+                continue;
+        for (int i=0; i < colPartitionSize; i++)
+            if (colPartition[i] != ExpandedMatrixByBlocks[kount]->colOffsets[i])
+                continue;
+
+        return ExpandedMatrixByBlocks[kount];
+    }
+
+    // not found; create a new collection
+    if (!appendToBlockArray) return NULL;
+
+    if (!processBlocks(rowPartition, rowPartitionSize,
+                       colPartition, colPartitionSize, false, symmetry))
+       return false;
+    return ExpandedMatrixByBlocks.back();
+}// end of MatrixType::getBlocks
+
+bool MatrixType::processBlocks(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry)
+{
+    int  cSize = getColumnPartitionSize(); 
+    int  rSize = getRowPartitionSize();
+    int* cPartition = getColumnPartition(); 
+    int* rPartition = getRowPartition(); 
+    return processBlocks(rPartition, rSize, cPartition, cSize, rowMajor, symmetry);
+}// end of MatrixType::processBlocks
+
+bool MatrixType::processBlocks(int* rowOffsets, int rowOffsetSize, int* colOffsets,
+                               int colOffsetSize, bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside processBlocks()");
+#endif
+    try
+    {
+        ENUM_MATRIX_TYPE elType = getMatrixType();
+
+        // check for blocks constructor with matching partition
+        if (inumberOfChildren == 1)
+        {
+            if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+            {
+                if (((MatrixBlocks*)m_mChildren[0])->rowOffsets->numberOfEl != rowOffsetSize ||
+                    ((MatrixBlocks*)m_mChildren[0])->colOffsets->numberOfEl != colOffsetSize)
+                    goto none_found;
+
+                for (int j=0; j < rowOffsetSize; j++)
+                    if (((MatrixBlocks*)m_mChildren[0])->rowOffsets->el[j] != rowOffsets[j])
+                        goto none_found;
+
+                for (int j=0; j < colOffsetSize; j++)
+                    if (((MatrixBlocks*)m_mChildren[0])->colOffsets->el[j] != colOffsets[j])
+                        goto none_found;
+
+                // Here we have matching block partitions
+                ExpandedMatrixBlocks* tmpBlocks = new ExpandedMatrixBlocks();
+
+                tmpBlocks->bDeleteArrays = false;
+                tmpBlocks->vType = elType;
+                tmpBlocks->isRowMajor = rowMajor;
+                tmpBlocks->rowOffsetSize = rowOffsetSize;
+                tmpBlocks->colOffsetSize = colOffsetSize;
+                tmpBlocks->rowOffsets = rowOffsets;
+                tmpBlocks->colOffsets = colOffsets;
+
+                // access each block; expand and convert if necessary, count (and suppress if empty)
+                MatrixBlock* tmpChild;
+                int tmpBlockNumber = 0;
+                int tmpBlockSize;
+                for (int j=0; j<((MatrixBlocks*)m_mChildren[0])->numberOfBlocks; j++)
+                {
+                    tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[0])->m_mChildren[j];
+                    if (rowMajor)
+                    {
+                        tmpChild->getMatrixCoefficientsInRowMajor();
+                        if (tmpChild->ExpandedMatrixInRowMajorForm->valueSize > 0)
+                            tmpBlockNumber++;
+                    }
+                    else
+                    {
+                        tmpChild->getMatrixCoefficientsInColumnMajor();
+                        if (tmpChild->ExpandedMatrixInColumnMajorForm->valueSize > 0)
+                            tmpBlockNumber++;
+                    }
+                }
+
+                // We know the number of blocks; allocate memory
+                tmpBlocks->blockNumber = tmpBlockNumber;
+                tmpBlocks->blocks = new GeneralSparseMatrix*[tmpBlockNumber];
+                tmpBlocks->blockRows = new int[tmpBlockNumber];
+                tmpBlocks->blockColumns = new int[tmpBlockNumber];
+
+                // go through blocks again and store pointers
+                tmpBlockNumber = 0;
+                for (int j=0; j<((MatrixBlocks*)m_mChildren[0])->numberOfBlocks; j++)
+                {
+                    tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[0])->m_mChildren[j];
+                    if (rowMajor)
+                    {
+                        if (tmpChild->ExpandedMatrixInRowMajorForm->valueSize == 0)
+                            continue;
+                        tmpBlocks->blocks[tmpBlockNumber] = tmpChild->ExpandedMatrixInRowMajorForm;
+                    }
+                    else
+                    {
+                        if (tmpChild->ExpandedMatrixInColumnMajorForm->valueSize == 0)
+                            continue;
+                        tmpBlocks->blocks[tmpBlockNumber] = tmpChild->ExpandedMatrixInColumnMajorForm;
+                    }
+                    tmpBlocks->blockRows[tmpBlockNumber]    = tmpChild->blockRowIdx;
+                    tmpBlocks->blockColumns[tmpBlockNumber] = tmpChild->blockColIdx;
+
+tmpChild->printExpandedMatrix(rowMajor);
+
+                    tmpBlockNumber++;
+                }
+                ExpandedMatrixByBlocks.push_back(tmpBlocks);
+                return true;
+            }
+        }
+
+none_found:
+        if (inumberOfChildren == 0)
+        {
+            // empty matrix -- return empty collection
+            ExpandedMatrixBlocks* tmpBlocks = new ExpandedMatrixBlocks();
+
+            tmpBlocks->bDeleteArrays = false;
+            tmpBlocks->vType = elType;
+            tmpBlocks->isRowMajor = rowMajor;
+            tmpBlocks->rowOffsetSize = rowOffsetSize;
+            tmpBlocks->colOffsetSize = colOffsetSize;
+            tmpBlocks->rowOffsets = rowOffsets;
+            tmpBlocks->colOffsets = colOffsets;
+            tmpBlocks->blockNumber = 0;
+            tmpBlocks->blocks = NULL;
+            tmpBlocks->blockRows = NULL;
+            tmpBlocks->blockColumns = NULL;
+            ExpandedMatrixByBlocks.push_back(tmpBlocks);
+            return true;
+        }
+
+        // unless there is a block partition already, separate the expanded matrix into blocks 
+        if ( (ExpandedMatrixInColumnMajorForm != NULL && !rowMajor) ||
+             (ExpandedMatrixInRowMajorForm    != NULL &&  rowMajor) ||
+              ExpandedMatrixByBlocks.size() == 0)
+        {
+            ExpandedMatrixByBlocks.push_back(disassembleMatrix(rowOffsets, rowOffsetSize, colOffsets,
+                                                               colOffsetSize, rowMajor, symmetry));
+            return true;
+        }
+
+        // If a different block partition is available, it is less wasteful to disassemble it
+        // rather than making a full expansion first
+        // Refinements and coarser partitions are easier to handle, so check for those first
+
+        int refinement = -1;
+        int coarsening = -1;
+        bool refinementCandidate;
+        bool coarseningCandidate;
+        int k = 0;
+
+        for (int k = 0; k < ExpandedMatrixByBlocks.size(); k++)
+        {
+            refinementCandidate = true;
+            int itarget = 0;
+            int itest = 0;
+            for (;;)
+            {
+                if (rowOffsets[itarget] == ExpandedMatrixByBlocks[k]->rowOffsets[itest])
+                {
+                    itest++;
+                    itarget++;
+                }
+                else
+                {
+                    if (rowOffsets[itarget] < ExpandedMatrixByBlocks[k]->rowOffsets[itest])
+                    {
+                        itarget++;
+                    }
+                    else
+                    {
+                        refinementCandidate = false;
+                        continue;
+                    }
+                }
+                if (itarget >= rowOffsetSize || itest >= ExpandedMatrixByBlocks[k]->rowOffsetSize)
+                    break;
+            }
+
+            if (refinementCandidate)
+            {
+                itarget = 0;
+                itest = 0;
+                for (;;)
+                {
+                    if (colOffsets[itarget] == ExpandedMatrixByBlocks[k]->colOffsets[itest])
+                    {
+                        itest++;
+                        itarget++;
+                    }
+                    else
+                    {
+                        if (colOffsets[itarget] < ExpandedMatrixByBlocks[k]->colOffsets[itest])
+                        {
+                            itarget++;
+                        }
+                        else
+                        {
+                            refinementCandidate = false;
+                            continue;
+                        }
+                    }
+                    if (itarget >= colOffsetSize || itest >= ExpandedMatrixByBlocks[k]->colOffsetSize)
+                        break;
+                }
+            }
+
+            if (refinementCandidate)
+            {
+                refinement = k;
+                break;
+            }
+
+            coarseningCandidate = false;
+            itarget = 0;
+            itest = 0;
+            for (;;)
+            {
+                if (rowOffsets[itarget] == ExpandedMatrixByBlocks[k]->rowOffsets[itest])
+                {
+                    itest++;
+                    itarget++;
+                }
+                else
+                {
+                    if (rowOffsets[itarget] < ExpandedMatrixByBlocks[k]->rowOffsets[itest])
+                    {
+                        itarget++;
+                        continue;
+                    }
+                    else
+                    {
+                        coarseningCandidate = true;
+                        itest++;
+                    }
+                }
+                if (itarget >= rowOffsetSize || itest >= ExpandedMatrixByBlocks[k]->rowOffsetSize)
+                    break;
+            }
+
+            itarget = 0;
+            itest = 0;
+            for (;;)
+            {
+                if (colOffsets[itarget] == ExpandedMatrixByBlocks[k]->colOffsets[itest])
+                {
+                    itest++;
+                    itarget++;
+                }
+                else
+                {
+                    if (colOffsets[itarget] < ExpandedMatrixByBlocks[k]->colOffsets[itest])
+                    {
+                        itarget++;
+                        continue;
+                    }
+                    else
+                    {
+                        coarseningCandidate = true;
+                        itest++;
+                    }
+                }
+                if (itarget >= colOffsetSize || itest >= ExpandedMatrixByBlocks[k]->colOffsetSize)
+                    break;
+            }
+
+            if (coarseningCandidate)
+            {
+                refinement = k;
+            }
+        }
+
+        if (refinement >= 0)
+        {
+            throw ErrorClass ("Not yet implemented: obtaining one block partition from a different one");
+            return false;
+        }
+
+        if (coarsening >= 0)
+        {
+            throw ErrorClass ("Not yet implemented: obtaining one block partition from a different one");
+            return false;
+        }
+
+        // here we have previous partitions that all overlap with the current one
+        throw ErrorClass ("Not yet implemented: obtaining one block partition from a different one");
+
+
+        return false;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of alternate MatrixType::processBlocks
+
+ExpandedMatrixBlocks* MatrixType::disassembleMatrix(int* rowPartition, int rowPartitionSize, 
+                                                    int* colPartition, int colPartitionSize, 
+                                                    bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry)
+{ 
+/*
+     We go through the nonzeros of the matrix to determine both the number of nonzero blocks
+     and the number of elements in each block. 
+     We do not know how many blocks there are, so we have to store them temporarily in a vector. 
+     As each block is detected, we extend the vector.
+     This keeps the blocks ordered by colIdx (assuming column major) and probably also 
+     by rowIdx within each column (assuming "normal" ordering of nonzeros). 
+     (This affects only the efficiency of the search routines, not the validity of the algorithm.)
+     After the counts have been established, we have to go through the nonzeros again to store values.
+     Finally we convert the vector to an array and return.
+ */
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside disassembleMatrix()");
+#endif
+    int currBlockRow, currBlockCol, lastBlock, currRow;
+    int blockCount, firstBlockInCol, blockTotal;
+    std::vector<GeneralSparseMatrix*> tmpBlocks;
+    int* tmpBlockRows; 
+    int* tmpBlockColumns;
+    bool found;
+    int  i, j, k;
+    int* elCount;
+    ENUM_MATRIX_TYPE vType = getMatrixType();
+
+    //This section is for column-wise representations --- row-wise will work analogously
+    if (!rowMajor)
+    {
+        firstBlockInCol = -1;
+        if (ExpandedMatrixInColumnMajorForm == NULL)
+            getMatrixCoefficientsInColumnMajor();
+
+        // OK. Start counting
+        blockCount = 0;
+        elCount = new int[rowPartitionSize-1];
+
+        for (i=0; i < colPartitionSize-1; i++) // i indexes a block of columns
+        {
+//            blk0 = blockCount;
+            for (j=0; j<rowPartitionSize-1; j++) 
+                elCount[j] = 0;
+            lastBlock = i;
+            if (lastBlock >= rowPartitionSize)
+                lastBlock  = rowPartitionSize - 1;
+
+            for (j=colPartition[i]; j<colPartition[i+1]; j++) // j indexes a column within this block
+            {
+                for ( k = ExpandedMatrixInColumnMajorForm->starts[j]; 
+                      k < ExpandedMatrixInColumnMajorForm->starts[j+1]; 
+                      k++ )                                 // k indexes the elements in this column
+                {
+                    currRow = ExpandedMatrixInColumnMajorForm->indexes[k];
+                    if (currRow < rowPartition[lastBlock] || currRow >= rowPartition[lastBlock+1])
+                    {
+                        found = false;
+                        int n = lastBlock + 1;
+                        while (!found && n < rowPartitionSize - 1)
+                        {
+//                            for (k=lastBlock+1; k < rowPartitionSize - 1; k++)
+                            if (currRow >= rowPartition[n+1])
+                                n++;
+                            else
+                            {
+                                found = true;
+                                lastBlock = n;
+                                break;
+                            }
+                        }
+                        if (!found)
+                            n = lastBlock - 1;
+                        while (!found && n >= 0)
+                        {
+//                            for (k=lastBlock-1; k >= 0; k--)
+                            if (currRow < rowPartition[n])
+                                n--;
+                            else
+                            {
+                                found = true;
+                                lastBlock = n;
+                                break;
+                            }
+                        }
+                        if (!found)
+                            throw ErrorClass("Invalid row information detected in disassembleMatrix()");
+
+                        elCount[lastBlock]++;
+                        if (elCount[lastBlock] == 1)
+                        {
+                            //add a new block
+                            GeneralSparseMatrix* tmpBlock = new GeneralSparseMatrix();
+                            blockCount++;
+                            if (firstBlockInCol < 0) 
+                                firstBlockInCol = blockCount - 1;
+                            tmpBlock->b_deleteStartArray = true;
+                            tmpBlock->b_deleteIndexArray = true;
+                            tmpBlock->b_deleteValueArray = true;
+                            tmpBlock->isRowMajor = false;
+                            tmpBlock->symmetry = symmetry;
+                            tmpBlock->vType = vType;
+                            tmpBlock->startSize = colPartition[i+1] - colPartition[i] + 1;
+                            tmpBlock->starts = new int[tmpBlock->startSize];
+    
+                            for (int n=0; n <= j - colPartition[i]; n++)
+                                tmpBlock->starts[n] = 0;
+
+                            tmpBlocks.push_back(tmpBlock);
+                            if (firstBlockInCol < 0) 
+                                firstBlockInCol = blockCount - 1;
+                        }
+                    } // end of element
+                } // end of column
+
+                //store starts
+                for (k=firstBlockInCol; k < blockCount; k++)
+                    tmpBlocks[k]->starts[j-colPartition[i] + 1] = elCount[k];
+
+            } // end of block of columns
+
+            // allocate space for indexes, values and block location 
+            for (k=firstBlockInCol; k < blockCount; k++)
+            {
+                tmpBlocks[k]->valueSize = elCount[k];
+                tmpBlocks[k]->indexes = new int[elCount[k]];
+                tmpBlocks[k]->values  = new MatrixElementValues[elCount[k]];
+            }
+            tmpBlockRows    = new int[blockCount]; 
+            tmpBlockColumns = new int[blockCount];
+            for (j=0; j<blockCount; j++)
+            {
+                tmpBlockRows[j]    = -1;
+            } 
+            
+            lastBlock = i;            
+//            blockCount = 
+
+            // traverse a second time to get values
+            for (j=colPartition[i]; j<colPartition[i+1]; j++) // j indexes a column within this block
+            {
+                for ( k = ExpandedMatrixInColumnMajorForm->starts[j]; 
+                      k < ExpandedMatrixInColumnMajorForm->starts[j+1]; 
+                      k++ )                                   // k indexes the elements in this column
+                {
+                    currRow = ExpandedMatrixInColumnMajorForm->indexes[k];
+                    if (currRow < rowPartition[lastBlock] || currRow >= rowPartition[lastBlock+1])
+                    {
+                        found = false;
+                        int n;
+                        while (!found)
+                        {
+                            for (n=lastBlock+1; n < rowPartitionSize - 1; n++)
+                                if (currRow >= rowPartition[lastBlock] && 
+                                    currRow <  rowPartition[lastBlock+1])
+                                {
+                                    found = true;
+                                    lastBlock = n;
+                                    break;
+                                }
+                        }
+                        while (!found)
+                        {
+                            for (n=lastBlock-1; k >= 0; k--)
+                                if (currRow >= rowPartition[lastBlock] && 
+                                    currRow <  rowPartition[lastBlock+1])
+                                {
+                                    found = true;
+                                    lastBlock = n;
+                                    break;
+                                }
+                        }
+                    }
+                    if (tmpBlockRows[lastBlock] == -1)
+                    {
+                        tmpBlockRows[lastBlock] = j;
+                        tmpBlockColumns[lastBlock] = i;
+                    }
+                }
+ 
+                int k0 = 0;
+                tmpBlocks[lastBlock]->indexes[k-k0] 
+                    = ExpandedMatrixInColumnMajorForm->indexes[k] - rowPartition[j];
+                tmpBlocks[lastBlock]->values [k-k0]  = ExpandedMatrixInColumnMajorForm->values[k];
+            }
+        } // end of entire collection
+
+    } // end of column major 
+    else
+        throw ErrorClass("Row major not yet implemented in MatrixType::disassembleMatrix()");
+
+    ExpandedMatrixBlocks* returnArray = new ExpandedMatrixBlocks();
+    returnArray->bDeleteArrays = true;
+    returnArray->vType = vType;
+    returnArray->isRowMajor = rowMajor;
+    returnArray->blockNumber = tmpBlocks.size();
+    returnArray->rowOffsets = rowPartition;
+    returnArray->colOffsets = colPartition;
+    returnArray->rowOffsetSize = rowPartitionSize;
+    returnArray->colOffsetSize = colPartitionSize;
+    returnArray->blocks = new GeneralSparseMatrix*[tmpBlocks.size()];
+
+    for (int i=0; i<tmpBlocks.size();i++);
+    {
+        returnArray->blocks[i] = tmpBlocks[i];
+        returnArray->blockRows[i] = tmpBlockRows[i];
+        returnArray->blockColumns[i] = tmpBlockColumns[i];    
+    }
+
+    return returnArray;
+}//end of MatrixType::disassembleMatrix
+
 
 GeneralSparseMatrix* MatrixType::extractBlock(int firstrow, int firstcol, int nrows, int ncols,
                                               bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside extractBlock()");
+#endif
     bool mustCopy = false;
     int n = inumberOfChildren;
     if (n > 1)
@@ -399,6 +2946,12 @@ MatrixElementValues::~MatrixElementValues()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixElementValues Destructor");
 #endif
 }//end of MatrixElementValues::~MatrixElementValues
+
+bool MatrixElementValues::deepCopyFrom(MatrixElementValues* that)
+{
+    return true;
+}// end of MatrixElementValues::deepCopyFrom
+
 // end of methods for MatrixElementValues
 
 
@@ -406,12 +2959,7 @@ MatrixElementValues::~MatrixElementValues()
 OSMatrix::OSMatrix():
     MatrixType(),
     idx(-1),
-    name(""),
-    m_miRowPartition(NULL),
-    m_iRowPartitionSize(0),
-    m_miColumnPartition(NULL),
-    m_iColumnPartitionSize(0),
-    m_bBlockPartitionProcessed(false)
+    name("")
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrix Constructor");
@@ -471,55 +3019,160 @@ ENUM_MATRIX_TYPE OSMatrix::getMatrixType()
     return matrixType;
 }// end of OSMatrix::getMatrixType()
 
-
-int OSMatrix::getRowPartitionSize()
+bool OSMatrix::expandElements(bool rowMajor)
 {
-    if (!m_bBlockPartitionProcessed) 
+#if 0
+    //Check if expanded previously
+    if (rowMajor)
     {
-        bool OK = processBlocks();
-        if (!OK) throw ErrorClass("Error processing blocks");
+        if (ExpandedMatrixInRowMajorForm != NULL) return true;
     }
-    return m_iRowPartitionSize;
-}// end of OSMatrix::getRowPartitionSize()
-
-int* OSMatrix::getRowPartition()
-{
-    if (!m_bBlockPartitionProcessed) 
+    else
     {
-        bool OK = processBlocks();
-        if (!OK) throw ErrorClass("Error processing blocks");
+        if (ExpandedMatrixInColumnMajorForm != NULL) return true;
     }
-    return m_miRowPartition;
-}// end of OSMatrix::getRowPartition()
 
-int OSMatrix::getColumnPartitionSize()
-{
-    if (!m_bBlockPartitionProcessed) 
+    // The complexity increases with the number of constructors
+    // Start by checking for empty matrix
+    if (inumberOfChildren == 0)
     {
-        bool OK = processBlocks();
-        if (!OK) throw ErrorClass("Error processing blocks");
+        if (rowMajor)
+        {
+            ExpandedMatrixInRowMajorForm = new GeneralSparseMatrix();
+            ExpandedMatrixInRowMajorForm->symmetry = symmetry;
+            ExpandedMatrixInRowMajorForm->valueSize = 0;
+            ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+            ExpandedMatrixInRowMajorForm->starts = new int[numberOfRows + 1];
+            for (int i=0; i <= numberOfRows; i++)
+                ExpandedMatrixInRowMajorForm->starts[i] = 0;
+            return true;
+        }
+        else
+        {
+            ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
+            ExpandedMatrixInColumnMajorForm->symmetry = symmetry;
+            ExpandedMatrixInColumnMajorForm->valueSize = 0;
+            ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+            ExpandedMatrixInColumnMajorForm->starts = new int[numberOfColumns + 1];
+            for (int i=0; i <= numberOfColumns; i++)
+                ExpandedMatrixInColumnMajorForm->starts[i] = 0;
+            return true;
+        }
     }
-    return m_iColumnPartitionSize;
-}// end of OSMatrix::getColumnPartitionSize()
 
-int* OSMatrix::getColumnPartition()
-{
-    if (!m_bBlockPartitionProcessed) 
+    else if (inumberOfChildren == 1)
     {
-        bool OK = processBlocks();
-        if (!OK) throw ErrorClass("Error processing blocks");
-    }
-    return m_miColumnPartition;
-}// end of OSMatrix::getColumnPartition()
+        if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
+        {
+            int  baseMtxIdx = ((BaseMatrix*)m_mChildren[0])->baseMatrixIdx;
+            OSMatrix* basematrix = 
+            bool haveRowForm    = (baseMtx->ExpandedMatrixInRowMajorForm != NULL);
+            bool haveColumnForm = (baseMtx->ExpandedMatrixInColumnMajorForm != NULL);
+// what about cropping, scaling, transpose???
+            m_mChildren[0]->expandElements(rowMajor);
+            if (targetMatrixFirstRow == 0 && targetMatrixFirstCol == 0 && 
+                baseMatrixStartRow   == 0 && baseMatrixStartCol   == 0 &&
+                baseMatrixEndRow == numberOfRows    - 1 &&
+                baseMatrixEndCol == numberOfColumns - 1 &&
+                scalarMultiplier == 1)
+            {
+                if (rowmajor)
+                {
+                    ExpandedMatrixInRowMajorForm = new GeneralSparseMatrix();
+                    ExpandedMatrixInRowMajorForm = m_mChildren[0]->ExpandedMatrixInRowMajorForm;
+                    ExpandedMatrixInRowMajorForm->symmetry = symmetry;
+                    ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+                    ExpandedMatrixInRowMajorForm->starts = new int[numberOfRows + 1];
+                }
+                else
+                {
+                    ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
+                    ExpandedMatrixInColumnMajorForm = m_mChildren[0]->ExpandedMatrixInColumnMajorForm;
+                    ExpandedMatrixInColumnMajorForm->symmetry = symmetry;
+                    ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+                    ExpandedMatrixInColumnMajorForm->starts = new int[numberOfColumns + 1];
+                }
+            }
+            return true;
+        }
 
-bool OSMatrix::processBlocks()
+        else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+        {
+            ExpandedMatrixBlocks* currentBlocks = 
+                processBlocks(int* rowOffsets, int* colOffsets,
+                              bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+            ExpandedMatrixByBlocks.push_back(currentBlocks);
+
+            if (rowmajor)
+            {
+                ExpandedMatrixInRowMajorForm = new GeneralSparseMatrix*();
+                ExpandedMatrixInRowMajorForm->startSize = numberOfRows + 1;
+                ExpandedMatrixInRowMajorForm->starts = new int[numberOfRows + 1];
+                for (int i=0; i <= numberOfRows; i++)
+                    ExpandedMatrixInRowMajorForm->starts[i] = 0;
+            }
+            else
+            {
+                ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix*();
+                ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
+                ExpandedMatrixInColumnMajorForm->starts = new int[numberOfColumns + 1];
+                for (int i=0; i <= numberOfColumns; i++)
+                    ExpandedMatrixInColumnMajorForm->starts[i] = 0;
+        // augment column lengths block by block
+                for (int j=0; j < currentBlocks->numberOfBlocks; j++)
+                {
+                }
+                    
+            }
+        }
+
+        else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+        {
+        }
+    }
+
+    else
+    {
+    }
+#endif
+/*do induction on # of constructors.
+if one: blocks: expand
+        transformation: see if I can do at least AB, A'B, AB'
+        elements: copy
+more than one: tricky
+        (basematrix plus) elements should be ok
+        maybe transformation (product) plus elements
+        others: throw error
+*/
+    return false;
+}// end of expandElements
+
+#if 0
+bool OSMatrix::processBlocks(int* rowOffsets, int* colOffsets,
+                                      bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry)
 {
+    /**
+     *  A method to process a matrixType into a specific block structure.
+     *  @param rowOffsets defines a partition of the matrix rows into the blocks
+     *  @param colOffsets defines a partition of the matrix columns into the blocks
+     *  @param rowMajor controls whether the blocks are stored by row or by column
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @return whether the operation was successful
+     *
+     *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
+     *          so that they can be retrieved later using extractBlock (see below).
+     *          It is possible (though probably not advisable) to maintain multiple
+     *          decompositions with different row and column partitions
+     */
     bool haveBlocks;
     bool haveTemp;
     bool mustSynchronize;
     int* temp;
     int  tempSize;
     int  iconst;
+
+//check for duplicates
 
     // check if empty
     if (inumberOfChildren == 0)
@@ -744,6 +3397,7 @@ bool OSMatrix::processBlocks()
 
     return true;
 }// end of OSMatrix::processBlocks()
+#endif
 
 bool OSMatrix::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
 {
@@ -1524,6 +4178,14 @@ bool ConstantMatrixValues::setRandom(double density, bool conformant, int iMin, 
 
 bool ConstantMatrixValues::deepCopyFrom(ConstantMatrixValues *that)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of ConstantMatrixValues");
+#endif
+    this->numberOfEl = that->numberOfEl;
+    this->el = new double[numberOfEl];
+    for (int i=0; i<numberOfEl; i++)
+        this->el[i] = that->el[i];
+
     return true;
 }// end of ConstantMatrixValues::deepCopyFrom()
 
@@ -1736,6 +4398,14 @@ bool VarReferenceMatrixValues::setRandom(double density, bool conformant, int iM
 
 bool VarReferenceMatrixValues::deepCopyFrom(VarReferenceMatrixValues *that)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of VarReferenceMatrixValues");
+#endif
+    this->numberOfEl = that->numberOfEl;
+    this->el = new int[numberOfEl];
+    for (int i=0; i<numberOfEl; i++)
+        this->el[i] = that->el[i];
+
     return true;
 }// end of VarReferenceMatrixValues::deepCopyFrom()
 
@@ -1967,6 +4637,16 @@ bool LinearMatrixValues::setRandom(double density, bool conformant, int iMin, in
 
 bool LinearMatrixValues::deepCopyFrom(LinearMatrixValues *that)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of LinearMatrixValues");
+#endif
+    this->numberOfEl = that->numberOfEl;
+    this->el = new LinearMatrixElement*[numberOfEl];
+    for (int i=0; i<numberOfEl; i++)
+    {
+        this->el[i] = new LinearMatrixElement();
+        ((LinearMatrixValues*)this)->el[i]->deepCopyFrom(that->el[i]);
+    }
     return true;
 }// end of LinearMatrixValues::deepCopyFrom()
 
@@ -2059,6 +4739,14 @@ bool LinearMatrixElement::setRandom(double density, bool conformant, int iMin, i
 
 bool LinearMatrixElement::deepCopyFrom(LinearMatrixElement *that)
 {
+    this->constant = that->constant;
+    this->numberOfVarIdx = that->numberOfVarIdx;
+    this->varIdx = new LinearMatrixElementTerm*[numberOfVarIdx];
+    for (int i=0; i<numberOfVarIdx; i++)
+    {
+        this->varIdx[i] = new LinearMatrixElementTerm();
+        ((LinearMatrixElement*)this)->varIdx[i]->deepCopyFrom(that->varIdx[i]);
+    }
     return true;
 }// end of LinearMatrixElement::deepCopyFrom()
 
@@ -2125,6 +4813,8 @@ bool LinearMatrixElementTerm::setRandom(double density, bool conformant, int iMi
 
 bool LinearMatrixElementTerm::deepCopyFrom(LinearMatrixElementTerm *that)
 {
+    this->coef = that->coef;
+    this->idx = that->idx;
     return true;
 }// end of LinearMatrixElementTerm::deepCopyFrom()
 
@@ -2337,6 +5027,21 @@ bool GeneralMatrixValues::IsEqual(GeneralMatrixValues *that)
     }
 }// end of GeneralMatrixValues::IsEqual()
 
+bool GeneralMatrixValues::deepCopyFrom(GeneralMatrixValues *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of GeneralMatrixValues");
+#endif
+    this->numberOfEl = that->numberOfEl;
+    this->el = new ScalarExpressionTree*[numberOfEl];
+    for (int i=0; i<numberOfEl; i++)
+    {
+        this->el[i] = new ScalarExpressionTree();
+//        this->el[i]->m_treeRoot = new OSnLNode();
+        this->el[i]->m_treeRoot->copyNodeAndDescendants();
+    }
+    return true;
+}// end of GeneralMatrixValues::deepCopyFrom()
 
 /** ---------- Methods for class ObjReferenceMatrixElements ---------- */ 
 ObjReferenceMatrixElements::ObjReferenceMatrixElements():
@@ -2546,6 +5251,13 @@ bool ObjReferenceMatrixValues::setRandom(double density, bool conformant, int iM
 
 bool ObjReferenceMatrixValues::deepCopyFrom(ObjReferenceMatrixValues *that)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of ObjReferenceMatrixValues");
+#endif
+    this->numberOfEl = that->numberOfEl;
+    this->el = new int[numberOfEl];
+    for (int i=0; i<numberOfEl; i++)
+        this->el[i] = that->el[i];
     return true;
 }// end of ObjReferenceMatrixValues::deepCopyFrom()
 
@@ -2706,6 +5418,15 @@ ConReferenceMatrixValues::~ConReferenceMatrixValues()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConReferenceMatrixValues Destructor");
 #endif
+    if (numberOfEl > 0 && el != NULL)
+    {
+        for (int i=0; i < numberOfEl; i++)
+        {
+            if (el[i] != NULL)
+                delete el[i];
+            el[i] = NULL;
+        }
+    }
     if (el != NULL)
         delete [] el;
     el = NULL;
@@ -2757,6 +5478,13 @@ bool ConReferenceMatrixValues::setRandom(double density, bool conformant, int iM
 
 bool ConReferenceMatrixValues::deepCopyFrom(ConReferenceMatrixValues *that)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of ConReferenceMatrixValues");
+#endif
+    this->numberOfEl = that->numberOfEl;
+    this->el = new ConReferenceMatrixElement*[numberOfEl];
+    for (int i=0; i<numberOfEl; i++)
+        ((ConReferenceMatrixValues*)this)->el[i]->deepCopyFrom(that->el[i]);
     return true;
 }// end of ConReferenceMatrixValues::deepCopyFrom()
 
@@ -2823,6 +5551,9 @@ bool ConReferenceMatrixElement::setRandom(double density, bool conformant, int i
 
 bool ConReferenceMatrixElement::deepCopyFrom(ConReferenceMatrixElement *that)
 {
+    this->conReference = that->conReference;
+    this->valueType    = that->valueType;
+    this->value        = that->value;
     return true;
 }// end of ConReferenceMatrixElement::deepCopyFrom()
 
@@ -3337,6 +6068,11 @@ bool MatrixBlock::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows
     return (firstRow == 0 && firstColumn == 0 && nRows == numberOfRows && nCols == numberOfColumns);
 }// end of MatrixBlock::alignsOnBlockBoundary()
 
+bool MatrixBlock::expandElements(bool rowMajor)
+{
+    return NULL;
+}// end of expandElements
+
 MatrixBlock* MatrixBlock::cloneMatrixNode()
 {
     MatrixType *nodePtr;
@@ -3363,8 +6099,10 @@ bool MatrixBlock::deepCopyFrom(MatrixBlock *that)
 
 /** ---------- Methods for class GeneralSparseMatrix ---------- */ 
 GeneralSparseMatrix::GeneralSparseMatrix():
-    bDeleteArrays(true),
-    isColumnMajor(true),
+    b_deleteStartArray(true),
+    b_deleteIndexArray(true),
+    b_deleteValueArray(true),
+    isRowMajor(false),
     startSize(-1),
     valueSize(-1),
     vType(ENUM_MATRIX_TYPE_unknown),
@@ -3377,12 +6115,22 @@ GeneralSparseMatrix::GeneralSparseMatrix():
 #endif
 }// end of GeneralSparseMatrix
 
-GeneralSparseMatrix::GeneralSparseMatrix(bool isColumnMajor_, int startSize, int valueSize,
-                                         ENUM_MATRIX_TYPE type)
+GeneralSparseMatrix::GeneralSparseMatrix(bool isColumnMajor_, int startSize_, int valueSize_,
+                                         ENUM_MATRIX_TYPE type_):
+    b_deleteStartArray(true),
+    b_deleteIndexArray(true),
+    b_deleteValueArray(true),
+    values(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the alternate GeneralSparseMatrix Constructor");
 #endif
+    isRowMajor = !(isColumnMajor_);
+    startSize = startSize_;
+    valueSize = valueSize_;
+    vType = type_;
+    starts  = new int[startSize];
+    indexes = new int[valueSize];
 }// end of GeneralSparseMatrix
 
 GeneralSparseMatrix::~GeneralSparseMatrix()
@@ -3390,20 +6138,20 @@ GeneralSparseMatrix::~GeneralSparseMatrix()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralSparseMatrix Destructor");
 #endif
-    if (bDeleteArrays)
+    if (b_deleteStartArray)
     {
         if (starts != NULL) delete [] starts;
         starts = NULL;
+    }
+    if (b_deleteIndexArray)
+    {
         if (indexes != NULL) delete [] indexes;
         indexes = NULL;
-        if (values != NULL)
-            if (vType == ENUM_MATRIX_TYPE_linear || vType == ENUM_MATRIX_TYPE_general)
-            {
-                for (int i=0; i < valueSize; i++)
-                    delete values[i];
-                delete [] values;
-                values = NULL;
-            }
+    }
+    if (b_deleteValueArray)
+    {
+        if (values != NULL) delete values;
+        values = NULL;
     }
 }// end of ~GeneralSparseMatrix
 
@@ -3416,7 +6164,7 @@ bool GeneralSparseMatrix::display(int secondaryDim)
 /** ---------- Methods for class ExpandedMatrixBlocks ---------- */ 
 ExpandedMatrixBlocks::ExpandedMatrixBlocks():
     bDeleteArrays(true),
-    isColumnMajor(true),
+    isRowMajor(false),
     blockNumber(0),
     blockRows(NULL),
     blockColumns(NULL),
@@ -3427,7 +6175,7 @@ ExpandedMatrixBlocks::ExpandedMatrixBlocks():
 #endif
 }// end of ExpandedMatrixBlocks
 
-ExpandedMatrixBlocks::ExpandedMatrixBlocks(bool isColumnMajor_, int startSize, int valueSize):
+ExpandedMatrixBlocks::ExpandedMatrixBlocks(bool isRowMajor_, int startSize, int valueSize):
     bDeleteArrays(true),
     blockNumber(0),
     blockRows(NULL),
@@ -3437,7 +6185,7 @@ ExpandedMatrixBlocks::ExpandedMatrixBlocks(bool isColumnMajor_, int startSize, i
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralSparseMatrix default constructor");
 #endif
-    isColumnMajor = isColumnMajor_;
+    isRowMajor = isRowMajor_;
 }// end of ExpandedMatrixBlocks
 
 ExpandedMatrixBlocks::~ExpandedMatrixBlocks()

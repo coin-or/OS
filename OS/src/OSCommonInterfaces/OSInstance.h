@@ -1163,7 +1163,6 @@ public:
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
      * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
-
      */
     bool setRandom(double density, bool conformant, int iMin, int iMax);
 
@@ -1922,7 +1921,6 @@ public:
      * A function to make a deep copy of an instance of this class
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
-
      */    
     bool deepCopyFrom(MatrixProgramming *that);
 }; // MatrixProgramming
@@ -3019,6 +3017,8 @@ private:
      */
     std::string* m_msTimeDomainStageNames;
 
+
+
     /**
      * m_miTimeDomainStageVariableNumber holds the number of variables in each stage.
      */
@@ -3614,7 +3614,7 @@ public:
      *
      * @return the number of values.
      */
-//    int getNumberOfValuesForMatrix(int n);
+    int getNumberOfValuesForMatrix(int n);
 
     /**
      * Get the name of the matrix.

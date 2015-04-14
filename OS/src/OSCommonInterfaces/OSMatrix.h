@@ -360,7 +360,7 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    //bool deepCopyFrom(MatrixElementValues *that);
+    virtual bool deepCopyFrom(MatrixElementValues *that);
 };//class MatrixElementValues
 
 // ------------------ concrete classes start here ------------------------------
@@ -593,7 +593,7 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(VarReferenceMatrixValues *that);
+    virtual bool deepCopyFrom(VarReferenceMatrixValues *that);
 };//class VarReferenceMatrixValues
 
 
@@ -630,7 +630,7 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(LinearMatrixValues *that);
+    virtual bool deepCopyFrom(LinearMatrixValues *that);
 };//class LinearMatrixValues
 
 
@@ -666,7 +666,7 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(GeneralMatrixValues *that);
+    virtual bool deepCopyFrom(GeneralMatrixValues *that);
 };//class GeneralMatrixValues
 
 
@@ -702,7 +702,7 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(ObjReferenceMatrixValues *that);
+    virtual bool deepCopyFrom(ObjReferenceMatrixValues *that);
 };//class ObjReferenceMatrixValues
 
 
@@ -740,7 +740,7 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(ConReferenceMatrixValues *that);
+    virtual bool deepCopyFrom(ConReferenceMatrixValues *that);
 };//class ConReferenceMatrixValues
 
 
@@ -1093,7 +1093,7 @@ class ObjReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The objective references (indexes of core objectives) of the elements */
-    IntVector *values;
+    ObjReferenceMatrixValues *values;
 
     ObjReferenceMatrixElements();
     ~ObjReferenceMatrixElements();
@@ -1186,7 +1186,7 @@ public:
 
 
     /**
-     * @return the value of nType
+     *  @return the constructor type 
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
@@ -1666,16 +1666,34 @@ class GeneralSparseMatrix
 public:
 
     /**
-     * bDeleteArrays is true if we delete the arrays in garbage collection
-     * set to true by default
+     * b_deleteStartArray is true if we delete the starts array
+     * in garbage collection --- set to true by default
      */
-    bool bDeleteArrays;
+    bool b_deleteStartArray;
 
     /**
-     * isColumnMajor holds whether the matrix is stored by column. 
-     * If false, the matrix is stored by row.
+     * b_deleteIndexArray is true if we delete the indexes array
+     * in garbage collection --- set to true by default
      */
-    bool isColumnMajor;
+    bool b_deleteIndexArray;
+
+    /**
+     * b_deleteValueArray is true if we delete the values array
+     * in garbage collection --- set to true by default
+     */
+    bool b_deleteValueArray;
+
+    /**
+     * isRowMajor holds whether the matrix is stored by row. 
+     * If false, the matrix is stored by column (which is the default).
+     */
+    bool isRowMajor;
+
+    /**
+     *  To track the type of symmetry present in the matrix or block
+     *  @remark for definitions, see OSParameters.h
+     */
+    ENUM_MATRIX_SYMMETRY symmetry;
 
     /**
      * startSize is the dimension of the starts array
@@ -1712,7 +1730,7 @@ public:
      * encountered (e.g., constant and nonlinear expression), they are converted 
      * to the most general form found.
      */
-    MatrixElementValues** values;
+    MatrixElementValues* values;
 
     /**
      *
@@ -1762,10 +1780,16 @@ public:
     bool bDeleteArrays;
 
     /**
-     * isColumnMajor holds whether the (nonzero) values holding the
-     * data are stored by column. If false, the matrix is stored by row.
+     * vType holds the type of all (nonzero) values in the collection of blocks
+     * contained in this set of blocks.
      */
-    bool isColumnMajor;
+    ENUM_MATRIX_TYPE vType;
+
+    /**
+     * isRowMajor holds whether the (nonzero) values holding the
+     * data are stored by columnrow. If false, the matrix is stored by column.
+     */
+    bool isRowMajor;
 
     /**
      * blockNumber gives the number of blocks (which is the size of
@@ -1790,6 +1814,12 @@ public:
     int* colOffsets;
 
     /**
+     * These two parameters give the size of the rowOffsets and colOffsets arrays, respectively
+     */
+    int rowOffsetSize;
+    int colOffsetSize;
+
+    /**
      * blockRows holds an integer array of the row to which a block belongs.
      * It must be of dimension blockNumber.
      * @Remark It is assumed that all blocks in a row have the same number of rows 
@@ -1800,7 +1830,7 @@ public:
     /**
      * blockColumns holds an integer array of the column to which a block belongs.
      * It must be of dimension blockNumber.
-     * @RemarkIt is assumed that all blocks in a column have the same number of columns
+     * @Remark It is assumed that all blocks in a column have the same number of columns
      * (while the number of rows is allowed to vary).
      */
     int* blockColumns;
@@ -1842,6 +1872,7 @@ public:
     bool display(int secondaryDim);
 }; //ExpandedMatrixBlocks
 
+
 /*! \class MatrixType
  * \brief a data structure to represent a MatrixType object (from which we derive OSMatrix and MatrixBlock)
  *
@@ -1865,18 +1896,45 @@ public:
     int numberOfColumns;
 
     /**
-     *  The expanded form of the matrix is held in four sparse matrix objects:
-     *  m_mmConstantElements
-     *  m_mmVariableReferences
-     *  m_mmGeneralElements
-     *  m_mmObjAndConReferences
+     *  The matrix can be held in expanded form by rows or by columns 
+     *  and in a number of ways stored by blocks
      */
+    GeneralSparseMatrix* ExpandedMatrixInRowMajorForm;
+    GeneralSparseMatrix* ExpandedMatrixInColumnMajorForm;
+    std::vector<ExpandedMatrixBlocks*> ExpandedMatrixByBlocks;
 
-    /** 
-     *  to track whether the expanded form of the matrix is available
+private:
+    /** m_miRowPartition is the partition vector of the matrix rows into blocks
+     *  @remark This only tracks the top-level partition and does not recurse
      */
-    bool haveExpandedForm;
+    int* m_miRowPartition;
 
+    /** m_iRowPartitionSize gives the size of the m_miRowPartition array, 
+     *  which is one more than the number of blocks in each row
+     */
+    int m_iRowPartitionSize;
+
+    /** m_miColumnPartition is the partition vector of the matrix columns into blocks
+     *  @remark This only tracks the top-level partition and does not recurse
+     */
+    int* m_miColumnPartition;
+
+    /** m_iColumnPartitionSize gives the size of the m_miColumnPartition array, 
+     *  which is one more than the number of blocks in each column
+     */
+    int m_iColumnPartitionSize;
+
+    /** m_bHaveRowPartition tracks whether the row partition has been determined
+     *  from the constructor list and stored in m_miRowPartition
+     */
+    bool m_bHaveRowPartition; 
+
+    /** m_bHaveColumnPartition tracks whether the column partition has been determined
+     *  from the constructor list and stored in m_miColumnPartition
+     */
+    bool m_bHaveColumnPartition; 
+
+public:
     MatrixType();
     virtual ~MatrixType();
 
@@ -1908,9 +1966,51 @@ public:
     int  getNumberOfTransformationConstructors();
     int  getNumberOfBlocksConstructors();
 
-    GeneralSparseMatrix* getMatrixInColumnMajorForm();
-    GeneralSparseMatrix* getMatrixInRowMajorForm();
+    GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor();
+    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor();
     GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx);
+
+    /**
+     *  a utility routine to print the expanded matrix or block.
+     *  @param rowMajor controls whether the matrix should be printed in row or column major.
+     *  @return whether the operation was successful
+     *  @remark if the expanded matrix does not exist, return false
+     */
+    bool printExpandedMatrix(bool rowMajor);
+
+    /**
+     *  get the size of the row partition of a matrix
+     *
+     *  @return an corresponding to the number of partition points
+     *  of the rows of this matrix (which is one more than the number
+     *  of blocks in one row)
+     */
+    int  getRowPartitionSize();
+
+    /**
+     *  get the row partition of the matrix
+     *
+     *  @return a vector of int corresponding to the partition points
+     *  of the rows of this matrix
+     */
+    int* getRowPartition();
+
+    /**
+     *  get the size of the column partition of a matrix
+     *
+     *  @return an corresponding to the number of partition points
+     *  of the columns of this matrix (which is one more than the number
+     *  of blocks in one column)
+     */
+    int  getColumnPartitionSize();
+
+    /**
+     *  get the column partition of the matrix
+     *
+     *  @return a vector of int corresponding to the partition points
+     *  of the columns of this matrix
+     */
+    int* getColumnPartition();
 
 
     /** 
@@ -1922,12 +2022,54 @@ public:
      *  @param rowMajor can be used to store the objects in row major form.
      *  @return whether the operation was successful or not.
      */
-    //virtual bool expandMatrixType(bool rowMajor);
+    virtual bool expandElements(bool rowMajor);
+
+    /**
+     * A method to convert a matrix to the other major. 
+     * @param isColumnMajor holds whether the matrix is stored by column.
+     *        If true, the matrix is converted to row major form.
+     *        If false, the matrix is stored by row and is converted to column major.
+     * @return A pointer to the matrix in the other major. Return null if input matrix not valid.
+     */
+    GeneralSparseMatrix* convertToOtherMajor(bool isColumnMajor);
+
+    /**
+     *  A method to determine the block structure of a matrixType 
+     *  as defined by the <blocks> element or elements.
+     *  If multiple partitions are found, they are consolidated into the
+     *  coarsest partition (intersection of all partition sets).
+     *
+     *  @return whether the operation was successful
+     *
+     *  @remark This method sets m_iRowPartition, m_iRowPartitionSize, 
+     *          m_iColumnPartition and m_iColumnPartitionSize,
+     *          but does not expand any of the blocks themselves.
+     */
+    bool processBlockPartition();
+
+    /**
+     *  A method to process a matrixType into a block structure defined by 
+     *  the <blocks> element or elements.
+     *  @param rowMajor indicates whether the blocks should be stored in row major (if true)
+     *         or column major.
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @return whether the operation was successful
+     *
+     *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
+     *          so that they can be retrieved later using extractBlocks (see below).
+     *          It is possible (though probably not advisable) to maintain multiple
+     *          decompositions with different row and column partitions (see next method)
+     */
+     virtual bool processBlocks(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
     /**
      *  A method to process a matrixType into a specific block structure.
      *  @param rowOffsets defines a partition of the matrix rows into the blocks
+     *  @param rowOffsetSize gives the number of elements in the rowOffsets array 
      *  @param colOffsets defines a partition of the matrix columns into the blocks
+     *  @param colOffsetSize gives the number of elements in the colOffsets array 
+     *  @param rowMajor controls whether the blocks are stored by row or by column
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return whether the operation was successful
@@ -1937,8 +2079,8 @@ public:
      *          It is possible (though probably not advisable) to maintain multiple
      *          decompositions with different row and column partitions
      */
-     bool processBlocks(int* rowOffsets, int* colOffsets,
-                                      bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+     virtual bool processBlocks(int* rowOffsets, int rowOffsetSize, int* colOffsets,
+                                int colOffsetSize, bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
     /** 
      *  A method to extract a block from a larger matrix
@@ -1948,15 +2090,59 @@ public:
      *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
      *  @param firstrow gives the first row of the block
      *  @param firstcol gives the first column of the block
-     *  @param nrows gives the number of rows in the block  
-     *  @param ncols gives the number of columns in the block  
+     *  @param lastrow gives the last row of the block  
+     *  @param lastcol gives the last column of the block  
      *  @param rowMajor can be used to store the objects in row major form.
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the block as a general sparse matrix
+     *  @remark Before extracting a block it is necessary to call processBlocks()
+     *          in order to make sure that a block partition conformal to the
+     *          block dimensions and positions has been defined or prepared.
      */
-    GeneralSparseMatrix* extractBlock(int firstrow, int firstcol, int nrows, int ncols,
+    GeneralSparseMatrix* extractBlock(int firstrow, int firstcol, int lastrow, int lastcol,
                                       bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+
+    /** 
+     *  A method to extract a block from a larger matrix
+     *  The result is a sparse matrix object, depending on the matrixType, 
+     *  of constant matrix elements, variable references, linear or nonlinear expressions, 
+     *  or objective and constraint references (possibly mixed).
+     *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
+     *  @param rowPartition defines the partition of the set of rows into the blocks  
+     *  @param rowPartitionSize gives the size of the rowPartition array
+     *  @param colPartition defines the partition of the set of columns into the blocks  
+     *  @param colPartitionSize gives the size of the colPartition array
+     *  @param rowMajor indicates whether the blocks are stored in row major form or not.
+     *  @param appendToBlockArray determines whether the blocks should be created if not found. 
+     *
+     *  @return the blocks as an ExpandedMatrixBlocks object, which is essentially 
+     *          an array of general sparse matrices. 
+     *
+     *  @remark If blocks corresponding to the indicated partition do not exist,
+     *          this method can try to create them. This can be quite storage-intensive
+     *          and is controlled by the parameter appendToBlockArray. If no blocks
+     *          found (and appending is inhibited) return NULL.
+     */
+    ExpandedMatrixBlocks* getBlocks(int* rowPartition, int rowPartitionSize, 
+                                    int* colPartition, int colPartitionSize, 
+                                    bool rowMajor, bool appendToBlockArray);
+
+    /** 
+     *  A method to disassemble a MatrixType into individual blocks of specific structure
+     *  @param rowPartition defines the partition of the set of rows into the blocks  
+     *  @param rowPartitionSize gives the size of the rowPartition array
+     *  @param colPartition defines the partition of the set of columns into the blocks  
+     *  @param colPartitionSize gives the size of the colPartition array
+     *  @param rowMajor indicates whether the blocks are stored in row major form or not.
+     *  @param symmetry determines what kind of symmetry to use in representing the blocks. 
+     *
+     *  @return the blocks as an ExpandedMatrixBlocks object, which is essentially 
+     *          an array of general sparse matrices. 
+     */
+    ExpandedMatrixBlocks* disassembleMatrix(int* rowPartition, int rowPartitionSize, 
+                                    int* colPartition, int colPartitionSize, 
+                                    bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
     /**
      *  A function to check for the equality of two objects
@@ -1993,35 +2179,7 @@ public:
     int idx;
     std::string name;
 
-private:
-    /** m_miRowPartition is the partition vector of the matrix rows into blocks
-     *  @remark This only tracks the top-level partition and does not recurse
-     */
-    int* m_miRowPartition;
-
-    /** m_iRowPartitionSize gives the number of entries
-     *  in the m_miRowPartition array, which is one more than the number of blocks
-     */
-    int m_iRowPartitionSize;
-
-    /** m_miColumnPartition is the partition vector of the matrix columns into blocks
-     *  @remark This only tracks the top-level partition and does not recurse
-     */
-    int* m_miColumnPartition;
-
-    /** m_iColumnPartitionSize gives the number of entries
-     *  in the m_miColumnPartition array, which is one more than the number of blocks
-     */
-    int m_iColumnPartitionSize;
-
-    /** m_bBlockPartitionProcessed tracks whether the block partition
-     *  has been determined (by rows as well as by columns) from the constructor list 
-     *  and stored in m_miRowPartition and m_miColumnPartition
-     */
-    bool m_bBlockPartitionProcessed; 
-
 public:
-
     OSMatrix();
     ~OSMatrix();
 
@@ -2053,46 +2211,32 @@ public:
     virtual ENUM_MATRIX_TYPE getMatrixType();
 
     /**
-     *  get the size of the row partition of a matrix
+     *  A method to process a matrixType into a specific block structure.
+     *  @param rowOffsets defines a partition of the matrix rows into the blocks
+     *  @param colOffsets defines a partition of the matrix columns into the blocks
+     *  @param rowMajor controls whether the blocks are stored by row or by column
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @return whether the operation was successful
      *
-     *  @return an corresponding to the number of partition points
-     *  of the rows of this matrix (which is one more than the number
-     *  of blocks in one row)
+     *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
+     *          so that they can be retrieved later using extractBlock (see below).
+     *          It is possible (though probably not advisable) to maintain multiple
+     *          decompositions with different row and column partitions
      */
-    int  getRowPartitionSize();
+     //virtual bool processBlocks(int* rowOffsets, int* colOffsets,
+     //                                 bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
-    /**
-     *  get the row partition of the matrix
-     *
-     *  @return a vector of int corresponding to the partition points
-     *  of the rows of this matrix
+    /** 
+     *  A method to expand a matrix or block
+     *  The result is a GeneralSparseMatrix object of constant matrix elements,
+     *  variable references, linear or nonlinear expressions, or objective and 
+     *  constraint references (possibly mixed). (Values depend on the matrixType.)
+     *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
+     *  @param rowMajor can be used to store the objects in row major form.
+     *  @return whether the operation was successful or not.
      */
-    int* getRowPartition();
-
-    /**
-     *  get the size of the column partition of a matrix
-     *
-     *  @return an corresponding to the number of partition points
-     *  of the columns of this matrix (which is one more than the number
-     *  of blocks in one column)
-     */
-    int  getColumnPartitionSize();
-
-    /**
-     *  get the column partition of the matrix
-     *
-     *  @return a vector of int corresponding to the partition points
-     *  of the columns of this matrix
-     */
-    int* getColumnPartition();
-
-    /**
-     *  process the dimensions of blocks found in the constructors of the matrix
-     *  (Note that there could be several block structures, potentially conflicting)
-     *
-     *  @remark This method is called by the previous four methods
-     */
-    bool processBlocks();
+    virtual bool expandElements(bool rowMajor);
 
     /** 
      *  Check whether a submatrix aligns with the block partition of a matrix
@@ -2225,6 +2369,17 @@ public:
      *  @return true if the submatrix aligns with the boundaries of a block
      */
     virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /** 
+     *  A method to expand a matrix or block
+     *  The result is a GeneralSparseMatrix object of constant matrix elements,
+     *  variable references, linear or nonlinear expressions, or objective and 
+     *  constraint references (possibly mixed). (Values depend on the matrixType.)
+     *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
+     *  @param rowMajor can be used to store the objects in row major form.
+     *  @return whether the operation was successful or not.
+     */
+    virtual bool expandElements(bool rowMajor);
 
     /*! \fn MatrixBlock *cloneMatrixNode()
      *  \brief The implementation of the virtual functions.

@@ -163,14 +163,11 @@
 #include "OSBase64.h"
 #include "OSMathUtil.h"
 
-
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
 #include "CoinError.hpp"
 #include "CoinHelperFunctions.hpp"
 #include "OsiSolverInterface.hpp"
-
-
 
 #ifdef COIN_HAS_GLPK
 #include <OsiGlpkSolverInterface.hpp>
@@ -958,8 +955,8 @@ cout << temposil << endl;
             cout << "compare the two objects" << endl;
             if (!instance2->IsEqual(instance1))
                 throw ErrorClass("<matrices> and <cones> not processed correctly");
-            delete osilreader;
-            osilreader = NULL;
+//            delete osilreader;
+//            osilreader = NULL;
             delete osilreader2;
             osilreader2 = NULL;
             delete osilwriter;
@@ -969,6 +966,77 @@ cout << temposil << endl;
 
             unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem testMatricesAndCones.osil" << std::endl;
             cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+
+            // now test the matrix manipulation routines 
+            // (expansion, separation into blocks, transformations, etc.)
+            cout << endl << "TEST " << ++nOfTest << ": Test matrix manipulation routines (using testMatricesAndCones.osil)" << endl << endl;
+
+// some matrices we cannot handle yet...
+//                bool* omit = new bool[instance1->instanceData->matrices->numberOfMatrices];
+//                omit[ 0] = true; //false;
+//                omit[ 1] = true; //false;
+//                omit[ 2] = true;
+//                omit[ 3] = true;
+//                omit[ 4] = true; //false;
+//                omit[ 5] = true; //false;
+//                omit[ 6] = true;
+//                omit[ 7] = true; //false;
+//                omit[ 8] = true; //false;
+//                omit[ 9] = true; //false;
+//                omit[10] = true;
+//                omit[11] = true; //false;
+//                omit[12] = true; //false;
+//                omit[13] = true;
+//                omit[14] = true;
+//                omit[15] = true;
+//                omit[16] = true;
+//                omit[17] = true;
+//                omit[18] = true;
+//                omit[19] = true;
+//                omit[20] = true;
+//                omit[21] = true;
+//                omit[22] = true; //false;
+//                omit[23] = true;
+//                omit[24] = true; //false;
+//                omit[25] = true;
+//                omit[26] = true;
+//                omit[27] = true; //false;
+//                omit[28] = true; //false;
+//                omit[29] = true; //false;
+//                omit[30] = true; //false;
+//                omit[31] = true; //false;
+//                omit[32] = true; //false; //--- expansion test 1
+//                omit[33] = true; //false;
+//                omit[34] = true; //false;
+//                omit[35] = false; //--- expansion test 2
+//                omit[36] = false;
+//                omit[37] = true; //--- expansion test 3
+//                omit[38] = true; //--- expansion test 4
+//                omit[39] = true; //--- expansion test 5
+
+//            for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
+//            {
+//                if (!omit[i])
+//                {
+                instance1->instanceData->matrices->matrix[32]->getMatrixCoefficientsInColumnMajor();
+//                instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
+                instance1->instanceData->matrices->matrix[32]->getMatrixCoefficientsInRowMajor();
+//                instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
+                instance1->instanceData->matrices->matrix[35]->getMatrixCoefficientsInColumnMajor();
+//                instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
+                instance1->instanceData->matrices->matrix[35]->getMatrixCoefficientsInRowMajor();
+//                instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
+//                }
+//            }
+
+
+            delete osilreader;
+            osilreader = NULL;
+
+            unitTestResult << "TEST " << nOfTest << ": Successful test of matrix manipulation routines" << std::endl;
+            cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
         }
         catch(const ErrorClass& eclass){
             cout << endl << endl << endl;
@@ -8535,9 +8603,9 @@ if( THOROUGH == true){
         cout << "call the COIN - Couenne Solver for nonconvex.osil" << endl;
         solver->buildSolverInstance();
     
-        std::cout << " CALL SOLVE " << std::endl;
+        std::cout << "CALL SOLVE" << std::endl;
         solver->solve();
-    
+
         check = -6.551133;
         //ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
         ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
@@ -8549,7 +8617,8 @@ if( THOROUGH == true){
             cout << "Couenne solver solution for nonconvex.osil checks." << endl;
         }
         else
-        {    cout << "Couenne solver solution for nonconvex.osil in error:" << endl;
+        {   
+            cout << "Couenne solver solution for nonconvex.osil in error:" << endl;
             cout << solver->osrl << endl;
         }
         if(ok == false) throw ErrorClass(" Fail unit test with Couenne on nonconvex.osil");

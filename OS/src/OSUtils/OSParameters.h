@@ -625,8 +625,8 @@ inline int returnMatrixType(std::string type)
     if (type == "quadratic" ) return ENUM_MATRIX_TYPE_quadratic;
     if (type == "general"   ) return ENUM_MATRIX_TYPE_general;
 
-    if (type == "conref"    ) return ENUM_MATRIX_TYPE_conref;
     if (type == "objref"    ) return ENUM_MATRIX_TYPE_objref;
+    if (type == "conref"    ) return ENUM_MATRIX_TYPE_conref;
     if (type == "mixedref"  ) return ENUM_MATRIX_TYPE_mixedref;
 
     if (type == "jumbled"   ) return ENUM_MATRIX_TYPE_jumbled;
@@ -642,8 +642,8 @@ inline std::string returnMatrixTypeString(ENUM_MATRIX_TYPE type)
     if (type == ENUM_MATRIX_TYPE_linear)    return "linear";
     if (type == ENUM_MATRIX_TYPE_quadratic) return "quadratic";
     if (type == ENUM_MATRIX_TYPE_general)   return "general";
-    if (type == ENUM_MATRIX_TYPE_conref)    return "conref";
     if (type == ENUM_MATRIX_TYPE_objref)    return "objref";
+    if (type == ENUM_MATRIX_TYPE_conref)    return "conref";
     if (type == ENUM_MATRIX_TYPE_mixedref)  return "mixedref";
     if (type == ENUM_MATRIX_TYPE_jumbled)   return "jumbled";
     if (type == ENUM_MATRIX_TYPE_unknown)   return "unknown";

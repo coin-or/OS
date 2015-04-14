@@ -181,6 +181,13 @@ public:
      */
     double calculateFunction( double *x, bool new_x);
 
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    //bool deepCopyFrom(ScalarExpressionTree *that);
+
 private:
     /**
      * m_dTreeRootValue is the function value of the root node

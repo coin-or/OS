@@ -5,7 +5,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2014, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2015, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -292,7 +292,7 @@ public:
      * make a copy of this node and all its descendants
      * @return a pointer to the duplicate node
      */
-    OSnLNode* copyNodeAndDescendants();
+    virtual OSnLNode* copyNodeAndDescendants();
 
     /**
      * A function to check for the equality of two objects
@@ -1313,6 +1313,11 @@ public:
      */
     virtual OSnLNode *cloneExprNode();
 
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLNode* copyNodeAndDescendants();
 
     /*! \fn double OSnLNodeNumber::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -1520,6 +1525,12 @@ public:
      *  \return a pointer to a new OSnLNode of the proper type.
      */
     virtual OSnLNode *cloneExprNode();
+
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLNode* copyNodeAndDescendants();
 
     /*! \fn double OSnLNodeVariable::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -1824,7 +1835,7 @@ public:
      * make a copy of this node and all its descendants
      * @return a pointer to the duplicate node
      */
-    OSnLMNode* copyNodeAndDescendants();
+    virtual OSnLMNode* copyNodeAndDescendants();
 
     /**
      * A function to check for the equality of two objects
@@ -2264,6 +2275,12 @@ public:
     virtual OSnLMNode *cloneExprNode();
 
     /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLMNode* copyNodeAndDescendants();
+
+    /**
      * A function to check for the equality of two objects
      */
     virtual bool IsEqual(OSnLMNodeMatrixLowerTriangle *that);
@@ -2310,6 +2327,12 @@ public:
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual OSnLMNode *cloneExprNode();
+
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLMNode* copyNodeAndDescendants();
 
     /**
      * A function to check for the equality of two objects
@@ -2484,6 +2507,12 @@ public:
      */
     virtual OSnLMNode *cloneExprNode();
 
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLMNode* copyNodeAndDescendants();
+
 #if 0
     /*! \fn double OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -2548,6 +2577,12 @@ public:
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual OSnLMNode *cloneExprNode();
+
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLMNode* copyNodeAndDescendants();
 
 #if 0
     /*! \fn double OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
@@ -2614,6 +2649,12 @@ public:
      */
     virtual OSnLMNode *cloneExprNode();
 
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLMNode* copyNodeAndDescendants();
+
 #if 0
     /*! \fn double OSnLMNodeMatrixObj::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
      *  \brief The implementation of the virtual functions.
@@ -2678,6 +2719,12 @@ public:
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual OSnLMNode *cloneExprNode();
+
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLMNode* copyNodeAndDescendants();
 
 #if 0
     /*! \fn double OSnLMNodeMatrixCon::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)

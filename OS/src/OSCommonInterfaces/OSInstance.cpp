@@ -3443,7 +3443,7 @@ i. baseMatrix would have been processed before
     {
         throw ErrorClass( eclass.errormsg);
     }
-}//processLinearConstraintCoefficients
+}//processMatrices
 
 
 bool OSInstance::matrixHasBase(int n)
@@ -3483,7 +3483,7 @@ int  OSInstance::getNumberOfElementConstructors(int n)
     int nMatrices = getMatrixNumber();
     if ( (instanceData->matrices == NULL) || (nMatrices == 0) ) return 0;
     if ( (n < 0) || (n >= nMatrices) ) return false;
-    return instanceData->matrices->matrix[n]->matrixHasBase();
+    return instanceData->matrices->matrix[n]->getNumberOfElementConstructors();
 }//getNumberOfElementConstructors
 
 int  OSInstance::getNumberOfTransformationConstructors(int n)
@@ -3502,6 +3502,30 @@ int  OSInstance::getNumberOfBlocksConstructors(int n)
     return instanceData->matrices->matrix[n]->getNumberOfBlocksConstructors();
 }//getNumberOfBlocksConstructors
 
+
+GeneralSparseMatrix* OSInstance::getMatrixCoefficientsInColumnMajor(int n)
+{
+    try
+    {
+        int nMatrices = getMatrixNumber();
+        if ( (instanceData->matrices == NULL) || (nMatrices == 0) )
+            throw ErrorClass("no matrices defined in method getMatrixCoefficientsInColumnMajor()");
+        if ( (n < 0) || (n >= nMatrices) )
+            throw ErrorClass("invalid matrix index in method getMatrixCoefficientsInColumnMajor()");
+        return instanceData->matrices->matrix[n]->getMatrixCoefficientsInColumnMajor();
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}//getMatrixCoefficientsInColumnMajor
+
+
+GeneralSparseMatrix* OSInstance::getMatrixCoefficientsInRowMajor(int n)
+{
+}//getMatrixCoefficientsInRowMajor
+
+//===========================================================================
 
 int OSInstance::getNumberOfMatrixVariables()
 {
@@ -4092,6 +4116,7 @@ std::map<int, MatrixExpressionTree*> OSInstance::getAllMatrixExpressionTrees()
     std::map<int, int>::iterator pos;
     OSnLNodePlus *nlNodePlus;
     MatrixExpressionTree *expTree;
+
     m_iObjectiveNumberNonlinear = 0;
     m_iConstraintNumberNonlinear = 0;
     int i;
@@ -7839,7 +7864,7 @@ std::string OrthantCone::getConeInXML()
     {
         ubt = ub[i];
         lbt = lb[i];
-        if (ubt == ub[i+mult] && lbt == lb[i+mult])
+        if (i+mult < numberOfRows*numberOfColumns && ubt == ub[i+mult] && lbt == lb[i+mult])
         {
             mult++;
         }
@@ -9028,6 +9053,7 @@ bool PolarCone::IsEqual(PolarCone *that)
         if (that == NULL)
             return true;
         else
+
         {
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
@@ -9244,7 +9270,6 @@ bool MatrixObjectives::IsEqual(MatrixObjectives *that)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MatrixProgramming");
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_always, "MatrixProgramming: Awaiting implementation");
 #endif
 
     if (this == NULL)
@@ -9285,6 +9310,7 @@ bool MatrixObjectives::IsEqual(MatrixObjectives *that)
             }
 
             return true;
+
         }
     }
 }//MatrixObjectives::IsEqual

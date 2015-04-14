@@ -4342,7 +4342,6 @@ osglIntArrayData:
     {
          if (osglData->osglCounter < osglData->osglNumberOfEl)
         {
-std::cout << "expected " << osglData->osglNumberOfEl << " elements; got " << osglData->osglCounter << std::endl;
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "fewer data elements than specified");
             parserData->ignoreDataAfterErrors = true;
         }
@@ -4372,7 +4371,6 @@ osglIntVectorElContent: GREATERTHAN INTEGER ELEND
 {
     if (osglData->osglCounter + osglData->osglMult > osglData->osglNumberOfEl)
     {
-std::cout << "IntVec: expected " << osglData->osglNumberOfEl << " elements; got " << osglData->osglCounter + osglData->osglMult << std::endl;
         if (!parserData->suppressFurtherErrorMessages)
         {
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more data elements than specified");
@@ -4452,7 +4450,6 @@ osglDblVectorElContent: GREATERTHAN aNumber ELEND
 {
     if (osglData->osglCounter + osglData->osglMult > osglData->osglNumberOfEl)
     {
-std::cout << "DblVec: expected " << osglData->osglNumberOfEl << " elements; got " << osglData->osglCounter + osglData->osglMult << std::endl;
         if (!parserData->suppressFurtherErrorMessages)
         {
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "more data elements than specified");
@@ -4593,8 +4590,6 @@ matrixStart: MATRIXSTART
     osglData->tempC = new OSMatrix();
     osglData->mtxConstructorVec.push_back((OSMatrix*)osglData->tempC);
     osglData->mtxBlkVec.push_back((OSMatrix*)osglData->tempC);
-std::cout << "push back a matrix" << std::endl;
-
 };
 
 matrixAttributes: matrixAttributeList
@@ -4661,7 +4656,6 @@ matrixLaden: GREATERTHAN matrixBody MATRIXEND
     osglData->mtxBlkVec.back()->m_mChildren = 
         new MatrixNode*[osglData->mtxBlkVec.back()->inumberOfChildren];
     osglData->mtxBlkVec.pop_back();
-std::cout << "pop back mtxBlkVec" << std::endl;
 }; 
 
 matrixBody: baseMatrix matrixConstructorList;
@@ -4669,7 +4663,6 @@ matrixBody: baseMatrix matrixConstructorList;
 baseMatrix: | baseMatrixStart baseMatrixAttributes baseMatrixEnd
 {
     osglData->mtxBlkVec.back()->inumberOfChildren++; 
-std::cout << "record a baseMatrix" << std::endl;
 };
 
 baseMatrixStart: BASEMATRIXSTART
@@ -4858,9 +4851,7 @@ baseMatrixEnd: GREATERTHAN BASEMATRIXEND | ENDOFELEMENT;
 
 matrixConstructorList: | matrixConstructorList matrixConstructor
 {
-    osglData->mtxBlkVec.back()->inumberOfChildren++; 
-std::cout << "add another child; numberOfChildren now " << osglData->mtxBlkVec.back()->inumberOfChildren << std::endl;
-if (osglData->mtxBlkVec.back()->inumberOfChildren > 1000) return(100);
+    osglData->mtxBlkVec.back()->inumberOfChildren++;
 };
 
 matrixConstructor: constantElements | varReferenceElements | linearElements | generalElements |
@@ -5457,6 +5448,124 @@ generalElementsElLaden: GREATERTHAN nlnode ELEND
     };
 
 
+objReferenceElements: objReferenceElementsStart objReferenceElementsAttributes GREATERTHAN objReferenceElementsContent; 
+
+objReferenceElementsStart: OBJREFERENCEELEMENTSSTART
+{
+    osglData->tempC = new ObjReferenceMatrixElements();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->numberOfValuesPresent = false;        
+    osglData->rowMajorPresent = false;
+    osglData->rowMajor = false;
+};
+
+objReferenceElementsAttributes: objReferenceElementsAttList
+{
+    if (osglData->numberOfValuesPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "<objReferenceElements>: numberOfValues attribute missing");    
+};
+
+objReferenceElementsAttList: | objReferenceElementsAttList objReferenceElementsAtt;
+
+objReferenceElementsAtt: 
+    osglNumberOfValuesATT
+    {
+        ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
+        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_objref;
+    }
+  | osglRowMajorATT
+    {
+        ((ObjReferenceMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
+    }
+;
+
+objReferenceElementsContent: objReferenceElementsStartVector objReferenceElementsNonzeros OBJREFERENCEELEMENTSEND;
+
+objReferenceElementsNonzeros: | objReferenceElementsIndexes objReferenceElementsValues;
+
+objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferenceElementsStartVectorContent
+{
+    ((ObjReferenceMatrixElements*)osglData->tempC)->start = new IntVector();
+    ((ObjReferenceMatrixElements*)osglData->tempC)->start->numberOfEl = osglData->osglNumberOfEl;
+    ((ObjReferenceMatrixElements*)osglData->tempC)->start->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+objReferenceElementsStartVectorStart: STARTVECTORSTART
+{
+    if (osglData->rowMajor == false)
+        osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
+    else
+        osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglNumberOfElPresent = false;
+    osglData->osglCounter = 0;
+};
+
+objReferenceElementsStartVectorContent: objReferenceElementsStartVectorEmpty | objReferenceElementsStartVectorLaden;
+
+objReferenceElementsStartVectorEmpty: ENDOFELEMENT;
+
+objReferenceElementsStartVectorLaden: GREATERTHAN objReferenceElementsStartVectorBody STARTVECTOREND;
+
+objReferenceElementsStartVectorBody:  osglIntArrayData;
+
+
+objReferenceElementsIndexes: objReferenceElementsIndexesStart objReferenceElementsIndexesContent
+{
+    ((ObjReferenceMatrixElements*)osglData->tempC)->indexes = new IntVector();
+    ((ObjReferenceMatrixElements*)osglData->tempC)->indexes->numberOfEl = osglData->osglNumberOfEl;
+    ((ObjReferenceMatrixElements*)osglData->tempC)->indexes->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+objReferenceElementsIndexesStart: INDEXESSTART
+{
+    osglData->osglNumberOfEl = ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+};
+
+objReferenceElementsIndexesContent:objReferenceElementsIndexesEmpty | objReferenceElementsIndexesLaden;
+
+objReferenceElementsIndexesEmpty: ENDOFELEMENT;
+
+objReferenceElementsIndexesLaden: GREATERTHAN objReferenceElementsIndexesBody INDEXESEND;
+
+objReferenceElementsIndexesBody: osglIntArrayData;
+
+
+objReferenceElementsValues: objReferenceElementsValuesStart objReferenceElementsValuesContent
+{
+    ((ObjReferenceMatrixElements*)osglData->tempC)->values = new ObjReferenceMatrixValues();
+    ((ObjReferenceMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
+    ((ObjReferenceMatrixElements*)osglData->tempC)->values->el = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
+    parserData->suppressFurtherErrorMessages = false;
+    parserData->ignoreDataAfterErrors = false;        
+};
+
+objReferenceElementsValuesStart: VALUESSTART
+{
+    osglData->osglNumberOfEl = ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues;
+    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglCounter = 0;
+};
+
+objReferenceElementsValuesContent: objReferenceElementsValuesEmpty | objReferenceElementsValuesLaden;
+
+objReferenceElementsValuesEmpty: ENDOFELEMENT;
+
+objReferenceElementsValuesLaden: GREATERTHAN objReferenceElementsValuesBody VALUESEND;
+
+objReferenceElementsValuesBody: osglIntArrayData;
+
+
 conReferenceElements: conReferenceElementsStart conReferenceElementsAttributes GREATERTHAN conReferenceElementsContent; 
 
 conReferenceElementsStart: CONREFERENCEELEMENTSSTART
@@ -5573,7 +5682,6 @@ conReferenceElementsValuesStart: VALUESSTART
     ((ConReferenceMatrixElements*)osglData->tempC)->values = new ConReferenceMatrixValues();
     ((ConReferenceMatrixElements*)osglData->tempC)->values->numberOfEl
         = osglData->osglNumberOfNonzeros;
-std::cout << "new conreference elements of size " << osglData->osglNumberOfNonzeros << std::endl;
     ((ConReferenceMatrixElements*)osglData->tempC)->values->el
         = new ConReferenceMatrixElement*[osglData->osglNumberOfNonzeros];
 
@@ -5645,7 +5753,6 @@ conReferenceElementsElContent: GREATERTHAN INTEGER ELEND
     else
         for (int i=0; i<osglData->osglMult; i++)
         {
-std::cout << "Add a conreference element" << std::endl;
             ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter + i]->conReference
                 = $2 + i*osglData->osglIncr;
             ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->valueType
@@ -5653,124 +5760,6 @@ std::cout << "Add a conreference element" << std::endl;
         }
         osglData->osglNonzeroCounter += osglData->osglMult;
     };
-
-
-objReferenceElements: objReferenceElementsStart objReferenceElementsAttributes GREATERTHAN objReferenceElementsContent; 
-
-objReferenceElementsStart: OBJREFERENCEELEMENTSSTART
-{
-    osglData->tempC = new ObjReferenceMatrixElements();
-    osglData->mtxConstructorVec.push_back(osglData->tempC);
-    osglData->numberOfValuesPresent = false;        
-    osglData->rowMajorPresent = false;
-    osglData->rowMajor = false;
-};
-
-objReferenceElementsAttributes: objReferenceElementsAttList
-{
-    if (osglData->numberOfValuesPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "<objReferenceElements>: numberOfValues attribute missing");    
-};
-
-objReferenceElementsAttList: | objReferenceElementsAttList objReferenceElementsAtt;
-
-objReferenceElementsAtt: 
-    osglNumberOfValuesATT
-    {
-        ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_objref;
-    }
-  | osglRowMajorATT
-    {
-        ((ObjReferenceMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
-    }
-;
-
-objReferenceElementsContent: objReferenceElementsStartVector objReferenceElementsNonzeros OBJREFERENCEELEMENTSEND;
-
-objReferenceElementsNonzeros: | objReferenceElementsIndexes objReferenceElementsValues;
-
-objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferenceElementsStartVectorContent
-{
-    ((ObjReferenceMatrixElements*)osglData->tempC)->start = new IntVector();
-    ((ObjReferenceMatrixElements*)osglData->tempC)->start->numberOfEl = osglData->osglNumberOfEl;
-    ((ObjReferenceMatrixElements*)osglData->tempC)->start->el = osglData->osglIntArray;
-    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-objReferenceElementsStartVectorStart: STARTVECTORSTART
-{
-    if (osglData->rowMajor == false)
-        osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
-    else
-        osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows + 1;
-    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->osglNumberOfElPresent = false;
-    osglData->osglCounter = 0;
-};
-
-objReferenceElementsStartVectorContent: objReferenceElementsStartVectorEmpty | objReferenceElementsStartVectorLaden;
-
-objReferenceElementsStartVectorEmpty: ENDOFELEMENT;
-
-objReferenceElementsStartVectorLaden: GREATERTHAN objReferenceElementsStartVectorBody STARTVECTOREND;
-
-objReferenceElementsStartVectorBody:  osglIntArrayData;
-
-
-objReferenceElementsIndexes: objReferenceElementsIndexesStart objReferenceElementsIndexesContent
-{
-    ((ObjReferenceMatrixElements*)osglData->tempC)->indexes = new IntVector();
-    ((ObjReferenceMatrixElements*)osglData->tempC)->indexes->numberOfEl = osglData->osglNumberOfEl;
-    ((ObjReferenceMatrixElements*)osglData->tempC)->indexes->el = osglData->osglIntArray;
-    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-objReferenceElementsIndexesStart: INDEXESSTART
-{
-    osglData->osglNumberOfEl = ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues;
-    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->osglCounter = 0;
-};
-
-objReferenceElementsIndexesContent:objReferenceElementsIndexesEmpty | objReferenceElementsIndexesLaden;
-
-objReferenceElementsIndexesEmpty: ENDOFELEMENT;
-
-objReferenceElementsIndexesLaden: GREATERTHAN objReferenceElementsIndexesBody INDEXESEND;
-
-objReferenceElementsIndexesBody: osglIntArrayData;
-
-
-objReferenceElementsValues: objReferenceElementsValuesStart objReferenceElementsValuesContent
-{
-    ((ObjReferenceMatrixElements*)osglData->tempC)->values = new IntVector();
-    ((ObjReferenceMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
-    ((ObjReferenceMatrixElements*)osglData->tempC)->values->el = osglData->osglIntArray;
-    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
-    parserData->suppressFurtherErrorMessages = false;
-    parserData->ignoreDataAfterErrors = false;        
-};
-
-objReferenceElementsValuesStart: VALUESSTART
-{
-    osglData->osglNumberOfEl = ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues;
-    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
-    osglData->osglCounter = 0;
-};
-
-objReferenceElementsValuesContent: objReferenceElementsValuesEmpty | objReferenceElementsValuesLaden;
-
-objReferenceElementsValuesEmpty: ENDOFELEMENT;
-
-objReferenceElementsValuesLaden: GREATERTHAN objReferenceElementsValuesBody VALUESEND;
-
-objReferenceElementsValuesBody: osglIntArrayData;
 
 
 matrixTransformation: matrixTransformationStart matrixTransformationShapeATT GREATERTHAN 
@@ -5900,7 +5889,6 @@ blockList: | blockList matrixBlock;
 
 matrixBlock: matrixBlockStart matrixBlockAttributes matrixBlockContent
 {
-std::cout << "pop back mtxBlkVec" << std::endl;
     osglData->mtxBlkVec.pop_back();
 };
 
@@ -5909,7 +5897,6 @@ matrixBlockStart: BLOCKSTART
     osglData->tempC = new MatrixBlock();
     osglData->mtxConstructorVec.push_back((MatrixBlock*)osglData->tempC);
     osglData->mtxBlkVec.push_back(osglData->tempC);
-std::cout << "push back a block" << std::endl;
 
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
