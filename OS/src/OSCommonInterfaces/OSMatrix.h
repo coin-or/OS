@@ -1761,6 +1761,12 @@ public:
      * @return
      */
     bool display(int secondaryDim);
+
+    /**
+     *  a method to determine whether the matrix is diagonal
+     *  @return whether the matrix is diagonal or not
+     */
+    bool isDiagonal(); 
 }; //GeneralSparseMatrix
 
 
@@ -1870,6 +1876,20 @@ public:
      * @return
      */
     bool display(int secondaryDim);
+
+    /** 
+     * a method to retrieve a particular block from a collection
+     * @param rowIdx is the row index of the block to be retrieved
+     * @param colIdx is the column index of the block to be retrieved
+     * @return a pointer to the block (as a GeneralSparseMatrix)
+     */
+    GeneralSparseMatrix* getBlock(int rowIdx, int colIdx);
+
+    /**
+     *  a method to determine whether the collection is blockDiagonal
+     *  @return whether the collection is blockDiagonal or not
+     */
+    bool isBlockDiagonal(); 
 }; //ExpandedMatrixBlocks
 
 

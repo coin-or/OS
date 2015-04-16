@@ -645,7 +645,7 @@ inline std::string returnMatrixTypeString(ENUM_MATRIX_TYPE type)
     if (type == ENUM_MATRIX_TYPE_objref)    return "objref";
     if (type == ENUM_MATRIX_TYPE_conref)    return "conref";
     if (type == ENUM_MATRIX_TYPE_mixedref)  return "mixedref";
-    if (type == ENUM_MATRIX_TYPE_jumbled)   return "jumbled";
+//    if (type == ENUM_MATRIX_TYPE_jumbled)   return "jumbled";
     if (type == ENUM_MATRIX_TYPE_unknown)   return "unknown";
     return "unknown";
 }//returnMatrixTypeString
@@ -664,25 +664,25 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
     if (type1 == type2) return type1;
 
     // if one matrix is jumbled, the result must be a jumbled matrix
-    if (type1 == ENUM_MATRIX_TYPE_jumbled || type2 == ENUM_MATRIX_TYPE_jumbled) 
-        return ENUM_MATRIX_TYPE_jumbled;
+//    if (type1 == ENUM_MATRIX_TYPE_jumbled || type2 == ENUM_MATRIX_TYPE_jumbled) 
+//        return ENUM_MATRIX_TYPE_jumbled;
 
     if (type1 == ENUM_MATRIX_TYPE_unknown) return type2;
     if (type2 == ENUM_MATRIX_TYPE_unknown) return type1;
     if (type1 == ENUM_MATRIX_TYPE_zero) return type2;
     if (type2 == ENUM_MATRIX_TYPE_zero) return type1;
 
-    // column and objective references can be mixed  --- in some circumstances 
+    // column and objective references can be mixed  
     if (type1 >= ENUM_MATRIX_TYPE_conref) // row reference (objective or constraint)
     {
         if (type2 >= ENUM_MATRIX_TYPE_conref)
             return ENUM_MATRIX_TYPE_mixedref;
         else
-            return ENUM_MATRIX_TYPE_jumbled;
+            return ENUM_MATRIX_TYPE_general;
     }                                  
     else // linear or nonlinear expression   
     {
-        if (type2 >= ENUM_MATRIX_TYPE_conref) return ENUM_MATRIX_TYPE_jumbled;  
+        if (type2 >= ENUM_MATRIX_TYPE_conref) return ENUM_MATRIX_TYPE_general;  
         else // varref must be treated like linear if it is mixed with any other remaining type
             if (type1 < type2)
                 if (type2 == ENUM_MATRIX_TYPE_varref)

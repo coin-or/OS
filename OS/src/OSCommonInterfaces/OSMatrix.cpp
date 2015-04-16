@@ -309,8 +309,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                 if (((BaseMatrix*)m_mChildren[0])->baseTranspose)
                 {
                     baseMtx = baseMtxPtr->getMatrixCoefficientsInRowMajor();
-//                    iroff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
-//                    icoff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
                     base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
                     base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
                     base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
@@ -323,8 +321,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                 else
                 {
                     baseMtx = baseMtxPtr->getMatrixCoefficientsInColumnMajor();
-//                    iroff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
-//                    icoff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
                     base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
                     base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
                     base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
@@ -334,14 +330,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                     if (base_cN < 0)
                         base_cN = baseMtxPtr->numberOfColumns - 1;
                 }
-//                base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
-//                base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
-//                base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
-//                base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
-//                if (base_rN < 0)
-//                    base_rN = baseMtxPtr->numberOfRows - 1;
-//                if (base_cN < 0)
-//                    base_cN = baseMtxPtr->numberOfColumns - 1;
 
                 double scaleMult = ((BaseMatrix*)m_mChildren[0])->scalarMultiplier;
 
@@ -777,6 +765,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                     ExpandedMatrixInColumnMajorForm->starts[i] =
                         ExpandedMatrixInColumnMajorForm->starts[i-1];
                 ExpandedMatrixInColumnMajorForm->starts[0] = 0;
+                return ExpandedMatrixInColumnMajorForm; 
             }
 
             else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
@@ -1074,8 +1063,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
                 if (((BaseMatrix*)m_mChildren[0])->baseTranspose)
                 {
                     baseMtx = baseMtxPtr->getMatrixCoefficientsInColumnMajor();
-//                    iroff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
-//                    icoff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
                     base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
                     base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
                     base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
@@ -1088,8 +1075,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
                 else
                 {
                     baseMtx = baseMtxPtr->getMatrixCoefficientsInRowMajor();
-//                    iroff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
-//                    icoff   = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
                     base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
                     base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
                     base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
@@ -1533,6 +1518,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
                     ExpandedMatrixInRowMajorForm->starts[i] =
                         ExpandedMatrixInRowMajorForm->starts[i-1];
                 ExpandedMatrixInRowMajorForm->starts[0] = 0;
+                return ExpandedMatrixInColumnMajorForm; 
             }
 
             else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
@@ -1696,8 +1682,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
                         {
                             ((GeneralMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[i]
                                 = new ScalarExpressionTree();
-//                            ((GeneralMatrixValues*)ExpandedMatrixInRowMajorForm->values)->el[i]->m_treeRoot
-//                                = new OSnLNode(); 
                         }
 
                         for (i = 0; i < numberOfColumns; i++)
@@ -2042,7 +2026,6 @@ GeneralSparseMatrix* MatrixType::convertToOtherMajor(bool isColumnMajor)
         for (i = 0; i < refMtx->valueSize; i++)
         {
             ((GeneralMatrixValues*)matrix->values)->el[i] = new ScalarExpressionTree();
-//            ((GeneralMatrixValues*)matrix->values)->el[i]->m_treeRoot = new OSnLNode();
         }
         for (i = 0; i < iNumSource; i++)
         {
@@ -2735,7 +2718,6 @@ ExpandedMatrixBlocks* MatrixType::disassembleMatrix(int* rowPartition, int rowPa
             } 
             
             lastBlock = i;            
-//            blockCount = 
 
             // traverse a second time to get values
             for (j=colPartition[i]; j<colPartition[i+1]; j++) // j indexes a column within this block
@@ -6155,6 +6137,29 @@ GeneralSparseMatrix::~GeneralSparseMatrix()
     }
 }// end of ~GeneralSparseMatrix
 
+bool GeneralSparseMatrix::isDiagonal()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside GeneralSparseMatrix::isDiagonal()");
+#endif
+    if (valueSize == 0)
+        return true;
+    if (valueSize >= startSize)
+        return false;
+
+    for (int i=1; i < startSize; i++)
+    {
+        if (starts[i] - starts[i-1] > 1)
+            return false;
+        for (int j=starts[i-1]; j<starts[i]; j++)
+            if (indexes[j] != i-1)
+                return false;
+    }
+
+    return true;
+}// end of GeneralSparseMatrix::isDiagonal
+
 bool GeneralSparseMatrix::display(int secondaryDim)
 {
     return true;
@@ -6212,6 +6217,36 @@ ExpandedMatrixBlocks::~ExpandedMatrixBlocks()
         blocks = NULL;
     }
 }// end of ~ExpandedMatrixBlocks
+
+GeneralSparseMatrix* ExpandedMatrixBlocks::getBlock(int rowIdx, int colIdx)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside ExpandedMatrixBlocks::getBlock()");
+#endif
+    for (int i=0; i < blockNumber; i++)
+        if (blockRows[i] == rowIdx && blockColumns[i] == colIdx)
+            return blocks[i];
+
+    return NULL;
+}// end of ExpandedMatrixBlocks::getBlock
+
+bool ExpandedMatrixBlocks::isBlockDiagonal()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside ExpandedMatrixBlocks::isBlockDiagonal()");
+#endif
+    if (blockNumber >= rowOffsetSize || blockNumber >= colOffsetSize || rowOffsetSize != colOffsetSize)
+        return false;
+
+    for (int i=0; i < blockNumber; i++)
+        if (blockRows[i] != blockColumns[i])
+            return false;
+
+    return true;
+}// end of ExpandedMatrixBlocks::isBlockDiagonal
+
 
 bool ExpandedMatrixBlocks::display(int secondaryDim)
 {

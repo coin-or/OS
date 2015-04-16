@@ -387,6 +387,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         and the single nonzero is on the diagonal)
  */
 
+
 #if 0
 // this is the signature of read_prob, which reads the SDPA problem from a file
 int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)

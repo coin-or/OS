@@ -1019,14 +1019,99 @@ cout << temposil << endl;
 //            {
 //                if (!omit[i])
 //                {
-                instance1->instanceData->matrices->matrix[32]->getMatrixCoefficientsInColumnMajor();
-//                instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
-                instance1->instanceData->matrices->matrix[32]->getMatrixCoefficientsInRowMajor();
-//                instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
-                instance1->instanceData->matrices->matrix[35]->getMatrixCoefficientsInColumnMajor();
-//                instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
-                instance1->instanceData->matrices->matrix[35]->getMatrixCoefficientsInRowMajor();
-//                instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
+                GeneralSparseMatrix* test1_a
+                    = instance1->instanceData->matrices->matrix[32]->getMatrixCoefficientsInColumnMajor();
+                if (test1_a->valueSize != 17)
+                    throw ErrorClass("Failed column expansion of matrix 32 (by columns)");
+                if (test1_a->isDiagonal())
+                    throw ErrorClass("Failed diagonality assessment of matrix 32");
+
+                int rowPartition1[3];
+                rowPartition1[0]= 0;
+                rowPartition1[1]= 3;
+                rowPartition1[2]= 7;
+
+                int colPartition1[3];
+                colPartition1[0]= 0;
+                colPartition1[1]= 2;
+                colPartition1[2]= 6;
+
+                ExpandedMatrixBlocks* test1_b
+                    = instance1->instanceData->matrices->matrix[32]
+                        ->getBlocks(rowPartition1,3,colPartition1,3,false,false);
+                if (test1_b->blockNumber != 4)
+                    throw ErrorClass("Failed block expansion of matrix 32");
+                if (test1_b->isBlockDiagonal())
+                    throw ErrorClass("Failed block expansion of matrix 32");
+                if (test1_b->blocks[0]->valueSize != 3)
+                    throw ErrorClass("Failed block expansion of matrix 32");
+                if (test1_b->blocks[0]->isDiagonal())
+                    throw ErrorClass("Failed block expansion of matrix 32");
+
+                GeneralSparseMatrix* test1_c
+                    = instance1->instanceData->matrices->matrix[32]->getMatrixCoefficientsInRowMajor();
+                if (test1_c->valueSize != 17)
+                    throw ErrorClass("Failed row expansion of matrix 32");
+                if (test1_c->isDiagonal())
+                    throw ErrorClass("Failed diagonality assessment of matrix 32 (by rows)");
+
+
+                GeneralSparseMatrix* test2_a = 
+                    instance1->instanceData->matrices->matrix[35]->getMatrixCoefficientsInColumnMajor();
+                if (test2_a->valueSize != 68)
+                    throw ErrorClass("Failed column expansion of matrix 35 (by columns)");
+
+                int rowPartition2[6];
+                rowPartition1[0]= 0;
+                rowPartition1[1]= 5;
+                rowPartition1[2]= 10;
+                rowPartition1[3]= 15;
+                rowPartition1[4]= 20;
+                rowPartition1[5]= 25;
+
+                int colPartition2[5];
+                colPartition1[0]= 0;
+                colPartition1[1]= 6;
+                colPartition1[2]= 12;
+                colPartition1[3]= 18;
+                colPartition1[4]= 24;
+
+                ExpandedMatrixBlocks* test2_b
+                    = instance1->instanceData->matrices->matrix[35]
+                        ->getBlocks(rowPartition2,6,colPartition2,5,false,false);
+                if (test2_b->blockNumber != 20)
+                    throw ErrorClass("Failed block expansion of matrix 35");
+                if (test2_b->isBlockDiagonal())
+                    throw ErrorClass("Failed block expansion of matrix 35");
+                if (test2_b->blocks[0]->valueSize != 5)
+                    throw ErrorClass("Failed block expansion of matrix 35");
+                if (test2_b->blocks[10]->valueSize != 4)
+                    throw ErrorClass("Failed block expansion of matrix 35");
+                if (test2_b->blocks[15]->valueSize != 1)
+                    throw ErrorClass("Failed block expansion of matrix 35");
+                if (test2_b->blocks[16]->valueSize != 2)
+                    throw ErrorClass("Failed block expansion of matrix 35");
+
+
+                GeneralSparseMatrix* test2_c = 
+                    instance1->instanceData->matrices->matrix[35]->getMatrixCoefficientsInRowMajor();
+                if (test2_c->valueSize != 68)
+                    throw ErrorClass("Failed column expansion of matrix 35 (by rows)");
+
+
+                GeneralSparseMatrix* test6_a = 
+                    instance1->instanceData->matrices->matrix[11]->getMatrixCoefficientsInColumnMajor();
+                if (!test6_a->isDiagonal())
+                    throw ErrorClass("Failed diagonality assessment of matrix 11 (by columns)");
+
+                GeneralSparseMatrix* test6_b = 
+                    instance1->instanceData->matrices->matrix[11]->getMatrixCoefficientsInRowMajor();
+                if (!test6_b->isDiagonal())
+                    throw ErrorClass("Failed diagonality assessment of matrix 11 (by rows)");
+
+
+
+
 //                }
 //            }
 
