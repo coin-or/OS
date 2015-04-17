@@ -655,7 +655,7 @@ The result of this transformation is aligned with the top left corner of the tar
 				<xs:documentation>If symmetry is "upper" or "skewUpper", any elements below the main diagonal are ignored and inferred from the upper triangle. If symmetry is "lower" or "skewLower", any elements above the main diagonal are ignored and inferred from the lower triangle.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="type">
+		<xs:attribute name="type" default="unknown">
 			<xs:annotation>
 				<xs:documentation>Describes the kind of values found in the elements of the matrix or block</xs:documentation>
 			</xs:annotation>
@@ -666,11 +666,10 @@ The result of this transformation is aligned with the top left corner of the tar
 					<xs:enumeration value="varReference"/>
 					<xs:enumeration value="objReference"/>
 					<xs:enumeration value="conReference"/>
-					<xs:enumeration value="mixedReference"/>
+					<xs:enumeration value="mixedRowReference"/>
 					<xs:enumeration value="linear"/>
 					<xs:enumeration value="quadratic"/>
 					<xs:enumeration value="general"/>
-					<xs:enumeration value="jumbled"/>
 					<xs:enumeration value="unknown"/>
 				</xs:restriction>
 			</xs:simpleType>

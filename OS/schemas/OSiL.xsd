@@ -446,6 +446,7 @@ If missing, all variables indicated  by the use of the template matrix are creat
 				<xs:documentation>same type for every newly created variable</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixProgramming">
 		<xs:annotation>
@@ -509,6 +510,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixConstraints">
 		<xs:annotation>
@@ -567,6 +569,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="LinearConstraintMatrixOperators">
 		<xs:annotation>
