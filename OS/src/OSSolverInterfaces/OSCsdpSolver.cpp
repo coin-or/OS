@@ -387,44 +387,42 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         and the single nonzero is on the diagonal)
  */
 
-
-#if 0
+//Here we set up the CSDP data structures
 // this is the signature of read_prob, which reads the SDPA problem from a file
-int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
-     char *fname;   // this is the name of the file
-     int *pn;       // pointer to n, the dimension of the matrices
-     int *pk;       // pointer to k, the number of constraints
-     struct blockmatrix *pC; // the matrix in the objective
-     double **pa;   // for RHS values
+//int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
+//     char *fname;   // this is the name of the file
+//     int *pn;       // pointer to n, the dimension of the matrices
+//     int *pk;       // pointer to k, the number of constraints
+     struct blockmatrix *pC; // the matrix in the objective (A0)
+//     double **pa;   // for RHS values
      struct constraintmatrix **pconstraints;  // the matrices Ai
-     int printlevel;  // for printing error messages and such
+//     int printlevel;  // for printing error messages and such
 
 //these declarations are used in example.c     
-{
+//{
   struct constraintmatrix *myconstraints;
-  FILE *fid;
-  int i,j;
-  int buflen;
-  char *buf;
-  int c;
-  int nblocks;
-  int blksz;
-  int blk;
-  char *ptr1;
-  char *ptr2;
-  int matno;
-  int blkno;
-  int indexi;
-  int indexj;
-  double ent;
-  int ret;
-  struct sparseblock *p;
-  struct sparseblock *q;
-  struct sparseblock *prev;
-  int *isdiag;
-  double *tempdiag;
-}
-#endif
+//  FILE *fid;
+//  int i,j;
+//  int buflen;
+//  char *buf;
+//  int c;
+//  int nblocks;
+//  int blksz;
+//  int blk;
+//  char *ptr1;
+//  char *ptr2;
+//  int matno;
+//  int blkno;
+//  int indexi;
+//  int indexj;
+//  double ent;
+//  int ret;
+//  struct sparseblock *p;
+//  struct sparseblock *q;
+//  struct sparseblock *prev;
+//  int *isdiag;
+//  double *tempdiag;
+//}
 
         /** Allocate space for the C matrix (A0). */
         pC->nblocks=nBlocks;
@@ -433,20 +431,21 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
             throw ErrorClass("Storage allocation failed!\n");
 
         /** Allocate space for the constraints. */
-        myconstraints = 
-            (struct constraintmatrix *)malloc((tempMtx->numberOfRows+1)*sizeof(struct constraintmatrix));
+        int pk = osinstance->instanceData->matrices->matrix[mtxRef[0]]->numberOfRows+1;
+        myconstraints = new constraintmatrix[pk];
+//            (struct constraintmatrix *)malloc((pk)*sizeof(struct constraintmatrix));
 
-        if (myconstraints == NULL)
-            throw ErrorClass("Storage allocation failed!\n");
+//        if (myconstraints == NULL)
+//            throw ErrorClass("Storage allocation failed!\n");
   
         /** Null out all pointers in constraints. */
-        for (i=1; i<=*pk; i++)
+        for (int i=1; i<=pk; i++)
             myconstraints[i].blocks=NULL;
 
-        *pa=(double *)malloc((*pk+1)*sizeof(double));
+        double *pa = new double[pk+1];
 
-        if (*pa == NULL)
-            throw ErrorClass("Storage allocation failed!\n");
+//        if (*pa == NULL)
+//            throw ErrorClass("Storage allocation failed!\n");
 
 
 #if 0
@@ -553,9 +552,9 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
        * a.
        */
       ptr1=buf;
-      for (i=1; i<=*pk; i++)
+      for (i=1; i<=pk; i++)
 	{
-	  (*pa)[i]=strtod(ptr1,&ptr2);
+	  (pa)[i]=strtod(ptr1,&ptr2);
 	  ptr1=ptr2;
 	};
     }
@@ -588,7 +587,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
      * Check the validity of these values.
      */
 
-    if ((matno < 0) || (matno > *pk) ||
+    if ((matno < 0) || (matno > pk) ||
 	(blkno<1) || (blkno>nblocks) ||
 	(indexi < 1) || (indexi > pC->blocks[blkno].blocksize) ||
 	(indexj < 1) || (indexj > pC->blocks[blkno].blocksize))
@@ -628,7 +627,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
    * Now, go through each of the blks in each of the constraint matrices,
    * and allocate space for the entries and indices.
    */
-  for (i=1; i<=*pk; i++)
+  for (i=1; i<=pk; i++)
     {
       p=myconstraints[i].blocks;
 
@@ -762,9 +761,9 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
        * a.
        */
       ptr1=buf;
-      for (i=1; i<=*pk; i++)
+      for (i=1; i<=pk; i++)
 	{
-	  (*pa)[i]=strtod(ptr1,&ptr2);
+	  (pa)[i]=strtod(ptr1,&ptr2);
 	  ptr1=ptr2;
 	};
     }
@@ -874,7 +873,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
    * Next, setup issparse and NULL out all nextbyblock pointers.
    */
 
-  for (i=1; i<=*pk; i++)
+  for (i=1; i<=pk; i++)
     {
       p=myconstraints[i].blocks;
       while (p != NULL)
@@ -908,7 +907,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
    */
   
   prev=NULL;
-  for (i=1; i<=*pk; i++)
+  for (i=1; i<=pk; i++)
     {
       p=myconstraints[i].blocks;
       while (p != NULL)
@@ -920,7 +919,7 @@ int read_prob(fname,pn,pk,pC,pa,pconstraints,printlevel)
 	      /*
 	       * link in the remaining blocks.
 	       */
-	      for (j=i+1; j<=*pk; j++)
+	      for (j=i+1; j<=pk; j++)
 		{
 		  q=myconstraints[j].blocks;
 		  

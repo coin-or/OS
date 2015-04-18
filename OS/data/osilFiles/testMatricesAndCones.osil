@@ -94,7 +94,7 @@
                 </ln>
             </nl>
         </nonlinearExpressions>
-        <matrices numberOfMatrices= " 40 " >
+        <matrices numberOfMatrices= " 41 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -1342,7 +1342,58 @@
                     </block>
                 </blocks>
             </matrix>
-            <matrix numberOfRows="2" numberOfColumns="2" name="36-Base matrix for Expansion test 3">
+
+            <matrix numberOfRows="7" numberOfColumns="7" name="36-Base matrix for Expansion test 3"
+                    symmetry="lower">
+                <blocks numberOfBlocks="2">
+                    <colOffsets numberOfEl="4">
+                        <el>0</el> 
+                        <el>2</el> 
+                        <el>5</el> 
+                        <el>7</el> 
+                    </colOffsets>
+                    <rowOffsets numberOfEl="4">
+                        <el>0</el> 
+                        <el>2</el> 
+                        <el>5</el> 
+                        <el>7</el> 
+                    </rowOffsets>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <constantElements numberOfValues="3">
+                            <start>
+                                <el>0</el>
+                                <el>2</el>
+                                <el>3</el>
+                            </start>
+                            <indexes>
+                                <el>0</el>
+                                <el mult="2">1</el>
+                            </indexes>
+                            <values>
+                                <el> 1.0 </el>
+                                <el>-2.0 </el>
+                                <el>-3.0</el>
+                            </values>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <constantElements numberOfValues="3">
+                            <start>
+                                <el incr="1" mult="4">0</el>
+                            </start>
+                            <indexes>
+                                <el incr="1" mult="3">0</el>
+                            </indexes>
+                            <values>
+                                <el> 1.0 </el>
+                                <el>-2.0 </el>
+                                <el>-3.0</el>
+                            </values>
+                        </constantElements>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfRows="2" numberOfColumns="2" name="37-Base matrix for Expansion test 4">
                 <varReferenceElements numberOfValues="2">
                     <start>
                         <el incr="1" mult="3">0</el>
@@ -1356,7 +1407,7 @@
                     </values>
                 </varReferenceElements>
             </matrix>
-            <matrix numberOfRows="6" numberOfColumns="6" name="37-Expansion test 3 - mixed elements">
+            <matrix numberOfRows="6" numberOfColumns="6" name="38-Expansion test 4 - mixed elements">
                 <blocks numberOfBlocks="8">
                     <colOffsets numberOfEl="4">
                         <el mult="4" incr="2">0</el> 
@@ -1452,7 +1503,7 @@
                         <baseMatrix baseMatrixIdx="0"/>
                     </block>
                     <block blockRowIdx="2" blockColIdx="1">
-                        <baseMatrix baseMatrixIdx="36"/>
+                        <baseMatrix baseMatrixIdx="37"/>
                     </block>
                     <block blockRowIdx="0" blockColIdx="2">
                         <baseMatrix baseMatrixIdx="8"/>
@@ -1462,7 +1513,7 @@
                     </block>
                 </blocks>
             </matrix>
-            <matrix numberOfRows="4" numberOfColumns="4" name="38-Expansion test 4 - mixed references">
+            <matrix numberOfRows="4" numberOfColumns="4" name="39-Expansion test 5 - mixed references">
                 <blocks numberOfBlocks="2">
                     <colOffsets numberOfEl="3">
                         <el mult="3" incr="2">0</el> 
@@ -1478,7 +1529,7 @@
                     </block>
                 </blocks>
             </matrix>
-            <matrix numberOfRows="4" numberOfColumns="4" name="39-Expansion test 5 - jumbled references">
+            <matrix numberOfRows="4" numberOfColumns="4" name="40-Expansion test 6 - jumbled references">
                 <blocks numberOfBlocks="2">
                     <colOffsets numberOfEl="3">
                         <el mult="3" incr="2">0</el> 
@@ -1487,7 +1538,7 @@
                         <el mult="3" incr="2">0</el> 
                     </rowOffsets>
                     <block blockRowIdx="0" blockColIdx="0">
-                        <baseMatrix baseMatrixIdx="36"/>
+                        <baseMatrix baseMatrixIdx="37"/>
                     </block>
                     <block blockRowIdx="1" blockColIdx="1">
                         <baseMatrix baseMatrixIdx="12"/>

@@ -1099,6 +1099,41 @@ cout << temposil << endl;
                     throw ErrorClass("Failed column expansion of matrix 35 (by rows)");
 
 
+
+                int partition3[4];
+                partition3[0]= 0;
+                partition3[1]= 2;
+                partition3[2]= 5;
+                partition3[3]= 7;
+
+                ExpandedMatrixBlocks* test3_a
+                    = instance1->instanceData->matrices->matrix[36]
+                        ->getBlocks(partition3,4,partition3,4,false,true);
+
+                if (test3_a == NULL)
+                    throw ErrorClass("Failed block expansion of matrix 36");
+                if (test3_a->blockNumber != 2)
+                    throw ErrorClass("Failed block expansion of matrix 36");
+                if (!test3_a->isBlockDiagonal())
+                    throw ErrorClass("Failed block expansion of matrix 36");
+
+                GeneralSparseMatrix* test3_b = test3_a->getBlock(0,0);
+                if (test3_b->valueSize != 3)
+                    throw ErrorClass("Failed block expansion of matrix 36");
+                if (test3_b->isDiagonal())
+                    throw ErrorClass("Failed block expansion of matrix 36");
+
+                GeneralSparseMatrix* test3_c = test3_a->getBlock(1,1);
+                if (test3_c->valueSize != 3)
+                    throw ErrorClass("Failed block expansion of matrix 36");
+                if (!test3_c->isDiagonal())
+                    throw ErrorClass("Failed block expansion of matrix 36");
+
+                GeneralSparseMatrix* test3_d = test3_a->getBlock(2,2);
+                if (test3_d != NULL)
+                    throw ErrorClass("Failed block expansion of matrix 36");
+
+
                 GeneralSparseMatrix* test6_a = 
                     instance1->instanceData->matrices->matrix[11]->getMatrixCoefficientsInColumnMajor();
                 if (!test6_a->isDiagonal())
