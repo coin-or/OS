@@ -20,6 +20,8 @@ noinst_LTLIBRARIES = libOSSolverInterfaces.la
 
 # List all source files for this library, including headers
 libOSSolverInterfaces_la_SOURCES = \
+	OSDefaultSolver.cpp \
+	OSDefaultSolver.h  \
 	OSCoinSolver.cpp \
 	OSCoinSolver.h  \
 	OSMatlabSolver.cpp \
@@ -94,6 +96,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
+	OSDefaultSolver.h \
 	OSCoinSolver.h \
 	OSMatlabSolver.h \
 	OSRunSolver.h 

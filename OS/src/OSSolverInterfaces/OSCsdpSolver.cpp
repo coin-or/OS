@@ -143,6 +143,29 @@ CsdpSolver::~CsdpSolver()
 
 void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 {
+/*  These are declared in OSDefaultSolver.h (from which OSCsdpSolver inherits)
+ *      std::string osil;
+ *      std::string osol;
+ *      std::string osrl;
+ *      OSInstance *osinstance;
+ *      OSOption   *osoption;
+ *      OSResult   *osresult;
+ *      std::string sSolverName;
+ *      bool bCallbuildSolverInstance;
+ *      bool bSetSolverOptions;
+ */
+
+/* Additional declarations from OSCsdpSolver.h
+ *      int nRows;                             // number of rows/columns in each matrix
+ *      int nBlocks;                           // number of blocks per matrix
+ *      struct blockmatrix C;                  // the matrix in the objective, A0
+ *      double *rhsValues;                     // the right-hand side values of the constraints
+ *      struct constraintmatrix *mconstraints; // the collection of matrices in the constraints (A_i)
+ *      struct blockmatrix X,Z;                // for the primal and dual matrix values, respectively
+ *      double *y;                             // dual variables of the constraints
+ *      double pobj,dobj;                      // primal and dual objective values
+ */
+
     std::ostringstream outStr;
     ScalarExpressionTree* tempTree;
     OSnLNode  *tr;
@@ -155,6 +178,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
     int*  blockSize   = NULL;
     int*  mtxRef      = NULL;
     bool* isdiag      = NULL;
+    ExpandedMatrixBlocks** mtxBlocks;
     try
     {
         if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
@@ -350,7 +374,15 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         // Note: blockSize is 1-based, due to issues of Fortran compatibility
         blockSize = new int[nBlocks];
         for (int i=1; i < nBlocks; i++)
+        {
+#ifndef NOSHORTS
+            if (blockOffset[i] - blockOffset[i-1] >= USHRT_MAX)
+                throw ErrorClass("This problem is too large to be solved by this version of the code!\n"
+                               + "Recompile without -DUSERSHORTINDS to fix the problem.\n");
+#endif
             blockSize[i] = blockOffset[i] - blockOffset[i-1]; 
+        }
+        int pn = blockOffset[nBlocks];
 
 #ifndef NOSHORTS
         /** If we're using unsigned shorts, make sure that the problem isn't too big. */
@@ -373,19 +405,35 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
             throw ErrorClass("This problem is too large to be solved in 32 bit mode!\n");
 #endif
 
-        /** Keep track of which blocks have off-diagonal entries. */
-        isdiag = new bool[nBlocks+1];
-        for (int i=1; i<=nBlocks; i++)
-            isdiag[i] = true;
-
 /*
-        at this point we know the dimensions of all blocks. We need to extract
+        At this point we know the dimensions of all blocks. We need to extract
         the blocks from the data structure, perhaps by simply moving pointers,
         perhaps by combining several blocks into one, perhaps by going deeper
-        into the data structure and the constructor list
-        we should also keep track of diagonal blocks (no column has length more than 1
-        and the single nonzero is on the diagonal)
+        into the data structure and the constructor list.
+        We also keep track of diagonal blocks.
  */
+
+        mtxBlocks = new ExpandedMatrixBlocks*[osinstance->getConstraintNumber()+1];
+        isdiag = new bool[nBlocks+1];
+        GeneralSparseMatrix* tmpBlock;
+
+//      Note: isdiag is 1-indexed
+        for (int i=0; i<nBlocks; i++)
+        {
+            isdiag[i+1] = true;
+        }
+        for (int j=0; j < osinstance->getConstraintNumber()+1; j++)
+        {
+            mtxBlocks[j] = osinstance->instanceData->matrices->matrix[mtxRef[j]]
+                ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,false,true);
+
+            for (int i=0; i<nBlocks; i++)
+            {
+                tmpBlock = mtxBlocks[j]->getBlock(i,i);
+                if (tmpBlock != NULL && !(tmpBlock->isDiagonal()))
+                    isdiag[i+1] = false;
+            }
+        }
 
 //Here we set up the CSDP data structures
 // this is the signature of read_prob, which reads the SDPA problem from a file
@@ -417,22 +465,24 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 //  int indexj;
 //  double ent;
 //  int ret;
-//  struct sparseblock *p;
-//  struct sparseblock *q;
-//  struct sparseblock *prev;
+  struct sparseblock *p;
+  struct sparseblock *q;
+  struct sparseblock *prev;
 //  int *isdiag;
 //  double *tempdiag;
 //}
 
         /** Allocate space for the C matrix (A0). */
         pC->nblocks=nBlocks;
-        pC->blocks=(struct blockrec *)malloc((nBlocks+1)*sizeof(struct blockrec));
-        if (pC->blocks == NULL)
-            throw ErrorClass("Storage allocation failed!\n");
+//        pC->blocks=(struct blockrec *)malloc((nBlocks+1)*sizeof(struct blockrec));
+        pC->blocks = new blockrec[nBlocks+1];
+//        if (pC->blocks == NULL)
+//            throw ErrorClass("Storage allocation failed!\n");
 
         /** Allocate space for the constraints. */
         int pk = osinstance->instanceData->matrices->matrix[mtxRef[0]]->numberOfRows+1;
         myconstraints = new constraintmatrix[pk];
+//        myconstraints = 
 //            (struct constraintmatrix *)malloc((pk)*sizeof(struct constraintmatrix));
 
 //        if (myconstraints == NULL)
@@ -442,13 +492,13 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         for (int i=1; i<=pk; i++)
             myconstraints[i].blocks=NULL;
 
-        double *pa = new double[pk+1];
+//        double *pa = new double[pk+1];
 
 //        if (*pa == NULL)
 //            throw ErrorClass("Storage allocation failed!\n");
 
 
-#if 0
+#if 0 //This stuff has been dealt with --- dead code
   /*
    * And read the block structure.
    */
@@ -488,62 +538,65 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 	   */
 
 	  *pn=*pn+abs(blksz);
+#endif
 
 	  /*
-	   * Now, handle diagonal blocks and matrix blocks separately.
+	   * Handle diagonal blocks and matrix blocks separately.
 	   */
-	  if (blksz < 0)
-	    {
+        for (int blk=1; blk <= nBlocks; blk++)
+        {
+            int blksz = blockSize[blk];
+            if (isdiag[blk] == 1)
+            {
+//	  if (blksz < 0)
+//	    {
 	      /*
 	       * It's a diag block.
 	       */
-	      pC->blocks[blk].blocksize=abs(blksz);
-	      pC->blocks[blk].blockcategory=DIAG;
-	      pC->blocks[blk].data.vec=(double *)malloc((1+abs(blksz))*sizeof(double));
-	      if (pC->blocks[blk].data.vec == NULL)
-		{
-		  printf("Storage allocation failed!\n");
-		  exit(10);
-		};
-	      for (i=1; i<=abs(blksz); i++)
-		pC->blocks[blk].data.vec[i]=0.0;
+	            pC->blocks[blk].blocksize=blksz;
+                pC->blocks[blk].blockcategory=DIAG;
+	            pC->blocks[blk].data.vec= new double[blksz];
+//	      if (pC->blocks[blk].data.vec == NULL)
+//		{
+//		  printf("Storage allocation failed!\n");
+//		  exit(10);
+//		};
 
-	    }
-	  else
-	    {
+	            for (int i=1; i<=blksz; i++)
+        		    pC->blocks[blk].data.vec[i]=0.0;
+            }
+	        else
+	        {
 	      /*
 	       * It's a matrix block.
 	       */
-	      pC->blocks[blk].blocksize=abs(blksz);
-	      pC->blocks[blk].blockcategory=MATRIX;
-	      pC->blocks[blk].data.mat=(double *)malloc((blksz*blksz)*sizeof(double));
-	      if (pC->blocks[blk].data.mat == NULL)
-		{
-		  printf("Storage allocation failed!\n");
-		  exit(10);
-		};
+	            pC->blocks[blk].blocksize=blksz;
+                pC->blocks[blk].blockcategory=MATRIX;
+	            pC->blocks[blk].data.mat= new double[blksz*blksz];
+//	      pC->blocks[blk].blocksize=abs(blksz);
+//	      pC->blocks[blk].blockcategory=MATRIX;
+//	      pC->blocks[blk].data.mat=(double *)malloc((blksz*blksz)*sizeof(double));
+//	      if (pC->blocks[blk].data.mat == NULL)
+//		{
+//		  printf("Storage allocation failed!\n");
+//		  exit(10);
+//		};
 
-	      for (j=1; j<=blksz; j++)
-		for (i=1; i<=blksz; i++)
-		  pC->blocks[blk].data.mat[ijtok(i,j,blksz)]=0.0;
+	            for (int j=1; j<=blksz; j++)
+		        for (int i=1; i<=blksz; i++)
+		            pC->blocks[blk].data.mat[ijtok(i,j,blksz)]=0.0;
 
-	    };
-		
-	};
+	        }
+		}
 
-    }
-  else
-    {
-      printf("Incorect SDPA file. Couldn't read block sizes.\n");
-      fclose(fid);
-      free(isdiag);
-      return(1);
-    };
 
   /*
-   *  Read in the right hand side values.
+   *  Read in the right hand side values. Note: 1-based for Fortran interface.
    */
+        double *pa = osinstance->getConstraintLowerBounds() - 1;
+        pa[0] = OSNaN();
 
+#if 0 // Redundant; dead code
   ret=get_line(fid,buf,buflen);
   if (ret == 0)
     {
@@ -622,21 +675,22 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
     };
 
   fclose(fid);
+#endif
 
   /*
    * Now, go through each of the blks in each of the constraint matrices,
    * and allocate space for the entries and indices.
    */
-  for (i=1; i<=pk; i++)
-    {
-      p=myconstraints[i].blocks;
+        for (int i=1; i<=pk; i++)
+        {
+            p=myconstraints[i].blocks;
 
-      while (p != NULL)
-	{
+            while (p != NULL)
+	        {
 	  /*
 	   * allocate storage for the entries in this block of this constraint.
 	   */
-	  p->entries=(double *)malloc((p->numentries+1)*sizeof(double));
+	  p->entries= (double *)malloc((p->numentries+1)*sizeof(double));
           if (p->entries == NULL)
 	    {
 	      printf("Storage allocation failed!\n");
@@ -670,6 +724,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 	};
     };
 
+#if 0
 
   /*
    *  In the final pass through the file, fill in the actual data.
@@ -965,6 +1020,154 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
   fclose(fid);
   return(0);
 }
+//===============================================
+
+//Two utility routines that are called by readprob()
+
+void countentry(constraints,matno,blkno,blocksize)
+     struct constraintmatrix *constraints;
+     int matno;
+     int blkno;
+     int blocksize;
+{
+  struct sparseblock *p;
+  struct sparseblock *q;
+  
+  p=constraints[matno].blocks;
+
+  if (p == NULL)
+    {
+      /*
+       * We haven't yet allocated any blocks.
+       */
+      p=(struct sparseblock *)malloc(sizeof(struct sparseblock));
+      if (p==NULL)
+	{
+	  printf("Storage allocation failed!\n");
+	  exit(10);
+	};
+      p->constraintnum=matno;
+      p->blocknum=blkno;
+      p->numentries=1;
+      p->next=NULL;
+      p->entries=NULL;
+      p->iindices=NULL;
+      p->jindices=NULL;
+      p->blocksize=blocksize;
+      constraints[matno].blocks=p;
+    }
+  else
+    {
+      /*
+       * We have some existing blocks.  See whether this block is already
+       * in the chain.
+       */
+
+      while ((p->next) != NULL)
+	{
+	  if (p->blocknum == blkno)
+	    {
+	      /*
+	       * Found the right block.
+	       */
+	      p->numentries=p->numentries+1;
+	      return;
+	    };
+	  p=p->next;
+	};
+      /*
+       * If we get here, we still have to check the last block in the
+       * chain.
+       */
+      if (p->blocknum == blkno)
+	{
+	  /*
+	   * Found the right block.
+	   */
+	  p->numentries=p->numentries+1;
+	  return;
+	};
+      /*
+       * If we get here, then the block doesn't exist yet.
+       */
+      q=(struct sparseblock *)malloc(sizeof(struct sparseblock));
+      if (q==NULL)
+	{
+	  printf("Storage allocation failed!\n");
+	  exit(10);
+	};
+      /*
+       * Fill in information for this block.
+       */
+      q->blocknum=blkno;
+      q->constraintnum=matno;
+      q->numentries=1;
+      q->next=NULL;
+      q->entries=NULL;
+      p->iindices=NULL;
+      p->jindices=NULL;
+      q->blocksize=blocksize;
+      /*
+       * Now link it into the list.
+       */
+      p->next=q;
+    };
+
+}
+
+void addentry(constraints,matno,blkno,indexi,indexj,ent)
+     struct constraintmatrix *constraints;
+     int matno;
+     int blkno;
+     int indexi;
+     int indexj;
+     double ent;
+{
+  struct sparseblock *p;
+
+  p=constraints[matno].blocks;
+  
+  if (p == NULL)
+    {
+      printf("Internal Error in CSDP!\n");
+      exit(100);
+    }
+  else
+    {
+      /*
+       * We have some existing blocks.  See whether this block is already
+       * in the chain.
+       */
+
+      while (p != NULL)
+	{
+	  if (p->blocknum == blkno)
+	    {
+	      /*
+	       * Found the right block.
+	       */
+	      p->numentries=(p->numentries)+1;
+	      p->entries[(p->numentries)]=ent;
+	      p->iindices[(p->numentries)]=indexi;
+	      p->jindices[(p->numentries)]=indexj;
+
+
+	      return;
+	    };
+	  p=p->next;
+	};
+      /*
+       * If we get here, we have an internal error.
+       */
+      printf("Internal Error in CSDP!\n");
+      exit(100);
+    };
+
+
+}
+
+//===============================================
+
 
         /*
          * The problem and solution data.
@@ -1512,6 +1715,9 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         if (blockSize   != NULL) delete [] blockSize;
         if (mtxRef      != NULL) delete [] mtxRef;
         if (isdiag      != NULL) delete [] isdiag;
+
+        this->bCallbuildSolverInstance = true;
+        return;
     }
 
     catch(const ErrorClass& eclass)
@@ -1532,6 +1738,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
  
 void  CsdpSolver::solve() throw (ErrorClass)
 {
+    return;
 }
 
 void  CsdpSolver::setSolverOptions() throw(ErrorClass)
@@ -1617,6 +1824,8 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
                     throw ErrorClass("Unrecognized option for solver csdp");
             }
         }
+        bSetSolverOptions = true;
+        return;
     }
     catch(const ErrorClass& eclass)
     {

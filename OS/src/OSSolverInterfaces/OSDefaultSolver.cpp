@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $Id: OSDefaultSolver.cpp 4943 2015-02-04 19:10:42Z Gassmann $ */
 /** @file DefaultSolver.cpp
  *
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin

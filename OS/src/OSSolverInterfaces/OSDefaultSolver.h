@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $Id: OSDefaultSolver.h 4562 2013-01-02 12:31:12Z Gassmann $ */
 /** @file DefaultSolver.h
  *
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,

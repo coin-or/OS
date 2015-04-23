@@ -596,8 +596,6 @@ OS/src/OSCommonInterfaces/OSCommandLine.cpp -text
 OS/src/OSCommonInterfaces/OSCommandLine.h -text
 OS/src/OSCommonInterfaces/OSCommandLineReader.cpp -text
 OS/src/OSCommonInterfaces/OSCommandLineReader.h -text
-OS/src/OSCommonInterfaces/OSDefaultSolver.cpp -text
-OS/src/OSCommonInterfaces/OSDefaultSolver.h -text
 OS/src/OSCommonInterfaces/OSExpressionTree.cpp -text
 OS/src/OSCommonInterfaces/OSExpressionTree.h -text
 OS/src/OSCommonInterfaces/OSGeneral.cpp -text
@@ -700,6 +698,8 @@ OS/src/OSSolverInterfaces/OSCouenneSolver.cpp -text
 OS/src/OSSolverInterfaces/OSCouenneSolver.h -text
 OS/src/OSSolverInterfaces/OSCsdpSolver.cpp -text
 OS/src/OSSolverInterfaces/OSCsdpSolver.h -text
+OS/src/OSSolverInterfaces/OSDefaultSolver.cpp -text
+OS/src/OSSolverInterfaces/OSDefaultSolver.h -text
 OS/src/OSSolverInterfaces/OSIpoptSolver.cpp -text
 OS/src/OSSolverInterfaces/OSIpoptSolver.h -text
 OS/src/OSSolverInterfaces/OSKnitroSolver.cpp -text

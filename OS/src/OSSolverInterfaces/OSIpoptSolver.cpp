@@ -680,6 +680,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             {
 
 
+
                 mdObjValues[0] = obj_value ;
                 osresult->setObjectiveValuesDense(solIdx, mdObjValues);
             }
@@ -798,14 +799,16 @@ void IpoptProblem::finalize_solution(SolverReturn status,
             osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
             if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
         }
+
         osresult->setGeneralStatusType("normal");
         delete osrlwriter;
+        osrlwriter = NULL;
         if(osinstance->getObjectiveNumber() > 0)
         {
             delete[] mdObjValues;
         }
-        osrlwriter = NULL;
 
+        return;
     }
     catch(const ErrorClass& eclass)
     {
@@ -820,12 +823,12 @@ void IpoptProblem::finalize_solution(SolverReturn status,
         std::string osrl = osrlwriter->writeOSrL( osresult);
         delete osrlwriter;
         osrlwriter = NULL;
-        throw ErrorClass(  osrl) ;
         if(osinstance->getObjectiveNumber() > 0)
         {
             delete[] mdObjValues;
         }
         mdObjValues = NULL;
+        throw ErrorClass(  osrl) ;
     }
 //////////
 }
@@ -931,6 +934,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
                 }
             }
         }
+        return;
     }
     catch(const ErrorClass& eclass)
     {
@@ -949,7 +953,6 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass)
     std::ostringstream outStr;
     try
     {
-
         if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
         if(osinstance == NULL)
         {
@@ -957,14 +960,16 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass)
             osinstance = m_osilreader->readOSiL( osil);
         }
 
-    // Can't handle multiobjective problems properly --- especially nonlinear ones
-    if (osinstance->getObjectiveNumber() > 1)
+        // Can't handle multiobjective problems properly --- especially nonlinear ones
+        if (osinstance->getObjectiveNumber() > 1)
             throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
 
         // Create a new instance of your nlp
         nlp = new IpoptProblem( osinstance, osoption, osresult, ipoptErrorMsg);
         app = new IpoptApplication();
+
         this->bCallbuildSolverInstance = true;
+        return;
     }
     catch(const ErrorClass& eclass)
     {
@@ -998,6 +1003,7 @@ void IpoptSolver::solve() throw (ErrorClass)
         {
             throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + *ipoptErrorMsg);
         }
+        return;
     }
     catch(const ErrorClass& eclass)
     {
@@ -1016,7 +1022,6 @@ void IpoptSolver::solve() throw (ErrorClass)
 
 void IpoptSolver::dataEchoCheck()
 {
-
     int i;
 
     // print out problem parameters
@@ -1031,18 +1036,24 @@ void IpoptSolver::dataEchoCheck()
     {
         for(i = 0; i < osinstance->getVariableNumber(); i++)
         {
-            if(osinstance->getVariableNames() != NULL) cout << "variable Names  " << osinstance->getVariableNames()[ i]  << endl;
-            if(osinstance->getVariableTypes() != NULL) cout << "variable Types  " << osinstance->getVariableTypes()[ i]  << endl;
-            if(osinstance->getVariableLowerBounds() != NULL) cout << "variable Lower Bounds  " << osinstance->getVariableLowerBounds()[ i]  << endl;
-            if(osinstance->getVariableUpperBounds() != NULL) cout << "variable Upper Bounds  " <<  osinstance->getVariableUpperBounds()[i] << endl;
+            if(osinstance->getVariableNames() != NULL)
+                cout << "variable Names  " << osinstance->getVariableNames()[i]  << endl;
+            if(osinstance->getVariableTypes() != NULL)
+                cout << "variable Types  " << osinstance->getVariableTypes()[i]  << endl;
+            if(osinstance->getVariableLowerBounds() != NULL)
+                cout << "variable Lower Bounds  " << osinstance->getVariableLowerBounds()[i] << endl;
+            if(osinstance->getVariableUpperBounds() != NULL)
+                cout << "variable Upper Bounds  " << osinstance->getVariableUpperBounds()[i] << endl;
         }
     }
 
     // print out objective function information
     if(osinstance->getVariableNumber() > 0 || osinstance->instanceData->objectives->obj != NULL || osinstance->instanceData->objectives->numberOfObjectives > 0)
     {
-        if( osinstance->getObjectiveMaxOrMins()[0] == "min")  cout <<  "problem is a minimization" << endl;
-        else cout <<  "problem is a maximization" << endl;
+        if( osinstance->getObjectiveMaxOrMins()[0] == "min")
+            cout <<  "problem is a minimization" << endl;
+        else 
+            cout <<  "problem is a maximization" << endl;
         for(i = 0; i < osinstance->getVariableNumber(); i++)
         {
             cout << "OBJ COEFFICIENT =  " <<  osinstance->getDenseObjectiveCoefficients()[0][i] << endl;
@@ -1082,6 +1093,7 @@ void IpoptSolver::dataEchoCheck()
         cout << "Var Index 2 = " << osinstance->getQuadraticTerms()->varTwoIndexes[ i] << endl;
         cout << "Coefficient = " << osinstance->getQuadraticTerms()->coefficients[ i] << endl;
     }
+    return;
 } // end dataEchoCheck
 
 
