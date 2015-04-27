@@ -70,10 +70,10 @@ extern "C"
 
 class CsdpSolver : public DefaultSolver
 {
-// These declarations are from the main method csdp.c
+// These declarations are taken from the main method csdp.c
   int nC_rows;                            // number of rows/columns in each matrix
   int nC_blks;                            // number of blocks per matrix
-  struct blockmatrix *C;                  // the matrix in the objective, A0
+  struct blockmatrix *C_matrix;           // the matrix in the objective, A0
   double *rhsValues;                      // the right-hand side values of the constraints
   struct constraintmatrix **mconstraints; // the collection of matrices in the constraints (A_i)
   struct blockmatrix *X,*Z;               // for the primal and dual matrix values, respectively

@@ -413,9 +413,9 @@ DefaultSolver* selectSolver(std::string solverName, OSInstance *osinstance)
         else if (solverName.find("csdp") != std::string::npos)
         {
 #ifdef COIN_HAS_CSDP
-//            solverType = new CsdpSolver();
-//            solverType->sSolverName = "csdp";
-            throw ErrorClass( "the CSDP solver requested is not yet supported");
+            solverType = new CsdpSolver();
+            solverType->sSolverName = "csdp";
+//            throw ErrorClass( "the CSDP solver requested is not yet supported");
 #else
             throw ErrorClass( "the CSDP solver requested is not present");
 #endif

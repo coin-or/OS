@@ -798,127 +798,48 @@ run_parsers: osil osol osrl osss
 osil: $(srcdir)/OSParseosil.cpp \
       $(srcdir)/OSParseosil.tab.cpp
 
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosil.cpp: \
-@HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParseosil.l \
-@HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParseosil.tab.cpp
-@HAVE_LEXYACC_TRUE@	$(LEX) -Posil -o$(srcdir)/OSParseosil.cpp \
-@HAVE_LEXYACC_TRUE@                        $(srcdir)/OSParseosil.l
-
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosil.tab.cpp: $(srcdir)/OSParseosil.y
-@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osil -o $(srcdir)/OSParseosil.tab.cpp \
-@HAVE_LEXYACC_TRUE@                                $(srcdir)/OSParseosil.y
-
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosil.l: \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.l.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.l.patterns \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.l.patterns \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.l.2
-@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosil.l.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.l.2 >$(srcdir)/OSParseosil.l
-
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosil.y: \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.tokens \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.2   \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.syntax \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.syntax \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.3
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosil.y.2      >osiltemp.tmp
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
-@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosil.y.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
-@HAVE_LEXYACC_TRUE@		osiltemp.tmp osgltemp.tmp osnltemp.tmp \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosil.y.3 >$(srcdir)/OSParseosil.y
-@HAVE_LEXYACC_TRUE@	rm -f osiltemp.tmp
-@HAVE_LEXYACC_TRUE@	rm -f osgltemp.tmp
-@HAVE_LEXYACC_TRUE@	rm -f osnltemp.tmp
-
 osol: $(srcdir)/OSParseosol.cpp \
       $(srcdir)/OSParseosol.tab.cpp
-
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosol.cpp: \
-@HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParseosol.l \
-@HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParseosol.tab.cpp
-@HAVE_LEXYACC_TRUE@	$(LEX) -Posol -o$(srcdir)/OSParseosol.cpp \
-@HAVE_LEXYACC_TRUE@                        $(srcdir)/OSParseosol.l
-
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosol.tab.cpp: $(srcdir)/OSParseosol.y
-@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osol -o $(srcdir)/OSParseosol.tab.cpp \
-@HAVE_LEXYACC_TRUE@                                $(srcdir)/OSParseosol.y
-
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosol.l: \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.l.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.l.patterns \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.l.patterns \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.l.2
-@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosol.l.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.l.2 >$(srcdir)/OSParseosol.l
-
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosol.y: \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.y.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.tokens \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.y.2   \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.syntax \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.syntax \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.y.3
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosol.y.2      >osoltemp.tmp
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
-@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosol.y.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
-@HAVE_LEXYACC_TRUE@		osoltemp.tmp osgltemp.tmp osnltemp.tmp \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosol.y.3 >$(srcdir)/OSParseosol.y
-@HAVE_LEXYACC_TRUE@	rm -f osoltemp.tmp
-@HAVE_LEXYACC_TRUE@	rm -f osgltemp.tmp
-@HAVE_LEXYACC_TRUE@	rm -f osnltemp.tmp
 
 osrl: $(srcdir)/OSParseosrl.cpp \
       $(srcdir)/OSParseosrl.tab.cpp
 
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosrl.cpp: \
-@HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParseosrl.l \
-@HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParseosrl.tab.cpp
-@HAVE_LEXYACC_TRUE@	$(LEX) -Posil -o$(srcdir)/OSParseosrl.cpp \
-@HAVE_LEXYACC_TRUE@                        $(srcdir)/OSParseosrl.l
+osss: $(srcdir)/OSParseosss.cpp 
 
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosrl.tab.cpp: $(srcdir)/OSParseosrl.y
-@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p osrl -o $(srcdir)/OSParseosrl.tab.cpp \
-@HAVE_LEXYACC_TRUE@                                $(srcdir)/OSParseosrl.y
+@HAVE_LEXYACC_TRUE@$(srcdir)/OSParse%.cpp: \
+@HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParse%.l \
+@HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParse%.tab.cpp
+@HAVE_LEXYACC_TRUE@	$(LEX) -P$* -o$@ $<
 
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosrl.l: \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.l.1 \
+@HAVE_LEXYACC_TRUE@$(srcdir)/OSParse%.tab.cpp $(srcdir)/OSParse%.tab.hpp: \
+@HAVE_LEXYACC_TRUE@                $(srcdir)/OSParse%.y
+@HAVE_LEXYACC_TRUE@	$(YACC) -ldv -p $* -o $(srcdir)/OSParse$*.tab.cpp $<
+
+@HAVE_LEXYACC_TRUE@$(srcdir)/OSParse%.l: \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParse%.l.1 \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.l.patterns \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.l.patterns \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.l.2
-@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosrl.l.1 \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.l.2 >$(srcdir)/OSParseosrl.l
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParse%.l.2
+@HAVE_LEXYACC_TRUE@	cat $? >$(srcdir)/OSParse$*.l
 
-@HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosrl.y: \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.y.1 \
+@HAVE_LEXYACC_TRUE@$(srcdir)/OSParse%.y: \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParse%.y.1 \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.tokens \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.y.2   \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParse%.y.2   \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.syntax \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosnl.y.syntax \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.y.3
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosrl.y.2      >osrltemp.tmp
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
-@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
-@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParseosrl.y.1 \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParse%.y.3
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParse$*.y.2      >$*temp.tmp
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+@HAVE_LEXYACC_TRUE@	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+@HAVE_LEXYACC_TRUE@	cat $(srcdir)/OSParse$*.y.1 \
 @HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
-@HAVE_LEXYACC_TRUE@		osrltemp.tmp osgltemp.tmp osnltemp.tmp \
-@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParseosrl.y.3 >$(srcdir)/OSParseosrl.y
-@HAVE_LEXYACC_TRUE@	rm -f osrltemp.tmp
+@HAVE_LEXYACC_TRUE@		osiltemp.tmp osgltemp.tmp osnltemp.tmp \
+@HAVE_LEXYACC_TRUE@		$(srcdir)/OSParse$*.y.3 >$(srcdir)/OSParse$*.y
+@HAVE_LEXYACC_TRUE@	rm -f $*temp.tmp
 @HAVE_LEXYACC_TRUE@	rm -f osgltemp.tmp
 @HAVE_LEXYACC_TRUE@	rm -f osnltemp.tmp
-
-osss: $(srcdir)/OSParseosss.cpp 
 
 @HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosss.cpp: $(srcdir)/OSParseosss.l 
 @HAVE_LEXYACC_TRUE@	$(LEX) -Posss -o$(srcdir)/OSParseosss.cpp \
