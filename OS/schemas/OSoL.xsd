@@ -186,11 +186,24 @@
 			<xs:documentation>numberOfVariables, numberOfObjectives and numberOfConstraints are the numbers in the original optimization instance and should match those in the corresponding OSiL file. The default value -1 can be used if no dense methods are called in the API.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:element name="matrices" type="Matrices" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="variables" type="VariableOption" minOccurs="0"/>
 			<xs:element name="objectives" type="ObjectiveOption" minOccurs="0"/>
 			<xs:element name="constraints" type="ConstraintOption" minOccurs="0"/>
-			<xs:element name="specialOrderedSets" type="SpecialOrderedSetsOption" minOccurs="0"/>
-			<xs:element name="matrixProgramming" type="MatrixProgrammingOption" minOccurs="0"/>
+			<xs:element name="specialOrderedSets" type="SpecialOrderedSetsOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>recommendation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixProgramming" type="MatrixProgrammingOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVariables" use="optional">
@@ -542,7 +555,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitMatrixVariableValues">
 		<xs:sequence>
-			<xs:element name="matrixVar" type="MatrixValue" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixVar" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -603,7 +616,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitMatrixObjectiveValues">
 		<xs:sequence>
-			<xs:element name="matrixObj" type="MatrixValue" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixObj" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -653,7 +666,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitMatrixConstraintValues">
 		<xs:sequence>
-			<xs:element name="matrixCon" type="MatrixValue" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixCon" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
