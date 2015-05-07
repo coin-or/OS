@@ -1,7 +1,7 @@
 /* $Id$ */
 /** @file FileUtil.cpp
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -133,7 +133,6 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname)
         {
             if(cstr[ i] != '\0')     fputc ( cstr[ i], ft )  ;
         }
-//	    fputc( '\n', ft);
         fclose ( ft);
         delete[] cstr;
         cstr = NULL;

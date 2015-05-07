@@ -55,42 +55,123 @@ osrl: $(srcdir)/OSParseosrl.cpp \
 
 osss: $(srcdir)/OSParseosss.cpp 
 
+
 if HAVE_LEXYACC
-$(srcdir)/OSParse%.cpp: \
-                 $(srcdir)/OSParse%.l \
-                 $(srcdir)/OSParse%.tab.cpp
-	$(LEX) -P$* -o$@ $<
+
+#Some preparatory file manipulations
+$(srcdir)/OSParseosil.l: \
+		$(srcdir)/OSParseosil.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns \
+		$(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosil.l.2
+	cat $(srcdir)/OSParseosil.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosil.l.2 >$(srcdir)/OSParseosil.l
+
+$(srcdir)/OSParseosil.y: \
+		$(srcdir)/OSParseosil.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens \
+		$(srcdir)/OSParseosnl.y.tokens \
+		$(srcdir)/OSParseosil.y.2   \
+		$(srcdir)/OSParseosgl.y.syntax \
+		$(srcdir)/OSParseosnl.y.syntax \
+		$(srcdir)/OSParseosil.y.3
+	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosil.y.2      >osiltemp.tmp
+	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	cat $(srcdir)/OSParseosil.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
+		osiltemp.tmp osgltemp.tmp osnltemp.tmp \
+		$(srcdir)/OSParseosil.y.3 >$(srcdir)/OSParseosil.y
+	rm -f osiltemp.tmp
+	rm -f osgltemp.tmp
+	rm -f osnltemp.tmp
+
+$(srcdir)/OSParseosol.l: \
+		$(srcdir)/OSParseosol.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns \
+		$(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosol.l.2
+	cat $(srcdir)/OSParseosol.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosol.l.2 >$(srcdir)/OSParseosol.l
+
+$(srcdir)/OSParseosol.y: \
+		$(srcdir)/OSParseosol.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens \
+		$(srcdir)/OSParseosnl.y.tokens \
+		$(srcdir)/OSParseosol.y.2   \
+		$(srcdir)/OSParseosgl.y.syntax \
+		$(srcdir)/OSParseosnl.y.syntax \
+		$(srcdir)/OSParseosol.y.3
+	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosol.y.2      >osoltemp.tmp
+	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+	sed 's/parserObjects/osoption, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	cat $(srcdir)/OSParseosol.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
+		osoltemp.tmp osgltemp.tmp osnltemp.tmp \
+		$(srcdir)/OSParseosol.y.3 >$(srcdir)/OSParseosol.y
+	rm -f osoltemp.tmp
+	rm -f osgltemp.tmp
+	rm -f osnltemp.tmp
+
+$(srcdir)/OSParseosrl.l: \
+		$(srcdir)/OSParseosrl.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns \
+		$(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosrl.l.2
+	cat $(srcdir)/OSParseosrl.l.1 \
+		$(srcdir)/OSParseosgl.l.patterns $(srcdir)/OSParseosnl.l.patterns \
+		$(srcdir)/OSParseosrl.l.2 >$(srcdir)/OSParseosrl.l
+
+$(srcdir)/OSParseosrl.y: \
+		$(srcdir)/OSParseosrl.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens \
+		$(srcdir)/OSParseosnl.y.tokens \
+		$(srcdir)/OSParseosrl.y.2   \
+		$(srcdir)/OSParseosgl.y.syntax \
+		$(srcdir)/OSParseosnl.y.syntax \
+		$(srcdir)/OSParseosrl.y.3
+	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosrl.y.2      >osrltemp.tmp
+	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
+	sed 's/parserObjects/osresult, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
+	cat $(srcdir)/OSParseosrl.y.1 \
+		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
+		osrltemp.tmp osgltemp.tmp osnltemp.tmp \
+		$(srcdir)/OSParseosrl.y.3 >$(srcdir)/OSParseosrl.y
+	rm -f osrltemp.tmp
+	rm -f osgltemp.tmp
+	rm -f osnltemp.tmp
+
+# use lex/flex to generate the scanner and tokens
+
+$(srcdir)/OSParseosil.cpp: \
+                 $(srcdir)/OSParseosil.l \
+                 $(srcdir)/OSParseosil.tab.cpp
+	$(LEX) -Posil -o$(srcdir)/OSParseosil.cpp \
+                        $(srcdir)/OSParseosil.l
+
+$(srcdir)/OSParseosol.cpp: \
+                 $(srcdir)/OSParseosol.l \
+                 $(srcdir)/OSParseosol.tab.cpp
+	$(LEX) -Posol -o$(srcdir)/OSParseosol.cpp \
+                        $(srcdir)/OSParseosol.l
+
+$(srcdir)/OSParseosrl.cpp: \
+                 $(srcdir)/OSParseosrl.l \
+                 $(srcdir)/OSParseosrl.tab.cpp
+	$(LEX) -Posil -o$(srcdir)/OSParseosrl.cpp \
+                        $(srcdir)/OSParseosrl.l
+
+# bison generates the grammars. Since there are multiple targets, use a pattern rule
 
 $(srcdir)/OSParse%.tab.cpp $(srcdir)/OSParse%.tab.hpp: \
                 $(srcdir)/OSParse%.y
 	$(YACC) -ldv -p $* -o $(srcdir)/OSParse$*.tab.cpp $<
 
-$(srcdir)/OSParse%.l: \
-		$(srcdir)/OSParse%.l.1 \
-		$(srcdir)/OSParseosgl.l.patterns \
-		$(srcdir)/OSParseosnl.l.patterns \
-		$(srcdir)/OSParse%.l.2
-	cat $? >$(srcdir)/OSParse$*.l
-
-$(srcdir)/OSParse%.y: \
-		$(srcdir)/OSParse%.y.1 \
-		$(srcdir)/OSParseosgl.y.tokens \
-		$(srcdir)/OSParseosnl.y.tokens \
-		$(srcdir)/OSParse%.y.2   \
-		$(srcdir)/OSParseosgl.y.syntax \
-		$(srcdir)/OSParseosnl.y.syntax \
-		$(srcdir)/OSParse%.y.3
-	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParse$*.y.2      >$*temp.tmp
-	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosgl.y.syntax >osgltemp.tmp
-	sed 's/parserObjects/osinstance, parserData, osglData, osnlData/g' $(srcdir)/OSParseosnl.y.syntax >osnltemp.tmp
-	cat $(srcdir)/OSParse$*.y.1 \
-		$(srcdir)/OSParseosgl.y.tokens $(srcdir)/OSParseosnl.y.tokens \
-		osiltemp.tmp osgltemp.tmp osnltemp.tmp \
-		$(srcdir)/OSParse$*.y.3 >$(srcdir)/OSParse$*.y
-	rm -f $*temp.tmp
-	rm -f osgltemp.tmp
-	rm -f osnltemp.tmp
 endif
+
+# the command line parser does not use a grammar
 
 if HAVE_LEXYACC
 $(srcdir)/OSParseosss.cpp: $(srcdir)/OSParseosss.l 

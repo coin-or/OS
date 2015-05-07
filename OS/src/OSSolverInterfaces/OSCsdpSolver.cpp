@@ -17,7 +17,6 @@
  * supplied in the CSDP distribution as an illustration of the CSDP API.
  */
 
-
 #include "OSCsdpSolver.h"
 #include "OSInstance.h"
 #include "OSOption.h"
@@ -111,7 +110,8 @@ using std::ostringstream;
 CsdpSolver::CsdpSolver()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "inside CsdpSolver constructor\n");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, 
+        "inside CsdpSolver constructor\n");
 #endif
     osrlwriter = new OSrLWriter();
     osresult = new OSResult();
@@ -158,6 +158,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 /* Additional declarations from OSCsdpSolver.h
  *      int nC_rows;                            // number of rows/columns in each matrix
  *      int nC_blks;                            // number of blocks per matrix
+ *      int ncon;                               // number of constraints (and constraint matrices A_i)
  *      struct blockmatrix *C_matrix;           // the matrix in the objective, A0
  *      double *rhsValues;                      // the right-hand side values of the constraints
  *      struct constraintmatrix **mconstraints; // the collection of matrices in the constraints (A_i)
@@ -228,7 +229,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         if (mr->inodeInt != OS_MATRIX_REFERENCE || mv->inodeInt != OS_MATRIX_VAR)
             throw ErrorClass("Unsupported expression in objective row");
 
-        mtxRef = new int[osinstance->getObjectiveNumber()+1];
+        mtxRef = new int[osinstance->getConstraintNumber()+1];
 
         // Analyze A0 matrix: Verify existence, block-diagonal structure, get block dimensions, etc.
         mtxRef[0] = ((OSnLMNodeMatrixReference*)mr)->idx;
@@ -338,7 +339,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
             nColumnBlocks = imerge;
         }
 
-        blockOffset = new int[nRowBlocks];
+        blockOffset = new int[nRowBlocks]; // step this through: nRowBlocks=?
 
         // make sure the row and column blocks are synchronized and compute block sizes
         int nBlocks;
@@ -378,11 +379,14 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 #endif
             blockSize[i] = blockOffset[i] - blockOffset[i-1]; 
         }
-        int pn = blockOffset[nBlocks];
+
+        nC_rows = blockOffset[nBlocks-1];
+        nC_blks = nBlocks-1;
+        ncon    = osinstance->getConstraintNumber();
 
 #ifndef NOSHORTS
         /** If we're using unsigned shorts, make sure that the problem isn't too big. */
-        if (osinstance->getConstraintNumber() >= USHRT_MAX) 
+        if (ncon >= USHRT_MAX) 
             throw ErrorClass("This problem is too large to be solved by this version of the code!\n"
                            + "Recompile without -DUSERSHORTINDS to fix the problem.\n");
 
@@ -397,16 +401,16 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
          * too big for 32 bits.  If we don't do this check, then integer overflow
          * won't be detected, and we'll allocate a bogus amount of storage.
          */
-        if (osinstance->getConstraintNumber() > 23169)
+        if (ncon > 23169)
             throw ErrorClass("This problem is too large to be solved in 32 bit mode!\n");
 #endif
 
         // set up the right hand side values. Note: 1-based for Fortran interface.
         rhsValues = osinstance->getConstraintLowerBounds() - 1;
-        rhsValues[0] = OSNaN();
+//        rhsValues[0] = OSNaN(); // This is the tricky code to avoid having to copy. Legal?
 
         // Set up storage and retrieve pointers.
-        mtxBlocks = new ExpandedMatrixBlocks*[osinstance->getConstraintNumber()+1];
+        mtxBlocks = new ExpandedMatrixBlocks*[ncon+1];
         GeneralSparseMatrix* tmpBlock;
 
         // At this point we know the dimensions of all blocks.
@@ -415,7 +419,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         for (int i=1; i<nBlocks; i++)
             isdiag[i] = true;
 
-        for (int j=0; j < osinstance->getConstraintNumber()+1; j++)
+        for (int j=0; j < ncon+1; j++)
         {
             mtxBlocks[j] = osinstance->instanceData->matrices->matrix[mtxRef[j]]
                 ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,false,true);
@@ -432,1041 +436,146 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         }
 
         /** Allocate space for the C matrix (A0). */
-        C_matrix = new blockmatrix();
-        C_matrix->nblocks=nBlocks-1;
-        C_matrix->blocks = new blockrec[nBlocks];
+//        C_matrix = new blockmatrix();
+        C_matrix.nblocks=nBlocks-1;
+        C_matrix.blocks = new blockrec[nBlocks];
 
         /** Handle diagonal blocks and matrix blocks separately. */
         for (int blk=1; blk < nBlocks; blk++)
         {
             tmpBlock = mtxBlocks[0]->getBlock(blk-1,blk-1);
+std::cout << "next block; blk= " << blk << std::endl;
+std::cout << "block address: " << tmpBlock << std::endl;
             int blksz = blockSize[blk];
             if (isdiag[blk] == 1)
             {
                 // diagonal block
-	            C_matrix->blocks[blk].blocksize = blksz;
-                C_matrix->blocks[blk].blockcategory = DIAG;
-	            C_matrix->blocks[blk].data.vec = new double[blksz];
+                C_matrix.blocks[blk].blocksize = blksz;
+                C_matrix.blocks[blk].blockcategory = DIAG;
+                C_matrix.blocks[blk].data.vec = new double[blksz+1];
 
-	            for (int i=1; i<=blksz; i++)
-        		    C_matrix->blocks[blk].data.vec[i] = 0.0;
+                for (int i=1; i<=blksz; i++)
+                    C_matrix.blocks[blk].data.vec[i] = 0.0;
 
-                for (int i=1; i <= tmpBlock->valueSize; i++)
-        		    C_matrix->blocks[blk].data.vec[tmpBlock->indexes[i-1]]
-                        = ((ConstantMatrixValues*)tmpBlock->values)->el[i-1];
+                if (tmpBlock != NULL)
+                {
+                    for (int i=0; i < tmpBlock->valueSize; i++)
+                        C_matrix.blocks[blk].data.vec[tmpBlock->indexes[i]+1]
+                            = ((ConstantMatrixValues*)tmpBlock->values)->el[i];
+                }
             }
-	        else
-	        {
+            else
+            {
                 // There are off-diagonals (i.e., "matrix block")
-	            C_matrix->blocks[blk].blocksize = blksz;
-                C_matrix->blocks[blk].blockcategory = MATRIX;
-	            C_matrix->blocks[blk].data.mat = new double[blksz*blksz];
+                C_matrix.blocks[blk].blocksize = blksz;
+                C_matrix.blocks[blk].blockcategory = MATRIX;
+                C_matrix.blocks[blk].data.mat = new double[blksz*blksz];
 
-		        for (int i=1; i<=blksz; i++)
-	            for (int j=1; j<=blksz; j++)
-		            C_matrix->blocks[blk].data.mat[ijtok(i,j,blksz)] = 0.0;
+                for (int i=1; i<=blksz; i++)
+                for (int j=1; j<=blksz; j++)
+                    C_matrix.blocks[blk].data.mat[ijtok(i,j,blksz)] = 0.0;
 
-                for (int i=1; i <= tmpBlock->startSize; i++)
-	            for (int j=tmpBlock->starts[i]+1; j<=tmpBlock->starts[i+1]; j++)
-        		    C_matrix->blocks[blk].data.vec[tmpBlock->indexes[j-1]]
-                        = ((ConstantMatrixValues*)tmpBlock->values)->el[j-1];
-	        }
-		}
+                if (tmpBlock != NULL)
+                {
+                    for (int i=1; i < tmpBlock->startSize; i++)
+                    for (int j=tmpBlock->starts[i-1]; j<tmpBlock->starts[i]; j++)
+                    {
+                        C_matrix.blocks[blk].data.mat[ijtok(i,tmpBlock->indexes[j]+1,blksz)]
+                            = ((ConstantMatrixValues*)tmpBlock->values)->el[j];
+                        C_matrix.blocks[blk].data.mat[ijtok(tmpBlock->indexes[j]+1,i,blksz)]
+                            = ((ConstantMatrixValues*)tmpBlock->values)->el[j];
+                    }
+                }
+            }
+        }
 
         /** Allocate space for the constraints (again using 1-based indexing). */
-        int pk = osinstance->getConstraintNumber();
-        mconstraints = new constraintmatrix*[pk+1];
+        mconstraints = new constraintmatrix[ncon+1];
   
         /** Null out all pointers in constraints. */
-        for (int i=1; i<=pk; i++)
-            mconstraints[i]->blocks = NULL;
-
-  struct sparseblock *p;
-  struct sparseblock *q;
-  struct sparseblock *prev;
-
-  /*
-   * Now, go through each of the blks in each of the constraint matrices,
-   * and allocate space for the entries and indices.
-   */
-        for (int i=1; i<=pk; i++)
+        for (int i=1; i<=ncon; i++)
         {
-            p = mconstraints[i]->blocks;
+//            mconstraints[i] = new constraintmatrix();
+            mconstraints[i].blocks = NULL;
+        }
 
-            while (p != NULL)
-	        {
-	  /*
-	   * allocate storage for the entries in this block of this constraint.
-	   */
-	  p->entries = new double[p->numentries+1];
-//	  p->entries= (double *)malloc((p->numentries+1)*sizeof(double));
-//          if (p->entries == NULL)
-//	    {
-//	      printf("Storage allocation failed!\n");
-//	      exit(10);
-//	    };
+        struct sparseblock *p;
+        struct sparseblock *q;
+        struct sparseblock *prev;
 
+        /**
+         * Go through all of the blocks in each of the constraint matrices,
+         * and allocate space for the entries and indices.
+         */
+        for (int i=1; i<=ncon; i++)
+        {
+            prev = NULL;
+            for (int blk=1; blk < nBlocks; blk++)
+            {
+                tmpBlock = mtxBlocks[i]->getBlock(blk-1,blk-1);
+                if (tmpBlock != NULL && tmpBlock->valueSize > 0)
+                {
+                    /**
+                     * initialize and allocate storage for the entries 
+                     * in this block of this constraint.
+                     */
+                    p = new sparseblock();
+                    p->numentries = tmpBlock->valueSize;
+                    p->entries = new double[p->numentries+1];
 #ifdef NOSHORTS
-	  p->jindices = new int[p->numentries+1];
-	  p->iindices = new int[p->numentries+1];
+                    p->iindices = new int[p->numentries+1];
+                    p->jindices = new int[p->numentries+1];
 #else
-	  p->iindices = new unsigned short[p->numentries+1];
-	  p->jindices = new unsigned short[p->numentries+1];
+                    p->iindices = new unsigned short[p->numentries+1];
+                    p->jindices = new unsigned short[p->numentries+1];
+#endif
+                    p->blocknum = blk;
+                    p->blocksize = blockSize[blk];
+                    p->constraintnum = i;
+                    p->next        = NULL;
+                    p->nextbyblock = NULL;
+                    if (((p->numentries) > 0.25*(p->blocksize)) && ((p->numentries) > 15))
+                        p->issparse=0;
+                    else
+                        p->issparse=1;
+
+                    // Note: everything is 1-indexed, so both locations and indices are shifted 
+                    for (int icol=1; icol < tmpBlock->startSize; icol++)
+                    for (int jent=tmpBlock->starts[icol-1]; jent<tmpBlock->starts[icol]; jent++)
+                    {
+std::cout << "store element in col " << icol << ", row " << tmpBlock->indexes[jent] + 1;
+std::cout << " (value " << ((ConstantMatrixValues*)tmpBlock->values)->el[jent];
+std::cout << ") into location " << jent + 1 << std::endl;
+                        p->iindices[jent+1] = icol;
+                        p->jindices[jent+1] = tmpBlock->indexes[jent] + 1;
+                        p->entries [jent+1] = ((ConstantMatrixValues*)tmpBlock->values)->el[jent];
+                    }
+
+                    if (prev == NULL)
+                    {
+                        mconstraints[i].blocks = p;
+                    }
+                    else
+                    {
+                        prev->next        = p;
+                        prev->nextbyblock = p;
+                    }
+                    prev = p;                  
+                }
+            }
+        }
+#ifndef NDEBUG
+        dataEchoCheck();
 #endif
 
-	  p->numentries=0;
-	  p=p->next;
-	}; // end while
-    }; // end for loop
-
 #if 0
-
-  /*
-   *  In the final pass through the file, fill in the actual data.
-   */
-
-  zero_mat(*pC);
-  
-  /*
-   * Open the file for reading, and then read in all of the actual 
-   * matrix entries.
-   * line.
-   */
-  fid=fopen(fname,"r");
- 
-  if (fid == (FILE *) NULL)
-    {
-      printf("Couldn't open problem file for reading! \n");
-      exit(11);
-    };
-
-  /*
-   * First, read through the comment lines.
-   */
- 
-  c=getc(fid);
-  while ((c == '"') || (c == '*'))
-    {
-      skip_to_end_of_line(fid);
-      c=getc(fid);
-    };
-
-  ungetc(c,fid);
-
-  /*
-   * Get the number of constraints (primal variables in SDPA terminology)
-   */
-
-  ret=get_line(fid,buf,buflen);
-  if (ret == 0)
-    {
-      sscanf(buf,"%d",pk);
-    }
-  else
-    {
-      printf("Incorect SDPA file. Couldn't read mDIM \n");
-      fclose(fid);
-      free(isdiag);
-      return(1);
-    };
-
-  /*
-   * Read in the number of blocks.
-   */
-  ret=get_line(fid,buf,buflen);
-  if (ret == 0)
-    {
-      sscanf(buf,"%d",&nblocks);
-    }
-  else
-    {
-      printf("Incorect SDPA file. Couldn't read nBLOCKS. \n");
-      fclose(fid);
-      free(isdiag);
-      return(1);
-    };
-
-  /*
-   * And read the block structure.
-   */
-
-  ret=get_line(fid,buf,buflen);
-  if (ret != 0)
-    {
-      printf("Incorect SDPA file. Couldn't read block sizes.\n");
-      fclose(fid);
-      free(isdiag);
-      return(1);
-    };
-
-  /*
-   *  Read in the right hand side values.
-   */
-
-  ret=get_line(fid,buf,buflen);
-  if (ret == 0)
-    {
-      /*
-       * Decode k numbers out of the buffer.  Put the results in 
-       * a.
-       */
-      ptr1=buf;
-      for (i=1; i<=pk; i++)
-	{
-	  (pa)[i]=strtod(ptr1,&ptr2);
-	  ptr1=ptr2;
-	};
-    }
-  else
-    {
-      printf("Incorect SDPA file. Can't read a values.\n");
-      fclose(fid);
-      free(isdiag);
-      return(1);
-    };
-
-  /*
-   * Now, read the actual entries.
-   */
-  ret=fscanf(fid,"%d %d %d %d %le ",&matno,&blkno,&indexi,&indexj,&ent);
-  do {
-
-    /*
-     * No need for sanity checking the second time around.
-     */
-
-    /*
-     * Mark this block as not diagonal if indexi!=indexj.
-     */
-    if ((indexi != indexj)  && (ent != 0.0))
-      isdiag[blkno]=0;
-
-    if (matno != 0)
-      {
-	if (ent != 0.0)
-	  addentry(myconstraints,matno,blkno,indexi,indexj,ent);
-      }
-    else
-      {
-	/*
-	 * An entry in C. 
-	 */
-	if (ent != 0.0)
-	  {
-	    blksz=pC->blocks[blkno].blocksize;
-	    if (pC->blocks[blkno].blockcategory == DIAG)
-	      {
-		pC->blocks[blkno].data.vec[indexi]=ent;
-	      }
-	    else
-	      {
-		pC->blocks[blkno].data.mat[ijtok(indexi,indexj,blksz)]=ent;
-		pC->blocks[blkno].data.mat[ijtok(indexj,indexi,blksz)]=ent;
-	      };
-	  };
-      };
-    ret=fscanf(fid,"%d %d %d %d %le ",&matno,&blkno,&indexi,&indexj,&ent);
-  } while (ret == 5);
-
-  if ((ret != EOF) && (ret != 0))
-    {
-      printf("Incorrect SDPA file. \n");
-      fclose(fid);
-      free(isdiag);
-      return(1);
-    };
-
-  /*
-   * At this point, we'll stop to recognize whether any of the blocks
-   * are "hidden LP blocks"  and correct the block type if needed.
-   */
-
-  for (i=1; i<=nblocks; i++)
-    {
-      if ((pC->blocks[i].blockcategory != DIAG) && 
-	  (isdiag[i]==1) && (pC->blocks[i].blocksize > 1))
-	{
-	  /*
-	   * We have a hidden diagonal block!
-	   */
-	  if (printlevel >= 2)
-	    {
-	      printf("Block %d is actually diagonal.\n",i);
-	    };
-	  blksz=pC->blocks[i].blocksize;
-	  tempdiag=(double *)malloc((blksz+1)*sizeof(double));
-	  for (j=1; j<=blksz; j++)
-	    tempdiag[j]=pC->blocks[i].data.mat[ijtok(j,j,blksz)];
-	  free(pC->blocks[i].data.mat);
-	  pC->blocks[i].data.vec=tempdiag;
-	  pC->blocks[i].blockcategory=DIAG;
-	};
-    };
-
-  /*
-   * If the printlevel is high, print out info on constraints and block
-   * matrix structure.
-   */
-  if (printlevel >= 3)
-    {
-      printf("Block matrix structure.\n");
-      for (blk=1; blk<=pC->nblocks; blk++)
-	{
-	  if (pC->blocks[blk].blockcategory == DIAG)
-	    printf("Block %d, DIAG, %d \n",blk,pC->blocks[blk].blocksize);
-	  if (pC->blocks[blk].blockcategory == MATRIX)
-	    printf("Block %d, MATRIX, %d \n",blk,pC->blocks[blk].blocksize);
-	};
-    };
-
-  /*
-   * Next, setup issparse and NULL out all nextbyblock pointers.
-   */
-
-  for (i=1; i<=pk; i++)
-    {
-      p=myconstraints[i].blocks;
-      while (p != NULL)
-	{
-	  /*
-	   * First, set issparse.
-	   */
-	  if (((p->numentries) > 0.25*(p->blocksize)) && ((p->numentries) > 15))
-	    {
-	      p->issparse=0;
-	    }
-	  else
-	    {
-	      p->issparse=1;
-	    };
-	  
-	  if (pC->blocks[p->blocknum].blockcategory == DIAG)
-	    p->issparse=1;
-	  
-	  /*
-	   * Setup the cross links.
-	   */
-	  
-	  p->nextbyblock=NULL;
-	  p=p->next;
-	};
-    };
-  
-  /*
-   * Now, cross link.
-   */
-  
-  prev=NULL;
-  for (i=1; i<=pk; i++)
-    {
-      p=myconstraints[i].blocks;
-      while (p != NULL)
-	{
-	  if (p->nextbyblock == NULL)
-	    {
-	      blk=p->blocknum;
-	      
-	      /*
-	       * link in the remaining blocks.
-	       */
-	      for (j=i+1; j<=pk; j++)
-		{
-		  q=myconstraints[j].blocks;
-		  
-		  while (q != NULL)
-		    {
-		      if (q->blocknum == p->blocknum)
-			{
-			  if (p->nextbyblock == NULL)
-			    {
-			      p->nextbyblock=q;
-			      q->nextbyblock=NULL;
-			      prev=q;
-			    }
-			  else
-			    {
-			      prev->nextbyblock=q;
-			      q->nextbyblock=NULL;
-			      prev=q;
-			    };
-			  break;
-			};
-		      q=q->next;
-		    };
-		};
-	    };
-	  p=p->next;
-	};
-    };
-
-  /*
-   * Free unneeded memory.
-   */
-
-  free(buf);
-  free(isdiag);
 
   /*
    *  Put back all the returned values.
    */
 
-  *pconstraints=myconstraints;
+//  *pconstraints=myconstraints;
   
-  fclose(fid);
-  return(0);
-}
-//===============================================
-
-//Two utility routines that are called by readprob()
-
-void countentry(constraints,matno,blkno,blocksize)
-     struct constraintmatrix *constraints;
-     int matno;
-     int blkno;
-     int blocksize;
-{
-  struct sparseblock *p;
-  struct sparseblock *q;
-  
-  p=constraints[matno].blocks;
-
-  if (p == NULL)
-    {
-      /*
-       * We haven't yet allocated any blocks.
-       */
-      p=(struct sparseblock *)malloc(sizeof(struct sparseblock));
-      if (p==NULL)
-	{
-	  printf("Storage allocation failed!\n");
-	  exit(10);
-	};
-      p->constraintnum=matno;
-      p->blocknum=blkno;
-      p->numentries=1;
-      p->next=NULL;
-      p->entries=NULL;
-      p->iindices=NULL;
-      p->jindices=NULL;
-      p->blocksize=blocksize;
-      constraints[matno].blocks=p;
-    }
-  else
-    {
-      /*
-       * We have some existing blocks.  See whether this block is already
-       * in the chain.
-       */
-
-      while ((p->next) != NULL)
-	{
-	  if (p->blocknum == blkno)
-	    {
-	      /*
-	       * Found the right block.
-	       */
-	      p->numentries=p->numentries+1;
-	      return;
-	    };
-	  p=p->next;
-	};
-      /*
-       * If we get here, we still have to check the last block in the
-       * chain.
-       */
-      if (p->blocknum == blkno)
-	{
-	  /*
-	   * Found the right block.
-	   */
-	  p->numentries=p->numentries+1;
-	  return;
-	};
-      /*
-       * If we get here, then the block doesn't exist yet.
-       */
-      q=(struct sparseblock *)malloc(sizeof(struct sparseblock));
-      if (q==NULL)
-	{
-	  printf("Storage allocation failed!\n");
-	  exit(10);
-	};
-      /*
-       * Fill in information for this block.
-       */
-      q->blocknum=blkno;
-      q->constraintnum=matno;
-      q->numentries=1;
-      q->next=NULL;
-      q->entries=NULL;
-      p->iindices=NULL;
-      p->jindices=NULL;
-      q->blocksize=blocksize;
-      /*
-       * Now link it into the list.
-       */
-      p->next=q;
-    };
-
-}
-
-void addentry(constraints,matno,blkno,indexi,indexj,ent)
-     struct constraintmatrix *constraints;
-     int matno;
-     int blkno;
-     int indexi;
-     int indexj;
-     double ent;
-{
-  struct sparseblock *p;
-
-  p=constraints[matno].blocks;
-  
-  if (p == NULL)
-    {
-      printf("Internal Error in CSDP!\n");
-      exit(100);
-    }
-  else
-    {
-      /*
-       * We have some existing blocks.  See whether this block is already
-       * in the chain.
-       */
-
-      while (p != NULL)
-	{
-	  if (p->blocknum == blkno)
-	    {
-	      /*
-	       * Found the right block.
-	       */
-	      p->numentries=(p->numentries)+1;
-	      p->entries[(p->numentries)]=ent;
-	      p->iindices[(p->numentries)]=indexi;
-	      p->jindices[(p->numentries)]=indexj;
-
-
-	      return;
-	    };
-	  p=p->next;
-	};
-      /*
-       * If we get here, we have an internal error.
-       */
-      printf("Internal Error in CSDP!\n");
-      exit(100);
-    };
-
-
-}
-
-//===============================================
-
-
-        /*
-         * The problem and solution data.
-         */
-//===========================================================================
-        struct blockmatrix C;
-        double *b;
-        struct constraintmatrix *constraints;
-
-        /*
-         * Storage for the initial and final solutions.
-         */
-
-        struct blockmatrix X,Z;
-        double *y;
-        double pobj,dobj;
-
-        /*
-         * blockptr will be used to point to blocks in constraint matrices.
-         */
-
-        struct sparseblock *blockptr;
-
-        /*
-         * A return code for the call to easy_sdp().
-         */
-
-        int ret;
-
-        /*
-         * The first major task is to setup the C matrix and right hand side b.
-         */
-
-        /*
-         * First, allocate storage for the C matrix.  We have three blocks, but
-         * because C starts arrays with index 0, we have to allocate space for
-         * four blocks- we'll waste the 0th block.  Notice that we check to 
-         * make sure that the malloc succeeded.
-         */
-
-        C.nblocks=3;
-  C.blocks=(struct blockrec *)malloc(4*sizeof(struct blockrec));
-  if (C.blocks == NULL)
-    {
-      printf("Couldn't allocate storage for C!\n");
-      exit(1);
-    };
-
-  /*
-   * Set up the first block.
-   */
-  
-  C.blocks[1].blockcategory=MATRIX;
-  C.blocks[1].blocksize=2;
-  C.blocks[1].data.mat=(double *)malloc(2*2*sizeof(double));
-  if (C.blocks[1].data.mat == NULL)
-    {
-      printf("Couldn't allocate storage for C!\n");
-      exit(1);
-    };
-
-  /*
-   * Put the entries into the first block.
-   */
-
-  C.blocks[1].data.mat[ijtok(1,1,2)]=2.0;
-  C.blocks[1].data.mat[ijtok(1,2,2)]=1.0;
-  C.blocks[1].data.mat[ijtok(2,1,2)]=1.0;
-  C.blocks[1].data.mat[ijtok(2,2,2)]=2.0;
-
-  /*
-   * Set up the second block.
-   */
-  
-  C.blocks[2].blockcategory=MATRIX;
-  C.blocks[2].blocksize=3;
-  C.blocks[2].data.mat=(double *)malloc(3*3*sizeof(double));
-  if (C.blocks[2].data.mat == NULL)
-    {
-      printf("Couldn't allocate storage for C!\n");
-      exit(1);
-    };
-
-  /*
-   * Put the entries into the second block.
-   */
-
-  C.blocks[2].data.mat[ijtok(1,1,3)]=3.0;
-  C.blocks[2].data.mat[ijtok(1,2,3)]=0.0;
-  C.blocks[2].data.mat[ijtok(1,3,3)]=1.0;
-  C.blocks[2].data.mat[ijtok(2,1,3)]=0.0;
-  C.blocks[2].data.mat[ijtok(2,2,3)]=2.0;
-  C.blocks[2].data.mat[ijtok(2,3,3)]=0.0;
-  C.blocks[2].data.mat[ijtok(3,1,3)]=1.0;
-  C.blocks[2].data.mat[ijtok(3,2,3)]=0.0;
-  C.blocks[2].data.mat[ijtok(3,3,3)]=3.0;
-
-  /*
-   * Set up the third block.  Note that we have to allocate space for 3
-   * entries because C starts array indexing with 0 rather than 1.
-   */
-  
-  C.blocks[3].blockcategory=DIAG;
-  C.blocks[3].blocksize=2;
-  C.blocks[3].data.vec=(double *)malloc((2+1)*sizeof(double));
-  if (C.blocks[3].data.vec == NULL)
-    {
-      printf("Couldn't allocate storage for C!\n");
-      exit(1);
-    };
-
-  /*
-   * Put the entries into the third block.
-   */
-
-  C.blocks[3].data.vec[1]=0.0;
-  C.blocks[3].data.vec[2]=0.0;
-
-
-  /*
-   * Allocate storage for the right hand side, b.
-   */
-
-  b=(double *)malloc((2+1)*sizeof(double));
-  if (b==NULL)
-    {
-      printf("Failed to allocate storage for a!\n");
-      exit(1);
-    };
-
-  /*
-   * Fill in the entries in b.
-   */
-
-  b[1]=1.0;
-  b[2]=2.0;
-
-  /*
-   * The next major step is to set up the two constraint matrices A1 and A2.
-   * Again, because C indexing starts with 0, we have to allocate space for
-   * one more constraint.  constraints[0] is not used.
-   */
-
-  constraints=(struct constraintmatrix *)malloc((2+1)*sizeof(struct constraintmatrix));
-  if (constraints==NULL)
-    {
-      printf("Failed to allocate storage for constraints!\n");
-      exit(1);
-    };
-
-  /*
-   * Setup the A1 matrix.  Note that we start with block 3 of A1 and then
-   * do block 1 of A1.  We do this in this order because the blocks will
-   * be inserted into the linked list of A1 blocks in reverse order.  
-   */
-
-  /*
-   * Terminate the linked list with a NULL pointer.
-   */
-
-  constraints[1].blocks=NULL;
-
-  /*
-   * Now, we handle block 3 of A1.
-   */
-
-  /*
-   * Allocate space for block 3 of A1.
-   */
-
-  blockptr=(struct sparseblock *)malloc(sizeof(struct sparseblock));
-  if (blockptr==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-
-  /*
-   * Initialize block 3.
-   */
-
-  blockptr->blocknum=3;
-  blockptr->blocksize=2;
-  blockptr->constraintnum=1;
-  blockptr->next=NULL;
-  blockptr->nextbyblock=NULL;
-  blockptr->entries=(double *) malloc((1+1)*sizeof(double));
-  if (blockptr->entries==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-  blockptr->iindices=(int *) malloc((1+1)*sizeof(int));
-  if (blockptr->iindices==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-  blockptr->jindices=(int *) malloc((1+1)*sizeof(int));
-  if (blockptr->jindices==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-
-  /*
-   * We have 1 nonzero entry in the upper triangle of block 3 of A1.
-   */
-
-  blockptr->numentries=1;
-
-  /*
-   * The entry in the 1,1 position of block 3 of A1 is 1.0
-   */
-
-  blockptr->iindices[1]=1;
-  blockptr->jindices[1]=1;
-  blockptr->entries[1]=1.0;
-
-  /*
-   * Note that the entry in the 2,2 position of block 3 of A1 is 0, 
-   * So we don't store anything for it.
-   */
-
-  /*
-   * Insert block 3 into the linked list of A1 blocks.  
-   */
-
-  blockptr->next=constraints[1].blocks;
-  constraints[1].blocks=blockptr;
-
-  /*
-   * Now, we handle block 1.  
-   */
-
-  /*
-   * Allocate space for block 1.
-   */
-
-  blockptr=(struct sparseblock *)malloc(sizeof(struct sparseblock));
-  if (blockptr==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-
-  /*
-   * Initialize block 1.
-   */
-
-  blockptr->blocknum=1;
-  blockptr->blocksize=2;
-  blockptr->constraintnum=1;
-  blockptr->next=NULL;
-  blockptr->nextbyblock=NULL;
-  blockptr->entries=(double *) malloc((3+1)*sizeof(double));
-  if (blockptr->entries==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-  blockptr->iindices=(int *) malloc((3+1)*sizeof(int));
-  if (blockptr->iindices==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-  blockptr->jindices=(int *) malloc((3+1)*sizeof(int));
-  if (blockptr->jindices==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-
-  /*
-   * We have 3 nonzero entries in the upper triangle of block 1 of A1.
-   */
-
-  blockptr->numentries=3;
-
-  /*
-   * The entry in the 1,1 position of block 1 of A1 is 3.0
-   */
-
-  blockptr->iindices[1]=1;
-  blockptr->jindices[1]=1;
-  blockptr->entries[1]=3.0;
-
-  /*
-   * The entry in the 1,2 position of block 1 of A1 is 1.0
-   */
-
-  blockptr->iindices[2]=1;
-  blockptr->jindices[2]=2;
-  blockptr->entries[2]=1.0;
-
-  /*
-   * The entry in the 2,2 position of block 1 of A1 is 3.0
-   */
-
-  blockptr->iindices[3]=2;
-  blockptr->jindices[3]=2;
-  blockptr->entries[3]=3.0;
-
-  /*
-   * Note that we don't have to store the 2,1 entry- this is assumed to be
-   * equal to the 1,2 entry.
-   */
-
-  /*
-   * Insert block 1 into the linked list of A1 blocks.  
-   */
-
-  blockptr->next=constraints[1].blocks;
-  constraints[1].blocks=blockptr;
-
-  /*
-   * Note that the second block of A1 is 0, so we didn't store anything for it.
-   */
-
-  /*
-   * Setup the A2 matrix.  This time, there are nonzero entries in block 3
-   * and block 2.  We start with block 3 of A2 and then do block 1 of A2. 
-   */
-
-  /*
-   * Terminate the linked list with a NULL pointer.
-   */
-
-  constraints[2].blocks=NULL;
-
-  /*
-   * First, we handle block 3 of A2.
-   */
-
-  /*
-   * Allocate space for block 3 of A2.
-   */
-
-  blockptr=(struct sparseblock *)malloc(sizeof(struct sparseblock));
-  if (blockptr==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-
-  /*
-   * Initialize block 3.
-   */
-
-  blockptr->blocknum=3;
-  blockptr->blocksize=2;
-  blockptr->constraintnum=2;
-  blockptr->next=NULL;
-  blockptr->nextbyblock=NULL;
-  blockptr->entries=(double *) malloc((1+1)*sizeof(double));
-  if (blockptr->entries==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-  blockptr->iindices=(int *) malloc((1+1)*sizeof(int));
-  if (blockptr->iindices==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-  blockptr->jindices=(int *) malloc((1+1)*sizeof(int));
-  if (blockptr->jindices==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-
-  /*
-   * We have 1 nonzero entry in the upper triangle of block 3 of A2.
-   */
-
-  blockptr->numentries=1;
-
-
-  /*
-   * The entry in the 2,2 position of block 3 of A2 is 1.0
-   */
-
-  blockptr->iindices[1]=2;
-  blockptr->jindices[1]=2;
-  blockptr->entries[1]=1.0;
-
-  /*
-   * Insert block 3 into the linked list of A2 blocks.  
-   */
-
-  blockptr->next=constraints[2].blocks;
-  constraints[2].blocks=blockptr;
-
-  /*
-   * Now, we handle block 2.  
-   */
-
-  /*
-   * Allocate space for block 2.
-   */
-
-  blockptr=(struct sparseblock *)malloc(sizeof(struct sparseblock));
-  if (blockptr==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-
-  /*
-   * Initialize block 2.
-   */
-
-  blockptr->blocknum=2;
-  blockptr->blocksize=3;
-  blockptr->constraintnum=2;
-  blockptr->next=NULL;
-  blockptr->nextbyblock=NULL;
-  blockptr->entries=(double *) malloc((4+1)*sizeof(double));
-  if (blockptr->entries==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-  blockptr->iindices=(int *) malloc((4+1)*sizeof(int));
-  if (blockptr->iindices==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-  blockptr->jindices=(int *) malloc((4+1)*sizeof(int));
-  if (blockptr->jindices==NULL)
-    {
-      printf("Allocation of constraint block failed!\n");
-      exit(1);
-    };
-
-  /*
-   * We have 4 nonzero entries in the upper triangle of block 2 of A2.
-   */
-
-  blockptr->numentries=4;
-
-
-  /*
-   * The entry in the 1,1 position of block 2 of A2 is 3.0
-   */
-
-  blockptr->iindices[1]=1;
-  blockptr->jindices[1]=1;
-  blockptr->entries[1]=3.0;
-
-  /*
-   * The entry in the 2,2 position of block 2 of A2 is 4.0
-   */
-
-  blockptr->iindices[2]=2;
-  blockptr->jindices[2]=2;
-  blockptr->entries[2]=4.0;
-
-  /*
-   * The entry in the 3,3 position of block 2 of A2 is 5.0
-   */
-
-  blockptr->iindices[3]=3;
-  blockptr->jindices[3]=3;
-  blockptr->entries[3]=5.0;
-
-  /*
-   * The entry in the 1,3 position of block 2 of A2 is 1.0
-   */
-
-  blockptr->iindices[4]=1;
-  blockptr->jindices[4]=3;
-  blockptr->entries[4]=1.0;
-
-  /*
-   * Note that we don't store the 0 entries and entries below the diagonal!
-   */
-
-  /*
-   * Insert block 2 into the linked list of A2 blocks.  
-   */
-
-  blockptr->next=constraints[2].blocks;
-  constraints[2].blocks=blockptr;
-
-  /*
-   * At this point, we have all of the problem data setup.
-   */
-
-
-#ifndef NDEBUG
-        //dataEchoCheck();
-#endif
-
-  /*
-   * Write the problem out in SDPA sparse format.
-   */
-
-  write_prob("prob.dat-s",7,2,C,b,constraints);
-
   /*
    * Create an initial solution.  This allocates space for X, y, and Z,
    * and sets initial values.
@@ -1510,6 +619,15 @@ void addentry(constraints,matno,blkno,indexi,indexj,ent)
         if (blockSize   != NULL) delete [] blockSize;
         if (mtxRef      != NULL) delete [] mtxRef;
         if (isdiag      != NULL) delete [] isdiag;
+        if (mtxBlocks   != NULL)
+        {
+            for (int i=0; i < ncon+1; i++)
+            {
+                if (mtxBlocks[i] != NULL) delete mtxBlocks[i];
+                mtxBlocks[i] = NULL;
+            }
+            delete []mtxBlocks;
+        }
 
         this->bCallbuildSolverInstance = true;
         return;
@@ -1521,6 +639,14 @@ void addentry(constraints,matno,blkno,indexi,indexj,ent)
         if (blockSize   != NULL) delete [] blockSize;
         if (mtxRef      != NULL) delete [] mtxRef;
         if (isdiag      != NULL) delete [] isdiag;
+        {
+            for (int i=0; i <= ncon; i++)
+            {
+                if (mtxBlocks[i] != NULL) delete mtxBlocks[i];
+                mtxBlocks[i] = NULL;
+            }
+            delete []mtxBlocks;
+        }
 
         osresult = new OSResult();
         osresult->setGeneralMessage( eclass.errormsg);
@@ -1530,29 +656,29 @@ void addentry(constraints,matno,blkno,indexi,indexj,ent)
     }
 
 }// end buildSolverInstance()
- 
-void  CsdpSolver::solve() throw (ErrorClass)
-{
-    return;
-}
+
 
 void  CsdpSolver::setSolverOptions() throw(ErrorClass)
 {
-/*
- * This is very rudimentary due to the limited API provided by CSDP
- * A full enumeration of available options is required
+/**
+ * Since CSDP provides no user interface for solver options 
+ * other than reading them in from the file param.csdp (if this file exists)
+ * the only choice is to write the options to file so that
+ * they can be read back by the CSDP method initparams(), called from easy_sdp().
+ *
+ * Note also that initial values are not treated here; 
+ * there is the special method setInitialValues() that should be used for that purpose.
  */
 
     struct paramstruc params;
 
     std::ostringstream outStr;
+    std::ostringstream optStr;
     int printlevel = 0;
 
     try
     {
-        initparams(&params,&printlevel);
-
-        /* now get options from OSoL */
+        /* get options from OSoL */
         if(osoption == NULL && osol.length() > 0)
         {
             m_osolreader = new OSoLReader();
@@ -1585,46 +711,24 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
                 outStr << std::endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-                if (optionsVector[ i]->name == "axtol" )
-                    params.axtol = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "atytol" )
-                    params.atytol = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "objtol" )
-                    params.objtol = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "pinftol" )
-                    params.pinftol = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "dinftol" )
-                    params.dinftol = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "minstepfrac" )
-                    params.minstepfrac = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "maxstepfrac" )
-                    params.maxstepfrac = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "minstepp" )
-                    params.minstepp = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "minstepd" )
-                    params.minstepd = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "perturbobj" )
-                    params.perturbobj = os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
-                else if (optionsVector[ i]->name == "maxiter" )
-                    params.maxiter = atoi( optionsVector[ i]->value.c_str() );
-                else if (optionsVector[ i]->name == "usexzgap" )
-                    params.usexzgap = atoi( optionsVector[ i]->value.c_str() );
-                else if (optionsVector[ i]->name == "tweakgap" )
-                    params.tweakgap = atoi( optionsVector[ i]->value.c_str() );
-                else if (optionsVector[ i]->name == "affine" )
-                    params.affine = atoi( optionsVector[ i]->value.c_str() );
-                else if (optionsVector[ i]->name == "fastmode" )
-                    params.fastmode = atoi( optionsVector[ i]->value.c_str() );
-                else 
-                    throw ErrorClass("Unrecognized option for solver csdp");
+                optStr << optionsVector[ i]->name << "=" << optionsVector[ i]->value << std::endl;
             }
+
+            FILE *paramfile;
+            paramfile=fopen("param.csdp","w");
+            if (!paramfile)
+                throw ErrorClass("File open error during option initialization");
+
+            fprintf(paramfile,"%s",(optStr.str()).c_str());
+            fclose(paramfile);
         }
         bSetSolverOptions = true;
         return;
     }
     catch(const ErrorClass& eclass)
     {
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "THERE IS AN ERROR\n");
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, 
+            "Error in setSolverOption\n");
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
@@ -1633,8 +737,226 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
 }//setSolverOptions
 
 
+#if 0
+void  CsdpSolver::setInitialValues() throw (ErrorClass)
+{
+    std::ostringstream outStr;
+    try
+    {
+        if(osinstance->getObjectiveNumber() <= 0) 
+            throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION\n(For pure feasibility problems, use zero function.)");
+        this->bSetSolverOptions = true;
+        /* set the default options */
+        //app->Options()->SetNumericValue("tol", 1e-9);
+        app->Options()->SetIntegerValue("print_level", 0);
+        app->Options()->SetIntegerValue("max_iter", 20000);
+        app->Options()->SetNumericValue("bound_relax_factor", 0, true, true);
+        app->Options()->SetStringValue("mu_strategy", "adaptive", true, true);
+        //app->Options()->SetStringValue("output_file", "ipopt.out");
+        app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
+        // hessian constant for an LP
+        if( (osinstance->getNumberOfNonlinearExpressions() <= 0) && 
+            (osinstance->getNumberOfQuadraticTerms() <= 0) )
+        {
+            app->Options()->SetStringValue("hessian_constant", "yes", true, true);
+        }
+        if(osinstance->getObjectiveNumber() > 0)
+        {
+            if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0)
+            {
+                app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
+            }
+        }
+        /* end of the default options, now get options from OSoL */
+
+
+        if(osoption == NULL && osol.length() > 0)
+        {
+            m_osolreader = new OSoLReader();
+            osoption = m_osolreader->readOSoL( osol);
+        }
+
+        if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 )
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "number of solver options ";
+            outStr << osoption->getNumberOfSolverOptions();
+            outStr << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+            std::vector<SolverOption*> optionsVector;
+            optionsVector = osoption->getSolverOptions( "ipopt",true);
+            char *pEnd;
+            int i;
+            int num_ipopt_options = optionsVector.size();
+            for(i = 0; i < num_ipopt_options; i++)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "ipopt solver option  ";
+                outStr << optionsVector[ i]->name;
+                outStr << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+                if(optionsVector[ i]->type == "numeric" )
+                {
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "FOUND A NUMERIC OPTION  ";
+                    outStr << os_strtod( optionsVector[ i]->value.c_str(), &pEnd );
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+                    app->Options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
+                }
+                else if(optionsVector[ i]->type == "integer" )
+                {
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "FOUND AN INTEGER OPTION  ";
+                    outStr << atoi( optionsVector[ i]->value.c_str() );
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+                    app->Options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
+                }
+                else if(optionsVector[ i]->type == "string" )
+                {
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "FOUND A STRING OPTION  ";
+                    outStr << optionsVector[ i]->value.c_str();
+                    outStr << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+                    app->Options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
+                }
+            }
+        }
+        return;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, "Error while setting options in IpoptSolver\n");
+        osresult->setGeneralMessage( eclass.errormsg);
+        osresult->setGeneralStatusType( "error");
+        osrl = osrlwriter->writeOSrL( osresult);
+        throw ErrorClass( osrl) ;
+    }
+}//end setInitialValues()
+
+#endif
+
+ 
+void  CsdpSolver::solve() throw (ErrorClass)
+{
+    std::ostringstream outStr;
+
+    if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+    if( this->bSetSolverOptions == false) setSolverOptions();
+    try
+    {
+
+// what about initial values for X and Y? perhaps even y?
+//if osoption->...->initialmatrix != NUll, set initial values. Make sure that defaults are there
+//in case X or Z is empty
+  
+        /*
+         * Create an initial solution.  This allocates space for X, y, and Z,
+         * and sets initial values.
+         */
+//else
+            initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
+
+
+        //call solver
+        int ret = easy_sdp(nC_rows,ncon,C_matrix,rhsValues,mconstraints,0.0,&X,&y,&Z,&pobj,&dobj);
+        if (ret == 0) // return codes are in csdp.c
+            printf("The objective value is %.7e \n",(dobj+pobj)/2);
+        else
+            printf("SDP failed.\n");
+
+        // build osresult
+//        osrl = osrlwriter->writeOSrL( osresult);
+//        if (status < -2)
+//        {
+//            throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + *ipoptErrorMsg);
+//        }
+//        return;
+
+    }
+    catch(const ErrorClass& eclass)
+    {
+        outStr.str("");
+        outStr.clear();
+        outStr << "error in OSCsdpSolver routine solve():\n" << eclass.errormsg << endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_error, outStr.str());
+
+        osresult->setGeneralMessage( eclass.errormsg);
+        osresult->setGeneralStatusType( "error");
+        osrl = osrlwriter->writeOSrL( osresult);
+        throw ErrorClass( osrl) ;
+    }
+}
+
 void CsdpSolver::dataEchoCheck()
 {
+    int i0, j0, blk0;
+    struct sparseblock *pp;
+    std::ostringstream outStr;
+
+    outStr << std::endl << "Check problem data:" << std::endl << std::endl;
+
+    outStr << "Dimension of matrices (number of rows):   n=" << nC_rows << std::endl;
+    outStr << "Number of constraints (and matrices A_i): k=" << ncon  << std::endl;
+    for (i0=1; i0 <= ncon; i0++)
+    {
+        outStr  << std::endl << "Right-hand side of constraint " << i0 << ": " 
+                << rhsValues[i0] << std::endl;
+        outStr << std::endl << "Data for matrix A_" << i0 << ":" << std::endl;
+        pp = mconstraints[i0].blocks;
+        while (pp != NULL)
+        {
+            outStr << std::endl << "Block " << pp->blocknum << ":" << std::endl;;
+            outStr << "Block size: " << pp->blocksize << std::endl;
+            outStr << "Number of entries: " << pp->numentries << std::endl;
+            for (j0=1; j0 <= pp->numentries; j0++)
+                outStr << "Entry in row " << pp->iindices[j0] << ", col " << pp->jindices[j0] 
+                       << " has value " << pp->entries[j0] << std::endl;
+            pp = pp->next;
+        }
+    }
+
+    outStr << std::endl << "Data for matrix C:" << std::endl;
+    outStr << "Number of blocks: " << C_matrix.nblocks << std::endl;
+    for (blk0=1; blk0 <= C_matrix.nblocks; blk0++)
+    {
+        outStr << std::endl << "Data for block " << blk0 << ":" << std::endl;
+        outStr << "Size: " << C_matrix.blocks[blk0].blocksize << std::endl;
+        if (C_matrix.blocks[blk0].blockcategory == DIAG)
+        {
+            outStr << "Type: diagonal" << std::endl;
+            for (i0=1; i0 <= C_matrix.blocks[blk0].blocksize; i0++)
+                outStr << "Entry in row " << i0 << ", col " << i0 << " has value " 
+                       << C_matrix.blocks[blk0].data.vec[i0] << std::endl;
+        }
+        else
+        {
+            outStr << "Type: dense" << std::endl;
+            for (i0=1; i0 <= C_matrix.blocks[blk0].blocksize; i0++)
+            for (j0=1; j0 <= C_matrix.blocks[blk0].blocksize; j0++)
+                outStr << "Entry in row " << i0 << ", col " << j0 << " has value " 
+                       << C_matrix.blocks[blk0].data.mat[ijtok(i0,j0,C_matrix.blocks[blk0].blocksize)]
+                       << std::endl;
+        }
+    }
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 }
 
 

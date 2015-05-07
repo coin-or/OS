@@ -2,7 +2,7 @@
 /** @file OSoLWriter.cpp
  *
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -40,16 +40,6 @@ OSoLWriter::OSoLWriter( )
 OSoLWriter::~OSoLWriter()
 {
 }
-
-
-/*char* OSoLWriter::writeOSoLWrap( OSOption *theosoption){
-	std::string sTmp = writeOSoL( theosoption);
-	char *ch;
-    ch = new char[sTmp.size() + 1];
-    strcpy(ch, sTmp.c_str());
-	return ch;
-}
-*/
 
 
 std::string OSoLWriter::writeOSoL( OSOption *theosoption)
@@ -393,6 +383,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
             osolStr << m_OSOption->job->directoriesToMake->numberOfPaths << "\">" << endl;
             for (int i=0; i < m_OSOption->job->directoriesToMake->numberOfPaths; i++)
                 osolStr << "<path>" << m_OSOption->job->directoriesToMake->path[i] << "</path>" << endl;
+
             osolStr << "</directoriesToMake>" << endl;
         }
         if (m_OSOption->job->filesToMake != NULL)

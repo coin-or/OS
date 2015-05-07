@@ -1037,7 +1037,7 @@
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="6" numberOfRows="7" name="32-Expansion test 1: nested blocks">
-                <blocks numberOfBlocks="4"> <!-- top level -->
+                <blocks numberOfBlocks="4"> 
                     <colOffsets numberOfEl="3">
                         <el>0</el> 
                         <el>2</el> 
@@ -1048,7 +1048,7 @@
                         <el>3</el> 
                         <el>7</el> 
                     </rowOffsets>
-                    <block blockRowIdx="0" blockColIdx="0"> <!-- top level -->
+                    <block blockRowIdx="0" blockColIdx="0"> 
                         <constantElements numberOfValues="3">
                             <start>
                                 <el>0</el> 
@@ -1067,8 +1067,8 @@
                             </values>
                         </constantElements>
                     </block>
-                    <block blockRowIdx="1" blockColIdx="1"> <!-- top level -->
-                        <blocks numberOfBlocks="3">   <!-- level 2 -->
+                    <block blockRowIdx="1" blockColIdx="1"> 
+                        <blocks numberOfBlocks="3">   
                             <colOffsets numberOfEl="3">
                                 <el>0</el> 
                                 <el>2</el> 
@@ -1079,9 +1079,9 @@
                                 <el>2</el> 
                                 <el>4</el> 
                             </rowOffsets>
-                            <block blockRowIdx="1" blockColIdx="0"/>  <!-- level 2 - empty!-->
-                            <block blockRowIdx="1" blockColIdx="1">   <!-- level 2 -->
-                                <blocks numberOfBlocks="2">   <!-- level 3 - two rows stacked vertically -->
+                            <block blockRowIdx="1" blockColIdx="0"/> 
+                            <block blockRowIdx="1" blockColIdx="1">  
+                                <blocks numberOfBlocks="2"> 
                                     <colOffsets numberOfEl="2">
                                         <el>0</el> 
                                         <el>2</el> 
@@ -1091,7 +1091,7 @@
                                         <el>1</el> 
                                         <el>2</el> 
                                     </rowOffsets>
-                                    <block blockRowIdx="1" blockColIdx="0"> <!-- bottom row, level 3 -->
+                                    <block blockRowIdx="1" blockColIdx="0"> 
                                         <constantElements numberOfValues="1" rowMajor="true">
                                             <start>
                                                 <el>0</el> 
@@ -1105,8 +1105,8 @@
                                             </values>
                                        </constantElements>
                                    </block>
-                                    <block blockRowIdx="0" blockColIdx="0"> <!-- top row, level 3 -->
-                                        <blocks numberOfBlocks="2">  <!-- bottom layer - two 1x1 blocks -->
+                                    <block blockRowIdx="0" blockColIdx="0"> 
+                                        <blocks numberOfBlocks="2"> 
                                             <colOffsets numberOfEl="3">
                                                 <el>0</el> 
                                                 <el>1</el> 
@@ -1116,7 +1116,7 @@
                                                 <el>0</el> 
                                                 <el>1</el> 
                                             </rowOffsets>
-                                            <block blockRowIdx="0" blockColIdx="1"> <!--layer 4 right-->
+                                            <block blockRowIdx="0" blockColIdx="1"> 
                                                 <constantElements numberOfValues="1">
                                                     <start>
                                                         <el>0</el>
@@ -1130,7 +1130,7 @@
                                                     </values>
                                                 </constantElements>
                                             </block>
-                                            <block blockRowIdx="0" blockColIdx="0"> <!--layer 4 left-->
+                                            <block blockRowIdx="0" blockColIdx="0"> 
                                                 <constantElements numberOfValues="1">
                                                     <start>
                                                         <el>0</el>
@@ -1148,7 +1148,7 @@
                                     </block>
                                 </blocks>
                             </block>
-                            <block blockRowIdx="0" blockColIdx="0">   <!-- level 2 -->
+                            <block blockRowIdx="0" blockColIdx="0">  
                                 <constantElements numberOfValues="2" rowMajor="true">
                                     <start>
                                         <el>0</el> 
@@ -1167,7 +1167,7 @@
                             </block>
                         </blocks>
                     </block>
-                    <block blockRowIdx="1" blockColIdx="0"> <!-- top level -->
+                    <block blockRowIdx="1" blockColIdx="0"> 
                         <constantElements numberOfValues="2">
                             <start>
                                 <el>0</el> 
@@ -1184,33 +1184,57 @@
                             </values>
                         </constantElements>
                     </block>
-                    <block blockRowIdx="0" blockColIdx="1"> <!-- top level -->
-                        <constantElements numberOfValues="7" rowMajor="true">
-                            <start>
+                    <block blockRowIdx="0" blockColIdx="1">
+                        <blocks numberOfBlocks="2"> 
+                            <colOffsets numberOfEl="2">
+                                <el>0</el> 
+                                <el>4</el> 
+                            </colOffsets>
+                            <rowOffsets numberOfEl="3">
                                 <el>0</el> 
                                 <el>2</el> 
-                                <el>5</el> 
-                                <el>7</el> 
-                            </start>
-                            <indexes>
-                                <el>0</el> 
                                 <el>3</el> 
-                                <el>1</el> 
-                                <el>2</el> 
-                                <el>3</el> 
-                                <el>2</el> 
-                                <el>3</el> 
-                            </indexes>
-                            <values>
-                                <el>1</el> 
-                                <el>-2</el> 
-                                <el>-3</el> 
-                                <el>-4</el> 
-                                <el>5</el> 
-                                <el>6</el> 
-                                <el>7</el> 
-                            </values>
-                        </constantElements>
+                            </rowOffsets>
+                            <block blockRowIdx="0" blockColIdx="0"> 
+                                <constantElements numberOfValues="5" rowMajor="true">
+                                    <start>
+                                        <el>0</el> 
+                                        <el>2</el> 
+                                        <el>5</el> 
+                                    </start>
+                                    <indexes>
+                                        <el>0</el> 
+                                        <el>3</el> 
+                                        <el>1</el> 
+                                        <el>2</el> 
+                                        <el>3</el> 
+                                    </indexes>
+                                    <values>
+                                        <el>1</el> 
+                                        <el>-2</el> 
+                                        <el>-3</el> 
+                                        <el>-4</el> 
+                                        <el>5</el> 
+                                    </values>
+                                </constantElements>
+                            </block>
+                            <block blockRowIdx="1" blockColIdx="0"> 
+                                <constantElements numberOfValues="2">
+                                    <start>
+                                        <el mult="2">0</el> 
+                                        <el mult="3" incr="1">0</el> 
+                                    </start>
+                                    <indexes>
+                                        <el>0</el> 
+                                        <el>0</el> 
+                                    </indexes>
+                                    <values>
+                                        <el>6</el> 
+                                        <el>7</el> 
+                                    </values>
+                                </constantElements>
+                            </block>
+                        </blocks>
                     </block>
                 </blocks>
             </matrix>

@@ -2387,7 +2387,9 @@ bool MatrixType::processBlocks(int* rowOffsets, int rowOffsetSize, int* colOffse
                     tmpBlocks->blockRows[tmpBlockNumber]    = tmpChild->blockRowIdx;
                     tmpBlocks->blockColumns[tmpBlockNumber] = tmpChild->blockColIdx;
 
-tmpChild->printExpandedMatrix(rowMajor);
+#ifndef NDEBUG
+                    tmpChild->printExpandedMatrix(rowMajor);
+#endif
 
                     tmpBlockNumber++;
                 }

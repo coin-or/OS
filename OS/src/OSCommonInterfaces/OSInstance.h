@@ -535,7 +535,7 @@ public:
     Cone();
 
     /** The Cone class destructor */
-    ~Cone();
+    virtual ~Cone();
 
     /** Every cone has (at least) two dimensions; no distinction
      *  is made between vector cones and matrix cones
@@ -2881,11 +2881,6 @@ private:
     ENUM_MATRIX_TYPE* m_miMatrixType;
 
     /**
-     * m_miMatrixNumberOfBlocks holds the number of blocks for each matrix.
-     */
-//    int* m_miMatrixNumberOfBlocks;
-
-    /**
      * m_miMatrixNumberOfColumns holds the number of columns for each matrix.
      */
     int* m_miMatrixNumberOfColumns;
@@ -2896,23 +2891,18 @@ private:
     int* m_miMatrixNumberOfRows;
 
     /**
-     * m_miMatrixNumberOfValues holds the number of values for each matrix.
-     */
-    int* m_miMatrixNumberOfValues;
-
-    /**
      * m_msMatrixNames holds the names of the matrices
      */
     std::string* m_msMatrixNames;
 
-	/**
+    /**
      * m_mMatrix holds the list of constructors for each matrix.
-	 * Each solver interface must access the list of matrices,
-	 * check that the data as given can be handled by the solver
-	 * and perform whatever transformations are necessary to 
-	 * send the data to the solver.
-	 */
-	OSMatrix** m_mMatrix;
+     * Each solver interface must access the list of matrices,
+     * check that the data as given can be handled by the solver
+     * and perform whatever transformations are necessary to 
+     * send the data to the solver.
+     */
+    OSMatrix** m_mMatrix;
 
 #if 0
     /**
@@ -2947,14 +2937,14 @@ private:
     /**
      * m_mMatrixBlocksInColumnMajor holds each matrix in a block partition form.
      * In addition, this format assumes that the matrix is stored in.
-	 * column major form and that all nesting has been resolved.
+     * column major form and that all nesting has been resolved.
      */
     ExpandedMatrixBlocks** m_mMatrixBlocksInColumnMajor;
 
     /**
      * m_mMatrixTransformation holds each matrix as a single transformation.
      * Any other matrix constructors are concatenated by superposition.
-	 * HIG: More work needed here!!! For now only allow transformation as single constructor
+     * HIG: More work needed here!!! For now only allow transformation as single constructor
      */
     OSnLMNode *m_mMatrixTransformation;
 #endif
@@ -3016,6 +3006,7 @@ private:
      * m_msTimeDomainStageNames holds the names of the time stages.
      */
     std::string* m_msTimeDomainStageNames;
+
 
 
 

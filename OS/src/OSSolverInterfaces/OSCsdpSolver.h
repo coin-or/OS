@@ -71,14 +71,15 @@ extern "C"
 class CsdpSolver : public DefaultSolver
 {
 // These declarations are taken from the main method csdp.c
-  int nC_rows;                            // number of rows/columns in each matrix
-  int nC_blks;                            // number of blocks per matrix
-  struct blockmatrix *C_matrix;           // the matrix in the objective, A0
-  double *rhsValues;                      // the right-hand side values of the constraints
-  struct constraintmatrix **mconstraints; // the collection of matrices in the constraints (A_i)
-  struct blockmatrix *X,*Z;               // for the primal and dual matrix values, respectively
-  double *y;                              // dual variables of the constraints
-  double pobj,dobj;                       // primal and dual objective values
+    int nC_rows;                            // number of rows/columns in each matrix
+    int nC_blks;                            // number of blocks per matrix
+    int ncon;                               // number of constraints (and constraint matrices A_i)
+    struct blockmatrix C_matrix;            // the matrix in the objective, A0
+    double *rhsValues;                      // the right-hand side values of the constraints
+    struct constraintmatrix *mconstraints;  // the collection of matrices in the constraints (A_i)
+    struct blockmatrix X,Z;                 // for the primal and dual matrix values, respectively
+    double *y;                              // dual variables of the constraints
+    double pobj,dobj;                       // primal and dual objective values
 
 public:
 
@@ -89,7 +90,7 @@ public:
     virtual ~CsdpSolver();
 
     /** solve results in an instance being read into the Csdp
-     * data structures and optimize */
+     *  data structures and optimized */
     virtual void  solve() throw (ErrorClass) ;
 
     /*! \fn void buildSolverInstance()

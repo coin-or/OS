@@ -412,9 +412,6 @@ bool LindoSolver::processVariables()
         m_mmcVarName = new char*[ osinstance->getVariableNumber()];
         for(i = 0; i < osinstance->getVariableNumber(); i++)
         {
-            //p = new char[osinstance->getVariableNames()[  i].size() + 1];
-            //strcpy(p, osinstance->getVariableNames()[  i].c_str());
-            //m_mmcVarName[i] = p;
             m_mmcVarName[i] = &osinstance->getVariableNames()[  i][0];
         }
         //fix for Stefan
@@ -552,7 +549,7 @@ bool LindoSolver::optimize()
     double *drcost;
     int nSolStatus;
     std::string description = "";
-    // resultHeader infomration
+    // resultHeader information
     if(osresult->setSolverInvoked( "LINDO Systems, Inc. Lindo API") != true)
         throw ErrorClass("OSResult error: setSolverInvoked");
     if(osresult->setServiceName( OSgetVersionInfo()) != true)

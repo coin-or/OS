@@ -927,6 +927,7 @@ if (PARSER_TESTS)
         fileUtil = NULL;
     }    
 
+#if 0
 // Here we test extensions to the "core": <matrices>, <cones>, stochastic programming, etc.
     if( THOROUGH == true)
     {
@@ -967,7 +968,7 @@ cout << temposil << endl;
             unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem testMatricesAndCones.osil" << std::endl;
             cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-
+#if 0
             // now test the matrix manipulation routines 
             // (expansion, separation into blocks, transformations, etc.)
             cout << endl << "TEST " << ++nOfTest << ": Test matrix manipulation routines (using testMatricesAndCones.osil)" << endl << endl;
@@ -1150,7 +1151,7 @@ cout << temposil << endl;
 //                }
 //            }
 
-
+#endif
             delete osilreader;
             osilreader = NULL;
 
@@ -1177,6 +1178,7 @@ cout << temposil << endl;
         fileUtil = NULL;
         }    
     }
+#endif
 
 #if 0
     // Now test <timeDomain> and stochastic programming
@@ -8557,7 +8559,6 @@ if (THOROUGH == true){
 #endif   // end of #ifdef COIN_HAS_BONMIN
 
 
-//#if 0 //for the time being --- Couenne stable 0.4 creates a segfault
 #ifdef COIN_HAS_COUENNE
     CouenneSolver *solver = NULL;
     try{
@@ -8576,8 +8577,6 @@ if (THOROUGH == true){
         solver->sSolverName = "couenne";
         solver->osil = osil;
         solver->osol = osol; 
-//        solver->osinstance = osilreader->readOSiL( osil);
-//        solver->osoption   = osolreader->readOSoL( osol);
         cout << "call the COIN - Couenne Solver for bonminEx1" << endl;
         solver->buildSolverInstance();
     
@@ -8986,8 +8985,6 @@ if( THOROUGH == true){
     }    
 } //end of if (THOROUGH)
 #endif // end of #ifdef COIN_HAS_COUENNE
-//#endif // #if 0 //for the time being --- Couenne stable 0.4 creates a segfault
-
 
     
 #ifdef COIN_HAS_LINDO

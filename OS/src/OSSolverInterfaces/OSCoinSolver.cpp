@@ -108,7 +108,8 @@ CoinSolver::CoinSolver() :
 CoinSolver::~CoinSolver()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, "inside CoinSolver destructor\n");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+        ENUM_OUTPUT_LEVEL_debug, "inside CoinSolver destructor\n");
 #endif
     if(m_osilreader != NULL) delete m_osilreader;
     m_osilreader = NULL;
@@ -135,7 +136,8 @@ CoinSolver::~CoinSolver()
         cbc_argv = NULL;
     }
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, "Leaving CoinSolver destructor\n");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+        ENUM_OUTPUT_LEVEL_trace, "Leaving CoinSolver destructor\n");
 #endif
 }
 
@@ -248,17 +250,22 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
             throw ErrorClass( "This COIN-OR Solver is not configured for nonlinear programming");
         }
         if ((osinstance->getNumberOfQuadraticTerms() > 0) && 
-            (sSolverName.find( "cbc") == std::string::npos) && (sSolverName.find( "clp") == std::string::npos))
+            (sSolverName.find( "cbc") == std::string::npos) &&
+            (sSolverName.find( "clp") == std::string::npos))
         {
             throw ErrorClass( "This COIN-OR Solver is not configured for quadratic programming");
         }
         // throw an exception if we have a solver that cannot do integer programming
         if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
         {
-            if( sSolverName.find("clp") != std::string::npos) throw ErrorClass( "Clp cannot do integer programming");
-            if( sSolverName.find("vol") != std::string::npos) throw ErrorClass( "Vol cannot do integer programming");
-            if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do integer programming");
-            if( sSolverName.find("soplex") != std::string::npos) throw ErrorClass( "SoPlex cannot do integer programming");
+            if( sSolverName.find("clp") != std::string::npos)
+                throw ErrorClass( "Clp cannot do integer programming");
+            if( sSolverName.find("vol") != std::string::npos)
+                throw ErrorClass( "Vol cannot do integer programming");
+            if( sSolverName.find("dylp") != std::string::npos)
+                throw ErrorClass( "DyLP cannot do integer programming");
+            if( sSolverName.find("soplex") != std::string::npos)
+                throw ErrorClass( "SoPlex cannot do integer programming");
         }
         // throw an exception if we have a solver that cannot handle semi-continuous or semi-integer variables
         if( osinstance->getNumberOfSemiIntegerVariables() + osinstance->getNumberOfSemiContinuousVariables() > 0)
@@ -272,9 +279,12 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         // check other trivial solver limitations
         //if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver:" + sSolverName +" cannot handle unconstrained problems");
         //if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
-        if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver: " + sSolverName + " needs an objective function");
-        if(osinstance->getNumberOfStringVariables() > 0) throw ErrorClass("Coin solver: " + sSolverName + " can only handle numeric variables");
-        if(osinstance->getLinearConstraintCoefficientNumber() <= 0 && sSolverName == "symphony") throw ErrorClass("Coin solver: " + sSolverName +   " needs a positive number of constraints");
+        if(osinstance->getObjectiveNumber() <= 0)
+            throw ErrorClass("Coin solver: " + sSolverName + " needs an objective function");
+        if(osinstance->getNumberOfStringVariables() > 0)
+            throw ErrorClass("Coin solver: " + sSolverName + " can only handle numeric variables");
+        if(osinstance->getLinearConstraintCoefficientNumber() <= 0 && sSolverName == "symphony")
+            throw ErrorClass("Coin solver: " + sSolverName +   " needs a positive number of constraints");
 
         if(!setCoinPackedMatrix() ) throw ErrorClass("Problem generating coin packed matrix");
         osiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(),
@@ -289,7 +299,8 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         if( osinstance->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
         else osiSolver->setObjSense(-1.0);
         // set the integer variables
-        int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
+        int numOfIntVars
+            = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
         if (numOfIntVars > 0)
         {
             int *intIndex = NULL;
@@ -315,9 +326,9 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         int nq = osinstance->getNumberOfQuadraticTerms();
         if (nq > 0)
         {
-            if ( (sSolverName.find("clp") != std::string::npos) || (sSolverName.find("clp") != std::string::npos) )
+            if ( (sSolverName.find("clp") != std::string::npos) )
             {
-                // must get the quadratic data, verify objective terms only, and convert to sparse matrix format
+                // get quadratic data, verify objective terms only, convert to sparse matrix format
                 QuadraticTerms* qterms = osinstance->getQuadraticTerms();
 
 #ifndef NDEBUG
@@ -567,7 +578,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     outStr.clear();
                     outStr << "osi solver option  "  << optionsVector[ i]->name  << std::endl;
                     outStr << "osi solver value   "  << optionsVector[ i]->value << std::endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                        ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
                     if (optionsVector[ i]->type == "OsiHintStrength" )
                     {
@@ -588,7 +600,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                     outStr.clear();
                     outStr << "osi solver option  "  << optionsVector[ i]->name  << std::endl;
                     outStr << "osi solver value   "  << optionsVector[ i]->value << std::endl;
-                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                        ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
                     if (optionsVector[ i]->type == "OsiHintParam" )
                     {
@@ -664,7 +677,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                         outStr.clear();
                         outStr << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
                         outStr << "cbc solver value   "  << optionsVector[ i]->name << std::endl;
-                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                            ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                         if(optionsVector[ i]->value.length() > 0 )
@@ -723,7 +737,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
                             outStr.clear();
                             outStr << "clp solver option  "  << optionsVector[ i]->name << std::endl;
                             outStr << "clp solver value   "  << optionsVector[ i]->name << std::endl;
-                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                                ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
 
                             if(optionsVector[ i]->value.length() > 0 )
@@ -1167,7 +1182,8 @@ void CoinSolver::solve() throw (ErrorClass)
                 }
                 int i;
 
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, "CALLING THE CBC SOLVER  CBCMAIN1()\n"); 
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                    ENUM_OUTPUT_LEVEL_info, "CALLING THE CBC SOLVER  CBCMAIN1()\n"); 
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
@@ -1514,6 +1530,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
         if(freeVars.size()  > 0)
         {
             kount = 0;
+
 
             basisIdx[ 0] = new int[ freeVars.size()];
 

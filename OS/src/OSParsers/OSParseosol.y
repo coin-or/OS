@@ -5523,6 +5523,7 @@ matrixStart: MATRIXSTART
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
     osglData->mtxConstructorVec.clear();
+    osglData->mtxBlocksVec.clear();
     osglData->mtxBlkVec.clear();
 
     /**
@@ -6751,19 +6752,30 @@ matrixBlocksStart: BLOCKSSTART
 {
     osglData->tempC = new MatrixBlocks();
     osglData->mtxConstructorVec.push_back((MatrixBlocks*)osglData->tempC);
+    osglData->mtxBlocksVec.push_back((MatrixBlocks*)osglData->tempC);
     osglData->numberOfBlocksPresent = false;
 };
 
 matrixBlocksAttributes: osglNumberOfBlocksATT
 {
     ((MatrixBlocks*)osglData->tempC)->numberOfBlocks    = osglData->numberOfBlocks;
-    ((MatrixBlocks*)osglData->tempC)->inumberOfChildren = osglData->numberOfBlocks;
-    ((MatrixBlocks*)osglData->tempC)->m_mChildren       = new MatrixNode*[osglData->numberOfBlocks];
+    ((MatrixBlocks*)osglData->tempC)->inumberOfChildren = 0;
 };
 
 matrixBlocksContent: GREATERTHAN colOffsets rowOffsets blockList matrixBlocksEnd;
 
-matrixBlocksEnd: BLOCKSEND;
+matrixBlocksEnd: BLOCKSEND
+{
+    if ( ((MatrixBlocks*)osglData->mtxBlocksVec.back())->inumberOfChildren != 
+         ((MatrixBlocks*)osglData->mtxBlocksVec.back())->numberOfBlocks )
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, 
+            "Number of blocks does not agree with attribute value numberOfBlocks");
+
+    ((MatrixBlocks*)osglData->mtxBlocksVec.back())->m_mChildren
+        = new MatrixNode*[((MatrixBlocks*)osglData->mtxBlocksVec.back())->numberOfBlocks];
+    osglData->mtxBlocksVec.pop_back();
+};
+
 
 colOffsets: colOffsetsStart colOffsetsNumberOfElAttribute colOffsetsContent
 {
@@ -6827,7 +6839,10 @@ rowOffsetsLaden: GREATERTHAN rowOffsetsBody ROWOFFSETSEND;
 
 rowOffsetsBody:  osglIntArrayData;
 
-blockList: | blockList matrixBlock;
+blockList: | blockList matrixBlock
+{
+    ((MatrixBlocks*)osglData->mtxBlocksVec.back())->inumberOfChildren++;
+};
 
 matrixBlock: matrixBlockStart matrixBlockAttributes matrixBlockContent
 {

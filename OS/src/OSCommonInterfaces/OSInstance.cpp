@@ -50,21 +50,12 @@ OSInstance::OSInstance():
     m_iNumberOfSemiContinuousVariables( 0),
     m_iNumberOfSemiIntegerVariables( 0),
     m_iNumberOfStringVariables( 0),
-    m_iNumberOfQuadraticRowIndexes( 0),
-    m_bQuadraticRowIndexesProcessed( false),
-    m_miQuadRowIndexes( NULL),
-    m_iNumberOfNonlinearExpressionTreeIndexes( 0),
-    m_bNonlinearExpressionTreeIndexesProcessed( false),
-    m_miNonlinearExpressionTreeIndexes( NULL),
-    m_iNumberOfNonlinearExpressionTreeModIndexes( 0),
-    m_bNonlinearExpressionTreeModIndexesProcessed( false),
-    m_miNonlinearExpressionTreeModIndexes( NULL),
     m_msVariableNames(NULL),
-    //m_mdVariableInitialValues(NULL), -- deprecated
-    //m_msVariableInitialStringValues(NULL), -- deprecated
     m_mcVariableTypes(NULL),
     m_mdVariableLowerBounds(NULL),
     m_mdVariableUpperBounds(NULL),
+    //m_mdVariableInitialValues(NULL), -- deprecated
+    //m_msVariableInitialStringValues(NULL), -- deprecated
     m_bProcessObjectives(false),
     m_iObjectiveNumber(-1),
     m_iObjectiveNumberNonlinear( 0),
@@ -87,11 +78,28 @@ OSInstance::OSInstance():
     m_bProcessLinearConstraintCoefficients(false),
     m_iLinearConstraintCoefficientNumber(-1),
     m_bColumnMajor(true),
-    m_binitForAlgDiff( false),
     m_linearConstraintCoefficientsInColumnMajor(NULL),
     m_linearConstraintCoefficientsInRowMajor(NULL),
+    m_iNumberOfQuadraticRowIndexes( 0),
+    m_bQuadraticRowIndexesProcessed(false),
+    m_miQuadRowIndexes( NULL),
     m_bProcessQuadraticTerms(false),
     m_iQuadraticTermNumber(-1),
+    m_quadraticTerms( NULL),
+    m_bQTermsAdded( false),
+    m_iNumberOfNonlinearExpressionTreeIndexes( 0),
+    m_bNonlinearExpressionTreeIndexesProcessed( false),
+    m_miNonlinearExpressionTreeIndexes( NULL),
+    m_iNumberOfNonlinearExpressionTreeModIndexes( 0),
+    m_bNonlinearExpressionTreeModIndexesProcessed( false),
+    m_miNonlinearExpressionTreeModIndexes( NULL),
+    m_binitForAlgDiff( false),
+    m_iNumberOfNonlinearVariables( 0),
+    m_bProcessNonlinearExpressions( false),
+    m_iNonlinearExpressionNumber( -1),
+    m_miNonlinearExpressionIndexes( NULL),
+    m_bProcessExpressionTrees( false),
+    m_bProcessExpressionTreesMod( false),
     m_mdConstraintFunctionValues( NULL),
     m_mdObjectiveFunctionValues( NULL),
     m_iJacValueSize( 0),
@@ -101,14 +109,6 @@ OSInstance::OSInstance():
     m_miJacNumConTerms( NULL),
     m_sparseJacMatrix( NULL),
     m_iHighestTaylorCoeffOrder(-1),
-    m_quadraticTerms( NULL),
-    m_bQTermsAdded( false),
-    m_iNumberOfNonlinearVariables( 0),
-    m_bProcessNonlinearExpressions( false),
-    m_iNonlinearExpressionNumber( -1),
-    m_miNonlinearExpressionIndexes( NULL),
-    m_bProcessExpressionTrees( false),
-    m_bProcessExpressionTreesMod( false),
     m_LagrangianExpTree(NULL),
     m_bLagrangianExpTreeCreated( false),
     m_LagrangianSparseHessian( NULL),
@@ -123,17 +123,15 @@ OSInstance::OSInstance():
     m_bSparseJacobianCalculated( false),
     m_iHighestOrderEvaluated( -1),
     m_mmdObjGradient( NULL),
-
     m_bProcessMatrices( false),
     m_iMatrixNumber (-1),
     m_miMatrixSymmetry(NULL),
     m_miMatrixType(NULL),
-//    m_miMatrixNumberOfBlocks(NULL),
     m_miMatrixNumberOfColumns(NULL),
     m_miMatrixNumberOfRows(NULL),
-//    m_miMatrixNumberOfValues(NULL),
     m_msMatrixNames(NULL),
     m_mMatrix(NULL),
+
 //    m_mExpandedMatricesInColumnMajor(NULL),
 //    m_mExpandedMatricesInRowMajor(NULL),
 //    m_mMatrixBlocksInColumnMajor(NULL),
@@ -149,6 +147,7 @@ OSInstance::OSInstance():
     m_bProcessTimeInterval( false),
     m_bFiniteTimeStages( false),
     m_iNumberOfTimeStages(-1),
+    m_sTimeDomainFormat(""),
     m_msTimeDomainStageNames(NULL),
     m_miTimeDomainStageVariableNumber(NULL),
     m_mmiTimeDomainStageVarList(NULL),
@@ -420,14 +419,10 @@ OSInstance::~OSInstance()
         m_miMatrixSymmetry = NULL;
         if (m_miMatrixType != NULL) delete[] m_miMatrixType;
         m_miMatrixType = NULL;
-//        if (m_miMatrixNumberOfBlocks != NULL) delete[] m_miMatrixNumberOfBlocks;
-//        m_miMatrixNumberOfBlocks = NULL;
         if (m_miMatrixNumberOfColumns != NULL) delete[] m_miMatrixNumberOfColumns;
         m_miMatrixNumberOfColumns = NULL;
         if (m_miMatrixNumberOfRows != NULL) delete[] m_miMatrixNumberOfRows;
         m_miMatrixNumberOfRows = NULL;
-//        if (m_miMatrixNumberOfValues != NULL) delete[] m_miMatrixNumberOfValues;
-//        m_miMatrixNumberOfValues = NULL;
         if (m_msMatrixNames != NULL) delete[] m_msMatrixNames;
         m_msMatrixNames = NULL;
 
@@ -3338,10 +3333,8 @@ bool OSInstance::processMatrices()
                 //allocate space
                 m_miMatrixType = new ENUM_MATRIX_TYPE[n];
                 m_miMatrixSymmetry = new ENUM_MATRIX_SYMMETRY[n];
-//                m_miMatrixNumberOfBlocks = new int[n];
                 m_miMatrixNumberOfColumns = new int[n];
                 m_miMatrixNumberOfRows = new int[n];
-//                m_miMatrixNumberOfValues = new int[n];
                 m_msMatrixNames = new std::string[n];
                 m_mMatrix = new OSMatrix*[n];
 //                m_mExpandedMatricesInColumnMajor = new GeneralSparseMatrix*[n];
@@ -4116,6 +4109,7 @@ std::map<int, MatrixExpressionTree*> OSInstance::getAllMatrixExpressionTrees()
     std::map<int, int>::iterator pos;
     OSnLNodePlus *nlNodePlus;
     MatrixExpressionTree *expTree;
+
 
     m_iObjectiveNumberNonlinear = 0;
     m_iConstraintNumberNonlinear = 0;
@@ -5784,7 +5778,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool new_x)
             // be careful, loop over only the constant terms in sparseJacMatrix
             i = m_sparseJacMatrix->starts[ idx];
             j = m_sparseJacMatrix->starts[ idx + 1 ];
-            while ( (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] )
+            while ( (i - m_sparseJacMatrix->starts[ idx]) < m_sparseJacMatrix->conVals[ idx] )
             {
                 dvalue += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
                 i++;
@@ -8413,6 +8407,7 @@ bool Constraint::IsEqual(Constraint *that)
                 return false;
 
             return true;
+
         }
     }
 }//Constraint::IsEqual
