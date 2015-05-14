@@ -28,7 +28,6 @@
 #include <string>
 #include <iostream>
 #include <sstream>  
-#include <algorithm>
  
 #include "OSInstance.h" 
 #include "OSGeneral.h" 
@@ -3826,8 +3825,9 @@ matrixTransformationEnd: TRANSFORMATIONEND
 matrixBlocks: matrixBlocksStart matrixBlocksAttributes matrixBlocksContent
 {
     // clean up temporary arrays without deleting the information
-    osglData->rowOffsets.back() = NULL;
+    osglData->rowOffsets.back() = NULL;  
     osglData->colOffsets.back() = NULL;
+    osglData->osglIntArray = NULL;
     osglData->rowOffsets.pop_back();
     osglData->colOffsets.pop_back();
 };
@@ -3898,7 +3898,7 @@ rowOffsets: rowOffsetsStart rowOffsetsNumberOfElAttribute rowOffsetsContent
     ((MatrixBlocks*)osglData->tempC)->rowOffsets = new IntVector();
     ((MatrixBlocks*)osglData->tempC)->rowOffsets->numberOfEl = osglData->osglNumberOfEl;
     ((MatrixBlocks*)osglData->tempC)->rowOffsets->el = osglData->osglIntArray;
-    osglData->rowOffsets.push_back(osglData->osglIntArray);
+    osglData->rowOffsets.push_back(osglData->osglIntArray); //!!!!!! can this cause a segfault?
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };

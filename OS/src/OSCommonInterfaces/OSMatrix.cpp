@@ -59,8 +59,18 @@ MatrixNode::~MatrixNode()
     {
         for (int i=0; i<inumberOfChildren; i++)
         {
-            if (m_mChildren[i] != NULL) 
+            if (m_mChildren[i] != NULL)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "deleting Matrixnode->m_mChildren[" << i << "] at " 
+                                                              << &m_mChildren[i] << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+                    ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                 delete m_mChildren[i];
+            }
             m_mChildren[i] = NULL;
         }
         delete [] m_mChildren;
@@ -2840,16 +2850,33 @@ MatrixElements::MatrixElements():
 
 MatrixElements::~MatrixElements()
 {
+    ostringstream outStr;
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixElements Destructor");
 #endif
     if (start != NULL)
+    {
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "deleting MatrixElements->start at " << &start << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
         delete start;
-    start = NULL;
+        start = NULL;
+    }
 
     if (indexes != NULL)
+    {
+#ifndef NDEBUG
+        outStr.str("");
+        outStr.clear();
+        outStr << "deleting MatrixElements->indexes at " << &indexes << std::endl;
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
         delete indexes;
-    indexes = NULL;
+        indexes = NULL;
+    }
 }// end of MatrixElements::~MatrixElements()
 
 bool MatrixElements::getRowMajor()
@@ -3969,7 +3996,15 @@ ConstantMatrixElements::ConstantMatrixElements():
 ConstantMatrixElements::~ConstantMatrixElements()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConstantMatrixElements Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+    "Inside the ConstantMatrixElements Destructor");
+
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting ConstantMatrixElements->values at " << &values << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (values != NULL)
         delete values;
@@ -4110,6 +4145,12 @@ ConstantMatrixValues::~ConstantMatrixValues()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConstantMatrixValues Destructor");
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting ConstantMatrixValues->el at " << &el << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (el != NULL)
         delete [] el;
@@ -4186,7 +4227,15 @@ VarReferenceMatrixElements::VarReferenceMatrixElements():
 VarReferenceMatrixElements::~VarReferenceMatrixElements()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the VarReferenceMatrixElements Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the VarReferenceMatrixElements Destructor");
+
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting VarReferenceMatrixElements->values at " << &values << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (values != NULL)
         delete values;
@@ -4329,7 +4378,14 @@ VarReferenceMatrixValues::VarReferenceMatrixValues():
 VarReferenceMatrixValues::~VarReferenceMatrixValues()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the VarReferenceMatrixValues Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the VarReferenceMatrixValues Destructor");
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting VarReferenceMatrixValues->el at " << &el << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (el != NULL)
         delete [] el;
@@ -4407,7 +4463,14 @@ LinearMatrixElements::~LinearMatrixElements()
 {
     std::ostringstream outStr;
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElements Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the LinearMatrixElements Destructor");
+
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting LinearMatrixElements->values at " << &values << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (values != NULL)
         delete values;
@@ -4549,7 +4612,8 @@ LinearMatrixValues::LinearMatrixValues():
     el(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixValues Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the LinearMatrixValues Constructor");
 
 #endif
 }// end of LinearMatrixValues::LinearMatrixValues()
@@ -4558,7 +4622,14 @@ LinearMatrixValues::~LinearMatrixValues()
 {
     std::ostringstream outStr;
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixValues Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the LinearMatrixValues Destructor");
+
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting LinearMatrixValues->el at " << &el << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
 
     if (el != NULL)
@@ -4566,8 +4637,17 @@ LinearMatrixValues::~LinearMatrixValues()
         for (int i=0; i < numberOfEl; i++)
         {
             if (el[i] != NULL)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "deleting LinearMatrixValues->el [" << i << "] at " << &el[i] << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+                   ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                 delete el[i];
-            el[i] = NULL;
+                el[i] = NULL;
+            }
         }
         delete [] el;
         el = NULL;
@@ -4642,7 +4722,8 @@ LinearMatrixElement::LinearMatrixElement():
     varIdx(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElement Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                      ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElement Constructor");
 #endif
 }// end of LinearMatrixElement::LinearMatrixElement()
 
@@ -4650,7 +4731,8 @@ LinearMatrixElement::~LinearMatrixElement()
 {
     std::ostringstream outStr;
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElement Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                      ENUM_OUTPUT_LEVEL_trace, "Inside the LinearMatrixElement Destructor");
     outStr.str("");
     outStr.clear();
     outStr << "NUMBER OF VARIDX = " << numberOfVarIdx << endl;
@@ -4663,7 +4745,7 @@ LinearMatrixElement::~LinearMatrixElement()
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
-            outStr << "DESTROYING VARIDX " << i << endl;
+            outStr << "DESTROYING VARIDX " << i << " at " << &varIdx[i] << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
             if (varIdx[i] != NULL)
@@ -4815,7 +4897,15 @@ GeneralMatrixElements::GeneralMatrixElements():
 GeneralMatrixElements::~GeneralMatrixElements()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixElements Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+        ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixElements Destructor");
+
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting GeneralMatrixElements->values at " << &values << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (values != NULL)
         delete values;
@@ -4951,7 +5041,8 @@ GeneralMatrixValues::~GeneralMatrixValues()
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixValues Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                      ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralMatrixValues Destructor");
     outStr.str("");
     outStr.clear();
     outStr << "NUMBER OF VALUES = " << numberOfEl << endl;
@@ -4962,8 +5053,17 @@ GeneralMatrixValues::~GeneralMatrixValues()
         for (int i=0; i < numberOfEl; i++)
         {
             if (el[i] != NULL)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "deleting ConstantMatrixValues->el [" << i << "] at " << &el[i] << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+                   ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                 delete el[i];
-            el[i] = NULL;
+                el[i] = NULL;
+            }            
         }
     }
     if (el != NULL)
@@ -4974,7 +5074,8 @@ GeneralMatrixValues::~GeneralMatrixValues()
 bool GeneralMatrixValues::IsEqual(GeneralMatrixValues *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralMatrixValues");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+        ENUM_OUTPUT_LEVEL_trace, "Start comparing in GeneralMatrixValues");
 #endif
     if (this == NULL)
     {
@@ -5039,7 +5140,15 @@ ObjReferenceMatrixElements::ObjReferenceMatrixElements():
 ObjReferenceMatrixElements::~ObjReferenceMatrixElements()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjReferenceMatrixElements Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                      ENUM_OUTPUT_LEVEL_trace, "Inside the ObjReferenceMatrixElements Destructor");
+
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting ObjReferenceMatrixElements->values at " << &values << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (values != NULL)
         delete values;
@@ -5108,7 +5217,7 @@ std::string ObjReferenceMatrixElements::getMatrixNodeInXML()
 bool ObjReferenceMatrixElements::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
 {
     return false;
-}// end of ObjReferenceMatrixElements::~alignsOnBlockBoundary()
+}// end of ObjReferenceMatrixElements::alignsOnBlockBoundary()
 
 ObjReferenceMatrixElements* ObjReferenceMatrixElements::cloneMatrixNode()
 {
@@ -5182,7 +5291,15 @@ ObjReferenceMatrixValues::ObjReferenceMatrixValues():
 ObjReferenceMatrixValues::~ObjReferenceMatrixValues()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ObjReferenceMatrixValues Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                      ENUM_OUTPUT_LEVEL_trace, "Inside the ObjReferenceMatrixValues Destructor");
+
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting ObjReferenceMatrixValues->el at " << &el << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (el != NULL)
         delete [] el;
@@ -5258,7 +5375,15 @@ ConReferenceMatrixElements::ConReferenceMatrixElements():
 ConReferenceMatrixElements::~ConReferenceMatrixElements()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ConReferenceMatrixElements Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                      ENUM_OUTPUT_LEVEL_trace, "Inside the ConReferenceMatrixElements Destructor");
+
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting ConReferenceMatrixElements->values at " << &values << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (values != NULL)
         delete values;
@@ -5325,7 +5450,7 @@ std::string ConReferenceMatrixElements::getMatrixNodeInXML()
 bool ConReferenceMatrixElements::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
 {
     return false;
-}// end of ConReferenceMatrixElements::~alignsOnBlockBoundary()
+}// end of ConReferenceMatrixElements::alignsOnBlockBoundary()
 
 ConReferenceMatrixElements* ConReferenceMatrixElements::cloneMatrixNode()
 {
@@ -5407,8 +5532,18 @@ ConReferenceMatrixValues::~ConReferenceMatrixValues()
         for (int i=0; i < numberOfEl; i++)
         {
             if (el[i] != NULL)
+            {
+#ifndef NDEBUG
+                ostringstream outStr;
+                outStr.str("");
+                outStr.clear();
+                outStr << "deleting ConstantMatrixValues->el [" << i << "] at " << &el[i] << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+                   ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                 delete el[i];
-            el[i] = NULL;
+                el[i] = NULL;
+            }
         }
     }
     if (el != NULL)
@@ -5847,10 +5982,23 @@ MatrixBlocks::~MatrixBlocks()
     outStr.clear();
     outStr << "NUMBER OF BLOCKS = " << numberOfBlocks << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting MatrixBlocks->colOffsets at " << &colOffsets << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting MatrixBlocks->rowOffsets at " << &rowOffsets << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
     if (colOffsets != NULL)
         delete colOffsets;
     colOffsets = NULL;
+
     if (rowOffsets != NULL)
         delete rowOffsets;
     rowOffsets = NULL;
@@ -5860,8 +6008,17 @@ MatrixBlocks::~MatrixBlocks()
         for (int i=0; i < numberOfBlocks; i++)
         {
             if (block[i] != NULL)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "deleting MatrixBlocks->block [" << i << "] at " << &block[i] << std::endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+                   ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
                 delete block[i];
-            block[i] = NULL;
+                block[i] = NULL;
+            }
         }
     }
     if (block != NULL)
@@ -5927,7 +6084,7 @@ bool MatrixBlocks::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRow
             break;
         }
     return accumulator;
-}// end of MatrixTransformation::~alignsOnBlockBoundary()
+}// end of MatrixTransformation::alignsOnBlockBoundary()
 
 MatrixBlocks* MatrixBlocks::cloneMatrixNode()
 {
@@ -6120,22 +6277,55 @@ GeneralSparseMatrix::GeneralSparseMatrix(bool isColumnMajor_, int startSize_, in
 GeneralSparseMatrix::~GeneralSparseMatrix()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralSparseMatrix Destructor");
+    ostringstream outStr;
+
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                      ENUM_OUTPUT_LEVEL_trace, "Inside the GeneralSparseMatrix Destructor");
 #endif
     if (b_deleteStartArray)
     {
-        if (starts != NULL) delete [] starts;
-        starts = NULL;
+        if (starts != NULL) 
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "deleting GeneralSparseMatrix->starts at " << &starts << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+                              ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            delete [] starts;
+            starts = NULL;
+        }        
     }
     if (b_deleteIndexArray)
     {
-        if (indexes != NULL) delete [] indexes;
-        indexes = NULL;
+        if (indexes != NULL)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "deleting GeneralSparseMatrix->indexes at " << &indexes << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+               ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            delete [] indexes;
+            indexes = NULL;
+        }
     }
     if (b_deleteValueArray)
     {
-        if (values != NULL) delete values;
-        values = NULL;
+        if (values != NULL) 
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "deleting GeneralSparseMatrix->values at " << &values << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+               ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            delete values;
+            values = NULL;
+        }
     }
 }// end of ~GeneralSparseMatrix
 
@@ -6197,22 +6387,53 @@ ExpandedMatrixBlocks::ExpandedMatrixBlocks(bool isRowMajor_, int startSize, int 
 
 ExpandedMatrixBlocks::~ExpandedMatrixBlocks()
 {
+    std::ostringstream outStr;
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the ExpandedMatrixBlocks Destructor");
 #endif
     if (bDeleteArrays)
     {
-        if (blockRows != NULL) delete [] blockRows;
-        blockRows = NULL;
-        if (blockColumns != NULL) delete [] blockColumns;
-        blockColumns = NULL;
+        if (blockRows != NULL) 
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "deleting ExpandedMatrixBlocks->blockRows at " << &blockRows << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+               ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            delete [] blockRows;
+            blockRows = NULL;
+        }
+        if (blockColumns != NULL)
+        {
+#ifndef NDEBUG
+            outStr.str("");
+            outStr.clear();
+            outStr << "deleting ExpandedMatrixBlocks->blockColumns at " << &blockColumns << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+               ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+            delete [] blockColumns;
+            blockColumns = NULL;
+        }
         if (blockNumber > 0 && blocks != NULL)
         {
             for (int i=0; i < blockNumber; i++)
             {
                 if (blocks[i] != NULL)
+                {
+#ifndef NDEBUG
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "deleting ExpandedMatrixBlocks->blocks[" << i << "] at " 
+                           << &blocks[i] << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+                        ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif          
                     delete blocks[i];
-                blocks[i] = NULL;
+                    blocks[i] = NULL;
+                }
             }
         }
         if (blocks != NULL) delete [] blocks;
