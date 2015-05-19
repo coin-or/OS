@@ -598,55 +598,50 @@ enum ENUM_PATHPAIR
  */
 enum ENUM_MATRIX_TYPE
 {
-    ENUM_MATRIX_TYPE_zero = 1,        // matrix is empty
+    ENUM_MATRIX_TYPE_empty = 1,         // matrix has no elements (i.e., zero matrix)
 
-    ENUM_MATRIX_TYPE_constant = 10,   // matrix elements contain constant values
-    ENUM_MATRIX_TYPE_varref,          // matrix elements contain indexes of variables in the core
-    ENUM_MATRIX_TYPE_linear,          // matrix contains linear expressions
-    ENUM_MATRIX_TYPE_quadratic,       // matrix contains quadratic expressions
-    ENUM_MATRIX_TYPE_general,         // matrix contains general nonlinear expressions
+    ENUM_MATRIX_TYPE_constant = 10,     // matrix elements contain constant values
+    ENUM_MATRIX_TYPE_varReference,      // matrix elements contain indexes of variables in the core
+    ENUM_MATRIX_TYPE_linear,            // matrix contains linear expressions
+    ENUM_MATRIX_TYPE_quadratic,         // matrix contains quadratic expressions
+    ENUM_MATRIX_TYPE_general,           // matrix contains general nonlinear expressions
 
-    ENUM_MATRIX_TYPE_conref = 20,     // matrix elements contain indexes of objectives in the core
-    ENUM_MATRIX_TYPE_objref,          // matrix elements contain indexes of constraints in the core
-    ENUM_MATRIX_TYPE_mixedref,        // mixed reference to objectives and constraints
-
-    ENUM_MATRIX_TYPE_jumbled = 30,    // mixture of matrix elements that is unsuited for further use
+    ENUM_MATRIX_TYPE_objReference = 20, // matrix elements contain indexes of constraints in the core
+    ENUM_MATRIX_TYPE_conReference,      // matrix elements contain indexes of objectives in the core
+    ENUM_MATRIX_TYPE_mixedRowReference, // mixed reference to objectives and constraints
 
     ENUM_MATRIX_TYPE_unknown = 99
-
 };
 
 inline int returnMatrixType(std::string type)
 {
-    if (type == "zero"      ) return ENUM_MATRIX_TYPE_zero;
-    if (type == "constant"  ) return ENUM_MATRIX_TYPE_constant;
-    if (type == "varref"    ) return ENUM_MATRIX_TYPE_varref;
-    if (type == "linear"    ) return ENUM_MATRIX_TYPE_linear;
-    if (type == "quadratic" ) return ENUM_MATRIX_TYPE_quadratic;
-    if (type == "general"   ) return ENUM_MATRIX_TYPE_general;
+    if (type == "empty"            ) return ENUM_MATRIX_TYPE_empty;
+    if (type == "constant"         ) return ENUM_MATRIX_TYPE_constant;
+    if (type == "varReference"     ) return ENUM_MATRIX_TYPE_varReference;
+    if (type == "linear"           ) return ENUM_MATRIX_TYPE_linear;
+    if (type == "quadratic"        ) return ENUM_MATRIX_TYPE_quadratic;
+    if (type == "general"          ) return ENUM_MATRIX_TYPE_general;
 
-    if (type == "objref"    ) return ENUM_MATRIX_TYPE_objref;
-    if (type == "conref"    ) return ENUM_MATRIX_TYPE_conref;
-    if (type == "mixedref"  ) return ENUM_MATRIX_TYPE_mixedref;
+    if (type == "objReference"     ) return ENUM_MATRIX_TYPE_objReference;
+    if (type == "conReference"     ) return ENUM_MATRIX_TYPE_conReference;
+    if (type == "mixedRowReference") return ENUM_MATRIX_TYPE_mixedRowReference;
 
-    if (type == "jumbled"   ) return ENUM_MATRIX_TYPE_jumbled;
-    if (type == "unknown"   ) return ENUM_MATRIX_TYPE_unknown;
+    if (type == "unknown"          ) return ENUM_MATRIX_TYPE_unknown;
     return 0;
 }//returnMatrixType
 
 inline std::string returnMatrixTypeString(ENUM_MATRIX_TYPE type)
 {
-    if (type == ENUM_MATRIX_TYPE_zero)      return "zero";
-    if (type == ENUM_MATRIX_TYPE_constant)  return "constant";
-    if (type == ENUM_MATRIX_TYPE_varref)    return "varref";
-    if (type == ENUM_MATRIX_TYPE_linear)    return "linear";
-    if (type == ENUM_MATRIX_TYPE_quadratic) return "quadratic";
-    if (type == ENUM_MATRIX_TYPE_general)   return "general";
-    if (type == ENUM_MATRIX_TYPE_objref)    return "objref";
-    if (type == ENUM_MATRIX_TYPE_conref)    return "conref";
-    if (type == ENUM_MATRIX_TYPE_mixedref)  return "mixedref";
-//    if (type == ENUM_MATRIX_TYPE_jumbled)   return "jumbled";
-    if (type == ENUM_MATRIX_TYPE_unknown)   return "unknown";
+    if (type == ENUM_MATRIX_TYPE_empty)             return "empty";
+    if (type == ENUM_MATRIX_TYPE_constant)          return "constant";
+    if (type == ENUM_MATRIX_TYPE_varReference)      return "varReference";
+    if (type == ENUM_MATRIX_TYPE_linear)            return "linear";
+    if (type == ENUM_MATRIX_TYPE_quadratic)         return "quadratic";
+    if (type == ENUM_MATRIX_TYPE_general)           return "general";
+    if (type == ENUM_MATRIX_TYPE_objReference)      return "objReference";
+    if (type == ENUM_MATRIX_TYPE_conReference)      return "conReference";
+    if (type == ENUM_MATRIX_TYPE_mixedRowReference) return "mixedRowReference";
+    if (type == ENUM_MATRIX_TYPE_unknown)           return "unknown";
     return "unknown";
 }//returnMatrixTypeString
 
@@ -669,28 +664,28 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
 
     if (type1 == ENUM_MATRIX_TYPE_unknown) return type2;
     if (type2 == ENUM_MATRIX_TYPE_unknown) return type1;
-    if (type1 == ENUM_MATRIX_TYPE_zero) return type2;
-    if (type2 == ENUM_MATRIX_TYPE_zero) return type1;
+    if (type1 == ENUM_MATRIX_TYPE_empty) return type2;
+    if (type2 == ENUM_MATRIX_TYPE_empty) return type1;
 
     // column and objective references can be mixed  
-    if (type1 >= ENUM_MATRIX_TYPE_conref) // row reference (objective or constraint)
+    if (type1 >= ENUM_MATRIX_TYPE_conReference) // row reference (objective or constraint)
     {
-        if (type2 >= ENUM_MATRIX_TYPE_conref)
-            return ENUM_MATRIX_TYPE_mixedref;
+        if (type2 >= ENUM_MATRIX_TYPE_conReference)
+            return ENUM_MATRIX_TYPE_mixedRowReference;
         else
             return ENUM_MATRIX_TYPE_general;
     }                                  
-    else // linear or nonlinear expression   
+    else // type1 is a linear or nonlinear expression   
     {
-        if (type2 >= ENUM_MATRIX_TYPE_conref) return ENUM_MATRIX_TYPE_general;  
-        else // varref must be treated like linear if it is mixed with any other remaining type
+        if (type2 >= ENUM_MATRIX_TYPE_conReference) return ENUM_MATRIX_TYPE_general;  
+        else // varReference must be treated like linear if it is mixed with any other remaining type
             if (type1 < type2)
-                if (type2 == ENUM_MATRIX_TYPE_varref)
+                if (type2 == ENUM_MATRIX_TYPE_varReference)
                     return ENUM_MATRIX_TYPE_linear;
                  else
                     return type2;
             else 
-                if (type1 == ENUM_MATRIX_TYPE_varref)
+                if (type1 == ENUM_MATRIX_TYPE_varReference)
                     return ENUM_MATRIX_TYPE_linear;
                  else
                     return type1;

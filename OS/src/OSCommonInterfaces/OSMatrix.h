@@ -265,8 +265,8 @@ public:
      */
     IntVector *start;
 
-    /** The indices of the (nonzero) elements */
-    IntVector *indexes;
+    /** The index array of the (nonzero) elements */
+    IntVector *index;
 
 
     MatrixElements();
@@ -321,7 +321,7 @@ public:
 class MatrixElementValues
 {
 public:
-    /** each type of values is stored as an array named "el". 
+    /** each type of value is stored as an array named "el". 
      *  numberOfEl records the size of this array.
      */
     int numberOfEl;
@@ -557,9 +557,8 @@ public:
 
 
 /*! \class VarReferenceMatrixValues
- * \brief an abstract class to help represent the elements in a MatrixType object
- * From this we derive concrete classes that are used to store specific types of values,
- * such as constant values, variable references, general nonlinear expressions, etc.
+ * \brief A concrete class that is used to store a specific type of matrix values,
+ * references to variable indexes defined in the core section.
  */
 class VarReferenceMatrixValues : public MatrixElementValues
 {
@@ -750,8 +749,8 @@ public:
 class ConstantMatrixElements: public MatrixElements
 {
 public:
-    /** The values of the (nonzero) constant elements */
-    ConstantMatrixValues *values;
+    /** The value array of the (nonzero) constant elements */
+    ConstantMatrixValues *value;
 
     ConstantMatrixElements();
     ~ConstantMatrixElements();
@@ -837,7 +836,7 @@ class VarReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The variable references (indexes of core variables) of the elements */
-    VarReferenceMatrixValues *values;
+    VarReferenceMatrixValues *value;
 
     VarReferenceMatrixElements();
     ~VarReferenceMatrixElements();
@@ -923,7 +922,7 @@ public:
      *  a_0 + a_1 x_{i_1} * a_2 x_{i_2} + ...
      *  Each term in this sum is stored as a separate LinearMatrixValues object
      */
-    LinearMatrixValues *values;     
+    LinearMatrixValues *value;     
 
     LinearMatrixElements();
     ~LinearMatrixElements();
@@ -1009,7 +1008,7 @@ public:
     /**
      *  The values are general nonlinear expressions 
      */
-    GeneralMatrixValues *values;
+    GeneralMatrixValues *value;
 
     GeneralMatrixElements();
     ~GeneralMatrixElements();
@@ -1093,7 +1092,7 @@ class ObjReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The objective references (indexes of core objectives) of the elements */
-    ObjReferenceMatrixValues *values;
+    ObjReferenceMatrixValues *value;
 
     ObjReferenceMatrixElements();
     ~ObjReferenceMatrixElements();
@@ -1179,7 +1178,7 @@ class ConReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The constraint references (indexes of core constraints and value types) of the elements */
-    ConReferenceMatrixValues *values;
+    ConReferenceMatrixValues *value;
 
     ConReferenceMatrixElements();
     ~ConReferenceMatrixElements();
@@ -1273,7 +1272,7 @@ public:
      *  Row reference elements are not part of the OSiL schema; they only exist 
      *  in the consolidated form of a matrix (where they are the ONLY constructor).
      */  
-    ConReferenceMatrixValues *values;
+    ConReferenceMatrixValues *value;
 
     RowReferenceMatrixElements();
     ~RowReferenceMatrixElements();
@@ -1454,16 +1453,16 @@ public:
      *  An array listing the leftmost column of each block within the larger matrix
      *  It is assumed that the blocks are neatly "stacked"
      */
-    IntVector *colOffsets;
+    IntVector *colOffset;
 
     /**
      *  An array listing the top row of each block within the larger matrix
      */
-    IntVector *rowOffsets;
+    IntVector *rowOffset;
 
     /** 
      *  This integer gives the number of blocks for which values are provided
-     *  Due to block-sparsity, this could be less than card(colOffsets)*card(rowOffsets)
+     *  Due to block-sparsity, this could be less than card(colOffset)*card(rowOffset)
      */
     int numberOfBlocks;
 
@@ -1666,19 +1665,19 @@ class GeneralSparseMatrix
 public:
 
     /**
-     * b_deleteStartArray is true if we delete the starts array
+     * b_deleteStartArray is true if we delete the start array
      * in garbage collection --- set to true by default
      */
     bool b_deleteStartArray;
 
     /**
-     * b_deleteIndexArray is true if we delete the indexes array
+     * b_deleteIndexArray is true if we delete the index array
      * in garbage collection --- set to true by default
      */
     bool b_deleteIndexArray;
 
     /**
-     * b_deleteValueArray is true if we delete the values array
+     * b_deleteValueArray is true if we delete the value array
      * in garbage collection --- set to true by default
      */
     bool b_deleteValueArray;
@@ -1701,39 +1700,38 @@ public:
     int startSize;
 
     /**
-     * valueSize is the dimension of the indexes and values arrays
+     * valueSize is the dimension of the index and value arrays
      */
     int valueSize;
 
     /**
-     * starts holds an integer array of start elements in the matrix,
+     * start holds an integer array of start elements in the matrix,
      * which points to the start of a column (row) of nonzero elements.
      */
-    int* starts;
+    int* start;
 
     /**
-     * indexes holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
+     * index holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
      * If the matrix is stored by column (row), rowIdx (colIdx) is the array of row (column) indices.
      */
-    int* indexes;
+    int* index;
 
     /**
-     * vType holds the type of values found in the values array.
+     * vType holds the type of values found in the value array.
      * @remark See OSParameters.h for a list of possible types
      */
     ENUM_MATRIX_TYPE vType;
 
     /**
-     * values holds a general array of value elements in the matrix,
+     * value holds a general array of value elements in the matrix,
      * which could be constants, linear expressions, general nonlinear expressions,
      * variable, constraint or objective references, etc. If mixed types are
      * encountered (e.g., constant and nonlinear expression), they are converted 
      * to the most general form found.
      */
-    MatrixElementValues* values;
+    MatrixElementValues* value;
 
     /**
-     *
      * Default constructor.
      */
     GeneralSparseMatrix();
@@ -1804,23 +1802,23 @@ public:
     int blockNumber;
 
     /** 
-     * rowOffsets gives the row offsets of the block decomposition
+     * rowOffset gives the row offsets of the block decomposition
      * It does not have to correspond to the row offsets in the matrix's 
      * <blocks> element (indeed there does not have to be such an element
      * at all, or there may be several, possibly incompatible).
      */
-    int* rowOffsets;
+    int* rowOffset;
 
     /** 
-     * colOffsets gives the column offsets of the block decomposition
+     * colOffset gives the column offsets of the block decomposition
      * It does not have to correspond to the column offsets in the matrix's 
      * <blocks> element (indeed there does not have to be such an element
      * at all, or there may be several, possibly incompatible).
      */
-    int* colOffsets;
+    int* colOffset;
 
     /**
-     * These two parameters give the size of the rowOffsets and colOffsets arrays, respectively
+     * These two parameters give the size of the rowOffset and colOffset arrays, respectively
      */
     int rowOffsetSize;
     int colOffsetSize;
@@ -2085,10 +2083,10 @@ public:
 
     /**
      *  A method to process a matrixType into a specific block structure.
-     *  @param rowOffsets defines a partition of the matrix rows into the blocks
-     *  @param rowOffsetSize gives the number of elements in the rowOffsets array 
-     *  @param colOffsets defines a partition of the matrix columns into the blocks
-     *  @param colOffsetSize gives the number of elements in the colOffsets array 
+     *  @param rowOffset defines a partition of the matrix rows into the blocks
+     *  @param rowOffsetSize gives the number of elements in the rowOffset array 
+     *  @param colOffset defines a partition of the matrix columns into the blocks
+     *  @param colOffsetSize gives the number of elements in the colOffset array 
      *  @param rowMajor controls whether the blocks are stored by row or by column
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
@@ -2099,7 +2097,7 @@ public:
      *          It is possible (though probably not advisable) to maintain multiple
      *          decompositions with different row and column partitions
      */
-     virtual bool processBlocks(int* rowOffsets, int rowOffsetSize, int* colOffsets,
+     virtual bool processBlocks(int* rowOffset, int rowOffsetSize, int* colOffset,
                                 int colOffsetSize, bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
     /** 
@@ -2232,8 +2230,8 @@ public:
 
     /**
      *  A method to process a matrixType into a specific block structure.
-     *  @param rowOffsets defines a partition of the matrix rows into the blocks
-     *  @param colOffsets defines a partition of the matrix columns into the blocks
+     *  @param rowOffset defines a partition of the matrix rows into the blocks
+     *  @param colOffset defines a partition of the matrix columns into the blocks
      *  @param rowMajor controls whether the blocks are stored by row or by column
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
@@ -2244,7 +2242,7 @@ public:
      *          It is possible (though probably not advisable) to maintain multiple
      *          decompositions with different row and column partitions
      */
-     //virtual bool processBlocks(int* rowOffsets, int* colOffsets,
+     //virtual bool processBlocks(int* rowOffset, int* colOffset,
      //                                 bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
     /** 

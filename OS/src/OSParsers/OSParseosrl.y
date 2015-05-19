@@ -246,7 +246,8 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %token ELEMENTSSTART ELEMENTSEND
 %token CONSTANTELEMENTSSTART CONSTANTELEMENTSEND STARTVECTORSTART STARTVECTOREND
-%token NONZEROSSTART NONZEROSEND INDEXESSTART INDEXESEND VALUESSTART VALUESEND
+%token NONZEROSSTART NONZEROSEND INDEXSTART INDEXEND VALUESTART VALUEEND
+%token INDEXESSTART INDEXESEND VALUESSTART VALUESEND
 %token VARREFERENCEELEMENTSSTART VARREFERENCEELEMENTSEND
 %token LINEARELEMENTSSTART LINEARELEMENTSEND
 %token GENERALELEMENTSSTART GENERALELEMENTSEND
@@ -256,7 +257,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %token TRANSFORMATIONSTART TRANSFORMATIONEND
 
-%token COLOFFSETSSTART COLOFFSETSEND ROWOFFSETSSTART ROWOFFSETSEND
+%token COLOFFSETSTART COLOFFSETEND ROWOFFSETSTART ROWOFFSETEND
 
 %token EMPTYROWMAJORATT ROWMAJORATT BLOCKROWIDXATT BLOCKCOLIDXATT
 
@@ -4890,21 +4891,25 @@ constantElementsAtt:
     }
 ;
 
-constantElementsContent: constantElementsStartVector constantElementsNonzeros CONSTANTELEMENTSEND;
+constantElementsContent: matrixElementsStartVector constantElementsNonzeros CONSTANTELEMENTSEND;
 
-constantElementsNonzeros: | constantElementsIndexes constantElementsValues;
+constantElementsNonzeros: | matrixElementsIndexVector constantElementsValues;
 
-constantElementsStartVector: constantElementsStartVectorStart constantElementsStartVectorContent
+/**
+ *  All types of elements have a start vector and an index vector. 
+ *  Parsing these elements can therefore be shared among them.
+ */
+matrixElementsStartVector: matrixElementsStartVectorStart matrixElementsStartVectorContent
 {
-    ((ConstantMatrixElements*)osglData->tempC)->start = new IntVector();
-    ((ConstantMatrixElements*)osglData->tempC)->start->numberOfEl = osglData->osglNumberOfEl;
-    ((ConstantMatrixElements*)osglData->tempC)->start->el = osglData->osglIntArray;
+    ((MatrixElements*)osglData->tempC)->start = new IntVector();
+    ((MatrixElements*)osglData->tempC)->start->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixElements*)osglData->tempC)->start->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
 
-constantElementsStartVectorStart: STARTVECTORSTART
+matrixElementsStartVectorStart: STARTVECTORSTART
 {
     if (osglData->rowMajor == false)
         osglData->osglNumberOfEl = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns + 1;
@@ -4914,66 +4919,69 @@ constantElementsStartVectorStart: STARTVECTORSTART
     osglData->osglCounter = 0;
 };
 
-constantElementsStartVectorContent: constantElementsStartVectorEmpty | constantElementsStartVectorLaden;
+matrixElementsStartVectorContent: matrixElementsStartVectorEmpty | matrixElementsStartVectorLaden;
 
-constantElementsStartVectorEmpty: ENDOFELEMENT;
+matrixElementsStartVectorEmpty: ENDOFELEMENT;
 
-constantElementsStartVectorLaden: GREATERTHAN constantElementsStartVectorBody STARTVECTOREND;
+matrixElementsStartVectorLaden: GREATERTHAN matrixElementsStartVectorBody STARTVECTOREND;
 
-constantElementsStartVectorBody: osglIntArrayData;
+matrixElementsStartVectorBody: osglIntArrayData;
 
 
-constantElementsIndexes: constantElementsIndexesStart constantElementsIndexesContent
+matrixElementsIndexVector: matrixElementsIndexStart matrixElementsIndexContent
 {
-    ((ConstantMatrixElements*)osglData->tempC)->indexes = new IntVector();
-    ((ConstantMatrixElements*)osglData->tempC)->indexes->numberOfEl
-        = ((ConstantMatrixElements*)osglData->tempC)->numberOfValues;
-    ((ConstantMatrixElements*)osglData->tempC)->indexes->el = osglData->osglIntArray;
+    ((MatrixElements*)osglData->tempC)->index = new IntVector();
+    ((MatrixElements*)osglData->tempC)->index->numberOfEl
+        = ((MatrixElements*)osglData->tempC)->numberOfValues;
+    ((MatrixElements*)osglData->tempC)->index->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
 
-constantElementsIndexesStart: INDEXESSTART
+matrixElementsIndexStart: INDEXSTART
 {
-    osglData->osglNumberOfEl = ((ConstantMatrixElements*)osglData->tempC)->numberOfValues;
+    osglData->osglNumberOfEl = ((MatrixElements*)osglData->tempC)->numberOfValues;
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
     osglData->osglCounter = 0;
 };
 
-constantElementsIndexesContent: constantElementsIndexesEmpty | constantElementsIndexesLaden;
+matrixElementsIndexContent: matrixElementsIndexEmpty | matrixElementsIndexLaden;
 
-constantElementsIndexesEmpty: ENDOFELEMENT;
+matrixElementsIndexEmpty: ENDOFELEMENT;
 
-constantElementsIndexesLaden: GREATERTHAN constantElementsIndexesBody INDEXESEND;
+matrixElementsIndexLaden: GREATERTHAN matrixElementsIndexBody INDEXEND;
 
-constantElementsIndexesBody: osglIntArrayData;
+matrixElementsIndexBody: osglIntArrayData;
 
 
-constantElementsValues: constantElementsValuesStart constantElementsValuesContent
+/**
+ *  The <value> element is specific to each type
+ */
+constantElementsValues: constantElementsValueStart constantElementsValueContent
 {
-    ((ConstantMatrixElements*)osglData->tempC)->values = new ConstantMatrixValues();
-    ((ConstantMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
-    ((ConstantMatrixElements*)osglData->tempC)->values->el = osglData->osglDblArray;
+    ((ConstantMatrixElements*)osglData->tempC)->value = new ConstantMatrixValues();
+    ((ConstantMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->osglNumberOfEl;
+    ((ConstantMatrixElements*)osglData->tempC)->value->el = osglData->osglDblArray;
     osglData->osglDblArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
 
-constantElementsValuesStart: VALUESSTART
+constantElementsValueStart: VALUESTART
 {
     osglData->osglNumberOfEl = ((ConstantMatrixElements*)osglData->tempC)->numberOfValues;
     osglData->osglDblArray = new double[osglData->osglNumberOfEl];
     osglData->osglCounter = 0;
 };
 
-constantElementsValuesContent: constantElementsValuesEmpty | constantElementsValuesLaden;
+constantElementsValueContent: constantElementsValueEmpty | constantElementsValueLaden;
 
-constantElementsValuesEmpty: ENDOFELEMENT;
+constantElementsValueEmpty: ENDOFELEMENT;
 
-constantElementsValuesLaden: GREATERTHAN constantElementsValuesBody VALUESEND;
+constantElementsValueLaden: GREATERTHAN constantElementsValueBody VALUEEND;
 
-constantElementsValuesBody: osglDblArrayData;
+constantElementsValueBody: osglDblArrayData;
 
 
 varReferenceElements: varReferenceElementsStart varReferenceElementsAttributes GREATERTHAN varReferenceElementsContent; 
@@ -5000,7 +5008,7 @@ varReferenceElementsAtt:
     {
         ((VarReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
         if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_varref;
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_varReference;
     }
   | osglRowMajorATT
     {
@@ -5008,10 +5016,11 @@ varReferenceElementsAtt:
     }
 ;
 
-varReferenceElementsContent: varReferenceElementsStartVector varReferenceElementsNonzeros VARREFERENCEELEMENTSEND;
+varReferenceElementsContent: matrixElementsStartVector varReferenceElementsNonzeros VARREFERENCEELEMENTSEND;
 
-varReferenceElementsNonzeros: | varReferenceElementsIndexes varReferenceElementsValues;
+varReferenceElementsNonzeros: | matrixElementsIndexVector varReferenceElementsValues;
 
+/*
 varReferenceElementsStartVector: varReferenceElementsStartVectorStart varReferenceElementsStartVectorContent
 {
     ((VarReferenceMatrixElements*)osglData->tempC)->start = new IntVector();
@@ -5064,19 +5073,19 @@ varReferenceElementsIndexesEmpty: ENDOFELEMENT;
 varReferenceElementsIndexesLaden: GREATERTHAN varReferenceElementsIndexesBody INDEXESEND;
 
 varReferenceElementsIndexesBody: osglIntArrayData;
-
+*/
 
 varReferenceElementsValues: varReferenceElementsValuesStart varReferenceElementsValuesContent
 {
-    ((VarReferenceMatrixElements*)osglData->tempC)->values = new VarReferenceMatrixValues();
-    ((VarReferenceMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
-    ((VarReferenceMatrixElements*)osglData->tempC)->values->el = osglData->osglIntArray;
+    ((VarReferenceMatrixElements*)osglData->tempC)->value = new VarReferenceMatrixValues();
+    ((VarReferenceMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->osglNumberOfEl;
+    ((VarReferenceMatrixElements*)osglData->tempC)->value->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
 
-varReferenceElementsValuesStart: VALUESSTART
+varReferenceElementsValuesStart: VALUESTART
 {
     osglData->osglNumberOfEl = ((VarReferenceMatrixElements*)osglData->tempC)->numberOfValues;
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
@@ -5087,7 +5096,7 @@ varReferenceElementsValuesContent: varReferenceElementsValuesEmpty | varReferenc
 
 varReferenceElementsValuesEmpty: ENDOFELEMENT;
 
-varReferenceElementsValuesLaden: GREATERTHAN varReferenceElementsValuesBody VALUESEND;
+varReferenceElementsValuesLaden: GREATERTHAN varReferenceElementsValuesBody VALUEEND;
 
 varReferenceElementsValuesBody: osglIntArrayData;
 
@@ -5123,10 +5132,11 @@ linearElementsAtt:
     }
 ;
 
-linearElementsContent: linearElementsStartVector linearElementsNonzeros LINEARELEMENTSEND;
+linearElementsContent: matrixElementsStartVector linearElementsNonzeros LINEARELEMENTSEND;
 
-linearElementsNonzeros: | linearElementsIndexes linearElementsValues;
+linearElementsNonzeros: | matrixElementsIndexVector linearElementsValues;
 
+/*
 linearElementsStartVector: linearElementsStartVectorStart linearElementsStartVectorContent
 {
     ((LinearMatrixElements*)osglData->tempC)->start = new IntVector();
@@ -5181,11 +5191,12 @@ linearElementsIndexesEmpty: ENDOFELEMENT;
 linearElementsIndexesLaden: GREATERTHAN linearElementsIndexesBody INDEXESEND;
 
 linearElementsIndexesBody: osglIntArrayData;
+*/
 
 linearElementsValues:
     {
         if (osglData->osglNumberOfNonzeros > 0)
-            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "expected <values> element");
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "expected <value> element");
     };    
   | 
     linearElementsValuesStart linearElementsValuesContent
@@ -5194,22 +5205,22 @@ linearElementsValues:
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too few <el> elements");
         else if (osglData->osglNumberOfNonzeros < osglData->osglNonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many <el> elements");        
-        ((LinearMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
+        ((LinearMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->osglNumberOfEl;
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     };
 
-linearElementsValuesStart: VALUESSTART
+linearElementsValuesStart: VALUESTART
 {
     osglData->osglNumberOfNonzeros = ((LinearMatrixElements*)osglData->tempC)->numberOfValues;
     osglData->osglNonzeroCounter = 0;
-    ((LinearMatrixElements*)osglData->tempC)->values = new LinearMatrixValues();
-    ((LinearMatrixElements*)osglData->tempC)->values->numberOfEl
+    ((LinearMatrixElements*)osglData->tempC)->value = new LinearMatrixValues();
+    ((LinearMatrixElements*)osglData->tempC)->value->numberOfEl
         = ((LinearMatrixElements*)osglData->tempC)->numberOfValues;    
-    ((LinearMatrixElements*)osglData->tempC)->values->el
+    ((LinearMatrixElements*)osglData->tempC)->value->el
         = new LinearMatrixElement*[((LinearMatrixElements*)osglData->tempC)->numberOfValues]; 
     for (int i=0; i < ((LinearMatrixElements*)osglData->tempC)->numberOfValues; i++)
-        ((LinearMatrixElements*)osglData->tempC)->values->el[i] = new LinearMatrixElement(); 
+        ((LinearMatrixElements*)osglData->tempC)->value->el[i] = new LinearMatrixElement(); 
     osglData->osglCounter = 0;
     osglData->numberOfVarIdxPresent = false;
 };
@@ -5218,7 +5229,7 @@ linearElementsValuesContent: linearElementsValuesEmpty | linearElementsValuesLad
 
 linearElementsValuesEmpty: ENDOFELEMENT;
 
-linearElementsValuesLaden: GREATERTHAN linearElementsValuesBody VALUESEND;
+linearElementsValuesLaden: GREATERTHAN linearElementsValuesBody VALUEEND;
 
 linearElementsValuesBody: linearElementsValuesElList;
 
@@ -5241,9 +5252,9 @@ linearElementsValuesElAttributes: linearElementsValuesElAttList
 {
     if (!osglData->numberOfVarIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "numberOfVarIdx attribute missing");
-    ((LinearMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->numberOfVarIdx
+    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter]->numberOfVarIdx
         = osglData->numberOfVarIdx;
-    ((LinearMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->varIdx
+    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter]->varIdx
         = new LinearMatrixElementTerm*[osglData->numberOfVarIdx];
     osglData->osglCounter = 0;
 };
@@ -5262,7 +5273,7 @@ osglConstantATT: CONSTANTATT QUOTE aNumber QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "linear matrix elements: duplicate constant");    
     else
     {
-        ((LinearMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->constant
+        ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter]->constant
              = parserData->tempVal;
         osglData->osglConstantPresent = true;
     }
@@ -5283,7 +5294,7 @@ linearElementsValuesVarIdxStart: VARIDXSTART
 {
     osglData->osglCoefPresent = false;
     osglData->osglCoef = 1.0;
-    ((LinearMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]
+    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]
         = new LinearMatrixElementTerm();
 };
 
@@ -5291,12 +5302,12 @@ osglLinearElementsValuesVarIdxCoefATT: | COEFATT QUOTE aNumber QUOTE
 {
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
-    ((LinearMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->coef = parserData->tempVal;
+    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->coef = parserData->tempVal;
 }; 
 
 linearElementsValuesVarIdxContent: GREATERTHAN INTEGER VARIDXEND
 {
-    ((LinearMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->idx = $2;
+    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter]->varIdx[osglData->osglCounter]->idx = $2;
     osglData->osglCounter++;
 };
 
@@ -5333,10 +5344,11 @@ generalElementsAtt:
     }
 ;
 
-generalElementsContent: generalElementsStartVector generalElementsNonzeros GENERALELEMENTSEND;
+generalElementsContent: matrixElementsStartVector generalElementsNonzeros GENERALELEMENTSEND;
 
-generalElementsNonzeros: | generalElementsIndexes generalElementsValues;
+generalElementsNonzeros: | matrixElementsIndexVector generalElementsValues;
 
+/*
 generalElementsStartVector: generalElementsStartVectorStart generalElementsStartVectorContent
 {
     ((GeneralMatrixElements*)osglData->tempC)->start = new IntVector();
@@ -5391,30 +5403,31 @@ generalElementsIndexesEmpty: ENDOFELEMENT;
 generalElementsIndexesLaden: GREATERTHAN generalElementsIndexesBody INDEXESEND;
 
 generalElementsIndexesBody: osglIntArrayData;
+*/
 
 generalElementsValues:
     | generalElementsValuesStart generalElementsValuesContent;
 
-generalElementsValuesStart: VALUESSTART
+generalElementsValuesStart: VALUESTART
 {
     osglData->osglNonzeroCounter = 0;
     osglData->osglNumberOfNonzeros = ((GeneralMatrixElements*)osglData->tempC)->numberOfValues;
 
-    ((GeneralMatrixElements*)osglData->tempC)->values = new GeneralMatrixValues();
-    ((GeneralMatrixElements*)osglData->tempC)->values->numberOfEl
+    ((GeneralMatrixElements*)osglData->tempC)->value = new GeneralMatrixValues();
+    ((GeneralMatrixElements*)osglData->tempC)->value->numberOfEl
         = osglData->osglNumberOfNonzeros;
-    ((GeneralMatrixElements*)osglData->tempC)->values->el
+    ((GeneralMatrixElements*)osglData->tempC)->value->el
         = new ScalarExpressionTree*[osglData->osglNumberOfNonzeros];
 
     for (int i=0; i<osglData->osglNumberOfNonzeros; i++)
-        ((GeneralMatrixElements*)osglData->tempC)->values->el[i] = new ScalarExpressionTree();
+        ((GeneralMatrixElements*)osglData->tempC)->value->el[i] = new ScalarExpressionTree();
 };
 
 generalElementsValuesContent: generalElementsValuesEmpty | generalElementsValuesLaden;
 
 generalElementsValuesEmpty: ENDOFELEMENT;
 
-generalElementsValuesLaden: GREATERTHAN generalElementsElList VALUESEND;
+generalElementsValuesLaden: GREATERTHAN generalElementsElList VALUEEND;
 
 generalElementsElList:  | generalElementsElList generalElementsEl;
 
@@ -5443,7 +5456,7 @@ generalElementsElLaden: GREATERTHAN nlnode ELEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
 
-        ((GeneralMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->m_treeRoot = 
+        ((GeneralMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter]->m_treeRoot = 
             ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osglData->osglNonzeroCounter++;
     };
@@ -5473,7 +5486,7 @@ objReferenceElementsAtt:
     {
         ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
         if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_objref;
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_objReference;
     }
   | osglRowMajorATT
     {
@@ -5481,10 +5494,11 @@ objReferenceElementsAtt:
     }
 ;
 
-objReferenceElementsContent: objReferenceElementsStartVector objReferenceElementsNonzeros OBJREFERENCEELEMENTSEND;
+objReferenceElementsContent: matrixElementsStartVector objReferenceElementsNonzeros OBJREFERENCEELEMENTSEND;
 
-objReferenceElementsNonzeros: | objReferenceElementsIndexes objReferenceElementsValues;
+objReferenceElementsNonzeros: | matrixElementsIndexVector objReferenceElementsValues;
 
+/*
 objReferenceElementsStartVector: objReferenceElementsStartVectorStart objReferenceElementsStartVectorContent
 {
     ((ObjReferenceMatrixElements*)osglData->tempC)->start = new IntVector();
@@ -5539,19 +5553,19 @@ objReferenceElementsIndexesEmpty: ENDOFELEMENT;
 objReferenceElementsIndexesLaden: GREATERTHAN objReferenceElementsIndexesBody INDEXESEND;
 
 objReferenceElementsIndexesBody: osglIntArrayData;
-
+*/
 
 objReferenceElementsValues: objReferenceElementsValuesStart objReferenceElementsValuesContent
 {
-    ((ObjReferenceMatrixElements*)osglData->tempC)->values = new ObjReferenceMatrixValues();
-    ((ObjReferenceMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
-    ((ObjReferenceMatrixElements*)osglData->tempC)->values->el = osglData->osglIntArray;
+    ((ObjReferenceMatrixElements*)osglData->tempC)->value = new ObjReferenceMatrixValues();
+    ((ObjReferenceMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->osglNumberOfEl;
+    ((ObjReferenceMatrixElements*)osglData->tempC)->value->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
 
-objReferenceElementsValuesStart: VALUESSTART
+objReferenceElementsValuesStart: VALUESTART
 {
     osglData->osglNumberOfEl = ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues;
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
@@ -5562,7 +5576,7 @@ objReferenceElementsValuesContent: objReferenceElementsValuesEmpty | objReferenc
 
 objReferenceElementsValuesEmpty: ENDOFELEMENT;
 
-objReferenceElementsValuesLaden: GREATERTHAN objReferenceElementsValuesBody VALUESEND;
+objReferenceElementsValuesLaden: GREATERTHAN objReferenceElementsValuesBody VALUEEND;
 
 objReferenceElementsValuesBody: osglIntArrayData;
 
@@ -5591,7 +5605,7 @@ conReferenceElementsAtt:
     {
         ((ConReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
         if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_conref;
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_conReference;
     }
   | osglRowMajorATT
     {
@@ -5599,10 +5613,11 @@ conReferenceElementsAtt:
     }
 ;
 
-conReferenceElementsContent: conReferenceElementsStartVector conReferenceElementsNonzeros CONREFERENCEELEMENTSEND;
+conReferenceElementsContent: matrixElementsStartVector conReferenceElementsNonzeros CONREFERENCEELEMENTSEND;
 
-conReferenceElementsNonzeros: | conReferenceElementsIndexes conReferenceElementsValues;
+conReferenceElementsNonzeros: | matrixElementsIndexVector conReferenceElementsValues;
 
+/*
 conReferenceElementsStartVector: conReferenceElementsStartVectorStart conReferenceElementsStartVectorContent
 {
     ((ConReferenceMatrixElements*)osglData->tempC)->start = new IntVector();
@@ -5656,12 +5671,12 @@ conReferenceElementsIndexesEmpty: ENDOFELEMENT;
 conReferenceElementsIndexesLaden: GREATERTHAN conReferenceElementsIndexesBody INDEXESEND;
 
 conReferenceElementsIndexesBody: osglIntArrayData;
-
+*/
 
 conReferenceElementsValues: 
     {
         if (osglData->osglNumberOfNonzeros > 0)
-            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "expected <values> element");
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "expected <value> element");
     };    
 
   | conReferenceElementsValuesStart conReferenceElementsValuesContent
@@ -5670,31 +5685,31 @@ conReferenceElementsValues:
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too few <el> elements");
         else if (osglData->osglNumberOfNonzeros < osglData->osglNonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many <el> elements");        
-        ((ConReferenceMatrixElements*)osglData->tempC)->values->numberOfEl = osglData->osglNumberOfEl;
+        ((ConReferenceMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->osglNumberOfEl;
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     };
 
-conReferenceElementsValuesStart: VALUESSTART
+conReferenceElementsValuesStart: VALUESTART
 {
     osglData->osglNumberOfNonzeros = ((ConReferenceMatrixElements*)osglData->tempC)->numberOfValues;
     osglData->osglNonzeroCounter = 0;
 
-    ((ConReferenceMatrixElements*)osglData->tempC)->values = new ConReferenceMatrixValues();
-    ((ConReferenceMatrixElements*)osglData->tempC)->values->numberOfEl
+    ((ConReferenceMatrixElements*)osglData->tempC)->value = new ConReferenceMatrixValues();
+    ((ConReferenceMatrixElements*)osglData->tempC)->value->numberOfEl
         = osglData->osglNumberOfNonzeros;
-    ((ConReferenceMatrixElements*)osglData->tempC)->values->el
+    ((ConReferenceMatrixElements*)osglData->tempC)->value->el
         = new ConReferenceMatrixElement*[osglData->osglNumberOfNonzeros];
 
     for (int i=0; i<osglData->osglNumberOfNonzeros; i++)
-        ((ConReferenceMatrixElements*)osglData->tempC)->values->el[i] = new ConReferenceMatrixElement();
+        ((ConReferenceMatrixElements*)osglData->tempC)->value->el[i] = new ConReferenceMatrixElement();
 };
 
 conReferenceElementsValuesContent: conReferenceElementsValuesEmpty | conReferenceElementsValuesLaden;
 
 conReferenceElementsValuesEmpty: ENDOFELEMENT;
 
-conReferenceElementsValuesLaden: GREATERTHAN conReferenceElementsElList VALUESEND;
+conReferenceElementsValuesLaden: GREATERTHAN conReferenceElementsElList VALUEEND;
 
 conReferenceElementsElList: | conReferenceElementsElList conReferenceElementsEl;
 
@@ -5754,9 +5769,9 @@ conReferenceElementsElContent: GREATERTHAN INTEGER ELEND
     else
         for (int i=0; i<osglData->osglMult; i++)
         {
-            ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter + i]->conReference
+            ((ConReferenceMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter + i]->conReference
                 = $2 + i*osglData->osglIncr;
-            ((ConReferenceMatrixElements*)osglData->tempC)->values->el[osglData->osglNonzeroCounter]->valueType
+            ((ConReferenceMatrixElements*)osglData->tempC)->value->el[osglData->osglNonzeroCounter]->valueType
                 = osglData->valueType; 
         }
         osglData->osglNonzeroCounter += osglData->osglMult;
@@ -5836,67 +5851,67 @@ matrixBlocksEnd: BLOCKSEND
 };
 
 
-colOffsets: colOffsetsStart colOffsetsNumberOfElAttribute colOffsetsContent
+colOffsets: colOffsetStart colOffsetNumberOfElAttribute colOffsetContent
 {
     if (osglData->osglCounter != osglData->osglNumberOfEl)
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of colOffsets does not match numberOfEl");
-    ((MatrixBlocks*)osglData->tempC)->colOffsets = new IntVector();
-    ((MatrixBlocks*)osglData->tempC)->colOffsets->numberOfEl = osglData->osglNumberOfEl;
-    ((MatrixBlocks*)osglData->tempC)->colOffsets->el = osglData->osglIntArray;
+    ((MatrixBlocks*)osglData->tempC)->colOffset = new IntVector();
+    ((MatrixBlocks*)osglData->tempC)->colOffset->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixBlocks*)osglData->tempC)->colOffset->el = osglData->osglIntArray;
     osglData->colOffsets.push_back(osglData->osglIntArray);
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
 
-colOffsetsStart: COLOFFSETSSTART
+colOffsetStart: COLOFFSETSTART
 {
     osglData->osglNumberOfEl = 0;
     osglData->osglNumberOfElPresent = false;
 };
 
-colOffsetsNumberOfElAttribute: osglNumberOfElATT
+colOffsetNumberOfElAttribute: osglNumberOfElATT
 {
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
 }; 
 
-colOffsetsContent: colOffsetsEmpty | colOffsetsLaden;
+colOffsetContent: colOffsetEmpty | colOffsetLaden;
 
-colOffsetsEmpty: ENDOFELEMENT;
+colOffsetEmpty: ENDOFELEMENT;
 
-colOffsetsLaden: GREATERTHAN colOffsetsBody COLOFFSETSEND;
+colOffsetLaden: GREATERTHAN colOffsetBody COLOFFSETEND;
 
-colOffsetsBody:  osglIntArrayData;
+colOffsetBody:  osglIntArrayData;
 
-rowOffsets: rowOffsetsStart rowOffsetsNumberOfElAttribute rowOffsetsContent
+rowOffsets: rowOffsetStart rowOffsetNumberOfElAttribute rowOffsetContent
 {
-    ((MatrixBlocks*)osglData->tempC)->rowOffsets = new IntVector();
-    ((MatrixBlocks*)osglData->tempC)->rowOffsets->numberOfEl = osglData->osglNumberOfEl;
-    ((MatrixBlocks*)osglData->tempC)->rowOffsets->el = osglData->osglIntArray;
-    osglData->rowOffsets.push_back(osglData->osglIntArray); //!!!!!! can this cause a segfault?
+    ((MatrixBlocks*)osglData->tempC)->rowOffset = new IntVector();
+    ((MatrixBlocks*)osglData->tempC)->rowOffset->numberOfEl = osglData->osglNumberOfEl;
+    ((MatrixBlocks*)osglData->tempC)->rowOffset->el = osglData->osglIntArray;
+    osglData->rowOffsets.push_back(osglData->osglIntArray);
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
 
-rowOffsetsStart: ROWOFFSETSSTART
+rowOffsetStart: ROWOFFSETSTART
 {
     osglData->osglNumberOfEl = 0;
     osglData->osglNumberOfElPresent = false;
 };
 
-rowOffsetsNumberOfElAttribute: osglNumberOfElATT
+rowOffsetNumberOfElAttribute: osglNumberOfElATT
 {
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->osglNumberOfEl];
 }; 
 
-rowOffsetsContent: rowOffsetsEmpty | rowOffsetsLaden;
+rowOffsetContent: rowOffsetEmpty | rowOffsetLaden;
 
-rowOffsetsEmpty: ENDOFELEMENT;
+rowOffsetEmpty: ENDOFELEMENT;
 
-rowOffsetsLaden: GREATERTHAN rowOffsetsBody ROWOFFSETSEND;
+rowOffsetLaden: GREATERTHAN rowOffsetBody ROWOFFSETEND;
 
-rowOffsetsBody:  osglIntArrayData;
+rowOffsetBody:  osglIntArrayData;
 
 blockList: | blockList matrixBlock
 {

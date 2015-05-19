@@ -927,7 +927,6 @@ if (PARSER_TESTS)
         fileUtil = NULL;
     }    
 
-#if 0
 // Here we test extensions to the "core": <matrices>, <cones>, stochastic programming, etc.
     if( THOROUGH == true)
     {
@@ -968,7 +967,6 @@ cout << temposil << endl;
             unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem testMatricesAndCones.osil" << std::endl;
             cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-#if 0
             // now test the matrix manipulation routines 
             // (expansion, separation into blocks, transformations, etc.)
             cout << endl << "TEST " << ++nOfTest << ": Test matrix manipulation routines (using testMatricesAndCones.osil)" << endl << endl;
@@ -1020,6 +1018,9 @@ cout << temposil << endl;
 //            {
 //                if (!omit[i])
 //                {
+
+                cout << endl << "Test matrix expansion in column major form" << endl;
+
                 GeneralSparseMatrix* test1_a
                     = instance1->instanceData->matrices->matrix[32]->getMatrixCoefficientsInColumnMajor();
                 if (test1_a->valueSize != 17)
@@ -1037,6 +1038,7 @@ cout << temposil << endl;
                 colPartition1[1]= 2;
                 colPartition1[2]= 6;
 
+                cout << endl << "Test matrix expansion in blocks form" << endl;
                 ExpandedMatrixBlocks* test1_b
                     = instance1->instanceData->matrices->matrix[32]
                         ->getBlocks(rowPartition1,3,colPartition1,3,false,false);
@@ -1049,6 +1051,7 @@ cout << temposil << endl;
                 if (test1_b->blocks[0]->isDiagonal())
                     throw ErrorClass("Failed block expansion of matrix 32");
 
+                cout << endl << "Test matrix expansion in row major form" << endl;
                 GeneralSparseMatrix* test1_c
                     = instance1->instanceData->matrices->matrix[32]->getMatrixCoefficientsInRowMajor();
                 if (test1_c->valueSize != 17)
@@ -1056,6 +1059,8 @@ cout << temposil << endl;
                 if (test1_c->isDiagonal())
                     throw ErrorClass("Failed diagonality assessment of matrix 32 (by rows)");
 
+#if 0
+                cout << endl << "Another matrix expansion in column major form" << endl;
 
                 GeneralSparseMatrix* test2_a = 
                     instance1->instanceData->matrices->matrix[35]->getMatrixCoefficientsInColumnMajor();
@@ -1077,6 +1082,7 @@ cout << temposil << endl;
                 colPartition1[3]= 18;
                 colPartition1[4]= 24;
 
+                cout << endl << "Another matrix expansion in blocks format" << endl;
                 ExpandedMatrixBlocks* test2_b
                     = instance1->instanceData->matrices->matrix[35]
                         ->getBlocks(rowPartition2,6,colPartition2,5,false,false);
@@ -1094,6 +1100,7 @@ cout << temposil << endl;
                     throw ErrorClass("Failed block expansion of matrix 35");
 
 
+                cout << endl << "Another matrix expansion in row major form" << endl;
                 GeneralSparseMatrix* test2_c = 
                     instance1->instanceData->matrices->matrix[35]->getMatrixCoefficientsInRowMajor();
                 if (test2_c->valueSize != 68)
@@ -1107,6 +1114,8 @@ cout << temposil << endl;
                 partition3[2]= 5;
                 partition3[3]= 7;
 
+                cout << endl << "Test matrix expansion 3_a" << endl;
+
                 ExpandedMatrixBlocks* test3_a
                     = instance1->instanceData->matrices->matrix[36]
                         ->getBlocks(partition3,4,partition3,4,false,true);
@@ -1118,40 +1127,44 @@ cout << temposil << endl;
                 if (!test3_a->isBlockDiagonal())
                     throw ErrorClass("Failed block expansion of matrix 36");
 
+                cout << endl << "Test matrix expansion 3_b" << endl;
                 GeneralSparseMatrix* test3_b = test3_a->getBlock(0,0);
                 if (test3_b->valueSize != 3)
                     throw ErrorClass("Failed block expansion of matrix 36");
                 if (test3_b->isDiagonal())
                     throw ErrorClass("Failed block expansion of matrix 36");
 
+                cout << endl << "Test matrix expansion 3_c" << endl;
                 GeneralSparseMatrix* test3_c = test3_a->getBlock(1,1);
                 if (test3_c->valueSize != 3)
                     throw ErrorClass("Failed block expansion of matrix 36");
                 if (!test3_c->isDiagonal())
                     throw ErrorClass("Failed block expansion of matrix 36");
 
+                cout << endl << "Test matrix expansion 3_d" << endl;
                 GeneralSparseMatrix* test3_d = test3_a->getBlock(2,2);
                 if (test3_d != NULL)
                     throw ErrorClass("Failed block expansion of matrix 36");
 
 
+                cout << endl << "Test matrix expansion 6_a" << endl;
                 GeneralSparseMatrix* test6_a = 
                     instance1->instanceData->matrices->matrix[11]->getMatrixCoefficientsInColumnMajor();
                 if (!test6_a->isDiagonal())
                     throw ErrorClass("Failed diagonality assessment of matrix 11 (by columns)");
 
+                cout << endl << "Test matrix expansion 6_b" << endl;
                 GeneralSparseMatrix* test6_b = 
                     instance1->instanceData->matrices->matrix[11]->getMatrixCoefficientsInRowMajor();
                 if (!test6_b->isDiagonal())
                     throw ErrorClass("Failed diagonality assessment of matrix 11 (by rows)");
 
 
-
+#endif
 
 //                }
 //            }
 
-#endif
             delete osilreader;
             osilreader = NULL;
 
@@ -1162,7 +1175,8 @@ cout << temposil << endl;
         catch(const ErrorClass& eclass){
             cout << endl << endl << endl;
             cout << eclass.errormsg << endl;
-            unitTestResultFailure << "Sorry Unit Test Failed Testing OSiL <matrix> Parser (Test " << nOfTest << ")" << endl;
+            unitTestResultFailure << "Sorry Unit Test Failed Testing OSiL <matrix> Parser (Test "
+                                  << nOfTest << ")" << endl;
 
             if (osilreader != NULL)
                 delete osilreader;
@@ -1175,10 +1189,9 @@ cout << temposil << endl;
             osilwriter = NULL;
             if (fileUtil != NULL)
                 delete fileUtil;
-        fileUtil = NULL;
+            fileUtil = NULL;
         }    
     }
-#endif
 
 #if 0
     // Now test <timeDomain> and stochastic programming

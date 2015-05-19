@@ -100,16 +100,16 @@
                     <start>
                         <el mult="3" incr="2">0</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el mult="2 " incr=" 1 ">0</el>
                         <el mult="2 " incr=" 1 ">0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>-1.0 </el>
                         <el> 2.0 </el>
                         <el> 3.0</el>
                         <el>-4.0</el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="1" numberOfRows="4" name="1-constant">
@@ -117,15 +117,15 @@
                     <start>
                         <el> 0 </el >    <el>   4   </el >
                     </start>
-                    <indexes>
+                    <index>
                         <el mult="4" incr="1"> 0 </el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el >2.0</el>
                         <el>3.0</el>
                         <el>4.0</el>
                         <el>5.0</el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="4" numberOfRows="4" name="2-transformation">
@@ -145,22 +145,22 @@
                         <el mult="3">0</el>
                         <el mult="2">1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el  > 100.0 </el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="4" numberOfRows="4" name="4-blocks">
                 <blocks numberOfBlocks="2">
-                    <colOffsets numberOfEl="3">
+                    <colOffset numberOfEl="3">
                         <el mult="3" incr="2">0</el>                    
-                    </colOffsets>
-                    <rowOffsets numberOfEl="3">
+                    </colOffset>
+                    <rowOffset numberOfEl="3">
                         <el mult="3" incr="2">0</el>                    
-                    </rowOffsets>
+                    </rowOffset>
                     <block blockRowIdx="0" blockColIdx="0">
                         <baseMatrix baseMatrixIdx="0"></baseMatrix>
                     </block>
@@ -169,14 +169,14 @@
                             <start>
                                 <el mult="3" incr="1">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el>0</el>
                                 <el>1</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el>-2</el>
                                 <el>3</el>
-                            </values>
+                            </value>
                         </constantElements>
                     </block>
                 </blocks>
@@ -198,12 +198,12 @@
                         <el>1</el>
                         <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>3</el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="1" numberOfRows="2" name="7-varRef">
@@ -212,14 +212,14 @@
                         <el>0</el>
                         <el>2</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>
                         <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>1</el>
                         <el>0</el>
-                    </values>
+                    </value>
                 </varReferenceElements>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="8-linearElements">
@@ -227,11 +227,11 @@
                     <start>
                         <el mult="3" incr="2">0</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>   <el>1</el>
                         <el>0</el>   <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el numberOfVarIdx="1" constant="2">
                             <varIdx coef="0.5">0</varIdx>
                         </el>
@@ -244,7 +244,7 @@
                             <varIdx coef="2">0</varIdx>
                             <varIdx coef="3">1</varIdx>
                         </el>
-                    </values>
+                    </value>
                 </linearElements>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="9-generalElements">
@@ -252,11 +252,11 @@
                     <start>
                         <el mult="3" incr="2">0</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>    <el>1</el>
                         <el>1</el>    <el>0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>
                             <sum>
                                 <matrixDeterminant>
@@ -319,7 +319,7 @@
                         <el>
                             <number value="3.0"></number>
                         </el>
-                    </values>
+                    </value>
                 </generalElements>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="10-mixedElements">
@@ -327,45 +327,45 @@
                     <start>
                         <el>0</el>    <el>1</el>    <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>6.0</el>
-                    </values>
+                    </value>
                 </constantElements>
                 <varReferenceElements numberOfValues="1" rowMajor="true">
                     <start> 
                         <el>0</el>    <el>1</el>    <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>1</el>
-                    </values>
+                    </value>
                 </varReferenceElements>
                 <linearElements numberOfValues="1" rowMajor="true">
                     <start>
                         <el>0</el>    <el>0</el>    <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el numberOfVarIdx="1">
                             <varIdx>1</varIdx>
                         </el>
-                    </values>
+                    </value>
                 </linearElements>
                 <generalElements numberOfValues="1">
                     <start>
                         <el>0</el>    <el>0</el>    <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>
                             <plus>
                                 <matrixDeterminant>
@@ -376,7 +376,7 @@
                                 </matrixTrace>
                             </plus>
                         </el>
-                    </values>
+                    </value>
                 </generalElements>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="11-conRef">
@@ -384,12 +384,12 @@
                      <start>
                          <el mult="3" incr="1">0</el>
                      </start>
-                     <indexes>
+                     <index>
                          <el>0</el>     <el>1</el>
-                     </indexes>
-                     <values>
+                     </index>
+                     <value>
                          <el>0</el>     <el>1</el>
-                     </values>
+                     </value>
                  </conReferenceElements>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="12-objRef">
@@ -397,14 +397,14 @@
                     <start>
                         <el>0</el>    <el>1</el>    <el>2</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>
                         <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>-1</el>
                         <el>-1</el>
-                    </values>                        
+                    </value>                        
                 </objReferenceElements>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="13-mixedRef">
@@ -412,23 +412,23 @@
                     <start>
                         <el>0</el>    <el>1</el>    <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>-1</el>
-                    </values>
+                    </value>
                 </objReferenceElements>
                 <conReferenceElements numberOfValues="2" rowMajor="true">
                     <start> 
                         <el>0</el>    <el>1</el>    <el>2</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el mult="2">1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el valueType="shortage" mult="2" incr="1">1</el>
-                    </values>
+                    </value>
                 </conReferenceElements>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="14-jumbled">
@@ -436,23 +436,23 @@
                     <start>
                         <el>0</el>    <el>1</el>    <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>6.0</el>
-                    </values>
+                    </value>
                 </constantElements>
                 <conReferenceElements numberOfValues="1" rowMajor="true">
                     <start> 
                         <el>0</el>    <el>1</el>    <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el valueType="status">1</el>
-                    </values>
+                    </value>
                 </conReferenceElements>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="15-M0-times-M0">
@@ -517,12 +517,12 @@
                     <start>
                         <el mult="3" incr="1">0</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el mult="2">0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el mult="2" incr="1">0</el>
-                    </values>
+                    </value>
                 </varReferenceElements>
             </matrix>
             <matrix numberOfColumns="1" numberOfRows="18" name="24-longVector">
@@ -531,10 +531,10 @@
                         <el>0</el>
                         <el>18</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el incr="1" mult="18">0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>1</el>
                         <el>2</el>
                         <el>3</el>
@@ -553,7 +553,7 @@
                         <el>16</el>
                         <el>17</el>
                         <el>18</el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="18" numberOfRows="18" name="25-largeRank-1">
@@ -573,12 +573,12 @@
                         <el>0</el>
                         <el mult="18">1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>1.5</el>
-                    </values>
+                    </value>
                 </constantElements>
                 <transformation>
                     <matrixDiagonal>
@@ -586,12 +586,12 @@
                     </matrixDiagonal>
                 </transformation>
                 <blocks numberOfBlocks="5">
-                    <colOffsets numberOfEl="4">
+                    <colOffset numberOfEl="4">
                         <el mult="4" incr="6">0</el>
-                    </colOffsets>
-                    <rowOffsets numberOfEl="4">
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
                         <el mult="4" incr="6">0</el>
-                    </rowOffsets>
+                    </rowOffset>
                     <block blockRowIdx="0" blockColIdx="0"/>
                     <block blockRowIdx="2" blockColIdx="0">
                         <baseMatrix baseMatrixIdx="5"/>
@@ -601,17 +601,17 @@
                             <start>
                                 <el incr="1" mult="7">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el>3</el>
                                 <el>1</el>
                                 <el>6</el>
                                 <el>5</el>
                                 <el>4</el>
                                 <el>2</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el mult="6">2.3</el>
-                            </values>
+                            </value>
                         </constantElements>
                         <transformation>
                             <matrixUpperTriangle includeDiagonal="true">
@@ -621,12 +621,12 @@
                     </block>
                     <block blockRowIdx="2" blockColIdx="0">
                         <blocks numberOfBlocks="5">
-                            <colOffsets numberOfEl="4">
+                            <colOffset numberOfEl="4">
                                 <el mult="4" incr="2">0</el>
-                            </colOffsets>
-                            <rowOffsets numberOfEl="4">
+                            </colOffset>
+                            <rowOffset numberOfEl="4">
                                 <el mult="4" incr="2">0</el>
-                            </rowOffsets>
+                            </rowOffset>
                             <block blockRowIdx="0" blockColIdx="0"/>
                             <block blockRowIdx="2" blockColIdx="0">
                                 <baseMatrix baseMatrixIdx="0"/>
@@ -645,22 +645,22 @@
                                         <el>0</el>
                                         <el mult="2">1</el>
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>1</el>
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>3.14</el>
-                                    </values>
+                                    </value>
                                 </constantElements>
                             </block>
                             <block blockRowIdx="0" blockColIdx="2">
                                 <blocks numberOfBlocks="2">
-                                    <colOffsets numberOfEl="3">
+                                    <colOffset numberOfEl="3">
                                         <el mult="3" incr="1">0</el> 
-                                    </colOffsets>
-                                    <rowOffsets numberOfEl="3">
+                                    </colOffset>
+                                    <rowOffset numberOfEl="3">
                                         <el mult="3" incr="1">0</el> 
-                                    </rowOffsets>
+                                    </rowOffset>
                                     <block blockRowIdx="0" blockColIdx="0">
                                         <transformation>
                                             <matrixTimes>
@@ -677,16 +677,16 @@
                                                 <el>0</el>
                                                 <el>1</el>
                                             </start>
-                                            <indexes>
+                                            <index>
                                                 <el>0</el>
-                                            </indexes>
-                                            <values>
+                                            </index>
+                                            <value>
                                                 <el>
                                                     <matrixTrace>
                                                         <matrixReference idx="7"/>
                                                     </matrixTrace>
                                                 </el>
-                                            </values>
+                                            </value>
                                         </generalElements>
                                     </block>
                                 </blocks>
@@ -705,20 +705,20 @@
                                         <el>0</el>
                                         <el mult="2">1</el>
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>1</el>
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>2.71</el>
-                                    </values>
+                                    </value>
                                 </constantElements>
                                 <blocks numberOfBlocks="2">
-                                    <colOffsets numberOfEl="3">
+                                    <colOffset numberOfEl="3">
                                         <el mult="3" incr="1">0</el> 
-                                    </colOffsets>
-                                    <rowOffsets numberOfEl="3">
+                                    </colOffset>
+                                    <rowOffset numberOfEl="3">
                                         <el mult="3" incr="1">0</el> 
-                                    </rowOffsets>
+                                    </rowOffset>
                                     <block blockRowIdx="0" blockColIdx="0">
                                         <transformation>
                                             <matrixTimes>
@@ -735,16 +735,16 @@
                                                 <el>0</el>
                                                 <el>1</el>
                                             </start>
-                                            <indexes>
+                                            <index>
                                                 <el>0</el>
-                                            </indexes>
-                                            <values>
+                                            </index>
+                                            <value>
                                                 <el>
                                                     <matrixTrace>
                                                         <matrixReference idx="7"/>
                                                     </matrixTrace>
                                                 </el>
-                                            </values>
+                                            </value>
                                         </generalElements>
                                     </block>
                                 </blocks>
@@ -753,12 +753,12 @@
                                         <el>0</el>
                                         <el mult="2">1</el>
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>1</el>
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>6.28</el>
-                                    </values>
+                                    </value>
                                 </constantElements>
                             </block>
                         </blocks>
@@ -768,17 +768,17 @@
                             <start>
                                 <el incr="1" mult="7">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el>3</el>
                                 <el>1</el>
                                 <el>6</el>
                                 <el>5</el>
                                 <el>4</el>
                                 <el>2</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el mult="6">2.3</el>
-                            </values>
+                            </value>
                         </constantElements>
                         <transformation>
                             <matrixUpperTriangle includeDiagonal="false">
@@ -786,12 +786,12 @@
                             </matrixUpperTriangle>
                         </transformation>
                         <blocks numberOfBlocks="5">
-                            <colOffsets numberOfEl="4">
+                            <colOffset numberOfEl="4">
                                 <el mult="4" incr="2">0</el>
-                            </colOffsets>
-                            <rowOffsets numberOfEl="4">
+                            </colOffset>
+                            <rowOffset numberOfEl="4">
                                 <el mult="4" incr="2">0</el>
-                            </rowOffsets>
+                            </rowOffset>
                             <block blockRowIdx="0" blockColIdx="0"/>
                             <block blockRowIdx="2" blockColIdx="0">
                                 <baseMatrix baseMatrixIdx="0"/>
@@ -810,22 +810,22 @@
                                         <el>0</el>
                                         <el mult="2">1</el>
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>1</el>
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>3.14</el>
-                                    </values>
+                                    </value>
                                 </constantElements>
                             </block>
                             <block blockRowIdx="0" blockColIdx="2">
                                 <blocks numberOfBlocks="2">
-                                    <colOffsets numberOfEl="3">
+                                    <colOffset numberOfEl="3">
                                         <el mult="3" incr="1">0</el> 
-                                    </colOffsets>
-                                    <rowOffsets numberOfEl="3">
+                                    </colOffset>
+                                    <rowOffset numberOfEl="3">
                                         <el mult="3" incr="1">0</el> 
-                                    </rowOffsets>
+                                    </rowOffset>
                                     <block blockRowIdx="0" blockColIdx="0">
                                         <constantElements numberOfValues="0">
                                             <start>
@@ -847,16 +847,16 @@
                                                 <el>0</el>
                                                 <el>1</el>
                                             </start>
-                                            <indexes>
+                                            <index>
                                                 <el>0</el>
-                                            </indexes>
-                                            <values>
+                                            </index>
+                                            <value>
                                                 <el>
                                                     <matrixTrace>
                                                         <matrixReference idx="7"/>
                                                     </matrixTrace>
                                                 </el>
-                                            </values>
+                                            </value>
                                         </generalElements>
                                     </block>
                                 </blocks>
@@ -875,20 +875,20 @@
                                         <el>0</el>
                                         <el mult="2">1</el>
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>1</el>
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>2.71</el>
-                                    </values>
+                                    </value>
                                 </constantElements>
                                 <blocks numberOfBlocks="2">
-                                    <colOffsets numberOfEl="3">
+                                    <colOffset numberOfEl="3">
                                         <el mult="3" incr="1">0</el> 
-                                    </colOffsets>
-                                    <rowOffsets numberOfEl="3">
+                                    </colOffset>
+                                    <rowOffset numberOfEl="3">
                                         <el mult="3" incr="1">0</el> 
-                                    </rowOffsets>
+                                    </rowOffset>
                                     <block blockRowIdx="0" blockColIdx="0">
                                         <transformation>
                                             <matrixTimes>
@@ -905,16 +905,16 @@
                                                 <el>0</el>
                                                 <el>1</el>
                                             </start>
-                                            <indexes>
+                                            <index>
                                                 <el>0</el>
-                                            </indexes>
-                                            <values>
+                                            </index>
+                                            <value>
                                                 <el>
                                                     <matrixTrace>
                                                         <matrixReference idx="7"/>
                                                     </matrixTrace>
                                                 </el>
-                                            </values>
+                                            </value>
                                         </generalElements>
                                     </block>
                                 </blocks>
@@ -923,12 +923,12 @@
                                         <el>0</el>
                                         <el mult="2">1</el>
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>1</el>
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>6.28</el>
-                                    </values>
+                                    </value>
                                 </constantElements>
                             </block>
                         </blocks>
@@ -936,17 +936,17 @@
                             <start>
                                 <el incr="1" mult="7">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el>3</el>
                                 <el>1</el>
                                 <el>6</el>
                                 <el>5</el>
                                 <el>4</el>
                                 <el>2</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el mult="6">6.7</el>
-                            </values>
+                            </value>
                         </constantElements>
                     </block>
                 </blocks>                
@@ -955,12 +955,12 @@
                         <el>0</el>
                         <el mult="18">1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>1</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>1.5</el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="4" numberOfRows="4" name="27-templateMatrix">
@@ -968,15 +968,15 @@
                     <start>
                         <el mult="5" incr="2">0</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>     <el>1</el>
                         <el>0</el>     <el>1</el>
                         <el>2</el>     <el>3</el>
                         <el>2</el>     <el>3</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el  mult="8"> 1 </el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="4" numberOfRows="4" name="28-impliedTemplateMatrix">
@@ -984,13 +984,13 @@
                     <start>
                         <el mult="5" incr="2">0</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>     <el>1</el>
                         <el>0</el>     <el>1</el>
                         <el>2</el>     <el>3</el>
                         <el>2</el>     <el>3</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el> 1.1 </el>
                         <el> 2.2 </el>
                         <el> 3.3 </el>
@@ -999,7 +999,7 @@
                         <el> 6.6 </el>
                         <el> 7.7 </el>
                         <el> 8.8 </el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="4" numberOfRows="4" name="29-emptyMatrix"/>
@@ -1008,18 +1008,18 @@
                     <start>
                         <el mult="5" incr="2">0</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>    <el>3</el>
                         <el>0</el>    <el>3</el>
                         <el>0</el>    <el>3</el>
                         <el>0</el>    <el>3</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>0</el>    <el>1</el>
                         <el>0</el>    <el>1</el>
                         <el>0</el>    <el>1</el>
                         <el>0</el>    <el>1</el>
-                    </values>
+                    </value>
                 </varReferenceElements>
             </matrix>
             <matrix numberOfColumns="1" numberOfRows="1" name="31-scalarConversionTest">
@@ -1028,26 +1028,26 @@
                         <el>0</el>
                         <el>1</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>1.4142</el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfColumns="6" numberOfRows="7" name="32-Expansion test 1: nested blocks">
                 <blocks numberOfBlocks="4"> 
-                    <colOffsets numberOfEl="3">
+                    <colOffset numberOfEl="3">
                         <el>0</el> 
                         <el>2</el> 
                         <el>6</el> 
-                    </colOffsets>
-                    <rowOffsets numberOfEl="3">
+                    </colOffset>
+                    <rowOffset numberOfEl="3">
                         <el>0</el> 
                         <el>3</el> 
                         <el>7</el> 
-                    </rowOffsets>
+                    </rowOffset>
                     <block blockRowIdx="0" blockColIdx="0"> 
                         <constantElements numberOfValues="3">
                             <start>
@@ -1055,79 +1055,79 @@
                                 <el>2</el> 
                                 <el>3</el> 
                             </start>
-                            <indexes>
+                            <index>
                                 <el>0</el> 
                                 <el>2</el> 
                                 <el>1</el> 
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el>8</el> 
                                 <el>-3</el> 
                                 <el>5</el> 
-                            </values>
+                            </value>
                         </constantElements>
                     </block>
                     <block blockRowIdx="1" blockColIdx="1"> 
                         <blocks numberOfBlocks="3">   
-                            <colOffsets numberOfEl="3">
+                            <colOffset numberOfEl="3">
                                 <el>0</el> 
                                 <el>2</el> 
                                 <el>4</el> 
-                            </colOffsets>
-                            <rowOffsets numberOfEl="3">
+                            </colOffset>
+                            <rowOffset numberOfEl="3">
                                 <el>0</el> 
                                 <el>2</el> 
                                 <el>4</el> 
-                            </rowOffsets>
+                            </rowOffset>
                             <block blockRowIdx="1" blockColIdx="0"/> 
                             <block blockRowIdx="1" blockColIdx="1">  
                                 <blocks numberOfBlocks="2"> 
-                                    <colOffsets numberOfEl="2">
+                                    <colOffset numberOfEl="2">
                                         <el>0</el> 
                                         <el>2</el> 
-                                    </colOffsets>
-                                    <rowOffsets numberOfEl="3">
+                                    </colOffset>
+                                    <rowOffset numberOfEl="3">
                                         <el>0</el> 
                                         <el>1</el> 
                                         <el>2</el> 
-                                    </rowOffsets>
+                                    </rowOffset>
                                     <block blockRowIdx="1" blockColIdx="0"> 
                                         <constantElements numberOfValues="1" rowMajor="true">
                                             <start>
                                                 <el>0</el> 
                                                 <el>1</el> 
                                             </start>
-                                            <indexes>
+                                            <index>
                                                 <el>0</el> 
-                                            </indexes>
-                                            <values>
+                                            </index>
+                                            <value>
                                                 <el>7</el> 
-                                            </values>
+                                            </value>
                                        </constantElements>
                                    </block>
                                     <block blockRowIdx="0" blockColIdx="0"> 
                                         <blocks numberOfBlocks="2"> 
-                                            <colOffsets numberOfEl="3">
+                                            <colOffset numberOfEl="3">
                                                 <el>0</el> 
                                                 <el>1</el> 
                                                 <el>2</el> 
-                                            </colOffsets>
-                                            <rowOffsets numberOfEl="2">
+                                            </colOffset>
+                                            <rowOffset numberOfEl="2">
                                                 <el>0</el> 
                                                 <el>1</el> 
-                                            </rowOffsets>
+                                            </rowOffset>
                                             <block blockRowIdx="0" blockColIdx="1"> 
                                                 <constantElements numberOfValues="1">
                                                     <start>
                                                         <el>0</el>
                                                         <el>1</el>
                                                     </start>
-                                                    <indexes>
+                                                    <index>
                                                         <el>0</el>
-                                                    </indexes>
-                                                    <values>
+                                                    </index>
+                                                    <value>
                                                         <el>3</el>
-                                                    </values>
+                                                    </value>
                                                 </constantElements>
                                             </block>
                                             <block blockRowIdx="0" blockColIdx="0"> 
@@ -1136,12 +1136,12 @@
                                                         <el>0</el>
                                                         <el>1</el>
                                                     </start>
-                                                    <indexes>
+                                                    <index>
                                                         <el>0</el>
-                                                    </indexes>
-                                                    <values>
+                                                    </index>
+                                                    <value>
                                                         <el>-5</el>
-                                                    </values>
+                                                    </value>
                                                 </constantElements>
                                             </block>
                                         </blocks>
@@ -1155,14 +1155,14 @@
                                         <el>1</el> 
                                         <el>2</el> 
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>0</el> 
                                         <el>1</el> 
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>2</el> 
                                         <el>3</el> 
-                                    </values>
+                                    </value>
                                 </constantElements>
                             </block>
                         </blocks>
@@ -1174,27 +1174,27 @@
                                 <el>1</el> 
                                 <el>2</el> 
                             </start>
-                            <indexes>
+                            <index>
                                 <el>2</el> 
                                 <el>1</el> 
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el>-1</el> 
                                 <el>3</el> 
-                            </values>
+                            </value>
                         </constantElements>
                     </block>
                     <block blockRowIdx="0" blockColIdx="1">
                         <blocks numberOfBlocks="2"> 
-                            <colOffsets numberOfEl="2">
+                            <colOffset numberOfEl="2">
                                 <el>0</el> 
                                 <el>4</el> 
-                            </colOffsets>
-                            <rowOffsets numberOfEl="3">
+                            </colOffset>
+                            <rowOffset numberOfEl="3">
                                 <el>0</el> 
                                 <el>2</el> 
                                 <el>3</el> 
-                            </rowOffsets>
+                            </rowOffset>
                             <block blockRowIdx="0" blockColIdx="0"> 
                                 <constantElements numberOfValues="5" rowMajor="true">
                                     <start>
@@ -1202,20 +1202,20 @@
                                         <el>2</el> 
                                         <el>5</el> 
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>0</el> 
                                         <el>3</el> 
                                         <el>1</el> 
                                         <el>2</el> 
                                         <el>3</el> 
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>1</el> 
                                         <el>-2</el> 
                                         <el>-3</el> 
                                         <el>-4</el> 
                                         <el>5</el> 
-                                    </values>
+                                    </value>
                                 </constantElements>
                             </block>
                             <block blockRowIdx="1" blockColIdx="0"> 
@@ -1224,14 +1224,14 @@
                                         <el mult="2">0</el> 
                                         <el mult="3" incr="1">0</el> 
                                     </start>
-                                    <indexes>
+                                    <index>
                                         <el>0</el> 
                                         <el>0</el> 
-                                    </indexes>
-                                    <values>
+                                    </index>
+                                    <value>
                                         <el>6</el> 
                                         <el>7</el> 
-                                    </values>
+                                    </value>
                                 </constantElements>
                             </block>
                         </blocks>
@@ -1244,17 +1244,17 @@
                         <el>0</el>
                         <el incr="1" mult="4">2</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>1</el>
                         <el mult="4">0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>21</el>
                         <el>11</el>
                         <el>12</el>
                         <el>13</el>
                         <el>14</el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix> 
             <matrix numberOfRows="4" numberOfColumns="2" name="34-BaseMatrix 2 for Expansion test">
@@ -1263,27 +1263,27 @@
                         <el>0</el>
                         <el incr="1" mult="4">2</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el>1</el>
                         <el mult="4">0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>112</el>
                         <el>111</el>
                         <el>121</el>
                         <el>131</el>
                         <el>141</el>
-                    </values>
+                    </value>
                 </constantElements>
             </matrix>
             <matrix numberOfRows="30" numberOfColumns="24" name="35-Expansion test 2 - Base matrices">
                 <blocks numberOfBlocks="20">
-                    <colOffsets numberOfEl="5">
+                    <colOffset numberOfEl="5">
                         <el mult="5" incr="6">0</el> 
-                    </colOffsets>
-                    <rowOffsets numberOfEl="6">
+                    </colOffset>
+                    <rowOffset numberOfEl="6">
                         <el mult="6" incr="5">0</el> 
-                    </rowOffsets>
+                    </rowOffset>
                     <block blockRowIdx="0" blockColIdx="0">
                         <baseMatrix baseMatrixIdx="33"/>
                     </block>
@@ -1370,18 +1370,18 @@
             <matrix numberOfRows="7" numberOfColumns="7" name="36-Base matrix for Expansion test 3"
                     symmetry="lower">
                 <blocks numberOfBlocks="2">
-                    <colOffsets numberOfEl="4">
+                    <colOffset numberOfEl="4">
                         <el>0</el> 
                         <el>2</el> 
                         <el>5</el> 
                         <el>7</el> 
-                    </colOffsets>
-                    <rowOffsets numberOfEl="4">
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
                         <el>0</el> 
                         <el>2</el> 
                         <el>5</el> 
                         <el>7</el> 
-                    </rowOffsets>
+                    </rowOffset>
                     <block blockRowIdx="0" blockColIdx="0">
                         <constantElements numberOfValues="3">
                             <start>
@@ -1389,15 +1389,15 @@
                                 <el>2</el>
                                 <el>3</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el>0</el>
                                 <el mult="2">1</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el> 1.0 </el>
                                 <el>-2.0 </el>
                                 <el>-3.0</el>
-                            </values>
+                            </value>
                         </constantElements>
                     </block>
                     <block blockRowIdx="1" blockColIdx="1">
@@ -1405,14 +1405,14 @@
                             <start>
                                 <el incr="1" mult="4">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el incr="1" mult="3">0</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el> 1.0 </el>
                                 <el>-2.0 </el>
                                 <el>-3.0</el>
-                            </values>
+                            </value>
                         </constantElements>
                     </block>
                 </blocks>
@@ -1422,38 +1422,38 @@
                     <start>
                         <el incr="1" mult="3">0</el>
                     </start>
-                    <indexes>
+                    <index>
                         <el mult="2">0</el>
-                    </indexes>
-                    <values>
+                    </index>
+                    <value>
                         <el>0</el>
                         <el>1</el>
-                    </values>
+                    </value>
                 </varReferenceElements>
             </matrix>
             <matrix numberOfRows="6" numberOfColumns="6" name="38-Expansion test 4 - mixed elements">
                 <blocks numberOfBlocks="8">
-                    <colOffsets numberOfEl="4">
+                    <colOffset numberOfEl="4">
                         <el mult="4" incr="2">0</el> 
-                    </colOffsets>
-                    <rowOffsets numberOfEl="4">
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
                         <el mult="4" incr="2">0</el> 
-                    </rowOffsets>
+                    </rowOffset>
                     <block blockRowIdx="0" blockColIdx="0">
                         <constantElements numberOfValues="4">
                             <start>
                                 <el mult="3" incr="2">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el mult="2 " incr=" 1 ">0</el>
                                 <el mult="2 " incr=" 1 ">0</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el> 1.0 </el>
                                 <el>-2.0 </el>
                                 <el>-3.0</el>
                                 <el> 4.0</el>
-                            </values>
+                            </value>
                         </constantElements>
                     </block>
                     <block blockRowIdx="0" blockColIdx="1">
@@ -1461,13 +1461,13 @@
                             <start>
                                 <el incr="1" mult="3">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el mult="2">1</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el>0</el>
                                 <el>1</el>
-                            </values>
+                            </value>
                         </varReferenceElements>
                     </block>
                     <block blockRowIdx="1" blockColIdx="0">
@@ -1475,11 +1475,11 @@
                             <start>
                                 <el mult="3" incr="2">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el>0</el>   <el>1</el>
                                 <el>0</el>   <el>1</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el numberOfVarIdx="1" constant="2">
                                     <varIdx coef="0.5">0</varIdx>
                                 </el>
@@ -1492,7 +1492,7 @@
                                     <varIdx coef="2">0</varIdx>
                                     <varIdx coef="3">1</varIdx>
                                 </el>
-                            </values>
+                            </value>
                         </linearElements>
                     </block>
                     <block blockRowIdx="1" blockColIdx="0">
@@ -1500,10 +1500,10 @@
                             <start>
                                 <el mult="3" incr="1">0</el>
                             </start>
-                            <indexes>
+                            <index>
                                 <el>0</el>    <el>1</el>
-                            </indexes>
-                            <values>
+                            </index>
+                            <value>
                                 <el>
                                     <plus>
                                         <power>
@@ -1520,7 +1520,7 @@
                                         <variable idx="1" coef="5.0"/>
                                     </sin>
                                 </el>
-                            </values>
+                            </value>
                         </generalElements>
                     </block>
                     <block blockRowIdx="2" blockColIdx="0">
@@ -1539,12 +1539,12 @@
             </matrix>
             <matrix numberOfRows="4" numberOfColumns="4" name="39-Expansion test 5 - mixed references">
                 <blocks numberOfBlocks="2">
-                    <colOffsets numberOfEl="3">
+                    <colOffset numberOfEl="3">
                         <el mult="3" incr="2">0</el> 
-                    </colOffsets>
-                    <rowOffsets numberOfEl="3">
+                    </colOffset>
+                    <rowOffset numberOfEl="3">
                         <el mult="3" incr="2">0</el> 
-                    </rowOffsets>
+                    </rowOffset>
                     <block blockRowIdx="0" blockColIdx="0">
                         <baseMatrix baseMatrixIdx="11"/>
                     </block>
@@ -1555,12 +1555,12 @@
             </matrix>
             <matrix numberOfRows="4" numberOfColumns="4" name="40-Expansion test 6 - jumbled references">
                 <blocks numberOfBlocks="2">
-                    <colOffsets numberOfEl="3">
+                    <colOffset numberOfEl="3">
                         <el mult="3" incr="2">0</el> 
-                    </colOffsets>
-                    <rowOffsets numberOfEl="3">
+                    </colOffset>
+                    <rowOffset numberOfEl="3">
                         <el mult="3" incr="2">0</el> 
-                    </rowOffsets>
+                    </rowOffset>
                     <block blockRowIdx="0" blockColIdx="0">
                         <baseMatrix baseMatrixIdx="37"/>
                     </block>

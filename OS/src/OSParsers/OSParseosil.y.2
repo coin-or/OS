@@ -683,6 +683,7 @@ productConeFactorsEnd: FACTORSEND
         = osglData->osglNumberOfEl;
     ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->factors ->el 
         = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };
@@ -754,6 +755,7 @@ intersectionConeComponentsEnd: COMPONENTSEND
         = osglData->osglNumberOfEl;
     ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->components ->el 
         = osglData->osglIntArray;
+    osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 };

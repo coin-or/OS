@@ -3497,7 +3497,8 @@ public:
 
     /**
      * @return a map: the key is the row index and the value is the corresponding expression tree
-     * \remark If there are several expressions in a single row, this method combines them by adding OSnLPlus nodes 
+     * \remark If there are several expressions in a single row, 
+     * this method combines them by adding OSnLPlus nodes 
      */
     std::map<int, ScalarExpressionTree* > getAllNonlinearExpressionTrees();
 
@@ -3507,7 +3508,8 @@ public:
     std::map<int, ScalarExpressionTree* > getAllNonlinearExpressionTreesMod();
 
     /**
-    * Get all the nonlinear expression tree indexes, i.e., indexes of rows (objectives or constraints) that contain nonlinear expressions.
+    * Get all the nonlinear expression tree indexes, i.e., 
+    * indexes of rows (objectives or constraints) that contain nonlinear expressions.
     *
     * @return a pointer to an integer array of nonlinear expression tree indexes.
     */

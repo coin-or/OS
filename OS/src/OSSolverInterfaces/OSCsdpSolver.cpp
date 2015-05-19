@@ -444,8 +444,6 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         for (int blk=1; blk < nBlocks; blk++)
         {
             tmpBlock = mtxBlocks[0]->getBlock(blk-1,blk-1);
-std::cout << "next block; blk= " << blk << std::endl;
-std::cout << "block address: " << tmpBlock << std::endl;
             int blksz = blockSize[blk];
             if (isdiag[blk] == 1)
             {
@@ -460,8 +458,8 @@ std::cout << "block address: " << tmpBlock << std::endl;
                 if (tmpBlock != NULL)
                 {
                     for (int i=0; i < tmpBlock->valueSize; i++)
-                        C_matrix.blocks[blk].data.vec[tmpBlock->indexes[i]+1]
-                            = ((ConstantMatrixValues*)tmpBlock->values)->el[i];
+                        C_matrix.blocks[blk].data.vec[tmpBlock->index[i]+1]
+                            = ((ConstantMatrixValues*)tmpBlock->value)->el[i];
                 }
             }
             else
@@ -478,12 +476,12 @@ std::cout << "block address: " << tmpBlock << std::endl;
                 if (tmpBlock != NULL)
                 {
                     for (int i=1; i < tmpBlock->startSize; i++)
-                    for (int j=tmpBlock->starts[i-1]; j<tmpBlock->starts[i]; j++)
+                    for (int j=tmpBlock->start[i-1]; j<tmpBlock->start[i]; j++)
                     {
-                        C_matrix.blocks[blk].data.mat[ijtok(i,tmpBlock->indexes[j]+1,blksz)]
-                            = ((ConstantMatrixValues*)tmpBlock->values)->el[j];
-                        C_matrix.blocks[blk].data.mat[ijtok(tmpBlock->indexes[j]+1,i,blksz)]
-                            = ((ConstantMatrixValues*)tmpBlock->values)->el[j];
+                        C_matrix.blocks[blk].data.mat[ijtok(i,tmpBlock->index[j]+1,blksz)]
+                            = ((ConstantMatrixValues*)tmpBlock->value)->el[j];
+                        C_matrix.blocks[blk].data.mat[ijtok(tmpBlock->index[j]+1,i,blksz)]
+                            = ((ConstantMatrixValues*)tmpBlock->value)->el[j];
                     }
                 }
             }
@@ -541,14 +539,11 @@ std::cout << "block address: " << tmpBlock << std::endl;
 
                     // Note: everything is 1-indexed, so both locations and indices are shifted 
                     for (int icol=1; icol < tmpBlock->startSize; icol++)
-                    for (int jent=tmpBlock->starts[icol-1]; jent<tmpBlock->starts[icol]; jent++)
+                    for (int jent=tmpBlock->start[icol-1]; jent<tmpBlock->start[icol]; jent++)
                     {
-std::cout << "store element in col " << icol << ", row " << tmpBlock->indexes[jent] + 1;
-std::cout << " (value " << ((ConstantMatrixValues*)tmpBlock->values)->el[jent];
-std::cout << ") into location " << jent + 1 << std::endl;
                         p->iindices[jent+1] = icol;
-                        p->jindices[jent+1] = tmpBlock->indexes[jent] + 1;
-                        p->entries [jent+1] = ((ConstantMatrixValues*)tmpBlock->values)->el[jent];
+                        p->jindices[jent+1] = tmpBlock->index[jent] + 1;
+                        p->entries [jent+1] = ((ConstantMatrixValues*)tmpBlock->value)->el[jent];
                     }
 
                     if (prev == NULL)

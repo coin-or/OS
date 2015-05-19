@@ -5711,15 +5711,8 @@ std::string OSInstance::printModel(int rowIdx )
             {
                 outStr << os_dtoa_format( m_mObjectiveCoefficients[obj_idx]->values[j] );
                 outStr << "*";
-//                if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name.size() > 0)
-//                {
-//                    outStr << this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name;
-//                }
-//                else
-                {
-                    outStr << "x_";
-                    outStr << m_mObjectiveCoefficients[obj_idx]->indexes[j] ;
-                }
+                outStr << "x_";
+                outStr << m_mObjectiveCoefficients[obj_idx]->indexes[j] ;
                 if( j < obj_nonz - 1) outStr << " + ";
             }
         }
@@ -9325,6 +9318,7 @@ bool MatrixObj::IsEqual(MatrixObj *that)
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
                 "First object is NULL, second is not");
+
 #endif
             return false;
         }
