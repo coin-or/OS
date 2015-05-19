@@ -391,7 +391,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 		<xs:sequence>
 			<xs:element name="matrixVar" type="MatrixVar" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixVar</xs:documentation>
+					<xs:documentation>number must match numberOfMatrixVar after "mult" has been considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -458,7 +458,7 @@ If missing, all variables indicated  by the use of the template matrix are creat
 			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
 			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions are contained in nonlinearExpressions</xs:documentation>
+					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions shold be set up as nonlinearExpressions</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -470,7 +470,7 @@ If missing, all variables indicated  by the use of the template matrix are creat
 		<xs:sequence>
 			<xs:element name="matrixObj" type="MatrixObj" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixObj</xs:documentation>
+					<xs:documentation>number must match numberOfMatrixObj after "mult" has been considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -519,7 +519,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		<xs:sequence>
 			<xs:element name="matrixCon" type="MatrixCon" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixCon</xs:documentation>
+					<xs:documentation>number must match numberOfMatrixCon after "mult" has been considered</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
