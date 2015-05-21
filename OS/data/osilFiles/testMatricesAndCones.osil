@@ -1337,12 +1337,12 @@
                     <block blockRowIdx="3" blockColIdx="2">
                         <baseMatrix baseMatrixIdx="34" scalarMultiplier="2"
                             targetMatrixFirstRow="2" targetMatrixFirstCol="3"
-                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                            baseMatrixStartCol="1" baseMatrixEndCol="1"/>
                     </block>
                     <block blockRowIdx="3" blockColIdx="3">
                         <baseMatrix baseMatrixIdx="34" baseTranspose="true" scalarMultiplier="2"
                             targetMatrixFirstRow="2" targetMatrixFirstCol="3"
-                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                            baseMatrixStartCol="1" baseMatrixEndCol="1"/>
                     </block>
                     <block blockRowIdx="4" blockColIdx="0">
                         <baseMatrix baseMatrixIdx="33" scalarMultiplier="2"
@@ -1357,12 +1357,12 @@
                     <block blockRowIdx="4" blockColIdx="2">
                         <baseMatrix baseMatrixIdx="34" scalarMultiplier="2"
                             targetMatrixFirstRow="3" targetMatrixFirstCol="4"
-                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                            baseMatrixStartCol="1" baseMatrixEndCol="1"/>
                     </block>
                     <block blockRowIdx="4" blockColIdx="3">
                         <baseMatrix baseMatrixIdx="34" baseTranspose="true" scalarMultiplier="2"
                             targetMatrixFirstRow="3" targetMatrixFirstCol="4"
-                            baseMatrixStartCol="1" baseMatrixEndCol="2"/>
+                            baseMatrixStartCol="1" baseMatrixEndCol="1"/>
                     </block>
                 </blocks>
             </matrix>

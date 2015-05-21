@@ -606,10 +606,10 @@ bool OSnl2OS::createOSObjects()
 
         for (osNLIdx = 0, aNLIdx = -1; osNLIdx < nlc; osNLIdx++, aNLIdx--)
         {
-            if (isQP)  // No need to continue looking for quadratic terms once we have found a non-quadratic term
+            if (isQP)  // (No need to keep looking for quad terms once we found a non-quadratic term)
             {
                 // check the nonzeroes before and after 
-                if (!fill_in) // once we know there will be fill-in, we can stop counting
+                if (!fill_in) // (once we know there will be fill-in, we can stop counting)
                 {
                     for(cg = Cgrad[osNLIdx]; cg; cg = cg->next)
                     {
@@ -633,12 +633,12 @@ bool OSnl2OS::createOSObjects()
                             }
                         }
                     }
-                    if (!fill_in) // once we know there will be fill-in we can stop counting
+                    if (!fill_in) // (once we know there will be fill-in we can stop counting)
                     {
                         for(cg = Cgrad[osNLIdx]; cg; cg = cg->next)
                         {
-                            if (cg->coef != 0) 
-                                if (cg->coef != A_row_temp[cg->varno]) 
+                            if (cg->coef != 0)
+                                if (cg->coef != A_row_temp[cg->varno])
                                 {
                                     fill_in = true;
                                     break;

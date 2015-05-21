@@ -5623,8 +5623,8 @@ baseMatrixStart: BASEMATRIXSTART
     osglData->baseMatrixEndColPresent = false;
     osglData->baseTransposePresent = false;
     osglData->scalarMultiplierPresent = false;
-    osglData->baseMatrixEndRow = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows;
-    osglData->baseMatrixEndCol = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns;
+    osglData->baseMatrixEndRow = -1;
+    osglData->baseMatrixEndCol = -1;
 };
 
 baseMatrixAttributes: baseMatrixAttList
@@ -5677,8 +5677,6 @@ osglBaseMatrixIdxATT: BASEMATRIXIDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
     if ($3 > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
-    //((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
-    //    mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType, osglData->matrix[$3]->matrixType);
     osglData->baseMatrixIdxPresent = true;   
     osglData->baseMatrixIdx = $3; 
 };
@@ -5710,11 +5708,14 @@ osglTargetMatrixFirstColATT: TARGETMATRIXFIRSTCOLATT QUOTE INTEGER QUOTE
 osglBaseMatrixStartRowATT: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
 { 
     if ( *$2 != *$4 ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, 
+                                         "start and end quotes are not the same");
     if (osglData->baseMatrixStartRowPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixStartRow attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, 
+            "more than one baseMatrixStartRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix first row cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, 
+                                         "baseMatrix first row cannot be negative");
     osglData->baseMatrixStartRowPresent = true;   
     osglData->baseMatrixStartRow = $3; 
 };
@@ -5722,11 +5723,14 @@ osglBaseMatrixStartRowATT: BASEMATRIXSTARTROWATT QUOTE INTEGER QUOTE
 osglBaseMatrixStartColATT: BASEMATRIXSTARTCOLATT QUOTE INTEGER QUOTE
 { 
     if ( *$2 != *$4 ) 
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, 
+                                         "start and end quotes are not the same");
     if (osglData->baseMatrixStartColPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixStartCol attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, 
+            "more than one baseMatrixStartCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix first col cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, 
+                                         "baseMatrix first column cannot be negative");
     osglData->baseMatrixStartColPresent = true;   
     osglData->baseMatrixStartCol = $3; 
 };
@@ -5738,9 +5742,7 @@ osglBaseMatrixEndRowATT: BASEMATRIXENDROWATT QUOTE INTEGER QUOTE
     if (osglData->baseMatrixEndRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix last row cannot be negative");
-    if ($3 > ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix last row exceeds matrix dimensions");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix end row cannot be negative");
     osglData->baseMatrixEndRowPresent = true;   
     osglData->baseMatrixEndRow = $3; 
 };
@@ -5752,9 +5754,7 @@ osglBaseMatrixEndColATT: BASEMATRIXENDCOLATT QUOTE INTEGER QUOTE
     if (osglData->baseMatrixEndColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ($3 < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix last col cannot be negative");
-    if ($3 > ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix last col exceeds matrix dimensions");
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "baseMatrix end col cannot be negative");
     osglData->baseMatrixEndColPresent = true;   
     osglData->baseMatrixEndCol = $3; 
 };

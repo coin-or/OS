@@ -1059,7 +1059,7 @@ cout << temposil << endl;
                 if (test1_c->isDiagonal())
                     throw ErrorClass("Failed diagonality assessment of matrix 32 (by rows)");
 
-#if 0
+//#if 0
                 cout << endl << "Another matrix expansion in column major form" << endl;
 
                 GeneralSparseMatrix* test2_a = 
@@ -1107,7 +1107,7 @@ cout << temposil << endl;
                     throw ErrorClass("Failed column expansion of matrix 35 (by rows)");
 
 
-
+#if 0
                 int partition3[4];
                 partition3[0]= 0;
                 partition3[1]= 2;

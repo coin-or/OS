@@ -1670,7 +1670,7 @@ static const yytype_uint16 yyrline[] =
     2593,  2602,  2624,  2642,  2642,  2645,  2646,  2647,  2648,  2649,
     2652,  2661,  2670,  2679,  2679,  2681,  2683,  2690,  2692,  2692,
     2697,  2715,  2742,  2742,  2745,  2746,  2747,  2748,  2749,  2750,
-    2751,  2752,  2753,  2755,  2771,  2783,  2795,  2807,  2819,  2833,
+    2751,  2752,  2753,  2755,  2769,  2781,  2793,  2808,  2823,  2835,
     2847,  2854,  2854,  2856,  2861,  2869,  2879,  2879,  2881,  2881,
     2886,  2886,  2886,  2886,  2887,  2887,  2887,  2887,  2889,  2891,
     2900,  2906,  2906,  2909,  2915,  2921,  2923,  2923,  2929,  2939,
@@ -5987,8 +5987,8 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     osglData->baseMatrixEndColPresent = false;
     osglData->baseTransposePresent = false;
     osglData->scalarMultiplierPresent = false;
-    osglData->baseMatrixEndRow = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows;
-    osglData->baseMatrixEndCol = ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns;
+    osglData->baseMatrixEndRow = -1;
+    osglData->baseMatrixEndCol = -1;
 }
     break;
 
@@ -6032,8 +6032,6 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
     if ((yyvsp[(3) - (4)].ival) > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
-    //((MatrixType*)osglData->mtxBlkVec.back())->matrixType  = 
-    //    mergeMatrixType(((MatrixType*)osglData->mtxBlkVec.back())->matrixType, osglData->matrix[$3]->matrixType);
     osglData->baseMatrixIdxPresent = true;   
     osglData->baseMatrixIdx = (yyvsp[(3) - (4)].ival); 
 }
@@ -6071,11 +6069,14 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
     { 
     if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+                                         "start and end quotes are not the same");
     if (osglData->baseMatrixStartRowPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixStartRow attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+            "more than one baseMatrixStartRow attribute in <baseMatrix> element");
     if ((yyvsp[(3) - (4)].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix first row cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+                                         "baseMatrix first row cannot be negative");
     osglData->baseMatrixStartRowPresent = true;   
     osglData->baseMatrixStartRow = (yyvsp[(3) - (4)].ival); 
 }
@@ -6085,11 +6086,14 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
     { 
     if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+                                         "start and end quotes are not the same");
     if (osglData->baseMatrixStartColPresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixStartCol attribute in <baseMatrix> element");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+            "more than one baseMatrixStartCol attribute in <baseMatrix> element");
     if ((yyvsp[(3) - (4)].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix first col cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+                                         "baseMatrix first column cannot be negative");
     osglData->baseMatrixStartColPresent = true;   
     osglData->baseMatrixStartCol = (yyvsp[(3) - (4)].ival); 
 }
@@ -6103,9 +6107,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     if (osglData->baseMatrixEndRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
     if ((yyvsp[(3) - (4)].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last row cannot be negative");
-    if ((yyvsp[(3) - (4)].ival) > ((MatrixType*)osglData->mtxBlkVec.back())->numberOfRows)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last row exceeds matrix dimensions");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix end row cannot be negative");
     osglData->baseMatrixEndRowPresent = true;   
     osglData->baseMatrixEndRow = (yyvsp[(3) - (4)].ival); 
 }
@@ -6119,9 +6121,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     if (osglData->baseMatrixEndColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
     if ((yyvsp[(3) - (4)].ival) < 0)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last col cannot be negative");
-    if ((yyvsp[(3) - (4)].ival) > ((MatrixType*)osglData->mtxBlkVec.back())->numberOfColumns)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix last col exceeds matrix dimensions");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix end col cannot be negative");
     osglData->baseMatrixEndColPresent = true;   
     osglData->baseMatrixEndCol = (yyvsp[(3) - (4)].ival); 
 }

@@ -307,7 +307,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
         {
             if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
             {
-                int  baseMtxIdx = ((BaseMatrix*)m_mChildren[0])->baseMatrixIdx;
+                int baseMtxIdx = ((BaseMatrix*)m_mChildren[0])->baseMatrixIdx;
                 OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
 
                 int iroff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
@@ -515,7 +515,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                     baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
                                 tmpStarts[i+1]++; 
                             }
-                        for (int i=icoff+1; i <= startSize; i++) 
+                        for (int i=icoff+1; i < startSize; i++) 
                             tmpStarts[i] += tmpStarts[i-1];
  
                         int valueSize = tmpStarts[startSize-1];
