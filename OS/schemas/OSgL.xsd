@@ -639,6 +639,11 @@ The result of this transformation is aligned with the top left corner of the tar
 						<xs:documentation>For elements that reference data items associated with scalar constraints, e.g., value, surplus, etc.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
+				<xs:element name="stringValuedElements" type="StringValuedMatrixElements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>For elements that are constant values, e.g., "active".</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 				<xs:element name="blocks" type="MatrixBlocks" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>If no block children, the blocks only give partition information of the matrix.</xs:documentation>
@@ -764,6 +769,39 @@ The result of this transformation is aligned with the top left corner of the tar
 				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 				<xs:attribute name="name" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OSMatrixWithMatrixVarIdx">
+		<xs:complexContent>
+			<xs:extension base="OSMatrix">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to a matrixVar defined in the problem instance (OsiL file).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OSMatrixWithMatrixObjIdx">
+		<xs:complexContent>
+			<xs:extension base="OSMatrix">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1">
+					<xs:annotation>
+						<xs:documentation>Refers to a matrixObj defined in the problem instance (OsiL file).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OSMatrixWithMatrixConIdx">
+		<xs:complexContent>
+			<xs:extension base="OSMatrix">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to a matrixCon defined in the problem instance (OsiL file).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -986,6 +1024,28 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 				<xs:annotation>
 					<xs:documentation>number of "el" children must equal numberOfValues.
 Each nonzero is a general nonlinear expression</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StringValuedMatrixElements">
+		<xs:sequence>
+			<xs:element name="start" type="SizelessNonNegativeIntVector">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfColumns + 1 (if rowMajor is false) and numberOfRows + 1 (if rowMajor is true), after "mult" is considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="index" type="SizelessNonNegativeIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfValues, after "mult" is considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="value" type="SizelessStringVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of "el" children must equal numberOfValues, after "mult" is considered
+</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>

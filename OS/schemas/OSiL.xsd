@@ -458,7 +458,7 @@ If missing, all variables indicated  by the use of the template matrix are creat
 			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
 			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions shold be set up as nonlinearExpressions</xs:documentation>
+					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions should be set up as nonlinearExpressions</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>

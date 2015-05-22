@@ -387,13 +387,13 @@
 	</xs:complexType>
 	<xs:complexType name="ObjectiveValues">
 		<xs:sequence>
-			<xs:element name="obj" type="ResultElementValue" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="ObjResultElementValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveResult">
 		<xs:choice>
-			<xs:element name="obj" type="ResultElementString" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="obj" type="ObjResultElementString" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
 				</xs:annotation>
@@ -550,13 +550,13 @@
 	</xs:complexType>
 	<xs:complexType name="MatrixVariableValues">
 		<xs:sequence>
-			<xs:element name="matrixVar" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixVar" type="OSMatrixWithMatrixVarIdx" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixVariableResult">
 		<xs:choice>
-			<xs:element name="matrixVar" type="OtherMatrixVarResult" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="matrixVar" type="OSMatrixWithMatrixVarIdx" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfMatrixVar must be set in parent, and the number of entries must agree with numberOfMtx</xs:documentation>
 				</xs:annotation>
@@ -593,7 +593,7 @@
 	</xs:complexType>
 	<xs:complexType name="MatrixObjectiveValues">
 		<xs:sequence>
-			<xs:element name="matrixObj" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixObj" type="OSMatrixWithMatrixObjIdx" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -606,7 +606,7 @@
 	</xs:complexType>
 	<xs:complexType name="MatrixConstraintValues">
 		<xs:sequence>
-			<xs:element name="matrixCon" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixCon" type="OSMatrixWithMatrixConIdx" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -649,7 +649,7 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixObjectiveResult">
 		<xs:choice>
-			<xs:element name="matrixObj" type="OtherMatrixObjResult" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="matrixObj" type="OSMatrixWithMatrixObjIdx" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfMtx must be set in parent, and the number of entries must agree with numberOfMtx</xs:documentation>
 				</xs:annotation>
@@ -690,7 +690,7 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixConstraintResult">
 		<xs:choice>
-			<xs:element name="matrixCon" type="OtherMatrixConResult" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="matrixCon" type="OSMatrixWithMatrixConIdx" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfMtx must be set in parent, and the number of entries must agree with numberOfMtx</xs:documentation>
 				</xs:annotation>
@@ -818,9 +818,22 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 		<xs:attribute name="type" type="xs:string"/>
 		<xs:attribute name="solver" type="xs:string"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>Must refer to a matrix defined in the "matrices" section</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="ResultElementValue">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ObjResultElementValue">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
@@ -829,6 +842,14 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="ResultElementString">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ObjResultElementString">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
