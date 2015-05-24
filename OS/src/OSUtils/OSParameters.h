@@ -600,7 +600,7 @@ enum ENUM_MATRIX_TYPE
 {
     ENUM_MATRIX_TYPE_empty = 1,         // matrix has no elements (i.e., zero matrix)
 
-    ENUM_MATRIX_TYPE_constant = 10,     // matrix elements contain constant values
+    ENUM_MATRIX_TYPE_constant = 10,     // matrix elements contain constant values (i.e., real numbers)
     ENUM_MATRIX_TYPE_varReference,      // matrix elements contain indexes of variables in the core
     ENUM_MATRIX_TYPE_linear,            // matrix contains linear expressions
     ENUM_MATRIX_TYPE_quadratic,         // matrix contains quadratic expressions
@@ -609,6 +609,8 @@ enum ENUM_MATRIX_TYPE
     ENUM_MATRIX_TYPE_objReference = 20, // matrix elements contain indexes of constraints in the core
     ENUM_MATRIX_TYPE_conReference,      // matrix elements contain indexes of objectives in the core
     ENUM_MATRIX_TYPE_mixedRowReference, // mixed reference to objectives and constraints
+
+    ENUM_MATRIX_TYPE_string,            // matrix elements contain string values
 
     ENUM_MATRIX_TYPE_unknown = 99
 };
@@ -626,6 +628,8 @@ inline int returnMatrixType(std::string type)
     if (type == "conReference"     ) return ENUM_MATRIX_TYPE_conReference;
     if (type == "mixedRowReference") return ENUM_MATRIX_TYPE_mixedRowReference;
 
+    if (type == "string"           ) return ENUM_MATRIX_TYPE_string;
+
     if (type == "unknown"          ) return ENUM_MATRIX_TYPE_unknown;
     return 0;
 }//returnMatrixType
@@ -642,6 +646,7 @@ inline std::string returnMatrixTypeString(ENUM_MATRIX_TYPE type)
     if (type == ENUM_MATRIX_TYPE_conReference)      return "conReference";
     if (type == ENUM_MATRIX_TYPE_mixedRowReference) return "mixedRowReference";
     if (type == ENUM_MATRIX_TYPE_unknown)           return "unknown";
+    if (type == ENUM_MATRIX_TYPE_string)            return "string";
     return "unknown";
 }//returnMatrixTypeString
 
@@ -658,9 +663,8 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
     // two matrices of same type 
     if (type1 == type2) return type1;
 
-    // if one matrix is jumbled, the result must be a jumbled matrix
-//    if (type1 == ENUM_MATRIX_TYPE_jumbled || type2 == ENUM_MATRIX_TYPE_jumbled) 
-//        return ENUM_MATRIX_TYPE_jumbled;
+    if (type1 == ENUM_MATRIX_TYPE_string || type2 == ENUM_MATRIX_TYPE_string) 
+        return ENUM_MATRIX_TYPE_string;
 
     if (type1 == ENUM_MATRIX_TYPE_unknown) return type2;
     if (type2 == ENUM_MATRIX_TYPE_unknown) return type1;
@@ -779,7 +783,8 @@ enum ENUM_MATRIX_CONSTRUCTOR_TYPE
     ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_rowRefElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_mixedRowRefElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_stringValuedElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_block,
@@ -795,6 +800,7 @@ inline int returnMatrixConstructorType(std::string cType)
     if (cType == "generalElements"  ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements;
     if (cType == "objRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements;
     if (cType == "conRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements;
+    if (cType == "stringElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_stringValuedElements;
     if (cType == "transformation"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
     if (cType == "blocks"           ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
     if (cType == "block"            ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;

@@ -4803,15 +4803,22 @@ bool LinearMatrixElement::setRandom(double density, bool conformant, int iMin, i
 
 bool LinearMatrixElement::deepCopyFrom(LinearMatrixElement *that)
 {
-    this->constant = that->constant;
-    this->numberOfVarIdx = that->numberOfVarIdx;
-    this->varIdx = new LinearMatrixElementTerm*[numberOfVarIdx];
-    for (int i=0; i<numberOfVarIdx; i++)
+    try
     {
-        this->varIdx[i] = new LinearMatrixElementTerm();
-        ((LinearMatrixElement*)this)->varIdx[i]->deepCopyFrom(that->varIdx[i]);
+        this->constant = that->constant;
+        this->numberOfVarIdx = that->numberOfVarIdx;
+        this->varIdx = new LinearMatrixElementTerm*[numberOfVarIdx];
+        for (int i=0; i<numberOfVarIdx; i++)
+        {
+            this->varIdx[i] = new LinearMatrixElementTerm();
+            ((LinearMatrixElement*)this)->varIdx[i]->deepCopyFrom(that->varIdx[i]);
+        }
+        return true;
     }
-    return true;
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
 }// end of LinearMatrixElement::deepCopyFrom()
 
 
@@ -5675,43 +5682,43 @@ bool ConReferenceMatrixElement::deepCopyFrom(ConReferenceMatrixElement *that)
 }// end of ConReferenceMatrixElement::deepCopyFrom()
 
 
-/** ---------- Methods for class RowReferenceMatrixElements ---------- */ 
-RowReferenceMatrixElements::RowReferenceMatrixElements():
+/** ---------- Methods for class MixedRowReferenceMatrixElements ---------- */ 
+MixedRowReferenceMatrixElements::MixedRowReferenceMatrixElements():
     value(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the RowReferenceMatrixElements Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MixedRowReferenceMatrixElements Constructor");
 #endif
-}// end of RowReferenceMatrixElements::RowReferenceMatrixElements()
+}// end of MixedRowReferenceMatrixElements::MixedRowReferenceMatrixElements()
 
-RowReferenceMatrixElements::~RowReferenceMatrixElements()
+MixedRowReferenceMatrixElements::~MixedRowReferenceMatrixElements()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the RowReferenceMatrixElements Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MixedRowReferenceMatrixElements Destructor");
 #endif
     if (value != NULL)
         delete value;
     value = NULL;
-}// end of RowReferenceMatrixElements::~RowReferenceMatrixElements()
+}// end of MixedRowReferenceMatrixElements::~MixedRowReferenceMatrixElements()
 
-ENUM_MATRIX_CONSTRUCTOR_TYPE RowReferenceMatrixElements::getNodeType()
+ENUM_MATRIX_CONSTRUCTOR_TYPE MixedRowReferenceMatrixElements::getNodeType()
 {
-    return ENUM_MATRIX_CONSTRUCTOR_TYPE_rowRefElements;
-}// end of RowReferenceMatrixElements::getNodeType()
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_mixedRowRefElements;
+}// end of MixedRowReferenceMatrixElements::getNodeType()
 
-std::string RowReferenceMatrixElements::getNodeName()
+std::string MixedRowReferenceMatrixElements::getNodeName()
 {
-    return "rowRefElements";
-}// end of RowReferenceMatrixElements::getNodeName()
+    return "mixedRowRefElements";
+}// end of MixedRowReferenceMatrixElements::getNodeName()
 
-ENUM_MATRIX_TYPE RowReferenceMatrixElements::getMatrixType()
+ENUM_MATRIX_TYPE MixedRowReferenceMatrixElements::getMatrixType()
 {
     if (matrixType == ENUM_MATRIX_TYPE_unknown)
         matrixType =  ENUM_MATRIX_TYPE_mixedRowReference;
     return matrixType;
-}// end of RowReferenceMatrixElements::getMatrixType()
+}// end of MixedRowReferenceMatrixElements::getMatrixType()
 
-std::string RowReferenceMatrixElements::getMatrixNodeInXML()
+std::string MixedRowReferenceMatrixElements::getMatrixNodeInXML()
 {
     /** These elements have to be printed in two passes: 
      *  objReference elements first, followed by conReference elements
@@ -5890,24 +5897,24 @@ std::string RowReferenceMatrixElements::getMatrixNodeInXML()
     }
 
     return outStr.str();
-}// end of RowReferenceMatrixElements::getMatrixNodeInXML()
+}// end of MixedRowReferenceMatrixElements::getMatrixNodeInXML()
 
-bool RowReferenceMatrixElements::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+bool MixedRowReferenceMatrixElements::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
 {
     return false;
-}// end of RowReferenceMatrixElements::alignsOnBlockBoundary()
+}// end of MixedRowReferenceMatrixElements::alignsOnBlockBoundary()
 
-RowReferenceMatrixElements* RowReferenceMatrixElements::cloneMatrixNode()
+MixedRowReferenceMatrixElements* MixedRowReferenceMatrixElements::cloneMatrixNode()
 {
-    RowReferenceMatrixElements *nodePtr;
-    nodePtr = new RowReferenceMatrixElements();
-    return  (RowReferenceMatrixElements*)nodePtr;
-}// end of RowReferenceMatrixElements::cloneMatrixNode
+    MixedRowReferenceMatrixElements *nodePtr;
+    nodePtr = new MixedRowReferenceMatrixElements();
+    return  (MixedRowReferenceMatrixElements*)nodePtr;
+}// end of MixedRowReferenceMatrixElements::cloneMatrixNode
 
-bool RowReferenceMatrixElements::IsEqual(RowReferenceMatrixElements *that)
+bool MixedRowReferenceMatrixElements::IsEqual(MixedRowReferenceMatrixElements *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in RowReferenceMatrixElements");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in MixedRowReferenceMatrixElements");
 #endif
     if (this == NULL)
     {
@@ -5944,17 +5951,17 @@ bool RowReferenceMatrixElements::IsEqual(RowReferenceMatrixElements *that)
             return true;
         }
     }
-}// end of RowReferenceMatrixElements::IsEqual()
+}// end of MixedRowReferenceMatrixElements::IsEqual()
 
-bool RowReferenceMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
+bool MixedRowReferenceMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
 {
     return true;
-}// end of RowReferenceMatrixElements::setRandom()
+}// end of MixedRowReferenceMatrixElements::setRandom()
 
-bool RowReferenceMatrixElements::deepCopyFrom(RowReferenceMatrixElements *that)
+bool MixedRowReferenceMatrixElements::deepCopyFrom(MixedRowReferenceMatrixElements *that)
 {
     return true;
-}// end of RowReferenceMatrixElements::deepCopyFrom()
+}// end of MixedRowReferenceMatrixElements::deepCopyFrom()
 
 
 /** ---------- Methods for class MatrixBlocks ---------- */ 
@@ -6474,3 +6481,202 @@ bool ExpandedMatrixBlocks::display(int secondaryDim)
     return true;
 }
 
+
+//-------------------------------------
+/**
+ *  Some methods to convert one type of matrix element into another
+ */
+LinearMatrixElement* convertToLinearMatrixElement(double val)
+{
+    try
+    {
+        LinearMatrixElement* tmp = new LinearMatrixElement();
+        tmp->constant = val;
+        tmp->numberOfVarIdx = 0;
+        tmp->varIdx = NULL;
+        return tmp;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of convertToLinearMatrixElement
+
+LinearMatrixElement* convertToLinearMatrixElement(int varref)
+{
+    try
+    {
+        LinearMatrixElement* tmp = new LinearMatrixElement();
+        tmp->constant = 0.0;
+        tmp->numberOfVarIdx = 1;
+        tmp->varIdx    = new LinearMatrixElementTerm*[1];
+        tmp->varIdx[0] = new LinearMatrixElementTerm();
+        tmp->varIdx[0]->coef = 1.0;
+        tmp->varIdx[0]->idx  = varref;
+        return tmp;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}
+
+ScalarExpressionTree* convertToGeneralMatrixElement(double val)
+{
+    try
+    {
+        std::vector<ExprNode*> nlNodeVec;
+        ScalarExpressionTree* tmp = new ScalarExpressionTree();
+
+        OSnLNodeNumber* tmpNum = new OSnLNodeNumber();
+        tmpNum->value = val;
+        nlNodeVec.push_back(tmpNum);
+
+        tmp->m_treeRoot =
+            ((OSnLNode*)nlNodeVec[ 0])->createExpressionTreeFromPostfix(nlNodeVec);
+        nlNodeVec.clear();
+        return tmp;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}
+
+ScalarExpressionTree* convertToGeneralMatrixElement(int refIdx, bool varRef) // varref or objref
+{
+    try
+    {
+        std::vector<ExprNode*> nlNodeVec;
+        ScalarExpressionTree* tmp = new ScalarExpressionTree();
+
+        OSnLNode* tmpRef;
+
+        if (varRef)
+        {
+            tmpRef = new OSnLNodeVariable();
+            ((OSnLNodeVariable*)tmpRef)->idx = refIdx;
+        }
+        else
+            throw ErrorClass("OSnLNodeObjective not yet implemented");
+        nlNodeVec.push_back(tmpRef);
+
+        tmp->m_treeRoot =
+            ((OSnLNode*)nlNodeVec[ 0])->createExpressionTreeFromPostfix(nlNodeVec);
+        nlNodeVec.clear();
+        return tmp;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}
+
+ScalarExpressionTree* convertToGeneralMatrixElement(LinearMatrixElement* linearExpr)
+{
+    try
+    {
+        std::vector<ExprNode*> nlNodeVec;
+        ScalarExpressionTree* tmp = new ScalarExpressionTree();
+
+//push this back as a sum node : [c_1*] x_1 + [c_2*] x_2 + ... (+ c_0)
+        OSnLNodeSum*      tmpSum = new OSnLNodeSum();
+        OSnLNodeNumber*   tmpNum;
+        OSnLNodeVariable* tmpVar;
+        OSnLNodeTimes*    tmpTimes;
+
+        for (int i=0; i < linearExpr->numberOfVarIdx; i++)
+        {
+            tmpVar = new OSnLNodeVariable();
+            tmpVar->idx = linearExpr->varIdx[i]->idx;
+            nlNodeVec.push_back(tmpVar);
+            if (linearExpr->varIdx[i]->coef != 1.0)
+            {
+                tmpNum = new OSnLNodeNumber();
+                tmpNum->value = linearExpr->varIdx[i]->coef;
+                nlNodeVec.push_back(tmpNum);
+
+                tmpTimes = new OSnLNodeTimes();
+                nlNodeVec.push_back(tmpTimes);
+            }
+        }
+
+        if (linearExpr->constant != 0.0)
+        {
+            tmpNum = new OSnLNodeNumber();
+            tmpNum->value = linearExpr->constant;
+            nlNodeVec.push_back(tmpNum);
+        }
+
+        nlNodeVec.push_back(tmpSum);
+
+        tmp->m_treeRoot =
+            ((OSnLNode*)nlNodeVec[ 0])->createExpressionTreeFromPostfix(nlNodeVec);
+        nlNodeVec.clear();
+        return tmp;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}
+
+ScalarExpressionTree* convertToGeneralMatrixElement(ConReferenceMatrixElement* val)
+{
+    try
+    {
+        throw ErrorClass("In convertToGeneralMatrixElement: OSnLNodeConstraint not yet implemented");
+        return NULL;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}
+
+ConReferenceMatrixElement* convertToConReferenceMatrixElement(int objref)
+{
+    try
+    {
+        throw ErrorClass("In convertToConReferenceMatrixElement: OSnLNodeConstraint not yet implemented");
+        return NULL;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}
+
+#if 0
+    // define the vectors
+    OSnLNode *nlNodePoint;
+    OSnLNodeVariable *nlNodeVariablePoint;
+    std::vector<ExprNode*> nlNodeVec;
+    //
+    //
+    int i;
+    for(i = 0; i < numQPTerms; i++)
+    {
+        instanceData->nonlinearExpressions->nl[ i] = new Nl();
+        instanceData->nonlinearExpressions->nl[ i]->idx = rowIndexes[ i];
+        instanceData->nonlinearExpressions->nl[ i]->osExpressionTree = new ScalarExpressionTree();
+        // create a variable nl node for x0
+        nlNodeVariablePoint = new OSnLNodeVariable();
+        nlNodeVariablePoint->idx = varOneIndexes[ i];
+        // give this variable the coefficient
+        nlNodeVariablePoint->coef = coefficients[ i];
+        nlNodeVec.push_back( nlNodeVariablePoint);
+        // create the nl node for x1
+        nlNodeVariablePoint = new OSnLNodeVariable();
+        nlNodeVariablePoint->idx = varTwoIndexes[ i];
+        nlNodeVec.push_back( nlNodeVariablePoint);
+        // create the nl node for *
+        nlNodePoint = new OSnLNodeTimes();
+        nlNodeVec.push_back( (OSnLNode*)nlNodePoint);
+        // the vectors are in postfix format
+        // now the expression tree
+        instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot =
+            ((OSnLNode*)nlNodeVec[ 0])->createExpressionTreeFromPostfix( nlNodeVec);
+        nlNodeVec.clear();
+    }
+#endif

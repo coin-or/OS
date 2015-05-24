@@ -446,9 +446,9 @@ public:
 /*! \class ConReferenceMatrixElement
  *  \brief a data structure to represent an entry in a conReferenceMatrix element,
  *  which consists of a constraint reference as well as a value type.
- *  @remark We use the same class to describe rowReferenceMatrix elements.
- *  A rowReferenceMatrix is obtained by combining objReferenceMatrix elements
- *  and conReferenceMatrix elements into a single matrix constructor.
+ *  @remark We use the same class to describe MixedRowReferenceMatrix elements.
+ *  A MixedRowReferenceMatrix is obtained by combining ObjReferenceMatrix elements
+ *  and ConReferenceMatrix elements into a single matrix constructor.
  */
 class ConReferenceMatrixElement
 {
@@ -1256,12 +1256,12 @@ public:
 };//class ConReferenceMatrixElements
 
 
-/*! \class RowReferenceMatrixElements
+/*! \class MixedRowReferenceMatrixElements
  * \brief a data structure to represent row reference elements in a MatrixType object
  *  Each nonzero element references a row (if index is negative) or constraint (otherwise)
  *  This class allows the combining of row and constraint references in a single matrix constructor.
  */
-class RowReferenceMatrixElements: public MatrixElements
+class MixedRowReferenceMatrixElements: public MatrixElements
 {
 public:
     /** The row references (indexes of core rows plus value type) of the elements.
@@ -1274,8 +1274,8 @@ public:
      */  
     ConReferenceMatrixValues *value;
 
-    RowReferenceMatrixElements();
-    ~RowReferenceMatrixElements();
+    MixedRowReferenceMatrixElements();
+    ~MixedRowReferenceMatrixElements();
 
 
     /**
@@ -1325,12 +1325,12 @@ public:
      * operator nodes that derive or extend from this class.
      * </p>
      */
-    virtual RowReferenceMatrixElements *cloneMatrixNode();
+    virtual MixedRowReferenceMatrixElements *cloneMatrixNode();
 
     /**
      * A function to check for the equality of two objects
      */
-    bool IsEqual(RowReferenceMatrixElements *that);
+    bool IsEqual(MixedRowReferenceMatrixElements *that);
 
     /**
      * A function to make a random instance of this class
@@ -1347,8 +1347,8 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(RowReferenceMatrixElements *that);
-};//class RowReferenceMatrixElements
+    bool deepCopyFrom(MixedRowReferenceMatrixElements *that);
+};//class MixedRowReferenceMatrixElements
 
 
 /*! \class MatrixTransformation
@@ -2429,4 +2429,16 @@ public:
      */
     bool deepCopyFrom(MatrixBlock *that);
 };// class MatrixBlock
+
+
+/**
+ *  Some methods to convert one type of matrix element into another
+ */
+LinearMatrixElement* convertToLinearMatrixElement(double val);
+LinearMatrixElement* convertToLinearMatrixElement(int varref);
+ScalarExpressionTree* convertToGeneralMatrixElement(double val);
+ScalarExpressionTree* convertToGeneralMatrixElement(int refIdx, bool varRef); // varref or objref
+ScalarExpressionTree* convertToGeneralMatrixElement(LinearMatrixElement* val);
+ScalarExpressionTree* convertToGeneralMatrixElement(ConReferenceMatrixElement* val);
+ConReferenceMatrixElement* convertToConReferenceMatrixElement(int objref);
 #endif
