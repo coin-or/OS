@@ -541,27 +541,27 @@ public:
 };//class IntVector
 
 
-/*! \class OtherOptionEnumeration
+/*! \class OtherOptionOrResultEnumeration
  *  brief an integer vector data structure used in OSOption and OSResult
  *
  *  This class extends IntVector by adding two string-valued elements, value and description
  */
-class OtherOptionEnumeration : public IntVector
+class OtherOptionOrResultEnumeration : public IntVector
 {
 public:
     std::string value;
     std::string description;
 
-    OtherOptionEnumeration();
-    ~OtherOptionEnumeration();
+    OtherOptionOrResultEnumeration();
+    ~OtherOptionOrResultEnumeration();
 
     /** alternate constructor */
-    OtherOptionEnumeration(int n);
+    OtherOptionOrResultEnumeration(int n);
 
     /**
      * A function to check for the equality of two objects
      */
-    bool IsEqual(OtherOptionEnumeration *that);
+    bool IsEqual(OtherOptionOrResultEnumeration *that);
 
     /**
      * A function to make a random instance of this class
@@ -578,7 +578,7 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(OtherOptionEnumeration *that);
+    bool deepCopyFrom(OtherOptionOrResultEnumeration *that);
 
     /**
      *  Set the indices for a particular level in an enumeration
@@ -587,7 +587,7 @@ public:
      *  @param i contains the array of indices
      *  @param ni contains the number of elements in i
      */
-    bool setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni);
+    bool setOtherOptionOrResultEnumeration(std::string value, std::string description, int *i, int ni);
 
 
     /**
@@ -600,7 +600,7 @@ public:
      */
     std::string getDescription();
 
-};//class OtherOptionEnumeration
+};//class OtherOptionOrResultEnumeration
 
 
 /*! \class DoubleVector

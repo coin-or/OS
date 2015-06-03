@@ -2611,6 +2611,7 @@ matrixStart: MATRIXSTART
     osglData->mtxConstructorVec.clear();
     osglData->mtxBlocksVec.clear();
     osglData->mtxBlkVec.clear();
+    osglData->nBlocksVec.clear();
 
     /**
      *  The <matrix> tag combines the functions of the <nl> tag and the top OSnLNode,
@@ -3859,7 +3860,7 @@ matrixBlocksStart: BLOCKSSTART
 
 matrixBlocksAttributes: osglNumberOfBlocksATT
 {
-    ((MatrixBlocks*)osglData->tempC)->numberOfBlocks    = osglData->numberOfBlocks;
+    osglData->nBlocksVec.push_back(osglData->numberOfBlocks);
     ((MatrixBlocks*)osglData->tempC)->inumberOfChildren = 0;
 };
 
@@ -3868,13 +3869,14 @@ matrixBlocksContent: GREATERTHAN colOffsets rowOffsets blockList matrixBlocksEnd
 matrixBlocksEnd: BLOCKSEND
 {
     if ( ((MatrixBlocks*)osglData->mtxBlocksVec.back())->inumberOfChildren != 
-         ((MatrixBlocks*)osglData->mtxBlocksVec.back())->numberOfBlocks )
+                           osglData->nBlocksVec.back())
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
             "Number of blocks does not agree with attribute value numberOfBlocks");
 
     ((MatrixBlocks*)osglData->mtxBlocksVec.back())->m_mChildren
-        = new MatrixNode*[((MatrixBlocks*)osglData->mtxBlocksVec.back())->numberOfBlocks];
+        = new MatrixNode*[((MatrixBlocks*)osglData->mtxBlocksVec.back())->inumberOfChildren];
     osglData->mtxBlocksVec.pop_back();
+    osglData->nBlocksVec.pop_back();
 };
 
 

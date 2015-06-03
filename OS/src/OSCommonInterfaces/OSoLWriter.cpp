@@ -709,7 +709,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                 {
 //						if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
                     for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfEnumerations; j++)
-                        osolStr << writeOtherOptionEnumeration(m_OSOption->optimization->variables->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+                        osolStr << writeOtherOptionOrResultEnumeration(m_OSOption->optimization->variables->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
                 }
                 osolStr << "</other>" << endl;
             }
@@ -821,7 +821,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                 }
 //					else if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
                 for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfEnumerations; j++)
-                    osolStr << writeOtherOptionEnumeration(m_OSOption->optimization->objectives->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+                    osolStr << writeOtherOptionOrResultEnumeration(m_OSOption->optimization->objectives->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 
                 osolStr << "</other>" << endl;
             }
@@ -943,7 +943,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                 }
 //					else if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
                 for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfEnumerations; j++)
-                    osolStr << writeOtherOptionEnumeration(m_OSOption->optimization->constraints->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+                    osolStr << writeOtherOptionOrResultEnumeration(m_OSOption->optimization->constraints->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 
                 osolStr << "</other>" << endl;
             }

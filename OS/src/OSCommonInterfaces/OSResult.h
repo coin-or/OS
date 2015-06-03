@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include "OSGeneral.h"
+#include "OSMatrix.h"
 
 //#define DEBUG
 
@@ -682,6 +683,7 @@ public:
     StorageCapacity *usedDiskSpace;
 
     /** a pointer to the MemorySize class
+
      */
     StorageCapacity *usedMemory;
 
@@ -1156,11 +1158,11 @@ public:
     /** type of the values in the var array */
     std::string varType;
 
-    /* a pointer to OtherOptionEnumeration objects that will
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
-    OtherOptionEnumeration** enumeration;
+    OtherOptionOrResultEnumeration** enumeration;
 
     /** type of the values in the enumeration array */
     std::string enumType;
@@ -1469,11 +1471,11 @@ public:
     /** type of the values in the obj array */
     std::string objType;
 
-    /* a pointer to OtherOptionEnumeration objects that will
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
-    OtherOptionEnumeration** enumeration;
+    OtherOptionOrResultEnumeration** enumeration;
 
     /** type of the values in the enumeration array */
     std::string enumType;
@@ -1788,11 +1790,11 @@ public:
     /** type of the values in the con array */
     std::string conType;
 
-    /* a pointer to OtherOptionEnumeration objects that will
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
-    OtherOptionEnumeration** enumeration;
+    OtherOptionOrResultEnumeration** enumeration;
 
     /** type of the values in the enumeration array */
     std::string enumType;
@@ -1888,7 +1890,219 @@ public:
 
 };//ConstraintSolution
 
+/*! \class MatrixVariableValues
+ * \brief The in-memory representation of the
+ * <b><matrixVariables></b> element.
+ */
+class MatrixVariableValues
+{
+public:
+    /** numberOfMatrixVar gives the number of <matrixVar> children */
+    int numberOfMatrixVar;
 
+    /** matrixVar is an array of pointers to the <matrixVar> children */
+    OSMatrixWithMatrixVarIdx** matrixVar;
+
+    /** The MatrixVariableValues class constructor */
+    MatrixVariableValues();
+
+    /** The MatrixVariableValues class destructor */
+    ~MatrixVariableValues();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixVariableValues *that);
+}; // MatrixVariableValues
+
+/*! \class OtherMatrixVariableResult
+ * \brief The in-memory representation of the
+ * <b><matrixVariables> <other></b> element.
+ */
+class OtherMatrixVariableResult
+{
+public:
+    /** Gives a name to this result. This is s mandatory data element */
+    std::string name;
+
+    /** other data elements are optional */
+    std::string description;
+    std::string value;
+    std::string type;
+    std::string solver;
+    std::string category;
+
+    /** number of matrix variables affected by or associated with this result */
+    int numberOfMatrixVar;
+
+    /** the type of matrixVar */
+    std::string matrixType;
+ 
+    /** the list of matrices and their values */
+    OSMatrixWithMatrixVarIdx** matrixVar;
+    
+    /** number of levels in an enumeration associated with this result */
+    int numberOfEnumerations;
+
+    /** the type of the enumeration */
+    std::string enumType;
+
+    /** the enumeration. 
+     *  Each enumeration level has a list of matrixVar indices associated with that level 
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /** The standard MatrixVariableValues class constructor */
+    OtherMatrixVariableResult();
+
+    /** Altername MatrixVariableValues class constructor */
+    OtherMatrixVariableResult(std::string name_);
+
+    /** The MatrixVariableValues class destructor */
+    ~OtherMatrixVariableResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixVariableResult *that);
+}; // OtherMatrixVariableResult
+
+
+/*! \class MatrixVariableSolution
+ * \brief The in-memory representation of the
+ * <b><MatrixVariableSolution></b> element.
+ */
+class MatrixVariableSolution
+{
+public:
+    /** numberOfOtherMatrixVariableResults gives the number of <other> children */
+    int numberOfOtherMatrixVariableResults;
+
+    /** values is pointer to the <values> child */
+    MatrixVariableValues* values;
+
+    /** other is a pointer to an array of <other> children */
+    OtherMatrixVariableResult** other;
+
+    /** The MatrixVariableSolution class constructor */
+    MatrixVariableSolution();
+
+    /** The MatrixVariableSolution class destructor */
+    ~MatrixVariableSolution();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixVariableSolution *that);
+}; // MatrixVariableSolution
+
+
+/*! \class MatrixObjectiveSolution
+ * \brief The in-memory representation of the
+ * <b><MatrixVariableSolution></b> element.
+ */
+class MatrixObjectiveSolution
+{
+public:
+    /** numberOfOtherMatrixObjectiveResults gives the number of <other> children */
+    int numberOfOtherMatrixObjectiveResults;
+
+    /** matrixObj is an array of pointers to the <matrixObj> children */
+    OSMatrixWithMatrixObjIdx** matrixObj;
+
+    /** The MatrixVariableSolution class constructor */
+    MatrixObjectiveSolution();
+
+    /** The MatrixVariableSolution class destructor */
+    ~MatrixObjectiveSolution();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixObjectiveSolution *that);
+}; // MatrixObjectiveSolution
+
+
+/*! \class MatrixConstraintSolution
+ * \brief The in-memory representation of the
+ * <b><MatrixConstraintSolution></b> element.
+ */
+class MatrixConstraintSolution
+{
+public:
+    /** numberOfOtherMatrixConstraintResults gives the number of <other> children */
+    int numberOfOtherMatrixConstraintResults;
+
+    /** matrixCon is an array of pointers to the <matrixCon> children */
+    OSMatrixWithMatrixConIdx** matrixCon;
+
+    /** The MatrixConstraintSolution class constructor */
+    MatrixConstraintSolution();
+
+    /** The MatrixConstraintSolution class destructor */
+    ~MatrixConstraintSolution();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixConstraintSolution *that);
+}; // MatrixConstraintSolution
+
+
+class OtherSolutionResult; //forward declaration
+
+/*! \class MatrixProgrammingSolution
+ * \brief The in-memory representation of the 
+   <b><MatrixProgrammingSolution></b> element.
+ */
+class MatrixProgrammingSolution
+{
+public:
+    /** the number of <other> child elements> */
+    int numberOfOtherMatrixProgrammingResults;
+
+    /** a pointer to the array of <other> children */
+    OtherSolutionResult** other;
+
+    /** a pointer to the matrixVariables object */
+    MatrixVariableSolution* matrixVariables;
+
+    /** a pointer to the matrixObjectives object */
+    MatrixObjectiveSolution* matrixObjectives;
+
+    /** a pointer to the matrixConstraints object */
+    MatrixConstraintSolution* matrixConstraints;
+
+
+    /** The MatrixProgramming class constructor */
+    MatrixProgrammingSolution();
+
+    /** The MatrixProgramming class destructor */
+    ~MatrixProgrammingSolution();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixProgrammingSolution *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(MatrixProgrammingSolution *that);
+}; // MatrixProgrammingSolution
 
 
 /*! \class OtherSolutionResult
@@ -2058,16 +2272,21 @@ public:
      *  the variables
      */
     VariableSolution *variables;
+    /** constraints holds the solution information
+     *  for the constraints
+     */
+    ConstraintSolution *constraints;
 
     /** objectives holds the solution information
      *  for the objectives
      */
     ObjectiveSolution *objectives;
 
-    /** constraints holds the solution information
-     *  for the constraints
+    /** matrixProgramming holds the solution information
+     *  for the matrix programming components: matrix variables, 
+     *  matrix objectives and matrix constraints
      */
-    ConstraintSolution *constraints;
+    MatrixProgrammingSolution *matrixProgramming;
 
     /** otherSolutionResults is a pointer to an OtherSolutionResults
     * object that is associated with this optimization solution
@@ -3096,6 +3315,7 @@ public:
      *     = 0: no data encountered
      *     > 0: number of data items set
      */
+
     int getOtherConstraintResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim);
 
 
@@ -4230,7 +4450,7 @@ public:
      * @param otherIdx holds the index of the OtherVariableResult object
      * @param object holds the object to which this enumeration pertains
      *     (legal values are taken from the ENUM_PROBLEM_COMPONENT enumeration --- see OSGeneral.h))
-     * @param enumIdx holds the index of the OtherOptionEnumeration object
+     * @param enumIdx holds the index of the OtherOptionOrResultEnumeration object
      * @param value holds the value of this result
      * @param description holds a description of this result
      * @param i holds the indices of the variables that take on this value
@@ -4241,7 +4461,7 @@ public:
      * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
      * @see #setSolutionNumber(int)
      */
-    bool setOtherOptionEnumeration(int solIdx, int otherIdx, int object, int enumIdx, std::string value, std::string description, int *i, int ni);
+    bool setOtherOptionOrResultEnumeration(int solIdx, int otherIdx, int object, int enumIdx, std::string value, std::string description, int *i, int ni);
 
     /**
      * Set the [i]th optimization solution's other (non-standard/solver specific) objective-related results,
@@ -4659,6 +4879,7 @@ public:
      * @param name holds the type of the <other> element's <con> array
      *
      * @return whether the other constraint result's conType was set successfully or not.
+
      * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
      * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
      * @see #setSolutionNumber(int)
@@ -4759,11 +4980,231 @@ public:
     bool setOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx, std::string value);
 
     /**
+     * Set the [i]th optimization solution's MatrixVariableSolution, 
+     * where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * This method then allocates the memory for the new MatrixVariableSolution objects.
+     * Further methods then store the values into the data structure.
+     *
+     * @param solIdx is the solution index
+     * @param numberOfMatrixVar_ holds the number of matrixVar elements 
+     *        for which values are to be provided
+     * @param numberOfOtherMatrixVarResults_ holds the number of <other> elements 
+     *        for which values are to be provided
+     *
+     * @return whether the matrix variable results are set successfully or not.  
+     */
+    bool setMatrixVariableSolution(int solIdx, int numberOfMatrixVar_, int numberOfOtherMatrixVarResults_);
+
+    /**
+     * A method to set general attributes for a matrixVar in the [i]th optimization solution,
+     * where i equals the given solution index.
+     * Before this method is called, the setMatrixVariableSolution() method has to be called first.
+     * This method then sets the matrix dimensions and other basic attributes.
+     * Further methods then store the values into the data structure.
+     *
+     * @param solIdx is the solution index
+     * @param idx holds the index of the matrixVar (in the MatrixVariableValues array)
+     * @param matrixVarIdx holds the index of the matrixVar (as defined in the OS instance)
+     * @param numberOfRows holds the number of rows in the matrixVar
+     * @param numberOfColumns holds the number of columns in the matrixVar
+     * @param symmetry (optional) holds the type of symmetry
+     *        (if not present, the default value is "none" 
+     * @param type (optional) holds the type of values in the nonzeroes of the matrix
+     *        (if not present, the default value is "unknown")
+     * @param name (optional) holds the name of this matrixVar (the default is the empty string) 
+     *        for which values are to be provided
+     * @return whether the matrix variable attributes are set successfully or not.  
+     */
+    bool setMatrixVarValuesAttributes(int solIdx, int idx, int matrixVarIdx, int numberOfRows, 
+            int numberOfColumns, ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_none, 
+            ENUM_MATRIX_TYPE type=ENUM_MATRIX_TYPE_unknown, std::string name="");
+
+    /**
+     * A method to set the block structure for the values of a matrixVar
+     * in the [i]th optimization solution, where i equals the given solution index.
+     * Before this method is called, the setMatrixVariableSolution() method has to be called first.
+     * This method then allocates the block structure for the new MatrixVar objects in the solution.
+     * Further methods then store the values into the data structure.
+     *
+     * @param solIdx is the solution index
+     * @param idx holds the index of the matrixVar for which values are to be provided
+     *        (as derived from the <values> element in matrixProgramming
+     * @param colOffset is an array of column offsets that define 
+     *        the partition of the columns within the block structure
+     * @param colOffsetSize gives the size of the colOffset array
+     * @param rowOffset is an array of row offsets that define 
+     *        the partition of the rows within the block structure
+     * @param rowOffsetSize gives the size of the rowOffset array
+     * @param numberOfBlocks gives the number of blocks 
+     * @param blocksConstructorIdx gives the index of the MatrixBlocks node 
+     *        in the array of constructors of the matrixVar. The default is 0.
+     *
+     * @return whether the matrix variable block structure was set successfully or not.  
+     */
+    bool setMatrixVarValuesBlockStructure(int solIdx, int idx, int* colOffset, int colOffsetSize,
+            int* rowOffset, int rowOffsetSize, int numberOfBlocks, int blocksConstructorIdx=0);
+
+    /**
+     * A method to set the elements within a block of a matrixVar in the [i]th optimization solution,
+     * where i equals the given solution index.
+     * Before this method is called, the setMatrixVarBlockStructure() method has to be called first.
+     * This method then allocates the elements for the new MatrixVar blocks in the solution.
+     *
+     * @param solIdx is the solution index
+     * @param idx holds the index of the matrixVar for which values are to be provided
+     *        (as derived from the <values> element in matrixProgramming
+     * @param blkno is the number of the block for which elements are provided
+     *        the partition of the columns within the block structure
+     * @param blkRowIdx gives the index of the block row in which the block is located
+     * @param blkColIdx gives the index of the block column in which the block is located
+     * @param nz gives the number of (nonzero) values 
+     * @param start gives the start elements (column or row starts, depending on
+     *        whether rowMajor is false or true)
+     * @param index gives the array of row or column (depending on rowMajor) indices
+     * @param value gives the data structure for (nonzero) values that need to be stored
+     * @param valueType gives the type of values (see OSParameters.h)
+     * @param symmetry gives the form of symmetry. (The default is NONE.)
+     * @param rowMajor indicates whther the elements are stored column by column (if rowMajor is false)
+     *        or row by row (if rowMajor is true). The default is rowMajor = false.
+     *
+     * @remark each block object can handle only one type of elements, 
+     *         although different blocks may contain different types of values
+     *
+     * @return whether the matrix variable block structure was set successfully or not.  
+     */
+    bool setMatrixVarValuesBlockElements(int solIdx, int idx, int blkno, int blkRowIdx, int blkColIdx,
+            int nz, int* start, int* index, MatrixElementValues* value, ENUM_MATRIX_TYPE valueType,
+            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_none, bool rowMajor=false);
+
+    /**
+     * A method to set general attributes for another (non-standard/solver specific) result
+     * associated with the matrix variables in the [i]th optimization solution,
+     * where i equals the given solution index.
+     * Before this method is called, the setMatrixVariableSolution() method has to be called first.
+     * This method then sets the matrix dimensions and other basic attributes.
+     * Further methods then store the values into the data structure.
+     *
+     * @param solIdx is the solution index
+     * @param idx holds the index of the other result (in the array of <other> solutions)
+     * @param name holds the name of the <other> result
+     * @param description can be used to hold a further description of the result
+     * @param value holds a scalar value associated with the <other> result
+     * @param type describes the type of value represented by the scalar result
+     * @param solver gives the solver with which this result is associated
+     * @param category can be used to specify a further category within the solver
+     * @param numberOfMatrixVar gives the number of matrixVar elements associated with this result.
+     *        This argument is optional and defaults to 0.
+     * @param matrixType can be used to associate a type with the values of the matrixVar elements. 
+     *        This argument is optional and defaults to the empty string ("").
+     * @param numberOfEnumerations gives the number of levels associated with an enumeration of matrixVar
+     *        elements pertaining to this result. The argument is optional and defaults to 0.
+     * @param enumType can be used to associate a type with the values of the enumeration. 
+     *        This argument is optional and defaults to the empty string ("").
+     * @return whether the attributes are set successfully or not.  
+     */
+    bool setMatrixVariablesOtherResultGeneralAttributes(int solIdx, int idx, std::string name, 
+                            std::string description, std::string value, std::string type,
+                            std::string solver, std::string category,
+                            int numberOfMatrixVar=0,    std::string matrixType="", 
+                            int numberOfEnumerations=0, std::string enumType="");
+
+    /**
+     * A method to set attributes for a matrixVar in the [j]th other result associated with
+     * matrix variables in the the [i]th optimization solution, where i equals the given solution index
+     * and j equals a given other result index. 
+     * Before this method is called, the setMatrixVariableSolution() and  
+     * setMatrixVariablesOtherResultGeneralAttributes() methods have to be called. 
+     * This method then sets the matrix dimensions and other basic attributes.
+     * Further methods then store the values into the data structure.
+     *
+     * @param solIdx is the solution index
+     * @param otherIdx holds the index of the other matrix variables result
+     * @param matrixVarIdx holds the index of the matrixVar (as defined in the OS instance)
+     * @param numberOfRows holds the number of rows in the matrixVar
+     * @param numberOfColumns holds the number of columns in the matrixVar
+     * @param symmetry (optional) holds the type of symmetry
+     *        (if not present, the default value is "none" 
+     * @param type (optional) holds the type of values in the nonzeroes of the matrix
+     *        (if not present, the default value is "unknown")
+     * @param name (optional) holds the name of this matrixVar (the default is the empty string) 
+     *        for which values are to be provided
+     * @return whether the matrix variable attributes are set successfully or not.  
+     */
+    bool setMatrixVariablesOtherResultMatrixAttributes(int solIdx, int otherIdx, int matrixVarIdx, 
+            int numberOfRows, int numberOfColumns, 
+            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_none, 
+            ENUM_MATRIX_TYPE type=ENUM_MATRIX_TYPE_unknown, std::string name="");
+
+    /**
+     * A method to set the block structure for the values of a matrixVar associated with the [j]th
+     * "other" result of the [i]th optimization solution, where i equals the given solution index,
+     * and j equals the index of the other result.
+     * Before this method is called, the setMatrixVariableSolution() and  
+     * setMatrixVariablesOtherSolutionAttributes() methods have to be called. 
+     * This method then allocates the block structure for the new MatrixVar objects in the solution.
+     * Further methods then store the values into the data structure.
+     *
+     * @param solIdx is the solution index
+     * @param otherIdx holds the index of the other solution
+     * @param matrixVarIdx holds the index of the matrixVar for which values are to be provided
+     * @param colOffset is an array of column offsets that define 
+     *        the partition of the columns within the block structure
+     * @param colOffsetSize gives the size of the colOffset array
+     * @param rowOffset is an array of row offsets that define 
+     *        the partition of the rows within the block structure
+     * @param rowOffsetSize gives the size of the rowOffset array
+     * @param numberOfBlocks gives the number of blocks 
+     * @param blocksConstructorIdx gives the index of the MatrixBlocks node 
+     *        in the array of constructors of the matrixVar. The default is 0.
+     *
+     * @return whether the matrix variable block structure was set successfully or not.  
+     */
+    bool setMatrixVariablesOtherResultBlockStructure(int solIdx, int otherIdx, int matrixVarIdx, 
+            int* colOffset, int colOffsetSize, int* rowOffset, int rowOffsetSize, 
+            int numberOfBlocks, int blocksConstructorIdx=0);
+
+    /**
+     * A method to set the elements within a block of a matrixVar associated with the [j]th "other"
+     * result in the [i]th optimization solution, where i equals the given solution index and
+     * j equals the index of the other result.
+     * Before this method is called, the setMatrixVariablesOtherResultBlockStructure() method 
+     * has to be called first.
+     * This method then allocates the elements for the new MatrixVar blocks in the solution.
+     *
+     * @param solIdx is the solution index
+     * @param otherIdx holds the index of the other solution
+     * @param matrixVarIdx holds the index of the matrixVar for which values are to be provided
+     * @param blkno is the number of the block for which elements are provided
+     *        the partition of the columns within the block structure
+     * @param blkRowIdx gives the index of the block row in which the block is located
+     * @param blkColIdx gives the index of the block column in which the block is located
+     * @param nz gives the number of (nonzero) values 
+     * @param start gives the start elements (column or row starts, depending on
+     *        whether rowMajor is false or true)
+     * @param index gives the array of row or column (depending on rowMajor) indices
+     * @param value gives the data structure for (nonzero) values that need to be stored
+     * @param valueType gives the type of values (see OSParameters.h)
+     * @param symmetry gives the form of symmetry. (The default is NONE.)
+     * @param rowMajor indicates whther the elements are stored column by column (if rowMajor is false)
+     *        or row by row (if rowMajor is true). The default is rowMajor = false.
+     *
+     * @remark each block object can handle only one type of elements, 
+     *         although different blocks may contain different types of values
+     *
+     * @return whether the matrix variable block structure was set successfully or not.  
+     */
+    bool setMatrixVariablesOtherResultBlockElements(int solIdx, int otherIdx, int matrixVarIdx, 
+            int blkno, int blkRowIdx, int blkColIdx, int nz, int* start, int* index,
+            MatrixElementValues* value, ENUM_MATRIX_TYPE valueType,
+            ENUM_MATRIX_SYMMETRY symmetry=ENUM_MATRIX_SYMMETRY_none, bool rowMajor=false);
+
+    /**
      * Set the [i]th optimization solution's other (non-standard/solver specific) solution-related results,
      * where i equals the given solution index.
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
      * This method then allocates the memory for the new OtherSolutionResult objects
-
+     *
      * @param solIdx is the solution index
      * @param numberOfOtherSolutionResults holds the number of OtherSolutionResult objects
      * Each other objective result contains the name (required), an optional

@@ -927,6 +927,240 @@ ConstraintSolution::~ConstraintSolution()
 
 
 
+MatrixVariableValues::MatrixVariableValues():
+    numberOfMatrixVar(0),
+    matrixVar(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixVariableValues Constructor");
+#endif
+}//end MatrixVariableValues constructor
+
+
+MatrixVariableValues::~MatrixVariableValues()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixVariableValues Destructor");
+#endif
+    if(numberOfMatrixVar > 0 && matrixVar != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixVar; i++)
+        {
+            delete matrixVar[i];
+            matrixVar[i] = NULL;
+        }
+        delete[] matrixVar;
+        matrixVar = NULL;
+    }
+}// end MatrixVariableValues destructor
+
+
+MatrixVariableSolution::MatrixVariableSolution():
+    numberOfOtherMatrixVariableResults(0),
+    values(NULL),
+    other(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixVariableSolution Constructor");
+#endif
+}//end MatrixVariableSolution constructor
+
+
+MatrixVariableSolution::~MatrixVariableSolution()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixVariableSolution Destructor");
+#endif
+	if (values != NULL)
+        delete values;
+    values = NULL;
+#if 0
+    if(numberOfOtherMatrixVariableResults > 0 && matrixVar != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixVar; i++)
+        {
+            delete matrixVar[i];
+            matrixVar[i] = NULL;
+        }
+        delete[] matrixVar;
+        matrixVar = NULL;
+    }
+#endif
+}// end MatrixVariableValues destructor
+
+
+OtherMatrixVariableResult::OtherMatrixVariableResult():
+    name(""),
+    description(""),
+    value(""),
+    type(""),
+    solver(""),
+    category(""),
+    numberOfMatrixVar(0),
+    matrixType(""),
+    matrixVar(NULL),
+    numberOfEnumerations(0),
+    enumType(""),
+    enumeration(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherMatrixVariableResult Constructor");
+#endif
+}//end OtherMatrixVariableResult constructor
+
+
+OtherMatrixVariableResult::OtherMatrixVariableResult(std::string name_):
+    description(""),
+    value(""),
+    type(""),
+    solver(""),
+    category(""),
+    numberOfMatrixVar(0),
+    matrixVar(NULL),
+    numberOfEnumerations(0),
+    enumeration(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherMatrixVariableResult Constructor");
+#endif
+    name = name_;
+}//end alternate OtherMatrixVariableResult constructor
+
+OtherMatrixVariableResult::~OtherMatrixVariableResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherMatrixVariableResult Destructor");
+#endif
+    if (numberOfMatrixVar > 0 && matrixVar != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixVar; i++)
+        {
+            delete matrixVar[i];
+            matrixVar[i] = NULL;
+        }
+        delete[] matrixVar;
+        matrixVar = NULL;
+    }
+
+    if (numberOfEnumerations > 0 && enumeration != NULL)
+    {
+        for(int i = 0; i < numberOfEnumerations; i++)
+        {
+            delete enumeration[i];
+            enumeration[i] = NULL;
+        }
+        delete[] enumeration;
+        enumeration = NULL;
+    }
+}// end OtherMatrixVariableResult destructor
+
+
+MatrixObjectiveSolution::MatrixObjectiveSolution() //:
+//    numberOfOtherMatrixVariableResults(0),
+//    values(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixObjectiveSolution Constructor");
+#endif
+}//end MatrixObjectiveSolution constructor
+
+
+MatrixObjectiveSolution::~MatrixObjectiveSolution()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixObjectiveSolution Destructor");
+#endif
+#if 0
+	if (values != NULL)
+        delete values;
+    values = NULL;
+    if(numberOfOtherMatrixVariableResults > 0 && matrixVar != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixVar; i++)
+        {
+            delete matrixVar[i];
+            matrixVar[i] = NULL;
+        }
+        delete[] matrixVar;
+        matrixVar = NULL;
+    }
+#endif
+}// end MatrixObjectiveSolution destructor
+
+
+MatrixConstraintSolution::MatrixConstraintSolution() //:
+//    numberOfOtherMatrixVariableResults(0),
+//    values(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstraintSolution Constructor");
+#endif
+}//end MatrixConstraintSolution constructor
+
+
+MatrixConstraintSolution::~MatrixConstraintSolution()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixConstraintSolution Destructor");
+#endif
+#if 0
+	if (values != NULL)
+        delete values;
+    values = NULL;
+    if(numberOfOtherMatrixVariableResults > 0 && matrixVar != NULL)
+    {
+        for(int i = 0; i < numberOfMatrixVar; i++)
+        {
+            delete matrixVar[i];
+            matrixVar[i] = NULL;
+        }
+        delete[] matrixVar;
+        matrixVar = NULL;
+    }
+#endif
+}// end MatrixConstraintSolution destructor
+
+MatrixProgrammingSolution::MatrixProgrammingSolution():
+    numberOfOtherMatrixProgrammingResults(0),
+    matrixVariables(NULL),
+    matrixObjectives(NULL),
+    matrixConstraints(NULL),
+    other(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixProgrammingSolution Constructor");
+#endif
+}//end MatrixProgrammingSolution constructor
+
+
+MatrixProgrammingSolution::~MatrixProgrammingSolution()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixProgrammingSolution Destructor");
+#endif
+	if (matrixVariables != NULL)
+        delete matrixVariables;
+    matrixVariables = NULL;
+	if (matrixObjectives != NULL)
+        delete matrixObjectives;
+    matrixObjectives = NULL;
+	if (matrixConstraints != NULL)
+        delete matrixConstraints;
+    matrixConstraints = NULL;
+
+    if(numberOfOtherMatrixProgrammingResults > 0 && other != NULL)
+    {
+        for(int i = 0; i < numberOfOtherMatrixProgrammingResults; i++)
+        {
+            delete other[i];
+            other[i] = NULL;
+        }
+        delete[] other;
+        other = NULL;
+    }
+}// end MatrixProgrammingSolution destructor
+
+
 OtherSolutionResult::OtherSolutionResult():
     name(""),
     value(""),
@@ -947,14 +1181,8 @@ OtherSolutionResult::~OtherSolutionResult()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherSolutionResult Destructor");
 #endif
     if (item != NULL)
-    {
-        //for (int i=0; i < numberOfItems; i++)
-        //{	delete item[i];
-        //	item[i] = NULL;
-        //}
         delete[] item;
-        item = NULL;
-    }
+    item = NULL;
 }// end OtherSolutionResult destructor
 
 
@@ -997,6 +1225,7 @@ OptimizationSolution::OptimizationSolution():
     variables( NULL),
     objectives( NULL),
     constraints( NULL),
+    matrixProgramming(NULL),
     otherSolutionResults( NULL)
     //other(NULL)
 {
@@ -1011,27 +1240,32 @@ OptimizationSolution::~OptimizationSolution()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OptimizationSolution Destructor");
 #endif
-    if(status != NULL)
+    if (status != NULL)
     {
         delete status;
         status = NULL;
     }
-    if(variables != NULL)
+    if (variables != NULL)
     {
         delete variables;
         variables = NULL;
     }
-    if(constraints != NULL)
-    {
-        delete constraints;
-        constraints = NULL;
-    }
-    if(objectives != NULL)
+    if (objectives != NULL)
     {
         delete objectives;
         objectives = NULL;
     }
-    if(otherSolutionResults != NULL)
+    if (constraints != NULL)
+    {
+        delete constraints;
+        constraints = NULL;
+    }
+    if (matrixProgramming != NULL)
+    {
+        delete matrixProgramming;
+        matrixProgramming = NULL;
+    }
+    if (otherSolutionResults != NULL)
     {
         delete otherSolutionResults;
         otherSolutionResults = NULL;
@@ -5187,9 +5421,9 @@ bool OSResult::setOtherVariableResultNumberOfEnumerations(int solIdx, int otherI
     if (optimization->solution[solIdx]->variables->other == NULL) return false;
     if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
     if (optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration == NULL)
-        optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
+        optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
     for(int i = 0; i < numberOfEnumerations; i++)
-        optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[i] = new OtherOptionEnumeration();
+        optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[i] = new OtherOptionOrResultEnumeration();
     optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfEnumerations = numberOfEnumerations;
     return true;
 }//setOtherVariableResultNumberOfEnumerations
@@ -5354,7 +5588,7 @@ bool OSResult::setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, s
     return true;
 }//setOtherVariableResultVar
 
-bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, int object, int enumIdx, std::string value, std::string description, int *i, int ni)
+bool OSResult::setOtherOptionOrResultEnumeration(int solIdx, int otherIdx, int object, int enumIdx, std::string value, std::string description, int *i, int ni)
 {
     if (optimization == NULL || optimization->solution == NULL)
         return false;
@@ -5376,9 +5610,9 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, int object, i
         int n_enum = optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfEnumerations;
         if (enumIdx < 0 || enumIdx >= n_enum) return false;
         if (optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx] == NULL)
-            optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionEnumeration();
+            optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionOrResultEnumeration();
         for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-        return optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
+        return optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionOrResultEnumeration(value, description, i, ni);
     }
     case ENUM_PROBLEM_COMPONENT_objectives:
     {
@@ -5389,9 +5623,9 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, int object, i
         int n_enum = optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfEnumerations;
         if (enumIdx < 0 || enumIdx >= n_enum) return false;
         if (optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx] == NULL)
-            optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionEnumeration();
+            optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionOrResultEnumeration();
         for (int j=0; j<ni; j++) if (i[j] >= 0) return false;
-        return optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
+        return optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionOrResultEnumeration(value, description, i, ni);
     }
     case ENUM_PROBLEM_COMPONENT_constraints:
     {
@@ -5402,15 +5636,15 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, int object, i
         int n_enum = optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfEnumerations;
         if (enumIdx < 0 || enumIdx >= n_enum) return false;
         if (optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[enumIdx] == NULL)
-            optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionEnumeration();
+            optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionOrResultEnumeration();
         for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-        return optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
+        return optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionOrResultEnumeration(value, description, i, ni);
     }
 
     default:
-        throw ErrorClass("target object not implemented in setOtherOptionEnumeration");
+        throw ErrorClass("target object not implemented in setOtherOptionOrResultEnumeration");
     }
-}//setOtherOptionEnumeration
+}//setOtherOptionOrResultEnumeration
 
 
 bool OSResult::setNumberOfOtherObjectiveResults(int solIdx, int num)
@@ -5674,9 +5908,9 @@ bool OSResult::setOtherObjectiveResultNumberOfEnumerations(int solIdx, int other
     if (optimization->solution[solIdx]->objectives->other == NULL) return false;
     if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return false;
     if (optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration == NULL)
-        optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
+        optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
     for(int i = 0; i < numberOfEnumerations; i++)
-        optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[i] = new OtherOptionEnumeration();
+        optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[i] = new OtherOptionOrResultEnumeration();
     optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfEnumerations = numberOfEnumerations;
     return true;
 }//setOtherObjectiveResultNumberOfEnumerations
@@ -6146,9 +6380,9 @@ bool OSResult::setOtherConstraintResultNumberOfEnumerations(int solIdx, int othe
     if (optimization->solution[solIdx]->constraints->other == NULL) return false;
     if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return false;
     if (optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration == NULL)
-        optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
+        optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
     for(int i = 0; i < numberOfEnumerations; i++)
-        optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[i] = new OtherOptionEnumeration();
+        optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[i] = new OtherOptionOrResultEnumeration();
     optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfEnumerations = numberOfEnumerations;
     return true;
 }//setOtherConstraintResultNumberOfEnumerations
@@ -6312,6 +6546,542 @@ bool OSResult::setOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx,
     optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->value = value;
     return true;
 }//setOtherConstraintResultCon
+
+bool OSResult::setMatrixVariableSolution(int solIdx, int numberOfMatrixVar_, 
+                                         int numberOfOtherMatrixVarResults_)
+{
+    int nSols = this->getSolutionNumber();
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming == NULL) 
+        optimization->solution[solIdx]->matrixProgramming = new MatrixProgrammingSolution();
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables == NULL) 
+        optimization->solution[solIdx]->matrixProgramming->matrixVariables
+            = new MatrixVariableSolution(); 
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values == NULL) 
+        optimization->solution[solIdx]->matrixProgramming->matrixVariables->values
+            = new MatrixVariableValues();
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->numberOfMatrixVar
+            = numberOfMatrixVar_;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar
+            = new OSMatrixWithMatrixVarIdx*[numberOfMatrixVar_];
+//    for (int i=0; i < numberOfMatrixVar_; i++)
+//        optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[i]
+//            = new OSMatrixWithMatrixVarIdx();
+
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other != NULL) return false;
+        optimization->solution[solIdx]->matrixProgramming->matrixVariables->other
+            = new OtherMatrixVariableResult*[numberOfOtherMatrixVarResults_];
+//    for (int i=0; i < numberOfOtherMatrixVarResults_; i++)
+//        optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[i]
+//            = new OtherMatrixVariableResult();
+    return true;
+}//setMatrixVariableSolution
+
+
+bool OSResult::setMatrixVarValuesAttributes(int solIdx, int idx, int matrixVarIdx, int numberOfRows, 
+            int numberOfColumns, ENUM_MATRIX_SYMMETRY symmetry, 
+            ENUM_MATRIX_TYPE type, std::string name)
+{
+    int nSols = this->getSolutionNumber();
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables == NULL) return false; 
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar == NULL)
+        return false;
+    if (idx < 0 || 
+        idx > optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->numberOfMatrixVar)
+        return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        != NULL) return false;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        = new OSMatrixWithMatrixVarIdx();
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->matrixVarIdx = matrixVarIdx;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->numberOfRows = numberOfRows;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->numberOfColumns = numberOfColumns;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->symmetry = symmetry;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]->type = type;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]->name = name;
+    return true;
+}//setMatrixVarValuesAttributes
+
+bool OSResult::setMatrixVarValuesBlockStructure(int solIdx, int idx, int* colOffset, int colOffsetSize,
+            int* rowOffset, int rowOffsetSize, int numberOfBlocks, int blocksConstructorIdx)
+{
+    int nSols = this->getSolutionNumber();
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables == NULL) return false; 
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar == NULL)
+        return false;
+    if (idx < 0 || 
+        idx > optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->numberOfMatrixVar)
+        return false;
+
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->inumberOfChildren = 1; //single Blocks constructor
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->m_mChildren = new MatrixNode*[1];
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->m_mChildren[0] = new MatrixBlocks();
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->m_mChildren[0]->inumberOfChildren = numberOfBlocks;
+
+    ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->values
+        ->matrixVar[idx]->m_mChildren[0])->colOffset = new IntVector(numberOfBlocks+1);
+
+    for (int i=0; i <= numberOfBlocks; i++)
+        ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->values
+            ->matrixVar[idx]->m_mChildren[0])->colOffset->el[i] = colOffset[i];
+
+    ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->values
+        ->matrixVar[idx]->m_mChildren[0])->rowOffset = new IntVector(numberOfBlocks+1);
+
+    for (int i=0; i <= numberOfBlocks; i++)
+        ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->values
+            ->matrixVar[idx]->m_mChildren[0])->rowOffset->el[i] = rowOffset[i];
+
+    //Note well: Individual pointers are set to NULL, which allows a check against double allocation later
+    ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->values
+        ->matrixVar[idx]->m_mChildren[0])->m_mChildren = new MatrixNode*[numberOfBlocks];
+
+    for (int i=0; i<numberOfBlocks; i++)
+        ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->values
+            ->matrixVar[idx]->m_mChildren[0])->m_mChildren[i] = NULL;
+
+    return true;
+}//setMatrixVarValuesBlockStructure
+
+
+bool OSResult::setMatrixVarValuesBlockElements(int solIdx, int idx, int blkno, int blkRowIdx, int blkColIdx,
+            int nz, int* start, int* index, MatrixElementValues* value, ENUM_MATRIX_TYPE valueType,
+            ENUM_MATRIX_SYMMETRY symmetry, bool rowMajor)
+{
+    try
+    {
+        int nSols = this->getSolutionNumber();
+        if (nSols <= 0) return false;
+        if (optimization == NULL) return false;
+        if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+        if (optimization->solution[solIdx] == NULL) return false;
+        if (optimization->solution[solIdx]->matrixProgramming == NULL) return false;
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables == NULL) return false; 
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values == NULL) 
+            return false;
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar == NULL)
+            return false;
+        if (idx < 0 || 
+            idx > optimization->solution[solIdx]->matrixProgramming
+                ->matrixVariables->values->numberOfMatrixVar)
+            return false;
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+                == NULL) return false;
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+            ->m_mChildren[0] == NULL) return false;
+
+        if (blkno < 0 ||
+            blkno > ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                ->values->matrixVar[idx]->m_mChildren[0])->inumberOfChildren) return false;
+
+        if ( ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->values->matrixVar[idx]->m_mChildren[0])->m_mChildren[blkno] != NULL)
+            throw ErrorClass("memory error in setMatrixVarBlockElements: block was previously allocated");
+
+        ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->values->matrixVar[idx]->m_mChildren[0])->m_mChildren[blkno] = new MatrixBlock();
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->blockRowIdx = blkRowIdx;
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->blockColIdx = blkColIdx;
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->symmetry = ENUM_MATRIX_SYMMETRY_lower;
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->inumberOfChildren = 1;
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->m_mChildren = new MatrixNode*[1];
+
+        if (valueType == ENUM_MATRIX_TYPE_constant)
+            ((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0] = new ConstantMatrixElements();
+        else
+            throw ErrorClass("in setMatrixVarBlockElements: element type not yet implemented:" 
+                    + returnMatrixTypeString(valueType));
+
+        ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->numberOfValues = nz;
+
+        int startSize;
+
+        if (rowMajor)
+            startSize 
+                = ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->values->matrixVar[idx]->m_mChildren[0])->rowOffset->el[blkRowIdx+1]
+                - ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->values->matrixVar[idx]->m_mChildren[0])->rowOffset->el[blkRowIdx] + 1;
+        else
+            startSize 
+                = ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->values->matrixVar[idx]->m_mChildren[0])->colOffset->el[blkColIdx+1]
+                - ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->values->matrixVar[idx]->m_mChildren[0])->colOffset->el[blkColIdx] + 1;
+
+        ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->start = new IntVector(startSize);
+
+        for (int i=0; i<startSize; i++)
+            ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->start->el[i] = start[i];
+
+        if (nz > 0)
+        {
+            ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->index = new IntVector(nz);
+        
+            for (int i=0; i<nz; i++)
+                ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->index->el[i] = index[i];
+
+            if (valueType == ENUM_MATRIX_TYPE_constant)
+            {
+                ((ConstantMatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                        ->m_mChildren[blkno]->m_mChildren[0])->value = new ConstantMatrixValues();
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                        ->m_mChildren[blkno]->m_mChildren[0])->value->numberOfEl = nz;
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[idx]->m_mChildren[0])
+                        ->m_mChildren[blkno]->m_mChildren[0])->value->el = new double[nz];
+
+                for (int i=0; i<nz; i++)            
+                    ((ConstantMatrixValues*)((ConstantMatrixElements*)((MatrixBlocks*)optimization
+                        ->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+                        ->m_mChildren[0])->m_mChildren[blkno]->m_mChildren[0])->value)->el[i]
+                    = ((ConstantMatrixValues*)value)->el[i];
+            }
+        }
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+    return true;
+}//setMatrixVarValuesBlockElements
+
+
+bool OSResult::setMatrixVariablesOtherResultGeneralAttributes(int solIdx, int idx, std::string name, 
+                            std::string description,   std::string value,          std::string type,
+                            std::string solver,        std::string category,
+                            int numberOfMatrixVar,     std::string matrixType, 
+                            int numberOfEnumerations,  std::string enumType)
+{
+    int nSols = this->getSolutionNumber();
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables == NULL) return false; 
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other == NULL) return false;
+    if (idx < 0 ||  idx > optimization->solution[solIdx]->matrixProgramming
+                        ->matrixVariables->numberOfOtherMatrixVariableResults) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx] != NULL) 
+        return false;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]
+        = new OtherMatrixVariableResult();
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->name = name;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->description
+        = description; 
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->value    = value;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->type     = type;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->solver   = solver;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->category = category;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->numberOfMatrixVar
+        = numberOfMatrixVar;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->matrixType
+        = matrixType;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->numberOfEnumerations
+        = numberOfEnumerations;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->enumType = enumType;
+
+    if (numberOfMatrixVar > 0)
+        optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->matrixVar
+            = new OSMatrixWithMatrixVarIdx*[numberOfMatrixVar];
+
+    if (numberOfEnumerations > 0)
+        optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[idx]->enumeration
+            = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
+    return true;
+}//setMatrixVariablesOtherResultGeneralAttributes
+
+
+bool OSResult::setMatrixVariablesOtherResultMatrixAttributes(int solIdx, int otherIdx, int matrixVarIdx, 
+            int numberOfRows, int numberOfColumns, ENUM_MATRIX_SYMMETRY symmetry, 
+            ENUM_MATRIX_TYPE type, std::string name)
+{
+    int nSols = this->getSolutionNumber();
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables == NULL) return false; 
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other == NULL) return false;
+
+    if (otherIdx < 0 || otherIdx > optimization->solution[solIdx]->matrixProgramming->matrixVariables
+        ->numberOfOtherMatrixVariableResults) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx] == NULL)
+        return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar
+        == NULL) return false;
+    if (matrixVarIdx < 0 || 
+        matrixVarIdx > optimization->solution[solIdx]->matrixProgramming->matrixVariables
+            ->other[otherIdx]->numberOfMatrixVar) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx] != NULL) return false;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx] = new OSMatrixWithMatrixVarIdx();
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->matrixVarIdx = matrixVarIdx;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->numberOfRows = numberOfRows;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->numberOfColumns = numberOfColumns;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->symmetry = symmetry;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->type = type;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->name = name;
+    return true;
+}//setMatrixVariablesOtherResultMatrixAttributes
+
+bool OSResult::setMatrixVariablesOtherResultBlockStructure(int solIdx, int otherIdx, int matrixVarIdx,
+                                int* colOffset, int colOffsetSize, int* rowOffset, int rowOffsetSize,
+                                int numberOfBlocks, int blocksConstructorIdx)
+{
+    int nSols = this->getSolutionNumber();
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables == NULL) return false; 
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values == NULL) return false;
+    if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar == NULL)
+        return false;
+    if (matrixVarIdx < 0 || 
+        matrixVarIdx > optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->numberOfMatrixVar)
+        return false;
+
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]
+        ->inumberOfChildren = 1; //single Blocks constructor
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]
+        ->m_mChildren = new MatrixNode*[1];
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]
+        ->m_mChildren[0] = new MatrixBlocks();
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]
+        ->m_mChildren[0]->inumberOfChildren = numberOfBlocks;
+
+    ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->m_mChildren[0])->colOffset = new IntVector(numberOfBlocks+1);
+
+    for (int i=0; i <= numberOfBlocks; i++)
+        ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+            ->matrixVar[matrixVarIdx]->m_mChildren[0])->colOffset->el[i] = colOffset[i];
+
+    ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->m_mChildren[0])->rowOffset = new IntVector(numberOfBlocks+1);
+
+    for (int i=0; i <= numberOfBlocks; i++)
+        ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+            ->matrixVar[matrixVarIdx]->m_mChildren[0])->rowOffset->el[i] = rowOffset[i];
+
+    //Note well: Individual pointers are set to NULL, which allows a check against double allocation later
+    ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+        ->matrixVar[matrixVarIdx]->m_mChildren[0])->m_mChildren = new MatrixNode*[numberOfBlocks];
+
+    for (int i=0; i<numberOfBlocks; i++)
+        ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
+            ->matrixVar[matrixVarIdx]->m_mChildren[0])->m_mChildren[i] = NULL;
+
+    return true;
+}//setMatrixVariablesOtherResultBlockStructure
+
+bool OSResult::setMatrixVariablesOtherResultBlockElements(int solIdx, int otherIdx, int matrixVarIdx, 
+                            int blkno, int blkRowIdx, int blkColIdx, int nz, int* start, int* index,
+                            MatrixElementValues* value, ENUM_MATRIX_TYPE valueType,
+                            ENUM_MATRIX_SYMMETRY symmetry, bool rowMajor)
+{
+    try
+    {
+        int nSols = this->getSolutionNumber();
+        if (nSols <= 0) return false;
+        if (optimization == NULL) return false;
+        if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+        if (optimization->solution[solIdx] == NULL) return false;
+        if (optimization->solution[solIdx]->matrixProgramming == NULL) return false;
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables == NULL) return false; 
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values == NULL) 
+            return false;
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar == NULL)
+            return false;
+        if (matrixVarIdx < 0 || 
+            matrixVarIdx > optimization->solution[solIdx]->matrixProgramming
+                ->matrixVariables->values->numberOfMatrixVar)
+            return false;
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]
+                == NULL) return false;
+        if (optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]
+            ->m_mChildren[0] == NULL) return false;
+
+        if (blkno < 0 ||
+            blkno > ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                ->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])->inumberOfChildren) return false;
+
+        if ( ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])->m_mChildren[blkno] != NULL)
+            throw ErrorClass("memory error in setMatrixVarBlockElements: block was previously allocated");
+
+        ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])->m_mChildren[blkno] = new MatrixBlock();
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->blockRowIdx = blkRowIdx;
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->blockColIdx = blkColIdx;
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->symmetry = ENUM_MATRIX_SYMMETRY_lower;
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->inumberOfChildren = 1;
+
+        ((MatrixBlock*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno])->m_mChildren = new MatrixNode*[1];
+
+        if (valueType == ENUM_MATRIX_TYPE_constant)
+            ((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0] = new ConstantMatrixElements();
+        else
+            throw ErrorClass("in setMatrixVarBlockElements: element type not yet implemented:" 
+                    + returnMatrixTypeString(valueType));
+
+        ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->numberOfValues = nz;
+
+        int startSize;
+
+        if (rowMajor)
+            startSize 
+                = ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])->rowOffset->el[blkRowIdx+1]
+                - ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])->rowOffset->el[blkRowIdx] + 1;
+        else
+            startSize 
+                = ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])->colOffset->el[blkColIdx+1]
+                - ((MatrixBlocks*)optimization->solution[solIdx]->matrixProgramming->matrixVariables
+                    ->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])->colOffset->el[blkColIdx] + 1;
+
+        ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->start = new IntVector(startSize);
+
+        for (int i=0; i<startSize; i++)
+            ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->start->el[i] = start[i];
+
+        if (nz > 0)
+        {
+            ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->index = new IntVector(nz);
+        
+            for (int i=0; i<nz; i++)
+                ((MatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                    ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                    ->m_mChildren[blkno]->m_mChildren[0])->index->el[i] = index[i];
+
+            if (valueType == ENUM_MATRIX_TYPE_constant)
+            {
+                ((ConstantMatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                        ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                        ->m_mChildren[blkno]->m_mChildren[0])->value = new ConstantMatrixValues();
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                        ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                        ->m_mChildren[blkno]->m_mChildren[0])->value->numberOfEl = nz;
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)optimization->solution[solIdx]
+                        ->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]->m_mChildren[0])
+                        ->m_mChildren[blkno]->m_mChildren[0])->value->el = new double[nz];
+
+                for (int i=0; i<nz; i++)            
+                    ((ConstantMatrixValues*)((ConstantMatrixElements*)((MatrixBlocks*)optimization
+                        ->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]->matrixVar[matrixVarIdx]
+                        ->m_mChildren[0])->m_mChildren[blkno]->m_mChildren[0])->value)->el[i]
+                    = ((ConstantMatrixValues*)value)->el[i];
+            }
+        }
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+    return true;
+}//setMatrixVariablesOtherResultBlockElements
+
 
 bool OSResult::setNumberOfOtherSolutionResults(int solIdx, int num)
 {
@@ -9468,11 +10238,11 @@ bool OtherVariableResult::setRandom(double density, bool conformant)
             if (conformant)	n = this->numberOfEnumerations;
             else            n = (int)(1+4*OSRand());
 
-            enumeration = new OtherOptionEnumeration*[n];
+            enumeration = new OtherOptionOrResultEnumeration*[n];
 
             for (int i = 0; i < n; i++)
             {
-                enumeration[i] = new OtherOptionEnumeration();
+                enumeration[i] = new OtherOptionOrResultEnumeration();
                 enumeration[i]->setRandom(density, conformant, 0, 9);
             }
         }
@@ -9515,6 +10285,7 @@ bool ObjectiveSolution::setRandom(double density, bool conformant)
 
         for (int i = 0; i < n; i++)
         {
+
             other[i] = new OtherObjectiveResult();
             other[i]->setRandom(density, conformant);
         }
@@ -9615,11 +10386,11 @@ bool OtherObjectiveResult::setRandom(double density, bool conformant)
             if (conformant)	n = this->numberOfEnumerations;
             else            n = (int)(1+4*OSRand());
 
-            enumeration = new OtherOptionEnumeration*[n];
+            enumeration = new OtherOptionOrResultEnumeration*[n];
 
             for (int i = 0; i < n; i++)
             {
-                enumeration[i] = new OtherOptionEnumeration();
+                enumeration[i] = new OtherOptionOrResultEnumeration();
                 enumeration[i]->setRandom(density, conformant, -2, -1);
             }
         }
@@ -9759,11 +10530,11 @@ bool OtherConstraintResult::setRandom(double density, bool conformant)
             if (conformant)	n = this->numberOfEnumerations;
             else            n = (int)(1+4*OSRand());
 
-            enumeration = new OtherOptionEnumeration*[n];
+            enumeration = new OtherOptionOrResultEnumeration*[n];
 
             for (int i = 0; i < n; i++)
             {
-                enumeration[i] = new OtherOptionEnumeration();
+                enumeration[i] = new OtherOptionOrResultEnumeration();
                 enumeration[i]->setRandom(density, conformant, 0, 4);
             }
         }

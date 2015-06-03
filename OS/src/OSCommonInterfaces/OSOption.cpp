@@ -6035,11 +6035,11 @@ bool VariableOption::setOther(int numberOfOptions, OtherVariableOption  **other)
 
             if (this->other[i]->numberOfEnumerations > 0)
             {
-                this->other[i]->enumeration = new OtherOptionEnumeration*[this->other[i]->numberOfEnumerations];
+                this->other[i]->enumeration = new OtherOptionOrResultEnumeration*[this->other[i]->numberOfEnumerations];
                 for (j = 0; j < this->other[i]->numberOfEnumerations; j++)
                 {
-                    this->other[i]->enumeration[j]  = new OtherOptionEnumeration();
-                    this->other[i]->enumeration[j]->setOtherOptionEnumeration(
+                    this->other[i]->enumeration[j]  = new OtherOptionOrResultEnumeration();
+                    this->other[i]->enumeration[j]->setOtherOptionOrResultEnumeration(
                         other[i]->enumeration[j]->value,
                         other[i]->enumeration[j]->description,
                         other[i]->enumeration[j]->el,
@@ -6107,11 +6107,11 @@ bool VariableOption::addOther(OtherVariableOption *other)
 
         if (other->numberOfEnumerations > 0)
         {
-            temp[ nopt]->enumeration = new OtherOptionEnumeration*[other->numberOfEnumerations];
+            temp[ nopt]->enumeration = new OtherOptionOrResultEnumeration*[other->numberOfEnumerations];
             for (j = 0; j < other->numberOfEnumerations; j++)
             {
-                temp[ nopt]->enumeration[j]  = new OtherOptionEnumeration();
-                temp[ nopt]->enumeration[j]->setOtherOptionEnumeration(
+                temp[ nopt]->enumeration[j]  = new OtherOptionOrResultEnumeration();
+                temp[ nopt]->enumeration[j]->setOtherOptionOrResultEnumeration(
                     other->enumeration[j]->value,
                     other->enumeration[j]->description,
                     other->enumeration[j]->el,
@@ -6670,11 +6670,11 @@ bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **othe
 
             if (this->other[i]->numberOfEnumerations > 0)
             {
-                this->other[i]->enumeration = new OtherOptionEnumeration*[this->other[i]->numberOfEnumerations];
+                this->other[i]->enumeration = new OtherOptionOrResultEnumeration*[this->other[i]->numberOfEnumerations];
                 for (j = 0; j < this->other[i]->numberOfEnumerations; j++)
                 {
-                    this->other[i]->enumeration[j]  = new OtherOptionEnumeration();
-                    this->other[i]->enumeration[j]->setOtherOptionEnumeration(
+                    this->other[i]->enumeration[j]  = new OtherOptionOrResultEnumeration();
+                    this->other[i]->enumeration[j]->setOtherOptionOrResultEnumeration(
                         other[i]->enumeration[j]->value,
                         other[i]->enumeration[j]->description,
                         other[i]->enumeration[j]->el,
@@ -6745,11 +6745,11 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
 
         if (other->numberOfEnumerations > 0)
         {
-            temp[ nopt]->enumeration = new OtherOptionEnumeration*[other->numberOfEnumerations];
+            temp[ nopt]->enumeration = new OtherOptionOrResultEnumeration*[other->numberOfEnumerations];
             for (j = 0; j < other->numberOfEnumerations; j++)
             {
-                temp[ nopt]->enumeration[j]  = new OtherOptionEnumeration();
-                temp[ nopt]->enumeration[j]->setOtherOptionEnumeration(
+                temp[ nopt]->enumeration[j]  = new OtherOptionOrResultEnumeration();
+                temp[ nopt]->enumeration[j]->setOtherOptionOrResultEnumeration(
                     other->enumeration[j]->value,
                     other->enumeration[j]->description,
                     other->enumeration[j]->el,
@@ -7316,11 +7316,11 @@ bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **ot
 
             if (this->other[i]->numberOfEnumerations > 0)
             {
-                this->other[i]->enumeration = new OtherOptionEnumeration*[this->other[i]->numberOfEnumerations];
+                this->other[i]->enumeration = new OtherOptionOrResultEnumeration*[this->other[i]->numberOfEnumerations];
                 for (j = 0; j < this->other[i]->numberOfEnumerations; j++)
                 {
-                    this->other[i]->enumeration[j]  = new OtherOptionEnumeration();
-                    this->other[i]->enumeration[j]->setOtherOptionEnumeration(
+                    this->other[i]->enumeration[j]  = new OtherOptionOrResultEnumeration();
+                    this->other[i]->enumeration[j]->setOtherOptionOrResultEnumeration(
                         other[i]->enumeration[j]->value,
                         other[i]->enumeration[j]->description,
                         other[i]->enumeration[j]->el,
@@ -7391,11 +7391,11 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
 
         if (other->numberOfEnumerations > 0)
         {
-            temp[ nopt]->enumeration = new OtherOptionEnumeration*[other->numberOfEnumerations];
+            temp[ nopt]->enumeration = new OtherOptionOrResultEnumeration*[other->numberOfEnumerations];
             for (j = 0; j < other->numberOfEnumerations; j++)
             {
-                temp[ nopt]->enumeration[j]  = new OtherOptionEnumeration();
-                temp[ nopt]->enumeration[j]->setOtherOptionEnumeration(
+                temp[ nopt]->enumeration[j]  = new OtherOptionOrResultEnumeration();
+                temp[ nopt]->enumeration[j]->setOtherOptionOrResultEnumeration(
                     other->enumeration[j]->value,
                     other->enumeration[j]->description,
                     other->enumeration[j]->el,
@@ -7548,6 +7548,7 @@ bool OSOption::setServiceURI( std::string serviceURI)
 bool OSOption::setServiceName( std::string serviceName)
 {
     if (this->general == NULL)
+
 
 
         this->general = new GeneralOption();
@@ -8793,14 +8794,14 @@ bool OSOption::setOtherVariableOptionAttributes(int iOther, int numberOfVar,
 
     if (numberOfEnumerations > 0)
     {
-        optimization->variables->other[iOther]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
+        optimization->variables->other[iOther]->enumeration = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
         for (int j=0; j<numberOfEnumerations; j++)
-            optimization->variables->other[iOther]->enumeration[j] = new OtherOptionEnumeration();
+            optimization->variables->other[iOther]->enumeration[j] = new OtherOptionOrResultEnumeration();
     }
     return true;
 }//setOtherVariableOptionAttributes
 
-bool OSOption::setOtherOptionEnumeration(int object, int otherOptionNumber, int enumerationNumber,
+bool OSOption::setOtherOptionOrResultEnumeration(int object, int otherOptionNumber, int enumerationNumber,
         int numberOfEl, std::string value, std::string description, int* idxArray)
 {
     if (optimization == NULL) return false;
@@ -8820,7 +8821,7 @@ bool OSOption::setOtherOptionEnumeration(int object, int otherOptionNumber, int 
         if (enumerationNumber < 0 || enumerationNumber >= optimization->variables->other[otherOptionNumber]->numberOfEnumerations) return false;
         if (optimization->variables->other[otherOptionNumber]->enumeration[enumerationNumber] == NULL) return false;
 
-        return optimization->variables->other[otherOptionNumber]->enumeration[enumerationNumber]->setOtherOptionEnumeration(value, description, idxArray, numberOfEl);
+        return optimization->variables->other[otherOptionNumber]->enumeration[enumerationNumber]->setOtherOptionOrResultEnumeration(value, description, idxArray, numberOfEl);
     }
 
     case ENUM_PROBLEM_COMPONENT_objectives:
@@ -8835,7 +8836,7 @@ bool OSOption::setOtherOptionEnumeration(int object, int otherOptionNumber, int 
         if (enumerationNumber < 0 || enumerationNumber >= optimization->objectives->other[otherOptionNumber]->numberOfEnumerations) return false;
         if (optimization->objectives->other[otherOptionNumber]->enumeration[enumerationNumber] == NULL) return false;
 
-        return optimization->objectives->other[otherOptionNumber]->enumeration[enumerationNumber]->setOtherOptionEnumeration(value, description, idxArray, numberOfEl);
+        return optimization->objectives->other[otherOptionNumber]->enumeration[enumerationNumber]->setOtherOptionOrResultEnumeration(value, description, idxArray, numberOfEl);
     }
 
     case ENUM_PROBLEM_COMPONENT_constraints:
@@ -8851,13 +8852,13 @@ bool OSOption::setOtherOptionEnumeration(int object, int otherOptionNumber, int 
         if (enumerationNumber < 0 || enumerationNumber >= optimization->constraints->other[otherOptionNumber]->numberOfEnumerations) return false;
         if (optimization->constraints->other[otherOptionNumber]->enumeration[enumerationNumber] == NULL) return false;
 
-        return optimization->constraints->other[otherOptionNumber]->enumeration[enumerationNumber]->setOtherOptionEnumeration(value, description, idxArray, numberOfEl);
+        return optimization->constraints->other[otherOptionNumber]->enumeration[enumerationNumber]->setOtherOptionOrResultEnumeration(value, description, idxArray, numberOfEl);
     }
     default:
-        throw ErrorClass("target object not implemented in setOtherOptionEnumeration");
+        throw ErrorClass("target object not implemented in setOtherOptionOrResultEnumeration");
     }
 
-}//setOtherOptionEnumeration
+}//setOtherOptionOrResultEnumeration
 
 bool OSOption::setOtherVariableOptionVar(int otherOptionNumber, int varNumber,
         int idx, std::string name, std::string value, std::string lbValue, std::string ubValue)
@@ -9141,9 +9142,9 @@ bool OSOption::setOtherObjectiveOptionAttributes(int iOther, int numberOfObj,
 
     if (numberOfEnumerations > 0)
     {
-        optimization->objectives->other[iOther]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
+        optimization->objectives->other[iOther]->enumeration = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
         for (int j=0; j<numberOfEnumerations; j++)
-            optimization->objectives->other[iOther]->enumeration[j] = new OtherOptionEnumeration();
+            optimization->objectives->other[iOther]->enumeration[j] = new OtherOptionOrResultEnumeration();
     }
     return true;
 }//setOtherObjOptionAttributes
@@ -9384,9 +9385,9 @@ bool OSOption::setOtherConstraintOptionAttributes(int iOther, int numberOfCon,
 
     if (numberOfEnumerations > 0)
     {
-        optimization->constraints->other[iOther]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
+        optimization->constraints->other[iOther]->enumeration = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
         for (int j=0; j<numberOfEnumerations; j++)
-            optimization->constraints->other[iOther]->enumeration[j] = new OtherOptionEnumeration();
+            optimization->constraints->other[iOther]->enumeration[j] = new OtherOptionOrResultEnumeration();
     }
     return true;
 }//setOtherConOptionAttributes
@@ -12545,6 +12546,7 @@ bool DirectoriesAndFiles::setRandom( double density, bool conformant )
     if (conformant)	n = this->numberOfPaths;
     else            n = (int)(1+4*OSRand());
 
+
     path = new std::string[n];
     for (int i = 0; i < n; i++)
         path[i] = "random string";
@@ -12850,10 +12852,10 @@ bool OtherVariableOption::setRandom( double density, bool conformant )
             if (conformant)	n = this->numberOfEnumerations;
             else            n = (int)(4*OSRand());
 
-            enumeration = new OtherOptionEnumeration*[n];
+            enumeration = new OtherOptionOrResultEnumeration*[n];
             for (int i = 0; i < n; i++)
             {
-                enumeration[i] = new OtherOptionEnumeration();
+                enumeration[i] = new OtherOptionOrResultEnumeration();
                 enumeration[i]->setRandom(density, conformant, 0, 9);
             }
         }
@@ -13035,10 +13037,10 @@ bool OtherObjectiveOption::setRandom( double density, bool conformant )
             if (conformant)	n = this->numberOfEnumerations;
             else            n = (int)(4*OSRand());
 
-            enumeration = new OtherOptionEnumeration*[n];
+            enumeration = new OtherOptionOrResultEnumeration*[n];
             for (int i = 0; i < n; i++)
             {
-                enumeration[i] = new OtherOptionEnumeration();
+                enumeration[i] = new OtherOptionOrResultEnumeration();
                 enumeration[i]->setRandom(density, conformant, -2, -1);
             }
         }
@@ -13219,10 +13221,10 @@ bool OtherConstraintOption::setRandom( double density, bool conformant )
             if (conformant)	n = this->numberOfEnumerations;
             else            n = (int)(4*OSRand());
 
-            enumeration = new OtherOptionEnumeration*[n];
+            enumeration = new OtherOptionOrResultEnumeration*[n];
             for (int i = 0; i < n; i++)
             {
-                enumeration[i] = new OtherOptionEnumeration();
+                enumeration[i] = new OtherOptionOrResultEnumeration();
                 enumeration[i]->setRandom(density, conformant, 0, 4);
             }
         }
@@ -13959,10 +13961,10 @@ bool OtherVariableOption::deepCopyFrom(OtherVariableOption *that)
     if (n  < 0) return false;
     if (n == 0) return true;
 
-    this->enumeration = new OtherOptionEnumeration*[n];
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
     for (int i = 0; i < n; i++)
     {
-        this->enumeration[i] = new OtherOptionEnumeration();
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
         if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
             return false;
     }
@@ -14125,10 +14127,10 @@ bool OtherObjectiveOption::deepCopyFrom(OtherObjectiveOption *that)
     if (n < 0) return false;
     if (n > 0)
     {
-        this->enumeration = new OtherOptionEnumeration*[n];
+        this->enumeration = new OtherOptionOrResultEnumeration*[n];
         for (int i = 0; i < n; i++)
         {
-            this->enumeration[i] = new OtherOptionEnumeration();
+            this->enumeration[i] = new OtherOptionOrResultEnumeration();
             if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
                 return false;
         }
@@ -14291,10 +14293,10 @@ bool OtherConstraintOption::deepCopyFrom(OtherConstraintOption *that)
     if (n < 0) return false;
     if (n > 0)
     {
-        this->enumeration = new OtherOptionEnumeration*[n];
+        this->enumeration = new OtherOptionOrResultEnumeration*[n];
         for (int i = 0; i < n; i++)
         {
-            this->enumeration[i] = new OtherOptionEnumeration();
+            this->enumeration[i] = new OtherOptionOrResultEnumeration();
             if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
                 return false;
         }

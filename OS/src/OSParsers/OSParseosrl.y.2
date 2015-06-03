@@ -2176,7 +2176,7 @@ otherVarEnumerationList: otherVarEnumeration | otherVarEnumerationList otherVarE
 
 otherVarEnumeration: otherVarEnumerationStart otherVarEnumerationAttributes otherVarEnumerationContent 
 {     
-    if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_variables, parserData->kounter, parserData->valueAttribute, 
+    if (osresult->setOtherOptionOrResultEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_variables, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other variable option failed");    
     delete[] osglData->osglIntArray;
@@ -2677,7 +2677,7 @@ otherObjEnumerationList: otherObjEnumeration | otherObjEnumerationList otherObjE
 
 otherObjEnumeration: otherObjEnumerationStart otherObjEnumerationAttributes otherObjEnumerationContent 
 {     
-    if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_objectives, parserData->kounter, parserData->valueAttribute, 
+    if (osresult->setOtherOptionOrResultEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_objectives, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other objective option failed");    
     delete[] osglData->osglIntArray;
@@ -3174,7 +3174,7 @@ otherConEnumerationList: otherConEnumeration | otherConEnumerationList otherConE
 
 otherConEnumeration: otherConEnumerationStart otherConEnumerationAttributes otherConEnumerationContent 
 {     
-    if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_constraints, parserData->kounter, parserData->valueAttribute, 
+    if (osresult->setOtherOptionOrResultEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_constraints, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other constraint option failed");
     delete[] osglData->osglIntArray;

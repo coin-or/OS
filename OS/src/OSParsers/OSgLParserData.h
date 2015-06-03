@@ -101,6 +101,7 @@ public:
     std::vector<MatrixNode*> mtxConstructorVec;
     std::vector<MatrixNode*> mtxBlocksVec;
     std::vector<MatrixNode*> mtxBlkVec;
+    std::vector<int> nBlocksVec;
 
     /** 
      *  Vectors to hold rowOffset and colOffset arrays in a place where they

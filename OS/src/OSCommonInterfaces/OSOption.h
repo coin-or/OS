@@ -2020,11 +2020,11 @@ public:
     /** type of the values in the var array */
     std::string varType;
 
-    /* a pointer to OtherOptionEnumeration objects that will
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
-    OtherOptionEnumeration** enumeration;
+    OtherOptionOrResultEnumeration** enumeration;
 
     /** type of the values in the enumeration array */
     std::string enumType;
@@ -2605,11 +2605,11 @@ public:
     /** type of the values in the obj array */
     std::string objType;
 
-    /* a pointer to OtherOptionEnumeration objects that will
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
-    OtherOptionEnumeration** enumeration;
+    OtherOptionOrResultEnumeration** enumeration;
 
     /** type of the values in the enumeration array */
     std::string enumType;
@@ -3187,11 +3187,11 @@ public:
     /** type of the values in the con array */
     std::string conType;
 
-    /* a pointer to OtherOptionEnumeration objects that will
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
-    OtherOptionEnumeration** enumeration;
+    OtherOptionOrResultEnumeration** enumeration;
 
     /** type of the values in the enumeration array */
     std::string enumType;
@@ -3977,6 +3977,7 @@ public:
     int getNumberOfInitVarValuesString();
 
     /**
+
      * Get the number of variables for which integer branching weights are provided.
      *
      * @return the number of variables.
@@ -4957,7 +4958,7 @@ public:
      *	@param description: further information about the enumeration and its value
      *	@param idxArray: the array of indices for the objects sharing this enumeration
      */
-    bool setOtherOptionEnumeration(int object, int otherOptionNumber, int enumerationNumber,
+    bool setOtherOptionOrResultEnumeration(int object, int otherOptionNumber, int enumerationNumber,
                                    int numberOfEl, std::string value, std::string description, int* idxArray);
 
     /**

@@ -1439,7 +1439,7 @@ public:
     bool deepCopyFrom(MatrixTransformation *that);
 };//class MatrixTransformation
 
-class MatrixBlock; //forward desclaration
+//class MatrixBlock; //forward declaration
 
 /*! \class MatrixBlocks
  * \brief a data structure to represent the nonzeroes of a matrix 
@@ -1459,15 +1459,6 @@ public:
      *  An array listing the top row of each block within the larger matrix
      */
     IntVector *rowOffset;
-
-    /** 
-     *  This integer gives the number of blocks for which values are provided
-     *  Due to block-sparsity, this could be less than card(colOffset)*card(rowOffset)
-     */
-    int numberOfBlocks;
-
-    /** The nonzeros in each block are held in this data structure */
-    MatrixBlock **block;
 
     MatrixBlocks();
     ~MatrixBlocks();
@@ -2336,6 +2327,170 @@ public:
      */
     bool deepCopyFrom(OSMatrix *that);
 };// class OSMatrix
+
+
+/*! \class OSMatrixWithMatrixVarIdx : OSMatrix
+ * \brief this class extends OSMatrix for use, e.g., in the matrixVar section of OSoL and OSrL
+ *
+ */
+class OSMatrixWithMatrixVarIdx : public OSMatrix
+{
+public:
+    int matrixVarIdx;
+
+public:
+    OSMatrixWithMatrixVarIdx();
+    ~OSMatrixWithMatrixVarIdx();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn OSMatrix *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual OSMatrixWithMatrixVarIdx *cloneMatrixNode();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OSMatrixWithMatrixVarIdx *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OSMatrixWithMatrixVarIdx *that);
+};// class OSMatrixWithMatrixVarIdx
+
+
+/*! \class OSMatrixWithMatrixObjIdx : OSMatrix
+ * \brief this class extends OSMatrix for use, e.g., in the matrixObj section of OSoL and OSrL
+ *
+ */
+class OSMatrixWithMatrixObjIdx : public OSMatrix
+{
+public:
+    int matrixObjIdx;
+
+public:
+    OSMatrixWithMatrixObjIdx();
+    ~OSMatrixWithMatrixObjIdx();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn OSMatrix *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual OSMatrixWithMatrixObjIdx *cloneMatrixNode();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OSMatrixWithMatrixObjIdx *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OSMatrixWithMatrixObjIdx *that);
+};// class OSMatrixWithMatrixObjIdx
+
+/*! \class OSMatrixWithMatrixConIdx : OSMatrix
+ * \brief this class extends OSMatrix for use, e.g., in the matrixCon section of OSoL and OSrL
+ *
+ */
+class OSMatrixWithMatrixConIdx : public OSMatrix
+{
+public:
+    int matrixConIdx;
+
+public:
+    OSMatrixWithMatrixConIdx();
+    ~OSMatrixWithMatrixConIdx();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /*! \fn OSMatrix *cloneMatrixNode()
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new MatrixNode of the proper type.
+     */
+    virtual OSMatrixWithMatrixConIdx *cloneMatrixNode();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OSMatrixWithMatrixConIdx *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OSMatrixWithMatrixConIdx *that);
+};// class OSMatrixWithMatrixConIdx
 
 
 /*! \class MatrixBlock

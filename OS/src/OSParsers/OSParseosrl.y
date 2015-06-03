@@ -2487,7 +2487,7 @@ otherVarEnumerationList: otherVarEnumeration | otherVarEnumerationList otherVarE
 
 otherVarEnumeration: otherVarEnumerationStart otherVarEnumerationAttributes otherVarEnumerationContent 
 {     
-    if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_variables, parserData->kounter, parserData->valueAttribute, 
+    if (osresult->setOtherOptionOrResultEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_variables, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other variable option failed");    
     delete[] osglData->osglIntArray;
@@ -2988,7 +2988,7 @@ otherObjEnumerationList: otherObjEnumeration | otherObjEnumerationList otherObjE
 
 otherObjEnumeration: otherObjEnumerationStart otherObjEnumerationAttributes otherObjEnumerationContent 
 {     
-    if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_objectives, parserData->kounter, parserData->valueAttribute, 
+    if (osresult->setOtherOptionOrResultEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_objectives, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other objective option failed");    
     delete[] osglData->osglIntArray;
@@ -3485,7 +3485,7 @@ otherConEnumerationList: otherConEnumeration | otherConEnumerationList otherConE
 
 otherConEnumeration: otherConEnumerationStart otherConEnumerationAttributes otherConEnumerationContent 
 {     
-    if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_constraints, parserData->kounter, parserData->valueAttribute, 
+    if (osresult->setOtherOptionOrResultEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_constraints, parserData->kounter, parserData->valueAttribute, 
             parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other constraint option failed");
     delete[] osglData->osglIntArray;
@@ -4584,6 +4584,7 @@ matrixStart: MATRIXSTART
     osglData->mtxConstructorVec.clear();
     osglData->mtxBlocksVec.clear();
     osglData->mtxBlkVec.clear();
+    osglData->nBlocksVec.clear();
 
     /**
      *  The <matrix> tag combines the functions of the <nl> tag and the top OSnLNode,
@@ -5832,7 +5833,7 @@ matrixBlocksStart: BLOCKSSTART
 
 matrixBlocksAttributes: osglNumberOfBlocksATT
 {
-    ((MatrixBlocks*)osglData->tempC)->numberOfBlocks    = osglData->numberOfBlocks;
+    osglData->nBlocksVec.push_back(osglData->numberOfBlocks);
     ((MatrixBlocks*)osglData->tempC)->inumberOfChildren = 0;
 };
 
@@ -5841,13 +5842,14 @@ matrixBlocksContent: GREATERTHAN colOffsets rowOffsets blockList matrixBlocksEnd
 matrixBlocksEnd: BLOCKSEND
 {
     if ( ((MatrixBlocks*)osglData->mtxBlocksVec.back())->inumberOfChildren != 
-         ((MatrixBlocks*)osglData->mtxBlocksVec.back())->numberOfBlocks )
+                           osglData->nBlocksVec.back())
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, 
             "Number of blocks does not agree with attribute value numberOfBlocks");
 
     ((MatrixBlocks*)osglData->mtxBlocksVec.back())->m_mChildren
-        = new MatrixNode*[((MatrixBlocks*)osglData->mtxBlocksVec.back())->numberOfBlocks];
+        = new MatrixNode*[((MatrixBlocks*)osglData->mtxBlocksVec.back())->inumberOfChildren];
     osglData->mtxBlocksVec.pop_back();
+    osglData->nBlocksVec.pop_back();
 };
 
 

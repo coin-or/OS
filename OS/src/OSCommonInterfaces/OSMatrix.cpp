@@ -2352,7 +2352,7 @@ bool MatrixType::processBlocks(int* rowOffset, int rowOffsetSize, int* colOffset
                 MatrixBlock* tmpChild;
                 int tmpBlockNumber = 0;
                 int tmpBlockSize;
-                for (int j=0; j<((MatrixBlocks*)m_mChildren[0])->numberOfBlocks; j++)
+                for (int j=0; j<((MatrixBlocks*)m_mChildren[0])->inumberOfChildren; j++)
                 {
                     tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[0])->m_mChildren[j];
                     if (rowMajor)
@@ -2377,7 +2377,7 @@ bool MatrixType::processBlocks(int* rowOffset, int rowOffsetSize, int* colOffset
 
                 // go through blocks again and store pointers
                 tmpBlockNumber = 0;
-                for (int j=0; j<((MatrixBlocks*)m_mChildren[0])->numberOfBlocks; j++)
+                for (int j=0; j<((MatrixBlocks*)m_mChildren[0])->inumberOfChildren; j++)
                 {
                     tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[0])->m_mChildren[j];
                     if (rowMajor)
@@ -3752,6 +3752,158 @@ bool OSMatrix::IsEqual(OSMatrix *that)
 }// end of OSMatrix::IsEqual()
 // end of methods for OSMatrix
 
+
+/** ---------- Methods for class OSMatrixWithMatrixVarIdx ---------- */ 
+OSMatrixWithMatrixVarIdx::OSMatrixWithMatrixVarIdx():
+    OSMatrix(),
+    matrixVarIdx(-1)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrixWithMatrixVarIdx Constructor");
+#endif
+}// end of OSMatrixWithMatrixVarIdx
+
+OSMatrixWithMatrixVarIdx::~OSMatrixWithMatrixVarIdx()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrixWithMatrixVarIdx Destructor");
+#endif
+}// end of ~OSMatrixWithMatrixVarIdx
+
+
+std::string OSMatrixWithMatrixVarIdx::getMatrixNodeInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixVar";
+    outStr << " numberOfRows=\""    << numberOfRows    << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    outStr << " matrixVarIdx=\""    << matrixVarIdx    << "\"";
+    if (symmetry != ENUM_MATRIX_SYMMETRY_none)
+        outStr << " symmetry=\"" << returnMatrixSymmetryString(symmetry) << "\"";
+    if (name != "") 
+        outStr << " name=\"" << name << "\"";
+    if (matrixType != ENUM_MATRIX_TYPE_unknown) 
+        outStr << " type=\"" << returnMatrixTypeString(matrixType) << "\"";
+
+    if (inumberOfChildren > 0)
+    {
+        outStr << ">" << std::endl;
+        for (int i=0; i < inumberOfChildren; i++)
+            outStr << m_mChildren[i]->getMatrixNodeInXML();
+        outStr << "</matrixVar>" << std::endl;
+    }
+    else
+        outStr << "/>" << std::endl;
+    return outStr.str();
+}// end of OSMatrixWithMatrixVarIdx::getMatrixNodeInXML()
+
+OSMatrixWithMatrixVarIdx* OSMatrixWithMatrixVarIdx::cloneMatrixNode()
+{
+    MatrixType *nodePtr;
+    nodePtr = new OSMatrixWithMatrixVarIdx();
+    return  (OSMatrixWithMatrixVarIdx*)nodePtr;
+}// end of OSMatrixWithMatrixVarIdx::cloneMatrixNode
+
+/** ---------- Methods for class OSMatrixWithMatrixObjIdx ---------- */ 
+OSMatrixWithMatrixObjIdx::OSMatrixWithMatrixObjIdx():
+    OSMatrix(),
+    matrixObjIdx(-1)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrixWithMatrixObjIdx Constructor");
+#endif
+}// end of OSMatrixWithMatrixObjIdx
+
+OSMatrixWithMatrixObjIdx::~OSMatrixWithMatrixObjIdx()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrixWithMatrixObjIdx Destructor");
+#endif
+}// end of ~OSMatrixWithMatrixObjIdx
+
+
+std::string OSMatrixWithMatrixObjIdx::getMatrixNodeInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixObj";
+    outStr << " numberOfRows=\""    << numberOfRows    << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    outStr << " matrixObjIdx=\""    << matrixObjIdx    << "\"";
+    if (symmetry != ENUM_MATRIX_SYMMETRY_none)
+        outStr << " symmetry=\"" << returnMatrixSymmetryString(symmetry) << "\"";
+    if (name != "") 
+        outStr << " name=\"" << name << "\"";
+    if (matrixType != ENUM_MATRIX_TYPE_unknown) 
+        outStr << " type=\"" << returnMatrixTypeString(matrixType) << "\"";
+
+    if (inumberOfChildren > 0)
+    {
+        outStr << ">" << std::endl;
+        for (int i=0; i < inumberOfChildren; i++)
+            outStr << m_mChildren[i]->getMatrixNodeInXML();
+        outStr << "</matrixObj>" << std::endl;
+    }
+    else
+        outStr << "/>" << std::endl;
+    return outStr.str();
+}// end of OSMatrixWithMatrixObjIdx::getMatrixNodeInXML()
+
+OSMatrixWithMatrixObjIdx* OSMatrixWithMatrixObjIdx::cloneMatrixNode()
+{
+    MatrixType *nodePtr;
+    nodePtr = new OSMatrixWithMatrixObjIdx();
+    return  (OSMatrixWithMatrixObjIdx*)nodePtr;
+}// end of OSMatrixWithMatrixObjIdx::cloneMatrixNode
+
+/** ---------- Methods for class OSMatrixWithMatrixConIdx ---------- */ 
+OSMatrixWithMatrixConIdx::OSMatrixWithMatrixConIdx():
+    OSMatrix(),
+    matrixConIdx(-1)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrixWithMatrixConIdx Constructor");
+#endif
+}// end of OSMatrixWithMatrixConIdx
+
+OSMatrixWithMatrixConIdx::~OSMatrixWithMatrixConIdx()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the OSMatrixWithMatrixConIdx Destructor");
+#endif
+}// end of ~OSMatrixWithMatrixConIdx
+
+std::string OSMatrixWithMatrixConIdx::getMatrixNodeInXML()
+{
+    ostringstream outStr;
+    outStr << "<matrixCon";
+    outStr << " numberOfRows=\""    << numberOfRows    << "\"";
+    outStr << " numberOfColumns=\"" << numberOfColumns << "\"";
+    outStr << " matrixConIdx=\""    << matrixConIdx    << "\"";
+    if (symmetry != ENUM_MATRIX_SYMMETRY_none)
+        outStr << " symmetry=\"" << returnMatrixSymmetryString(symmetry) << "\"";
+    if (name != "") 
+        outStr << " name=\"" << name << "\"";
+    if (matrixType != ENUM_MATRIX_TYPE_unknown) 
+        outStr << " type=\"" << returnMatrixTypeString(matrixType) << "\"";
+
+    if (inumberOfChildren > 0)
+    {
+        outStr << ">" << std::endl;
+        for (int i=0; i < inumberOfChildren; i++)
+            outStr << m_mChildren[i]->getMatrixNodeInXML();
+        outStr << "</matrixCon>" << std::endl;
+    }
+    else
+        outStr << "/>" << std::endl;
+    return outStr.str();
+}// end of OSMatrixWithMatrixConIdx::getMatrixNodeInXML()
+
+OSMatrixWithMatrixConIdx* OSMatrixWithMatrixConIdx::cloneMatrixNode()
+{
+    MatrixType *nodePtr;
+    nodePtr = new OSMatrixWithMatrixConIdx();
+    return  (OSMatrixWithMatrixConIdx*)nodePtr;
+}// end of OSMatrixWithMatrixConIdx::cloneMatrixNode
 
 /** ---------- Methods for class BaseMatrix ---------- */ 
 BaseMatrix::BaseMatrix():
@@ -5966,10 +6118,8 @@ bool MixedRowReferenceMatrixElements::deepCopyFrom(MixedRowReferenceMatrixElemen
 
 /** ---------- Methods for class MatrixBlocks ---------- */ 
 MatrixBlocks::MatrixBlocks():
-    numberOfBlocks(0),
     colOffset(NULL),
-    rowOffset(NULL),
-    block(NULL)
+    rowOffset(NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlocks Constructor");
@@ -5985,7 +6135,7 @@ MatrixBlocks::~MatrixBlocks()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixBlocks Destructor");
     outStr.str("");
     outStr.clear();
-    outStr << "NUMBER OF BLOCKS = " << numberOfBlocks << endl;
+    outStr << "NUMBER OF BLOCKS = " << inumberOfChildren << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 
     outStr.str("");
@@ -6008,7 +6158,8 @@ MatrixBlocks::~MatrixBlocks()
         delete rowOffset;
     rowOffset = NULL;
 
-    if(numberOfBlocks > 0 && block != NULL)
+#if 0
+    if(inumberOfChildren > 0 && block != NULL)
     {
         for (int i=0; i < numberOfBlocks; i++)
         {
@@ -6029,6 +6180,7 @@ MatrixBlocks::~MatrixBlocks()
     if (block != NULL)
         delete [] block;
     block = NULL;
+#endif
 }// end of MatrixBlocks::~MatrixBlocks()
 
 ENUM_MATRIX_CONSTRUCTOR_TYPE MatrixBlocks::getNodeType()
@@ -6055,7 +6207,7 @@ ENUM_MATRIX_TYPE MatrixBlocks::getMatrixType()
 std::string MatrixBlocks::getMatrixNodeInXML()
 {
     ostringstream outStr;
-    outStr << "<blocks numberOfBlocks=\"" << numberOfBlocks << "\">" << std::endl;
+    outStr << "<blocks numberOfBlocks=\"" << inumberOfChildren << "\">" << std::endl;
     outStr << "<colOffset numberOfEl=\"" << colOffset->numberOfEl << "\">" << std::endl;
     outStr << writeIntVectorData(colOffset, true, false);
     outStr << "</colOffset>" << std::endl;
@@ -6063,7 +6215,7 @@ std::string MatrixBlocks::getMatrixNodeInXML()
     outStr << writeIntVectorData(rowOffset, true, false);
     outStr << "</rowOffset>" << std::endl;
 
-    for (int i=0; i < numberOfBlocks; i++)
+    for (int i=0; i < inumberOfChildren; i++)
         outStr << m_mChildren[i]->getMatrixNodeInXML();
 
     outStr << "</blocks>" << std::endl;
@@ -6105,7 +6257,7 @@ bool MatrixBlocks::IsEqual(MatrixBlocks *that)
 #endif
     if (this == NULL)
     {
-        if (that == NULL || that->numberOfBlocks == 0)
+        if (that == NULL)
             return true;
         else
         {
@@ -6118,7 +6270,7 @@ bool MatrixBlocks::IsEqual(MatrixBlocks *that)
     }
     else
     {
-        if (that == NULL || this->numberOfBlocks == 0)
+        if (that == NULL)
         {
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
@@ -6128,16 +6280,10 @@ bool MatrixBlocks::IsEqual(MatrixBlocks *that)
         }
         else
         {
-            if (this->numberOfBlocks != this->numberOfBlocks) return false; 
             if (!this->colOffset->IsEqual(that->colOffset))
                 return false;
             if (!this->rowOffset->IsEqual(that->rowOffset))
                 return false;
-
-            for (int i = 0; i < this->numberOfBlocks; i++)
-                if (!this->block[i]->IsEqual(that->block[i]))
-                    return false;
-
             return true;
         }
     }

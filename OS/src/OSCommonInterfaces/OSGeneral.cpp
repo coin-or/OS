@@ -588,60 +588,60 @@ bool IntVector::deepCopyFrom(IntVector *that)
     return true;
 }//IntVector::deepCopyFrom
 
-OtherOptionEnumeration::OtherOptionEnumeration():
+OtherOptionOrResultEnumeration::OtherOptionOrResultEnumeration():
     IntVector(),
     value(""),
     description("")
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
-        "Inside the OtherOptionEnumeration Constructor");
+        "Inside the OtherOptionOrResultEnumeration Constructor");
 #endif
 }
 
-OtherOptionEnumeration::OtherOptionEnumeration(int n):
+OtherOptionOrResultEnumeration::OtherOptionOrResultEnumeration(int n):
     IntVector(n),
     value(""),
     description("")
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
-        "Inside the alternate OtherOptionEnumeration Constructor");
+        "Inside the alternate OtherOptionOrResultEnumeration Constructor");
 #endif
 }
 
-OtherOptionEnumeration::~OtherOptionEnumeration()
+OtherOptionOrResultEnumeration::~OtherOptionOrResultEnumeration()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
-        "Inside the OtherOptionEnumeration Destructor");
+        "Inside the OtherOptionOrResultEnumeration Destructor");
 #endif
 }
 
-bool OtherOptionEnumeration::setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni)
+bool OtherOptionOrResultEnumeration::setOtherOptionOrResultEnumeration(std::string value, std::string description, int *i, int ni)
 {
     this->value = value;
     this->description = description;
     return this->IntVector::setIntVector(i, ni);
 }
 
-std::string OtherOptionEnumeration::getValue()
+std::string OtherOptionOrResultEnumeration::getValue()
 {
     return this->value;
 }
 
-std::string OtherOptionEnumeration::getDescription()
+std::string OtherOptionOrResultEnumeration::getDescription()
 {
     return this->description;
 }
 
 
-bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
+bool OtherOptionOrResultEnumeration::IsEqual(OtherOptionOrResultEnumeration *that)
 {
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOptionEnumeration");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOptionOrResultEnumeration");
 #endif
     if (this == NULL)
     {
@@ -681,24 +681,24 @@ bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
             return this->IntVector::IsEqual(that);
         }
     }
-}//OtherOptionEnumeration::IsEqual
+}//OtherOptionOrResultEnumeration::IsEqual
 
-bool OtherOptionEnumeration::setRandom(double density, bool conformant, int iMin, int iMax)
+bool OtherOptionOrResultEnumeration::setRandom(double density, bool conformant, int iMin, int iMax)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Set random OtherOptionEnumeration");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Set random OtherOptionOrResultEnumeration");
 #endif
     if (OSRand() <= density) this->value       = "random string";
     if (OSRand() <= density) this->description = "random string";
 
     if (OSRand() <= density) this->IntVector::setRandom(density,conformant,iMin,iMax);
     return true;
-}//OtherOptionEnumeration::setRandom
+}//OtherOptionOrResultEnumeration::setRandom
 
-bool OtherOptionEnumeration::deepCopyFrom(OtherOptionEnumeration *that)
+bool OtherOptionOrResultEnumeration::deepCopyFrom(OtherOptionOrResultEnumeration *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherOptionEnumeration");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherOptionOrResultEnumeration");
 #endif
     this->value       = that->value;
     this->description = that->description;
@@ -707,7 +707,7 @@ bool OtherOptionEnumeration::deepCopyFrom(OtherOptionEnumeration *that)
         return false;
 
     return true;
-}//OtherOptionEnumeration::deepCopyFrom
+}//OtherOptionOrResultEnumeration::deepCopyFrom
 
 
 DoubleVector::DoubleVector():
@@ -1416,6 +1416,7 @@ bool StorageCapacity::setRandom(double density, bool conformant)
 {
     if (OSRand() <= density)
     {
+
         double temp = OSRand();
         if (conformant) temp = 0.5*temp;
 
@@ -1689,6 +1690,7 @@ bool TimeSpan::setRandom(double density, bool conformant)
         if      (temp <= 0.25) this->unit = "second";
         else if (temp <= 0.50) this->unit = "tick";
         else if (temp <= 0.75) this->unit = "";
+
         else                   this->unit = "flea";
     }
     if (OSRand() <= density)

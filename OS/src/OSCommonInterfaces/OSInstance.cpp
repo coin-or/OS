@@ -4523,8 +4523,8 @@ bool OSInstance::setVariables(int number, string *names, double *lowerBounds,
         {
             for(i = 0; i < number; i++)
             {
-                instanceData->variables->var[i]->type = types[i];
                 if(verifyVarType(types[i]) == false) types[i] = 'C';
+                instanceData->variables->var[i]->type = types[i];
             }
         }
         return true;

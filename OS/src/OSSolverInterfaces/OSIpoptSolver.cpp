@@ -702,9 +702,9 @@ void IpoptProblem::finalize_solution(SolverReturn status,
                     idx[ i] = i;
                 }
                 otherIdx = 0;
-                osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, 
-"reduced_costs", "", 
-                    "the variable reduced costs", idx, rcost, osinstance->getVariableNumber(), "", "double", "");
+                osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced_costs", "",
+                    "the variable reduced costs", idx, rcost, osinstance->getVariableNumber(), "",
+                    "double", "");
             }
             //set dual values on variable upper and lower bounds
             /*

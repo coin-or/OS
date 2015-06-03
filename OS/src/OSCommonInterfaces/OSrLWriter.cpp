@@ -937,7 +937,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                 {
                                     for(j = 0; j < m_OSResult->optimization->solution[i]->variables->other[k]->numberOfEnumerations; j++)
                                     {
-                                        outStr << writeOtherOptionEnumeration(m_OSResult->optimization->solution[i]->variables->other[k]->enumeration[j],
+                                        outStr << writeOtherOptionOrResultEnumeration(m_OSResult->optimization->solution[i]->variables->other[k]->enumeration[j],
                                                                               m_bWhiteSpace, m_bWriteBase64);
                                     }
                                 }
@@ -1069,7 +1069,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                 {
                                     for(j = 0; j < m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfEnumerations; j++)
                                     {
-                                        outStr << writeOtherOptionEnumeration(m_OSResult->optimization->solution[i]->objectives->other[k]->enumeration[j],
+                                        outStr << writeOtherOptionOrResultEnumeration(m_OSResult->optimization->solution[i]->objectives->other[k]->enumeration[j],
                                                                               m_bWhiteSpace, m_bWriteBase64);
                                     }
                                 }
@@ -1079,6 +1079,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                     } // end of if on other objectives
                     outStr << "</objectives>" << endl;
                 }
+
                 if(m_OSResult->optimization->solution[i]->constraints != NULL)
                 {
                     outStr << "<constraints ";
@@ -1198,7 +1199,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                 {
                                     for(j = 0; j < m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfEnumerations; j++)
                                     {
-                                        outStr << writeOtherOptionEnumeration(m_OSResult->optimization->solution[i]->constraints->other[k]->enumeration[j],
+                                        outStr << writeOtherOptionOrResultEnumeration(m_OSResult->optimization->solution[i]->constraints->other[k]->enumeration[j],
                                                                               m_bWhiteSpace, m_bWriteBase64);
                                     }
                                 }
@@ -1207,8 +1208,98 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                         }
                     } // end of if on other constraints
                     outStr << "</constraints>" << endl;
-                }
+                }// end of <constraints> element
 
+                if(m_OSResult->optimization->solution[i]->matrixProgramming != NULL)
+                {
+#ifndef NDEBUG
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, 
+                        "output <matrixProgramming>");
+#endif
+                    outStr << "<matrixProgramming ";
+                    if (m_OSResult->optimization->solution[i]->matrixProgramming
+                                  ->numberOfOtherMatrixProgrammingResults > 0)
+                        outStr << "numberOfOtherMatrixProgrammingResults=\"" 
+                               << m_OSResult->optimization->solution[i]->matrixProgramming
+                                            ->numberOfOtherMatrixProgrammingResults << "\"";
+                    outStr << ">" << endl;
+
+                    if(m_OSResult->optimization->solution[i]->matrixProgramming->matrixVariables != NULL)
+                    {
+                        MatrixVariableSolution* tmpVar
+                            = m_OSResult->optimization->solution[i]->matrixProgramming->matrixVariables;
+#ifndef NDEBUG
+                        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, 
+                            "output <matrixVariables>");
+#endif
+                        outStr << "<matrixVariables";
+                        if (tmpVar->numberOfOtherMatrixVariableResults > 0)
+                            outStr << " numberOfOtherMatrixVariableResults=\"" 
+                                   << tmpVar->numberOfOtherMatrixVariableResults << "\"";
+                        outStr << ">" << endl;
+
+                        if (tmpVar->values != NULL)
+                        {
+                            outStr << "<values numberOfMatrixVar=\"" 
+                                   << tmpVar->values->numberOfMatrixVar << "\">" << std::endl;
+                            for (int var=0; var < tmpVar->values->numberOfMatrixVar; var++)
+                                outStr << tmpVar->values->matrixVar[var]->getMatrixNodeInXML();
+                        }
+                        if (tmpVar->numberOfOtherMatrixVariableResults > 0 &&
+                            tmpVar->other != NULL)
+                        {
+                            for (int j=0; j < tmpVar->numberOfOtherMatrixVariableResults; j++)
+                            {
+                                outStr << "<other name=\"" << tmpVar->other[j]->name << "\"";
+                                if (tmpVar->other[j]->description != "")
+                                    outStr << " description=\"" << tmpVar->other[j]->description << "\""; 
+                                if (tmpVar->other[j]->value != "")
+                                    outStr << " value=\"" << tmpVar->other[j]->value << "\""; 
+                                if (tmpVar->other[j]->type != "")
+                                    outStr << " type=\"" << tmpVar->other[j]->type << "\""; 
+                                if (tmpVar->other[j]->solver != "")
+                                    outStr << " solver=\"" << tmpVar->other[j]->solver << "\""; 
+                                if (tmpVar->other[j]->category != "")
+                                    outStr << " category=\"" << tmpVar->other[j]->category << "\""; 
+                                if (tmpVar->other[j]->numberOfMatrixVar != 0)
+                                    outStr << " numberOfMatrixVar=\"" 
+                                           << tmpVar->other[j]->numberOfMatrixVar << "\""; 
+                                if (tmpVar->other[j]->matrixType != "")
+                                    outStr << " matrixType=\"" << tmpVar->other[j]->matrixType << "\""; 
+                                if (tmpVar->other[j]->numberOfEnumerations != 0)
+                                    outStr << " numberOfEnumerations=\"" 
+                                           << tmpVar->other[j]->numberOfEnumerations << "\""; 
+                                if (tmpVar->other[j]->enumType != "")
+                                    outStr << " enumType=\"" << tmpVar->other[j]->enumType << "\""; 
+
+                                if (tmpVar->other[j]->numberOfMatrixVar == 0 &&
+                                    tmpVar->other[j]->numberOfEnumerations == 0)
+                                {
+                                    outStr << "/>";
+                                }
+                                else
+                                {
+                                    outStr << ">";
+                                    if (tmpVar->other[j]->numberOfMatrixVar > 0)
+                                        for (int var=0; var < tmpVar->other[j]->numberOfMatrixVar; var++)
+                                            outStr << tmpVar->other[j]->matrixVar[var]->getMatrixNodeInXML();
+
+                                    if (tmpVar->other[j]->numberOfEnumerations > 0)
+                                    for(int k = 0; k < tmpVar->other[j]->numberOfEnumerations; k++)
+                                    {
+                                        outStr << writeOtherOptionOrResultEnumeration(
+                                                        tmpVar->other[j]->enumeration[j],
+                                                        m_bWhiteSpace, m_bWriteBase64);
+                                    }
+
+                                    outStr << "</other>";
+                                }
+                            }
+                        }
+                        outStr << "</matrixVariables>" << endl;
+                    }
+                    outStr << "</matrixProgramming>" << endl;
+                }
 
 #ifndef NDEBUG
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, "output <otherSolutionResults>");

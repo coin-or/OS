@@ -207,15 +207,15 @@ std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase6
  */
 std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace);
 
-/*! \brief Take an OtherOptionEnumeration object and write
+/*! \brief Take an OtherOptionOrResultEnumeration object and write
  * a string that validates against the OSgL schema.
  *
- * @param e is the OtherOptionEnumeration to be output
+ * @param e is the OtherOptionOrResultEnumeration to be output
  * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
  * @param writeBase64 controls whether the embedded integer array is to be output in base64 format
  *        or as a sequence of <el> (including mult and incr attributes)
  */
-std::string writeOtherOptionEnumeration(OtherOptionEnumeration *e, bool addWhiteSpace, bool writeBase64);
+std::string writeOtherOptionOrResultEnumeration(OtherOptionOrResultEnumeration *e, bool addWhiteSpace, bool writeBase64);
 
 
 /*! \brief Take a DoubleVector object and write

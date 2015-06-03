@@ -867,26 +867,648 @@ void  CsdpSolver::solve() throw (ErrorClass)
          * and sets initial values.
          */
 //else
-            initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
+        initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
+
+
 
 
         //call solver
-        int ret = easy_sdp(nC_rows,ncon,C_matrix,rhsValues,mconstraints,0.0,&X,&y,&Z,&pobj,&dobj);
-        if (ret == 0) // return codes are in csdp.c
-            printf("The objective value is %.7e \n",(dobj+pobj)/2);
-        else
-            printf("SDP failed.\n");
+        int returnCode = easy_sdp(nC_rows,ncon,C_matrix,rhsValues,mconstraints,0.0,&X,&y,&Z,&pobj,&dobj);
 
-        // build osresult
-//        osrl = osrlwriter->writeOSrL( osresult);
-//        if (status < -2)
-//        {
-//            throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + *ipoptErrorMsg);
-//        }
-//        return;
+        double*  mdObjValues = NULL;
+        int solIdx = 0;
+        int numberOfOtherVariableResults;
+        int otherIdx;
+        int numCon = osinstance->getConstraintNumber();
+
+        if(osinstance->getObjectiveNumber() > 0)   
+        {
+            mdObjValues = new double[1];
+            mdObjValues[0] = (dobj+pobj)/2;
+            outStr << std::endl << "Objective value f(x*) = " << os_dtoa_format(mdObjValues[0]);
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_summary, outStr.str());
+        }
+
+        std::string message = "Csdp solver finishes to the end.";
+        std::string solutionDescription = "";
+
+        // write resultHeader information
+        if(osresult->setSolverInvoked( "COIN-OR Csdp") != true)
+            throw ErrorClass("OSResult error: setSolverInvoked");
+        if(osresult->setServiceName( OSgetVersionInfo()) != true)
+            throw ErrorClass("OSResult error: setServiceName");
+        if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
+            throw ErrorClass("OSResult error: setInstanceName");
+
+        //if(osresult->setJobID( osoption->jobID) != true)
+        //    throw ErrorClass("OSResult error: setJobID");
+
+        // set basic problem parameters
+        if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+            throw ErrorClass("OSResult error: setVariableNumer");
+        if(osresult->setObjectiveNumber( 1) != true)
+            throw ErrorClass("OSResult error: setObjectiveNumber");
+        if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+            throw ErrorClass("OSResult error: setConstraintNumber");
+        if(osresult->setSolutionNumber(  1) != true)
+            throw ErrorClass("OSResult error: setSolutionNumer");
+        if(osresult->setGeneralMessage( message) != true)
+            throw ErrorClass("OSResult error: setGeneralMessage");
+
+
+        switch( returnCode)
+        {
+        case 0:
+        case 3:
+        {
+            if (returnCode == 0)
+            {
+                solutionDescription = "SUCCESS[Csdp]: Algorithm terminated normally at an optimal point, satisfying the convergence tolerances.";
+                osresult->setSolutionStatus(solIdx,  "optimal", solutionDescription);
+            }
+            else
+            {
+                solutionDescription = "PARTIAL SUCCESS[Csdp]: A solution has been found, but full accuracy was not achieved.";
+                osresult->setSolutionStatus(solIdx,  "unsure", solutionDescription);
+            }
+
+            if (osinstance->getObjectiveNumber() > 0)
+                osresult->setObjectiveValuesDense(solIdx, mdObjValues);
+            //set X, y, Z
+            if(numCon > 0)
+                osresult->setDualVariableValuesDense(solIdx, y+1); // !! Csdp uses Fortran indexing 
+
+            int* colOffset = new int[X.nblocks+1];
+            colOffset[0] = 0;
+            for (int i=1; i<=X.nblocks; i++)
+                colOffset[i] = colOffset[i-1] + X.blocks[i].blocksize;
+
+            int* colOffsetD = new int[Z.nblocks+1];
+            colOffsetD[0] = 0;
+            for (int i=1; i<=Z.nblocks; i++)
+                colOffsetD[i] = colOffsetD[i-1] + Z.blocks[i].blocksize;
+
+            // initial the <variables> element: one primal matrixVar, one dual matrixVar (in <other>)
+            osresult->setMatrixVariableSolution(0,1,1);
+
+
+            osresult->setMatrixVarValuesAttributes(0,0,0,colOffset[X.nblocks],
+                                                   colOffset[X.nblocks], ENUM_MATRIX_SYMMETRY_lower);
+
+            osresult->setMatrixVariablesOtherResultGeneralAttributes(0, 0, "dual matrix", 
+                                                                     "", "", "", "csdp", "", 0);
+            osresult->setMatrixVariablesOtherResultMatrixAttributes(0, 0, 0, 
+                            colOffset[Z.nblocks],colOffset[Z.nblocks], ENUM_MATRIX_SYMMETRY_lower);
+
+#if 0
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0] = new OtherMatrixVariableResult("dual matrix");
+
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->numberOfMatrixVar = 1;
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar = new OSMatrixWithMatrixVarIdx*[1];
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0] = new OSMatrixWithMatrixVarIdx();
+
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0]->numberOfRows = colOffsetD[Z.nblocks];
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0]->numberOfColumns = rowOffsetD[Z.nblocks];
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0]->matrixVarIdx = 0;
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0]->symmetry = ENUM_MATRIX_SYMMETRY_lower;
+#endif
+
+#if 0
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->values->matrixVar[0]->inumberOfChildren = 1;
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->values->matrixVar[0]->m_mChildren = new MatrixNode*[1];
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->values->matrixVar[0]->m_mChildren[0] = new MatrixBlocks();
+//            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming
+//                ->matrixVariables->values->matrixVar[0]->m_mChildren[0])->numberOfBlocks = X.nblocks;
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->values->matrixVar[0]->m_mChildren[0])->inumberOfChildren = X.nblocks;
+
+
+
+
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->values->matrixVar[0]->m_mChildren[0])->colOffset = new IntVector();
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->values->matrixVar[0]->m_mChildren[0])->colOffset->numberOfEl = X.nblocks + 1;
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->values->matrixVar[0]->m_mChildren[0])->colOffset->el = colOffset;
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->values->matrixVar[0]->m_mChildren[0])->rowOffset = new IntVector();
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->values->matrixVar[0]->m_mChildren[0])->rowOffset->numberOfEl = X.nblocks + 1;
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->values->matrixVar[0]->m_mChildren[0])->rowOffset->el = rowOffset;
+
+
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->values->matrixVar[0]->m_mChildren[0])->m_mChildren = new MatrixNode*[X.nblocks];
+
+#endif
+            osresult->setMatrixVarValuesBlockStructure(0, 0, colOffset, X.nblocks + 1,
+                                                       colOffset, X.nblocks + 1, X.nblocks);
+
+            osresult->setMatrixVariablesOtherResultBlockStructure(0, 0, 0, colOffsetD, Z.nblocks + 1,
+                                                       colOffsetD, Z.nblocks + 1, Z.nblocks);
+
+#if 0
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0]->inumberOfChildren = 1;
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0]->m_mChildren = new MatrixNode*[1];
+            osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0] = new MatrixBlocks();
+//            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming
+//                ->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])->numberOfBlocks = X.nblocks;
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming
+                ->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])->inumberOfChildren = X.nblocks;
+
+
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->other[0]->matrixVar[0]->m_mChildren[0])->colOffset = new IntVector();
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->other[0]->matrixVar[0]->m_mChildren[0])->colOffset->numberOfEl = X.nblocks + 1;
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->other[0]->matrixVar[0]->m_mChildren[0])->colOffset->el = colOffsetD;
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->other[0]->matrixVar[0]->m_mChildren[0])->rowOffset = new IntVector();
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->other[0]->matrixVar[0]->m_mChildren[0])->rowOffset->numberOfEl = X.nblocks + 1;
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->other[0]->matrixVar[0]->m_mChildren[0])->rowOffset->el = rowOffsetD;
+
+            ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                ->other[0]->matrixVar[0]->m_mChildren[0])->m_mChildren = new MatrixNode*[X.nblocks];
+#endif
+
+            int*    start;
+            int*    index;
+//            double* value;
+            ConstantMatrixValues* value;
+
+            int nonz;
+            double ent;
+
+            //count nonzeroes and set column starts
+            for (int blk=1; blk<=X.nblocks; blk++)
+            {
+                start = new int[colOffset[blk]-colOffset[blk-1]+1];
+            	start[0] = 0;
+                nonz = 0;
+
+                switch (X.blocks[blk].blockcategory)
+                {
+                    case DIAG:
+                        for (int i=1; i<=X.blocks[blk].blocksize; i++)
+                        {
+                            ent=X.blocks[blk].data.vec[i];
+                            if (ent != 0.0)
+                                nonz++;
+                            start[i] = nonz;
+                        };
+                        break;
+                    case MATRIX:
+                        for (int i=1; i<=X.blocks[blk].blocksize; i++)
+                        {
+                            for (int j=i; j<=X.blocks[blk].blocksize; j++)
+                            {
+                                ent=X.blocks[blk].data.mat[ijtok(i,j,X.blocks[blk].blocksize)];
+                                if (ent != 0.0)
+                                    nonz++;
+                            };
+                            start[i] = nonz;
+                        };
+                        break;
+                    case PACKEDMATRIX:
+                    default:
+                        throw ErrorClass("Invalid Block Type in CSDP solution");
+                }; // end switch
+
+
+std::cout << std::endl << "starts for block " << blk << ":" << std::endl;
+for (int i=0; i<=X.blocks[blk].blocksize; i++)
+    std::cout << "  " << start[i]  << std::endl;
+
+                // go through nonzeros a second time and store values
+                index = new    int[nonz];
+//                value = new double[nonz];
+                value = new ConstantMatrixValues();
+                value->numberOfEl = nonz;
+                value->el = new double[nonz];
+
+                nonz = 0;
+                switch (X.blocks[blk].blockcategory)
+                {
+                    case DIAG:
+                        for (int i=1; i<=X.blocks[blk].blocksize; i++)
+                        {
+                            ent=X.blocks[blk].data.vec[i];
+                            if (ent != 0.0)
+                            {
+                                index[nonz] = i-1;
+                                value->el[nonz] = ent;
+                                nonz++;
+                            }
+                        };
+                        break;
+                    case MATRIX:
+                        for (int i=1; i<=X.blocks[blk].blocksize; i++)
+                        {
+                            for (int j=i; j<=X.blocks[blk].blocksize; j++)
+                            {
+                                ent=X.blocks[blk].data.mat[ijtok(i,j,X.blocks[blk].blocksize)];
+                                if (ent != 0.0)
+                                {
+                                    index[nonz] = j-1;
+                                    value->el[nonz] = ent;
+                                    nonz++;
+                                }
+                            };
+                            start[i] = nonz;
+                        };
+                        break;
+                    case PACKEDMATRIX:
+                    default:
+                        throw ErrorClass("Invalid Block Type in CSDP solution");
+                }; // end switch
+
+#if 0
+                ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                    ->values->matrixVar[0]->m_mChildren[0])->m_mChildren[blk-1] = new MatrixBlock();
+
+
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->blockRowIdx = blk - 1;
+
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->blockColIdx = blk - 1;
+
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->symmetry = ENUM_MATRIX_SYMMETRY_lower;
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->inumberOfChildren = 1;
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->m_mChildren = new MatrixNode*[1];
+
+                ((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0] = new ConstantMatrixElements();
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0])->numberOfValues = nonz;
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0])->start = new IntVector();
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0])->start->el = start;
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0])->start->numberOfEl
+                        = colOffset[blk] - colOffset[blk-1] + 1;
+
+                if (nonz > 0)
+                {
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->index = new IntVector();
+
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->index->el = index;
+
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->index->numberOfEl = nonz;
+
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->value = new ConstantMatrixValues();
+
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->value->el = value;
+                }
+#endif
+
+                osresult->setMatrixVarValuesBlockElements(0, 0, blk-1, blk-1, blk-1, nonz, 
+                                                          start, index, value,
+                                                          ENUM_MATRIX_TYPE_constant, 
+                                                          ENUM_MATRIX_SYMMETRY_lower);
+
+std::cout << std::endl << "indices for block " << blk << ":" << std::endl;
+for (int i=0; i<nonz; i++)
+    std::cout << "  " << index[i]  << std::endl;
+std::cout << std::endl << "values for block " << blk << ":" << std::endl;
+for (int i=0; i<nonz; i++)
+    std::cout << "  " << value->el[i]  << std::endl;
+
+                }; // end block
+
+                // now the dual variables
+                for (int blk=1; blk<=Z.nblocks; blk++)
+                {
+	                start = new int[colOffsetD[blk]-colOffsetD[blk-1]+1];
+                	start[0] = 0;
+                    nonz = 0;
+
+                    switch (Z.blocks[blk].blockcategory)
+                    {
+                    case DIAG:
+                        for (int i=1; i<=Z.blocks[blk].blocksize; i++)
+                        {
+                            ent=Z.blocks[blk].data.vec[i];
+                            if (ent != 0.0)
+                                nonz++;
+                            start[i] = nonz;
+                        };
+                        break;
+                    case MATRIX:
+                        for (int i=1; i<=Z.blocks[blk].blocksize; i++)
+                        {
+                            for (int j=i; j<=Z.blocks[blk].blocksize; j++)
+                            {
+                                ent=Z.blocks[blk].data.mat[ijtok(i,j,Z.blocks[blk].blocksize)];
+                                if (ent != 0.0)
+                                    nonz++;
+                            };
+                            start[i] = nonz;
+                        };
+                        break;
+                    case PACKEDMATRIX:
+                    default:
+                        throw ErrorClass("Invalid Block Type in CSDP solution");
+                    }; // end switch
+
+
+std::cout << std::endl << "starts for block " << blk << ":" << std::endl;
+for (int i=0; i<=Z.blocks[blk].blocksize; i++)
+    std::cout << "  " << start[i]  << std::endl;
+                    // go through nonzeros a second time and store values
+                    index = new    int[nonz];
+//                    value = new double[nonz];
+                    value = new ConstantMatrixValues();
+                    value->numberOfEl = nonz;
+                    value->el = new double[nonz];
+
+                    nonz = 0;
+                    switch (Z.blocks[blk].blockcategory)
+                    {
+                    case DIAG:
+                        for (int i=1; i<=Z.blocks[blk].blocksize; i++)
+                        {
+                            ent=Z.blocks[blk].data.vec[i];
+                            if (ent != 0.0)
+                            {
+                                index[nonz] = i-1;
+                                value->el[nonz] = ent;
+                                nonz++;
+                            }
+                        };
+                        break;
+                    case MATRIX:
+                        for (int i=1; i<=Z.blocks[blk].blocksize; i++)
+                        {
+                            for (int j=i; j<=Z.blocks[blk].blocksize; j++)
+                            {
+                                ent=Z.blocks[blk].data.mat[ijtok(i,j,Z.blocks[blk].blocksize)];
+                                if (ent != 0.0)
+                                {
+                                    index[nonz] = j-1;
+                                    value->el[nonz] = ent;
+                                    nonz++;
+                                }
+                            };
+                            start[i] = nonz;
+                        };
+                        break;
+                    case PACKEDMATRIX:
+                    default:
+                        throw ErrorClass("Invalid Block Type in CSDP solution");
+                    }; // end switch
+
+
+
+std::cout << std::endl << "indices for block " << blk << ":" << std::endl;
+for (int i=0; i<nonz; i++)
+    std::cout << "  " << index[i]  << std::endl;
+std::cout << std::endl << "values for block " << blk << ":" << std::endl;
+for (int i=0; i<nonz; i++)
+    std::cout << "  " << value->el[i]  << std::endl;
+
+                osresult->setMatrixVariablesOtherResultBlockElements(0, 0, 0, blk-1, blk-1, blk-1,  
+                                                          nonz, start, index, value,
+                                                          ENUM_MATRIX_TYPE_constant, 
+                                                          ENUM_MATRIX_SYMMETRY_lower);
+
+
+#if 0
+                ((MatrixBlocks*)osresult->optimization->solution[0]->matrixProgramming->matrixVariables
+                    ->other[0]->matrixVar[0]->m_mChildren[0])->m_mChildren[blk-1] = new MatrixBlock();
+
+
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->blockRowIdx = blk - 1;
+
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->blockColIdx = blk - 1;
+
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->symmetry = ENUM_MATRIX_SYMMETRY_lower;
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->inumberOfChildren = 1;
+                ((MatrixBlock*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1])->m_mChildren = new MatrixNode*[1];
+
+                ((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0] = new ConstantMatrixElements();
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0])->numberOfValues = nonz;
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0])->start = new IntVector();
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0])->start->el = start;
+
+                ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                    ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                    ->m_mChildren[blk-1]->m_mChildren[0])->start->numberOfEl
+                        = colOffsetD[blk] - colOffsetD[blk-1] + 1;
+
+                if (nonz > 0)
+                {
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->index = new IntVector();
+
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->index->el = index;
+
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->index->numberOfEl = nonz;
+
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->value = new ConstantMatrixValues();
+
+                    ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[blk-1]->m_mChildren[0])->value->el = value;
+                }
+#endif
+                }; // end block
+
+
+            break;
+        }
+        case 1:
+            solutionDescription = "PRIMAL_INFEASIBILITY[Csdp]: Problem is primal infeasible.";
+            osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
+            break;
+
+        case 2:
+            solutionDescription = "DUAL_INFEASIBILITY[Csdp]: Problem is dual infeasible.";
+            osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
+            break;
+
+        case 4:
+            solutionDescription = "MAXITER_EXCEEDED[Csdp]: Maximum number of iterations exceeded.";
+            osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+            break;
+
+        case 5:
+            solutionDescription = "STUCK AT EDGE[Csdp]: Stuck at edge of primal infeasibility.";
+            osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+            break;
+
+        case 6:
+            solutionDescription = "STUCK AT EDGE[Csdp]: Stuck at edge of dual infeasibility.";
+            osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+            break;
+
+        case 7:
+            solutionDescription = "LACK OF PROGRESS[Csdp]: Stopped due to lack of progress.";
+            osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+            break;
+
+        case 8:
+            solutionDescription = "SINGULARITY DETECTED[Csdp]: X, Z or O was singular.";
+            osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+            break;
+
+        case 9:
+            solutionDescription = "NaN or INF[Csdp]: Detected NaN or Infinity during computations.";
+            osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+            break;
+        }
+
+#if 0
+for (int iii=0; iii<3; iii++)
+{ 
+std::cout << " variable block " << iii << " is at " << 
+                    &((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->value->el << std::endl;
+std::cout << " dual var block " << iii << " is at " << 
+                    &((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->value->el << std::endl;
+std::cout << " data check: primal variables" << std::endl;
+std::cout << " starts: " << std::endl;
+for (int i=0; i < ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->start->numberOfEl; i++)
+    std::cout << "  " << ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->start->el[i];
+std::cout << std::endl;
+std::cout << " indexes: " << std::endl;
+for (int i=0; i < ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->index->numberOfEl; i++)
+    std::cout << "  " << ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->index->el[i];
+std::cout << std::endl;
+std::cout << " values: " << std::endl;
+for (int i=0; i < ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->index->numberOfEl; i++)
+    std::cout << "  " << ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->values->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->value->el[i];
+std::cout << std::endl;
+
+std::cout << " data check: dual variables" << std::endl;
+std::cout << " starts: " << std::endl;
+for (int i=0; i < ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->start->numberOfEl; i++)
+    std::cout << "  " << ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->start->el[i];
+std::cout << std::endl;
+std::cout << " indexes: " << std::endl;
+for (int i=0; i < ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->index->numberOfEl; i++)
+    std::cout << "  " << ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->index->el[i];
+std::cout << std::endl;
+std::cout << " values: " << std::endl;
+for (int i=0; i < ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->index->numberOfEl; i++)
+    std::cout << "  " << ((ConstantMatrixElements*)((MatrixBlocks*)osresult->optimization->solution[0]
+                        ->matrixProgramming->matrixVariables->other[0]->matrixVar[0]->m_mChildren[0])
+                        ->m_mChildren[iii]->m_mChildren[0])->value->el[i];
+std::cout << std::endl;
+}
+#endif
+
+        OSrLWriter *osrlwriter ;
+        osrlwriter = new OSrLWriter();
+        osrl = osrlwriter->writeOSrL( osresult);
+
+std::cout << osrl << std::endl;
+
+        if (returnCode != 0)
+            throw ErrorClass("Csdp FAILED TO SOLVE THE PROBLEM");
 
     }
-    catch(const ErrorClass& eclass)
+    catch (const ErrorClass& eclass)
     {
         outStr.str("");
         outStr.clear();

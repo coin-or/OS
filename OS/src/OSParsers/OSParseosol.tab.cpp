@@ -1895,7 +1895,7 @@ static const yytype_uint16 yyrline[] =
     5234,  5236,  5242,  5250,  5250,  5252,  5252,  5254,  5260,  5268,
     5268,  5270,  5270,  5272,  5284,  5292,  5294,  5294,  5296,  5298,
     5307,  5309,  5309,  5311,  5311,  5313,  5329,  5332,  5332,  5334,
-    5334,  5337,  7016,  7023,  7033
+    5334,  5337,  7018,  7025,  7035
 };
 #endif
 
@@ -8824,7 +8824,7 @@ yyreduce:
 
     {     
     if (!parserData->ignoreDataAfterErrors)
-        if (!osoption->setOtherOptionEnumeration(parserData->otherOptionType, 
+        if (!osoption->setOtherOptionOrResultEnumeration(parserData->otherOptionType, 
                 parserData->iOther,
                 parserData->kounter,
                 osglData->osglNumberOfEl, 
