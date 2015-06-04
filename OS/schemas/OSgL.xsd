@@ -775,7 +775,7 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="OSMatrixWithMatrixVarIdx">
 		<xs:complexContent>
 			<xs:extension base="OSMatrix">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>Must refer to a matrixVar defined in the problem instance (OsiL file).</xs:documentation>
 					</xs:annotation>
@@ -786,7 +786,7 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="OSMatrixWithMatrixObjIdx">
 		<xs:complexContent>
 			<xs:extension base="OSMatrix">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1">
+				<xs:attribute name="matrixObjIdx" type="xs:negativeInteger" use="optional" default="-1">
 					<xs:annotation>
 						<xs:documentation>Refers to a matrixObj defined in the problem instance (OsiL file).</xs:documentation>
 					</xs:annotation>
@@ -797,7 +797,7 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="OSMatrixWithMatrixConIdx">
 		<xs:complexContent>
 			<xs:extension base="OSMatrix">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+				<xs:attribute name="matrixConIdx" type="xs:nonNegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>Must refer to a matrixCon defined in the problem instance (OsiL file).</xs:documentation>
 					</xs:annotation>

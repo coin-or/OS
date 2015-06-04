@@ -828,7 +828,7 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 	<xs:complexType name="ResultElementValue">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -844,7 +844,7 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 	<xs:complexType name="ResultElementString">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
