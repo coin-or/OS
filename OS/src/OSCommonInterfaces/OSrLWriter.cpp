@@ -1245,6 +1245,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                             for (int var=0; var < tmpVar->values->numberOfMatrixVar; var++)
                                 outStr << tmpVar->values->matrixVar[var]->getMatrixNodeInXML();
                         }
+                        outStr << "</values>";
                         if (tmpVar->numberOfOtherMatrixVariableResults > 0 &&
                             tmpVar->other != NULL)
                         {

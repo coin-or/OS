@@ -3316,6 +3316,7 @@ public:
      *     > 0: number of data items set
      */
 
+
     int getOtherConstraintResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim);
 
 
@@ -4989,12 +4990,13 @@ public:
      * @param solIdx is the solution index
      * @param numberOfMatrixVar_ holds the number of matrixVar elements 
      *        for which values are to be provided
-     * @param numberOfOtherMatrixVarResults_ holds the number of <other> elements 
+     * @param numberOfOtherMatrixVariableResults_ holds the number of <other> elements 
      *        for which values are to be provided
      *
      * @return whether the matrix variable results are set successfully or not.  
      */
-    bool setMatrixVariableSolution(int solIdx, int numberOfMatrixVar_, int numberOfOtherMatrixVarResults_);
+    bool setMatrixVariableSolution(int solIdx, int numberOfMatrixVar_, 
+                                               int numberOfOtherMatrixVariableResults_);
 
     /**
      * A method to set general attributes for a matrixVar in the [i]th optimization solution,
