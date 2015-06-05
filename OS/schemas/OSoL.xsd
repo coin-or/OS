@@ -347,7 +347,7 @@
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveOption">
 		<xs:choice>
-			<xs:element name="obj" type="OptionElementString" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="obj" type="ObjOptionElementString" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
 				</xs:annotation>
@@ -778,6 +778,13 @@
 	</xs:complexType>
 	<xs:complexType name="OptionElementString">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ObjOptionElementString">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
