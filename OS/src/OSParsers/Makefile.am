@@ -47,17 +47,19 @@ run_parsers: osil osol osrl osss
 osil: $(srcdir)/OSParseosil.cpp \
       $(srcdir)/OSParseosil.tab.cpp
 
+osol: $(srcdir)/OSParseosol.cpp \
+      $(srcdir)/OSParseosol.tab.cpp
+
+osrl: $(srcdir)/OSParseosrl.cpp \
+      $(srcdir)/OSParseosrl.tab.cpp
+
+osss: $(srcdir)/OSParseosss.cpp 
+
+
 if HAVE_LEXYACC
-$(srcdir)/OSParseosil.cpp: \
-                 $(srcdir)/OSParseosil.l \
-                 $(srcdir)/OSParseosil.tab.cpp
-	$(LEX) -Posil -o$(srcdir)/OSParseosil.cpp \
-                        $(srcdir)/OSParseosil.l
 
-$(srcdir)/OSParseosil.tab.cpp: $(srcdir)/OSParseosil.y
-	$(YACC) -ldv -p osil -o $(srcdir)/OSParseosil.tab.cpp \
-                                $(srcdir)/OSParseosil.y
-
+# Some preparatory file manipulations
+# Needs special rules to ensure nested dependencies are handled successfully
 $(srcdir)/OSParseosil.l: \
 		$(srcdir)/OSParseosil.l.1 \
 		$(srcdir)/OSParseosgl.l.patterns \
@@ -85,21 +87,6 @@ $(srcdir)/OSParseosil.y: \
 	rm -f osiltemp.tmp
 	rm -f osgltemp.tmp
 	rm -f osnltemp.tmp
-endif
-
-osol: $(srcdir)/OSParseosol.cpp \
-      $(srcdir)/OSParseosol.tab.cpp
-
-if HAVE_LEXYACC
-$(srcdir)/OSParseosol.cpp: \
-                 $(srcdir)/OSParseosol.l \
-                 $(srcdir)/OSParseosol.tab.cpp
-	$(LEX) -Posol -o$(srcdir)/OSParseosol.cpp \
-                        $(srcdir)/OSParseosol.l
-
-$(srcdir)/OSParseosol.tab.cpp: $(srcdir)/OSParseosol.y
-	$(YACC) -ldv -p osol -o $(srcdir)/OSParseosol.tab.cpp \
-                                $(srcdir)/OSParseosol.y
 
 $(srcdir)/OSParseosol.l: \
 		$(srcdir)/OSParseosol.l.1 \
@@ -128,21 +115,6 @@ $(srcdir)/OSParseosol.y: \
 	rm -f osoltemp.tmp
 	rm -f osgltemp.tmp
 	rm -f osnltemp.tmp
-endif
-
-osrl: $(srcdir)/OSParseosrl.cpp \
-      $(srcdir)/OSParseosrl.tab.cpp
-
-if HAVE_LEXYACC
-$(srcdir)/OSParseosrl.cpp: \
-                 $(srcdir)/OSParseosrl.l \
-                 $(srcdir)/OSParseosrl.tab.cpp
-	$(LEX) -Posil -o$(srcdir)/OSParseosrl.cpp \
-                        $(srcdir)/OSParseosrl.l
-
-$(srcdir)/OSParseosrl.tab.cpp: $(srcdir)/OSParseosrl.y
-	$(YACC) -ldv -p osrl -o $(srcdir)/OSParseosrl.tab.cpp \
-                                $(srcdir)/OSParseosrl.y
 
 $(srcdir)/OSParseosrl.l: \
 		$(srcdir)/OSParseosrl.l.1 \
@@ -171,9 +143,37 @@ $(srcdir)/OSParseosrl.y: \
 	rm -f osrltemp.tmp
 	rm -f osgltemp.tmp
 	rm -f osnltemp.tmp
+
+# use lex/flex to generate the scanner and tokens. 
+# Needs special rules to ensure nested dependencies are handled successfully
+
+$(srcdir)/OSParseosil.cpp: \
+                 $(srcdir)/OSParseosil.l \
+                 $(srcdir)/OSParseosil.tab.cpp
+	$(LEX) -Posil -o$(srcdir)/OSParseosil.cpp \
+                        $(srcdir)/OSParseosil.l
+
+$(srcdir)/OSParseosol.cpp: \
+                 $(srcdir)/OSParseosol.l \
+                 $(srcdir)/OSParseosol.tab.cpp
+	$(LEX) -Posol -o$(srcdir)/OSParseosol.cpp \
+                        $(srcdir)/OSParseosol.l
+
+$(srcdir)/OSParseosrl.cpp: \
+                 $(srcdir)/OSParseosrl.l \
+                 $(srcdir)/OSParseosrl.tab.cpp
+	$(LEX) -Posil -o$(srcdir)/OSParseosrl.cpp \
+                        $(srcdir)/OSParseosrl.l
+
+# bison generates the grammars. Since there are multiple targets, use a pattern rule
+
+$(srcdir)/OSParse%.tab.cpp $(srcdir)/OSParse%.tab.hpp: \
+                $(srcdir)/OSParse%.y
+	$(YACC) -ldv -p $* -o $(srcdir)/OSParse$*.tab.cpp $<
+
 endif
 
-osss: $(srcdir)/OSParseosss.cpp 
+# the command line parser does not use a grammar
 
 if HAVE_LEXYACC
 $(srcdir)/OSParseosss.cpp: $(srcdir)/OSParseosss.l 

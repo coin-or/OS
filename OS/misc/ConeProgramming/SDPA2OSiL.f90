@@ -45,7 +45,7 @@
       integer,parameter :: maxline=31768
       character(LEN=maxline) :: nextl,infilenm,outfilenm
       integer lineno, ierr
-      integer nmatrices, nblocks, nvar, nsize, nvar0, stride, start
+      integer nmatrices, nblocks, nvar, nelem0, nelem1, nsize, stride, start
       integer imtx, iblk, irow, icol
       integer,allocatable :: blksize(:)
       double precision, allocatable :: cost(:)
@@ -59,6 +59,7 @@
       integer narg, iloc, clen, istart, lmn
       logical dual
       character*2 primaldual
+      character*30 compress_real
 !
 !     command line handling
 !
@@ -84,6 +85,7 @@
 !
       open (15, file=infilenm,  err=9015)
       open (16, file=outfilenm, err=9016)
+      print *, 'Translating file ', trim(adjustl(infilenm))
 !
 !     First put the header information
 !
@@ -118,9 +120,17 @@
       allocate(blksize(nblocks  ))
       allocate(   cost(nmatrices))
       read (15,*) (blksize(i),i=1,nblocks) 
-      read (15,*) (   cost(i),i=1,nmatrices) 
+      read (15,*) (   cost(i),i=1,nmatrices)
 !
 !     Now write this information
+!
+      print *, 'Number of matrices ', nmatrices 
+      print *, 'Number of blocks   ', nblocks
+      nvar = 0
+      do i=1,nblocks
+         nvar = nvar + abs(blksize(i))
+      end do
+      print *, 'Number of rows     ', nvar
 !
       if (.not. dual) then
 !
@@ -132,7 +142,7 @@
 !
          write (16, 1008) nmatrices
          do i=1,nmatrices
-            write (16, 1009) i-1,cost(i)
+            write (16, 1009) i-1,trim(compress_real(cost(i)))
          end do
          write (16, 1010)
 !
@@ -142,9 +152,25 @@
       else
          write (16, 1107)
          write (16, 1108) nmatrices
-         do i=1,nmatrices
-            write (16, 1109) cost(i),cost(i)
-         end do   
+         i = 1
+         do while (i .le. nmatrices)
+            mult = 1
+            if (i .lt. nmatrices) then
+               vmark = cost(i)
+               do j=i+1,nmatrices
+                  if (cost(j) .ne. vmark) exit
+                  mult = mult + 1
+               end do
+            endif
+            if (mult .eq. 1) then
+               write (16, 1109) trim(compress_real(cost(i))),                &
+     &                          trim(compress_real(cost(i)))
+            else
+               write (16, 11095) trim(compress_real(vmark)),                 &
+     &                           trim(compress_real(vmark)),mult
+            end if
+            i = i + mult
+         end do
          write (16, 1110)
 !
 !     Write the nonlinear expressions for the objective and the body for each constraint
@@ -166,7 +192,7 @@
 !     allocation proves insufficient.
 !
 !     blkstart is a pointer into the array of column starts. 
-!     It essentially gives colOffsets for each matrix block in one long array
+!     It essentially gives column offsets for each matrix block in one long array
 !
 !     blkelem counts the number of elements in each block 
 !
@@ -212,13 +238,19 @@
 !     Matrices are assumed symmetric and seem to contain (in the examples available to me)
 !     only elements in the lower triangular part. Therefore ignore other elements. 
 !
+      nelem0 = 0
+      nelem1 = 0
       do
          read (15,*,err=900, end=200) imtx, iblk, icol, irow, value
+         nelem1 = nelem1 + 1
          if (imtx .lt. 0 .or. imtx .gt. nmatrices) goto 900
          if (iblk .le. 0 .or. iblk .gt. nblocks  ) goto 900
          if (irow .le. 0 .or. irow .gt. abs(blksize(iblk))) goto 900
          if (icol .le. 0 .or. icol .gt. abs(blksize(iblk))) goto 900
-         if (irow .lt. icol) cycle
+         if (irow .lt. icol) then
+            nelem0 = nelem0 + 1
+            cycle
+         endif
 !
 !     When putting the coefficients into the data structure,
 !     make sure nonzeroes in each column are sorted by increasing row number.
@@ -274,11 +306,14 @@
           row(ncoef) = irow
       end do
 !
+  200 continue
+      print *, 'Number of nonzeros ', nelem1
+      if (nelem0 .gt. 0) print *, '    Eliminated     ', nelem0, ' superdiagonals'
+!
 !     Now write the matrices and blocks one at a time. 
 !     There are (nmatrices+1) of them, including some blocks that may be empty.
 !     This section is the same for primal and dual problems.
 !
-  200 continue
       write (16, 1200) nmatrices+1
       do j=0,nmatrices
 !
@@ -351,7 +386,7 @@
                call iflush(mark,mult,incr)
                write (16, 1211)
 !
-!     Write the row indices (<indexes> element)
+!     Write the row indices (<index> element)
 !
                write (16, 1212)
                mark = -1
@@ -378,7 +413,6 @@
                   iloc = first(blkstart(j,i)+k)
                   if (iloc .gt. 0) then
                      do while (iloc .gt. 0)
-!                        write (16, 1223) coef(iloc)
                         call dprint0(vmark,coef(iloc),mult)
                         iloc = next(iloc)
                      end do
@@ -453,18 +487,17 @@
       stop
 !
  1001 format('<?xml version="1.0" encoding="UTF-8"?>',/,                    &
-     &       '<osil xmlns="os.optimizationservices.org"',/,                 &  
-     &       'xmlns:os="os.optimizationservices.org"',/,                    &
-     &       'xmlns:xs="http://www.w3.org/2001/XMLSchema"',/,               &
-     &       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',/,     &
-     &       'xsi:schemaLocation="os.optimizationservices.org',/,           &
-!     &       ' http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">')
-     &       'C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">')
+     &       '<osil xmlns="os.optimizationservices.org" ',/,                &  
+     &       'xmlns:os="os.optimizationservices.org" ',/,                   &
+     &       'xmlns:xs="http://www.w3.org/2001/XMLSchema" ',/,              &
+     &       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ',/,    &
+     &       'xsi:schemaLocation="os.optimizationservices.org ',/,          &
+     &       'http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">')
  1002 format('<instanceHeader>')
  1003 format('<name>SDPA problem ',A,'</name>')
  1004 format('<description>Translated from SDPA format using SDPA2OSiL',/,  &
      &       '       (C) H.I. Gassmann 2010-2015')
- 1005 format('/<description>')
+ 1005 format('</description>')
  1006 format('</instanceHeader>')
  1007 format('<instanceData>',/,                                            &
      &       '<variables numberOfVariables="',I0,'">',/,                    &
@@ -472,13 +505,16 @@
      &       '</variables>')
  1008 format('<objectives>',/,                                              &
      &       '<obj maxOrMin="min" numberOfObjCoef="',I0,'">')
- 1009 format('<coef idx="',I0,'">',G30.15,'</coef>')
+ 1009 format('<coef idx="',I0,'">',A,'</coef>')
  1010 format('</obj>',/,'</objectives>')
 
- 1107 format('<objectives>',/,                                              &
-     &       '<obj maxOrMin="max" numberOfObjCoef="0"/>')
+ 1107 format('<instanceData>',/,                                            &
+     &       '<objectives>',/,                                              &
+     &       '<obj maxOrMin="max" numberOfObjCoef="0"/>',                   &
+     &       '</objectives>')
  1108 format('<constraints numberOfConstraints="',I0,'">')
- 1109 format('<con lb="',G30.15,'" ub="',G30.15,'"/>')
+ 1109 format('<con lb="',A,'" ub="',A,'"/>') 
+11095 format('<con lb="',A,'" ub="',A,'" mult="',I0,'"/>')
  1110 format('</constraints>')
  1111 format('<nonlinearExpressions numberOfNonlinearExpressions="',I0,'">')
  1112 format('<nl idx="',I0,'">',/,                                         &
@@ -498,13 +534,13 @@
      &       '<start numberOfEl="',I0,'">')
  1013 format('<el>',I0,'</el>')
  1014 format('</start>',/,'<nonzeros numberOfEl="',I0,'">',/,               &
-     &       '<indexes>')
+     &       '<index>')
  1015 format('<el>0</el>')
  1016 format('<el>0</el>   <el>1</el>')    
  1017 format('<el mult="',I0,'" incr="1">0</el>')
- 1018 format('</indexes>',/,'<values>',/,                                   &
+ 1018 format('</index>',/,'<value>',/,                                   &
      &       '<el mult="',I0,'" incr="1">',I0,'</el>',/,                    &
-     &       '</values>',/,'</nonzeros>',/,                                 &
+     &       '</value>',/,'</nonzeros>',/,                                 &
      &       '</varReferenceElements>',/,'</elements>',/,'</matrix>')
  1019 format('<matrix numberOfColumns="',I0,                                &
      &       '" numberOfRows="',I0,'">')
@@ -512,10 +548,9 @@
      &       '<start numberOfEl="',I0,'">')
  1021 format('<el>',I0,'</el>')
  1022 format('</start>',/,'<nonzeros numberOfEl="',I0,'">',/,               &
-     &       '<indexes>')
- 1023 format('</indexes>',/,'<values>')
- 1024 format('<el>',G30.15,'</el>')
- 1025 format('</values>',/,'</nonzeros>',/,'</constantElements>',/,         &
+     &       '<index>')
+ 1023 format('</index>',/,'<value>')
+ 1025 format('</value>',/,'</nonzeros>',/,'</constantElements>',/,         &
      &       '</elements>')
  1026 format('</matrix>')
  1027 format('</matrices>')
@@ -552,33 +587,31 @@
  1044 format('</instanceData>',/,'</osil>')
  1045 format('<el mult="',I0,'">',I0,'</el>')
  1046 format('<el mult="',I0,'" incr="',I0,'">',I0,'</el>')
- 1047 format('<el mult="',I0,'">',G30.15,'</el>')
 !
  1100 format(a)
  1200 format('<matrices numberOfMatrices="',I0,'">')
  1201 format('<matrix numberOfColumns="',I0,'" numberOfRows="',I0,          &
      &     '" symmetry="lower" name="F',I0,'">')
  1202 format('<blocks numberOfBlocks="',I0,'">')
- 1203 format('<colOffsets numberOfEl="',I0,'">')   
- 1204 format('<rowOffsets numberOfEl="',I0,'">')
+ 1203 format('<colOffset numberOfEl="',I0,'">')   
+ 1204 format('<rowOffset numberOfEl="',I0,'">')
  1205 format('<el>',I0,'</el>')
- 1206 format('</colOffsets>')
- 1207 format('</rowOffsets>')
+ 1206 format('</colOffset>')
+ 1207 format('</rowOffset>')
  1208 format('<block blockRowIdx="',I0,'" blockColIdx="',I0,'">')
  1209 format('<constantElements numberOfValues="',I0,'">')
  1210 format('<start>')
  1211 format('</start>')
- 1212 format('<indexes>')
+ 1212 format('<index>')
  1213 format('<el>',I0,'</el>')
- 1214 format('</indexes>')
- 1215 format('<values>')
- 1216 format('</values>')
+ 1214 format('</index>')
+ 1215 format('<value>')
+ 1216 format('</value>')
  1217 format('</constantElements>')
  1218 format('</block>')
  1219 format('</blocks>')
  1220 format('</matrix>')
  1221 format('</matrices>')
- 1223 format('<el>',G30.15,'</el>')
  1230 format('<cones numberOfCones="',I0,'">')
  1231 format('<semidefiniteCone numberOfColumns="',I0,                      &
      &       '" numberOfRows="',I0,'"/>')
@@ -712,6 +745,7 @@
 !
       integer mult, incr
       double precision prev, dval
+      character*30 compress_real
 !
       if (mult .eq. 0) then
          mult = 1
@@ -723,35 +757,77 @@
 !
       else
          if (mult .eq. 1) then
-            write (16, 1601) prev
+            write (16, 1601) trim(compress_real(prev))
          else
-            write (16, 1602) mult, prev
+            write (16, 1602) mult, trim(compress_real(prev))
          endif
          prev = dval
          mult = 1
       endif
       return
 !
- 1601 format('<el>',G30.15,'</el>')
- 1602 format('<el mult="',i0,'">',G30.15,'</el>')
+ 1601 format('<el>',A,'</el>')
+ 1602 format('<el mult="',i0,'">',A,'</el>')
       end
 !
       subroutine dflush( prev, mult)
 !
       integer mult
       double precision prev
+      character*30 compress_real
 !
 !     Here we just print and reset
 !
       if (mult .eq. 1) then
-         write (16, 1601) prev
+         write (16, 1601) trim(compress_real(prev))
       else
-         write (16, 1602) mult, prev
+         write (16, 1602) mult, trim(compress_real(prev))
       endif
       mult = 0   
       return
 !
- 1601 format('<el>',G30.15,'</el>')
- 1602 format('<el mult="',i0,'">',G30.15,'</el>')
+ 1601 format('<el>',A,'</el>')
+ 1602 format('<el mult="',i0,'">',A,'</el>')
       end
-
+!
+!     This function compresses a real number as much as possible
+!     without going into the ramifications of using David Gay's dtoa
+!
+      character*30 function compress_real(x)
+!
+      character*30 temp, temp2
+      double precision x
+      integer first, last
+!
+      if (x .eq. 0.0) then
+         compress_real = '0'
+         return
+      endif
+!
+      write (temp, *) x
+!
+!     suppress leading blanks
+!  
+      first = 1
+      do while (temp(first:first) .eq. ' ')
+         first = first + 1
+      end do
+!
+!     suppress trailing blanks
+!  
+      last = 30
+      do while (temp(last:last) .eq. ' ')
+         last = last - 1
+      end do
+!
+!     suppress trailing zeros if not exponential form
+!
+      if (scan(temp(first:last),'eEdD') .eq. 0) then
+         do while (temp(last:last) .eq. '0')
+            last = last - 1
+         end do
+      endif
+!
+      compress_real = temp(first:last)
+      return
+      end 

@@ -28,7 +28,6 @@
 #include <string>
 #include <iostream>
 #include <sstream>  
-#include <algorithm>
  
 #include "OSInstance.h" 
 #include "OSGeneral.h" 

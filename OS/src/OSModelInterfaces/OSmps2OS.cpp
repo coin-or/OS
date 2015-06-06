@@ -17,7 +17,6 @@
 #include "OSOutput.h"
 #include "OSErrorClass.h"
 #include <iostream>
-#include <sstream>
 
 using std::endl;
 
