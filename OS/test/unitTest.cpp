@@ -1739,8 +1739,8 @@ cout << temposil << endl;
         conopt->numberOfCon = 0;
         conopt->numberOfEnumerations = 1;
 
-        conopt->enumeration = new OtherOptionEnumeration*[1];
-        conopt->enumeration[0] = new OtherOptionEnumeration();
+        conopt->enumeration = new OtherOptionOrResultEnumeration*[1];
+        conopt->enumeration[0] = new OtherOptionOrResultEnumeration();
         conopt->enumeration[0]->numberOfEl = 3;
         conopt->enumeration[0]->value = "test";
         conopt->enumeration[0]->description = "this is not a test";
@@ -4176,18 +4176,20 @@ cout << temposil << endl;
             intArray[2] = 1000*i + 1130 + 10*k + 3;
 
 
-                ok &= osresult1->setOtherOptionEnumeration(i,2,ENUM_PROBLEM_COMPONENT_variables,k,"value","description",intArray,3);
+                ok &= osresult1->setOtherOptionOrResultEnumeration(i,2,
+                        ENUM_PROBLEM_COMPONENT_variables,k,"value","description",intArray,3);
                 if (!ok) 
-                    throw ErrorClass("Error during setOtherOptionEnumeration!");
+                    throw ErrorClass("Error during setOtherOptionOrResultEnumeration!");
                 ok &= (!osresult1->IsEqual(osresult2));
                 if (!ok) 
-                    throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare equal!");
-                ok &= osresult2->setOtherOptionEnumeration(i,2,ENUM_PROBLEM_COMPONENT_variables,k,"value","description",intArray,3);
+                    throw ErrorClass("setOtherOptionOrResultEnumeration: osresult objects falsely compare equal!");
+                ok &= osresult2->setOtherOptionOrResultEnumeration(i,2,
+                        ENUM_PROBLEM_COMPONENT_variables,k,"value","description",intArray,3);
                 if (!ok) 
-                    throw ErrorClass("Error during setOtherOptionEnumeration!");
+                    throw ErrorClass("Error during setOtherOptionOrResultEnumeration!");
                 ok &= (osresult1->IsEqual(osresult2));
                 if (!ok) 
-                    throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare unequal!");
+                    throw ErrorClass("setOtherOptionOrResultEnumeration: osresult objects falsely compare unequal!");
             }
 
 
@@ -4502,18 +4504,20 @@ cout << temposil << endl;
             intArray[1] = -(1000*i + 1230 + 10*k + 2);
             intArray[2] = -(1000*i + 1230 + 10*k + 3);
 
-                ok &= osresult1->setOtherOptionEnumeration(i,2,ENUM_PROBLEM_COMPONENT_objectives,k,"value","description",intArray,3);
+                ok &= osresult1->setOtherOptionOrResultEnumeration(i,2,
+                        ENUM_PROBLEM_COMPONENT_objectives,k,"value","description",intArray,3);
                 if (!ok) 
-                    throw ErrorClass("Error during setOtherOptionEnumeration (objective)!");
+                    throw ErrorClass("Error during setOtherOptionOrResultEnumeration (objective)!");
                 ok &= (!osresult1->IsEqual(osresult2));
                 if (!ok) 
-                    throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare equal!");
-                ok &= osresult2->setOtherOptionEnumeration(i,2,ENUM_PROBLEM_COMPONENT_objectives,k,"value","description",intArray,3);
+                    throw ErrorClass("setOtherOptionOrResultEnumeration: osresult objects falsely compare equal!");
+                ok &= osresult2->setOtherOptionOrResultEnumeration(i,2,
+                        ENUM_PROBLEM_COMPONENT_objectives,k,"value","description",intArray,3);
                 if (!ok) 
-                    throw ErrorClass("Error during setOtherOptionEnumeration (objective)!");
+                    throw ErrorClass("Error during setOtherOptionOrResultEnumeration (objective)!");
                 ok &= (osresult1->IsEqual(osresult2));
                 if (!ok) 
-                    throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare unequal!");
+                    throw ErrorClass("setOtherOptionOrResultEnumeration: osresult objects falsely compare unequal!");
             }
 
 
@@ -4828,18 +4832,20 @@ cout << temposil << endl;
             intArray[1] = 1000*i + 1330 + 10*k + 2;
             intArray[2] = 1000*i + 1330 + 10*k + 3;
 
-                ok &= osresult1->setOtherOptionEnumeration(i,2,ENUM_PROBLEM_COMPONENT_constraints,k,"value","description",intArray,3);
+                ok &= osresult1->setOtherOptionOrResultEnumeration(i,2,
+                        ENUM_PROBLEM_COMPONENT_constraints,k,"value","description",intArray,3);
                 if (!ok) 
-                    throw ErrorClass("Error during setOtherOptionEnumeration (constraint)!");
+                    throw ErrorClass("Error during setOtherOptionOrResultEnumeration (constraint)!");
                 ok &= (!osresult1->IsEqual(osresult2));
                 if (!ok) 
-                    throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare equal!");
-                ok &= osresult2->setOtherOptionEnumeration(i,2,ENUM_PROBLEM_COMPONENT_constraints,k,"value","description",intArray,3);
+                    throw ErrorClass("setOtherOptionOrResultEnumeration: osresult objects falsely compare equal!");
+                ok &= osresult2->setOtherOptionOrResultEnumeration(i,2,
+                        ENUM_PROBLEM_COMPONENT_constraints,k,"value","description",intArray,3);
                 if (!ok) 
-                    throw ErrorClass("Error during setOtherOptionEnumeration (constraint)!");
+                    throw ErrorClass("Error during setOtherOptionOrResultEnumeration (constraint)!");
                 ok &= (osresult1->IsEqual(osresult2));
                 if (!ok) 
-                    throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare unequal!");
+                    throw ErrorClass("setOtherOptionOrResultEnumeration: osresult objects falsely compare unequal!");
             }
 
 
@@ -5546,7 +5552,8 @@ cout << temposil << endl;
                     tempInt   = osresult1->getOtherVariableResultEnumerationNumberOfEl(i,j,k);
                     for (int l=0; l<tempInt; ++l)
                         tempArray[l] = osresult1->getOtherVariableResultEnumerationEl(i,j,k,l);
-                    ok &= osresult2->setOtherOptionEnumeration(i,j,ENUM_PROBLEM_COMPONENT_variables,k,tempStr1,tempStr2,tempArray,tempInt);
+                    ok &= osresult2->setOtherOptionOrResultEnumeration(i,j,
+                            ENUM_PROBLEM_COMPONENT_variables,k,tempStr1,tempStr2,tempArray,tempInt);
                     if (!ok) 
                         throw ErrorClass("Error during setOtherVariableResultEnumeration!");
                 }
@@ -5671,7 +5678,8 @@ cout << temposil << endl;
                     tempInt   = osresult1->getOtherObjectiveResultEnumerationNumberOfEl(i,j,k);
                     for (int l=0; l<tempInt; ++l)
                         tempArray[l] = osresult1->getOtherObjectiveResultEnumerationEl(i,j,k,l);
-                    ok &= osresult2->setOtherOptionEnumeration(i,j,ENUM_PROBLEM_COMPONENT_objectives,k,tempStr1,tempStr2,tempArray,tempInt);
+                    ok &= osresult2->setOtherOptionOrResultEnumeration(i,j,
+                            ENUM_PROBLEM_COMPONENT_objectives,k,tempStr1,tempStr2,tempArray,tempInt);
                     if (!ok) 
                         throw ErrorClass("Error during setOtherObjectiveResultEnumeration!");
                 }
@@ -5798,7 +5806,8 @@ cout << temposil << endl;
                     tempInt   = osresult1->getOtherConstraintResultEnumerationNumberOfEl(i,j,k);
                     for (int l=0; l<tempInt; ++l)
                         tempArray[l] = osresult1->getOtherConstraintResultEnumerationEl(i,j,k,l);
-                    ok &= osresult2->setOtherOptionEnumeration(i,j,ENUM_PROBLEM_COMPONENT_constraints,k,tempStr1,tempStr2,tempArray,tempInt);
+                    ok &= osresult2->setOtherOptionOrResultEnumeration(i,j,
+                            ENUM_PROBLEM_COMPONENT_constraints,k,tempStr1,tempStr2,tempArray,tempInt);
 
                     if (!ok) 
                         throw ErrorClass("Error during setOtherConstraintResultEnumeration!");
@@ -9600,7 +9609,8 @@ if (OTHER_TESTS){
             {
                 for (int j=0; j < otherVar->numberOfEnumerations; j++)
                 {
-                    if (!osresult->setOtherOptionEnumeration(0, i, ENUM_PROBLEM_COMPONENT_variables, j, 
+                    if (!osresult->setOtherOptionOrResultEnumeration(
+                                0, i, ENUM_PROBLEM_COMPONENT_variables, j, 
                                 otherVar->enumeration[j]->value, otherVar->enumeration[j]->description, 
                                 otherVar->enumeration[j]->el,    otherVar->enumeration[j]->numberOfEl)  )
                         throw ErrorClass(" Fail setting OtherVariableResult enumeration in AMPL suffix handler");
@@ -9667,13 +9677,14 @@ if (OTHER_TESTS){
 
         enumArray[0] = 1;
         enumArray[1] = 2;
-        if (!osresult->setOtherOptionEnumeration(0, nOther + 1, ENUM_PROBLEM_COMPONENT_variables, 0, "11", "First value", 
-                    enumArray, 2)  )
+        if (!osresult->setOtherOptionOrResultEnumeration(0, nOther + 1, ENUM_PROBLEM_COMPONENT_variables, 
+                                                         0, "11", "First value", enumArray, 2)  )
             throw ErrorClass(" Fail adding OtherVariableResult enumeration in AMPL suffix handler");
 
         enumArray[0] = 3;
         enumArray[1] = 0;
-        if (!osresult->setOtherOptionEnumeration(0, nOther + 1, ENUM_PROBLEM_COMPONENT_variables, 1, "12", "Last value",
+        if (!osresult->setOtherOptionOrResultEnumeration(0, nOther + 1, ENUM_PROBLEM_COMPONENT_variables, 
+                                                         1, "12", "Last value",
                     enumArray, 2)  )
             throw ErrorClass(" Fail adding OtherVariableResult enumeration in AMPL suffix handler");
 
@@ -9743,7 +9754,8 @@ if (OTHER_TESTS){
             {
                 for (int j=0; j < otherCon->numberOfEnumerations; j++)
                 {
-                    if (!osresult->setOtherOptionEnumeration(0, i, ENUM_PROBLEM_COMPONENT_constraints, j, 
+                    if (!osresult->setOtherOptionOrResultEnumeration(
+                                0, i, ENUM_PROBLEM_COMPONENT_constraints, j, 
                                 otherCon->enumeration[j]->value, otherCon->enumeration[j]->description, 
                                 otherCon->enumeration[j]->el,    otherCon->enumeration[j]->numberOfEl)  )
                         throw ErrorClass(" Fail setting OtherConstraintResult enumeration in AMPL suffix handler");
@@ -9806,13 +9818,14 @@ if (OTHER_TESTS){
 
         enumArray[0] = 2;
         enumArray[1] = 3;
-        if (!osresult->setOtherOptionEnumeration(0, nOther+1, ENUM_PROBLEM_COMPONENT_constraints, 0, "21", "First value", 
-                    enumArray, 2)  )
+        if (!osresult->setOtherOptionOrResultEnumeration(0, nOther+1, ENUM_PROBLEM_COMPONENT_constraints,
+                                                         0, "21", "First value", enumArray, 2)  )
             throw ErrorClass(" Fail adding OtherConstraintResult enumeration in AMPL suffix handler");
 
         enumArray[0] = 1;
         enumArray[1] = 0;
-        if (!osresult->setOtherOptionEnumeration(0, nOther+1, ENUM_PROBLEM_COMPONENT_constraints, 1, "22", "Last value",
+        if (!osresult->setOtherOptionOrResultEnumeration(0, nOther+1, ENUM_PROBLEM_COMPONENT_constraints,
+                                                         1, "22", "Last value",
                     enumArray, 2)  )
             throw ErrorClass(" Fail adding OtherConstraintResult enumeration in AMPL suffix handler");
 
@@ -9883,7 +9896,8 @@ if (OTHER_TESTS){
             {
                 for (int j=0; j < otherObj->numberOfEnumerations; j++)
                 {
-                    if (!osresult->setOtherOptionEnumeration(0, i, ENUM_PROBLEM_COMPONENT_objectives, j, 
+                    if (!osresult->setOtherOptionOrResultEnumeration(
+                                0, i, ENUM_PROBLEM_COMPONENT_objectives, j, 
                                 otherObj->enumeration[j]->value, otherObj->enumeration[j]->description, 
                                 otherObj->enumeration[j]->el,    otherObj->enumeration[j]->numberOfEl)  )
                         throw ErrorClass(" Fail setting OtherObjectiveResult enumeration in AMPL suffix handler");
@@ -9946,7 +9960,8 @@ if (OTHER_TESTS){
 
         int objArray[1];
         objArray[0] = -1;
-        if (!osresult->setOtherOptionEnumeration(0, nOther + 1, ENUM_PROBLEM_COMPONENT_objectives, 0, "31", "Only value", 
+        if (!osresult->setOtherOptionOrResultEnumeration(0, nOther + 1, ENUM_PROBLEM_COMPONENT_objectives,
+                                                         0, "31", "Only value", 
                     objArray, 1)  )
             throw ErrorClass(" Fail adding OtherObjectiveResult enumeration in AMPL suffix handler");
 
