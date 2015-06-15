@@ -61,6 +61,12 @@ public:
     bool fileCreatorPresent;
     bool licencePresent;
 
+    std::string enumTypeAttribute;
+    bool numberOfEnumerationsAttributePresent;
+    bool enumTypeAttributePresent;
+    int numberOfEnumerations;
+
+
     /** the OSgLParserData class constructor */
     OSgLParserData( );
 
@@ -90,9 +96,18 @@ public:
     /** We need to hold an array of <matrix> elements temporarily */
     OSMatrix** matrix;
 
+    /** There are also other variants of these ... */
+    OSMatrixWithMatrixVarIdx** matrixWithVarIdx;
+    OSMatrixWithMatrixObjIdx** matrixWithObjIdx;
+    OSMatrixWithMatrixConIdx** matrixWithConIdx;
+
     /** We also need to keep track locally of the number of matrices */
-    int numberOfMatrices;
-    int matrixCounter;
+    bool numberOfMatricesPresent;
+    int  numberOfMatrices;
+    int  numberOfMatricesWithVarIdx;
+    int  numberOfMatricesWithObjIdx;
+    int  numberOfMatricesWithConIdx;
+    int  matrixCounter;
 
     /** This matrix constructor is needed in order to properly push the constructor vector */
     MatrixNode* tempC;
@@ -168,6 +183,24 @@ public:
     bool shapePresent;
     ENUM_CONREFERENCE_VALUETYPE valueType;
     bool valueTypePresent;
+
+    int  numberOfMatrixVar;
+    int  osglMatrixVarIdxATT;
+    bool osglMatrixVarIdxATTPresent;
+    bool osglMatrixVarTypeAttributePresent;
+    std::string osglMatrixVarTypeAttribute;
+
+    int  numberOfMatrixObj;
+    int  osglMatrixObjIdxATT;
+    bool osglMatrixObjIdxATTPresent;
+    bool osglMatrixObjTypeAttributePresent;
+    std::string osglMatrixObjTypeAttribute;
+
+    int  numberOfMatrixCon;
+    int  osglMatrixConIdxATT;
+    bool osglMatrixConIdxATTPresent;
+    bool osglMatrixConTypeAttributePresent;
+    std::string osglMatrixConTypeAttribute;
 
 };//OSgLParserData
 

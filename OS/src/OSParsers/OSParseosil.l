@@ -256,21 +256,6 @@ return(DOUBLE);}
 {xmlwhitespace}*\<components {YY_PRINT;  return(COMPONENTSSTART);}
 {xmlwhitespace}*\<\/components{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(COMPONENTSEND);}
 
- /* patterns for <matrixProgramming> */
-{xmlwhitespace}*\<matrixProgramming {YY_PRINT;  return(MATRIXPROGRAMMINGSTART);}
-{xmlwhitespace}*\<\/matrixProgramming{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXPROGRAMMINGEND);}
-{xmlwhitespace}*\<matrixVariables {YY_PRINT;  return(MATRIXVARIABLESSTART);}
-{xmlwhitespace}*\<\/matrixVariables{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXVARIABLESEND);}
-{xmlwhitespace}*\<matrixVar {YY_PRINT;  return(MATRIXVARSTART);}
-{xmlwhitespace}*\<\/matrixVar{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXVAREND);}
-{xmlwhitespace}*\<matrixObjectives {YY_PRINT;  return(MATRIXOBJECTIVESSTART);}
-{xmlwhitespace}*\<\/matrixObjectives{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXOBJECTIVESEND);}
-{xmlwhitespace}*\<matrixObj {YY_PRINT;  return(MATRIXOBJSTART);}
-{xmlwhitespace}*\<\/matrixObj{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXOBJEND);}
-{xmlwhitespace}*\<matrixConstraints {YY_PRINT;  return(MATRIXCONSTRAINTSSTART);}
-{xmlwhitespace}*\<\/matrixConstraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXCONSTRAINTSEND);}
-{xmlwhitespace}*\<matrixCon {YY_PRINT;  return(MATRIXCONSTART);}
-{xmlwhitespace}*\<\/matrixCon{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXCONEND);}
 
  /* patterns for <timeDomain> element */
 {xmlwhitespace}*\<timeDomain {YY_PRINT; return(TIMEDOMAINSTART);}
@@ -365,6 +350,10 @@ return(DOUBLE);}
 ({xmlwhitespace}+blockColIdx{equality}) {YY_PRINT; return(BLOCKCOLIDXATT);}
 ({xmlwhitespace}+constant{equality}) {YY_PRINT; return(CONSTANTATT);}
 
+({xmlwhitespace}+matrixVarIdx{equality}) {YY_PRINT; return(MATRIXVARIDXATT);}
+({xmlwhitespace}+matrixObjIdx{equality}) {YY_PRINT; return(MATRIXOBJIDXATT);}
+({xmlwhitespace}+matrixConIdx{equality}) {YY_PRINT; return(MATRIXCONIDXATT);}
+
 ({xmlwhitespace}+idx{equality})  {YY_PRINT;  return(IDXATT);}
 ({xmlwhitespace}+incr{equality}) {YY_PRINT; return(INCRATT);}
 ({xmlwhitespace}+mult{equality}) {YY_PRINT; return(MULTATT);}
@@ -406,8 +395,23 @@ return(DOUBLE);}
 ({xmlwhitespace}+valueType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUETYPEATT);}
 ({xmlwhitespace}+valueType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUETYPEATT);}
 
- /* tokens for the <matrix> element */
+ /* patterns for <matrixProgramming> */
+{xmlwhitespace}*\<matrixProgramming {YY_PRINT;  return(MATRIXPROGRAMMINGSTART);}
+{xmlwhitespace}*\<\/matrixProgramming{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXPROGRAMMINGEND);}
+{xmlwhitespace}*\<matrixVariables {YY_PRINT;  return(MATRIXVARIABLESSTART);}
+{xmlwhitespace}*\<\/matrixVariables{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXVARIABLESEND);}
+{xmlwhitespace}*\<matrixVar {YY_PRINT;  return(MATRIXVARSTART);}
+{xmlwhitespace}*\<\/matrixVar{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXVAREND);}
+{xmlwhitespace}*\<matrixObjectives {YY_PRINT;  return(MATRIXOBJECTIVESSTART);}
+{xmlwhitespace}*\<\/matrixObjectives{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXOBJECTIVESEND);}
+{xmlwhitespace}*\<matrixObj {YY_PRINT;  return(MATRIXOBJSTART);}
+{xmlwhitespace}*\<\/matrixObj{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXOBJEND);}
+{xmlwhitespace}*\<matrixConstraints {YY_PRINT;  return(MATRIXCONSTRAINTSSTART);}
+{xmlwhitespace}*\<\/matrixConstraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXCONSTRAINTSEND);}
+{xmlwhitespace}*\<matrixCon {YY_PRINT;  return(MATRIXCONSTART);}
+{xmlwhitespace}*\<\/matrixCon{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXCONEND);}
 
+ /* tokens for the <matrix> element */
 {xmlwhitespace}*\<matrix {YY_PRINT;  return(MATRIXSTART);}
 {xmlwhitespace}*\<\/matrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXEND);}
 {xmlwhitespace}*\<baseMatrix {YY_PRINT;  return(BASEMATRIXSTART);}

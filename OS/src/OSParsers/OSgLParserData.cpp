@@ -50,11 +50,24 @@ OSgLParserData::OSgLParserData() :
     descriptionPresent(false),
     fileCreatorPresent(false),
     licencePresent(false),
+
+    enumTypeAttribute(""),
+    numberOfEnumerationsAttributePresent(false),
+    enumTypeAttributePresent(false),
+    numberOfEnumerations(0),
+
     parser_errors(""),
     ignoreDataAfterErrors(false),
     suppressFurtherErrorMessages(false),
     matrix(NULL),
+    matrixWithVarIdx(NULL),
+    matrixWithObjIdx(NULL),
+    matrixWithConIdx(NULL),
+    numberOfMatricesPresent(false),
     numberOfMatrices(0),
+    numberOfMatricesWithVarIdx(0),
+    numberOfMatricesWithObjIdx(0),
+    numberOfMatricesWithConIdx(0),
     matrixCounter(0),
     tempC(NULL),
     symmetry(""),
@@ -111,7 +124,25 @@ OSgLParserData::OSgLParserData() :
     shape(ENUM_NL_EXPR_SHAPE_general),
     shapePresent(false),
     valueType(ENUM_CONREFERENCE_VALUETYPE_value),
-    valueTypePresent(false)
+    valueTypePresent(false),
+
+    numberOfMatrixVar(0),
+    osglMatrixVarIdxATT(-1),
+    osglMatrixVarIdxATTPresent(false),
+    osglMatrixVarTypeAttributePresent(false),
+    osglMatrixVarTypeAttribute(""),
+
+    numberOfMatrixObj(0),
+    osglMatrixObjIdxATT(-1),
+    osglMatrixObjIdxATTPresent(false),
+    osglMatrixObjTypeAttributePresent(false),
+    osglMatrixObjTypeAttribute(""),
+
+    numberOfMatrixCon(0),
+    osglMatrixConIdxATT(-1),
+    osglMatrixConIdxATTPresent(false),
+    osglMatrixConTypeAttributePresent(false),
+    osglMatrixConTypeAttribute("")
 {
 }//OSgLParserData
 

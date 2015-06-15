@@ -839,10 +839,10 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                         std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->shape);
                         if (tempStr != "" && tempStr != "general");
                         {
-                            outStr << " shape=\"" << tempStr;
+                            outStr << " shape=\"" << tempStr << "\"";
                         }
 
-                        outStr << "\">";
+                        outStr << ">";
                         if(m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->matrixExpressionTree->m_treeRoot != NULL)
                             outStr << m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->matrixExpressionTree->m_treeRoot->getNonlinearExpressionInXML();
                         outStr << "</expr>";

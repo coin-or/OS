@@ -3516,6 +3516,19 @@ GeneralSparseMatrix* OSInstance::getMatrixCoefficientsInColumnMajor(int n)
 
 GeneralSparseMatrix* OSInstance::getMatrixCoefficientsInRowMajor(int n)
 {
+    try
+    {
+        int nMatrices = getMatrixNumber();
+        if ( (instanceData->matrices == NULL) || (nMatrices == 0) )
+            throw ErrorClass("no matrices defined in method getMatrixCoefficientsInRowMajor()");
+        if ( (n < 0) || (n >= nMatrices) )
+            throw ErrorClass("invalid matrix index in method getMatrixCoefficientsInRowMajor()");
+        return instanceData->matrices->matrix[n]->getMatrixCoefficientsInRowMajor();
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
 }//getMatrixCoefficientsInRowMajor
 
 //===========================================================================
@@ -4194,13 +4207,20 @@ std::string OSInstance::getTimeDomainFormat()
 
 int OSInstance::getTimeDomainStageNumber()
 {
-    if (instanceData->timeDomain == NULL)
-        return 1;
-    if (instanceData->timeDomain->interval != NULL)
-        ; //throw an error
-    if (instanceData->timeDomain->stages == NULL)
-        return 1;
-    return instanceData->timeDomain->stages->numberOfStages;
+    try
+    {
+        if (instanceData->timeDomain == NULL)
+            return 1;
+        if (instanceData->timeDomain->interval != NULL)
+            throw ErrorClass("getTimeDomainStageNumber: Continuous time not implemented yet");
+        if (instanceData->timeDomain->stages == NULL)
+            return 1;
+        return instanceData->timeDomain->stages->numberOfStages;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass(  eclass.errormsg);
+    }
 }// getTimeDomainStageNumber
 
 std::string* OSInstance::getTimeDomainStageNames()
@@ -4365,8 +4385,6 @@ int** OSInstance::getTimeDomainStageObjList()
     if (m_mmiTimeDomainStageObjList != NULL)
     {
         for (int i = 0; i < m_iNumberOfTimeStages; i ++)
-
-
             delete[] m_mmiTimeDomainStageObjList[i];
         delete[] m_mmiTimeDomainStageObjList;
         m_mmiTimeDomainStageObjList = NULL;

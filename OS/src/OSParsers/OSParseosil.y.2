@@ -132,25 +132,26 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 matrices: | matricesStart matricesAttributes matricesContent
 {
-    if (osglData->matrixCounter < parserData->numberOfMatrices) parserData->parser_errors += 
+    if (osglData->matrixCounter < osglData->numberOfMatrices) parserData->parser_errors += 
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer matrices than specified");
-    osinstance->instanceData->matrices->numberOfMatrices = parserData->numberOfMatrices;
+    osinstance->instanceData->matrices->numberOfMatrices = osglData->numberOfMatrices;
     osinstance->instanceData->matrices->matrix = osglData->matrix;
 };
 
 matricesStart: MATRICESSTART
 {
     osinstance->instanceData->matrices = new Matrices();
+    osglData->numberOfMatricesPresent = false;
 };
 
 matricesAttributes: numberOfMatricesATT
 {
-    if (parserData->numberOfMatrices < 0) parserData->parser_errors +=
+    if (osglData->numberOfMatrices < 0) parserData->parser_errors +=
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices cannot be negative");
     else
     {
-        osglData->matrix = new OSMatrix*[parserData->numberOfMatrices];
-        for (int i=0; i < parserData->numberOfMatrices; i++)
+        osglData->matrix = new OSMatrix*[osglData->numberOfMatrices];
+        for (int i=0; i < osglData->numberOfMatrices; i++)
             osglData->matrix[i] = NULL;
     }
 };
@@ -1552,11 +1553,11 @@ numberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE
 {
     if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if (parserData->numberOfMatricesPresent)
+    if (osglData->numberOfMatricesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <matrix> elements cannot be negative");
-    parserData->numberOfMatricesPresent = true;
-    parserData->numberOfMatrices = $3;
+    osglData->numberOfMatricesPresent = true;
+    osglData->numberOfMatrices = $3;
 }; 
 
 numberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE 

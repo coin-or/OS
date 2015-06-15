@@ -1531,7 +1531,7 @@ weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
 };
 
 solutionContent: GREATERTHAN solutionStatus solutionMessage
-          variables objectives constraints otherSolutionResults SOLUTIONEND
+          variables objectives constraints matrixProgramming otherSolutionResults SOLUTIONEND
     {
         parserData->solutionIdx++;
     };
@@ -2033,18 +2033,18 @@ otherVariableResultStart: OTHERSTART
     if (parserData->iOther >= parserData->numberOfOtherVariableResults)
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherVariableResults> than specified");
     parserData->nameAttributePresent = false;    
-    parserData->numberOfVarAttributePresent = false;    
-    parserData->numberOfEnumerationsAttributePresent = false;    
+    parserData->numberOfVarAttributePresent = false;
     parserData->valueAttributePresent = false;    
     parserData->typeAttributePresent = false;
     parserData->varTypeAttributePresent = false;
-    parserData->enumTypeAttributePresent = false;
     parserData->descriptionAttributePresent = false;    
     parserData->valueAttribute = "";
     parserData->typeAttribute = "";
     parserData->varTypeAttribute = "";
-    parserData->enumTypeAttribute = "";
     parserData->descriptionAttribute = "";    
+    osglData->numberOfEnumerationsAttributePresent = false;    
+    osglData->enumTypeAttributePresent = false;
+    osglData->enumTypeAttribute = "";
 }; 
 
 otherVariableResultAttributes: otherVariableResultAttList 
@@ -2069,12 +2069,12 @@ otherVariableResultATT:
     } 
   | numberOfEnumerationsAttribute
     {
-        if (parserData->numberOfEnumerationsAttributePresent)
+        if (osglData->numberOfEnumerationsAttributePresent)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
-        parserData->numberOfEnumerationsAttributePresent = true;
+        osglData->numberOfEnumerationsAttributePresent = true;
          if (osresult->setOtherVariableResultNumberOfEnumerations(parserData->solutionIdx, 
                                                          parserData->iOther, 
-                                                         parserData->numberOfEnumerations) == false)
+                                                         osglData->numberOfEnumerations) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultNumberOfEnumerations failed");
         parserData->kounter = 0;
     }  
@@ -2105,7 +2105,7 @@ otherVariableResultATT:
   | enumTypeAttribute 
     {    
          if (osresult->setOtherVariableResultEnumType(parserData->solutionIdx, parserData->iOther, 
-                                                  parserData->enumTypeAttribute) == false)
+                                                  osglData->enumTypeAttribute) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultEnumType failed");
     }
   | descriptionAttribute
@@ -2534,19 +2534,19 @@ otherObjectiveResultStart: OTHERSTART
     if (parserData->iOther >= parserData->numberOfOtherObjectiveResults)
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherObjectiveResults> than specified");
     parserData->nameAttributePresent = false;    
-    parserData->numberOfObjAttributePresent = false;    
-    parserData->numberOfEnumerationsAttributePresent = false;    
+    parserData->numberOfObjAttributePresent = false;
     parserData->valueAttributePresent = false;
     parserData->typeAttributePresent = false;
     parserData->objTypeAttributePresent = false;
-    parserData->enumTypeAttributePresent = false;
     parserData->descriptionAttributePresent = false;    
     parserData->valueAttribute = "";
     parserData->typeAttribute = "";
     parserData->objTypeAttribute = "";
-    parserData->enumTypeAttribute = "";
     parserData->descriptionAttribute = "";
-}; 
+    osglData->numberOfEnumerationsAttributePresent = false;    
+    osglData->enumTypeAttributePresent = false;
+    osglData->enumTypeAttribute = "";
+};
 
 otherObjectiveResultAttributes: otherObjectiveResultAttList
     {
@@ -2571,12 +2571,12 @@ otherObjectiveResultATT:
     }
   | numberOfEnumerationsAttribute
     {
-        if (parserData->numberOfEnumerationsAttributePresent)
+        if (osglData->numberOfEnumerationsAttributePresent)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
-        parserData->numberOfEnumerationsAttributePresent = true;
+        osglData->numberOfEnumerationsAttributePresent = true;
          if (osresult->setOtherObjectiveResultNumberOfEnumerations(parserData->solutionIdx, 
                                                          parserData->iOther, 
-                                                         parserData->numberOfEnumerations) == false)
+                                                         osglData->numberOfEnumerations) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultNumberOfEnumerations failed");
         parserData->kounter = 0;
     }  
@@ -2607,7 +2607,7 @@ otherObjectiveResultATT:
   | enumTypeAttribute 
     {    
          if (osresult->setOtherObjectiveResultEnumType(parserData->solutionIdx, parserData->iOther, 
-                                                  parserData->enumTypeAttribute) == false)
+                                                  osglData->enumTypeAttribute) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherObjectiveResultEnumType failed");
     }
   | descriptionAttribute
@@ -3032,17 +3032,17 @@ otherConstraintResultStart: OTHERSTART
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherConstraintResults> than specified");
     parserData->nameAttributePresent = false;    
     parserData->numberOfConAttributePresent = false;    
-    parserData->numberOfEnumerationsAttributePresent = false;    
     parserData->valueAttributePresent = false;    
     parserData->typeAttributePresent = false;
     parserData->conTypeAttributePresent = false;
-    parserData->enumTypeAttributePresent = false;
     parserData->descriptionAttributePresent = false;    
     parserData->valueAttribute = "";
     parserData->typeAttribute = "";
     parserData->conTypeAttribute = "";
-    parserData->enumTypeAttribute = "";
     parserData->descriptionAttribute = "";
+    osglData->numberOfEnumerationsAttributePresent = false;    
+    osglData->enumTypeAttributePresent = false;
+    osglData->enumTypeAttribute = "";
 }; 
 
 otherConstraintResultAttributes: otherConstraintResultAttList
@@ -3067,12 +3067,12 @@ otherConstraintResultATT:
     } 
   | numberOfEnumerationsAttribute
     {
-        if (parserData->numberOfEnumerationsAttributePresent)
+        if (osglData->numberOfEnumerationsAttributePresent)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
-        parserData->numberOfEnumerationsAttributePresent = true;
+        osglData->numberOfEnumerationsAttributePresent = true;
          if (osresult->setOtherConstraintResultNumberOfEnumerations(parserData->solutionIdx, 
                                                          parserData->iOther, 
-                                                         parserData->numberOfEnumerations) == false)
+                                                         osglData->numberOfEnumerations) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultNumberOfEnumerations failed");
         parserData->kounter = 0;
     }  
@@ -3104,7 +3104,7 @@ otherConstraintResultATT:
   | enumTypeAttribute 
     {    
          if (osresult->setOtherConstraintResultEnumType(parserData->solutionIdx, parserData->iOther, 
-                                                  parserData->enumTypeAttribute) == false)
+                                                  osglData->enumTypeAttribute) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherConstraintResultEnumType failed");
     }
   | descriptionAttribute
@@ -3220,7 +3220,706 @@ otherConEnumerationLaden: GREATERTHAN otherConEnumerationBody ENUMERATIONEND;
 otherConEnumerationBody:  osglIntArrayData;  
 
 
+matrixProgramming: | matrixProgrammingStart matrixProgrammingContent; 
+        
+matrixProgrammingStart: MATRIXPROGRAMMINGSTART
+{
+    osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming
+        = new MatrixProgrammingSolution();
+};
 
+matrixProgrammingContent: matrixProgrammingEmpty | matrixProgrammingLaden;
+
+matrixProgrammingEmpty: ENDOFELEMENT;
+
+matrixProgrammingLaden: 
+        GREATERTHAN  matrixVariables /*matrixObjectives matrixConstraints*/ otherMatrixProgrammingResults MATRIXPROGRAMMINGEND;
+
+matrixVariables: | matrixVariablesStart matrixVariablesAttributes matrixVariablesContent
+    {  
+        if (parserData->kounter < osglData->numberOfMatrixVar)  
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "actual number of matrixVar less than number attribute");   
+    };
+
+
+matrixVariablesStart: MATRIXVARIABLESSTART
+{
+    osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables
+        = new MatrixVariableSolution(); 
+};
+
+matrixVariablesAttributes: numberOfOtherMatrixVariableResultsATT
+{
+    parserData->numberOfOtherMatrixVariableResults = parserData->tempInt;
+    osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables
+        ->numberOfOtherMatrixVariableResults = parserData->tempInt;
+    parserData->iOther = 0;
+};
+
+matrixVariablesContent: matrixVariablesEmpty | matrixVariablesLaden;
+
+matrixVariablesEmpty: ENDOFELEMENT;
+
+matrixVariablesLaden: GREATERTHAN matrixVariableValues otherMatrixVariableResults matrixVariablesEnd;
+
+matrixVariablesEnd: MATRIXVARIABLESEND;
+
+matrixVariableValues: | matrixVariableValuesStart matrixVariableValuesAttributes
+                        matrixVariableValuesContent;
+
+matrixVariableValuesStart: MATRIXVARIABLEVALUESSTART
+{
+    osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables->values
+        = new MatrixVariableValues(); 
+};
+
+matrixVariableValuesAttributes: numberOfMatrixVarAttribute
+{
+    osglData->numberOfMatrixVar = parserData->tempInt;
+    osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables->values
+        ->numberOfMatrixVar = parserData->tempInt;
+    parserData->kounter = 0;
+};
+
+matrixVariableValuesContent: matrixVariableValuesEmpty | matrixVariableValuesLaden;
+
+matrixVariableValuesEmpty: ENDOFELEMENT;
+
+matrixVariableValuesLaden: GREATERTHAN matrixVarList matrixVariableValuesEnd;
+
+matrixVariableValuesEnd: MATRIXVARIABLEVALUESEND;
+
+matrixVarList: | matrixVarList osglMatrixWithMatrixVarIdx;
+
+/*
+matrixVar: matrixVarStart matrixVarAttributes matrixVarEnd
+{
+    parserData->kounter++;
+};
+
+matrixVarStart: MATRIXVARSTART
+{
+    osglData->numberOfRowsPresent = false;
+    osglData->numberOfColumnsPresent = false;
+    osglData->namePresent = false;
+    osglData->typePresent = false;
+    osglData->symmetryPresent = false;
+    osglData->matrixVarIdxPresent = false;
+};
+
+matrixVarAttributes: matrixVarAttList
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, 
+            "mandatory attribute \"numberOfRows\" missing");
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+            "mandatory attribute \"numberOfColumns\" missing");
+    if (osglData->matrixVarIdxPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+            "mandatory attribute \"matrixVarIdx\" missing");
+
+    osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables
+        ->values->matrixVar[parserData->kounter]->numberOfRows = osglData->numberOfRows;
+    osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables
+        ->values->matrixVar[parserData->kounter]->numberOfColumns = osglData->numberOfColumns;
+    osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables
+        ->values->matrixVar[parserData->kounter]->matrixVarIdx = osglData->matrixVarIdx;
+
+    if (osglData->namePresent)
+        osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables
+            ->values->matrixVar[parserData->kounter]->name = osglData->name;
+    if (osglData->typePresent)
+        osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables
+            ->values->matrixVar[parserData->kounter]->type
+                = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+    if (osglData->symmetryPresent)
+        osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables
+            ->values->matrixVar[parserData->kounter]->symmetry
+                = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+};
+
+matrixVarAttList: | matrixVarAttList matrixVarAtt;
+
+matrixVarAtt: 
+      osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | matrixVarIdxATT
+    | osglSymmetryATT
+    | osglNameATT
+    | osglTypeATT
+;
+
+matrixVarEnd: ENDOFELEMENT
+            | GREATERTHAN MATRIXVAREND;
+*/
+
+otherMatrixVariableResults: | otherMatrixVariableResults otherMatrixVariableResult;
+
+otherMatrixVariableResult: otherMatrixVariableResultStart otherMatrixVariableResultAttributes
+                           otherMatrixVariableResultContent
+    {      
+        parserData->iOther++;
+    };
+
+otherMatrixVariableResultStart: OTHERMATRIXVARIABLERESULTSTART
+{
+    if (parserData->iOther >= parserData->numberOfOtherMatrixVariableResults)
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherMatrixVariableResults> than specified");
+    parserData->nameAttributePresent = false;    
+    parserData->valueAttributePresent = false;    
+    parserData->typeAttributePresent = false;
+    parserData->descriptionAttributePresent = false;
+    //solver
+    //category 
+    parserData->numberOfVarAttributePresent = false;    
+    parserData->valueAttribute = "";
+    parserData->typeAttribute = "";
+    parserData->descriptionAttribute = "";    
+    osglData->numberOfEnumerationsAttributePresent = false;    
+    osglData->osglMatrixVarTypeAttributePresent = false;
+    osglData->enumTypeAttributePresent = false;
+    osglData->osglMatrixVarTypeAttribute = "";
+    osglData->enumTypeAttribute = "";
+}; 
+
+otherMatrixVariableResultAttributes: otherMatrixVariableResultAttList
+    {
+        if(!parserData->nameAttributePresent) 
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, 
+                "<other> element requires name attribute"); 
+    };
+      
+otherMatrixVariableResultAttList: | otherMatrixVariableResultAttList otherMatrixVariableResultATT;
+
+otherMatrixVariableResultATT: 
+    numberOfMatrixVarAttribute 
+    {
+        if (parserData->numberOfVarAttributePresent)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfVar attribute previously set");
+        parserData->numberOfVarAttributePresent = true;
+         if (osresult->setOtherVariableResultNumberOfVar(parserData->solutionIdx, 
+                                                         parserData->iOther, 
+                                                         parserData->numberOfVar) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultNumberOfVar failed");
+        parserData->kounter = 0;
+    } 
+  | numberOfEnumerationsAttribute
+    {
+        if (osglData->numberOfEnumerationsAttributePresent)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "numberOfEnumerations attribute previously set");
+        osglData->numberOfEnumerationsAttributePresent = true;
+         if (osresult->setOtherVariableResultNumberOfEnumerations(parserData->solutionIdx, 
+                                                         parserData->iOther, 
+                                                         osglData->numberOfEnumerations) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultNumberOfEnumerations failed");
+        parserData->kounter = 0;
+    }  
+  | valueAttribute
+    {    
+         if (osresult->setOtherVariableResultValue(parserData->solutionIdx, parserData->iOther, 
+                                                   parserData->valueAttribute) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultValue failed");
+    }
+  | nameAttribute 
+    {    
+         if (osresult->setOtherVariableResultName(parserData->solutionIdx, parserData->iOther, 
+                                                  parserData->nameAttribute) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultName failed");
+    }
+  | typeAttribute 
+    {    
+         if (osresult->setOtherVariableResultType(parserData->solutionIdx, parserData->iOther, 
+                                                  parserData->typeAttribute) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultType failed");
+    }
+  | matrixVarTypeAttribute 
+    {    
+//         if (osresult->setOtherVariableResultVarType(parserData->solutionIdx, parserData->iOther, 
+//                                                  parserData->varTypeAttribute) == false)
+//            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultVarType failed");
+    }
+  | enumTypeAttribute 
+    {    
+         if (osresult->setOtherVariableResultEnumType(parserData->solutionIdx, parserData->iOther, 
+                                                  osglData->enumTypeAttribute) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultEnumType failed");
+    }
+  | descriptionAttribute
+    {    
+         if (osresult->setOtherVariableResultDescription(parserData->solutionIdx, parserData->iOther, 
+                                                         parserData->descriptionAttribute) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultDescription failed");
+    };
+
+
+otherMatrixVariableResultContent: otherMatrixVariableResultEmpty | otherMatrixVariableResultLaden;
+
+otherMatrixVariableResultEmpty: GREATERTHAN OTHEREND | ENDOFELEMENT;
+
+otherMatrixVariableResultLaden: GREATERTHAN otherMatrixVariableResultBody OTHEREND;
+
+otherMatrixVariableResultBody:  otherMatrixVarList | otherMatrixVarEnumerationList;
+
+otherMatrixVarList: osglMatrixWithMatrixVarIdx | otherMatrixVarList osglMatrixWithMatrixVarIdx;
+
+/*
+otherMatrixVar: otherMatrixVarStart otherMatrixVarAttList otherMatrixVarContent 
+{     
+    if (!parserData->idxAttributePresent)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "idx attribute not set");
+    parserData->kounter++;
+};
+
+otherMatrixVarStart: MATRIXVARSTART
+{    
+    if (parserData->kounter >= parserData->numberOfVar)
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <var> elements than specified");
+    parserData->idxAttributePresent = false;
+    parserData->nameAttributePresent = false;
+    parserData->name = ""    ;
+};
+
+otherMatrixVarAttList: | otherMatrixVarAttList otherMatrixVarAtt;
+
+otherMatrixVarAtt:
+    idxAttribute
+    {    
+         if (osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, 
+                                                    parserData->kounter, parserData->idx) == false)
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultVarIdx failed");
+    }
+  | nameAttribute
+    {    
+         if (osresult->setOtherVariableResultVarName(parserData->solutionIdx, parserData->iOther, 
+                                                    parserData->kounter, parserData->nameAttribute) == false)
+                osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherVariableResultVarName failed");
+    };
+
+otherMatrixVarContent: otherMatrixVarEmpty | otherMatrixVarLaden;
+
+otherMatrixVarEmpty: GREATERTHAN MATRIXVAREND | ENDOFELEMENT;
+
+otherMatrixVarLaden: GREATERTHAN osglMatrix MATRIXVAREND;
+*/
+
+
+otherMatrixVarEnumerationList: otherMatrixVarEnumeration 
+                             | otherMatrixVarEnumerationList otherMatrixVarEnumeration;
+
+otherMatrixVarEnumeration: otherMatrixVarEnumerationStart otherMatrixVarEnumerationAttributes 
+                           otherMatrixVarEnumerationContent 
+{     
+    if (osresult->setOtherOptionOrResultEnumeration(parserData->solutionIdx, parserData->iOther, ENUM_PROBLEM_COMPONENT_variables, parserData->kounter, parserData->valueAttribute, 
+            parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "set other variable option failed");    
+    delete[] osglData->osglIntArray;
+    osglData->osglIntArray = NULL;
+    osglData->osglNumberOfEl = 0;
+    parserData->kounter++;
+};
+
+otherMatrixVarEnumerationStart: ENUMERATIONSTART
+{
+    parserData->valueAttributePresent = false;
+    parserData->descriptionAttributePresent = false;
+    parserData->valueAttribute = "";
+    parserData->descriptionAttribute = "";
+};    
+
+otherMatrixVarEnumerationAttributes: otherMatrixVarEnumerationAttList 
+    {
+        if(!parserData->nameAttributePresent) 
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "other element enumeration requires name attribute"); 
+    };
+      
+otherMatrixVarEnumerationAttList: | otherMatrixVarEnumerationAttList otherMatrixVarEnumerationATT;
+
+otherMatrixVarEnumerationATT: 
+    numberOfElAttribute 
+    {
+        osglData->osglCounter = 0; 
+        osglData->osglNumberOfEl = parserData->numberOf;
+        osglData->osglIntArray = new int[parserData->numberOf];
+    } 
+  | valueAttribute
+  | descriptionAttribute
+  ;
+
+
+otherMatrixVarEnumerationContent: otherMatrixVarEnumerationEmpty | otherMatrixVarEnumerationLaden;
+
+otherMatrixVarEnumerationEmpty: ENDOFELEMENT;
+
+otherMatrixVarEnumerationLaden: GREATERTHAN otherMatrixVarEnumerationBody ENUMERATIONEND;
+
+
+otherMatrixVarEnumerationBody:  osglIntArrayData;  
+
+/*
+-------------------------------
+matrixObjectives: | matrixObjectivesStart matrixObjectivesAttributes matrixObjectivesContent
+    {  
+        if (parserData->kounter < parserData->numberOfMatrixObj)  
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "actual number of matrixObj less than number attribute");
+    };
+
+matrixObjectivesStart: MATRIXOBJECTIVESSTART
+{
+    osinstance->instanceData->matrixProgramming->matrixObjectives = new MatrixObjectives(); 
+};
+
+matrixObjectivesAttributes: numberOfMatrixObjATT
+{
+    osinstance->instanceData->matrixProgramming->matrixObjectives->numberOfMatrixObj = parserData->numberOfMatrixObj;
+    osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj
+        = new MatrixObj*[parserData->numberOfMatrixObj];
+    for (int i=0; i < parserData->numberOfMatrixObj; i++)
+        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i] = new MatrixObj();
+    parserData->kounter = 0;
+};
+
+matrixObjectivesContent: matrixObjectivesEmpty | matrixObjectivesLaden;
+
+matrixObjectivesEmpty: ENDOFELEMENT;
+
+matrixObjectivesLaden: GREATERTHAN matrixObjList matrixObjectivesEnd;
+
+matrixObjectivesEnd: MATRIXOBJECTIVESEND;
+
+matrixObjList: | matrixObjList matrixObj;
+
+matrixObj: matrixObjStart matrixObjAttributes matrixObjEnd 
+{
+    parserData->kounter += osglData->osglMult;
+};
+
+matrixObjStart: MATRIXOBJSTART
+{
+    osglData->numberOfRowsPresent = false;
+    osglData->numberOfColumnsPresent = false;
+    osglData->namePresent = false;
+    osglData->osglMultPresent = false;
+    osglData->osglMult = 1;
+    parserData->templateMatrixIdxPresent = false;
+    parserData->objReferenceMatrixIdxPresent = false;
+    parserData->orderConeIdxPresent = false;
+    parserData->constantMatrixIdxPresent = false;
+};
+
+matrixObjAttributes: matrixObjAttList
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfRows\" missing");
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfColumns\" missing");
+    if (parserData->kounter + osglData->osglMult > parserData->numberOfMatrixObj) 
+        parserData->parser_errors += 
+            addErrorMsg( NULL, parserObjects, "actual number of matrixObj greater than number attribute");
+    for (int i=0; i<osglData->osglMult; i++)
+    {
+        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->numberOfRows
+            = osglData->numberOfRows;
+        osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->numberOfColumns
+                = osglData->numberOfColumns;
+        if (osglData->namePresent)
+            osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->name
+                = osglData->name;
+        if (parserData->templateMatrixIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->templateMatrixIdx
+                = parserData->templateMatrixIdx;
+        if (parserData->objReferenceMatrixIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->objReferenceMatrixIdx
+                = parserData->objReferenceMatrixIdx;
+        if (parserData->orderConeIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->orderConeIdx
+                = parserData->orderConeIdx;
+        if (parserData->constantMatrixIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->constantMatrixIdx
+                = parserData->constantMatrixIdx;
+    }
+};
+
+matrixObjAttList: | matrixObjAttList matrixObjAtt;
+
+matrixObjAtt: 
+      osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | templateMatrixIdxATT
+    | objReferenceMatrixIdxATT
+    | orderConeIdxATT
+    | constantMatrixIdxATT
+    | osglNameATT
+    | osglMultATT
+;
+
+matrixObjEnd: ENDOFELEMENT
+            | GREATERTHAN MATRIXOBJEND;
+
+
+matrixConstraints: | matrixConstraintsStart matrixConstraintsAttributes matrixConstraintsContent
+    {  
+        if (parserData->kounter < parserData->numberOfMatrixCon)  
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "actual number of matrixCon less than number attribute");   
+    };
+
+matrixConstraintsStart: MATRIXCONSTRAINTSSTART
+{
+    osinstance->instanceData->matrixProgramming->matrixConstraints = new MatrixConstraints(); 
+};
+
+matrixConstraintsAttributes: numberOfMatrixConATT
+{
+    osinstance->instanceData->matrixProgramming->matrixConstraints->numberOfMatrixCon = parserData->numberOfMatrixCon;
+    osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon
+        = new MatrixCon*[parserData->numberOfMatrixCon];
+    for (int i=0; i < parserData->numberOfMatrixCon; i++)
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i] = new MatrixCon();
+    parserData->kounter = 0;
+};
+
+matrixConstraintsContent: matrixConstraintsEmpty | matrixConstraintsLaden; 
+
+matrixConstraintsEmpty: ENDOFELEMENT;
+
+matrixConstraintsLaden: GREATERTHAN matrixConList matrixConstraintsEnd;
+
+matrixConstraintsEnd: MATRIXCONSTRAINTSEND;
+
+matrixConList: | matrixConList matrixCon;
+
+matrixCon: matrixConStart matrixConAttributes matrixConEnd 
+{
+    parserData->kounter += osglData->osglMult;
+};
+
+matrixConStart: MATRIXCONSTART
+{
+    osglData->numberOfRowsPresent = false;
+    osglData->numberOfColumnsPresent = false;
+    osglData->namePresent = false;
+    osglData->osglMultPresent = false;
+    osglData->osglMult = 1;
+    parserData->templateMatrixIdxPresent = false;
+    parserData->conReferenceMatrixIdxPresent = false;
+    parserData->lbMatrixIdxPresent = false;
+    parserData->lbConeIdxPresent = false;
+    parserData->ubMatrixIdxPresent = false;
+    parserData->ubConeIdxPresent = false;
+};
+
+matrixConAttributes: matrixConAttList
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfRows\" missing");
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfColumns\" missing");
+    if (parserData->kounter + osglData->osglMult > parserData->numberOfMatrixCon) 
+        parserData->parser_errors += 
+            addErrorMsg( NULL, parserObjects, "actual number of matrixCon greater than number attribute");
+    for (int i=0; i<osglData->osglMult; i++)
+    {
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->numberOfRows
+            = osglData->numberOfRows;
+        osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->numberOfColumns
+            = osglData->numberOfColumns;
+        if (osglData->namePresent)
+            osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->name
+                = osglData->name;
+        if (parserData->templateMatrixIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->templateMatrixIdx
+                = parserData->templateMatrixIdx;
+        if (parserData->conReferenceMatrixIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->conReferenceMatrixIdx
+                = parserData->conReferenceMatrixIdx;
+        if (parserData->lbMatrixIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->lbMatrixIdx
+                = parserData->lbMatrixIdx;
+        if (parserData->lbConeIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->lbConeIdx
+                = parserData->lbConeIdx;
+        if (parserData->ubMatrixIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->ubMatrixIdx
+                = parserData->ubMatrixIdx;
+        if (parserData->ubConeIdxPresent)
+            osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->ubConeIdx
+                = parserData->ubConeIdx;
+    }
+};
+
+matrixConAttList: | matrixConAttList matrixConAtt;
+
+matrixConAtt:
+      osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | templateMatrixIdxATT
+    | conReferenceMatrixIdxATT
+    | lbMatrixIdxATT
+    | lbConeIdxATT
+    | ubMatrixIdxATT
+    | ubConeIdxATT
+    | osglNameATT
+;
+
+matrixConEnd: ENDOFELEMENT
+            | GREATERTHAN MATRIXCONEND;
+
+
+=========================
+*/
+
+
+otherMatrixProgrammingResults: | otherMatrixProgrammingResults otherMatrixProgrammingResult;
+
+otherMatrixProgrammingResult: OTHERMATRIXPROGRAMMINGRESULTSTART
+{
+    parserData->numberOf = 0; 
+};
+
+/*
+----------------------
+numberOfOtherSolutionResults: numberOfOtherSolutionResultsAttribute
+{    
+    if (osresult->setNumberOfOtherSolutionResults(parserData->solutionIdx, parserData->tempInt) == false)
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setNumberOfOtherSolutionResults failed");
+    parserData->numberOf = parserData->tempInt;
+    parserData->iOther = 0; 
+};
+
+otherSolutionResultsContent:
+    otherSolutionResultsEmpty 
+    {
+        if (parserData->numberOf > 0)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <otherSolutionResult> element");
+    }
+  | otherSolutionResultsLaden
+    {
+        if (parserData->iOther != parserData->numberOf)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <otherSolutionResult> elements than specified");
+    };
+
+otherSolutionResultsEmpty: GREATERTHAN OTHERSOLUTIONRESULTSEND | ENDOFELEMENT;
+
+otherSolutionResultsLaden: GREATERTHAN otherSolutionResultsBody OTHERSOLUTIONRESULTSEND;
+
+otherSolutionResultsBody:  otherSolutionResultArray; 
+
+otherSolutionResultArray: otherSolutionResult | otherSolutionResultArray otherSolutionResult;
+
+otherSolutionResult: otherSolutionResultStart otherSolutionResultAttributes otherSolutionResultContent
+{
+    parserData->iOther++;
+};    
+
+otherSolutionResultStart: OTHERSOLUTIONRESULTSTART  
+{
+    if (parserData->iOther >= parserData->numberOf)
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <otherSolutionResult> elements than specified");
+    parserData->numberOfItemsPresent = false; 
+    parserData->nameAttributePresent = false;
+    parserData->valueAttributePresent = false;
+    parserData->categoryAttributePresent = false;
+    parserData->descriptionAttributePresent = false;
+    parserData->categoryAttribute = "";
+    parserData->descriptionAttribute = "";
+    parserData->numberOfItems = 0;
+};
+
+otherSolutionResultAttributes: otherSolutionResultAttList 
+{
+    if (!parserData->nameAttributePresent)
+        osrlerror (NULL, NULL, parserData, osglData, osnlData, "<otherSolutionResult> element must have name attribute");
+    //if (!parserData->numberOfItemsPresent)
+    //    osrlerror (NULL, NULL, parserData, osglData, osnlData, "<otherSolutionResult> element must have numberOfItems attribute");
+};    
+
+otherSolutionResultAttList: | otherSolutionResultAttList otherSolutionResultAtt;
+
+otherSolutionResultAtt: 
+    nameAttribute 
+    {    
+        if (osresult->setOtherSolutionResultName(parserData->solutionIdx, parserData->iOther,
+                                                 parserData->nameAttribute) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultName failed");
+    } 
+  | valueAttribute 
+    {    
+        if (osresult->setOtherSolutionResultValue(parserData->solutionIdx, parserData->iOther,
+                                                 parserData->valueAttribute) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultValuee failed");
+    } 
+  | categoryAttribute 
+    {    
+        if (osresult->setOtherSolutionResultCategory(parserData->solutionIdx, parserData->iOther,
+                                                     parserData->categoryAttribute) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultCategory failed");
+    } 
+  | descriptionAttribute
+    {    
+        if (osresult->setOtherSolutionResultDescription(parserData->solutionIdx, 
+                                                        parserData->iOther,
+                                                        parserData->descriptionAttribute) 
+                                                            == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultDescription failed");
+    }
+  | numberOfItemsAttribute
+    {    
+        if (osresult->setOtherSolutionResultNumberOfItems(parserData->solutionIdx, 
+                                                          parserData->iOther,
+                                                          parserData->numberOfItems) == false)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultNumberOfItems failed");
+        parserData->kounter = 0;
+    };
+
+otherSolutionResultContent:
+    otherSolutionResultEmpty
+    {
+        if (parserData->numberOfItems > 0)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "expected at least one <item> element");
+    }
+  | otherSolutionResultLaden
+    {
+        if (parserData->kounter != parserData->numberOfItems)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "fewer <item> elements than specified");
+    };
+
+otherSolutionResultEmpty: GREATERTHAN OTHERSOLUTIONRESULTEND | ENDOFELEMENT; 
+
+otherSolutionResultLaden: GREATERTHAN otherSolutionResultBody OTHERSOLUTIONRESULTEND;
+
+otherSolutionResultBody:   otherSolutionResultItemArray;
+
+otherSolutionResultItemArray: otherSolutionResultItem | otherSolutionResultItemArray otherSolutionResultItem;
+
+otherSolutionResultItem: otherSolutionResultItemContent
+{
+    parserData->kounter++;
+};    
+
+otherSolutionResultItemContent: 
+    otherSolutionResultItemEmpty
+    {
+        if (parserData->kounter >= parserData->numberOfItems)
+            osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <item> elements than specified");
+    }
+  | otherSolutionResultItemLaden; 
+
+otherSolutionResultItemEmpty: ITEMSTARTANDEND | ITEMEMPTY;
+
+otherSolutionResultItemLaden: ITEMSTART otherSolutionResultItemBody ITEMEND;
+
+otherSolutionResultItemBody:  ITEMTEXT 
+{
+    if (parserData->kounter >= parserData->numberOfItems)
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "more <item> elements than specified");
+    parserData->itemContent = $1; free($1);
+    if (osresult->setOtherSolutionResultItem(parserData->solutionIdx, parserData->iOther, 
+                                             parserData->kounter, parserData->itemContent) 
+                                                 == false)
+        osrlerror(NULL, NULL, parserData, osglData, osnlData, "setOtherSolutionResultItem failed");
+};
+=====================
+*/
 otherSolutionResults: | otherSolutionResultsStart numberOfOtherSolutionResults otherSolutionResultsContent;
 
 otherSolutionResultsStart: OTHERSOLUTIONRESULTSSTART
@@ -3565,22 +4264,35 @@ descriptionAttContent: DESCRIPTIONATT ATTRIBUTETEXT quote
 
 enumTypeAttribute: enumTypeAtt
     {
-        if (parserData->enumTypeAttributePresent ) 
+        if (osglData->enumTypeAttributePresent ) 
                 osrlerror(NULL, NULL, parserData, osglData, osnlData, "only one enumType attribute allowed for this element");
-        parserData->enumTypeAttributePresent = true;
+        osglData->enumTypeAttributePresent = true;
     };
 
 enumTypeAtt: enumTypeAttEmpty | enumTypeAttContent;
 
 enumTypeAttEmpty: EMPTYENUMTYPEATT
 { 
-    parserData->enumTypeAttribute = ""; 
+    osglData->enumTypeAttribute = ""; 
 };
 
 enumTypeAttContent: ENUMTYPEATT ATTRIBUTETEXT quote 
 { 
-    parserData->enumTypeAttribute = $2; free($2);
+    osglData->enumTypeAttribute = $2; free($2);
 };
+
+
+matrixVarTypeAttribute: MATRIXVARTYPEATT ATTRIBUTETEXT QUOTE 
+{
+    if (osglData->osglMatrixVarTypeAttributePresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+            "more than one matrixVarType attribute");
+    osglData->osglMatrixVarTypeAttributePresent = true;
+    osglData->osglMatrixVarTypeAttribute = $2; 
+    free($2);
+};
+
+
 
 idxAttribute: IDXATT quote INTEGER quote 
     {    
@@ -3729,7 +4441,7 @@ numberOfElAttribute: NUMBEROFELATT quote INTEGER quote
 numberOfEnumerationsAttribute: NUMBEROFENUMERATIONSATT quote INTEGER quote 
 {
     if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of <enumeration> elements cannot be negative");
-    parserData->numberOfEnumerations = $3; 
+    osglData->numberOfEnumerations = $3; 
 }; 
 
 /*
@@ -3749,6 +4461,13 @@ numberOfItemsAttribute: NUMBEROFITEMSATT quote INTEGER quote
     parserData->numberOfItems = $3;
 };
 
+numberOfMatrixVarAttribute: NUMBEROFMATRIXVARATT quote INTEGER quote
+{
+    if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData,
+        "number of <matrixVar> cannot be negative");
+    osglData->numberOfMatrixVar = $3;
+}; 
+
 numberOfObjAttribute: NUMBEROFOBJATT quote INTEGER quote
 {
     if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of <obj> cannot be negative");
@@ -3767,6 +4486,12 @@ numberOfObjectivesAttribute: NUMBEROFOBJECTIVESATT quote INTEGER quote
 numberOfOtherConstraintResultsAttribute: NUMBEROFOTHERCONSTRAINTRESULTSATT quote INTEGER quote 
 {
     if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other constraint results cannot be negative");
+    parserData->tempInt = $3;
+};
+
+numberOfOtherMatrixVariableResultsATT: NUMBEROFOTHERMATRIXVARIABLERESULTSATT quote INTEGER quote
+{
+    if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "number of other matrix variable results cannot be negative");
     parserData->tempInt = $3;
 };
 

@@ -153,7 +153,6 @@ public:
      */
     int numberOfCon;
 
-    int numberOfEnumerations;
 
     /** number of Objectives in a solution instance
      * may change from solution to solution
@@ -191,19 +190,24 @@ public:
     std::ostringstream outStr;
 
     /** the number of types of variable results other
-     * than the value of the variable
+     *  than the value of the variable
      */
     int numberOfOtherVariableResults;
 
     /** the number of types of objective results other
-     * than the value of the objective
+     *  than the value of the objective
      */
     int numberOfOtherObjectiveResults;
 
     /** the number of types of constraint results other
-     * than the value of the constraint
+     *  than the value of the constraint
      */
     int numberOfOtherConstraintResults;
+
+    /** the number of types of matrix variable results other
+     *  than the value of the matrix variable
+     */
+    int numberOfOtherMatrixVariableResults;
 
     /** an index of which solution we have found */
     unsigned int solutionIdx;
@@ -233,12 +237,10 @@ public:
     bool numberOfObjIdxAttributePresent;
     bool numberOfConAttributePresent;
     bool numberOfConIdxAttributePresent;
-    bool numberOfEnumerationsAttributePresent;
     bool typeAttributePresent;
     bool varTypeAttributePresent;
     bool objTypeAttributePresent;
     bool conTypeAttributePresent;
-    bool enumTypeAttributePresent;
     bool unitAttributePresent;
     bool valueAttributePresent;
     bool weightedObjAttributePresent;
@@ -255,7 +257,6 @@ public:
     std::string varTypeAttribute;
     std::string objTypeAttribute;
     std::string conTypeAttribute;
-    std::string enumTypeAttribute;
     std::string unitAttribute;
     std::string valueAttribute;
 

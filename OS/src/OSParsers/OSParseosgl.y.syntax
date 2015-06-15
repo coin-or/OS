@@ -392,10 +392,55 @@ osglMatrix: matrixStart matrixAttributes matrixContent
     osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
     osglData->matrixCounter++;
 };
+
+
+/**
+ *  Note: The OSoL and OSrL schemas use modifications of OSMatrix
+ *        that include the index of a matrixVar or MatrixObj or matrixCon object.
+ *        These modifications are given next.
+ */
+osglMatrixWithMatrixVarIdx: matrixStart {osglData->osglMatrixVarIdxATTPresent = false;} 
+                            matrixAttributesWithMatrixVarIdx matrixContent
+{
+//  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osglData->matrix[osglData->matrixCounter] = 
+        ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    ((OSMatrixWithMatrixVarIdx*)osglData->matrix[osglData->matrixCounter])->matrixVarIdx
+        = osglData->osglMatrixVarIdxATT;
+    osglData->matrixCounter++;
+};
+
+osglMatrixWithMatrixObjIdx: matrixStart {osglData->matrixObjIdxPresent = false;} 
+                            /*matrixAttributesWithMatrixObjIdx*/ matrixContent
+{
+//  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osglData->matrix[osglData->matrixCounter] = 
+        ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    ((OSMatrixWithObjIdx*)osglData->matrix[osglData->matrixCounter])->matrixObjIdx = osglData->matrixObjIdx;
+    osglData->matrixCounter++;
+};
+
+osglMatrixWithMatrixConIdx: matrixStart {osglData->matrixConIdxPresent = false;} 
+                            /*matrixAttributesWithMatrixConIdx*/ matrixContent
+{
+//  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osglData->matrix[osglData->matrixCounter] = 
+        ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    ((OSMatrixWithConIdx*)osglData->matrix[osglData->matrixCounter])->matrixConIdx = osglData->matrixConIdx;
+    osglData->matrixCounter++;
+};
+
+
+
  
 matrixStart: MATRIXSTART
 {
-    if (osglData->matrixCounter >= parserData->numberOfMatrices)
+std::cout << "Starting matrix " << osglData->matrixCounter;
+std::cout << " out of " << osglData->numberOfMatrices << std::endl;
+    if (osglData->matrixCounter >= osglData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
@@ -444,6 +489,102 @@ matrixAttribute:
     | osglMatrixTypeATT
 ;
 
+
+matrixAttributesWithMatrixVarIdx: matrixAttributesWithMatrixVarIdx
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute numberOfRows is missing");    
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute numberOfColumns is missing");
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
+    if (osglData->osglMatrixVarIdxATTPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute matrixVarIdx is missing");    
+    else
+        ((OSMatrixWithMatrixVarIdx*)osglData->tempC)->matrixVarIdx = osglData->osglMatrixVarIdxATT;
+    if (osglData->symmetryPresent == true)
+        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    if (osglData->namePresent == true)
+        ((OSMatrix*)osglData->tempC)->name = osglData->name;
+    if (osglData->typePresent == true)
+        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+};
+
+matrixAttributesWithMatrixVarIdx: | matrixAttributesWithMatrixVarIdx matrixAttributesWithMatrixVarIdx;
+
+matrixAttributesWithMatrixVarIdx:
+      osglSymmetryATT
+    | osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | osglMatrixNameATT
+    | osglMatrixTypeATT
+    | osglMatrixVarIdxATT
+;
+
+/*
+-----------------
+matrixAttributes: matrixAttributeList
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute numberOfRows is missing");    
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute numberOfColumns is missing");
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
+    if (osglData->symmetryPresent == true)
+        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    if (osglData->namePresent == true)
+        ((OSMatrix*)osglData->tempC)->name = osglData->name;
+    if (osglData->typePresent == true)
+        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+};
+
+matrixAttributeList: | matrixAttributeList matrixAttribute;
+
+matrixAttribute:
+      osglSymmetryATT
+    | osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | osglMatrixNameATT
+    | osglMatrixTypeATT
+;
+
+
+matrixAttributes: matrixAttributeList
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute numberOfRows is missing");    
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute numberOfColumns is missing");
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
+    if (osglData->symmetryPresent == true)
+        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    if (osglData->namePresent == true)
+        ((OSMatrix*)osglData->tempC)->name = osglData->name;
+    if (osglData->typePresent == true)
+        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+};
+
+matrixAttributeList: | matrixAttributeList matrixAttribute;
+
+matrixAttribute:
+      osglSymmetryATT
+    | osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | osglMatrixNameATT
+    | osglMatrixTypeATT
+;
+==================================
+*/
+
+
 osglSymmetryATT: SYMMETRYATT ATTRIBUTETEXT QUOTE 
 { 
     if (osglData->symmetryPresent == true)
@@ -469,6 +610,15 @@ osglMatrixTypeATT: TYPEATT ATTRIBUTETEXT QUOTE
     osglData->typePresent = true;
     osglData->type = $2; 
     free($2);
+};
+
+osglMatrixVarIdxATT: MATRIXVARIDXATT quote INTEGER quote 
+{
+    if (osglData->osglMatrixVarIdxATTPresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more than one matrixVarIdx attribute in <matrixVar> element");
+    osglData->osglMatrixVarIdxATTPresent = true;
+    if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "<matrixVarIdx> cannot be negative");
+    osglData->osglMatrixVarIdxATT = $3; 
 };
 
 matrixContent: matrixEmpty | matrixLaden;
@@ -1565,14 +1715,14 @@ conReferenceElementsElAttribute:
 conReferenceElementsElValueTypeATT: VALUETYPEATT ATTRIBUTETEXT QUOTE 
 {
     if (osglData->valueTypePresent == true)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects,
             "only one valueType attribute allowed");
 
     std::string tmpStr = $2; 
     if (returnConReferenceValueType(tmpStr) > 0)  
         osglData->valueType = (ENUM_CONREFERENCE_VALUETYPE)returnConReferenceValueType(tmpStr); 
     else
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects,
             "valueType must be one of \"value\", \"status\", \"surplus\", \"shortage\"");
     free($2);
 };

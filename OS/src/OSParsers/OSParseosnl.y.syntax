@@ -219,11 +219,19 @@ exp: EXPSTART {
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode EXPEND;
 
-abs: ABSSTART {
+abs: absStart nlnode absEnd;
+
+absStart: ABSSTART 
+{
     osnlData->nlNodePoint = new OSnLNodeAbs();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-} nlnode ABSEND {
-osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+};
+
+absEnd: ABSEND 
+{
+#ifdef OSINSTANCE_AVAILABLE
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 erf: ERFSTART {
@@ -235,8 +243,11 @@ erf: ERFSTART {
 if: IFSTART {
     osnlData->nlNodePoint = new OSnLNodeIf();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-} nlnode nlnode nlnode IFEND {
-osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+} nlnode nlnode nlnode IFEND
+{
+#ifdef OSINSTANCE_AVAILABLE
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 
@@ -350,8 +361,6 @@ variableidxATT: IDXATT QUOTE  INTEGER QUOTE
     if ( *$2 != *$4 ) parserData->parser_errors += 
         addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlNodeVariablePoint->idx = $3;
-    if ( $3 >= osinstance->instanceData->variables->numberOfVariables)
-         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "variable index exceeds number of variables");
 }; 
 
 
@@ -388,7 +397,9 @@ anotherallDiffnlnode ALLDIFFEND {
     ((OSnLNode*)osnlData->allDiffVec.back())->m_mChildren 
         = new OSnLNode*[ ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren];
     osnlData->allDiffVec.pop_back();
+#ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 anotherallDiffnlnode: 
@@ -403,7 +414,9 @@ max: MAXSTART {
 anothermaxnlnode MAXEND {
     osnlData->maxVec.back()->m_mChildren = new OSnLNode*[ osnlData->maxVec.back()->inumberOfChildren];
     osnlData->maxVec.pop_back();
+#ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 anothermaxnlnode: 
@@ -418,7 +431,9 @@ min: MINSTART {
 anotherminnlnode MINEND {
     osnlData->minVec.back()->m_mChildren = new OSnLNode*[ osnlData->minVec.back()->inumberOfChildren];
     osnlData->minVec.pop_back();
+#ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 anotherminnlnode: 
@@ -750,26 +765,33 @@ matrixExpressions: | matrixExpressionsStart matrixExpressionsAtt matrixExpressio
 
 matrixExpressionsStart: MATRIXEXPRESSIONSSTART
     {               
+    #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions = new MatrixExpressions();
         osnlData->tmpnlcount = 0;
+    #endif
     };
 
 matrixExpressionsAtt: numberOfExprATT;
 
 numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE 
     {
+    #ifdef OSINSTANCE_AVAILABLE
         if (*$2 != *$4) 
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
-                        "mismatched quotes");
-        if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mismatched quotes");
+        if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, parserObjects, 
                         "number of expressions cannot be negative");
         osnlData->nlnodenumber = $3;
         osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr = $3;  
         if (osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr > 0 ) 
-            osinstance->instanceData->matrixProgramming->matrixExpressions->expr = new MatrixExpression*[ $3 ];
-        for (int i = 0; i < osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr; i++)
-            osinstance->instanceData->matrixProgramming->matrixExpressions->expr[i] = new MatrixExpression();
-}; 
+            osinstance->instanceData->matrixProgramming->matrixExpressions->expr
+                = new MatrixExpression*[ $3 ];
+        for (int i = 0; 
+                 i < osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr;
+                 i++)
+            osinstance->instanceData->matrixProgramming->matrixExpressions->expr[i]
+                = new MatrixExpression();
+    #endif
+    }; 
 
 matrixExpressionsContent: matrixExpressionsEmpty | matrixExpressionsLaden;
 
@@ -782,8 +804,10 @@ matrixExprList: | matrixExprList matrixExpr;
 matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN OSnLMNode EXPREND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+    #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
             ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+    #endif
         osnlData->tmpnlcount++;
     };
 
@@ -816,14 +840,18 @@ matrixExprAttributeList: | matrixExprAttributeList exprAttribute;
 
 exprAttribute: 
       osglIdxATT 
-    { 
+    {
+    #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->idx = osglData->idx;
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree
             = new MatrixExpressionTree();
+    #endif
     }
     | osglShapeATT
     {
+    #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->shape = osglData->shape;
+    #endif
     };
 
 

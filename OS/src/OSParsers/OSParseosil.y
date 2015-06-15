@@ -42,6 +42,8 @@
 #include "OSMathUtil.h"
 #include "OSConfig.h"
 
+#define OSINSTANCE_AVAILABLE
+
 //#define CHECK_PARSE_TIME
 
 //#define DEBUG
@@ -234,11 +236,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token AXISDIRECTIONATT FIRSTAXISDIRECTIONATT SECONDAXISDIRECTIONATT
 %token EMPTYSEMIDEFINITENESSATT SEMIDEFINITENESSATT REFERENCEMATRIXIDXATT
 
-%token MATRIXPROGRAMMINGSTART MATRIXPROGRAMMINGEND
 %token VARTYPEATT
-%token MATRIXVARIABLESSTART   MATRIXVARIABLESEND   NUMBEROFMATRIXVARATT MATRIXVARSTART MATRIXVAREND
-%token MATRIXOBJECTIVESSTART  MATRIXOBJECTIVESEND  NUMBEROFMATRIXOBJATT MATRIXOBJSTART MATRIXOBJEND
-%token MATRIXCONSTRAINTSSTART MATRIXCONSTRAINTSEND NUMBEROFMATRIXCONATT MATRIXCONSTART MATRIXCONEND
 
 %token MATRIXIDXATT LBMATRIXIDXATT LBCONEIDXATT UBMATRIXIDXATT UBCONEIDXATT 
 %token TEMPLATEMATRIXIDXATT VARREFERENCEMATRIXIDXATT OBJREFERENCEMATRIXIDXATT CONREFERENCEMATRIXIDXATT
@@ -296,6 +294,7 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token NUMBEROFBLOCKSATT NUMBEROFCOLUMNSATT NUMBEROFROWSATT NUMBEROFVALUESATT NUMBEROFVARIDXATT
 
 %token IDXATT COEFATT
+%token MATRIXVARIDXATT MATRIXOBJIDXATT MATRIXCONIDXATT
 
 %token BASEMATRIXIDXATT TARGETMATRIXFIRSTROWATT TARGETMATRIXFIRSTCOLATT
 %token BASEMATRIXSTARTROWATT BASEMATRIXSTARTCOLATT BASEMATRIXENDROWATT BASEMATRIXENDCOLATT
@@ -317,6 +316,12 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 %token COLOFFSETSTART COLOFFSETEND ROWOFFSETSTART ROWOFFSETEND
 
 %token EMPTYROWMAJORATT ROWMAJORATT BLOCKROWIDXATT BLOCKCOLIDXATT
+
+%token MATRIXPROGRAMMINGSTART MATRIXPROGRAMMINGEND
+%token MATRIXVARIABLESSTART   MATRIXVARIABLESEND   NUMBEROFMATRIXVARATT MATRIXVARSTART MATRIXVAREND
+%token MATRIXOBJECTIVESSTART  MATRIXOBJECTIVESEND  NUMBEROFMATRIXOBJATT MATRIXOBJSTART MATRIXOBJEND
+%token MATRIXCONSTRAINTSSTART MATRIXCONSTRAINTSEND NUMBEROFMATRIXCONATT MATRIXCONSTART MATRIXCONEND
+
 
 %token DUMMY
 
@@ -500,25 +505,26 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 matrices: | matricesStart matricesAttributes matricesContent
 {
-    if (osglData->matrixCounter < parserData->numberOfMatrices) parserData->parser_errors += 
+    if (osglData->matrixCounter < osglData->numberOfMatrices) parserData->parser_errors += 
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer matrices than specified");
-    osinstance->instanceData->matrices->numberOfMatrices = parserData->numberOfMatrices;
+    osinstance->instanceData->matrices->numberOfMatrices = osglData->numberOfMatrices;
     osinstance->instanceData->matrices->matrix = osglData->matrix;
 };
 
 matricesStart: MATRICESSTART
 {
     osinstance->instanceData->matrices = new Matrices();
+    osglData->numberOfMatricesPresent = false;
 };
 
 matricesAttributes: numberOfMatricesATT
 {
-    if (parserData->numberOfMatrices < 0) parserData->parser_errors +=
+    if (osglData->numberOfMatrices < 0) parserData->parser_errors +=
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices cannot be negative");
     else
     {
-        osglData->matrix = new OSMatrix*[parserData->numberOfMatrices];
-        for (int i=0; i < parserData->numberOfMatrices; i++)
+        osglData->matrix = new OSMatrix*[osglData->numberOfMatrices];
+        for (int i=0; i < osglData->numberOfMatrices; i++)
             osglData->matrix[i] = NULL;
     }
 };
@@ -1920,11 +1926,11 @@ numberOfMatricesATT: NUMBEROFMATRICESATT QUOTE INTEGER QUOTE
 {
     if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if (parserData->numberOfMatricesPresent)
+    if (osglData->numberOfMatricesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <matrix> elements cannot be negative");
-    parserData->numberOfMatricesPresent = true;
-    parserData->numberOfMatrices = $3;
+    osglData->numberOfMatricesPresent = true;
+    osglData->numberOfMatrices = $3;
 }; 
 
 numberOfConesATT: NUMBEROFCONESATT QUOTE INTEGER QUOTE 
@@ -2599,10 +2605,55 @@ osglMatrix: matrixStart matrixAttributes matrixContent
     osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
     osglData->matrixCounter++;
 };
+
+
+/**
+ *  Note: The OSoL and OSrL schemas use modifications of OSMatrix
+ *        that include the index of a matrixVar or MatrixObj or matrixCon object.
+ *        These modifications are given next.
+ */
+osglMatrixWithMatrixVarIdx: matrixStart {osglData->osglMatrixVarIdxATTPresent = false;} 
+                            matrixAttributesWithMatrixVarIdx matrixContent
+{
+//  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osglData->matrix[osglData->matrixCounter] = 
+        ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    ((OSMatrixWithMatrixVarIdx*)osglData->matrix[osglData->matrixCounter])->matrixVarIdx
+        = osglData->osglMatrixVarIdxATT;
+    osglData->matrixCounter++;
+};
+
+osglMatrixWithMatrixObjIdx: matrixStart {osglData->matrixObjIdxPresent = false;} 
+                            /*matrixAttributesWithMatrixObjIdx*/ matrixContent
+{
+//  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osglData->matrix[osglData->matrixCounter] = 
+        ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    ((OSMatrixWithObjIdx*)osglData->matrix[osglData->matrixCounter])->matrixObjIdx = osglData->matrixObjIdx;
+    osglData->matrixCounter++;
+};
+
+osglMatrixWithMatrixConIdx: matrixStart {osglData->matrixConIdxPresent = false;} 
+                            /*matrixAttributesWithMatrixConIdx*/ matrixContent
+{
+//  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
+    osglData->matrix[osglData->matrixCounter] = 
+        ((OSMatrix*)osglData->mtxConstructorVec[0])->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
+    ((OSMatrixWithConIdx*)osglData->matrix[osglData->matrixCounter])->matrixConIdx = osglData->matrixConIdx;
+    osglData->matrixCounter++;
+};
+
+
+
  
 matrixStart: MATRIXSTART
 {
-    if (osglData->matrixCounter >= parserData->numberOfMatrices)
+std::cout << "Starting matrix " << osglData->matrixCounter;
+std::cout << " out of " << osglData->numberOfMatrices << std::endl;
+    if (osglData->matrixCounter >= osglData->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
@@ -2651,6 +2702,102 @@ matrixAttribute:
     | osglMatrixTypeATT
 ;
 
+
+matrixAttributesWithMatrixVarIdx: matrixAttributesWithMatrixVarIdx
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");    
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfColumns is missing");
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
+    if (osglData->osglMatrixVarIdxATTPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute matrixVarIdx is missing");    
+    else
+        ((OSMatrixWithMatrixVarIdx*)osglData->tempC)->matrixVarIdx = osglData->osglMatrixVarIdxATT;
+    if (osglData->symmetryPresent == true)
+        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    if (osglData->namePresent == true)
+        ((OSMatrix*)osglData->tempC)->name = osglData->name;
+    if (osglData->typePresent == true)
+        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+};
+
+matrixAttributesWithMatrixVarIdx: | matrixAttributesWithMatrixVarIdx matrixAttributesWithMatrixVarIdx;
+
+matrixAttributesWithMatrixVarIdx:
+      osglSymmetryATT
+    | osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | osglMatrixNameATT
+    | osglMatrixTypeATT
+    | osglMatrixVarIdxATT
+;
+
+/*
+-----------------
+matrixAttributes: matrixAttributeList
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");    
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfColumns is missing");
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
+    if (osglData->symmetryPresent == true)
+        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    if (osglData->namePresent == true)
+        ((OSMatrix*)osglData->tempC)->name = osglData->name;
+    if (osglData->typePresent == true)
+        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+};
+
+matrixAttributeList: | matrixAttributeList matrixAttribute;
+
+matrixAttribute:
+      osglSymmetryATT
+    | osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | osglMatrixNameATT
+    | osglMatrixTypeATT
+;
+
+
+matrixAttributes: matrixAttributeList
+{
+    if (osglData->numberOfRowsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfRows is missing");    
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfRows = osglData->numberOfRows;
+    if (osglData->numberOfColumnsPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute numberOfColumns is missing");
+    else
+        ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
+    if (osglData->symmetryPresent == true)
+        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    if (osglData->namePresent == true)
+        ((OSMatrix*)osglData->tempC)->name = osglData->name;
+    if (osglData->typePresent == true)
+        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+};
+
+matrixAttributeList: | matrixAttributeList matrixAttribute;
+
+matrixAttribute:
+      osglSymmetryATT
+    | osglNumberOfRowsATT
+    | osglNumberOfColumnsATT
+    | osglMatrixNameATT
+    | osglMatrixTypeATT
+;
+==================================
+*/
+
+
 osglSymmetryATT: SYMMETRYATT ATTRIBUTETEXT QUOTE 
 { 
     if (osglData->symmetryPresent == true)
@@ -2676,6 +2823,15 @@ osglMatrixTypeATT: TYPEATT ATTRIBUTETEXT QUOTE
     osglData->typePresent = true;
     osglData->type = $2; 
     free($2);
+};
+
+osglMatrixVarIdxATT: MATRIXVARIDXATT quote INTEGER quote 
+{
+    if (osglData->osglMatrixVarIdxATTPresent == true)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one matrixVarIdx attribute in <matrixVar> element");
+    osglData->osglMatrixVarIdxATTPresent = true;
+    if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "<matrixVarIdx> cannot be negative");
+    osglData->osglMatrixVarIdxATT = $3; 
 };
 
 matrixContent: matrixEmpty | matrixLaden;
@@ -4412,11 +4568,19 @@ exp: EXPSTART {
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 } nlnode EXPEND;
 
-abs: ABSSTART {
+abs: absStart nlnode absEnd;
+
+absStart: ABSSTART 
+{
     osnlData->nlNodePoint = new OSnLNodeAbs();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-} nlnode ABSEND {
-osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+};
+
+absEnd: ABSEND 
+{
+#ifdef OSINSTANCE_AVAILABLE
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 erf: ERFSTART {
@@ -4428,8 +4592,11 @@ erf: ERFSTART {
 if: IFSTART {
     osnlData->nlNodePoint = new OSnLNodeIf();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
-} nlnode nlnode nlnode IFEND {
-osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+} nlnode nlnode nlnode IFEND
+{
+#ifdef OSINSTANCE_AVAILABLE
+    osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 
@@ -4543,8 +4710,6 @@ variableidxATT: IDXATT QUOTE  INTEGER QUOTE
     if ( *$2 != *$4 ) parserData->parser_errors += 
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlNodeVariablePoint->idx = $3;
-    if ( $3 >= osinstance->instanceData->variables->numberOfVariables)
-         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index exceeds number of variables");
 }; 
 
 
@@ -4581,7 +4746,9 @@ anotherallDiffnlnode ALLDIFFEND {
     ((OSnLNode*)osnlData->allDiffVec.back())->m_mChildren 
         = new OSnLNode*[ ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren];
     osnlData->allDiffVec.pop_back();
+#ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 anotherallDiffnlnode: 
@@ -4596,7 +4763,9 @@ max: MAXSTART {
 anothermaxnlnode MAXEND {
     osnlData->maxVec.back()->m_mChildren = new OSnLNode*[ osnlData->maxVec.back()->inumberOfChildren];
     osnlData->maxVec.pop_back();
+#ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 anothermaxnlnode: 
@@ -4611,7 +4780,9 @@ min: MINSTART {
 anotherminnlnode MINEND {
     osnlData->minVec.back()->m_mChildren = new OSnLNode*[ osnlData->minVec.back()->inumberOfChildren];
     osnlData->minVec.pop_back();
+#ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
+#endif
 };
 
 anotherminnlnode: 
@@ -4943,26 +5114,33 @@ matrixExpressions: | matrixExpressionsStart matrixExpressionsAtt matrixExpressio
 
 matrixExpressionsStart: MATRIXEXPRESSIONSSTART
     {               
+    #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions = new MatrixExpressions();
         osnlData->tmpnlcount = 0;
+    #endif
     };
 
 matrixExpressionsAtt: numberOfExprATT;
 
 numberOfExprATT: NUMBEROFEXPR QUOTE INTEGER QUOTE 
     {
+    #ifdef OSINSTANCE_AVAILABLE
         if (*$2 != *$4) 
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
-                        "mismatched quotes");
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
         if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
                         "number of expressions cannot be negative");
         osnlData->nlnodenumber = $3;
         osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr = $3;  
         if (osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr > 0 ) 
-            osinstance->instanceData->matrixProgramming->matrixExpressions->expr = new MatrixExpression*[ $3 ];
-        for (int i = 0; i < osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr; i++)
-            osinstance->instanceData->matrixProgramming->matrixExpressions->expr[i] = new MatrixExpression();
-}; 
+            osinstance->instanceData->matrixProgramming->matrixExpressions->expr
+                = new MatrixExpression*[ $3 ];
+        for (int i = 0; 
+                 i < osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr;
+                 i++)
+            osinstance->instanceData->matrixProgramming->matrixExpressions->expr[i]
+                = new MatrixExpression();
+    #endif
+    }; 
 
 matrixExpressionsContent: matrixExpressionsEmpty | matrixExpressionsLaden;
 
@@ -4975,8 +5153,10 @@ matrixExprList: | matrixExprList matrixExpr;
 matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN OSnLMNode EXPREND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+    #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
             ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+    #endif
         osnlData->tmpnlcount++;
     };
 
@@ -5009,14 +5189,18 @@ matrixExprAttributeList: | matrixExprAttributeList exprAttribute;
 
 exprAttribute: 
       osglIdxATT 
-    { 
+    {
+    #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->idx = osglData->idx;
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree
             = new MatrixExpressionTree();
+    #endif
     }
     | osglShapeATT
     {
+    #ifdef OSINSTANCE_AVAILABLE
         osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->shape = osglData->shape;
+    #endif
     };
 
 

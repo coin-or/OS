@@ -58,7 +58,8 @@ osss: $(srcdir)/OSParseosss.cpp
 
 if HAVE_LEXYACC
 
-#Some preparatory file manipulations
+# Some preparatory file manipulations
+# Needs special rules to ensure nested dependencies are handled successfully
 $(srcdir)/OSParseosil.l: \
 		$(srcdir)/OSParseosil.l.1 \
 		$(srcdir)/OSParseosgl.l.patterns \
@@ -143,7 +144,8 @@ $(srcdir)/OSParseosrl.y: \
 	rm -f osgltemp.tmp
 	rm -f osnltemp.tmp
 
-# use lex/flex to generate the scanner and tokens
+# use lex/flex to generate the scanner and tokens. 
+# Needs special rules to ensure nested dependencies are handled successfully
 
 $(srcdir)/OSParseosil.cpp: \
                  $(srcdir)/OSParseosil.l \

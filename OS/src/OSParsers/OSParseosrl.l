@@ -160,6 +160,7 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
 ({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
 ({xmlwhitespace}+numberOfOtherConstraintResults{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
+({xmlwhitespace}+numberOfOtherMatrixVariableResults{equality}) {YY_PRINT; return(NUMBEROFOTHERMATRIXVARIABLERESULTSATT);}
 ({xmlwhitespace}+numberOfOtherObjectiveResults{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
 ({xmlwhitespace}+numberOfOtherResults{equality}) {YY_PRINT; return(NUMBEROFOTHERRESULTSATT);}
 ({xmlwhitespace}+numberOfOtherSolutionResults{equality}) {YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
@@ -212,6 +213,10 @@ return(DOUBLE);}
 ({xmlwhitespace}+enumType{equality}\'\') {YY_PRINT; return(EMPTYENUMTYPEATT);}
 ({xmlwhitespace}+enumType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(ENUMTYPEATT);}
 ({xmlwhitespace}+enumType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(ENUMTYPEATT);}
+({xmlwhitespace}+matrixVarType{equality}\"\") {YY_PRINT; return(EMPTYMATRIXVARTYPEATT);}
+({xmlwhitespace}+matrixVarType{equality}\'\') {YY_PRINT; return(EMPTYMATRIXVARTYPEATT);}
+({xmlwhitespace}+matrixVarType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(MATRIXVARTYPEATT);}
+({xmlwhitespace}+matrixVarType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(MATRIXVARTYPEATT);}
 ({xmlwhitespace}+objType{equality}\"\") {YY_PRINT; return(EMPTYOBJTYPEATT);}
 ({xmlwhitespace}+objType{equality}\'\') {YY_PRINT; return(EMPTYOBJTYPEATT);}
 ({xmlwhitespace}+objType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(OBJTYPEATT);}
@@ -387,6 +392,14 @@ return(DOUBLE);}
 {xmlwhitespace}*\<varIdx {YY_PRINT; return(VARIDXSTART);}
 {xmlwhitespace}*\<\/varIdx{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIDXEND);}
 
+ /* patterns for matrixProgramming results */
+{xmlwhitespace}*\<matrixVariableValues {YY_PRINT; return(MATRIXVARIABLEVALUESSTART);}
+{xmlwhitespace}*\<\/matrixVariableValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXVARIABLEVALUESEND);}
+{xmlwhitespace}*\<otherMatrixProgrammingResult {YY_PRINT;  return(OTHERMATRIXPROGRAMMINGRESULTSTART);}
+{xmlwhitespace}*\<\/otherMatrixProgrammingResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERMATRIXPROGRAMMINGRESULTEND);}
+{xmlwhitespace}*\<otherMatrixVariableResult {YY_PRINT;  return(OTHERMATRIXVARIABLERESULTSTART);}
+{xmlwhitespace}*\<\/otherMatrixVariableResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERMATRIXVARIABLERESULTEND);}
+
 
  /* include file OSParseosgl.l.patterns --- patterns for OSgL schema elements */
 
@@ -450,6 +463,10 @@ return(DOUBLE);}
 ({xmlwhitespace}+blockColIdx{equality}) {YY_PRINT; return(BLOCKCOLIDXATT);}
 ({xmlwhitespace}+constant{equality}) {YY_PRINT; return(CONSTANTATT);}
 
+({xmlwhitespace}+matrixVarIdx{equality}) {YY_PRINT; return(MATRIXVARIDXATT);}
+({xmlwhitespace}+matrixObjIdx{equality}) {YY_PRINT; return(MATRIXOBJIDXATT);}
+({xmlwhitespace}+matrixConIdx{equality}) {YY_PRINT; return(MATRIXCONIDXATT);}
+
 ({xmlwhitespace}+idx{equality})  {YY_PRINT;  return(IDXATT);}
 ({xmlwhitespace}+incr{equality}) {YY_PRINT; return(INCRATT);}
 ({xmlwhitespace}+mult{equality}) {YY_PRINT; return(MULTATT);}
@@ -491,8 +508,23 @@ return(DOUBLE);}
 ({xmlwhitespace}+valueType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUETYPEATT);}
 ({xmlwhitespace}+valueType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUETYPEATT);}
 
- /* tokens for the <matrix> element */
+ /* patterns for <matrixProgramming> */
+{xmlwhitespace}*\<matrixProgramming {YY_PRINT;  return(MATRIXPROGRAMMINGSTART);}
+{xmlwhitespace}*\<\/matrixProgramming{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXPROGRAMMINGEND);}
+{xmlwhitespace}*\<matrixVariables {YY_PRINT;  return(MATRIXVARIABLESSTART);}
+{xmlwhitespace}*\<\/matrixVariables{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXVARIABLESEND);}
+{xmlwhitespace}*\<matrixVar {YY_PRINT;  return(MATRIXVARSTART);}
+{xmlwhitespace}*\<\/matrixVar{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXVAREND);}
+{xmlwhitespace}*\<matrixObjectives {YY_PRINT;  return(MATRIXOBJECTIVESSTART);}
+{xmlwhitespace}*\<\/matrixObjectives{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXOBJECTIVESEND);}
+{xmlwhitespace}*\<matrixObj {YY_PRINT;  return(MATRIXOBJSTART);}
+{xmlwhitespace}*\<\/matrixObj{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXOBJEND);}
+{xmlwhitespace}*\<matrixConstraints {YY_PRINT;  return(MATRIXCONSTRAINTSSTART);}
+{xmlwhitespace}*\<\/matrixConstraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXCONSTRAINTSEND);}
+{xmlwhitespace}*\<matrixCon {YY_PRINT;  return(MATRIXCONSTART);}
+{xmlwhitespace}*\<\/matrixCon{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXCONEND);}
 
+ /* tokens for the <matrix> element */
 {xmlwhitespace}*\<matrix {YY_PRINT;  return(MATRIXSTART);}
 {xmlwhitespace}*\<\/matrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXEND);}
 {xmlwhitespace}*\<baseMatrix {YY_PRINT;  return(BASEMATRIXSTART);}
