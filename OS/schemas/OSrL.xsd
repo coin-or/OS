@@ -537,7 +537,7 @@
 			<xs:element name="matrixVariables" type="MatrixVariableSolution" minOccurs="0"/>
 			<xs:element name="matrixObjectives" type="MatrixObjectiveSolution" minOccurs="0"/>
 			<xs:element name="matrixConstraints" type="MatrixConstraintSolution" minOccurs="0"/>
-			<xs:element name="other" type="OtherSolutionResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="SolverOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherMatrixProgrammingResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -794,36 +794,9 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 	</xs:complexType>
 	<xs:complexType name="OtherSolutionResults">
 		<xs:sequence>
-			<xs:element name="otherSolutionResult" type="OtherSolutionResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="otherSolutionResult" type="SolverOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherSolutionResults" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="OtherSolutionResult">
-		<xs:sequence>
-			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfItems</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="name" use="required">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:minLength value="1"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string"/>
-		<xs:attribute name="solver" type="xs:string"/>
-		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>Must refer to a matrix defined in the "matrices" section</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="ResultElementValue">
 		<xs:simpleContent>

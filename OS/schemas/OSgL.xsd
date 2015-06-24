@@ -3209,4 +3209,32 @@ Each nonzero is a general nonlinear expression</xs:documentation>
 			<xs:enumeration value="year"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:complexType name="SolverOptionOrResult">
+		<xs:choice>
+			<xs:element name="matrix" type="OSMatrix" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfMatrices</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfItems</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string"/>
+		<xs:attribute name="solver" type="xs:string"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" default="0"/>
+	</xs:complexType>
 </xs:schema>

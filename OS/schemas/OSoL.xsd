@@ -542,7 +542,7 @@
 			<xs:element name="matrixVariables" type="MatrixVariableOption" minOccurs="0"/>
 			<xs:element name="matrixObjectives" type="MatrixObjectiveOption" minOccurs="0"/>
 			<xs:element name="matrixConstraints" type="MatrixConstraintOption" minOccurs="0"/>
-			<xs:element name="other" type="SolverOption" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="SolverOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherMatrixProgrammingOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -765,7 +765,7 @@
 	</xs:complexType>
 	<xs:complexType name="SolverOptions">
 		<xs:sequence>
-			<xs:element name="solverOption" type="SolverOption" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="solverOption" type="SolverOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>

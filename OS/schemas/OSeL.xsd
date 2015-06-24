@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSeL: version - 2.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -378,8 +379,8 @@
 			<xs:element name="description" type="xs:string"/>
 			<xs:element name="dedication" type="SystemDedication"/>
 			<xs:element name="operatingSystem" type="xs:string" minOccurs="0"/>
-			<xs:element name="diskSpace" type="DiskSpace" default="0.0" minOccurs="0"/>
-			<xs:element name="memory" type="MemorySize" default="0.0" minOccurs="0"/>
+			<xs:element name="diskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
+			<xs:element name="memory" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="cpuSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
 			<xs:element name="cpuNumber" type="CPUNumber" default="1" minOccurs="0"/>
 			<xs:element name="networkSpeed" type="NetworkSpeed" minOccurs="0"/>
@@ -419,6 +420,7 @@
 		</xs:attribute>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
+	<!-- These are shared with info in OSgL
 	<xs:complexType name="DiskSpace">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -499,6 +501,7 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+-->
 	<xs:complexType name="ServiceInfo">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
