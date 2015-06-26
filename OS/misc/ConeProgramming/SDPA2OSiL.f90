@@ -192,7 +192,7 @@
 !     allocation proves insufficient.
 !
 !     blkstart is a pointer into the array of column starts. 
-!     It essentially gives colOffsets for each matrix block in one long array
+!     It essentially gives column offsets for each matrix block in one long array
 !
 !     blkelem counts the number of elements in each block 
 !
@@ -386,7 +386,7 @@
                call iflush(mark,mult,incr)
                write (16, 1211)
 !
-!     Write the row indices (<indexes> element)
+!     Write the row indices (<index> element)
 !
                write (16, 1212)
                mark = -1
@@ -534,13 +534,13 @@
      &       '<start numberOfEl="',I0,'">')
  1013 format('<el>',I0,'</el>')
  1014 format('</start>',/,'<nonzeros numberOfEl="',I0,'">',/,               &
-     &       '<indexes>')
+     &       '<index>')
  1015 format('<el>0</el>')
  1016 format('<el>0</el>   <el>1</el>')    
  1017 format('<el mult="',I0,'" incr="1">0</el>')
- 1018 format('</indexes>',/,'<values>',/,                                   &
+ 1018 format('</index>',/,'<value>',/,                                   &
      &       '<el mult="',I0,'" incr="1">',I0,'</el>',/,                    &
-     &       '</values>',/,'</nonzeros>',/,                                 &
+     &       '</value>',/,'</nonzeros>',/,                                 &
      &       '</varReferenceElements>',/,'</elements>',/,'</matrix>')
  1019 format('<matrix numberOfColumns="',I0,                                &
      &       '" numberOfRows="',I0,'">')
@@ -548,9 +548,9 @@
      &       '<start numberOfEl="',I0,'">')
  1021 format('<el>',I0,'</el>')
  1022 format('</start>',/,'<nonzeros numberOfEl="',I0,'">',/,               &
-     &       '<indexes>')
- 1023 format('</indexes>',/,'<values>')
- 1025 format('</values>',/,'</nonzeros>',/,'</constantElements>',/,         &
+     &       '<index>')
+ 1023 format('</index>',/,'<value>')
+ 1025 format('</value>',/,'</nonzeros>',/,'</constantElements>',/,         &
      &       '</elements>')
  1026 format('</matrix>')
  1027 format('</matrices>')
@@ -593,20 +593,20 @@
  1201 format('<matrix numberOfColumns="',I0,'" numberOfRows="',I0,          &
      &     '" symmetry="lower" name="F',I0,'">')
  1202 format('<blocks numberOfBlocks="',I0,'">')
- 1203 format('<colOffsets numberOfEl="',I0,'">')   
- 1204 format('<rowOffsets numberOfEl="',I0,'">')
+ 1203 format('<colOffset numberOfEl="',I0,'">')   
+ 1204 format('<rowOffset numberOfEl="',I0,'">')
  1205 format('<el>',I0,'</el>')
- 1206 format('</colOffsets>')
- 1207 format('</rowOffsets>')
+ 1206 format('</colOffset>')
+ 1207 format('</rowOffset>')
  1208 format('<block blockRowIdx="',I0,'" blockColIdx="',I0,'">')
  1209 format('<constantElements numberOfValues="',I0,'">')
  1210 format('<start>')
  1211 format('</start>')
- 1212 format('<indexes>')
+ 1212 format('<index>')
  1213 format('<el>',I0,'</el>')
- 1214 format('</indexes>')
- 1215 format('<values>')
- 1216 format('</values>')
+ 1214 format('</index>')
+ 1215 format('<value>')
+ 1216 format('</value>')
  1217 format('</constantElements>')
  1218 format('</block>')
  1219 format('</blocks>')
