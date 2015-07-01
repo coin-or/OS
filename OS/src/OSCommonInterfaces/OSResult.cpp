@@ -4549,6 +4549,7 @@ bool OSResult::setNumberOfTimes(int numberOfTimes)
     if (numberOfTimes > 0)
     {
 
+
         job->timingInformation->time = new TimeMeasurement*[numberOfTimes];
         for(int i = 0; i < numberOfTimes; i++)
             job->timingInformation->time[i] = new TimeMeasurement();
@@ -5543,6 +5544,44 @@ bool OSResult::setOtherVariableResultDescription(int solIdx, int otherIdx, std::
     return true;
 }//setOtherVariableResultDescription
 
+bool OSResult::setOtherVariableResultSolver(int solIdx, int otherIdx, std::string solver)
+{
+    int numberOfVar = this->getVariableNumber();
+    int iNumberOfVariables = numberOfVar;
+    if (iNumberOfVariables <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->variables == NULL)return false;
+    if (optimization->solution[solIdx]->variables->other == NULL) return false;
+    if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->solver = solver;
+    return true;
+}//setOtherVariableResultSolver
+
+bool OSResult::setOtherVariableResultCategory(int solIdx, int otherIdx, std::string category)
+{
+    int numberOfVar = this->getVariableNumber();
+    int iNumberOfVariables = numberOfVar;
+    if (iNumberOfVariables <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->variables == NULL)return false;
+    if (optimization->solution[solIdx]->variables->other == NULL) return false;
+    if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->category = category;
+    return true;
+}//setOtherVariableResultCategory
+
 bool OSResult::setOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx, int idx)
 {
     int nSols = this->getSolutionNumber();
@@ -6030,6 +6069,44 @@ bool OSResult::setOtherObjectiveResultDescription(int solIdx, int otherIdx, std:
     return true;
 }//setOtherObjectiveResultDescription
 
+bool OSResult::setOtherObjectiveResultSolver(int solIdx, int otherIdx, std::string solver)
+{
+    int numberOfObj = this->getObjectiveNumber();
+    int iNumberOfObjectives = numberOfObj;
+    if (iNumberOfObjectives <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->objectives == NULL)return false;
+    if (optimization->solution[solIdx]->objectives->other == NULL) return false;
+    if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->objectives->other[ otherIdx]->solver = solver;
+    return true;
+}//setOtherObjectiveResultSolver
+
+bool OSResult::setOtherObjectiveResultCategory(int solIdx, int otherIdx, std::string category)
+{
+    int numberOfObj = this->getObjectiveNumber();
+    int iNumberOfObjectives = numberOfObj;
+    if (iNumberOfObjectives <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->objectives == NULL)return false;
+    if (optimization->solution[solIdx]->objectives->other == NULL) return false;
+    if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->objectives->other[ otherIdx]->category = category;
+    return true;
+}//setOtherObjectiveResultCategory
+
 bool OSResult::setOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx, int idx)
 {
     int nSols = this->getSolutionNumber();
@@ -6501,6 +6578,44 @@ bool OSResult::setOtherConstraintResultDescription(int solIdx, int otherIdx, std
     optimization->solution[solIdx]->constraints->other[ otherIdx]->description = description;
     return true;
 }//setOtherConstraintResultDescription
+
+bool OSResult::setOtherConstraintResultSolver(int solIdx, int otherIdx, std::string solver)
+{
+    int numberOfCon = this->getConstraintNumber();
+    int iNumberOfConstraints = numberOfCon;
+    if (iNumberOfConstraints <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->constraints == NULL)return false;
+    if (optimization->solution[solIdx]->constraints->other == NULL) return false;
+    if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->constraints->other[ otherIdx]->solver = solver;
+    return true;
+}//setOtherConstraintResultSolver
+
+bool OSResult::setOtherConstraintResultCategory(int solIdx, int otherIdx, std::string category)
+{
+    int numberOfCon = this->getConstraintNumber();
+    int iNumberOfConstraints = numberOfCon;
+    if (iNumberOfConstraints <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->constraints == NULL)return false;
+    if (optimization->solution[solIdx]->constraints->other == NULL) return false;
+    if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->constraints->other[ otherIdx]->category = category;
+    return true;
+}//setOtherConstraintResultCategory
 
 bool OSResult::setOtherConstraintResultConIdx(int solIdx, int otherIdx, int conIdx, int idx)
 {

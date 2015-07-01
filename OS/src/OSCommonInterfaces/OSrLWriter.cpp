@@ -1216,10 +1216,10 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSrLwriter, ENUM_OUTPUT_LEVEL_trace, 
                         "output <matrixProgramming>");
 #endif
-                    outStr << "<matrixProgramming ";
+                    outStr << "<matrixProgramming";
                     if (m_OSResult->optimization->solution[i]->matrixProgramming
                                   ->numberOfOtherMatrixProgrammingResults > 0)
-                        outStr << "numberOfOtherMatrixProgrammingResults=\"" 
+                        outStr << " numberOfOtherMatrixProgrammingResults=\"" 
                                << m_OSResult->optimization->solution[i]->matrixProgramming
                                             ->numberOfOtherMatrixProgrammingResults << "\"";
                     outStr << ">" << endl;
@@ -1245,7 +1245,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                             for (int var=0; var < tmpVar->values->numberOfMatrixVar; var++)
                                 outStr << tmpVar->values->matrixVar[var]->getMatrixNodeInXML();
                         }
-                        outStr << "</values>";
+                        outStr << "</values>" << endl;
                         if (tmpVar->numberOfOtherMatrixVariableResults > 0 &&
                             tmpVar->other != NULL)
                         {
@@ -1276,11 +1276,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                 if (tmpVar->other[j]->numberOfMatrixVar == 0 &&
                                     tmpVar->other[j]->numberOfEnumerations == 0)
                                 {
-                                    outStr << "/>";
+                                    outStr << "/>" << endl;
                                 }
                                 else
                                 {
-                                    outStr << ">";
+                                    outStr << ">" << endl;
                                     if (tmpVar->other[j]->numberOfMatrixVar > 0)
                                         for (int var=0; var < tmpVar->other[j]->numberOfMatrixVar; var++)
                                             outStr << tmpVar->other[j]->matrixVar[var]->getMatrixNodeInXML();
@@ -1293,7 +1293,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                                         m_bWhiteSpace, m_bWriteBase64);
                                     }
 
-                                    outStr << "</other>";
+                                    outStr << "</other>" << endl;
                                 }
                             }
                         }

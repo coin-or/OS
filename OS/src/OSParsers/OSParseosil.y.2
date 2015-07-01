@@ -311,11 +311,11 @@ generalOrthantConeStart: ORTHANTCONESTART
 
 generalOrthantConeAttributes: generalOrthantConeAttList
 {
-    osglData->osglNumberOfEl = (osglData->numberOfRows)*(osglData->numberOfColumns);
+    osglData->numberOfEl = (osglData->numberOfRows)*(osglData->numberOfColumns);
     ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->ub 
-        = new double[osglData->osglNumberOfEl];  
+        = new double[osglData->numberOfEl];  
     ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->lb
-        = new double[osglData->osglNumberOfEl];   
+        = new double[osglData->numberOfEl];   
     osglData->osglCounter = 0;
 };
 
@@ -340,7 +340,7 @@ generalOrthantConeAtt:
 
 generalOrthantConeContent: ENDOFELEMENT | GREATERTHAN generalOrthantConeDirectionList generalOrthantConeEnd
 {
-    if (osglData->osglCounter != osglData->osglNumberOfEl)
+    if (osglData->osglCounter != osglData->numberOfEl)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of directions does not match");
 };
 
@@ -353,8 +353,8 @@ generalOrthantConeDirection: generalOrthantConeDirectionStart generalOrthantCone
 generalOrthantConeDirectionStart: DIRECTIONSTART
 {
     osglData->typePresent = false;
-    osglData->osglMultPresent = false;
-    osglData->osglMult = 1;
+    osglData->multPresent = false;
+    osglData->mult = 1;
 };
 
 generalOrthantConeDirectionAttributes: generalOrthantConeDirectionAttributeList
@@ -385,14 +385,14 @@ generalOrthantConeDirectionAttributes: generalOrthantConeDirectionAttributeList
     {
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "unrecognized direction type");
     }
-    if (osglData->osglCounter + osglData->osglMult > osglData->osglNumberOfEl)
+    if (osglData->osglCounter + osglData->mult > osglData->numberOfEl)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "Too many directions given");
-    for (int i=0; i < osglData->osglMult; i++)
+    for (int i=0; i < osglData->mult; i++)
     {
         ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->ub[osglData->osglCounter+i] = ubt;
         ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->lb[osglData->osglCounter+i] = lbt;
     }
-    osglData->osglCounter += osglData->osglMult;
+    osglData->osglCounter += osglData->mult;
 };
 
 generalOrthantConeDirectionAttributeList: 
@@ -657,14 +657,14 @@ productConeFactors: productConeFactorsStart productConeFactorsAttributes product
 
 productConeFactorsStart: FACTORSSTART
 {
-    osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent = false;
+    osglData->numberOfEl = 0;
+    osglData->numberOfElPresent = false;
 };
 
 productConeFactorsAttributes: osglNumberOfElATT
 {
     osglData->osglCounter = 0; 
-    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglIntArray = new int[osglData->numberOfEl];
 }; 
 
 productConeFactorsContent: productConeFactorsEmpty | productConeFactorsLaden;
@@ -677,11 +677,11 @@ productConeFactorList: osglIntArrayData;
 
 productConeFactorsEnd: FACTORSEND
 {
-    if (osglData->osglCounter != osglData->osglNumberOfEl)
+    if (osglData->osglCounter != osglData->numberOfEl)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of factors does not match numberOfEl");
     ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->factors = new IntVector();
     ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->factors->numberOfEl
-        = osglData->osglNumberOfEl;
+        = osglData->numberOfEl;
     ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->factors ->el 
         = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
@@ -729,14 +729,14 @@ intersectionConeComponents: intersectionConeComponentsStart intersectionConeComp
 
 intersectionConeComponentsStart: COMPONENTSSTART
 {
-    osglData->osglNumberOfEl = 0;
-    osglData->osglNumberOfElPresent = false;
+    osglData->numberOfEl = 0;
+    osglData->numberOfElPresent = false;
 };
 
 intersectionConeComponentsAttributes: osglNumberOfElATT
 {
     osglData->osglCounter = 0; 
-    osglData->osglIntArray = new int[osglData->osglNumberOfEl];
+    osglData->osglIntArray = new int[osglData->numberOfEl];
 };
 
 intersectionConeComponentsContent: intersectionConeComponentsEmpty | intersectionConeComponentsLaden;
@@ -749,11 +749,11 @@ intersectionConeComponentList: osglIntArrayData;
 
 intersectionConeComponentsEnd: COMPONENTSEND
 {
-    if (osglData->osglCounter != osglData->osglNumberOfEl)
+    if (osglData->osglCounter != osglData->numberOfEl)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of components does not match numberOfEl");
     ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->components = new IntVector();
     ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->components->numberOfEl
-        = osglData->osglNumberOfEl;
+        = osglData->numberOfEl;
     ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->components ->el 
         = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
@@ -818,7 +818,7 @@ matrixVarList: | matrixVarList matrixVar;
 
 matrixVar: matrixVarStart matrixVarAttributes matrixVarEnd
 {
-    parserData->kounter += osglData->osglMult;
+    parserData->kounter += osglData->mult;
 };
 
 matrixVarStart: MATRIXVARSTART
@@ -826,15 +826,15 @@ matrixVarStart: MATRIXVARSTART
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
-    osglData->osglMultPresent = false;
-    osglData->osglMult = 1;
+    osglData->multPresent = false;
+    osglData->mult = 1;
+    osglData->varTypePresent = false;
     parserData->templateMatrixIdxPresent = false;
     parserData->varReferenceMatrixIdxPresent = false;
     parserData->lbMatrixIdxPresent = false;
     parserData->lbConeIdxPresent = false;
     parserData->ubMatrixIdxPresent = false;
     parserData->ubConeIdxPresent = false;
-    parserData->varTypePresent = false;
 };
 
 matrixVarAttributes: matrixVarAttList
@@ -843,10 +843,10 @@ matrixVarAttributes: matrixVarAttList
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfRows\" missing");
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfColumns\" missing");
-    if (parserData->kounter + osglData->osglMult > parserData->numberOfMatrixVar) 
+    if (parserData->kounter + osglData->mult > parserData->numberOfMatrixVar) 
         parserData->parser_errors += 
             addErrorMsg( NULL, parserObjects, "actual number of matrixVar greater than number attribute");
-    for (int i=0; i<osglData->osglMult; i++)
+    for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter+i]->numberOfRows
             = osglData->numberOfRows;
@@ -873,9 +873,15 @@ matrixVarAttributes: matrixVarAttList
         if (parserData->ubConeIdxPresent)
             osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter+i]->ubConeIdx
                 = parserData->ubConeIdx;
-        if (parserData->varTypePresent)
-            osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter+i]->varType
-                = parserData->varType;
+        if (osglData->varTypePresent)
+        {
+            if (returnVarType(osglData->varType[0]) > 0)  
+                osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter+i]->varType
+                = osglData->varType[0];
+            else
+                parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+                    "varType must be one of C, B, I, S, D, J");
+        }
     }
 };
 
@@ -891,7 +897,7 @@ matrixVarAtt:
     | ubMatrixIdxATT
     | ubConeIdxATT
     | osglNameATT
-    | varTypeATT
+    | osglVarTypeATT
     | osglMultATT
 ;
 
@@ -931,7 +937,7 @@ matrixObjList: | matrixObjList matrixObj;
 
 matrixObj: matrixObjStart matrixObjAttributes matrixObjEnd 
 {
-    parserData->kounter += osglData->osglMult;
+    parserData->kounter += osglData->mult;
 };
 
 matrixObjStart: MATRIXOBJSTART
@@ -939,8 +945,8 @@ matrixObjStart: MATRIXOBJSTART
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
-    osglData->osglMultPresent = false;
-    osglData->osglMult = 1;
+    osglData->multPresent = false;
+    osglData->mult = 1;
     parserData->templateMatrixIdxPresent = false;
     parserData->objReferenceMatrixIdxPresent = false;
     parserData->orderConeIdxPresent = false;
@@ -953,10 +959,10 @@ matrixObjAttributes: matrixObjAttList
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfRows\" missing");
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfColumns\" missing");
-    if (parserData->kounter + osglData->osglMult > parserData->numberOfMatrixObj) 
+    if (parserData->kounter + osglData->mult > parserData->numberOfMatrixObj) 
         parserData->parser_errors += 
             addErrorMsg( NULL, parserObjects, "actual number of matrixObj greater than number attribute");
-    for (int i=0; i<osglData->osglMult; i++)
+    for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->numberOfRows
             = osglData->numberOfRows;
@@ -1030,7 +1036,7 @@ matrixConList: | matrixConList matrixCon;
 
 matrixCon: matrixConStart matrixConAttributes matrixConEnd 
 {
-    parserData->kounter += osglData->osglMult;
+    parserData->kounter += osglData->mult;
 };
 
 matrixConStart: MATRIXCONSTART
@@ -1038,8 +1044,8 @@ matrixConStart: MATRIXCONSTART
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
-    osglData->osglMultPresent = false;
-    osglData->osglMult = 1;
+    osglData->multPresent = false;
+    osglData->mult = 1;
     parserData->templateMatrixIdxPresent = false;
     parserData->conReferenceMatrixIdxPresent = false;
     parserData->lbMatrixIdxPresent = false;
@@ -1054,10 +1060,10 @@ matrixConAttributes: matrixConAttList
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfRows\" missing");
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfColumns\" missing");
-    if (parserData->kounter + osglData->osglMult > parserData->numberOfMatrixCon) 
+    if (parserData->kounter + osglData->mult > parserData->numberOfMatrixCon) 
         parserData->parser_errors += 
             addErrorMsg( NULL, parserObjects, "actual number of matrixCon greater than number attribute");
-    for (int i=0; i<osglData->osglMult; i++)
+    for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->numberOfRows
             = osglData->numberOfRows;
@@ -1543,7 +1549,7 @@ osilNumberOfElATT: NUMBEROFELATT QUOTE INTEGER QUOTE
 {
     if (*$2 != *$4) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if (osglData->osglNumberOfElPresent)
+    if (osglData->numberOfElPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfEl attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> cannot be negative");
     parserData->numberOfEl = $3; 
@@ -1805,7 +1811,7 @@ orderConeIdxATT: ORDERCONEIDXATT QUOTE INTEGER QUOTE
     parserData->orderConeIdx = $3;
 };
 
-
+/*
 varTypeATT: VARTYPEATT ATTRIBUTETEXT QUOTE 
 { 
     if (parserData->varTypePresent == true)
@@ -1817,7 +1823,7 @@ varTypeATT: VARTYPEATT ATTRIBUTETEXT QUOTE
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "varType must be one of C, B, I, S, D, J");
     free($2);
 };
-
+*/
 
 aNumber:
     xmlWhiteSpace INTEGER xmlWhiteSpace {parserData->tempVal = $2;}

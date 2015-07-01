@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2015, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -13,14 +13,19 @@
  * In order to allow easier maintenance of the parsers, 
  * the files OSParseosil.y and OSParseosil.l are stored in several pieces
  * that are combined in the makefile.
- * This is the first part of the file OSParseosil.y.
- * Tokens pertaining to the OSgL and OSnL parses are appended next.
- * These are in files OSParseosnl.y.tokens and OSParseosnl.y.tokens.   
+ * This is the first part of the file OSParseosil.y. It contains the
+ * preamble and tokens that are unique to the OSiL parser.
+ * Tokens pertaining to the OSgL and OSnL parsers are appended next.
+ * These are in files OSParseosgl.y.tokens and OSParseosnl.y.tokens.   
  * Then follow the syntax rules involving only OSiL constructs (OSParseosil.y.2). 
- * After that we put the syntax rules for elements from the OSgL and OSnL schema, 
- * maintained in the files OSParseosnl.y.syntax and OSParseosnl.y.syntax. 
- * The postamble in OSParseosil.y.3 is appended at the end.
+ * After that we put the syntax rules for elements from the OSgL schema, 
+ * maintained in the file OSParseosgl.y.syntax, and then the OSnL syntax
+ * in OSParseosnl.y.syntax. The postamble in OSParseosil.y.3 is appended at the end.
  * This process could be repeated for as many other auxiliary schemas as needed. 
+ *
+ * Note: Make changes in this file rather than OSParseosil.y or OSParserosil.tab.cpp,
+ *       as the latter files are recreated by the build system and are thus to be
+ *       considered fragile.
  */
 
 %{
@@ -204,52 +209,47 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 #define scanner parserData->scanner
 %}
 
-%token <sval> QUOTE
 %token <sval> ATTRIBUTETEXT 
 %token <sval> ELEMENTTEXT
 %token <sval> ITEMTEXT
 %token <ival> INTEGER  
-%token <dval> DOUBLE 
+%token <dval> DOUBLE
+%token <sval> QUOTE
+%token <sval> TWOQUOTES
 
-%token TWOQUOTES ENDOFELEMENT GREATERTHAN 
+%token ENDOFELEMENT GREATERTHAN
+
+%token /*EMPTYIDATT IDATT*/ EMPTYSEMIDEFINITENESSATT SEMIDEFINITENESSATT
+
+%token NUMBEROFQTERMSATT NUMBEROFCONESATT NUMBEROFSTAGESATT
+
+%token IDXONEATT IDXTWOATT HORIZONATT STARTATT STARTIDXATT 
+%token MATRIXIDXATT LBMATRIXIDXATT LBCONEIDXATT UBMATRIXIDXATT UBCONEIDXATT 
+%token TEMPLATEMATRIXIDXATT REFERENCEMATRIXIDXATT
+%token VARREFERENCEMATRIXIDXATT OBJREFERENCEMATRIXIDXATT CONREFERENCEMATRIXIDXATT
+%token ORDERCONEIDXATT CONSTANTMATRIXIDXATT
+%token NORMSCALEFACTORATT DISTORTIONMATRIXIDXATT
+%token AXISDIRECTIONATT FIRSTAXISDIRECTIONATT SECONDAXISDIRECTIONATT
+
 %token OSILEND INSTANCEDATAEND INSTANCEDATASTARTEND
 
-%token EMPTYIDATT 
-%token IDXONEATT IDXTWOATT VALUEATT
+%token QUADRATICCOEFFICIENTSSTART QUADRATICCOEFFICIENTSEND QTERMSTART QTERMEND
 
-%token QUADRATICCOEFFICIENTSSTART QUADRATICCOEFFICIENTSEND
-%token NUMBEROFQTERMSATT QTERMSTART QTERMEND  
-
-%token MATRICESSTART MATRICESEND NUMBEROFMATRICESATT
-%token CONESSTART CONESEND NUMBEROFCONESATT
-
+%token CONESSTART CONESEND 
 %token NONNEGATIVECONESTART NONNEGATIVECONEEND NONPOSITIVECONESTART NONPOSITIVECONEEND
 %token ORTHANTCONESTART ORTHANTCONEEND POLYHEDRALCONESTART POLYHEDRALCONEEND
 %token QUADRATICCONESTART QUADRATICCONEEND ROTATEDQUADRATICCONESTART ROTATEDQUADRATICCONEEND
 %token SEMIDEFINITECONESTART SEMIDEFINITECONEEND
 %token PRODUCTCONESTART PRODUCTCONEEND INTERSECTIONCONESTART INTERSECTIONCONEEND
 %token DUALCONESTART DUALCONEEND POLARCONESTART POLARCONEEND
-
 %token DIRECTIONSTART DIRECTIONEND
 %token FACTORSSTART FACTORSEND COMPONENTSSTART COMPONENTSEND
-%token NORMSCALEFACTORATT DISTORTIONMATRIXIDXATT
-%token AXISDIRECTIONATT FIRSTAXISDIRECTIONATT SECONDAXISDIRECTIONATT
-%token EMPTYSEMIDEFINITENESSATT SEMIDEFINITENESSATT REFERENCEMATRIXIDXATT
-
-%token VARTYPEATT
-
-%token MATRIXIDXATT LBMATRIXIDXATT LBCONEIDXATT UBMATRIXIDXATT UBCONEIDXATT 
-%token TEMPLATEMATRIXIDXATT VARREFERENCEMATRIXIDXATT OBJREFERENCEMATRIXIDXATT CONREFERENCEMATRIXIDXATT
-%token ORDERCONEIDXATT CONSTANTMATRIXIDXATT
 
 %token TIMEDOMAINSTART TIMEDOMAINEND
 %token STAGESSTART STAGESEND STAGESTART STAGEEND
-%token NUMBEROFSTAGESATT HORIZONATT STARTATT
-%token VARIABLESSTART CONSTRAINTSSTART OBJECTIVESSTART
-%token VARIABLESEND CONSTRAINTSEND OBJECTIVESEND
-%token NUMBEROFVARIABLESATT NUMBEROFCONSTRAINTSATT NUMBEROFOBJECTIVESATT
-%token STARTIDXATT 
-%token VARSTART VAREND CONSTART CONEND OBJSTART OBJEND
 %token INTERVALSTART INTERVALEND
+
+//%token EMPTYSEMIDEFINITENESSATT SEMIDEFINITENESSATT REFERENCEMATRIXIDXATT
+
 
 

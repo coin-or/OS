@@ -1149,6 +1149,12 @@ public:
     /** a brief description of the type of result */
     std::string description;
 
+    /** the solver of the result value */
+    std::string solver;
+
+    /** the category of the result value */
+    std::string category;
+
     /* a pointer to OtherVarResult objects that will
      * give for each variable the index and value for
      * this user defined variable result
@@ -1461,6 +1467,12 @@ public:
 
     /** a brief description of the type of result */
     std::string description;
+
+    /** the solver of the result value */
+    std::string solver;
+
+    /** the category of the result value */
+    std::string category;
 
     /* a pointer to OtherObjResult objects that will
      * give for each objective function the index and
@@ -1780,6 +1792,11 @@ public:
     /** a brief description of the type of result */
     std::string description;
 
+    /** the solver of the result value */
+    std::string solver;
+
+    /** the category of the result value */
+    std::string category;
 
     /* a vector of OtherConResult objects that will
      * give for each constraint the index and
@@ -3317,6 +3334,7 @@ public:
      */
 
 
+
     int getOtherConstraintResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim);
 
 
@@ -3941,13 +3959,13 @@ public:
      * @param constraintNumber holds the number of constraints
      * @return whether the constraint number is set successfully or not.
      */
-    bool setConstraintNumber(int constraintNumber);
+    bool setConstraintNumber(int constraintNumber); 
 
     /**
      * set the number of solutions. This method must be called before setting other optimization solution
      * related results.
-     * Before this method is called, the setVariableNumber(int), setObjectiveNumber(int), setConstraintNumber(int) methods
-     * have to be called first.
+     * Before this method is called, the setVariableNumber(int), setObjectiveNumber(int),
+     * setConstraintNumber(int) methods have to be called first.
      *
      * @param number holds the number of solutions to set.
      * @return whether the solution number is set successfully.
@@ -4024,6 +4042,7 @@ public:
      * Set the [i]th optimization solution's objective index, where i equals the given solution index.
      * The first objective's index should be -1, the second -2, and so on.
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
+
      *
      * @param solIdx holds the solution index to set the objective index.
      * @param objectiveIdx holds the objective index to set.
@@ -4396,6 +4415,36 @@ public:
     bool setOtherVariableResultDescription(int solIdx, int otherIdx, std::string description);
 
     /**
+     * Set the solver of another (non-standard/solver specific) variable-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherVariableResult object
+     * @param solver holds the type of the other element
+     *
+     * @return whether the other variable result's solver was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherVariableResultSolver(int solIdx, int otherIdx, std::string solver);
+
+    /**
+     * Set the category of another (non-standard/solver specific) variable-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherVariableResult object
+     * @param category holds the type of the other element
+     *
+     * @return whether the other variable result's category was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherVariableResultCategory(int solIdx, int otherIdx, std::string category);
+
+    /**
      * Set the index of another (non-standard/solver specific) variable-related result,
      * for the [i]th solution, where i equals the given solution index.
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
@@ -4674,6 +4723,36 @@ public:
     bool setOtherObjectiveResultDescription(int solIdx, int otherIdx, std::string description);
 
     /**
+     * Set the solver of another (non-standard/solver specific) objective-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherObjectiveResult object
+     * @param solver holds the solver of the other element
+     *
+     * @return whether the other Objective result's solver was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherObjectiveResultSolver(int solIdx, int otherIdx, std::string solver);
+
+    /**
+     * Set the category of another (non-standard/solver specific) objective-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherObjectiveResult object
+     * @param category holds the category of the other element
+     *
+     * @return whether the other objective result's category was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherObjectiveResultCategory(int solIdx, int otherIdx, std::string category);
+
+    /**
      * Set the index of another (non-standard/solver specific) objective-related result,
      * for the [i]th solution, where i equals the given solution index.
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
@@ -4931,6 +5010,36 @@ public:
      * @see #setSolutionNumber(int)
      */
     bool setOtherConstraintResultDescription(int solIdx, int otherIdx, std::string description);
+
+    /**
+     * Set the solver of another (non-standard/solver specific) constraint-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherConstraintResult object
+     * @param solver holds the solver of the other element
+     *
+     * @return whether the other constraint result's solver was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherConstraintResultSolver(int solIdx, int otherIdx, std::string solver);
+
+    /**
+     * Set the category of another (non-standard/solver specific) constraint-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherConstraintResult object
+     * @param category holds the category of the other element
+     *
+     * @return whether the other constraint result's category was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherConstraintResultCategory(int solIdx, int otherIdx, std::string category);
 
     /**
      * Set the index of another (non-standard/solver specific) constraint-related result,

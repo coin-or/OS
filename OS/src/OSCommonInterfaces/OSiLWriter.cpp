@@ -513,7 +513,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
             outStr << "<quadraticCoefficients";
             outStr << "  numberOfQuadraticTerms=\"";
             outStr << m_OSInstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms;
-            outStr << "\" >"  ;
+            outStr << "\">"  ;
             if( m_bWhiteSpace == true) outStr << endl;
             for(i = 0; i < m_OSInstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms; i++)
             {
@@ -549,7 +549,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
             outStr << "<nonlinearExpressions";
             outStr << "  numberOfNonlinearExpressions=\"";
             outStr << m_OSInstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions;
-            outStr << "\" >"  ;
+            outStr << "\">"  ;
             if( m_bWhiteSpace == true) outStr << endl;
             for(i = 0; i < m_OSInstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
             {

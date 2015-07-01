@@ -9663,7 +9663,7 @@ bool GeneralOption::IsEqual(GeneralOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in GeneralOption");
 #endif
     if (this == NULL)
     {
@@ -9729,7 +9729,7 @@ bool GeneralOption::IsEqual(GeneralOption *that)
 bool SystemOption::IsEqual(SystemOption *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SystemOption");
 #endif
     if (this == NULL)
     {
@@ -9775,7 +9775,7 @@ bool ServiceOption::IsEqual(ServiceOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ServiceOption");
 #endif
     if (this == NULL)
     {
@@ -9824,7 +9824,7 @@ bool JobOption::IsEqual(JobOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in JobOption");
 #endif
     if (this == NULL)
     {
@@ -9900,7 +9900,7 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OptimizationOption");
 #endif
     if (this == NULL)
     {
@@ -9980,7 +9980,7 @@ bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InstanceLocation");
 #endif
     if (this == NULL)
     {
@@ -10026,7 +10026,7 @@ bool ContactOption::IsEqual(ContactOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ContactOption");
 #endif
     if (this == NULL)
     {
@@ -10072,7 +10072,7 @@ bool OtherOptions::IsEqual(OtherOptions *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOptions");
 #endif
     if (this == NULL)
     {
@@ -10122,7 +10122,7 @@ bool OtherOption::IsEqual(OtherOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOption");
 #endif
     if (this == NULL)
     {
@@ -10171,7 +10171,7 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MinDiskSpace");
 #endif
     if (this == NULL)
     {
@@ -10220,7 +10220,7 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MinMemorySize");
 #endif
     if (this == NULL)
     {
@@ -10268,7 +10268,7 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MinCPUSpeed");
 #endif
     if (this == NULL)
     {
@@ -10316,7 +10316,7 @@ bool MinCPUNumber::IsEqual(MinCPUNumber *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in MinCPUNumber");
 #endif
     if (this == NULL)
     {
@@ -10363,7 +10363,7 @@ bool JobDependencies::IsEqual(JobDependencies *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in JobDependencies");
 #endif
     if (this == NULL)
     {
@@ -10420,7 +10420,7 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in DirectoriesAndFiles");
 #endif
     if (this == NULL)
     {
@@ -10477,7 +10477,7 @@ bool PathPairs::IsEqual(PathPairs *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in PathPairs");
 #endif
     if (this == NULL)
     {
@@ -10527,7 +10527,7 @@ bool PathPair::IsEqual(PathPair *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in PathPair");
 #endif
     if (this == NULL)
     {
@@ -10576,7 +10576,7 @@ bool Processes::IsEqual(Processes *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in Processes");
 #endif
     if (this == NULL)
     {
@@ -10634,7 +10634,7 @@ bool VariableOption::IsEqual(VariableOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in VariableOption");
 #endif
     if (this == NULL)
     {
@@ -10704,7 +10704,7 @@ bool InitVariableValues::IsEqual(InitVariableValues *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitVariableValues");
 #endif
     if (this == NULL)
     {
@@ -10753,7 +10753,7 @@ bool InitVarValue::IsEqual(InitVarValue *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitVarValue");
 #endif
     if (this == NULL)
     {
@@ -10801,7 +10801,7 @@ bool InitVariableValuesString::IsEqual(InitVariableValuesString *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitVariableValuesString");
 #endif
     if (this == NULL)
     {
@@ -10850,7 +10850,7 @@ bool InitVarValueString::IsEqual(InitVarValueString *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitVarValueString");
 #endif
     if (this == NULL)
     {
@@ -10896,7 +10896,7 @@ bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitialBasisStatus");
 #endif
     if (this == NULL)
     {
@@ -10945,7 +10945,7 @@ bool InitBasStatus::IsEqual(InitBasStatus *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitBasStatus");
 #endif
     if (this == NULL)
     {
@@ -10994,7 +10994,7 @@ bool IntegerVariableBranchingWeights::IsEqual(IntegerVariableBranchingWeights *t
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in IntegerVariableBranchingWeights");
 #endif
     if (this == NULL)
     {
@@ -11043,7 +11043,7 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SOSVariableBranchingWeights");
 #endif
     if (this == NULL)
     {
@@ -11095,7 +11095,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SOSWeights");
 #endif
     if (this == NULL)
     {
@@ -11161,7 +11161,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in BranchingWeight");
 #endif
     if (this == NULL)
     {
@@ -11208,7 +11208,7 @@ bool OtherVariableOption::IsEqual(OtherVariableOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherVariableOption");
 #endif
     if (this == NULL)
     {
@@ -11292,7 +11292,7 @@ bool OtherVarOption::IsEqual(OtherVarOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherVarOption");
 #endif
     if (this == NULL)
     {
@@ -11341,7 +11341,7 @@ bool ObjectiveOption::IsEqual(ObjectiveOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ObjectiveOption");
 #endif
     if (this == NULL)
     {
@@ -11398,7 +11398,7 @@ bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitObjectiveValues");
 #endif
     if (this == NULL)
     {
@@ -11447,7 +11447,7 @@ bool InitObjValue::IsEqual(InitObjValue *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitObjValue");
 #endif
     if (this == NULL)
     {
@@ -11493,7 +11493,7 @@ bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitObjectiveBounds");
 #endif
     if (this == NULL)
     {
@@ -11542,7 +11542,7 @@ bool InitObjBound::IsEqual(InitObjBound *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitObjBound");
 #endif
     if (this == NULL)
     {
@@ -11592,7 +11592,7 @@ bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherObjectiveOption");
 #endif
     if (this == NULL)
     {
@@ -11662,7 +11662,7 @@ bool OtherObjOption::IsEqual(OtherObjOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherObjOption");
 #endif
     if (this == NULL)
     {
@@ -11711,7 +11711,7 @@ bool ConstraintOption::IsEqual(ConstraintOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in ConstraintOption");
 #endif
     if (this == NULL)
     {
@@ -11768,7 +11768,7 @@ bool InitConstraintValues::IsEqual(InitConstraintValues *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitConstraintValues");
 #endif
     if (this == NULL)
     {
@@ -11817,7 +11817,7 @@ bool InitConValue::IsEqual(InitConValue *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitConValue");
 #endif
     if (this == NULL)
     {
@@ -11863,7 +11863,7 @@ bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitDualVariableValues");
 #endif
     if (this == NULL)
     {
@@ -11912,7 +11912,7 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in InitDualVarValue");
 #endif
     if (this == NULL)
     {
@@ -11961,7 +11961,7 @@ bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherConstraintOption");
 #endif
     if (this == NULL)
     {
@@ -12031,7 +12031,7 @@ bool OtherConOption::IsEqual(OtherConOption *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherConOption");
 #endif
     if (this == NULL)
     {
@@ -12082,7 +12082,7 @@ bool SolverOptions::IsEqual(SolverOptions *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SolverOptions");
 #endif
     if (this == NULL)
     {
@@ -12133,7 +12133,7 @@ bool SolverOption::IsEqual(SolverOption *that )
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OSOption");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SolverOption");
 #endif
     if (this == NULL)
     {

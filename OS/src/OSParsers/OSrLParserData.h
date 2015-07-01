@@ -204,6 +204,11 @@ public:
      */
     int numberOfOtherConstraintResults;
 
+    /** the number of types of matrix programming results other than those
+     *  associated with matrix variables, matrix objectives or matrix constraints
+     */
+    int numberOfOtherMatrixProgrammingResults;
+
     /** the number of types of matrix variable results other
      *  than the value of the matrix variable
      */
@@ -243,6 +248,7 @@ public:
     bool conTypeAttributePresent;
     bool unitAttributePresent;
     bool valueAttributePresent;
+    bool solverAttributePresent;
     bool weightedObjAttributePresent;
 
     /** many attributes, particularly those that return strings, are used
@@ -259,6 +265,7 @@ public:
     std::string conTypeAttribute;
     std::string unitAttribute;
     std::string valueAttribute;
+    std::string solverAttribute;
 
 
     bool nVarPresent;

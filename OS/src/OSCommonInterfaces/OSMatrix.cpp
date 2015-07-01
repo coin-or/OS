@@ -1901,7 +1901,7 @@ bool MatrixType::printExpandedMatrix(bool rowMajor_)
             }
             outStr << std::endl;
         }
-        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_always, outStr.str());
+        osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 
         return true;
     }

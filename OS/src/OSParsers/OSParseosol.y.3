@@ -26,7 +26,7 @@ void addErrorMsg(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData
     osgl_empty_vectors( osglData);
     std::ostringstream outStr;
     std::string error = errormsg;
-    error = "OSoL input is either not valid or well formed: "  + error;
+    error = "OSoL input is either invalid or not well-formed: "  + error;
     outStr << error << std::endl;
     outStr << "Error occurred when reading: " << osolget_text ( scanner ) << std::endl; 
     outStr << "See line number: " << osolget_lineno( scanner) << std::endl; 

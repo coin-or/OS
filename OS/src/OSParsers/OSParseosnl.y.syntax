@@ -7,7 +7,7 @@
  * Copyright (C) 2005-2014, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License.
+ * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  * This file contains parser elements that are contained in the OSnL schema
@@ -21,7 +21,6 @@
  * The makefile accomplishes this through maintaining each parser 
  * in several parts and to copy this include file between the OSxL syntax rules
  * and the postamble to make the final OSParseosxl.y file.
- * 
  */
 
 /** ==========================================================================
@@ -111,7 +110,12 @@ nlAttribute:
     }
     | osglShapeATT
     {
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->shape = osglData->shape;
+        if (returnNlExprShape(osglData->shape) > 0)
+            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->shape 
+                = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
+        else
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+                "unknown shape specified in matrix transformation");
     };
 
 nlnode: number
@@ -272,31 +276,37 @@ matrixToScalar: MATRIXTOSCALARSTART {
  *  In addition <variable> has an optional OSnLNode descendant 
  *  (for variable index expressions) --- not implemented yet.
  */
-number: NUMBERSTART {
+number: numberStart numberAttributeList numberEnd
+{
+    osglData->valuePresent = false; 
+    osglData->typePresent  = false; 
+    osnlData->numberidattON = false;
+};
+
+numberStart: NUMBERSTART 
+{
     osnlData->nlNodeNumberPoint = new OSnLNodeNumber();
     osnlData->nlNodeVec.push_back( osnlData->nlNodeNumberPoint);
-} anotherNumberATT  numberend {osnlData->numbervalueattON = false; osnlData->numbertypeattON = false; osnlData->numberidattON = false;};
+};
 
-numberend: ENDOFELEMENT
+numberEnd: ENDOFELEMENT
          | GREATERTHAN NUMBEREND;
 
-anotherNumberATT:
-         | anotherNumberATT numberATT;
+numberAttributeList:
+         | numberAttributeList numberAttribute;
             
-numberATT: numbertypeATT
-         | numbervalueATT
-         | numberidATT            
+numberAttribute: 
+    osglTypeATT
+    {
+        osnlData->nlNodeNumberPoint->type = osglData->type;
+    }
+  | osglValueATT
+    {
+        osnlData->nlNodeNumberPoint->value = atof(osglData->value.c_str());
+    };
+  | numberidATT            
             ;
             
-numbertypeATT: TYPEATT ATTRIBUTETEXT 
-{
-    if (osnlData->numbertypeattON) parserData->parser_errors += 
-        addErrorMsg( NULL, parserObjects, "too many number type attributes"); 
-    osnlData->numbertypeattON = true;
-    osnlData->nlNodeNumberPoint->type = $2;
-    free($2);
-} QUOTE;
-
 numberidATT:   IDATT   ATTRIBUTETEXT 
 {
     if (osnlData->numberidattON) parserData->parser_errors += 
@@ -850,7 +860,13 @@ exprAttribute:
     | osglShapeATT
     {
     #ifdef OSINSTANCE_AVAILABLE
-        osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->shape = osglData->shape;
+        if (returnNlExprShape(osglData->shape) > 0)
+            osinstance->instanceData->matrixProgramming->matrixExpressions
+                ->expr[ osnlData->tmpnlcount]->shape 
+                    = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
+        else
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+                "unknown shape specified in matrix transformation");
     #endif
     };
 

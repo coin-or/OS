@@ -17,6 +17,10 @@
  * supplied in the CSDP distribution as an illustration of the CSDP API.
  */
 
+#include "OSrLReader.h"
+
+
+
 #include "OSCsdpSolver.h"
 #include "OSInstance.h"
 #include "OSOption.h"
@@ -860,6 +864,7 @@ void  CsdpSolver::solve() throw (ErrorClass)
         // set basic problem parameters
         if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
             throw ErrorClass("OSResult error: setVariableNumer");
+
         if(osresult->setObjectiveNumber( 1) != true)
             throw ErrorClass("OSResult error: setObjectiveNumber");
         if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
@@ -1144,13 +1149,22 @@ void  CsdpSolver::solve() throw (ErrorClass)
             break;
         }
 
-
-        OSrLWriter *osrlwriter ;
-        osrlwriter = new OSrLWriter();
-        osrl = osrlwriter->writeOSrL( osresult);
-
         if (returnCode != 0)
             throw ErrorClass("Csdp FAILED TO SOLVE THE PROBLEM");
+
+    osrl = osrlwriter->writeOSrL( osresult);
+
+std::cout << std::endl << std::endl << "Here is osrl: " << std::endl << std::endl;
+std::cout << osrl << std::endl;
+
+    OSrLReader* osrlreader = new OSrLReader();
+    OSResult* osresult2 = osrlreader->readOSrL(osrl);
+
+    std::string osrl2 = osrlwriter->writeOSrL( osresult2);
+
+std::cout << std::endl << std::endl << "Here is osrl2: " << std::endl << std::endl;
+std::cout << osrl2 << std::endl;
+    
     }
 
     catch (const ErrorClass& eclass)

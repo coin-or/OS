@@ -35,14 +35,7 @@ class OSgLParserData
 public:
 
     /** data structure to process an IntVector and hold the data temporarily */
-    bool osglMultPresent;
-    bool osglIncrPresent;
-    bool osglNumberOfElPresent;
-    int  osglNumberOfEl;
     int* osglIntArray;
-    int  osglMult;
-    int  osglIncr;
-    int  osglSize;
     int  osglCounter;
     int  osglTempint;
 
@@ -52,20 +45,12 @@ public:
     /** data structure to process a GeneralFileHeader and hold the data temporarily */
     std::string fileName;
     std::string source;
-    std::string description;
     std::string fileCreator;
     std::string licence;
     bool fileNamePresent;
     bool sourcePresent;
-    bool descriptionPresent;
     bool fileCreatorPresent;
     bool licencePresent;
-
-    std::string enumTypeAttribute;
-    bool numberOfEnumerationsAttributePresent;
-    bool enumTypeAttributePresent;
-    int numberOfEnumerations;
-
 
     /** the OSgLParserData class constructor */
     OSgLParserData( );
@@ -75,7 +60,7 @@ public:
 
 
     /** scanner is used to store data in a reentrant lexer
-     * we use this to pass an OSoLParserData object to the parser
+     * we use this to pass an OSgLParserData object to the parser
      */
     void* scanner;
 
@@ -97,17 +82,20 @@ public:
     OSMatrix** matrix;
 
     /** There are also other variants of these ... */
-    OSMatrixWithMatrixVarIdx** matrixWithVarIdx;
-    OSMatrixWithMatrixObjIdx** matrixWithObjIdx;
-    OSMatrixWithMatrixConIdx** matrixWithConIdx;
+    OSMatrixWithMatrixVarIdx** matrixWithMatrixVarIdx;
+    OSMatrixWithMatrixObjIdx** matrixWithMatrixObjIdx;
+    OSMatrixWithMatrixConIdx** matrixWithMatrixConIdx;
+
+    /** In order to use synergies in the parser, we store matrixXXXIdx in a separate vector */
+    int* matrixVarIndexes;
+    int* matrixObjIndexes;
+    int* matrixConIndexes;
 
     /** We also need to keep track locally of the number of matrices */
-    bool numberOfMatricesPresent;
-    int  numberOfMatrices;
-    int  numberOfMatricesWithVarIdx;
-    int  numberOfMatricesWithObjIdx;
-    int  numberOfMatricesWithConIdx;
     int  matrixCounter;
+
+    /** Linear matrices need a counter to count the number of terms within each element */
+    int nonzeroCounter;
 
     /** This matrix constructor is needed in order to properly push the constructor vector */
     MatrixNode* tempC;
@@ -125,83 +113,135 @@ public:
     std::vector<int*> rowOffsets;
     std::vector<int*> colOffsets;
 
-    /** other data structures to temporarily hold a matrix and its subordinate elements */
-    std::string symmetry;
-    bool symmetryPresent;
-    std::string name;
-    std::string type;
-    int  idx;
-    bool namePresent;
-    bool typePresent;
-    bool  idxPresent;
-    int  numberOfBlocks;
-    int  numberOfColumns;
-    int  numberOfRows;
-    int  baseMatrixIdx;
-    int  targetMatrixFirstRow;
-    int  targetMatrixFirstCol;
-    int  baseMatrixStartRow;
-    int  baseMatrixStartCol;
-    int  baseMatrixEndRow;
-    int  baseMatrixEndCol;
-    bool baseTranspose;
-    double scalarMultiplier;
+    /** Data elements for parsing number-valued attributes and elements */
+
+    bool numberOfBlocksPresent;
+    bool numberOfColumnsPresent;
+    bool numberOfConPresent;
+    bool numberOfConIdxPresent;
+    bool numberOfConstraintsPresent;
+    bool numberOfElPresent;
+    bool numberOfEnumerationsPresent;
+    bool numberOfItemsPresent;
+    bool numberOfMatricesPresent;
+    bool numberOfMatrixConPresent;
+    bool numberOfMatrixObjPresent;
+    bool numberOfMatrixVarPresent;
+    bool numberOfObjPresent;
+    bool numberOfObjIdxPresent;
+    bool numberOfObjectivesPresent;
+    bool numberOfRowsPresent;
+    bool numberOfValuesPresent;
+    bool numberOfVarPresent;
+    bool numberOfVarIdxPresent;
+    bool numberOfVariablesPresent;
+
+    bool base64SizePresent;
     bool baseMatrixIdxPresent;
-    bool targetMatrixFirstRowPresent;
-    bool targetMatrixFirstColPresent;
     bool baseMatrixStartRowPresent;
     bool baseMatrixStartColPresent;
     bool baseMatrixEndRowPresent;
     bool baseMatrixEndColPresent;
-    bool baseTransposePresent;
-    bool scalarMultiplierPresent;
-    bool rowMajorPresent;
-    bool rowMajor;
-    int  blockRowIdx;
     bool blockRowIdxPresent;
-    int  blockColIdx;
     bool blockColIdxPresent;
-    bool osglConstantPresent;
-    bool osglCoefPresent;
-    double osglCoef;
-    bool numberOfBlocksPresent;
-    bool numberOfColumnsPresent;
-    bool numberOfRowsPresent;
-    bool numberOfValuesPresent;
-    int  numberOfValues;
-    bool numberOfVarIdxPresent;
-    int  numberOfVarIdx;
-    bool numberOfElPresent;
-    int  numberOfEl;
-    int  osglNumberOfNonzeros;
-    int  osglNonzeroCounter;
+    bool coefPresent;
+    bool constantPresent;
+    bool idxPresent;
+    bool incrPresent;
+    bool matrixConIdxPresent;
+    bool matrixObjIdxPresent;
+    bool matrixVarIdxPresent;
+    bool multPresent;
+    bool scalarMultiplierPresent;
+    bool targetMatrixFirstRowPresent;
+    bool targetMatrixFirstColPresent;
 
-    int* matrixBlockNumberOfRows;
-    int* matrixBlockNumberOfCols;
-    
-    ENUM_NL_EXPR_SHAPE shape;
+    int numberOfBlocks;
+    int numberOfColumns;
+    int numberOfCon;
+    int numberOfConIdx;
+    int numberOfConstraints;
+    int numberOfEl;
+    int numberOfEnumerations;
+    int numberOfItems;
+    int numberOfMatrices;
+    int numberOfMatrixCon;
+    int numberOfMatrixObj;
+    int numberOfMatrixVar;
+    int numberOfObj;
+    int numberOfObjIdx;
+    int numberOfObjectives;
+    int numberOfRows;
+    int numberOfValues;
+    int numberOfVar;
+    int numberOfVarIdx;
+    int numberOfVariables;
+
+    int base64Size;
+    int baseMatrixIdx;
+    int baseMatrixStartRow;
+    int baseMatrixStartCol;
+    int baseMatrixEndRow;
+    int baseMatrixEndCol;
+    int blockRowIdx;
+    int blockColIdx;
+    double coef;
+    double constant;
+    int idx;
+    int incr;
+    int matrixConIdx;
+    int matrixObjIdx;
+    int matrixVarIdx;
+    int mult;
+    double scalarMultiplier;
+    int targetMatrixFirstRow;
+    int targetMatrixFirstCol;
+
+    /** Data elements for parsing string-valued attributes and text elements */
+
+    bool baseTransposePresent;
+    bool categoryPresent;
+    bool conTypePresent;
+    bool descriptionPresent;
+    bool enumTypePresent;
+    bool matrixConTypePresent;
+    bool matrixNamePresent;
+    bool matrixObjTypePresent;
+    bool matrixTypePresent;
+    bool matrixVarTypePresent;
+    bool namePresent;
+    bool objTypePresent;
+    bool rowMajorPresent;
     bool shapePresent;
-    ENUM_CONREFERENCE_VALUETYPE valueType;
+    bool solverPresent;
+    bool symmetryPresent;
+    bool typePresent;
+    bool unitPresent;
+    bool valuePresent;
     bool valueTypePresent;
+    bool varTypePresent;
 
-    int  numberOfMatrixVar;
-    int  osglMatrixVarIdxATT;
-    bool osglMatrixVarIdxATTPresent;
-    bool osglMatrixVarTypeAttributePresent;
-    std::string osglMatrixVarTypeAttribute;
-
-    int  numberOfMatrixObj;
-    int  osglMatrixObjIdxATT;
-    bool osglMatrixObjIdxATTPresent;
-    bool osglMatrixObjTypeAttributePresent;
-    std::string osglMatrixObjTypeAttribute;
-
-    int  numberOfMatrixCon;
-    int  osglMatrixConIdxATT;
-    bool osglMatrixConIdxATTPresent;
-    bool osglMatrixConTypeAttributePresent;
-    std::string osglMatrixConTypeAttribute;
-
+    bool baseTranspose;
+    std::string category;
+    std::string conType;
+    std::string description;
+    std::string enumType;
+    std::string matrixConType; 
+    std::string matrixName;
+    std::string matrixObjType;
+    std::string matrixType;
+    std::string matrixVarType;
+    std::string name;
+    std::string objType;
+    bool rowMajor;
+    std::string shape;
+    std::string solver;
+    std::string symmetry;
+    std::string type;
+    std::string unit;
+    std::string value;
+    std::string valueType;
+    std::string varType; 
 };//OSgLParserData
 
 inline void osgl_empty_vectors( OSgLParserData* osglData)
