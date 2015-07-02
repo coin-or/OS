@@ -1,6 +1,6 @@
 # Copyright (C) 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id: Makefile.am 806 2006-06-12 01:47:32Z andreasw $ 
 
@@ -38,6 +38,18 @@ AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSCommonInterfaces` \
 	$(OSLIB_CFLAGS)
+	
+if COIN_HAS_LINDO
+  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+endif
+	
+if COIN_HAS_CSDP
+  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
+endif
+
+if COIN_HAS_KNITRO
+  AM_CPPFLAGS +=   -I`$(CYGPATH_W) $(KNITROINCDIR)` 
+endif
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src

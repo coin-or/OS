@@ -16,7 +16,7 @@
 
 # Copyright (C) 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
@@ -43,6 +43,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = unitTest$(EXEEXT)
+@COIN_HAS_LINDO_TRUE@am__append_1 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_CSDP_TRUE@am__append_2 = -I`$(CYGPATH_W) $(CSDPINCDIR)` -DNOSHORTS
+@COIN_HAS_KNITRO_TRUE@am__append_3 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -437,16 +440,14 @@ unitTest_DEPENDENCIES = ../src/libOS.la $(OSLIB_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = \
-	-I`$(CYGPATH_W) $(srcdir)/../src` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSAgent` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSParsers` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSCommonInterfaces` \
-	$(OSLIB_CFLAGS)
-
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src` -I`$(CYGPATH_W) \
+	$(srcdir)/../src/OSAgent` -I`$(CYGPATH_W) \
+	$(srcdir)/../src/OSParsers` -I`$(CYGPATH_W) \
+	$(srcdir)/../src/OSUtils` -I`$(CYGPATH_W) \
+	$(srcdir)/../src/OSSolverInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/../src/OSModelInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/../src/OSCommonInterfaces` $(OSLIB_CFLAGS) \
+	$(am__append_1) $(am__append_2) $(am__append_3)
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src

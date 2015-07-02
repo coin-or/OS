@@ -3237,6 +3237,7 @@ matrixVariableValuesStart: VALUESSTART
 {
     osresult->optimization->solution[parserData->solutionIdx]->matrixProgramming->matrixVariables->values
         = new MatrixVariableValues();
+    osglData->numberOfMatrixVarPresent = false;
 };
 
 matrixVariableValuesAttributes: osglNumberOfMatrixVarATT
@@ -3292,6 +3293,7 @@ otherMatrixVariableResultStart: OTHERSTART
     osglData->solver = "";
     osglData->category = "";
     osglData->description = "";    
+    osglData->numberOfMatrixVarPresent = false;
     osglData->numberOfEnumerationsPresent = false;    
     osglData->matrixVarTypePresent = false;
     osglData->enumTypePresent = false;

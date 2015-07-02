@@ -48,18 +48,18 @@
 		<matrices numberOfMatrices="3">
 			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F0">
 				<blocks numberOfBlocks="2">
-					<colOffsets numberOfEl="4">
+					<colOffset numberOfEl="4">
 						<el>0</el>
 						<el>2</el>
 						<el>5</el>
 						<el>7</el>
-					</colOffsets>
-					<rowOffsets numberOfEl="4">
+					</colOffset>
+					<rowOffset numberOfEl="4">
 						<el>0</el>
 						<el>2</el>
 						<el>5</el>
 						<el>7</el>
-					</rowOffsets>
+					</rowOffset>
 					<block blockRowIdx="0" blockColIdx="0">
 						<constantElements numberOfValues="3">
 							<start>
@@ -67,15 +67,15 @@
 								<el>2</el>
 								<el>3</el>
 							</start>
-							<indexes>
+							<index>
 								<el>0</el>
 								<el mult="2">1</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el>2.</el>
 								<el>1.</el>
 								<el>2.</el>
-							</values>
+							</value>
 						</constantElements>
 					</block>
 					<block blockRowIdx="1" blockColIdx="1">
@@ -84,36 +84,36 @@
 								<el>0</el>
 								<el mult="3" incr="1">2</el>
 							</start>
-							<indexes>
+							<index>
 								<el>0</el>
 								<el>2</el>
 								<el>1</el>
 								<el>2</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el>3.</el>
 								<el>1.</el>
 								<el>2.</el>
 								<el>3.</el>
-							</values>
+							</value>
 						</constantElements>
 					</block>
 				</blocks>
 			</matrix>
 			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F1">
 				<blocks numberOfBlocks="2">
-					<colOffsets numberOfEl="4">
+					<colOffset numberOfEl="4">
 						<el>0</el>
 						<el>2</el>
 						<el>5</el>
 						<el>7</el>
-					</colOffsets>
-					<rowOffsets numberOfEl="4">
+					</colOffset>
+					<rowOffset numberOfEl="4">
 						<el>0</el>
 						<el>2</el>
 						<el>5</el>
 						<el>7</el>
-					</rowOffsets>
+					</rowOffset>
 					<block blockRowIdx="0" blockColIdx="0">
 						<constantElements numberOfValues="3">
 							<start>
@@ -121,15 +121,15 @@
 								<el>2</el>
 								<el>3</el>
 							</start>
-							<indexes>
+							<index>
 								<el>0</el>
 								<el mult="2">1</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el>3.</el>
 								<el>1.</el>
 								<el>3.</el>
-							</values>
+							</value>
 						</constantElements>
 					</block>
 					<block blockRowIdx="2" blockColIdx="2">
@@ -138,48 +138,48 @@
 								<el>0</el>
 								<el mult="2">1</el>
 							</start>
-							<indexes>
+							<index>
 								<el>0</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el>1.</el>
-							</values>
+							</value>
 						</constantElements>
 					</block>
 				</blocks>
 			</matrix>
 			<matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F2">
 				<blocks numberOfBlocks="2">
-					<colOffsets numberOfEl="4">
+					<colOffset numberOfEl="4">
 						<el>0</el>
 						<el>2</el>
 						<el>5</el>
 						<el>7</el>
-					</colOffsets>
-					<rowOffsets numberOfEl="4">
+					</colOffset>
+					<rowOffset numberOfEl="4">
 						<el>0</el>
 						<el>2</el>
 						<el>5</el>
 						<el>7</el>
-					</rowOffsets>
+					</rowOffset>
 					<block blockRowIdx="1" blockColIdx="1">
 						<constantElements numberOfValues="4">
 							<start>
 								<el>0</el>
 								<el mult="3" incr="1">2</el>
 							</start>
-							<indexes>
+							<index>
 								<el>0</el>
 								<el>2</el>
 								<el>1</el>
 								<el>2</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el>3.</el>
 								<el>1.</el>
 								<el>4.</el>
 								<el>5.</el>
-							</values>
+							</value>
 						</constantElements>
 					</block>
 					<block blockRowIdx="2" blockColIdx="2">
@@ -188,12 +188,12 @@
 								<el mult="2">0</el>
 								<el>1</el>
 							</start>
-							<indexes>
+							<index>
 								<el>1</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el>1.</el>
-							</values>
+							</value>
 						</constantElements>
 					</block>
 				</blocks>

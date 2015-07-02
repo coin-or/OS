@@ -153,6 +153,7 @@
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
+#include "OSOutput.h"
 #include "CoinError.hpp"
 
 #include "OSDefaultSolver.h"  
@@ -192,6 +193,10 @@
 
 #ifdef COIN_HAS_BONMIN    
 #include "OSBonminSolver.h"
+#endif 
+
+#ifdef COIN_HAS_CSDP   
+#include "OSCsdpSolver.h"
 #endif 
 
 #ifdef COIN_HAS_CPX
@@ -402,9 +407,9 @@ int main(int argC, char* argV[])
     ostringstream unitTestResultFailure;
 
     // get the input files
-     const char dirsep =  CoinFindDirSeparator();
-      // Set directory containing data files.
-      std::string dataDir;
+    const char dirsep =  CoinFindDirSeparator();
+    // Set directory containing data files.
+    std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 #ifdef GUS_DEBUG
     dataDir = "C:\\datafiles\\research\\OS\\OS-trunk-work\\OS\\data\\";
@@ -628,6 +633,7 @@ if(BASIC_TESTS == true){
         */
         osil = fileUtil->getFileAsString( expTreeTest.c_str() );
         //create an osinstance
+	cout << "Read file" << endl;
         osinstance = osilreader->readOSiL( osil);
         double *x;
         x = new double[ 4];
@@ -637,6 +643,7 @@ if(BASIC_TESTS == true){
         x[3] = 5;
         SparseVector *sp;
         // get the gradient for constraint 1
+        cout << "Perform gradient computations" << endl;
         osinstance->getJacobianSparsityPattern();
         sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
         ok = true;
@@ -654,6 +661,7 @@ if(BASIC_TESTS == true){
         sp = NULL;
         SparseHessianMatrix *sh;
         // calcuate Hessian of objective function (index = -1)
+        cout << "Perform Hessian computations" << endl;
         osinstance->getLagrangianHessianSparsityPattern( );
         sh = osinstance->calculateHessian(x, -1, true);
         ok = ( fabs(2. - sh->hessValues[0] )/(2. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
@@ -756,12 +764,14 @@ if (PARSER_TESTS)
         fileUtil = new FileUtil();
         osilreader = new OSiLReader(); 
 
+        cout << "Read file" << endl;
         osilFileName =  dataDir  + "osilFiles" + dirsep +  "rosenbrockmod.osil";
         osil = fileUtil->getFileAsString( osilFileName.c_str() );
         osinstance = osilreader->readOSiL( osil);
 
 
         // first copy header information
+        cout << "Copy header information" << endl;
         std::string name, source, description, fileCreator, licence;
 
         name        = osinstance->getInstanceName();
@@ -777,6 +787,7 @@ if (PARSER_TESTS)
         if (!osinstance2->setInstanceLicence(licence)) throw ErrorClass("Error duplicating header information");
 
         // copy variables
+        cout << "Copy variables" << endl;
         if (osinstance->instanceData->variables != NULL)
         {
             int nvar = osinstance->getVariableNumber();
@@ -794,6 +805,7 @@ if (PARSER_TESTS)
         }
 
         // copy objectives
+        cout << "Copy objectives" << endl;
         if (osinstance->instanceData->objectives != NULL)
         {
             int nobj = osinstance->getObjectiveNumber();
@@ -812,6 +824,7 @@ if (PARSER_TESTS)
         }
 
         // copy constraints
+        cout << "Copy constraints" << endl;
         if (osinstance->instanceData->constraints != NULL)
         {
             int ncon = osinstance->getConstraintNumber();
@@ -829,6 +842,8 @@ if (PARSER_TESTS)
         }
 
         // copy linear constraint coefficient matrix
+        cout << "Copy linear constraint coefficient matrix" << endl;
+
         if (osinstance->instanceData->linearConstraintCoefficients != NULL)
         {
             int ncoef = osinstance->getLinearConstraintCoefficientNumber();
@@ -856,6 +871,7 @@ if (PARSER_TESTS)
         }
 
         // copy quadratic terms
+        cout << "Copy quadratic terms" << endl;
         if (osinstance->instanceData->quadraticCoefficients != NULL)
         {
             int nquad = osinstance->getNumberOfQuadraticTerms();
@@ -869,6 +885,7 @@ if (PARSER_TESTS)
         }
 
         // copy nonlinear expressions
+        cout << "Copy nonlinear expressions" << endl;
         Nl** root = NULL;
 
         if (osinstance->instanceData->nonlinearExpressions != NULL)
@@ -886,6 +903,7 @@ if (PARSER_TESTS)
         }
 
         // now compare the two instances
+        cout << "Compare the two instances" << endl;
         if (!osinstance2->IsEqual(osinstance)) throw ErrorClass("Loss of data during duplication");
 
         delete osinstance2;
@@ -2477,7 +2495,9 @@ cout << temposil << endl;
 #endif
 
         ok = osoption->IsEqual(osoption2) && ok;
-        if (!ok)
+        if (ok)
+            cout << "get/set methods successfully duplicate OSOption object" << std::endl << std::endl;
+        else
             throw ErrorClass("OSOption get() and  set() methods do not work correctly");
 
         cout << "Write the content to a new file" << endl;        
@@ -2491,6 +2511,11 @@ cout << temposil << endl;
         cout << "Read the string back" << endl;
 
         osoption3 = osolreader2->readOSoL( tmpOSoL);
+
+        cout << "Compare the two OSOption objects" << endl;
+
+//extern const OSSmartPtr<OSOutput> osoutput;
+//        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)907);
 
         ok = osoption->IsEqual(osoption3);
         if (!ok)
@@ -2672,7 +2697,7 @@ cout << temposil << endl;
         delete fileUtil;
         fileUtil = NULL;
 
-        unitTestResultFailure << "OSoL parser cannot detect errors in faulty OSoL file (Test " << nOfTest << ")" << endl;
+        unitTestResultFailure << "OSoL parser: error detection failed in faulty OSoL file (Test " << nOfTest << ")" << endl;
     }    
     
     catch(const ErrorClass& eclass)
@@ -2753,9 +2778,12 @@ cout << temposil << endl;
 
         osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
         std::string osol = fileUtil->getFileAsString( osolFileName.c_str() );
+        cout << "Read osol file" << endl;
         osoption = osolreader->readOSoL( osol);
         osoption2 = new OSOption();
+        cout << "Duplicate OSOption object" << endl;
         osoption2->deepCopyFrom(osoption);
+        cout << "Compare the two objects" << endl;
         ok = (osoption->IsEqual(osoption2));
 
         delete osolreader;
@@ -2817,6 +2845,7 @@ cout << temposil << endl;
             throw ErrorClass("Empty osresult objects do not compare equal!");
 
 //    <general> element
+        cout << "Set <general> element" << endl;
         ok &= osresult1->setGeneralStatusType("warning");
         if (!ok) 
             throw ErrorClass("Error during setGeneralStatusType!");
@@ -3032,6 +3061,7 @@ cout << temposil << endl;
         }
 
 // <system> element
+        cout << "Set <system> element" << endl;
         ok &= osresult1->setSystemInformation("testing 123");
         if (!ok) 
             throw ErrorClass("Error during setSystemInformation!");
@@ -3245,6 +3275,7 @@ cout << temposil << endl;
         }
 
 //  <service> element
+        cout << "Set <service> element" << endl;
         ok &= osresult1->setCurrentState("busy");
         if (!ok) 
             throw ErrorClass("Error during setCurrentState!");
@@ -3367,6 +3398,7 @@ cout << temposil << endl;
         }
 //======================
 //    <job> element
+        cout << "Set <job> element" << endl;
         ok &= osresult1->setJobStatus("waiting");
         if (!ok) 
             throw ErrorClass("Error during setJobStatus!");
@@ -3660,6 +3692,7 @@ cout << temposil << endl;
                 throw ErrorClass("setOtherJobResultDescription: osresult objects falsely compare unequal!");
         }
 
+        cout << "Set <optimization> element" << endl;
         ok &= osresult1->setSolutionNumber(2);
         if (!ok) 
             throw ErrorClass("Error during setSolutionNumber!");
@@ -5031,17 +5064,24 @@ cout << temposil << endl;
         osrlreader = new OSrLReader();
         std::string tempOSrL;
 
+        cout << "write out the OSResult object from previous test" << endl;
+
         tempOSrL = osrlwriter->writeOSrL( osresult1);
 
-        std::cout << "Here is the temporary OSrL string produced from OSrLWriter" << std::endl << tempOSrL << std::endl;
+        cout << tempOSrL << endl;
+
+        cout << "Read the string back into memory" << endl;
 
         osresult3 = osrlreader->readOSrL( tempOSrL);
+
+        cout << "write out the new object created" << endl;
 
         tempOSrL = osrlwriter->writeOSrL( osresult3);
 
         std::cout << "Here is the temporary OSrL string produced from OSrLReader" << std::endl << tempOSrL << std::endl;
 
-
+        cout << "verify that the old and new objects are equal" << endl;
+ 
         ok &= (osresult1->IsEqual(osresult3));
         if (!ok) 
             throw ErrorClass("Writing an osresult then reading leads to loss of data");
@@ -8582,7 +8622,7 @@ if (THOROUGH == true){
 
 
 #ifdef COIN_HAS_COUENNE
-    CouenneSolver *solver = NULL;
+//    CouenneSolver *solver = NULL;
     try{
         cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
 
@@ -9007,6 +9047,102 @@ if( THOROUGH == true){
     }    
 } //end of if (THOROUGH)
 #endif // end of #ifdef COIN_HAS_COUENNE
+
+
+#ifdef COIN_HAS_CSDP
+    try{
+        cout << endl << "TEST " << ++nOfTest << ": CSDP solver on SDPA_ex.osil" << endl << endl;
+
+        fileUtil = new FileUtil();
+        osilreader = new OSiLReader(); 
+        solver = new CsdpSolver();    
+
+        ok = true;
+        osilFileName = dataDir  + "osilFiles" + dirsep + "SDPA_ex.osil";
+        //osolFileName = dataDir  + "osolFiles" + dirsep + "lindoapiaddins_lindo.osol";
+        osil = fileUtil->getFileAsString( osilFileName.c_str());
+        //osol = fileUtil->getFileAsString( osolFileName.c_str());
+        cout << "create a new Csdp Solver for OSiL string solution" << endl;
+        solver->osinstance = osilreader->readOSiL( osil);
+        //solver->osol = osol;
+        cout << "call the Csdp Solver" << endl;
+        solver->buildSolverInstance();
+        solver->solve();
+        check = 2.75;
+        //ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+        ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+        if (ok)
+        {    
+#ifdef DEBUG
+            cout << solver->osrl << endl;
+#endif
+            cout << "Csdp solver solution for SDPA_ex checks." << endl;
+        }
+        else
+        {    cout << "Csdp solver solution for SDPA_ex in error:" << endl;
+            cout << solver->osrl << endl;
+        }
+        if(ok == false) throw ErrorClass("Fail solving problem SDPA_ex.osil with Csdp");
+
+        std::cout << std::endl << "now test matrix extensions to OSrL" << std::endl;
+//        osrl = osrlwriter->writeOSrL( osresult);
+//        std::cout << std::endl << std::endl << "Here is osrl: " << std::endl << std::endl;
+//        std::cout << osrl << std::endl;
+
+        OSrLReader* osrlreader = new OSrLReader();
+        std::cout << std::endl << "Read OSrL string" << std::endl;
+        OSResult* osresult2 = osrlreader->readOSrL(solver->osrl);
+
+        OSrLWriter* osrlwriter2 = new OSrLWriter();
+        OSrLReader* osrlreader2 = new OSrLReader();
+        std::cout << std::endl << "Write OSrL string" << std::endl;
+        std::string osrl2 = osrlwriter2->writeOSrL( osresult2);
+        OSResult* osresult3 = osrlreader2->readOSrL(osrl2);
+    
+#ifdef DEBUG
+        std::cout << std::endl << std::endl << "Here is osrl2: " << std::endl << std::endl;
+        std::cout << osrl2 << std::endl;
+#endif
+
+        ok &= osresult2->IsEqual(osresult3);
+        if (!ok) throw ErrorClass("OSrL reader/writer loses information in matrix extensions");
+
+//        delete osresult2;
+//        osresult2 = NULL;
+//        delete osresult3;
+//        osresult3 = NULL;
+        delete osrlreader2;
+        osrlreader2 = NULL;
+        delete osrlwriter2;
+        osrlwriter2 = NULL;
+
+        solver->osinstance = NULL;
+        delete solver;
+        solver = NULL;
+        delete osilreader;
+        osilreader = NULL;    
+        delete fileUtil;
+        fileUtil = NULL;
+        unitTestResult << "TEST " << nOfTest << ": Solved problem SDPA_ex.osil with Csdp" << std::endl;
+        cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        //cout << "OSrL =  " <<  solver->osrl <<  endl;
+        cout << endl << endl << endl;
+        unitTestResultFailure << "Test " << nOfTest << ": Unit Test Failed Testing the Csdp Solver:"
+                              << endl << eclass.errormsg << endl << endl;
+        if (solver != NULL)
+            delete solver;
+        solver = NULL;
+        if (osilreader != NULL)
+            delete osilreader;
+        osilreader = NULL;
+        if (fileUtil != NULL)
+            delete fileUtil;
+        fileUtil = NULL;
+    }
+#endif
 
     
 #ifdef COIN_HAS_LINDO

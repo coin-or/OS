@@ -52,7 +52,7 @@ At line number 56: <jobID
 Repeated element: <jobID>
 At line number 68: <minDiskSpace
 only one minDiskSpace element allowed
-At line number 68: -1 
+At line number 68:  -1 
 setMinDiskSpace failed
 At line number 69: <minMemorySize
 only one minMemory element allowed
@@ -188,7 +188,8 @@ At line number 182: </pathPair>
 too many path pairs
 At line number 183: <otherOptions
 Repeated element: <job> <otherOptions>
-At line number 184: <other
+At line number 184: 
+            <other
 more <other> elements than specified
 At line number 191: "
 variable index must be nonnegative
@@ -252,5 +253,5 @@ fewer data elements than specified
 At line number 273: <con
 more <con> elements than specified
 
-OSoL input is either not valid or well formed.
+OSoL input is either invalid or not well-formed.
 

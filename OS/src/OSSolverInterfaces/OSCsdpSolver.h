@@ -41,6 +41,7 @@
 extern "C"
 {
 #include "declarations.h"
+#include "parameters.h"
 }
 
 

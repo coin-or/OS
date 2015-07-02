@@ -50,19 +50,19 @@
  * These standard declarations for the C library are needed.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
+//#include <stdlib.h>
+//#include <stdio.h>
 
 /*
  * Include CSDP declarations so that we'll know the calling interfaces.
  */
 
-extern "C"
-{
-#include "declarations.h"
-}
+//extern "C"
+//{
+//#include "declarations.h"
+//}
 
-#include "parameters.h"
+//#include "parameters.h"
 
 using std::cout;
 using std::endl;
@@ -1152,19 +1152,7 @@ void  CsdpSolver::solve() throw (ErrorClass)
         if (returnCode != 0)
             throw ErrorClass("Csdp FAILED TO SOLVE THE PROBLEM");
 
-    osrl = osrlwriter->writeOSrL( osresult);
-
-std::cout << std::endl << std::endl << "Here is osrl: " << std::endl << std::endl;
-std::cout << osrl << std::endl;
-
-    OSrLReader* osrlreader = new OSrLReader();
-    OSResult* osresult2 = osrlreader->readOSrL(osrl);
-
-    std::string osrl2 = osrlwriter->writeOSrL( osresult2);
-
-std::cout << std::endl << std::endl << "Here is osrl2: " << std::endl << std::endl;
-std::cout << osrl2 << std::endl;
-    
+        osrl = osrlwriter->writeOSrL( osresult);
     }
 
     catch (const ErrorClass& eclass)
