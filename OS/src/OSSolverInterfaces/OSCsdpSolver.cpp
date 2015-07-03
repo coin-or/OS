@@ -17,21 +17,18 @@
  * supplied in the CSDP distribution as an illustration of the CSDP API.
  */
 
-#include "OSrLReader.h"
-
-
-
 #include "OSCsdpSolver.h"
+#include "OSFileUtil.h"
 #include "OSInstance.h"
 #include "OSOption.h"
-#include "OSFileUtil.h"
-#include "OSOutput.h"
-#include "CoinTime.hpp"
-
 #include "OSGeneral.h"
 #include "OSMatrix.h"
+#include "OSrLReader.h"
+#include "OSOutput.h"
 #include "OSParameters.h"
 #include "OSMathUtil.h"
+
+#include "CoinTime.hpp"
 
 #include <map>
 
@@ -46,69 +43,9 @@
 # endif
 #endif
 
-/*
- * These standard declarations for the C library are needed.
- */
-
-//#include <stdlib.h>
-//#include <stdio.h>
-
-/*
- * Include CSDP declarations so that we'll know the calling interfaces.
- */
-
-//extern "C"
-//{
-//#include "declarations.h"
-//}
-
-//#include "parameters.h"
-
 using std::cout;
 using std::endl;
 using std::ostringstream;
-
-
-/*
-   An example showing how to call the easy_sdp() interface to CSDP.
-   In this example, we solve the problem
- 
-      max tr(C*X)
-          tr(A1*X)=1
-          tr(A2*X)=2
-          X >= 0       (X is PSD)
- 
-   where 
- 
-    C=[2 1
-       1 2
-           3 0 1
-           0 2 0
-           1 0 3
-                 0
-                   0]
-
-   A1=[3 1
-       1 3
-           0 0 0
-           0 0 0
-           0 0 0
-                 1
-                   0] 
-
-   A2=[0 0
-       0 0
-           3 0 1
-           0 4 0
-           1 0 5
-                 0
-                   1] 
-
-  Notice that all of the matrices have block diagonal structure.  The first
-  block is of size 2x2.  The second block is of size 3x3.  The third block
-  is a diagonal block of size 2.  
- */
-
 
 
 CsdpSolver::CsdpSolver()
@@ -147,30 +84,6 @@ CsdpSolver::~CsdpSolver()
 
 void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 {
-/*  These are declared in OSDefaultSolver.h (from which OSCsdpSolver inherits)
- *      std::string osil;
- *      std::string osol;
- *      std::string osrl;
- *      OSInstance *osinstance;
- *      OSOption   *osoption;
- *      OSResult   *osresult;
- *      std::string sSolverName;
- *      bool bCallbuildSolverInstance;
- *      bool bSetSolverOptions;
- */
-
-/* Additional declarations from OSCsdpSolver.h
- *      int nC_rows;                            // number of rows/columns in each matrix
- *      int nC_blks;                            // number of blocks per matrix
- *      int ncon;                               // number of constraints (and constraint matrices A_i)
- *      struct blockmatrix *C_matrix;           // the matrix in the objective, A0
- *      double *rhsValues;                      // the right-hand side values of the constraints
- *      struct constraintmatrix **mconstraints; // the collection of matrices in the constraints (A_i)
- *      struct blockmatrix *X,*Z;               // for the primal and dual matrix values, respectively
- *      double *y;                              // dual variables of the constraints
- *      double pobj,dobj;                       // primal and dual objective values
- */
-
     std::ostringstream outStr;
     ScalarExpressionTree* tempTree;
     OSnLNode  *tr;
@@ -411,7 +324,6 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 
         // set up the right hand side values. Note: 1-based for Fortran interface.
         rhsValues = osinstance->getConstraintLowerBounds() - 1;
-//        rhsValues[0] = OSNaN(); // This is the tricky code to avoid having to copy. Legal?
 
         // Set up storage and retrieve pointers.
         mtxBlocks = new ExpandedMatrixBlocks*[ncon+1];
@@ -440,7 +352,6 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         }
 
         /** Allocate space for the C matrix (A0). */
-//        C_matrix = new blockmatrix();
         C_matrix.nblocks=nBlocks-1;
         C_matrix.blocks = new blockrec[nBlocks];
 
@@ -497,7 +408,6 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         /** Null out all pointers in constraints. */
         for (int i=1; i<=ncon; i++)
         {
-//            mconstraints[i] = new constraintmatrix();
             mconstraints[i].blocks = NULL;
         }
 
@@ -563,9 +473,6 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
                 }
             }
         }
-#ifndef NDEBUG
-        dataEchoCheck();
-#endif
 
         //garbage collection
         if (blockOffset != NULL) delete [] blockOffset;
@@ -1040,6 +947,7 @@ void  CsdpSolver::solve() throw (ErrorClass)
                                 nonz++;
                             start[i] = nonz;
                         };
+
                         break;
                     case MATRIX:
                         for (int i=1; i<=Z.blocks[blk].blocksize; i++)
