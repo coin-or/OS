@@ -117,6 +117,34 @@
 			<xs:element name="scheduledStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="actualStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="endTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
+			<xs:element name="dependenciesFinished" type="JobDependencies" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Dependent jobs that finished before the current job started.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="directoriesPresent" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="DirectoriesAndFiles"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="filesPresent" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="DirectoriesAndFiles"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="directoriesMade" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="filesMade" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="inputDirectoriesMoved" type="PathPairs" minOccurs="0"/>
+			<xs:element name="inputFilesMoved" type="PathPairs" minOccurs="0"/>
+			<xs:element name="outputDirectoriesMoved" type="PathPairs" minOccurs="0"/>
+			<xs:element name="outputFilesMoved" type="PathPairs" minOccurs="0"/>
+			<xs:element name="filesDeleted" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="directoriesDeleted" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="processesKilled" type="Processes" minOccurs="0"/>
 			<xs:element name="timingInformation" type="TimingInformation" minOccurs="0"/>
 			<xs:element name="usedDiskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="usedMemory" type="StorageCapacity" default="0.0" minOccurs="0"/>
@@ -195,7 +223,7 @@
 		<xs:attribute name="numberOfSolutions" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfVariables" use="required">
 			<xs:annotation>
-				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+				<xs:documentation>Must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:int">
@@ -203,9 +231,9 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjectives" use="required">
+		<xs:attribute name="numberOfObjectives" default="1">
 			<xs:annotation>
-				<xs:documentation>If present, must match number of objectives in the original optimization instance</xs:documentation>
+				<xs:documentation>Can be omitted if number of objectives in the original optimization instance is 1. Otherwise, must match number of objectives in the original optimization instance.</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:int">
@@ -215,7 +243,7 @@
 		</xs:attribute>
 		<xs:attribute name="numberOfConstraints" use="required">
 			<xs:annotation>
-				<xs:documentation>If present, must match number of constraints in the original optimization instance</xs:documentation>
+				<xs:documentation>Must match number of constraints in the original optimization instance</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:int">
@@ -226,7 +254,7 @@
 	</xs:complexType>
 	<xs:complexType name="OtherResults">
 		<xs:sequence>
-			<xs:element name="other" type="OtherResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherResults" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -331,7 +359,7 @@
 			<xs:element name="values" type="VariableValues" minOccurs="0"/>
 			<xs:element name="valuesString" type="VariableValuesString" minOccurs="0"/>
 			<xs:element name="basisStatus" type="BasisStatus" minOccurs="0"/>
-			<xs:element name="other" type="OtherVariableResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherVariableOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherVariableResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -381,7 +409,7 @@
 		<xs:sequence>
 			<xs:element name="values" type="ObjectiveValues" minOccurs="0"/>
 			<xs:element name="basisStatus" type="BasisStatus" minOccurs="0"/>
-			<xs:element name="other" type="OtherObjectiveResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherObjectiveOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherObjectiveResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -425,7 +453,7 @@
 		<xs:sequence>
 			<xs:element name="dualValues" type="DualVariableValues" minOccurs="0"/>
 			<xs:element name="basisStatus" type="BasisStatus" minOccurs="0"/>
-			<xs:element name="other" type="OtherConstraintResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherConstraintOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherConstraintResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -475,7 +503,7 @@
 	</xs:complexType>
 	<xs:complexType name="SpecialOrderedSetsSolution">
 		<xs:sequence>
-			<xs:element name="other" type="OtherSpecialOrderedSetsResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherSpecialOrderedSetsOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherSpecialOrderedSetsResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -544,7 +572,7 @@
 	<xs:complexType name="MatrixVariableSolution">
 		<xs:sequence>
 			<xs:element name="values" type="MatrixVariableValues" minOccurs="0"/>
-			<xs:element name="other" type="OtherMatrixVariableResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherMatrixVariableOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherMatrixVariableResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -587,7 +615,7 @@
 	<xs:complexType name="MatrixObjectiveSolution">
 		<xs:sequence>
 			<xs:element name="values" type="MatrixObjectiveValues" minOccurs="0"/>
-			<xs:element name="other" type="OtherMatrixObjectiveResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherMatrixObjectiveOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherMatrixObjectiveResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -600,7 +628,7 @@
 	<xs:complexType name="MatrixConstraintSolution">
 		<xs:sequence>
 			<xs:element name="values" type="MatrixConstraintValues" minOccurs="0"/>
-			<xs:element name="other" type="OtherMatrixConstraintResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherMatrixConstraintOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherMatrixConstraintResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
@@ -770,7 +798,7 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 	</xs:complexType>
 	<xs:complexType name="OtherSolverOutput">
 		<xs:sequence>
-			<xs:element name="solverOutput" type="SolverOutput" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="solverOutput" type="SolverOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverOutputs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
