@@ -4,10 +4,10 @@ Cbc  https://projects.coin-or.org/svn/Cbc/stable/2.9/Cbc
 Cgl  https://projects.coin-or.org/svn/Cgl/stable/0.59/Cgl
 Clp  https://projects.coin-or.org/svn/Clp/stable/1.16/Clp
 Osi  https://projects.coin-or.org/svn/Osi/stable/0.107/Osi
-Vol  https://projects.coin-or.org/svn/Vol/stable/1.4/Vol
-DyLP  https://projects.coin-or.org/svn/DyLP/stable/1.9/DyLP
+Vol  https://projects.coin-or.org/svn/Vol/stable/1.5/Vol
+DyLP  https://projects.coin-or.org/svn/DyLP/stable/1.10/DyLP
 SYMPHONY  https://projects.coin-or.org/svn/SYMPHONY/stable/5.6/SYMPHONY
-Bcp  https://projects.coin-or.org/svn/Bcp/stable/1.3/Bcp
+Bcp  https://projects.coin-or.org/svn/Bcp/stable/1.4/Bcp
 Ipopt  https://projects.coin-or.org/svn/Ipopt/stable/3.12/Ipopt
 cppad  https://projects.coin-or.org/svn/CppAD/stable/20150000
 Bonmin https://projects.coin-or.org/svn/Bonmin/stable/1.8/Bonmin
