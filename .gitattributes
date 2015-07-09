@@ -336,6 +336,7 @@ OS/data/osolFiles/retrieve.osol -text
 OS/data/osolFiles/rosenbrockmod_ipopt.osol -text
 OS/data/osolFiles/rosenbrockmod_knitro.osol -text
 OS/data/osolFiles/rosenbrockmod_lindo.osol -text
+OS/data/osolFiles/sample_sdpa.osol -text
 OS/data/osolFiles/send.osol -text
 OS/data/osolFiles/sendWithJobID.osol -text
 OS/data/osolFiles/serverOutputCapture.osol -text

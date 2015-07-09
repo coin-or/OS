@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+    <general> 
+        <instanceLocation locationType="https">https://projects.coin-or.org/OS/browser/releases/2.10.0/OS/misc/ConeProgramming/sample.osil</instanceLocation>
+        <jobID>XYZ12345-demo</jobID>
+    </general>
+    <system>
+        <minDiskSpace unit="gigabyte" description="currently not enforced"> 100 </minDiskSpace>
+        <minMemorySize unit="gigabyte" description="currently not enforced"> 8 </minDiskSpace>
+    </system>
+    <optimization>
+        <solverOptions numberOfSolverOptions="3">
+            <solverOption name="axtol" solver="csdp" value="1.0e-12" description="default is 1.0e-08"/>
+            <solverOption name="atytol" solver="csdp" value="1.0e-12"description="default is 1.0e-08" />
+            <solverOption name="objtol" solver="csdp"  value="1.0e-12"description="default is 1.0e-08"/>
+        </solverOptions>
+    </optimization>
+</osol>
+
