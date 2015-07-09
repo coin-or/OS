@@ -1,41 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org"
-xmlns:os="os.optimizationservices.org"
-xmlns:xs="http://www.w3.org/2001/XMLSchema"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="os.optimizationservices.org
-C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
+<osil xmlns="os.optimizationservices.org" 
+xmlns:os="os.optimizationservices.org" 
+xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="os.optimizationservices.org 
+http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 <instanceHeader>
 <name>SDPA problem sample.sdpa</name>
 <description>Translated from SDPA format using SDPA2OSiL
        (C) H.I. Gassmann 2010-2015
-/<description>
+</description>
 </instanceHeader>
 <instanceData>
-<variables numberOfVariables="2">
-<var lb="-INF" ub="INF" mult="2"/>
-</variables>
 <objectives>
-<obj maxOrMin="min" numberOfObjCoef="2">
-<coef idx="0">          1.00000000000000    </coef>
-<coef idx="1">          2.00000000000000    </coef>
-</obj>
-</objectives>
+<obj maxOrMin="max" numberOfObjCoef="0"/></objectives>
+<constraints numberOfConstraints="2">
+<con lb="1." ub="1."/>
+<con lb="2." ub="2."/>
+</constraints>
+<nonlinearExpressions numberOfNonlinearExpressions="3">
+<nl idx="-1">
+<matrixTrace>
+<matrixTimes>
+<matrixReference idx="0"/>
+<matrixVar idx="0"/>
+</matrixTimes>
+</matrixTrace>
+</nl>
+<nl idx="0">
+<matrixTrace>
+<matrixTimes>
+<matrixReference idx="1"/>
+<matrixVar idx="0"/>
+</matrixTimes>
+</matrixTrace>
+</nl>
+<nl idx="1">
+<matrixTrace>
+<matrixTimes>
+<matrixReference idx="2"/>
+<matrixVar idx="0"/>
+</matrixTimes>
+</matrixTrace>
+</nl>
+</nonlinearExpressions>
 <matrices numberOfMatrices="3">
 <matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F0">
 <blocks numberOfBlocks="2">
-<colOffsets numberOfEl="4">
+<colOffset numberOfEl="4">
 <el>0</el>
 <el>2</el>
 <el>5</el>
 <el>7</el>
-</colOffsets>
-<rowOffsets numberOfEl="4">
+</colOffset>
+<rowOffset numberOfEl="4">
 <el>0</el>
 <el>2</el>
 <el>5</el>
 <el>7</el>
-</rowOffsets>
+</rowOffset>
 <block blockRowIdx="0" blockColIdx="0">
 <constantElements numberOfValues="3">
 <start>
@@ -43,15 +66,15 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 <el>2</el>
 <el>3</el>
 </start>
-<indexes>
+<index>
 <el>0</el>
 <el mult="2">1</el>
-</indexes>
-<values>
-<el>          2.00000000000000    </el>
-<el>          1.00000000000000    </el>
-<el>          2.00000000000000    </el>
-</values>
+</index>
+<value>
+<el>2.</el>
+<el>1.</el>
+<el>2.</el>
+</value>
 </constantElements>
 </block>
 <block blockRowIdx="1" blockColIdx="1">
@@ -60,36 +83,36 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 <el>0</el>
 <el mult="3" incr="1">2</el>
 </start>
-<indexes>
+<index>
 <el>0</el>
 <el>2</el>
 <el>1</el>
 <el>2</el>
-</indexes>
-<values>
-<el>          3.00000000000000    </el>
-<el>          1.00000000000000    </el>
-<el>          2.00000000000000    </el>
-<el>          3.00000000000000    </el>
-</values>
+</index>
+<value>
+<el>3.</el>
+<el>1.</el>
+<el>2.</el>
+<el>3.</el>
+</value>
 </constantElements>
 </block>
 </blocks>
 </matrix>
 <matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F1">
 <blocks numberOfBlocks="2">
-<colOffsets numberOfEl="4">
+<colOffset numberOfEl="4">
 <el>0</el>
 <el>2</el>
 <el>5</el>
 <el>7</el>
-</colOffsets>
-<rowOffsets numberOfEl="4">
+</colOffset>
+<rowOffset numberOfEl="4">
 <el>0</el>
 <el>2</el>
 <el>5</el>
 <el>7</el>
-</rowOffsets>
+</rowOffset>
 <block blockRowIdx="0" blockColIdx="0">
 <constantElements numberOfValues="3">
 <start>
@@ -97,15 +120,15 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 <el>2</el>
 <el>3</el>
 </start>
-<indexes>
+<index>
 <el>0</el>
 <el mult="2">1</el>
-</indexes>
-<values>
-<el>          3.00000000000000    </el>
-<el>          1.00000000000000    </el>
-<el>          3.00000000000000    </el>
-</values>
+</index>
+<value>
+<el>3.</el>
+<el>1.</el>
+<el>3.</el>
+</value>
 </constantElements>
 </block>
 <block blockRowIdx="2" blockColIdx="2">
@@ -114,48 +137,48 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 <el>0</el>
 <el mult="2">1</el>
 </start>
-<indexes>
+<index>
 <el>0</el>
-</indexes>
-<values>
-<el>          1.00000000000000    </el>
-</values>
+</index>
+<value>
+<el>1.</el>
+</value>
 </constantElements>
 </block>
 </blocks>
 </matrix>
 <matrix numberOfColumns="7" numberOfRows="7" symmetry="lower" name="F2">
 <blocks numberOfBlocks="2">
-<colOffsets numberOfEl="4">
+<colOffset numberOfEl="4">
 <el>0</el>
 <el>2</el>
 <el>5</el>
 <el>7</el>
-</colOffsets>
-<rowOffsets numberOfEl="4">
+</colOffset>
+<rowOffset numberOfEl="4">
 <el>0</el>
 <el>2</el>
 <el>5</el>
 <el>7</el>
-</rowOffsets>
+</rowOffset>
 <block blockRowIdx="1" blockColIdx="1">
 <constantElements numberOfValues="4">
 <start>
 <el>0</el>
 <el mult="3" incr="1">2</el>
 </start>
-<indexes>
+<index>
 <el>0</el>
 <el>2</el>
 <el>1</el>
 <el>2</el>
-</indexes>
-<values>
-<el>          3.00000000000000    </el>
-<el>          1.00000000000000    </el>
-<el>          4.00000000000000    </el>
-<el>          5.00000000000000    </el>
-</values>
+</index>
+<value>
+<el>3.</el>
+<el>1.</el>
+<el>4.</el>
+<el>5.</el>
+</value>
 </constantElements>
 </block>
 <block blockRowIdx="2" blockColIdx="2">
@@ -164,48 +187,24 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 <el mult="2">0</el>
 <el>1</el>
 </start>
-<indexes>
+<index>
 <el>1</el>
-</indexes>
-<values>
-<el>          1.00000000000000    </el>
-</values>
+</index>
+<value>
+<el>1.</el>
+</value>
 </constantElements>
 </block>
 </blocks>
 </matrix>
 </matrices>
-<cones numberOfCones="2">
+<cones numberOfCones="1">
 <semidefiniteCone numberOfColumns="7" numberOfRows="7"/>
-<nonnegativeCone numberOfColumns="7" numberOfRows="7"/>
 </cones>
 <matrixProgramming>
 <matrixVariables numberOfMatrixVar="1">
 <matrixVar numberOfColumns="7" numberOfRows="7" lbConeIdx="0"/>
 </matrixVariables>
-<matrixConstraints numberOfMatrixCon="1">
-<matrixVar numberOfColumns="7" numberOfRows="7" lbConeIdx="1" ubConeIdx="1"/>
-</matrixConstraints>
-<matrixExpressions numberOfExpr="1">
-<expr idx="0" shape="linear">
-<matrixSum>
-<matrixScalarTimes>
-<variable idx="0">
-<matrixReference idx="1">
-</matrixScalarTimes>
-<matrixScalarTimes>
-<variable idx="1">
-<matrixReference idx="2">
-</matrixScalarTimes>
-<matrixNegate>
-<matrixReference idx="0">
-</matrixNegate>
-<matrixNegate>
-<matrixVar idx="0">
-</matrixNegate>
-</matrixSum>
-</expr>
-</matrixExpressions>
 </matrixProgramming>
 </instanceData>
 </osil>

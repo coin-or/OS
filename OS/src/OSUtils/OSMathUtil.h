@@ -288,6 +288,34 @@ inline int getMult(double* a, int size)
 }
 
 
+
+/**
+ * getMult
+ *
+ * Identify the number of duplicates at the start of an array of type string
+ *
+ * @param i holds a pointer to the array to be processed.
+ * @param size holds the number of elements in the array.
+ *
+ * @return the length of the run.
+ */
+inline int getMult(std::string* a, int size)
+{
+    std::string mark;
+
+    int mult = 1;
+
+    if (size == 1) return mult;
+
+    mark = a[0];
+    for (int k=1; (k < size) && (a[k] == mark); k++)
+    {
+        mult++;
+    }
+    return mult;
+}
+
+
 /**
  * OSRand()
  *

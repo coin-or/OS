@@ -297,5 +297,13 @@ private:
     //double m_dTreeRootValue;
 };//end MatrixExpressionTree
 
+
+
+/** 
+ * A utility method to convert an expression tree into its ASCII representation in infix notation.
+ * This is useful in printModel (OSInstance) as well as matrix handling (OSMatrix).
+ */
+std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec);
+
 #endif
 

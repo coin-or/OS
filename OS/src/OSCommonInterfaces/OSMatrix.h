@@ -242,8 +242,14 @@ public:
 
 /*! \class MatrixElements
  * \brief an abstract class to help represent the elements in a MatrixType object
- * From this we derive concrete classes that are used to store specific types of values,
- * such as constant values, variable references, general nonlinear expressions, etc.
+ * From this we derive the following concrete classes used to store specific types of values:
+ *     ConstantMatrixValues
+ *     VarReferenceMatrixValues
+ *     LinearMatrixValues
+ *     GeneralMatrixValues
+ *     ObjReferenceMatrixValues
+ *     ConReferenceMatrixValues
+ *     StringValuedMatrixValues
  */
 class MatrixElements: public MatrixConstructor
 {
@@ -741,6 +747,67 @@ public:
      */
     virtual bool deepCopyFrom(ConReferenceMatrixValues *that);
 };//class ConReferenceMatrixValues
+
+
+/*! \class StringValuedMatrixValues
+ *  \brief to represent the nonzeros in a stringValuedMatrix element
+ */
+class StringValuedMatrixValues : public MatrixElementValues
+{
+public:
+    std::string *el;
+
+    StringValuedMatrixValues();
+    ~StringValuedMatrixValues();
+
+    /**
+     * @return the value of nType
+     */
+    //virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    //virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    //virtual std::string getNodeName();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    //virtual std::string getMatrixValuesInXML();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(StringValuedMatrixValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(StringValuedMatrixValues *that);
+};//class StringValuedMatrixValues
 
 
 /*! \class ConstantMatrixElements
@@ -1253,6 +1320,14 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(ConReferenceMatrixElements *that);
+
+    /**
+     *  A method to convert objReference matrix elements into general rowReferences
+     *  @param _values is the array  of matrix elements that are to be converted
+     *  @param nvalues is the number of matrix elements that are to be converted
+     *  @return true if the conversion was successful
+     */
+    bool convertFromObjRef(ObjReferenceMatrixValues* _values, int nvalues);
 };//class ConReferenceMatrixElements
 
 
@@ -1349,6 +1424,105 @@ public:
      */
     bool deepCopyFrom(MixedRowReferenceMatrixElements *that);
 };//class MixedRowReferenceMatrixElements
+
+
+/*! \class StringValuedMatrixElements
+ * \brief a data structure to represent the string-valued elements in a MatrixType object
+ */
+class StringValuedMatrixElements: public MatrixElements
+{
+public:
+    /** The value array of the (nonzero) constant elements */
+    StringValuedMatrixValues *value;
+
+    StringValuedMatrixElements();
+    ~StringValuedMatrixElements();
+
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual StringValuedMatrixElements *cloneMatrixNode();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(StringValuedMatrixElements *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(StringValuedMatrixElements *that);
+
+    /**
+     *  Some methods to convert one type of matrix elements into another
+     *  @param _values is the array  of matrix elements that are to be converted
+     *  @param nvalues is the number of matrix elements that are to be converted
+     *  @return true if the conversion was successful
+     */
+    bool convertFromConstant(ConstantMatrixValues*     _values, int nvalues);
+    bool convertFromVarRef  (VarReferenceMatrixValues* _values, int nvalues);
+    bool convertFromObjRef  (ObjReferenceMatrixValues* _values, int nvalues);
+    bool convertFromLinear  (LinearMatrixValues*       _values, int nvalues);
+    bool convertFromConRef  (ConReferenceMatrixValues* _values, int nvalues);
+    bool convertFromGeneral (GeneralMatrixValues*      _values, int nvalues);
+};//class StringValuedMatrixElements
+
 
 
 /*! \class MatrixTransformation
@@ -2589,11 +2763,20 @@ public:
 /**
  *  Some methods to convert one type of matrix element into another
  */
-LinearMatrixElement* convertToLinearMatrixElement(double val);
-LinearMatrixElement* convertToLinearMatrixElement(int varref);
-ScalarExpressionTree* convertToGeneralMatrixElement(double val);
-ScalarExpressionTree* convertToGeneralMatrixElement(int refIdx, bool varRef); // varref or objref
-ScalarExpressionTree* convertToGeneralMatrixElement(LinearMatrixElement* val);
-ScalarExpressionTree* convertToGeneralMatrixElement(ConReferenceMatrixElement* val);
-ConReferenceMatrixElement* convertToConReferenceMatrixElement(int objref);
+//ScalarExpressionTree* convertFromConstant(double val);
+//ScalarExpressionTree* convertFromVarRef(int varref);
+//ScalarExpressionTree* convertFromObjRef(int objRef);
+//ScalarExpressionTree* convertFromLinear(LinearMatrixElement* val);
+//ScalarExpressionTree* convertFromConRef(ConReferenceMatrixElement* val);
+
+/**
+ *  Some methods to convert one type of matrix element into another
+ */
+//LinearMatrixElement* convertFromConstant(double val);
+//LinearMatrixElement* convertFromVarRef(int varref);
+
+/**
+ *  Some methods to convert one type of matrix element into another
+ */
+//ConReferenceMatrixElement* convertFromObjRef(int objref);
 #endif

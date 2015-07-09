@@ -5285,6 +5285,74 @@ bool GeneralMatrixValues::deepCopyFrom(GeneralMatrixValues *that)
     return true;
 }// end of GeneralMatrixValues::deepCopyFrom()
 
+/**
+ *  Some methods to convert one type of matrix element into another
+ */
+/*------------------------------------------------------
+ScalarExpressionTree* GeneralMatrixValues::convertFromConstant(double val)
+{
+    ostringstream outStr;
+    outStr << os_dtoa_format(val);
+    return outStr.str();
+}// end of GeneralMatrixValues::convertFromConstant
+
+ScalarExpressionTree* GeneralMatrixValues::convertFromVarRef(int varref)
+{
+    ostringstream outStr;
+    outStr << "x_" << varref;
+    return outStr.str();
+}// end of GeneralMatrixValues::convertFromVarRef
+
+ScalarExpressionTree* GeneralMatrixValues::convertFromLinear(LinearMatrixElement* val)
+{//a0 + a1x1 + a2x2 + ...
+    ostringstream outStr;
+    if (val->constant != 0.0)
+    {
+        outStr << os_dtoa_format(val->constant);
+    }
+    if (val->numberOfVarIdx > 0)
+    {
+        if (val->varIdx[0]->coef >= 0)
+        {
+            if (val->constant != 0.0)
+                outStr << " + ";
+            else
+                outStr << " - ";
+        }
+        else
+            outStr << "-";
+        if (val->varIdx[0]->coef != 1)
+            outStr << os_dtoa_format(abs(val->varIdx[0]->coef)) << "*";
+        outStr << "x_" << val->varIdx[0]->idx;
+    }
+    for (int i=1; i<val->numberOfVarIdx; i++)
+    {
+        if (val->varIdx[i]->coef >= 0)
+           outStr << " + ";
+        else
+           outStr << " - ";
+        if (val->varIdx[i]->coef != 1)
+            outStr << os_dtoa_format(abs(val->varIdx[i]->coef)) << "*";
+        outStr << "x_" << val->varIdx[i]->idx;
+    }
+    return outStr.str();
+}// end of GeneralMatrixValues::convertFromLinear
+
+ScalarExpressionTree* GeneralMatrixValues::convertFromObjRef(int objRef)
+{
+    ostringstream outStr;
+    outStr << "o_" << objRef;
+    return outStr.str();
+}// end of GeneralMatrixValues::convertFromObjRef
+
+ScalarExpressionTree* GeneralMatrixValues::convertFromConRef(ConReferenceMatrixElement* val)
+{
+    ostringstream outStr;
+    outStr << "c_" << val->conReference << "." << returnConReferenceValueTypeString(val->valueType);
+    return outStr.str();
+}// end of GeneralMatrixValues::convertFromConRef
+=======================================*/
+
 /** ---------- Methods for class ObjReferenceMatrixElements ---------- */ 
 ObjReferenceMatrixElements::ObjReferenceMatrixElements():
     value(NULL)
@@ -5669,6 +5737,34 @@ bool ConReferenceMatrixElements::deepCopyFrom(ConReferenceMatrixElements *that)
     return true;
 }// end of ConReferenceMatrixElements::deepCopyFrom()
 
+bool ConReferenceMatrixElements::convertFromObjRef(ObjReferenceMatrixValues* _values, int nvalues)
+{
+    try
+    {
+        ostringstream outStr;
+
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromObjRefToVarRef: number of values does not match ");
+
+        if (this->value->el == NULL)
+            this->value->el =  new ConReferenceMatrixElement*[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+        {
+            if (this->value->el[i] == NULL)
+                this->value->el[i] =  new ConReferenceMatrixElement();
+
+            this->value->el[i]->conReference = _values->el[i];
+            this->value->el[i]->valueType = ENUM_CONREFERENCE_VALUETYPE_value;
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of ConReferenceMatrixElements::convertFromObjRef
+
 
 /** ---------- Methods for class ConReferenceMatrixValues ---------- */ 
 ConReferenceMatrixValues::ConReferenceMatrixValues():
@@ -5832,7 +5928,6 @@ bool ConReferenceMatrixElement::deepCopyFrom(ConReferenceMatrixElement *that)
     this->value        = that->value;
     return true;
 }// end of ConReferenceMatrixElement::deepCopyFrom()
-
 
 /** ---------- Methods for class MixedRowReferenceMatrixElements ---------- */ 
 MixedRowReferenceMatrixElements::MixedRowReferenceMatrixElements():
@@ -6114,6 +6209,430 @@ bool MixedRowReferenceMatrixElements::deepCopyFrom(MixedRowReferenceMatrixElemen
 {
     return true;
 }// end of MixedRowReferenceMatrixElements::deepCopyFrom()
+
+/** ---------- Methods for class StringValuedMatrixElements ---------- */ 
+StringValuedMatrixElements::StringValuedMatrixElements():
+    value(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the StringValuedMatrixElements Constructor");
+#endif
+}// end of StringValuedMatrixElements::StringValuedMatrixElements()
+
+StringValuedMatrixElements::~StringValuedMatrixElements()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+    "Inside the StringValuedMatrixElements Destructor");
+
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting StringValuedMatrixElements->value at " << &value << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+    if (value != NULL)
+        delete value;
+    value = NULL;
+}// end of StringValuedMatrixElements::~StringValuedMatrixElements()
+
+ENUM_MATRIX_CONSTRUCTOR_TYPE StringValuedMatrixElements::getNodeType()
+{
+    return ENUM_MATRIX_CONSTRUCTOR_TYPE_stringValuedElements;
+}// end of StringValuedMatrixElements::getNodeType()
+
+std::string StringValuedMatrixElements::getNodeName()
+{
+    return "stringValuedElements";
+}// end of StringValuedMatrixElements::getNodeName()
+
+ENUM_MATRIX_TYPE StringValuedMatrixElements::getMatrixType()
+{
+    if (matrixType == ENUM_MATRIX_TYPE_unknown)
+        matrixType =  ENUM_MATRIX_TYPE_string;
+    return matrixType;
+}// end of StringValuedMatrixElements::getMatrixType()
+
+std::string StringValuedMatrixElements::getMatrixNodeInXML()
+{
+    ostringstream outStr;
+    outStr <<  "<stringValuedElements";
+    if (rowMajor)
+        outStr << " rowMajor=\"true\"";
+    outStr << " numberOfValues=\"" << numberOfValues << "\"";
+    outStr << ">" << std::endl;
+
+    outStr << "<start>" << std::endl;
+    outStr << writeIntVectorData(start, true, false);
+    outStr << "</start>" << std::endl;
+
+    if (numberOfValues > 0)
+    {
+        outStr << "<index>" << std::endl;
+        outStr << writeIntVectorData(index, true, false);
+        outStr << "</index>" << std::endl;
+
+        outStr << "<value>" << std::endl;
+
+        for(int i = 0; i < numberOfValues;)
+        {
+            int mult = getMult(&(value->el[i]), numberOfValues - i);
+            if (mult == 1)
+                outStr << "<el>" ;
+            else
+                outStr << "<el mult=\"" << mult << "\">";
+            outStr << value->el[i];
+            outStr << "</el>" << std::endl;
+            i += mult;
+        }
+        outStr << "</value>" << std::endl;
+    }
+
+    outStr << "</stringValuedElements>" << std::endl;
+    return outStr.str();
+}// end of StringValuedMatrixElements::getMatrixNodeInXML()
+
+bool StringValuedMatrixElements::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)
+{
+    return false;
+}// end of StringValuedMatrixElements::alignsOnBlockBoundary()
+
+StringValuedMatrixElements* StringValuedMatrixElements::cloneMatrixNode()
+{
+    StringValuedMatrixElements *nodePtr;
+    nodePtr = new StringValuedMatrixElements();
+    return  (StringValuedMatrixElements*)nodePtr;
+}// end of StringValuedMatrixElements::cloneMatrixNode
+
+bool StringValuedMatrixElements::IsEqual(StringValuedMatrixElements *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in StringValuedMatrixElements");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->rowMajor       != that->rowMajor)       return false;
+            if (this->numberOfValues != that->numberOfValues) return false;
+
+            if (!this->start->IsEqual(that->start)) return false;
+            if (!this->index->IsEqual(that->index)) return false;
+            if (!this->value->IsEqual(that->value)) return false;
+
+            return true;
+        }
+    }
+}// end of StringValuedMatrixElements::IsEqual()
+
+bool StringValuedMatrixElements::setRandom(double density, bool conformant, int iMin, int iMax)
+{
+    return true;
+}// end of StringValuedMatrixElements::setRandom()
+
+bool StringValuedMatrixElements::deepCopyFrom(StringValuedMatrixElements *that)
+{
+    return true;
+}// end of StringValuedMatrixElements::deepCopyFrom()
+
+
+/**
+ *  Some methods to convert one type of matrix elements into another
+ */
+bool StringValuedMatrixElements::convertFromConstant(ConstantMatrixValues* _values, int nvalues)
+{
+    try
+    {
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromConstantToString: number of values does not match ");
+
+        if (this->value->el == NULL)
+            this->value->el =  new std::string[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+            this->value->el[i] = os_dtoa_format(_values->el[i]);
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of StringValuedMatrixElements::convertFromConstant
+
+bool StringValuedMatrixElements::convertFromVarRef(VarReferenceMatrixValues* _values, int nvalues)
+{
+    try
+    {
+        ostringstream outStr;
+
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromVarRefToString: number of values does not match ");
+
+        if (this->value->el == NULL)
+            this->value->el =  new std::string[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+        {
+            outStr.str("");
+            outStr.clear();
+            outStr << "x_" << _values->el[i];
+            this->value->el[i] = outStr.str();
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of StringValuedMatrixElements::convertFromVarRef
+
+bool StringValuedMatrixElements::convertFromLinear(LinearMatrixValues* _values, int nvalues)
+{//a0 + a1x1 + a2x2 + ...
+    try
+    {
+        ostringstream outStr;
+
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromLinearToString: number of values does not match ");
+
+        if (this->value->el == NULL)
+            this->value->el =  new std::string[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+        {
+            outStr.str("");
+            outStr.clear();
+
+            if (_values->el[i]->constant < 0.0 || _values->el[i]->constant > 0.0)
+            {
+                outStr << os_dtoa_format(_values->el[i]->constant);
+            }
+            if (_values->el[i]->numberOfVarIdx > 0)
+            {
+                if (_values->el[i]->varIdx[0]->coef >= 0)
+                {
+                    if (_values->el[i]->constant < 0.0 || _values->el[i]->constant > 0.0)
+                        outStr << " + ";
+                    else
+                        outStr << " - ";
+                }
+                else
+                    outStr << "-";
+                if (_values->el[i]->varIdx[0]->coef < 1 || _values->el[i]->varIdx[0]->coef > 1 )
+                    outStr << os_dtoa_format(abs(_values->el[i]->varIdx[0]->coef)) << "*";
+                outStr << "x_" << _values->el[i]->varIdx[0]->idx;
+            }
+            for (int j=1; j<_values->el[i]->numberOfVarIdx; i++)
+            {
+                if (_values->el[i]->varIdx[j]->coef >= 0)
+                   outStr << " + ";
+                else
+                   outStr << " - ";
+                if (_values->el[i]->varIdx[j]->coef < 1 || _values->el[i]->varIdx[j]->coef > 1 )
+                    outStr << os_dtoa_format(abs(_values->el[i]->varIdx[j]->coef)) << "*";
+                outStr << "x_" << _values->el[i]->varIdx[j]->idx;
+            }
+            this->value->el[i] = outStr.str();
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of StringValuedMatrixElements::convertFromLinear
+
+bool StringValuedMatrixElements::convertFromObjRef(ObjReferenceMatrixValues* _values, int nvalues)
+{
+    try
+    {
+        ostringstream outStr;
+
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromObjRefToString: number of values does not match ");
+
+        if (this->value->el == NULL)
+            this->value->el =  new std::string[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+        {
+            outStr.str("");
+            outStr.clear();
+            outStr << "o_" << _values->el[i];
+            this->value->el[i] = outStr.str();
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of StringValuedMatrixElements::convertFromObjRef
+
+bool StringValuedMatrixElements::convertFromConRef(ConReferenceMatrixValues* _values, int nvalues)
+{
+    try
+    {
+        ostringstream outStr;
+
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromConRefToString: number of values does not match ");
+
+        if (this->value->el == NULL)
+            this->value->el =  new std::string[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+        {
+            outStr.str("");
+            outStr.clear();
+            outStr << "c_" << _values->el[i]->conReference << "." 
+                   << returnConReferenceValueTypeString(_values->el[i]->valueType);
+            this->value->el[i] = outStr.str();
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of StringValuedMatrixElements::convertFromConRef
+
+bool StringValuedMatrixElements::convertFromGeneral(GeneralMatrixValues* _values, int nvalues)
+{
+    try
+    {
+        std::vector<ExprNode*> postfixVec;
+        ostringstream outStr;
+
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromGeneralToString: number of values does not match ");
+
+        if (this->value->el == NULL)
+            this->value->el =  new std::string[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+        {
+            if (_values->el[i] != NULL)
+            {
+                postfixVec = _values->el[i]->getPostfixFromExpressionTree();
+                this->value->el[i] = getExpressionTreeAsInfixString(postfixVec);
+            }
+            else
+                this->value->el[i] = "";
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of StringValuedMatrixElements::convertFromGeneral
+
+
+/** ---------- Methods for class StringValuedMatrixValues ---------- */ 
+StringValuedMatrixValues::StringValuedMatrixValues():
+    el(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the StringValuedMatrixValues Constructor");
+#endif
+}// end of StringValuedMatrixValues::StringValuedMatrixValues()
+
+StringValuedMatrixValues::~StringValuedMatrixValues()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the StringValuedMatrixValues Destructor");
+    ostringstream outStr;
+    outStr.str("");
+    outStr.clear();
+    outStr << "deleting StringValuedMatrixValues->el at " << &el << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, 
+       ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+    if (el != NULL)
+        delete [] el;
+    el = NULL;
+}// end of StringValuedMatrixValues::~StringValuedMatrixValues()
+
+bool StringValuedMatrixValues::IsEqual(StringValuedMatrixValues *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, "Start comparing in StringValuedMatrixValues");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->numberOfEl != that->numberOfEl) return false;
+            for (int i=0; i < numberOfEl; i++)
+                if (this->el[i] != that->el[i]) return false;
+
+            return true;
+        }
+    }
+}// end of StringValuedMatrixValues::IsEqual()
+
+bool StringValuedMatrixValues::setRandom(double density, bool conformant, int iMin, int iMax)
+{
+    return true;
+}// end of StringValuedMatrixValues::setRandom()
+
+bool StringValuedMatrixValues::deepCopyFrom(StringValuedMatrixValues *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of StringValuedMatrixValues");
+#endif
+    this->numberOfEl = that->numberOfEl;
+    this->el = new std::string[numberOfEl];
+    for (int i=0; i<numberOfEl; i++)
+        this->el[i] = that->el[i];
+
+    return true;
+}// end of StringValuedMatrixValues::deepCopyFrom()
+
 
 
 /** ---------- Methods for class MatrixBlocks ---------- */ 
@@ -6793,36 +7312,21 @@ ConReferenceMatrixElement* convertToConReferenceMatrixElement(int objref)
     }
 }
 
-#if 0
-    // define the vectors
-    OSnLNode *nlNodePoint;
-    OSnLNodeVariable *nlNodeVariablePoint;
-    std::vector<ExprNode*> nlNodeVec;
-    //
-    //
-    int i;
-    for(i = 0; i < numQPTerms; i++)
-    {
-        instanceData->nonlinearExpressions->nl[ i] = new Nl();
-        instanceData->nonlinearExpressions->nl[ i]->idx = rowIndexes[ i];
-        instanceData->nonlinearExpressions->nl[ i]->osExpressionTree = new ScalarExpressionTree();
-        // create a variable nl node for x0
-        nlNodeVariablePoint = new OSnLNodeVariable();
-        nlNodeVariablePoint->idx = varOneIndexes[ i];
-        // give this variable the coefficient
-        nlNodeVariablePoint->coef = coefficients[ i];
-        nlNodeVec.push_back( nlNodeVariablePoint);
-        // create the nl node for x1
-        nlNodeVariablePoint = new OSnLNodeVariable();
-        nlNodeVariablePoint->idx = varTwoIndexes[ i];
-        nlNodeVec.push_back( nlNodeVariablePoint);
-        // create the nl node for *
-        nlNodePoint = new OSnLNodeTimes();
-        nlNodeVec.push_back( (OSnLNode*)nlNodePoint);
-        // the vectors are in postfix format
-        // now the expression tree
-        instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot =
-            ((OSnLNode*)nlNodeVec[ 0])->createExpressionTreeFromPostfix( nlNodeVec);
-        nlNodeVec.clear();
-    }
-#endif
+/*
+ScalarExpressionTree* convertMatrixElementToExpr(double val);
+ScalarExpressionTree* convertMatrixElementToExpr(int varref);
+ScalarExpressionTree* convertMatrixElementToExpr(int refIdx, bool objRef); // varref or objref
+ScalarExpressionTree* convertMatrixElementToExpr(LinearMatrixElement* val);
+ScalarExpressionTree* convertMatrixElementToExpr(ConReferenceMatrixElement* val);
+
+LinearMatrixElement* convertMatrixElementToLinear(double val)
+{
+    LinearMatrixElement* temp = new LinearMatrixElement();
+    temp->numberOfVaridx = 0;  
+    temp->constant = val;
+    return temp;  
+}
+LinearMatrixElement* convertMatrixElementToLinear(int varref);
+
+ConReferenceMatrixElement* convertMatrixElementToConRef(int objref);
+*/
