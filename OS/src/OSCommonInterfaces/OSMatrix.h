@@ -1063,6 +1063,15 @@ public:
      * @return whether the copy was created successfully
      */
     bool deepCopyFrom(LinearMatrixElements *that);
+
+    /**
+     *  Some methods to convert one type of matrix elements into another
+     *  @param _values is the array  of matrix elements that are to be converted
+     *  @param nvalues is the number of matrix elements that are to be converted
+     *  @return true if the conversion was successful
+     */
+    bool convertFromConstant(ConstantMatrixValues*     _values, int nvalues);
+    bool convertFromVarRef  (VarReferenceMatrixValues* _values, int nvalues);
 };//class LinearMatrixElements
 
 
@@ -2760,6 +2769,19 @@ public:
 };// class MatrixBlock
 
 
+    /**
+     *  Some methods to convert one type of matrix elements into another
+     *  @param _values is the array  of matrix elements that are to be converted
+     *  @param nvalues is the number of matrix elements that are to be converted
+     *  @return true if the conversion was successful
+     */
+//    bool convertFromConstant(ConstantMatrixValues*     _values, int nvalues);
+//    bool convertFromVarRef  (VarReferenceMatrixValues* _values, int nvalues);
+//    bool convertFromObjRef  (ObjReferenceMatrixValues* _values, int nvalues);
+//    bool convertFromLinear  (LinearMatrixValues*       _values, int nvalues);
+//    bool convertFromConRef  (ConReferenceMatrixValues* _values, int nvalues);
+//    bool convertFromGeneral (GeneralMatrixValues*      _values, int nvalues);
+
 /**
  *  Some methods to convert one type of matrix element into another
  */
@@ -2769,14 +2791,12 @@ public:
 //ScalarExpressionTree* convertFromLinear(LinearMatrixElement* val);
 //ScalarExpressionTree* convertFromConRef(ConReferenceMatrixElement* val);
 
-/**
- *  Some methods to convert one type of matrix element into another
- */
-//LinearMatrixElement* convertFromConstant(double val);
-//LinearMatrixElement* convertFromVarRef(int varref);
-
-/**
- *  Some methods to convert one type of matrix element into another
- */
-//ConReferenceMatrixElement* convertFromObjRef(int objref);
+    /**
+     *  Some methods to convert one type of matrix elements into another
+     *  @param _values is the array  of matrix elements that are to be converted
+     *  @param nvalues is the number of matrix elements that are to be converted
+     *  @return true if the conversion was successful
+     */
+    bool convertFromConstant(ConstantMatrixValues*     _values, int nvalues);
+    bool convertFromVarRef(VarReferenceMatrixValues* _values, int nvalues);
 #endif

@@ -538,6 +538,27 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
 
     try
     {
+
+        /* set default values first
+	     * Unfortunately there seems to be no way around a complete enumeration of options
+         */
+	    double axtol       = 1.0e-8;
+	    double atytol      = 1.0e-8;
+	    double objtol      = 1.0e-8;
+	    double pinftol     = 1.0e8;
+	    double dinftol     = 1.0e8;
+	    double minstepfrac = 0.90;
+	    double maxstepfrac = 0.97;
+	    double minstepp    = 1.0e-8;
+	    double minstepd    = 1.0e-8;
+	    int maxiter        = 100;
+	    int usexzgap       = 1;
+	    int tweakgap       = 0;
+	    int affine         = 0;
+	    int perturbobj     = 1;
+	    int fastmode       = 0;
+	    int pprintlevel    = 1;
+
         /* get options from OSoL */
         if(osoption == NULL && osol.length() > 0)
         {
@@ -555,7 +576,6 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
             outStr << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-
             std::vector<SolverOption*> optionsVector;
             optionsVector = osoption->getSolverOptions( "csdp",true);
             char *pEnd;
@@ -571,8 +591,58 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
                 outStr << std::endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-                optStr << optionsVector[ i]->name << "=" << optionsVector[ i]->value << std::endl;
+                // Store value
+                if (optionsVector[ i]->name == "axtol")
+					axtol = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "atytol")
+					atytol = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "objtol")
+					objtol = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "pinftol")
+					pinftol = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "dinftol")
+					dinftol = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "minstepfrac")
+					minstepfrac = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "maxstepfrac")
+					maxstepfrac = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "minstepp")
+					minstepp = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "minstepd")
+					minstepd = atof(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "maxiter")
+					maxiter = atoi(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "usexzgap")
+					usexzgap = atoi(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "tweakgap")
+					tweakgap = atoi(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "affine")
+					affine = atoi(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "perturbobj")
+					perturbobj = atoi(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "fastmode")
+					fastmode = atoi(optionsVector[ i]->value.c_str());
+                else if (optionsVector[ i]->name == "pprintlevel")
+					pprintlevel = atoi(optionsVector[ i]->value.c_str());
             }
+
+			// Write the values into the CSDP option file "param.csdp"
+            optStr << "axtol="       << os_dtoa_format(axtol)       << std::endl;
+            optStr << "atytol="      << os_dtoa_format(atytol)      << std::endl;
+            optStr << "objtol="      << os_dtoa_format(objtol)      << std::endl;
+            optStr << "pinftol="     << os_dtoa_format(pinftol)     << std::endl;
+            optStr << "dinftol="     << os_dtoa_format(dinftol)     << std::endl;
+            optStr << "maxiter="     <<                maxiter      << std::endl;
+            optStr << "minstepfrac=" << os_dtoa_format(minstepfrac) << std::endl;
+            optStr << "maxstepfrac=" << os_dtoa_format(maxstepfrac) << std::endl;
+            optStr << "minstepp="    << os_dtoa_format(minstepp)    << std::endl;
+            optStr << "minstepd="    << os_dtoa_format(minstepd)    << std::endl;
+            optStr << "usexzgap="    <<                usexzgap     << std::endl;
+            optStr << "tweakgap="    <<                tweakgap     << std::endl;
+            optStr << "affine="      <<                affine       << std::endl;
+            optStr << "printlevel="  <<                printlevel   << std::endl;
+            optStr << "perturbobj="  <<                perturbobj   << std::endl;
+            optStr << "fastmode="    <<                fastmode     << std::endl;
 
             FILE *paramfile;
             paramfile=fopen("param.csdp","w");
@@ -1006,6 +1076,7 @@ void  CsdpSolver::solve() throw (ErrorClass)
                     case PACKEDMATRIX:
                     default:
                         throw ErrorClass("Invalid Block Type in CSDP solution");
+
                     }; // end switch
 
                 if (!osresult->setMatrixVariablesOtherResultBlockElements(0, 0, 0, blk-1, blk-1, blk-1,  

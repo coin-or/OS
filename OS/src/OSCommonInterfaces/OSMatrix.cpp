@@ -4756,6 +4756,64 @@ bool LinearMatrixElements::deepCopyFrom(LinearMatrixElements *that)
     return true;
 }// end of LinearMatrixElements::deepCopyFrom()
 
+/**
+ *  Some methods to convert one type of matrix elements into another
+ */
+bool LinearMatrixElements::convertFromConstant(ConstantMatrixValues* _values, int nvalues)
+{
+    try
+    {
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromConstantToLinear: number of values does not match ");
+
+        if (this->value->el != NULL)
+            delete this->value->el;
+
+        this->value->el =  new LinearMatrixElement*[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+        {
+            this->value->el[i] =  new LinearMatrixElement();
+            this->value->el[i]->constant = _values->el[i];
+            this->value->el[i]->numberOfVarIdx = 0;
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of LinearMatrixElements::convertFromConstant
+
+bool LinearMatrixElements::convertFromVarRef(VarReferenceMatrixValues* _values, int nvalues)
+{
+    try
+    {
+        if (numberOfValues != nvalues)
+            throw ErrorClass("ConvertFromVarRefToLinear: number of values does not match ");
+
+        if (this->value->el != NULL)
+            delete this->value->el;
+
+        this->value->el =  new LinearMatrixElement*[nvalues];
+
+        for (int i=0; i<nvalues; i++)
+        {
+            this->value->el[i] =  new LinearMatrixElement();
+            this->value->el[i]->constant = 0;
+            this->value->el[i]->numberOfVarIdx = 1;
+            this->value->el[i]->varIdx    = new LinearMatrixElementTerm*[1];
+            this->value->el[i]->varIdx[0] = new LinearMatrixElementTerm();
+            this->value->el[i]->varIdx[0]->idx  = _values->el[i];
+            this->value->el[i]->varIdx[0]->coef = 0;
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}// end of LinearMatrixElements::convertFromVarRef
 
 /** ---------- Methods for class LinearMatrixValues ---------- */ 
 LinearMatrixValues::LinearMatrixValues():
