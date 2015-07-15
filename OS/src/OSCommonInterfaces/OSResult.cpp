@@ -885,7 +885,6 @@ OtherConstraintResult::~OtherConstraintResult()
 }// end OtherConstraintResult destructor
 
 
-
 ConstraintSolution::ConstraintSolution():
     numberOfOtherConstraintResults( 0),
     dualValues( NULL),
@@ -924,7 +923,6 @@ ConstraintSolution::~ConstraintSolution()
         other = NULL;
     }
 }// end ConstraintSolution destructor
-
 
 
 MatrixVariableValues::MatrixVariableValues():
@@ -974,6 +972,18 @@ MatrixVariableSolution::~MatrixVariableSolution()
 	if (values != NULL)
         delete values;
     values = NULL;
+
+    if (numberOfOtherMatrixVariableResults > 0 && other != NULL)
+    {
+        for(int i = 0; i < numberOfOtherMatrixVariableResults; i++)
+        {
+            delete other[i];
+            other[i] = NULL;
+        }
+        delete[] other;
+        other = NULL;
+    }
+
 #if 0
     if(numberOfOtherMatrixVariableResults > 0 && matrixVar != NULL)
     {
@@ -1138,13 +1148,15 @@ MatrixProgrammingSolution::~MatrixProgrammingSolution()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixProgrammingSolution Destructor");
 #endif
-	if (matrixVariables != NULL)
+    if (matrixVariables != NULL)
         delete matrixVariables;
     matrixVariables = NULL;
-	if (matrixObjectives != NULL)
+
+    if (matrixObjectives != NULL)
         delete matrixObjectives;
     matrixObjectives = NULL;
-	if (matrixConstraints != NULL)
+
+    if (matrixConstraints != NULL)
         delete matrixConstraints;
     matrixConstraints = NULL;
 
@@ -1186,7 +1198,6 @@ OtherSolutionResult::~OtherSolutionResult()
 }// end OtherSolutionResult destructor
 
 
-
 OtherSolutionResults::OtherSolutionResults():
     numberOfOtherSolutionResults( 0),
     otherSolutionResult( NULL)
@@ -1213,7 +1224,6 @@ OtherSolutionResults::~OtherSolutionResults()
         otherSolutionResult = NULL;
     }
 }// end OtherSolutionResults destructor
-
 
 
 OptimizationSolution::OptimizationSolution():
@@ -1303,7 +1313,6 @@ SolverOutput::~SolverOutput()
 }// end SolverOutput destructor
 
 
-
 OtherSolverOutput::OtherSolverOutput():
     numberOfSolverOutputs(0),
     solverOutput(NULL)
@@ -1331,7 +1340,6 @@ OtherSolverOutput::~OtherSolverOutput()
         solverOutput = NULL;
     }
 }// end OtherSolverOutput destructor
-
 
 
 OptimizationResult::OptimizationResult():
@@ -4548,6 +4556,7 @@ bool OSResult::setNumberOfTimes(int numberOfTimes)
     job->timingInformation->numberOfTimes = numberOfTimes;
     if (numberOfTimes > 0)
     {
+
 
 
         job->timingInformation->time = new TimeMeasurement*[numberOfTimes];

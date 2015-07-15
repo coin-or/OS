@@ -77,9 +77,46 @@ CsdpSolver::~CsdpSolver()
     //delete osinstance;
     //osinstance = NULL;
     delete csdpErrorMsg;
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_trace, "Leaving CsdpSolver destructor\n");
-#endif
+
+    // delete Csdp data structures
+    // Note: Some data items are allocated in init_soln.c; these must be free'd. 
+    // The others must be delete'd 
+    if (y != NULL)
+        free(y); 
+    y = NULL;
+    free_mat(X);
+    free_mat(Z);
+
+    for (int i=1; i<=C_matrix.nblocks; i++)
+    {
+        if (C_matrix.blocks[i].blockcategory == DIAG) 
+            delete[] C_matrix.blocks[i].data.vec;
+        else
+            delete[] C_matrix.blocks[i].data.mat;
+    }
+    delete [] C_matrix.blocks;
+
+    // Finally clear out mconstraints;
+    struct sparseblock *ptr;
+    struct sparseblock *oldptr;
+
+    if (mconstraints != NULL)
+    {
+        for (int i=1; i<=ncon; i++)
+        {
+            ptr = mconstraints[i].blocks;
+            while (ptr != NULL)
+            {
+                delete[] ptr->entries;
+                delete[] ptr->iindices;
+                delete[] ptr->jindices;
+                oldptr = ptr;
+                ptr = ptr->next;
+                delete oldptr;
+            }
+        }
+        delete[] mconstraints;
+    }
 }
 
 void CsdpSolver::buildSolverInstance() throw (ErrorClass)
@@ -403,7 +440,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         }
 
         /** Allocate space for the constraints (again using 1-based indexing). */
-        mconstraints = new constraintmatrix[ncon+1];
+        mconstraints = new constraintmatrix[ncon+1]; // leaks memory ??
   
         /** Null out all pointers in constraints. */
         for (int i=1; i<=ncon; i++)
@@ -540,24 +577,24 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
     {
 
         /* set default values first
-	     * Unfortunately there seems to be no way around a complete enumeration of options
+         * Unfortunately there seems to be no way around a complete enumeration of options
          */
-	    double axtol       = 1.0e-8;
-	    double atytol      = 1.0e-8;
-	    double objtol      = 1.0e-8;
-	    double pinftol     = 1.0e8;
-	    double dinftol     = 1.0e8;
-	    double minstepfrac = 0.90;
-	    double maxstepfrac = 0.97;
-	    double minstepp    = 1.0e-8;
-	    double minstepd    = 1.0e-8;
-	    int maxiter        = 100;
-	    int usexzgap       = 1;
-	    int tweakgap       = 0;
-	    int affine         = 0;
-	    int perturbobj     = 1;
-	    int fastmode       = 0;
-	    int pprintlevel    = 1;
+        double axtol       = 1.0e-8;
+        double atytol      = 1.0e-8;
+        double objtol      = 1.0e-8;
+        double pinftol     = 1.0e8;
+        double dinftol     = 1.0e8;
+        double minstepfrac = 0.90;
+        double maxstepfrac = 0.97;
+        double minstepp    = 1.0e-8;
+        double minstepd    = 1.0e-8;
+        int maxiter        = 100;
+        int usexzgap       = 1;
+        int tweakgap       = 0;
+        int affine         = 0;
+        int perturbobj     = 1;
+        int fastmode       = 0;
+        int pprintlevel    = 1;
 
         /* get options from OSoL */
         if(osoption == NULL && osol.length() > 0)
@@ -593,40 +630,40 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
 #endif
                 // Store value
                 if (optionsVector[ i]->name == "axtol")
-					axtol = atof(optionsVector[ i]->value.c_str());
+                    axtol = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "atytol")
-					atytol = atof(optionsVector[ i]->value.c_str());
+                    atytol = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "objtol")
-					objtol = atof(optionsVector[ i]->value.c_str());
+                    objtol = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "pinftol")
-					pinftol = atof(optionsVector[ i]->value.c_str());
+                    pinftol = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "dinftol")
-					dinftol = atof(optionsVector[ i]->value.c_str());
+                    dinftol = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "minstepfrac")
-					minstepfrac = atof(optionsVector[ i]->value.c_str());
+                    minstepfrac = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "maxstepfrac")
-					maxstepfrac = atof(optionsVector[ i]->value.c_str());
+                    maxstepfrac = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "minstepp")
-					minstepp = atof(optionsVector[ i]->value.c_str());
+                    minstepp = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "minstepd")
-					minstepd = atof(optionsVector[ i]->value.c_str());
+                    minstepd = atof(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "maxiter")
-					maxiter = atoi(optionsVector[ i]->value.c_str());
+                    maxiter = atoi(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "usexzgap")
-					usexzgap = atoi(optionsVector[ i]->value.c_str());
+                    usexzgap = atoi(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "tweakgap")
-					tweakgap = atoi(optionsVector[ i]->value.c_str());
+                    tweakgap = atoi(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "affine")
-					affine = atoi(optionsVector[ i]->value.c_str());
+                    affine = atoi(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "perturbobj")
-					perturbobj = atoi(optionsVector[ i]->value.c_str());
+                    perturbobj = atoi(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "fastmode")
-					fastmode = atoi(optionsVector[ i]->value.c_str());
+                    fastmode = atoi(optionsVector[ i]->value.c_str());
                 else if (optionsVector[ i]->name == "pprintlevel")
-					pprintlevel = atoi(optionsVector[ i]->value.c_str());
+                    pprintlevel = atoi(optionsVector[ i]->value.c_str());
             }
 
-			// Write the values into the CSDP option file "param.csdp"
+            // Write the values into the CSDP option file "param.csdp"
             optStr << "axtol="       << os_dtoa_format(axtol)       << std::endl;
             optStr << "atytol="      << os_dtoa_format(atytol)      << std::endl;
             optStr << "objtol="      << os_dtoa_format(objtol)      << std::endl;
@@ -787,6 +824,11 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
 void  CsdpSolver::solve() throw (ErrorClass)
 {
     std::ostringstream outStr;
+    double* mdObjValues = NULL;
+    int* colOffset = NULL;
+    int* colOffsetD = NULL;
+//    int* rowOffset = NULL;
+//    int* rowOffsetD = NULL;
 
     if( this->bCallbuildSolverInstance == false) buildSolverInstance();
     if( this->bSetSolverOptions == false) setSolverOptions();
@@ -810,7 +852,6 @@ void  CsdpSolver::solve() throw (ErrorClass)
         //call solver
         int returnCode = easy_sdp(nC_rows,ncon,C_matrix,rhsValues,mconstraints,0.0,&X,&y,&Z,&pobj,&dobj);
 
-        double*  mdObjValues = NULL;
         int solIdx = 0;
         int numberOfOtherVariableResults;
         int otherIdx;
@@ -874,12 +915,12 @@ void  CsdpSolver::solve() throw (ErrorClass)
             if(numCon > 0)
                 osresult->setDualVariableValuesDense(solIdx, y+1); // !! Csdp uses Fortran indexing 
 
-            int* colOffset = new int[X.nblocks+1];
+            colOffset = new int[X.nblocks+1];
             colOffset[0] = 0;
             for (int i=1; i<=X.nblocks; i++)
                 colOffset[i] = colOffset[i-1] + X.blocks[i].blocksize;
 
-            int* colOffsetD = new int[Z.nblocks+1];
+            colOffsetD = new int[Z.nblocks+1];
             colOffsetD[0] = 0;
             for (int i=1; i<=Z.nblocks; i++)
                 colOffsetD[i] = colOffsetD[i-1] + Z.blocks[i].blocksize;
@@ -918,8 +959,8 @@ void  CsdpSolver::solve() throw (ErrorClass)
             //count nonzeroes and set column starts
             for (int blk=1; blk<=X.nblocks; blk++)
             {
-                start = new int[colOffset[blk]-colOffset[blk-1]+1];
-            	start[0] = 0;
+                start = new int[colOffset[blk]-colOffset[blk-1]+1]; // leaks memory
+                start[0] = 0;
                 nonz = 0;
 
                 switch (X.blocks[blk].blockcategory)
@@ -951,8 +992,8 @@ void  CsdpSolver::solve() throw (ErrorClass)
                 }; // end switch
 
                 // go through nonzeros a second time and store values
-                index = new    int[nonz];
-                value = new ConstantMatrixValues();
+                index = new    int[nonz]; // leaks memory
+                value = new ConstantMatrixValues(); // leaks memory
                 value->numberOfEl = nonz;
                 value->el = new double[nonz];
 
@@ -998,17 +1039,26 @@ void  CsdpSolver::solve() throw (ErrorClass)
                                                           ENUM_MATRIX_TYPE_constant, 
                                                           ENUM_MATRIX_SYMMETRY_lower))
                     throw ErrorClass("OSResult error: setMatrixVarValuesBlockElements");
-                }; // end block
+                if (start != NULL)
+                    delete[] start;
+                start = NULL;
+                if (index != NULL)
+                    delete[] index;
+                index = NULL;
+                if (value != NULL)
+                    delete value;
+                value = NULL;
+            }; // end block
 
-                // now the dual variables
-                for (int blk=1; blk<=Z.nblocks; blk++)
+            // now the dual variables
+            for (int blk=1; blk<=Z.nblocks; blk++)
+            {
+                start = new int[colOffsetD[blk]-colOffsetD[blk-1]+1]; // leaks memory
+                start[0] = 0;
+                nonz = 0;
+
+                switch (Z.blocks[blk].blockcategory)
                 {
-	                start = new int[colOffsetD[blk]-colOffsetD[blk-1]+1];
-                	start[0] = 0;
-                    nonz = 0;
-
-                    switch (Z.blocks[blk].blockcategory)
-                    {
                     case DIAG:
                         for (int i=1; i<=Z.blocks[blk].blocksize; i++)
                         {
@@ -1034,17 +1084,17 @@ void  CsdpSolver::solve() throw (ErrorClass)
                     case PACKEDMATRIX:
                     default:
                         throw ErrorClass("Invalid Block Type in CSDP solution");
-                    }; // end switch
+                }; // end switch
 
-                    // go through nonzeros a second time and store values
-                    index = new    int[nonz];
-                    value = new ConstantMatrixValues();
-                    value->numberOfEl = nonz;
-                    value->el = new double[nonz];
+                // go through nonzeros a second time and store values
+                index = new    int[nonz]; // leaks memory
+                value = new ConstantMatrixValues(); // leaks memory
+                value->numberOfEl = nonz;
+                value->el = new double[nonz];
 
-                    nonz = 0;
-                    switch (Z.blocks[blk].blockcategory)
-                    {
+                nonz = 0;
+                switch (Z.blocks[blk].blockcategory)
+                {
                     case DIAG:
                         for (int i=1; i<=Z.blocks[blk].blocksize; i++)
                         {
@@ -1077,14 +1127,23 @@ void  CsdpSolver::solve() throw (ErrorClass)
                     default:
                         throw ErrorClass("Invalid Block Type in CSDP solution");
 
-                    }; // end switch
+                }; // end switch
 
                 if (!osresult->setMatrixVariablesOtherResultBlockElements(0, 0, 0, blk-1, blk-1, blk-1,  
                                                           nonz, start, index, value,
                                                           ENUM_MATRIX_TYPE_constant, 
                                                           ENUM_MATRIX_SYMMETRY_lower))
                     throw ErrorClass("OSResult error: setMatrixVariablesOtherResultBlockElements");
-                }; // end block
+                if (start != NULL)
+                    delete[] start;
+                start = NULL;
+                if (index != NULL)
+                    delete[] index;
+                index = NULL;
+                if (value != NULL)
+                    delete value;
+                value = NULL;
+            }; // end block
             break;
         }
         case 1:
@@ -1132,10 +1191,34 @@ void  CsdpSolver::solve() throw (ErrorClass)
             throw ErrorClass("Csdp FAILED TO SOLVE THE PROBLEM");
 
         osrl = osrlwriter->writeOSrL( osresult);
+
+        if (mdObjValues != NULL)
+            delete[] mdObjValues;
+        mdObjValues = NULL;
+
+        if (colOffset != NULL)
+            delete[] colOffset;
+        colOffset = NULL;
+
+        if (colOffsetD != NULL)
+            delete[] colOffsetD;
+        colOffsetD = NULL;
     }
 
     catch (const ErrorClass& eclass)
     {
+        if (mdObjValues != NULL)
+            delete[] mdObjValues;
+        mdObjValues = NULL;
+
+        if (colOffset != NULL)
+            delete[] colOffset;
+        colOffset = NULL;
+
+        if (colOffsetD != NULL)
+            delete[] colOffsetD;
+        colOffsetD = NULL;
+
         outStr.str("");
         outStr.clear();
         outStr << "error in OSCsdpSolver routine solve():\n" << eclass.errormsg << endl;

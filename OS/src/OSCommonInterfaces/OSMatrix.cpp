@@ -186,6 +186,21 @@ MatrixType::~MatrixType()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixType Destructor");
 #endif
+    if (ExpandedMatrixInRowMajorForm != NULL)
+        delete ExpandedMatrixInRowMajorForm;
+    ExpandedMatrixInRowMajorForm = NULL;
+
+    if (ExpandedMatrixInColumnMajorForm != NULL)
+        delete ExpandedMatrixInColumnMajorForm;
+    ExpandedMatrixInColumnMajorForm = NULL;
+
+    if (m_miRowPartition != NULL)
+        delete[] m_miRowPartition;
+    m_miRowPartition = NULL;
+
+    if (m_miColumnPartition != NULL)
+        delete[] m_miColumnPartition;
+    m_miColumnPartition = NULL;
 }// end of ~MatrixType
 
 bool MatrixType::alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols)

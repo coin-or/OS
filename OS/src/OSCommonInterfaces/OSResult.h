@@ -2244,17 +2244,12 @@ public:
 };//OtherSolutionResults
 
 
-
 /*! \class OptimizationSolution
  *  \brief The OptimizationSolution Class.
  *
  * @author Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
-
-
-
-
  *
  * \remarks
  * A class for reporting the various components of
