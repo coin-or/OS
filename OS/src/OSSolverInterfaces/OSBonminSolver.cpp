@@ -672,6 +672,12 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass)
 	if (osinstance->getObjectiveNumber() > 1)
     		throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
 
+        if(osoption == NULL && osol.length() > 0)
+        {
+            m_osolreader = new OSoLReader();
+            osoption = m_osolreader->readOSoL( osol);
+        }
+
         // Create a new instance of your nlp
         tminlp = new BonminProblem( osinstance, osoption);
         this->bCallbuildSolverInstance = true;
@@ -735,12 +741,6 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
         if(printSolution == 1)
         {
             tminlp->printSolutionAtEndOfAlgorithm();
-        }
-        //
-        if(osoption == NULL && osol.length() > 0)
-        {
-            m_osolreader = new OSoLReader();
-            osoption = m_osolreader->readOSoL( osol);
         }
 
         if(osoption != NULL && osoption->getNumberOfSolverOptions() > 0 )

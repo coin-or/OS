@@ -156,13 +156,19 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
             osinstance = m_osilreader->readOSiL( osil);
         }
 
+        if(osoption == NULL && osol.length() > 0)
+        {
+            m_osolreader = new OSoLReader();
+            osoption = m_osolreader->readOSoL( osol);
+        }
+
         osinstance->initForAlgDiff( );
         //Ipopt::Journalist* jnlst = new Ipopt::Journalist();
         //jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
         //couenne = new CouenneProblem(NULL, NULL, jnlst);
         couenne = new CouenneProblem(NULL, NULL, NULL);
         int n_allvars = osinstance->getVariableNumber();
-        if( n_allvars < 0 )throw ErrorClass("Couenne solver Cannot have a negatiave number of Variables");
+        if( n_allvars < 0 )throw ErrorClass("Couenne solver Cannot have a negative number of Variables");
 #ifndef NDEBUG
         outStr.str("");
         outStr.clear();
@@ -225,7 +231,6 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
                 lin[i].second = -sv->values[ i];
             }
         }
-
 
         ScalarExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
         if (exptree != NULL)
@@ -450,11 +455,6 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass)
         //turn off a lot of output -- this can be overridden by using OSOptions
         couenneSetup.options()->SetIntegerValue("bonmin.bb_log_level", 0);
         couenneSetup.options()->SetIntegerValue("bonmin.nlp_log_level", 0 );
-        if(osoption == NULL && osol.length() > 0)
-        {
-            m_osolreader = new OSoLReader();
-            osoption = m_osolreader->readOSoL( osol);
-        }
 
         if(osoption != NULL && osoption->getNumberOfSolverOptions() > 0 )
         {
@@ -527,21 +527,9 @@ void CouenneSolver::solve() throw (ErrorClass)
     if(this->bSetSolverOptions == false) setSolverOptions() ;
     try
     {
-
-        //couenne->print();
-
         char **argv = NULL;
 
 	bb.setProblem(couenne);
-
-        //using namespace Ipopt;
-
-        if(osoption == NULL  && osol.length() > 0)
-        {
-            m_osolreader = new OSoLReader();
-            osoption = m_osolreader->readOSoL( osol);
-        }
-
 
         tminlp = new BonminProblem( osinstance, osoption);
 
@@ -565,7 +553,6 @@ void CouenneSolver::solve() throw (ErrorClass)
         // initialize causes lots of memory leaks
         bool setupInit = false;
         setupInit = couenneSetup.InitializeCouenne(argv, couenne, NULL, ci);
-
 
         if(setupInit == false)
         {
@@ -591,7 +578,6 @@ void CouenneSolver::solve() throw (ErrorClass)
             osresult->setGeneralStatusType("normal");
             osrl = osrlwriter->writeOSrL( osresult);
             return;
-
         }
 
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_info, " \n\n");
@@ -631,7 +617,6 @@ void CouenneSolver::solve() throw (ErrorClass)
         if (bb.model (). cutGenerators ())
             cg = dynamic_cast <CouenneCutGenerator *>
                  (bb.model (). cutGenerators () [0] -> generator ());
-
 
         double global_opt;
         couenneSetup.options () -> GetNumericValue ("couenne_check", global_opt, "couenne.");
@@ -762,13 +747,12 @@ void CouenneSolver::writeResult()
                 // okay if equal to 9999000000000 we are probably unbounded
                 if(fabs(*(z + 0)) == 9.999e+12)
                 {
-                    solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: Continuous relaxation is unbounded, the MINLP may or may not be 		unbounded.";
+                    solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: Continuous relaxation is unbounded, the MINLP may or may not be unbounded.";
                     osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
                     break;
                 }
                 osresult->setObjectiveValuesDense(solIdx, z);
             }
-
 
             if(osinstance->getVariableNumber() > 0)
             {

@@ -32,8 +32,8 @@ using namespace Ipopt;
 IpoptSolver::IpoptSolver()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, 
-        "inside IpoptSolver constructor\n");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                      ENUM_OUTPUT_LEVEL_debug, "inside IpoptSolver constructor\n");
 #endif
     osrlwriter = new OSrLWriter();
     osresult = new OSResult();
@@ -45,8 +45,8 @@ IpoptSolver::IpoptSolver()
 IpoptSolver::~IpoptSolver()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, 
-        "inside IpoptSolver destructor\n");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                      ENUM_OUTPUT_LEVEL_debug, "inside IpoptSolver destructor\n");
 #endif
     if(m_osilreader != NULL) delete m_osilreader;
     m_osilreader = NULL;
@@ -869,6 +869,12 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass)
         if (osinstance->getObjectiveNumber() > 1)
             throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
 
+        if(osoption == NULL && osol.length() > 0)
+        {
+            m_osolreader = new OSoLReader();
+            osoption = m_osolreader->readOSoL( osol);
+        }
+
         // Create a new instance of your nlp
         nlp = new IpoptProblem( osinstance, osoption, osresult, ipoptErrorMsg);
         app = new IpoptApplication();
@@ -922,13 +928,6 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             }
         }
         /* end of the default options, now get options from OSoL */
-
-
-        if(osoption == NULL && osol.length() > 0)
-        {
-            m_osolreader = new OSoLReader();
-            osoption = m_osolreader->readOSoL( osol);
-        }
 
         if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 )
         {
@@ -1004,7 +1003,6 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
         throw ErrorClass( osrl) ;
     }
 }//end setSolverOptions()
-
 
 
 void IpoptSolver::solve() throw (ErrorClass)

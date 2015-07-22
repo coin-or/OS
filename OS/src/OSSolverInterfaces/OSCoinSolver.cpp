@@ -156,11 +156,16 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
             m_osilreader = new OSiLReader();
             osinstance = m_osilreader->readOSiL( osil);
         }
+        if(osoption == NULL && osol.length() > 0)
+        {
+            m_osolreader = new OSoLReader();
+            osoption = m_osolreader->readOSoL( osol);
+        }
         finish = clock();
         duration = (double) (finish - start) / CLOCKS_PER_SEC;
 
-    // Can't handle multiobjective problems properly --- especially nonlinear ones
-    if (osinstance->getObjectiveNumber() > 1)
+        // Can't handle multiobjective problems properly --- especially nonlinear ones
+        if (osinstance->getObjectiveNumber() > 1)
             throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
 
         // get the type of solver requested from OSoL string
@@ -539,13 +544,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
     // read option string if necessary
     try
     {
-        if(osoption == NULL && osol.length() > 0)
-        {
-            m_osolreader = new OSoLReader();
-            osoption = m_osolreader->readOSoL( osol);
-        }
-
-// Process any options found
+        // Process any options found
         if(osoption != NULL)
         {
             int i;

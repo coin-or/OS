@@ -1,10 +1,10 @@
 /* $Id: OSDefaultSolver.h 4562 2013-01-02 12:31:12Z Gassmann $ */
 /** @file DefaultSolver.h
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2015, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -12,15 +12,12 @@
  *
  */
 
-
-
 #ifndef DEFAULTSOLVER
 #define DEFAULTSOLVER
 
-
 #include "OSInstance.h"
-#include "OSResult.h"
 #include "OSOption.h"
+#include "OSResult.h"
 
 #include <string>
 
@@ -36,15 +33,11 @@ class DefaultSolver
 {
 
 public:
-
-
-
     /** osil holds the problem instance as a std::string */
     std::string osil;
 
     /** osol holds the options for the solver */
     std::string osol;
-
 
     /** osrl holds the solution or result of the model */
     std::string osrl;
@@ -53,20 +46,16 @@ public:
     /** osinstance holds the problem instance in-memory as an OSInstance object */
     OSInstance *osinstance;
 
-
     /** osoption holds the solver options in-memory as an OSOption object */
     OSOption  *osoption;
 
     /** osresult holds the solution or result of the model in-memory as an OSResult object */
     OSResult  *osresult;
 
-
-
     /**
-     * sSolverName is the name of the Coin solver used, e.g. glpk, or clp
+     * sSolverName is the name of the Coin solver used, e.g. ipopt, or clp
      */
     std::string sSolverName;
-
 
     /**
      * bCallbuildSolverInstance is set to true if buildSolverService has
@@ -74,13 +63,11 @@ public:
      */
     bool bCallbuildSolverInstance;
 
-
     /**
      * bSetSolverOptions is set to true if setSolverOptions has
      * been called, false otherwise
      */
     bool bSetSolverOptions;
-
 
     /** solve is a virtual function -- the actual solvers will
      * implement their own solve method
@@ -107,14 +94,7 @@ public:
     /**
      * default destructor.
      */
-    virtual	~DefaultSolver() = 0;
-
-
-
-
-
-
-
+    virtual ~DefaultSolver() = 0;
 };
 
 
