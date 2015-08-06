@@ -270,7 +270,7 @@ sudo tar -xvf gcc-bin.tar -C /
 
 \end{itemize}
 
-We have also successfully used the fink project, see
+We have also successfully used the {\tt fink} project, see
 
 \url{http://www.finkproject.org/}
 
@@ -544,7 +544,8 @@ Cygwin search path.
 :/cygdrive/c/WINDOWS/system32:/cygdrive/c/WINDOWS
 :/cygdrive/c/WINDOWS/System32/Wbem:/cygdrive/c/Program Files/ATI Technologies/ATI Control Panel
 :/cygdrive/c/Program Files/Common Files/Roxio Shared/DLLShared/
-:/cygdrive/c/Program Files/QuickTime/QTSystem/:/cygdrive/c/Program Files/Microsoft SQL Server/90/Tools/bin/
+:/cygdrive/c/Program Files/QuickTime/QTSystem/
+:/cygdrive/c/Program Files/Microsoft SQL Server/90/Tools/bin/
 :/cygdrive/c/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Bin/
 :/cygdrive/c/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Bin/WinNT/
 :/cygdrive/c/Program Files/SSH Communications Security/SSH Secure Shell
@@ -605,7 +606,7 @@ BuildTools/compile_f2c
 \item{}  Run the configure script
 
 \begin{verbatim}
- ./configure  --enable-doscompile=msvc
+./configure  --enable-doscompile=msvc
 \end{verbatim}
 
 
@@ -677,7 +678,7 @@ and install.  Double-clicking on the MSYS icon will open a Bourne shell window.
 
 \item{}  Download  Visual Studio Express C++ at 
 
-\noindent{\scriptsize\tt\UrlCl}
+\noindent{\tt\UrlCl}
 
 and install.
 
@@ -698,7 +699,6 @@ C:\Program Files\Microsoft Visual Studio 8\Common7\Tools;
 C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\bin;
 C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;
 C:\Program Files\Microsoft Visual Studio 8\VC\VCPackages
-
 
 INCLUDE=C:\Program Files\Microsoft Visual Studio 8\VC\INCLUDE;
 C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include
@@ -1136,11 +1136,11 @@ unlike the configured COIN-OR projects that appear as
 #define COIN_HAS_CLP 1
 \end{verbatim}
 In the following subsections we  describe how to incorporate various  third-party packages into the OS project
-and see to it that the
+and see to it that the corresponding
 \begin{verbatim}
 COIN_HAS_XXXXX
 \end{verbatim}
-variable is defined in  {\tt config\_os.h}.
+variables are defined in  {\tt config\_os.h}.
 \index{COIN_HAS_XXXXX@{\tt COIN\_HAS\_XXXXX}|)}
 
 \medskip
@@ -1275,6 +1275,7 @@ At the time of this writing, the most up-to-date version is \GlpkVer, which can 
 %\begin{verbatim}
 %ftp://ftp.gnu.org/gnu/glpk/glpk-4.30.tar.gz
 %\end{verbatim}
+
 \noindent{\tt\UrlGlpkDownload}
 \index{Third-party software!GLPK|)}
 
@@ -1308,8 +1309,9 @@ After installing the binaries and include files in an appropriate directory, run
 include and library directory. An example is given below:
 
 \begin{verbatim}
-configure --with-cplex-lib="-L$(HOME)/Cplex/cplex/lib -lcplex -lilocplex -lm -lpthread"   \
---with-cplex-incdir="$(HOME)/Cplex/cplex/include"
+configure --with-cplex-incdir="$(HOME)/Cplex/cplex/include"  \
+--with-cplex-lib="-L$(HOME)/Cplex/cplex/lib -lcplex -lilocplex -lm -lpthread"
+
 \end{verbatim}
 
 You may also need the following environment variables (if they are not already set). The following  values were used in a working implementation.
@@ -1343,9 +1345,10 @@ GRB_LICENSE_FILE='$(HOME)/gurobi/gurobi.lic'
 linked to OS, file locations for both programs must be added to the {\tt configure} command, as follows:
 
 \begin{verbatim}
-configure --with-cplex-lib="-L$(HOME)/Cplex/cplex/lib -lcplex -lilocplex -lm -lpthread""  \
---with-gurobi-lib="-L$(HOME)/gurobi/lib -lgurobi55 -lpthread -lm"    \
---with-cplex-incdir= $(HOME)/Cplex/cplex/include  --with-gurobi-incdir="$(HOME)/gurobi/include" 
+configure --with-cplex-incdir= $(HOME)/Cplex/cplex/include \
+--with-cplex-lib="-L$(HOME)/Cplex/cplex/lib -lcplex -lilocplex -lm -lpthread""  \
+--with-gurobi-incdir="$(HOME)/gurobi/include" \
+--with-gurobi-lib="-L$(HOME)/gurobi/lib -lgurobi55 -lpthread -lm"
 \end{verbatim}
   
 \index{Gurobi|)}%

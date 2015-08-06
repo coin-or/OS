@@ -2,16 +2,23 @@
 
 This chapter describes some sample applications distributed with the OS project. These applications 
 are stand-alone developments, but they can be linked against the OS libraries and are intended to show
-the sophisticated user how to harness the OS API to build their own interfaces with the OSxL schemas, their private solvers, front ends, or other projects.
+experienced users how to harness the OS API to build their own interfaces with the OSxL schemas, their private solvers, front ends, or other projects.
 
 \ifdevelop
-The example executable files described in this chapter are {\bf not} built by running {\tt configure} and {\tt make}. 
+The example executable files described in this chapter are not part of the regular {\tt configure\rm/\tt make} cycle and are not built by running {\tt configure} and {\tt make}. However, in order to build them, the OS libraries must be installed and available. Each application comes with its own makefile  
+and needs to be built separately.
 
-{\bf Windows users} are advised to download a binary distribution and use the solution file {\tt examples.sln} provided there in the 
+\subdivision{Building the sample applications}\label{section:buildSamples}
+
+Some of these examples (particularly the OSSolverdemo in Section~\ref{section:ossolverdemo}) 
+make use of {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, which relies on a Fortran compiler\index{Fortran}.
+{\bf Windows users} may therefore wish to download a binary distribution and use the solution file {\tt examples.sln} provided there in the 
 \begin{verbatim}
 examples\MSVisualStudio
 \end{verbatim}
-directory to buld the examples under MS VisualStudio.
+directory to build the examples under MS VisualStudio.
+
+\medskip
 
 In order to build the examples in a {\bf unix environment}\index{unix} the user must first run
 %
@@ -32,20 +39,20 @@ In addition the folder {\tt pkgconfig} is placed in the {\tt lib} directory as w
 \begin{verbatim}
 export PKG_CONFIG_PATH=<path to pkgconfig directory>
 \end{verbatim}
-The source code for the examples is in the {\tt COIN-OS/examples} hierarchy.  For instance, the {\tt osModDemo}
+The source code for the examples is in the {\tt COIN-OS/examples} hierarchy.  For instance, the {\tt osModificationDemo}
 example of section~\ref{section:exampleOSModDemo} is in the directory
 \begin{verbatim}
-COIN-OS/examples/osModDemo
+COIN-OS/examples/osModificationDemo
 \end{verbatim}
 
 Next, the user should connect to the appropriate example directory and run {\tt make}.
 If the user has done a VPATH\index{VPATH} build, the makefiles\index{makefile|(} will be in each respective example directory under
 \begin{verbatim}
-vpath_root/OS/examples
+vpath_root/examples
 \end{verbatim}
 otherwise, the makefiles will be in each respective example directory under
 \begin{verbatim}
-COIN-OS/OS/examples
+COIN-OS/examples
 \end{verbatim}
 \else
 The binary distribution contains a number of sample applications that illustrate the use of the
@@ -74,7 +81,7 @@ examples/osModDemo
 \fi
 
 The {\tt Makefile} in each example directory is fairly simple and is designed to be easily modified 
-by the user if necessary.  The part of the Makefile to be adjusted, if necessary, is
+by the user if necessary.  The part of the {\tt Makefile} to be adjusted, if necessary, is
 
 \begin{verbatim}
 ##########################################################################
@@ -100,7 +107,7 @@ prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
 \end{verbatim}
 
 
-Developers can use the Makefiles as a starting point for building applications that use the 
+Developers can use the {\tt Makefile}s as a starting point for building applications that use the 
 OS project libraries\index{makefile|)}.
 
 
@@ -109,7 +116,7 @@ OS project libraries\index{makefile|)}.
 \subdivision{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
 
 \index{Algorithmic differentiation|(}
-In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt OSAlgorithmicDiffTest.cpp}. This code
+In the {\tt examples/algorithmicDiff} folder is test code {\tt OSAlgorithmicDiffTest.cpp}. This code
 illustrates the key methods in the {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} API that are used for
 algorithmic differentiation.   These methods are described in Section~\ref{section:ad}.
 
@@ -143,9 +150,9 @@ osinstance->addVariable(1, "x1", 0, 1, 'B');
 \end{verbatim}
 There is also a method {\tt setVariables} for adding more than one variable simultaneously.  The objective function(s) and constraints are added through similar calls.
 
-Nonlinear terms are also easily added.  The following code illustrates how to add a nonlinear term
+Nonlinear terms are also easily added.  The following code illustrates how to add the nonlinear term
 $x_{0}*x_{1}$ in the {\tt <nonlinearExpressions>} section of  OSiL. This term is part of constraint~1
-and is the second of six constraints contained in the instance.
+and is the second of six expressions contained in the instance.
 \begin{verbatim}
 osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = 6;
 osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ 6 ];
@@ -175,30 +182,20 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 
 %\subdivision{Matlab:  Using  MATLAB To Generate OSiL}\label{section:exampleMatlab}
 
-\subdivision{branchCutPrice:  Using Bcp}\label{section:examplebranchCutPrice}
-
-This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  
-This project offers the user with the ability to have control over each node in the branch and process. 
-This makes it possible to add user-defined cuts and/or user-defined variables. At each node in the tree, 
-a call is made to the method {\tt process\_lp\_result()}. In the example problem we illustrate 1) adding COIN-OR Cgl cuts, 
-2) a user-defined cut, and 3) a user-defined variable. 
-
-
 \subdivision{OSModificationDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
 
 The {\tt osModificationDemo} folder holds the file {\tt OSModificationDemo.cpp}.
 This is similar to the {\tt instanceGenerator} example. In this case, a simple
 linear program is generated. However, this example also illustrates how to
 modify an in-memory OSInstance object. In particular, we illustrate how to
-modify an objective function coeffient. Note the dual occurrence of the
-following code
+modify an objective function coeffient. Note the repeated occurrence of the code
 
 \begin{verbatim}
 solver->osinstance->bObjectivesModified = true;
 \end{verbatim}
 
-\noindent in the {\tt OSModificationDemo.cpp} file (lines 177 and 187).
-This line is critical, since otherwise changes made to the OSInstance object
+\noindent in the {\tt OSModificationDemo.cpp} file (lines 175 and 185).
+These lines are critical, since otherwise changes made to the OSInstance object
 will not be passed to the solver.
 
 This example also illustrates calling a COIN-OR solver,
@@ -278,8 +275,13 @@ expected by the solver.
 
 
 \item[] {\tt std::string  description} -- this argument is used to provide any detail or 
-additional information about the option. An empty string ({\tt""}) can be passed if such additional
-information is not needed.
+additional information about the option.
+
+\item[] Only {\tt name} is mandatory in the OSiL schema. 
+However, the API requires mention of all six arguments. 
+If any of the remaining optional arguments are not needed, 
+an empty string ({\tt""}) should be passed in its place.
+
 \end{itemize}
 
 For excellent documentation that details solver options for Bonmin, Cbc, and Ipopt  we recommend 
@@ -297,6 +299,7 @@ DefaultSolver *solver  = NULL;
 \end{verbatim}
 
 The Cbc, Clp and SYMPHONY solvers as well as other solvers of linear and integer linear programs
+--- including third-party solvers such as GLPK, Cplex and Gurobi ---  
 are all invoked by creating a {\tt CoinSolver().} For example, the following is used to invoke Cbc.
 
 \begin{verbatim}
@@ -305,11 +308,13 @@ solver->sSolverName ="cbc";
 \end{verbatim}
 
 %Then to declare a specific, for example, an {\tt Ipopt} solver, simply write
-Other solvers, particularly Ipopt, Bonmin and Couenne are implemented separately. So to declare,
+Other solvers, particularly Ipopt, Bonmin and Couenne, as well as Csdp where available, 
+are implemented separately. So to declare,
 for example, an Ipopt solver, one should write
 
 \begin{verbatim}
 solver = new IpoptSolver();
+solver->sSolverName ="ipopt";
 \end{verbatim}
 
 The syntax is the same regardless of solver. 
@@ -353,15 +358,15 @@ We now highlight some of the features illustrated by each of the solver examples
 
 \begin{itemize}
 \item {\bf Clp --}  In this example we read in a problem instance in MPS format.  The class 
-{\tt OSmps2osil}  has a method {\tt mps2osil} that is used to convert the MPS instance contained 
+{\tt OSmps2OS}  has a method {\tt mps2OS} that is used to convert the MPS instance contained 
 in a file into an in-memory {\tt OSInstance} object. This example also illustrates how to 
-set options using the Osi interface. In particular we turn on intermediate output which is 
+set options using the Osi interface. In particular we turn on intermediate output, which is 
 turned off by default in the Coin Solver Interface. 
 
 \item {\bf Cbc --}  In this example we read a problem instance that is in OSiL format and create 
-an in-memory {\tt OSInstance} object.  We then create an {\tt OSOption} object.  This is quite trivial.  
-A  plain-text XML file conforming to the OSiL schema is read into a string {\tt osil} which is then 
-converted into the in-memory {\tt OSInstance} object by
+an in-memory {\tt OSInstance} object.  This is quite trivial.  
+A  plain-text XML file conforming to the OSiL schema is read into the string {\tt osil}, 
+which is then  converted into an in-memory {\tt OSInstance} object by
 
 \begin{verbatim}
 OSiLReader *osilreader = NULL;
@@ -371,7 +376,7 @@ osinstance = osilreader->readOSiL( osil);
 \end{verbatim}
 
 
- We set the linear programming algorithm to be the primal simplex method and then set the option 
+We then create an {\tt OSOption} object.   We set the linear programming algorithm to be the primal simplex method and then set the option 
 on the pivot selection to be Dantzig rule.  Finally, we set the print level to be 10.
 
 \item {\bf SYMPHONY --}   In this example we also read a problem instance that is in OSiL format and 
@@ -384,10 +389,12 @@ a string {\tt osil}.  We then feed the {\tt osil} string directly into the Ipopt
 \begin{verbatim}
 solver->osil = osil;
 \end{verbatim} 
-The user always has the option of providing the OSiL to the solver as either a string or in-memory object.
+The user always has the option of providing the problem instance to the solver 
+as either an OSiL string or an in-memory object.
 
 Next we create an {\tt OSOption} object. For Ipopt, we illustrate setting the maximum iteration limit 
-and also provide the name of the output file. In addition, the OSOption object can hold initial solution 
+and also provide the name of the output file. 
+In addition, the {\tt OSOption} object can hold initial solution 
 values. We illustrate how to initialize all of the variable to 1.0.
 
 \begin{verbatim}
@@ -402,7 +409,7 @@ osoption->setInitVarValuesDense(numVar, xinitial);
 
 
 \item {\bf Bonmin --}  In this example we read a problem instance that is in OSiL format and create 
-an in-memory {\tt OSInstance} object just as was done in the Cbc and SYMPHONY examples.   
+an in-memory {\tt OSInstance} object, just as was done in the Cbc and SYMPHONY examples.   
 We then create an {\tt OSOption} object.  In setting the  {\tt OSOption} object we intentionally 
 set an option that will cause the Bonmin solver to terminate early.  In particular we set the 
 {\tt node\_limit} to zero. 
@@ -427,13 +434,13 @@ LIMIT_EXCEEDED[BONMIN]: A resource limit was exceeded, we provide the current so
 
 
 \item {\bf Couenne --}   In this example we read in a problem instance in AMPL nl format.  
-The class {\tt OSnl2osil}  has a method {\tt nl2osil} that is used to convert the nl instance 
+The class {\tt OSnl2OS}  has a method {\tt nl2OS} that is used to convert the nl instance 
 contained in a file into an in-memory {\tt OSInstance} object. This is done as follows:
 
 \begin{verbatim}
 // convert to the OS native format
-OSnl2osil *nl2osil = NULL;
-nl2osil = new OSnl2osil( nlFileName);
+OSnl2OS *nl2osil = NULL;
+nl2osil = new OSnl2OS( nlFileName);
 // create the first in-memory OSInstance
 nl2osil->createOSInstance() ;
 osinstance =  nl2osil->osinstance;
@@ -446,20 +453,30 @@ Couenne uses Bonmin which uses Ipopt.  So for example,
 \begin{verbatim}
 osoption->setAnotherSolverOption("max_iter","100","couenne","ipopt","integer","");
 \end{verbatim}
-identifies the solver as {\tt couenne}, but the category of value of {\tt ipopt}  tells the solver 
+identifies the solver as {\tt couenne}, but the value of the fourth argument ({\tt ipopt})  tells the solver 
 interface to set the iteration limit on the Ipopt algorithm that is solving the continuous relaxation 
 of the problem.  Likewise, the setting
 \begin{verbatim}
 osoption->setAnotherSolverOption("num_resolve_at_node","3","couenne","bonmin","integer","");
 \end{verbatim}
-identifies the solver as {\tt couenne}, but the category of value of {\tt bonmin}  tells the solver 
+identifies the solver as {\tt couenne}, but the value of the fourth argument ({\tt bonmin})  tells the solver 
 interface to tell the Bonmin solver to try three starting points at each node. 
 
  
 
-\subdivision{OSResultDemo: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
+\subdivision{OSResultDemo: Building an In-Memory Result Object to Display Solver Results}\label{section:exampleOSResultDemo}
 
-The OS protocol for representing an optimization result is {\tt OSrL}. Like the {\tt OSiL} and {\tt OSoL} protocol, this protocol has an associated in-memory {\tt OSResult} class with corresponding API.  The use of the API is demonstrated in the code {\tt OSResultDemo.cpp} in the folder {\tt OS/examples/OSResultDemo}.  In the code we solve a linear program with the {\tt Clp} solver.  The OS solver interface builds an {\tt OSrL} string that we read into the {\tt OSrLReader} class and create and {\tt OSResult} object. We then use the {\tt OSResult} API to get the optimal primal and dual solution. We also use the API to get the reduced cost values. 
+The OS protocol for representing an optimization result is {\tt OSrL}. Like the {\tt OSiL} and {\tt OSoL} protocols, this protocol has an associated in-memory {\tt OSResult} class with corresponding API.  The use of the API is demonstrated in the code {\tt OSResultDemo.cpp} in the folder {\tt OS/examples/OSResultDemo}.  In the code we solve a linear program with the {\tt Clp} solver.  The OS solver interface builds an {\tt OSrL} string that we read into the {\tt OSrLReader} class and create an {\tt OSResult} object. We then use the {\tt OSResult} API to get the optimal primal and dual solution. We also use the API to get the reduced cost values. 
+
+
+\subdivision{branchCutPrice:  Using Bcp}\label{section:examplebranchCutPrice}
+
+This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  
+This project provides the user with the ability to have control over each node 
+in the branch and bound process. 
+This makes it possible to add user-defined cuts and/or user-defined variables. At each node in the tree, 
+a call is made to the method {\tt process\_lp\_result()}. In the example problem we illustrate adding 
+1)  COIN-OR Cgl cuts, 2) a user-defined cut, and 3) a user-defined variable. 
 
 
 \subdivision{OSCglCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
@@ -519,7 +536,9 @@ user get {\tt Eclipse Classic}.  In addition, the user should also have a copy o
 The {\tt OSSolverService} executable for several different platforms is
 available at \url{http://www.coin-or.org/download/binary/OS/OSSolverService/}. 
 The user can also build the executable as described in this Manual.  See Section
-\ref{section:build}. The code base for this example is in the folder:
+\ref{section:build}. 
+
+The code base for this example is in the folder:
 \begin{verbatim}
 OSjava/OSJavaExamples/src/OSJavaInstanceDemo.java
 \end{verbatim}
@@ -532,7 +551,7 @@ generate in the folder
 OSjava/OSJavaExamples
 \end{verbatim}
 two files. It will generate {\tt parincLinear.osil} which is a linear program in
-the OS OSiL format, it will also call the {\tt OSSolverService} executable which
-generates the result file {\tt result.osrl} in the OS OSrL format. 
+the OSiL format, it will also call the {\tt OSSolverService} executable, which
+generates the result file {\tt result.osrl} in the OSrL format. 
 
 

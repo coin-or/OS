@@ -9,7 +9,7 @@
 \division{Implementation Plans for Next Release}\label{section:future-work}
 
 \begin{itemize}
-\item Implement a Gurobi solver interface.
+%\item Implement a Gurobi solver interface.
 
 %\item Implement the {\tt mult} and {\tt incr} features in OSInstance/OSiL parsers.
 
@@ -21,19 +21,19 @@
 
 \item Make GAMS OSiL read and OSrL write part of the standard distribution
 
-\item Implement the Bcp solver
+%\item Implement the Bcp solver
 
-\item Installer for Windows
+%\item Installer for Windows
 
 %\item Right now the OSSolverService command line parser requires / for path -- allow {$\backslash$} for Windows users
 
-\item Warmstart for LP
+%\item Warmstart for LP
 
-\item Add support for SDPA
+%\item Add support for SDPA
 
-\item Implement parser for matrices and cones
+%\item Implement parser for matrices and cones
 
-\item Proof of Concept: Hook to a solver (CSDP?)
+%\item Proof of Concept: Hook to a solver (CSDP?)
 
 \item Implement parser for scenarios
 
@@ -41,7 +41,7 @@
 
 \item Put in proper error checking for problems that have zero variables
 
-\item Prepare a detailed example of how to build a problem instance using the OSInstance API
+%\item Prepare a detailed example of how to build a problem instance using the OSInstance API
 
 %\item Run Artistic Style on the code so Gus and Kipp are consistent
 
@@ -57,52 +57,52 @@
 
 \item Implement OS as part of CoinUtils. (That is, break out some of the basic routines.)
 
-\item Write a document on how to hook your solver to OS
+\item Write a document on how to hook your solver to OS.
 
-\item Add a module to FlopC++ that writes OSiL
+\item Add a module to FlopC++ that writes OSiL.
 
-\item Add a module to one or both of the Python modeling language (Pyomo and/or Pulp) that writes OSiL
+\item Add a module to one or both of the Python modeling language (Pyomo and/or Pulp) that writes OSiL.
 
-\item Investigate the Amazon cloud computing
+\item Investigate the Amazon cloud computing.
 
-\item Figure out how to put the version number on the executables
+%\item Figure out how to put the version number on the executables
 
-\item Add code so that we can take a LINGO postfix problem instance and generate an OSExpression tree
+%\item Add code so that we can take a LINGO postfix problem instance and generate an OSExpression tree.
 
-\item Paper on SOS
+%\item Paper on SOS
 
-\item Prepare constraint programming document/report
+\item Prepare constraint programming document/report.
 
 %\item Prepare a paper on OSOption and OSResult.
 
-\item Write documentation on the new Java example 
+\item Write documentation on the new Java example.
 
 \item Build and document Java distribution for users who want to build OSiL from Java and 
 call OSSolverService from Java. 
 
-\item Paper on matrix programming
+\item Paper on matrix programming.
 
-\item Re-check scenario formulation
+\item Re-check scenario formulation.
 
-\item Solution files for matrix programming (Imre)
+%\item Solution files for matrix programming (Imre)
 
-\item Complex numbers in OSiL (Imre)
+\item Complex numbers in OSiL (Imre).
 
-\item Figure out why Che-lin's problem dies when finding a sparse Hessian
+%\item Figure out why Che-lin's problem dies when finding a sparse Hessian
 
-\item Deal with GAMS list of complaints
+\item Deal with GAMS list of complaints.
 
 \begin{itemize}
-\item SOS can be used with Cbc and Bonmin
+\item SOS can be used with Cbc and Bonmin,
 \item Cbc can handle semicontinuous+semiinteger variables with Cbc, 
-\item Ipopt and Bonmin allow user defined functions
-\item enable parameters for Cbc 
+\item Ipopt and Bonmin allow user defined functions,
+\item enable parameters for Cbc, 
 \item - most important - allow redirecting the output.
 \end{itemize}
 
 %\item Treat \url{https://projects.coin-or.org/OS/ticket/14} 
 %
-%\item[] Andreas' comments regarding this issue:
+%\item[] Stefan's comments regarding this issue:
 %
 %\item[] ``I like the message handling of Ipopt, where you can register several
 %journals that can handle output for different categories with differing

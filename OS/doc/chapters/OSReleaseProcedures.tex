@@ -367,11 +367,23 @@ The simplest form of invoking it is
 \end{verbatim}
 
 \noindent
-where {\tt dir} is the local directory that contains the new stable version, e.g., {\tt ./OS-2.9}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter {\tt -c} to do the commit.
+where {\tt dir} is the local directory that contains the new stable version, e.g., {\tt ./OS-2.10}. In this form, it only performs a ``dry run'', that is, it only prints the commands that are to be executed, without actually doing anything. Once satisfied, use the command line parameter {\tt -c} to do the commit.
 
 
 
-{\tt prepare\_new\_release} and {\tt commit\_new\_release} are the corresponding scripts to prepare and commit releases (which are based on stable versions).
+{\tt prepare\_new\_release} and {\tt commit\_new\_release} are the corresponding scripts to prepare and commit releases (which are based on stable versions). The scripts determine release numbers automatically. For instance, a new maintenance release of {\tt stable\_2.9} to follow release 2.9.3 would use
+
+\begin{verbatim}
+prepare_new_release OS/stable/2.9
+\end{verbatim}
+
+and would automatically increase the release number to 2.9.4. If this script finishes without error, simply say
+
+\begin{verbatim}
+commit_new_release 
+\end{verbatim}
+
+to create the folder {\tt OS/releases/2.9.4} in the code repository.
 
 Once a new release has been committed, it is customary to inform users of this fact by sending email to both {\tt OS@list.coin-or.org} and {\tt coin-announce@list.coin-or.org}.
 
@@ -379,8 +391,8 @@ If doing a maintenance release of an existing stable version (i.e., a release nu
 To do that, check out the stable version into a local directory and merge the appropriate trunk version into it, e.g.:
 
 \begin{verbatim}
-svn merge https://projects.coin-or.org/svn/OS/stable/2.8      \
-               https://projects.coin-or.org/svn/OS/trunk@4678    .
+svn merge https://projects.coin-or.org/svn/OS/stable/2.10      \
+          https://projects.coin-or.org/svn/OS/trunk@5047    .
 \end{verbatim} 
 
 Make sure to resolve any conflicts and commit the merged version.
