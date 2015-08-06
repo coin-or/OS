@@ -422,9 +422,9 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 #ifndef NDEBUG
     outStr.str("");
     outStr.clear();
-    for(i = 0; i < n1; i++)
+    for (i = 0; i < n1; i++)
     {
-        outStr << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
+        outStr << "Initial value x[" << i << "] = " << x[ i] << std::endl;
     }
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
@@ -438,18 +438,17 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 // returns the value of the objective function
 bool BonminProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
 {
-
     try
     {
         if(osinstance->getObjectiveNumber() > 0)
         {
             if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0)
             {
-                obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
+                obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
             }
             else  // we have a max
             {
-                obj_value  = -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
+                obj_value = -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
             }
         }
     }
@@ -701,47 +700,20 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
     std::ostringstream outStr;
     try
     {
+        /** 
+         *  Bonmin uses the Ipopt option loader, which is
+         *  found in IpOptionsList and IpRegOptions.
+         *  The latter allows the addition of user-defined options.
+         *  A list of options is in BabSetupBase::gatherParametersValues().
+         *  The options are read in BabSetupBase::readOptionsStream()
+         *  and finally processed in IpOptionsList,cpp (method ReadFromStream()).
+         */
         this->bSetSolverOptions = true;
         bonminSetup.initializeOptionsAndJournalist();
-        //Register an additional option -- just an example
-        bonminSetup.roptions()->AddStringOption2("print_solution","Do we print the solution or not?",
-                "yes",
-                "no", "No, we don't.",
-                "yes", "Yes, we do.",
-                "A longer comment can be put here");
-
-        // Here we can change the default value of some Bonmin or Ipopt option
-        bonminSetup.options()->SetNumericValue("bonmin.time_limit", 5000); //changes bonmin's time limit
-        //bonminSetup.options()->SetIntegerValue("bonmin.num_resolve_at_node", 3);
-        //bonminSetup.options()->SetIntegerValue("bonmin.num_resolve_at_root", 3);
-        //bonminSetup.options()->SetIntegerValue("bonmin.num_retry_unsolved_random_point", 30);
-        //bonminSetup.options()->SetIntegerValue("print_level", 12);
-        //bonminSetup.options()->SetIntegerValue("bonmin.bb_log_level", 4);
-        //bonminSetup.options()->SetStringValue("bonmin.nlp_failure_behavior", "fathom");
-        //bonminSetup.options()->SetNumericValue("bonmin.allowable_gap", -1);
-        //bonminSetup.options()->SetNumericValue("bonmin.allowable_fraction_gap", -.1);
-        //bonminSetup.options()->SetNumericValue("bonmin.cutoff_decr", -1);
-        //bonminSetup.options()->SetStringValue("mu_oracle","loqo");
-
-
-        //Here we read several option files
-        //bonminSetup.readOptionsFile("Mybonmin.opt");
-        //bonminSetup.readOptionsFile();// This reads the default file "bonmin.opt"
-
-        // Options can also be set by using a string with a format similar to the bonmin.opt file
-        bonminSetup.readOptionsString("bonmin.algorithm B-BB\n");
 
         //turn off a lot of output -- this can be overridden by using OSOptions
         bonminSetup.options()->SetIntegerValue("bonmin.bb_log_level", 0 );
         bonminSetup.options()->SetIntegerValue("bonmin.nlp_log_level", 0 );
-
-        // Now we can obtain the value of the new option
-        int printSolution;
-        bonminSetup.options()->GetEnumValue("print_solution", printSolution,"");
-        if(printSolution == 1)
-        {
-            tminlp->printSolutionAtEndOfAlgorithm();
-        }
 
         if(osoption != NULL && osoption->getNumberOfSolverOptions() > 0 )
         {
@@ -750,9 +722,53 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
             std::vector<SolverOption*> optionsVector;
             optionsVector = osoption->getSolverOptions( "bonmin",true);
             int num_bonmin_options = optionsVector.size();
+
+            std::string optionName;
+
             for(i = 0; i < num_bonmin_options; i++)
             {
-                if(optionsVector[ i]->type == "numeric" )
+                //code simplification 23 July 2015
+                if (optionsVector[ i]->category == "")
+                    optionName = optionsVector[ i]->name;
+                else
+                    optionName = optionsVector[ i]->category + "." + optionsVector[ i]->name;
+
+                if (optionsVector[ i]->type == "numeric" )
+                {
+                    outStr.str("");
+                    outStr.clear();
+                    outStr  << "FOUND A  NUMERIC OPTION  "  
+                            << os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) 
+                            << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, 
+                                      ENUM_OUTPUT_LEVEL_info, outStr.str());
+                    bonminSetup.options()->SetNumericValue(optionName, 
+                                      os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
+                }
+
+                else if(optionsVector[ i]->type == "integer" )
+                {
+                    outStr.str("");
+                    outStr.clear();
+                    outStr  << "FOUND AN INTEGER OPTION  " << optionsVector[ i]->name << std::endl;  
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                                      ENUM_OUTPUT_LEVEL_info, outStr.str());
+                    bonminSetup.options()->SetIntegerValue(optionName, 
+                                      atoi( optionsVector[ i]->value.c_str() ) );
+                }
+
+                else if(optionsVector[ i]->type == "string" )
+                {
+                    outStr.str("");
+                    outStr.clear();
+                    outStr << "FOUND A STRING OPTION  " << optionsVector[ i]->name << std::endl;
+                    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces,
+                                      ENUM_OUTPUT_LEVEL_info, outStr.str());
+                    bonminSetup.options()->SetStringValue(optionName, optionsVector[ i]->value );
+                }
+            }
+#if 0
+                if (optionsVector[ i]->type == "numeric" )
                 {
                     outStr.str("");
                     outStr.clear();
@@ -822,7 +838,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
                         }
                     }
                 }
-            }
+#endif
         }
     }
 
@@ -848,7 +864,7 @@ void BonminSolver::solve() throw (ErrorClass)
         {
             bonminSetup.initialize( GetRawPtr(tminlp) );
             // bb is a Bonmin BonCbc object;;
-            bb(  bonminSetup);  //process parameter file using Ipopt and do branch and bound using Cbc
+            bb( bonminSetup);  //process parameter file using Ipopt and do branch and bound using Cbc
         }
         catch(TNLPSolver::UnsolvedError *E)
         {
@@ -1153,7 +1169,6 @@ BonminProblem::BonminProblem(OSInstance *osinstance_,  OSOption *osoption_)
 {
     osinstance = osinstance_;
     osoption = osoption_;
-    printSol_ = false;
 }
 
 BonminProblem::~BonminProblem()

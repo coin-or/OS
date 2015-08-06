@@ -53,8 +53,6 @@
 class BonminProblem : public Bonmin::TMINLP
 {
 
-
-
 public:
 
     /** the BonminProblemclass constructor */
@@ -171,18 +169,6 @@ public:
     {
         return NULL;
     }
-
-    void printSolutionAtEndOfAlgorithm()
-    {
-        printSol_ = true;
-    }
-
-
-
-
-
-private:
-    bool printSol_;
 
 private:
     /**@name Methods to block default compiler methods.

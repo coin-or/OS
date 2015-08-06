@@ -620,6 +620,10 @@ std::string OSnLNodePlus::getTokenName()
 
 double OSnLNodePlus::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodePlus::calculateFunction");
+#endif
     m_dFunctionValue = m_mChildren[0]->calculateFunction(x) + m_mChildren[1]->calculateFunction(x);
     return m_dFunctionValue;
 }// end OSnLNodePlus::calculate
@@ -663,6 +667,10 @@ std::string OSnLNodeSum::getTokenName()
 
 double OSnLNodeSum::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeSum::calculateFunction");
+#endif
     m_dFunctionValue = 0.0;
     unsigned int i;
     for(i = 0; i < inumberOfChildren; i++)
@@ -719,6 +727,10 @@ std::string OSnLNodeAllDiff::getTokenName()
 
 double OSnLNodeAllDiff::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeAllDiff::calculateFunction");
+#endif
     m_dFunctionValue = 1;
     // return false if not all different
     unsigned int i, k;
@@ -781,13 +793,17 @@ OSnLNodeMax::~OSnLNodeMax()
 
 double OSnLNodeMax::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeMax::calculateFunction");
+#endif
     m_dFunctionValue = -OSDBL_MAX;
 
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
         if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
         {
-            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
+            m_dFunctionValue = m_mChildren[i]->calculateFunction(x);
         }
     }
     return m_dFunctionValue;
@@ -847,13 +863,17 @@ std::string OSnLNodeMin::getTokenName()
 
 double OSnLNodeMin::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeMin::calculateFunction");
+#endif
     m_dFunctionValue = OSDBL_MAX;
 
     for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
         if(m_mChildren[i]->calculateFunction(x) < m_dFunctionValue)
         {
-            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
+            m_dFunctionValue = m_mChildren[i]->calculateFunction(x);
         }
     }
     return m_dFunctionValue;
@@ -911,6 +931,10 @@ std::string OSnLNodeMinus::getTokenName()
 
 double OSnLNodeMinus::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeMinus::calculateFunction");
+#endif
     m_dFunctionValue =  m_mChildren[0]->calculateFunction( x) - m_mChildren[1]->calculateFunction( x);
     return m_dFunctionValue;
 }// end OSnLNodeMinus::calculate
@@ -959,6 +983,10 @@ std::string OSnLNodeNegate::getTokenName()
 
 double OSnLNodeNegate::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeNegate::calculateFunction");
+#endif
     m_dFunctionValue =  -m_mChildren[0]->calculateFunction( x) ;
     return m_dFunctionValue;
 }// end OSnLNodeMinus::calculate
@@ -1004,6 +1032,10 @@ std::string OSnLNodeTimes::getTokenName()
 
 double OSnLNodeTimes::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeTimes::calculateFunction");
+#endif
     m_dFunctionValue = m_mChildren[0]->calculateFunction( x)*m_mChildren[1]->calculateFunction( x);
     return m_dFunctionValue;
 }// end OSnLNodeTimes::calculate
@@ -1051,6 +1083,10 @@ std::string OSnLNodeDivide::getTokenName()
 
 double OSnLNodeDivide::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeDivide::calculateFunction");
+#endif
     // kipp throw error if we divide by 0
     m_dFunctionValue = m_mChildren[0]->calculateFunction( x)/m_mChildren[1]->calculateFunction( x);
     return m_dFunctionValue;
@@ -1100,6 +1136,10 @@ std::string OSnLNodePower::getTokenName()
 
 double OSnLNodePower::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodePower::calculateFunction");
+#endif
     // kipp throw error if operation not defined
     m_dFunctionValue =  pow(m_mChildren[0]->calculateFunction( x), m_mChildren[1]->calculateFunction( x));
     return  m_dFunctionValue;
@@ -1166,6 +1206,10 @@ std::string OSnLNodeProduct::getTokenName()
 
 double OSnLNodeProduct::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeProduct::calculateFunction");
+#endif
     // kipp throw error if operation not defined
     m_dFunctionValue = 1.0;
     unsigned int i;
@@ -1224,6 +1268,10 @@ std::string OSnLNodeLn::getTokenName()
 
 double OSnLNodeLn::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeLn::calculateFunction");
+#endif
     m_dFunctionValue = log(m_mChildren[0]->calculateFunction( x) );
     return m_dFunctionValue;
 }// end OSnLNodeLn::calculate
@@ -1270,6 +1318,10 @@ std::string OSnLNodeSqrt::getTokenName()
 
 double OSnLNodeSqrt::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeSqrt::calculateFunction");
+#endif
     m_dFunctionValue = sqrt(m_mChildren[0]->calculateFunction( x) );
     return m_dFunctionValue;
 }// end OSnLNodeSqrt::calculate
@@ -1316,7 +1368,11 @@ std::string OSnLNodeSquare::getTokenName()
 
 double OSnLNodeSquare::calculateFunction(double *x)
 {
-    m_dFunctionValue = pow( (m_mChildren[0]->calculateFunction( x) ), 2);
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeSquare::calculateFunction");
+#endif
+    m_dFunctionValue = m_mChildren[0]->calculateFunction( x) * m_mChildren[0]->calculateFunction( x);
     return m_dFunctionValue;
 }// end OSnLNodeSquare::calculate
 
@@ -1362,6 +1418,10 @@ std::string OSnLNodeSin::getTokenName()
 
 double OSnLNodeSin::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeSin::calculateFunction");
+#endif
     m_dFunctionValue = sin(m_mChildren[0]->calculateFunction( x) );
     return m_dFunctionValue;
 }// end OSnLNodeSin::calculate
@@ -1408,6 +1468,10 @@ std::string OSnLNodeCos::getTokenName()
 
 double OSnLNodeCos::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeCos::calculateFunction");
+#endif
     m_dFunctionValue = cos(m_mChildren[0]->calculateFunction( x) );
     return m_dFunctionValue;
 }// end OSnLNodeCos::calculate
@@ -1454,6 +1518,10 @@ std::string OSnLNodeExp::getTokenName()
 
 double OSnLNodeExp::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeExp::calculateFunction");
+#endif
     m_dFunctionValue = exp(m_mChildren[0]->calculateFunction( x) );
     return m_dFunctionValue;
 }// end OSnLNodeExp::calculate
@@ -1500,6 +1568,10 @@ std::string OSnLNodeAbs::getTokenName()
 
 double OSnLNodeAbs::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeAbs::calculateFunction");
+#endif
     m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
     return m_dFunctionValue;
 }// end OSnLNodeAbs::calculate
@@ -1547,10 +1619,13 @@ std::string OSnLNodeErf::getTokenName()
 
 double OSnLNodeErf::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeErf::calculateFunction");
+#endif
     const double a = (993./880.);
     const double b =  (89./880.);
     m_dFunctionValue = tanh( (a + b * m_mChildren[0]->calculateFunction( x) * m_mChildren[0]->calculateFunction( x)) * m_mChildren[0]->calculateFunction( x) );
-    //std::cout << "function value =   " << m_dFunctionValue << std::endl;
     return m_dFunctionValue;
 }// end OSnLNodeErf::calculate
 
@@ -1613,8 +1688,14 @@ std::string OSnLNodeIf::getTokenName()
 
 double OSnLNodeIf::calculateFunction(double *x)
 {
-    if(m_mChildren[0]->calculateFunction( x)  >= 0) m_dFunctionValue = m_mChildren[ 1]->calculateFunction( x);
-    else m_dFunctionValue = m_mChildren[ 2]->calculateFunction( x);
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeIf::calculateFunction");
+#endif
+    if (m_mChildren[0]->calculateFunction( x) >= 0) 
+        m_dFunctionValue = m_mChildren[ 1]->calculateFunction( x);
+    else
+        m_dFunctionValue = m_mChildren[ 2]->calculateFunction( x);
     return m_dFunctionValue;
 }// end OSnLNodeIf::calculate
 
@@ -1675,6 +1756,7 @@ std::string OSnLNodeNumber::getTokenNumber()
 //        outStr << ":" ;
 //        outStr << type ;
 //    //}
+
 //    //if(id.length() > 0){
 //        outStr << ":" ;
 //        outStr << id;
@@ -1716,6 +1798,10 @@ std::string OSnLNodeNumber::getNonlinearExpressionInXML()
 
 double OSnLNodeNumber::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeNumber::calculateFunction");
+#endif
     m_dFunctionValue = this->value;
     return m_dFunctionValue;
 }// end OSnLNodeNumber::calculate
@@ -1883,6 +1969,10 @@ std::string OSnLNodeE::getNonlinearExpressionInXML()
 
 double OSnLNodeE::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeE::calculateFunction");
+#endif
     m_dFunctionValue = OS_E_VALUE;
     return m_dFunctionValue;
 }// end OSnLNodeE::calculate
@@ -1950,6 +2040,10 @@ std::string OSnLNodePI::getNonlinearExpressionInXML()
 
 double OSnLNodePI::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodePI::calculateFunction");
+#endif
     m_dFunctionValue = OS_PI_VALUE;
     return m_dFunctionValue;
 }// end OSnLNodePI::calculate
@@ -2058,6 +2152,10 @@ std::string OSnLNodeVariable::getNonlinearExpressionInXML()
 
 double OSnLNodeVariable::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeVariable::calculateFunction");
+#endif
     m_dFunctionValue = coef*x[idx];
     return m_dFunctionValue;
 }// end OSnLNodeVariable::calculate
@@ -2206,23 +2304,19 @@ OSnLNodeMatrixDeterminant::OSnLNodeMatrixDeterminant()
 OSnLNodeMatrixDeterminant::~OSnLNodeMatrixDeterminant()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixDeterminant destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                      ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixDeterminant destructor");
 #endif
 }//end ~OSnLNodeMatrixDeterminant
 
 
 double OSnLNodeMatrixDeterminant::calculateFunction(double *x)
 {
-    m_dFunctionValue = -OSDBL_MAX;
-
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
-        {
-            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
-        }
-    }
-    return m_dFunctionValue;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeMatrixDeterminant::calculateFunction");
+#endif
+    return OSNaN();
 }// end OSnLNodeMatrixDeterminant::calculate
 
 std::string OSnLNodeMatrixDeterminant::getTokenName()
@@ -2273,17 +2367,9 @@ OSnLNodeMatrixTrace::~OSnLNodeMatrixTrace()
 
 double OSnLNodeMatrixTrace::calculateFunction(double *x)
 {
-#if 0
-    m_dFunctionValue = -OSDBL_MAX;
-
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
-        {
-            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
-        }
-    }
-    return m_dFunctionValue;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeMatrixTrace::calculateFunction");
 #endif
     return 0.0;
 }// end OSnLNodeMatrixTrace::calculate
@@ -2337,15 +2423,19 @@ OSnLNodeMatrixToScalar::~OSnLNodeMatrixToScalar()
 
 double OSnLNodeMatrixToScalar::calculateFunction(double *x)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLNodeMatrixToScalar::calculateFunction");
+#endif
     m_dFunctionValue = -OSDBL_MAX;
 
-    for(unsigned int i = 0; i < inumberOfChildren; i++)
-    {
-        if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
-        {
-            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
-        }
-    }
+//    for(unsigned int i = 0; i < inumberOfChildren; i++)
+//    {
+//        if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
+//        {
+//            m_dFunctionValue =     m_mChildren[i]->calculateFunction(x);
+//        }
+//    }
     return m_dFunctionValue;
 }// end OSnLNodeMatrixToScalar::calculate
 
