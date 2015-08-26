@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Two alternative schema locations for now. Eventually fix both -->
+<!--
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+-->
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
 	<instanceHeader>
 		<name>Hanging chain problem</name>
@@ -90,12 +95,12 @@
 						<el>0</el>
 						<el>1</el>
 					</start>
-					<indexes>
+					<index>
 						<el>0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el>-0.44721359549995793928183473374626</el>
-					</values>
+					</value>
 				</constantElements>
 			</matrix>
 			<matrix name="link1" numberOfColumns="1" numberOfRows="3">
@@ -104,10 +109,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>22</varIdx>
 						</el>
@@ -119,7 +124,7 @@
 							<varIdx coef="-1">11</varIdx>
 							<varIdx>12</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link2" numberOfColumns="1" numberOfRows="3">
@@ -128,10 +133,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>23</varIdx>
 						</el>
@@ -143,7 +148,7 @@
 							<varIdx coef="-1">12</varIdx>
 							<varIdx>13</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link3" numberOfColumns="1" numberOfRows="3">
@@ -152,10 +157,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>24</varIdx>
 						</el>
@@ -167,7 +172,7 @@
 							<varIdx coef="-1">13</varIdx>
 							<varIdx>14</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link4" numberOfColumns="1" numberOfRows="3">
@@ -176,10 +181,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>25</varIdx>
 						</el>
@@ -191,7 +196,7 @@
 							<varIdx coef="-1">14</varIdx>
 							<varIdx>15</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link5" numberOfColumns="1" numberOfRows="3">
@@ -200,10 +205,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>26</varIdx>
 						</el>
@@ -215,7 +220,7 @@
 							<varIdx coef="-1">15</varIdx>
 							<varIdx>16</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link6" numberOfColumns="1" numberOfRows="3">
@@ -224,10 +229,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>27</varIdx>
 						</el>
@@ -239,7 +244,7 @@
 							<varIdx coef="-1">16</varIdx>
 							<varIdx>17</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link7" numberOfColumns="1" numberOfRows="3">
@@ -248,10 +253,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>28</varIdx>
 						</el>
@@ -263,7 +268,7 @@
 							<varIdx coef="-1">17</varIdx>
 							<varIdx>18</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link8" numberOfColumns="1" numberOfRows="3">
@@ -272,10 +277,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>29</varIdx>
 						</el>
@@ -287,7 +292,7 @@
 							<varIdx coef="-1">18</varIdx>
 							<varIdx>19</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link9" numberOfColumns="1" numberOfRows="3">
@@ -296,10 +301,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>30</varIdx>
 						</el>
@@ -311,7 +316,7 @@
 							<varIdx coef="-1">19</varIdx>
 							<varIdx>20</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 			<matrix name="link10" numberOfColumns="1" numberOfRows="3">
@@ -320,10 +325,10 @@
 						<el>0</el>
 						<el>3</el>
 					</start>
-					<indexes>
+					<index>
 						<el mult="3" incr="1">0</el>
-					</indexes>
-					<values>
+					</index>
+					<value>
 						<el numberOfVarIdx="1">
 							<varIdx>31</varIdx>
 						</el>
@@ -335,7 +340,7 @@
 							<varIdx coef="-1">20</varIdx>
 							<varIdx>21</varIdx>
 						</el>
-					</values>
+					</value>
 				</linearElements>
 			</matrix>
 		</matrices>
@@ -344,16 +349,16 @@
 		</cones>
 		<matrixProgramming>
 			<matrixConstraints numberOfMatrixCon="10">
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
-				<matrixCon numberOfRows="3" numberOfCols="1" lbConeIdx="0" lbMtxIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
+				<matrixCon numberOfRows="3" numberOfColumns="1" lbConeIdx="0" lbMatrixIdx="0"/>
 			</matrixConstraints>
 			<matrixExpressions numberOfExpr="10">
 				<expr idx="0" shape="linear">
