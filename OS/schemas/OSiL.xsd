@@ -369,6 +369,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 		</xs:attribute>
 	</xs:complexType>
 	<!--MatrixProgramming: draft-->
+	<!-- dead code
 	<xs:complexType name="MatrixProgramming_old">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
@@ -380,6 +381,22 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>For scalar-valued expressions  in "core" objectives and constraints that contain matrix references</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+-->
+	<xs:complexType name="MatrixProgramming">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
+			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0"/>
+			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
+			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions should be set up as nonlinearExpressions</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -447,21 +464,6 @@ If missing, all variables indicated  by the use of the template matrix are creat
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixProgramming">
-		<xs:annotation>
-			<xs:documentation>proposal</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
-			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0"/>
-			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
-			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions should be set up as nonlinearExpressions</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MatrixObjectives">
 		<xs:annotation>
@@ -571,6 +573,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
+	<!-- dead code	
 	<xs:complexType name="LinearConstraintMatrixOperators">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -768,7 +771,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		</xs:attribute>
 		<xs:attribute name="numberOfMatrixTerms" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="MatrixProgrammingObj">
+	<xs:complexType name="MatrixProgrammingObj">	
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -795,6 +798,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
+-->
 	<xs:complexType name="MatrixExpressions">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -831,6 +835,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
+	<!-- dead code
 	<xs:complexType name="MatrixProgrammingScalarCon">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -927,6 +932,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		</xs:attribute>
 		<xs:attribute name="numberOfMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+-->
 	<xs:complexType name="SpecialOrderedSets">
 		<xs:annotation>
 			<xs:documentation>recommendation</xs:documentation>
@@ -989,6 +995,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+<!-- dead code	
 	<xs:complexType name="SOSAdjacencySet">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
@@ -1107,7 +1114,9 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+-->
 	<!--Cones: draft -->
+	<!-- dead code
 	<xs:complexType name="Cone">
 		<xs:choice minOccurs="0">
 			<xs:element name="scalarVariables" type="NonNegativeIntVector"/>
@@ -1125,6 +1134,24 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="cone" type="Cone" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:complexType name="ConeVar">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+-->
 	<xs:complexType name="Cones">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
@@ -1170,7 +1197,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="semidefiniteCone" type="SemidefiniteCone">
 				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="copositiveMatricesCone" type="CopositiveMatricesCone">
@@ -1266,7 +1293,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:sequence>
 					<xs:element name="direction" type="OrthantConeDirection" maxOccurs="unbounded">
 						<xs:annotation>
-							<xs:documentation>There must be (numberOfRows* NumberOfColumns) directions (after accounting for 'mult')</xs:documentation>
+							<xs:documentation>There must be (numberOfRows* NumberOfColumns) directions (after accounting for 'mult'). Row index changes fastest, then column index, then other indexes.</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
@@ -1274,6 +1301,52 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="OrthantConeDirection">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="nonnegative"/>
+					<xs:enumeration value="nonpositive"/>
+					<xs:enumeration value="free"/>
+					<xs:enumeration value="zero"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="PolyhedralCone">
+		<xs:annotation>
+			<xs:documentation>draft </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="GenericCone">
+				<xs:sequence>
+					<xs:element name="direction" type="PolyhedralConeDirection" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>If present, there must be (numberOfRows* NumberOfColumns) directions (after accounting for 'mult'). Row index changes fastest, then column index, then other indexes.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="referenceMatrixIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="coneDirection" use="optional">
+					<xs:annotation>
+						<xs:documentation>'positive: Ax \ge 0; 'negative: Ax \le 0; 
+'mixed': specified by 'direction' element</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="positive"/>
+							<xs:enumeration value="negative"/>
+							<xs:enumeration value="mixed"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PolyhedralConeDirection">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
@@ -1383,16 +1456,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:complexType name="PolyhedralCone">
-		<xs:annotation>
-			<xs:documentation>draft </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="GenericCone">
-				<xs:attribute name="referenceMatrixIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="symmetry" type="xs:boolean" default="true"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1526,23 +1590,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="coneId" type="xs:string" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="ConeVar">
-		<xs:annotation>
-			<xs:documentation>draft </xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
-					<xs:annotation>
-						<xs:documentation>NEW in release 2.2.1</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-			</xs:extension>
-		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="IntersectionCone">
 		<xs:annotation>
