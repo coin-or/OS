@@ -196,7 +196,7 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 195		5010	FALSE	0			
 196		5011	EULERGAMMA	0			
 197		5012	NAN	0			
-198	reference to problem components	6001	variable	0*		"one optional argument, two attributes"	partially
+198	reference to problem components	6001	variable	0*		"one optional argument, two attributes"	yes
 199		6002	objective	0*		"one optional argument, one attribute"	
 200		6003	constraint	0*		"one optional argument, two attributes"	
 201		6004	qTerm	0*		"one optional argument, three attributes"	
@@ -326,3 +326,6 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 325		8601	matrixVar		0	one attribute: existing matrixVar	yes
 326		8602	matrixObj		0	one attribute: existing matrixObj	yes
 327		8603	matrixCon		0	one attribute: existing matrixCon	yes
+328		9001	complexNumber			two attributes: real and imaginary part	
+329		9002	complex	2 (real)	0	"First child is real part, second is imaginary part"	
+330		9003	complexPlus	2 (real or scalar)			

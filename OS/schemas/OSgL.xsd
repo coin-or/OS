@@ -677,6 +677,7 @@ The result of this transformation is aligned with the top left corner of the tar
 					<xs:enumeration value="linear"/>
 					<xs:enumeration value="quadratic"/>
 					<xs:enumeration value="general"/>
+					<xs:enumeration value="stringValued"/>
 					<xs:enumeration value="unknown"/>
 				</xs:restriction>
 			</xs:simpleType>

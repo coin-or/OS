@@ -995,7 +995,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-<!-- dead code	
+	<!-- dead code	
 	<xs:complexType name="SOSAdjacencySet">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
@@ -2474,7 +2474,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
-				<xs:attribute name="id" type="xs:string" use="required"/>
+				<xs:attribute name="id" type="xs:IDREF" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -2484,7 +2484,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
-				<xs:attribute name="id" type="xs:string" use="required"/>
+				<xs:attribute name="id" type="xs:IDREF" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

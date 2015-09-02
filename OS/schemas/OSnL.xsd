@@ -4,41 +4,22 @@
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
-	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<!-- Abstract types and elements: Scalar nodes (OSnLNode and OSnLCNode) and matrix nodes (OSnLMNode) make up ExprNode. -->
 	<xs:complexType name="ExprNode" mixed="false">
 		<xs:annotation>
 			<xs:documentation> draft. This is a generic expression node from which we derive OSnLMNode and ScalarNode</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
-	<xs:complexType name="ScalarNode" mixed="false">
+	<xs:element name="ExprNode" type="ExprNode" abstract="true">
 		<xs:annotation>
-			<xs:documentation> draft. This is a generic expression node from which we derive OSnLNode and OSnLCNode</xs:documentation>
+			<xs:documentation> recommendation. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
-		<xs:complexContent mixed="false">
-			<xs:extension base="ExprNode"/>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:complexType name="OSnLNode" mixed="false">
-		<xs:annotation>
-			<xs:documentation> since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent mixed="false">
-			<xs:extension base="ScalarNode"/>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:complexType name="OSnLCNode" mixed="false">
-		<xs:annotation>
-			<xs:documentation> draft. This is a generic complex number node from which we derive complex-valued operator nodes</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent mixed="false">
-			<xs:extension base="ScalarNode"/>
-		</xs:complexContent>
-	</xs:complexType>
+	</xs:element>
 	<xs:complexType name="OSnLMNode" mixed="false">
 		<xs:annotation>
 			<xs:documentation> recommendation. This is a generic matrix node from which we derive matrix operator nodes</xs:documentation>
@@ -47,22 +28,46 @@
 			<xs:extension base="ExprNode"/>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="ScalarNode" type="ScalarNode" abstract="true">
-		<xs:annotation>
-			<xs:documentation> since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:element name="OSnLNode" type="OSnLNode" abstract="true">
-		<xs:annotation>
-			<xs:documentation> since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true">
+	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true" substitutionGroup="ExprNode">
 		<xs:annotation>
 			<xs:documentation> recommendation. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="OSnLCNode" type="OSnLCNode" abstract="true">
+	<xs:complexType name="ScalarNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation> draft. This is a generic expression node from which we derive OSnLNode and OSnLCNode</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent mixed="false">
+			<xs:extension base="ExprNode"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ScalarNode" type="ScalarNode" abstract="true" substitutionGroup="ExprNode">
+		<xs:annotation>
+			<xs:documentation> since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation> since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent mixed="false">
+			<xs:extension base="ScalarNode"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OSnLNode" type="OSnLNode" abstract="true" substitutionGroup="ScalarNode">
+		<xs:annotation>
+			<xs:documentation> since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation> draft. This is a generic complex number node from which we derive complex-valued operator nodes</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent mixed="false">
+			<xs:extension base="ScalarNode"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OSnLCNode" type="OSnLCNode" abstract="true" substitutionGroup="ScalarNode">
 		<xs:annotation>
 			<xs:documentation> draft. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
@@ -85,45 +90,6 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!-- - - - - - -->
-	<xs:complexType name="OSnLCNodePlus">
-		<xs:annotation>
-			<xs:documentation>experiment. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="ScalarNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="complexPlus" type="OSnLCNodePlus" substitutionGroup="OSnLCNode">
-		<xs:annotation>
-			<xs:documentation>experiment. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLCNodeNumber">
-		<xs:annotation>
-			<xs:documentation>experiment. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:annotation>
-						<xs:documentation>First child is the real part; second child is imaginary.</xs:documentation>
-					</xs:annotation>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="complexNumber" type="OSnLCNodeNumber" substitutionGroup="OSnLCNode">
-		<xs:annotation>
-			<xs:documentation>experiment.. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<!-- - - - - - -->
 	<xs:complexType name="OSnLNodeSum">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -3607,18 +3573,14 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="value" type="xs:string" use="optional"/>
-				<xs:attribute name="type" use="optional" default="real">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="real"/>
-							<xs:enumeration value="string"/>
-							<xs:enumeration value="realtime"/>
-							<xs:enumeration value="random"/>
-						</xs:restriction>
-					</xs:simpleType>
+				<xs:attribute name="value" type="xs:double" use="optional"/>
+				<xs:attribute name="id" type="xs:string" use="optional">
+					<xs:annotation>
+						<xs:documentation>required if realtime or random is true</xs:documentation>
+					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="id" type="xs:string" use="optional"/>
+				<xs:attribute name="realtime" type="xs:boolean" default="false"/>
+				<xs:attribute name="random" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3634,16 +3596,13 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:attribute name="value" type="xs:string" use="optional"/>
-				<xs:attribute name="type" use="optional" default="regular">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="regular"/>
-							<xs:enumeration value="realtime"/>
-							<xs:enumeration value="random"/>
-						</xs:restriction>
-					</xs:simpleType>
+				<xs:attribute name="id" type="xs:ID" use="optional">
+					<xs:annotation>
+						<xs:documentation>required if realtime or random is true</xs:documentation>
+					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="id" type="xs:string" use="optional"/>
+				<xs:attribute name="realtime" type="xs:boolean" default="false"/>
+				<xs:attribute name="random" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -6107,6 +6066,60 @@
 			<xs:documentation>result matrix has a 1 wherever all argument matrices have a nonzero value</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<!--Complex Nodes: experimental  -->
+	<xs:complexType name="OSnLCNodeNumber">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:attribute name="real" type="xs:double" default="0.0"/>
+				<xs:attribute name="imag" type="xs:double" default="0.0"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexNumber" type="OSnLCNodeNumber" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeComplex">
+		<xs:annotation>
+			<xs:documentation>experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>First child is real part; second is imaginary part</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complex" type="OSnLCNodeComplex" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experimental </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodePlus">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexPlus" type="OSnLCNodePlus" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:simpleType name="NlNodeEnumeration">
 		<xs:annotation>
 			<xs:documentation>since version 2.0.0. </xs:documentation>
@@ -6428,6 +6441,7 @@
 			<xs:enumeration value="matrixNot"/>
 			<xs:enumeration value="matrixForAll"/>
 			<xs:enumeration value="matrixExists"/>
+			<xs:enumeration value="complex"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
