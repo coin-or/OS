@@ -139,11 +139,11 @@ The {\tt serviceLocation} option is used to specify the location of a solver ser
 In this case, the string of options for {\tt OSAmplClient\_options} is:
 
 \begin{verbatim}
-serviceLocation  http://xxx/OSServer/services/OSSolverService
+serviceLocation  http://xxx.xxx.xxx.xxx/OSServer/services/OSSolverService
 \end{verbatim}
-where {\tt xxx} is the IP Address for the server. (For instance, Kipp Martin maintains a server that is reachable  at {\tt 74.94.100.129:8080} This string is used to replace the string `{\tt solver symphony}' in the previous example. 
+where {\tt xxx.xxx.xxx.xxx} is the IP Address for the server. This string is used to replace the string `{\tt solver symphony}' in the previous example. 
 The {\tt serviceLocation} option will send the problem to the %solver server at 
-location {\tt http://xxx} and, assuming the remote executable is indeed found 
+location {\tt http://xxx.xxx.xxx.xxx} and, assuming the remote executable is indeed found 
 in the indicated folder, will start the executable.  
 
 
@@ -395,7 +395,7 @@ This option is required in order to direct the remote call appropriately.
 \vskip 8pt
 Use the following value for this option.
 \begin{verbatim}
-service http://74.94.100.129:8080/OSServer/services/OSSolverService
+service http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 \end{verbatim}
 
 
@@ -407,7 +407,7 @@ If a solver name is specified that is not recognized, the default solver for the
 The value for the solver option is case insensitive. 
 For example, if the file {\tt CoinOS.opt} contains the two lines
 \begin{verbatim}
-service http://74.94.100.129:8080/OSServer/services/OSSolverService
+service http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 solver glpk
 \end{verbatim}
 then executing
@@ -461,18 +461,19 @@ inside the XML tag {\tt <solverToInvoke>}. The example  {\tt solveroptions.osol}
 If, for example,  the {\tt CoinOS.opt} file is
 \begin{verbatim}
 solver ipopt
-service http://74.94.100.129:8080/OSServer/services/OSSolverService
+service http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 readosol  solveroptions.osol
 writeosrl temp.osrl
 \end{verbatim}
 then {\tt Ipopt} is ignored as a solver option and the remote server uses the {\tt  SYMPHONY} solver.
 \fi  
 Valid values for the remote solver service specified in the {\tt <solverToInvoke>} tag are 
-installation dependent; the solver service at 
-{\tt http://74.94.100.129:8080/OSServer/services/OSSolverService} accepts
-{\tt clp},  
-{\tt cbc},  {\tt dylp}, {\tt glpk}, {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and 
-{\tt vol}.  
+installation dependent.
+%the solver service at 
+%{\tt http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService} accepts
+%{\tt clp},  
+%{\tt cbc},  {\tt dylp}, {\tt glpk}, {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and 
+%{\tt vol}.  
 
 %If the problem is solved using a remote solver service the value specified by the 
 %GAMS {\tt solver} option is irrelevant and ignored. 
@@ -504,7 +505,7 @@ uniquely identify each job. The {\tt getJobID} service method will result in the
 a unique job ID. For example if the following {\tt CoinOS.opt} file is used
 \vskip 8pt
 \begin{verbatim}
-service http://74.94.100.129:8080/OSServer/services/OSSolverService
+service http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 service_method getJobID
 \end{verbatim}
 with the command
@@ -522,7 +523,7 @@ must be present and must specify a  job ID that has not been used before.  Assum
 the options:
 \vskip 8pt
 \begin{verbatim}
-service http://74.94.100.129:8080/OSServer/services/OSSolverService
+service http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 service_method send
 readosol sendWithJobID.osol
 \end{verbatim}
@@ -546,7 +547,7 @@ This is accomplished using the {\tt knock} service method.
 of a job.  Consider the following {\tt CoinOS.opt} file:
 \vskip 8pt
 \begin{verbatim}
-service http://74.94.100.129:8080/OSServer/services/OSSolverService
+service http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 service_method knock
 readosol sendWithJobID.osol 
 readospl knock.ospl
@@ -584,7 +585,7 @@ to specify an options file and in that options file specify a job ID.
 Consider the following {\tt CoinOS.opt} file:
 \vskip 8pt
 \begin{verbatim}
-service http://74.94.100.129:8080/OSServer/services/OSSolverService
+service http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 service_method retrieve
 readosol sendWithJobID.osol
 writeosrl answer.osrl
@@ -753,7 +754,7 @@ gams.exe  eastborne.gms optfile=1
 \item {\tt service (string)}: using the COIN-OR solver server; this is done by giving the option
 
 \begin{verbatim}
-service  http://74.94.100.129:8080/OSServer/services/OSSolverService
+service  http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 \end{verbatim}
 
 

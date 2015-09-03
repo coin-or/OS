@@ -165,11 +165,12 @@ You should get an error message saying:
 model hs71.mod;
 option solver OSAmplClient;
 option OSAmplClient_options "solver ipopt   serviceLocation        
-    http://74.94.100.129:8080/OSServer/services/OSSolverService";
+    http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService";
 solve;
 display x3;
 \end{verbatim}
 }%end small
+(Make sure to replace `{\tt xxx.xxx.xxx.xxx}' by the IP address of Kipp Martin's server.)
 
 The result of {\tt display x3} should be 3.82115. 
 
@@ -182,7 +183,7 @@ The result of {\tt display x3} should be 3.82115.
 model hs71.mod;
 option solver OSAmplClient;
 option OSAmplClient_options "solver clp  serviceLocation   
-     http://74.94.100.129:8080/OSServer/services/OSSolverService";
+     http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
 }%end \small

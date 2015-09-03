@@ -12,10 +12,11 @@ is a string with a problem instance and {\tt sOSoL} is a string with solver opti
 will call a solver service and invoke the {\tt solve} method.
 \begin{verbatim}
 OSSolverAgent *osagent;
-string serviceLocation = "http://74.94.100.129:8080/OSServer/services/OSSolverService";
+string serviceLocation = "http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService";
 osagent = new OSSolverAgent(  serviceLocation );
 string sOSrL = osagent->solve(sOSiL, sOSoL);
 \end{verbatim}
+(The string `{\tt xxx.xxx.xxx.xxx}' must be replaced by the IP address of a computer running the {\tt OSSolverService}.)
 Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  
 The use of these methods is described in Section~\ref{section:servicemethods}.
 

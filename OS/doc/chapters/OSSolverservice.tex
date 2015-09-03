@@ -512,10 +512,11 @@ hard optimization instance is required. Indeed, one of the major purposes of Opt
 facilitate optimization in a distributed environment.   We now provide examples that illustrate using the
 {\tt OSSolverService} executable to call a remote solver service.   By remote solver service we mean a
 solver service that is called using Web Services.  
-One such solver service is maintained at
-\begin{verbatim}
-http://74.94.100.129:8080/OSServer/services/OSSolverService
-\end{verbatim}
+One such solver service is maintained at by Kipp Martin. 
+For details contact him at {\tt kmartin@chicagobooth.edu}.
+%\begin{verbatim}
+%http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
+%\end{verbatim}
 The implementation  of this solver service
 uses Apache Tomcat\index{Apache Tomcat}. See \url{tomcat.apache.org}. The Web Service running on the server
 is a Java program based on Apache Axis\index{Apache Axis}. See \url{ws.apache.org/axis}. 
@@ -570,21 +571,19 @@ Open a web browser and type the URL
 \begin{verbatim}
 http://***.***.***.***:8080
 \end{verbatim}
-
 into a web browser. If the Tomcat server at the remote location is working, you should see the welcome page for the Tomcat server. If you do not see welcome page, the Tomcat server is not working.
 
-\item If the Tomcat server is working, try the URL
-
+\item If the Tomcat server is working, try the URL 
 \begin{verbatim}
-http://74.94.100.129:8080/OSServer/services/OSSolverService?wsdl
+http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService?wsdl
 \end{verbatim}
+using the IP address of the target server.
 
 This tests the connection with the OSSolver Java servlet. If a connection is established, the remote server sends back an XML file that is displayed in the browser. Any error message indicates that a connection could not be established. 
 
 \item If a connection exists, try the URL
-
 \begin{verbatim}
-http://74.94.100.129:8080/OSServer/services/OSSolverService
+http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 \end{verbatim}
 
 This should indicate whether the  remote {\tt OSSolverService} is available or not.
@@ -592,17 +591,6 @@ This should indicate whether the  remote {\tt OSSolverService} is available or n
 At this point, you may try calling the remote {\tt OSSolverService} in the normal way. At worst, this should return an interpretable error message. You may also want to check whether the local solver gives sensible output when run on the same data.
 
 \end{enumerate}
-
-\iffalse %\ifdevelop
-Whenever you are working with the remote server and things don't work as they should try:
-
-\begin{verbatim}
-http://74.94.100.129:8080/OSServer/services/OSSolverService?wsdl
-\end{verbatim}
-
-If this does not return the WSDL for our solve, send, knock, etc. methods then we know the problem is with the Web Server and not the OSSolverService.exe. So this is a nice little "trick" to help isolate where the problem might be.\index{Remote server!Connection problems}
-\fi
-
 
 
 \begin{figure}
@@ -630,7 +618,7 @@ First we illustrate a simple call to  {\tt OSSolverService}.  The call on the cl
 where the {\tt testRemote1.config} file is
 \begin{verbatim}
 osil $DATA/osilFiles/parincLinear.osil
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 serviceMethod solve
 \end{verbatim}
 \else
@@ -640,7 +628,7 @@ serviceMethod solve
 where the {\tt testRemote1.config} file is
 \begin{verbatim}
 osil ../examples/data/osilFiles/parincLinear.osil
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 serviceMethod solve
 \end{verbatim}
 \fi
@@ -686,12 +674,12 @@ on the remote machine that is hosting the {\tt OSSolverService} and not on the c
 \ifdevelop
 \begin{verbatim}
 ./OSSolverService osol $DATA/osolFiles/remoteSolve1.osol
-     serviceLocation  http://74.94.100.129:8080/OSServer/services/OSSolverService
+     serviceLocation  http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \else
 \begin{verbatim}
 ./OSSolverService osol ../examples/data/osolFiles/remoteSolve1.osol
-     serviceLocation  http://74.94.100.129:8080/OSServer/services/OSSolverService
+     serviceLocation  http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \fi
 %
@@ -719,18 +707,16 @@ The scenario is depicted in Figure~\ref{figure:ossolverservice2}.  The OSiL stri
 service is empty.  However,  the text of the {\tt <instanceLocation>} element contains the URL of a third machine (the COIN-OR web server at {\tt http://www.coin-or.org}), which 
 has the problem instance {\tt p0033.osil}.  The solver service will contact the machine with URL
 {\tt http://www.coin-or.org/OS/p0033.osil} and download this test problem. 
-%So the {\tt OSSolverService} is running on the server {\tt http://74.94.100.129:8080/} 
-%which contacts the server {\tt www.coin-or.org} for the model instance.
 The command line to accomplish this is
 \ifdevelop
 \begin{verbatim}
 ./OSSolverService osol $DATA/osolFiles/remoteSolve2.osol \
-     serviceLocation  http://74.94.100.129:8080/OSServer/services/OSSolverService
+     serviceLocation  http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \else
 \begin{verbatim}
 ./OSSolverService osol ../examples/data/osolFiles/remoteSolve2.osol \
-     serviceLocation  http://74.94.100.129:8080/OSServer/services/OSSolverService
+     serviceLocation  http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \fi
 %
@@ -782,7 +768,7 @@ method is used, the instance is communicated to the remote service, and the loca
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
 nl $DATA/amplFiles/hs71.nl
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 serviceMethod send   osol $DATA/osolFiles/sendWithJobID.osol
 \end{verbatim}
 \else
@@ -792,7 +778,7 @@ serviceMethod send   osol $DATA/osolFiles/sendWithJobID.osol
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
 nl ../examples/data/amplFiles/hs71.nl
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 serviceMethod send  osol ../examples/osolFiles/sendWithJobID.osol
 \end{verbatim}
 \fi
@@ -922,14 +908,14 @@ The {\tt testRemoteRetrieve.config} file is
 %
 \ifdevelop
 \begin{verbatim}
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 osol $DATA/osolFiles/retrieve.osol
 serviceMethod retrieve
 osrl ./test.osrl
 \end{verbatim}
 \else
 \begin{verbatim}
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 osol ../examples/data/osolFiles/retrieve.osol
 serviceMethod retrieve
 osrl ./test.osrl
@@ -964,7 +950,7 @@ where the result file is stored. By using the {\tt browser} parameter one could 
 Before  submitting a job with the {\tt send}\index{send@{\tt send}} method a {\tt JobID}\index{JobID@{\tt JobID}}
 is required. The {\tt OSSolverService} can get a {\tt JobID} with the following command line options.
 \begin{verbatim}
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 serviceMethod getJobID
 \end{verbatim}
 Note that no OSoL\index{OSoL} input file is specified. In this case, the {\tt OSSolverService} sends an empty string.
@@ -988,7 +974,7 @@ with {\tt JobID 123456abcd}\index{JobID@{\tt JobID}} has completed. A user would
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 osplInput $DATA/osolFiles/knock.ospl
 osol $DATA/osolFiles/retrieve.osol
 serviceMethod knock
@@ -999,7 +985,7 @@ serviceMethod knock
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 osplInput ../examples/data/osolFiles/knock.ospl
 osol ../examples/data/osolFiles/retrieve.osol
 serviceMethod knock
@@ -1116,7 +1102,7 @@ For example, to kill job {\tt 123456abcd}, at the command line type
 where the configure file {\tt kill.config} is
 \begin{verbatim}
 osol $DATA/osolFiles/kill.osol
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 serviceMethod kill
 \end{verbatim}
 \else
@@ -1126,7 +1112,7 @@ serviceMethod kill
 where the configure file {\tt kill.config} is
 \begin{verbatim}
 osol ../examples/data/osolFiles/kill.osol
-serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
+serviceLocation http://xxx.xxx.xxx.xxx:8080/OSServer/services/OSSolverService
 serviceMethod kill
 \end{verbatim}
 \fi
