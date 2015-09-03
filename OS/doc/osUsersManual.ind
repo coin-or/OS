@@ -2,17 +2,17 @@
 
   \item Algorithmic differentiation, 8, 47--48, 79--80
   \item AMPL, 7, 8, 27--30, 112
-  \item AMPL nl format, 1, 7, 8, 10, 11, 19, 72--73
+  \item AMPL nl format, 1, 7, 8, 10, 11, 19, 73
   \item AMPL Solver Library , \see{Third-party software, ASL}{1}
   \item {\tt amplFiles}, 28
   \item Apache Axis, 8, 16
-  \item Apache Tomcat, 1, 8, 9, 16, 93, 112--116
+  \item Apache Tomcat, 1, 8, 9, 15, 93, 112--116
   \item ASL, \see{Third-party software, ASL}{1}
 
   \indexspace
 
   \item {\it Bell, Bradley M.}, 79
-  \item {\tt bison}, 73, 91, 102
+  \item {\tt bison}, 74, 91, 102
   \item Blas, \see{Third-party software, Blas}{1}
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
   \item Bug reporting, 109
@@ -77,7 +77,7 @@
   \item {\tt f2c}, 91, 100, 104
   \item file locations, 13
   \item file naming conventions, 9, 98
-  \item {\tt flex}, 73, 91, 102
+  \item {\tt flex}, 74, 91, 102
   \item Fortran, 46, 91, 94, 100, 103--105
 
   \indexspace
@@ -165,7 +165,7 @@
   \item {\tt OSLibrary}, 14, 66--76
   \item {\tt OSmps2osil}, 72--73
   \item OSnL, 43
-  \item {\tt OSnl2osil}, 72, 106
+  \item {\tt OSnl2osil}, 73, 106
   \item OSoL, 7, 9, 14, 16, 20, 21, 23, 24, 45, 73
   \item {\tt OSOption}, 72--73
   \item OSpL, 21--22, 24, 45
