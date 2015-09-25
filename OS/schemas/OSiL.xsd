@@ -87,18 +87,26 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>recommendation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>recommendation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="complexProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="complexVariables"/>
+						<xs:element name="complexObjectives"/>
+						<xs:element name="complexConstraints"/>
+						<xs:element name="complexExpressions"/>
+					</xs:sequence>
+				</xs:complexType>
 			</xs:element>
 			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
@@ -127,7 +135,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:element>
 			<xs:element name="softConstraints" type="SoftConstraints" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="ambiguityResolution" type="AmbiguityResolution" minOccurs="0">
@@ -2566,7 +2574,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStages">
 		<xs:annotation>
-			<xs:documentation>proposal</xs:documentation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>

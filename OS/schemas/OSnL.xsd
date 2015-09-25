@@ -3574,7 +3574,7 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:attribute name="value" type="xs:double" use="optional"/>
-				<xs:attribute name="id" type="xs:string" use="optional">
+				<xs:attribute name="id" type="xs:ID" use="optional">
 					<xs:annotation>
 						<xs:documentation>required if realtime or random is true</xs:documentation>
 					</xs:annotation>
@@ -4605,6 +4605,40 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="inNonnegativeIntegerSet" type="OSnLNodeInNonnegativeIntegerSet" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeIsNaN">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="isNaN" type="OSnLNodeIsNaN" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeIsInf">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="isInf" type="OSnLNodeIsInf" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -6075,6 +6109,31 @@
 			<xs:extension base="OSnLCNode">
 				<xs:attribute name="real" type="xs:double" default="0.0"/>
 				<xs:attribute name="imag" type="xs:double" default="0.0"/>
+				<xs:attribute name="id" type="xs:ID">
+					<xs:annotation>
+						<xs:documentation>required if realtime or random is true</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="realTime">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="none"/>
+							<xs:enumeration value="realPart"/>
+							<xs:enumeration value="imaginaryPart"/>
+							<xs:enumeration value="both"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="random">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="none"/>
+							<xs:enumeration value="realPart"/>
+							<xs:enumeration value="imaginaryPart"/>
+							<xs:enumeration value="both"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
