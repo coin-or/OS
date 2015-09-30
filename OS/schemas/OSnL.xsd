@@ -6142,7 +6142,7 @@
 			<xs:documentation>experiment.. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLCNodeComplex">
+	<xs:complexType name="OSnLCNodeCreate">
 		<xs:annotation>
 			<xs:documentation>experimental </xs:documentation>
 		</xs:annotation>
@@ -6150,14 +6150,15 @@
 			<xs:extension base="OSnLCNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:annotation>
-						<xs:documentation>First child is real part; second is imaginary part</xs:documentation>
+						<xs:documentation>Package two real-valued expressions into a complex. First child is real part; 
+second is imaginary part</xs:documentation>
 					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="complex" type="OSnLCNodeComplex" substitutionGroup="OSnLCNode">
+	<xs:element name="createComplex" type="OSnLCNodeCreate" substitutionGroup="OSnLCNode">
 		<xs:annotation>
 			<xs:documentation>experimental </xs:documentation>
 		</xs:annotation>

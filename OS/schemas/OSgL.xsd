@@ -895,7 +895,7 @@ Each nonzero is a real-valued expression</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="MatrixElements">
 				<xs:sequence>
-					<xs:element name="value" type="ComplexValuedExpressions" minOccurs="0">
+					<xs:element name="value" type="ComplexValuedExpressionArray" minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>number of "el" children must equal numberOfValues.
 Each nonzero is a complex-valued expression</xs:documentation>
