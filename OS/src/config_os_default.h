@@ -5,7 +5,7 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define OS_VERSION "2.10"
+#define OS_VERSION "2.10.1"
 
 /* Major Version number of project */
 #define OS_VERSION_MAJOR 2
@@ -14,7 +14,7 @@
 #define OS_VERSION_MINOR 10
 
 /* Release Version number of project */
-#define OS_VERSION_RELEASE 9999
+#define OS_VERSION_RELEASE 1
 
 /* Define to 1 if OS uses CppAD */
 #define OS_HAS_CPPAD
