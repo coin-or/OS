@@ -71,7 +71,7 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 70		4013	kLargest	>=1*		kth largest?				
 71		4014	kSmallest	>=1*		kth smallest?				
 72		4015	range	0 or more						
-73		4016	interQuantileRange	0 or more						
+73		4016	interQuartileRange	0 or more						
 74		4017	absdev	0 or more						
 75		4018	stddev	0 or more						
 76		4019	variance	0 or more						
@@ -139,15 +139,15 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 138		4481	gammaDist	3		"first is ""x"""				
 139		4482	gammaCum	3		"first is ""x"""				
 140		4483	gammaInv	3		"first is ""x"""				
-141		4491	gammaGeneralDist	5		"first is ""x"""				
-142		4492	gammaGeneralCum	5		"first is ""x"""				
-143		4493	gammaGeneralInv	5		"first is ""x"""				
+141		4491	generalizedGammaDist	5		"first is ""x"""				
+142		4492	generalizedGammaCum	5		"first is ""x"""				
+143		4493	generalizedGammaInv	5		"first is ""x"""				
 144		4501	betaDist	3		"first is ""x"""				
 145		4502	betaCum	3		"first is ""x"""				
 146		4503	betaInv	3		"first is ""x"""				
-147		4511	betaGeneralDist	5		"first is ""x"""				
-148		4512	betaGeneralCum	5		"first is ""x"""				
-149		4513	betaGeneralInv	5		"first is ""x"""				
+147		4511	generalizedBetaDist	5		"first is ""x"""				
+148		4512	generalizedBetaCum	5		"first is ""x"""				
+149		4513	generalizedBetaInv	5		"first is ""x"""				
 150		4521	lognormalDist	3		"first is ""x"""				
 151		4522	lognormalCum	3		"first is ""x"""				
 152		4523	lognormalInv	3		"first is ""x"""				
@@ -336,11 +336,11 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 335		8004	complexArgument	1 (complex)		returns real-valued 		q in |z|e^(iq)		
 336		8051	isComplexInf	1 (complex)		returns 0 or 1 				
 337		8052	isComplexNaN	1 (complex)		returns 0 or 1 				
-338		8053	complexEq	1 (complex)		returns 0 or 1 				
-339		8054	complexNeq	1 (complex)		returns 0 or 1 				
-340		8101	complexNumber			two attributes: real and imaginary part				
-341		8102	complexCreate	2 (real)	0	"First child is real part, second is imaginary part"				
-342		8103	complexPlus	2 (scalar)		returns complex-valued 				
+338		8053	isComplexEq	1 (complex)		returns 0 or 1 				
+339		8054	isComplexNeq	1 (complex)		returns 0 or 1 				
+340		8101	complexCreate	2 (real)	0	"First child is real part, second is imaginary part"				
+341		8102	complexPlus	2 (scalar)		returns complex-valued 				
+342		8103	complexSum	0 or more (scalar)		returns complex-valued 				
 343		8104	complexMinus	2 (scalar)		returns complex-valued 				
 344		8105	complexNegate	1 (complex)		returns complex-valued 		-x-iy		
 345		8106	complexConjugate	1 (complex)		returns complex-valued 		x-iy		
@@ -350,21 +350,21 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 349		8110	complexSquare	1 (complex)		returns complex-valued 				
 350		8111	complexSquareRoot	1 (scalar)		returns complex-valued 				
 351		8112	complexPower	2 (scalar)		returns complex-valued 				
-352		8113	complexSum	0 or more (scalar)		returns complex-valued 				
-353		8114	complexProduct	0 or more (scalar)		returns complex-valued 				
-354		8115	complexExp	1 (complex)		returns complex-valued 				
-355		8116	complexSin	1 (complex)		returns complex-valued 				
-356		8117	complexCos	1 (complex)		returns complex-valued 				
-357		8118	complexTan	1 (complex)		returns complex-valued 				
-358		8119	complexSinh	1 (complex)		returns complex-valued 				
-359		8120	complexCosh	1 (complex)		returns complex-valued 				
-360		8121	complexTanh	1 (complex)		returns complex-valued 				
-361		8122	complexNormal							
-362		8123	complexDiscrete							
-363		8501	complexMatrixDeterminant		1	can be complex if matrix complex-valued	yes			
-364		8125	complexMatrixTrace		1	can be complex if matrix complex-valued	yes			
-365		8126	matrixToComplexScalar		1	can be complex if matrix complex-valued	yes			
-366		858127	complexMatrixElementAt	2 (integer)	1	can be complex if matrix complex-valued				
+352		8113	complexProduct	0 or more (scalar)		returns complex-valued 				
+353		8114	complexExp	1 (complex)		returns complex-valued 				
+354		8115	complexSin	1 (complex)		returns complex-valued 				
+355		8116	complexCos	1 (complex)		returns complex-valued 				
+356		8117	complexTan	1 (complex)		returns complex-valued 				
+357		8118	complexSinh	1 (complex)		returns complex-valued 				
+358		8119	complexCosh	1 (complex)		returns complex-valued 				
+359		8120	complexTanh	1 (complex)		returns complex-valued 				
+360		8121	complexNormal							
+361		8122	complexDiscrete							
+362		8501	complexMatrixDeterminant		1	can be complex if matrix complex-valued				
+363		8502	complexMatrixTrace		1	can be complex if matrix complex-valued				
+364		8503	complexMatrixToScalar		1	can be complex if matrix complex-valued				
+365		8504	complexMatrixElementAt	2 (integer)	1	can be complex if matrix complex-valued				
+366		8701	complexNumber			"several attributes, including real and imaginary part, realTime etc. "				
 										
 										
 										

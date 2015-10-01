@@ -3871,15 +3871,4 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:simpleType name="SymmetryType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="none"/>
-			<xs:enumeration value="upper"/>
-			<xs:enumeration value="lower"/>
-			<xs:enumeration value="skewUpper"/>
-			<xs:enumeration value="skewLower"/>
-			<xs:enumeration value="HermitianUpper"/>
-			<xs:enumeration value="HermitianLower"/>
-		</xs:restriction>
-	</xs:simpleType>
 </xs:schema>

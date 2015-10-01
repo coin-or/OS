@@ -3369,4 +3369,15 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:attributeGroup>
+	<xs:simpleType name="SymmetryType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="none"/>
+			<xs:enumeration value="upper"/>
+			<xs:enumeration value="lower"/>
+			<xs:enumeration value="skewUpper"/>
+			<xs:enumeration value="skewLower"/>
+			<xs:enumeration value="HermitianUpper"/>
+			<xs:enumeration value="HermitianLower"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>
