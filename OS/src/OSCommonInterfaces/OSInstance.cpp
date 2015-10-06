@@ -171,7 +171,7 @@ OSInstance::~OSInstance()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "OSInstance Destructor Called");
 #endif
-    std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+    std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
     // delete the temporary arrays
 
     if (this->instanceData->variables != NULL && 
@@ -2688,10 +2688,10 @@ int* OSInstance::getNonlinearExpressionTreeIndexes()
 {
     if(m_bNonlinearExpressionTreeIndexesProcessed == true) return m_miNonlinearExpressionTreeIndexes;
     m_bNonlinearExpressionTreeIndexesProcessed = true;
-    std::map<int, ScalarExpressionTree*> expTrees;
+    std::map<int, RealValuedExpressionTree*> expTrees;
     expTrees = getAllNonlinearExpressionTrees();
 
-    std::map<int, ScalarExpressionTree*>::iterator pos;
+    std::map<int, RealValuedExpressionTree*>::iterator pos;
     try
     {
         // now put the term into an array
@@ -2721,9 +2721,9 @@ int* OSInstance::getNonlinearExpressionTreeModIndexes()
 {
     if(m_bNonlinearExpressionTreeModIndexesProcessed == true) return m_miNonlinearExpressionTreeModIndexes;
     m_bNonlinearExpressionTreeModIndexesProcessed = true;
-    std::map<int, ScalarExpressionTree*> expTrees;
+    std::map<int, RealValuedExpressionTree*> expTrees;
     expTrees = getAllNonlinearExpressionTreesMod();
-    std::map<int, ScalarExpressionTree*>::iterator pos;
+    std::map<int, RealValuedExpressionTree*>::iterator pos;
     try
     {
         // now put the term into an array
@@ -2758,7 +2758,7 @@ int OSInstance::getNumberOfNonlinearObjectives()
     return m_iObjectiveNumberNonlinear;
 }//getNumberOfNonlinearObjectivess
 
-ScalarExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx)
+RealValuedExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx)
 {
     // check to make sure rowIdx has a nonlinear term and is in the map
     if( m_bProcessExpressionTrees == false )
@@ -2770,7 +2770,7 @@ ScalarExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx)
     else return NULL ;
 }// getNonlinearExpressionTree for a specific index
 
-ScalarExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx)
+RealValuedExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx)
 {
     // check to make sure rowIdx has a nonlinear term and is in the map
     if( m_bProcessExpressionTreesMod == false )
@@ -2791,7 +2791,7 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeInPostfix( int rowI
     {
         if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end())
         {
-            ScalarExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
+            RealValuedExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
             postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
         }
         else
@@ -2819,7 +2819,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
     {
         if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end())
         {
-            ScalarExpressionTree* exptree = this->getNonlinearExpressionTree( rowIdx);
+            RealValuedExpressionTree* exptree = this->getNonlinearExpressionTree( rowIdx);
             if(exptree != NULL)
             {
                 postfixVec = this->getNonlinearExpressionTreeInPostfix( rowIdx);
@@ -2852,7 +2852,7 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeModInPostfix( int r
     {
         if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end())
         {
-            ScalarExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
+            RealValuedExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
             postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
 
         }
@@ -2878,7 +2878,7 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeInPrefix( int rowId
     {
         if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end())
         {
-            ScalarExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
+            RealValuedExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
             prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
         }
         else
@@ -2903,7 +2903,7 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int ro
     {
         if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end())
         {
-            ScalarExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
+            RealValuedExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
             prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
         }
         else
@@ -2918,14 +2918,14 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int ro
     }
 }//getNonlinearExpressionTreeInPrefix
 
-std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTrees()
+std::map<int, RealValuedExpressionTree*> OSInstance::getAllNonlinearExpressionTrees()
 {
     //if( m_binitForAlgDiff == false) this->initForAlgDiff();
     if(m_bProcessExpressionTrees == true) return m_mapExpressionTrees;
     std::map<int, int> foundIdx;
     std::map<int, int>::iterator pos;
     OSnLNodePlus *nlNodePlus;
-    ScalarExpressionTree *expTree;
+    RealValuedExpressionTree *expTree;
     m_iObjectiveNumberNonlinear = 0;
     m_iConstraintNumberNonlinear = 0;
     int i;
@@ -2987,7 +2987,7 @@ std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(
     return m_mapExpressionTrees;
 }// getAllNonlinearExpressionTrees
 
-std::map<int, ScalarExpressionTree*> OSInstance::getAllNonlinearExpressionTreesMod()
+std::map<int, RealValuedExpressionTree*> OSInstance::getAllNonlinearExpressionTreesMod()
 {
     if( m_bProcessExpressionTreesMod == true ) return m_mapExpressionTreesMod;
     m_bProcessExpressionTreesMod = true;
@@ -4070,7 +4070,7 @@ bool OSInstance::setQuadraticTermsInNonlinearExpressions(int numQPTerms, int* ro
     {
         instanceData->nonlinearExpressions->nl[ i] = new Nl();
         instanceData->nonlinearExpressions->nl[ i]->idx = rowIndexes[ i];
-        instanceData->nonlinearExpressions->nl[ i]->osExpressionTree = new ScalarExpressionTree();
+        instanceData->nonlinearExpressions->nl[ i]->osExpressionTree = new RealValuedExpressionTree();
         // create a variable nl node for x0
         nlNodeVariablePoint = new OSnLNodeVariable();
         nlNodeVariablePoint->idx = varOneIndexes[ i];
@@ -4112,7 +4112,7 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
     {
         instanceData->nonlinearExpressions->nl[i] = new Nl();
         instanceData->nonlinearExpressions->nl[i]->idx = root[i]->idx;
-        instanceData->nonlinearExpressions->nl[i]->osExpressionTree = new ScalarExpressionTree();
+        instanceData->nonlinearExpressions->nl[i]->osExpressionTree = new RealValuedExpressionTree();
         instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot
             = (OSnLNode*)root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
     }
@@ -4121,7 +4121,7 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
 
 bool OSInstance::initializeNonLinearStructures( )
 {
-    std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+    std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
     if( m_bNonLinearStructuresInitialized == true) return true;
     if( m_bProcessVariables == false) processVariables();
     if( m_bProcessObjectives == false) processObjectives();
@@ -4216,7 +4216,7 @@ bool OSInstance::addQTermsToExpressionTree()
     OSnLNodeVariable* nlNodeVariableTwo;
     OSnLNodeTimes* nlNodeTimes;
     OSnLNodePlus* nlNodePlus;
-    ScalarExpressionTree* expTree;
+    RealValuedExpressionTree* expTree;
     getQuadraticTerms();
 #ifndef NDEBUG
     //std::cout << "PROCESSING QUADRATIC TERMS" << std::endl;
@@ -4281,7 +4281,7 @@ bool OSInstance::addQTermsToExpressionTree()
             nlNodePlus = new OSnLNodePlus();
             nlNodePlus->m_mChildren[ 0] = (OSnLNode*)expTree->m_treeRoot;
             nlNodePlus->m_mChildren[ 1] = nlNodeTimes;
-            //expTree = new ScalarExpressionTree();
+            //expTree = new RealValuedExpressionTree();
             expTree->m_treeRoot = nlNodePlus ;
             // get rid of old variable map
             if(expTree->m_bIndexMapGenerated == true)
@@ -4308,7 +4308,7 @@ bool OSInstance::addQTermsToExpressionTree()
             nlNodeTimes->m_mChildren[ 0] = nlNodeVariableOne;
             nlNodeTimes->m_mChildren[ 1] = nlNodeVariableTwo;
             // create a new expression tree corresponding to row idx.
-            expTree = new ScalarExpressionTree();
+            expTree = new RealValuedExpressionTree();
             expTree->m_treeRoot = nlNodeTimes ;
             expTree->mapVarIdx = expTree->getVariableIndicesMap();
             m_mapExpressionTreesMod[ idx ] = expTree;
@@ -5097,7 +5097,7 @@ double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *o
         if(highestOrder < 1 ) throw ErrorClass("When calling calculateAllObjectiveFunctionGradients highestOrder should be 1 or 2");
         if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  )
         {
-            std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+            std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
             for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
             {
                 if(posMapExpTree->first < 0)  // this nonlinear expression indexes an objective function
@@ -5127,7 +5127,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
         if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  )
         {
             int domainIdx = 0;
-            std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+            std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
             std::map<int, int>::iterator posVarIndexMap;
             int iHighestOrderEvaluatedStore;
             unsigned int i;
@@ -5184,7 +5184,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
     try
     {
         int domainIdx = 0;
-        std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+        std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
         std::map<int, int>::iterator posVarIndexMap;
         unsigned int i;
         int  iHighestOrderEvaluatedStore;
@@ -5318,7 +5318,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
     m_miJacNumConTerms = new int[ getConstraintNumber()];
     OSnLNodePlus *nlNodePlus;
     OSnLNodeVariable *nlNodeVariable;
-    ScalarExpressionTree *expTree = NULL;
+    RealValuedExpressionTree *expTree = NULL;
     // now initialize starts and variable index maps
     for ( i = 0; i < iNumRowStarts; i++)
     {
@@ -5636,14 +5636,14 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
     return true;
 }//getSparseJacobianFromRowMajor
 
-ScalarExpressionTree* OSInstance::getLagrangianExpTree( )
+RealValuedExpressionTree* OSInstance::getLagrangianExpTree( )
 {
     if( m_bLagrangianExpTreeCreated == true) return m_LagrangianExpTree;
     // we calculate the Lagrangian for all the objectives and constraints
     // with nonlinear terms
     // first initialize everything for nonlinear work
     if(m_bSparseJacobianCalculated == false) getJacobianSparsityPattern( );
-    std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+    std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
     OSnLNodeTimes* nlNodeTimes = NULL;
     OSnLNodeVariable* nlNodeVariable = NULL;
     OSnLNodeSum* nlNodeSum = NULL;
@@ -5654,7 +5654,7 @@ ScalarExpressionTree* OSInstance::getLagrangianExpTree( )
     nlNodeSum->inumberOfChildren = m_mapExpressionTreesMod.size();
     nlNodeSum->m_mChildren = new OSnLNode*[ nlNodeSum->inumberOfChildren];
     // create and expression tree for the sum node
-    m_LagrangianExpTree = new ScalarExpressionTree();
+    m_LagrangianExpTree = new RealValuedExpressionTree();
     m_LagrangianExpTree->m_treeRoot = nlNodeSum;
     // now create the children of the sum node
     for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
@@ -5696,9 +5696,9 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( )
     if(m_bAllNonlinearVariablesIndex == true) return m_mapAllNonlinearVariablesIndex;
     // loop over the map of expression tree and get a unique listing of all variables
     // put these in the map m_mapAllNonlinearVariablesIndex
-    std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+    std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
     std::map<int, int>::iterator posVarIdx;
-    ScalarExpressionTree *expTree;
+    RealValuedExpressionTree *expTree;
     for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
     {
         // get the index map for the expression tree
@@ -5975,9 +5975,9 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
         int rowNum,  jacIndex;
         unsigned int jstart, jend;
         int idx;
-        ScalarExpressionTree *expTree = NULL;
+        RealValuedExpressionTree *expTree = NULL;
         int domainIdx = 0;
-        std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+        std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
         std::map<int, int>::iterator posVarIdx;
 
         /** if the number of columns exceeds the number of rows we will get the
@@ -6099,10 +6099,10 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
         unsigned int i, j;
         int rowNum,  jacIndex;
         int jstart,  idx;
-        ScalarExpressionTree *expTree = NULL;
+        RealValuedExpressionTree *expTree = NULL;
         int hessValuesIdx = 0;
         if( m_bLagrangianSparseHessianCreated == false) getLagrangianHessianSparsityPattern( );
-        std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+        std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
         std::map<int, int>::iterator posVarIndexMap;
         if( objLambda == NULL) throw ErrorClass("must have a multiplier for the objective function even if zero when calling getSecondOrderResults");
 
@@ -6214,7 +6214,7 @@ bool OSInstance::initForAlgDiff()
     //if(m_bSparseJacobianCalculated  == false) getJacobianSparsityPattern();
     //see if we need to retape
     //loop over expression tree and see if one requires it
-    std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+    std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
     for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
     {
         if(posMapExpTree->second->bADMustReTape == true) m_bCppADMustReTape = true;
@@ -6765,7 +6765,7 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
         if(m_binitForAlgDiff == false) initForAlgDiff();
 
         //if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
-        std::map<int, ScalarExpressionTree*>::iterator posMapExpTree;
+        std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
         unsigned int i;
         size_t n = vdX.size();
 #ifdef COIN_HAS_CPPAD

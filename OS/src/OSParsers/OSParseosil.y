@@ -321,12 +321,15 @@ std::string addErrorMsg(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData*
 
 %token ELEMENTSSTART ELEMENTSEND
 %token CONSTANTELEMENTSSTART CONSTANTELEMENTSEND
+%token COMPLEXELEMENTSSTART COMPLEXELEMENTSEND
 %token VARREFERENCEELEMENTSSTART VARREFERENCEELEMENTSEND
 %token LINEARELEMENTSSTART LINEARELEMENTSEND
-%token GENERALELEMENTSSTART GENERALELEMENTSEND
 %token CONREFERENCEELEMENTSSTART CONREFERENCEELEMENTSEND
 %token OBJREFERENCEELEMENTSSTART OBJREFERENCEELEMENTSEND
+%token REALVALUEDEXPRESSIONSSTART REALVALUEDEXPRESSIONSSEND
+%token COMPLEXVALUEDEXPRESSIONSSTART COMPLEXVALUEDEXPRESSIONSSEND
 %token STRINGVALUEDELEMENTSSTART STRINGVALUEDELEMENTSEND 
+
 
 %token STARTVECTORSTART STARTVECTOREND INDEXSTART INDEXEND VALUESTART VALUEEND
 
@@ -3210,7 +3213,7 @@ matrixConstructorList: | matrixConstructorList matrixConstructor
     osglData->mtxBlkVec.back()->inumberOfChildren++;
 };
 
-matrixConstructor: constantElements | varReferenceElements | linearElements | generalElements |
+matrixConstructor: constantElements | varReferenceElements | linearElements | realValuedExpressions |
                    objReferenceElements | conReferenceElements | matrixTransformation | matrixBlocks;
 
 constantElements: constantElementsStart constantElementsAttributes GREATERTHAN constantElementsContent; 
@@ -3541,71 +3544,72 @@ linearElementsValuesVarIdxContent: GREATERTHAN INTEGER VARIDXEND
 };
 
 
-generalElements: generalElementsStart generalElementsAttributes GREATERTHAN generalElementsContent; 
+realValuedExpressions: realValuedExpressionsStart realValuedExpressionsAttributes GREATERTHAN realValuedExpressionsContent; 
 
-generalElementsStart: GENERALELEMENTSSTART
+realValuedExpressionsStart: REALVALUEDEXPRESSIONSSTART
 {
-    osglData->tempC = new GeneralMatrixElements();
+    osglData->tempC = new RealValuedExpressions();
     osglData->mtxConstructorVec.push_back(osglData->tempC);
     osglData->numberOfValuesPresent = false;        
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 };
 
-generalElementsAttributes: generalElementsAttList
+realValuedExpressionsAttributes: realValuedExpressionsAttList
 {
     if (osglData->numberOfValuesPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<generalElements>: numberOfValues attribute missing");    
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<realValuedExpressions>: numberOfValues attribute missing");    
 };
 
-generalElementsAttList: | generalElementsAttList generalElementsAtt;
+realValuedExpressionsAttList: | realValuedExpressionsAttList realValuedExpressionsAtt;
 
-generalElementsAtt: 
+realValuedExpressionsAtt: 
     osglNumberOfValuesATT
     {
-        ((GeneralMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
+        ((RealValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
         if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_general;
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_realValuedExpressions;
     }
   | osglRowMajorATT
     {
-        ((GeneralMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
+        ((RealValuedExpressions*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
 ;
 
-generalElementsContent: matrixElementsStartVector generalElementsNonzeros GENERALELEMENTSEND;
+realValuedExpressionsContent: 
+    matrixElementsStartVector realValuedExpressionsNonzeros REALVALUEDEXPRESSIONSSEND;
 
-generalElementsNonzeros: | matrixElementsIndexVector generalElementsValues;
+realValuedExpressionsNonzeros: | matrixElementsIndexVector realValuedExpressionsValues;
 
-generalElementsValues:
-    | generalElementsValuesStart generalElementsValuesContent;
+realValuedExpressionsValues:
+    | realValuedExpressionsValuesStart realValuedExpressionsValuesContent;
 
-generalElementsValuesStart: VALUESTART
+realValuedExpressionsValuesStart: VALUESTART
 {
     osglData->nonzeroCounter = 0;
-    osglData->numberOfValues = ((GeneralMatrixElements*)osglData->tempC)->numberOfValues;
+    osglData->numberOfValues = ((RealValuedExpressions*)osglData->tempC)->numberOfValues;
 
-    ((GeneralMatrixElements*)osglData->tempC)->value = new GeneralMatrixValues();
-    ((GeneralMatrixElements*)osglData->tempC)->value->numberOfEl
+    ((RealValuedExpressions*)osglData->tempC)->value = new RealValuedExpressionArray();
+    ((RealValuedExpressions*)osglData->tempC)->value->numberOfEl
         = osglData->numberOfValues;
-    ((GeneralMatrixElements*)osglData->tempC)->value->el
-        = new ScalarExpressionTree*[osglData->numberOfValues];
+    ((RealValuedExpressions*)osglData->tempC)->value->el
+        = new RealValuedExpressionTree*[osglData->numberOfValues];
 
     for (int i=0; i<osglData->numberOfValues; i++)
-        ((GeneralMatrixElements*)osglData->tempC)->value->el[i] = new ScalarExpressionTree();
+        ((RealValuedExpressions*)osglData->tempC)->value->el[i] = new RealValuedExpressionTree();
 };
 
-generalElementsValuesContent: generalElementsValuesEmpty | generalElementsValuesLaden;
+realValuedExpressionsValuesContent: realValuedExpressionsValuesEmpty | realValuedExpressionsValuesLaden;
 
-generalElementsValuesEmpty: ENDOFELEMENT;
+realValuedExpressionsValuesEmpty: ENDOFELEMENT;
 
-generalElementsValuesLaden: GREATERTHAN generalElementsElList VALUEEND;
+realValuedExpressionsValuesLaden: GREATERTHAN realValuedExpressionsElList VALUEEND;
 
-generalElementsElList:  | generalElementsElList generalElementsEl;
+realValuedExpressionsElList:  | realValuedExpressionsElList realValuedExpressionsEl;
 
-generalElementsEl: generalElementsElStart generalElementsElContent;
+realValuedExpressionsEl: realValuedExpressionsElStart realValuedExpressionsElContent;
 
-generalElementsElStart: ELSTART
+realValuedExpressionsElStart: ELSTART
     {
         if (osglData->nonzeroCounter >= osglData->numberOfValues) 
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> terms greater than expected");
@@ -3620,15 +3624,15 @@ generalElementsElStart: ELSTART
         osnlData->matrixProductVec.clear();
     };
 
-generalElementsElContent: generalElementsElEmpty | generalElementsElLaden;
+realValuedExpressionsElContent: realValuedExpressionsElEmpty | realValuedExpressionsElLaden;
 
-generalElementsElEmpty: ENDOFELEMENT;
+realValuedExpressionsElEmpty: ENDOFELEMENT;
 
-generalElementsElLaden: GREATERTHAN nlnode ELEND
+realValuedExpressionsElLaden: GREATERTHAN nlnode ELEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
 
-        ((GeneralMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
+        ((RealValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
             ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osglData->nonzeroCounter++;
     };
@@ -5017,7 +5021,7 @@ nlAttribute:
     { 
         osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
         osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
-            = new ScalarExpressionTree();
+            = new RealValuedExpressionTree();
     }
     | osglShapeATT
     {

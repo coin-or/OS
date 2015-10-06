@@ -106,7 +106,7 @@ nlAttribute:
     { 
         osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
         osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
-            = new ScalarExpressionTree();
+            = new RealValuedExpressionTree();
     }
     | osglShapeATT
     {

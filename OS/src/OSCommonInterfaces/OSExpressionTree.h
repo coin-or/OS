@@ -28,7 +28,7 @@ class OSnLMNode;
  *
  * \remarks
  * This is a generic class.
- * Specific classes ScalarExpressionTree (for expressions that evaluate to scalar values)
+ * Specific classes RealValuedExpressionTree (for expressions that evaluate to scalar values)
  * and MatrixExpressionTrees (for expressions that evaluate to matrices) are derived
  * from this class. 
  *
@@ -87,7 +87,7 @@ public:
 };//end OSExpressionTree
 
 
-/*! \class ScalarExpressionTree
+/*! \class RealValuedExpressionTree
  *  \brief Used to hold part of the instance in memory.
  *
  * \remarks
@@ -96,7 +96,7 @@ public:
  *
  */
 
-class ScalarExpressionTree : public OSExpressionTree
+class RealValuedExpressionTree : public OSExpressionTree
 {
 public:
 
@@ -108,17 +108,17 @@ public:
     /**
      * default constructor.
      */
-    ScalarExpressionTree();
+    RealValuedExpressionTree();
 
     /**
      * default destructor.
      */
-    ~ScalarExpressionTree();
+    ~RealValuedExpressionTree();
 
     /**
      * A function to check for the equality of two objects
      */
-    bool IsEqual(ScalarExpressionTree *that);
+    bool IsEqual(RealValuedExpressionTree *that);
 
     /**
      * Get a vector of pointers to ExprNodes that correspond to
@@ -186,14 +186,14 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */    
-    //bool deepCopyFrom(ScalarExpressionTree *that);
+    //bool deepCopyFrom(RealValuedExpressionTree *that);
 
 private:
     /**
      * m_dTreeRootValue is the function value of the root node
      */
     double m_dTreeRootValue;
-};//end ScalarExpressionTree
+};//end RealValuedExpressionTree
 
 
 /*! \class MatrixExpressionTree

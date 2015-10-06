@@ -39,7 +39,7 @@
  */
 class OSnLNode;
 class OSnLMNode;
-class ScalarExpressionTree;
+class RealValuedExpressionTree;
 
 
 /*! \class MatrixNode
@@ -243,13 +243,15 @@ public:
 /*! \class MatrixElements
  * \brief an abstract class to help represent the elements in a MatrixType object
  * From this we derive the following concrete classes used to store specific types of values:
- *     ConstantMatrixValues
- *     VarReferenceMatrixValues
- *     LinearMatrixValues
- *     GeneralMatrixValues
- *     ObjReferenceMatrixValues
- *     ConReferenceMatrixValues
- *     StringValuedMatrixValues
+ *     ConstantMatrixElements
+ *     ComplexMatrixVElements
+ *     VarReferenceMatrixElements
+ *     LinearMatrixElements
+ *     RealValuedExpressions
+ *     ComplexValuedExpressions
+ *     ObjReferenceMatrixElements
+ *     ConReferenceMatrixElements
+ *     StringValuedMatrixElements
  */
 class MatrixElements: public MatrixConstructor
 {
@@ -273,6 +275,12 @@ public:
 
     /** The index array of the (nonzero) elements */
     IntVector *index;
+
+    /**
+     *  To track the type of symmetry present in the matrix element tag
+     *  @remark for definitions, see OSParameters.h
+     */
+    ENUM_MATRIX_SYMMETRY symmetry;
 
 
     MatrixElements();
@@ -639,22 +647,22 @@ public:
 };//class LinearMatrixValues
 
 
-/*! \class GeneralMatrixValues
+/*! \class RealValuedExpressionArray
  * \brief a data structure to represent the nonzeros in a generalMatrix element
  */
-class GeneralMatrixValues : public MatrixElementValues
+class RealValuedExpressionArray : public MatrixElementValues
 {
 public:
-    ScalarExpressionTree **el;
+    RealValuedExpressionTree **el;
 
-    GeneralMatrixValues();
-    ~GeneralMatrixValues();
+    RealValuedExpressionArray();
+    ~RealValuedExpressionArray();
 
     /**
      *
      * A function to check for the equality of two objects
      */
-    bool IsEqual(GeneralMatrixValues *that);
+    bool IsEqual(RealValuedExpressionArray *that);
 
     /**
      * A function to make a random instance of this class
@@ -671,8 +679,8 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    virtual bool deepCopyFrom(GeneralMatrixValues *that);
-};//class GeneralMatrixValues
+    virtual bool deepCopyFrom(RealValuedExpressionArray *that);
+};//class RealValuedExpressionArray
 
 
 /*! \class ObjReferenceMatrixValues
@@ -1075,19 +1083,19 @@ public:
 };//class LinearMatrixElements
 
 
-/*! \class GeneralMatrixElements
+/*! \class RealValuedExpressions
  * \brief a data structure to represent the nonzero values in a generalMatrix element
  */
-class GeneralMatrixElements: public MatrixElements
+class RealValuedExpressions: public MatrixElements
 {
 public:
     /**
      *  The values are general nonlinear expressions 
      */
-    GeneralMatrixValues *value;
+    RealValuedExpressionArray *value;
 
-    GeneralMatrixElements();
-    ~GeneralMatrixElements();
+    RealValuedExpressions();
+    ~RealValuedExpressions();
 
 
     /**
@@ -1134,12 +1142,12 @@ public:
      * operator nodes that derive or extend from this class.
      * </p>
      */
-    virtual GeneralMatrixElements *cloneMatrixNode();
+    virtual RealValuedExpressions *cloneMatrixNode();
 
     /**
      * A function to check for the equality of two objects
      */
-    bool IsEqual(GeneralMatrixElements *that);
+    bool IsEqual(RealValuedExpressions *that);
 
     /**
      * A function to make a random instance of this class
@@ -1156,8 +1164,8 @@ public:
      * @param that: the instance from which information is to be copied
      * @return whether the copy was created successfully
      */
-    bool deepCopyFrom(GeneralMatrixElements *that);
-};//class GeneralMatrixElements
+    bool deepCopyFrom(RealValuedExpressions *that);
+};//class RealValuedExpressions
 
 
 /*! \class ObjReferenceMatrixElements
@@ -1529,7 +1537,7 @@ public:
     bool convertFromObjRef  (ObjReferenceMatrixValues* _values, int nvalues);
     bool convertFromLinear  (LinearMatrixValues*       _values, int nvalues);
     bool convertFromConRef  (ConReferenceMatrixValues* _values, int nvalues);
-    bool convertFromGeneral (GeneralMatrixValues*      _values, int nvalues);
+    bool convertFromGeneral (RealValuedExpressionArray*      _values, int nvalues);
 };//class StringValuedMatrixElements
 
 
@@ -1736,14 +1744,14 @@ public:
     int targetMatrixFirstCol;
 
     /**
-     * to select the position of the upper left corner 
+     * to pinpoint the position of the upper left corner 
      * of the portion of the base matrix that is to be selected 
      */
     int baseMatrixStartRow;
     int baseMatrixStartCol;
 
     /**
-     * to select the position of the lower right corner 
+     * to pinpoint the position of the lower right corner 
      * of the portion of the base matrix that is to be selected 
      */
     int baseMatrixEndRow;
@@ -2081,12 +2089,15 @@ public:
     /**
      *  To track the type of values present in the matrix or block
      *  @remark for definitions, see OSParameters.h
+     *  type is the type declared by the user (if any)
+     *  inferredType is computed from the list of matrix constructors
      */
     ENUM_MATRIX_TYPE type;
+    ENUM_MATRIX_TYPE inferredType;
 
     int numberOfRows;
     int numberOfColumns;
-
+   
     /**
      *  The matrix can be held in expanded form by rows or by columns 
      *  and in a number of ways stored by blocks
@@ -2780,16 +2791,16 @@ public:
 //    bool convertFromObjRef  (ObjReferenceMatrixValues* _values, int nvalues);
 //    bool convertFromLinear  (LinearMatrixValues*       _values, int nvalues);
 //    bool convertFromConRef  (ConReferenceMatrixValues* _values, int nvalues);
-//    bool convertFromGeneral (GeneralMatrixValues*      _values, int nvalues);
+//    bool convertFromGeneral (RealValuedExpressionArray*      _values, int nvalues);
 
 /**
  *  Some methods to convert one type of matrix element into another
  */
-//ScalarExpressionTree* convertFromConstant(double val);
-//ScalarExpressionTree* convertFromVarRef(int varref);
-//ScalarExpressionTree* convertFromObjRef(int objRef);
-//ScalarExpressionTree* convertFromLinear(LinearMatrixElement* val);
-//ScalarExpressionTree* convertFromConRef(ConReferenceMatrixElement* val);
+//RealValuedExpressionTree* convertFromConstant(double val);
+//RealValuedExpressionTree* convertFromVarRef(int varref);
+//RealValuedExpressionTree* convertFromObjRef(int objRef);
+//RealValuedExpressionTree* convertFromLinear(LinearMatrixElement* val);
+//RealValuedExpressionTree* convertFromConRef(ConReferenceMatrixElement* val);
 
     /**
      *  Some methods to convert one type of matrix elements into another
@@ -2797,6 +2808,6 @@ public:
      *  @param nvalues is the number of matrix elements that are to be converted
      *  @return true if the conversion was successful
      */
-    bool convertFromConstant(ConstantMatrixValues*     _values, int nvalues);
+    bool convertFromConstant(ConstantMatrixValues*   _values, int nvalues);
     bool convertFromVarRef(VarReferenceMatrixValues* _values, int nvalues);
 #endif

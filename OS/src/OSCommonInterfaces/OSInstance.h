@@ -426,8 +426,8 @@ public:
      */
     bool m_bDeleteExpressionTree;
 
-    /** osExpressionTree contains the root of the ScalarExpressionTree */
-    ScalarExpressionTree *osExpressionTree;
+    /** osExpressionTree contains the root of the RealValuedExpressionTree */
+    RealValuedExpressionTree *osExpressionTree;
 
     /**
      * default constructor.
@@ -2694,7 +2694,7 @@ private:
      * @remark For this to work all nonlinear expressions (including quadratic ones)
      *         must be combined into a single expression.
      */
-    std::map<int, ScalarExpressionTree*> m_mapExpressionTrees;
+    std::map<int, RealValuedExpressionTree*> m_mapExpressionTrees;
 
     /**
      * m_mapOSADFunRangeIndex is an inverse of the previous map. The key is the number of the
@@ -2713,10 +2713,10 @@ private:
     std::map<int, MatrixExpressionTree*> m_mapMatrixExpressionTrees;
 
     /**
-     * m_LagrangianExpTree is an ScalarExpressionTree object that is the expression tree
+     * m_LagrangianExpTree is an RealValuedExpressionTree object that is the expression tree
      * for the Lagrangian function.
      */
-    ScalarExpressionTree *m_LagrangianExpTree;
+    RealValuedExpressionTree *m_LagrangianExpTree;
 
     /**
      * m_bLagrangianHessionCreated is true if a Lagrangian function for the Hessian has been created
@@ -2758,7 +2758,7 @@ private:
      * We incorporate the linear and quadratic term for a variable 
      * into the corresponding expression tree before gradient and Hessian calculations
      */
-    std::map<int, ScalarExpressionTree*> m_mapExpressionTreesMod ;
+    std::map<int, RealValuedExpressionTree*> m_mapExpressionTreesMod ;
 
     /**
      * m_bOSADFunIsCreated is true if we have created the OSInstanc
@@ -3428,7 +3428,7 @@ public:
      *
      * @return an expression tree
      */
-    ScalarExpressionTree* getNonlinearExpressionTree(int rowIdx);
+    RealValuedExpressionTree* getNonlinearExpressionTree(int rowIdx);
 
     /**
      * Get the expression tree for a given row index for
@@ -3436,7 +3436,7 @@ public:
      *
      * @return an expression tree
      */
-    ScalarExpressionTree* getNonlinearExpressionTreeMod(int rowIdx);
+    RealValuedExpressionTree* getNonlinearExpressionTreeMod(int rowIdx);
 
     /**
      * Get the postfix tokens for a given row index.
@@ -3500,12 +3500,12 @@ public:
      * \remark If there are several expressions in a single row, 
      * this method combines them by adding OSnLPlus nodes 
      */
-    std::map<int, ScalarExpressionTree* > getAllNonlinearExpressionTrees();
+    std::map<int, RealValuedExpressionTree* > getAllNonlinearExpressionTrees();
 
     /**
      * @return a map: the key is the row index and the value is the corresponding expression tree
      */
-    std::map<int, ScalarExpressionTree* > getAllNonlinearExpressionTreesMod();
+    std::map<int, RealValuedExpressionTree* > getAllNonlinearExpressionTreesMod();
 
     /**
     * Get all the nonlinear expression tree indexes, i.e., 
@@ -4702,7 +4702,7 @@ public:
      * @return a pointer to the ExpressionTree for the Lagrangian function of current instance
      * we only take the Lagrangian of the rows with nonlinear terms
      */
-    ScalarExpressionTree* getLagrangianExpTree( );
+    RealValuedExpressionTree* getLagrangianExpTree( );
 
     /**
      * @return a pointer to a map of the indices of all of the variables

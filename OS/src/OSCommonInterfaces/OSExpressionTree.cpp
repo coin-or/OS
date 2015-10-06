@@ -124,42 +124,42 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
 }//OSExpressionTree::IsEqual
 
 
-ScalarExpressionTree::ScalarExpressionTree():
+RealValuedExpressionTree::RealValuedExpressionTree():
     m_treeRoot( NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
-        "Inside the ScalarExpressionTree Constructor");
+        "Inside the RealValuedExpressionTree Constructor");
 #endif
-}//end ScalarExpressionTree
+}//end RealValuedExpressionTree
 
 
-ScalarExpressionTree::~ScalarExpressionTree()
+RealValuedExpressionTree::~RealValuedExpressionTree()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
-        "Inside the ScalarExpressionTree Destructor");
+        "Inside the RealValuedExpressionTree Destructor");
 #endif
     if( bDestroyNlNodes == true)
     {
         if(m_treeRoot != NULL) delete m_treeRoot;
         m_treeRoot = NULL;
     }
-}//end ~ScalarExpressionTree
+}//end ~RealValuedExpressionTree
 
-std::vector<ExprNode*> ScalarExpressionTree::getPrefixFromExpressionTree()
+std::vector<ExprNode*> RealValuedExpressionTree::getPrefixFromExpressionTree()
 {
     return m_treeRoot->getPrefixFromExpressionTree();
 }//getPrefixFromExpressionTree
 
 
-std::vector<ExprNode*> ScalarExpressionTree::getPostfixFromExpressionTree()
+std::vector<ExprNode*> RealValuedExpressionTree::getPostfixFromExpressionTree()
 {
     return m_treeRoot->getPostfixFromExpressionTree();
 }//getPostfixFromExpressionTree
 
 
-std::map<int, int> *ScalarExpressionTree::getVariableIndicesMap()
+std::map<int, int> *RealValuedExpressionTree::getVariableIndicesMap()
 {
     if( m_bIndexMapGenerated == true) return mapVarIdx;
     mapVarIdx = new std::map<int, int>();
@@ -170,7 +170,7 @@ std::map<int, int> *ScalarExpressionTree::getVariableIndicesMap()
 }//getVariableIndicesMap
 
 
-double ScalarExpressionTree::calculateFunction( double *x, bool new_x)
+double RealValuedExpressionTree::calculateFunction( double *x, bool new_x)
 {
     //calculateFunctionAD( x, functionEvaluated);
     if( new_x == false)
@@ -185,10 +185,10 @@ double ScalarExpressionTree::calculateFunction( double *x, bool new_x)
 }//calculateFunction
 
 
-bool ScalarExpressionTree::IsEqual(ScalarExpressionTree *that)
+bool RealValuedExpressionTree::IsEqual(RealValuedExpressionTree *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ScalarExpressionTree");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in RealValuedExpressionTree");
 #endif
     if (this == NULL)
     {
@@ -219,7 +219,7 @@ bool ScalarExpressionTree::IsEqual(ScalarExpressionTree *that)
             return this->OSExpressionTree::IsEqual(that);
         }
     }
-}//ScalarExpressionTree::IsEqual
+}//RealValuedExpressionTree::IsEqual
 
 
 MatrixExpressionTree::MatrixExpressionTree():

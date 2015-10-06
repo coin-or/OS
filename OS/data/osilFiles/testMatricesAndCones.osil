@@ -247,8 +247,8 @@
                     </value>
                 </linearElements>
             </matrix>
-            <matrix numberOfColumns="2" numberOfRows="2" name="9-generalElements">
-                <generalElements numberOfValues="4">
+            <matrix numberOfColumns="2" numberOfRows="2" name="9-realValuedExpressions">
+                <realValuedExpressions numberOfValues="4">
                     <start>
                         <el mult="3" incr="2">0</el>
                     </start>
@@ -320,7 +320,7 @@
                             <number value="3.0"></number>
                         </el>
                     </value>
-                </generalElements>
+                </realValuedExpressions>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="10-mixedElements">
                 <constantElements numberOfValues="1">
@@ -358,7 +358,7 @@
                         </el>
                     </value>
                 </linearElements>
-                <generalElements numberOfValues="1">
+                <realValuedExpressions numberOfValues="1">
                     <start>
                         <el>0</el>    <el>0</el>    <el>1</el>
                     </start>
@@ -377,7 +377,7 @@
                             </plus>
                         </el>
                     </value>
-                </generalElements>
+                </realValuedExpressions>
             </matrix>
             <matrix numberOfColumns="2" numberOfRows="2" name="11-conRef">
                  <conReferenceElements numberOfValues="2">
@@ -672,7 +672,7 @@
                                         </transformation>
                                     </block>
                                     <block blockRowIdx="1" blockColIdx="1">
-                                        <generalElements numberOfValues="1">
+                                        <realValuedExpressions numberOfValues="1">
                                             <start>
                                                 <el>0</el>
                                                 <el>1</el>
@@ -687,7 +687,7 @@
                                                     </matrixTrace>
                                                 </el>
                                             </value>
-                                        </generalElements>
+                                        </realValuedExpressions>
                                     </block>
                                 </blocks>
                             </block>
@@ -730,7 +730,7 @@
                                         </transformation>
                                     </block>
                                     <block blockRowIdx="1" blockColIdx="1">
-                                        <generalElements numberOfValues="1">
+                                        <realValuedExpressions numberOfValues="1">
                                             <start>
                                                 <el>0</el>
                                                 <el>1</el>
@@ -745,7 +745,7 @@
                                                     </matrixTrace>
                                                 </el>
                                             </value>
-                                        </generalElements>
+                                        </realValuedExpressions>
                                     </block>
                                 </blocks>
                                 <constantElements numberOfValues="1">
@@ -842,7 +842,7 @@
                                         </transformation>
                                     </block>
                                     <block blockRowIdx="1" blockColIdx="1">
-                                        <generalElements numberOfValues="1">
+                                        <realValuedExpressions numberOfValues="1">
                                             <start>
                                                 <el>0</el>
                                                 <el>1</el>
@@ -857,7 +857,7 @@
                                                     </matrixTrace>
                                                 </el>
                                             </value>
-                                        </generalElements>
+                                        </realValuedExpressions>
                                     </block>
                                 </blocks>
                             </block>
@@ -900,7 +900,7 @@
                                         </transformation>
                                     </block>
                                     <block blockRowIdx="1" blockColIdx="1">
-                                        <generalElements numberOfValues="1">
+                                        <realValuedExpressions numberOfValues="1">
                                             <start>
                                                 <el>0</el>
                                                 <el>1</el>
@@ -915,7 +915,7 @@
                                                     </matrixTrace>
                                                 </el>
                                             </value>
-                                        </generalElements>
+                                        </realValuedExpressions>
                                     </block>
                                 </blocks>
                                 <constantElements numberOfValues="1">
@@ -1496,7 +1496,7 @@
                         </linearElements>
                     </block>
                     <block blockRowIdx="1" blockColIdx="0">
-                        <generalElements numberOfValues="2" rowMajor="true">
+                        <realValuedExpressions numberOfValues="2" rowMajor="true">
                             <start>
                                 <el mult="3" incr="1">0</el>
                             </start>
@@ -1521,7 +1521,7 @@
                                     </sin>
                                 </el>
                             </value>
-                        </generalElements>
+                        </realValuedExpressions>
                     </block>
                     <block blockRowIdx="2" blockColIdx="0">
                         <baseMatrix baseMatrixIdx="0"/>

@@ -559,7 +559,7 @@ if(BASIC_TESTS == true){
         osilreader->readOSiL( osil2);       
         cout << "Done" << endl;
 
-        ScalarExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+        RealValuedExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
         std::vector<ExprNode*> postfixVec;
         postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
         int n = postfixVec.size();
@@ -960,6 +960,7 @@ if (PARSER_TESTS)
             cout << "First read the file into a string" << endl;
             osilFileName = dataDir  + "osilFiles" + dirsep + "testMatricesAndCones.osil";
             osil = fileUtil->getFileAsString( osilFileName.c_str());
+
             cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
             instance1 = osilreader->readOSiL( osil);
 
@@ -986,6 +987,26 @@ cout << temposil << endl;
             cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
             // now test the matrix manipulation routines 
+
+            // print out the merge table for the many different types of matrix elements
+            std::cout << "Type1:     ";
+            for (int i=ENUM_MATRIX_TYPE_empty; i <= ENUM_MATRIX_TYPE_unknown; i++)
+            {
+                std::cout << returnMatrixTypeString((ENUM_MATRIX_TYPE)i) << " ";
+            }
+            std::cout << std::endl;
+            for (int i=ENUM_MATRIX_TYPE_empty; i <= ENUM_MATRIX_TYPE_unknown; i++)
+            {
+                std::cout << returnMatrixTypeString((ENUM_MATRIX_TYPE)i);
+                for (int j=ENUM_MATRIX_TYPE_empty; j <= ENUM_MATRIX_TYPE_unknown; j++)
+                    std::cout << "  "
+                        << returnMatrixTypeString(mergeMatrixType( (ENUM_MATRIX_TYPE)i,
+                                                                   (ENUM_MATRIX_TYPE)j ));
+                std::cout << std::endl;
+            }
+
+            
+
             // (expansion, separation into blocks, transformations, etc.)
             cout << endl << "TEST " << ++nOfTest << ": Test matrix manipulation routines (using testMatricesAndCones.osil)" << endl << endl;
 
@@ -10302,7 +10323,7 @@ if (OTHER_TESTS){
         osil = fileUtil->getFileAsString( expTreeTest.c_str() ) ;
         //create an osinstance
         osinstance = osilreader->readOSiL( osil);
-        ScalarExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+        RealValuedExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
         if(expTree == NULL) throw ErrorClass(" Null expression tree when testing prefix and postfix routines");
         std::vector<ExprNode*> postfixVec;
         //postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();

@@ -503,6 +503,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/elements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ELEMENTSEND);}
 {xmlwhitespace}*\<constantElements {YY_PRINT;  return(CONSTANTELEMENTSSTART);}
 {xmlwhitespace}*\<\/constantElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CONSTANTELEMENTSEND);}
+{xmlwhitespace}*\<complexElements {YY_PRINT;  return(COMPLEXELEMENTSSTART);}
+{xmlwhitespace}*\<\/complexElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(COMPLEXELEMENTSEND);}
 {xmlwhitespace}*\<varReferenceElements {YY_PRINT;  return(VARREFERENCEELEMENTSSTART);}
 {xmlwhitespace}*\<\/varReferenceElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(VARREFERENCEELEMENTSEND);}
 {xmlwhitespace}*\<objReferenceElements {YY_PRINT;  return(OBJREFERENCEELEMENTSSTART);}
@@ -511,8 +513,10 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/conReferenceElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CONREFERENCEELEMENTSEND);}
 {xmlwhitespace}*\<linearElements {YY_PRINT;  return(LINEARELEMENTSSTART);}
 {xmlwhitespace}*\<\/linearElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(LINEARELEMENTSEND);}
-{xmlwhitespace}*\<generalElements {YY_PRINT;  return(GENERALELEMENTSSTART);}
-{xmlwhitespace}*\<\/generalElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(GENERALELEMENTSEND);}
+{xmlwhitespace}*\<realValuedExpressions {YY_PRINT;  return(REALVALUEDEXPRESSIONSSTART);}
+{xmlwhitespace}*\<\/realValuedExpressions{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(REALVALUEDEXPRESSIONSSEND);}
+{xmlwhitespace}*\<complexValuedExpressions {YY_PRINT;  return(COMPLEXVALUEDEXPRESSIONSSTART);}
+{xmlwhitespace}*\<\/complexValuedExpressions{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(COMPLEXVALUEDEXPRESSIONSSEND);}
 {xmlwhitespace}*\<stringValuedElements {YY_PRINT;  return(STRINGVALUEDELEMENTSSTART);}
 {xmlwhitespace}*\<\/stringValuedElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(STRINGVALUEDELEMENTSEND);}
 

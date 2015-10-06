@@ -4,7 +4,7 @@
 	<instanceHeader>
 		<name>Bonmin Example</name>
 		<source>Bonmin example folder</source>
-		<description>Objective value: -1.70711
+		<description>Objective value: -17.071067
 			Solution:
 			x[0] = 0, x[1] = 0.853553, x[2] = 0.853553, x[3] = 1
 		</description>

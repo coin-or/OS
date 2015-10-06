@@ -42,40 +42,59 @@
 #define OS_COS                           3002
 #define OS_MIN                           4010
 #define OS_MAX                           4011
+
 #define OS_NUMBER                        5001
-#define OS_PI                            5003
-#define OS_E                             5004
-#define OS_VARIABLE                      6001
-#define OS_IF                            7001
-#define OS_ALLDIFF                       7016
+#define OS_PI                            5004
+#define OS_E                             5005
+#define OS_VARIABLE                      5101
 
-#define OS_MATRIX_DETERMINANT            8001
-#define OS_MATRIX_TRACE                  8002
-#define OS_MATRIX_TO_SCALAR              8003
+#define OS_IF                            6001
+#define OS_ALLDIFF                       6016
+
+#define OS_MATRIX_DETERMINANT            7101
+#define OS_MATRIX_TRACE                  7102
+#define OS_MATRIX_TO_SCALAR              7103
+
+#define OS_MATRIX_PLUS                   7501
+#define OS_MATRIX_SUM                    7502
+#define OS_MATRIX_MINUS                  7503
+#define OS_MATRIX_NEGATE                 7504
+#define OS_MATRIX_TIMES                  7505
+#define OS_MATRIX_PRODUCT                7506
+#define OS_MATRIX_INVERSE                7510
+#define OS_MATRIX_TRANSPOSE              7516
+#define OS_MATRIX_SUBMATRIX_AT           7553
+
+#define OS_MATRIX_SCALARTIMES            7603
+#define OS_MATRIX_DOTTIMES               7611
+
+#define OS_MATRIX_REFERENCE              7701
+#define OS_MATRIX_VAR                    7702
+#define OS_MATRIX_OBJ                    7703
+#define OS_MATRIX_CON                    7704
+
+#define OS_IDENTITY_MATRIX               7801
+#define OS_MATRIX_LOWERTRIANGLE          7802
+#define OS_MATRIX_UPPERTRIANGLE          7803
+#define OS_MATRIX_DIAGONAL               7804
+#define OS_DIAGONAL_MATRIX_FROM_VECTOR   7805
+
+#define OS_REAL_PART                     8001
+#define OS_IMAGINARY_PART                8002
+#define OS_COMPLEX_MODULUS               8003
 
 
-#define OS_MATRIX_PLUS                   8501
-#define OS_MATRIX_SUM                    8502
-#define OS_MATRIX_MINUS                  8503
-#define OS_MATRIX_NEGATE                 8504
-#define OS_MATRIX_TIMES                  8505
-#define OS_MATRIX_PRODUCT                8506
-#define OS_MATRIX_INVERSE                8510
-#define OS_MATRIX_TRANSPOSE              8515
-#define OS_MATRIX_SCALARTIMES            8518
-#define OS_MATRIX_DOTTIMES               8520
-#define OS_IDENTITY_MATRIX               8536
-#define OS_MATRIX_LOWERTRIANGLE          8537
-#define OS_MATRIX_UPPERTRIANGLE          8538
-#define OS_MATRIX_DIAGONAL               8539
-#define OS_DIAGONAL_MATRIX_FROM_VECTOR   8540
-#define OS_MATRIX_REFERENCE              8541
-#define OS_MATRIX_SUBMATRIX_AT           8544
-#define OS_MATRIX_VAR                    8601
-#define OS_MATRIX_OBJ                    8602
-#define OS_MATRIX_CON                    8603
+#define OS_FIRST_COMPLEX_NODE            8100
 
-
+#define OS_COMPLEX_NUMBER                8101
+#define OS_COMPLEX_CREATE                8102
+#define OS_COMPLEX_PLUS                  8103
+#define OS_COMPLEX_SUM                   8104
+#define OS_COMPLEX_MINUS                 8105
+#define OS_COMPLEX_NEGATE                8106
+#define OS_COMPLEX_CONJUGATE             8107
+#define OS_COMPLEX_TIMES                 8109
+#define OS_COMPLEX_SQUARE                8111
 
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
@@ -599,55 +618,64 @@ enum ENUM_PATHPAIR
  */
 enum ENUM_MATRIX_TYPE
 {
-    ENUM_MATRIX_TYPE_empty = 1,         // matrix has no elements (i.e., zero matrix)
+    ENUM_MATRIX_TYPE_empty = 1,                // matrix has no elements (i.e., zero matrix)
 
-    ENUM_MATRIX_TYPE_constant = 10,     // matrix elements contain constant values (i.e., real numbers)
-    ENUM_MATRIX_TYPE_varReference,      // matrix elements contain indexes of variables in the core
-    ENUM_MATRIX_TYPE_linear,            // matrix contains linear expressions
-    ENUM_MATRIX_TYPE_quadratic,         // matrix contains quadratic expressions
-    ENUM_MATRIX_TYPE_general,           // matrix contains general nonlinear expressions
+    ENUM_MATRIX_TYPE_constant,                 // matrix elements contain constant values (real numbers)
+    ENUM_MATRIX_TYPE_varReference,             // matrix elements contain indexes of variables in the core
+    ENUM_MATRIX_TYPE_linear,                   // matrix contains linear expressions
+    ENUM_MATRIX_TYPE_quadratic,                // matrix contains quadratic expressions
+    ENUM_MATRIX_TYPE_realValuedExpressions,    // matrix contains general real-valued expressions
 
-    ENUM_MATRIX_TYPE_objReference = 20, // matrix elements contain indexes of constraints in the core
-    ENUM_MATRIX_TYPE_conReference,      // matrix elements contain indexes of objectives in the core
-    ENUM_MATRIX_TYPE_mixedRowReference, // mixed reference to objectives and constraints
+    ENUM_MATRIX_TYPE_objReference,             // matrix elements contain indexes of constraints in the core
+    ENUM_MATRIX_TYPE_conReference,             // matrix elements contain indexes of objectives  in the core
+    ENUM_MATRIX_TYPE_mixedRowReference,        // mixed reference to objectives and constraints
 
-    ENUM_MATRIX_TYPE_string,            // matrix elements contain string values
+    ENUM_MATRIX_TYPE_complexConstant,          // matrix elements contain complex numbers numbers)
+    ENUM_MATRIX_TYPE_complexValuedExpressions, // matrix contains complex-valued expressions
 
-    ENUM_MATRIX_TYPE_unknown = 99
+    ENUM_MATRIX_TYPE_string,                   // matrix elements contain string values
+
+    ENUM_MATRIX_TYPE_unknown
 };
 
 inline int returnMatrixType(std::string type)
 {
-    if (type == "empty"            ) return ENUM_MATRIX_TYPE_empty;
-    if (type == "constant"         ) return ENUM_MATRIX_TYPE_constant;
-    if (type == "varReference"     ) return ENUM_MATRIX_TYPE_varReference;
-    if (type == "linear"           ) return ENUM_MATRIX_TYPE_linear;
-    if (type == "quadratic"        ) return ENUM_MATRIX_TYPE_quadratic;
-    if (type == "general"          ) return ENUM_MATRIX_TYPE_general;
+    if (type == "empty"                   ) return ENUM_MATRIX_TYPE_empty;
+    if (type == "constant"                ) return ENUM_MATRIX_TYPE_constant;
+    if (type == "varReference"            ) return ENUM_MATRIX_TYPE_varReference;
+    if (type == "linear"                  ) return ENUM_MATRIX_TYPE_linear;
+    if (type == "quadratic"               ) return ENUM_MATRIX_TYPE_quadratic;
+ 
+    if (type == "objReference"            ) return ENUM_MATRIX_TYPE_objReference;
+    if (type == "conReference"            ) return ENUM_MATRIX_TYPE_conReference;
+    if (type == "mixedRowReference"       ) return ENUM_MATRIX_TYPE_mixedRowReference;
 
-    if (type == "objReference"     ) return ENUM_MATRIX_TYPE_objReference;
-    if (type == "conReference"     ) return ENUM_MATRIX_TYPE_conReference;
-    if (type == "mixedRowReference") return ENUM_MATRIX_TYPE_mixedRowReference;
+    if (type == "realValuedExpressions"   ) return ENUM_MATRIX_TYPE_realValuedExpressions;
 
-    if (type == "string"           ) return ENUM_MATRIX_TYPE_string;
+    if (type == "complexConstant"         ) return ENUM_MATRIX_TYPE_complexConstant;
+    if (type == "complexValuedExpressions") return ENUM_MATRIX_TYPE_complexValuedExpressions;
 
-    if (type == "unknown"          ) return ENUM_MATRIX_TYPE_unknown;
+    if (type == "string"                  ) return ENUM_MATRIX_TYPE_string;
+
+    if (type == "unknown"                ) return ENUM_MATRIX_TYPE_unknown;
     return 0;
 }//returnMatrixType
 
 inline std::string returnMatrixTypeString(ENUM_MATRIX_TYPE type)
 {
-    if (type == ENUM_MATRIX_TYPE_empty)             return "empty";
-    if (type == ENUM_MATRIX_TYPE_constant)          return "constant";
-    if (type == ENUM_MATRIX_TYPE_varReference)      return "varReference";
-    if (type == ENUM_MATRIX_TYPE_linear)            return "linear";
-    if (type == ENUM_MATRIX_TYPE_quadratic)         return "quadratic";
-    if (type == ENUM_MATRIX_TYPE_general)           return "general";
-    if (type == ENUM_MATRIX_TYPE_objReference)      return "objReference";
-    if (type == ENUM_MATRIX_TYPE_conReference)      return "conReference";
-    if (type == ENUM_MATRIX_TYPE_mixedRowReference) return "mixedRowReference";
-    if (type == ENUM_MATRIX_TYPE_unknown)           return "unknown";
-    if (type == ENUM_MATRIX_TYPE_string)            return "string";
+    if (type == ENUM_MATRIX_TYPE_empty)                    return "empty";
+    if (type == ENUM_MATRIX_TYPE_constant)                 return "constant";
+    if (type == ENUM_MATRIX_TYPE_varReference)             return "varReference";
+    if (type == ENUM_MATRIX_TYPE_linear)                   return "linear";
+    if (type == ENUM_MATRIX_TYPE_quadratic)                return "quadratic";
+    if (type == ENUM_MATRIX_TYPE_objReference)             return "objReference";
+    if (type == ENUM_MATRIX_TYPE_conReference)             return "conReference";
+    if (type == ENUM_MATRIX_TYPE_mixedRowReference)        return "mixedRowReference";
+    if (type == ENUM_MATRIX_TYPE_realValuedExpressions)    return "realValuedExpressions";
+    if (type == ENUM_MATRIX_TYPE_complexConstant)          return "complexConstant";
+    if (type == ENUM_MATRIX_TYPE_complexValuedExpressions) return "complexValuedExpressions";
+    if (type == ENUM_MATRIX_TYPE_string)                   return "string";
+    if (type == ENUM_MATRIX_TYPE_unknown)                  return "unknown";
     return "unknown";
 }//returnMatrixTypeString
 
@@ -669,20 +697,45 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
 
     if (type1 == ENUM_MATRIX_TYPE_unknown) return type2;
     if (type2 == ENUM_MATRIX_TYPE_unknown) return type1;
-    if (type1 == ENUM_MATRIX_TYPE_empty) return type2;
-    if (type2 == ENUM_MATRIX_TYPE_empty) return type1;
+    if (type1 == ENUM_MATRIX_TYPE_empty)   return type2;
+    if (type2 == ENUM_MATRIX_TYPE_empty)   return type1;
 
-    // column and objective references can be mixed  
-    if (type1 >= ENUM_MATRIX_TYPE_conReference) // row reference (objective or constraint)
+    if (type1 == ENUM_MATRIX_TYPE_complexValuedExpressions || 
+        type2 == ENUM_MATRIX_TYPE_complexValuedExpressions) 
+        return   ENUM_MATRIX_TYPE_complexValuedExpressions;
+
+    if (type1 == ENUM_MATRIX_TYPE_complexConstant)
     {
-        if (type2 >= ENUM_MATRIX_TYPE_conReference)
+        if (type2 == ENUM_MATRIX_TYPE_constant)
+            return ENUM_MATRIX_TYPE_complexConstant;
+        else
+            return ENUM_MATRIX_TYPE_complexValuedExpressions;
+    }
+    else if (type2 == ENUM_MATRIX_TYPE_complexConstant)
+    {
+        if (type1 == ENUM_MATRIX_TYPE_constant)
+            return ENUM_MATRIX_TYPE_complexConstant;
+        else
+            return ENUM_MATRIX_TYPE_complexValuedExpressions;
+    }
+
+
+    if (type1 == ENUM_MATRIX_TYPE_realValuedExpressions || 
+        type2 == ENUM_MATRIX_TYPE_realValuedExpressions) 
+        return   ENUM_MATRIX_TYPE_realValuedExpressions;
+
+    // constraint and objective references can be mixed  
+    if (type1 >= ENUM_MATRIX_TYPE_objReference) // row reference (objective or constraint)
+    {
+        if (type2 >= ENUM_MATRIX_TYPE_objReference)
             return ENUM_MATRIX_TYPE_mixedRowReference;
         else
-            return ENUM_MATRIX_TYPE_general;
+            return ENUM_MATRIX_TYPE_realValuedExpressions;
     }                                  
     else // type1 is a linear or nonlinear expression   
     {
-        if (type2 >= ENUM_MATRIX_TYPE_conReference) return ENUM_MATRIX_TYPE_general;  
+        if (type2 >= ENUM_MATRIX_TYPE_objReference)
+            return ENUM_MATRIX_TYPE_realValuedExpressions;  
         else // varReference must be treated like linear if it is mixed with any other remaining type
             if (type1 < type2)
                 if (type2 == ENUM_MATRIX_TYPE_varReference)
@@ -779,9 +832,11 @@ enum ENUM_MATRIX_CONSTRUCTOR_TYPE
     ENUM_MATRIX_CONSTRUCTOR_TYPE_unknown = 0,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_complexElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements,
-    ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_realValuedExpressions,
+    ENUM_MATRIX_CONSTRUCTOR_TYPE_complexValuedExpressions,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements,
     ENUM_MATRIX_CONSTRUCTOR_TYPE_mixedRowRefElements,
@@ -794,18 +849,20 @@ enum ENUM_MATRIX_CONSTRUCTOR_TYPE
 
 inline int returnMatrixConstructorType(std::string cType)
 {
-    if (cType == "baseMatrix"       ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
-    if (cType == "constantElements" ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements;
-    if (cType == "varRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements;
-    if (cType == "linearElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements;
-    if (cType == "generalElements"  ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_generalElements;
-    if (cType == "objRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements;
-    if (cType == "conRefElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements;
-    if (cType == "stringElements"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_stringValuedElements;
-    if (cType == "transformation"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
-    if (cType == "blocks"           ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
-    if (cType == "block"            ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
-    if (cType == "matrix"           ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
+    if (cType == "baseMatrix"              ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix;
+    if (cType == "constantElements"        ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements;
+    if (cType == "complexElements"         ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_complexElements;
+    if (cType == "varRefElements"          ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements;
+    if (cType == "linearElements"          ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements;
+    if (cType == "realValuedExpressions"   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_realValuedExpressions;
+    if (cType == "complexValuedExpressions") return ENUM_MATRIX_CONSTRUCTOR_TYPE_complexValuedExpressions;
+    if (cType == "objRefElements"          ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements;
+    if (cType == "conRefElements"          ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements;
+    if (cType == "stringElements"          ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_stringValuedElements;
+    if (cType == "transformation"          ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation;
+    if (cType == "blocks"                  ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks;
+    if (cType == "block"                   ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
+    if (cType == "matrix"                  ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
     return 0;
 }//returnMatrixConstructorType
 

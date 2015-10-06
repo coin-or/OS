@@ -13,12 +13,14 @@
  *
  *
  * In this file we define classes for a subset of the nodes defined in the OSnL schema
- * These nodes fall into two broad classes: 
- * Those that evaluate to scalar values (which inherit from OSnLNode), and
- * those that evaluate to matrices (and inherit from OSnLMNode).
+ * These nodes fall into three broad classes: 
+ * Those that evaluate to real values (which inherit from OSnLNode),
+ * those that evaluate to matrices (and inherit from OSnLMNode), and
+ * those that evaluate to complex values (and inherit from OSnLCNode).
+ * Real and complex-valued nodes derive from a common parent, ScalarNode,
+ * which is derived from ExprNode.
  * OSnLNodes can have OSnLMNode children (e.g., matrixDeterminant) 
- * and vice versa (e.g., matrixScalarTimes). 
- * Both OSnLNode and OSnLMNode inherit from the base class ExprNode. 
+ * and vice versa (e.g., matrixScalarTimes); similarly for OSnLCNodes.
  */
 
 #ifndef OSNLNODE_H
@@ -44,11 +46,13 @@ typedef std::vector<ADdouble> ADvector;
  *  Some forward declarations to make sure circular references are handled properly.
  */
 class OSnLNode;
+class OSnLCNode;
 class OSnLMNode;
+class ScalarNode;
 class OSMatrix;
 
 /*! \class ExprNode 
- *  \brief A generic class from which we derive both OSnLNode and OSnLMNode
+ *  \brief A generic class from which we derive ScalarNode and OSnLMNode
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  * @version 2.9, 10/Sep/2014
@@ -57,7 +61,7 @@ class ExprNode
 {
 public:
 
-    /**  inodeInt is the unique integer assigned to the OSnLNode or OSnLMNode in OSParameters.h.
+    /**  inodeInt is the unique integer assigned to the OSnLNode, OSnLCNode or OSnLMNode in OSParameters.h.
      */
     int inodeInt;
 
@@ -73,15 +77,38 @@ public:
      */
     unsigned int inumberOfChildren;
 
+    /**  inumberOfComplexChildren is the number of OSnLCNode child elements
+     *   If this number is not fixed, it is temporarily set to 0
+     */
+    unsigned int inumberOfComplexChildren;
+
+    /**  inumberOfScalarChildren is the number of ScalarNode child elements
+     *   If this number is not fixed, e.g., for a complexSum node, it is temporarily set to 0
+     *   @remark A ScalarNode can be either real-valued or complex-valued.
+     *   Implementations of such nodes are expected to cater to both possibilities.
+     *   The value of inodeType can be used to disambiguate.
+     */
+    unsigned int inumberOfScalarChildren;
+
     /**  inumberOfMatrixChildren is the number of OSnLMNode child elements
      *   If this number is not fixed, e.g., for a matrixProduct node, it is temporarily set to 0
      */
     unsigned int inumberOfMatrixChildren;
 
     /**
-     * m_mChildren holds all the operands, that is, nodes that the current node operates on.
+     * m_mChildren holds all the real-valued operands, that is, nodes that the current node operates on.
      */
     OSnLNode **m_mChildren;
+
+    /**
+     * m_mComplexChildren holds all the complex-valued operands, if any.
+     */
+    OSnLCNode **m_mComplexChildren;
+
+    /**
+     * m_mScalarChildren holds all the scalar-valued operands, if any.
+     */
+    ScalarNode **m_mScalarChildren;
 
     /**
      * m_mMatrixChildren holds all the matrix-valued operands, if any.
@@ -169,6 +196,93 @@ public:
 };//end ExprNode
 
 
+/*! \class ScalarNode 
+
+ *  \brief A generic class from which we derive OSnLNode and OSnLCNode
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.9, 10/Sep/2015
+ */
+class ScalarNode : public ExprNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    ScalarNode();
+
+    /**
+     * default destructor.
+     */
+    virtual ~ScalarNode();
+
+    /**
+     * @return the value of the operator name
+     */
+    virtual std::string getTokenName();
+
+    virtual std::string getTokenNumber();
+
+    /**
+     * The following method writes an OSnLNode or OSnLMNode in OSiL format.
+     * It is used by OSiLWriter to assist in writing an OSiL file 
+     * from a corresponding OSInstance.
+     *
+     * @return the ExprNode and its children as an OSiL string.
+     */
+    //virtual std::string getNonlinearExpressionInXML() = 0;
+
+#if 0
+    /**
+     * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
+     * the (scalar-valued or matrix-valued) expression tree in prefix format.
+     *
+     * @return the expression tree as a vector of ExprNodes in prefix.
+     */
+    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
+
+    /**
+     * Called by getPrefixFromExpressionTree().  
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNode in prefix
+     * 
+     * @param a pointer prefixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNode in prefix.
+     */
+    virtual std::vector<ExprNode*> preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector);
+
+    /**
+     * Get a vector of pointers to ExprNodes that correspond to
+     * the expression tree in postfix format
+     *
+     * @return the expression tree as a vector of ExprNodes in postfix.
+     */
+    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
+
+    /**
+     * Called by getPostfixFromExpressionTree(). 
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNodes in postfix.
+     * 
+     * @param a pointer postfixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNodes in postfix.
+     */
+    virtual std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
+#endif
+
+    /**
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     */
+    //virtual ScalarNode *cloneScalarNode() = 0;
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    virtual bool IsEqual(ScalarNode *that);
+};//end ScalarNode
+
 /*! \class OSnLNode 
  *  \brief The OSnLNode Class for nonlinear expressions.
  *
@@ -176,7 +290,7 @@ public:
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  */
-class OSnLNode: public ExprNode
+class OSnLNode: public ScalarNode
 {
 public:
     /**
@@ -2791,6 +2905,349 @@ public:
 };//end OSnLNodeProduct
 
 
+/*! \class OSnLCNode 
+ *  \brief The OSnLCNode Class for complex-valued expressions.
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
+
+ * @version 1.0, 28/Sep/2015
+ * @since   OS2.9
+ */
+class OSnLCNode: public ScalarNode
+{
+public:
+    /**
+     * m_dFunctionValue    holds the function value given the current variable values.
+     * m_dFunctionValue[0] holds the real part,
+     * m_dFunctionValue[1] holds the imaginary part.
+     */
+    double m_dFunctionValue[2];
+
+    /**
+     * m_ADTape stores the expression tree for the this OSnLNode as an ADdouble.
+     */
+    ADdouble m_ADTape;
+
+
+    /**
+     * default constructor.
+     */
+    OSnLCNode();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLCNode();
+
+#if 0
+    /**
+     * varIdx is a map where the key is the index of an OSnLNodeVariable and
+     * (*varIdx)[ idx] is the kth variable in the map, e.g.
+     * (*varIdx)[ 5] = 2 means that variable indexed by 5 is the second variable
+     * in the OSnLNode and all of its children
+     * 
+     * @param a pointer to a map of the variables in the OSnLNode and its children
+     */
+    virtual void getVariableIndexMap(std::map<int, int> *varIdx);
+#endif
+
+    /**
+     * Calculate the function value given the current variable values.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLCNode class.
+     *
+     * @param x holds the values of the variables in a double array.
+     * @return nothing, but store the function value given the current variable values
+     *         into m_dFunctionValue.
+     * @remark The function value is a complex number, which we implement
+     *         as an array of two doubles --- the real part is first.
+     */
+    virtual void calculateFunction(double *x) = 0;
+
+    /**
+     * Create the AD tape to be evaluated by AD.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLNode class.
+     *
+     * @return the expression tree.
+     */
+    //virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
+
+    /**
+     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
+     * and create a scalar-valued OSExpressionTree root node
+     * 
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes and OSnLMNodes
+     * in prefix format
+     * @return a pointer to an OSnLCNode which is the root of
+     * a complex-valued expression tree.
+     */
+    OSnLCNode* createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec);
+
+    /**
+     * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
+     * the (scalar-valued or matrix-valued) expression tree in prefix format.
+     *
+     * @return the expression tree as a vector of ExprNodes in prefix.
+     */
+    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
+
+    /**
+     * Called by getPrefixFromExpressionTree().  
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNode in prefix
+     * 
+     * @param a pointer prefixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNode in prefix.
+     */
+    virtual std::vector<ExprNode*> preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector);
+
+    /**
+     * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in postfix format 
+     * and create a scalar-valued OSExpressionTree root node
+     * 
+     * @param nlNodeVec holds a vector of pointers to OSnLNodes
+     * in postfix format
+     * @return a pointer to an OSnLNode which is the root of
+     * an OSExpressionTree.
+     */
+    OSnLCNode* createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec);
+
+    /**
+     * Get a vector of pointers to ExprNodes that correspond to
+     * the expression tree in postfix format
+     *
+     * @return the expression tree as a vector of ExprNodes in postfix.
+     */
+    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
+
+    /**
+     * Called by getPostfixFromExpressionTree(). 
+     * This method calls itself recursively and
+     * generates a vector of pointers to ExprNodes in postfix.
+     * 
+     * @param a pointer postfixVector to a vector of pointers of ExprNodes
+     * @return a vector of pointers to ExprNodes in postfix.
+     */
+    virtual std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
+
+    /**
+     * make a copy of this node and all its descendants
+     * @return a pointer to the duplicate node
+     */
+    virtual OSnLCNode* copyNodeAndDescendants();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OSnLCNode *that);
+};//end OSnLCNode
+
+
+/*! \class OSnLCNodeCreate
+ *  \brief The OSnLCNodeCreate Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexCreate>
+ *
+ */
+class OSnLCNodeCreate : public OSnLCNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodeCreate();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLCNodeCreate();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn void OSnLCNodePlus::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual void calculateFunction( double *x);
+
+#if 0
+    /*! \fn double OSnLCNodeComplex::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
+     *  \brief The implementation of the virtual functions.
+     *  \return a ADdouble.
+     */
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
+#endif
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLCNode of the proper type.
+     */
+    virtual OSnLCNode *cloneExprNode();
+};//end OSnLCNodeCreate
+
+/*! \class OSnLCNodePlus
+ *  \brief The OSnLCNodePlus Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexPlus>
+ *
+ */
+class OSnLCNodePlus : public OSnLCNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodePlus();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLCNodePlus();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn void OSnLCNodePlus::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual void calculateFunction( double *x);
+
+#if 0
+    /*! \fn double OSnLCNodePlus::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
+     *  \brief The implementation of the virtual functions.
+     *  \return a ADdouble.
+     */
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
+#endif
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLNode of the proper type.
+     */
+    virtual OSnLCNode *cloneExprNode();
+};//end OSnLCNodePlus
+
+/*! \class OSnLCNodeSum
+ *  \brief The OSnLCNodePlus Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexSum>
+ *
+ */
+class OSnLCNodeSum : public OSnLCNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodeSum();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLCNodeSum();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn void OSnLCNodeSum::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual void calculateFunction( double *x);
+
+#if 0
+    /*! \fn double OSnLCNodeSum::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
+     *  \brief The implementation of the virtual functions.
+     *  \return a ADdouble.
+     */
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
+#endif
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLCNode of the proper type.
+     */
+    virtual OSnLCNode *cloneExprNode();
+};//end OSnLCNodeSum
+
+
+/*! \class OSnLCNodeTimes
+ *  \brief The OSnLCNodeTimes Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexTimes>
+ *
+ */
+class OSnLCNodeTimes : public OSnLCNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodeTimes();
+
+    /**
+     * default destructor.
+     */
+    ~OSnLCNodeTimes();
+
+    /**
+     *
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn void OSnLCNodeTimes::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual void calculateFunction( double *x);
+
+#if 0
+    /*! \fn double OSnLCNodeTimes::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
+     *  \brief The implementation of the virtual functions.
+     *  \return a ADdouble.
+     */
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
+#endif
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLNode of the proper type.
+     */
+    virtual OSnLCNode *cloneExprNode();
+};//end OSnLCNodeTimes
 
 /*
 TO DO:
