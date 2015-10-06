@@ -588,7 +588,7 @@ bool OSnl2OS::createOSObjects()
                 Nl nl;
                 expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
                 nl.idx = osNLIdx;
-                nl.osExpressionTree = new ScalarExpressionTree();
+                nl.osExpressionTree = new RealValuedExpressionTree();
                 nl.osExpressionTree->m_treeRoot = walkTree (e);
                 nl.m_bDeleteExpressionTree = false;
                 /*
@@ -655,7 +655,7 @@ bool OSnl2OS::createOSObjects()
                 Nl nl;
                 expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
                 nl.idx = osNLIdx;
-                nl.osExpressionTree = new ScalarExpressionTree();
+                nl.osExpressionTree = new RealValuedExpressionTree();
                 nl.osExpressionTree->m_treeRoot = walkTree (e);
                 nl.m_bDeleteExpressionTree = false;
                 /*
