@@ -122,7 +122,7 @@ CsdpSolver::~CsdpSolver()
 void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 {
     std::ostringstream outStr;
-    ScalarExpressionTree* tempTree;
+    RealValuedExpressionTree* tempTree;
     OSnLNode  *tr;
     OSnLMNode *mt;
     OSnLMNode *mr;
