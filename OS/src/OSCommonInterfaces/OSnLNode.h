@@ -1379,7 +1379,7 @@ public:
     /** value is the value of the number */
     double value;
 
-    /** in the C++ type is real */
+    /** in the C++ implementation, type is real */
     std::string type;
 
     /** later, e.g. stochastic programming, we may wish

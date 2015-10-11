@@ -42,6 +42,8 @@ public:
     double* osglDblArray;
     int*    osglValArray;
 
+    std::string* osglStrArray;
+
     /** data structure to process a GeneralFileHeader and hold the data temporarily */
     std::string fileName;
     std::string source;

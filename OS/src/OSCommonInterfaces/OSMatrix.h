@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <complex>
 
 
 /*********************************************************************************
@@ -244,7 +245,7 @@ public:
  * \brief an abstract class to help represent the elements in a MatrixType object
  * From this we derive the following concrete classes used to store specific types of values:
  *     ConstantMatrixElements
- *     ComplexMatrixVElements
+ *     ComplexMatrixElements
  *     VarReferenceMatrixElements
  *     LinearMatrixElements
  *     RealValuedExpressions
@@ -508,6 +509,50 @@ public:
     bool deepCopyFrom(ConReferenceMatrixElement *that);
 };//class ConReferenceMatrixElement
 
+#if 0
+/*! \class ComplexMatrixElement
+ *  \brief a data structure to represent an entry in a complexMatrix element,
+ *  which consists of a real and an imaginary part.
+ */
+class ComplexMatrixElement
+{
+public:
+    /** 
+     *  the real part 
+     */
+    int Re;
+
+    /** 
+     *  the imaginary part 
+     */
+    int Im;
+
+    ComplexMatrixElement();
+    ~ComplexMatrixElement();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ComplexMatrixElement *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ComplexMatrixElement *that);
+};//class ComplexMatrixElement
+#endif
 
 /*! \class ConstantMatrixValues
  *  \brief to represent the nonzeros in a constantMatrix element
@@ -568,6 +613,67 @@ public:
      */
     bool deepCopyFrom(ConstantMatrixValues *that);
 };//class ConstantMatrixValues
+
+
+/*! \class ComplexMatrixValues
+ *  \brief to represent the nonzeros in a complexConstantMatrix element
+ */
+class ComplexMatrixValues : public MatrixElementValues
+{
+public:
+    std::complex<double> *el;
+
+    ComplexMatrixValues();
+    ~ComplexMatrixValues();
+
+    /**
+     * @return the value of nType
+     */
+    //virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    //virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    //virtual std::string getNodeName();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    //virtual std::string getMatrixValuesInXML();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ComplexMatrixValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ComplexMatrixValues *that);
+};//class ComplexMatrixValues
 
 
 /*! \class VarReferenceMatrixValues
@@ -901,6 +1007,91 @@ public:
      */
     bool deepCopyFrom(ConstantMatrixElements *that);
 };//class ConstantMatrixElements
+
+
+/*! \class ComplexMatrixElements
+ * \brief a data structure to represent the complex-valued constant elements in a MatrixType object
+ */
+class ComplexMatrixElements: public MatrixElements
+{
+public:
+    /** The value array of the (nonzero) complex elements */
+    ComplexMatrixValues *value;
+
+    ComplexMatrixElements();
+    ~ComplexMatrixElements();
+
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual ComplexMatrixElements *cloneMatrixNode();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ComplexMatrixElements *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ComplexMatrixElements *that);
+};//class ComplexMatrixElements
 
 
 /*! \class VarReferenceMatrixElements
@@ -1532,12 +1723,14 @@ public:
      *  @param nvalues is the number of matrix elements that are to be converted
      *  @return true if the conversion was successful
      */
-    bool convertFromConstant(ConstantMatrixValues*     _values, int nvalues);
-    bool convertFromVarRef  (VarReferenceMatrixValues* _values, int nvalues);
-    bool convertFromObjRef  (ObjReferenceMatrixValues* _values, int nvalues);
-    bool convertFromLinear  (LinearMatrixValues*       _values, int nvalues);
-    bool convertFromConRef  (ConReferenceMatrixValues* _values, int nvalues);
-    bool convertFromGeneral (RealValuedExpressionArray*      _values, int nvalues);
+    bool convertFromConstant   (ConstantMatrixValues*         _values, int nvalues);
+    bool convertFromVarRef     (VarReferenceMatrixValues*     _values, int nvalues);
+    bool convertFromObjRef     (ObjReferenceMatrixValues*     _values, int nvalues);
+    bool convertFromLinear     (LinearMatrixValues*           _values, int nvalues);
+    bool convertFromConRef     (ConReferenceMatrixValues*     _values, int nvalues);
+    bool convertFromGeneral    (RealValuedExpressionArray*    _values, int nvalues);
+    bool convertFromComplex    (ComplexMatrixValues*          _values, int nvalues);
+//    bool convertFromComplexExpr(ComplexValuedExpressionArray* _values, int nvalues);
 };//class StringValuedMatrixElements
 
 

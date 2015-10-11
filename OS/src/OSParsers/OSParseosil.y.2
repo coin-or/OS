@@ -814,14 +814,14 @@ matrixVariablesLaden: GREATERTHAN matrixVarList matrixVariablesEnd;
 
 matrixVariablesEnd: MATRIXVARIABLESEND;
 
-matrixVarList: | matrixVarList matrixVar;
+matrixVarList: | matrixVarList matrixVariable;
 
-matrixVar: matrixVarStart matrixVarAttributes matrixVarEnd
+matrixVariable: matrixVariableStart matrixVariableAttributes matrixVariableEnd
 {
     parserData->kounter += osglData->mult;
 };
 
-matrixVarStart: MATRIXVARSTART
+matrixVariableStart: MATRIXVARSTART
 {
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
@@ -837,7 +837,7 @@ matrixVarStart: MATRIXVARSTART
     parserData->ubConeIdxPresent = false;
 };
 
-matrixVarAttributes: matrixVarAttList
+matrixVariableAttributes: matrixVariableAttList
 {
     if (osglData->numberOfRowsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfRows\" missing");
@@ -885,9 +885,9 @@ matrixVarAttributes: matrixVarAttList
     }
 };
 
-matrixVarAttList: | matrixVarAttList matrixVarAtt;
+matrixVariableAttList: | matrixVariableAttList matrixVariableAtt;
 
-matrixVarAtt: 
+matrixVariableAtt: 
       osglNumberOfRowsATT
     | osglNumberOfColumnsATT
     | templateMatrixIdxATT
@@ -901,7 +901,7 @@ matrixVarAtt:
     | osglMultATT
 ;
 
-matrixVarEnd: ENDOFELEMENT
+matrixVariableEnd: ENDOFELEMENT
             | GREATERTHAN MATRIXVAREND;
 
 matrixObjectives: | matrixObjectivesStart matrixObjectivesAttributes matrixObjectivesContent
@@ -933,14 +933,14 @@ matrixObjectivesLaden: GREATERTHAN matrixObjList matrixObjectivesEnd;
 
 matrixObjectivesEnd: MATRIXOBJECTIVESEND;
 
-matrixObjList: | matrixObjList matrixObj;
+matrixObjList: | matrixObjList matrixObjective;
 
-matrixObj: matrixObjStart matrixObjAttributes matrixObjEnd 
+matrixObjective: matrixObjectiveStart matrixObjectiveAttributes matrixObjectiveEnd 
 {
     parserData->kounter += osglData->mult;
 };
 
-matrixObjStart: MATRIXOBJSTART
+matrixObjectiveStart: MATRIXOBJSTART
 {
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
@@ -953,7 +953,7 @@ matrixObjStart: MATRIXOBJSTART
     parserData->constantMatrixIdxPresent = false;
 };
 
-matrixObjAttributes: matrixObjAttList
+matrixObjectiveAttributes: matrixObjectiveAttList
 {
     if (osglData->numberOfRowsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfRows\" missing");
@@ -986,9 +986,9 @@ matrixObjAttributes: matrixObjAttList
     }
 };
 
-matrixObjAttList: | matrixObjAttList matrixObjAtt;
+matrixObjectiveAttList: | matrixObjectiveAttList matrixObjectiveAtt;
 
-matrixObjAtt: 
+matrixObjectiveAtt: 
       osglNumberOfRowsATT
     | osglNumberOfColumnsATT
     | templateMatrixIdxATT
@@ -999,7 +999,7 @@ matrixObjAtt:
     | osglMultATT
 ;
 
-matrixObjEnd: ENDOFELEMENT
+matrixObjectiveEnd: ENDOFELEMENT
             | GREATERTHAN MATRIXOBJEND;
 
 
@@ -1032,14 +1032,14 @@ matrixConstraintsLaden: GREATERTHAN matrixConList matrixConstraintsEnd;
 
 matrixConstraintsEnd: MATRIXCONSTRAINTSEND;
 
-matrixConList: | matrixConList matrixCon;
+matrixConList: | matrixConList matrixConstraint;
 
-matrixCon: matrixConStart matrixConAttributes matrixConEnd 
+matrixConstraint: matrixConstraintStart matrixConstraintAttributes matrixConstraintEnd 
 {
     parserData->kounter += osglData->mult;
 };
 
-matrixConStart: MATRIXCONSTART
+matrixConstraintStart: MATRIXCONSTART
 {
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
@@ -1054,7 +1054,7 @@ matrixConStart: MATRIXCONSTART
     parserData->ubConeIdxPresent = false;
 };
 
-matrixConAttributes: matrixConAttList
+matrixConstraintAttributes: matrixConstraintAttList
 {
     if (osglData->numberOfRowsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfRows\" missing");
@@ -1093,9 +1093,9 @@ matrixConAttributes: matrixConAttList
     }
 };
 
-matrixConAttList: | matrixConAttList matrixConAtt;
+matrixConstraintAttList: | matrixConstraintAttList matrixConstraintAtt;
 
-matrixConAtt:
+matrixConstraintAtt:
       osglNumberOfRowsATT
     | osglNumberOfColumnsATT
     | templateMatrixIdxATT
@@ -1107,7 +1107,7 @@ matrixConAtt:
     | osglNameATT
 ;
 
-matrixConEnd: ENDOFELEMENT
+matrixConstraintEnd: ENDOFELEMENT
             | GREATERTHAN MATRIXCONEND;
 
 

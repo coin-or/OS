@@ -94,7 +94,7 @@
                 </ln>
             </nl>
         </nonlinearExpressions>
-        <matrices numberOfMatrices= " 41 " >
+        <matrices numberOfMatrices= " 50 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -1569,6 +1569,392 @@
                     </block>
                 </blocks>
             </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="41-baseAndConstantElements">
+                <baseMatrix baseMatrixIdx="0"/>
+                <constantElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">0</el>
+                    </index>
+                    <value>
+                        <el> 11.0 </el>
+                        <el> 12.0 </el>
+                    </value>
+                </constantElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="42-baseAndVarRef">
+                <baseMatrix baseMatrixIdx="0"/>
+                <varReferenceElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">1</el>
+                    </index>
+                    <value>
+                        <el> 3 </el>
+                        <el> 5 </el>
+                    </value>
+                </varReferenceElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="43-baseAndLinear">
+                <baseMatrix baseMatrixIdx="0"/>
+                <linearElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">2</el>
+                    </index>
+                    <value>
+                        <el numberOfVarIdx="1" constant="2">
+                            <varIdx coef="0.5">0</varIdx>
+                        </el>
+                        <el numberOfVarIdx="2" constant="1">
+                            <varIdx coef="2">0</varIdx>
+                            <varIdx coef="3">1</varIdx>
+                        </el>
+                    </value>
+                </linearElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="44-baseAndRealExpr">
+                <baseMatrix baseMatrixIdx="0"/>
+                <realValuedExpressions numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">0</el>
+                    </index>
+                    <value>
+                        <el>
+                            <sum>
+                                <matrixDeterminant>
+                                    <matrixDiagonal>
+                                        <matrixDotTimes>
+                                            <matrixInverse>
+                                                <matrixReference idx="2"/>
+                                            </matrixInverse>
+                                            <matrixPlus>
+                                                <identityMatrix>
+                                                    <number value="2"/>
+                                                </identityMatrix>
+                                                <matrixUpperTriangle>
+                                                    <matrixTimes>
+                                                        <matrixReference idx="6"/>
+                                                        <matrixReference idx="8"/>
+                                                    </matrixTimes>
+                                                </matrixUpperTriangle>
+                                            </matrixPlus>
+                                        </matrixDotTimes>
+                                    </matrixDiagonal>
+                                </matrixDeterminant>
+                                <matrixTrace>
+                                    <matrixMinus>
+                                        <matrixScalarTimes>
+                                            <number value="1.5"/>
+                                            <matrixNegate>
+                                                <matrixLowerTriangle>
+                                                    <matrixReference idx="2"/>
+                                                </matrixLowerTriangle>
+                                            </matrixNegate>
+                                        </matrixScalarTimes>
+                                        <matrixTranspose>
+                                            <matrixReference idx="8"/>
+                                        </matrixTranspose>
+                                    </matrixMinus>
+                                </matrixTrace>
+                                <matrixToScalar>
+                                    <matrixSubmatrixAt>
+                                        <number value="0"/>
+                                        <number value="0"/>
+                                        <number value="0"/>
+                                        <number value="0"/>
+                                        <matrixReference idx="6"/>
+                                    </matrixSubmatrixAt>
+                                </matrixToScalar>
+                            </sum>
+                        </el>
+                        <el>
+                            <times>
+                                <variable idx="0" coef="2.0"/>
+                                <variable idx="1"></variable>
+                            </times>
+                        </el>
+                    </value>
+                </realValuedExpressions>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="45-baseConstantAndVarRef">
+                <baseMatrix baseMatrixIdx="0"/>
+                <constantElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">0</el>
+                    </index>
+                    <value>
+                        <el> 11.0 </el>
+                        <el> 12.0 </el>
+                    </value>
+                </constantElements>
+                <varReferenceElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">1</el>
+                    </index>
+                    <value>
+                        <el> 3 </el>
+                        <el> 5 </el>
+                    </value>
+                </varReferenceElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="46-baseConstantAndLinear">
+                <baseMatrix baseMatrixIdx="0"/>
+                <constantElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">0</el>
+                    </index>
+                    <value>
+                        <el> 11.0 </el>
+                        <el> 12.0 </el>
+                    </value>
+                </constantElements>
+                <linearElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">2</el>
+                    </index>
+                    <value>
+                        <el numberOfVarIdx="1" constant="2">
+                            <varIdx coef="0.5">0</varIdx>
+                        </el>
+                        <el numberOfVarIdx="2" constant="1">
+                            <varIdx coef="2">0</varIdx>
+                            <varIdx coef="3">1</varIdx>
+                        </el>
+                    </value>
+                </linearElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="47-baseVarRefAndLinear">
+                <baseMatrix baseMatrixIdx="0"/>
+                <varReferenceElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">1</el>
+                    </index>
+                    <value>
+                        <el> 3 </el>
+                        <el> 5 </el>
+                    </value>
+                </varReferenceElements>
+                <linearElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">2</el>
+                    </index>
+                    <value>
+                        <el numberOfVarIdx="1" constant="2">
+                            <varIdx coef="0.5">0</varIdx>
+                        </el>
+                        <el numberOfVarIdx="2" constant="1">
+                            <varIdx coef="2">0</varIdx>
+                            <varIdx coef="3">1</varIdx>
+                        </el>
+                    </value>
+                </linearElements>
+            </matrix>
+            <matrix numberOfColumns="4" numberOfRows="4" name="48-objRefAndConRef">
+                <objReferenceElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">1</el>
+                    </index>
+                    <value>
+                        <el> 3 </el>
+                        <el> 5 </el>
+                    </value>
+                </objReferenceElements>
+                <conReferenceElements numberOfValues="2">
+                    <start>
+                        <el>0</el>
+                        <el mult="2">1</el>
+                        <el mult="2">2</el>
+                    </start>
+                    <index>
+                        <el mult="2" incr="1">2</el>
+                    </index>
+                    <value>
+                        <el valueType="value">0</el>     <el valueType="status">1</el>
+                    </value>
+                </conReferenceElements>
+            </matrix>
+            <matrix numberOfColumns="3" numberOfRows="3" name="49-stringsEtc.">
+                <constantElements numberOfValues="1">
+                    <start>
+                        <el>0</el>
+                        <el mult="3">1</el>
+                    </start>
+                    <index>
+                        <el>0</el>
+                    </index>
+                    <value>
+                        <el>1.4142</el>
+                    </value>
+                </constantElements>
+                <varReferenceElements numberOfValues="1">
+                    <start>
+                        <el>0</el>
+                        <el mult="3">1</el>
+                    </start>
+                    <index>
+                        <el>1</el>
+                    </index>
+                    <value>
+                        <el>0</el>
+                    </value>
+                </varReferenceElements>
+                <linearElements numberOfValues="1">
+                    <start>
+                        <el>0</el>
+                        <el mult="3">1</el>
+                    </start>
+                    <index>
+                        <el>2</el>
+                    </index>
+                     <value>
+                        <el numberOfVarIdx="2" constant="1">
+                            <varIdx coef="2">0</varIdx>
+                            <varIdx coef="3">1</varIdx>
+                        </el>
+                     </value>
+                </linearElements>
+                <realValuedExpressions numberOfValues="1">
+                    <start>
+                        <el mult="2">0</el>
+                        <el mult="2">1</el>
+                    </start>
+                    <index>
+                        <el>0</el>
+                    </index>
+                    <value>
+                        <el>
+                            <sin>
+                                <variable idx="1" coef="5.0"/>
+                            </sin>
+                        </el>
+                    </value>
+                </realValuedExpressions>
+                <objReferenceElements numberOfValues="1">
+                    <start>
+                        <el mult="2">0</el>
+                        <el mult="2">1</el>
+                    </start>
+                    <index>
+                        <el>1</el>
+                    </index>
+                    <value>
+                        <el>-1</el>
+                    </value>
+                </objReferenceElements>
+                <conReferenceElements numberOfValues="1">
+                    <start>
+                        <el mult="2">0</el>
+                        <el mult="2">1</el>
+                    </start>
+                    <index>
+                        <el>2</el>
+                    </index>
+                    <value>
+                        <el valueType="surplus">1</el>
+                    </value>
+                </conReferenceElements>
+                <stringValuedElements numberOfValues="1">
+                    <start>
+                        <el mult="3">0</el>
+                        <el>1</el>
+                    </start>
+                    <index>
+                        <el>0</el>
+                    </index>
+                    <value>
+                        <el>blue</el>
+                    </value>
+                </stringValuedElements>
+<!-- These types have not been implemented yet
+                <complexElements numberOfValues="1">
+                    <start>
+                        <el mult="3">0</el>
+                        <el>1</el>
+                    </start>
+                    <index>
+                        <el>1</el>
+                    </index>
+                    <value>
+                         <el real="1.0" imag="-1.0"/>
+                    </value>
+                </complexElements>
+                <complexValuedExpressions numberOfValues="1">
+                    <start>
+                        <el mult="2">0</el>
+                        <el mult="2">1</el>
+                    </start>
+                    <index>
+                        <el>0</el>
+                    </index>
+                    <value>
+                        <el>
+                            <complexCreate>
+                                <sin>
+                                    <variable idx="0" coef="5.0"/>
+                                </sin>
+                                <exp>
+                                    <variable idx="1" coef="-2.0"/>
+                                </exp>
+                            <complexCreate>
+                        </el>
+                    </value>
+                </complexValuedExpressions>
+ -->
+            </matrix>
+
         </matrices>
         <cones numberOfCones="11">
             <nonnegativeCone numberOfColumns="2" numberOfRows="2"></nonnegativeCone>

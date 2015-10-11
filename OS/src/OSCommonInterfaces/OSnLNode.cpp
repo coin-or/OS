@@ -1269,7 +1269,7 @@ OSnLNodeMinus::~OSnLNodeMinus()
 std::string OSnLNodeMinus::getTokenName()
 {
     return "minus";
-}// end OSnLNodeSum::getTokenName(
+}// end OSnLNodeMinus::getTokenName(
 
 double OSnLNodeMinus::calculateFunction(double *x)
 {

@@ -172,6 +172,8 @@
 ({xmlwhitespace}+blockRowIdx{equality}) {YY_PRINT; return(BLOCKROWIDXATT);}
 ({xmlwhitespace}+blockColIdx{equality}) {YY_PRINT; return(BLOCKCOLIDXATT);}
 ({xmlwhitespace}+constant{equality}) {YY_PRINT; return(CONSTANTATT);}
+({xmlwhitespace}+Re{equality}) {YY_PRINT; return(REATT);}
+({xmlwhitespace}+Im{equality}) {YY_PRINT; return(IMATT);}
 
 ({xmlwhitespace}+matrixVarIdx{equality}) {YY_PRINT; return(MATRIXVARIDXATT);}
 ({xmlwhitespace}+matrixObjIdx{equality}) {YY_PRINT; return(MATRIXOBJIDXATT);}

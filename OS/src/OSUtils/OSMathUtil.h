@@ -13,7 +13,6 @@
  * <p>The <code>MathUtil</code> class contains methods for performing
  * mathematics related operations used by many classes in the
  * Optimization Services (OS) framework. </p>
- *
  */
 
 
@@ -27,6 +26,7 @@
 
 
 #include <string>
+#include <complex>
 
 #ifdef __cplusplus
 extern std::string os_dtoa_format(double  x);
@@ -287,6 +287,32 @@ inline int getMult(double* a, int size)
     return mult;
 }
 
+
+/**
+ * getMult
+ *
+ * Identify the number of duplicates at the start of an array of type std::complex<double>
+ *
+ * @param i holds a pointer to the array to be processed.
+ * @param size holds the number of elements in the array.
+ *
+ * @return the length of the run.
+ */
+inline int getMult(std::complex<double>* a, int size)
+{
+    std::complex<double> mark;
+
+    int mult = 1;
+
+    if (size == 1) return mult;
+
+    mark = a[0];
+    for (int k=1; (k < size) && (a[k] == mark); k++)
+    {
+        mult++;
+    }
+    return mult;
+}
 
 
 /**
