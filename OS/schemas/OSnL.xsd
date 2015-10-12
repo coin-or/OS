@@ -3574,6 +3574,14 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:attribute name="value" type="xs:double" use="optional"/>
+				<xs:attribute name="type">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="real"/>
+							<xs:enumeration value="string"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 				<xs:attribute name="id" type="xs:ID" use="optional">
 					<xs:annotation>
 						<xs:documentation>required if realtime or random is true</xs:documentation>
@@ -6201,7 +6209,6 @@ Smallest representable positive number. </xs:documentation>
 			<xs:documentation>experiment. returns the imaginary part of a complex number.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeComplexModulus">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6236,7 +6243,6 @@ Smallest representable positive number. </xs:documentation>
 			<xs:documentation>experiment. returns theta for the complex number z = |z|e^(i*theta)</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeIsComplexInf">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -6271,8 +6277,6 @@ Smallest representable positive number. </xs:documentation>
 			<xs:documentation>experiment. returns 1 if either real part or imaginary part is NaN </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	
-	
 	<xs:complexType name="OSnLNodeIsComplexEq">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6307,9 +6311,6 @@ Smallest representable positive number. </xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	
-	
-	
 	<xs:complexType name="OSnLCNodeCreate">
 		<xs:annotation>
 			<xs:documentation>experimental </xs:documentation>
@@ -6348,7 +6349,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLCNodeSum">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6366,8 +6366,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeMinus">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6385,15 +6383,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeNegate">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6404,15 +6400,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeConjugate">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6423,15 +6417,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeNegativeConjugate">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6442,8 +6434,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. for the complex argument x + iy returns -x + iy. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeTimes">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6461,8 +6451,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeDivide">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6480,14 +6468,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLCNodeSquare">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6498,16 +6485,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
-
 	<xs:complexType name="OSnLCNodeSquareRoot">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6518,8 +6502,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeProduct">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6537,15 +6519,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeExp">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6556,15 +6536,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeSin">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6575,15 +6553,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeCos">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6594,15 +6570,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeTan">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6613,15 +6587,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeSinh">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6632,15 +6604,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeCosh">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6651,15 +6621,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeTanh">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -6670,8 +6638,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodePower">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6689,8 +6655,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="OSnLCNodeMatrixDeterminant">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -6761,10 +6725,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. First child is the matrix to get the element, Second child is rowIdx. Third Child is colIdx.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
-
-
 	<xs:complexType name="OSnLCNodeNumber">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6806,8 +6766,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:simpleType name="NlNodeEnumeration">
 		<xs:annotation>
 			<xs:documentation>since version 2.0.0. </xs:documentation>
