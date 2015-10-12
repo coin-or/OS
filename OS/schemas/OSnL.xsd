@@ -5915,7 +5915,7 @@ Smallest representable positive number. </xs:documentation>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrix" type="OSnLNodeMatrixReference" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixReference" type="OSnLNodeMatrixReference" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
