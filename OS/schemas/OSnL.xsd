@@ -3766,6 +3766,23 @@ Smallest representable positive number. </xs:documentation>
 				</xs:sequence>
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
+				<xs:attribute name="valueType" use="optional" default="value">
+					<xs:annotation>
+						<xs:documentation>The value of the valueType attribute can be either of
+“value” (default), “status” (whether the variable is between the bounds, a boolean), “surplus”
+( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="value"/>
+							<xs:enumeration value="status"/>
+							<xs:enumeration value="surplus"/>
+							<xs:enumeration value="shortage"/>
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3776,14 +3793,32 @@ Smallest representable positive number. </xs:documentation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeObjective">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0. 
+Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>could be used to give a dynamic index value</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:int" use="optional" default="-1"/>
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+				<xs:attribute name="valueType" use="optional" default="value">
+					<xs:annotation>
+						<xs:documentation>The value of the valueType attribute can be either of
+“value” (default), “constant” (the additive constant to the variable specified in the 'obj' section), “weight”
+(the weight assigned to this objective).</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="value"/>
+							<xs:enumeration value="constant"/>
+							<xs:enumeration value="weight"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3799,16 +3834,26 @@ Smallest representable positive number. </xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>could be used to give a dynamic index value</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:int" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="valueType" use="optional" default="value">
+					<xs:annotation>
+						<xs:documentation>The value of the valueType attribute can be either of
+“value” (default), “status” (whether the constraint is satisfied, a boolean), “surplus”
+( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
+					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="value"/>
 							<xs:enumeration value="status"/>
 							<xs:enumeration value="surplus"/>
 							<xs:enumeration value="shortage"/>
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
@@ -3827,6 +3872,9 @@ Smallest representable positive number. </xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>the tree can serve as an alternate way to specify the coefficient.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 				<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
@@ -3854,7 +3902,8 @@ Smallest representable positive number. </xs:documentation>
 	</xs:complexType>
 	<xs:element name="quadratic" type="OSnLNodeQuadratic" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0. 
+Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeParameter">
@@ -3863,7 +3912,11 @@ Smallest representable positive number. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>refers to an index in the parameters section</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -4082,102 +4135,6 @@ Smallest representable positive number. </xs:documentation>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="prob" type="OSnLNodeProb" substitutionGroup="OSnLNode"/-->
-	<xs:complexType name="OSnLNodePrefix">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element name="values" minOccurs="0">
-						<xs:complexType mixed="true">
-							<xs:sequence>
-								<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-							<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
-						</xs:complexType>
-					</xs:element>
-					<xs:element name="operators">
-						<xs:complexType mixed="true">
-							<xs:sequence>
-								<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-							<xs:attribute name="numberOfOperators" type="xs:nonNegativeInteger" use="required"/>
-						</xs:complexType>
-					</xs:element>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="prefix" type="OSnLNodePrefix" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodePostfix">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element name="values" minOccurs="0">
-						<xs:complexType mixed="true">
-							<xs:sequence>
-								<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-							<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
-						</xs:complexType>
-					</xs:element>
-					<xs:element name="operators">
-						<xs:complexType mixed="true">
-							<xs:sequence>
-								<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-							<xs:attribute name="numberOfOperators" type="xs:nonNegativeInteger" use="required"/>
-						</xs:complexType>
-					</xs:element>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="postfix" type="OSnLNodePostfix" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeInfix">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element name="values" minOccurs="0">
-						<xs:complexType mixed="true">
-							<xs:sequence>
-								<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-							<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
-						</xs:complexType>
-					</xs:element>
-					<xs:element name="operators">
-						<xs:complexType mixed="true">
-							<xs:sequence>
-								<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-							<xs:attribute name="numberOfOperators" type="xs:nonNegativeInteger" use="required"/>
-						</xs:complexType>
-					</xs:element>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="infix" type="OSnLNodeInfix" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<!--Logical and relational Nodes: since version 1.0.0  -->
 	<xs:complexType name="OSnLNodeIf">
 		<xs:annotation>
@@ -6986,10 +6943,6 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="nodeRef"/>
 			<xs:enumeration value="arcRef"/>
 			<xs:enumeration value="complements"/>
-			<xs:enumeration value="prob"/>
-			<xs:enumeration value="prefix"/>
-			<xs:enumeration value="postfix"/>
-			<xs:enumeration value="infix"/>
 			<xs:enumeration value="if"/>
 			<xs:enumeration value="lt"/>
 			<xs:enumeration value="leq"/>
