@@ -441,16 +441,15 @@ of the platforms listed in Table~\ref{table:testedplatforms}.  If the user does 
 or {\tt OSParseosil.y} (or any of their constituent parts --- see comments in the opening sections of these files), then {\tt OSParseosil.cpp} and {\tt OSParseosil.tab.cpp} need to be regenerated with 
 {\tt flex} and {\tt bison}. In order to make this work, the {\tt configure} step must be run with the
 option {\tt --with-flex-bison} (see the notes on page~\pageref{itemize:unixBuildNotes}).
-\iffalse
-If these programs are present, in the OS directory  execute
-%
-\index{make run_parsers@{\tt make run\_parsers}}
-\begin{verbatim}
-make  run_parsers
-\end{verbatim}
-\fi
 %
 (This requires Unix or a unix-like environment (Cygwin, MinGW, MSYS, etc.) under Windows.)
+The files OSParseosil.l.1 and OSParseosil.y.1 contain {\tt \#define} statements that allow debugging to be turned on. For even more detailed tracing of the {\tt bison} parser, the value of {\tt osildebug} can be set to a nonzero value in the calling program just before the call to the parser:
+\begin{verbatim}
+    extern int osildebug;
+    osildebug = 1;
+\end{verbatim}
+{\bf Note that this code generates vast amounts of output.}
+\medskip
 \fi
 
 The files {\tt OSParseosrl.l} and {\tt OSParseosrl.y} are used by {\tt flex} and {\tt bison} to  
