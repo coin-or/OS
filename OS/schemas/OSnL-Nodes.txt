@@ -361,10 +361,10 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 360		8702	complexMatrixTrace		1	can be complex if matrix complex-valued				
 361		8703	complexMatrixToScalar		1	can be complex if matrix complex-valued				
 362		8704	complexMatrixElementAt	2 (integer)	1	can be complex if matrix complex-valued				
-363										
-364										
-365										
-366										
+										
+										
+										
+										
 										
 										
 										
