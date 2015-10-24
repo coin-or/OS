@@ -3766,22 +3766,12 @@ Smallest representable positive number. </xs:documentation>
 				</xs:sequence>
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-				<xs:attribute name="valueType" use="optional" default="value">
+				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
 					<xs:annotation>
 						<xs:documentation>The value of the valueType attribute can be either of
 “value” (default), “status” (whether the variable is between the bounds, a boolean), “surplus”
 ( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
 					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="value"/>
-							<xs:enumeration value="status"/>
-							<xs:enumeration value="surplus"/>
-							<xs:enumeration value="shortage"/>
-							<xs:enumeration value="lb"/>
-							<xs:enumeration value="ub"/>
-						</xs:restriction>
-					</xs:simpleType>
 				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
@@ -3840,22 +3830,12 @@ Returns the current value of the indicated objective</xs:documentation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="valueType" use="optional" default="value">
+				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
 					<xs:annotation>
 						<xs:documentation>The value of the valueType attribute can be either of
 “value” (default), “status” (whether the constraint is satisfied, a boolean), “surplus”
 ( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
 					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="value"/>
-							<xs:enumeration value="status"/>
-							<xs:enumeration value="surplus"/>
-							<xs:enumeration value="shortage"/>
-							<xs:enumeration value="lb"/>
-							<xs:enumeration value="ub"/>
-						</xs:restriction>
-					</xs:simpleType>
 				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
@@ -3865,6 +3845,7 @@ Returns the current value of the indicated objective</xs:documentation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+<!-- removed 23 October 2015 	
 	<xs:complexType name="OSnLNodeQTerm">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -3906,6 +3887,7 @@ Returns the current value of the indicated objective</xs:documentation>
 Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+-->
 	<xs:complexType name="OSnLNodeParameter">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>

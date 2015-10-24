@@ -977,9 +977,9 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ComplexMatrixElement">
-				<xs:attribute name="Re" type="xs:double" use="required"/>
-				<xs:attribute name="Im" type="xs:double" use="required"/>
-				<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="Re" type="xs:double" use="required"/>
+		<xs:attribute name="Im" type="xs:double" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixNonzeros">
 		<xs:annotation>
@@ -3374,6 +3374,23 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			<xs:enumeration value="skewLower"/>
 			<xs:enumeration value="HermitianUpper"/>
 			<xs:enumeration value="HermitianLower"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="rangedConstraintValueType">
+		<xs:restriction base="xs:string">
+							<xs:enumeration value="value"/>
+							<xs:enumeration value="status"/>
+							<xs:enumeration value="surplus"/>
+							<xs:enumeration value="shortage"/>
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="objReferenceValueType">
+		<xs:restriction base="xs:string">
+								<xs:enumeration value="value"/>
+							<xs:enumeration value="constant"/>
+							<xs:enumeration value="weight"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
