@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+	<instanceHeader>
+		<name>Test</name>
+		<source>Computing Journal 3:175-184, 1960</source>
+		<description>
+		    Modified version of Rosenbrock problem to test extensions to the OSiL schema.
+		    The objective is modified to utilize userF (for the generic expression (t0 - t1)^2),
+		    realtime data (for the coefficient of t1 in this user function),
+		    and a simulation to return a sample mean and variance for the multiplier (100.0).
+		    The mean is used in place of the coefficient, and the variance is added to the objective.
+
+		    Note that none of this has actually been implemented yet, so the external data are
+		    never actually retrieved, hence the problem is not currently solvable.
+		</description>
+	</instanceHeader>
+	<instanceData> 
+		<variables numberOfVariables="2">
+			<var lb="0" name="x0" type="C"/>
+			<var lb="0" name="x1" type="C"/>
+		</variables> 
+		<objectives numberOfObjectives=" 1">
+			<obj maxOrMin="min" name="minCost" numberOfObjCoef="0"/>
+		</objectives>
+
+		<nonlinearExpressions numberOfNonlinearExpressions="1">
+			<nl idx="-1">
+				<sum>
+					 <userF name="quad">
+						 <number type="real" value="1.0"/>
+						 <variable idx="0"/>
+					 </userF>
+					<power>
+						<minus>
+							<number type="real" value="1.0 "/>
+							<variable coef="1.0" idx="0"/>
+						</minus>
+						<number type="real"  value="2.0"/>
+					</power>
+					<times>
+						<sim name="mySim">
+							<simInput inputName="popMean"> <number value="100"/></simInput>
+							<simInput inputName="nRep"> <number value="10000"/> </simInput>
+							<simOutput outputName="smplMean"/>
+						</sim> 
+						<power>
+							<minus>
+								<variable coef="1.0" idx="1"/>
+								<power>
+									<variable  coef="1.0" idx="0"/>
+									<number type="real" value="2.0"/>    
+								</power>
+							</minus>
+							<number type="real" value="2.0"/>
+						</power>
+					</times>
+					<sim name="mySim">
+						<simInput inputName="popMean"> <number value="100"/></simInput>
+						<simInput inputName="nRep"> <number value="10000"/> </simInput>
+						<simOutput outputName="SE"/>
+					</sim> 
+				</sum>
+			</nl   >
+		</nonlinearExpressions>
+		<realTimeData>
+			<nonlinearExpressions numberOfNonlinearExpressionNumbersAndStrings="1">
+				<number id="1">
+					<xPath uri="./stockdata.xml" path="/stocks/stock[@name='msft'/@return"/>
+				</number> 
+			</nonlinearExpressions>
+		</realTimeData>
+		<userFunctions numberOfUserfunctions="1">
+			<userFunction numArg="2" name="quad">
+					<power>
+						<minus>
+							<arg idx="0"/>
+							<times>
+								<arg idx="1"/>
+								<number type="realtime" id="1"/>
+							</times>
+						</minus>
+						<number type="real"  value="2.0"/>
+					</power>			
+			</userFunction>
+		</userFunctions>
+		<simulations numberOfSimulations="1">
+			<simulation name="mySim">
+				<uri value="http://www.optimizationservices.org/os/ossimulation/SimpleSimulationService.jws"/>
+				<ossl>
+					<input numberOfElements="2">
+						<el name="popMean" type="string"/> 
+						<el name="nRep" type="string"/> 
+					</input>
+					<output numberOfElements="2">
+						<el name="smplMean" type="string"/> 
+						<el name="SE" type="string"/> 
+					</output>
+				</ossl>
+			</simulation> 
+		</simulations> 
+	</instanceData>
+</osil>

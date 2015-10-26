@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Two alternative schema locations for now. Eventually fix both -->
+<!--
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+-->
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
 	<instanceHeader>
 		<name>br17</name>
@@ -14,17 +19,30 @@
 			<var type="B" mult="289"></var>
 		</variables>
 		<objectives>
-			<obj maxOrMin="min" numberOfObjCoef="0"></obj>
+			<obj maxOrMin="min" numberOfObjCoef="0"/>
 		</objectives>
-		<matrices numberOfMatrices="5">
-			<matrix id="cost" numberOfColumns="17" numberOfRows="17">
-				<elements>
-					<constantElements>
-						<start numberOfEl="18">
+		<nonlinearExpressions numberOfNonlinearExpressions="1">		
+			<nl idx="-1" shape="linear">
+				<times>
+					<number value="0.5"/>
+					<matrixTrace>
+						<matrixTimes>
+							<matrixTranspose>
+								<matrixReference idx="0"/>
+							</matrixTranspose>
+							<matrixVar idx="0"/>
+						</matrixTimes>
+					</matrixTrace> 
+				</times>
+			</nl>
+		</nonlinearExpressions>
+		<matrices numberOfMatrices="4">
+			<matrix name="cost" numberOfColumns="17" numberOfRows="17">
+					<constantElements numberOfValues="289">
+						<start>
 							<el mult="18" incr="17">0</el>
 						</start>
-						<nonzeros numberOfEl="289">
-							<indexes>
+							<index>
 								<el mult="17" incr="1">0</el>
 								<el mult="17" incr="1">0</el>
 								<el mult="17" incr="1">0</el>
@@ -42,8 +60,8 @@
 								<el mult="17" incr="1">0</el>
 								<el mult="17" incr="1">0</el>
 								<el mult="17" incr="1">0</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el>9.999000000000000e+03</el>
 								<el>3.000000000000000e+00</el>
 								<el>5.000000000000000e+00</el>
@@ -333,69 +351,28 @@
 								<el>8.000000000000000e+00</el>
 								<el>8.000000000000000e+00</el>
 								<el>9.999000000000000e+03</el>
-							</values>
-						</nonzeros>
+							</value>
 					</constantElements>
-				</elements>
 			</matrix>
-			<matrix  id="X" numberOfColumns="17" numberOfRows="17">
-				<elements>
-					<varReferenceElements>
-						<start numberOfEl="18">
-							<el mult="18" incr="17">0</el>
-						</start>
-						<nonzeros numberOfEl="289">
-							<indexes>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-								<el mult="17" incr="1">0</el>
-							</indexes>
-							<values>
-								<el mult="289" incr="1">0</el>
-							</values>
-						</nonzeros>
-					</varReferenceElements>
-				</elements>
-			</matrix>
-			<matrix id="identity" numberOfColumns="17" numberOfRows="17">
-				<elements>
-					<constantElements>
-						<start numberOfEl="18">
+			<matrix name="identity" numberOfColumns="17" numberOfRows="17">
+					<constantElements numberOfValues="17">
+						<start >
 							<el mult="18" incr="1">0</el>
 						</start>
-						<nonzeros numberOfEl="17">
-							<indexes>
+							<index>
 								<el mult="17" incr="1">0</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el mult="17">1.0</el>
-							</values>
-						</nonzeros>
+							</value>
 					</constantElements>
-				</elements>
 			</matrix>
-			<matrix id="MatrixOfOnes" numberOfColumns="17" numberOfRows="17">
-				<elements>
-					<constantElements>
-						<start numberOfEl="18">
+			<matrix name="MatrixOfOnes" numberOfColumns="17" numberOfRows="17">
+					<constantElements numberOfValues="289">
+						<start>
 							<el mult="18" incr="17">0</el>
 						</start>
-						<nonzeros numberOfEl="289">
-							<indexes>
+							<index>
 								<el mult="17" incr="1">0</el>
 								<el mult="17" incr="1">0</el>
 								<el mult="17" incr="1">0</el>
@@ -413,89 +390,78 @@
 								<el mult="17" incr="1">0</el>
 								<el mult="17" incr="1">0</el>
 								<el mult="17" incr="1">0</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el mult="289">1.0</el>
-							</values>
-						</nonzeros>
+							</value>
 					</constantElements>
-				</elements>
 			</matrix>
-			<matrix id="VectorOfOnes" numberOfColumns="1" numberOfRows="17">
-				<elements>
-					<constantElements>
-						<start numberOfEl="2">
+			<matrix name="VectorOfOnes" numberOfColumns="1" numberOfRows="17">
+					<constantElements numberOfValues="17">
+						<start>
 							<el>0</el> <el>17</el>
 						</start>
-						<nonzeros numberOfEl="17">
-							<indexes>
+							<index>
 								<el mult="17" incr="1">0</el>
-							</indexes>
-							<values>
+							</index>
+							<value>
 								<el mult="17">1.0</el>
-							</values>
-						</nonzeros>
+							</value>
 					</constantElements>
-				</elements>
 			</matrix>
 		</matrices>
 		<cones numberOfCones="2">
-			<semidefiniteCone id="C0" numberOfColumns="17" numberOfRows="17"></semidefiniteCone>
-			<generalOrthantCone id="Zero" numberOfColumns="1" numberOfRows="17">
-				<direction ub="0.0" lb="0.0" mult="17"></direction>
+			<generalOrthantCone name="Zero" numberOfColumns="1" numberOfRows="17">
+				<direction type="zero" mult="17"></direction>
 			</generalOrthantCone>
+			<semidefiniteCone name="C1" numberOfColumns="17" numberOfRows="17"/>
 		</cones>
 		<matrixProgramming>
 			<matrixVariables numberOfMatrixVar="1">
-				<matrixVar matrixID="X"></matrixVar>
-			</matrixVariables>
-			<objectives numberOfObj="1">
-				<obj numberOfLinearMatrixOperators="1" objIdx="-1">
-					<linearMatrixOperator matrixVarIdx="0" leftMatrixID="cost" leftOperator="matrixDotProduct" scalarCoef="0.5"/>
-				</obj>
-			</objectives>
+				<matrixVar numberOfColumns="17" numberOfRows="17" varType="B"/>
+			</matrixVariables> 
 			<matrixConstraints numberOfMatrixCon="3">
-				<matrixCon numberOfRows="17" numberOfCols="1" mult="2" lbConeId="Zero" ubConeId="Zero"/>
-				<matrixCon numberOfRows="17" numberOfCols="1" lbConeId="C0"/>
+				<matrixCon numberOfRows="17" numberOfColumns="1" mult="2" lbConeIdx="0"/>
+				<matrixCon numberOfRows="17" numberOfColumns="1" lbConeIdx="1"/>
 			</matrixConstraints>
-			<nonlinearMatrixExpressions numberOfMatrixNL="3">
-				<matrixNL matrixConIdx="0">
+			<matrixExpressions numberOfExpr="3">
+				<expr idx="0" shape="linear">
 					<matrixDiagonal>
-						<matrix id="X"></matrix>
+						<matrixVar idx="0"/>
 					</matrixDiagonal>
-				</matrixNL>
-				<matrixNL matrixConIdx="1">
+				</expr>
+				<expr idx="1" shape="linear">
 					<matrixMinus>
 						<matrixTimes>
-							<matrix id="X"/>
-							<matrix id="VectorOfOnes"/>
+							<matrixVar idx="0"/>
+							<matrixReference idx="3"/>
 						</matrixTimes>
-						<matrixScalarTimes>
+						<matrixScalarTimes> 
 							<number type="real" value="2.0"/>
-							<matrix id="VectorOfOnes"/>
+							<matrixReference idx="3"/> 
 						</matrixScalarTimes>
 					</matrixMinus>
-				</matrixNL>
-				<matrixNL matrixConIdx="2">
+				</expr>
+				<expr idx="2" shape="linear">
 					<matrixSum>
-						<VectorToDiagonalMatrix>
+						<diagonalMatrixFromVector>
 							<matrixProduct>
-								<matrix id="X"/>
-								<matrix id="VectorOfOnes"/>
+								<matrixVar idx="0"/>
+								<matrixReference idx="3"/>
 							</matrixProduct>
-						</VectorToDiagonalMatrix>
+						</diagonalMatrixFromVector>
 						<matrixScalarTimes>
 							<number type="real" value="-1.0"/>
-							<matrix id="X"/>
+							<matrixVar idx="0"/>
 						</matrixScalarTimes>
-						<matrix id="MatrixOfOnes"/>
+						<matrixReference idx="2"/>
 						<matrixScalarTimes>
 							<number type="real" value="-0.13505554119128839085376821635687"/>
-							<matrix id="identity"/>
+							<matrixReference idx="1"/>
 						</matrixScalarTimes>						
 					</matrixSum>
-				</matrixNL>
-			</nonlinearMatrixExpressions>
+				</expr>
+			</matrixExpressions> 
 		</matrixProgramming>
 	</instanceData>
 </osil>
