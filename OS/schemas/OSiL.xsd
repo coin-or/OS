@@ -163,12 +163,294 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="updateableData" type="UpdateableData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>realTimeData and simulations. experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="new_realTimeData" type="new_RealTimeData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="new_simulations" type="new_SimulationData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="xmlData" type="XMLData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="new_RealTimeData">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="defaultURI" type="xs:anyURI" default="." minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>recommendation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="uriAliases" type="RealTimeDataURIAliases" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>recommendation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onSolverStart" minOccurs="0"/>
+			<xs:element name="new_realTimeDataItem" type="new_RealTimeDataItem" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with  numberOfDataItems</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfDataItems" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="new_RealTimeDataItem">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>if both uri and uriAlias missing, use defaultURI</xs:documentation>
+				</xs:annotation>
+				<xs:element name="uri" type="xs:anyURI" minOccurs="0"/>
+				<xs:element name="uriAlias" type="xs:nonNegativeInteger" minOccurs="0"/>
+			</xs:choice>
+			<xs:element name="xPath" type="xs:string" minOccurs="0"/>
+			<xs:element name="output" type="new_RealTimeDataItemInputOrOutput" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="numberOfInputs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOutputs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="refreshPoint"/>
+	</xs:complexType>
+	<xs:complexType name="new_RealTimeDataItemInputOrOutput">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="el" type="new_RealTimeDataElement" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="new_RealTimeDataElement">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="value" type="xs:ID" use="required"/>
+				<xs:attribute name="type" use="optional" default="string">
+					<xs:annotation>
+						<xs:documentation>default is "real"</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="string"/>
+							<xs:enumeration value="link"/>
+							<xs:enumeration value="real"/>
+							<xs:enumeration value="integer"/>
+							<xs:enumeration value="xPath"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="new_SimulationData">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="defaultURI" type="xs:anyURI" default="." minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>recommendation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="uriAliases" type="RealTimeDataURIAliases" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>recommendation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="defaultRefreshPoint" default="onInputChange" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="RefreshPointEnum"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="new_simulationDataItem" type="new_SimulationDataItem" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with  numberOfDataItems</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfDataItems" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="new_SimulationDataItem">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>if both uri and uriAlias missing, use defaultURI</xs:documentation>
+				</xs:annotation>
+				<xs:element name="uri" type="xs:anyURI" minOccurs="0"/>
+				<xs:element name="uriAlias" type="xs:nonNegativeInteger" minOccurs="0"/>
+			</xs:choice>
+			<xs:element name="input" type="new_SimulationDataItemInputOrOutput" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="output" type="new_SimulationDataItemInputOrOutput" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="numberOfInputs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOutputs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="refreshPoint"/>
+	</xs:complexType>
+	<xs:complexType name="new_SimulationDataItemInputOrOutput">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="el" type="new_SimulationDataElement" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="new_SimulationDataElement">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="value" type="xs:ID" use="required"/>
+				<xs:attribute name="type" use="optional" default="string">
+					<xs:annotation>
+						<xs:documentation>default is "real"</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="string"/>
+							<xs:enumeration value="link"/>
+							<xs:enumeration value="real"/>
+							<xs:enumeration value="integer"/>
+							<xs:enumeration value="xPath"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="UpdateableData">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="defaultURI" type="xs:anyURI" default="." minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>recommendation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="uriAliases" type="RealTimeDataURIAliases" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>recommendation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onSolverStart" minOccurs="0"/>
+			<xs:element name="updateableDataItem" type="UpdateableDataItem" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with  numberOfDataItems</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfDataItems" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="UpdateableDataItem">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>if both uri and uriAlias missing, use defaultURI</xs:documentation>
+				</xs:annotation>
+				<xs:element name="uri" type="xs:anyURI" minOccurs="0"/>
+				<xs:element name="uriAlias" type="xs:nonNegativeInteger" minOccurs="0"/>
+			</xs:choice>
+			<xs:element name="input" type="UpdateableDataItemInputOrOutput" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="output" type="UpdateableDataItemInputOrOutput" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="numberOfInputs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOutputs" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="refreshPoint"/>
+	</xs:complexType>
+	<xs:complexType name="UpdateableDataItemInputOrOutput">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="el" type="UpdateableDataElement" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="UpdateableDataElement">
+		<xs:annotation>
+			<xs:documentation>finalization</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="value" type="xs:ID" use="required"/>
+				<xs:attribute name="type" use="optional" default="string">
+					<xs:annotation>
+						<xs:documentation>default is "real"</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="string"/>
+							<xs:enumeration value="link"/>
+							<xs:enumeration value="real"/>
+							<xs:enumeration value="integer"/>
+							<xs:enumeration value="xPath"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<!--Variables: since version 1.0 -->
 	<xs:complexType name="Variables">
@@ -348,12 +630,14 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:annotation>
 				<xs:documentation>Number of the child nl elements must agree with numberOfNonlinearExpressions</xs:documentation>
 			</xs:annotation>
+			<xs:element name="userFunction" type="UserFunction" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="nl" type="Nl" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfUserfunctions" type="xs:nonNegativeInteger" default="0"/>
 		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Nl">
@@ -2257,7 +2541,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>recommendation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="objectives" type="RealTimdDataObjectives" minOccurs="0">
+			<xs:element name="objectives" type="RealTimeDataObjectives" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>recommendation</xs:documentation>
 				</xs:annotation>
@@ -2417,7 +2701,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="RealTimdDataObjectives">
+	<xs:complexType name="RealTimeDataObjectives">
 		<xs:annotation>
 			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
@@ -3871,4 +4155,17 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:simpleType name="RefreshPointEnum">
+		<xs:restriction base="xs:string">
+			<xs:annotation>
+				<xs:documentation>experiment</xs:documentation>
+			</xs:annotation>
+			<xs:enumeration value="onSystemStart"/>
+			<xs:enumeration value="onServiceStart"/>
+			<xs:enumeration value="onJobStart"/>
+			<xs:enumeration value="onSolverStart"/>
+			<xs:enumeration value="onInputChange"/>
+			<xs:enumeration value="always"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>
