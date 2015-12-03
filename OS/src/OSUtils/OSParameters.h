@@ -32,14 +32,17 @@
 #define OS_DIVIDE                        1006
 #define OS_POWER                         1009
 #define OS_PRODUCT                       1010
+
 #define OS_ABS                           2001
 #define OS_SQUARE                        2005
 #define OS_SQRT                          2006
 #define OS_LN                            2007
 #define OS_EXP                           2010
 #define OS_ERF                           2023
+
 #define OS_SIN                           3001
 #define OS_COS                           3002
+
 #define OS_MIN                           4010
 #define OS_MAX                           4011
 
@@ -51,9 +54,9 @@
 #define OS_IF                            6001
 #define OS_ALLDIFF                       6016
 
-#define OS_MATRIX_DETERMINANT            7101
-#define OS_MATRIX_TRACE                  7102
-#define OS_MATRIX_TO_SCALAR              7103
+#define OS_MATRIX_DETERMINANT            7001
+#define OS_MATRIX_TRACE                  7002
+#define OS_MATRIX_TO_SCALAR              7003
 
 #define OS_MATRIX_PLUS                   7501
 #define OS_MATRIX_SUM                    7502
@@ -82,9 +85,6 @@
 #define OS_REAL_PART                     8001
 #define OS_IMAGINARY_PART                8002
 #define OS_COMPLEX_MODULUS               8003
-
-
-#define OS_FIRST_COMPLEX_NODE            8100
 
 #define OS_COMPLEX_NUMBER                8101
 #define OS_COMPLEX_CREATE                8102

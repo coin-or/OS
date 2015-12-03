@@ -163,6 +163,8 @@ OSgLParserData::OSgLParserData() :
     valuePresent(false),
     valueTypePresent(false),
     varTypePresent(false),
+    realPartPresent(false),
+    imagPartPresent(false),
 
     baseTranspose(""),
     category(""),
@@ -184,7 +186,9 @@ OSgLParserData::OSgLParserData() :
     unit(""),
     value(""),
     valueType(""),
-    varType("")
+    varType(""),
+    realPart(0.0),
+    imagPart(0.0)
 
 
 /*

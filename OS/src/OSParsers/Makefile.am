@@ -162,7 +162,7 @@ $(srcdir)/OSParseosol.cpp: \
 $(srcdir)/OSParseosrl.cpp: \
                  $(srcdir)/OSParseosrl.l \
                  $(srcdir)/OSParseosrl.tab.cpp
-	$(LEX) -Posil -o$(srcdir)/OSParseosrl.cpp \
+	$(LEX) -Posrl -o$(srcdir)/OSParseosrl.cpp \
                         $(srcdir)/OSParseosrl.l
 
 # bison generates the grammars. Since there are multiple targets, use a pattern rule

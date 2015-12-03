@@ -1808,8 +1808,7 @@
                         <el mult="2" incr="1">1</el>
                     </index>
                     <value>
-                        <el> 3 </el>
-                        <el> 5 </el>
+                        <el mult="2"> -1 </el>
                     </value>
                 </objReferenceElements>
                 <conReferenceElements numberOfValues="2">
@@ -1928,7 +1927,7 @@
                         <el>1</el>
                     </index>
                     <value>
-                         <el real="1.0" imag="-1.0"/>
+                         <el Re="3.14" Im="2.718"/>
                     </value>
                 </complexElements>
                 <complexValuedExpressions numberOfValues="1">

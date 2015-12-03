@@ -240,8 +240,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                                 outStr << ">";
                                 //
                                 //
-                                outStr << os_dtoa_format( m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value) ;
-                                //outStr << m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value ;
+                                outStr << os_dtoa_format( m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value);
                                 outStr << "</coef>" ;
                                 if( m_bWhiteSpace == true) outStr << endl;
                             }
@@ -388,7 +387,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                 }
                 else
                 {
-                    //outStr << "<base64BinaryData sizeOf=\"4\" numericType=\"int\" >" ;
                     outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
                     outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->rowIdx->el,
                                                  m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues*sizeof(int) );

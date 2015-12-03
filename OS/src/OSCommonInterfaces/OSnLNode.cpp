@@ -1,6 +1,6 @@
 /* $Id$ */
 /** @file OSnLNode.cpp
- *
+ *c
  *
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
@@ -40,6 +40,22 @@ using std::ostringstream;
 using std::cout;
 using std::endl;
 
+// This macro defines a code snippet that will be used repeatedly, 
+// potentially in hundreds of specific methods
+ 
+#define CLONE_CHILDREN {                                      \
+        if (inumberOfChildren > 0)                            \
+        {                                                     \
+            nlNodePoint->m_mChildren                          \
+                = new ExprNode*[inumberOfChildren];           \
+            for (int i=0; i < inumberOfChildren; i++)         \
+            {                                                 \
+                nlNodePoint->m_mChildren[i]                   \
+                    = this->m_mChildren[i]->cloneExprNode();  \
+            }                                                 \
+        }                                                     \
+}
+
 
 //==================================================================================================
 // For definitions of functions, argument lists and unique IDs, see OSParameter.h and OSnL-Nodes.txt
@@ -51,7 +67,7 @@ using std::endl;
 
 ExprNode::ExprNode():
     inodeInt(-1),
-    inodeType(0),
+    inodeKind(0),
     inumberOfChildren( 0),
     inumberOfComplexChildren( 0),
     inumberOfScalarChildren( 0),
@@ -81,6 +97,10 @@ ExprNode::~ExprNode()
     {
         for (int i=0; i<inumberOfChildren; i++)
         {
+#ifndef NDEBUG
+            outStr << "Delete memory at address " << &m_mChildren[i] << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
             if (m_mChildren[i] != NULL) 
                 delete m_mChildren[i];
             m_mChildren[i] = NULL;
@@ -96,6 +116,10 @@ ExprNode::~ExprNode()
     {
         for (int i=0; i<inumberOfComplexChildren; i++)
         {
+#ifndef NDEBUG
+            outStr << "Delete memory at address " << &m_mComplexChildren[i] << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
             if (m_mComplexChildren[i] != NULL) 
                 delete m_mComplexChildren[i];
             m_mComplexChildren[i] = NULL;
@@ -111,6 +135,10 @@ ExprNode::~ExprNode()
     {
         for (int i=0; i<inumberOfScalarChildren; i++)
         {
+#ifndef NDEBUG
+            outStr << "Delete memory at address " << &m_mScalarChildren[i] << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
             if (m_mScalarChildren[i] != NULL) 
                 delete m_mScalarChildren[i];
             m_mScalarChildren[i] = NULL;
@@ -126,6 +154,10 @@ ExprNode::~ExprNode()
     {
         for (int i=0; i<inumberOfMatrixChildren; i++)
         {
+#ifndef NDEBUG
+            outStr << "Delete memory at address " << &m_mMatrixChildren[i] << std::endl;
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
             if (m_mMatrixChildren[i] != NULL) 
                 delete m_mMatrixChildren[i];
             m_mMatrixChildren[i] = NULL;
@@ -279,6 +311,47 @@ std::vector<ExprNode*> ExprNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
 
+// Dummy implementations for calculate functions
+double ExprNode::calculateFunction(double *x)
+{
+}
+
+ADdouble ExprNode::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
+{
+}
+
+std::complex<double> ExprNode::calculateFunction_C(double *x)
+{
+}
+
+//ADdouble ExprNode::constructADTape_C(std::map<int, int> *ADIdx, ADvector *XAD){};
+
+OSMatrix* ExprNode::calculateFunction_M(double *x)
+{
+}
+
+//ADdouble ExprNode::constructADTape_M(std::map<int, int> *ADIdx, ADvector *XAD){};
+
+
+bool ExprNode::isRealValued()
+{
+    if ( inodeInt >= OS_PLUS       && inodeInt < OS_MATRIX_PLUS  ) return true;
+    if ( inodeInt >= OS_REAL_PART  && inodeInt < OS_COMPLEX_PLUS ) return true;
+    return false;
+}//end isRealValued
+
+bool ExprNode::isComplexValued()
+{
+    if ( inodeInt >= OS_COMPLEX_PLUS ) return true;
+    return false;
+}//end isRealValued
+
+bool ExprNode::isMatrixValued()
+{
+    if ( inodeInt >= OS_MATRIX_PLUS  && inodeInt < OS_REAL_PART ) return true;
+    return false;
+}//end isRealValued
+
 
 bool ExprNode::IsEqual(ExprNode *that)
 {
@@ -312,7 +385,7 @@ bool ExprNode::IsEqual(ExprNode *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -358,16 +431,16 @@ ScalarNode::ScalarNode():
 
 ScalarNode::~ScalarNode()
 {
-#if 0
 #ifndef NDEBUG
     std::ostringstream outStr;
     outStr << "inside ScalarNode destructor" << std::endl;
-    outStr << "real-valued kids = " <<  inumberOfChildren << std::endl;
-    outStr << "complex-valued kids = " <<  inumberOfComplexChildren << std::endl;
-    outStr << "scalar-valued kids = " <<  inumberOfScalarChildren << std::endl;
-    outStr << "matrix kids = " <<  inumberOfMatrixChildren << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+//    outStr << "real-valued kids = " <<  inumberOfChildren << std::endl;
+//    outStr << "complex-valued kids = " <<  inumberOfComplexChildren << std::endl;
+//    outStr << "scalar-valued kids = " <<  inumberOfScalarChildren << std::endl;
+//    outStr << "matrix kids = " <<  inumberOfMatrixChildren << std::endl;
+//    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+#if 0
     if (inumberOfChildren > 0 && m_mChildren != NULL)
     {
         for (int i=0; i<inumberOfChildren; i++)
@@ -558,7 +631,7 @@ bool ScalarNode::IsEqual(ScalarNode *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -645,7 +718,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNode
         {
             for(int i = 0; i < numScalarKids; i++)
             {
-                if (nlNodeVec[kount]->inodeType < OS_FIRST_COMPLEX_NODE)
+                if (nlNodeVec[kount]->m_mScalarChildren[i]->isRealValued())
                     nlNodeVec[kount]->m_mScalarChildren[i] = (OSnLNode*)stackVec.back();
                 else
                     nlNodeVec[kount]->m_mScalarChildren[i] = (OSnLCNode*)stackVec.back();
@@ -689,7 +762,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNod
         {
             for(int i = numSclrKids - 1; i >= 0;  i--)
             {
-                if (nlNodeVec[kount]->inodeType < OS_FIRST_COMPLEX_NODE)
+                if (nlNodeVec[kount]->m_mScalarChildren[i]->isRealValued())
                     nlNodeVec[kount]->m_mScalarChildren[i] = (OSnLNode*)stackVec.back();
                 else
                     nlNodeVec[kount]->m_mScalarChildren[i] = (OSnLCNode*)stackVec.back();
@@ -734,25 +807,25 @@ std::vector<ExprNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<ExprNode
     if(inumberOfChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->OSnLNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     if(inumberOfComplexChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfComplexChildren; i++)
-            m_mComplexChildren[i]->OSnLCNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mComplexChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     if(inumberOfScalarChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfScalarChildren; i++)
-            if (m_mScalarChildren[i]->inodeType < OS_FIRST_COMPLEX_NODE) 
-                ((OSnLNode*) m_mScalarChildren[i])->preOrderOSnLNodeTraversal( prefixVector);
+            if (m_mScalarChildren[i]->isRealValued())
+                m_mScalarChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
             else
-                ((OSnLCNode*)m_mScalarChildren[i])->preOrderOSnLNodeTraversal( prefixVector);
+                m_mScalarChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     if(inumberOfMatrixChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-            m_mMatrixChildren[i]->OSnLMNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mMatrixChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     return *prefixVector;
 }//end preOrderOSnLNodeTraversal
@@ -770,28 +843,28 @@ std::vector<ExprNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
     {
         unsigned int i;
         for(i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->OSnLNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     if(inumberOfComplexChildren > 0)
     {
         unsigned int i;
         for(i = 0; i < inumberOfComplexChildren; i++)
-            m_mComplexChildren[i]->OSnLCNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mComplexChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     if(inumberOfScalarChildren > 0)
     {
         unsigned int i;
         for(i = 0; i < inumberOfScalarChildren; i++)
-            if (m_mScalarChildren[i]->inodeType < OS_FIRST_COMPLEX_NODE) 
-                ((OSnLNode*) m_mScalarChildren[i])->postOrderOSnLNodeTraversal( postfixVector);
+            if (m_mScalarChildren[i]->isRealValued())
+                m_mScalarChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
             else
-                ((OSnLCNode*)m_mScalarChildren[i])->postOrderOSnLNodeTraversal( postfixVector);
+                m_mScalarChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     if(inumberOfMatrixChildren > 0)
     {
         unsigned int i;
         for(i = 0; i < inumberOfMatrixChildren; i++)
-            m_mMatrixChildren[i]->OSnLMNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mMatrixChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     (*postfixVector).push_back( (OSnLNode*)this);
     return *postfixVector;
@@ -804,69 +877,13 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
     {
         for(i = 0; i < inumberOfChildren; i++)
         {
-            m_mChildren[ i]->getVariableIndexMap( varIdx);
+            if (!m_mChildren[ i]->isRealValued())
+                throw ErrorClass("Can only evaluate real-valued nodes so far");
+            ((OSnLNode*)m_mChildren[ i])->getVariableIndexMap( varIdx);
         }
     }
 }//getVariableIndexMap
 
-OSnLNode* OSnLNode::copyNodeAndDescendants()
-{
-#ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-
-    OSnLNode* ndcopy = (OSnLNode*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfComplexChildren = inumberOfComplexChildren;
-    ndcopy->inumberOfScalarChildren = inumberOfScalarChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = /*(OSnLNode)*/m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-    
-    if (inumberOfComplexChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfComplexChildren];
-        for (int i=0; i < inumberOfComplexChildren; i++)
-        {
-            ndcopy->m_mComplexChildren[i] = m_mComplexChildren[i]->copyNodeAndDescendants();
-        }
-    }
-    
-    if (inumberOfScalarChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfScalarChildren];
-        for (int i=0; i < inumberOfScalarChildren; i++)
-        {
-            if (m_mScalarChildren[i]->inodeInt < OS_FIRST_COMPLEX_NODE)
-                ndcopy->m_mScalarChildren[i] = ((OSnLNode*) m_mScalarChildren[i])->copyNodeAndDescendants();
-            else
-                ndcopy->m_mScalarChildren[i] = ((OSnLCNode*)m_mScalarChildren[i])->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfMatrixChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end OSnLNode::copyNodeAndDescendants
 
 bool OSnLNode::IsEqual(OSnLNode *that)
 {
@@ -908,7 +925,7 @@ bool OSnLNode::IsEqual(OSnLNode *that)
                 return false;
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
 
             for (unsigned int i = 0; i < this->inumberOfChildren; i++)
@@ -938,11 +955,11 @@ OSnLNodePlus::OSnLNodePlus()
 {
     inumberOfChildren = 2;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[2];
+    m_mChildren = new ExprNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
     inodeInt = OS_PLUS;
-    inodeType = 2;
+    inodeKind = 1;
 }//end OSnLNodePlus
 
 
@@ -966,22 +983,98 @@ double OSnLNodePlus::calculateFunction(double *x)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, "in OSnLNodePlus::calculateFunction");
 #endif
-    m_dFunctionValue = m_mChildren[0]->calculateFunction(x) + m_mChildren[1]->calculateFunction(x);
+    if (!m_mChildren[0]->isRealValued() || !m_mChildren[1]->isRealValued())
+        throw ErrorClass("Can only evaluate real-valued nodes so far");
+    m_dFunctionValue = ((OSnLNode*)m_mChildren[0])->calculateFunction(x) + 
+                       ((OSnLNode*)m_mChildren[1])->calculateFunction(x);
     return m_dFunctionValue;
 }// end OSnLNodePlus::calculate
 
 
 ADdouble OSnLNodePlus::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
 {
-    m_ADTape = m_mChildren[0]->constructADTape( ADIdx,  XAD) + m_mChildren[1]->constructADTape( ADIdx,  XAD);
+    if (!m_mChildren[0]->isRealValued() || !m_mChildren[1]->isRealValued())
+        throw ErrorClass("Can only evaluate real-valued nodes so far");
+    m_ADTape = ((OSnLNode*)m_mChildren[0])->constructADTape( ADIdx,  XAD) + 
+               ((OSnLNode*)m_mChildren[1])->constructADTape( ADIdx,  XAD);
     return m_ADTape;
 }// end OSnLNodePlus::constructADTape
 
-OSnLNode* OSnLNodePlus::cloneExprNode()
+#if 0
+ExprNode* OSnLNodePlus::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodePlus");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodePlus();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+
+    if (inumberOfChildren > 0)
+    {
+        nlNodePoint->m_mChildren = new ExprNode*[inumberOfChildren];                          
+        for (int i=0; i < inumberOfChildren; i++)                                        
+        {                                                                                
+            nlNodePoint->m_mChildren[i]  = this->m_mChildren[i]->cloneExprNode();
+        }                                                                                
+    }
+    
+    if (inumberOfComplexChildren > 0)
+    {
+        nlNodePoint->m_mComplexChildren = new ExprNode*[inumberOfComplexChildren];
+        for (int i=0; i < inumberOfComplexChildren; i++)
+        {
+            nlNodePoint->m_mComplexChildren[i] = m_mComplexChildren[i]->cloneExprNode();
+        }
+    }
+    
+    if (inumberOfScalarChildren > 0)
+    {
+        nlNodePoint->m_mScalarChildren = new ExprNode*[inumberOfScalarChildren];
+        for (int i=0; i < inumberOfScalarChildren; i++)
+        {
+            if (m_mScalarChildren[i]->isRealValued())
+                nlNodePoint->m_mScalarChildren[i]
+                    = m_mScalarChildren[i]->cloneExprNode();
+            else
+                nlNodePoint->m_mScalarChildren[i]
+                    = m_mScalarChildren[i]->cloneExprNode();
+        }
+    }
+
+    if (inumberOfMatrixChildren > 0)
+    {
+        nlNodePoint->m_mMatrixChildren = new ExprNode*[inumberOfMatrixChildren];
+        for (int i=0; i < inumberOfMatrixChildren; i++)
+        {
+            nlNodePoint->m_mMatrixChildren[i] = m_mMatrixChildren[i]->cloneExprNode();
+        }
+    }
+
     return  nlNodePoint;
+}//end OSnLNodePlus::cloneExprNode
+#endif
+
+ExprNode* OSnLNodePlus::cloneExprNode()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodePlus");
+#endif
+    OSnLNode *nlNodePoint;
+    nlNodePoint = new OSnLNodePlus();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLNodePlus::cloneExprNode
 
 
@@ -992,7 +1085,7 @@ OSnLNodeSum::OSnLNodeSum()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     inodeInt = OS_SUM;
-    inodeType = -1;
+    inodeKind = 1;
 }//end OSnLNodeSum
 
 OSnLNodeSum::~OSnLNodeSum()
@@ -1034,10 +1127,19 @@ ADdouble OSnLNodeSum::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodeSum::constructADTape
 
-OSnLNode* OSnLNodeSum::cloneExprNode()
+ExprNode* OSnLNodeSum::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeSum");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeSum();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeSum::cloneExprNode
 //end OSnLNodeSum methods
@@ -1051,7 +1153,7 @@ OSnLNodeAllDiff::OSnLNodeAllDiff()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     inodeInt = OS_ALLDIFF;
-    inodeType = -1;
+    inodeKind = 1;
 }//end OSnLNodeAllDiff
 
 OSnLNodeAllDiff::~OSnLNodeAllDiff()
@@ -1107,10 +1209,19 @@ ADdouble OSnLNodeAllDiff::constructADTape(std::map<int, int> *ADIdx, ADvector *X
 }// end OSnLNodeAllDiff::constructADTape
 
 
-OSnLNode* OSnLNodeAllDiff::cloneExprNode()
+ExprNode* OSnLNodeAllDiff::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeAllDiff");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeAllDiff();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeAllDiff::cloneExprNode
 //end OSnLNodeAllDiff methods
@@ -1123,7 +1234,7 @@ OSnLNodeMax::OSnLNodeMax()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     inodeInt = OS_MAX;
-    inodeType = -1;
+    inodeKind = 1;
 }//end OSnLNodeMax
 
 OSnLNodeMax::~OSnLNodeMax()
@@ -1172,10 +1283,19 @@ ADdouble OSnLNodeMax::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
 }// end OSnLNodeMax::constructADTape
 
 
-OSnLNode* OSnLNodeMax::cloneExprNode()
+ExprNode* OSnLNodeMax::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeMax");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMax();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeMax::cloneExprNode
 
@@ -1187,12 +1307,13 @@ OSnLNodeMin::OSnLNodeMin()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     inodeInt = OS_MIN;
-    inodeType = -1;
+    inodeKind = 1;
 }//end OSnLNodeMin
 
 OSnLNodeMin::~OSnLNodeMin()
 {
 #ifndef NDEBUG
+
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMin destructor");
 #endif
 }//end ~OSnLNodeMin
@@ -1237,10 +1358,19 @@ ADdouble OSnLNodeMin::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
 }// end OSnLNodeMin::constructADTape
 
 
-OSnLNode* OSnLNodeMin::cloneExprNode()
+ExprNode* OSnLNodeMin::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeMin");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMin();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeMin::cloneExprNode
 
@@ -1251,11 +1381,11 @@ OSnLNodeMinus::OSnLNodeMinus()
 {
     inumberOfChildren = 2;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[2];
+    m_mChildren = new ExprNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
     inodeInt = OS_MINUS;
-    inodeType = 2;
+    inodeKind = 1;
 }//end OSnLNodeMinus
 
 
@@ -1289,10 +1419,19 @@ ADdouble OSnLNodeMinus::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD
 }// end OSnLNodeMinus::constructADTape
 
 
-OSnLNode* OSnLNodeMinus::cloneExprNode()
+ExprNode* OSnLNodeMinus::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeMinus");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMinus();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeMinus::cloneExprNode
 
@@ -1304,10 +1443,10 @@ OSnLNodeNegate::OSnLNodeNegate()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_NEGATE;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeNegate
 
 
@@ -1339,10 +1478,19 @@ ADdouble OSnLNodeNegate::constructADTape(std::map<int, int> *ADIdx, ADvector *XA
     return m_ADTape;
 }// end OSnLNodeNegate::constructADTape
 
-OSnLNode* OSnLNodeNegate::cloneExprNode()
+ExprNode* OSnLNodeNegate::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeNegate");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeNegate();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeNegate::cloneExprNode
 
@@ -1352,11 +1500,11 @@ OSnLNodeTimes::OSnLNodeTimes()
 {
     inumberOfChildren = 2;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[2];
+    m_mChildren = new ExprNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
     inodeInt = OS_TIMES;
-    inodeType = 2;
+    inodeKind = 1;
 }//end OSnLNodeTimes
 
 
@@ -1389,10 +1537,19 @@ ADdouble OSnLNodeTimes::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD
     return m_ADTape;
 }// end OSnLNodeTimes::constructADTape
 
-OSnLNode* OSnLNodeTimes::cloneExprNode()
+ExprNode* OSnLNodeTimes::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeTimes");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeTimes();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeTimes::cloneExprNode
 
@@ -1403,11 +1560,11 @@ OSnLNodeDivide::OSnLNodeDivide()
 {
     inumberOfChildren = 2;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[2];
+    m_mChildren = new ExprNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
     inodeInt = OS_DIVIDE;
-    inodeType = 2;
+    inodeKind = 1;
 }//end OSnLNodeDivide
 
 
@@ -1442,10 +1599,19 @@ ADdouble OSnLNodeDivide::constructADTape(std::map<int, int> *ADIdx, ADvector *XA
 }// end OSnLNodeDivide::constructADTape
 
 
-OSnLNode* OSnLNodeDivide::cloneExprNode()
+ExprNode* OSnLNodeDivide::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeDivide");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeDivide();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeDivide::cloneExprNode
 
@@ -1456,11 +1622,11 @@ OSnLNodePower::OSnLNodePower()
 {
     inumberOfChildren = 2;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[2];
+    m_mChildren = new ExprNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
     inodeInt = OS_POWER;
-    inodeType = 2;
+    inodeKind = 1;
 }//end OSnLNodePower
 
 
@@ -1515,10 +1681,19 @@ ADdouble OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD
 //}// end OSnLNodePower::constructADTape
 
 
-OSnLNode* OSnLNodePower::cloneExprNode()
+ExprNode* OSnLNodePower::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodePower");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodePower();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodePower::cloneExprNode
 
@@ -1530,7 +1705,7 @@ OSnLNodeProduct::OSnLNodeProduct()
     inumberOfChildren = 0;
     inumberOfMatrixChildren = 0;
     inodeInt = OS_PRODUCT;
-    inodeType = -1;
+    inodeKind = 1;
 }//end OSnLNodeProduct
 
 
@@ -1575,10 +1750,19 @@ ADdouble OSnLNodeProduct::constructADTape(std::map<int, int> *ADIdx, ADvector *X
 }// end OSnLNodeProduct::constructADTape
 
 
-OSnLNode* OSnLNodeProduct::cloneExprNode()
+ExprNode* OSnLNodeProduct::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeProduct");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeProduct();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeProduct::cloneExprNode
 
@@ -1589,10 +1773,10 @@ OSnLNodeLn::OSnLNodeLn()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_LN;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeLn
 
 
@@ -1625,10 +1809,19 @@ ADdouble OSnLNodeLn::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodeLn::constructADTape
 
-OSnLNode* OSnLNodeLn::cloneExprNode()
+ExprNode* OSnLNodeLn::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeLn");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeLn();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeLn::cloneExprNode
 
@@ -1639,10 +1832,10 @@ OSnLNodeSqrt::OSnLNodeSqrt()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_SQRT;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeSqrt
 
 
@@ -1675,10 +1868,19 @@ ADdouble OSnLNodeSqrt::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodeSqrt::constructADTape
 
-OSnLNode* OSnLNodeSqrt::cloneExprNode()
+ExprNode* OSnLNodeSqrt::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeSqrt");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeSqrt();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeSqrt::cloneExprNode
 
@@ -1689,10 +1891,10 @@ OSnLNodeSquare::OSnLNodeSquare()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_SQUARE;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeSquare
 
 
@@ -1725,10 +1927,19 @@ ADdouble OSnLNodeSquare::constructADTape(std::map<int, int> *ADIdx, ADvector *XA
     return m_ADTape;
 }// end OSnLNodeSquare::constructADTape
 
-OSnLNode* OSnLNodeSquare::cloneExprNode()
+ExprNode* OSnLNodeSquare::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeSquare");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeSquare();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeSquare::cloneExprNode
 
@@ -1739,10 +1950,10 @@ OSnLNodeSin::OSnLNodeSin()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_SIN;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeSin
 
 
@@ -1775,10 +1986,19 @@ ADdouble OSnLNodeSin::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodeSin::constructADTape
 
-OSnLNode* OSnLNodeSin::cloneExprNode()
+ExprNode* OSnLNodeSin::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeSin");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeSin();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeSin::cloneExprNode
 
@@ -1789,10 +2009,10 @@ OSnLNodeCos::OSnLNodeCos()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_COS;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeCos
 
 
@@ -1825,10 +2045,19 @@ ADdouble OSnLNodeCos::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodeCos::constructADTape
 
-OSnLNode* OSnLNodeCos::cloneExprNode()
+ExprNode* OSnLNodeCos::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeCos");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeCos();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeCos::cloneExprNode
 
@@ -1839,10 +2068,10 @@ OSnLNodeExp::OSnLNodeExp()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_EXP;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeExp
 
 
@@ -1875,10 +2104,19 @@ ADdouble OSnLNodeExp::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodeExp::constructADTape
 
-OSnLNode* OSnLNodeExp::cloneExprNode()
+ExprNode* OSnLNodeExp::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeExp");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeExp();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeExp::cloneExprNode
 
@@ -1889,10 +2127,10 @@ OSnLNodeAbs::OSnLNodeAbs()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_ABS;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeLn
 
 
@@ -1925,10 +2163,19 @@ ADdouble OSnLNodeAbs::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodeAbs::constructADTape
 
-OSnLNode* OSnLNodeAbs::cloneExprNode()
+ExprNode* OSnLNodeAbs::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeAbs");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeAbs();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeAbs::cloneExprNode
 // end OSnLNodeAbs methods
@@ -1940,10 +2187,10 @@ OSnLNodeErf::OSnLNodeErf()
 {
     inumberOfChildren = 1;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
+    m_mChildren = new ExprNode*[1];
     m_mChildren[ 0] = NULL;
     inodeInt = OS_ERF;
-    inodeType = 1;
+    inodeKind = 1;
 }//end OSnLNodeErf
 
 
@@ -1993,10 +2240,19 @@ ADdouble OSnLNodeErf::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLNodeErf::constructADTape
 
-OSnLNode* OSnLNodeErf::cloneExprNode()
+ExprNode* OSnLNodeErf::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeErf");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeErf();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeErf::cloneExprNode
 // end OSnLNodeErf methods
@@ -2007,12 +2263,12 @@ OSnLNodeIf::OSnLNodeIf()
 {
     inumberOfChildren = 3;
     inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[3];
+    m_mChildren = new ExprNode*[3];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
     m_mChildren[ 2] = NULL;
     inodeInt = OS_IF;
-    inodeType = 3;
+    inodeKind = 1;
 }//end OSnLNodeIf
 
 
@@ -2055,10 +2311,19 @@ ADdouble OSnLNodeIf::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     }
 }// end OSnLNodeIf::constructADTape
 
-OSnLNode* OSnLNodeIf::cloneExprNode()
+ExprNode* OSnLNodeIf::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeIf");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeIf();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeIf::cloneExprNode
 // end OSnLNodeIf methods
@@ -2073,9 +2338,9 @@ OSnLNodeNumber::OSnLNodeNumber()
     inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
-    inodeType = 0;
-    value = 0.0;
+    inodeKind = 1;
 
+    value = 0.0;
     type = "real";
     id = "";
 
@@ -2154,52 +2419,23 @@ ADdouble OSnLNodeNumber::constructADTape(std::map<int, int> *ADIdx, ADvector *XA
     return m_ADTape;
 }// end OSnLNodeNumber::constructADTape
 
-OSnLNode* OSnLNodeNumber::cloneExprNode()
+ExprNode* OSnLNodeNumber::cloneExprNode()
 {
-    OSnLNode *nlNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeNumber");
+#endif
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeNumber();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    ((OSnLNodeNumber*)nlNodePoint)->value = value;
+    CLONE_CHILDREN;
     return  nlNodePoint;
 }//end OSnLNodeNumber::cloneExprNode
 
-
-OSnLNode* OSnLNodeNumber::copyNodeAndDescendants()
-{
-#ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-
-    OSnLNodeNumber* ndcopy = (OSnLNodeNumber*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    ndcopy->value = value;
-    ndcopy->type = type;
-    ndcopy->id = id;
-    
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end OSnLNodeNumber::copyNodeAndDescendants
 
 bool OSnLNodeNumber::IsEqual(OSnLNodeNumber *that)
 {
@@ -2233,7 +2469,7 @@ bool OSnLNodeNumber::IsEqual(OSnLNodeNumber *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -2269,7 +2505,7 @@ OSnLNodeE::OSnLNodeE()
     inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
-    inodeType = 0;
+    inodeKind = 1;
     //value = 0.0;
     //type = "real";
     //id = "";
@@ -2325,10 +2561,18 @@ ADdouble OSnLNodeE::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLE::constructADTape
 
-OSnLNode* OSnLNodeE::cloneExprNode()
+ExprNode* OSnLNodeE::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeE");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodeE();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
     return  nlNodePoint;
 }//end OSnLNodeE::cloneExprNode
 //end OSnLNodeE
@@ -2342,7 +2586,7 @@ OSnLNodePI::OSnLNodePI()
     inumberOfMatrixChildren = 0;
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
-    inodeType = 0;
+    inodeKind = 1;
 }//end OSnLNodePI
 
 
@@ -2396,10 +2640,18 @@ ADdouble OSnLNodePI::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
     return m_ADTape;
 }// end OSnLE::constructADTape
 
-OSnLNode* OSnLNodePI::cloneExprNode()
+ExprNode* OSnLNodePI::cloneExprNode()
 {
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodePI");
+#endif
     OSnLNode *nlNodePoint;
     nlNodePoint = new OSnLNodePI();
+#ifndef NDEBUG
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
     return  nlNodePoint;
 }//end OSnLNodePI::cloneExprNode
 //end OSnLNodePI methods
@@ -2413,7 +2665,8 @@ OSnLNodeVariable::OSnLNodeVariable()
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
     inodeInt = OS_VARIABLE;
-    inodeType = -1;
+    inodeKind = 1;
+
     coef = 1.0;
     idx = -1;
 }//end OSnLNodeVariable
@@ -2523,51 +2776,28 @@ void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx)
     }
 }//getVariableIndexMap
 
-OSnLNode* OSnLNodeVariable::cloneExprNode()
+ExprNode* OSnLNodeVariable::cloneExprNode()
 {
-    OSnLNode *nlNodePoint;
-    nlNodePoint = new OSnLNodeVariable();
-    return  nlNodePoint;
-}//end OSnLNodeVariable::cloneExprNode
-
-
-OSnLNode* OSnLNodeVariable::copyNodeAndDescendants()
-{
+    std::ostringstream outStr;
 #ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeVariable");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLNodeVariable();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+//!!    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    outStr << "Allocate memory at address ";
+    outStr << nlNodePoint;
+    outStr << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-
-    OSnLNodeVariable* ndcopy = (OSnLNodeVariable*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    ndcopy->coef = coef;
-    ndcopy->idx = idx;
-    
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = /*(OSnLNode)*/m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end OSnLNodeVariable::copyNodeAndDescendants
+    ((OSnLNodeVariable*)nlNodePoint)->idx  = idx;
+    ((OSnLNodeVariable*)nlNodePoint)->coef = coef;
+    CLONE_CHILDREN;
+    return  nlNodePoint;
+}//end OSnLNodeVariable::cloneExprNode
 
 
 bool OSnLNodeVariable::IsEqual(OSnLNodeVariable *that)
@@ -2602,7 +2832,7 @@ bool OSnLNodeVariable::IsEqual(OSnLNodeVariable *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -2634,11 +2864,11 @@ bool OSnLNodeVariable::IsEqual(OSnLNodeVariable *that)
 // OSnLNodeMatrixDeterminant Methods
 OSnLNodeMatrixDeterminant::OSnLNodeMatrixDeterminant()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_DETERMINANT;
-    inodeType = 0;
+    inodeKind = 1;
 }//end OSnLNodeMatrixDeterminant
 
 OSnLNodeMatrixDeterminant::~OSnLNodeMatrixDeterminant()
@@ -2680,22 +2910,34 @@ ADdouble OSnLNodeMatrixDeterminant::constructADTape(std::map<int, int> *ADIdx, A
 }// end OSnLNodeMatrixDeterminant::constructADTape
 
 
-OSnLNode* OSnLNodeMatrixDeterminant::cloneExprNode()
+ExprNode* OSnLNodeMatrixDeterminant::cloneExprNode()
 {
-    OSnLNode *nlNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+                      "cloning an OSnLNodeMatrixDeterminant");
+#endif
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMatrixDeterminant();
-    return  nlNodePoint;
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLNodeMatrixDeterminant::cloneExprNode
 
 
 // OSnLNodeMatrixTrace Methods
 OSnLNodeMatrixTrace::OSnLNodeMatrixTrace()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_TRACE;
-    inodeType = 0;
+    inodeKind = 1;
 }//end OSnLNodeMatrixTrace
 
 OSnLNodeMatrixTrace::~OSnLNodeMatrixTrace()
@@ -2735,11 +2977,23 @@ ADdouble OSnLNodeMatrixTrace::constructADTape(std::map<int, int> *ADIdx, ADvecto
 }// end OSnLNodeMatrixTrace::constructADTape
 
 
-OSnLNode* OSnLNodeMatrixTrace::cloneExprNode()
+ExprNode* OSnLNodeMatrixTrace::cloneExprNode()
 {
-    OSnLNode *nlNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "cloning an OSnLNodeMatrixTrace");
+#endif 
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMatrixTrace();
-    return  nlNodePoint;
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLNodeMatrixTrace::cloneExprNode
 
 
@@ -2747,11 +3001,11 @@ OSnLNode* OSnLNodeMatrixTrace::cloneExprNode()
 // OSnLNodeMatrixToScalar Methods
 OSnLNodeMatrixToScalar::OSnLNodeMatrixToScalar()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_TO_SCALAR;
-    inodeType = 0;
+    inodeKind = 1;
 }//end OSnLNodeMatrixToScalar
 
 OSnLNodeMatrixToScalar::~OSnLNodeMatrixToScalar()
@@ -2800,11 +3054,23 @@ ADdouble OSnLNodeMatrixToScalar::constructADTape(std::map<int, int> *ADIdx, ADve
 }// end OSnLNodeMatrixToScalar::constructADTape
 
 
-OSnLNode* OSnLNodeMatrixToScalar::cloneExprNode()
+ExprNode* OSnLNodeMatrixToScalar::cloneExprNode()
 {
-    OSnLNode *nlNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "cloning an OSnLNodeMatrixToScalar");
+#endif
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMatrixToScalar();
-    return  nlNodePoint;
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLNodeMatrixToScalar::cloneExprNode
 
 
@@ -2826,41 +3092,6 @@ OSnLMNode::~OSnLMNode()
 #endif
 }//end ~OSnLNode
 
-OSnLMNode* OSnLMNode::copyNodeAndDescendants()
-{
-#ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-
-    OSnLMNode* ndcopy = (OSnLMNode*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end copyNodeAndDescendants
 
 #if 0
 OSnLMNode* OSnLMNode::createExpressionTreeFromPostfix(std::vector<OSnLMNode*> nlMNodeVec)
@@ -2961,6 +3192,7 @@ OSnLMNode* OSnLMNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlN
                 stackVec.pop_back();
             }
         }
+
         stackVec.push_back( nlNodeVec[kount]);
         kount++;
     }
@@ -2981,12 +3213,25 @@ std::vector<ExprNode*> OSnLMNode::preOrderOSnLNodeTraversal( std::vector<ExprNod
     if(inumberOfChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->OSnLNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+    }
+    if(inumberOfComplexChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfComplexChildren; i++)
+            m_mComplexChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+    }
+    if(inumberOfScalarChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfScalarChildren; i++)
+            if (m_mScalarChildren[i]->isRealValued())
+                m_mScalarChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+            else
+                m_mScalarChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     if(inumberOfMatrixChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-            m_mMatrixChildren[i]->OSnLMNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mMatrixChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     return *prefixVector;
 }//end preOrderOSnLNodeTraversal
@@ -3004,13 +3249,13 @@ std::vector<ExprNode*> OSnLMNode::postOrderOSnLNodeTraversal( std::vector<ExprNo
     {
         unsigned int i;
         for(i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->OSnLNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     if(inumberOfMatrixChildren > 0)
     {
         unsigned int i;
         for(i = 0; i < inumberOfMatrixChildren; i++)
-            m_mMatrixChildren[i]->OSnLMNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mMatrixChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     (*postfixVector).push_back( (OSnLMNode*)this);
     return *postfixVector;
@@ -3023,7 +3268,7 @@ std::string OSnLMNode::getTokenNumber()
     outStr << inodeInt;
 
     // when I create an OSnLNode from a token number, I need to know how many children there are
-//    if(inodeType == -1){
+//    if(inodeKind == -1){
     outStr << "[";
     outStr << inumberOfChildren ;
     outStr << "]";
@@ -3223,7 +3468,7 @@ bool OSnLMNode::IsEqual(OSnLMNode *that)
                 return false;
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
 
             for (unsigned int i = 0; i < this->inumberOfChildren; i++)
@@ -3247,7 +3492,7 @@ OSnLMNode* OSnLMNode::copyNodeAndDescendants()
     ndcopy->inumberOfChildren = inumberOfChildren;
     ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
     ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
+    ndcopy->inodeKind = inodeKind;
     
     if (inumberOfChildren > 0)
     {
@@ -3274,12 +3519,12 @@ OSnLMNode* OSnLMNode::copyNodeAndDescendants()
 // OSnLMNodeMatrixPlus Methods
 OSnLMNodeMatrixPlus::OSnLMNodeMatrixPlus()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 2;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[2];
+    inumberOfChildren = 2; // 0;
+    inumberOfMatrixChildren = 0; // 2;
+    m_mChildren = new ExprNode*[2]; //NULL;
+    //m_mMatrixChildren = new ExprNode*[2];
     inodeInt = OS_MATRIX_PLUS;
-    inodeType = 2;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixPlus
 
 OSnLMNodeMatrixPlus::~OSnLMNodeMatrixPlus()
@@ -3296,11 +3541,23 @@ std::string OSnLMNodeMatrixPlus::getTokenName()
     return "matrixPlus";
 }// end OSnLMNodeMatrixPlus::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixPlus::cloneExprNode()
+ExprNode* OSnLMNodeMatrixPlus::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixPlus();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "cloning an OSnLMNodeMatrixPlus");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixPlus();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixPlus::cloneExprNode
 
 
@@ -3312,9 +3569,7 @@ OSnLMNodeMatrixSum::OSnLMNodeMatrixSum()
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
     inodeInt = OS_MATRIX_SUM;
-    inodeType = -1;
-
-
+    inodeKind = 3;
 }//end OSnLMNodeMatrixSum
 
 OSnLMNodeMatrixSum::~OSnLMNodeMatrixSum()
@@ -3331,11 +3586,22 @@ std::string OSnLMNodeMatrixSum::getTokenName()
     return "matrixSum";
 }// end OSnLMNodeMatrixSum::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixSum::cloneExprNode()
+ExprNode* OSnLMNodeMatrixSum::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixSum();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixSum");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixSum();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return  nlNodePoint;
 }//end OSnLMNodeMatrixSum::cloneExprNode
 
 //
@@ -3347,7 +3613,7 @@ OSnLMNodeMatrixProduct::OSnLMNodeMatrixProduct()
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
     inodeInt = OS_MATRIX_PRODUCT;
-    inodeType = -1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixProduct
 
 
@@ -3389,23 +3655,34 @@ ADdouble OSnLMNodeMatrixProduct::constructADTape(std::map<int, int> *ADIdx, ADve
 }// end OSnLMNodeMatrixProduct::constructADTape
 #endif
 
-OSnLMNode* OSnLMNodeMatrixProduct::cloneExprNode()
+ExprNode* OSnLMNodeMatrixProduct::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixProduct();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixProduct");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixProduct();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return  nlNodePoint;
 }//end OSnLMNodeMatrixProduct::cloneExprNode
 
 
 // OSnLMNodeMatrixMinus Methods
 OSnLMNodeMatrixMinus::OSnLMNodeMatrixMinus()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 2;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[2];
+    inumberOfChildren = 2; // 0;
+    inumberOfMatrixChildren = 0; // 2;
+    m_mChildren = new ExprNode*[2]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[2];
     inodeInt = OS_MATRIX_MINUS;
-    inodeType = 2;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixMinus
 
 OSnLMNodeMatrixMinus::~OSnLMNodeMatrixMinus()
@@ -3422,22 +3699,33 @@ std::string OSnLMNodeMatrixMinus::getTokenName()
     return "matrixMinus";
 }// end OSnLMNodeMatrixMinus::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixMinus::cloneExprNode()
+ExprNode* OSnLMNodeMatrixMinus::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixMinus();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixMinus");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixMinus();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixMinus::cloneExprNode
 
 // OSnLMNodeMatrixNegate Methods
 OSnLMNodeMatrixNegate::OSnLMNodeMatrixNegate()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1; // 0;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_NEGATE;
-    inodeType = 1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixNegate
 
 OSnLMNodeMatrixNegate::~OSnLMNodeMatrixNegate()
@@ -3454,22 +3742,33 @@ std::string OSnLMNodeMatrixNegate::getTokenName()
     return "matrixNegate";
 }// end OSnLMNodeMatrixNegate::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixNegate::cloneExprNode()
+ExprNode* OSnLMNodeMatrixNegate::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixNegate();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixNegate");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixNegate();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixNegate::cloneExprNode
 
 // OSnLMNodeMatrixTimes Methods
 OSnLMNodeMatrixTimes::OSnLMNodeMatrixTimes()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 2;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[2];
+    inumberOfChildren = 2; // 0;
+//    inumberOfMatrixChildren = 2;
+    m_mChildren = new ExprNode*[2]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[2];
     inodeInt = OS_MATRIX_TIMES;
-    inodeType = 2;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixTimes
 
 OSnLMNodeMatrixTimes::~OSnLMNodeMatrixTimes()
@@ -3486,22 +3785,33 @@ std::string OSnLMNodeMatrixTimes::getTokenName()
     return "matrixTimes";
 }// end OSnLMNodeMatrixTimes::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixTimes::cloneExprNode()
+ExprNode* OSnLMNodeMatrixTimes::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixTimes();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixTimes");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixTimes();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixTimes::cloneExprNode
 
 // OSnLMNodeMatrixInverse Methods
 OSnLMNodeMatrixInverse::OSnLMNodeMatrixInverse()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1; // 0;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_INVERSE;
-    inodeType = 1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixInverse
 
 OSnLMNodeMatrixInverse::~OSnLMNodeMatrixInverse()
@@ -3518,23 +3828,34 @@ std::string OSnLMNodeMatrixInverse::getTokenName()
     return "matrixInverse";
 }// end OSnLMNodeMatrixInverse::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixInverse::cloneExprNode()
+ExprNode* OSnLMNodeMatrixInverse::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixInverse();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixInverse");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixInverse();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixInverse::cloneExprNode
 
 
 // OSnLMNodeMatrixTranspose Methods
 OSnLMNodeMatrixTranspose::OSnLMNodeMatrixTranspose()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1; // 0;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_TRANSPOSE;
-    inodeType = 1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixTranspose
 
 OSnLMNodeMatrixTranspose::~OSnLMNodeMatrixTranspose()
@@ -3551,22 +3872,33 @@ std::string OSnLMNodeMatrixTranspose::getTokenName()
     return "matrixTranspose";
 }// end OSnLMNodeMatrixTranspose::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixTranspose::cloneExprNode()
+ExprNode* OSnLMNodeMatrixTranspose::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixTranspose();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixTranspose");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixTranspose();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixTranspose::cloneExprNode
 
 // OSnLMNodeMatrixScalarTimes Methods
 OSnLMNodeMatrixScalarTimes::OSnLMNodeMatrixScalarTimes()
 {
-    inumberOfChildren = 1;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = new OSnLNode*[1];
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 2; // 1;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[2]; // [1];
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_SCALARTIMES;
-    inodeType = 1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixScalarTimes
 
 OSnLMNodeMatrixScalarTimes::~OSnLMNodeMatrixScalarTimes()
@@ -3583,22 +3915,33 @@ std::string OSnLMNodeMatrixScalarTimes::getTokenName()
     return "matrixScalarTimes";
 }// end OSnLMNodeMatrixScalarTimes::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixScalarTimes::cloneExprNode()
+ExprNode* OSnLMNodeMatrixScalarTimes::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixScalarTimes();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixScalarTimes");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixScalarTimes();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixScalarTimes::cloneExprNode
 
 // OSnLMNodeMatrixDotTimes Methods
 OSnLMNodeMatrixDotTimes::OSnLMNodeMatrixDotTimes()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 2;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[2];
+    inumberOfChildren = 2; // 0;
+//    inumberOfMatrixChildren = 2;
+    m_mChildren = new ExprNode*[2]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[2];
     inodeInt = OS_MATRIX_DOTTIMES;
-    inodeType = 2;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixDotTimes
 
 OSnLMNodeMatrixDotTimes::~OSnLMNodeMatrixDotTimes()
@@ -3615,11 +3958,22 @@ std::string OSnLMNodeMatrixDotTimes::getTokenName()
     return "matrixDotTimes";
 }// end OSnLMNodeMatrixDotTimes::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixDotTimes::cloneExprNode()
+ExprNode* OSnLMNodeMatrixDotTimes::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixDotTimes();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixDotTimes");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixDotTimes();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixDotTimes::cloneExprNode
 
 
@@ -3627,11 +3981,11 @@ OSnLMNode* OSnLMNodeMatrixDotTimes::cloneExprNode()
 OSnLMNodeIdentityMatrix::OSnLMNodeIdentityMatrix()
 {
     inumberOfChildren = 1;
-    inumberOfMatrixChildren = 0;
-    m_mChildren = new OSnLNode*[1];
-    m_mMatrixChildren = NULL;
+//    inumberOfMatrixChildren = 0;
+    m_mChildren = new ExprNode*[1];
+//    m_mMatrixChildren = NULL;
     inodeInt = OS_IDENTITY_MATRIX;
-    inodeType = -1;
+    inodeKind = 3;
 }//end OSnLMNodeIdentityMatrix
 
 OSnLMNodeIdentityMatrix::~OSnLMNodeIdentityMatrix()
@@ -3648,23 +4002,34 @@ std::string OSnLMNodeIdentityMatrix::getTokenName()
     return "identityMatrix";
 }// end OSnLMNodeIdentityMatrix::getTokenName()
 
-OSnLMNode* OSnLMNodeIdentityMatrix::cloneExprNode()
+ExprNode* OSnLMNodeIdentityMatrix::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeIdentityMatrix();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeIdentityMatrix");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeIdentityMatrix();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeIdentityMatrix::cloneExprNode
 
 
 // OSnLMNodeMatrixLowerTriangle Methods
 OSnLMNodeMatrixLowerTriangle::OSnLMNodeMatrixLowerTriangle()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1; // 0;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_LOWERTRIANGLE;
-    inodeType = 1;
+    inodeKind = 3;
     includeDiagonal = true;
 }//end OSnLMNodeMatrixLowerTriangle
 
@@ -3682,49 +4047,25 @@ std::string OSnLMNodeMatrixLowerTriangle::getTokenName()
     return "matrixLowerTriangle";
 }// end OSnLMNodeMatrixLowerTriangle::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixLowerTriangle::cloneExprNode()
+ExprNode* OSnLMNodeMatrixLowerTriangle::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixLowerTriangle();
-    return  nlMNodePoint;
-}//end OSnLMNodeMatrixLowerTriangle::cloneExprNode
-
-OSnLMNode* OSnLMNodeMatrixLowerTriangle::copyNodeAndDescendants()
-{
+    std::ostringstream outStr;
 #ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixLowerTriangle");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixLowerTriangle();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+    ((OSnLMNodeMatrixLowerTriangle*)nlNodePoint)->includeDiagonal = includeDiagonal;
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLMNodeMatrixLowerTriangle::cloneExprNode
 
-    OSnLMNodeMatrixLowerTriangle* ndcopy = (OSnLMNodeMatrixLowerTriangle*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    ndcopy->includeDiagonal = includeDiagonal;
-
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end copyNodeAndDescendants
 
 std::string OSnLMNodeMatrixLowerTriangle::getNonlinearExpressionInXML()
 {
@@ -3734,7 +4075,8 @@ std::string OSnLMNodeMatrixLowerTriangle::getNonlinearExpressionInXML()
         outStr << " includeDiagonal=\"false\""; 
     outStr << ">" << std::endl;
 
-    outStr << m_mMatrixChildren[0]->getNonlinearExpressionInXML();
+    outStr << m_mChildren[0]->getNonlinearExpressionInXML();
+//    outStr << m_mMatrixChildren[0]->getNonlinearExpressionInXML();
 
     outStr << "</matrixLowerTriangle>";
     return outStr.str();
@@ -3772,7 +4114,7 @@ bool OSnLMNodeMatrixLowerTriangle::IsEqual(OSnLMNodeMatrixLowerTriangle *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -3800,12 +4142,12 @@ bool OSnLMNodeMatrixLowerTriangle::IsEqual(OSnLMNodeMatrixLowerTriangle *that)
 
 OSnLMNodeMatrixUpperTriangle::OSnLMNodeMatrixUpperTriangle()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1; // 0;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_UPPERTRIANGLE;
-    inodeType = 1;
+    inodeKind = 3;
 
     includeDiagonal = true;
 }//end OSnLMNodeMatrixUpperTriangle
@@ -3827,7 +4169,8 @@ std::string OSnLMNodeMatrixUpperTriangle::getNonlinearExpressionInXML()
         outStr << " includeDiagonal=\"false\""; 
     outStr << ">" << std::endl;
 
-    outStr << m_mMatrixChildren[0]->getNonlinearExpressionInXML();
+//    outStr << m_mMatrixChildren[0]->getNonlinearExpressionInXML();
+    outStr << m_mChildren[0]->getNonlinearExpressionInXML();
 
     outStr << "</matrixUpperTriangle>";
     return outStr.str();
@@ -3838,49 +4181,25 @@ std::string OSnLMNodeMatrixUpperTriangle::getTokenName()
     return "matrixUpperTriangle";
 }// end OSnLMNodeMatrixUpperTriangle::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
+ExprNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixUpperTriangle();
-    return  nlMNodePoint;
-}//end OSnLMNodeMatrixUpperTriangle::cloneExprNode
-
-OSnLMNode* OSnLMNodeMatrixUpperTriangle::copyNodeAndDescendants()
-{
+    std::ostringstream outStr;
 #ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixUpperTriangle");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixUpperTriangle();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+    ((OSnLMNodeMatrixUpperTriangle*)nlNodePoint)->includeDiagonal = includeDiagonal;
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLMNodeMatrixUpperTriangle::cloneExprNode
 
-    OSnLMNodeMatrixUpperTriangle* ndcopy = (OSnLMNodeMatrixUpperTriangle*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    ndcopy->includeDiagonal = includeDiagonal;
-
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end copyNodeAndDescendants
 
 bool OSnLMNodeMatrixUpperTriangle::IsEqual(OSnLMNodeMatrixUpperTriangle *that)
 {
@@ -3914,7 +4233,7 @@ bool OSnLMNodeMatrixUpperTriangle::IsEqual(OSnLMNodeMatrixUpperTriangle *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -3941,12 +4260,12 @@ bool OSnLMNodeMatrixUpperTriangle::IsEqual(OSnLMNodeMatrixUpperTriangle *that)
 // OSnLMNodeMatrixDiagonal Methods
 OSnLMNodeMatrixDiagonal::OSnLMNodeMatrixDiagonal()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1; // 0;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_DIAGONAL;
-    inodeType = 1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixDiagonal
 
 OSnLMNodeMatrixDiagonal::~OSnLMNodeMatrixDiagonal()
@@ -3963,23 +4282,34 @@ std::string OSnLMNodeMatrixDiagonal::getTokenName()
     return "matrixDiagonal";
 }// end OSnLMNodeMatrixDiagonal::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixDiagonal::cloneExprNode()
+ExprNode* OSnLMNodeMatrixDiagonal::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixDiagonal();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixDiagonal");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixDiagonal();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixDiagonal::cloneExprNode
 
 
 // OSnLMNodeDiagonalMatrixFromVector Methods
 OSnLMNodeDiagonalMatrixFromVector::OSnLMNodeDiagonalMatrixFromVector()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = NULL;
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 1; // 0;
+//    inumberOfMatrixChildren = 1;
+    m_mChildren = new ExprNode*[1]; // NULL;
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_DIAGONAL_MATRIX_FROM_VECTOR;
-    inodeType = -1;
+    inodeKind = 3;
 }//end OSnLMNodeDiagonalMatrixFromVector
 
 OSnLMNodeDiagonalMatrixFromVector::~OSnLMNodeDiagonalMatrixFromVector()
@@ -3996,23 +4326,34 @@ std::string OSnLMNodeDiagonalMatrixFromVector::getTokenName()
     return "diagonalMatrixFromVector";
 }// end OSnLMNodeDiagonalMatrixFromVector::getTokenName()
 
-OSnLMNode* OSnLMNodeDiagonalMatrixFromVector::cloneExprNode()
+ExprNode* OSnLMNodeDiagonalMatrixFromVector::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeDiagonalMatrixFromVector();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeDiagonalMatrixFromVector");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeDiagonalMatrixFromVector();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeDiagonalMatrixFromVector::cloneExprNode
 
 
 // OSnLMNodeMatrixSubmatrixAt Methods
 OSnLMNodeMatrixSubmatrixAt::OSnLMNodeMatrixSubmatrixAt()
 {
-    inumberOfChildren = 4;
-    inumberOfMatrixChildren = 1;
-    m_mChildren = new OSnLNode*[4];
-    m_mMatrixChildren = new OSnLMNode*[1];
+    inumberOfChildren = 5; // 4;
+    inumberOfMatrixChildren = 0; // 1;
+    m_mChildren = new ExprNode*[5]; // [4];
+//    m_mMatrixChildren = new ExprNode*[1];
     inodeInt = OS_MATRIX_SUBMATRIX_AT;
-    inodeType = 1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixSubmatrixAt
 
 OSnLMNodeMatrixSubmatrixAt::~OSnLMNodeMatrixSubmatrixAt()
@@ -4029,11 +4370,22 @@ std::string OSnLMNodeMatrixSubmatrixAt::getTokenName()
     return "matrixSubmatrixAt";
 }// end OSnLMNodeMatrixSubmatrixAt::getTokenName()
 
-OSnLMNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
+ExprNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixSubmatrixAt();
-    return  nlMNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixSubmatrixAt");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixSubmatrixAt();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLMNodeMatrixSubmatrixAt::cloneExprNode
 
 
@@ -4046,7 +4398,7 @@ OSnLMNodeMatrixReference::OSnLMNodeMatrixReference():
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
     inodeInt = OS_MATRIX_REFERENCE;
-    inodeType = -1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixReference
 
 OSnLMNodeMatrixReference::~OSnLMNodeMatrixReference()
@@ -4084,49 +4436,25 @@ std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
     return outStr.str();
 }//OSnLMNodeMatrixReference::getNonlinearExpressionInXML
 
-OSnLMNode* OSnLMNodeMatrixReference::cloneExprNode()
+ExprNode* OSnLMNodeMatrixReference::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixReference();
-    return  nlMNodePoint;
-}//end OSnLMNodeMatrixReference::cloneExprNode
-
-OSnLMNode* OSnLMNodeMatrixReference::copyNodeAndDescendants()
-{
+    std::ostringstream outStr;
 #ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixReference");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixReference();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+    ((OSnLMNodeMatrixReference*)nlNodePoint)->idx = idx;
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLMNodeMatrixReference::cloneExprNode
 
-    OSnLMNodeMatrixReference* ndcopy = (OSnLMNodeMatrixReference*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    ndcopy->idx = idx;
-
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end copyNodeAndDescendants
 
 bool OSnLMNodeMatrixReference::IsEqual(OSnLMNodeMatrixReference *that)
 {
@@ -4160,7 +4488,7 @@ bool OSnLMNodeMatrixReference::IsEqual(OSnLMNodeMatrixReference *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -4193,7 +4521,7 @@ OSnLMNodeMatrixVar::OSnLMNodeMatrixVar():
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
     inodeInt = OS_MATRIX_VAR;
-    inodeType = -1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixVar
 
 OSnLMNodeMatrixVar::~OSnLMNodeMatrixVar()
@@ -4266,49 +4594,25 @@ void OSnLMNodeMatrixVar::getVariableIndexMap(std::map<int, int> *varIdx)
 #endif
 
 
-OSnLMNode* OSnLMNodeMatrixVar::cloneExprNode()
+ExprNode* OSnLMNodeMatrixVar::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixVar();
-    return  nlMNodePoint;
-}//end OSnLMNodeMatrixVar::cloneExprNode
-
-OSnLMNode* OSnLMNodeMatrixVar::copyNodeAndDescendants()
-{
+    std::ostringstream outStr;
 #ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixVar");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixVar();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+    ((OSnLMNodeMatrixVar*)nlNodePoint)->idx = idx;
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLMNodeMatrixVar::cloneExprNode
 
-    OSnLMNodeMatrixVar* ndcopy = (OSnLMNodeMatrixVar*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    ndcopy->idx = idx;
-
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end copyNodeAndDescendants
 
 bool OSnLMNodeMatrixVar::IsEqual(OSnLMNodeMatrixVar *that)
 {
@@ -4342,7 +4646,7 @@ bool OSnLMNodeMatrixVar::IsEqual(OSnLMNodeMatrixVar *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -4375,7 +4679,7 @@ OSnLMNodeMatrixObj::OSnLMNodeMatrixObj():
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
     inodeInt = OS_MATRIX_OBJ;
-    inodeType = -1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixObj
 
 OSnLMNodeMatrixObj::~OSnLMNodeMatrixObj()
@@ -4445,49 +4749,25 @@ void OSnLMNodeMatrixObj::getVariableIndexMap(std::map<int, int> *varIdx)
 }//getVariableIndexMap
 #endif
 
-OSnLMNode* OSnLMNodeMatrixObj::cloneExprNode()
+ExprNode* OSnLMNodeMatrixObj::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixObj();
-    return  nlMNodePoint;
-}//end OSnLMNodeMatrixObj::cloneExprNode
-
-OSnLMNode* OSnLMNodeMatrixObj::copyNodeAndDescendants()
-{
+    std::ostringstream outStr;
 #ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixObj");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixObj();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+    ((OSnLMNodeMatrixObj*)nlNodePoint)->idx = idx;
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLMNodeMatrixObj::cloneExprNode
 
-    OSnLMNodeMatrixObj* ndcopy = (OSnLMNodeMatrixObj*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    ndcopy->idx = idx;
-
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end copyNodeAndDescendants
 
 bool OSnLMNodeMatrixObj::IsEqual(OSnLMNodeMatrixObj *that)
 {
@@ -4521,7 +4801,7 @@ bool OSnLMNodeMatrixObj::IsEqual(OSnLMNodeMatrixObj *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -4554,7 +4834,7 @@ OSnLMNodeMatrixCon::OSnLMNodeMatrixCon():
     m_mChildren = NULL;
     m_mMatrixChildren = NULL;
     inodeInt = OS_MATRIX_CON;
-    inodeType = -1;
+    inodeKind = 3;
 }//end OSnLMNodeMatrixCon
 
 OSnLMNodeMatrixCon::~OSnLMNodeMatrixCon()
@@ -4626,49 +4906,24 @@ void OSnLMNodeMatrixCon::getVariableIndexMap(std::map<int, int> *varIdx)
 #endif
 
 
-OSnLMNode* OSnLMNodeMatrixCon::cloneExprNode()
+ExprNode* OSnLMNodeMatrixCon::cloneExprNode()
 {
-    OSnLMNode *nlMNodePoint;
-    nlMNodePoint = new OSnLMNodeMatrixCon();
-    return  nlMNodePoint;
-}//end OSnLMNodeMatrixCon::cloneExprNode
-
-OSnLMNode* OSnLMNodeMatrixCon::copyNodeAndDescendants()
-{
+    std::ostringstream outStr;
 #ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLMNodeMatrixCon");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLMNodeMatrixCon();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-
-    OSnLMNodeMatrixCon* ndcopy = (OSnLMNodeMatrixCon*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    ndcopy->idx = idx;
-
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end copyNodeAndDescendants
+    ((OSnLMNodeMatrixCon*)nlNodePoint)->idx = idx;
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLMNodeMatrixCon::cloneExprNode
 
 
 bool OSnLMNodeMatrixCon::IsEqual(OSnLMNodeMatrixCon *that)
@@ -4703,7 +4958,7 @@ bool OSnLMNodeMatrixCon::IsEqual(OSnLMNodeMatrixCon *that)
         {
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
             if (this->inumberOfChildren != that->inumberOfChildren)
                 return false;
@@ -4780,7 +5035,7 @@ OSnLCNode* OSnLCNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNo
         {
             for(int i = 0; i < numScalarKids; i++)
             {
-                if (nlNodeVec[kount]->inodeType < OS_FIRST_COMPLEX_NODE)
+            if (nlNodeVec[kount]->isRealValued())
                     nlNodeVec[kount]->m_mScalarChildren[i] = (OSnLNode*)stackVec.back();
                 else
                     nlNodeVec[kount]->m_mScalarChildren[i] = (OSnLCNode*)stackVec.back();
@@ -4824,7 +5079,7 @@ OSnLCNode* OSnLCNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlN
         {
             for(int i = numSclrKids - 1; i >= 0;  i--)
             {
-                if (nlNodeVec[kount]->inodeType < OS_FIRST_COMPLEX_NODE)
+                if (nlNodeVec[kount]->isRealValued())
                     nlNodeVec[kount]->m_mScalarChildren[i] = (OSnLNode*)stackVec.back();
                 else
                     nlNodeVec[kount]->m_mScalarChildren[i] = (OSnLCNode*)stackVec.back();
@@ -4869,25 +5124,25 @@ std::vector<ExprNode*> OSnLCNode::preOrderOSnLNodeTraversal( std::vector<ExprNod
     if(inumberOfChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->OSnLNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     if(inumberOfComplexChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfComplexChildren; i++)
-            m_mComplexChildren[i]->OSnLCNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mComplexChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     if(inumberOfScalarChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfScalarChildren; i++)
-            if (m_mScalarChildren[i]->inodeType < OS_FIRST_COMPLEX_NODE) 
-                ((OSnLNode*) m_mScalarChildren[i])->preOrderOSnLNodeTraversal( prefixVector);
+            if (m_mScalarChildren[i]->isRealValued())
+                m_mScalarChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
             else
-                ((OSnLCNode*)m_mScalarChildren[i])->preOrderOSnLNodeTraversal( prefixVector);
+                m_mScalarChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     if(inumberOfMatrixChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfMatrixChildren; i++)
-            m_mMatrixChildren[i]->OSnLMNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mMatrixChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     return *prefixVector;
 }//end preOrderOSnLNodeTraversal
@@ -4905,28 +5160,28 @@ std::vector<ExprNode*> OSnLCNode::postOrderOSnLNodeTraversal( std::vector<ExprNo
     {
         unsigned int i;
         for(i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->OSnLNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     if(inumberOfComplexChildren > 0)
     {
         unsigned int i;
         for(i = 0; i < inumberOfComplexChildren; i++)
-            m_mComplexChildren[i]->OSnLCNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mComplexChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     if(inumberOfScalarChildren > 0)
     {
         unsigned int i;
         for(i = 0; i < inumberOfScalarChildren; i++)
-            if (m_mScalarChildren[i]->inodeType < OS_FIRST_COMPLEX_NODE) 
-                ((OSnLNode*) m_mScalarChildren[i])->postOrderOSnLNodeTraversal( postfixVector);
+            if (m_mScalarChildren[i]->isRealValued())
+                m_mScalarChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
             else
-                ((OSnLCNode*)m_mScalarChildren[i])->postOrderOSnLNodeTraversal( postfixVector);
+                m_mScalarChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     if(inumberOfMatrixChildren > 0)
     {
         unsigned int i;
         for(i = 0; i < inumberOfMatrixChildren; i++)
-            m_mMatrixChildren[i]->OSnLMNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mMatrixChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     (*postfixVector).push_back( (OSnLNode*)this);
     return *postfixVector;
@@ -4946,64 +5201,6 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
 }//getVariableIndexMap
 #endif
 
-OSnLCNode* OSnLCNode::copyNodeAndDescendants()
-{
-#ifndef NDEBUG
-    ostringstream outStr;
-    outStr << "In copyNodeAndDescendants(), copy a node of type " << inodeInt;
-    outStr << " (" << this->getTokenName() << ")" << std::endl;
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
-#endif
-
-    OSnLCNode* ndcopy = (OSnLCNode*)cloneExprNode();
-    ndcopy->inumberOfChildren = inumberOfChildren;
-    ndcopy->inumberOfComplexChildren = inumberOfComplexChildren;
-    ndcopy->inumberOfScalarChildren = inumberOfScalarChildren;
-    ndcopy->inumberOfMatrixChildren = inumberOfMatrixChildren;
-    ndcopy->inodeInt = inodeInt;
-    ndcopy->inodeType = inodeType;
-    
-    if (inumberOfChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
-        for (int i=0; i < inumberOfChildren; i++)
-        {
-            ndcopy->m_mChildren[i] = /*(OSnLNode)*/m_mChildren[i]->copyNodeAndDescendants();
-        }
-    }
-    
-    if (inumberOfComplexChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfComplexChildren];
-        for (int i=0; i < inumberOfComplexChildren; i++)
-        {
-            ndcopy->m_mComplexChildren[i] = m_mComplexChildren[i]->copyNodeAndDescendants();
-        }
-    }
-    
-    if (inumberOfScalarChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfScalarChildren];
-        for (int i=0; i < inumberOfScalarChildren; i++)
-        {
-            if (m_mScalarChildren[i]->inodeInt < OS_FIRST_COMPLEX_NODE)
-                ndcopy->m_mScalarChildren[i] = ((OSnLNode*) m_mScalarChildren[i])->copyNodeAndDescendants();
-            else
-                ndcopy->m_mScalarChildren[i] = ((OSnLCNode*)m_mScalarChildren[i])->copyNodeAndDescendants();
-        }
-    }
-
-    if (inumberOfMatrixChildren > 0)
-    {
-        ndcopy->m_mChildren = new OSnLNode*[inumberOfMatrixChildren];
-        for (int i=0; i < inumberOfMatrixChildren; i++)
-        {
-            ndcopy->m_mMatrixChildren[i] = m_mMatrixChildren[i]->copyNodeAndDescendants();
-        }
-    }
-
-    return ndcopy;
-}// end OSnLCNode::copyNodeAndDescendants
 
 bool OSnLCNode::IsEqual(OSnLCNode *that)
 {
@@ -5045,7 +5242,7 @@ bool OSnLCNode::IsEqual(OSnLCNode *that)
                 return false;
             if (this->inodeInt != that->inodeInt)
                 return false;
-            if (this->inodeType != that->inodeType)
+            if (this->inodeKind != that->inodeKind)
                 return false;
 
             for (unsigned int i = 0; i < this->inumberOfChildren; i++)
@@ -5074,13 +5271,13 @@ bool OSnLCNode::IsEqual(OSnLCNode *that)
 OSnLCNodeCreate::OSnLCNodeCreate()
 {
     inumberOfChildren = 2;
-    inumberOfMatrixChildren = 0;
-    inumberOfScalarChildren = 0;
-    m_mChildren = new OSnLNode*[2];
+//    inumberOfMatrixChildren = 0;
+//    inumberOfScalarChildren = 0;
+    m_mChildren = new ExprNode*[2];
     m_mChildren[ 0] = NULL;
     m_mChildren[ 1] = NULL;
     inodeInt = OS_COMPLEX_CREATE;
-    inodeType = 2;
+    inodeKind = 2;
 }//end OSnLCNodeCreate
 
 
@@ -5098,20 +5295,23 @@ std::string OSnLCNodeCreate::getTokenName()
     return "complexCreate";
 }// end OSnLCNodeCreate::getTokenName()
 
-void OSnLCNodeCreate::calculateFunction(double *x)
+std::complex<double> OSnLCNodeCreate::calculateFunction_C(double *x)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, "in OSnLCNodePlus::calculateFunction");
 #endif
 
-    ((OSnLNode*)m_mScalarChildren[0])->calculateFunction(x);
-    m_dFunctionValue[0] = ((OSnLNode*)m_mScalarChildren[0])->m_dFunctionValue;
+    m_mScalarChildren[0]->calculateFunction(x);
+    //m_dFunctionValue[0] = ((OSnLNode*)m_mScalarChildren[0])->m_dFunctionValue;
 
-    ((OSnLNode*)m_mScalarChildren[1])->calculateFunction(x);
-    m_dFunctionValue[1] = ((OSnLNode*)m_mScalarChildren[1])->m_dFunctionValue;
+    m_mScalarChildren[1]->calculateFunction(x);
+    //
 
-    return;
+    m_dFunctionValue = ( ((OSnLNode*) m_mScalarChildren[0])->m_dFunctionValue, 
+                         ((OSnLNode*) m_mScalarChildren[1])->m_dFunctionValue);
+
+    return m_dFunctionValue;
 }// end OSnLCNodeCreate::calculate
 
 #if 0
@@ -5122,25 +5322,39 @@ ADdouble OSnLCNodeCreate::constructADTape(std::map<int, int> *ADIdx, ADvector *X
 }// end OSnLNodePlus::constructADTape
 #endif
 
-OSnLCNode* OSnLCNodeCreate::cloneExprNode()
+ExprNode* OSnLCNodeCreate::cloneExprNode()
 {
-    OSnLCNode *nlNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodeCreate");
+#endif
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLCNodeCreate();
-    return  nlNodePoint;
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLCNodeCreate::cloneExprNode
 
 
 // OSnLCNodePlus Methods
 OSnLCNodePlus::OSnLCNodePlus()
 {
-    inumberOfChildren = 0;
-    inumberOfMatrixChildren = 0;
-    inumberOfScalarChildren = 2;
-    m_mScalarChildren = new ScalarNode*[2];
-    m_mScalarChildren[ 0] = NULL;
-    m_mScalarChildren[ 1] = NULL;
+    inumberOfChildren = 2; // 0;
+//    inumberOfMatrixChildren = 0;
+//    inumberOfScalarChildren = 2;
+    m_mChildren = new ExprNode*[2];
+    m_mChildren[ 0] = NULL;
+    m_mChildren[ 1] = NULL;
+//    m_mScalarChildren = new ExprNode*[2];
+//    m_mScalarChildren[ 0] = NULL;
+//    m_mScalarChildren[ 1] = NULL;
     inodeInt = OS_COMPLEX_PLUS;
-    inodeType = 2;
+    inodeKind = 2;
 }//end OSnLCNodePlus
 
 
@@ -5158,29 +5372,28 @@ std::string OSnLCNodePlus::getTokenName()
     return "complexPlus";
 }// end OSnLNodePlus::getTokenName()
 
-void OSnLCNodePlus::calculateFunction(double *x)
+std::complex<double> OSnLCNodePlus::calculateFunction_C(double *x)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, "in OSnLCNodePlus::calculateFunction");
 #endif
-    m_dFunctionValue[0] = m_dFunctionValue[1] = 0;
+    m_dFunctionValue = 0;
 
     for (int i=0; i=1; i++)
     {
-        if (m_mScalarChildren[i]->inodeInt < OS_FIRST_COMPLEX_NODE)
+        if (m_mScalarChildren[i]->isRealValued())
         {
-            ((OSnLNode*)m_mScalarChildren[i])->calculateFunction(x);
-            m_dFunctionValue[0] += ((OSnLNode*)m_mScalarChildren[i])->m_dFunctionValue;
+            m_mScalarChildren[i]->calculateFunction(x);
+            m_dFunctionValue += ((OSnLNode*)m_mScalarChildren[i])->m_dFunctionValue;
         }
         else
         {
-            ((OSnLCNode*)m_mScalarChildren[i])->calculateFunction(x);
-            m_dFunctionValue[0] += ((OSnLCNode*)m_mScalarChildren[i])->m_dFunctionValue[0];
-            m_dFunctionValue[1] += ((OSnLCNode*)m_mScalarChildren[i])->m_dFunctionValue[1];
+            m_mScalarChildren[i]->calculateFunction_C(x);
+            m_dFunctionValue += ((OSnLCNode*)m_mScalarChildren[i])->m_dFunctionValue;
         }
     }
-    return;
+    return m_dFunctionValue;
 }// end OSnLCNodePlus::calculate
 
 #if 0
@@ -5191,11 +5404,22 @@ ADdouble OSnLCNodePlus::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD
 }// end OSnLNodePlus::constructADTape
 #endif
 
-OSnLCNode* OSnLCNodePlus::cloneExprNode()
+ExprNode* OSnLCNodePlus::cloneExprNode()
 {
-    OSnLCNode *nlNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodePlus");
+#endif
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLCNodePlus();
-    return  nlNodePoint;
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLCNodePlus::cloneExprNode
 
 
@@ -5206,7 +5430,7 @@ OSnLCNodeSum::OSnLCNodeSum()
     inumberOfMatrixChildren = 0;
     inumberOfScalarChildren = 0;
     inodeInt = OS_COMPLEX_SUM;
-    inodeType = -1;
+    inodeKind = 2;
 }//end OSnLCNodeSum
 
 
@@ -5224,29 +5448,29 @@ std::string OSnLCNodeSum::getTokenName()
     return "complexSum";
 }// end OSnLCNodeSum::getTokenName()
 
-void OSnLCNodeSum::calculateFunction(double *x)
+std::complex<double> OSnLCNodeSum::calculateFunction_C(double *x)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, "in OSnLCNodeSum::calculateFunction");
 #endif
-    m_dFunctionValue[0] = m_dFunctionValue[1] = 0;
+    //m_dFunctionValue[0] = m_dFunctionValue[1] = 0;
+    m_dFunctionValue = 0;
 
     for (int i=0; i < inumberOfScalarChildren; i++)
     {
-        if (m_mScalarChildren[i]->inodeInt < OS_FIRST_COMPLEX_NODE)
+        if (m_mScalarChildren[i]->isRealValued())
         {
-            ((OSnLNode*)m_mScalarChildren[i])->calculateFunction(x);
-            m_dFunctionValue[0] += ((OSnLNode*)m_mScalarChildren[i])->m_dFunctionValue;
+            m_mScalarChildren[i]->calculateFunction(x);
+            m_dFunctionValue += ((OSnLNode*)m_mScalarChildren[i])->m_dFunctionValue;
         }
         else
         {
-            ((OSnLCNode*)m_mScalarChildren[i])->calculateFunction(x);
-            m_dFunctionValue[0] += ((OSnLCNode*)m_mScalarChildren[i])->m_dFunctionValue[0];
-            m_dFunctionValue[1] += ((OSnLCNode*)m_mScalarChildren[i])->m_dFunctionValue[1];
+            m_mScalarChildren[i]->calculateFunction_C(x);
+            m_dFunctionValue += ((OSnLCNode*)m_mScalarChildren[i])->m_dFunctionValue;
         }
     }
-    return;
+    return m_dFunctionValue;
 }// end OSnLCNodeSum::calculate
 
 #if 0
@@ -5257,25 +5481,39 @@ ADdouble OSnLCNodeSum::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
 }// end OSnLNodePlus::constructADTape
 #endif
 
-OSnLCNode* OSnLCNodeSum::cloneExprNode()
+ExprNode* OSnLCNodeSum::cloneExprNode()
 {
-    OSnLCNode *nlNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodeSum");
+#endif
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLCNodeSum();
-    return  nlNodePoint;
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLCNodeSum::cloneExprNode
 
 
 // OSnLCNodeTimes Methods
 OSnLCNodeTimes::OSnLCNodeTimes()
 {
-    inumberOfChildren = 0;
+    inumberOfChildren = 2; // 0;
     inumberOfMatrixChildren = 0;
-    inumberOfScalarChildren = 2;
-    m_mScalarChildren = new ScalarNode*[2];
-    m_mScalarChildren[ 0] = NULL;
-    m_mScalarChildren[ 1] = NULL;
+//    inumberOfScalarChildren = 2;
+    m_mChildren = new ExprNode*[2];
+    m_mChildren[ 0] = NULL;
+    m_mChildren[ 1] = NULL;
+//    m_mScalarChildren = new ExprNode*[2];
+//    m_mScalarChildren[ 0] = NULL;
+//    m_mScalarChildren[ 1] = NULL;
     inodeInt = OS_COMPLEX_TIMES;
-    inodeType = 2;
+    inodeKind = 2;
 }//end OSnLCNodeTimes
 
 
@@ -5293,46 +5531,32 @@ std::string OSnLCNodeTimes::getTokenName()
     return "complexTimes";
 }// end OSnLCNodeTimes::getTokenName()
 
-void OSnLCNodeTimes::calculateFunction(double *x)
+std::complex<double> OSnLCNodeTimes::calculateFunction_C(double *x)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, "in OSnLCNodeTimes::calculateFunction");
 #endif
-    m_dFunctionValue[0] = m_dFunctionValue[1] = 0;
-    int temp0[2];
-    int temp1[2];
+//    m_dFunctionValue[0] = m_dFunctionValue[1] = 0;
+    m_dFunctionValue = 1.0;
+    std::complex <double> temp;
 
-    if (m_mScalarChildren[0]->inodeInt < OS_FIRST_COMPLEX_NODE)
+    for (int i=0; i < 1; i++)
     {
-        ((OSnLNode*)m_mScalarChildren[0])->calculateFunction(x);
-        temp0[0] = ((OSnLNode*)m_mScalarChildren[0])->m_dFunctionValue;
-        temp0[1] = 0;
-    }
-    else
-    {
-        ((OSnLCNode*)m_mScalarChildren[0])->calculateFunction(x);
-        temp0[0] = ((OSnLCNode*)m_mScalarChildren[0])->m_dFunctionValue[0];
-        temp0[1] = ((OSnLCNode*)m_mScalarChildren[0])->m_dFunctionValue[1];
-    }
-
-    if (m_mScalarChildren[1]->inodeInt < OS_FIRST_COMPLEX_NODE)
-    {
-        ((OSnLNode*)m_mScalarChildren[1])->calculateFunction(x);
-        temp1[0] = ((OSnLNode*)m_mScalarChildren[1])->m_dFunctionValue;
-        temp1[1] = 0;
-    }
-    else
-    {
-        ((OSnLCNode*)m_mScalarChildren[1])->calculateFunction(x);
-        temp1[0] = ((OSnLCNode*)m_mScalarChildren[1])->m_dFunctionValue[0];
-        temp1[1] = ((OSnLCNode*)m_mScalarChildren[1])->m_dFunctionValue[1];
+        if (m_mScalarChildren[i]->isRealValued())
+        {
+            m_mScalarChildren[i]->calculateFunction(x);
+            temp = ((OSnLNode*)m_mScalarChildren[i])->m_dFunctionValue;
+        }
+        else
+        {
+            m_mScalarChildren[i]->calculateFunction_C(x);
+            temp = ((OSnLCNode*)m_mScalarChildren[i])->m_dFunctionValue;
+        }
+        m_dFunctionValue *= temp;
     }
 
-    m_dFunctionValue[0] = temp0[0]*temp1[0] - temp0[1]*temp1[1];
-    m_dFunctionValue[1] = temp0[0]*temp1[1] + temp0[1]*temp1[0];
-
-    return;
+    return m_dFunctionValue;
 }// end OSnLCNodeTimes::calculate
 
 #if 0
@@ -5343,10 +5567,21 @@ ADdouble OSnLCNodeTimes::constructADTape(std::map<int, int> *ADIdx, ADvector *XA
 }// end OSnLCNodeTimes::constructADTape
 #endif
 
-OSnLCNode* OSnLCNodeTimes::cloneExprNode()
+ExprNode* OSnLCNodeTimes::cloneExprNode()
 {
-    OSnLCNode *nlNodePoint;
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodeTimes");
+#endif
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLCNodeTimes();
-    return  nlNodePoint;
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
 }//end OSnLCNodeTimes::cloneExprNode
 

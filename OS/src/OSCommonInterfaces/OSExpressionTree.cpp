@@ -26,63 +26,29 @@ using namespace std;
 using std::ostringstream;
 using std::endl;
 
-OSExpressionTree::OSExpressionTree():
-//    m_treeRoot( NULL),
-//    m_bIsVectorValued(false),
-    mapVarIdx( NULL),
-    m_bIndexMapGenerated( false),
-    bADMustReTape( false),
-    bDestroyNlNodes( true)
+OSExpressionTree::OSExpressionTree() :
+    m_treeRoot( NULL),
+    bDestroyNlNodes(false)
 {
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+        "Inside the OSExpressionTree Constructor");
+#endif
 }//end OSExpressionTree
 
 
-OSExpressionTree::~OSExpressionTree()
+OSExpressionTree::~OSExpressionTree() 
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the OSExpressionTree Destructor");
 #endif
-//    if( bDestroyNlNodes == true)
-//    {
-//        if(m_treeRoot != NULL) delete m_treeRoot;
-//        m_treeRoot = NULL;
-//    }
-    if(mapVarIdx != NULL)
+    if( bDestroyNlNodes == true)
     {
-        delete mapVarIdx;
-        mapVarIdx = NULL;
+        if(m_treeRoot != NULL) delete m_treeRoot;
+        m_treeRoot = NULL;
     }
 }//end ~OSExpressionTree
-
-#if 0
-std::vector<ExprNode*> OSExpressionTree::getPrefixFromExpressionTree()
-{
-    return m_treeRoot->getPrefixFromExpressionTree();
-}//getPrefixFromExpressionTree
-
-
-std::vector<ExprNode*> OSExpressionTree::getPostfixFromExpressionTree()
-{
-    return m_treeRoot->getPostfixFromExpressionTree();
-}//getPostfixFromExpressionTree
-#endif
-
-#if 0
-double OSExpressionTree::calculateFunction( double *x, bool new_x)
-{
-    //calculateFunctionAD( x, functionEvaluated);
-    if( new_x == false)
-    {
-        return m_dTreeRootValue;
-    }
-    else
-    {
-        m_dTreeRootValue = m_treeRoot->calculateFunction( x);
-        return  m_dTreeRootValue;
-    }
-}//calculateFunction
-#endif
 
 bool OSExpressionTree::IsEqual(OSExpressionTree *that)
 {
@@ -112,20 +78,18 @@ bool OSExpressionTree::IsEqual(OSExpressionTree *that)
         }
         else
         {
-            if (this->m_bIndexMapGenerated != that->m_bIndexMapGenerated)
-                return false;
-            if (this->bADMustReTape        != that->bADMustReTape)
-                return false;
-            if (this->bDestroyNlNodes      != that->bDestroyNlNodes)
-                return false;
             return true;
         }
     }
 }//OSExpressionTree::IsEqual
 
 
-RealValuedExpressionTree::RealValuedExpressionTree():
-    m_treeRoot( NULL)
+RealValuedExpressionTree::RealValuedExpressionTree() :
+//    m_treeRoot( NULL),
+    m_bIndexMapGenerated(false),
+    bADMustReTape(false),
+//    bDestroyNlNodes(false),
+    mapVarIdx( NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
@@ -140,22 +104,27 @@ RealValuedExpressionTree::~RealValuedExpressionTree()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the RealValuedExpressionTree Destructor");
 #endif
-    if( bDestroyNlNodes == true)
+//    if( bDestroyNlNodes == true)
+//    {
+//        if(m_treeRoot != NULL) delete m_treeRoot;
+//        m_treeRoot = NULL;
+//    }
+    if(mapVarIdx != NULL)
     {
-        if(m_treeRoot != NULL) delete m_treeRoot;
-        m_treeRoot = NULL;
+        delete mapVarIdx;
+        mapVarIdx = NULL;
     }
 }//end ~RealValuedExpressionTree
 
 std::vector<ExprNode*> RealValuedExpressionTree::getPrefixFromExpressionTree()
 {
-    return m_treeRoot->getPrefixFromExpressionTree();
+    return ((OSnLNode*)m_treeRoot)->getPrefixFromExpressionTree();
 }//getPrefixFromExpressionTree
 
 
 std::vector<ExprNode*> RealValuedExpressionTree::getPostfixFromExpressionTree()
 {
-    return m_treeRoot->getPostfixFromExpressionTree();
+    return ((OSnLNode*)m_treeRoot)->getPostfixFromExpressionTree();
 }//getPostfixFromExpressionTree
 
 
@@ -164,7 +133,7 @@ std::map<int, int> *RealValuedExpressionTree::getVariableIndicesMap()
     if( m_bIndexMapGenerated == true) return mapVarIdx;
     mapVarIdx = new std::map<int, int>();
     std::map<int, int>::iterator m_mPosVarIdx;
-    m_treeRoot->getVariableIndexMap( mapVarIdx);
+    ((OSnLNode*)m_treeRoot)->getVariableIndexMap( mapVarIdx);
     m_bIndexMapGenerated = true;
     return mapVarIdx;
 }//getVariableIndicesMap
@@ -179,7 +148,7 @@ double RealValuedExpressionTree::calculateFunction( double *x, bool new_x)
     }
     else
     {
-        m_dTreeRootValue = m_treeRoot->calculateFunction( x);
+        m_dTreeRootValue = ((OSnLNode*)m_treeRoot)->calculateFunction( x);
         return  m_dTreeRootValue;
     }
 }//calculateFunction
@@ -216,14 +185,115 @@ bool RealValuedExpressionTree::IsEqual(RealValuedExpressionTree *that)
             if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
                 return false;
 
-            return this->OSExpressionTree::IsEqual(that);
+            return true; //this->OSExpressionTree::IsEqual(that);
         }
     }
 }//RealValuedExpressionTree::IsEqual
 
 
-MatrixExpressionTree::MatrixExpressionTree():
-    m_treeRoot( NULL)
+ComplexValuedExpressionTree::ComplexValuedExpressionTree()   //:
+//    m_treeRoot( NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+        "Inside the ComplexValuedExpressionTree Constructor");
+#endif
+}//end ComplexValuedExpressionTree
+
+
+ComplexValuedExpressionTree::~ComplexValuedExpressionTree()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+        "Inside the ComplexValuedExpressionTree Destructor");
+#endif
+//    if( bDestroyNlNodes == true)
+//    {
+//        if(m_treeRoot != NULL) delete m_treeRoot;
+//        m_treeRoot = NULL;
+//    }
+}//end ~ComplexValuedExpressionTree
+
+std::vector<ExprNode*> ComplexValuedExpressionTree::getPrefixFromExpressionTree()
+{
+    return ((OSnLCNode*)m_treeRoot)->getPrefixFromExpressionTree();
+}//getPrefixFromExpressionTree
+
+
+std::vector<ExprNode*> ComplexValuedExpressionTree::getPostfixFromExpressionTree()
+{
+    return ((OSnLCNode*)m_treeRoot)->getPostfixFromExpressionTree();
+}//getPostfixFromExpressionTree
+
+
+
+std::map<int, int> *ComplexValuedExpressionTree::getVariableIndicesMap()
+{
+#if 0
+    if( m_bIndexMapGenerated == true) return mapVarIdx;
+    mapVarIdx = new std::map<int, int>();
+    std::map<int, int>::iterator m_mPosVarIdx;
+    ((OSnLCNode*)m_treeRoot)->getVariableIndexMap( mapVarIdx);
+    m_bIndexMapGenerated = true;
+    return mapVarIdx;
+#endif
+}//getVariableIndicesMap
+
+
+std::complex<double> ComplexValuedExpressionTree::calculateFunction( double *x, bool new_x)
+{
+    //calculateFunctionAD( x, functionEvaluated);
+    if( new_x == false)
+    {
+        return m_dTreeRootValue;
+    }
+    else
+    {
+        m_dTreeRootValue = ((OSnLCNode*)m_treeRoot)->calculateFunction_C( x);
+        return  m_dTreeRootValue;
+    }
+}//calculateFunction
+
+
+bool ComplexValuedExpressionTree::IsEqual(ComplexValuedExpressionTree *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Start comparing in ComplexValuedExpressionTree");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
+                return false;
+
+            return this->OSExpressionTree::IsEqual(that);
+        }
+    }
+}//ComplexValuedExpressionTree::IsEqual
+
+
+MatrixExpressionTree::MatrixExpressionTree()  //:
+//    m_treeRoot( NULL)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
@@ -238,23 +308,23 @@ MatrixExpressionTree::~MatrixExpressionTree()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
         "Inside the MatrixExpressionTree Destructor");
 #endif
-    if( bDestroyNlNodes == true)
-    {
-        if(m_treeRoot != NULL) delete m_treeRoot;
-        m_treeRoot = NULL;
-    }
+//    if( bDestroyNlNodes == true)
+//    {
+//        if(m_treeRoot != NULL) delete m_treeRoot;
+//        m_treeRoot = NULL;
+//    }
 }//end ~MatrixExpressionTree
 
 
 std::vector<ExprNode*> MatrixExpressionTree::getPrefixFromExpressionTree()
 {
-    return m_treeRoot->/*OSnLMNode::*/getPrefixFromExpressionTree();
+    return ((OSnLMNode*)m_treeRoot)->/*OSnLMNode::*/getPrefixFromExpressionTree();
 }//getPrefixFromExpressionTree
 
 
 std::vector<ExprNode*> MatrixExpressionTree::getPostfixFromExpressionTree()
 {
-    return m_treeRoot->/*OSnLMNode::*/getPostfixFromExpressionTree();
+    return ((OSnLMNode*)m_treeRoot)->/*OSnLMNode::*/getPostfixFromExpressionTree();
 }//getPostfixFromExpressionTree
 
 

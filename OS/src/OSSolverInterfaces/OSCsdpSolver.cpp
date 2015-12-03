@@ -123,10 +123,10 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 {
     std::ostringstream outStr;
     RealValuedExpressionTree* tempTree;
-    OSnLNode  *tr;
-    OSnLMNode *mt;
-    OSnLMNode *mr;
-    OSnLMNode *mv;
+    ExprNode *tr;
+    ExprNode *mt;
+    ExprNode *mr;
+    ExprNode *mv;
     OSMatrix* tempMtx;
 
     int*  blockOffset = NULL;
@@ -172,14 +172,14 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         //Check the form of the objective
         tempTree = osinstance->getNonlinearExpressionTree(-1);
         if (tempTree == NULL) throw ErrorClass("Expecting matrixTrace in objective row");
-        tr = tempTree->m_treeRoot; 
+        tr = tempTree->m_treeRoot;
         if (tr->inodeInt != OS_MATRIX_TRACE)
             throw ErrorClass("Expecting matrixTrace in objective row");
-        mt = tr->m_mMatrixChildren[0];
+        mt = tr->m_mChildren[0];
         if (mt->inodeInt != OS_MATRIX_TIMES)
             throw ErrorClass("Unsupported expression in objective row");
-        mr = mt->m_mMatrixChildren[0];
-        mv = mt->m_mMatrixChildren[1];
+        mr = mt->m_mChildren[0];
+        mv = mt->m_mChildren[1];
         if (mr->inodeInt != OS_MATRIX_REFERENCE || mv->inodeInt != OS_MATRIX_VAR)
             throw ErrorClass("Unsupported expression in objective row");
 
@@ -218,11 +218,11 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
             tr = tempTree->m_treeRoot; 
             if (tr->inodeInt != OS_MATRIX_TRACE)
                 throw ErrorClass("Expecting matrixTrace in constraint row");
-            mt = tr->m_mMatrixChildren[0];
+            mt = tr->m_mChildren[0];
             if (mt->inodeInt != OS_MATRIX_TIMES)
                 throw ErrorClass("Unsupported expression in constraint row");
-            mr = mt->m_mMatrixChildren[0];
-            mv = mt->m_mMatrixChildren[1];
+            mr = mt->m_mChildren[0];
+            mv = mt->m_mChildren[1];
             if (mr->inodeInt != OS_MATRIX_REFERENCE || mv->inodeInt != OS_MATRIX_VAR)
                 throw ErrorClass("Unsupported expression in constraint row");
 

@@ -886,19 +886,25 @@ if (PARSER_TESTS)
 
         // copy nonlinear expressions
         cout << "Copy nonlinear expressions" << endl;
-        Nl** root = NULL;
+        Nl** rootPtr = NULL;
+
+        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)(100*ENUM_OUTPUT_AREA_OSInstance
+                                                                + ENUM_OUTPUT_LEVEL_detailed_trace));
 
         if (osinstance->instanceData->nonlinearExpressions != NULL)
         {
             int nexpr = osinstance->getNumberOfNonlinearExpressions();
-//            root = osinstance->getNonlinearExpressions();
-            root = new Nl*[osinstance->getNumberOfNonlinearExpressions()];
-            for (int i=0; i < osinstance->getNumberOfNonlinearExpressions(); i++)
+            rootPtr = osinstance->getNonlinearExpressions();
+#if 0
+            rootPtr = new Nl*[nexpr];
+            for (int i=0; i < nexpr; i++)
             {
-                root[i] = osinstance->instanceData->nonlinearExpressions->nl[i];
+                 rootPtr[i] = new Nl();
+                *rootPtr[i] = *(osinstance->instanceData->nonlinearExpressions->nl[i]);
             }
-
-            if (!osinstance2->setNonlinearExpressions(nexpr, root))
+#endif
+//            if (!osinstance2->setNonlinearExpressions(nexpr, osinstance->getNonlinearExpressions()))
+            if (!osinstance2->setNonlinearExpressions(nexpr, rootPtr))
                 throw ErrorClass("Error duplicating nonlinear expressions");
         }
 
@@ -908,6 +914,8 @@ if (PARSER_TESTS)
 
         delete osinstance2;
         osinstance2 = NULL;
+
+        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)ENUM_OUTPUT_LEVEL_error);
 
         unitTestResult << "TEST " << nOfTest << ": Passed OSInstance get() and set() methods" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -919,13 +927,13 @@ if (PARSER_TESTS)
         delete fileUtil;
         fileUtil = NULL;
 
-        if (root != NULL)
-        {
+//        if (rootPtr != NULL)
+//        {
 //            for (int i=0; i < osinstance->getNumberOfNonlinearExpressions(); i++)
-//                if (root[i] != NULL) delete root[i];
-            delete [] root;
-            root = NULL;
-        }
+//                if (rootPtr[i] != NULL) delete rootPtr[i];
+//            delete [] rootPtr;
+//            rootPtr = NULL;
+//        }
     }
     catch(const ErrorClass& eclass)
     {
@@ -954,13 +962,14 @@ if (PARSER_TESTS)
             fileUtil = new FileUtil();
             osilreader = new OSiLReader(); 
             osilwriter = new OSiLWriter();
+extern int osildebug;
+osildebug = 1;
 
             OSInstance *instance1, *instance2;
 
             cout << "First read the file into a string" << endl;
             osilFileName = dataDir  + "osilFiles" + dirsep + "testMatricesAndCones.osil";
             osil = fileUtil->getFileAsString( osilFileName.c_str());
-
             cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
             instance1 = osilreader->readOSiL( osil);
 

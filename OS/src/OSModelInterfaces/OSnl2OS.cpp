@@ -203,9 +203,9 @@ OSnl2OS::~OSnl2OS()
     asl = NULL;
 }
 
-OSnLNode* OSnl2OS::walkTree (expr *e)
+ExprNode* OSnl2OS::walkTree (expr *e)
 {
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     OSnLNodeVariable *nlNodeVariablePoint;
     OSnLNodeNumber *nlNodeNumberPoint;
     efunc *op;
@@ -230,7 +230,7 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             i = 0;
             nlNodePoint = new OSnLNodeSum();
             nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
-            nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
+            nlNodePoint->m_mChildren = new ExprNode*[ e->R.ep - e->L.ep];
             for (ep = e->L.ep; ep < e->R.ep; *ep++)
                 nlNodePoint->m_mChildren[i++] = walkTree ( *ep);
             return nlNodePoint;
@@ -239,7 +239,7 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             i = 0;
             nlNodePoint = new OSnLNodeMax();
             nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
-            nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
+            nlNodePoint->m_mChildren = new ExprNode*[ e->R.ep - e->L.ep];
             for (ep = e->L.ep; ep < e->R.ep; *ep++)
                 nlNodePoint->m_mChildren[i++] = walkTree ( *ep);
             return nlNodePoint;
@@ -278,29 +278,22 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
             op_type.push_back( "POWER");
             return nlNodePoint;
 
-
         case OP1POW:
             nlNodePoint = new OSnLNodePower();
-
-
             nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
             nlNodeNumberPoint = new OSnLNodeNumber();
             nlNodeNumberPoint->value = e->R.en->v;
             nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
-
             op_type.push_back( "NUMBER");
             op_type.push_back( os_dtoa_format( numkount) );
             operand.push_back( e->R.en->v );
+
             numkount++;
-
             op_type.push_back( "POWER");
-
-
             return nlNodePoint;
 
         case OP2POW:
             nlNodePoint = new OSnLNodeSquare();
-
             nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
             op_type.push_back( "SQUARE");
             return nlNodePoint;
@@ -374,7 +367,7 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
                     {
                         nlNodePoint = new OSnLNodeSum();
                         nlNodePoint->inumberOfChildren = nlin + 1;
-                        nlNodePoint->m_mChildren = new OSnLNode*[ nlin + 1];
+                        nlNodePoint->m_mChildren = new ExprNode*[ nlin + 1];
                         // we have linear variables
                         // get the index and coefficient
                         linpart *L = common -> L;
@@ -403,7 +396,7 @@ OSnLNode* OSnl2OS::walkTree (expr *e)
                     {
                         nlNodePoint = new OSnLNodeSum();
                         nlNodePoint->inumberOfChildren = nlin + 1;
-                        nlNodePoint->m_mChildren = new OSnLNode*[ nlin + 1];
+                        nlNodePoint->m_mChildren = new ExprNode*[ nlin + 1];
                         // we have linear variables
                         // get the index and coefficient
                         linpart *L = common -> L;

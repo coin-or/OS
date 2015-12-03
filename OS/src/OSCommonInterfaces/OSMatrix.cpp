@@ -491,8 +491,10 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                 tmpValues->el[i]->m_treeRoot->m_mChildren[0] = new OSnLNodeNumber();
                                 ((OSnLNodeNumber*)tmpValues->el[i]->m_treeRoot->m_mChildren[0])->value = scaleMult;
                                 tmpValues->el[i]->m_treeRoot->m_mChildren[1]
-                                     = ((RealValuedExpressionArray*)baseMtx->value)->el[i]->m_treeRoot
-                                        ->copyNodeAndDescendants();
+//                                     = ((RealValuedExpressionArray*)baseMtx->value)->el[i]->m_treeRoot
+//                                        ->copyNodeAndDescendants();
+                                     = ((OSnLNode*)((RealValuedExpressionArray*)baseMtx->value)->el[i]
+                                        ->m_treeRoot->cloneExprNode());
                             }
                             ExpandedMatrixInColumnMajorForm->value = tmpValues;
                         }
@@ -665,8 +667,10 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
 //                                            ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot 
 //                                                = new OSnLNode();
                                             ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot 
-                                                = ((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot
-                                                    ->copyNodeAndDescendants();
+//                                                = ((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot
+//                                                    ->copyNodeAndDescendants();
+                                                = /*((OSnLNode*)*/((RealValuedExpressionArray*)baseMtx->value)->el[j]
+                                                    ->m_treeRoot->cloneExprNode()/*)*/;
                                             ival++;
                                         }
                                     }
@@ -693,7 +697,9 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                                 = new OSnLNodeNumber();
                                             ((OSnLNodeNumber*)tmpValues->el[ival]->m_treeRoot->m_mChildren[0])->value = scaleMult;
                                             ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot->m_mChildren[1]
-                                                = ((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+//                                                = ((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                                                = /*((OSnLNode*)*/((RealValuedExpressionArray*)baseMtx->value)
+                                                    ->el[j]->m_treeRoot->cloneExprNode()/*)*/;
                                             ival++;
 
                                         }
@@ -969,7 +975,8 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                 iTemp = ExpandedMatrixInColumnMajorForm->start[refMtx->index->el[j]];
                                 ExpandedMatrixInColumnMajorForm->index[ iTemp] = i;
                                 ((RealValuedExpressionArray*)ExpandedMatrixInColumnMajorForm->value)->el[ iTemp]->m_treeRoot
-                                    = ((RealValuedExpressionArray*)((RealValuedExpressions*)refMtx)->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+//                                    = ((RealValuedExpressionArray*)((RealValuedExpressions*)refMtx)->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                                    = ((OSnLNode*)((RealValuedExpressionArray*)((RealValuedExpressions*)refMtx)->value)->el[j]->m_treeRoot->cloneExprNode());
                                 ExpandedMatrixInColumnMajorForm->start[refMtx->index->el[j]] ++;
                             }
                         }
@@ -1340,14 +1347,14 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                             haveConstant = false;
                                             if (n == 0) break;
                                             temp->m_treeRoot = new OSnLNodeSum();
-                                            temp->m_treeRoot->m_mChildren = new OSnLNode*[n];
+                                            temp->m_treeRoot->m_mChildren = new ExprNode*[n];
                                             temp->m_treeRoot->inumberOfChildren = n; 
                                         }
                                         else
                                         {
                                             haveConstant = true;
                                             temp->m_treeRoot = new OSnLNodeSum();
-                                            temp->m_treeRoot->m_mChildren = new OSnLNode*[n+1];
+                                            temp->m_treeRoot->m_mChildren = new ExprNode*[n+1];
                                             temp->m_treeRoot->inumberOfChildren = n+1; 
                                         }
 
@@ -1740,8 +1747,10 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
                                 tmpValues->el[i]->m_treeRoot->m_mChildren[0] = new OSnLNodeNumber();
                                 ((OSnLNodeNumber*)tmpValues->el[i]->m_treeRoot->m_mChildren[0])->value = scaleMult;
                                 tmpValues->el[i]->m_treeRoot->m_mChildren[1]
-                                     = ((RealValuedExpressionArray*)baseMtx->value)->el[i]->m_treeRoot
-                                        ->copyNodeAndDescendants();
+//                                     = ((RealValuedExpressionArray*)baseMtx->value)->el[i]->m_treeRoot
+//                                        ->copyNodeAndDescendants();
+                                     = ((OSnLNode*)((RealValuedExpressionArray*)baseMtx->value)->el[i]
+                                        ->m_treeRoot->cloneExprNode());
                             }
                             ExpandedMatrixInRowMajorForm->value = tmpValues;
                         }
@@ -1914,8 +1923,10 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
 //                                            ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot 
 //                                                = new OSnLNode();
                                             ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot 
-                                                = ((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot
-                                                    ->copyNodeAndDescendants();
+//                                                = ((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot
+//                                                    ->copyNodeAndDescendants();
+                                                = ((OSnLNode*)((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot
+                                                    ->cloneExprNode());
                                             ival++;
                                         }
                                     }
@@ -1942,7 +1953,8 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
                                                 = new OSnLNodeNumber();
                                             ((OSnLNodeNumber*)tmpValues->el[ival]->m_treeRoot->m_mChildren[0])->value = scaleMult;
                                             ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot->m_mChildren[1]
-                                                = ((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+//                                                = ((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                                                = ((OSnLNode*)((RealValuedExpressionArray*)baseMtx->value)->el[j]->m_treeRoot->cloneExprNode());
                                             ival++;
 
                                         }
@@ -2218,7 +2230,8 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInRowMajor()
                                 iTemp = ExpandedMatrixInRowMajorForm->start[refMtx->index->el[j]];
                                 ExpandedMatrixInRowMajorForm->index[ iTemp] = i;
                                 ((RealValuedExpressionArray*)ExpandedMatrixInRowMajorForm->value)->el[ iTemp]->m_treeRoot
-                                    = ((RealValuedExpressionArray*)((RealValuedExpressions*)refMtx)->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+//                                    = ((RealValuedExpressionArray*)((RealValuedExpressions*)refMtx)->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                                    = ((OSnLNode*)((RealValuedExpressionArray*)((RealValuedExpressions*)refMtx)->value)->el[j]->m_treeRoot->cloneExprNode());
                                 ExpandedMatrixInRowMajorForm->start[refMtx->index->el[j]] ++;
                             }
                         }
@@ -2561,7 +2574,8 @@ GeneralSparseMatrix* MatrixType::convertToOtherMajor(bool isColumnMajor)
                 iTemp = miStart[refMtx->index[j]];
                 miIndex [ iTemp] = i;
                 ((RealValuedExpressionArray*)matrix->value)->el[ iTemp]->m_treeRoot
-                    = ((RealValuedExpressionArray*)refMtx->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+//                    = ((RealValuedExpressionArray*)refMtx->value)->el[j]->m_treeRoot->copyNodeAndDescendants();
+                    = ((OSnLNode*)((RealValuedExpressionArray*)refMtx->value)->el[j]->m_treeRoot->cloneExprNode());
                 miStart[refMtx->index[j]] ++;
             }
         }
@@ -6092,7 +6106,8 @@ bool RealValuedExpressionArray::deepCopyFrom(RealValuedExpressionArray *that)
     {
         this->el[i] = new RealValuedExpressionTree();
 //        this->el[i]->m_treeRoot = new OSnLNode();
-        this->el[i]->m_treeRoot->copyNodeAndDescendants();
+//        this->el[i]->m_treeRoot->copyNodeAndDescendants();
+        ((OSnLNode*)this->el[i]->m_treeRoot->cloneExprNode());
     }
     return true;
 }// end of RealValuedExpressionArray::deepCopyFrom()

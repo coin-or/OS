@@ -222,6 +222,8 @@ public:
     bool valuePresent;
     bool valueTypePresent;
     bool varTypePresent;
+    bool realPartPresent;
+    bool imagPartPresent;
 
     bool baseTranspose;
     std::string category;
@@ -243,7 +245,9 @@ public:
     std::string unit;
     std::string value;
     std::string valueType;
-    std::string varType; 
+    std::string varType;
+    double realPart; 
+    double imagPart; 
 };//OSgLParserData
 
 inline void osgl_empty_vectors( OSgLParserData* osglData)

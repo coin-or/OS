@@ -164,7 +164,7 @@ public:
      *
      * @return the AMPL nonlinear structure as an OSnLNode.
      */
-    OSnLNode* walkTree(expr *e);
+    ExprNode* walkTree(expr *e);
 
     /** osinstance is a pointer to the OSInstance object that gets created
      *  from the information in the nl file

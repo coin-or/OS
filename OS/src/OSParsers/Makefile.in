@@ -915,7 +915,7 @@ osss: $(srcdir)/OSParseosss.cpp
 @HAVE_LEXYACC_TRUE@$(srcdir)/OSParseosrl.cpp: \
 @HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParseosrl.l \
 @HAVE_LEXYACC_TRUE@                 $(srcdir)/OSParseosrl.tab.cpp
-@HAVE_LEXYACC_TRUE@	$(LEX) -Posil -o$(srcdir)/OSParseosrl.cpp \
+@HAVE_LEXYACC_TRUE@	$(LEX) -Posrl -o$(srcdir)/OSParseosrl.cpp \
 @HAVE_LEXYACC_TRUE@                        $(srcdir)/OSParseosrl.l
 
 # bison generates the grammars. Since there are multiple targets, use a pattern rule

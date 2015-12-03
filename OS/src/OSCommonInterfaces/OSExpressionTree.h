@@ -18,7 +18,9 @@
 #include "OSnLNode.h"
 #include <vector>
 #include <map>
+#include <complex>
 
+// forward declarations to deal with circularity
 class ExprNode; 
 class OSnLNode; 
 class OSnLMNode; 
@@ -28,15 +30,26 @@ class OSnLMNode;
  *
  * \remarks
  * This is a generic class.
- * Specific classes RealValuedExpressionTree (for expressions that evaluate to scalar values)
- * and MatrixExpressionTrees (for expressions that evaluate to matrices) are derived
+ * Specific classes RealValuedExpressionTree (for expressions that evaluate to real values)
+ * ComplexValuedExpressionTree (for expressions that evaluate to complex values)
+ * and MatrixExpressionTree (for expressions that evaluate to matrices) are derived
  * from this class. 
- *
  */
 
 class OSExpressionTree
 {
 public:
+
+    /**
+     * m_treeRoot holds the root node (as a generic node) of the expression tree.
+     */
+    ExprNode *m_treeRoot;
+
+    /**
+     * m_bDestroyNlNodes is true if the destructor deletes the OSnLNodes in the Expression tree
+     */
+    bool bDestroyNlNodes;
+
     /**
      * default constructor.
      */
@@ -48,37 +61,11 @@ public:
     ~OSExpressionTree();
 
     /**
-     * m_mapVarIdx is a map used to generate the infix expression for AD   
-     * the key is idx, a variable number;
-     * the value of the map is the location of the corresponding entry in the sparse Jacobian
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
      */
-    std::map<int, int> *mapVarIdx;
-
-    /**
-     * Retrieve a map of the indices of the variables
-     * that are in the expression tree
-     *
-     * </p>
-     *
-     * @return a map of the variables in the current expression tree.
-     */
-    //virtual std::map<int, int> *getVariableIndicesMap();
-
-    /**
-     * m_bIndexMapGenerated is set to true if getVariableIndicesMap() has been called
-     */
-    bool m_bIndexMapGenerated;
-
-    /**
-     * is true if an AD Expression Tree has an expression that can change depending on
-     * the value of the input, e.g. an if statement -- false by default
-     */
-    bool bADMustReTape;
-
-    /**
-     * m_bDestroyNlNodes is true if the destructor deletes the nodes in the Expression tree
-     */
-    bool bDestroyNlNodes;
+    //bool deepCopyFrom(RealValuedExpressionTree *that);
 
     /**
      * A function to check for the equality of two objects
@@ -103,7 +90,7 @@ public:
     /**
      * m_treeRoot holds the root node (of OSnLNode type) of the expression tree.
      */
-    OSnLNode *m_treeRoot;
+    //OSnLNode *m_treeRoot;
 
     /**
      * default constructor.
@@ -116,11 +103,6 @@ public:
     ~RealValuedExpressionTree();
 
     /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(RealValuedExpressionTree *that);
-
-    /**
      * Get a vector of pointers to ExprNodes that correspond to
      * a scalar-valued OSExpressionTree in prefix format
      *
@@ -128,7 +110,7 @@ public:
      *
      * @return the expression tree as a vector of ExprNodes in prefix.
      */
-    std::vector<ExprNode*> getPrefixFromExpressionTree();
+    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
 
     /**
      * Get a vector of pointers to ExprNodes that correspond to
@@ -138,7 +120,7 @@ public:
      *
      * @return the expression tree as a vector of ExprNodes in postfix.
      */
-    std::vector<ExprNode*> getPostfixFromExpressionTree();
+    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
 
     /**
      * Retrieve a map of the indices of the variables
@@ -148,9 +130,8 @@ public:
      *
      * @return a map of the variables in the current expression tree.
      */
-    std::map<int, int> *getVariableIndicesMap();
+    virtual std::map<int, int> *getVariableIndicesMap();
 
-#if 0
     /**
      * m_bIndexMapGenerated is set to true if getVariableIndicesMap() has been called
      */
@@ -165,8 +146,14 @@ public:
     /**
      * m_bDestroyNlNodes is true if the destructor deletes the OSnLNodes in the Expression tree
      */
-    bool bDestroyNlNodes;
-#endif
+    //bool bDestroyNlNodes;
+
+    /**
+     * m_mapVarIdx is a map used to generate the infix expression for AD   
+     * the key is idx, a variable number;
+     * the value of the map is the location of the corresponding entry in the sparse Jacobian
+     */
+    std::map<int, int> *mapVarIdx;
 
     /**
      * Calculate the expression tree function value given the current variable
@@ -179,7 +166,7 @@ public:
      * @param new_x is false if any evaluation method was previously called for the current x
      * @return the expression tree function value given the current variable values.
      */
-    double calculateFunction( double *x, bool new_x);
+    virtual double calculateFunction( double *x, bool new_x);
 
     /**
      * A function to make a deep copy of an instance of this class
@@ -188,12 +175,114 @@ public:
      */    
     //bool deepCopyFrom(RealValuedExpressionTree *that);
 
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(RealValuedExpressionTree *that);
+
 private:
     /**
      * m_dTreeRootValue is the function value of the root node
      */
     double m_dTreeRootValue;
 };//end RealValuedExpressionTree
+
+
+/*! \class ComplexValuedExpressionTree
+ *  \brief Used to hold part of the instance in memory.
+ *
+ * \remarks
+ * This class stores the OSiL instance in memory as
+ * an expression tree.
+ *
+ */
+class ComplexValuedExpressionTree : public OSExpressionTree
+{
+public:
+
+    /**
+     * default constructor.
+     */
+    ComplexValuedExpressionTree();
+
+    /**
+     * default destructor.
+     */
+    ~ComplexValuedExpressionTree();
+
+    /**
+     * Get a vector of pointers to ExprNodes that correspond to
+     * a complex-valued OSExpressionTree in prefix format
+     *
+     * </p>
+     *
+     * @return the expression tree as a vector of ExprNodes in prefix.
+     */
+    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
+
+    /**
+     * Get a vector of pointers to ExprNodes that correspond to
+     * a scalar-valued OSExpressionTree in postfix format
+     *
+     * </p>
+     *
+     * @return the expression tree as a vector of ExprNodes in postfix.
+     */
+    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
+
+    /**
+     * Retrieve a map of the indices of the variables
+     * that are in the expression tree
+     *
+     * </p>
+     *
+     * @return a map of the variables in the current expression tree.
+     */
+    virtual std::map<int, int> *getVariableIndicesMap();
+
+    /**
+     * m_bIndexMapGenerated is set to true if getVariableIndicesMap() has been called
+     */
+    bool m_bIndexMapGenerated;
+
+    /**
+     * is true if an AD Expression Tree has an expression that can change depending on
+     * the value of the input, e.g. an if statement -- false by default
+     */
+    bool bADMustReTape;
+
+    /**
+     * Calculate the expression tree function value given the current variable
+     * values using the calculateFunction method of OSnLNode.
+     * If the function has been calculated, the method will retrieve it.
+     *
+     * </p>
+     *
+     * @param x holds the values of the variables in a double array.
+     * @param new_x is false if any evaluation method was previously called for the current x
+     * @return the expression tree function value given the current variable values.
+     */
+    virtual std::complex<double> calculateFunction( double *x, bool new_x);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    //bool deepCopyFrom(ComplexValuedExpressionTree *that);
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ComplexValuedExpressionTree *that);
+
+private:
+    /**
+
+     * m_dTreeRootValue is the function value of the root node
+     */
+    std::complex<double> m_dTreeRootValue;
+};//end ComplexValuedExpressionTree
 
 
 /*! \class MatrixExpressionTree
@@ -208,10 +297,11 @@ private:
 class MatrixExpressionTree : public OSExpressionTree
 {
 public:
+
     /**
      * m_treeRoot holds the root node (of OSnLMNode type) of the expression tree.
      */
-    OSnLMNode *m_treeRoot;
+    //OSnLMNode *m_treeRoot;
 
     /**
      * default constructor.
@@ -224,11 +314,6 @@ public:
     ~MatrixExpressionTree();
 
     /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(MatrixExpressionTree *that);
-
-    /**
      * Get a vector of pointers to ExprNodes that correspond to
      * a scalar-valued OSExpressionTree in prefix format
      *
@@ -236,7 +321,7 @@ public:
      *
      * @return the expression tree as a vector of ExprNodes in prefix.
      */
-    std::vector<ExprNode*> getPrefixFromExpressionTree();
+    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
 
     /**
      * Get a vector of pointers to ExprNodes that correspond to
@@ -246,7 +331,7 @@ public:
      *
      * @return the expression tree as a vector of ExprNodes in postfix.
      */
-    std::vector<ExprNode*> getPostfixFromExpressionTree();
+    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
 
     /**
      * Retrieve a map of the indices of the variables
@@ -256,7 +341,7 @@ public:
      *
      * @return a map of the variables in the current expression tree.
      */
-    //std::map<int, int> *getVariableIndicesMap();
+    //virtual std::map<int, int> *getVariableIndicesMap();
 
 #if 0
     /**
@@ -286,8 +371,20 @@ public:
      * @param new_x is false if any evaluation method was previously called for the current x
      * @return the expression tree function value given the current variable values.
      */
-    double calculateFunction( double *x, bool new_x);
+    //virtual double calculateFunction( double *x, bool new_x);
 #endif
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    //bool deepCopyFrom(MatrixValuedExpressionTree *that);
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixExpressionTree *that);
 
 private:
 

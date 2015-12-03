@@ -337,7 +337,7 @@ variableend:
     | GREATERTHAN nlnode 
         {
             osnlData->nlNodeVariablePoint->inumberOfChildren = 1;
-            osnlData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+            osnlData->nlNodeVariablePoint->m_mChildren = new ExprNode*[ 1];
         }    
         VARIABLEEND;
             
@@ -391,7 +391,7 @@ sum: SUMSTART {
 }
 anothersumnlnode SUMEND {
     ((OSnLNode*)osnlData->sumVec.back())->m_mChildren 
-        = new OSnLNode*[ ((OSnLNode*)osnlData->sumVec.back())->inumberOfChildren];
+        = new ExprNode*[ ((OSnLNode*)osnlData->sumVec.back())->inumberOfChildren];
     osnlData->sumVec.pop_back();
 };
 
@@ -405,7 +405,7 @@ allDiff: ALLDIFFSTART {
 }
 anotherallDiffnlnode ALLDIFFEND {
     ((OSnLNode*)osnlData->allDiffVec.back())->m_mChildren 
-        = new OSnLNode*[ ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren];
+        = new ExprNode*[ ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren];
     osnlData->allDiffVec.pop_back();
 #ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
@@ -422,7 +422,7 @@ max: MAXSTART {
     osnlData->maxVec.push_back( osnlData->nlNodePoint);
 }
 anothermaxnlnode MAXEND {
-    osnlData->maxVec.back()->m_mChildren = new OSnLNode*[ osnlData->maxVec.back()->inumberOfChildren];
+    osnlData->maxVec.back()->m_mChildren = new ExprNode*[ osnlData->maxVec.back()->inumberOfChildren];
     osnlData->maxVec.pop_back();
 #ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
@@ -439,7 +439,7 @@ min: MINSTART {
     osnlData->minVec.push_back( osnlData->nlNodePoint);
 }
 anotherminnlnode MINEND {
-    osnlData->minVec.back()->m_mChildren = new OSnLNode*[ osnlData->minVec.back()->inumberOfChildren];
+    osnlData->minVec.back()->m_mChildren = new ExprNode*[ osnlData->minVec.back()->inumberOfChildren];
     osnlData->minVec.pop_back();
 #ifdef OSINSTANCE_AVAILABLE
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
@@ -456,7 +456,7 @@ product: PRODUCTSTART {
     osnlData->productVec.push_back( osnlData->nlNodePoint);
 }
 anotherproductnlnode PRODUCTEND {
-    osnlData->productVec.back()->m_mChildren = new OSnLNode*[ osnlData->productVec.back()->inumberOfChildren];
+    osnlData->productVec.back()->m_mChildren = new ExprNode*[ osnlData->productVec.back()->inumberOfChildren];
     osnlData->productVec.pop_back();
 };
 
@@ -717,7 +717,7 @@ matrixProduct: MATRIXPRODUCTSTART
 }
 anothermatrixproductnode MATRIXPRODUCTEND 
 {
-    osnlData->matrixProductVec.back()->m_mMatrixChildren = new OSnLMNode*[ osnlData->matrixProductVec.back()->inumberOfMatrixChildren];
+    osnlData->matrixProductVec.back()->m_mMatrixChildren = new ExprNode*[ osnlData->matrixProductVec.back()->inumberOfMatrixChildren];
     osnlData->matrixProductVec.pop_back();
 };
 

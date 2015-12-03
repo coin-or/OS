@@ -869,16 +869,13 @@ NonlinearExpressions::~NonlinearExpressions()
 #ifndef NDEBUG
             outStr.str("");
             outStr.clear();
-            outStr << "DESTROYING EXPRESSION " << i << "(row " << nl[ i]->idx << ")" << endl;
+            outStr << "DESTROYING EXPRESSION " << i << " (row " << nl[ i]->idx << ")" << endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-            if(nl != NULL)
+            if(nl[i] != NULL)
             {
-                if(nl[i] != NULL)
-                {
-                    delete nl[i];
-                    nl[i] = NULL;
-                }
+                delete nl[i];
+                nl[i] = NULL;
             }
         }
     }
@@ -2200,16 +2197,18 @@ bool OSInstance::processObjectives()
         {
             if(m_bProcessObjectives != true)
             {
-                m_msMaxOrMins = new string[n];
-                m_miNumberOfObjCoef = new int[n];
-                m_mdObjectiveConstants = new double[n];
-                m_mdObjectiveWeights = new double[n];
+                m_msMaxOrMins            = new string[n];
+                m_miNumberOfObjCoef      = new int[n];
+                m_mdObjectiveConstants   = new double[n];
+                m_mdObjectiveWeights     = new double[n];
                 m_mObjectiveCoefficients = new SparseVector*[n];
-                m_msObjectiveNames = new string[n];
+                m_msObjectiveNames       = new string[n];
                 for(i = 0; i < n; i++)
                 {
-                    if(instanceData->objectives->obj[i] == NULL) throw ErrorClass("processObjectives(): obj element was never defined");
-                    m_mObjectiveCoefficients[i] = new SparseVector(instanceData->objectives->obj[i]->numberOfObjCoef);
+                    if(instanceData->objectives->obj[i] == NULL)
+                        throw ErrorClass("processObjectives(): obj element was never defined");
+                    m_mObjectiveCoefficients[i]
+                        = new SparseVector(instanceData->objectives->obj[i]->numberOfObjCoef);
                     //m_mObjectiveCoefficients[i]->bDeleteArrays=false;
                 }
                 m_bProcessObjectives = true;
@@ -2218,7 +2217,9 @@ bool OSInstance::processObjectives()
             for(i = 0; i < n; i++)
             {
                 if(instanceData->objectives->obj[i] == NULL) throw ErrorClass("processObjectives(): obj element was never defined");
-                if((instanceData->objectives->obj[i]->maxOrMin.compare("max") != 0) && (instanceData->objectives->obj[i]->maxOrMin.compare("min") != 0 )) throw ErrorClass("wrong objective maxOrMin");
+                if((instanceData->objectives->obj[i]->maxOrMin.compare("max") != 0) && 
+                   (instanceData->objectives->obj[i]->maxOrMin.compare("min") != 0 )) 
+                   throw ErrorClass("wrong objective maxOrMin");
                 m_msMaxOrMins[i] = instanceData->objectives->obj[i]->maxOrMin;
                 m_miNumberOfObjCoef[i] = instanceData->objectives->obj[i]->numberOfObjCoef;
                 m_mdObjectiveConstants[i] = instanceData->objectives->obj[i]->constant;
@@ -2354,9 +2355,9 @@ bool OSInstance::processConstraints()
             {
                 m_mdConstraintLowerBounds = new double[n];
                 m_mdConstraintUpperBounds = new double[n];
-                m_mdConstraintConstants = new double[n];
-                m_mcConstraintTypes = new char[n];
-                m_msConstraintNames = new string[n];
+                m_mdConstraintConstants   = new double[n];
+                m_mcConstraintTypes       = new char[n];
+                m_msConstraintNames       = new string[n];
                 m_bProcessConstraints = true;
             }
             for(i = 0; i < n; i++)
@@ -2462,8 +2463,10 @@ bool OSInstance::processLinearConstraintCoefficients()
         //value array
         if((instanceData->linearConstraintCoefficients->value == NULL ) || (n == 0) ) return true;
         //index array
-        if((instanceData->linearConstraintCoefficients->colIdx != NULL && instanceData->linearConstraintCoefficients->colIdx->el != NULL)
-                && (instanceData->linearConstraintCoefficients->rowIdx != NULL && instanceData->linearConstraintCoefficients->rowIdx->el != NULL))
+        if((instanceData->linearConstraintCoefficients->colIdx     != NULL  && 
+            instanceData->linearConstraintCoefficients->colIdx->el != NULL) && 
+           (instanceData->linearConstraintCoefficients->rowIdx     != NULL  && 
+            instanceData->linearConstraintCoefficients->rowIdx->el != NULL))
             throw ErrorClass("ambiguous linear constraint coefficient major");
         else if(instanceData->linearConstraintCoefficients->value->el == NULL) return true;
         else
@@ -2479,7 +2482,8 @@ bool OSInstance::processLinearConstraintCoefficients()
                 }
                 m_linearConstraintCoefficientsInColumnMajor->isColumnMajor = true;
                 m_linearConstraintCoefficientsInColumnMajor->valueSize = n;
-                m_linearConstraintCoefficientsInColumnMajor->startSize = instanceData->variables->numberOfVariables + 1;
+                m_linearConstraintCoefficientsInColumnMajor->startSize
+                    = instanceData->variables->numberOfVariables + 1;
             }
             else
             {
@@ -2492,20 +2496,27 @@ bool OSInstance::processLinearConstraintCoefficients()
                 }
                 m_linearConstraintCoefficientsInRowMajor->isColumnMajor = false;
                 m_linearConstraintCoefficientsInRowMajor->valueSize = n;
-                m_linearConstraintCoefficientsInRowMajor->startSize = instanceData->constraints->numberOfConstraints + 1;
+                m_linearConstraintCoefficientsInRowMajor->startSize
+                    = instanceData->constraints->numberOfConstraints + 1;
             }
         }
         if(m_bColumnMajor == true)
         {
-            m_linearConstraintCoefficientsInColumnMajor->values = instanceData->linearConstraintCoefficients->value->el;
-            m_linearConstraintCoefficientsInColumnMajor->indexes = instanceData->linearConstraintCoefficients->rowIdx->el;
-            m_linearConstraintCoefficientsInColumnMajor->starts = instanceData->linearConstraintCoefficients->start->el;
+            m_linearConstraintCoefficientsInColumnMajor->values
+                = instanceData->linearConstraintCoefficients->value->el;
+            m_linearConstraintCoefficientsInColumnMajor->indexes
+                = instanceData->linearConstraintCoefficients->rowIdx->el;
+            m_linearConstraintCoefficientsInColumnMajor->starts
+                = instanceData->linearConstraintCoefficients->start->el;
         }
         else
         {
-            m_linearConstraintCoefficientsInRowMajor->values = instanceData->linearConstraintCoefficients->value->el;
-            m_linearConstraintCoefficientsInRowMajor->indexes = instanceData->linearConstraintCoefficients->colIdx->el;
-            m_linearConstraintCoefficientsInRowMajor->starts = instanceData->linearConstraintCoefficients->start->el;
+            m_linearConstraintCoefficientsInRowMajor->values 
+                = instanceData->linearConstraintCoefficients->value->el;
+            m_linearConstraintCoefficientsInRowMajor->indexes 
+                = instanceData->linearConstraintCoefficients->colIdx->el;
+            m_linearConstraintCoefficientsInRowMajor->starts
+                = instanceData->linearConstraintCoefficients->start->el;
         }
         return true;
     }
@@ -2591,10 +2602,10 @@ QuadraticTerms* OSInstance::getQuadraticTerms()
         m_quadraticTerms = new QuadraticTerms();
         if(n > 0)
         {
-            m_quadraticTerms->rowIndexes = new int[n];
+            m_quadraticTerms->rowIndexes    = new int[n];
             m_quadraticTerms->varOneIndexes = new int[n];
             m_quadraticTerms->varTwoIndexes = new int[n];
-            m_quadraticTerms->coefficients = new double[n];
+            m_quadraticTerms->coefficients  = new double[n];
         }
         for(i = 0; i < n; i++)
         {
@@ -2669,12 +2680,13 @@ int OSInstance::getNumberOfNonlinearExpressions()
 
 Nl** OSInstance::getNonlinearExpressions()
 {
-    Nl** root = new Nl*[getNumberOfNonlinearExpressions()];
-    for (int i=0; i < getNumberOfNonlinearExpressions(); i++)
-    {
-        root[i] = instanceData->nonlinearExpressions->nl[i];
-    }
-    return root;
+//    Nl** root = new Nl*[getNumberOfNonlinearExpressions()];
+//    for (int i=0; i < getNumberOfNonlinearExpressions(); i++)
+//    {
+//        root[i] = instanceData->nonlinearExpressions->nl[i];
+//    }
+//    return root;
+    return instanceData->nonlinearExpressions->nl;
 }//getNonlinearExpressions
 
 
@@ -2792,7 +2804,7 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeInPostfix( int rowI
         if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end())
         {
             RealValuedExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
-            postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+            postfixVec = ((OSnLNode*)expTree->m_treeRoot)->getPostfixFromExpressionTree();
         }
         else
         {
@@ -2853,7 +2865,7 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeModInPostfix( int r
         if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end())
         {
             RealValuedExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
-            postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+            postfixVec = ((OSnLNode*)expTree->m_treeRoot)->getPostfixFromExpressionTree();
 
         }
         else
@@ -2879,7 +2891,7 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeInPrefix( int rowId
         if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end())
         {
             RealValuedExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
-            prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
+            prefixVec = ((OSnLNode*)expTree->m_treeRoot)->getPrefixFromExpressionTree();
         }
         else
         {
@@ -2904,7 +2916,7 @@ std::vector<ExprNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int ro
         if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end())
         {
             RealValuedExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
-            prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
+            prefixVec = ((OSnLNode*)expTree->m_treeRoot)->getPrefixFromExpressionTree();
         }
         else
         {
@@ -2951,8 +2963,8 @@ std::map<int, RealValuedExpressionTree*> OSInstance::getAllNonlinearExpressionTr
                 //expTree = new OSExpressionTree();
                 expTree =  instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
                 // set left child to old index and right child to new one
-                nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
-                nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
+                nlNodePlus->m_mChildren[ 0] = ((OSnLNode*)m_mapExpressionTrees[ index]->m_treeRoot);
+                nlNodePlus->m_mChildren[ 1] = ((OSnLNode*)instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot);
                 // we must delete the Expression tree corresponding to the old index value but not the nl nodes
                 instanceData->nonlinearExpressions->nl[ foundIdx[ index]  ]->m_bDeleteExpressionTree = true;
                 instanceData->nonlinearExpressions->nl[ foundIdx[ index]  ]->osExpressionTree->bDestroyNlNodes = false;
@@ -3031,12 +3043,12 @@ bool OSInstance::processMatrices()
             if(m_bProcessMatrices != true)
             {
                 //allocate space
-                m_miMatrixType = new ENUM_MATRIX_TYPE[n];
-                m_miMatrixSymmetry = new ENUM_MATRIX_SYMMETRY[n];
+                m_miMatrixType            = new ENUM_MATRIX_TYPE[n];
+                m_miMatrixSymmetry        = new ENUM_MATRIX_SYMMETRY[n];
                 m_miMatrixNumberOfColumns = new int[n];
-                m_miMatrixNumberOfRows = new int[n];
-                m_msMatrixNames = new std::string[n];
-                m_mMatrix = new OSMatrix*[n];
+                m_miMatrixNumberOfRows    = new int[n];
+                m_msMatrixNames           = new std::string[n];
+                m_mMatrix                 = new OSMatrix*[n];
 //                m_mExpandedMatricesInColumnMajor = new GeneralSparseMatrix*[n];
 //                m_mExpandedMatricesInRowMajor = new GeneralSparseMatrix*[n];
 //                m_mMatrixBlocksInColumnMajor = new ExpandedMatrixBlocks*[n];
@@ -3808,7 +3820,6 @@ bool OSInstance::setConstraints(int number, string* names, double* lowerBounds, 
     }
     try
     {
-
         if(instanceData->constraints  == NULL)
         {
             throw ErrorClass("there is no constraints object");
@@ -4114,7 +4125,8 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
         instanceData->nonlinearExpressions->nl[i]->idx = root[i]->idx;
         instanceData->nonlinearExpressions->nl[i]->osExpressionTree = new RealValuedExpressionTree();
         instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot
-            = (OSnLNode*)root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
+            = /*((OSnLNode*)*/root[i]->osExpressionTree->m_treeRoot->cloneExprNode()/*)*/;
+//            = root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
     }
     return true;
 }//setNonlinearExpressions
@@ -5360,7 +5372,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
                         nlNodeVariable->coef = value[ j];
                         nlNodeVariable->idx = i;
                         nlNodePlus = new OSnLNodePlus();
-                        nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
+                        nlNodePlus->m_mChildren[ 0] = ((OSnLNode*)m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot);
                         nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
                         expTree->m_treeRoot = nlNodePlus ;
                     }
@@ -5536,7 +5548,7 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
                         nlNodeVariable->coef = value[ j];
                         nlNodeVariable->idx = index[ j];
                         nlNodePlus = new OSnLNodePlus();
-                        nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ i ]->m_treeRoot;
+                        nlNodePlus->m_mChildren[ 0] = ((OSnLNode*)m_mapExpressionTreesMod[ i ]->m_treeRoot);
                         nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
                         m_mapExpressionTreesMod[ i ]->m_treeRoot = nlNodePlus;
                     }
@@ -5652,8 +5664,8 @@ RealValuedExpressionTree* OSInstance::getLagrangianExpTree( )
     // create the sum node
     nlNodeSum = new OSnLNodeSum();
     nlNodeSum->inumberOfChildren = m_mapExpressionTreesMod.size();
-    nlNodeSum->m_mChildren = new OSnLNode*[ nlNodeSum->inumberOfChildren];
-    // create and expression tree for the sum node
+    nlNodeSum->m_mChildren = new ExprNode*[ nlNodeSum->inumberOfChildren];
+    // create an expression tree for the sum node
     m_LagrangianExpTree = new RealValuedExpressionTree();
     m_LagrangianExpTree->m_treeRoot = nlNodeSum;
     // now create the children of the sum node
@@ -5678,7 +5690,7 @@ RealValuedExpressionTree* OSInstance::getLagrangianExpTree( )
         // now create a times multiply the new variable times the root of the expression tree
         nlNodeTimes = new OSnLNodeTimes();
         nlNodeTimes->m_mChildren[ 0] = nlNodeVariable;
-        nlNodeTimes->m_mChildren[ 1] = m_mapExpressionTreesMod[ posMapExpTree->first ]->m_treeRoot;
+        nlNodeTimes->m_mChildren[ 1] = ((OSnLNode*)m_mapExpressionTreesMod[ posMapExpTree->first ]->m_treeRoot);
         // the times node is the new child
         nlNodeSum->m_mChildren[ numChildren] = nlNodeTimes;
         numChildren++;
@@ -6786,7 +6798,7 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
         int kount = 0;
         for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
         {
-            m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
+            m_vFG.push_back( ((OSnLNode*)posMapExpTree->second->m_treeRoot)->constructADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
             if( m_mapOSADFunRangeIndex.find( posMapExpTree->first) == m_mapOSADFunRangeIndex.end() )
             {
                 // count which nonlinear obj/constraint this is

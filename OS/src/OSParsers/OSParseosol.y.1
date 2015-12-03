@@ -55,6 +55,13 @@
 #define YYDEBUG 1
 #endif
 
+// This declaration produces *loads* of output
+#ifdef YYDEBUG
+    extern int osildebug;
+    osildebug = 1;
+#endif
+
+
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osol_scan_string (const char *yy_str , void* yyscanner  );
 int osollex_init(void** ptr_yy_globals);

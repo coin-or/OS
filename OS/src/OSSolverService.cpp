@@ -190,7 +190,8 @@ int main(int argC, const char* argV[])
         return 0;
     }
 
-//  Any optional output created before the printLevel is set (near line 400) must be kept in temporary buffers
+//  Any optional output created before the printLevel is set (near line 400) 
+//  must be kept in temporary buffers (one for each level)
     std::ostringstream *tempBuffer = new std::ostringstream[ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS];
 
     for (int i=ENUM_OUTPUT_LEVEL_info; i<ENUM_OUTPUT_LEVEL_NUMBER_OF_LEVELS; i++)
