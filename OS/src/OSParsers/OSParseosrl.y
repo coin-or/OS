@@ -7767,13 +7767,13 @@ matrixProduct: MATRIXPRODUCTSTART
 }
 anothermatrixproductnode MATRIXPRODUCTEND 
 {
-    osnlData->matrixProductVec.back()->m_mMatrixChildren = new ExprNode*[ osnlData->matrixProductVec.back()->inumberOfMatrixChildren];
+    osnlData->matrixProductVec.back()->m_mChildren = new ExprNode*[ osnlData->matrixProductVec.back()->inumberOfChildren];
     osnlData->matrixProductVec.pop_back();
 };
 
 anothermatrixproductnode: | anothermatrixproductnode OSnLMNode 
 { 
-    osnlData->matrixProductVec.back()->inumberOfMatrixChildren++; 
+    osnlData->matrixProductVec.back()->inumberOfChildren++; 
 };
 
 

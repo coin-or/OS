@@ -74,58 +74,16 @@ public:
      */
     int inodeKind;
 
-#if 0
-    /** inodeType essentially tracks whether the number of children is known or not.
-     *  For most nodes this is known, in which case inodeType is set to inumberOfChildren.
-     *  For some nodes the number of children is not known a priori, e.g., a sum node,
-     *  then inodeType is set to -1.
-     */
-    int inodeType;
-#endif
-
     /**  inumberOfChildren is the number of OSnLNode child elements
      *   If this number is not fixed, e.g., for a sum node, it is temporarily set to 0
      */
     unsigned int inumberOfChildren;
 
-    /**  inumberOfComplexChildren is the number of OSnLCNode child elements
-     *   If this number is not fixed, it is temporarily set to 0
-     */
-    unsigned int inumberOfComplexChildren;
-
-    /**  inumberOfScalarChildren is the number of ScalarNode child elements
-     *   If this number is not fixed, e.g., for a complexSum node, it is temporarily set to 0
-     *   @remark A ScalarNode can be either real-valued or complex-valued.
-     *   Implementations of such nodes are expected to cater to both possibilities.
-     *   The value of inodeType can be used to disambiguate.
-     */
-    unsigned int inumberOfScalarChildren;
-
-    /**  inumberOfMatrixChildren is the number of OSnLMNode child elements
-     *   If this number is not fixed, e.g., for a matrixProduct node, it is temporarily set to 0
-     */
-    unsigned int inumberOfMatrixChildren;
-
     /**
-     * m_mChildren holds all the real-valued operands, that is, nodes that the current node operates on.
+     *  m_mChildren holds all the operands, that is, nodes that the current node operates on.
+     *  @remark There is no distinction based on the kind of node (real-valued or otherwise)
      */
     /*OSnLNode*/ ExprNode **m_mChildren;
-
-    /**
-     * m_mComplexChildren holds all the complex-valued operands, if any.
-     */
-    /*OSnLCNode*/ ExprNode **m_mComplexChildren;
-
-    /**
-     * m_mScalarChildren holds all the scalar-valued operands, if any.
-     */
-    /*ScalarNode*/ ExprNode**m_mScalarChildren;
-
-    /**
-     * m_mMatrixChildren holds all the matrix-valued operands, if any.
-     */
-    /*OSnLMNode*/ ExprNode **m_mMatrixChildren;
-
 
     /**
      * default constructor.
@@ -344,44 +302,6 @@ public:
      * @return the ExprNode and its children as an OSiL string.
      */
     //virtual std::string getNonlinearExpressionInXML() = 0;
-
-#if 0
-    /**
-     * Get a vector of pointers to OSnLNodes and OSnLMNodes that correspond to
-     * the (scalar-valued or matrix-valued) expression tree in prefix format.
-     *
-     * @return the expression tree as a vector of ExprNodes in prefix.
-     */
-    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
-
-    /**
-     * Called by getPrefixFromExpressionTree().  
-     * This method calls itself recursively and
-     * generates a vector of pointers to ExprNode in prefix
-     * 
-     * @param a pointer prefixVector to a vector of pointers of ExprNodes
-     * @return a vector of pointers to ExprNode in prefix.
-     */
-    virtual std::vector<ExprNode*> preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector);
-
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * the expression tree in postfix format
-     *
-     * @return the expression tree as a vector of ExprNodes in postfix.
-     */
-    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
-
-    /**
-     * Called by getPostfixFromExpressionTree(). 
-     * This method calls itself recursively and
-     * generates a vector of pointers to ExprNodes in postfix.
-     * 
-     * @param a pointer postfixVector to a vector of pointers of ExprNodes
-     * @return a vector of pointers to ExprNodes in postfix.
-     */
-    virtual std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
-#endif
 
     /**
      * Create or clone a node of this type.
@@ -1362,6 +1282,7 @@ public:
 
 /*! \class OSnLNodeErf
  *  \brief The OSnLNodeErf Class.
+
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 10/05/2005
@@ -2100,15 +2021,6 @@ public:
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual ExprNode *cloneExprNode();
-
-#if 0
-    /*! \fn double OSnLMNodeMatrixPlus::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
-
 };//end OSnLMNodeMatrixPlus
 
 class OSnLMNodeMatrixMinus : public OSnLMNode
@@ -2284,6 +2196,7 @@ public:
     /**
      *
      * @return the OSiL XML for the OSnLMNode <matrix>.
+
      */
 //    virtual std::string getNonlinearExpressionInXML();
 
@@ -2648,33 +2561,11 @@ public:
      */
     virtual std::string getNonlinearExpressionInXML();
 
-#if 0
-    /*! \fn double OSnLNodeNumber::double(double *x)
-     *  \brief The implementation of the virtual functions.
-     *  \return a double.
-     */
-    virtual double calculateFunction( double *x);
-#endif
-
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual ExprNode *cloneExprNode();
-
-    /**
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
-     */
-//    virtual OSnLMNode* copyNodeAndDescendants();
-
-#if 0
-    /*! \fn double OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
 
     /**
      * A function to check for the equality of two objects
@@ -2716,33 +2607,11 @@ public:
      */
     virtual std::string getNonlinearExpressionInXML();
 
-#if 0
-    /*! \fn double OSnLNodeNumber::double(double *x)
-     *  \brief The implementation of the virtual functions.
-     *  \return a double.
-     */
-    virtual double calculateFunction( double *x);
-#endif
-
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual ExprNode *cloneExprNode();
-
-    /**
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
-     */
-//    virtual OSnLMNode* copyNodeAndDescendants();
-
-#if 0
-    /*! \fn double OSnLMNodeMatrixReference::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
 
     /**
      * A function to check for the equality of two objects
@@ -2784,33 +2653,11 @@ public:
      */
     virtual std::string getNonlinearExpressionInXML();
 
-#if 0
-    /*! \fn double OSnLNodeNumber::double(double *x)
-     *  \brief The implementation of the virtual functions.
-     *  \return a double.
-     */
-    virtual double calculateFunction( double *x);
-#endif
-
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual ExprNode *cloneExprNode();
-
-    /**
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
-     */
-//    virtual OSnLMNode* copyNodeAndDescendants();
-
-#if 0
-    /*! \fn double OSnLMNodeMatrixObj::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
 
     /**
      * A function to check for the equality of two objects
@@ -2852,33 +2699,11 @@ public:
      */
     virtual std::string getNonlinearExpressionInXML();
 
-#if 0
-    /*! \fn double OSnLNodeNumber::double(double *x)
-     *  \brief The implementation of the virtual functions.
-     *  \return a double.
-     */
-    virtual double calculateFunction( double *x);
-#endif
-
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual ExprNode *cloneExprNode();
-
-    /**
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
-     */
-//    virtual OSnLMNode* copyNodeAndDescendants();
-
-#if 0
-    /*! \fn double OSnLMNodeMatrixCon::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
 
     /**
      * A function to check for the equality of two objects
@@ -2968,18 +2793,6 @@ public:
      * default destructor.
      */
     virtual ~OSnLCNode();
-
-#if 0
-    /**
-     * varIdx is a map where the key is the index of an OSnLNodeVariable and
-     * (*varIdx)[ idx] is the kth variable in the map, e.g.
-     * (*varIdx)[ 5] = 2 means that variable indexed by 5 is the second variable
-     * in the OSnLNode and all of its children
-     * 
-     * @param a pointer to a map of the variables in the OSnLNode and its children
-     */
-    virtual void getVariableIndexMap(std::map<int, int> *varIdx);
-#endif
 
     /**
      * Calculate the function value given the current variable values.
@@ -3107,14 +2920,6 @@ public:
      */
     virtual std::complex<double> calculateFunction_C( double *x);
 
-#if 0
-    /*! \fn double OSnLCNodeComplex::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
-
     /*! \fn OSnLCNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLCNode of the proper type.
@@ -3156,14 +2961,6 @@ public:
      *  \return nothing, but store function value into m_dFunctionValue.
      */
     virtual std::complex<double> calculateFunction_C( double *x);
-
-#if 0
-    /*! \fn double OSnLCNodePlus::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
 
     /*! \fn OSnLCNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -3207,14 +3004,6 @@ public:
      */
     virtual std::complex<double> calculateFunction_C( double *x);
 
-#if 0
-    /*! \fn double OSnLCNodeSum::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
-
     /*! \fn OSnLCNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLCNode of the proper type.
@@ -3257,14 +3046,6 @@ public:
      *  \return nothing, but store function value into m_dFunctionValue.
      */
     virtual std::complex<double> calculateFunction_C( double *x);
-
-#if 0
-    /*! \fn double OSnLCNodeTimes::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD)
-     *  \brief The implementation of the virtual functions.
-     *  \return a ADdouble.
-     */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
-#endif
 
     /*! \fn OSnLCNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.

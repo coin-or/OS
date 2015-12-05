@@ -11643,7 +11643,7 @@ std::cout << "matched \"Re\"; value = " << parserData->tempVal << std::cout;
   case 1722:
 
     {
-    osnlData->matrixProductVec.back()->m_mMatrixChildren = new ExprNode*[ osnlData->matrixProductVec.back()->inumberOfMatrixChildren];
+    osnlData->matrixProductVec.back()->m_mChildren = new ExprNode*[ osnlData->matrixProductVec.back()->inumberOfChildren];
     osnlData->matrixProductVec.pop_back();
 }
     break;
@@ -11651,7 +11651,7 @@ std::cout << "matched \"Re\"; value = " << parserData->tempVal << std::cout;
   case 1724:
 
     { 
-    osnlData->matrixProductVec.back()->inumberOfMatrixChildren++; 
+    osnlData->matrixProductVec.back()->inumberOfChildren++; 
 }
     break;
 

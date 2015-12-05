@@ -99,7 +99,7 @@
 //#define CHECK_PARSE_TIME
 
 // debugging tools. uncomment as needed 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define YYDEBUG 1
@@ -8530,7 +8530,7 @@ std::cout << "matched \"Re\"; value = " << parserData->tempVal << std::cout;
   case 989:
 
     {
-    osnlData->matrixProductVec.back()->m_mMatrixChildren = new ExprNode*[ osnlData->matrixProductVec.back()->inumberOfMatrixChildren];
+    osnlData->matrixProductVec.back()->m_mChildren = new ExprNode*[ osnlData->matrixProductVec.back()->inumberOfChildren];
     osnlData->matrixProductVec.pop_back();
 }
     break;
@@ -8538,7 +8538,7 @@ std::cout << "matched \"Re\"; value = " << parserData->tempVal << std::cout;
   case 991:
 
     { 
-    osnlData->matrixProductVec.back()->inumberOfMatrixChildren++; 
+    osnlData->matrixProductVec.back()->inumberOfChildren++; 
 }
     break;
 

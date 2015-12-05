@@ -2922,39 +2922,39 @@ std::string *OSOption::getInitVarValuesStringDense()
  * @return an array of value strings
  * @note return the empty string "" for variables that are not initialed
 std::string *OSOption::getInitVarValuesStringDense(int numberOfVariables)
-{	try
-	{	if (numberOfVariables < 0)
-			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");
+{    try
+    {    if (numberOfVariables < 0)
+            throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");
 
-		if (this->optimization != NULL)
-		{	if (this->optimization->variables != NULL)
-			{	if (this->optimization->variables->initialVariableValuesString != NULL)
-				{	int i,j,k;
-					int num_var;
-					num_var = this->getNumberOfInitVarValuesString();
+        if (this->optimization != NULL)
+        {    if (this->optimization->variables != NULL)
+            {    if (this->optimization->variables->initialVariableValuesString != NULL)
+                {    int i,j,k;
+                    int num_var;
+                    num_var = this->getNumberOfInitVarValuesString();
 
-					if (m_mdInitVarValuesStringDense != NULL)
-						delete [] m_mdInitVarValuesStringDense;
-					m_mdInitVarValuesStringDense = new std::string[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesStringDense[k] = "";
+                    if (m_mdInitVarValuesStringDense != NULL)
+                        delete [] m_mdInitVarValuesStringDense;
+                    m_mdInitVarValuesStringDense = new std::string[numberOfVariables];
+                    for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesStringDense[k] = "";
 
-					for (i = 0; i < num_var; i++)
-					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
-						if (j >= 0 && j < numberOfVariables)
-							m_mdInitVarValuesStringDense[j]
-							  = this->optimization->variables->initialVariableValuesString->var[i]->value;
-						else
-							throw ErrorClass("Variable index out of range");
-					}
-					return m_mdInitVarValuesStringDense;
-				}
-			}
-		}
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return NULL;
+                    for (i = 0; i < num_var; i++)
+                    {    j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
+                        if (j >= 0 && j < numberOfVariables)
+                            m_mdInitVarValuesStringDense[j]
+                              = this->optimization->variables->initialVariableValuesString->var[i]->value;
+                        else
+                            throw ErrorClass("Variable index out of range");
+                    }
+                    return m_mdInitVarValuesStringDense;
+                }
+            }
+        }
+    }
+    catch(const ErrorClass& eclass)
+    {    throw ErrorClass(eclass.errormsg);
+    }
+    return NULL;
 }//getInitVarValuesStringDense
  */
 
@@ -4650,7 +4650,7 @@ bool OtherOptions::addOther(std::string name, std::string value, std::string des
 
         delete[] this->other; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new OtherOption();
 
         temp[ nopt]->name = name;
@@ -4860,8 +4860,8 @@ bool PathPairs::setPathPair(int numberOfPathPairs, PathPair **pathPair)
 
 bool PathPairs::setPathPair(std::string *from, std::string *to, bool *makeCopy, int numberOfPathPairs)
 {
-//	if (this->pathPair != NULL)
-//		return false;
+//    if (this->pathPair != NULL)
+//        return false;
 
     this->numberOfPathPairs = numberOfPathPairs;
     if (numberOfPathPairs == 0)
@@ -4911,7 +4911,7 @@ bool PathPairs::addPathPair(std::string fromPath, std::string toPath, bool makeC
 
         delete[] this->pathPair; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new PathPair();
 
         temp[ nopt]->from = fromPath;
@@ -5153,7 +5153,7 @@ bool InitVariableValues::addVar(int idx, double value)
 
         delete[] this->var; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new InitVarValue();
 
         temp[ nopt]->idx = idx;
@@ -5194,15 +5194,15 @@ bool InitVariableValues::addVar(int numberOfVar, InitVarValue **var)
 
         delete[] this->var; //delete old pointers
 
-//	add in the new elements
+//    add in the new elements
         for (int i=0; i < numberOfVar; i++)
         {
             temp[nprev+i] = new InitVarValue();
-	       *temp[nprev+i] = *var[i];
+           *temp[nprev+i] = *var[i];
         }
 
         this->var = temp;   //hook the new pointers into the data structure
-       	this->numberOfVar = nprev + numberOfVar;
+           this->numberOfVar = nprev + numberOfVar;
 
         return true;
     }
@@ -5274,8 +5274,8 @@ bool InitVariableValuesString::setVar(int numberOfVar, InitVarValueString **var,
                 delete this->var[i];
             delete [] this->var;
             this->var = NULL;
-		}			
-			
+        }            
+            
         if (numberOfVar < 0)
             throw ErrorClass( "length of var array cannot be negative.");
 
@@ -5360,7 +5360,7 @@ bool InitVariableValuesString::addVar(int idx, std::string value)
 
         delete[] this->var; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new InitVarValueString();
 
         temp[ nopt]->idx = idx;
@@ -5402,15 +5402,15 @@ bool InitVariableValuesString::addVar(int numberOfVar, InitVarValueString **var)
 
         delete[] this->var; //delete old pointers
 
-//	add in the new elements
+//    add in the new elements
         for (int i=0; i < numberOfVar; i++)
         {
             temp[nprev+i] = new InitVarValueString();
-	       *temp[nprev+i] = *var[i];
+           *temp[nprev+i] = *var[i];
         }
 
         this->var = temp;   //hook the new pointers into the data structure
-       	this->numberOfVar = nprev + numberOfVar;
+           this->numberOfVar = nprev + numberOfVar;
 
         return true;
     }
@@ -5487,7 +5487,7 @@ bool InitialBasisStatus::addVar(int idx, std::string value)
 
         delete[] this->var; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new InitBasStatus();
 
         temp[ nopt]->idx = idx;
@@ -5654,7 +5654,7 @@ bool IntegerVariableBranchingWeights::addVar(int idx, double value)
 
         delete[] this->var; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new BranchingWeight();
 
         temp[ nopt]->idx = idx;
@@ -5695,15 +5695,15 @@ bool IntegerVariableBranchingWeights::addVar(int numberOfVar, BranchingWeight **
 
         delete[] this->var; //delete old pointers
 
-//	add in the new elements
+//    add in the new elements
         for (int i=0; i < numberOfVar; i++)
         {
             temp[nprev+i] = new BranchingWeight();
-	       *temp[nprev+i] = *var[i];
+           *temp[nprev+i] = *var[i];
         }
 
         this->var = temp;   //hook the new pointers into the data structure
-       	this->numberOfVar = nprev + numberOfVar;
+           this->numberOfVar = nprev + numberOfVar;
 
         return true;
     }
@@ -5777,7 +5777,7 @@ bool SOSWeights::addVar(int idx, double value)
 
         delete[] this->var; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new BranchingWeight();
 
         temp[ nopt]->idx = idx;
@@ -5874,7 +5874,7 @@ bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, in
 
         delete[] this->sos; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new SOSWeights();
 
         temp[ nopt]->sosIdx = sosIdx;
@@ -5965,7 +5965,7 @@ bool OtherVariableOption::addVar(int idx, std::string value, std::string lbValue
 
         delete[] this->var; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new OtherVarOption();
 
         temp[ nopt]->idx = idx;
@@ -6077,7 +6077,7 @@ bool VariableOption::addOther(OtherVariableOption *other)
 
         delete[] this->other; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new OtherVariableOption();
         temp[ nopt]->name        = other->name;
         temp[ nopt]->value       = other->value;
@@ -6269,7 +6269,7 @@ bool InitObjectiveValues::addObj(int idx, double value)
 
         delete[] this->obj; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new InitObjValue();
 
         temp[ nopt]->idx = idx;
@@ -6310,15 +6310,15 @@ bool InitObjectiveValues::addObj(int numberOfObj, InitObjValue **obj)
 
         delete[] this->obj; //delete old pointers
 
-//	add in the new elements
+//    add in the new elements
         for (int i=0; i < numberOfObj; i++)
         {
             temp[nprev+i] = new InitObjValue();
-	       *temp[nprev+i] = *obj[i];
+           *temp[nprev+i] = *obj[i];
         }
 
         this->obj = temp;   //hook the new pointers into the data structure
-       	this->numberOfObj = nprev + numberOfObj;
+           this->numberOfObj = nprev + numberOfObj;
 
         return true;
     }
@@ -6471,7 +6471,7 @@ bool InitObjectiveBounds::addObj(int idx, double lbValue, double ubValue)
 
         delete[] this->obj; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new InitObjBound();
 
         temp[ nopt]->idx = idx;
@@ -6513,15 +6513,15 @@ bool InitObjectiveBounds::addObj(int numberOfObj, InitObjBound **obj)
 
         delete[] this->obj; //delete old pointers
 
-//	add in the new elements
+//    add in the new elements
         for (int i=0; i < numberOfObj; i++)
         {
             temp[nprev+i] = new InitObjBound();
-	       *temp[nprev+i] = *obj[i];
+           *temp[nprev+i] = *obj[i];
         }
 
         this->obj = temp;   //hook the new pointers into the data structure
-       	this->numberOfObj = nprev + numberOfObj;
+           this->numberOfObj = nprev + numberOfObj;
 
         return true;
     }
@@ -6600,7 +6600,7 @@ bool OtherObjectiveOption::addObj(int idx, std::string value, std::string lbValu
 
         delete[] this->obj; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new OtherObjOption();
 
         temp[ nopt]->idx = idx;
@@ -6712,7 +6712,7 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
 
         delete[] this->other; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new OtherObjectiveOption();
         temp[ nopt]->name        = other->name;
         temp[ nopt]->value       = other->value;
@@ -6914,7 +6914,7 @@ bool InitConstraintValues::addCon(int idx, double value)
 
         delete[] this->con; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new InitConValue();
 
         temp[ nopt]->idx = idx;
@@ -6955,15 +6955,15 @@ bool InitConstraintValues::addCon(int numberOfCon, InitConValue **con)
 
         delete[] this->con; //delete old pointers
 
-//	add in the new elements
+//    add in the new elements
         for (int i=0; i < numberOfCon; i++)
         {
             temp[nprev+i] = new InitConValue();
-	       *temp[nprev+i] = *con[i];
+           *temp[nprev+i] = *con[i];
         }
 
         this->con = temp;   //hook the new pointers into the data structure
-       	this->numberOfCon = nprev + numberOfCon;
+           this->numberOfCon = nprev + numberOfCon;
 
         return true;
     }
@@ -7116,7 +7116,7 @@ bool InitDualVariableValues::addCon(int idx, double lbDualValue, double ubDualVa
 
         delete[] this->con; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new InitDualVarValue();
 
         temp[ nopt]->idx = idx;
@@ -7158,15 +7158,15 @@ bool InitDualVariableValues::addCon(int numberOfCon, InitDualVarValue **con)
 
         delete[] this->con; //delete old pointers
 
-//	add in the new elements
+//    add in the new elements
         for (int i=0; i < numberOfCon; i++)
         {
             temp[nprev+i] = new InitDualVarValue();
-	       *temp[nprev+i] = *con[i];
+           *temp[nprev+i] = *con[i];
         }
 
         this->con = temp;   //hook the new pointers into the data structure
-       	this->numberOfCon = nprev + numberOfCon;
+           this->numberOfCon = nprev + numberOfCon;
 
         return true;
     }
@@ -7242,7 +7242,7 @@ bool OtherConstraintOption::addCon(int idx, std::string value, std::string lbVal
 
         delete[] this->con; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new OtherConOption();
 
         temp[ nopt]->idx = idx;
@@ -7359,7 +7359,7 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
 
         delete[] this->other; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new OtherConstraintOption();
         temp[ nopt]->name        = other->name;
         temp[ nopt]->value       = other->value;
@@ -7498,7 +7498,7 @@ bool SolverOptions::addSolverOption(std::string name, std::string value, std::st
 
         delete[] this->solverOption; //delete old pointers
 
-//	add in the new element
+//    add in the new element
         temp[ nopt] = new SolverOption();
 
         temp[ nopt]->numberOfItems = 0;
@@ -8443,7 +8443,7 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
     int i;
     for (i = 0; i < numberOfVar; i++)
     {
-//		if (!CoinIsnan(value[i]))
+//        if (!CoinIsnan(value[i]))
         if (!this->optimization->variables->initialVariableValues->addVar(i, value[i]))
             return false;
     }
@@ -8557,7 +8557,7 @@ bool OSOption::setInitBasisStatus(int object, int status, int *i, int ni)
         for (int j=0; j<ni; j++)
         {
             if (i[j] < 0)
-				return false;
+                return false;
         }
         return optimization->variables->initialBasisStatus->setIntVector(status, i, ni);
     }
@@ -8568,10 +8568,10 @@ bool OSOption::setInitBasisStatus(int object, int status, int *i, int ni)
         if (optimization->objectives->initialBasisStatus == NULL)
             optimization->objectives->initialBasisStatus = new BasisStatus();
         for (int j=0; j<ni; j++) 
-		{
-			if (i[j] >= 0) 
-				return false;
-		}
+        {
+            if (i[j] >= 0) 
+                return false;
+        }
         return optimization->objectives->initialBasisStatus->setIntVector(status, i, ni);
     }
     case ENUM_PROBLEM_COMPONENT_constraints:
@@ -8581,10 +8581,10 @@ bool OSOption::setInitBasisStatus(int object, int status, int *i, int ni)
         if (optimization->constraints->initialBasisStatus == NULL)
             optimization->constraints->initialBasisStatus = new BasisStatus();
         for (int j=0; j<ni; j++) 
-		{
-			if (i[j] < 0) 
-				return false;
-		}
+        {
+            if (i[j] < 0) 
+                return false;
+        }
         return optimization->constraints->initialBasisStatus->setIntVector(status, i, ni);
     }
     default:
@@ -8690,7 +8690,7 @@ bool OSOption::setIntegerVariableBranchingWeightsDense(int numberOfVar, double *
     int i;
     for (i = 0; i < numberOfVar; i++)
     {
-//		if (!CoinIsnan(value[i]))
+//        if (!CoinIsnan(value[i]))
         if (!this->optimization->variables->integerVariableBranchingWeights->addVar(i, value[i]))
             return false;
     }
@@ -8742,7 +8742,7 @@ bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double
 bool OSOption::setNumberOfOtherVariableOptions(int numberOfOther)
 {
     if (optimization == NULL) 
-	optimization = new OptimizationOption();
+    optimization = new OptimizationOption();
     if (optimization->variables == NULL)
         optimization->variables = new VariableOption();
     if(optimization->variables->numberOfOtherVariableOptions < 0) return false;
@@ -8970,7 +8970,7 @@ bool OSOption::setInitObjValuesDense(int numberOfObj, double *value)
     int i;
     for (i = 0; i < numberOfObj; i++)
     {
-//		if (!CoinIsnan(value[i]))
+//        if (!CoinIsnan(value[i]))
         if (!this->optimization->objectives->initialObjectiveValues->addObj(-1-i, value[i]))
             return false;
     }
@@ -9237,7 +9237,7 @@ bool OSOption::setInitConValuesDense(int numberOfCon, double *value)
     int i;
     for (i = 0; i < numberOfCon; i++)
     {
-//		if (!CoinIsnan(value[i]))
+//        if (!CoinIsnan(value[i]))
         if (!this->optimization->constraints->initialConstraintValues->addCon(i, value[i]))
             return false;
     }
@@ -12488,7 +12488,7 @@ bool OtherOptions::setRandom( double density, bool conformant )
 
     this->numberOfOtherOptions = (int)(1+4*OSRand());
 
-    if (conformant)	n = this->numberOfOtherOptions;
+    if (conformant)    n = this->numberOfOtherOptions;
     else            n = (int)(1+4*OSRand());
 
     other = new OtherOption*[n];
@@ -12524,7 +12524,7 @@ bool JobDependencies::setRandom( double density, bool conformant )
 
     this->numberOfJobIDs = (int)(1+4*OSRand());
 
-    if (conformant)	n = this->numberOfJobIDs;
+    if (conformant)    n = this->numberOfJobIDs;
     else            n = (int)(1+4*OSRand());
 
     jobID = new std::string[n];
@@ -12543,7 +12543,7 @@ bool DirectoriesAndFiles::setRandom( double density, bool conformant )
 
     this->numberOfPaths = (int)(1+4*OSRand());
 
-    if (conformant)	n = this->numberOfPaths;
+    if (conformant)    n = this->numberOfPaths;
     else            n = (int)(1+4*OSRand());
 
 
@@ -12563,7 +12563,7 @@ bool PathPairs::setRandom( double density, bool conformant )
 
     this->numberOfPathPairs = (int)(1+4*OSRand());
 
-    if (conformant)	n = this->numberOfPathPairs;
+    if (conformant)    n = this->numberOfPathPairs;
     else            n =(int)(1+4*OSRand());
 
     pathPair = new PathPair*[n];
@@ -12596,7 +12596,7 @@ bool Processes::setRandom( double density, bool conformant )
 
     this->numberOfProcesses = (int)(1+4*OSRand());
 
-    if (conformant)	n = this->numberOfProcesses;
+    if (conformant)    n = this->numberOfProcesses;
     else            n = (int)(1+4*OSRand());
 
     process = new std::string[n];
@@ -12643,7 +12643,7 @@ bool VariableOption::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfOtherVariableOptions;
+    if (conformant)    n = this->numberOfOtherVariableOptions;
     else            n = (int)(4*OSRand());
 
     other = new OtherVariableOption*[n];
@@ -12664,7 +12664,7 @@ bool InitVariableValues::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfVar;
+    if (conformant)    n = this->numberOfVar;
     else            n = (int)(1+4*OSRand());
 
     var = new InitVarValue*[n];
@@ -12704,7 +12704,7 @@ bool InitVariableValuesString::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfVar;
+    if (conformant)    n = this->numberOfVar;
     else            n = (int)(1+4*OSRand());
 
     var = new InitVarValueString*[n];
@@ -12739,7 +12739,7 @@ bool IntegerVariableBranchingWeights::setRandom( double density, bool conformant
 
     int n;
 
-    if (conformant)	n = this->numberOfVar;
+    if (conformant)    n = this->numberOfVar;
     else            n = (int)(1+4*OSRand());
 
     var = new BranchingWeight*[n];
@@ -12760,7 +12760,7 @@ bool SOSVariableBranchingWeights::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfSOS;
+    if (conformant)    n = this->numberOfSOS;
     else            n = (int)(1+4*OSRand());
 
     sos = new SOSWeights*[n];
@@ -12786,7 +12786,7 @@ bool SOSWeights::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfVar;
+    if (conformant)    n = this->numberOfVar;
     else            n = (int)(4*OSRand());
 
     var = new BranchingWeight*[n];
@@ -12833,7 +12833,7 @@ bool OtherVariableOption::setRandom( double density, bool conformant )
 
             int n;
 
-            if (conformant)	n = this->numberOfVar;
+            if (conformant)    n = this->numberOfVar;
             else            n = (int)(4*OSRand());
 
             var = new OtherVarOption*[n];
@@ -12849,7 +12849,7 @@ bool OtherVariableOption::setRandom( double density, bool conformant )
 
             int n;
 
-            if (conformant)	n = this->numberOfEnumerations;
+            if (conformant)    n = this->numberOfEnumerations;
             else            n = (int)(4*OSRand());
 
             enumeration = new OtherOptionOrResultEnumeration*[n];
@@ -12904,7 +12904,7 @@ bool ObjectiveOption::setRandom( double density, bool conformant )
 
         int n;
 
-        if (conformant)	n = this->numberOfOtherObjectiveOptions;
+        if (conformant)    n = this->numberOfOtherObjectiveOptions;
         else            n = (int)(4*OSRand());
 
         other = new OtherObjectiveOption*[n];
@@ -12926,7 +12926,7 @@ bool InitObjectiveValues::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfObj;
+    if (conformant)    n = this->numberOfObj;
     else            n = (int)(1+4*OSRand());
 
     obj = new InitObjValue*[n];
@@ -12966,7 +12966,7 @@ bool InitObjectiveBounds::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfObj;
+    if (conformant)    n = this->numberOfObj;
     else            n = (int)(1+4*OSRand());
 
     obj = new InitObjBound*[n];
@@ -13018,7 +13018,7 @@ bool OtherObjectiveOption::setRandom( double density, bool conformant )
 
             int n;
 
-            if (conformant)	n = this->numberOfObj;
+            if (conformant)    n = this->numberOfObj;
             else            n = (int)(4*OSRand());
 
             obj = new OtherObjOption*[n];
@@ -13034,7 +13034,7 @@ bool OtherObjectiveOption::setRandom( double density, bool conformant )
 
             int n;
 
-            if (conformant)	n = this->numberOfEnumerations;
+            if (conformant)    n = this->numberOfEnumerations;
             else            n = (int)(4*OSRand());
 
             enumeration = new OtherOptionOrResultEnumeration*[n];
@@ -13090,7 +13090,7 @@ bool ConstraintOption::setRandom( double density, bool conformant )
 
         int n;
 
-        if (conformant)	n = this->numberOfOtherConstraintOptions;
+        if (conformant)    n = this->numberOfOtherConstraintOptions;
         else            n = (int)(4*OSRand());
 
         other = new OtherConstraintOption*[n];
@@ -13112,7 +13112,7 @@ bool InitConstraintValues::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfCon;
+    if (conformant)    n = this->numberOfCon;
     else            n = (int)(1+4*OSRand());
 
     con = new InitConValue*[n];
@@ -13151,7 +13151,7 @@ bool InitDualVariableValues::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfCon;
+    if (conformant)    n = this->numberOfCon;
     else            n = (int)(1+4*OSRand());
 
     con = new InitDualVarValue*[n];
@@ -13202,7 +13202,7 @@ bool OtherConstraintOption::setRandom( double density, bool conformant )
 
             int n;
 
-            if (conformant)	n = this->numberOfCon;
+            if (conformant)    n = this->numberOfCon;
             else            n = (int)(4*OSRand());
 
             con = new OtherConOption*[n];
@@ -13218,7 +13218,7 @@ bool OtherConstraintOption::setRandom( double density, bool conformant )
 
             int n;
 
-            if (conformant)	n = this->numberOfEnumerations;
+            if (conformant)    n = this->numberOfEnumerations;
             else            n = (int)(4*OSRand());
 
             enumeration = new OtherOptionOrResultEnumeration*[n];
@@ -13255,7 +13255,7 @@ bool SolverOptions::setRandom( double density, bool conformant )
 
     int n;
 
-    if (conformant)	n = this->numberOfSolverOptions;
+    if (conformant)    n = this->numberOfSolverOptions;
     else            n = (int)(1+4*OSRand());
 
     solverOption = new SolverOption*[n];
@@ -13286,7 +13286,7 @@ bool SolverOption::setRandom( double density, bool conformant )
 
         int n;
 
-        if (conformant)	n = this->numberOfItems;
+        if (conformant)    n = this->numberOfItems;
         else            n = (int)(4*OSRand());
 
         item = new std::string[n];

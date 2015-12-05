@@ -567,8 +567,7 @@ if(BASIC_TESTS == true){
         for (int i = 0 ; i < n; i++)
         {
             std::cout << "node " << i << "@" << postfixVec[i] <<":  " << postfixVec[i]->getTokenName();
-            std::cout << "   scalar kids = " << postfixVec[i]->inumberOfChildren;
-            std::cout << "   matrix kids = " << postfixVec[i]->inumberOfMatrixChildren << std::endl;
+            std::cout << "   number of kids = " << postfixVec[i]->inumberOfChildren;
             nodeNames1[i] = postfixVec[i]->getTokenName();
         }
         // now test value
@@ -962,8 +961,6 @@ if (PARSER_TESTS)
             fileUtil = new FileUtil();
             osilreader = new OSiLReader(); 
             osilwriter = new OSiLWriter();
-extern int osildebug;
-osildebug = 1;
 
             OSInstance *instance1, *instance2;
 
@@ -975,7 +972,6 @@ osildebug = 1;
 
             cout << "Write the OSInstance object to a temporary file (i.e., string)" << endl;
             std::string temposil = osilwriter->writeOSiL(instance1);
-cout << temposil << endl;
             cout << "Parse the temporary string again" << endl;
             osilreader2 = new OSiLReader;
             instance2 = osilreader2->readOSiL( temposil);
@@ -7701,10 +7697,11 @@ if( THOROUGH == true){
             cout << "IPOPT solver solution for avion2 checks." << endl;
         }
         else
-        {    cout << "IPOPT solver solution for avion2 in error:" << endl;
+        {
+            cout << "IPOPT solver solution for avion2 in error:" << endl;
             cout << ipoptSolver->osrl << endl;
+            throw ErrorClass(" Fail unit test with Ipopt on avion2.osil");
         }
-        if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on avion2.osil");
         delete osilreader;
         osilreader = NULL;
         delete osolreader;

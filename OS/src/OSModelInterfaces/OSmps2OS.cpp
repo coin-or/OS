@@ -162,18 +162,6 @@ OSmps2OS::~OSmps2OS()
         delete m_SOS;
     m_SOS = NULL;
 
-    if (m_quadColumnStart != NULL)
-        delete m_quadColumnStart;
-    m_quadColumnStart = NULL;
-
-    if (m_quadColumnIdx != NULL)
-        delete m_quadColumnIdx;
-    m_quadColumnIdx = NULL;
-
-    if (m_quadElements != NULL)
-        delete m_quadElements;
-    m_quadElements = NULL;
-
     if (m_coneStart != NULL)
         delete m_coneStart;
     m_coneStart = NULL;
