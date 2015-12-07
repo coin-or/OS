@@ -6034,12 +6034,12 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
   case 387:
 
-    {parserData->tempVal = (yyvsp[(2) - (3)].ival);std::cout << "matched integer" << (yyvsp[(2) - (3)].ival) << std::endl;}
+    {parserData->tempVal = (yyvsp[(2) - (3)].ival);}
     break;
 
   case 388:
 
-    {parserData->tempVal = (yyvsp[(2) - (3)].dval);std::cout << "matched double" << (yyvsp[(2) - (3)].dval) << std::endl;}
+    {parserData->tempVal = (yyvsp[(2) - (3)].dval);}
     break;
 
   case 396:

@@ -206,27 +206,6 @@ OSMatrix* ExprNode::calculateFunction_M(double *x)
 
 //ADdouble ExprNode::constructADTape_M(std::map<int, int> *ADIdx, ADvector *XAD){};
 
-
-bool ExprNode::isRealValued()
-{
-    if ( inodeInt >= OS_PLUS       && inodeInt < OS_MATRIX_PLUS  ) return true;
-    if ( inodeInt >= OS_REAL_PART  && inodeInt < OS_COMPLEX_PLUS ) return true;
-    return false;
-}//end isRealValued
-
-bool ExprNode::isComplexValued()
-{
-    if ( inodeInt >= OS_COMPLEX_PLUS ) return true;
-    return false;
-}//end isRealValued
-
-bool ExprNode::isMatrixValued()
-{
-    if ( inodeInt >= OS_MATRIX_PLUS  && inodeInt < OS_REAL_PART ) return true;
-    return false;
-}//end isRealValued
-
-
 bool ExprNode::IsEqual(ExprNode *that)
 {
 #ifndef NDEBUG
@@ -464,7 +443,7 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
     {
         for(i = 0; i < inumberOfChildren; i++)
         {
-            if (!m_mChildren[ i]->isRealValued())
+            if (!m_mChildren[ i]->inodeKind == 1)
                 throw ErrorClass("Can only evaluate real-valued nodes so far");
             ((OSnLNode*)m_mChildren[ i])->getVariableIndexMap( varIdx);
         }
@@ -551,7 +530,7 @@ double OSnLNodePlus::calculateFunction(double *x)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, "in OSnLNodePlus::calculateFunction");
 #endif
-    if (!m_mChildren[0]->isRealValued() || !m_mChildren[1]->isRealValued())
+    if (!m_mChildren[0]->inodeKind == 1 || !m_mChildren[1]->inodeKind == 1)
         throw ErrorClass("Can only evaluate real-valued nodes so far");
     m_dFunctionValue = ((OSnLNode*)m_mChildren[0])->calculateFunction(x) + 
                        ((OSnLNode*)m_mChildren[1])->calculateFunction(x);
@@ -561,7 +540,7 @@ double OSnLNodePlus::calculateFunction(double *x)
 
 ADdouble OSnLNodePlus::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
 {
-    if (!m_mChildren[0]->isRealValued() || !m_mChildren[1]->isRealValued())
+    if (!m_mChildren[0]->inodeKind == 1 || !m_mChildren[1]->inodeKind == 1)
         throw ErrorClass("Can only evaluate real-valued nodes so far");
     m_ADTape = ((OSnLNode*)m_mChildren[0])->constructADTape( ADIdx,  XAD) + 
                ((OSnLNode*)m_mChildren[1])->constructADTape( ADIdx,  XAD);
@@ -4228,7 +4207,7 @@ std::complex<double> OSnLCNodePlus::calculateFunction_C(double *x)
 
     for (int i=0; i=1; i++)
     {
-        if (m_mChildren[i]->isRealValued())
+        if (m_mChildren[i]->inodeKind == 1)
         {
             m_mChildren[i]->calculateFunction(x);
             m_dFunctionValue += ((OSnLNode*)m_mChildren[i])->m_dFunctionValue;
@@ -4295,7 +4274,7 @@ std::complex<double> OSnLCNodeSum::calculateFunction_C(double *x)
 
     for (int i=0; i < inumberOfChildren; i++)
     {
-        if (m_mChildren[i]->isRealValued())
+        if (m_mChildren[i]->inodeKind == 1)
         {
             m_mChildren[i]->calculateFunction(x);
             m_dFunctionValue += ((OSnLNode*)m_mChildren[i])->m_dFunctionValue;
@@ -4366,7 +4345,7 @@ std::complex<double> OSnLCNodeTimes::calculateFunction_C(double *x)
 
     for (int i=0; i < 1; i++)
     {
-        if (m_mChildren[i]->isRealValued())
+        if (m_mChildren[i]->inodeKind == 1)
         {
             m_mChildren[i]->calculateFunction(x);
             temp = ((OSnLNode*)m_mChildren[i])->m_dFunctionValue;

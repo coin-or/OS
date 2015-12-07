@@ -28,7 +28,7 @@ using std::endl;
 
 OSExpressionTree::OSExpressionTree() :
     m_treeRoot( NULL),
-    bDestroyNlNodes(false)
+    bDestroyNlNodes(true)
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
@@ -294,6 +294,7 @@ bool ComplexValuedExpressionTree::IsEqual(ComplexValuedExpressionTree *that)
 
 MatrixExpressionTree::MatrixExpressionTree()  //:
 //    m_treeRoot( NULL)
+
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
@@ -664,6 +665,7 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                     opStack.pop();
                 }
                 postfixVec.clear();
+
                 if(tmpStack.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree -- stack size should be 1 at end");
                 resultString = tmpStack.top();
                 //std::cout << resultString << std::endl;

@@ -1826,8 +1826,8 @@ varTypeATT: VARTYPEATT ATTRIBUTETEXT QUOTE
 */
 
 aNumber:
-    xmlWhiteSpace INTEGER xmlWhiteSpace {parserData->tempVal = $2;std::cout << "matched integer" << $2 << std::endl;}
-  | xmlWhiteSpace DOUBLE  xmlWhiteSpace {parserData->tempVal = $2;std::cout << "matched double" << $2 << std::endl;};
+    xmlWhiteSpace INTEGER xmlWhiteSpace {parserData->tempVal = $2;}
+  | xmlWhiteSpace DOUBLE  xmlWhiteSpace {parserData->tempVal = $2;};
 
 //ElementValue: 
 //    ELEMENTTEXT  { parserData->tempStr = $1;       /*free($1);*/ }

@@ -83,7 +83,7 @@ public:
      *  m_mChildren holds all the operands, that is, nodes that the current node operates on.
      *  @remark There is no distinction based on the kind of node (real-valued or otherwise)
      */
-    /*OSnLNode*/ ExprNode **m_mChildren;
+    ExprNode **m_mChildren;
 
     /**
      * default constructor.
@@ -257,13 +257,6 @@ public:
      * A function to check for the equality of two objects
      */
     virtual bool IsEqual(ExprNode *that);
-
-    /**
-     *  These methods check the type of value associated with this node
-     */
-    bool isRealValued();
-    bool isComplexValued();
-    bool isMatrixValued();
 };//end ExprNode
 
 
@@ -2670,6 +2663,7 @@ class OSnLMNodeMatrixCon : public OSnLMNode
 {
 public:
     /**
+
      *  The index of the matrixCon
      */
      int idx;

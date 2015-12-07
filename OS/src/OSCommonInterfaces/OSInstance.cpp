@@ -5340,7 +5340,6 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         {
             // the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
             m_mapExpressionTreesMod[ i]->getVariableIndicesMap();
-
         }
     }
     // only execute the following code if there are linear constraint coefficients
@@ -5372,9 +5371,9 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
                         nlNodeVariable->coef = value[ j];
                         nlNodeVariable->idx = i;
                         nlNodePlus = new OSnLNodePlus();
-                        nlNodePlus->m_mChildren[ 0] = ((OSnLNode*)m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot);
+                        nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
                         nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
-                        expTree->m_treeRoot = nlNodePlus ;
+                        expTree->m_treeRoot = nlNodePlus;
                     }
                 }
                 else

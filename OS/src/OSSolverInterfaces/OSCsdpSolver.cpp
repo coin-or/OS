@@ -375,7 +375,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         for (int j=0; j < ncon+1; j++)
         {
             mtxBlocks[j] = osinstance->instanceData->matrices->matrix[mtxRef[j]]
-                ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,false,true);
+                ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,false,true);  //leaks memory
 
             if (!mtxBlocks[j]->isBlockDiagonal())
                 throw ErrorClass("Constraint matrix must be block-diagonal");
