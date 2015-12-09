@@ -3264,7 +3264,7 @@ matrixConstructorList: | matrixConstructorList matrixConstructor
 
 matrixConstructor: constantElements | varReferenceElements | linearElements | realValuedExpressions |
                    objReferenceElements | conReferenceElements | 
-                   complexElements | /*complexValuedExpressions |*/ stringValuedElements | 
+                   complexElements | complexValuedExpressions | stringValuedElements | 
                    matrixTransformation | matrixBlocks;
 
 constantElements: constantElementsStart constantElementsAttributes GREATERTHAN constantElementsContent; 
@@ -3702,6 +3702,114 @@ realValuedExpressionsElLaden: GREATERTHAN nlnode ELEND
     };
 
 
+complexValuedExpressions: complexValuedExpressionsStart complexValuedExpressionsAttributes GREATERTHAN complexValuedExpressionsContent; 
+
+complexValuedExpressionsStart: COMPLEXVALUEDEXPRESSIONSSTART
+{
+    osglData->tempC = new ComplexValuedExpressions();
+    osglData->mtxConstructorVec.push_back(osglData->tempC);
+    osglData->numberOfValuesPresent = false;        
+    osglData->rowMajorPresent = false;
+    osglData->rowMajor = false;
+};
+
+complexValuedExpressionsAttributes: complexValuedExpressionsAttList
+{
+    if (osglData->numberOfValuesPresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<complexValuedExpressions>: numberOfValues attribute missing");    
+};
+
+complexValuedExpressionsAttList: | complexValuedExpressionsAttList complexValuedExpressionsAtt;
+
+complexValuedExpressionsAtt: 
+    osglNumberOfValuesATT
+    {
+        ((ComplexValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
+        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType =
+                ENUM_MATRIX_TYPE_complexValuedExpressions;
+    }
+  | osglRowMajorATT
+    {
+        ((ComplexValuedExpressions*)osglData->tempC)->rowMajor = osglData->rowMajor;
+    }
+;
+
+complexValuedExpressionsContent: 
+    matrixElementsStartVector complexValuedExpressionsNonzeros COMPLEXVALUEDEXPRESSIONSSEND;
+
+complexValuedExpressionsNonzeros: | matrixElementsIndexVector complexValuedExpressionsValues;
+
+complexValuedExpressionsValues:
+    {
+        if (osglData->numberOfValues > 0)
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "expected <value> element");
+    }
+  | complexValuedExpressionsValuesStart complexValuedExpressionsValuesContent
+    {
+        if (osglData->numberOfValues > osglData->nonzeroCounter)
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few <el> elements");
+        else if (osglData->numberOfValues < osglData->nonzeroCounter)
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many <el> elements");        
+        ((ConReferenceMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
+        parserData->suppressFurtherErrorMessages = false;
+        parserData->ignoreDataAfterErrors = false;        
+    };
+
+complexValuedExpressionsValuesStart: VALUESTART
+{
+    osglData->numberOfValues = ((ComplexValuedExpressions*)osglData->tempC)->numberOfValues;
+    osglData->nonzeroCounter = 0;
+
+    ((ComplexValuedExpressions*)osglData->tempC)->value = new ComplexValuedExpressionArray();
+    ((ComplexValuedExpressions*)osglData->tempC)->value->numberOfEl
+        = osglData->numberOfValues;
+    ((ComplexValuedExpressions*)osglData->tempC)->value->el
+        = new ComplexValuedExpressionTree*[osglData->numberOfValues];
+
+    for (int i=0; i<osglData->numberOfValues; i++)
+        ((ComplexValuedExpressions*)osglData->tempC)->value->el[i] = new ComplexValuedExpressionTree();
+};
+
+complexValuedExpressionsValuesContent: 
+    complexValuedExpressionsValuesEmpty | complexValuedExpressionsValuesLaden;
+
+complexValuedExpressionsValuesEmpty: ENDOFELEMENT;
+
+complexValuedExpressionsValuesLaden: GREATERTHAN complexValuedExpressionsElList VALUEEND;
+
+complexValuedExpressionsElList:  | complexValuedExpressionsElList complexValuedExpressionsEl;
+
+complexValuedExpressionsEl: complexValuedExpressionsElStart complexValuedExpressionsElContent;
+
+complexValuedExpressionsElStart: ELSTART
+    {
+        if (osglData->nonzeroCounter >= osglData->numberOfValues) 
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> terms greater than expected");
+        // clear the vectors of pointers
+        osnlData->nlNodeVec.clear();
+        osnlData->sumVec.clear();
+        osnlData->allDiffVec.clear();
+        osnlData->maxVec.clear();
+        osnlData->minVec.clear();
+        osnlData->productVec.clear();
+        osnlData->matrixSumVec.clear();
+        osnlData->matrixProductVec.clear();
+    };
+
+complexValuedExpressionsElContent: complexValuedExpressionsElEmpty | complexValuedExpressionsElLaden;
+
+complexValuedExpressionsElEmpty: ENDOFELEMENT;
+
+complexValuedExpressionsElLaden: GREATERTHAN nlnode ELEND
+    {
+    // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+        ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
+            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        osglData->nonzeroCounter++;
+    };
+
+
 objReferenceElements: objReferenceElementsStart objReferenceElementsAttributes GREATERTHAN objReferenceElementsContent; 
 
 objReferenceElementsStart: OBJREFERENCEELEMENTSSTART
@@ -3941,7 +4049,7 @@ complexElementsValues:
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few <el> elements");
         else if (osglData->numberOfValues < osglData->nonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many <el> elements");
-//        ((ComplexMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
+        ((ComplexMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     };

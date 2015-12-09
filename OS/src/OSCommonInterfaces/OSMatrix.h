@@ -244,15 +244,15 @@ public:
 /*! \class MatrixElements
  * \brief an abstract class to help represent the elements in a MatrixType object
  * From this we derive the following concrete classes used to store specific types of values:
- *     ConstantMatrixElements
- *     ComplexMatrixElements
- *     VarReferenceMatrixElements
- *     LinearMatrixElements
- *     RealValuedExpressions
- *     ComplexValuedExpressions
- *     ObjReferenceMatrixElements
- *     ConReferenceMatrixElements
- *     StringValuedMatrixElements
+ *     ConstantMatrixElements     (real-valued constants, such as 3.14) 
+ *     ComplexMatrixElements      (complex-valued constants, such as 1 + 2.78*i)
+ *     VarReferenceMatrixElements (elements of the form x_i - return current value of the variable)
+ *     LinearMatrixElements       (elements of the form a_0 + a_1*x_{i_1} + ... + a_k*x_{i_k}) 
+ *     RealValuedExpressions      (an expression tree with a    real-valued root)
+ *     ComplexValuedExpressions   (an expression tree with a complex-valued root)
+ *     ObjReferenceMatrixElements (elements of the form o_i - return value of the i'th objective)
+ *     ConReferenceMatrixElements (elements of the form c_i - return values associated with i'th constraint)
+ *     StringValuedMatrixElements (elements can be general or symbolic strings)
  */
 class MatrixElements: public MatrixConstructor
 {
@@ -787,6 +787,42 @@ public:
      */
     virtual bool deepCopyFrom(RealValuedExpressionArray *that);
 };//class RealValuedExpressionArray
+
+
+/*! \class ComplexValuedExpressionArray
+ * \brief a data structure to represent nonzero expressions in an OSMatrix element
+ */
+class ComplexValuedExpressionArray : public MatrixElementValues
+{
+public:
+    ComplexValuedExpressionTree **el;
+
+    ComplexValuedExpressionArray();
+    ~ComplexValuedExpressionArray();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ComplexValuedExpressionArray *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    virtual bool deepCopyFrom(ComplexValuedExpressionArray *that);
+};//class ComplexValuedExpressionArray
 
 
 /*! \class ObjReferenceMatrixValues
@@ -1359,6 +1395,91 @@ public:
 };//class RealValuedExpressions
 
 
+/*! \class ComplexValuedExpressions
+ * \brief a data structure to represent nonzero values in the form of complex-valued expression trees
+ */
+class ComplexValuedExpressions: public MatrixElements
+{
+public:
+    /**
+     *  The values are general nonlinear expressions 
+     */
+    ComplexValuedExpressionArray *value;
+
+    ComplexValuedExpressions();
+    ~ComplexValuedExpressions();
+
+
+    /**
+     * @return the value of nType
+     */
+    virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
+
+    /**
+     *  @return the type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
+
+    /**
+     * @return the name of the matrix constructor
+     */
+    virtual std::string getNodeName();
+    /**
+     * <p>
+     * The following method writes a matrix node in OSgL format. 
+     * it is used by OSgLWriter to write a <matrix> element.
+     * </p>
+     *
+     * @return the MatrixNode and its children as an OSgL string.
+     */
+    virtual std::string getMatrixNodeInXML();
+
+    /** 
+     *  Check whether a submatrix aligns with the block partition of a matrix
+     *  or block or other constructor
+     *  @param firstRow gives the number of the first row in the submatrix (zero-based)
+     *  @param firstColumn gives the number of the first column in the submatrix (zero-based)
+     *  @param nRows gives the number of rows in the submatrix
+     *  @param nColumns gives the number of columns in the submatrix
+     *  @return true if the submatrix aligns with the boundaries of a block
+     *  This is an abstract method which is required to be implemented by the concrete
+     *  operator nodes that derive or extend from this class.
+     */
+    virtual bool alignsOnBlockBoundary(int firstRow, int firstColumn, int nRows, int nCols);
+
+    /**
+     * <p>
+     * Create or clone a node of this type.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     * </p>
+     */
+    virtual ComplexValuedExpressions *cloneMatrixNode();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(ComplexValuedExpressions *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(ComplexValuedExpressions *that);
+};//class ComplexValuedExpressions
+
+
 /*! \class ObjReferenceMatrixElements
  * \brief a data structure to represent objective reference elements in a MatrixType object
  *  Each nonzero element is of the form x_{k} where k is the index of an objective (i.e., less than zero)
@@ -1730,7 +1851,7 @@ public:
     bool convertFromConRef     (ConReferenceMatrixValues*     _values, int nvalues);
     bool convertFromGeneral    (RealValuedExpressionArray*    _values, int nvalues);
     bool convertFromComplex    (ComplexMatrixValues*          _values, int nvalues);
-//    bool convertFromComplexExpr(ComplexValuedExpressionArray* _values, int nvalues);
+    bool convertFromComplexExpr(ComplexValuedExpressionArray* _values, int nvalues);
 };//class StringValuedMatrixElements
 
 
@@ -2428,6 +2549,24 @@ public:
      * @return A pointer to the matrix in the other major. Return null if input matrix not valid.
      */
     GeneralSparseMatrix* convertToOtherMajor(bool isColumnMajor);
+
+    /**
+     *  A method to process a baseMatrix into the form required in the referencing matrixType. 
+     *  Processing may include cropping, scaling and transformation of the base matrix elements
+     *  and may require that the baseMatrix itself be properly expanded first.
+     *
+     *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
+     *         or column major.
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @return the processed elements of the baseMatrix as a pointer to a GeneralSparseMatrix object.
+     *
+     *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
+     *          so that they can be retrieved later using extractBlocks (see below).
+     *          It is possible (though probably not advisable) to maintain multiple
+     *          decompositions with different row and column partitions (see next method)
+     */
+     virtual GeneralSparseMatrix* processBaseMatrix(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
     /**
      *  A method to determine the block structure of a matrixType 
