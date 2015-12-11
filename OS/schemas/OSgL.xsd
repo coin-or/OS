@@ -757,7 +757,11 @@ The result of this transformation is aligned with the top left corner of the tar
 				<xs:documentation>Applied after cropping</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="scalarMultiplier" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="scalarMultiplier" type="xs:double" use="optional" default="1.0">
+			<xs:annotation>
+				<xs:documentation>real-valued only.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="targetMatrixFirstRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="targetMatrixFirstCol" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
