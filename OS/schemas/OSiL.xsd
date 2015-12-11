@@ -200,7 +200,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>recommendation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onSolverStart" minOccurs="0"/>
+			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onOptimizationStart" minOccurs="0"/>
 			<xs:element name="new_realTimeDataItem" type="new_RealTimeDataItem" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with  numberOfDataItems</xs:documentation>
@@ -214,37 +214,22 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:choice>
+			<xs:choice minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>if both uri and uriAlias missing, use defaultURI</xs:documentation>
 				</xs:annotation>
-				<xs:element name="uri" type="xs:anyURI" minOccurs="0"/>
-				<xs:element name="uriAlias" type="xs:nonNegativeInteger" minOccurs="0"/>
+				<xs:element name="uri" type="xs:anyURI"/>
+				<xs:element name="uriAlias" type="xs:nonNegativeInteger"/>
 			</xs:choice>
-			<xs:element name="xPath" type="xs:string" minOccurs="0"/>
-			<xs:element name="output" type="new_RealTimeDataItemInputOrOutput" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>finalization</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="xPath" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="numberOfInputs" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfOutputs" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="refreshPoint"/>
 	</xs:complexType>
-	<xs:complexType name="new_RealTimeDataItemInputOrOutput">
+	<xs:complexType name="DOMNode">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="new_RealTimeDataElement" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>finalization</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="new_RealTimeDataElement">
 		<xs:annotation>
@@ -378,7 +363,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>recommendation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onSolverStart" minOccurs="0"/>
+			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onOptimizationStart" minOccurs="0"/>
 			<xs:element name="updateableDataItem" type="UpdateableDataItem" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with  numberOfDataItems</xs:documentation>
@@ -4163,7 +4148,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:enumeration value="onSystemStart"/>
 			<xs:enumeration value="onServiceStart"/>
 			<xs:enumeration value="onJobStart"/>
-			<xs:enumeration value="onSolverStart"/>
+			<xs:enumeration value="onOptimizationStart"/>
 			<xs:enumeration value="onInputChange"/>
 			<xs:enumeration value="always"/>
 		</xs:restriction>

@@ -1,34 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
-	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNode" mixed="false">
+	<!-- Abstract types and elements: Scalar nodes (OSnLNode and OSnLCNode) and matrix nodes (OSnLMNode) make up ExprNode. -->
+	<xs:complexType name="ExprNode" mixed="false">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
+			<xs:documentation> draft. This is a generic expression node from which we derive OSnLMNode and ScalarNode</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
-	<xs:element name="OSnLNode" type="OSnLNode" abstract="true">
+	<xs:element name="ExprNode" type="ExprNode" abstract="true">
 		<xs:annotation>
-			<xs:documentation>  since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
+			<xs:documentation> recommendation. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Generic base matrix definitions (draft): all functions that return a matrix value  -->
 	<xs:complexType name="OSnLMNode" mixed="false">
 		<xs:annotation>
-			<xs:documentation>draft. This is a generic matrx node from which we derive matrix operator nodes</xs:documentation>
+			<xs:documentation> recommendation. This is a generic matrix node from which we derive matrix operator nodes</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent mixed="false">
-			<xs:extension base="OSnLNode"/>
+			<xs:extension base="ExprNode"/>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="OSnLMNode" abstract="true">
+	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true" substitutionGroup="ExprNode">
+		<xs:annotation>
+			<xs:documentation> recommendation. Set abstract to true in order to create a substitution group</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ScalarNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation> draft. This is a generic expression node from which we derive OSnLNode and OSnLCNode</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent mixed="false">
+			<xs:extension base="ExprNode"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ScalarNode" type="ScalarNode" abstract="true" substitutionGroup="ExprNode">
+		<xs:annotation>
+			<xs:documentation> since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation> since version 1.0.0. This is a generic node from which we derive operator nodes</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent mixed="false">
+			<xs:extension base="ScalarNode"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OSnLNode" type="OSnLNode" abstract="true" substitutionGroup="ScalarNode">
+		<xs:annotation>
+			<xs:documentation> since version 1.0.0. Set abstract to true in order to create a substitution group</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation> draft. This is a generic complex number node from which we derive complex-valued operator nodes</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent mixed="false">
+			<xs:extension base="ScalarNode"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OSnLCNode" type="OSnLCNode" abstract="true" substitutionGroup="ScalarNode">
 		<xs:annotation>
 			<xs:documentation> draft. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
@@ -57,7 +96,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -193,7 +232,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -204,7 +243,7 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Elementary Functions Node: since version 1.0.0-->
+	<!--Elementary Function Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeAbs">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -304,6 +343,11 @@
 	</xs:complexType>
 	<xs:element name="squareRoot" type="OSnLNodeSquareRoot" substitutionGroup="OSnLNode">
 		<xs:annotation>
+			<xs:documentation>since version 1.0.0 --- deprecated (use sqrt instead) </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="sqrt" type="OSnLNodeSquareRoot" substitutionGroup="OSnLNode">
+		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
@@ -331,6 +375,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>First argument is base of logarithm. </xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -394,11 +441,14 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeCombination">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>First argument is n in "(n!/(k!(n-k)!))". </xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -416,6 +466,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>First argument is n in "(n!/(n-k)!)". </xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -479,11 +532,14 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeRound">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>Round to nearest multiple of 10^a, where a is second argument.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -496,11 +552,14 @@
 	</xs:element>
 	<xs:complexType name="OSnLNodeTruncate">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>Truncate towards zero to nearest multiple of 10^a, where a is second argument.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -581,7 +640,24 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Trigonometric Functions Node: since version 1.0.0-->
+	<xs:complexType name="OSnLNodeErf">
+		<xs:annotation>
+			<xs:documentation>since version 2.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="erf" type="OSnLNodeErf" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--Trigonometric Function Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeSin">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -1049,6 +1125,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument gives amount to trim (at each end).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1056,7 +1135,7 @@
 	</xs:complexType>
 	<xs:element name="trimMean" type="OSnLNodeTrimMean" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0. First argument gives amount to trim (at each end).</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeCount">
@@ -1150,7 +1229,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1167,7 +1246,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1185,6 +1264,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is percent, rest is data</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1192,39 +1274,45 @@
 	</xs:complexType>
 	<xs:element name="percentile" type="OSnLNodePercentile" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeLarge">
+	<xs:complexType name="OSnLNodeKthLargest">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is "k", rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="large" type="OSnLNodeLarge" substitutionGroup="OSnLNode">
+	<xs:element name="kLargest" type="OSnLNodeKthLargest" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeSmall">
+	<xs:complexType name="OSnLNodeKthSmallest">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is "k", rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="small" type="OSnLNodeSmall" substitutionGroup="OSnLNode">
+	<xs:element name="kSmallest" type="OSnLNodeKthSmallest" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -1246,7 +1334,7 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeInterQuantileRange">
+	<xs:complexType name="OSnLNodeInterQuartileRange">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -1258,7 +1346,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="interQuantileRange" type="OSnLNodeInterQuantileRange" substitutionGroup="OSnLNode">
+	<xs:element name="interQuartileRange" type="OSnLNodeInterQuartileRange" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -1372,7 +1460,10 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="unbounded">
-					<xs:element ref="OSnLNode"/>
+					<xs:sequence>
+						<xs:element ref="OSnLNode"/>
+						<xs:element ref="OSnLNode"/>
+					</xs:sequence>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1457,6 +1548,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is lag, rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1474,6 +1568,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is interest rate, rest is data (equally spaced cash flows).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1491,6 +1588,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>First argument is interest rate guess, rest is data (equally spaced cash flows).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1501,44 +1601,60 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeErf">
+	<xs:complexType name="OSnLNodeEmpiricalDiscreteDist">
 		<xs:annotation>
-			<xs:documentation>since version 2.0.0. </xs:documentation>
+			<xs:documentation>Experiment. </xs:documentation>
 		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="erf" type="OSnLNodeErf" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<!--<xs:complexType name="OSnLNodeEmpiricalDiscreteDist">
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="empiricalDiscreteDist" type="OSnLNodeEmpiricalDiscreteDist" substitutionGroup="OSnLNode"/>
+	<xs:element name="empiricalDiscreteDist" type="OSnLNodeEmpiricalDiscreteDist" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>Experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeEmpiricalDiscreteCum">
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); rest is data.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="empiricalDiscreteCum" type="OSnLNodeEmpiricalDiscreteCum" substitutionGroup="OSnLNode"/>
-	-->
+	<xs:element name="empiricalDiscreteCum" type="OSnLNodeEmpiricalDiscreteCum" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>Experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeEmpiricalDiscreteInv">
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; rest is data.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="empiricalDiscreteInv" type="OSnLNodeEmpiricalDiscreteInv" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>Experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeDiscreteUniformDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -1546,6 +1662,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); uniform on 1, 2, ..., N (2d argument).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1563,6 +1682,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); uniform on 1, 2, ..., N (2d argument).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1580,6 +1702,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability;  uniform on 1, 2, ..., N (2d argument).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1597,6 +1722,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2d argument is "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1614,6 +1742,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2d argument is "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1631,6 +1762,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2d argument is "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1648,6 +1782,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); others are "N" and "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1665,6 +1802,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); others are "N" and "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1682,6 +1822,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; others are "N" and "p".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1699,6 +1842,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2nd is "N", followed by k event probabilities (that sum to 1).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1716,6 +1862,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd is "N", followed by k event probabilities (that sum to 1).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1733,6 +1882,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd is "N", followed by k event probabilities (that sum to 1).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1750,6 +1902,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); others are population size N, population successes K, number of draws n.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1767,6 +1922,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); others are population size N, population successes K, number of draws n.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1784,6 +1942,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; others are population size N, population successes K, number of draws n.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1801,6 +1962,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2d is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1818,6 +1982,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); ; 2d is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1835,6 +2002,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2d is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1852,6 +2022,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2nd is "decay" p. (Support is {0, 1, ...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1869,6 +2042,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd is "decay" p. (Support is {0, 1, ...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1886,6 +2062,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd is "decay" p. (Support is {0, 1, ...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1903,6 +2082,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2nd argument: p of success; 3rd argument: number of successes; support: {0,1,...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1920,6 +2102,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: p of success; 3rd argument: number of successes; support: {0,1,...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1937,6 +2122,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: p of success; 3rd argument: number of successes; support: {0,1,...}.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1947,27 +2135,66 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--<xs:complexType name="OSnLNodeEmpiricalContinuousDist">
+	<xs:complexType name="OSnLNodeLogarithmicDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability mass at x (1st argument); 2d argument: p.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="empiricalContinuousDist" type="OSnLNodeEmpiricalContinuousDist" substitutionGroup="OSnLNode"/>
-	<xs:complexType name="OSnLNodeEmpiricalContinuousCum">
+	<xs:element name="logarithmicDist" type="OSnLNodeLogarithmicDist" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeLogarithmicCum">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="unbounded">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: p.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="empiricalContinuousCum" type="OSnLNodeEmpiricalContinuousCum" substitutionGroup="OSnLNode"/>
-	-->
+	<xs:element name="logarithmicCum" type="OSnLNodeLogarithmicCum" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeLogarithmicInv">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: p.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="logarithmicInv" type="OSnLNodeLogarithmicInv" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeUniformDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -1975,6 +2202,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); support is [a,b] (2d and 3d args).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1992,6 +2222,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); support is [a,b] (2d and 3d args).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2009,6 +2242,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; support is [a,b] (2d and 3d args).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2026,6 +2262,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: mean; 3rd argument: standard deviation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2043,6 +2282,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: mean; 3rd argument: standard deviation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2060,6 +2302,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd argument: mean; 3rd argument: standard deviation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2121,6 +2366,26 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeUnitNormalLinearLoss">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>Assumes standard normal distribution; argument is lower integration limit.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="unitNormalLinearLoss" type="OSnLNodeUnitNormalLinearLoss" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeBivariateNormalDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -2128,6 +2393,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="7" maxOccurs="7">
+					<xs:annotation>
+						<xs:documentation>Probability density at (x1,x2) --- first two arguments. Arguments 3 and 4: mu1, mu 2. Arguments 5 and 6: sigma1,sigma2; Argument 7: correlation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2145,6 +2413,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="7" maxOccurs="7">
+					<xs:annotation>
+						<xs:documentation>Cumulative probability distribution up to (x1,x2) --- first two arguments. Arguments 3 and 4: mu1, mu 2. Arguments 5 and 6: sigma1,sigma2; Argument 7: correlation.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2162,6 +2433,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation> probability density at x (1st argument); 2nd argument is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2179,6 +2453,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2196,6 +2473,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd argument is "lambda".</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2213,6 +2493,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: shape (k); 3rd argument: scale (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2230,6 +2513,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: shape (k); 3rd argument: scale (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2247,6 +2533,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd argument: shape (k); 3rd argument: scale (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2264,6 +2553,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: shape (k); 3rd argument: rate (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2281,6 +2573,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: shape (k); 3rd argument: rate (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2298,6 +2593,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument is cumulative probability; 2nd argument: shape (k); 3rd argument: rate (lambda).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2314,7 +2612,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="4" maxOccurs="4">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: scale; 3rd argument: shape.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2331,7 +2632,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="4" maxOccurs="4">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: scale; 3rd argument: shape.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2348,13 +2652,76 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="4" maxOccurs="4">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: scale; 3rd argument: shape.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="gammaInv" type="OSnLNodeGammaInv" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGeneralizedGammaDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: scale; 3rd argument: shape; 4th argument: second shape parameter; 5th argument: location (shift).</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="generalizedGammaDist" type="OSnLNodeGeneralizedGammaDist" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGeneralizedGammaCum">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: scale; 3rd argument: shape; 4th argument: second shape parameter; 5th argument: location (shift).</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="generalizedGammaCum" type="OSnLNodeGeneralizedGammaCum" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeGeneralizedGammaInv">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: scale; 3rd argument: shape; 4th argument: second shape parameter; 5th argument: location (shift).</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="generalizedGammaInv" type="OSnLNodeGeneralizedGammaInv" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -2366,6 +2733,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: alpha; 3rd argument: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2383,6 +2753,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2400,6 +2773,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: alpha; 3rd argument: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2410,53 +2786,62 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeBetaGeneralDist">
+	<xs:complexType name="OSnLNodeGeneralizedBetaDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="betaGeneralDist" type="OSnLNodeBetaGeneralDist" substitutionGroup="OSnLNode">
+	<xs:element name="generalizedBetaDist" type="OSnLNodeGeneralizedBetaDist" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeBetaGeneralCum">
+	<xs:complexType name="OSnLNodeGeneralizedBetaCum">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="betaCumGeneral" type="OSnLNodeBetaGeneralCum" substitutionGroup="OSnLNode">
+	<xs:element name="generalizedBetaCum" type="OSnLNodeGeneralizedBetaCum" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeBetaGeneralInv">
+	<xs:complexType name="OSnLNodeGeneralizedBetaInv">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="5" maxOccurs="5">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: alpha; 3rd argument: beta; 4th argument: left endpoint; 5th argument: right endpoint.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="betaGeneralInv" type="OSnLNodeBetaGeneralInv" substitutionGroup="OSnLNode">
+	<xs:element name="generalizedBetaInv" type="OSnLNodeGeneralizedBetaInv" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -2468,6 +2853,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: mu; 3rd argument: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2485,6 +2873,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: mu; 3rd argument: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2502,6 +2893,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: mu; 3rd argument: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2518,7 +2912,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="3">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>probability mass at x</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2535,7 +2932,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="3">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>cumulative probability up to x</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2552,7 +2952,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="3">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>quantile (at prob. p)</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2570,6 +2973,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2587,6 +2993,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2604,6 +3013,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2621,6 +3033,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2638,6 +3053,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2655,6 +3073,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2672,6 +3093,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d argument: numerator df; 3rd argument: denominator df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2689,6 +3113,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: numerator df; 3rd argument: denominator df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2706,6 +3133,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: numerator df; 3rd argument: denominator df.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2723,6 +3153,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d argument: mean; 3rd argument: scale (>0).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2740,6 +3173,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d argument: mean; 3rd argument: scale (>0).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2757,6 +3193,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d argument: mean; 3rd argument: scale (>0).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2774,6 +3213,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd argument: scale (alpha); 3rd argument: shape (beta).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2791,6 +3233,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: scale (alpha); 3rd argument: shape (beta).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2808,6 +3253,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: scale (alpha); 3rd argument: shape (beta).</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2818,53 +3266,62 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeLogarithmicDist">
+	<xs:complexType name="OSnLNodeExpLogDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>Exponential-logarithmic density at x (1st arg.); 2nd arg: p; 3rd arg: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="logarithmicDist" type="OSnLNodeLogarithmicDist" substitutionGroup="OSnLNode">
+	<xs:element name="expLogDist" type="OSnLNodeExpLogDist" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeLogarithmicCum">
+	<xs:complexType name="OSnLNodeExpLogCum">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>Cumulative exponential-logarithmic distribution at x (1st arg.); 2nd arg: p; 3rd arg: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="logarithmicCum" type="OSnLNodeLogarithmicCum" substitutionGroup="OSnLNode">
+	<xs:element name="expLogCum" type="OSnLNodeExpLogCum" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeLogarithmicInv">
+	<xs:complexType name="OSnLNodeExpLogInv">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd arg: p; 3rd arg: beta.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="logarithmicInv" type="OSnLNodeLogarithmicInv" substitutionGroup="OSnLNode">
+	<xs:element name="expLogInv" type="OSnLNodeExpLogInv" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -2876,6 +3333,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation> probability density at x (1st argument); 2nd argument: xm (left endpoint of support); 3rd parameter: alpha.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2893,6 +3353,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd argument: xm (left endpoint of support); 3rd parameter: alpha.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2910,6 +3373,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd argument: xm (left endpoint of support); 3rd parameter: alpha.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2927,6 +3393,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2d arg: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2944,6 +3413,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2d arg: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2961,6 +3433,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2d arg: sigma.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2978,6 +3453,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -2995,6 +3473,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3012,6 +3493,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>1st argument: cumulative probability; 2nd arg: minimum; 3d arg: most likely; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3029,6 +3513,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability density at x (1st argument); 2nd arg: minimum; 3d arg: mode; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3046,6 +3533,9 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation>probability up to x (1st argument); 2nd arg: minimum; 3d arg: mode; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3063,29 +3553,15 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:annotation>
+						<xs:documentation> 1st argument: cumulative probability; 2nd arg: minimum; 3d arg: mode; 4th arg: maximum.</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="triangularInv" type="OSnLNodeTriangularInv" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeUnitNormalLinearLoss">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="unitNormalLinearLoss" type="OSnLNodeUnitNormalLinearLoss" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
@@ -3097,18 +3573,22 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="value" type="xs:string" use="optional"/>
-				<xs:attribute name="type" use="optional" default="real">
+				<xs:attribute name="value" type="xs:double" use="optional"/>
+				<xs:attribute name="type">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="real"/>
 							<xs:enumeration value="string"/>
-							<xs:enumeration value="realtime"/>
-							<xs:enumeration value="random"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="id" type="xs:string" use="optional"/>
+				<xs:attribute name="id" type="xs:ID" use="optional">
+					<xs:annotation>
+						<xs:documentation>required if realtime or random is true</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="realtime" type="xs:boolean" default="false"/>
+				<xs:attribute name="random" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3124,16 +3604,13 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:attribute name="value" type="xs:string" use="optional"/>
-				<xs:attribute name="type" use="optional" default="regular">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="regular"/>
-							<xs:enumeration value="realtime"/>
-							<xs:enumeration value="random"/>
-						</xs:restriction>
-					</xs:simpleType>
+				<xs:attribute name="id" type="xs:ID" use="optional">
+					<xs:annotation>
+						<xs:documentation>required if realtime or random is true</xs:documentation>
+					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="id" type="xs:string" use="optional"/>
+				<xs:attribute name="realtime" type="xs:boolean" default="false"/>
+				<xs:attribute name="random" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3207,7 +3684,22 @@
 	</xs:complexType>
 	<xs:element name="EPS" type="OSnLNodeEPS" substitutionGroup="OSnLNode">
 		<xs:annotation>
+			<xs:documentation>since version 1.0.0.
+Smallest positive number such that 1 = (1+EPS). </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeTINY">
+		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TINY" type="OSnLNodeTINY" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. 
+Smallest representable positive number. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeTRUE">
@@ -3262,7 +3754,7 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Variable, Objective, Constraint, Parameter Nodes: since version 1.0.0-->
+	<!--Variable, Objective, Constraint and other reference Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeVariable">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -3272,26 +3764,51 @@
 				<xs:sequence minOccurs="0">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
+				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
+					<xs:annotation>
+						<xs:documentation>The value of the valueType attribute can be either of
+“value” (default), “status” (whether the variable is between the bounds, a boolean), “surplus”
+( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="variable" type="OSnLNodeVariable" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to provide a child OSnLNode which evaluates to a nonnegative integer variable index.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeObjective">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0. 
+Returns the current value of the indicated objective</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>could be used to give a dynamic index value</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:int" use="optional" default="-1"/>
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+				<xs:attribute name="valueType" use="optional" default="value">
+					<xs:annotation>
+						<xs:documentation>The value of the valueType attribute can be either of
+“value” (default), “constant” (the additive constant to the variable specified in the 'obj' section), “weight”
+(the weight assigned to this objective).</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="value"/>
+							<xs:enumeration value="constant"/>
+							<xs:enumeration value="weight"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3307,18 +3824,18 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>could be used to give a dynamic index value</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:int" use="required"/>
-				<xs:attribute name="valueType" use="optional" default="value">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="value"/>
-							<xs:enumeration value="status"/>
-							<xs:enumeration value="surplus"/>
-							<xs:enumeration value="shortage"/>
-						</xs:restriction>
-					</xs:simpleType>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
+					<xs:annotation>
+						<xs:documentation>The value of the valueType attribute can be either of
+“value” (default), “status” (whether the constraint is satisfied, a boolean), “surplus”
+( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
+					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
@@ -3328,13 +3845,60 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+<!-- removed 23 October 2015 	
+	<xs:complexType name="OSnLNodeQTerm">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>the tree can serve as an alternate way to specify the coefficient.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="qTerm" type="OSnLNodeQTerm" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeQuadratic">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence maxOccurs="unbounded">
+					<xs:element ref="qTerm"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="quadratic" type="OSnLNodeQuadratic" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. 
+Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+-->
 	<xs:complexType name="OSnLNodeParameter">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>refers to an index in the parameters section</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -3360,7 +3924,200 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Logic and relational Nodes: since version 1.0.0  -->
+	<xs:complexType name="OSnLNodeSim">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="simInput" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="simOutput"/>
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:IDREF" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="sim" type="OSnLNodeSim" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeSimInput">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="simName" type="xs:IDREF" use="optional"/>
+				<xs:attribute name="inputName" type="xs:IDREF" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="simInput" type="OSnLNodeSimInput" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeSimOutput">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="simName" type="xs:IDREF" use="optional"/>
+				<xs:attribute name="outputName" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="simOutput" type="OSnLNodeSimOutput" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeUserF">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:IDREF" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="userF" type="OSnLNodeUserF" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeArg">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="arg" type="OSnLNodeArg" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeXPath">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="xPathIndex" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="uri" type="xs:anyURI" use="optional" default="."/>
+				<xs:attribute name="path" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="xPath" type="OSnLNodeXPath" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeXPathIndex">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="indexName" type="xs:string" use="required"/>
+				<xs:attribute name="indexValue" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="xPathIndex" type="OSnLNodeXPathIndex" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeNodeRef">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="nodeID" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="propName" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="nodeRef" type="OSnLNodeNodeRef" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeArcRef">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="arcID" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="propName" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="arcRef" type="OSnLNodeArcRef" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeComplements">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complements" type="OSnLNodeComplements" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--xs:complexType name="OSnLNodeProb">
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="prob" type="OSnLNodeProb" substitutionGroup="OSnLNode"/-->
+	<!--Logical and relational Nodes: since version 1.0.0  -->
 	<xs:complexType name="OSnLNodeIf">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -3622,7 +4379,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3814,82 +4571,537 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Matrix Specific Nodes: draft -->
-	<xs:complexType name="OSnLNodeMatrixVariable">
+	<xs:complexType name="OSnLNodeIsInf">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="0">
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-				<xs:attribute name="leftCoefMatrixID" type="xs:string" use="optional"/>
-				<xs:attribute name="rightCoefMatrixID" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixVariable" type="OSnLNodeMatrixVariable" substitutionGroup="OSnLMNode">
+	<xs:element name="isInf" type="OSnLNodeIsInf" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrix">
+	<xs:complexType name="OSnLNodeIsNaN">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="isNaN" type="OSnLNodeIsNaN" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--Nodes involving matrices: since version 2.9.0 -->
+	<xs:complexType name="OSnLNodeMatrixDeterminant">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:attribute name="id" type="xs:string" use="required"/>
-				<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrix" type="OSnLNodeMatrix" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixBlock">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
 				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
-				<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixBlock" type="OSnLNodeMatrixBlock" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixDeterminant" type="OSnLNodeMatrixDeterminant" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>draft. Should be appended under matrixConcatenate</xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixIdentical">
+	<xs:complexType name="OSnLNodeMatrixTrace">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixTrace" type="OSnLNodeMatrixTrace" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixToScalar">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixToScalar" type="OSnLNodeMatrixToScalar" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. Intended for 1x1 matrices only. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixElementAt">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixElementAt" type="OSnLNodeMatrixElementAt" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. First child is the matrix to get the element, Second child is rowIdx. Third Child is colIdx.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixNorm">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixNorm" type="OSnLNodeMatrixNorm" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixFrobeniusNorm">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixFrobeniusNorm" type="OSnLNodeMatrixFrobeniusNorm" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixCondition">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixCondition" type="OSnLNodeMatrixCondition" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. The second child defines the norm.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixFrobeniusNormCondition">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixFrobeniusNormCondition" type="OSnLNodeMatrixFrobeniusNormCondition" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixLargestEigenValue">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixLargestEigenValue" type="OSnLNodeMatrixLargestEigenValue" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixNthLargestEigenValue">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixNthLargestEigenValue" type="OSnLNodeMatrixNthLargestEigenValue" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixSmallestEigenValue">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixSmallestEigenValue" type="OSnLNodeMatrixSmallestEigenValue" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixSubspaceAngle">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixIdentical" type="OSnLNodeMatrixIdentical" substitutionGroup="OSnLNode">
+	<xs:element name="matrixSubspaceAngle" type="OSnLNodeMatrixSubspaceAngle" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixColumnNumber">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixColumnNumber" type="OSnLNodeMatrixColumnNumber" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixRowNumber">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixRowNumber" type="OSnLNodeMatrixRowNumber" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixRank">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixRank" type="OSnLNodeMatrixRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixColumnRank">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixColumnRank" type="OSnLNodeMatrixColumnRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixRowRank">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixRowRank" type="OSnLNodeMatrixRowRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsNonsingular">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsNonsingular" type="OSnLNodeMatrixIsNonsingular" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if the matrix is nonsingular, 0 otherwise. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsPositiveDefinite">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsPositiveDefinite" type="OSnLNodeMatrixIsPositiveDefinite" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsPositiveSemidefinite">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsPositiveSemidefinite" type="OSnLNodeMatrixIsPositiveSemidefinite" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsNegativeDefinite">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsNegativeDefinite" type="OSnLNodeMatrixIsNegativeDefinite" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsNegativeSemidefinite">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsNegativeSemidefinite" type="OSnLNodeMatrixIsNegativeSemidefinite" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsIndefinite">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsIndefinite" type="OSnLNodeMatrixIsIndefinite" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsFullRank">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsFullRank" type="OSnLNodeMatrixIsFullRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if the matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsFullColumnRank">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsFullColumnRank" type="OSnLNodeMatrixIsFullColumnRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if the matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsFullRowRank">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsFullRowRank" type="OSnLNodeMatrixIsFullRowRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if the matrix is full rank or min(row, col), 0 otherwise.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsIdentical">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsIdentical" type="OSnLNodeMatrixIsIdentical" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if the two matrices are identical, 0 otherwise.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsSymmetric">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsSymmetric" type="OSnLNodeMatrixIsSymmetric" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if the matrix is symmetric, 0 otherwise. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixIsHermitian">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixIsHermitian" type="OSnLNodeMatrixIsHermitian" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. returns 1 if the matrix is Hermitian, 0 otherwise. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixPlus">
@@ -3905,24 +5117,6 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixPlus" type="OSnLNodeMatrixPlus" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixScalarPlus">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:all>
-					<xs:element ref="OSnLNode"/>
-					<xs:element ref="OSnLMNode"/>
-				</xs:all>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixScalarPlus" type="OSnLNodeMatrixScalarPlus" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -3961,24 +5155,6 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixScalarMinus">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:all>
-					<xs:element ref="OSnLNode"/>
-					<xs:element ref="OSnLMNode"/>
-				</xs:all>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixScalarMinus" type="OSnLNodeMatrixScalarMinus" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixNegate">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -4013,41 +5189,6 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDotTimes">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixDotTimes" type="OSnLNodeMatrixDotTimes" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixScalarTimes">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:all>
-					<xs:element ref="OSnLNode"/>
-					<xs:element ref="OSnLMNode"/>
-				</xs:all>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixScalarTimes" type="OSnLNodeMatrixScalarTimes" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixProduct">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -4061,23 +5202,6 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixProduct" type="OSnLNodeMatrixProduct" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixRightDivide">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixRightDivide" type="OSnLNodeMatrixRightDivide" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4099,7 +5223,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDotRightDivide">
+	<xs:complexType name="OSnLNodeMatrixRightDivide">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4111,42 +5235,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixDotRightDivide" type="OSnLNodeMatrixDotRightDivide" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDotLeftDivide">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixDotLeftDivide" type="OSnLNodeMatrixDotLeftDivide" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixScalarDivide">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:all>
-					<xs:element ref="OSnLNode"/>
-					<xs:element ref="OSnLMNode"/>
-				</xs:all>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixScalarDivide" type="OSnLNodeMatrixScalarDivide" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixRightDivide" type="OSnLNodeMatrixRightDivide" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4158,8 +5247,8 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -4169,24 +5258,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDotPower">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixDotPower" type="OSnLNodeMatrixDotPower" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixLog">
+	<xs:complexType name="OSnLNodeMatrixInverse">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4198,7 +5270,35 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixLog" type="OSnLNodeMatrixLog" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixInverse" type="OSnLNodeMatrixInverse" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixGeneralizedInverse">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="leftInverse"/>
+							<xs:enumeration value="rightInverse"/>
+							<xs:enumeration value="MoorePenrose"/>
+							<xs:enumeration value="BottDuffin"/>
+							<xs:enumeration value="Drazin"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixGeneralizedInverse" type="OSnLNodeMatrixGeneralizedInverse" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4237,118 +5337,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixRowNumber">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixRowNumber" type="OSnLNodeMatrixRowNumber" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixColumnNumber">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixColumnNumber" type="OSnLNodeMatrixColumnNumber" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixValueNumber">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixValueNumber" type="OSnLNodeMatrixValueNumber" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixElementAt">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="3" maxOccurs="3">
-					<xs:element ref="OSnLMNode"/>
-					<xs:element ref="OSnLNode"/>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixElementAt" type="OSnLNodeMatrixElementAt" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixSubmatrixAt">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="5" maxOccurs="5">
-					<xs:element ref="OSnLMNode"/>
-					<xs:element ref="OSnLNode"/>
-					<xs:element ref="OSnLNode"/>
-					<xs:element ref="OSnLNode"/>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixSubmatrixAt" type="OSnLNodeMatrixSubmatrixAt" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixConcatenate">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence maxOccurs="unbounded">
-					<xs:element ref="matrixBlock"/>
-				</xs:sequence>
-				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
-				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-				<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixConcatenate" type="OSnLNodeMatrixConcatenate" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixUpperTriangle">
+	<xs:complexType name="OSnLNodeMatrixModulus">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4360,12 +5349,12 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixUpperTriangle" type="OSnLNodeMatrixUpperTriangle" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixModulus" type="OSnLNodeMatrixModulus" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
+			<xs:documentation>draft. returns sqrt(A'A).</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixLowerTriangle">
+	<xs:complexType name="OSnLNodeMatrixLog">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4377,92 +5366,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixLowerTriangle" type="OSnLNodeMatrixLowerTriangle" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDiagonal">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixDiagonal" type="OSnLNodeMatrixDiagonal" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixRank">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixRank" type="OSnLNodeMatrixRank" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDeterminant">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixDeterminant" type="OSnLNodeMatrixDeterminant" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixInverse">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixInverse" type="OSnLNodeMatrixInverse" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixTrace">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixTrace" type="OSnLNodeMatrixTrace" substitutionGroup="OSnLNode">
+	<xs:element name="matrixLog" type="OSnLNodeMatrixLog" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4484,7 +5388,222 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixDotTranspose">
+	<xs:complexType name="OSnLNodeMatrixBlock">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+				<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>gives the row index of the top row of this block within the larger matrix </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>gives the column index of the leftmost column of this block within the larger matrix </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixBlock" type="OSnLNodeMatrixBlock">
+		<xs:annotation>
+			<xs:documentation>draft. matrix blocks may overlop with each other</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixMerge">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>number must equal numberOfBlocks.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="matrixBlock">
+						<xs:annotation>
+							<xs:documentation>draft. matrix blocks may overlop with each other. Later blocks override earlier values </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="numberOfBlocks" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:nonNegativeInteger"/>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="mergeType" use="optional" default="replace">
+					<xs:annotation>
+						<xs:documentation>Specifies what happens if a location within the larger matrix is referenced in more than one block</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="replace"/>
+							<xs:enumeration value="ignore"/>
+							<xs:enumeration value="add"/>
+							<xs:enumeration value="error"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixMerge" type="OSnLNodeMatrixMerge" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. Merge one or more blocks in general position (including overlaps, etc.) into a single matrix</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixSubmatrixAt">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixSubmatrixAt" type="OSnLNodeMatrixSubmatrixAt" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. First four children are OSnLNode, which indicate rowIdxStart, colIdxStart, rowIdxEnd, and colIdxEnd; the last child is an OSnLMNode, which is the matrix to crop.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixScalarPlus">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixScalarPlus" type="OSnLNodeMatrixScalarPlus" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixScalarMinus">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixScalarMinus" type="OSnLNodeMatrixScalarMinus" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixScalarTimes">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixScalarTimes" type="OSnLNodeMatrixScalarTimes" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixScalarDivide">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixScalarDivide" type="OSnLNodeMatrixScalarDivide" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixDotTimes">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixDotTimes" type="OSnLNodeMatrixDotTimes" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixDotDivide">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixDotDivide" type="OSnLNodeMatrixDotDivide" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixDotPower">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixDotPower" type="OSnLNodeMatrixDotPower" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixDotExp">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4496,126 +5615,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixDotTranspose" type="OSnLNodeMatrixDotTranspose" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixSingular">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixSingular" type="OSnLNodeMatrixSingular" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixFullRank">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixFullRank" type="OSnLNodeMatrixFullRank" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixPositiveDefinite">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixPositiveDefinite" type="OSnLNodeMatrixPositiveDefinite" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixPositiveSemidefinite">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixPositiveSemidefinite" type="OSnLNodeMatrixPositiveSemidefinite" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixNegativeDefinite">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixNegativeDefinite" type="OSnLNodeMatrixNegativeDefinite" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixNegativeSemidefinite">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixNegativeSemidefinite" type="OSnLNodeMatrixNegativeSemidefinite" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixIndefinite">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixIndefinite" type="OSnLNodeMatrixIndefinite" substitutionGroup="OSnLNode">
+	<xs:element name="matrixDotExp" type="OSnLNodeMatrixDotExp" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4637,7 +5637,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixEigenVectors">
+	<xs:complexType name="OSnLNodeMatrixLeftEigenVectors">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4649,66 +5649,12 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixEigenVectors" type="OSnLNodeMatrixEigenVectors" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixLeftEigenVectors" type="OSnLNodeMatrixLeftEigenVectors" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixNthLargestEigenValue">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixNthLargestEigenValue" type="OSnLNodeMatrixNthLargestEigenValue" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixLargestEigenValue">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixLargestEigenValue" type="OSnLNodeMatrixLargestEigenValue" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixNorm">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixNorm" type="OSnLNodeMatrixNorm" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixFrobeniusNorm">
+	<xs:complexType name="OSnLNodeMatrixRightEigenVectors">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4720,127 +5666,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixFrobeniusNorm" type="OSnLNodeMatrixFrobeniusNorm" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixCondition">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixCondition" type="OSnLNodeMatrixCondition" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixFrobeniusNormCondition">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixFrobeniusNormCondition" type="OSnLNodeMatrixFrobeniusNormCondition" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixNullSpace">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixNullSpace" type="OSnLNodeMatrixNullSpace" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixRangeSpace">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixRangeSpace" type="OSnLNodeMatrixRangeSpace" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixIdentity">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixIdentity" type="OSnLNodeMatrixIdentity" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixReducedRowEchelon">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixReducedRowEchelon" type="OSnLNodeMatrixReducedRowEchelon" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixSubspaceAngle">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixSubspaceAngle" type="OSnLNodeMatrixSubspaceAngle" substitutionGroup="OSnLNode">
+	<xs:element name="matrixRightEigenVectors" type="OSnLNodeMatrixRightEigenVectors" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -4862,267 +5688,1021 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--Special or Other Nodes: since version 1.0.0 -->
-	<xs:complexType name="OSnLNodeQuadratic">
+	<xs:complexType name="OSnLNodeMatrixLDLDecomposition">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
-					<xs:element ref="qTerm"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="quadratic" type="OSnLNodeQuadratic" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeQTerm">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0">
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-				<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="qTerm" type="OSnLNodeQTerm" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeSim">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
+			<xs:extension base="OSnLMNode">
 				<xs:sequence>
-					<xs:element ref="simInput" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element ref="simOutput"/>
+					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
-				<xs:attribute name="name" type="xs:IDREF" use="required"/>
+				<xs:attribute name="returnedMatrix" use="optional" default="lowerTriangle">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="lowerTriangle"/>
+							<xs:enumeration value="diagonal"/>
+							<xs:enumeration value="permutationMatrix"/>
+							<xs:enumeration value="quasiLowerTriangle"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="sim" type="OSnLNodeSim" substitutionGroup="OSnLNode">
+	<xs:element name="matrixLDLDecomposition" type="OSnLNodeMatrixLDLDecomposition" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeSimInput">
+	<xs:complexType name="OSnLNodeMatrixLUDecomposition">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0">
-					<xs:element ref="OSnLNode"/>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
-				<xs:attribute name="simName" type="xs:IDREF" use="optional"/>
-				<xs:attribute name="inputName" type="xs:IDREF" use="required"/>
+				<xs:attribute name="returnedMatrix" use="optional" default="lowerTriangle">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="lowerTriangle"/>
+							<xs:enumeration value="upperTriangle"/>
+							<xs:enumeration value="quasiLowerTriangle"/>
+							<xs:enumeration value="quasiUpperTriangle"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="simInput" type="OSnLNodeSimInput" substitutionGroup="OSnLNode">
+	<xs:element name="matrixLUDecomposition" type="OSnLNodeMatrixLUDecomposition" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeSimOutput">
+	<xs:complexType name="OSnLNodeMatrixColumnSpace">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0">
-					<xs:element ref="OSnLNode"/>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
-				<xs:attribute name="simName" type="xs:IDREF" use="optional"/>
-				<xs:attribute name="outputName" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="simOutput" type="OSnLNodeSimOutput" substitutionGroup="OSnLNode">
+	<xs:element name="matrixColumnSpace" type="OSnLNodeMatrixColumnSpace" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeUserF">
+	<xs:complexType name="OSnLNodeMatrixRowSpace">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="OSnLNode"/>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
-				<xs:attribute name="name" type="xs:IDREF" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="userF" type="OSnLNodeUserF" substitutionGroup="OSnLNode">
+	<xs:element name="matrixRowSpace" type="OSnLNodeMatrixRowSpace" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeArg">
+	<xs:complexType name="OSnLNodeMatrixNullSpace">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLNode">
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixNullSpace" type="OSnLNodeMatrixNullSpace" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixLeftNullSpace">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixLeftNullSpace" type="OSnLNodeMatrixLeftNullSpace" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixRightNullSpace">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixRightNullSpace" type="OSnLNodeMatrixRightNullSpace" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixReducedRowEchelon">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixReducedRowEchelon" type="OSnLNodeMatrixReducedRowEchelon" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixReference">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="arg" type="OSnLNodeArg" substitutionGroup="OSnLNode">
+	<xs:element name="matrixReference" type="OSnLNodeMatrixReference" substitutionGroup="OSnLMNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeXPath">
+	<xs:complexType name="OSnLNodeMatrixVar">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixVar" type="OSnLNodeMatrixVar" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a matrixVar object. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixObj">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixObj" type="OSnLNodeMatrixObj" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a matrixObj object.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixCon">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixCon" type="OSnLNodeMatrixCon" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a matrixcon object. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeIdentityMatrix">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>dimension of the matrix</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="identityMatrix" type="OSnLNodeIdentityMatrix" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixLowerTriangle">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+				<xs:attribute name="includeDiagonal" type="xs:boolean" use="optional" default="true"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixLowerTriangle" type="OSnLNodeMatrixLowerTriangle" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixUpperTriangle">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+				<xs:attribute name="includeDiagonal" type="xs:boolean" use="optional" default="true"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixUpperTriangle" type="OSnLNodeMatrixUpperTriangle" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixDiagonal">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixDiagonal" type="OSnLNodeMatrixDiagonal" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeDiagonalMatrixFromVector">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="diagonalMatrixFromVector" type="OSnLNodeDiagonalMatrixFromVector" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeMatrixAnd">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixAnd" type="OSnLMNodeMatrixAnd" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. result has a 1 whenever both argument matrices have a nonzero value; 0 otherwise</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeMatrixOr">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixOr" type="OSnLMNodeMatrixOr" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. result matrix has a 1 wherever at least one of the two argument matrices has a nonzero value</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeMatrixXor">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixXor" type="OSnLMNodeMatrixXor" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. result matrix has a 1 wherever one of the two argument matrices has a nonzero and the other has a zero value</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeMatrixPattern">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixPattern" type="OSnLMNodeMatrixPattern" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. result matrix has a 1 wherever the argument matrix has a nonzero. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeMatrixNot">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixNot" type="OSnLMNodeMatrixNot" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. result matrix has a 1 wherever the argument matrix has a zero value</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeMatrixForAll">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence maxOccurs="unbounded">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixForAll" type="OSnLMNodeMatrixForAll" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. result matrix has a 1 wherever all argument matrices have a nonzero value</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeMatrixExists">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence maxOccurs="unbounded">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixExists" type="OSnLMNodeMatrixExists" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. result matrix has a 1 wherever at least one of the argument matrices has a nonzero value</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--Complex Nodes: experimental  -->
+	<xs:complexType name="OSnLNodeRealPart">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence>
-					<xs:element ref="xPathIndex" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="OSnLCNode"/>
 				</xs:sequence>
-				<xs:attribute name="uri" type="xs:anyURI" use="optional" default="."/>
-				<xs:attribute name="path" type="xs:string" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="xPath" type="OSnLNodeXPath" substitutionGroup="OSnLNode">
+	<xs:element name="realPart" type="OSnLNodeRealPart" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0. returns the real part of a complex number.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeXPathIndex">
+	<xs:complexType name="OSnLNodeImaginaryPart">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="imaginaryPart" type="OSnLNodeImaginaryPart" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment. returns the imaginary part of a complex number.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeComplexModulus">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLCNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexModulus" type="OSnLNodeComplexModulus" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment.. for the complex numnber (a,b) returns sqrt(a^2+b^2)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeComplexArgument">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLCNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexArgument" type="OSnLNodeComplexArgument" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment. returns theta for the complex number z = |z|e^(i*theta)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeIsComplexInf">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0">
-					<xs:element ref="OSnLNode"/>
+				<xs:sequence>
+					<xs:element ref="OSnLCNode"/>
 				</xs:sequence>
-				<xs:attribute name="indexName" type="xs:string" use="required"/>
-				<xs:attribute name="indexValue" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="xPathIndex" type="OSnLNodeXPathIndex" substitutionGroup="OSnLNode">
+	<xs:element name="isComplexInf" type="OSnLNodeIsComplexInf" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment. returns 1 if either real part or imaginary part is Inf. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeIsComplexNaN">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeNodeRef">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0">
-					<xs:element ref="OSnLNode"/>
+				<xs:sequence>
+					<xs:element ref="OSnLCNode"/>
 				</xs:sequence>
-				<xs:attribute name="nodeID" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="propName" type="xs:string" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="nodeRef" type="OSnLNodeNodeRef" substitutionGroup="OSnLNode">
+	<xs:element name="isComplexNaN" type="OSnLNodeIsComplexNaN" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>experiment. returns 1 if either real part or imaginary part is NaN </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeArcRef">
+	<xs:complexType name="OSnLNodeIsComplexEq">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0">
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-				<xs:attribute name="arcID" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="propName" type="xs:string" use="required"/>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="arcRef" type="OSnLNodeArcRef" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeComplements">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLCNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="complements" type="OSnLNodeComplements" substitutionGroup="OSnLNode">
+	<xs:element name="isComplexEq" type="OSnLNodeIsComplexEq" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--xs:complexType name="OSnLNodeProb">
+	<xs:complexType name="OSnLNodeIsComplexNeq">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence>
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLCNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="isComplexNeq" type="OSnLNodeIsComplexNeq" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeCreate">
+		<xs:annotation>
+			<xs:documentation>experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:annotation>
+						<xs:documentation>Package two real-valued expressions into a complex. First child is real part; 
+second is imaginary part</xs:documentation>
+					</xs:annotation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="prob" type="OSnLNodeProb" substitutionGroup="OSnLNode"/-->
-	<xs:complexType name="OSnLNodePostfix">
+	<xs:element name="createComplex" type="OSnLCNodeCreate" substitutionGroup="OSnLCNode">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>experimental </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodePlus">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element name="values" minOccurs="0">
-						<xs:complexType mixed="true">
-							<xs:sequence>
-								<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-							<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
-						</xs:complexType>
-					</xs:element>
-					<xs:element name="operators">
-						<xs:complexType mixed="true">
-							<xs:sequence>
-								<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-							<xs:attribute name="numberOfOperators" type="xs:nonNegativeInteger" use="required"/>
-						</xs:complexType>
-					</xs:element>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="postfix" type="OSnLNodePostfix" substitutionGroup="OSnLNode">
+	<xs:element name="complexPlus" type="OSnLCNodePlus" substitutionGroup="OSnLCNode">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeSum">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexSum" type="OSnLCNodeSum" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeMinus">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexMinus" type="OSnLCNodeMinus" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeNegate">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexNegate" type="OSnLCNodeNegate" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeConjugate">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexConjugate" type="OSnLCNodeConjugate" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeNegativeConjugate">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexNegativeConjugate" type="OSnLCNodeNegativeConjugate" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. for the complex argument x + iy returns -x + iy. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeTimes">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexTimes" type="OSnLCNodeTimes" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeDivide">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexDivide" type="OSnLCNodeDivide" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeSquare">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexSquare" type="OSnLCNodeSquare" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeSquareRoot">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexSquareRoot" type="OSnLCNodeSquareRoot" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeProduct">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexProduct" type="OSnLCNodeProduct" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeExp">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexExp" type="OSnLCNodeExp" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeSin">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexSin" type="OSnLCNodeSin" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeCos">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexCos" type="OSnLCNodeCos" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeTan">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexTan" type="OSnLCNodeTan" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeSinh">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexSinh" type="OSnLCNodeSinh" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeCosh">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexCosh" type="OSnLCNodeCosh" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeTanh">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexTanh" type="OSnLCNodeTanh" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodePower">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexPower" type="OSnLCNodePower" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeMatrixDeterminant">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexMatrixDeterminant" type="OSnLCNodeMatrixDeterminant" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeMatrixTrace">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexMatrixTrace" type="OSnLCNodeMatrixTrace" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeMatrixToScalar">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexMatrixToScalar" type="OSnLCNodeMatrixToScalar" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>draft. Intended for 1x1 matrices only. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeMatrixElementAt">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLNode"/>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexMatrixElementAt" type="OSnLCNodeMatrixElementAt" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>draft. First child is the matrix to get the element, Second child is rowIdx. Third Child is colIdx.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeNumber">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:attribute name="real" type="xs:double" default="0.0"/>
+				<xs:attribute name="imag" type="xs:double" default="0.0"/>
+				<xs:attribute name="id" type="xs:ID">
+					<xs:annotation>
+						<xs:documentation>required if realtime or random is true</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="realTime">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="none"/>
+							<xs:enumeration value="realPart"/>
+							<xs:enumeration value="imaginaryPart"/>
+							<xs:enumeration value="both"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="random">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="none"/>
+							<xs:enumeration value="realPart"/>
+							<xs:enumeration value="imaginaryPart"/>
+							<xs:enumeration value="both"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexNumber" type="OSnLCNodeNumber" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:simpleType name="NlNodeEnumeration">
@@ -5145,6 +6725,7 @@
 			<xs:enumeration value="ceiling"/>
 			<xs:enumeration value="percent"/>
 			<xs:enumeration value="square"/>
+			<xs:enumeration value="sqrt"/>
 			<xs:enumeration value="squareRoot"/>
 			<xs:enumeration value="ln"/>
 			<xs:enumeration value="log"/>
@@ -5162,6 +6743,7 @@
 			<xs:enumeration value="rand"/>
 			<xs:enumeration value="gammaFn"/>
 			<xs:enumeration value="gammaLn"/>
+			<xs:enumeration value="erf"/>
 			<xs:enumeration value="sin"/>
 			<xs:enumeration value="cos"/>
 			<xs:enumeration value="tan"/>
@@ -5185,7 +6767,7 @@
 			<xs:enumeration value="csc"/>
 			<xs:enumeration value="csch"/>
 			<xs:enumeration value="arccsc"/>
-			<xs:enumeration value="arcscsch"/>
+			<xs:enumeration value="arccsch"/>
 			<xs:enumeration value="mean"/>
 			<xs:enumeration value="geometricMean"/>
 			<xs:enumeration value="harmonicMean"/>
@@ -5198,10 +6780,10 @@
 			<xs:enumeration value="min"/>
 			<xs:enumeration value="max"/>
 			<xs:enumeration value="percentile"/>
-			<xs:enumeration value="large"/>
-			<xs:enumeration value="small"/>
+			<xs:enumeration value="kLargest"/>
+			<xs:enumeration value="kSmallest"/>
 			<xs:enumeration value="range"/>
-			<xs:enumeration value="interQuantileRange"/>
+			<xs:enumeration value="interQuartileRange"/>
 			<xs:enumeration value="absdev"/>
 			<xs:enumeration value="stddev"/>
 			<xs:enumeration value="variance"/>
@@ -5214,10 +6796,10 @@
 			<xs:enumeration value="rankCorrelation"/>
 			<xs:enumeration value="autoCorrelation1"/>
 			<xs:enumeration value="autoCorrelation"/>
-			<xs:enumeration value="autoCorrelation"/>
 			<xs:enumeration value="npv"/>
 			<xs:enumeration value="irr"/>
-			<xs:enumeration value="erf"/>
+			<xs:enumeration value="empiricalDiscreteDist"/>
+			<xs:enumeration value="empiricalDiscreteCum"/>
 			<xs:enumeration value="discreteUniformDist"/>
 			<xs:enumeration value="discreteUniformCum"/>
 			<xs:enumeration value="discreteUniformInv"/>
@@ -5242,6 +6824,9 @@
 			<xs:enumeration value="negativeBinomialDist"/>
 			<xs:enumeration value="negativeBinomialCum"/>
 			<xs:enumeration value="negativeBinomialInv"/>
+			<xs:enumeration value="logarithmicDist"/>
+			<xs:enumeration value="logarithmicCum"/>
+			<xs:enumeration value="logarithmicInv"/>
 			<xs:enumeration value="uniformDist"/>
 			<xs:enumeration value="uniformCum"/>
 			<xs:enumeration value="uniformInv"/>
@@ -5251,6 +6836,7 @@
 			<xs:enumeration value="stdNormalDist"/>
 			<xs:enumeration value="stdNormalCum"/>
 			<xs:enumeration value="stdNormalInv"/>
+			<xs:enumeration value="unitNormalLinearLoss"/>
 			<xs:enumeration value="bivariateNormalDist"/>
 			<xs:enumeration value="bivariateNormalCum"/>
 			<xs:enumeration value="exponentialDist"/>
@@ -5265,12 +6851,15 @@
 			<xs:enumeration value="gammaDist"/>
 			<xs:enumeration value="gammaCum"/>
 			<xs:enumeration value="gammaInv"/>
+			<xs:enumeration value="generalizedGammaDist"/>
+			<xs:enumeration value="generalizedGammaCum"/>
+			<xs:enumeration value="generalizedGammaInv"/>
 			<xs:enumeration value="betaDist"/>
 			<xs:enumeration value="betaCum"/>
 			<xs:enumeration value="betaInv"/>
-			<xs:enumeration value="betaGeneralDist"/>
-			<xs:enumeration value="betaCumGeneral"/>
-			<xs:enumeration value="betaGeneralInv"/>
+			<xs:enumeration value="generalizedBetaDist"/>
+			<xs:enumeration value="generalizedBetaCum"/>
+			<xs:enumeration value="generalizedBetaInv"/>
 			<xs:enumeration value="lognormalDist"/>
 			<xs:enumeration value="lognormalCum"/>
 			<xs:enumeration value="lognormalInv"/>
@@ -5292,9 +6881,9 @@
 			<xs:enumeration value="logLogisticDist"/>
 			<xs:enumeration value="logLogisticCum"/>
 			<xs:enumeration value="logLogisticInv"/>
-			<xs:enumeration value="logarithmicDist"/>
-			<xs:enumeration value="logarithmicCum"/>
-			<xs:enumeration value="logarithmicInv"/>
+			<xs:enumeration value="expLogDist"/>
+			<xs:enumeration value="expLogCum"/>
+			<xs:enumeration value="expLogInv"/>
 			<xs:enumeration value="paretoDist"/>
 			<xs:enumeration value="paretoCum"/>
 			<xs:enumeration value="paretoInv"/>
@@ -5307,7 +6896,6 @@
 			<xs:enumeration value="triangularDist"/>
 			<xs:enumeration value="triangularCum"/>
 			<xs:enumeration value="triangularInv"/>
-			<xs:enumeration value="unitNormalLinearLoss"/>
 			<xs:enumeration value="number"/>
 			<xs:enumeration value="string"/>
 			<xs:enumeration value="identifier"/>
@@ -5315,6 +6903,7 @@
 			<xs:enumeration value="E"/>
 			<xs:enumeration value="INF"/>
 			<xs:enumeration value="EPS"/>
+			<xs:enumeration value="TINY"/>
 			<xs:enumeration value="TRUE"/>
 			<xs:enumeration value="FALSE"/>
 			<xs:enumeration value="EULERGAMMA"/>
@@ -5322,8 +6911,20 @@
 			<xs:enumeration value="variable"/>
 			<xs:enumeration value="objective"/>
 			<xs:enumeration value="constraint"/>
+			<xs:enumeration value="qTerm"/>
+			<xs:enumeration value="quadratic"/>
 			<xs:enumeration value="parameter"/>
 			<xs:enumeration value="randomVariable"/>
+			<xs:enumeration value="sim"/>
+			<xs:enumeration value="simInput"/>
+			<xs:enumeration value="simOutput"/>
+			<xs:enumeration value="userF"/>
+			<xs:enumeration value="arg"/>
+			<xs:enumeration value="xPath"/>
+			<xs:enumeration value="xPathIndex"/>
+			<xs:enumeration value="nodeRef"/>
+			<xs:enumeration value="arcRef"/>
+			<xs:enumeration value="complements"/>
 			<xs:enumeration value="if"/>
 			<xs:enumeration value="lt"/>
 			<xs:enumeration value="leq"/>
@@ -5340,6 +6941,7 @@
 			<xs:enumeration value="exists"/>
 			<xs:enumeration value="logicCount"/>
 			<xs:enumeration value="allDiff"/>
+			<xs:enumeration value="allDisjoint"/>
 			<xs:enumeration value="atMost"/>
 			<xs:enumeration value="atLeast"/>
 			<xs:enumeration value="exactly"/>
@@ -5350,79 +6952,141 @@
 			<xs:enumeration value="inIntegerSet"/>
 			<xs:enumeration value="inPositiveIntegerSet"/>
 			<xs:enumeration value="inNonnegativeIntegerSet"/>
-			<xs:enumeration value="matrixVariable"/>
-			<xs:enumeration value="matrix"/>
-			<xs:enumeration value="matrixBlock"/>
-			<xs:enumeration value="matrixIdentical"/>
-			<xs:enumeration value="matrixPlus"/>
-			<xs:enumeration value="matrixScalarPlus"/>
-			<xs:enumeration value="matrixSum"/>
-			<xs:enumeration value="matrixMinus"/>
-			<xs:enumeration value="matrixScalarMinus"/>
-			<xs:enumeration value="matrixNegate"/>
-			<xs:enumeration value="matrixTimes"/>
-			<xs:enumeration value="matrixDotTimes"/>
-			<xs:enumeration value="matrixScalarTimes"/>
-			<xs:enumeration value="matrixProduct"/>
-			<xs:enumeration value="matrixRightDivide"/>
-			<xs:enumeration value="matrixLeftDivide"/>
-			<xs:enumeration value="matrixDotRightDivide"/>
-			<xs:enumeration value="matrixDotLeftDivide"/>
-			<xs:enumeration value="matrixScalarDivide"/>
-			<xs:enumeration value="matrixPower"/>
-			<xs:enumeration value="matrixDotPower"/>
-			<xs:enumeration value="matrixLog"/>
-			<xs:enumeration value="matrixExp"/>
-			<xs:enumeration value="matrixSquareRoot"/>
-			<xs:enumeration value="matrixRowNumber"/>
-			<xs:enumeration value="matrixColumnNumber"/>
-			<xs:enumeration value="matrixValueNumber"/>
-			<xs:enumeration value="matrixElementAt"/>
-			<xs:enumeration value="matrixSubmatrixAt"/>
-			<xs:enumeration value="matrixConcatenate"/>
-			<xs:enumeration value="matrixUpperTriangle"/>
-			<xs:enumeration value="matrixLowerTriangle"/>
-			<xs:enumeration value="matrixDiagonal"/>
-			<xs:enumeration value="matrixRank"/>
+			<xs:enumeration value="isInf"/>
+			<xs:enumeration value="isNaN"/>
 			<xs:enumeration value="matrixDeterminant"/>
-			<xs:enumeration value="matrixInverse"/>
 			<xs:enumeration value="matrixTrace"/>
-			<xs:enumeration value="matrixTranspose"/>
-			<xs:enumeration value="matrixDotTranspose"/>
-			<xs:enumeration value="matrixSingular"/>
-			<xs:enumeration value="matrixFullRank"/>
-			<xs:enumeration value="matrixPositiveDefinite"/>
-			<xs:enumeration value="matrixPositiveSemidefinite"/>
-			<xs:enumeration value="matrixNegativeDefinite"/>
-			<xs:enumeration value="matrixNegativeSemidefinite"/>
-			<xs:enumeration value="matrixIndefinite"/>
-			<xs:enumeration value="matrixEigenValues"/>
-			<xs:enumeration value="matrixEigenVectors"/>
-			<xs:enumeration value="matrixNthLargestEigenValue"/>
-			<xs:enumeration value="matrixLargestEigenValue"/>
+			<xs:enumeration value="matrixToScalar"/>
+			<xs:enumeration value="matrixElementAt"/>
 			<xs:enumeration value="matrixNorm"/>
 			<xs:enumeration value="matrixFrobeniusNorm"/>
 			<xs:enumeration value="matrixCondition"/>
 			<xs:enumeration value="matrixFrobeniusNormCondition"/>
-			<xs:enumeration value="matrixNullSpace"/>
-			<xs:enumeration value="matrixRangeSpace"/>
-			<xs:enumeration value="matrixIdentity"/>
-			<xs:enumeration value="matrixReducedRowEchelon"/>
+			<xs:enumeration value="matrixLargestEigenValue"/>
+			<xs:enumeration value="matrixNthLargestEigenValue"/>
+			<xs:enumeration value="matrixSmallestEigenValue"/>
 			<xs:enumeration value="matrixSubspaceAngle"/>
+			<xs:enumeration value="matrixColumnNumber"/>
+			<xs:enumeration value="matrixRowNumber"/>
+			<xs:enumeration value="matrixRank"/>
+			<xs:enumeration value="matrixColumnRank"/>
+			<xs:enumeration value="matrixRowRank"/>
+			<xs:enumeration value="matrixIsNonsingular"/>
+			<xs:enumeration value="matrixIsPositiveDefinite"/>
+			<xs:enumeration value="matrixIsPositiveSemidefinite"/>
+			<xs:enumeration value="matrixIsNegativeDefinite"/>
+			<xs:enumeration value="matrixIsNegativeSemidefinite"/>
+			<xs:enumeration value="matrixIsIndefinite"/>
+			<xs:enumeration value="matrixIsFullRank"/>
+			<xs:enumeration value="matrixIsFullColumnRank"/>
+			<xs:enumeration value="matrixIsFullRowRank"/>
+			<xs:enumeration value="matrixIsIdentical"/>
+			<xs:enumeration value="matrixIsSymmetric"/>
+			<xs:enumeration value="matrixIsHermitian"/>
+			<xs:enumeration value="matrixPlus"/>
+			<xs:enumeration value="matrixSum"/>
+			<xs:enumeration value="matrixMinus"/>
+			<xs:enumeration value="matrixNegate"/>
+			<xs:enumeration value="matrixTimes"/>
+			<xs:enumeration value="matrixProduct"/>
+			<xs:enumeration value="matrixLeftDivide"/>
+			<xs:enumeration value="matrixRightDivide"/>
+			<xs:enumeration value="matrixPower"/>
+			<xs:enumeration value="matrixInverse"/>
+			<xs:enumeration value="matrixGeneralizedInverse"/>
+			<xs:enumeration value="matrixExp"/>
+			<xs:enumeration value="matrixSquareRoot"/>
+			<xs:enumeration value="matrixLog"/>
+			<xs:enumeration value="matrixTranspose"/>
+			<xs:enumeration value="matrixBlock"/>
+			<xs:enumeration value="matrixMerge"/>
+			<xs:enumeration value="matrixSubmatrixAt"/>
+			<xs:enumeration value="matrixScalarPlus"/>
+			<xs:enumeration value="matrixScalarMinus"/>
+			<xs:enumeration value="matrixScalarTimes"/>
+			<xs:enumeration value="matrixScalarDivide"/>
+			<xs:enumeration value="matrixDotTimes"/>
+			<xs:enumeration value="matrixDotDivide"/>
+			<xs:enumeration value="matrixDotPower"/>
+			<xs:enumeration value="matrixDotExp"/>
+			<xs:enumeration value="matrixEigenValues"/>
+			<xs:enumeration value="matrixLeftEigenVectors"/>
+			<xs:enumeration value="matrixRightEigenVectors"/>
 			<xs:enumeration value="matrixCholeskyDecomposition"/>
-			<xs:enumeration value="quadratic"/>
-			<xs:enumeration value="qTerm"/>
-			<xs:enumeration value="sim"/>
-			<xs:enumeration value="simInput"/>
-			<xs:enumeration value="simOutput"/>
-			<xs:enumeration value="userF"/>
-			<xs:enumeration value="arg"/>
-			<xs:enumeration value="xPath"/>
-			<xs:enumeration value="xPathIndex"/>
-			<xs:enumeration value="nodeRef"/>
-			<xs:enumeration value="arcRef"/>
-			<xs:enumeration value="complements"/>
-			<xs:enumeration value="postfix"/>
+			<xs:enumeration value="matrixLDLDecomposition"/>
+			<xs:enumeration value="matrixLUDecomposition"/>
+			<xs:enumeration value="matrixColumnSpace"/>
+			<xs:enumeration value="matrixRowSpace"/>
+			<xs:enumeration value="matrixNullSpace"/>
+			<xs:enumeration value="matrixLeftNullSpace"/>
+			<xs:enumeration value="matrixRightNullSpace"/>
+			<xs:enumeration value="matrixReducedRowEchelon"/>
+			<xs:enumeration value="matrixReference"/>
+			<xs:enumeration value="matrixVar"/>
+			<xs:enumeration value="matrixObj"/>
+			<xs:enumeration value="matrixCon"/>
+			<xs:enumeration value="identityMatrix"/>
+			<xs:enumeration value="matrixLowerTriangle"/>
+			<xs:enumeration value="matrixUpperTriangle"/>
+			<xs:enumeration value="matrixDiagonal"/>
+			<xs:enumeration value="diagonalMatrixFromVector"/>
+			<xs:enumeration value="matrixAnd"/>
+			<xs:enumeration value="matrixOr"/>
+			<xs:enumeration value="matrixXor"/>
+			<xs:enumeration value="matrixPattern"/>
+			<xs:enumeration value="matrixNot"/>
+			<xs:enumeration value="matrixForAll"/>
+			<xs:enumeration value="matrixExists"/>
+			<xs:enumeration value="realPart"/>
+			<xs:enumeration value="imaginaryPart"/>
+			<xs:enumeration value="complexModulus"/>
+			<xs:enumeration value="complexArgument"/>
+			<xs:enumeration value="isComplexInf"/>
+			<xs:enumeration value="isComplexNaN"/>
+			<xs:enumeration value="complexEq"/>
+			<xs:enumeration value="isComplexNeq"/>
+			<xs:enumeration value="complexCreate"/>
+			<xs:enumeration value="complexPlus"/>
+			<xs:enumeration value="complexSum"/>
+			<xs:enumeration value="complexMinus"/>
+			<xs:enumeration value="complexNegate"/>
+			<xs:enumeration value="complexConjugate"/>
+			<xs:enumeration value="complexNegativeConjugate"/>
+			<xs:enumeration value="complexTimes"/>
+			<xs:enumeration value="complexDivide"/>
+			<xs:enumeration value="complexSquare"/>
+			<xs:enumeration value="complexSquareRoot"/>
+			<xs:enumeration value="complexPower"/>
+			<xs:enumeration value="complexProduct"/>
+			<xs:enumeration value="complexExp"/>
+			<xs:enumeration value="complexSin"/>
+			<xs:enumeration value="complexCos"/>
+			<xs:enumeration value="complexTan"/>
+			<xs:enumeration value="complexSinh"/>
+			<xs:enumeration value="complexCosh"/>
+			<xs:enumeration value="complexTanh"/>
+			<xs:enumeration value="complexMatrixDeterminant"/>
+			<xs:enumeration value="complexMatrixTrace"/>
+			<xs:enumeration value="complexMatrixToScalar"/>
+			<xs:enumeration value="complexMatrixElementAt"/>
+			<xs:enumeration value="complexNumber"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="rangedConstraintValueType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="value"/>
+			<xs:enumeration value="status"/>
+			<xs:enumeration value="surplus"/>
+			<xs:enumeration value="shortage"/>
+			<xs:enumeration value="lb"/>
+			<xs:enumeration value="ub"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="objReferenceValueType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="value"/>
+			<xs:enumeration value="constant"/>
+			<xs:enumeration value="weight"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
