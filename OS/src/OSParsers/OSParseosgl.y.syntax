@@ -1547,7 +1547,7 @@ complexValuedExpressionsElContent: complexValuedExpressionsElEmpty | complexValu
 
 complexValuedExpressionsElEmpty: ENDOFELEMENT;
 
-complexValuedExpressionsElLaden: GREATERTHAN nlnode ELEND
+complexValuedExpressionsElLaden: GREATERTHAN OSnLCNode ELEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
         ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
@@ -1841,7 +1841,7 @@ complexElementsEl: complexElementsElStart complexElementsElAttributeList complex
         for (int i=0; i<osglData->mult; i++)
         {
             ((ComplexMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter + i]
-                = (osglData->realPart,osglData->imagPart); 
+                = std::complex<double>(osglData->realPart,osglData->imagPart); 
         }
         osglData->nonzeroCounter += osglData->mult;
     }
@@ -1849,9 +1849,9 @@ complexElementsEl: complexElementsElStart complexElementsElAttributeList complex
 
 complexElementsElStart: ELSTART
     {
-std::cout << "matched <complexElements> <values> <el; next should be \"Re=\"" << std::endl;
         if (osglData->nonzeroCounter >= osglData->numberOfValues) 
-            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "number of <el> terms greater than expected");
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects, 
+                "number of <el> terms greater than expected");
         osglData->realPartPresent = false;
         osglData->imagPartPresent = false;
         osglData->multPresent = false;
@@ -2604,7 +2604,6 @@ osglConstantATT: CONSTANTATT QUOTE aNumber QUOTE
 
 osglImagPartATT: IMATT QUOTE aNumber QUOTE
 {
-std::cout << "matched \"Im\"; value = " << parserData->tempVal << std::cout;
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     if (osglData->imagPartPresent == true)
@@ -2615,7 +2614,6 @@ std::cout << "matched \"Im\"; value = " << parserData->tempVal << std::cout;
 
 osglRealPartATT: REATT QUOTE aNumber QUOTE
 {
-std::cout << "matched \"Re\"; value = " << parserData->tempVal << std::cout;
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     if (osglData->realPartPresent == true)

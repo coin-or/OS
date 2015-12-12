@@ -29,6 +29,10 @@ OSnLParserData::OSnLParserData() :
     numberidattON(false),
     variableidxattON(false),
     variablecoefattON(false),
+    complexReAttON(false),
+    complexImAttON(false),
+    Re(0.0),
+    Im(0.0),
     includeDiagonalAttributePresent(false),
     includeDiagonalAttribute(true)
 {

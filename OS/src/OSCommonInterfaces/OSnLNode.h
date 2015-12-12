@@ -2921,6 +2921,7 @@ public:
     virtual ExprNode *cloneExprNode();
 };//end OSnLCNodeCreate
 
+
 /*! \class OSnLCNodePlus
  *  \brief The OSnLCNodePlus Class.
  *
@@ -2962,6 +2963,137 @@ public:
      */
     virtual ExprNode *cloneExprNode();
 };//end OSnLCNodePlus
+
+
+/*! \class OSnLCNodeMinus
+ *  \brief The OSnLCNodeMinus Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexMinus>
+ *
+ */
+class OSnLCNodeMinus : public OSnLCNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodeMinus();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLCNodeMinus();
+
+    /**
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn void OSnLCNodeMinus::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual std::complex<double> calculateFunction_C( double *x);
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLNode of the proper type.
+     */
+    virtual ExprNode *cloneExprNode();
+};//end OSnLCNodeMinus
+
+
+/*! \class OSnLCNodeNegate
+ *  \brief The OSnLCNodeNegate Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexNegate>
+ *
+ */
+class OSnLCNodeNegate : public OSnLCNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodeNegate();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLCNodeNegate();
+
+    /**
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn void OSnLCNodeNegate::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual std::complex<double> calculateFunction_C( double *x);
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLNode of the proper type.
+     */
+    virtual ExprNode *cloneExprNode();
+};//end OSnLCNodeNegate
+
+
+/*! \class OSnLCNodeConjugate
+ *  \brief The OSnLCNodeConjugate Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexConjugate>
+ *
+ */
+class OSnLCNodeConjugate : public OSnLCNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodeConjugate();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLCNodeConjugate();
+
+    /**
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn void OSnLCNodeConjugate::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual std::complex<double> calculateFunction_C( double *x);
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLNode of the proper type.
+     */
+    virtual ExprNode *cloneExprNode();
+};//end OSnLCNodeConjugate
+
 
 /*! \class OSnLCNodeSum
  *  \brief The OSnLCNodePlus Class.
@@ -3047,6 +3179,135 @@ public:
      */
     virtual ExprNode *cloneExprNode();
 };//end OSnLCNodeTimes
+
+
+/*! \class OSnLCNodeSquare
+ *  \brief The OSnLCNodeSquare Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexSquare>
+ *
+ */
+class OSnLCNodeSquare : public OSnLCNode
+{
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodeSquare();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLCNodeSquare();
+
+    /**
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn void OSnLCNodeSquare::calculateFunction(double *x)
+
+     *  \brief The implementation of the virtual functions.
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual std::complex<double> calculateFunction_C( double *x);
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLNode of the proper type.
+     */
+    virtual ExprNode *cloneExprNode();
+};//end OSnLCNodeSquare
+
+
+/*! \class OSnLCNodeNumber
+ *  \brief The OSnLCNodeNumber Class.
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 29/Sep/2015
+ * @since   OS2.9
+ *
+ * \remarks
+ * The in-memory representation of the OSnL element <complexNumber>
+ *
+ */
+class OSnLCNodeNumber : public OSnLCNode
+{
+private:
+    /**
+     * value, stored as a std::complex<double>, even though the OSiL schema stores the
+     *        real and imaginary parts as separate attributes
+     */
+    std::complex<double> value;
+
+    /**
+     * id can be used to reference an entry in a pool of numbers
+     */
+    int id;
+
+    /**   
+     *  realtime can be used to signal any part of the number that will be resolved in real time
+     *  The default is "none"
+     */
+    ENUM_COMPLEX_NUMBER_PART realTime;
+
+    /**   
+     *  random can be used to signal any part of the number that is random
+     *  The default is "none"
+     */
+    ENUM_COMPLEX_NUMBER_PART random;
+
+public:
+    /**
+     * default constructor.
+     */
+    OSnLCNodeNumber();
+
+    /**
+     * default destructor.
+     */
+    virtual ~OSnLCNodeNumber();
+
+    /**
+     * @return the value of operator name
+     */
+    virtual std::string getTokenName();
+
+    /*! \fn std::string OSnLCNodeNumber::getNonlinearExpressionInXML()
+     *  \brief The implementation of the virtual function.
+     *  \return the XML representation, including two attributes 
+     */
+    virtual std::string getNonlinearExpressionInXML();
+
+    /*! \fn void OSnLCNodeNumber::calculateFunction(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return nothing, but store function value into m_dFunctionValue.
+     */
+    virtual std::complex<double> calculateFunction_C( double *x);
+
+    /*! \fn OSnLCNode *cloneExprNode(double *x)
+     *  \brief The implementation of the virtual functions.
+     *  \return a pointer to a new OSnLNode of the proper type.
+     */
+    virtual ExprNode *cloneExprNode();
+
+    /*! \fn std::complex<double> getValue()
+     *  \brief return the value of a complex number 
+     */
+    std::complex<double> getValue();
+
+    /*! \fn void setValue(double Re, double Im)
+     *  \brief create the value of a complex number from the real and imaginary parts
+     */
+    void setValue(double Re, double Im);
+};//end OSnLCNodeNumber
+
+
 
 /*
 TO DO:

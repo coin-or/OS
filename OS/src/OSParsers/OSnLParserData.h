@@ -100,6 +100,9 @@ public:
     /** a pointer to an OSnLMNode object that is a matrixCon reference */
     OSnLMNodeMatrixCon *nlMNodeMatrixCon;
 
+    /** a pointer to an OSnLCNode object that is a complex number */
+    OSnLCNodeNumber *nlCNodeComplexNumber;
+
     /** nlnodenumber is the number of nl nodes in the instance*/
     int nlnodenumber;
 
@@ -136,7 +139,23 @@ public:
      *  for an OSnLNodeVariable, an exception is thrown if there is more than
      *  one coeff attribute
      */
-    bool variablecoefattON ;
+    bool variablecoefattON;
+
+    /** complexReAttON is set to true if the Re attribute has been parsed
+     *  for an OSnLCNodeCreate, an exception is thrown if there is more than
+     *  one Re attribute
+     */
+    bool complexReAttON;
+
+    /** complexImAttON is set to true if the Im attribute has been parsed
+     *  for an OSnLCNodeCreate, an exception is thrown if there is more than
+     *  one Im attribute
+     */
+    bool complexImAttON;
+
+    /** Re and Im hold the real and imaginary parts of a complex number */
+    double Re;
+    double Im;
 
     /** nlNodeVec holds a vector of pointers to OSnLNodes and OSnLMNodes 
      *  In order to build the expression tree correctly from the prefix notation
@@ -186,6 +205,12 @@ public:
      * parsing we need to temporarily store all of its children
      */
     std::vector<ExprNode*> matrixProductVec;
+
+    /** the OSnLCNodeComplexSum node can have any number of children, including
+     *  other children with an indeterminate number of children so when
+     *  parsing we need to temporarily store all of its children
+     */
+    std::vector<ExprNode*> cSumVec;
 
     /** matrixreftypeattON is set to true if the type attribute has been parsed
      * for an OSnLMNodeMatrixReference object, an exception is thrown if there is more than

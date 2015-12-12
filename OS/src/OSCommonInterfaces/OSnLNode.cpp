@@ -359,7 +359,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNode
     int kount =  nlNodeVec.size() - 1;
     while(kount >= 0)
     {
-        int numkids        = nlNodeVec[kount]->inumberOfChildren;
+        int numkids = nlNodeVec[kount]->inumberOfChildren;
 
         if(numkids > 0)
         {
@@ -4121,7 +4121,6 @@ OSnLCNodeCreate::OSnLCNodeCreate()
     inodeKind = 2;
 }//end OSnLCNodeCreate
 
-
 OSnLCNodeCreate::~OSnLCNodeCreate()
 {
     std::ostringstream outStr;
@@ -4129,11 +4128,11 @@ OSnLCNodeCreate::~OSnLCNodeCreate()
     outStr << "inside OSnLCNodeCreate destructor" << endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-}//end ~OSnLCNodePlus
+}//end ~OSnLCNodeCreate
 
 std::string OSnLCNodeCreate::getTokenName()
 {
-    return "complexCreate";
+    return "createComplex";
 }// end OSnLCNodeCreate::getTokenName()
 
 std::complex<double> OSnLCNodeCreate::calculateFunction_C(double *x)
@@ -4146,8 +4145,8 @@ std::complex<double> OSnLCNodeCreate::calculateFunction_C(double *x)
     m_mChildren[0]->calculateFunction(x);
     m_mChildren[1]->calculateFunction(x);
 
-    m_dFunctionValue = ( ((OSnLNode*) m_mChildren[0])->m_dFunctionValue, 
-                         ((OSnLNode*) m_mChildren[1])->m_dFunctionValue);
+    std::complex<double> m_dFunctionValue = ( ((OSnLNode*) m_mChildren[0])->m_dFunctionValue, 
+                                              ((OSnLNode*) m_mChildren[1])->m_dFunctionValue);
 
     return m_dFunctionValue;
 }// end OSnLCNodeCreate::calculate
@@ -4240,6 +4239,209 @@ ExprNode* OSnLCNodePlus::cloneExprNode()
 }//end OSnLCNodePlus::cloneExprNode
 
 
+// OSnLCNodeMinus Methods
+OSnLCNodeMinus::OSnLCNodeMinus()
+{
+    inumberOfChildren = 2;
+    m_mChildren = new ExprNode*[2];
+    m_mChildren[ 0] = NULL;
+    m_mChildren[ 1] = NULL;
+    inodeInt = OS_COMPLEX_MINUS;
+    inodeKind = 2;
+}//end OSnLCNodeMinus
+
+
+OSnLCNodeMinus::~OSnLCNodeMinus()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLCNodeMinus destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLCNodeMinus
+
+std::string OSnLCNodeMinus::getTokenName()
+{
+    return "complexMinus";
+}// end OSnLCNodeMinus::getTokenName()
+
+std::complex<double> OSnLCNodeMinus::calculateFunction_C(double *x)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLCNodeMinus::calculateFunction");
+#endif
+    if (m_mChildren[0]->inodeKind == 1)
+    {
+        m_mChildren[0]->calculateFunction(x);
+        m_dFunctionValue = ((OSnLNode*)m_mChildren[0])->m_dFunctionValue;
+    }
+    else
+    {
+        m_mChildren[0]->calculateFunction_C(x);
+        m_dFunctionValue = ((OSnLCNode*)m_mChildren[0])->m_dFunctionValue;
+    }
+
+    if (m_mChildren[1]->inodeKind == 1)
+    {
+        m_mChildren[1]->calculateFunction(x);
+        m_dFunctionValue -= ((OSnLNode*)m_mChildren[1])->m_dFunctionValue;
+    }
+    else
+    {
+        m_mChildren[1]->calculateFunction_C(x);
+        m_dFunctionValue -= ((OSnLCNode*)m_mChildren[1])->m_dFunctionValue;
+    }
+
+    return m_dFunctionValue;
+}// end OSnLCNodeMinus::calculate
+
+ExprNode* OSnLCNodeMinus::cloneExprNode()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodeMinus");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLCNodeMinus();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLCNodeMinus::cloneExprNode
+
+
+// OSnLCNodeNegate Methods
+OSnLCNodeNegate::OSnLCNodeNegate()
+{
+    inumberOfChildren = 1;
+    m_mChildren = new ExprNode*[1];
+    m_mChildren[ 0] = NULL;
+    inodeInt = OS_COMPLEX_NEGATE;
+    inodeKind = 2;
+}//end OSnLCNodeNegate
+
+OSnLCNodeNegate::~OSnLCNodeNegate()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLCNodeNegate destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLCNodeNegate
+
+std::string OSnLCNodeNegate::getTokenName()
+{
+    return "complexNegate";
+}// end OSnLCNodeNegate::getTokenName()
+
+std::complex<double> OSnLCNodeNegate::calculateFunction_C(double *x)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLCNodeNegate::calculateFunction");
+#endif
+    if (m_mChildren[0]->inodeKind == 1)
+    {
+        m_mChildren[0]->calculateFunction(x);
+        m_dFunctionValue = -((OSnLNode*)m_mChildren[0])->m_dFunctionValue;
+    }
+    else
+    {
+        m_mChildren[0]->calculateFunction_C(x);
+        m_dFunctionValue = -((OSnLCNode*)m_mChildren[0])->m_dFunctionValue;
+    }
+
+    return m_dFunctionValue;
+}// end OSnLCNodeNegate::calculate
+
+ExprNode* OSnLCNodeNegate::cloneExprNode()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodeNegate");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLCNodeNegate();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLCNodeNegate::cloneExprNode
+
+
+// OSnLCNodeConjugate Methods
+OSnLCNodeConjugate::OSnLCNodeConjugate()
+{
+    inumberOfChildren = 1;
+    m_mChildren = new ExprNode*[1];
+    m_mChildren[ 0] = NULL;
+    inodeInt = OS_COMPLEX_CONJUGATE;
+    inodeKind = 2;
+}//end OSnLCNodeConjugate
+
+
+OSnLCNodeConjugate::~OSnLCNodeConjugate()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLCNodeConjugate destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLCNodeConjugate
+
+std::string OSnLCNodeConjugate::getTokenName()
+{
+    return "complexConjugate";
+}// end OSnLCNodeConjugate::getTokenName()
+
+std::complex<double> OSnLCNodeConjugate::calculateFunction_C(double *x)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLCNodeMinus::calculateFunction");
+#endif
+    if (m_mChildren[0]->inodeKind == 1)
+    {
+        m_mChildren[0]->calculateFunction(x);
+        m_dFunctionValue = ((OSnLNode*)m_mChildren[0])->m_dFunctionValue;
+    }
+    else
+    {
+        m_mChildren[0]->calculateFunction_C(x);
+        m_dFunctionValue = std::conj( ((OSnLCNode*)m_mChildren[0])->m_dFunctionValue );
+    }
+
+    return m_dFunctionValue;
+}// end OSnLCNodeConjugate::calculate
+
+ExprNode* OSnLCNodeConjugate::cloneExprNode()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodeConjugate");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLCNodeConjugate();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLCNodeConjugate::cloneExprNode
+
+
 // OSnLCNodeSum Methods
 OSnLCNodeSum::OSnLCNodeSum()
 {
@@ -4247,7 +4449,6 @@ OSnLCNodeSum::OSnLCNodeSum()
     inodeInt = OS_COMPLEX_SUM;
     inodeKind = 2;
 }//end OSnLCNodeSum
-
 
 OSnLCNodeSum::~OSnLCNodeSum()
 {
@@ -4378,4 +4579,160 @@ ExprNode* OSnLCNodeTimes::cloneExprNode()
     CLONE_CHILDREN;
     return nlNodePoint;
 }//end OSnLCNodeTimes::cloneExprNode
+
+
+// OSnLCNodeSquare Methods
+OSnLCNodeSquare::OSnLCNodeSquare()
+{
+    inumberOfChildren = 1;
+    m_mChildren = new ExprNode*[1];
+    m_mChildren[ 0] = NULL;
+    inodeInt = OS_COMPLEX_SQUARE;
+    inodeKind = 2;
+}//end OSnLCNodeSquare
+
+OSnLCNodeSquare::~OSnLCNodeSquare()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLCNodeSquare destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLCNodeSquare
+
+std::string OSnLCNodeSquare::getTokenName()
+{
+    return "complexSquare";
+}// end OSnLCNodeSquare::getTokenName()
+
+std::complex<double> OSnLCNodeSquare::calculateFunction_C(double *x)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in ExprNode::calculateFunction");
+#endif
+    std::complex <double> temp;
+
+    if (m_mChildren[0]->inodeKind == 1)
+    {
+        m_mChildren[0]->calculateFunction(x);
+        temp = ((OSnLNode*)m_mChildren[0])->m_dFunctionValue;
+    }
+    else
+    {
+        m_mChildren[0]->calculateFunction_C(x);
+        temp = ((OSnLCNode*)m_mChildren[0])->m_dFunctionValue;
+    }
+    m_dFunctionValue = temp*temp;
+
+    return m_dFunctionValue;
+}// end OSnLCNodeSquare::calculate
+
+ExprNode* OSnLCNodeSquare::cloneExprNode()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodeSquare");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLCNodeSquare();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLCNodeSquare::cloneExprNode
+
+
+// OSnLCNodeNumber Methods
+OSnLCNodeNumber::OSnLCNodeNumber() :
+    value(0.0, 0.0),
+    id(-1),
+    realTime(ENUM_COMPLEX_NUMBER_PART_none),
+    random(ENUM_COMPLEX_NUMBER_PART_none)
+{
+    inumberOfChildren = 0;
+    inodeInt = OS_COMPLEX_NUMBER;
+    inodeKind = 2;
+}//end OSnLCNodeNumber
+
+OSnLCNodeNumber::~OSnLCNodeNumber()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "inside OSnLCNodeNumber destructor" << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}//end ~OSnLCNodeNumber
+
+std::string OSnLCNodeNumber::getTokenName()
+{
+    return "complexNumber";
+}// end OSnLCNodeNumber::getTokenName()
+
+std::string OSnLCNodeNumber::getNonlinearExpressionInXML()
+{
+    ostringstream outStr, logStr;
+    outStr << "<";
+    outStr << this->getTokenName();
+#ifndef NDEBUG
+    logStr << "nonlinear node " << this->getTokenName() << endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, logStr.str());
+#endif
+    outStr << " Re=\"" << os_dtoa_format(value.real()) << "\""
+           << " Im=\"" << os_dtoa_format(value.imag()) << "\"";
+    outStr << "/>";
+    return outStr.str();
+}//getNonlinearExpressionInXML()
+
+std::complex<double> OSnLCNodeNumber::calculateFunction_C(double *x)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, "in OSnLCNodeNumber::calculateFunction");
+#endif
+    m_dFunctionValue = value;
+    return m_dFunctionValue;
+}// end OSnLCNodeNumber::calculate
+
+std::complex<double> OSnLCNodeNumber::getValue()
+{
+    return value;
+}// end of OSnLCNodeNumber::getValue
+
+void OSnLCNodeNumber::setValue(double Re, double Im)
+{
+    ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "in OSnLCNodeNumber::setValue; Re=" << Re << "; Im=" << Im;
+#endif
+    std::complex<double> value(Re, Im);
+#ifndef NDEBUG
+    outStr << "; value=" << value;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}// end of OSnLCNodeNumber::setValue
+
+ExprNode* OSnLCNodeNumber::cloneExprNode()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLCNodeNumber");
+#endif
+    ExprNode *nlNodePoint;
+    nlNodePoint = new OSnLCNodeNumber();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << nlNodePoint << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    CLONE_CHILDREN;
+    return nlNodePoint;
+}//end OSnLCNodeNumber::cloneExprNode
+
 

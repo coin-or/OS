@@ -972,6 +972,7 @@ if (PARSER_TESTS)
 
             cout << "Write the OSInstance object to a temporary file (i.e., string)" << endl;
             std::string temposil = osilwriter->writeOSiL(instance1);
+
             cout << "Parse the temporary string again" << endl;
             osilreader2 = new OSiLReader;
             instance2 = osilreader2->readOSiL( temposil);
@@ -992,26 +993,6 @@ if (PARSER_TESTS)
             cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
             // now test the matrix manipulation routines 
-
-            // print out the merge table for the many different types of matrix elements
-            std::cout << "Type1:     ";
-            for (int i=ENUM_MATRIX_TYPE_empty; i <= ENUM_MATRIX_TYPE_unknown; i++)
-            {
-                std::cout << returnMatrixTypeString((ENUM_MATRIX_TYPE)i) << " ";
-            }
-            std::cout << std::endl;
-            for (int i=ENUM_MATRIX_TYPE_empty; i <= ENUM_MATRIX_TYPE_unknown; i++)
-            {
-                std::cout << returnMatrixTypeString((ENUM_MATRIX_TYPE)i);
-                for (int j=ENUM_MATRIX_TYPE_empty; j <= ENUM_MATRIX_TYPE_unknown; j++)
-                    std::cout << "  "
-                        << returnMatrixTypeString(mergeMatrixType( (ENUM_MATRIX_TYPE)i,
-                                                                   (ENUM_MATRIX_TYPE)j ));
-                std::cout << std::endl;
-            }
-
-            
-
             // (expansion, separation into blocks, transformations, etc.)
             cout << endl << "TEST " << ++nOfTest << ": Test matrix manipulation routines (using testMatricesAndCones.osil)" << endl << endl;
 

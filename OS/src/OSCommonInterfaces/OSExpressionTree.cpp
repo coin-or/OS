@@ -384,6 +384,13 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
     OSnLNodeProduct *nlnodeProduct = NULL;
     OSnLNodeMin *nlnodeMin = NULL;
     OSnLNodeMax *nlnodeMax = NULL;
+    OSnLMNodeMatrixSum *nlnodeMtxSum = NULL;
+    OSnLMNodeMatrixProduct *nlnodeMtxProd = NULL;
+    OSnLMNodeMatrixReference *nlnodeMtxRef = NULL;
+    OSnLMNodeMatrixVar *nlnodeMtxVar = NULL;
+    OSnLCNodeSum *nlnodeComplexSum = NULL;
+    OSnLCNodeNumber *nlnodeCNum = NULL;
+
     std::string tmp1 = "";
     std::string tmp2 = "";
     std::string tmp3 = "";
@@ -393,6 +400,9 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
     std::stack<std::string> productStack;
     std::stack<std::string> minStack;
     std::stack<std::string> maxStack;
+    std::stack<std::string> mtxSumStack;
+    std::stack<std::string> mtxProdStack;
+    std::stack<std::string> cSumStack;
 
     try
     {
@@ -490,8 +500,6 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "-"+ tmp1 );
-
-
                         break;
 
                     case OS_TIMES :
@@ -521,7 +529,6 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         tmpStack.push("(" + tmp2 +  " ^ "  + tmp1 + ")");
                         break;
 
-
                     case OS_ABS :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing abs operator");
                         tmp1 = tmpStack.top();
@@ -535,7 +542,6 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         tmpStack.pop();
                         tmpStack.push( "erf( "+ tmp1  + ")");
                         break;
-
 
                     case OS_SQUARE :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing square operator ");
@@ -600,7 +606,6 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         tmpStack.push( outStr.str() );
                         break;
 
-
                     case OS_MAX :
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing max operator");
                         //std::cout << "INSIDE Max NODE " << std::endl;
@@ -623,7 +628,6 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         break;
 
                     case OS_IF :
-
                         if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing if operator ");
                         if(nlnode->inumberOfChildren != 3)throw  ErrorClass("The if node must have three children");
                         tmp1 = tmpStack.top();
@@ -657,6 +661,227 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         tmpStack.push( outStr.str() );
                         //std::cout << outStr.str() << std::endl;
                         break;
+
+
+                    case OS_MATRIX_DETERMINANT :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing det operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "det( "+ tmp1  + ")");
+                        break;
+
+                    case OS_MATRIX_TRACE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing trace operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "tr( "+ tmp1  + ")");
+                        break;
+
+
+                    case OS_MATRIX_PLUS :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix plus operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp2 +  " + "  + tmp1 + ")");
+                        break;
+
+                    case OS_MATRIX_SUM :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix sum operator");
+                        //std::cout << "INSIDE SUM NODE " << std::endl;
+                        nlnodeMtxSum = (OSnLMNodeMatrixSum*)nlnode;
+                        outStr.str("");
+                        for(j = 0; j < nlnodeMtxSum->inumberOfChildren; j++)
+                        {
+                            mtxSumStack.push( tmpStack.top() );
+                            tmpStack.pop();
+                        }
+                        outStr << "(";
+                        for(j = 0; j < nlnodeMtxSum->inumberOfChildren; j++)
+                        {
+                            outStr << mtxSumStack.top();
+                            if (j < nlnodeMtxSum->inumberOfChildren - 1) outStr << " + ";
+                            mtxSumStack.pop();
+                        }
+                        outStr << ")";
+                        tmpStack.push( outStr.str() );
+                        //std::cout << outStr.str() << std::endl;
+                        break;
+
+                    case OS_MATRIX_MINUS :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix minus operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp2 +  " - "  + tmp1 + ")");
+                        break;
+
+                    case OS_MATRIX_NEGATE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing matrix negate operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "-"+ tmp1 );
+                        break;
+
+                    case OS_MATRIX_TIMES :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix times operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp2 +  "*"  + tmp1 + ")");
+                        break;
+
+                    case OS_MATRIX_PRODUCT :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix product operator");
+                        //std::cout << "INSIDE Product NODE " << std::endl;
+                        nlnodeMtxProd = (OSnLMNodeMatrixProduct*)nlnode;
+                        outStr.str("");
+                        for(j = 0; j < nlnodeMtxProd->inumberOfChildren; j++)
+                        {
+                            mtxProdStack.push( tmpStack.top() );
+                            tmpStack.pop();
+                        }
+                        outStr << "(";
+                        for(j = 0; j < nlnodeMtxProd->inumberOfChildren; j++)
+                        {
+                            outStr << mtxProdStack.top();
+                            if (j < nlnodeMtxProd->inumberOfChildren - 1) outStr << " * ";
+                            mtxProdStack.pop();
+                        }
+                        outStr << ")";
+                        tmpStack.push( outStr.str() );
+                        //std::cout << outStr.str() << std::endl;
+                        break;
+
+                    case OS_MATRIX_INVERSE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing matrix inverse operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "(" + tmp1 + ")^(-1)");
+                        break;
+
+                    case OS_MATRIX_TRANSPOSE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing matrix negate operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "(" + tmp1 + ")^T");
+                        break;
+
+                    case OS_MATRIX_SCALARTIMES :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix scalar multiple operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp1 +  "*"  + tmp2 + ")");
+                        break;
+
+                    case OS_MATRIX_REFERENCE:
+                        outStr.str("");
+                        // handle a matrix reference
+                        nlnodeMtxRef = (OSnLMNodeMatrixReference*)nlnode;
+                        // see if the coefficient is specified
+                        outStr << "M_";
+                        outStr << nlnodeMtxRef->idx;
+                        tmpStack.push(outStr.str() );
+                        break;
+
+                    case OS_MATRIX_VAR:
+                        outStr.str("");
+                        // handle a reference to a matrix variable
+                        nlnodeMtxVar = (OSnLMNodeMatrixVar*)nlnode;
+                        // see if the coefficient is specified
+                        outStr << "M_";
+                        outStr << nlnodeMtxVar->idx;
+                        tmpStack.push(outStr.str() );
+                        break;
+
+
+                    case OS_COMPLEX_PLUS :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix plus operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp2 +  " + "  + tmp1 + ")");
+                        break;
+
+                    case OS_COMPLEX_SUM :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix sum operator");
+                        //std::cout << "INSIDE SUM NODE " << std::endl;
+                        nlnodeComplexSum = (OSnLCNodeSum*)nlnode;
+                        outStr.str("");
+                        for(j = 0; j < nlnodeComplexSum->inumberOfChildren; j++)
+                        {
+                            cSumStack.push( tmpStack.top() );
+                            tmpStack.pop();
+                        }
+                        outStr << "(";
+                        for(j = 0; j < nlnodeMtxSum->inumberOfChildren; j++)
+                        {
+                            outStr << cSumStack.top();
+                            if (j < nlnodeMtxSum->inumberOfChildren - 1) outStr << " + ";
+                            cSumStack.pop();
+                        }
+                        outStr << ")";
+                        tmpStack.push( outStr.str() );
+                        //std::cout << outStr.str() << std::endl;
+                        break;
+
+                    case OS_COMPLEX_MINUS :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing complex minus operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp2 +  " - "  + tmp1 + ")");
+                        break;
+
+                    case OS_COMPLEX_NEGATE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing complex negate operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "-"+ tmp1 );
+                        break;
+
+                    case OS_COMPLEX_CONJUGATE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing complex conjugate operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "conj(" + tmp1 + ")");
+                        break;
+
+                    case OS_COMPLEX_TIMES :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing complex times operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp2 +  "*"  + tmp1 + ")");
+                        break;
+
+                    case OS_COMPLEX_NUMBER:
+//                        ostringstream outStr;
+                        nlnodeCNum = (OSnLCNodeNumber*)nlnode;
+//                        outStr << "(" << os_dtoa_format(nlnodeCNum->getValue().real()) << ", " << 
+//                                      << os_dtoa_format(nlnodeCNum->getValue().imag() << ")" ) );
+
+                        tmpStack.push( "(" + os_dtoa_format(nlnodeCNum->getValue().real()) + ", "  
+                                           + os_dtoa_format(nlnodeCNum->getValue().imag()) + ")" );
+                        break;
+
+                    case OS_COMPLEX_CREATE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing complex number operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp2 +  ", "  + tmp1 + ")");
+                        break;
+
 
                     default:
                         throw  ErrorClass("operator " + nlnode->getTokenName() + " not supported");

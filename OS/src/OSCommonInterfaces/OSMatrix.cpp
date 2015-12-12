@@ -5614,8 +5614,8 @@ std::string ComplexMatrixElements::getMatrixNodeInXML()
         {
             int mult = getMult(&(value->el[i]), numberOfValues - i);
             outStr  << "<el"
-                    << " Re=\"" << os_dtoa_format((value->el[i]).real())
-                    << " Im=\"" << os_dtoa_format((value->el[i]).imag());
+                    << " Re=\"" << os_dtoa_format((value->el[i]).real()) << "\""
+                    << " Im=\"" << os_dtoa_format((value->el[i]).imag()) << "\"";
             if (mult > 1)
                 outStr << " mult=\"" << mult;
             outStr << "/>" << std::endl;

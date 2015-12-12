@@ -529,7 +529,7 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/transformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TRANSFORMATIONEND);}
 
 
- /* Patterns for <matrices> element */
+ /* Patterns for <matrixProgramming> element */
 
 {xmlwhitespace}*\<matrixProgramming {YY_PRINT;  return(MATRIXPROGRAMMINGSTART);}
 {xmlwhitespace}*\<\/matrixProgramming{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MATRIXPROGRAMMINGEND);}
@@ -731,6 +731,28 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/matrixTranspose{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MATRIXTRANSPOSEEND);}
 {xmlwhitespace}*\<identityMatrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(IDENTITYMATRIXSTART);}
 {xmlwhitespace}*\<\/identityMatrix{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(IDENTITYMATRIXEND);}
+
+ /* patterns for complex expressions and functions */
+
+{xmlwhitespace}*\<complexNumber {YY_PRINT;  return(COMPLEXNUMBERSTART);}
+{xmlwhitespace}*\<\/complexNumber{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(COMPLEXNUMBEREND);}
+{xmlwhitespace}*\<createComplex {YY_PRINT;  return(CREATECOMPLEXSTART);}
+{xmlwhitespace}*\<\/createComplex{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CREATECOMPLEXEND);}
+{xmlwhitespace}*\<complexPlus {YY_PRINT;  return(COMPLEXPLUSSTART);}
+{xmlwhitespace}*\<\/complexPlus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(COMPLEXPLUSEND);}
+{xmlwhitespace}*\<complexSum {YY_PRINT;  return(COMPLEXSUMSTART);}
+{xmlwhitespace}*\<\/complexSum{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(COMPLEXSUMEND);}
+{xmlwhitespace}*\<complexMinus {YY_PRINT;  return(COMPLEXMINUSSTART);}
+{xmlwhitespace}*\<\/complexMinus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(COMPLEXMINUSEND);}
+{xmlwhitespace}*\<complexNegate {YY_PRINT;  return(COMPLEXNEGATESTART);}
+{xmlwhitespace}*\<\/complexNegate{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(COMPLEXNEGATEEND);}
+{xmlwhitespace}*\<complexConjugate {YY_PRINT;  return(COMPLEXCONJUGATESTART);}
+{xmlwhitespace}*\<\/complexConjugate{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(COMPLEXCONJUGATEEND);}
+{xmlwhitespace}*\<complexTimes {YY_PRINT;  return(COMPLEXTIMESSTART);}
+{xmlwhitespace}*\<\/complexTimes{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(COMPLEXTIMESEND);}
+{xmlwhitespace}*\<complexSquare {YY_PRINT;  return(COMPLEXSQUARESTART);}
+{xmlwhitespace}*\<\/complexSquare{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(COMPLEXSQUAREEND);}
+
 
  /* attributes returning strings (that are potentially empty)*/
 

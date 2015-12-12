@@ -317,6 +317,12 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token MATRIXTRANSPOSESTART MATRIXTRANSPOSEEND MATRIXREFERENCESTART MATRIXREFERENCEEND
 %token IDENTITYMATRIXSTART IDENTITYMATRIXEND MATRIXINVERSESTART  MATRIXINVERSEEND
 
+%token COMPLEXCONJUGATESTART COMPLEXCONJUGATEEND COMPLEXMINUSSTART COMPLEXMINUSEND
+%token COMPLEXNEGATESTART COMPLEXNEGATEEND COMPLEXNUMBERSTART COMPLEXNUMBEREND
+%token COMPLEXPLUSSTART COMPLEXPLUSEND COMPLEXSQUARESTART COMPLEXSQUAREEND
+%token COMPLEXSUMSTART COMPLEXSUMEND COMPLEXTIMESSTART COMPLEXTIMESEND
+%token CREATECOMPLEXSTART CREATECOMPLEXEND
+
 %token EMPTYINCLUDEDIAGONALATT INCLUDEDIAGONALATT
 
 %token EMPTYIDATT IDATT
@@ -5684,7 +5690,7 @@ complexValuedExpressionsElContent: complexValuedExpressionsElEmpty | complexValu
 
 complexValuedExpressionsElEmpty: ENDOFELEMENT;
 
-complexValuedExpressionsElLaden: GREATERTHAN nlnode ELEND
+complexValuedExpressionsElLaden: GREATERTHAN OSnLCNode ELEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
         ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
@@ -5978,7 +5984,7 @@ complexElementsEl: complexElementsElStart complexElementsElAttributeList complex
         for (int i=0; i<osglData->mult; i++)
         {
             ((ComplexMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter + i]
-                = (osglData->realPart,osglData->imagPart); 
+                = std::complex<double>(osglData->realPart,osglData->imagPart); 
         }
         osglData->nonzeroCounter += osglData->mult;
     }
@@ -5986,9 +5992,9 @@ complexElementsEl: complexElementsElStart complexElementsElAttributeList complex
 
 complexElementsElStart: ELSTART
     {
-std::cout << "matched <complexElements> <values> <el; next should be \"Re=\"" << std::endl;
         if (osglData->nonzeroCounter >= osglData->numberOfValues) 
-            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "number of <el> terms greater than expected");
+            parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, 
+                "number of <el> terms greater than expected");
         osglData->realPartPresent = false;
         osglData->imagPartPresent = false;
         osglData->multPresent = false;
@@ -6741,7 +6747,6 @@ osglConstantATT: CONSTANTATT QUOTE aNumber QUOTE
 
 osglImagPartATT: IMATT QUOTE aNumber QUOTE
 {
-std::cout << "matched \"Im\"; value = " << parserData->tempVal << std::cout;
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->imagPartPresent == true)
@@ -6752,7 +6757,6 @@ std::cout << "matched \"Im\"; value = " << parserData->tempVal << std::cout;
 
 osglRealPartATT: REATT QUOTE aNumber QUOTE
 {
-std::cout << "matched \"Re\"; value = " << parserData->tempVal << std::cout;
     if ( *$2 != *$4 ) 
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->realPartPresent == true)
@@ -7221,9 +7225,9 @@ nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN
  *  The expression tree is eventually identified with its root node.
  */                  
 nlnodes: 
-        | nlnodes scalarExpressionTree;
+        | nlnodes realValuedExpressionTree;
 
-scalarExpressionTree: nlstart nlAttributes GREATERTHAN nlnode NLEND
+realValuedExpressionTree: nlstart nlAttributes GREATERTHAN nlnode NLEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
         osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
@@ -7463,9 +7467,9 @@ numberAttribute:
         osnlData->nlNodeNumberPoint->value = atof(osglData->value.c_str());
     };
   | numberidATT            
-            ;
+  ;
             
-numberidATT:   IDATT   ATTRIBUTETEXT 
+numberidATT: IDATT ATTRIBUTETEXT 
 {
     if (osnlData->numberidattON) parserData->parser_errors += 
         addErrorMsg( NULL, osresult, parserData, osglData, osnlData,"too many number id attributes"); 
@@ -7476,6 +7480,8 @@ numberidATT:   IDATT   ATTRIBUTETEXT
 
 numbervalueATT: VALUEATT QUOTE aNumber QUOTE 
 {
+    if ( *$2 != *$4 ) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osnlData->numbervalueattON) parserData->parser_errors += 
         addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "too many number value attributes"); 
     osnlData->numbervalueattON = true;
@@ -7517,14 +7523,14 @@ variableATT:
         }
 ;
             
-variablecoefATT: COEFATT  QUOTE aNumber QUOTE 
+variablecoefATT: COEFATT QUOTE aNumber QUOTE 
 { 
     if ( *$2 != *$4 ) parserData->parser_errors += 
         addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlNodeVariablePoint->coef = parserData->tempVal;
 };
                 
-variableidxATT: IDXATT QUOTE  INTEGER QUOTE 
+variableidxATT: IDXATT QUOTE INTEGER QUOTE 
 { 
     if ( *$2 != *$4 ) parserData->parser_errors += 
         addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
@@ -7573,7 +7579,7 @@ anotherallDiffnlnode ALLDIFFEND {
 anotherallDiffnlnode: 
             | anotherallDiffnlnode nlnode { ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren++; };
             
-            
+ 
 max: MAXSTART {
     osnlData->nlNodePoint = new OSnLNodeMax();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
@@ -7866,7 +7872,7 @@ matrixTimesStart: MATRIXTIMESSTART
 
 matrixTimesContent: OSnLMNode OSnLMNode MATRIXTIMESEND;
 
-            
+   
 matrixProduct: MATRIXPRODUCTSTART 
 {
     osnlData->nlNodePoint = new OSnLMNodeMatrixProduct();
@@ -7894,7 +7900,7 @@ matrixScalarTimesStart: MATRIXSCALARTIMESSTART
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 };
 
-matrixScalarTimesContent: nlnode OSnLMNode MATRIXSCALARTIMESEND;
+matrixScalarTimesContent: OSnLMNode scalarNode  MATRIXSCALARTIMESEND;
 
 matrixSubMatrixAt: matrixSubMatrixAtStart matrixSubMatrixAtContent;
 
@@ -8028,6 +8034,169 @@ exprAttribute:
     #endif
     };
 
+
+/** scalarNodes can be either real-valued or complex-valued */
+
+scalarNode: nlnode | OSnLCNode;
+
+/** OSnLCNodes are parsed in essentially the same way as OSnLNodes */
+
+OSnLCNode: complexNumber
+         | createComplex
+         | complexPlus
+         | complexSum
+         | complexMinus
+         | complexNegate
+         | complexConjugate
+         | complexTimes
+         | complexSquare
+;
+
+
+complexNumber: complexNumberStart complexNumberAttributes complexNumberEnd 
+{
+};
+
+complexNumberStart: COMPLEXNUMBERSTART
+{
+    osglData->realPartPresent = false;
+    osglData->imagPartPresent = false;
+    osnlData->nlNodePoint = new OSnLCNodeNumber();
+    osnlData->nlNodeVec.push_back(osnlData->nlNodePoint);
+};
+
+              
+complexNumberEnd: ENDOFELEMENT
+           | GREATERTHAN COMPLEXNUMBEREND;
+
+complexNumberAttributes: complexNumberAttList
+{
+    osnlData->nlCNodeComplexNumber->setValue(osnlData->Re, osnlData->Im);
+};
+
+complexNumberAttList: | complexNumberAttList complexNumberAtt;
+
+complexNumberAtt:
+//      ReATT
+//    | ImATT
+      osglRealPartATT
+    | osglImagPartATT
+;
+
+
+ReATT: IDXATT QUOTE /*aNumber*/ INTEGER QUOTE 
+{
+    if ( *$2 != *$4 ) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if (osnlData->complexReAttON) parserData->parser_errors += 
+        addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "real part of complex number previously given"); 
+    osnlData->complexReAttON = true;
+    osnlData->Re = parserData->tempVal;
+};
+
+ImATT: IDXATT QUOTE /*aNumber*/ INTEGER QUOTE 
+{
+    if ( *$2 != *$4 ) 
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if (osnlData->complexImAttON) parserData->parser_errors += 
+        addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "imaginary part of complex number previously given"); 
+    osnlData->complexImAttON = true;
+    osnlData->Im = parserData->tempVal;
+};
+
+
+createComplex: createComplexStart GREATERTHAN createComplexContent;
+
+createComplexStart: CREATECOMPLEXSTART 
+{
+    osnlData->nlNodePoint = new OSnLCNodeCreate();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+createComplexContent: nlnode nlnode CREATECOMPLEXEND;
+
+
+complexPlus: complexPlusStart GREATERTHAN complexPlusContent;
+
+complexPlusStart: COMPLEXPLUSSTART 
+{
+    osnlData->nlNodePoint = new OSnLCNodePlus();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+complexPlusContent: scalarNode scalarNode COMPLEXPLUSEND;
+
+
+complexSum: COMPLEXSUMSTART GREATERTHAN {
+    osnlData->nlNodePoint = new OSnLCNodeSum();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+    osnlData->cSumVec.push_back( osnlData->nlNodePoint);
+}
+anothercsumnode COMPLEXSUMEND {
+    osnlData->cSumVec.back()->m_mChildren = new ExprNode*[ osnlData->cSumVec.back()->inumberOfChildren];
+    osnlData->cSumVec.pop_back();
+};
+
+anothercsumnode: 
+            | anothercsumnode scalarNode
+{ 
+    osnlData->cSumVec.back()->inumberOfChildren++; 
+};
+
+
+complexMinus: complexMinusStart GREATERTHAN complexMinusContent;
+
+complexMinusStart: COMPLEXMINUSSTART 
+{
+    osnlData->nlNodePoint = new OSnLCNodeMinus();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+complexMinusContent: scalarNode scalarNode COMPLEXMINUSEND;
+
+
+complexNegate: complexNegateStart GREATERTHAN complexNegateContent;
+
+complexNegateStart: COMPLEXNEGATESTART 
+{
+    osnlData->nlNodePoint = new OSnLCNodeNegate();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+complexNegateContent: scalarNode COMPLEXNEGATEEND;
+
+
+complexConjugate: complexConjugateStart GREATERTHAN complexConjugateContent;
+
+complexConjugateStart: COMPLEXCONJUGATESTART 
+{
+    osnlData->nlNodePoint = new OSnLCNodeConjugate();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+complexConjugateContent: scalarNode COMPLEXCONJUGATEEND;
+
+
+complexTimes: complexTimesStart GREATERTHAN complexTimesContent;
+
+complexTimesStart: COMPLEXTIMESSTART 
+{
+    osnlData->nlNodePoint = new OSnLCNodeTimes();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+complexTimesContent: scalarNode scalarNode COMPLEXTIMESEND;
+
+
+complexSquare: complexSquareStart GREATERTHAN complexSquareContent;
+
+complexSquareStart: COMPLEXSQUARESTART 
+{
+    osnlData->nlNodePoint = new OSnLCNodeSquare();
+    osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
+};
+
+complexSquareContent: scalarNode COMPLEXSQUAREEND;
 
 /* $Id$ */
 /** @file OSParseosol.y.3

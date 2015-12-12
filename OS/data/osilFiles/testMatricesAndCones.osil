@@ -282,12 +282,12 @@
                                 <matrixTrace>
                                     <matrixMinus>
                                         <matrixScalarTimes>
-                                            <number value="1.5"/>
                                             <matrixNegate>
                                                 <matrixLowerTriangle>
                                                     <matrixReference idx="2"/>
                                                 </matrixLowerTriangle>
                                             </matrixNegate>
+                                            <number value="1.5"/>
                                         </matrixScalarTimes>
                                         <matrixTranspose>
                                             <matrixReference idx="8"/>
@@ -1662,12 +1662,12 @@
                                 <matrixTrace>
                                     <matrixMinus>
                                         <matrixScalarTimes>
-                                            <number value="1.5"/>
                                             <matrixNegate>
                                                 <matrixLowerTriangle>
                                                     <matrixReference idx="2"/>
                                                 </matrixLowerTriangle>
                                             </matrixNegate>
+                                            <number value="1.5"/>
                                         </matrixScalarTimes>
                                         <matrixTranspose>
                                             <matrixReference idx="8"/>
@@ -1917,7 +1917,6 @@
                         <el>blue</el>
                     </value>
                 </stringValuedElements>
-<!-- These types have not been implemented yet
                 <complexElements numberOfValues="1">
                     <start>
                         <el mult="3">0</el>
@@ -1927,7 +1926,7 @@
                         <el>1</el>
                     </index>
                     <value>
-                         <el Re="3.14" Im="2.718"/>
+                         <el Re="3.1415" Im="2.7183"/>
                     </value>
                 </complexElements>
                 <complexValuedExpressions numberOfValues="1">
@@ -1940,18 +1939,35 @@
                     </index>
                     <value>
                         <el>
-                            <complexCreate>
-                                <sin>
-                                    <variable idx="0" coef="5.0"/>
-                                </sin>
-                                <exp>
-                                    <variable idx="1" coef="-2.0"/>
-                                </exp>
-                            <complexCreate>
+                            <complexSum>
+                                <complexNumber Re="1" Im="1"/>
+                                <createComplex>
+                                    <sin>
+                                        <variable idx="0" coef="5.0"/>
+                                    </sin>
+                                    <exp>
+                                        <variable idx="1" coef="-2.0"/>
+                                    </exp>
+                                </createComplex>
+                                <complexPlus>
+                                    <complexTimes>
+                                        <complexNumber Re="3" Im="0"/>
+                                        <complexNumber Re="2" Im="2"/>
+                                    </complexTimes>
+                                    <complexNumber Re="0" Im="-2"/>
+                                </complexPlus>
+                                <complexMinus>
+                                    <complexNegate>
+                                        <complexNumber Re="0.5" Im="0.5"/>
+                                    </complexNegate>
+                                    <complexConjugate>
+                                        <complexNumber Re="0.5" Im="0.5"/>
+                                    </complexConjugate>
+                                </complexMinus>
+                            </complexSum>
                         </el>
                     </value>
                 </complexValuedExpressions>
- -->
             </matrix>
 
         </matrices>

@@ -976,4 +976,28 @@ inline bool verifyConeType(std::string type)
 }//verifyConeType
 
 
+// This enum can be used to identify parts of a complex number
+enum ENUM_COMPLEX_NUMBER_PART
+{
+    ENUM_COMPLEX_NUMBER_PART_none = 1,
+    ENUM_COMPLEX_NUMBER_PART_real,
+    ENUM_COMPLEX_NUMBER_PART_imag,
+    ENUM_COMPLEX_NUMBER_PART_both
+};
+
+inline int returnComplexNumberPart(std::string type)
+{
+    if (type == "none"      ) return ENUM_COMPLEX_NUMBER_PART_none;
+    if (type == "real"      ) return ENUM_COMPLEX_NUMBER_PART_real;
+    if (type == "imag"      ) return ENUM_COMPLEX_NUMBER_PART_imag;
+    if (type == "imaginary" ) return ENUM_COMPLEX_NUMBER_PART_imag;
+    if (type == "both"      ) return ENUM_COMPLEX_NUMBER_PART_both;
+    return 0;
+}//returnComplexNumberPart
+
+inline bool verifyComplexNumberPart(std::string type)
+{
+    return (returnComplexNumberPart(type) > 0);
+}//verifyConeType
+
 #endif
