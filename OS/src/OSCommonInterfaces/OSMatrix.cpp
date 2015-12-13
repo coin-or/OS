@@ -167,7 +167,6 @@ MatrixType::MatrixType():
     numberOfColumns(0),
     ExpandedMatrixInRowMajorForm(NULL),
     ExpandedMatrixInColumnMajorForm(NULL),
-    ExpandedMatrixByBlocks(NULL),
     m_miRowPartition(NULL),
     m_iRowPartitionSize(0),
     m_miColumnPartition(NULL),
@@ -808,395 +807,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
         {
             if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
             {
-#if 0
-                int baseMtxIdx = ((BaseMatrix*)m_mChildren[0])->baseMatrixIdx;
-                OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
-
-                int iroff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstRow;
-                int icoff = ((BaseMatrix*)m_mChildren[0])->targetMatrixFirstCol;
-
-                int base_r0, base_c0, base_rN, base_cN;
-
-                GeneralSparseMatrix* baseMtx;
-                if (((BaseMatrix*)m_mChildren[0])->baseTranspose)
-                {
-                    baseMtx = baseMtxPtr->getMatrixCoefficientsInRowMajor();
-                    base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
-                    base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
-                    base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
-                    base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
-                    if (base_cN < 0)
-                        base_cN = baseMtxPtr->numberOfRows - 1;
-                    if (base_rN < 0)
-                        base_rN = baseMtxPtr->numberOfColumns - 1;
-                }
-                else
-                {
-                    baseMtx = baseMtxPtr->getMatrixCoefficientsInColumnMajor();
-                    base_r0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartRow;
-                    base_c0 = ((BaseMatrix*)m_mChildren[0])->baseMatrixStartCol;
-                    base_rN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndRow;
-                    base_cN = ((BaseMatrix*)m_mChildren[0])->baseMatrixEndCol;
-                    if (base_rN < 0)
-                        base_rN = baseMtxPtr->numberOfRows - 1;
-                    if (base_cN < 0)
-                        base_cN = baseMtxPtr->numberOfColumns - 1;
-                }
-
-                double scaleMult = ((BaseMatrix*)m_mChildren[0])->scalarMultiplier;
-
-                ExpandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
-                ExpandedMatrixInColumnMajorForm->symmetry  = symmetry;
-                ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
-
-                // position and other options can affect what arrays need to be duplicated
-                bool isShifted = (iroff > 0 || icoff > 0);
-                bool isCropped = (base_c0 > 0 || base_r0 > 0 || 
-                                  base_rN < baseMtxPtr->numberOfRows - 1 ||
-                                  base_cN < baseMtxPtr->numberOfColumns - 1);
-                bool isClipped = (iroff + base_rN - base_r0 >= numberOfRows ||
-                                  icoff + base_cN - base_c0 >= numberOfColumns);
-                bool isScaled  = (scaleMult != 1);
-                bool reTyped   = (getMatrixType() != baseMtx->vType);
-                bool hasGap    = (icoff + base_cN - base_c0 < numberOfColumns - 1);
-
-                //default position without cropping, scaling or retyping is easiest
-                if ( !isShifted && !isCropped && !isClipped && !isScaled && !reTyped )
-                {
-                    ExpandedMatrixInColumnMajorForm->b_deleteStartArray = hasGap;
-                    ExpandedMatrixInColumnMajorForm->b_deleteIndexArray = false;
-                    ExpandedMatrixInColumnMajorForm->b_deleteValueArray = false;
-                    ExpandedMatrixInColumnMajorForm->isRowMajor = false;
-                    ExpandedMatrixInColumnMajorForm->valueSize  = baseMtx->valueSize;
-                    ExpandedMatrixInColumnMajorForm->vType      = baseMtx->vType;
-                    ExpandedMatrixInColumnMajorForm->index      = baseMtx->index;
-                    ExpandedMatrixInColumnMajorForm->value      = baseMtx->value;
-
-                    // even in default layout the baseMatrix may still have different dimensions...
-                    if (!hasGap)
-                        ExpandedMatrixInColumnMajorForm->start = baseMtx->start;
-                    else
-                    {
-                        ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
-                        ExpandedMatrixInColumnMajorForm->start =
-                            new int[ExpandedMatrixInColumnMajorForm->startSize];
-                        for (int i=0; i < baseMtx->startSize; i++)
-                            ExpandedMatrixInColumnMajorForm->start[i] = baseMtx->start[i];
-                        int lastStart = baseMtx->valueSize;
-                        for (int i=baseMtx->startSize; 
-                                 i < ExpandedMatrixInColumnMajorForm->startSize; i++)
-                            ExpandedMatrixInColumnMajorForm->start[i] = lastStart;
-                    }
-
-                    return ExpandedMatrixInColumnMajorForm; 
-                }
-                else
-                {
-                    // cropping, positioning or scaling all require a deep copy
-                    if ( !isShifted && !isCropped && !isClipped )
-                    {
-                        // it's a bit easier if we are just scaling
-                        ExpandedMatrixInColumnMajorForm->b_deleteStartArray = hasGap;
-                        ExpandedMatrixInColumnMajorForm->b_deleteIndexArray = false;
-                        ExpandedMatrixInColumnMajorForm->b_deleteValueArray = true;
-                        ExpandedMatrixInColumnMajorForm->isRowMajor = false;
-                        ExpandedMatrixInColumnMajorForm->valueSize  = baseMtx->valueSize;
-                        ExpandedMatrixInColumnMajorForm->vType      = baseMtx->vType;
-                        ExpandedMatrixInColumnMajorForm->index      = baseMtx->index;
-
-                        // even in default layout the baseMatrix may still have different dimensions...
-                        if (!hasGap)
-                            ExpandedMatrixInColumnMajorForm->start = baseMtx->start;
-                        else
-                        {
-                            ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
-                            ExpandedMatrixInColumnMajorForm->start =
-                                new int[ExpandedMatrixInColumnMajorForm->startSize];
-                            for (int i=0; i < baseMtx->startSize; i++)
-                                ExpandedMatrixInColumnMajorForm->start[i] = baseMtx->start[i];
-                            int lastStart = baseMtx->valueSize;
-                            for (int i=baseMtx->startSize; 
-                                     i < ExpandedMatrixInColumnMajorForm->startSize; i++)
-                                ExpandedMatrixInColumnMajorForm->start[i] = lastStart;
-                        }
-
-                        // the values are a bit more difficult ...
-                        if ( baseMtx->vType == ENUM_MATRIX_TYPE_constant)
-                        {
-                            ExpandedMatrixInColumnMajorForm->value = new ConstantMatrixValues();
-                            ((ConstantMatrixValues*)ExpandedMatrixInColumnMajorForm->value)->el
-                                = new double[baseMtx->valueSize];
-                            for (int i = 0; i < baseMtx->valueSize; i++)
-                                ((ConstantMatrixValues*)ExpandedMatrixInColumnMajorForm->value)->el[i]
-                                    = scaleMult*((ConstantMatrixValues*)baseMtx->value)->el[i];
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_varReference)
-                        {
-                            // must convert to linear elements
-                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
-                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
-                            for (int i = 0; i < baseMtx->valueSize; i++)
-                            {
-                                tmpValues->el[i] = new LinearMatrixElement();
-                                tmpValues->el[i]->numberOfVarIdx = 1; 
-                                tmpValues->el[i]->varIdx    = new LinearMatrixElementTerm*[1];
-                                tmpValues->el[i]->varIdx[0] = new LinearMatrixElementTerm();
-                                tmpValues->el[i]->varIdx[0]->coef = scaleMult;
-                                tmpValues->el[i]->varIdx[0]->idx  
-                                    = ((VarReferenceMatrixValues*)baseMtx->value)->el[i];
-                            }
-                            ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_linear)
-                        {
-                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
-                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
-                            for (int i = 0; i < baseMtx->valueSize; i++)
-                            {
-                                tmpValues->el[i] = new LinearMatrixElement();
-                                if (!(tmpValues->el[i]
-                                        ->deepCopyFrom(((LinearMatrixValues*)baseMtx->value)->el[i])))
-                                    throw ErrorClass("failed copying linear element values in method getMatrixCoefficientsInColumnMajor()");
-                                for (int j=0; j<tmpValues->el[i]->numberOfVarIdx; j++)
-                                    tmpValues->el[i]->varIdx[j]->coef *= scaleMult;
-                            }
-                            ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_realValuedExpressions)
-                        {
-                            // add scalar multiple as a product
-                            RealValuedExpressionArray* tmpValues = new RealValuedExpressionArray();
-                            tmpValues->el = new RealValuedExpressionTree*[baseMtx->valueSize];
-                            for (int i = 0; i < baseMtx->valueSize; i++)
-                            {
-                                tmpValues->el[i] = new RealValuedExpressionTree();
-                                tmpValues->el[i]->m_treeRoot = new OSnLNodeTimes();
-                                tmpValues->el[i]->m_treeRoot->m_mChildren[0] = new OSnLNodeNumber();
-                                ((OSnLNodeNumber*)tmpValues->el[i]->m_treeRoot->m_mChildren[0])->value = scaleMult;
-                                tmpValues->el[i]->m_treeRoot->m_mChildren[1]
-                                     = ((OSnLNode*)((RealValuedExpressionArray*)baseMtx->value)->el[i]
-                                        ->m_treeRoot->cloneExprNode());
-                            }
-                            ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_objReference)
-                        {
-                            throw ErrorClass("scalar multiple not defined for objReference elements in  getMatrixCoefficientsInColumnMajor()");
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_conReference)
-                        {
-                            throw ErrorClass("scalar multiple not defined for conReference elements in  getMatrixCoefficientsInColumnMajor()");
-                        }
-                        return ExpandedMatrixInColumnMajorForm; 
-                    }
-                    else // repositioned Basematrix with cropping
-                    {
-                        ExpandedMatrixInColumnMajorForm->b_deleteStartArray = true;
-                        ExpandedMatrixInColumnMajorForm->b_deleteIndexArray = true;
-                        ExpandedMatrixInColumnMajorForm->b_deleteValueArray = true;
-                        ExpandedMatrixInColumnMajorForm->startSize = numberOfColumns + 1;
-                        ExpandedMatrixInColumnMajorForm->isRowMajor = false;
-                        ExpandedMatrixInColumnMajorForm->vType      = baseMtx->vType;
-
-                        int  startSize = numberOfColumns + 1; 
-                        int* tmpStarts = new int[startSize];
-                        for (int i=0; i < startSize; i++)
-                            tmpStarts[i] = 0;
-
-                        int adjc = icoff - base_c0;
-                        int lastcol = icoff + base_cN - base_c0 + 1;
-                        if (lastcol > numberOfColumns)
-                            lastcol = numberOfColumns;
-
-                        // count elements in each column and calculate starts
-                        for (int i=icoff; i<lastcol; i++)
-                            for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
-                            {
-                                if (baseMtx->index[j] >= base_r0 &&
-                                    baseMtx->index[j] <= base_rN &&
-                                    baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
-                                tmpStarts[i+1]++; 
-                            }
-                        for (int i=icoff+1; i < startSize; i++) 
-                            tmpStarts[i] += tmpStarts[i-1];
- 
-                        int valueSize = tmpStarts[startSize-1];
-                        int* tmpIndexes = new int[valueSize];
-
-                        ExpandedMatrixInColumnMajorForm->valueSize = valueSize;
-                        ExpandedMatrixInColumnMajorForm->start     = tmpStarts;
-
-                        // to get the values, go through the base matrix a second time
-                        if ( baseMtx->vType == ENUM_MATRIX_TYPE_constant)
-                        {
-                            MatrixElementValues* tmpValues = new ConstantMatrixValues();
-                            ((ConstantMatrixValues*)tmpValues)->el = new double[valueSize];
-
-                            int ival = 0;
-                            for (int i=icoff; i<lastcol; i++)
-                                for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
-                                {
-                                    if (baseMtx->index[j] >= base_r0 &&
-                                        baseMtx->index[j] <= base_rN &&
-                                        baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
-                                    {
-                                        tmpIndexes[ival] = baseMtx->index[j] - base_r0 + iroff; 
-                                        ((ConstantMatrixValues*)tmpValues)->el[ival]
-                                            = scaleMult*((ConstantMatrixValues*)baseMtx->value)->el[j];
-                                        ival++;
-                                    }    
-                                }
-                            ExpandedMatrixInColumnMajorForm->index = tmpIndexes;
-                            ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                        }
-
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_varReference)
-                        {
-                            if (scaleMult == 1)
-                            {
-                                MatrixElementValues* tmpValues = new VarReferenceMatrixValues();
-                                ((VarReferenceMatrixValues*)tmpValues)->el = new int[valueSize];
-
-                                int ival = 0;
-                                for (int i=icoff; i<lastcol; i++)
-                                    for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
-                                    {
-                                        if (baseMtx->index[j] >= base_r0 &&
-                                            baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
-                                        {
-                                            tmpIndexes[ival] = baseMtx->index[j] - base_r0 + iroff; 
-                                            ((VarReferenceMatrixValues*)tmpValues)->el[ival]
-                                                = ((VarReferenceMatrixValues*)baseMtx->value)->el[j];
-                                            ival++;
-                                        }    
-                                    }
-                                ExpandedMatrixInColumnMajorForm->index = tmpIndexes;
-                                ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                            }
-                            else
-                            {
-                                // must convert to linear elements
-                                MatrixElementValues* tmpValues = new LinearMatrixValues();
-                                ((LinearMatrixValues*)tmpValues)->el 
-                                    = new LinearMatrixElement*[valueSize];
-
-                                int ival = 0;
-                                for (int i=icoff; i<lastcol; i++)
-                                    for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
-                                    {
-                                        if (baseMtx->index[j] >= base_r0 &&
-                                            baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
-                                        {
-                                            ((LinearMatrixValues*)tmpValues)->el[ival] 
-                                                = new LinearMatrixElement();
-                                            ((LinearMatrixValues*)tmpValues)->el[ival]->numberOfVarIdx = 1; 
-                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx 
-                                                = new LinearMatrixElementTerm*[1];
-                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0] 
-                                                = new LinearMatrixElementTerm();
-                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0]->coef 
-                                                = scaleMult;
-                                            ((LinearMatrixValues*)tmpValues)->el[ival]->varIdx[0]->idx  
-                                                = ((VarReferenceMatrixValues*)baseMtx->value)->el[j];
-                                            ival++;
-                                        }
-                                    }
-                                ExpandedMatrixInColumnMajorForm->index = tmpIndexes;
-                                ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                            }
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_linear)
-                        {
-                            LinearMatrixValues* tmpValues = new LinearMatrixValues();
-                            tmpValues->el = new LinearMatrixElement*[baseMtx->valueSize];
-
-                            int ival = 0;
-                            for (int i=icoff; i<lastcol; i++)
-                                for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
-                                {
-                                    if (baseMtx->index[j] >= base_r0 &&
-                                        baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
-                                    {
-                                        tmpValues->el[ival] = new LinearMatrixElement();
-                                        if (!(tmpValues->el[ival]
-                                                ->deepCopyFrom(((LinearMatrixValues*)baseMtx->value)->el[j])))
-                                        throw ErrorClass("failed copying linear element values in method getMatrixCoefficientsInColumnMajor()");
-                                    for (int k=0; k<tmpValues->el[ival]->numberOfVarIdx; k++)
-                                        tmpValues->el[ival]->varIdx[k]->coef *= scaleMult;
-                                    ival++;
-                                    }
-                                }
-                            ExpandedMatrixInColumnMajorForm->index = tmpIndexes;
-                            ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_realValuedExpressions)
-                        {
-                            if (scaleMult == 1)
-                            {
-                                RealValuedExpressionArray* tmpValues = new RealValuedExpressionArray();
-                                tmpValues->el = new RealValuedExpressionTree*[baseMtx->valueSize];
-
-                                int ival = 0;
-                                for (int i=icoff; i<lastcol; i++)
-                                    for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
-                                    {
-                                        if (baseMtx->index[j] >= base_r0 &&
-                                            baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
-                                        {
-                                            ((RealValuedExpressionArray*)tmpValues)->el[ival] 
-                                                = new RealValuedExpressionTree();
-//                                            ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot 
-//                                                = new OSnLNode();
-                                            ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot 
-                                                = /*((OSnLNode*)*/((RealValuedExpressionArray*)baseMtx->value)->el[j]
-                                                    ->m_treeRoot->cloneExprNode()/*)*/;
-                                            ival++;
-                                        }
-                                    }
-                                ExpandedMatrixInColumnMajorForm->index = tmpIndexes;
-                                ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                            }
-                            else
-                            {
-                                // add scalar multiple as a product
-                                RealValuedExpressionArray* tmpValues = new RealValuedExpressionArray();
-                                tmpValues->el = new RealValuedExpressionTree*[baseMtx->valueSize];
-                                int ival = 0;
-                                for (int i=icoff; i<lastcol; i++)
-                                    for (int j=baseMtx->start[i-adjc]; j<baseMtx->start[i-adjc+1]; j++)
-                                    {
-                                        if (baseMtx->index[j] >= base_r0 &&
-                                            baseMtx->index[j] <  numberOfRows + base_r0 - iroff)
-                                        {
-                                            ((RealValuedExpressionArray*)tmpValues)->el[ival] 
-                                                = new RealValuedExpressionTree();
-                                            ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot 
-                                                = new OSnLNodeTimes();
-                                            ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot->m_mChildren[0] 
-                                                = new OSnLNodeNumber();
-                                            ((OSnLNodeNumber*)tmpValues->el[ival]->m_treeRoot->m_mChildren[0])->value = scaleMult;
-                                            ((RealValuedExpressionArray*)tmpValues)->el[ival]->m_treeRoot->m_mChildren[1]
-                                                = ((RealValuedExpressionArray*)baseMtx->value)
-                                                    ->el[j]->m_treeRoot->cloneExprNode();
-                                            ival++;
-
-                                        }
-                                    }
-                                ExpandedMatrixInColumnMajorForm->index = tmpIndexes;
-                                ExpandedMatrixInColumnMajorForm->value = tmpValues;
-                            }
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_objReference)
-                        {
-                                    throw ErrorClass("scalar multiple not defined for objReference elements in  getMatrixCoefficientsInColumnMajor()");
-                        }
-                        else if (baseMtx->vType == ENUM_MATRIX_TYPE_conReference)
-                        {
-                                    throw ErrorClass("scalar multiple not defined for conReference elements in  getMatrixCoefficientsInColumnMajor()");
-                        }
-                    }
-                }
-#endif
                 ExpandedMatrixInColumnMajorForm = this->processBaseMatrix(true,symmetry);
                 return ExpandedMatrixInColumnMajorForm; 
             }
@@ -1567,7 +1177,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
             if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
             {
                 OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
-//                baseMtx = baseMtxPtr->getMatrixCoefficientsInColumnMajor();
                 baseMtx = baseMtxPtr->processBaseMatrix(true,symmetry);
                 if (baseMtx != NULL)
                 {
@@ -1588,6 +1197,8 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
             }
 
             // allocate space for elements (nv is an overestimate --- don't worry about cancelations)
+
+            ExpandedMatrixInColumnMajorForm->start = new int[nv];
 
             switch (inferredType)
             {
@@ -1636,8 +1247,6 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                     break;
             }
 
-            ExpandedMatrixInColumnMajorForm->start = new int[nv];
-
             // allocate and initial two dense columns of locations of elements 
             // If the merged matrix has a nonzero in row i of the current column,
             // ctorNbr[i] gives the number of the constructor whose value is used
@@ -1668,7 +1277,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                 }
                 for (int i=i0; i < inumberOfChildren; i++)
                 {
-                    // if constructor k has a nonzero, it overrides previous information
+                    // if constructor i has a nonzero, it overrides previous information
                     for (int k = ((MatrixElements*)m_mChildren[i])->start->el[j]; 
                              k < ((MatrixElements*)m_mChildren[i])->start->el[j+1]; k++)
                     {
@@ -1686,10 +1295,8 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                         int n =  ctorNbr[i];
                         ExpandedMatrixInColumnMajorForm->index[nz] = 
                             ((MatrixElements*)m_mChildren[n])->index->el[l];
-//                        ExpandedMatrixInColumnMajorForm->value[nz] = 
-//                            ((MatrixElements*)m_mChildren[n])->value->el[l];
 
-                        // If the constructors differen in type, we convert to the most general type
+                        // If the constructors differ in type, we convert to the most general type
                         switch (inferredType)
                         {
                             // the first three types are minimal types, so no conversion is necessary,
@@ -1726,26 +1333,24 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                     throw ErrorClass ("undefined matrix element conversion");
                                 break;
 
-                            // the other types may require conversion and more elaborate copying
+                            // The other types may require conversion and more elaborate copying
+                            // First, complexConstant. The only legal conversion is from (real) constant
                             case ENUM_MATRIX_TYPE_complexConstant:
-//                                ExpandedMatrixInColumnMajorForm->value->el[nz] 
-//                                    = new ComplexMatrixElement();
-//                                    if (m_mChildren[n]->getMatrixType() == ENUM_MATRIX_TYPE_complexConstant)
-//                                    {
-//                                  ((ComplexMatrixElements*)
-//                                            ExpandedMatrixInColumnMajorForm)->value->el[nz]->Re =  
-//                                        ((ComplexMatrixElement*)m_mChildren[n])->value->el[l]->Re;  
-//                                    ((ComplexMatrixElement*)
-//                                            ExpandedMatrixInColumnMajorForm)->value->el[nz]->Im =  
-//                                        ((ComplexMatrixElement*)m_mChildren[n])->value->el[l]->Im;
-//                                    }
-//                                    else if (m_mChildren[n]->getMatrixType() == ENUM_MATRIX_TYPE_constant)
-//                                    {
-//                                 ((ComplexMatrixElements*)
-//                                        ExpandedMatrixInColumnMajorForm)->value->el[nz]->Re =  
-//                                    ((ConstantMatrixElements*)m_mChildren[n])->value->el[l];
-//                                    else 
-//                                        throw ErrorClass ("undefined matrix element conversion");
+
+                                if (m_mChildren[n]->getMatrixType() == ENUM_MATRIX_TYPE_complexConstant)
+                                {
+                                    std::complex<double> (((ComplexMatrixElements*)
+                                            ExpandedMatrixInColumnMajorForm)->value->el[nz]) =  
+                                        ((ComplexMatrixElements*)m_mChildren[n])->value->el[l];  
+                                }
+                                else if (m_mChildren[n]->getMatrixType() == ENUM_MATRIX_TYPE_constant)
+                                {
+                                    std::complex<double> (((ComplexMatrixElements*)
+                                            ExpandedMatrixInColumnMajorForm)->value->el[nz]) =  
+                                        ((ConstantMatrixElements*)m_mChildren[n])->value->el[l];  
+                                }
+                                else 
+                                    throw ErrorClass ("undefined matrix element conversion");
                                 break;
 
                             case ENUM_MATRIX_TYPE_linear:
@@ -1760,7 +1365,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                             ->el[nz]->deepCopyFrom(((LinearMatrixElements*)
                                                                     m_mChildren[n])->value->el[l]);
                                     break;
-                                    // some conversions are legal ...
+                                    // legal conversions: constant, varReference
                                     case ENUM_MATRIX_TYPE_constant:
                                         ((LinearMatrixElements*)
                                              ExpandedMatrixInColumnMajorForm)->value->el[nz]->constant = 
@@ -1782,7 +1387,8 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                         ((LinearMatrixElements*)ExpandedMatrixInColumnMajorForm)
                                                             ->value->el[nz]->varIdx[0]->coef = 0; 
                                     break;
-                                    // ... while others are not ...
+
+                                    // other conversion are illegal
                                     default: throw ErrorClass ("undefined matrix element conversion");
                                     break;
                                 }
@@ -1802,6 +1408,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                                 ->deepCopyFrom(((ConReferenceMatrixElements*)
                                                                     m_mChildren[n])->value->el[l]);
                                     break;
+
                                     // only other legal possibility: objective references
                                     case ENUM_MATRIX_TYPE_objReference:
                                         ((MixedRowReferenceMatrixElements*)
@@ -1836,6 +1443,56 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                             = ((VarReferenceMatrixElements*)m_mChildren[n])->value->el[l];
                                     break;
 
+                                    case ENUM_MATRIX_TYPE_realValuedExpressions:
+                                        temp->m_treeRoot 
+                                            = ((RealValuedExpressions*)m_mChildren[n])
+                                                ->value->el[l]->m_treeRoot->cloneExprNode();
+                                    break;
+
+                                    // the hardest conversion: linear expressions
+                                    case ENUM_MATRIX_TYPE_linear:
+                                    {
+                                        int nn = ((LinearMatrixElements*)
+                                                  m_mChildren[n])->value->el[l]->numberOfVarIdx;
+                                        bool haveConstant;
+
+                                        if (((LinearMatrixElements*)
+                                                  m_mChildren[n])->value->el[l]->constant == 0)
+                                        {
+                                            haveConstant = false;
+                                            if (nn == 0) break;
+                                            temp->m_treeRoot = new OSnLNodeSum();
+                                            temp->m_treeRoot->m_mChildren = new ExprNode*[nn];
+                                            temp->m_treeRoot->inumberOfChildren = nn; 
+                                        }
+                                        else
+                                        {
+                                            haveConstant = true;
+                                            temp->m_treeRoot = new OSnLNodeSum();
+                                            temp->m_treeRoot->m_mChildren = new ExprNode*[nn+1];
+                                            temp->m_treeRoot->inumberOfChildren = nn+1; 
+                                        }
+
+                                        for (int ii=0; ii<nn; ii++)
+                                        {
+                                            temp->m_treeRoot->m_mChildren[ii] = new OSnLNodeVariable();
+                                            ((OSnLNodeVariable*)temp->m_treeRoot->m_mChildren[ii])->idx
+                                                = ((LinearMatrixElements*)
+                                                    m_mChildren[n])->value->el[l]->varIdx[ii]->idx;
+                                            ((OSnLNodeVariable*)temp->m_treeRoot->m_mChildren[ii])->coef
+                                                = ((LinearMatrixElements*)
+                                                    m_mChildren[n])->value->el[l]->varIdx[ii]->coef;
+                                        }
+                                        if (haveConstant)
+                                        {
+                                            temp->m_treeRoot->m_mChildren[nn] = new OSnLNodeNumber();
+                                            ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[nn])->value
+                                                = ((LinearMatrixElements*)
+                                                    m_mChildren[n])->value->el[l]->constant;
+                                        }
+                                    }
+                                    break;
+
                                     case ENUM_MATRIX_TYPE_objReference:
                                         throw ErrorClass("OSnLNodeObjective not implemented yet");
                                     break;
@@ -1850,51 +1507,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
 
                                     case ENUM_MATRIX_TYPE_complexConstant:
                                     case ENUM_MATRIX_TYPE_complexValuedExpressions:
-                                        throw ErrorClass("complex numbers not implemented yet");
-                                    break;
-
-                                    // the hardest case: linear expressions
-                                    case ENUM_MATRIX_TYPE_linear:
-                                    {
-                                        int n = ((LinearMatrixElements*)
-                                                  m_mChildren[n])->value->el[l]->numberOfVarIdx;
-                                        bool haveConstant;
-
-                                        if (((LinearMatrixElements*)
-                                                  m_mChildren[n])->value->el[l]->constant == 0)
-                                        {
-                                            haveConstant = false;
-                                            if (n == 0) break;
-                                            temp->m_treeRoot = new OSnLNodeSum();
-                                            temp->m_treeRoot->m_mChildren = new ExprNode*[n];
-                                            temp->m_treeRoot->inumberOfChildren = n; 
-                                        }
-                                        else
-                                        {
-                                            haveConstant = true;
-                                            temp->m_treeRoot = new OSnLNodeSum();
-                                            temp->m_treeRoot->m_mChildren = new ExprNode*[n+1];
-                                            temp->m_treeRoot->inumberOfChildren = n+1; 
-                                        }
-
-                                        for (int i=0; i<n; i++)
-                                        {
-                                            temp->m_treeRoot->m_mChildren[i] = new OSnLNodeVariable();
-                                            ((OSnLNodeVariable*)temp->m_treeRoot->m_mChildren[i])->idx
-                                                = ((LinearMatrixElements*)
-                                                    m_mChildren[n])->value->el[l]->varIdx[i]->idx;
-                                            ((OSnLNodeVariable*)temp->m_treeRoot->m_mChildren[i])->coef
-                                                = ((LinearMatrixElements*)
-                                                    m_mChildren[n])->value->el[l]->varIdx[i]->coef;
-                                        }
-                                        if (haveConstant)
-                                        {
-                                            temp->m_treeRoot->m_mChildren[i] = new OSnLNodeNumber();
-                                            ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[i])->value
-                                                = ((LinearMatrixElements*)
-                                                    m_mChildren[n])->value->el[l]->constant;
-                                        }
-                                    }
+                                        throw ErrorClass("improper conversion of complex-valued elements");
                                     break;
 
                                     default: throw ErrorClass ("undefined matrix element conversion");
@@ -1905,9 +1518,150 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                 break;
                             }
 
-//                            case ENUM_MATRIX_TYPE_complexValuedExpressions:
-//                                break;
+                            case ENUM_MATRIX_TYPE_complexValuedExpressions:
+                            {
+                                ComplexValuedExpressionTree* temp = new ComplexValuedExpressionTree();
 
+                                switch (m_mChildren[n]->getMatrixType())
+                                {
+                                    case ENUM_MATRIX_TYPE_complexValuedExpressions:
+                                    {
+                                        temp->m_treeRoot 
+                                            = ((ComplexValuedExpressions*)m_mChildren[n])
+                                                ->value->el[l]->m_treeRoot->cloneExprNode();
+                                    }
+                                    break;
+
+                                    case ENUM_MATRIX_TYPE_constant:
+                                    {
+                                        temp->m_treeRoot = new OSnLCNodeNumber();
+                                        double tempVal = ((ConstantMatrixElements*)
+                                                            m_mChildren[n])->value->el[l];
+                                        ((OSnLCNodeNumber*) temp->m_treeRoot)->setValue(tempVal, 0.0);
+                                    }
+                                    break;
+
+                                    case ENUM_MATRIX_TYPE_complexConstant:
+                                    {
+                                        temp->m_treeRoot = new OSnLCNodeNumber();
+                                        std::complex<double> tempVal  
+                                            = ((ComplexMatrixElements*)
+                                                m_mChildren[n])->value->el[l];
+                                        ((OSnLCNodeNumber*) temp->m_treeRoot)->setValue(tempVal);
+                                    }
+                                    break;
+
+                                    case ENUM_MATRIX_TYPE_varReference:
+                                    {
+                                        temp->m_treeRoot = new OSnLCNodeCreate();
+                                        temp->m_treeRoot->m_mChildren[0] = new OSnLNodeVariable();
+                                        temp->m_treeRoot->m_mChildren[1] = new OSnLNodeNumber();
+                                        ((OSnLNodeVariable*)temp->m_treeRoot->m_mChildren[0])->idx
+                                            = ((VarReferenceMatrixElements*)m_mChildren[n])->value->el[l];
+                                        ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[1])->value  = 0.0;
+                                    }
+                                    break;
+
+                                    case ENUM_MATRIX_TYPE_realValuedExpressions:
+                                    {
+                                        temp->m_treeRoot = new OSnLCNodeCreate();
+                                        temp->m_treeRoot->m_mChildren[1] = new OSnLNodeNumber();
+                                        ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[1])->value  = 0.0;
+
+                                        temp->m_treeRoot->m_mChildren[0] 
+                                            = ((RealValuedExpressions*)m_mChildren[n])
+                                                ->value->el[l]->m_treeRoot->cloneExprNode();
+                                    }
+                                    break;
+
+                                    // the hardest conversion: linear expressions
+                                    case ENUM_MATRIX_TYPE_linear:
+                                    {
+
+                                        temp->m_treeRoot = new OSnLCNodeCreate();
+                                        temp->m_treeRoot->m_mChildren[1] = new OSnLNodeNumber();
+                                        ((OSnLNodeNumber*)temp->m_treeRoot->m_mChildren[1])->value = 0.0;
+
+                                        temp->m_treeRoot->m_mChildren[0] = new OSnLNodeVariable();
+                                        ((OSnLNodeVariable*)temp->m_treeRoot->m_mChildren[0])->idx
+                                            = ((VarReferenceMatrixElements*)m_mChildren[n])->value->el[l];
+
+
+                                        int n = ((LinearMatrixElements*)
+                                                  m_mChildren[n])->value->el[l]->numberOfVarIdx;
+                                        bool haveConstant;
+
+                                        if (((LinearMatrixElements*)
+                                                  m_mChildren[n])->value->el[l]->constant == 0)
+                                        {
+                                            haveConstant = false;
+                                            if (n == 0) 
+                                            {
+                                                temp->m_treeRoot->m_mChildren[0] = new OSnLNodeNumber();
+                                                ((OSnLNodeNumber*)
+                                                    temp->m_treeRoot->m_mChildren[1])->value = 0.0;
+                                                break;
+                                            }
+                                            temp->m_treeRoot->m_mChildren[0] = new OSnLNodeSum();
+                                            temp->m_treeRoot->m_mChildren[0]->m_mChildren 
+                                                = new ExprNode*[n];
+                                            temp->m_treeRoot->m_mChildren[0]->inumberOfChildren = n; 
+                                        }
+                                        else
+                                        {
+                                            haveConstant = true;
+                                            temp->m_treeRoot->m_mChildren[0] = new OSnLNodeSum();
+                                            temp->m_treeRoot->m_mChildren[0]->m_mChildren
+                                                = new ExprNode*[n+1];
+                                            temp->m_treeRoot->m_mChildren[0]->inumberOfChildren = n+1; 
+                                        }
+
+                                        for (int i=0; i<n; i++)
+                                        {
+                                            temp->m_treeRoot->m_mChildren[0]->m_mChildren[i]
+                                                = new OSnLNodeVariable();
+                                            ((OSnLNodeVariable*)
+                                                    temp->m_treeRoot->m_mChildren[0]->m_mChildren[i])->idx
+                                                = ((LinearMatrixElements*)
+                                                    m_mChildren[n])->value->el[l]->varIdx[i]->idx;
+                                            ((OSnLNodeVariable*)
+                                                    temp->m_treeRoot->m_mChildren[0]->m_mChildren[i])->coef
+                                                = ((LinearMatrixElements*)
+                                                    m_mChildren[n])->value->el[l]->varIdx[i]->coef;
+                                        }
+                                        if (haveConstant)
+                                        {
+                                            temp->m_treeRoot->m_mChildren[0]->m_mChildren[i]
+                                                = new OSnLNodeNumber();
+                                            ((OSnLNodeNumber*)
+                                                    temp->m_treeRoot->m_mChildren[0]->m_mChildren[i])->value
+                                                = ((LinearMatrixElements*)
+                                                    m_mChildren[n])->value->el[l]->constant;
+                                        }
+                                    }
+                                    break;
+
+                                    case ENUM_MATRIX_TYPE_objReference:
+                                        throw ErrorClass("OSnLNodeObjective not implemented yet");
+                                    break;
+
+                                    case ENUM_MATRIX_TYPE_conReference:
+                                        throw ErrorClass("OSnLNodeConstraint not implemented yet");
+                                    break;
+
+                                    case ENUM_MATRIX_TYPE_mixedRowReference:
+                                        throw ErrorClass("relevant OSnLNodes not implemented yet");
+                                    break;
+
+                                    default:
+                                        throw ErrorClass("undefined matrix element conversion");
+                                    break;
+
+                                }
+                                ((ComplexValuedExpressions*)
+                                    ExpandedMatrixInColumnMajorForm)->value->el[nz] = temp;
+                                break;
+                            }
                             case ENUM_MATRIX_TYPE_string:
                             {
                                 ostringstream outStr;
@@ -2009,13 +1763,33 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
                                     break;
 
                                     case ENUM_MATRIX_TYPE_realValuedExpressions:
-//                                        outStr << os_dtoa_format(((ConstantMatrixElements*)
-//                                                       m_mChildren[n])->value->el[l]);
+                                    {
+                                        std::vector<ExprNode*> postfixVec;
+                                        if ( ((RealValuedExpressions*)
+                                                m_mChildren[n])->value->el[l] != NULL)
+                                        {
+                                            postfixVec = ((RealValuedExpressions*)
+                                                m_mChildren[n])->value->el[l]->getPostfixFromExpressionTree();
+                                            outStr << getExpressionTreeAsInfixString(postfixVec);
+                                        }
+                                        else
+                                            outStr.str() = "";
+                                    }
                                     break;
 
                                     case ENUM_MATRIX_TYPE_complexValuedExpressions:
-//                                        outStr << os_dtoa_format(((ConstantMatrixElements*)
-//                                                       m_mChildren[n])->value->el[l]);
+                                    {
+                                        std::vector<ExprNode*> postfixVec;
+                                        if ( ((ComplexValuedExpressions*)
+                                                m_mChildren[n])->value->el[l] != NULL)
+                                        {
+                                            postfixVec = ((ComplexValuedExpressions*)
+                                                m_mChildren[n])->value->el[l]->getPostfixFromExpressionTree();
+                                            outStr << getExpressionTreeAsInfixString(postfixVec);
+                                        }
+                                        else
+                                            outStr.str() = "";
+                                    }
                                     break;
 
                                     default:
@@ -2039,6 +1813,7 @@ GeneralSparseMatrix* MatrixType::getMatrixCoefficientsInColumnMajor()
 
                         nz++;
 
+                        // "turn out the lights" for the next column
                         location[i] = -1;
                          ctorNbr[i] = -1;
                     }

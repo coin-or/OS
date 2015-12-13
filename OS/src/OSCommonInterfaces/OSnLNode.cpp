@@ -3904,6 +3904,7 @@ ExprNode* OSnLMNodeMatrixCon::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+
     ((OSnLMNodeMatrixCon*)nlNodePoint)->idx = idx;
     CLONE_CHILDREN;
     return nlNodePoint;
@@ -4707,7 +4708,7 @@ void OSnLCNodeNumber::setValue(double Re, double Im)
 {
     ostringstream outStr;
 #ifndef NDEBUG
-    outStr << "in OSnLCNodeNumber::setValue; Re=" << Re << "; Im=" << Im;
+    outStr << "in OSnLCNodeNumber::setValue; Re=" << Re << "; Im=" << Im << std::endl;
 #endif
     std::complex<double> value(Re, Im);
 #ifndef NDEBUG
@@ -4715,7 +4716,21 @@ void OSnLCNodeNumber::setValue(double Re, double Im)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-}// end of OSnLCNodeNumber::setValue
+}// end of OSnLCNodeNumber::setValue(double Re, double Im)
+
+void OSnLCNodeNumber::setValue(std::complex<double> z)
+{
+    ostringstream outStr;
+#ifndef NDEBUG
+    outStr << "in OSnLCNodeNumber::setValue; z=" << z << std::endl;
+#endif
+    std::complex<double> value(z);
+#ifndef NDEBUG
+    outStr << "; value=" << value;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
+                      ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+}// end of OSnLCNodeNumber::setValue(std::complex<double> z)
 
 ExprNode* OSnLCNodeNumber::cloneExprNode()
 {
@@ -4733,6 +4748,7 @@ ExprNode* OSnLCNodeNumber::cloneExprNode()
 #endif
     CLONE_CHILDREN;
     return nlNodePoint;
+
 }//end OSnLCNodeNumber::cloneExprNode
 
 

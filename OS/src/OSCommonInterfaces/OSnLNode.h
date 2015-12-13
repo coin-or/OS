@@ -3260,6 +3260,7 @@ private:
      *  random can be used to signal any part of the number that is random
      *  The default is "none"
      */
+
     ENUM_COMPLEX_NUMBER_PART random;
 
 public:
@@ -3305,6 +3306,11 @@ public:
      *  \brief create the value of a complex number from the real and imaginary parts
      */
     void setValue(double Re, double Im);
+
+    /*! \fn void setValue(std::complex<double> z)
+     *  \brief store the value of a complex number z into the data structure
+     */
+    void setValue(std::complex<double> z);
 };//end OSnLCNodeNumber
 
 
