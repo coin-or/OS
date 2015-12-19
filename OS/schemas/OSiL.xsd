@@ -222,11 +222,19 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:element name="uriAlias" type="xs:nonNegativeInteger"/>
 			</xs:choice>
 			<xs:element name="dataPoint" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfDataPoints</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="sourceXPath" type="xs:string"/>
-						<xs:element name="targetComponent" type="UpdateableProblemComponent"/>
+						<xs:element name="targetComponent" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>number must agree with numberOfTargetComponents</xs:documentation>
+							</xs:annotation>
+						</xs:element>
 					</xs:sequence>
+					<xs:attribute name="numberOfTargetComponents" type="xs:nonNegativeInteger" use="required"/>
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
