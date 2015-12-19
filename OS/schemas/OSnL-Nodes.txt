@@ -202,16 +202,16 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 201	other lookups	5201	quadratic	***		one or more qTerm				
 202		5202	qTerm	0*		"one optional argument, three attributes"				
 203		5203	parameter	0		two attributes				
-204		5204	randomVariable	0		two attributes				
-205		5205	sim	***		"0 or more simInput, 1 simOutput, one attribute"				
-206		5206	simInput	0*		"one optional argument, two attributes"				
-207		5207	simOutput	0*		"one optional argument, two attributes"				
+204		5204	randomVariable	0		two attributes --- need to revisit			need to revisit	
+205		5205	sim	***		"0 or more simInput, 1 simOutput, one attribute"			need to revisit	
+206		5206	simInput	0*		"one optional argument, two attributes"			need to revisit	
+207		5207	simOutput	0*		"one optional argument, two attributes"			need to revisit	
 208		5208	userF	-1		one attribute				
 209		5209	arg	0		one attribute				
 210		5210	xPath	***		"one argument of type xPathIndex, two attributes"				
 211		5211	xPathIndex	0*		"one optional argument, two attributes"				
-212		5212	nodeRef	0*		"one optional argument, two attributes"				
-213		5213	arcRef	0*		"one optional argument, two attributes"				
+212		5212	nodeRef	0*		"one optional argument, two attributes --- need to revisit"			need to revisit	
+213		5213	arcRef	0*		"one optional argument, two attributes --- need to revisit"			need to revisit	
 214		5214	complements	2						
 215	logical functions	6001	if	3		"return value 0 is ""false"", 1 is ""true"""	yes			
 216		6002	lt	2		"return value 0 is ""false"", 1 is ""true"""				
@@ -345,22 +345,24 @@ Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented
 344		8109	complexConstruct	2 (real)	0	"First child is real part, second is imaginary part"				
 345		8110	complexPower	2 (scalar)		returns complex-valued 				
 346		8111	complexProduct	0 or more (scalar)		returns complex-valued 				
-347		8201	complexExp	1 (complex)		returns complex-valued 				
-348		8202	complexSquare	1 (complex)		returns complex-valued 				
-349		8203	complexSquareRoot	1 (scalar)		returns complex-valued 				
-350		8301	complexSin	1 (complex)		returns complex-valued 				
-351		8302	complexCos	1 (complex)		returns complex-valued 				
-352		8303	complexTan	1 (complex)		returns complex-valued 				
-353		8304	complexSinh	1 (complex)		returns complex-valued 				
-354		8305	complexCosh	1 (complex)		returns complex-valued 				
-355		8306	complexTanh	1 (complex)		returns complex-valued 				
-356		8401	complexDiscrete							
-357		8411	complexNormal							
-358		8501	complexNumber			"several attributes, including real and imaginary part, realTime etc. "				
-359		8701	complexMatrixDeterminant		1	can be complex if matrix complex-valued				
-360		8702	complexMatrixTrace		1	can be complex if matrix complex-valued				
-361		8703	complexMatrixToScalar		1	can be complex if matrix complex-valued				
-362		8704	complexMatrixElementAt	2 (integer)	1	can be complex if matrix complex-valued				
+347		8112	complexCartesianToPolar	1		returns complex-valued 				
+348		8113	complexPolarToCartesian	1		returns complex-valued 				
+349		8201	complexExp	1 (complex)		returns complex-valued 				
+350		8202	complexSquare	1 (complex)		returns complex-valued 				
+351		8203	complexSquareRoot	1 (scalar)		returns complex-valued 				
+352		8301	complexSin	1 (complex)		returns complex-valued 				
+353		8302	complexCos	1 (complex)		returns complex-valued 				
+354		8303	complexTan	1 (complex)		returns complex-valued 				
+355		8304	complexSinh	1 (complex)		returns complex-valued 				
+356		8305	complexCosh	1 (complex)		returns complex-valued 				
+357		8306	complexTanh	1 (complex)		returns complex-valued 				
+358		8401	complexDiscrete							
+359		8411	complexNormal							
+360		8501	complexNumber			"several attributes, including real and imaginary part, realTime etc. "				
+361		8701	complexMatrixDeterminant		1	can be complex if matrix complex-valued				
+362		8702	complexMatrixTrace		1	can be complex if matrix complex-valued				
+363		8703	complexMatrixToScalar		1	can be complex if matrix complex-valued				
+364		8704	complexMatrixElementAt	2 (integer)	1	can be complex if matrix complex-valued				
 										
 										
 										
