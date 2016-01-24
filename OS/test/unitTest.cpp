@@ -9436,7 +9436,8 @@ if (OTHER_TESTS){
             delete mps2osil; 
         mps2osil = NULL;
     }
-    
+
+#ifdef COIN_HAS_IPOPT    
     try{
         // solve another problem
         // a problem that is a pure quadratic
@@ -9495,6 +9496,7 @@ if (OTHER_TESTS){
             delete mps2osil; 
         mps2osil = NULL;
     }
+#endif 
 
     
 // test reading a GAMS file
