@@ -10228,8 +10228,7 @@ if (OTHER_TESTS){
             delete IBS;
         IBS = NULL;
    }
-
-#endif
+#endif // end of ifdef COIN_HAS_ASL
 
     //
     // Now read an mps file and write in b64 format to test the b64 feature 
@@ -10264,7 +10263,8 @@ if (OTHER_TESTS){
 #endif            
         }
         else
-        {    cout << "COIN solution of a OSiL string in b64 format:" << endl;
+        {
+            cout << "COIN solution of a OSiL string in b64 format:" << endl;
             cout << solver->osrl << endl;
         }
         if(ok == false) throw ErrorClass(" Fail unit test with COIN Cbc Solver on b64 test problem parincLinear.mps");
