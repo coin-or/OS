@@ -803,6 +803,7 @@ OS/wsdl/OSdL.wsdl -text
 OS/wsdl/OShL.wsdl -text
 /OSRepository.xml -text
 /README -text
+/appveyor.yml -text
 /compile -text
 /config.guess -text
 /config.sub -text
