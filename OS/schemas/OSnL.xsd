@@ -5181,6 +5181,19 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
+				<xs:attribute name="transpose" default="neither">
+					<xs:annotation>
+						<xs:documentation>To allow one or both of the factors to be transposed. transpose="first" calculates A'B, "second" calculates AB',etc. default is "neither".</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="neither"/>
+							<xs:enumeration value="first"/>
+							<xs:enumeration value="second"/>
+							<xs:enumeration value="both"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
