@@ -224,7 +224,7 @@ int main(int argC, const char* argV[])
         {
             addQuotes = false;
             if (argV[i][0] != '\"')
-                for (int k=0; k<strlen(argV[i]); k++)
+                for (unsigned int k=0; k<strlen(argV[i]); k++)
                 {
                     if (argV[i][k] == ' ')
                     {
@@ -1562,7 +1562,6 @@ void interactiveShell()
     std::string optionValue = "";
     std::string::size_type indexStart;
     std::string::size_type indexEnd;
-    unsigned int k;
 
     const int nCommands = 13;
     std::string commandArray[nCommands] = 
@@ -1582,7 +1581,7 @@ void interactiveShell()
 
     std::map<string, int> commandMap;
 
-    for(k = 0; k < nCommands; k++)
+    for(int k = 0; k < nCommands; k++)
     {
         commandMap[ commandArray[ k] ] = k;
     }
@@ -1591,7 +1590,7 @@ void interactiveShell()
 
     std::map<string, int> optionMap;
 
-    for(k = 0; k < nOptions; k++)
+    for(int k = 0; k < nOptions; k++)
     {
         optionMap[ optionArray[ k] ] = k;
     }
@@ -1650,10 +1649,10 @@ void interactiveShell()
                 {
                     if (indexEnd != std::string::npos)
                         optionValue = lineText.substr(indexStart + skipChars, 
-                                                                      indexEnd - indexStart - skipChars);
+                                                      indexEnd - indexStart - skipChars);
                     else 
                         optionValue = lineText.substr(indexStart + skipChars, 
-                                                                      lineText.length() - indexStart - skipChars);
+                                                      lineText.length() - indexStart - skipChars);
                 }
                 else
                 {
@@ -1670,7 +1669,8 @@ void interactiveShell()
 
                                 case 0: // solve command
 
-                                    if(oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
+                                    if(oscommandline->osil == "" && oscommandline->mps == "" 
+                                                                 &&  oscommandline->nl == "")
                                     {
                                         std::cout
                                                 << std::endl
@@ -1725,7 +1725,6 @@ void interactiveShell()
 
                                 case 4: // kill command
 
-
                                     if(oscommandline->serviceLocation == "")
                                         getServiceLocation(oscommandline);
 
@@ -1740,10 +1739,7 @@ void interactiveShell()
                                     {
                                         kill(oscommandline);
                                     }
-
-
                                     break;
-
 
                                 case 5: // knock command
 
@@ -1764,21 +1760,13 @@ void interactiveShell()
                                     {
                                         knock(oscommandline);
                                     }
-
                                     break;
 
-
                                 case 6: // quit command
-
                                     return;
-
-
 
                                 case 7: // exit command
-
                                     return;
-
-
 
                                 case 8: // reset command
 
@@ -1998,7 +1986,7 @@ void interactiveShell()
                                     case 7: //solver
 
                                         //make solver name lower case 
-                                        for (k = 0; k
+                                        for (int k = 0; k
                                                 < oscommandline->solverName.length(); k++)
                                         {
                                             oscommandline->solverName[k] = 

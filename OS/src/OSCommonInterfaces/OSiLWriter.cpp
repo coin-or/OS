@@ -631,6 +631,9 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                         case ENUM_CONE_TYPE_intersection: 
                             outStr << ((IntersectionCone*)m_OSInstance->instanceData->cones->cone[i])->getConeInXML();
                             break;
+                        default:
+                            throw ErrorClass(" This cone type not implemented yet");
+                            break; 
                     }
                 }
             }

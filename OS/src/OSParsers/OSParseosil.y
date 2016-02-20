@@ -52,7 +52,7 @@
 //#define CHECK_PARSE_TIME
 
 // debugging tools. uncomment as needed 
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 #define YYDEBUG 1
@@ -126,7 +126,7 @@ bool parseColIdx(const char **pchar, OSInstance *osinstance, int* osillineno);
 bool parseValue(const char **pchar, OSInstance *osinstance, int* osillineno);
 bool parseInstanceHeader(const char **pchar, OSInstance *osinstance, int* osillineno);
 bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
-char *parseBase64( const char **p, int *dataSize, int* osillineno);
+char *parseBase64( const char **p, long int *dataSize, int* osillineno);
 
 #define	ISWHITESPACE( char_) ((char_) == ' ' || \
                      (char_) == '\t' ||  (char_) == '\r')
@@ -2087,11 +2087,11 @@ semidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE
     if (parserData->semidefinitenessPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->semidefinitenessPresent = true;
-    if ($2 != "positive" && $2 != "negative")
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "semidefiniteness must be either \"positive\" or \"negative\"");
-    else
-        parserData->semidefiniteness = $2; 
+    parserData->semidefiniteness = $2; 
     free($2);
+    if (parserData->semidefiniteness != "positive" && parserData->semidefiniteness != "negative")
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "semidefiniteness must be either \"positive\" or \"negative\"");
 };
 
 matrixIdxATT: MATRIXIDXATT QUOTE INTEGER QUOTE 
@@ -2962,7 +2962,8 @@ matrixAttributes: matrixAttributeList
     if (osglData->namePresent == true)
         ((OSMatrix*)osglData->tempC)->name = osglData->name;
     if (osglData->typePresent == true)
-        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+        ((OSMatrix*)osglData->tempC)->declaredMatrixType
+            = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
 };
 
 matrixAttributeList: | matrixAttributeList matrixAttribute;
@@ -3020,7 +3021,8 @@ matrixWithMatrixVarIdxAttributes: matrixWithMatrixVarIdxATTList
     if (osglData->namePresent == true)
         ((OSMatrix*)osglData->tempC)->name = osglData->name;
     if (osglData->typePresent == true)
-        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+        ((OSMatrix*)osglData->tempC)->declaredMatrixType
+            = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
 };
 
 matrixWithMatrixVarIdxATTList: | matrixWithMatrixVarIdxATTList matrixWithMatrixVarIdxATT;
@@ -3078,7 +3080,8 @@ matrixWithMatrixObjIdxAttributes: matrixWithMatrixObjIdxATTList
     if (osglData->namePresent == true)
         ((OSMatrix*)osglData->tempC)->name = osglData->name;
     if (osglData->typePresent == true)
-        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+        ((OSMatrix*)osglData->tempC)->declaredMatrixType
+            = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
 };
 
 matrixWithMatrixObjIdxATTList: | matrixWithMatrixObjIdxATTList matrixWithMatrixObjIdxATT;
@@ -3136,7 +3139,8 @@ matrixWithMatrixConIdxAttributes: matrixWithMatrixConIdxATTList
     if (osglData->namePresent == true)
         ((OSMatrix*)osglData->tempC)->name = osglData->name;
     if (osglData->typePresent == true)
-        ((OSMatrix*)osglData->tempC)->matrixType = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
+        ((OSMatrix*)osglData->tempC)->declaredMatrixType
+            = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
 };
 
 matrixWithMatrixConIdxATTList: | matrixWithMatrixConIdxATTList matrixWithMatrixConIdxATT;
@@ -3268,9 +3272,9 @@ matrixConstructorList: | matrixConstructorList matrixConstructor
     osglData->mtxBlkVec.back()->inumberOfChildren++;
 };
 
-matrixConstructor: constantElements | varReferenceElements | linearElements | realValuedExpressions |
-                   objReferenceElements | conReferenceElements | 
-                   complexElements | complexValuedExpressions | stringValuedElements | 
+matrixConstructor: constantElements | complexElements | stringValuedElements |
+                   varReferenceElements | objReferenceElements | conReferenceElements | 
+                   linearElements | realValuedExpressions | complexValuedExpressions |  
                    matrixTransformation | matrixBlocks;
 
 constantElements: constantElementsStart constantElementsAttributes GREATERTHAN constantElementsContent; 
@@ -3296,8 +3300,8 @@ constantElementsAtt:
     osglNumberOfValuesATT
     {
         ((ConstantMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_constant;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_constant;
     }
   | osglRowMajorATT
     {
@@ -3342,7 +3346,7 @@ matrixElementsStartVectorLaden: GREATERTHAN matrixElementsStartVectorBody STARTV
 matrixElementsStartVectorBody: osglIntArrayData;
 
 
-matrixElementsIndexVector: matrixElementsIndexStart matrixElementsIndexContent
+matrixElementsIndexVector: | matrixElementsIndexStart matrixElementsIndexContent
 {
     ((MatrixElements*)osglData->tempC)->index = new IntVector();
     ((MatrixElements*)osglData->tempC)->index->numberOfEl
@@ -3356,7 +3360,8 @@ matrixElementsIndexVector: matrixElementsIndexStart matrixElementsIndexContent
 matrixElementsIndexStart: INDEXSTART
 {
     osglData->numberOfEl = ((MatrixElements*)osglData->tempC)->numberOfValues;
-    osglData->osglIntArray = new int[osglData->numberOfEl];
+    if (osglData->numberOfEl > 0)
+        osglData->osglIntArray = new int[osglData->numberOfEl];
     osglData->osglCounter = 0;
 };
 
@@ -3385,7 +3390,8 @@ constantElementsValues: constantElementsValueStart constantElementsValueContent
 constantElementsValueStart: VALUESTART
 {
     osglData->numberOfEl = ((ConstantMatrixElements*)osglData->tempC)->numberOfValues;
-    osglData->osglDblArray = new double[osglData->numberOfEl];
+    if (osglData->numberOfEl > 0)
+        osglData->osglDblArray = new double[osglData->numberOfEl];
     osglData->osglCounter = 0;
 };
 
@@ -3421,8 +3427,8 @@ varReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((VarReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_varReference;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_varReference;
     }
   | osglRowMajorATT
     {
@@ -3432,9 +3438,9 @@ varReferenceElementsAtt:
 
 varReferenceElementsContent: matrixElementsStartVector varReferenceElementsNonzeros VARREFERENCEELEMENTSEND;
 
-varReferenceElementsNonzeros: | matrixElementsIndexVector varReferenceElementsValues;
+varReferenceElementsNonzeros: matrixElementsIndexVector varReferenceElementsValues;
 
-varReferenceElementsValues: varReferenceElementsValuesStart varReferenceElementsValuesContent
+varReferenceElementsValues: | varReferenceElementsValuesStart varReferenceElementsValuesContent
 {
     ((VarReferenceMatrixElements*)osglData->tempC)->value = new VarReferenceMatrixValues();
     ((VarReferenceMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
@@ -3447,7 +3453,8 @@ varReferenceElementsValues: varReferenceElementsValuesStart varReferenceElements
 varReferenceElementsValuesStart: VALUESTART
 {
     osglData->numberOfEl = ((VarReferenceMatrixElements*)osglData->tempC)->numberOfValues;
-    osglData->osglIntArray = new int[osglData->numberOfEl];
+    if (osglData->numberOfEl > 0)
+        osglData->osglIntArray = new int[osglData->numberOfEl];
     osglData->osglCounter = 0;
 };
 
@@ -3458,6 +3465,7 @@ varReferenceElementsValuesEmpty: ENDOFELEMENT;
 varReferenceElementsValuesLaden: GREATERTHAN varReferenceElementsValuesBody VALUEEND;
 
 varReferenceElementsValuesBody: osglIntArrayData;
+
 
 linearElements: linearElementsStart linearElementsAttributes GREATERTHAN linearElementsContent; 
 
@@ -3482,8 +3490,8 @@ linearElementsAtt:
     osglNumberOfValuesATT
     {
         ((LinearMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_linear;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_linear;
     }
   | osglRowMajorATT
     {
@@ -3493,7 +3501,7 @@ linearElementsAtt:
 
 linearElementsContent: matrixElementsStartVector linearElementsNonzeros LINEARELEMENTSEND;
 
-linearElementsNonzeros: | matrixElementsIndexVector linearElementsValues;
+linearElementsNonzeros: matrixElementsIndexVector linearElementsValues;
 
 linearElementsValues:
     {
@@ -3506,7 +3514,7 @@ linearElementsValues:
         if (osglData->numberOfValues > osglData->nonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few <el> elements");
         else if (osglData->numberOfValues < osglData->nonzeroCounter)
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many <el> elements");        
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many <el> elements");
         ((LinearMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
@@ -3519,10 +3527,11 @@ linearElementsValuesStart: VALUESTART
     ((LinearMatrixElements*)osglData->tempC)->value = new LinearMatrixValues();
     ((LinearMatrixElements*)osglData->tempC)->value->numberOfEl
         = ((LinearMatrixElements*)osglData->tempC)->numberOfValues;    
-    ((LinearMatrixElements*)osglData->tempC)->value->el
+    if (osglData->numberOfValues > 0)
+        ((LinearMatrixElements*)osglData->tempC)->value->el
         = new LinearMatrixElement*[((LinearMatrixElements*)osglData->tempC)->numberOfValues]; 
     for (int i=0; i < ((LinearMatrixElements*)osglData->tempC)->numberOfValues; i++)
-        ((LinearMatrixElements*)osglData->tempC)->value->el[i] = new LinearMatrixElement(); 
+        ((LinearMatrixElements*)osglData->tempC)->value->el[i] = new LinearMatrixElement();
     osglData->osglCounter = 0;
     osglData->numberOfVarIdxPresent = false;
 };
@@ -3553,14 +3562,20 @@ linearElementsValuesElStart: ELSTART
 
 linearElementsValuesElAttributes: linearElementsValuesElAttList
 {
-    if (!osglData->numberOfVarIdxPresent)
+    if (osglData->numberOfVarIdxPresent)
+    {
+        ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->numberOfVarIdx
+            = osglData->numberOfVarIdx;
+        ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->varIdx
+            = new LinearMatrixElementTerm*[osglData->numberOfVarIdx];
+        ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->constant
+            = osglData->constant;
+    }
+    else
+    {
+        ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->numberOfVarIdx = 0;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfVarIdx attribute missing");
-    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->numberOfVarIdx
-        = osglData->numberOfVarIdx;
-    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->varIdx
-        = new LinearMatrixElementTerm*[osglData->numberOfVarIdx];
-    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->constant
-        = osglData->constant;
+    }
     osglData->osglCounter = 0;
 };
 
@@ -3601,7 +3616,6 @@ linearElementsValuesVarIdxContent: GREATERTHAN INTEGER VARIDXEND
 };
 
 
-
 realValuedExpressions: realValuedExpressionsStart realValuedExpressionsAttributes GREATERTHAN realValuedExpressionsContent; 
 
 realValuedExpressionsStart: REALVALUEDEXPRESSIONSSTART
@@ -3625,8 +3639,9 @@ realValuedExpressionsAtt:
     osglNumberOfValuesATT
     {
         ((RealValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_realValuedExpressions;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
+                = ENUM_MATRIX_TYPE_realValuedExpressions;
     }
   | osglRowMajorATT
     {
@@ -3637,7 +3652,7 @@ realValuedExpressionsAtt:
 realValuedExpressionsContent: 
     matrixElementsStartVector realValuedExpressionsNonzeros REALVALUEDEXPRESSIONSSEND;
 
-realValuedExpressionsNonzeros: | matrixElementsIndexVector realValuedExpressionsValues;
+realValuedExpressionsNonzeros: matrixElementsIndexVector realValuedExpressionsValues;
 
 realValuedExpressionsValues:
     {
@@ -3650,7 +3665,7 @@ realValuedExpressionsValues:
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few <el> elements");
         else if (osglData->numberOfValues < osglData->nonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many <el> elements");        
-        ((ConReferenceMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
+        ((RealValuedExpressions*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     };
@@ -3663,6 +3678,7 @@ realValuedExpressionsValuesStart: VALUESTART
     ((RealValuedExpressions*)osglData->tempC)->value = new RealValuedExpressionArray();
     ((RealValuedExpressions*)osglData->tempC)->value->numberOfEl
         = osglData->numberOfValues;
+    if (osglData->numberOfValues > 0)
     ((RealValuedExpressions*)osglData->tempC)->value->el
         = new RealValuedExpressionTree*[osglData->numberOfValues];
 
@@ -3731,9 +3747,9 @@ complexValuedExpressionsAtt:
     osglNumberOfValuesATT
     {
         ((ComplexValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType =
-                ENUM_MATRIX_TYPE_complexValuedExpressions;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
+                = ENUM_MATRIX_TYPE_complexValuedExpressions;
     }
   | osglRowMajorATT
     {
@@ -3744,7 +3760,7 @@ complexValuedExpressionsAtt:
 complexValuedExpressionsContent: 
     matrixElementsStartVector complexValuedExpressionsNonzeros COMPLEXVALUEDEXPRESSIONSSEND;
 
-complexValuedExpressionsNonzeros: | matrixElementsIndexVector complexValuedExpressionsValues;
+complexValuedExpressionsNonzeros: matrixElementsIndexVector complexValuedExpressionsValues;
 
 complexValuedExpressionsValues:
     {
@@ -3757,7 +3773,7 @@ complexValuedExpressionsValues:
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few <el> elements");
         else if (osglData->numberOfValues < osglData->nonzeroCounter)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many <el> elements");        
-        ((ConReferenceMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
+        ((ComplexValuedExpressions*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     };
@@ -3770,6 +3786,7 @@ complexValuedExpressionsValuesStart: VALUESTART
     ((ComplexValuedExpressions*)osglData->tempC)->value = new ComplexValuedExpressionArray();
     ((ComplexValuedExpressions*)osglData->tempC)->value->numberOfEl
         = osglData->numberOfValues;
+    if (osglData->numberOfValues > 0)
     ((ComplexValuedExpressions*)osglData->tempC)->value->el
         = new ComplexValuedExpressionTree*[osglData->numberOfValues];
 
@@ -3839,8 +3856,8 @@ objReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_objReference;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_objReference;
     }
   | osglRowMajorATT
     {
@@ -3850,9 +3867,9 @@ objReferenceElementsAtt:
 
 objReferenceElementsContent: matrixElementsStartVector objReferenceElementsNonzeros OBJREFERENCEELEMENTSEND;
 
-objReferenceElementsNonzeros: | matrixElementsIndexVector objReferenceElementsValues;
+objReferenceElementsNonzeros: matrixElementsIndexVector objReferenceElementsValues;
 
-objReferenceElementsValues: objReferenceElementsValuesStart objReferenceElementsValuesContent
+objReferenceElementsValues: | objReferenceElementsValuesStart objReferenceElementsValuesContent
 {
     ((ObjReferenceMatrixElements*)osglData->tempC)->value = new ObjReferenceMatrixValues();
     ((ObjReferenceMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
@@ -3865,7 +3882,8 @@ objReferenceElementsValues: objReferenceElementsValuesStart objReferenceElements
 objReferenceElementsValuesStart: VALUESTART
 {
     osglData->numberOfEl = ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues;
-    osglData->osglIntArray = new int[osglData->numberOfEl];
+    if (osglData->numberOfEl > 0)
+        osglData->osglIntArray = new int[osglData->numberOfEl];
     osglData->osglCounter = 0;
 };
 
@@ -3901,8 +3919,8 @@ conReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((ConReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_conReference;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_conReference;
     }
   | osglRowMajorATT
     {
@@ -3912,7 +3930,7 @@ conReferenceElementsAtt:
 
 conReferenceElementsContent: matrixElementsStartVector conReferenceElementsNonzeros CONREFERENCEELEMENTSEND;
 
-conReferenceElementsNonzeros: | matrixElementsIndexVector conReferenceElementsValues;
+conReferenceElementsNonzeros: matrixElementsIndexVector conReferenceElementsValues;
 
 conReferenceElementsValues: 
     {
@@ -3938,6 +3956,7 @@ conReferenceElementsValuesStart: VALUESTART
     ((ConReferenceMatrixElements*)osglData->tempC)->value = new ConReferenceMatrixValues();
     ((ConReferenceMatrixElements*)osglData->tempC)->value->numberOfEl
         = osglData->numberOfValues;
+    if (osglData->numberOfValues > 0)
     ((ConReferenceMatrixElements*)osglData->tempC)->value->el
         = new ConReferenceMatrixElement*[osglData->numberOfValues];
 
@@ -4007,6 +4026,7 @@ conReferenceElementsElContent: GREATERTHAN INTEGER ELEND
     }
 };
 
+
 complexElements: complexElementsStart complexElementsAttributes GREATERTHAN complexElementsContent; 
 
 complexElementsStart: COMPLEXELEMENTSSTART
@@ -4031,8 +4051,9 @@ complexElementsAtt:
     osglNumberOfValuesATT
     {
         ((ComplexMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_complexConstant;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
+                = ENUM_MATRIX_TYPE_complexConstant;
     }
   | osglRowMajorATT
     {
@@ -4042,7 +4063,7 @@ complexElementsAtt:
 
 complexElementsContent: matrixElementsStartVector complexElementsNonzeros COMPLEXELEMENTSEND;
 
-complexElementsNonzeros: | matrixElementsIndexVector complexElementsValues;
+complexElementsNonzeros: matrixElementsIndexVector complexElementsValues;
 
 complexElementsValues: 
     {
@@ -4068,6 +4089,7 @@ complexElementsValuesStart: VALUESTART
     ((ComplexMatrixElements*)osglData->tempC)->value = new ComplexMatrixValues();
     ((ComplexMatrixElements*)osglData->tempC)->value->numberOfEl
         = osglData->numberOfValues;
+    if (osglData->numberOfValues> 0)
     ((ComplexMatrixElements*)osglData->tempC)->value->el
         = new std::complex<double>[osglData->numberOfValues];
 };
@@ -4151,8 +4173,8 @@ stringValuedElementsAtt:
     osglNumberOfValuesATT
     {
         ((StringValuedMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->matrixType = ENUM_MATRIX_TYPE_string;
+//        if (osglData->numberOfValues > 0)
+            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_string;
     }
   | osglRowMajorATT
     {
@@ -4162,9 +4184,9 @@ stringValuedElementsAtt:
 
 stringValuedElementsContent: matrixElementsStartVector stringValuedElementsNonzeros STRINGVALUEDELEMENTSEND;
 
-stringValuedElementsNonzeros: | matrixElementsIndexVector stringValuedElementsValues;
+stringValuedElementsNonzeros: matrixElementsIndexVector stringValuedElementsValues;
 
-stringValuedElementsValues: stringValuedElementsValueStart stringValuedElementsValueContent
+stringValuedElementsValues: | stringValuedElementsValueStart stringValuedElementsValueContent
 {
     ((StringValuedMatrixElements*)osglData->tempC)->value = new StringValuedMatrixValues();
     ((StringValuedMatrixElements*)osglData->tempC)->value->numberOfEl = osglData->numberOfEl;
@@ -4177,7 +4199,8 @@ stringValuedElementsValues: stringValuedElementsValueStart stringValuedElementsV
 stringValuedElementsValueStart: VALUESTART
 {
     osglData->numberOfEl = ((StringValuedMatrixElements*)osglData->tempC)->numberOfValues;
-    osglData->osglStrArray = new std::string[osglData->numberOfEl];
+    if (osglData->numberOfEl > 0)
+        osglData->osglStrArray = new std::string[osglData->numberOfEl];
     osglData->osglCounter = 0;
 };
 
@@ -4370,7 +4393,7 @@ matrixBlockAtt:
     }
     | osglTypeATT
     {
-        ((MatrixBlock*)osglData->tempC)->type
+        ((MatrixBlock*)osglData->tempC)->declaredMatrixType
             = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
     }
 ;
@@ -5369,6 +5392,7 @@ nlstart: NLSTART
         osnlData->productVec.clear();
         osnlData->matrixSumVec.clear();
         osnlData->matrixProductVec.clear();
+        osnlData->cSumVec.clear();
     };
 
 nlAttributes: nlAttributeList
@@ -6188,38 +6212,17 @@ complexNumberEnd: ENDOFELEMENT
 
 complexNumberAttributes: complexNumberAttList
 {
-    osnlData->nlCNodeComplexNumber->setValue(osnlData->Re, osnlData->Im);
+    ((OSnLCNodeNumber*)osnlData->nlNodePoint)->setValue(osglData->realPart, osglData->imagPart);
+std::cout << "just to verify: value = " 
+          << ((OSnLCNodeNumber*)osnlData->nlNodePoint)->getValue() << std::endl;
 };
 
 complexNumberAttList: | complexNumberAttList complexNumberAtt;
 
 complexNumberAtt:
-//      ReATT
-//    | ImATT
       osglRealPartATT
     | osglImagPartATT
 ;
-
-
-ReATT: IDXATT QUOTE /*aNumber*/ INTEGER QUOTE 
-{
-    if ( *$2 != *$4 ) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-    if (osnlData->complexReAttON) parserData->parser_errors += 
-        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "real part of complex number previously given"); 
-    osnlData->complexReAttON = true;
-    osnlData->Re = parserData->tempVal;
-};
-
-ImATT: IDXATT QUOTE /*aNumber*/ INTEGER QUOTE 
-{
-    if ( *$2 != *$4 ) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-    if (osnlData->complexImAttON) parserData->parser_errors += 
-        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "imaginary part of complex number previously given"); 
-    osnlData->complexImAttON = true;
-    osnlData->Im = parserData->tempVal;
-};
 
 
 createComplex: createComplexStart GREATERTHAN createComplexContent;
@@ -6426,7 +6429,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
     const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
     char *pelementText = NULL;
     const char *ptemp = NULL;
-    int elementSize;
+    long int elementSize;
 
     bool namePresent = false;
     bool sourcePresent = false;
@@ -6441,7 +6444,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
     }
     // increment the line number counter if there are any newlines between the start of
     // the osil string and pinstanceHeadStart
-    int    kount = pinstanceHeadStart - pchar;
+    long int kount = pinstanceHeadStart - pchar;
     while( kount-- > 0) if(*(pchar++) == '\n') (*osillineno)++;
     // important! pchar now points to the '<' in <instanceHeader
     // that is, both pinstanceHeadStart and pchar point to the same thing
@@ -6931,7 +6934,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -7218,7 +7222,8 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock();
@@ -7544,7 +7549,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock();    
@@ -7813,7 +7819,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 }//end parseConstraints
 
 bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, int* osillineno){;
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;    
     const char *c_numberOfValues = "numberOfValues";
@@ -7914,7 +7921,8 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -7958,7 +7966,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
         //reset ch
         ch = *p;
         // call base64 parse here
-        int dataSize = 0;
+        long int dataSize = 0;
         char* b64string = parseBase64(&ch, &dataSize, osillineno );
         if( b64string == NULL) {  osilerror_wrapper( ch,osillineno,"<start> must have children or base64 data"); return false;}
         std::string base64decodeddata = Base64::decodeb64( b64string );
@@ -8107,7 +8115,8 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -8153,7 +8162,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
         //reset ch
         ch = *p;
         // call base64 parse here
-        int dataSize = 0;
+        long int dataSize = 0;
         char* b64string = parseBase64(&ch, &dataSize, osillineno );
         if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<rowIdx> must have children or base64 data"); return false;}
         std::string base64decodeddata = Base64::decodeb64( b64string );
@@ -8309,7 +8318,8 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -8355,7 +8365,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
         //reset ch
         ch = *p;
         // call base64 parse here
-        int dataSize = 0;
+        long int dataSize = 0;
         char* b64string = parseBase64(&ch, &dataSize, osillineno );
         if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<colIdx> must have children or base64 data"); return false;}
         std::string base64decodeddata = Base64::decodeb64( b64string );
@@ -8510,7 +8520,8 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -8554,7 +8565,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
         //reset ch
         ch = *p;
         // call base64 parse here
-        int dataSize = 0;
+        long int dataSize = 0;
         char* b64string = parseBase64(&ch, &dataSize, osillineno );
         if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<start> must have children or base64 data"); return false;};
         std::string base64decodeddata = Base64::decodeb64( b64string );
@@ -8710,7 +8721,8 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 }//end parseValue
 
 bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* osillineno){
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     const char* startCoef = "<coef";
@@ -8768,8 +8780,9 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
     return true;
 }//end parseObjCoef
 
-char *parseBase64(const char **p, int *dataSize, int* osillineno ){
-    int ki, numChar;
+char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     const char *sizeOf = "sizeOf";
@@ -8810,7 +8823,7 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
     // we should be pointing to </base64BinaryData>
     for(i = 0; endBase64BinaryData[i]  == *ch; i++, ch++);
     if(i != 18) { osilerror_wrapper( ch,osillineno," problem with <base64BinaryData> element"); return false;}
-    int b64len = b64textend - b64textstart;
+    long int b64len = b64textend - b64textstart;
     b64string = new char[ b64len + 1]; 
     for(ki = 0; ki < b64len; ki++) b64string[ki] = b64textstart[ ki]; 
     b64string[ki] = '\0';    

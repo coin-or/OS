@@ -90,6 +90,7 @@ nlstart: NLSTART
         osnlData->productVec.clear();
         osnlData->matrixSumVec.clear();
         osnlData->matrixProductVec.clear();
+        osnlData->cSumVec.clear();
     };
 
 nlAttributes: nlAttributeList
@@ -909,38 +910,17 @@ complexNumberEnd: ENDOFELEMENT
 
 complexNumberAttributes: complexNumberAttList
 {
-    osnlData->nlCNodeComplexNumber->setValue(osnlData->Re, osnlData->Im);
+    ((OSnLCNodeNumber*)osnlData->nlNodePoint)->setValue(osglData->realPart, osglData->imagPart);
+std::cout << "just to verify: value = " 
+          << ((OSnLCNodeNumber*)osnlData->nlNodePoint)->getValue() << std::endl;
 };
 
 complexNumberAttList: | complexNumberAttList complexNumberAtt;
 
 complexNumberAtt:
-//      ReATT
-//    | ImATT
       osglRealPartATT
     | osglImagPartATT
 ;
-
-
-ReATT: IDXATT QUOTE /*aNumber*/ INTEGER QUOTE 
-{
-    if ( *$2 != *$4 ) 
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osnlData->complexReAttON) parserData->parser_errors += 
-        addErrorMsg( NULL, parserObjects, "real part of complex number previously given"); 
-    osnlData->complexReAttON = true;
-    osnlData->Re = parserData->tempVal;
-};
-
-ImATT: IDXATT QUOTE /*aNumber*/ INTEGER QUOTE 
-{
-    if ( *$2 != *$4 ) 
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
-    if (osnlData->complexImAttON) parserData->parser_errors += 
-        addErrorMsg( NULL, parserObjects, "imaginary part of complex number previously given"); 
-    osnlData->complexImAttON = true;
-    osnlData->Im = parserData->tempVal;
-};
 
 
 createComplex: createComplexStart GREATERTHAN createComplexContent;

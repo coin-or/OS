@@ -43,18 +43,18 @@ using std::endl;
 // This macro defines a code snippet that will be used repeatedly, 
 // potentially in hundreds of specific methods
  
-#define CLONE_CHILDREN {                                      \
-        if (inumberOfChildren > 0)                            \
-        {                                                     \
-            if (nlNodePoint->m_mChildren == NULL)             \
-                nlNodePoint->m_mChildren                      \
-                    = new ExprNode*[inumberOfChildren];       \
-            for (int i=0; i < inumberOfChildren; i++)         \
-            {                                                 \
-                nlNodePoint->m_mChildren[i]                   \
-                    = this->m_mChildren[i]->cloneExprNode();  \
-            }                                                 \
-        }                                                     \
+#define CLONE_CHILDREN {                                        \
+        if (inumberOfChildren > 0)                              \
+        {                                                       \
+            if (nlNodePoint->m_mChildren == NULL)               \
+                nlNodePoint->m_mChildren                        \
+                    = new ExprNode*[inumberOfChildren];         \
+            for (unsigned int i=0; i < inumberOfChildren; i++)  \
+            {                                                   \
+                nlNodePoint->m_mChildren[i]                     \
+                    = this->m_mChildren[i]->cloneExprNode();    \
+            }                                                   \
+        }                                                       \
 }
 
 
@@ -87,7 +87,7 @@ ExprNode::~ExprNode()
 #endif
     if (inumberOfChildren > 0 && m_mChildren != NULL)
     {
-        for (int i=0; i<inumberOfChildren; i++)
+        for (unsigned int i=0; i<inumberOfChildren; i++)
         {
 #ifndef NDEBUG
             outStr << "Delete memory at address " << &m_mChildren[i] << std::endl;
@@ -188,21 +188,24 @@ std::vector<ExprNode*> ExprNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
 // Dummy implementations for calculate functions
 double ExprNode::calculateFunction(double *x)
 {
+    return OSNaN();
 }
 
 ADdouble ExprNode::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
 {
+    return 0.0;
 }
 
 std::complex<double> ExprNode::calculateFunction_C(double *x)
 {
+    return 0;
 }
 
 //ADdouble ExprNode::constructADTape_C(std::map<int, int> *ADIdx, ADvector *XAD){};
 
-OSMatrix* ExprNode::calculateFunction_M(double *x)
-{
-}
+//OSMatrix* ExprNode::calculateFunction_M(double *x)
+//{
+//}
 
 //ADdouble ExprNode::constructADTape_M(std::map<int, int> *ADIdx, ADvector *XAD){};
 
@@ -380,7 +383,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNod
 {
     std::vector<ExprNode*> stackVec;
 
-    int kount =  0;
+    unsigned int kount =  0;
     while(kount <= nlNodeVec.size() - 1)
     {
         int numkids = nlNodeVec[kount]->inumberOfChildren;
@@ -1696,6 +1699,7 @@ ADdouble OSnLNodeErf::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
      *
      * This is a fast approximation (few numerical operations)
      * with relative error bound $latex 4 \times 10^{-4}$$; see
+
      * Vedder, J.D., "Simple approximations for the error function and its inverse",
      * American Journal of Physics, v 55, n 8, 1987, p 762-3. I took this reference from
      * Brad Bell's erf.hpp
@@ -2218,7 +2222,6 @@ ADdouble OSnLNodeVariable::constructADTape(std::map<int, int> *varIdx, ADvector 
 
 void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx)
 {
-    int numVars;
     if( (*varIdx).find( idx) == (*varIdx).end() )  // variable to map with variable index as the key
     {
         //just put a placeholder for now to record the key.
@@ -3905,6 +3908,7 @@ ExprNode* OSnLMNodeMatrixCon::cloneExprNode()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 
+
     ((OSnLMNodeMatrixCon*)nlNodePoint)->idx = idx;
     CLONE_CHILDREN;
     return nlNodePoint;
@@ -4146,7 +4150,7 @@ std::complex<double> OSnLCNodeCreate::calculateFunction_C(double *x)
     m_mChildren[0]->calculateFunction(x);
     m_mChildren[1]->calculateFunction(x);
 
-    std::complex<double> m_dFunctionValue = ( ((OSnLNode*) m_mChildren[0])->m_dFunctionValue, 
+    std::complex<double> m_dFunctionValue   ( ((OSnLNode*) m_mChildren[0])->m_dFunctionValue, 
                                               ((OSnLNode*) m_mChildren[1])->m_dFunctionValue);
 
     return m_dFunctionValue;
@@ -4205,7 +4209,7 @@ std::complex<double> OSnLCNodePlus::calculateFunction_C(double *x)
 #endif
     m_dFunctionValue = 0;
 
-    for (int i=0; i=1; i++)
+    for (int i=0; i<2; i++)
     {
         if (m_mChildren[i]->inodeKind == 1)
         {
@@ -4465,6 +4469,7 @@ std::string OSnLCNodeSum::getTokenName()
     return "complexSum";
 }// end OSnLCNodeSum::getTokenName()
 
+
 std::complex<double> OSnLCNodeSum::calculateFunction_C(double *x)
 {
 #ifndef NDEBUG
@@ -4474,7 +4479,7 @@ std::complex<double> OSnLCNodeSum::calculateFunction_C(double *x)
     //m_dFunctionValue[0] = m_dFunctionValue[1] = 0;
     m_dFunctionValue = 0;
 
-    for (int i=0; i < inumberOfChildren; i++)
+    for (unsigned int i=0; i < inumberOfChildren; i++)
     {
         if (m_mChildren[i]->inodeKind == 1)
         {
@@ -4701,6 +4706,8 @@ std::complex<double> OSnLCNodeNumber::calculateFunction_C(double *x)
 
 std::complex<double> OSnLCNodeNumber::getValue()
 {
+std::cout << "this value = " << this->value << std::endl;
+std::cout << "value = " << value << std::endl;
     return value;
 }// end of OSnLCNodeNumber::getValue
 
@@ -4708,10 +4715,12 @@ void OSnLCNodeNumber::setValue(double Re, double Im)
 {
     ostringstream outStr;
 #ifndef NDEBUG
-    outStr << "in OSnLCNodeNumber::setValue; Re=" << Re << "; Im=" << Im << std::endl;
+    outStr << "in OSnLCNodeNumber::setValue; Re=" << Re << "; Im=" << Im;
 #endif
-    std::complex<double> value(Re, Im);
+    std::complex<double> temp(Re, Im);
+    this->value = temp;
 #ifndef NDEBUG
+    outStr << "; temp=" << temp;
     outStr << "; value=" << value;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, outStr.str());
@@ -4722,15 +4731,18 @@ void OSnLCNodeNumber::setValue(std::complex<double> z)
 {
     ostringstream outStr;
 #ifndef NDEBUG
-    outStr << "in OSnLCNodeNumber::setValue; z=" << z << std::endl;
+    outStr << "in OSnLCNodeNumber::setValue; z=" << z;
 #endif
-    std::complex<double> value(z);
+    std::complex<double> temp(z);
+    this->value = temp;
 #ifndef NDEBUG
+    outStr << "; temp=" << temp;
     outStr << "; value=" << value;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 }// end of OSnLCNodeNumber::setValue(std::complex<double> z)
+
 
 ExprNode* OSnLCNodeNumber::cloneExprNode()
 {
@@ -4746,6 +4758,7 @@ ExprNode* OSnLCNodeNumber::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+    ((OSnLCNodeNumber*)nlNodePoint)->value = value;
     CLONE_CHILDREN;
     return nlNodePoint;
 

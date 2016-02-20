@@ -3150,7 +3150,7 @@ static yyconst flex_int16_t yy_rule_linenum[481] =
  * to place temporary data into the correct parser data object.
  */
 #line 23 "../../../../OS/src/OSParsers/OSParseosil.l"
-//#define OSILPARSERDEBUG
+#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
 	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext)

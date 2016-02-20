@@ -94,7 +94,7 @@
                 </ln>
             </nl>
         </nonlinearExpressions>
-        <matrices numberOfMatrices= " 50 " >
+        <matrices numberOfMatrices= " 54 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -247,7 +247,7 @@
                     </value>
                 </linearElements>
             </matrix>
-            <matrix numberOfColumns="2" numberOfRows="2" name="9-realValuedExpressions">
+           <matrix numberOfColumns="2" numberOfRows="2" name="9-realValuedExpressions">
                 <realValuedExpressions numberOfValues="4">
                     <start>
                         <el mult="3" incr="2">0</el>
@@ -368,6 +368,8 @@
                     <value>
                         <el>
                             <plus>
+
+
                                 <matrixDeterminant>
                                     <matrixReference idx="0"></matrixReference>
                                 </matrixDeterminant>                                        
@@ -495,7 +497,7 @@
                     </matrixTimes>
                 </transformation>
             </matrix>
-            <matrix numberOfColumns="2" numberOfRows="2" name="20-M0-timesM7---linear">
+            <matrix numberOfColumns="2" numberOfRows="2" name="20-M0-times-M7---linear">
                 <transformation>
                     <matrixTimes>
                         <matrixReference idx="0"></matrixReference>
@@ -1036,7 +1038,7 @@
                     </value>
                 </constantElements>
             </matrix>
-            <matrix numberOfColumns="6" numberOfRows="7" name="32-Expansion test 1: nested blocks">
+            <matrix numberOfColumns="6" numberOfRows="7" name="32-Expansion test 1 - nested blocks">
                 <blocks numberOfBlocks="4"> 
                     <colOffset numberOfEl="3">
                         <el>0</el> 
@@ -1366,7 +1368,6 @@
                     </block>
                 </blocks>
             </matrix>
-
             <matrix numberOfRows="7" numberOfColumns="7" name="36-Base matrix for Expansion test 3"
                     symmetry="lower">
                 <blocks numberOfBlocks="2">
@@ -1417,21 +1418,488 @@
                     </block>
                 </blocks>
             </matrix>
-            <matrix numberOfRows="2" numberOfColumns="2" name="37-Base matrix for Expansion test 4">
-                <varReferenceElements numberOfValues="2">
+            <matrix numberOfColumns="6" numberOfRows="6" name="37-block expansion 1">
+                <blocks numberOfBlocks="4"> <!--6-->
+                    <colOffset numberOfEl="4">
+                        <el mult="4" incr="2">0</el>                    
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
+                        <el mult="4" incr="2">0</el>                    
+                    </rowOffset>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <constantElements numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <index>
+                                <el mult="2 " incr=" 1 ">0</el>
+                                <el mult="2 " incr=" 1 ">0</el>
+                            </index>
+                            <value>
+                                <el>-1.0 </el>
+                                <el> 2.0 </el>
+                                <el> 3.0</el>
+                                <el>-4.0</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="1">
+                        <complexValuedExpressions numberOfValues="1">
+                            <start>
+                                <el mult="2">0</el>
+                                <el>1 </el>
+                            </start>
+                            <index>
+                                <el>1 </el>
+                            </index>
+                            <value>
+                                <el>
+                                    <complexSum>
+                                        <complexNumber Re="1" Im="1"/>
+                                        <createComplex>
+                                            <sin>
+                                                <variable idx="0" coef="5.0"/>
+                                            </sin>
+                                            <exp>
+                                                <variable idx="1" coef="-2.0"/>
+                                            </exp>
+                                        </createComplex>
+                                        <complexPlus>
+                                            <complexTimes>
+                                                <complexNumber Re="3" Im="0"/>
+                                                <complexNumber Re="2" Im="2"/>
+                                            </complexTimes>
+                                            <complexNumber Re="0" Im="-2"/>
+                                        </complexPlus>
+                                        <complexMinus>
+                                            <complexNegate>
+                                                <complexNumber Re="0.5" Im="0.5"/>
+                                            </complexNegate>
+                                            <complexConjugate>
+                                                <complexNumber Re="0.5" Im="0.5"/>
+                                            </complexConjugate>
+                                        </complexMinus>
+                                    </complexSum>
+                                </el>
+                            </value>
+                        </complexValuedExpressions>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="2">
+                        <linearElements numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <index>
+                                <el>0</el>   <el>1</el>
+                                <el>0</el>   <el>1</el>
+                            </index>
+                            <value>
+                                <el numberOfVarIdx="1" constant="2">
+                                    <varIdx coef="0.5">0</varIdx>
+                                </el>
+                                <el numberOfVarIdx="2">
+                                    <varIdx>0</varIdx>
+                                    <varIdx>1</varIdx>
+                                </el>
+                                <el numberOfVarIdx="0" constant="-1"/>
+                                <el numberOfVarIdx="2" constant="1">
+                                    <varIdx coef="2">0</varIdx>
+                                    <varIdx coef="3">1</varIdx>
+                                </el>
+                            </value>
+                        </linearElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <realValuedExpressions numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <index>
+                                <el>0</el>    <el>1</el>
+                                <el>1</el>    <el>0</el>
+                            </index>
+                            <value>
+                                <el>
+                                    <sum>
+                                        <matrixDeterminant>
+                                            <matrixInverse>
+                                                <matrixPlus>
+                                                    <matrixReference idx="6"/>
+                                                    <matrixTimes>
+                                                        <matrixReference idx="6"/>
+                                                        <matrixReference idx="8"/>
+                                                    </matrixTimes>
+                                                </matrixPlus>
+                                            </matrixInverse>
+                                        </matrixDeterminant>
+                                        <matrixTrace>
+                                            <matrixMinus>
+                                                <matrixScalarTimes>
+                                                    <matrixNegate>
+                                                        <matrixReference idx="2"/>
+                                                    </matrixNegate>
+                                                    <number value="1.5"/>
+                                                </matrixScalarTimes>
+                                                <matrixTranspose>
+                                                    <matrixReference idx="8"/>
+                                                </matrixTranspose>
+                                            </matrixMinus>
+                                        </matrixTrace>
+                                    </sum>
+                                </el>
+                                <el>
+                                    <times>
+                                        <variable idx="0" coef="2.0"/>
+                                        <variable idx="1"></variable>
+                                    </times>
+                                </el>
+                                <el>
+                                    <sin>
+                                        <variable idx="1" coef="5.0"/>
+                                    </sin>
+                                </el>
+                                <el>
+                                    <number value="3.0"></number>
+                                </el>
+                            </value>
+                        </realValuedExpressions>
+                    </block>
+<!--
+                    <block blockRowIdx="2" blockColIdx="1">
+                         <conReferenceElements numberOfValues="2">
+                             <start>
+                                 <el mult="3" incr="1">0</el>
+                             </start>
+                             <index>
+                                 <el>0</el>     <el>1</el>
+                             </index>
+                             <value>
+                                 <el>0</el>     <el>1</el>
+                             </value>
+                         </conReferenceElements>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="0">
+                        <objReferenceElements numberOfValues="2">
+                            <start>
+                                <el>0</el>    <el>1</el>    <el>2</el>
+                            </start>
+                            <index>
+                                <el>0</el>
+                                <el>1</el>
+                            </index>
+                            <value>
+                                <el>-1</el>
+                                <el>-1</el>
+                            </value>                        
+                        </objReferenceElements>
+                    </block>
+-->
+                </blocks>
+            </matrix>
+            <matrix numberOfColumns="6" numberOfRows="6" name="38-block expansion 2">
+                <blocks numberOfBlocks="7">
+                    <colOffset numberOfEl="4">
+                        <el mult="4" incr="2">0</el>                    
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
+                        <el mult="4" incr="2">0</el>                    
+                    </rowOffset>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <constantElements numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <index>
+                                <el mult="2 " incr=" 1 ">0</el>
+                                <el mult="2 " incr=" 1 ">0</el>
+                            </index>
+                            <value>
+                                <el>-1.0 </el>
+                                <el> 2.0 </el>
+                                <el> 3.0</el>
+                                <el>-4.0</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="1">
+                        <complexValuedExpressions numberOfValues="0">
+                            <start>
+                                <el mult="3">0</el>
+                            </start>
+                            <index>
+                            </index>
+                        </complexValuedExpressions>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="2">
+                        <linearElements numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <index>
+                                <el>0</el>   <el>1</el>
+                                <el>0</el>   <el>1</el>
+                            </index>
+                            <value>
+                                <el numberOfVarIdx="1" constant="2">
+                                    <varIdx coef="0.5">0</varIdx>
+                                </el>
+                                <el numberOfVarIdx="2">
+                                    <varIdx>0</varIdx>
+                                    <varIdx>1</varIdx>
+                                </el>
+                                <el numberOfVarIdx="0" constant="-1"/>
+                                <el numberOfVarIdx="2" constant="1">
+                                    <varIdx coef="2">0</varIdx>
+                                    <varIdx coef="3">1</varIdx>
+                                </el>
+                            </value>
+                        </linearElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <realValuedExpressions numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <index>
+                                <el>0</el>    <el>1</el>
+                                <el>1</el>    <el>0</el>
+                            </index>
+                            <value>
+                                <el>
+                                    <sum>
+                                        <matrixDeterminant>
+                                            <matrixInverse>
+                                                <matrixPlus>
+                                                    <matrixReference idx="6"/>
+                                                    <matrixTimes>
+                                                        <matrixReference idx="6"/>
+                                                        <matrixReference idx="8"/>
+                                                    </matrixTimes>
+                                                </matrixPlus>
+                                            </matrixInverse>
+                                        </matrixDeterminant>
+                                        <matrixTrace>
+                                            <matrixMinus>
+                                                <matrixScalarTimes>
+                                                    <matrixNegate>
+                                                        <matrixReference idx="2"/>
+                                                    </matrixNegate>
+                                                    <number value="1.5"/>
+                                                </matrixScalarTimes>
+                                                <matrixTranspose>
+                                                    <matrixReference idx="8"/>
+                                                </matrixTranspose>
+                                            </matrixMinus>
+                                        </matrixTrace>
+                                    </sum>
+                                </el>
+                                <el>
+                                    <times>
+                                        <variable idx="0" coef="2.0"/>
+                                        <variable idx="1"></variable>
+                                    </times>
+                                </el>
+                                <el>
+                                    <sin>
+                                        <variable idx="1" coef="5.0"/>
+                                    </sin>
+                                </el>
+                                <el>
+                                    <number value="3.0"></number>
+                                </el>
+                            </value>
+                        </realValuedExpressions>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="1">
+                         <conReferenceElements numberOfValues="2">
+                             <start>
+                                 <el mult="3" incr="1">0</el>
+                             </start>
+                             <index>
+                                 <el>0</el>     <el>1</el>
+                             </index>
+                             <value>
+                                 <el>0</el>     <el>1</el>
+                             </value>
+                         </conReferenceElements>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="0">
+                        <objReferenceElements numberOfValues="2">
+                            <start>
+                                <el>0</el>    <el>1</el>    <el>2</el>
+                            </start>
+                            <index>
+                                <el>0</el>
+                                <el>1</el>
+                            </index>
+                            <value>
+                                <el>-1</el>
+                                <el>-1</el>
+                            </value>                        
+                        </objReferenceElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="0">
+                        <stringValuedElements numberOfValues="1">
+                            <start>
+                                <el mult="2">0</el>
+                                <el>1</el>
+                            </start>
+                            <index>
+                                <el>0</el>
+                            </index>
+                            <value>
+                                <el>blue</el>
+                            </value>
+                        </stringValuedElements>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfRows="2" numberOfColumns="2" name="39-Base matrix for block expansion 2">
+                <stringValuedElements numberOfValues="1">
                     <start>
-                        <el incr="1" mult="3">0</el>
+                        <el mult="2">0</el>
+                        <el>1</el>
                     </start>
                     <index>
-                        <el mult="2">0</el>
+                        <el>0</el>
                     </index>
                     <value>
-                        <el>0</el>
-                        <el>1</el>
+                        <el>blue</el>
                     </value>
-                </varReferenceElements>
+                </stringValuedElements>
             </matrix>
-            <matrix numberOfRows="6" numberOfColumns="6" name="38-Expansion test 4 - mixed elements">
+            <matrix numberOfColumns="6" numberOfRows="6" name="40-block expansion 2">
+                <blocks numberOfBlocks="5">
+                    <colOffset numberOfEl="4">
+                        <el mult="4" incr="2">0</el>                    
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
+                        <el mult="4" incr="2">0</el>                    
+                    </rowOffset>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="0"></baseMatrix>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="22"></baseMatrix>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="8"></baseMatrix>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="12"></baseMatrix>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="39"></baseMatrix>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfRows="6" numberOfColumns="6" name="41-Expansion test 4 - mixed elements">
+                <blocks numberOfBlocks="8">
+                    <colOffset numberOfEl="4">
+                        <el mult="4" incr="2">0</el> 
+                    </colOffset>
+                    <rowOffset numberOfEl="4">
+                        <el mult="4" incr="2">0</el> 
+                    </rowOffset>
+                    <block blockRowIdx="0" blockColIdx="0">
+                        <constantElements numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <index>
+                                <el mult="2 " incr=" 1 ">0</el>
+                                <el mult="2 " incr=" 1 ">0</el>
+                            </index>
+                            <value>
+                                <el> 1.0 </el>
+                                <el>-2.0 </el>
+                                <el>-3.0</el>
+                                <el> 4.0</el>
+                            </value>
+                        </constantElements>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="1">
+                        <varReferenceElements numberOfValues="2" rowMajor="true">
+                            <start>
+                                <el incr="1" mult="3">0</el>
+                            </start>
+                            <index>
+                                <el mult="2">1</el>
+                            </index>
+                            <value>
+                                <el>0</el>
+                                <el>1</el>
+                            </value>
+                        </varReferenceElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="0">
+                        <linearElements numberOfValues="4">
+                            <start>
+                                <el mult="3" incr="2">0</el>
+                            </start>
+                            <index>
+                                <el>0</el>   <el>1</el>
+                                <el>0</el>   <el>1</el>
+                            </index>
+                            <value>
+                                <el numberOfVarIdx="1" constant="2">
+                                    <varIdx coef="0.5">0</varIdx>
+                                </el>
+                                <el numberOfVarIdx="2">
+                                    <varIdx>0</varIdx>
+                                    <varIdx>1</varIdx>
+                                </el>
+                                <el numberOfVarIdx="0" constant="-1"/>
+                                <el numberOfVarIdx="2" constant="1">
+                                    <varIdx coef="2">0</varIdx>
+                                    <varIdx coef="3">1</varIdx>
+                                </el>
+                            </value>
+                        </linearElements>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="1">
+                        <realValuedExpressions numberOfValues="2" rowMajor="true">
+                            <start>
+                                <el mult="3" incr="1">0</el>
+                            </start>
+                            <index>
+                                <el>0</el>    <el>1</el>
+                            </index>
+                            <value>
+                                <el>
+                                    <plus>
+                                        <power>
+                                            <E/>
+                                            <variable idx="0"/>
+                                        </power>
+                                        <ln>
+                                            <variable idx="1"/>
+                                        </ln>
+                                    </plus>
+                                </el>
+                                <el>
+                                    <sin>
+                                        <variable idx="1" coef="5.0"/>
+                                    </sin>
+                                </el>
+                            </value>
+                        </realValuedExpressions>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="0">
+                        <baseMatrix baseMatrixIdx="0"/>
+                    </block>
+                    <block blockRowIdx="2" blockColIdx="1">
+                        <baseMatrix baseMatrixIdx="37"/>
+                    </block>
+                    <block blockRowIdx="0" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="8"/>
+                    </block>
+                    <block blockRowIdx="1" blockColIdx="2">
+                        <baseMatrix baseMatrixIdx="9"/>
+                    </block>
+                </blocks>
+            </matrix>
+            <matrix numberOfRows="6" numberOfColumns="6" name="42-Expansion test 4 - erasing block!">
                 <blocks numberOfBlocks="8">
                     <colOffset numberOfEl="4">
                         <el mult="4" incr="2">0</el> 
@@ -1537,7 +2005,7 @@
                     </block>
                 </blocks>
             </matrix>
-            <matrix numberOfRows="4" numberOfColumns="4" name="39-Expansion test 5 - mixed references">
+            <matrix numberOfRows="4" numberOfColumns="4" name="43-Expansion test 5 - mixed references">
                 <blocks numberOfBlocks="2">
                     <colOffset numberOfEl="3">
                         <el mult="3" incr="2">0</el> 
@@ -1553,7 +2021,7 @@
                     </block>
                 </blocks>
             </matrix>
-            <matrix numberOfRows="4" numberOfColumns="4" name="40-Expansion test 6 - jumbled references">
+            <matrix numberOfRows="4" numberOfColumns="4" name="44-Expansion test 6 - jumbled references">
                 <blocks numberOfBlocks="2">
                     <colOffset numberOfEl="3">
                         <el mult="3" incr="2">0</el> 
@@ -1569,7 +2037,7 @@
                     </block>
                 </blocks>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="4" name="41-baseAndConstantElements">
+            <matrix numberOfColumns="4" numberOfRows="4" name="45-baseAndConstantElements">
                 <baseMatrix baseMatrixIdx="0"/>
                 <constantElements numberOfValues="2">
                     <start>
@@ -1586,7 +2054,7 @@
                     </value>
                 </constantElements>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="4" name="42-baseAndVarRef">
+            <matrix numberOfColumns="4" numberOfRows="4" name="46-baseAndVarRef">
                 <baseMatrix baseMatrixIdx="0"/>
                 <varReferenceElements numberOfValues="2">
                     <start>
@@ -1603,7 +2071,7 @@
                     </value>
                 </varReferenceElements>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="4" name="43-baseAndLinear">
+            <matrix numberOfColumns="4" numberOfRows="4" name="47-baseAndLinear">
                 <baseMatrix baseMatrixIdx="0"/>
                 <linearElements numberOfValues="2">
                     <start>
@@ -1625,7 +2093,7 @@
                     </value>
                 </linearElements>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="4" name="44-baseAndRealExpr">
+            <matrix numberOfColumns="4" numberOfRows="4" name="48-baseAndRealExpr">
                 <baseMatrix baseMatrixIdx="0"/>
                 <realValuedExpressions numberOfValues="2">
                     <start>
@@ -1660,6 +2128,7 @@
                                     </matrixDiagonal>
                                 </matrixDeterminant>
                                 <matrixTrace>
+
                                     <matrixMinus>
                                         <matrixScalarTimes>
                                             <matrixNegate>
@@ -1694,7 +2163,7 @@
                     </value>
                 </realValuedExpressions>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="4" name="45-baseConstantAndVarRef">
+            <matrix numberOfColumns="4" numberOfRows="4" name="49-baseConstantAndVarRef">
                 <baseMatrix baseMatrixIdx="0"/>
                 <constantElements numberOfValues="2">
                     <start>
@@ -1725,7 +2194,7 @@
                     </value>
                 </varReferenceElements>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="4" name="46-baseConstantAndLinear">
+            <matrix numberOfColumns="4" numberOfRows="4" name="50-baseConstantAndLinear">
                 <baseMatrix baseMatrixIdx="0"/>
                 <constantElements numberOfValues="2">
                     <start>
@@ -1761,7 +2230,7 @@
                     </value>
                 </linearElements>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="4" name="47-baseVarRefAndLinear">
+            <matrix numberOfColumns="4" numberOfRows="4" name="51-baseVarRefAndLinear">
                 <baseMatrix baseMatrixIdx="0"/>
                 <varReferenceElements numberOfValues="2">
                     <start>
@@ -1797,7 +2266,7 @@
                     </value>
                 </linearElements>
             </matrix>
-            <matrix numberOfColumns="4" numberOfRows="4" name="48-objRefAndConRef">
+            <matrix numberOfColumns="4" numberOfRows="4" name="52-objRefAndConRef">
                 <objReferenceElements numberOfValues="2">
                     <start>
                         <el>0</el>
@@ -1825,7 +2294,7 @@
                     </value>
                 </conReferenceElements>
             </matrix>
-            <matrix numberOfColumns="3" numberOfRows="3" name="49-stringsEtc.">
+            <matrix numberOfColumns="3" numberOfRows="3" name="53-stringsEtc.">
                 <constantElements numberOfValues="1">
                     <start>
                         <el>0</el>

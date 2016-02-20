@@ -630,7 +630,7 @@ enum ENUM_MATRIX_TYPE
     ENUM_MATRIX_TYPE_conReference,             // matrix elements contain indexes of objectives  in the core
     ENUM_MATRIX_TYPE_mixedRowReference,        // mixed reference to objectives and constraints
 
-    ENUM_MATRIX_TYPE_complexConstant,          // matrix elements contain complex numbers numbers)
+    ENUM_MATRIX_TYPE_complexConstant,          // matrix elements contain complex numbers
     ENUM_MATRIX_TYPE_complexValuedExpressions, // matrix contains complex-valued expressions
 
     ENUM_MATRIX_TYPE_string,                   // matrix elements contain string values
@@ -797,18 +797,6 @@ enum ENUM_MATRIX_SYMMETRY
     ENUM_MATRIX_SYMMETRY_HermitianUpper
 };
 
-inline std::string returnMatrixSymmetryString(ENUM_MATRIX_SYMMETRY symmetry)
-{
-    if (symmetry == ENUM_MATRIX_SYMMETRY_none          ) return "none";
-    if (symmetry == ENUM_MATRIX_SYMMETRY_upper         ) return "upper";
-    if (symmetry == ENUM_MATRIX_SYMMETRY_lower         ) return "lower";
-    if (symmetry == ENUM_MATRIX_SYMMETRY_skewUpper     ) return "skewUpper";
-    if (symmetry == ENUM_MATRIX_SYMMETRY_skewLower     ) return "skewLower";
-    if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower) return "HermitianLower";
-    if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower) return "HermitianLower";
-    return "none";
-}//returnMatrixSymmetryString
-
 inline int returnMatrixSymmetry(std::string symmetry)
 {
     if (symmetry == "none"          ) return ENUM_MATRIX_SYMMETRY_none;
@@ -820,6 +808,18 @@ inline int returnMatrixSymmetry(std::string symmetry)
     if (symmetry == "HermitianLower") return ENUM_MATRIX_SYMMETRY_HermitianLower;
     return 0;
 }//returnMatrixSymmetry
+
+inline std::string returnMatrixSymmetryString(ENUM_MATRIX_SYMMETRY symmetry)
+{
+    if (symmetry == ENUM_MATRIX_SYMMETRY_none          ) return "none";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_upper         ) return "upper";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_lower         ) return "lower";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_skewUpper     ) return "skewUpper";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_skewLower     ) return "skewLower";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower) return "HermitianLower";
+    if (symmetry == ENUM_MATRIX_SYMMETRY_HermitianLower) return "HermitianLower";
+    return "none";
+}//returnMatrixSymmetryString
 
 inline bool verifyMatrixSymmetry(std::string symmetry)
 {
@@ -865,6 +865,25 @@ inline int returnMatrixConstructorType(std::string cType)
     if (cType == "matrix"                  ) return ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
     return 0;
 }//returnMatrixConstructorType
+
+inline std::string returnMatrixConstructorTypeString(ENUM_MATRIX_CONSTRUCTOR_TYPE cType)
+{
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix              ) return "baseMatrix";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_constantElements        ) return "constantElements";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexElements         ) return "complexElements";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_varRefElements          ) return "varRefElements";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_linearElements          ) return "linearElements";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_realValuedExpressions   ) return "realValuedExpressions";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_complexValuedExpressions) return "complexValuedExpressions";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_objRefElements          ) return "objRefElements";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_conRefElements          ) return "conRefElements";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_stringValuedElements    ) return "stringElements";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation          ) return "transformation";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks                  ) return "blocks";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_block                   ) return "block";
+    if (cType == ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix                  ) return "matrix";
+    return "unknown";
+}//returnMatrixConstructorTypeString
 
 inline bool verifyMatrixConstructorType(std::string type)
 {

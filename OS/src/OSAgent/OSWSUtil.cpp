@@ -62,7 +62,7 @@ WSUtil::~WSUtil()
 
 
 
-string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int servicePortNumber)
+string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned short int servicePortNumber)
 {
     try
     {
@@ -74,7 +74,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
         unsigned short httpServPort = servicePortNumber;
         char *servIP = &serviceIP[0];
         char httpBuffer[RCVBUFSIZE] = "";
-        int httpStringLen;
+        size_t httpStringLen;
         char* message = &theSOAP[0];
 #ifndef NDEBUG
         osoutput->OSPrint(ENUM_OUTPUT_AREA_OSAgent, ENUM_OUTPUT_LEVEL_trace, "Inside WSUtil::sendSOAPMessage\n");
@@ -86,10 +86,10 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
         /* Create a reliable, stream socket using TCP */
         if ((sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) throw ErrorClass( "failure creating socket");
         /* Construct the server address structure */
-        memset(&httpServAddr, 0, sizeof(httpServAddr));     /* Zero out structure */
-        httpServAddr.sin_family      = AF_INET;             /* Internet address family */
-        httpServAddr.sin_addr.s_addr = ResolveName( servIP);   /* Server IP address */
-        httpServAddr.sin_port        = htons(httpServPort); /* Server port */
+        memset(&httpServAddr, 0, sizeof(httpServAddr));       /* Zero out structure      */
+        httpServAddr.sin_family      = AF_INET;               /* Internet address family */
+        httpServAddr.sin_addr.s_addr = ResolveName( servIP);  /* Server IP address       */
+        httpServAddr.sin_port        = htons(httpServPort);   /* Server port             */
         /* Establish the connection to the http server */
         if (connect(sock, (struct sockaddr *) &httpServAddr, sizeof(httpServAddr)) < 0)
         {
@@ -113,9 +113,6 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 #endif
         int recvMsgSize = 1;
         int n;
-#ifndef NDEBUG
-        int char_val;
-#endif
         httpBuffer[ RCVBUFSIZE - 1] = '\0';
         while (recvMsgSize > 0)
         {

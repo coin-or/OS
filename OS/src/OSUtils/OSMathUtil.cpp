@@ -180,13 +180,13 @@ std::string os_dtoa_format(double  x)
     char *charResult;
     int decimalPointPos;
     int sign;
-    int strLength = 0;
+    //int strLength = 0;
     int k = 0;
     charResult = os_dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
     // get the length
     // get the sign, 1 for negative
     if( sign == 1) outStr << "-";
-    strLength = strlen( charResult);
+    size_t strLength = strlen( charResult);
 
 
     // return charResult if we have nan or infinity  -- if so, return original string

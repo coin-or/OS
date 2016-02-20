@@ -67,7 +67,8 @@ public:
      * @return the reply from the Web service in a SOAP message.
      * </p>
      */
-    static std::string sendSOAPMessage(std::string theSOAP, std::string serviceIP, unsigned int servicePortNumber);
+    static std::string sendSOAPMessage(std::string theSOAP, std::string serviceIP, 
+                                       unsigned short int servicePortNumber);
 
 
     /**

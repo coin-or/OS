@@ -52,7 +52,7 @@
 //#define CHECK_PARSE_TIME
 
 // debugging tools. uncomment as needed 
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 #define YYDEBUG 1
@@ -126,7 +126,7 @@ bool parseColIdx(const char **pchar, OSInstance *osinstance, int* osillineno);
 bool parseValue(const char **pchar, OSInstance *osinstance, int* osillineno);
 bool parseInstanceHeader(const char **pchar, OSInstance *osinstance, int* osillineno);
 bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
-char *parseBase64( const char **p, int *dataSize, int* osillineno);
+char *parseBase64( const char **p, long int *dataSize, int* osillineno);
 
 #define	ISWHITESPACE( char_) ((char_) == ' ' || \
                      (char_) == '\t' ||  (char_) == '\r')

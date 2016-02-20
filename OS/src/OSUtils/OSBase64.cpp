@@ -4,12 +4,11 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2015, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- *
  */
 
 #include "OSBase64.h"
@@ -30,7 +29,16 @@ const char *base64_char_cstr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 }
 
-std::string Base64::encodeb64(char* bytes, int string_size)
+/** 
+ *  A binary string of 8-bit char is coded three bytes at a time into groups of four
+ *  printable characters. (Each base_64 char represents 6 bits of the binary string.)
+ *  The encoded string is always a multiple of four characters long, which may require
+ *  padding if the length of the binary string is not a multiple of three. Either two 
+ *  (if there was one remaining byte in the binary string) or one (if there were two
+ *  bytes left over) special character ('=') is added in this case.
+ */
+
+std::string Base64::encodeb64(char* bytes, long unsigned int string_size)
 {
     unsigned char out_byte1, out_byte2, out_byte3, out_byte4;
     unsigned char in_byte1, in_byte2, in_byte3;
@@ -38,9 +46,9 @@ std::string Base64::encodeb64(char* bytes, int string_size)
     const std::string base64_chars = base64_char_cstr ;
 
     std::ostringstream outStr;
-    int remainder = string_size%3;
+    long unsigned int remainder = string_size%3;
     // get a number divisible by 3
-    int test = string_size - remainder;
+    long unsigned int test = string_size - remainder;
     while(test > 0)
     {
         in_byte1 = *(bytes++);
@@ -49,9 +57,9 @@ std::string Base64::encodeb64(char* bytes, int string_size)
         out_byte1 = (in_byte1 >> 2);
         out_byte2 = (in_byte1 & 0x03) << 4 | (in_byte2 >> 4);
         out_byte3 = (in_byte2 & 0x0f) << 2 | (in_byte3 >> 6);
-        out_byte4 = in_byte3 & 0x3f;
+        out_byte4 =  in_byte3 & 0x3f;
         outStr << base64_chars[out_byte1];
-        outStr <<  base64_chars[out_byte2];
+        outStr << base64_chars[out_byte2];
         outStr << base64_chars[out_byte3];
         outStr << base64_chars[out_byte4]  ;
         test = test - 3;
@@ -67,7 +75,7 @@ std::string Base64::encodeb64(char* bytes, int string_size)
         {
             in_byte2 = '\0';
             out_byte2 = (in_byte1 & 0x03) << 4 | (in_byte2 >> 4);
-            outStr <<  base64_chars[out_byte2];
+            outStr << base64_chars[out_byte2];
             outStr << '=';
         }
         else
@@ -75,7 +83,7 @@ std::string Base64::encodeb64(char* bytes, int string_size)
             in_byte2 = *(bytes++);
             out_byte2 = (in_byte1 & 0x03) << 4 | (in_byte2 >> 4);
             out_byte3 = (in_byte2 & 0x0f) << 2 | (in_byte3 >> 6);
-            outStr <<  base64_chars[out_byte2];
+            outStr << base64_chars[out_byte2];
             outStr << base64_chars[out_byte3];
         }
         outStr << '=';
@@ -99,19 +107,19 @@ std::string Base64::decodeb64(char* b64bytes)
         in_byte2 = base64_chars.find(*(b64bytes++));
         in_byte3 = base64_chars.find(*(b64bytes++));
         in_byte4 = base64_chars.find(*(b64bytes++));
-        out_byte1 = (in_byte1 << 2)  | ((in_byte2 & 0x30)  >> 4)  ;
-        out_byte2 = ((in_byte2 & 0x0f) << 4)  | ((in_byte3 & 0x3c)  >> 2)  ;
-        out_byte3 = ((in_byte3  & 0x03) << 6)  |  in_byte4  ;
+        out_byte1 =  (in_byte1 << 2)         | ((in_byte2 & 0x30)  >> 4)  ;
+        out_byte2 = ((in_byte2 & 0x0f) << 4) | ((in_byte3 & 0x3c)  >> 2)  ;
+        out_byte3 = ((in_byte3 & 0x03) << 6) |   in_byte4  ;
         outStr << out_byte1;
         outStr << out_byte2;
         outStr << out_byte3;
     }
-    // now take into account the padding
+    // now take into account the padding. Note: Either one or two extra out_bytes
+    // Note: one extra out_byte if padding is '=='; two if padding is just '='
     if(*b64bytes == '=')
     {
         in_byte1 = base64_chars.find(*(b64bytes++));
         in_byte2 = base64_chars.find(*(b64bytes++));
-        in_byte4 = '\0';
         out_byte1 = (in_byte1 << 2)  | ((in_byte2 & 0x30)  >> 4)  ;
         outStr << out_byte1;
         *b64bytes++;
@@ -119,16 +127,7 @@ std::string Base64::decodeb64(char* b64bytes)
         {
             in_byte3 = base64_chars.find(*(b64bytes++));
             out_byte2 = ((in_byte2 & 0x0f) << 4)  | ((in_byte3 & 0x3c)  >> 2)  ;
-            out_byte3 = ((in_byte3  & 0x03) << 6)  |  in_byte4  ;
             outStr << out_byte2;
-        }
-        else  // we have == in the padding
-        {
-            in_byte3 = '\0';
-            out_byte2 = ((in_byte2 & 0x0f) << 4)  | ((in_byte3 & 0x3c)  >> 2)  ;
-            out_byte3 = ((in_byte3  & 0x03) << 6)  |  in_byte4  ;
-            //outStr << out_byte2;
-            //outStr << out_byte3;
         }
     }
     return outStr.str();

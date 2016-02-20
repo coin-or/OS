@@ -415,6 +415,8 @@ int main(int argC, char* argV[])
     dataDir = "C:\\datafiles\\research\\OS\\OS-trunk-work\\OS\\data\\";
 #endif
 
+//extern const OSSmartPtr<OSOutput> osoutput;
+//        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)907);
 
 // BASIC_TESTS include file-handling, numerical calculations and algorithmic differentiation
 if(BASIC_TESTS == true){
@@ -446,7 +448,7 @@ if(BASIC_TESTS == true){
         osilwriter = NULL;
     }
     catch(const ErrorClass& eclass){
-        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": Reading from file " + eclass.errormsg << endl; 
+        unitTestResultFailure << "Unit Test Failed Test " << nOfTest << ": Reading from file " + eclass.errormsg << endl; 
         //no point continuing -- we can't even read a file
         unitTestResultFailure << "Since we can't read files we are terminating"  << endl; 
         cout << unitTestResultFailure.str() << endl << endl;
@@ -593,7 +595,7 @@ if(BASIC_TESTS == true){
     }
     catch(const ErrorClass& eclass)
     {
-        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": nonlinear operators " + eclass.errormsg << endl; 
+        unitTestResultFailure << "Unit Test Failed Test " << nOfTest << ": nonlinear operators " + eclass.errormsg << endl; 
         cout << endl << endl << endl;
         unitTestResultFailure << eclass.errormsg << endl;
         if (x != NULL)
@@ -680,7 +682,7 @@ if(BASIC_TESTS == true){
     }    
     catch(const ErrorClass& eclass)
     {
-        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": Automatic differentiation " + eclass.errormsg << endl; 
+        unitTestResultFailure << "Unit Test Failed Test " << nOfTest << ": Automatic differentiation " + eclass.errormsg << endl; 
         cout << endl << endl << endl;
         unitTestResultFailure << "Failed test " << nOfTest << endl << eclass.errormsg << endl;
         if (x != NULL)
@@ -736,10 +738,10 @@ if (PARSER_TESTS)
     }    
     catch(const ErrorClass& eclass)
     {
-        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": OSiL parser " + eclass.errormsg << endl; 
+        unitTestResultFailure << "Unit Test Failed Test " << nOfTest << ": OSiL parser " + eclass.errormsg << endl; 
         cout << endl << endl << endl;
         cout << eclass.errormsg << endl;
-        unitTestResultFailure << "Sorry Unit Test Failed Testing An OSiL Parser (Test " << nOfTest << ")" << endl;
+        unitTestResultFailure << "Unit Test Failed Testing An OSiL Parser (Test " << nOfTest << ")" << endl;
 
         if (osilreader != NULL)
             delete osilreader;
@@ -994,56 +996,47 @@ if (PARSER_TESTS)
 
             // now test the matrix manipulation routines 
             // (expansion, separation into blocks, transformations, etc.)
-            cout << endl << "TEST " << ++nOfTest << ": Test matrix manipulation routines (using testMatricesAndCones.osil)" << endl << endl;
+            cout << endl << "TEST " << ++nOfTest 
+                 << ": Test matrix manipulation routines (using testMatricesAndCones.osil)"
+                 << endl << endl;
 
-// some matrices we cannot handle yet...
-//                bool* omit = new bool[instance1->instanceData->matrices->numberOfMatrices];
-//                omit[ 0] = true; //false;
-//                omit[ 1] = true; //false;
-//                omit[ 2] = true;
-//                omit[ 3] = true;
-//                omit[ 4] = true; //false;
-//                omit[ 5] = true; //false;
-//                omit[ 6] = true;
-//                omit[ 7] = true; //false;
-//                omit[ 8] = true; //false;
-//                omit[ 9] = true; //false;
-//                omit[10] = true;
-//                omit[11] = true; //false;
-//                omit[12] = true; //false;
-//                omit[13] = true;
-//                omit[14] = true;
-//                omit[15] = true;
-//                omit[16] = true;
-//                omit[17] = true;
-//                omit[18] = true;
-//                omit[19] = true;
-//                omit[20] = true;
-//                omit[21] = true;
-//                omit[22] = true; //false;
-//                omit[23] = true;
-//                omit[24] = true; //false;
-//                omit[25] = true;
-//                omit[26] = true;
-//                omit[27] = true; //false;
-//                omit[28] = true; //false;
-//                omit[29] = true; //false;
-//                omit[30] = true; //false;
-//                omit[31] = true; //false;
-//                omit[32] = true; //false; //--- expansion test 1
-//                omit[33] = true; //false;
-//                omit[34] = true; //false;
-//                omit[35] = false; //--- expansion test 2
-//                omit[36] = false;
-//                omit[37] = true; //--- expansion test 3
-//                omit[38] = true; //--- expansion test 4
-//                omit[39] = true; //--- expansion test 5
+extern const OSSmartPtr<OSOutput> osoutput;
+        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL) 7);
 
-//            for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
-//            {
-//                if (!omit[i])
-//                {
+            for (int i=5; i < instance1->instanceData->matrices->numberOfMatrices; i++)
+            {
+                try
+                {
+                    cout << endl << "Test expansion of matrix " << i << " in column major form" << endl;
+                    instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInColumnMajor();
+                    cout << endl << "Matrix expanded" << endl << endl;
+                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
+                    cout << endl << "Completed successfully" << endl << endl;
+                }
+                catch(const ErrorClass& eclass)
+                {
+                    cout << endl << "Expansion failed" << endl << endl;
+                    cout << "Error message: " << eclass.errormsg  << endl << endl;
+                }
 
+                try
+                {
+//                    cout << endl << "Test expansion of matrix " << i << " in row major form" << endl;
+//                    instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInRowMajor();
+//                    cout << endl << "Matrix expanded" << endl << endl;
+//                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
+//                    cout << endl << "Completed successfully" << endl << endl;
+                }
+                catch(const ErrorClass& eclass)
+                {
+                    cout << endl << "Expansion failed" << endl << endl;
+                    cout << "Error message: " << eclass.errormsg  << endl << endl;
+                }
+            }
+
+        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL) 0);
+
+#if 0
                 cout << endl << "Test matrix expansion in column major form" << endl;
 
                 GeneralSparseMatrix* test1_a
@@ -1132,7 +1125,7 @@ if (PARSER_TESTS)
                     throw ErrorClass("Failed column expansion of matrix 35 (by rows)");
 
 
-#if 0
+//#if 0
                 int partition3[4];
                 partition3[0]= 0;
                 partition3[1]= 2;
@@ -1200,7 +1193,7 @@ if (PARSER_TESTS)
         catch(const ErrorClass& eclass){
             cout << endl << endl << endl;
             cout << eclass.errormsg << endl;
-            unitTestResultFailure << "Sorry Unit Test Failed Testing OSiL <matrix> Parser (Test "
+            unitTestResultFailure << "Unit Test Failed Testing matrix manipulation routines (Test "
                                   << nOfTest << ")" << endl;
 
             if (osilreader != NULL)
@@ -1551,7 +1544,7 @@ if (PARSER_TESTS)
     {
         cout << endl << endl << endl;
         cout << eclass.errormsg << endl;
-        unitTestResultFailure << "Sorry Unit Test Failed osinstance get() and set() Methods (Test "<< nOfTest << ")" << endl;        
+        unitTestResultFailure << "Unit Test Failed osinstance get() and set() Methods (Test "<< nOfTest << ")" << endl;        
         // Garbage Collection
         if (sncheck != NULL)
             delete [] sncheck;
@@ -2521,9 +2514,6 @@ if (PARSER_TESTS)
 
         cout << "Compare the two OSOption objects" << endl;
 
-//extern const OSSmartPtr<OSOutput> osoutput;
-//        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)907);
-
         ok = osoption->IsEqual(osoption3);
         if (!ok)
             throw ErrorClass(" Loss of information in OSoL write/read");
@@ -2548,7 +2538,7 @@ if (PARSER_TESTS)
     {
         cout << endl << endl << endl;
         cout << eclass.errormsg << endl;
-        unitTestResultFailure << "Sorry Unit Test Failed OSoL set() and get() methods (Test " << nOfTest << ")" << endl;        
+        unitTestResultFailure << "Unit Test Failed OSoL set() and get() methods (Test " << nOfTest << ")" << endl;        
 
         if (osoption2 != NULL)
             delete osoption2;
@@ -2811,7 +2801,7 @@ if (PARSER_TESTS)
     
     catch(const ErrorClass& eclass)
     {
-        unitTestResultFailure << "Sorry Unit Test Failed Test " << nOfTest << ": Deep copy of OSOoption object " + eclass.errormsg << endl; 
+        unitTestResultFailure << "Unit Test Failed Test " << nOfTest << ": Deep copy of OSOoption object " + eclass.errormsg << endl; 
         if(osolreader != NULL) 
             delete osolreader;
         osolreader = NULL;
@@ -7715,7 +7705,8 @@ if( THOROUGH == true){
 
 if(THOROUGH == true){
     // solve another problem
-    try{
+    try
+    {
         cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with HS071_NLPMod.osil" << endl << endl;
         cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 
@@ -7748,7 +7739,8 @@ if(THOROUGH == true){
             cout << "IPOPT solver solution for HS071_NLP checks." << endl;
         }
         else
-        {    cout << "IPOPT solver solution for HS071_NLP in error:" << endl;
+        {
+            cout << "IPOPT solver solution for HS071_NLP in error:" << endl;
             cout << ipoptSolver->osrl << endl;
         }
         delete osilreader;
@@ -9386,8 +9378,10 @@ if (THOROUGH == true){
 
 
 // now solve with an OSInstance created from an MPS file
-if (OTHER_TESTS){
-    try{
+if (OTHER_TESTS)
+{
+    try
+    {
         cout << endl << "TEST " << ++nOfTest << ": Cbc solver using MPS file" << endl << endl;
 
         mpsFileName = dataDir +  "mpsFiles" + dirsep + "parinc.mps";
@@ -9445,6 +9439,7 @@ if (OTHER_TESTS){
         mps2osil = NULL;
     }
     
+#ifdef COIN_HAS_IPOPT
     try{
         // solve another problem
         // a problem that is a pure quadratic
@@ -9503,7 +9498,7 @@ if (OTHER_TESTS){
             delete mps2osil; 
         mps2osil = NULL;
     }
-
+#endif //end of #ifdef COIN_HAS_IPOPT
     
 // test reading a GAMS file
 
@@ -10235,7 +10230,7 @@ if (OTHER_TESTS){
         IBS = NULL;
    }
 
-#endif
+#endif // end of ifdef COIN_HAS_ASL
 
     //
     // Now read an mps file and write in b64 format to test the b64 feature 
@@ -10256,7 +10251,7 @@ if (OTHER_TESTS){
         solver->osol = osol;
         mps2osil->createOSObjects();
         solver->osil = osilwriter.writeOSiL( mps2osil->osinstance);
-        //std::cout << solver->osil << std::endl;
+        std::cout << solver->osil << std::endl;
         solver->buildSolverInstance();
         solver->solve();
         cout << endl << endl;
@@ -10378,22 +10373,22 @@ if (OTHER_TESTS){
     }
 } //end of if (OTHER_TESTS)
   
-    if(unitTestResultFailure.str().length() > 0){
-        cout << endl << "THE UNIT TEST PASSED THE FOLLOWING:" << endl << endl;
-        cout << unitTestResult.str() << endl << endl;
-        cout << "UNFORTUNATELY, YOU FAILED ON THE FOLLOWING:" << endl << endl;
-        cout << unitTestResultFailure.str() << endl << endl;
-        cout << "Conclusion: FAILURE" << endl;
-        return 1;
-    }
-    else{
-        cout << endl << "THE UNIT TEST PASSED THE FOLLOWING:" << endl << endl;
-        cout << unitTestResult.str() << endl << endl;
+    cout << endl << "THE UNIT TEST PASSED THE FOLLOWING:" << endl << endl;
+    cout << unitTestResult.str() << endl << endl;
+    if(unitTestResultFailure.str().length() == 0)
+    {
         cout << "All tests completed successfully" <<  endl <<  endl;
 #ifdef GUS_DEBUG
         cout << "Make sure to #undef GUS_DEBUG before committing!!!" <<  endl <<  endl;
 #endif
         return 0;
+    }
+    else
+    {
+        cout << "UNFORTUNATELY, YOU FAILED ON THE FOLLOWING:" << endl << endl;
+        cout << unitTestResultFailure.str() << endl << endl;
+        cout << "Conclusion: FAILURE" << endl;
+        return 1;
     }
 
 }//end main

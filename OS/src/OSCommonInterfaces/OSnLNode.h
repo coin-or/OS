@@ -180,14 +180,38 @@ public:
     /**
      * Calculate the function value given the current variable values.
      * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from this OSnLNode class.
+     * operator nodes that derive or extend from the OSnLNode class.
+     * Since expression trees can hold real-valued, complex-valued and matrix-valued nodes
+     * in essentially arbitrary order, three different calculateFunctions must be
+     * declared here in order for the recursion to work as intended.
+     *
+     * @param x holds the values of the variables in a double array.
+     * @return the function value given the current variable values.
+     */
+    virtual double calculateFunction(double *x);
+
+    /**
+     * Calculate the function value given the current variable values.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from the OSnLCNode class.
+     *
+     * @param x holds the values of the variables in a double array.
+     * @return the function value given the current variable values.
+     * @remark this function will have different return value when implemented in
+     *         OSnLNode, OSnLMNode and OSnLCNode as well as their descendants.
+     */    virtual std::complex<double> calculateFunction_C(double *x);
+
+    /**
+     * Calculate the function value given the current variable values.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from the OSnLMNode class.
      *
      * @param x holds the values of the variables in a double array.
      * @return the function value given the current variable values.
      * @remark this function will have different return value when implemented in
      *         OSnLNode, OSnLMNode and OSnLCNode as well as their descendants.
      */
-    virtual double calculateFunction(double *x);
+    //virtual OSMatrix* calculateFunction_M(double *x);
 
     /**
      * Create the AD tape to be evaluated by AD.
@@ -201,18 +225,6 @@ public:
     virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD);
 
     /**
-     * Calculate the function value given the current variable values.
-     * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from the OSnLCNode class.
-     *
-     * @param x holds the values of the variables in a double array.
-     * @return the function value given the current variable values.
-     * @remark this function will have different return value when implemented in
-     *         OSnLNode, OSnLMNode and OSnLCNode as well as their descendants.
-     */
-    virtual std::complex<double> calculateFunction_C(double *x);
-
-    /**
      * Create the AD tape to be evaluated by AD.
      * This is an abstract method which is required to be implemented by the concrete
      * operator nodes that derive or extend from this OSnLNode class.
@@ -222,18 +234,6 @@ public:
      *         OSnLNode, OSnLMNode and OSnLCNode as well as their descendants.
      */
     //virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
-
-    /**
-     * Calculate the function value given the current variable values.
-     * This is an abstract method which is required to be implemented by the concrete
-     * operator nodes that derive or extend from the OSnLMNode class.
-     *
-     * @param x holds the values of the variables in a double array.
-     * @return the function value given the current variable values.
-     * @remark this function will have different return value when implemented in
-     *         OSnLNode, OSnLMNode and OSnLCNode as well as their descendants.
-     */
-    virtual OSMatrix* calculateFunction_M(double *x);
 
     /**
      * Create the AD tape to be evaluated by AD.
@@ -1931,12 +1931,28 @@ public:
      */
     std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
 
+    /**
+     * Calculate the function value given the current variable values.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from the OSnLMNode class.
+     *
+     * @param x holds the values of the variables in a double array.
+     * @return the function value given the current variable values.
+     * @remark this function will have different return value when implemented in
+     *         OSnLNode, OSnLMNode and OSnLCNode as well as their descendants.
+     */
+    //virtual OSMatrix* calculateFunction_M(double *x);
 
     /**
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
+     * Create the AD tape to be evaluated by AD.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this OSnLNode class.
+     *
+     * @return the expression tree.
+     * @remark this function will have different return value when implemented in
+     *         OSnLNode, OSnLMNode and OSnLCNode as well as their descendants.
      */
-//    virtual OSnLMNode* copyNodeAndDescendants();
+    //virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
 
     /**
      * A function to check for the equality of two objects
@@ -2867,12 +2883,6 @@ public:
     virtual std::vector<ExprNode*> postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector);
 
     /**
-     * make a copy of this node and all its descendants
-     * @return a pointer to the duplicate node
-     */
-//    virtual OSnLCNode* copyNodeAndDescendants();
-
-    /**
      * A function to check for the equality of two objects
      */
     bool IsEqual(OSnLCNode *that);
@@ -3260,6 +3270,7 @@ private:
      *  random can be used to signal any part of the number that is random
      *  The default is "none"
      */
+
 
     ENUM_COMPLEX_NUMBER_PART random;
 

@@ -4374,7 +4374,7 @@ bool OSInstance::addMatrix(int arrayIndex, std::string name, int numberOfRows, i
     if (instanceData->matrices->matrix == NULL) return false;
     instanceData->matrices->matrix[arrayIndex] = new OSMatrix();
     return instanceData->matrices->matrix[arrayIndex]->setMatrix(name,numberOfRows,numberOfColumns,symmetry,
-                                                                 matrixType,inumberOfChildren,m_mChildren);
+                                         matrixType,ENUM_MATRIX_TYPE_unknown,inumberOfChildren,m_mChildren);
 }//addMatrix
 
 bool OSInstance::setConeNumber(int number)
@@ -8422,6 +8422,7 @@ bool MatrixObjectives::IsEqual(MatrixObjectives *that)
                 if (this->matrixObj[i] != NULL)
                 {
                     if (!(this->matrixObj[i]->IsEqual(that->matrixObj[i]))) return false;
+
                 }
                 else 
                     if (that->matrixObj[i] != NULL) return false; 

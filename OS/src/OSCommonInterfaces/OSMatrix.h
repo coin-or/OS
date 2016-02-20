@@ -40,6 +40,7 @@
  */
 class OSnLNode;
 class OSnLMNode;
+class OSnLCNode;
 class RealValuedExpressionTree;
 
 
@@ -52,11 +53,14 @@ class MatrixNode
 {
 public:
     /**
-     *  matrixType tracks the type of elements contained in this MatrixNode,
+     *  The next two data items track the type of elements contained in this MatrixNode,
      *  which may be useful in solver selection
-     *  For an enumeration of the possible types see OSParameters.h 
+     *  For an enumeration of the possible types see OSParameters.h
+     *  declaredMatrixType contains any type that the user may have declared,
+     *  inferredMatrixType contains the type derived from the list of matrix constructors
      */
-    ENUM_MATRIX_TYPE matrixType;
+    ENUM_MATRIX_TYPE declaredMatrixType;
+    ENUM_MATRIX_TYPE inferredMatrixType;
 
     /**
      *  nType is a unique integer assigned to each type of matrix node
@@ -88,9 +92,22 @@ public:
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
      */
-    virtual ENUM_MATRIX_TYPE getMatrixType() = 0;
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  getMatrixType() amalgamates the declared and inferred types 
+     *  @return the amalgamated type of the matrix elements:
+     *          if mergeTypes(declared,inferred) = declared, return declared
+     *          else throw an error (matrix contains undeclared element types)
+     */
+    virtual ENUM_MATRIX_TYPE getMatrixType();
 
     /**
      * @return the name of the matrix constructor
@@ -278,7 +295,7 @@ public:
     IntVector *index;
 
     /**
-     *  To track the type of symmetry present in the matrix element tag
+     *  To track the kind of symmetry present in the matrix element tag
      *  @remark for definitions, see OSParameters.h
      */
     ENUM_MATRIX_SYMMETRY symmetry;
@@ -754,7 +771,7 @@ public:
 
 
 /*! \class RealValuedExpressionArray
- * \brief a data structure to represent the nonzeros in a generalMatrix element
+ * \brief a data structure to represent the nonzeros in a matrix of real-valued expressions
  */
 class RealValuedExpressionArray : public MatrixElementValues
 {
@@ -983,10 +1000,22 @@ public:
      */
     virtual std::string getNodeName();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * <p>
@@ -1068,10 +1097,22 @@ public:
      */
     virtual std::string getNodeName();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * <p>
@@ -1148,10 +1189,22 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1235,10 +1288,22 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1311,7 +1376,7 @@ public:
 
 
 /*! \class RealValuedExpressions
- * \brief a data structure to represent the nonzero values in a generalMatrix element
+ * \brief a data structure to represent the nonzero values in a matrix of real-valued expressions
  */
 class RealValuedExpressions: public MatrixElements
 {
@@ -1330,10 +1395,22 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1415,10 +1492,22 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1499,10 +1588,22 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1585,10 +1686,22 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1687,11 +1800,23 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
-
+#endif
+ 
     /**
      * @return the name of the matrix constructor
      */
@@ -1778,10 +1903,22 @@ public:
      */
     virtual std::string getNodeName();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * <p>
@@ -1887,11 +2024,22 @@ public:
      */
     virtual std::string getNodeName();
 
+#if 0
+    /**
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
 
     /**
-     *  @return the type of the matrix elements
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * <p>
@@ -1978,10 +2126,22 @@ public:
      */
     virtual std::string getNodeName();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * <p>
@@ -2096,7 +2256,17 @@ public:
     virtual std::string getNodeName();
 
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
 
@@ -2213,10 +2383,10 @@ public:
     int* index;
 
     /**
-     * vType holds the type of values found in the value array.
+     * matrixType holds the type of values found in the value array.
      * @remark See OSParameters.h for a list of possible types
      */
-    ENUM_MATRIX_TYPE vType;
+    ENUM_MATRIX_TYPE matrixType;
 
     /**
      * value holds a general array of value elements in the matrix,
@@ -2254,7 +2424,7 @@ public:
      * </p>
      * @return
      */
-    bool display(int secondaryDim);
+    bool printMatrix();
 
     /**
      *  a method to determine whether the matrix is diagonal
@@ -2280,10 +2450,10 @@ public:
     bool bDeleteArrays;
 
     /**
-     * vType holds the type of all (nonzero) values in the collection of blocks
-     * contained in this set of blocks.
+     * matrixType holds the inferred (i.e., most general) type
+     *  of (nonzero) values in this collection of blocks
      */
-    ENUM_MATRIX_TYPE vType;
+    ENUM_MATRIX_TYPE matrixType;
 
     /**
      * isRowMajor holds whether the (nonzero) values holding the
@@ -2406,8 +2576,8 @@ public:
      *  type is the type declared by the user (if any)
      *  inferredType is computed from the list of matrix constructors
      */
-    ENUM_MATRIX_TYPE type;
-    ENUM_MATRIX_TYPE inferredType;
+//    ENUM_MATRIX_TYPE type;
+//    ENUM_MATRIX_TYPE inferredType;
 
     int numberOfRows;
     int numberOfColumns;
@@ -2452,9 +2622,11 @@ private:
     bool m_bHaveColumnPartition; 
 
 public:
+    /** default constructor */
     MatrixType();
-    virtual ~MatrixType();
 
+    /** default destructor */
+    virtual ~MatrixType();
 
     /**
      *  A method to check whether a matrix or block is diagonal
@@ -2483,9 +2655,14 @@ public:
     int  getNumberOfTransformationConstructors();
     int  getNumberOfBlocksConstructors();
 
-    GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor();
-    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor();
-    GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx);
+    GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor(
+                                 ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
+
+    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor(
+                                 ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
+
+    GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx,
+                                 ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
 
     /**
      *  a utility routine to print the expanded matrix or block.
@@ -2529,7 +2706,6 @@ public:
      */
     int* getColumnPartition();
 
-
     /** 
      *  A method to expand a matrix or block
      *  The result is a GeneralSparseMatrix object of constant matrix elements,
@@ -2543,7 +2719,7 @@ public:
 
     /**
      * A method to convert a matrix to the other major. 
-     * @param isColumnMajor holds whether the matrix is stored by column.
+     * @param isColumnMajor holds whether the matrix is currently stored by column.
      *        If true, the matrix is converted to row major form.
      *        If false, the matrix is stored by row and is converted to column major.
      * @return A pointer to the matrix in the other major. Return null if input matrix not valid.
@@ -2560,11 +2736,6 @@ public:
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the processed elements of the baseMatrix as a pointer to a GeneralSparseMatrix object.
-     *
-     *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
-     *          so that they can be retrieved later using extractBlocks (see below).
-     *          It is possible (though probably not advisable) to maintain multiple
-     *          decompositions with different row and column partitions (see next method)
      */
      virtual GeneralSparseMatrix* processBaseMatrix(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
 
@@ -2583,12 +2754,53 @@ public:
     bool processBlockPartition();
 
     /**
+     *  A method to expand a blocks constructor into the form required in the referencing matrixType. 
+     *  Processing may include transposing the elements in some or all of the blocks, applying
+     *  symmetry, and may require that the blocks themselves be properly expanded first.
+     *
+     *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
+     *         or column major.
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @param currentBlocks is a pointer to the collection of blocks that is to be expanded
+     *  @return the expanded elements of all blocks as a pointer to a GeneralSparseMatrix object.
+     */
+     virtual GeneralSparseMatrix* expandBlocks(ExpandedMatrixBlocks* currentBlocks,
+                                               bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+
+    /**
+     *  A method to repackage an elements constructor into the form required in the referencing matrixType. 
+     *  Processing may include transposing the elements and applying symmetry.
+     *
+     *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
+     *         or column major.
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @return the expanded elements as a pointer to a GeneralSparseMatrix object.
+     */
+     virtual GeneralSparseMatrix* extractElements(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+
+    /**
+     *  A method to expand a matrix transformation into the form required in the referencing matrixType. 
+     *  Processing may require recursion, transposing the elements, and applying symmetry.
+     *
+     *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
+     *         or column major.
+     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @return the expanded elements of the transformation as a pointer to a GeneralSparseMatrix object.
+     */
+     virtual GeneralSparseMatrix* expandTransformation(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+
+    /**
      *  A method to process a matrixType into a block structure defined by 
      *  the <blocks> element or elements.
      *  @param rowMajor indicates whether the blocks should be stored in row major (if true)
      *         or column major.
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
+     *  @param convertTo is an optional parameter that can be used to covert the elements
+     *         of all blocks to a different type 
      *  @return whether the operation was successful
      *
      *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
@@ -2596,7 +2808,8 @@ public:
      *          It is possible (though probably not advisable) to maintain multiple
      *          decompositions with different row and column partitions (see next method)
      */
-     virtual bool processBlocks(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+     virtual bool processBlocks(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry,
+                                               ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
 
     /**
      *  A method to process a matrixType into a specific block structure.
@@ -2607,6 +2820,8 @@ public:
      *  @param rowMajor controls whether the blocks are stored by row or by column
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
+     *  @param convertTo is an optional parameter that can be used to covert the elements
+     *         of all blocks to a different type 
      *  @return whether the operation was successful
      *
      *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
@@ -2615,7 +2830,8 @@ public:
      *          decompositions with different row and column partitions
      */
      virtual bool processBlocks(int* rowOffset, int rowOffsetSize, int* colOffset,
-                                int colOffsetSize, bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+                                int colOffsetSize, bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry,
+                                ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
 
     /** 
      *  A method to extract a block from a larger matrix
@@ -2740,10 +2956,22 @@ public:
      */
     virtual std::string getNodeName();
 
+#if 0
     /**
-     *  @return the type of the matrix elements
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
+
+    /**
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      *  A method to process a matrixType into a specific block structure.
@@ -2800,7 +3028,7 @@ public:
      * @param symmetry holds the type of symmetry used in the definition of the matrix. 
      *        For more information  see the enumeration ENUM_MATRIX_SYMMETRY in OSGeneral.h.
      *        If no symmetry, use ENUM_MATRIX_SYMMETRY_none.
-     * @param matrixType tracks the type of elements contained in this matrix.
+     * @param declaredMatrixType tracks the type of elements contained in this matrix.
      *        For more information  see the enumeration ENUM_MATRIX_TYPE in OSGeneral.h.
      *        If unsure, use ENUM_MATRIX_TYPE_unknown.
      * @param inumberOfChildren is the number of MatrixNode child elements,
@@ -2809,10 +3037,9 @@ public:
      * @return whether the matrix was added successfully.
      */
     bool setMatrix(std::string name, int numberOfRows, int numberOfColumns, 
-                   ENUM_MATRIX_SYMMETRY symmetry, ENUM_MATRIX_TYPE matrixType, 
-                   unsigned int inumberOfChildren, MatrixNode **m_mChildren);
-
-
+                         ENUM_MATRIX_SYMMETRY symmetry, ENUM_MATRIX_TYPE declaredMatrixType, 
+                         ENUM_MATRIX_TYPE inferredMatrixType, unsigned int inumberOfChildren, 
+                         MatrixNode **m_mChildren);
     /**
      * <p>
      * The following method writes a matrix node in OSgL format. 
@@ -3042,11 +3269,22 @@ public:
      */
     virtual std::string getNodeName();
 
+#if 0
+    /**
+     *  @return the declared type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
 
     /**
-     *  @return the type of the matrix elements
+     *  @return the inferred type of the matrix elements
+     */
+    virtual ENUM_MATRIX_TYPE getInferredMatrixType();
+
+    /**
+     *  @return the amalgamated type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getMatrixType();
+#endif
 
     /**
      * <p>
@@ -3112,6 +3350,52 @@ public:
 };// class MatrixBlock
 
 
+
+/**
+ *  Some methods to convert one type of matrix element into another
+ */
+LinearMatrixElement* convertToLinearMatrixElement(double val);
+LinearMatrixElement* convertToLinearMatrixElement(int varref);
+RealValuedExpressionTree* convertToRealExpressionTree(double val);
+RealValuedExpressionTree* convertToRealExpressionTree(int idx, bool varref); // use for varRef and objRef
+RealValuedExpressionTree* convertToRealExpressionTree(LinearMatrixElement* val);
+RealValuedExpressionTree* convertToRealExpressionTree(ConReferenceMatrixElement* val);
+ConReferenceMatrixElement* convertToConReferenceMatrixElement(int objRef);
+std::complex<double> convertToComplexMatrixElement(double val);
+ComplexValuedExpressionTree* convertToComplexExpressionTree(double val);
+ComplexValuedExpressionTree* convertToComplexExpressionTree(int idx, bool varref); // for varRef and objRef
+ComplexValuedExpressionTree* convertToComplexExpressionTree(LinearMatrixElement* val);
+ComplexValuedExpressionTree* convertToComplexExpressionTree(ConReferenceMatrixElement* val);
+ComplexValuedExpressionTree* convertToComplexExpressionTree(std::complex<double> val);
+ComplexValuedExpressionTree* convertToComplexExpressionTree(RealValuedExpressionTree* val);
+std::string convertToString(double val);
+std::string convertToString(int idx, bool varref); // use for varRef and objRef
+std::string convertToString(LinearMatrixElement* val);
+std::string convertToString(ConReferenceMatrixElement* val);
+std::string convertToString(std::complex<double> val);
+std::string convertToString(RealValuedExpressionTree* val);
+std::string convertToString(ComplexValuedExpressionTree* val);
+
+/** other potential conversions: (do not implement for now)
+ *      string to constant
+ *      linear to varref
+ *      linear to constant
+ *      real expression to constant
+ *      real expression to linear
+ *      real expression to varref
+ *      complex constant to real constant
+ *      complex expression to complex constant
+ **/
+
+
+    /**
+     *  Some methods to convert one type of matrix elements into another
+     *  @param _values is the array  of matrix elements that are to be converted
+     *  @param nvalues is the number of matrix elements that are to be converted
+     *  @return true if the conversion was successful
+     */
+    bool convertFromConstant(ConstantMatrixValues*   _values, int nvalues);
+    bool convertFromVarRef(VarReferenceMatrixValues* _values, int nvalues);
     /**
      *  Some methods to convert one type of matrix elements into another
      *  @param _values is the array  of matrix elements that are to be converted
@@ -3124,22 +3408,4 @@ public:
 //    bool convertFromLinear  (LinearMatrixValues*       _values, int nvalues);
 //    bool convertFromConRef  (ConReferenceMatrixValues* _values, int nvalues);
 //    bool convertFromGeneral (RealValuedExpressionArray*      _values, int nvalues);
-
-/**
- *  Some methods to convert one type of matrix element into another
- */
-//RealValuedExpressionTree* convertFromConstant(double val);
-//RealValuedExpressionTree* convertFromVarRef(int varref);
-//RealValuedExpressionTree* convertFromObjRef(int objRef);
-//RealValuedExpressionTree* convertFromLinear(LinearMatrixElement* val);
-//RealValuedExpressionTree* convertFromConRef(ConReferenceMatrixElement* val);
-
-    /**
-     *  Some methods to convert one type of matrix elements into another
-     *  @param _values is the array  of matrix elements that are to be converted
-     *  @param nvalues is the number of matrix elements that are to be converted
-     *  @return true if the conversion was successful
-     */
-    bool convertFromConstant(ConstantMatrixValues*   _values, int nvalues);
-    bool convertFromVarRef(VarReferenceMatrixValues* _values, int nvalues);
 #endif

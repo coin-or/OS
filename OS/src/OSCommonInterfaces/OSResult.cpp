@@ -5489,6 +5489,7 @@ bool OSResult::setOtherVariableResultVarType(int solIdx, int otherIdx, std::stri
     if (optimization->solution == NULL ||
             solIdx < 0 || solIdx >=  nSols) return false;
     if (optimization->solution[solIdx] == NULL) return false;
+
     if (optimization->solution[solIdx]->variables == NULL)return false;
     if (optimization->solution[solIdx]->variables->other == NULL) return false;
     if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
@@ -6738,7 +6739,8 @@ bool OSResult::setMatrixVarValuesAttributes(int solIdx, int idx, int matrixVarId
         ->numberOfColumns = numberOfColumns;
     optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
         ->symmetry = symmetry;
-    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]->type = type;
+    optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]
+        ->declaredMatrixType = type;
     optimization->solution[solIdx]->matrixProgramming->matrixVariables->values->matrixVar[idx]->name = name;
     return true;
 }//setMatrixVarValuesAttributes
@@ -7021,7 +7023,7 @@ bool OSResult::setMatrixVariablesOtherResultMatrixAttributes(int solIdx, int oth
     optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
         ->matrixVar[matrixVarIdx]->symmetry = symmetry;
     optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
-        ->matrixVar[matrixVarIdx]->type = type;
+        ->matrixVar[matrixVarIdx]->declaredMatrixType = type;
     optimization->solution[solIdx]->matrixProgramming->matrixVariables->other[otherIdx]
         ->matrixVar[matrixVarIdx]->name = name;
     return true;

@@ -212,7 +212,7 @@ ExprNode* OSnl2OS::walkTree (expr *e)
     expr **ep;
     int opnum;
     int i;
-    int j = ((expr_v *)e - VAR_E) - osinstance->getVariableNumber() ;
+    long int j = ((expr_v *)e - VAR_E) - osinstance->getVariableNumber() ;
     op = e->op;
     opnum = Intcast op;
     try
@@ -663,7 +663,7 @@ bool OSnl2OS::createOSObjects()
         if (nlExprs.size())
         {
             Nl** ppsNl = new Nl*[ nlExprs.size() ];
-            for (i = 0; i < nlExprs.size(); i++)
+            for (unsigned int i = 0; i < nlExprs.size(); i++)
             {
                 ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
                 ppsNl[i]->m_bDeleteExpressionTree = true;
@@ -899,7 +899,7 @@ bool OSnl2OS::createOSObjects()
      */
 
     SufDesc *d;
-    int suffixType, nOther, nOtherIdx;
+    int suffixType, nOtherIdx;
 
     asl = cw;
 
@@ -954,7 +954,6 @@ bool OSnl2OS::createOSObjects()
         }
 
         bool found;
-        bool extend;
         int  nOther;
         int  nIndexes;
         std::string *otherOptionNames = NULL;

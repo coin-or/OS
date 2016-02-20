@@ -48,7 +48,7 @@ public:
      * @param size is the size of the pointer in bytes
      * @return a string in base 64 format.
      */
-    static std::string encodeb64(char* bytes, int size);
+    static std::string encodeb64(char* bytes, long unsigned int size);
 
     /**
      * decode the data in base 64

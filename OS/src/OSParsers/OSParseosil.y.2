@@ -1673,11 +1673,11 @@ semidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE
     if (parserData->semidefinitenessPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->semidefinitenessPresent = true;
-    if ($2 != "positive" && $2 != "negative")
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "semidefiniteness must be either \"positive\" or \"negative\"");
-    else
-        parserData->semidefiniteness = $2; 
+    parserData->semidefiniteness = $2; 
     free($2);
+    if (parserData->semidefiniteness != "positive" && parserData->semidefiniteness != "negative")
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "semidefiniteness must be either \"positive\" or \"negative\"");
 };
 
 matrixIdxATT: MATRIXIDXATT QUOTE INTEGER QUOTE 

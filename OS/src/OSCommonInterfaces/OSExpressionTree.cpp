@@ -237,6 +237,7 @@ std::map<int, int> *ComplexValuedExpressionTree::getVariableIndicesMap()
     m_bIndexMapGenerated = true;
     return mapVarIdx;
 #endif
+    return NULL;
 }//getVariableIndicesMap
 
 
@@ -394,6 +395,8 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
     std::string tmp1 = "";
     std::string tmp2 = "";
     std::string tmp3 = "";
+    std::string tmp4 = "";
+    std::string tmp5 = "";
     std::stack<ExprNode*> opStack;
     std::stack<std::string> tmpStack;
     std::stack<std::string> sumStack;
@@ -764,10 +767,31 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         break;
 
                     case OS_MATRIX_TRANSPOSE :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing matrix negate operator");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing matrix transpose operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "(" + tmp1 + ")^T");
+                        break;
+
+                    case OS_MATRIX_DIAGONAL :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing matrix diagonal operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "diag(" + tmp1 + ")");
+                        break;
+
+                    case OS_MATRIX_LOWERTRIANGLE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing matrix lower triangle operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "L(" + tmp1 + ")");
+                        break;
+
+                    case OS_MATRIX_UPPERTRIANGLE :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing matrix upper triangle operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push( "U(" + tmp1 + ")");
                         break;
 
                     case OS_MATRIX_SCALARTIMES :
@@ -777,6 +801,45 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         tmp2 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push("(" + tmp1 +  "*"  + tmp2 + ")");
+                        break;
+
+                    case OS_MATRIX_DOTTIMES :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix dot product operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("(" + tmp1 +  "."  + tmp2 + ")");
+                        break;
+
+                    case OS_IDENTITY_MATRIX :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing identity matrix");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("I_" + tmp1);
+                        break;
+
+                    case OS_MATRIX_TO_SCALAR :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix to scalar conversion operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("scalar(" + tmp1 +")");
+                        break;
+
+                    case OS_MATRIX_SUBMATRIX_AT :
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing submatrix operator");
+                        tmp1 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp2 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp3 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp4 = tmpStack.top();
+                        tmpStack.pop();
+                        tmp5 = tmpStack.top();
+                        tmpStack.pop();
+                        tmpStack.push("sub(" + tmp1 +  ")"
+                            + "[" + tmp2 + "," + tmp3 + "," + tmp4 + "," + tmp5 + "]");
                         break;
 
                     case OS_MATRIX_REFERENCE:
@@ -801,7 +864,7 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
 
 
                     case OS_COMPLEX_PLUS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix plus operator");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing complex plus operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmp2 = tmpStack.top();
@@ -810,7 +873,7 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                         break;
 
                     case OS_COMPLEX_SUM :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing matrix sum operator");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing complex sum operator");
                         //std::cout << "INSIDE SUM NODE " << std::endl;
                         nlnodeComplexSum = (OSnLCNodeSum*)nlnode;
                         outStr.str("");
@@ -820,10 +883,10 @@ std::string getExpressionTreeAsInfixString(std::vector<ExprNode*> postfixVec)
                             tmpStack.pop();
                         }
                         outStr << "(";
-                        for(j = 0; j < nlnodeMtxSum->inumberOfChildren; j++)
+                        for(j = 0; j < nlnodeComplexSum->inumberOfChildren; j++)
                         {
                             outStr << cSumStack.top();
-                            if (j < nlnodeMtxSum->inumberOfChildren - 1) outStr << " + ";
+                            if (j < nlnodeComplexSum->inumberOfChildren - 1) outStr << " + ";
                             cSumStack.pop();
                         }
                         outStr << ")";

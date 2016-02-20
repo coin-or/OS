@@ -109,7 +109,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
     const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
     char *pelementText = NULL;
     const char *ptemp = NULL;
-    int elementSize;
+    long int elementSize;
 
     bool namePresent = false;
     bool sourcePresent = false;
@@ -124,7 +124,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
     }
     // increment the line number counter if there are any newlines between the start of
     // the osil string and pinstanceHeadStart
-    int    kount = pinstanceHeadStart - pchar;
+    long int kount = pinstanceHeadStart - pchar;
     while( kount-- > 0) if(*(pchar++) == '\n') (*osillineno)++;
     // important! pchar now points to the '<' in <instanceHeader
     // that is, both pinstanceHeadStart and pchar point to the same thing
@@ -614,7 +614,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -901,7 +902,8 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock();
@@ -1227,7 +1229,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock();    
@@ -1496,7 +1499,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 }//end parseConstraints
 
 bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, int* osillineno){;
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;    
     const char *c_numberOfValues = "numberOfValues";
@@ -1597,7 +1601,8 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -1641,7 +1646,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
         //reset ch
         ch = *p;
         // call base64 parse here
-        int dataSize = 0;
+        long int dataSize = 0;
         char* b64string = parseBase64(&ch, &dataSize, osillineno );
         if( b64string == NULL) {  osilerror_wrapper( ch,osillineno,"<start> must have children or base64 data"); return false;}
         std::string base64decodeddata = Base64::decodeb64( b64string );
@@ -1790,7 +1795,8 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -1836,7 +1842,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
         //reset ch
         ch = *p;
         // call base64 parse here
-        int dataSize = 0;
+        long int dataSize = 0;
         char* b64string = parseBase64(&ch, &dataSize, osillineno );
         if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<rowIdx> must have children or base64 data"); return false;}
         std::string base64decodeddata = Base64::decodeb64( b64string );
@@ -1992,7 +1998,8 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -2038,7 +2045,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
         //reset ch
         ch = *p;
         // call base64 parse here
-        int dataSize = 0;
+        long int dataSize = 0;
         char* b64string = parseBase64(&ch, &dataSize, osillineno );
         if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<colIdx> must have children or base64 data"); return false;}
         std::string base64decodeddata = Base64::decodeb64( b64string );
@@ -2193,7 +2200,8 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock(); 
@@ -2237,7 +2245,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
         //reset ch
         ch = *p;
         // call base64 parse here
-        int dataSize = 0;
+        long int dataSize = 0;
         char* b64string = parseBase64(&ch, &dataSize, osillineno );
         if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<start> must have children or base64 data"); return false;};
         std::string base64decodeddata = Base64::decodeb64( b64string );
@@ -2393,7 +2401,8 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 }//end parseValue
 
 bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* osillineno){
-    int ki, numChar;
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     const char* startCoef = "<coef";
@@ -2451,8 +2460,9 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
     return true;
 }//end parseObjCoef
 
-char *parseBase64(const char **p, int *dataSize, int* osillineno ){
-    int ki, numChar;
+char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
+    long int ki;
+    long int numChar;
     char *attTextEnd;
     const char *ch = *p;
     const char *sizeOf = "sizeOf";
@@ -2493,7 +2503,7 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
     // we should be pointing to </base64BinaryData>
     for(i = 0; endBase64BinaryData[i]  == *ch; i++, ch++);
     if(i != 18) { osilerror_wrapper( ch,osillineno," problem with <base64BinaryData> element"); return false;}
-    int b64len = b64textend - b64textstart;
+    long int b64len = b64textend - b64textstart;
     b64string = new char[ b64len + 1]; 
     for(ki = 0; ki < b64len; ki++) b64string[ki] = b64textstart[ ki]; 
     b64string[ki] = '\0';    

@@ -20,7 +20,7 @@
  * to place temporary data into the correct parser data object.
  */
 %{
-//#define OSILPARSERDEBUG
+#define OSILPARSERDEBUG
 
 #ifdef OSILPARSERDEBUG
 	#define YY_PRINT  printf("matched %i characters: %s\n", yyleng, yytext)
