@@ -3631,7 +3631,8 @@
 	</xs:complexType>
 	<xs:element name="identifier" type="OSnLNodeIdentifier" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0. 
+For symbolic programming, NOT to identify a nonlinear expression or node.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<!--Constant Nodes: since version 1.0.0  -->
