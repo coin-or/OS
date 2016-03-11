@@ -1313,6 +1313,49 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:attribute name="numberOfMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 -->
+
+
+
+	<xs:complexType name="nonlinearComplexValuedExpressions">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="expr" type="nonlinearComplexValuedExpression" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number must agree with numberOfExpr</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="nonlinearComplexValuedExpression">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLCNode"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to existing complex-valued objectives (if negative) or complex-valued constraints (if nonnegative)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+
+			
+
+
 	<xs:complexType name="SpecialOrderedSets">
 		<xs:annotation>
 			<xs:documentation>recommendation</xs:documentation>
@@ -2381,9 +2424,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the el child elements must agree with numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="DisjunctionObjectiveCoefficientElement" maxOccurs="unbounded"/>
+			<xs:element name="el" type="DisjunctionObjectiveCoefficientElement" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>if this location cooincdes with core information, the data get added together.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionLinearConstraintCoefficientElement">
 		<xs:annotation>
@@ -2404,7 +2451,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the el child elements must agree with numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="DisjunctionLinearConstraintCoefficientElement" maxOccurs="unbounded"/>
+			<xs:element name="el" type="DisjunctionLinearConstraintCoefficientElement" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>if this location cooincdes with core information, the data get added together.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2416,9 +2467,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the qTerm child elements must agree with numberOfQuadraticTerms</xs:documentation>
 			</xs:annotation>
-			<xs:element name="qTerm" type="DisjunctionQuadraticTerm" maxOccurs="unbounded"/>
+			<xs:element name="qTerm" type="QuadraticTerm" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>if this location cooincdes with core information, the data get added together.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfQTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionQuadraticTerm">
 		<xs:annotation>
@@ -2434,9 +2489,9 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="nl" type="DisjunctionNl" maxOccurs="unbounded"/>
+			<xs:element name="nl" type="Nl" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionNl">
 		<xs:annotation>
@@ -2744,22 +2799,22 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	<!-- start of a third proposal for disjunctions, derived from the previous two -->
 	<xs:complexType name="Disjunction_mark3">
 		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
+			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="variables" type="DisjunctionVariables_mark3" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="objectives" type="DisjunctionObjectives_mark3" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="constraints" type="DisjunctionConstraints_mark3" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<!--			
@@ -2771,46 +2826,60 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 -->
 			<xs:element name="specialOrderedSets" type="DisjunctionSpecialOrderedSets_mark3" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixVariables" type="DisjunctionMatrixVariables_mark3" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixObjectives" type="DisjunctionMatrixObjectives_mark3" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixConstraints" type="DisjunctionMatrixConstraints_mark3" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="objectiveCoefficients" type="DisjunctionObjectiveCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="linearConstraintCoefficients" type="DisjunctionLinearConstraintCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="quadraticCoefficients" type="DisjunctionQuadraticCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="nonlinearExpressions" type="DisjunctionNonlinearExpressions" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexValuedExpressions" type="ComplexValuedExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="conditioningVariable" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="conditioningVariableIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>disjunction is enforced only if logical conditioning variable is TRUE</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="DisjunctiveSet_mark3">
 		<xs:annotation>
@@ -2843,14 +2912,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 		<xs:attribute name="weight" type="xs:double" use="optional" default="1.0"/>
-		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionCon_mark3">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 	</xs:complexType>
@@ -2896,7 +2963,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the var child elements must agree with numberOfVariables</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" type="DisjunctionVar_mark3" maxOccurs="unbounded"/>
+			<xs:element name="var" type="DisjunctionVar_mark3" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>if lb or up are mentioned, they replace core information</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2908,7 +2979,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the obj child elements must agree with numberOfObjectives</xs:documentation>
 			</xs:annotation>
-			<xs:element name="obj" type="DisjunctionObj_mark3" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="DisjunctionObj_mark3" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>if constant or weight is mentioned, it replaces information in the core</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2920,7 +2995,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the con child elements must agree with numberOfConstraints</xs:documentation>
 			</xs:annotation>
-			<xs:element name="con" type="DisjunctionCon_mark3" maxOccurs="unbounded"/>
+			<xs:element name="con" type="DisjunctionCon_mark3" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>if lb or up are mentioned, they replace core information</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2970,7 +3049,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:annotation>
 			<xs:element name="matrixCon" type="DisjunctionMatrixCon_mark3" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctiveInformation_mark3">
 		<xs:annotation>
@@ -2980,14 +3059,14 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the disjunctiveSet child elements must agree with numberOfDisjunctiveSets</xs:documentation>
 			</xs:annotation>
-			<xs:element name="logicPropositionConditioningVariables" type="NonNegativeIntVector" minOccurs="0">
+			<xs:element name="conditioningVariables" type="NonNegativeIntVector" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>to identify logical core variables that describe conditions under which one of the disjunctions holds</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="logicPropositionConditioningConstraints" type="NonNegativeIntVector" minOccurs="0">
+			<xs:element name="conditioningConstraints" type="NonNegativeIntVector" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>to identify core contraints that describe additional restrictions on the logicPropositionConditioningVariables</xs:documentation>
+					<xs:documentation>to identify core contraints that describe additional restrictions on the logical conditioningVariables</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="disjunctiveSet" type="DisjunctiveSet_mark3" minOccurs="0" maxOccurs="unbounded">
