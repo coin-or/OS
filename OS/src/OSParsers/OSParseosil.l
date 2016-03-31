@@ -125,6 +125,7 @@ twoquotes (\"\"|\'\')
 greater_than (>)
 aninteger ([ \t\n\r]*-?[0-9]+[ \t\n\r]*)
 adouble ([ \t\n\r]*(-?(([0-9]+|[0-9]*\.[0-9]*)([eE][-+]?[0-9]+)?|INF)|NaN)[ \t\n\r]*)
+aboolean (true|false|1|0)
 %% 
  
 {xmlwhitespace}*
@@ -140,6 +141,8 @@ adouble ([ \t\n\r]*(-?(([0-9]+|[0-9]*\.[0-9]*)([eE][-+]?[0-9]+)?|INF)|NaN)[ \t\n
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
 return(DOUBLE);}
+
+{aboolean} {YY_PRINT;  yylval->sval = yytext; return(BOOLEAN);}
 
 ({xmlwhitespace}*\/>) {YY_PRINT; return(ENDOFELEMENT);}
 
@@ -726,6 +729,11 @@ return(DOUBLE);}
 ({xmlwhitespace}+includeDiagonal{equality}\'\') {YY_PRINT; return(EMPTYINCLUDEDIAGONALATT);}
 ({xmlwhitespace}+includeDiagonal{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(INCLUDEDIAGONALATT);}
 ({xmlwhitespace}+includeDiagonal{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(INCLUDEDIAGONALATT);}
+
+({xmlwhitespace}+transpose{equality}\"\") {YY_PRINT; return(EMPTYTRANSPOSEATT);}
+({xmlwhitespace}+transpose{equality}\'\') {YY_PRINT; return(EMPTYTRANSPOSEATT);}
+({xmlwhitespace}+transpose{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TRANSPOSEATT);}
+({xmlwhitespace}+transpose{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TRANSPOSEATT);}
 
  /* last section of OSParseosil.l */
 

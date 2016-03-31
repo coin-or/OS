@@ -61,11 +61,31 @@ public:
     ~OSExpressionTree();
 
     /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
+     * Get a vector of pointers to ExprNodes that correspond to
+     * an OSExpressionTree in prefix format
+     *
+     * </p>
+     *
+     * @return the expression tree as a vector of ExprNodes in prefix.
      */
-    //bool deepCopyFrom(RealValuedExpressionTree *that);
+    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
+
+    /**
+     * Get a vector of pointers to ExprNodes that correspond to
+     * an OSExpressionTree in postfix format
+     *
+     * </p>
+     *
+     * @return the expression tree as a vector of ExprNodes in postfix.
+     */
+    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
+
+    /**
+     * Create or clone an expression tree.
+     * This is an abstract method which is required to be implemented by the concrete
+     * operator nodes that derive or extend from this class.
+     */
+    //virtual OSExpressionTree *cloneExpressionTree() = 0;
 
     /**
      * A function to check for the equality of two objects
@@ -80,18 +100,10 @@ public:
  * \remarks
  * This class stores the OSiL instance in memory as
  * an expression tree.
- *
  */
-
 class RealValuedExpressionTree : public OSExpressionTree
 {
 public:
-
-    /**
-     * m_treeRoot holds the root node (of OSnLNode type) of the expression tree.
-     */
-    //OSnLNode *m_treeRoot;
-
     /**
      * default constructor.
      */
@@ -101,26 +113,6 @@ public:
      * default destructor.
      */
     ~RealValuedExpressionTree();
-
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * a scalar-valued OSExpressionTree in prefix format
-     *
-     * </p>
-     *
-     * @return the expression tree as a vector of ExprNodes in prefix.
-     */
-    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
-
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * a scalar-valued OSExpressionTree in postfix format
-     *
-     * </p>
-     *
-     * @return the expression tree as a vector of ExprNodes in postfix.
-     */
-    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
 
     /**
      * Retrieve a map of the indices of the variables
@@ -144,11 +136,6 @@ public:
     bool bADMustReTape;
 
     /**
-     * m_bDestroyNlNodes is true if the destructor deletes the OSnLNodes in the Expression tree
-     */
-    //bool bDestroyNlNodes;
-
-    /**
      * m_mapVarIdx is a map used to generate the infix expression for AD   
      * the key is idx, a variable number;
      * the value of the map is the location of the corresponding entry in the sparse Jacobian
@@ -168,12 +155,11 @@ public:
      */
     virtual double calculateFunction( double *x, bool new_x);
 
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */    
-    //bool deepCopyFrom(RealValuedExpressionTree *that);
+    /*! \fn OSExpressionTree *cloneExpressionTree() 
+     *  \brief The implementation of the virtual function.
+     *  \return a pointer to a new OSExpressionTree of the proper type.
+     */
+    /*virtual*/ RealValuedExpressionTree *cloneExpressionTree();
 
     /**
      * A function to check for the equality of two objects
@@ -194,7 +180,6 @@ private:
  * \remarks
  * This class stores the OSiL instance in memory as
  * an expression tree.
- *
  */
 class ComplexValuedExpressionTree : public OSExpressionTree
 {
@@ -209,26 +194,6 @@ public:
      * default destructor.
      */
     ~ComplexValuedExpressionTree();
-
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * a complex-valued OSExpressionTree in prefix format
-     *
-     * </p>
-     *
-     * @return the expression tree as a vector of ExprNodes in prefix.
-     */
-    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
-
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * a scalar-valued OSExpressionTree in postfix format
-     *
-     * </p>
-     *
-     * @return the expression tree as a vector of ExprNodes in postfix.
-     */
-    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
 
     /**
      * Retrieve a map of the indices of the variables
@@ -264,12 +229,11 @@ public:
      */
     virtual std::complex<double> calculateFunction( double *x, bool new_x);
 
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */    
-    //bool deepCopyFrom(ComplexValuedExpressionTree *that);
+    /*! \fn OSExpressionTree *cloneExpressionTree()
+     *  \brief The implementation of the virtual function.
+     *  \return a pointer to a new OSExpressionTree of the proper type.
+     */
+    /*virtual*/ ComplexValuedExpressionTree *cloneExpressionTree();
 
     /**
      * A function to check for the equality of two objects
@@ -278,7 +242,6 @@ public:
 
 private:
     /**
-
      * m_dTreeRootValue is the function value of the root node
      */
     std::complex<double> m_dTreeRootValue;
@@ -297,12 +260,6 @@ private:
 class MatrixExpressionTree : public OSExpressionTree
 {
 public:
-
-    /**
-     * m_treeRoot holds the root node (of OSnLMNode type) of the expression tree.
-     */
-    //OSnLMNode *m_treeRoot;
-
     /**
      * default constructor.
      */
@@ -312,26 +269,6 @@ public:
      * default destructor.
      */
     ~MatrixExpressionTree();
-
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * a scalar-valued OSExpressionTree in prefix format
-     *
-     * </p>
-     *
-     * @return the expression tree as a vector of ExprNodes in prefix.
-     */
-    virtual std::vector<ExprNode*> getPrefixFromExpressionTree();
-
-    /**
-     * Get a vector of pointers to ExprNodes that correspond to
-     * a scalar-valued OSExpressionTree in postfix format
-     *
-     * </p>
-     *
-     * @return the expression tree as a vector of ExprNodes in postfix.
-     */
-    virtual std::vector<ExprNode*> getPostfixFromExpressionTree();
 
     /**
      * Retrieve a map of the indices of the variables
@@ -356,11 +293,6 @@ public:
     bool bADMustReTape;
 
     /**
-     * m_bDestroyNlNodes is true if the destructor deletes the OSnLNodes in the Expression tree
-     */
-    bool bDestroyNlNodes;
-
-    /**
      * Calculate the expression tree function value given the current variable
      * values using the calculateFunction method of OSnLNode.
      * If the function has been calculated, the method will retrieve it.
@@ -374,12 +306,11 @@ public:
     //virtual double calculateFunction( double *x, bool new_x);
 #endif
 
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */    
-    //bool deepCopyFrom(MatrixValuedExpressionTree *that);
+    /*! \fn OSExpressionTree *cloneExpressionTree()
+     *  \brief The implementation of the virtual function.
+     *  \return a pointer to a new OSExpressionTree of the proper type.
+     */
+    /*virtual*/ MatrixExpressionTree *cloneExpressionTree();
 
     /**
      * A function to check for the equality of two objects

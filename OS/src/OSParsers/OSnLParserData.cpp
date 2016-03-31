@@ -34,7 +34,9 @@ OSnLParserData::OSnLParserData() :
     Re(0.0),
     Im(0.0),
     includeDiagonalAttributePresent(false),
-    includeDiagonalAttribute(true)
+    includeDiagonalAttribute(true),
+    transposeAttributePresent(false),
+    matrixTransposeAttribute(false)
 {
 
 }//OSnLParserData

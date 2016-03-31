@@ -3049,10 +3049,6 @@ bool OSInstance::processMatrices()
                 m_miMatrixNumberOfRows    = new int[n];
                 m_msMatrixNames           = new std::string[n];
                 m_mMatrix                 = new OSMatrix*[n];
-//                m_mExpandedMatricesInColumnMajor = new GeneralSparseMatrix*[n];
-//                m_mExpandedMatricesInRowMajor = new GeneralSparseMatrix*[n];
-//                m_mMatrixBlocksInColumnMajor = new ExpandedMatrixBlocks*[n];
-//                m_mMatrixTransformation = new OSnLMNode*[n];
                 m_bProcessMatrices = true;
             }
 

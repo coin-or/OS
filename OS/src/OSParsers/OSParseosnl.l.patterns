@@ -147,3 +147,8 @@
 ({xmlwhitespace}+includeDiagonal{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(INCLUDEDIAGONALATT);}
 ({xmlwhitespace}+includeDiagonal{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(INCLUDEDIAGONALATT);}
 
+({xmlwhitespace}+transpose{equality}\"\") {YY_PRINT; return(EMPTYTRANSPOSEATT);}
+({xmlwhitespace}+transpose{equality}\'\') {YY_PRINT; return(EMPTYTRANSPOSEATT);}
+({xmlwhitespace}+transpose{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TRANSPOSEATT);}
+({xmlwhitespace}+transpose{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TRANSPOSEATT);}
+

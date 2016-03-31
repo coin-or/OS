@@ -1513,12 +1513,12 @@ weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "weighted objective attribute previously set");
     parserData->weightedObjAttributePresent = true;
     parserData->tempStr = $2; free($2);
-    if (parserData->tempStr == "true")
+    if (parserData->tempStr == "true" || parserData->tempStr == "1")
     {
           if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, true) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionWeightedObjectives failed");
     }
-    else if (parserData->tempStr == "false")
+    else if (parserData->tempStr == "false" || parserData->tempStr == "0")
     {
           if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, false) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionWeightedObjectives failed");

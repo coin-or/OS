@@ -50,6 +50,27 @@ OSExpressionTree::~OSExpressionTree()
     }
 }//end ~OSExpressionTree
 
+
+std::vector<ExprNode*> OSExpressionTree::getPrefixFromExpressionTree()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+        "get prefix from an expression tree");
+#endif
+    return m_treeRoot->getPrefixFromExpressionTree();
+}//getPrefixFromExpressionTree
+
+
+std::vector<ExprNode*> OSExpressionTree::getPostfixFromExpressionTree()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
+        "get postfix from an expression tree");
+#endif
+    return m_treeRoot->getPostfixFromExpressionTree();
+}//getPostfixFromExpressionTree
+
+
 bool OSExpressionTree::IsEqual(OSExpressionTree *that)
 {
 #ifndef NDEBUG
@@ -116,18 +137,6 @@ RealValuedExpressionTree::~RealValuedExpressionTree()
     }
 }//end ~RealValuedExpressionTree
 
-std::vector<ExprNode*> RealValuedExpressionTree::getPrefixFromExpressionTree()
-{
-    return ((OSnLNode*)m_treeRoot)->getPrefixFromExpressionTree();
-}//getPrefixFromExpressionTree
-
-
-std::vector<ExprNode*> RealValuedExpressionTree::getPostfixFromExpressionTree()
-{
-    return ((OSnLNode*)m_treeRoot)->getPostfixFromExpressionTree();
-}//getPostfixFromExpressionTree
-
-
 std::map<int, int> *RealValuedExpressionTree::getVariableIndicesMap()
 {
     if( m_bIndexMapGenerated == true) return mapVarIdx;
@@ -152,6 +161,25 @@ double RealValuedExpressionTree::calculateFunction( double *x, bool new_x)
         return  m_dTreeRootValue;
     }
 }//calculateFunction
+
+RealValuedExpressionTree* RealValuedExpressionTree::cloneExpressionTree()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+       "cloning a real-valued expression tree");
+#endif
+    RealValuedExpressionTree *osTree;
+    osTree = new RealValuedExpressionTree();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << osTree << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    osTree->m_treeRoot = this->m_treeRoot->cloneExprNode();
+    return osTree;
+}//RealValuedExpressionTree::cloneExpressionTree
 
 
 bool RealValuedExpressionTree::IsEqual(RealValuedExpressionTree *that)
@@ -214,18 +242,6 @@ ComplexValuedExpressionTree::~ComplexValuedExpressionTree()
 //    }
 }//end ~ComplexValuedExpressionTree
 
-std::vector<ExprNode*> ComplexValuedExpressionTree::getPrefixFromExpressionTree()
-{
-    return ((OSnLCNode*)m_treeRoot)->getPrefixFromExpressionTree();
-}//getPrefixFromExpressionTree
-
-
-std::vector<ExprNode*> ComplexValuedExpressionTree::getPostfixFromExpressionTree()
-{
-    return ((OSnLCNode*)m_treeRoot)->getPostfixFromExpressionTree();
-}//getPostfixFromExpressionTree
-
-
 
 std::map<int, int> *ComplexValuedExpressionTree::getVariableIndicesMap()
 {
@@ -255,6 +271,25 @@ std::complex<double> ComplexValuedExpressionTree::calculateFunction( double *x, 
     }
 }//calculateFunction
 
+
+ComplexValuedExpressionTree* ComplexValuedExpressionTree::cloneExpressionTree()
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+       "cloning a complex-valued expression tree");
+#endif
+    ComplexValuedExpressionTree *osTree;
+    osTree = new ComplexValuedExpressionTree();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << osTree << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    osTree->m_treeRoot = this->m_treeRoot->cloneExprNode();
+    return osTree;
+}//ComplexValuedExpressionTree::cloneExpressionTree
 
 bool ComplexValuedExpressionTree::IsEqual(ComplexValuedExpressionTree *that)
 {
@@ -318,17 +353,24 @@ MatrixExpressionTree::~MatrixExpressionTree()
 }//end ~MatrixExpressionTree
 
 
-std::vector<ExprNode*> MatrixExpressionTree::getPrefixFromExpressionTree()
+MatrixExpressionTree* MatrixExpressionTree::cloneExpressionTree()
 {
-    return ((OSnLMNode*)m_treeRoot)->/*OSnLMNode::*/getPrefixFromExpressionTree();
-}//getPrefixFromExpressionTree
-
-
-std::vector<ExprNode*> MatrixExpressionTree::getPostfixFromExpressionTree()
-{
-    return ((OSnLMNode*)m_treeRoot)->/*OSnLMNode::*/getPostfixFromExpressionTree();
-}//getPostfixFromExpressionTree
-
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, 
+       "cloning a matrix-valued expression tree");
+#endif
+    MatrixExpressionTree *osTree;
+    osTree = new MatrixExpressionTree();
+#ifndef NDEBUG
+    outStr.str( std::string() );
+    outStr.clear();
+    outStr << "Allocate memory at address " << osTree << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
+#endif
+    osTree->m_treeRoot = this->m_treeRoot->cloneExprNode();
+    return osTree;
+}//MatrixExpressionTree::cloneExpressionTree
 
 bool MatrixExpressionTree::IsEqual(MatrixExpressionTree *that)
 {

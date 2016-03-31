@@ -1003,15 +1003,15 @@ if (PARSER_TESTS)
 extern const OSSmartPtr<OSOutput> osoutput;
         osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL) 7);
 
-            for (int i=5; i < instance1->instanceData->matrices->numberOfMatrices; i++)
+            for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
             {
                 try
                 {
                     cout << endl << "Test expansion of matrix " << i << " in column major form" << endl;
                     instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInColumnMajor();
                     cout << endl << "Matrix expanded" << endl << endl;
-                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
                     cout << endl << "Completed successfully" << endl << endl;
+                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
                 }
                 catch(const ErrorClass& eclass)
                 {
@@ -1024,8 +1024,8 @@ extern const OSSmartPtr<OSOutput> osoutput;
 //                    cout << endl << "Test expansion of matrix " << i << " in row major form" << endl;
 //                    instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInRowMajor();
 //                    cout << endl << "Matrix expanded" << endl << endl;
-//                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
 //                    cout << endl << "Completed successfully" << endl << endl;
+//                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
                 }
                 catch(const ErrorClass& eclass)
                 {

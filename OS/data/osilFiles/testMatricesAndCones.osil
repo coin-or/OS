@@ -369,7 +369,6 @@
                         <el>
                             <plus>
 
-
                                 <matrixDeterminant>
                                     <matrixReference idx="0"></matrixReference>
                                 </matrixDeterminant>                                        

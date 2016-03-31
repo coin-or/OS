@@ -491,16 +491,30 @@ OSnLMNode: matrixReference
          | identityMatrix
 ;
 
-matrixReference: matrixReferenceStart matrixIdxATT matrixReferenceEnd 
+matrixReference: matrixReferenceStart matrixRefAttributeList matrixReferenceEnd 
 {
     osnlData->matrixidxattON = false;
+    if (osnlData->idxAttributePresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory idx attribute missing");
+    if (osnlData->transposeAttributePresent == true)
+        osnlData->nlMNodeMatrixRef->transpose = osnlData->matrixTransposeAttribute;
+    osnlData->idxAttributePresent = false;
+    osnlData->transposeAttributePresent = false;
 };
 
 matrixReferenceStart: MATRIXREFERENCESTART
 {
     osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixRef);
+    osnlData->idxAttributePresent = false;
+    osnlData->transposeAttributePresent = false;
 };
+
+matrixRefAttributeList: | matrixRefAttributeList matrixRefAttribute;
+
+matrixRefAttribute:
+    matrixIdxATT
+  | matrixTransposeATT 
 
               
 matrixReferenceEnd: ENDOFELEMENT
@@ -508,10 +522,26 @@ matrixReferenceEnd: ENDOFELEMENT
                            
 matrixIdxATT: IDXATT QUOTE INTEGER QUOTE 
 {
+    if (osnlData->idxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "idx attribute repeated");
     if ( *$2 != *$4 )
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
+    osnlData->idxAttributePresent = true;
 }; 
+
+matrixTransposeATT: TRANSPOSEATT ATTRIBUTETEXT QUOTE 
+{
+    if (osnlData->transposeAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "transpose attribute repeated");
+    if      (strcmp($2,"false") == 0) osnlData->matrixTransposeAttribute = false;
+    else if (strcmp($2,"true" ) == 0) osnlData->matrixTransposeAttribute = true;
+    else if (strcmp($2,"1"    ) == 0) osnlData->matrixTransposeAttribute = true;
+    else if (strcmp($2,"0"    ) == 0) osnlData->matrixTransposeAttribute = false;
+    else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "osnlData->includeDiagonal attribute must be \"true\" or \"false\"");
+    free($2);
+    osnlData->transposeAttributePresent = true;
+};
 
 
 matrixVarReference: matrixVarReferenceStart matrixVarIdxATT matrixVarReferenceEnd 
@@ -654,6 +684,8 @@ includeDiagonalATT: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE
 {
     if      (strcmp($2,"false") == 0) osnlData->includeDiagonalAttribute = false;
     else if (strcmp($2,"true" ) == 0) osnlData->includeDiagonalAttribute = true;
+    else if (strcmp($2,"1"    ) == 0) osnlData->includeDiagonalAttribute = true;
+    else if (strcmp($2,"0"    ) == 0) osnlData->includeDiagonalAttribute = false;
     else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "osnlData->includeDiagonal attribute must be \"true\" or \"false\"");
     free($2);
 };

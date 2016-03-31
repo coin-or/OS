@@ -4301,7 +4301,7 @@ PathPairMakeCopyATT: MAKECOPYATT ATTRIBUTETEXT QUOTE
     if (parserData->pathPairMakeCopyPresent)
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "only one \"makeCopy\" attribute allowed");
     parserData->pathPairMakeCopyPresent = true;
-    parserData->pathPairMakeCopy = (strcmp($2,"true") == 0);
+    parserData->pathPairMakeCopy = (strcmp($2,"true") == 0 || strcmp($2,"1") == 0);
     free($2);
 };
 

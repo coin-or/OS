@@ -1000,22 +1000,10 @@ public:
      */
     virtual std::string getNodeName();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * <p>
@@ -1097,22 +1085,10 @@ public:
      */
     virtual std::string getNodeName();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * <p>
@@ -1189,22 +1165,10 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1288,22 +1252,10 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1395,22 +1347,10 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1492,22 +1432,10 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1588,22 +1516,10 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1686,22 +1602,10 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * @return the name of the matrix constructor
@@ -1800,22 +1704,10 @@ public:
      */
     virtual ENUM_MATRIX_CONSTRUCTOR_TYPE getNodeType();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
  
     /**
      * @return the name of the matrix constructor
@@ -1903,22 +1795,10 @@ public:
      */
     virtual std::string getNodeName();
 
-#if 0
-    /**
-     *  @return the declared type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getDeclaredMatrixType();
-
     /**
      *  @return the inferred type of the matrix elements
      */
     virtual ENUM_MATRIX_TYPE getInferredMatrixType();
-
-    /**
-     *  @return the amalgamated type of the matrix elements
-     */
-    virtual ENUM_MATRIX_TYPE getMatrixType();
-#endif
 
     /**
      * <p>
@@ -2405,13 +2285,13 @@ public:
     /**
      * Alternate constructor.
      *
-     * @param isColumnMajor holds whether the matrix is stored by column. 
-     * If false, the matrix is stored by row.
+     * @param isRowMajor holds whether the matrix is stored by column. 
+     * If true, the matrix is stored by row.
      * @param startSize holds the size of the start array.
      * @param valueSize holds the size of the value and index arrays.
      * @param type describes the type of values held in the matrix (see OSParameters.h).
      */
-    GeneralSparseMatrix(bool isColumnMajor, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
+    GeneralSparseMatrix(bool isRowMajor, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
 
     /**
      *
@@ -2457,7 +2337,7 @@ public:
 
     /**
      * isRowMajor holds whether the (nonzero) values holding the
-     * data are stored by columnrow. If false, the matrix is stored by column.
+     * data are stored by column or row. If false, the matrix is stored by column.
      */
     bool isRowMajor;
 
@@ -2521,12 +2401,12 @@ public:
     /**
      * Alternate constructor.
      *
-     * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
-     * data is stored by column. If false, the matrix is stored by row.
+     * @param isRowMajor_ holds whether the blocks are stored by row or by column.
+     * If true, the blocks are stored by row.
      * @param startSize holds the size of the start array.
      * @param valueSize holds the size of the value and index arrays.
      */
-    ExpandedMatrixBlocks(bool isColumnMajor_, int startSize, int valueSize);
+    ExpandedMatrixBlocks(bool isRowMajor_, int startSize, int valueSize);
 
     /**
      *
@@ -2772,14 +2652,16 @@ public:
      *  A method to repackage an elements constructor into the form required in the referencing matrixType. 
      *  Processing may include transposing the elements and applying symmetry.
      *
+     *  @param constructorNo_ gives the number of the constructor within the constructor list
+     *         of the parent matrix or block
      *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
      *         or column major.
      *  @param symmetry can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the expanded elements as a pointer to a GeneralSparseMatrix object.
      */
-     virtual GeneralSparseMatrix* extractElements(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
-
+     virtual GeneralSparseMatrix* extractElements(int constructorNo_, bool rowMajor,
+                                                  ENUM_MATRIX_SYMMETRY symmetry);
     /**
      *  A method to expand a matrix transformation into the form required in the referencing matrixType. 
      *  Processing may require recursion, transposing the elements, and applying symmetry.

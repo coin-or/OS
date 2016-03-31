@@ -2904,50 +2904,6 @@ private:
      */
     OSMatrix** m_mMatrix;
 
-#if 0
-    /**
-     * This and the following definitions are placeholders for the representation
-     * of the matrices in different formats. For now three formats are provided:
-     * column major format, row major format, and a symmetric block representation 
-     * needed for the CSDP interface.
-     *
-     * Additional placeholders may be defined (and implemented!) as the need arises.
-     *
-     * In each case the values are stored in sparse matrix format (start, index, value)
-     * and all values are converted to the most general form encountered. 
-     * (The form is also available in m_miMatrixType.)
-     *
-     * For instance, in the matrix
-     *
-     *     |  5      x1   |
-     *     | x2^2  ln(x3) |
-     * 
-     * every (nonzero) entry would be converted to a nonlinear expression, and 
-     * m_miMatrixType would be set to ENUM_MATRIX_TYPE_general.
-     * 
-     * m_mExpandedMatricesInColumnMajor holds each matrix in column major format
-     */
-    GeneralSparseMatrix** m_mExpandedMatricesInColumnMajor;
-
-    /**
-     * m_mExpandedMatricesInRowMajor holds each matrix in row major format
-     */
-    GeneralSparseMatrix** m_mExpandedMatricesInRowMajor;
-
-    /**
-     * m_mMatrixBlocksInColumnMajor holds each matrix in a block partition form.
-     * In addition, this format assumes that the matrix is stored in.
-     * column major form and that all nesting has been resolved.
-     */
-    ExpandedMatrixBlocks** m_mMatrixBlocksInColumnMajor;
-
-    /**
-     * m_mMatrixTransformation holds each matrix as a single transformation.
-     * Any other matrix constructors are concatenated by superposition.
-     * HIG: More work needed here!!! For now only allow transformation as single constructor
-     */
-    OSnLMNode *m_mMatrixTransformation;
-#endif
 
     /** ------- data items for matrix programming ------- **/
     /**

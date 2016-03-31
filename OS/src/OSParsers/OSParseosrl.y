@@ -107,6 +107,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token <dval> DOUBLE
 %token <sval> QUOTE
 %token <sval> TWOQUOTES
+%token <sval> BOOLEAN
 
 %token GREATERTHAN ENDOFELEMENT
 
@@ -323,7 +324,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token COMPLEXSUMSTART COMPLEXSUMEND COMPLEXTIMESSTART COMPLEXTIMESEND
 %token CREATECOMPLEXSTART CREATECOMPLEXEND
 
-%token EMPTYINCLUDEDIAGONALATT INCLUDEDIAGONALATT
+%token EMPTYINCLUDEDIAGONALATT INCLUDEDIAGONALATT EMPTYTRANSPOSEATT TRANSPOSEATT
 
 %token EMPTYIDATT IDATT
 
@@ -1842,12 +1843,12 @@ weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
         osrlerror(NULL, NULL, parserData, osglData, osnlData, "weighted objective attribute previously set");
     parserData->weightedObjAttributePresent = true;
     parserData->tempStr = $2; free($2);
-    if (parserData->tempStr == "true")
+    if (parserData->tempStr == "true" || parserData->tempStr == "1")
     {
           if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, true) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionWeightedObjectives failed");
     }
-    else if (parserData->tempStr == "false")
+    else if (parserData->tempStr == "false" || parserData->tempStr == "0")
     {
           if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, false) == false)
             osrlerror(NULL, NULL, parserData, osglData, osnlData, "setSolutionWeightedObjectives failed");
@@ -5183,8 +5184,6 @@ constantElementsAtt:
     osglNumberOfValuesATT
     {
         ((ConstantMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_constant;
     }
   | osglRowMajorATT
     {
@@ -5310,8 +5309,6 @@ varReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((VarReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_varReference;
     }
   | osglRowMajorATT
     {
@@ -5373,8 +5370,6 @@ linearElementsAtt:
     osglNumberOfValuesATT
     {
         ((LinearMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_linear;
     }
   | osglRowMajorATT
     {
@@ -5522,9 +5517,6 @@ realValuedExpressionsAtt:
     osglNumberOfValuesATT
     {
         ((RealValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
-                = ENUM_MATRIX_TYPE_realValuedExpressions;
     }
   | osglRowMajorATT
     {
@@ -5630,9 +5622,6 @@ complexValuedExpressionsAtt:
     osglNumberOfValuesATT
     {
         ((ComplexValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
-                = ENUM_MATRIX_TYPE_complexValuedExpressions;
     }
   | osglRowMajorATT
     {
@@ -5739,8 +5728,6 @@ objReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_objReference;
     }
   | osglRowMajorATT
     {
@@ -5802,8 +5789,6 @@ conReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((ConReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_conReference;
     }
   | osglRowMajorATT
     {
@@ -5934,9 +5919,6 @@ complexElementsAtt:
     osglNumberOfValuesATT
     {
         ((ComplexMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
-                = ENUM_MATRIX_TYPE_complexConstant;
     }
   | osglRowMajorATT
     {
@@ -6056,8 +6038,6 @@ stringValuedElementsAtt:
     osglNumberOfValuesATT
     {
         ((StringValuedMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_string;
     }
   | osglRowMajorATT
     {
@@ -6822,6 +6802,8 @@ baseTransposeAttContent: BASETRANSPOSEATT ATTRIBUTETEXT quote
     {
         if      (strcmp($2,"false") == 0) osglData->baseTranspose = false;
         else if (strcmp($2,"true" ) == 0) osglData->baseTranspose = true;
+        else if (strcmp($2,"1"    ) == 0) osglData->baseTranspose = true;
+        else if (strcmp($2,"0"    ) == 0) osglData->baseTranspose = false;
         else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, 
             "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
     }
@@ -7030,6 +7012,8 @@ rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT QUOTE
     {
         if      (strcmp($2,"false") == 0) osglData->rowMajor = false;
         else if (strcmp($2,"true" ) == 0) osglData->rowMajor = true;
+        else if (strcmp($2,"1"    ) == 0) osglData->rowMajor = true;
+        else if (strcmp($2,"0"    ) == 0) osglData->rowMajor = false;
         else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "rowMajor attribute must be \"true\" or \"false\"");
     }
     osglData->rowMajorPresent = true;
@@ -7676,16 +7660,30 @@ OSnLMNode: matrixReference
          | identityMatrix
 ;
 
-matrixReference: matrixReferenceStart matrixIdxATT matrixReferenceEnd 
+matrixReference: matrixReferenceStart matrixRefAttributeList matrixReferenceEnd 
 {
     osnlData->matrixidxattON = false;
+    if (osnlData->idxAttributePresent == false)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "mandatory idx attribute missing");
+    if (osnlData->transposeAttributePresent == true)
+        osnlData->nlMNodeMatrixRef->transpose = osnlData->matrixTransposeAttribute;
+    osnlData->idxAttributePresent = false;
+    osnlData->transposeAttributePresent = false;
 };
 
 matrixReferenceStart: MATRIXREFERENCESTART
 {
     osnlData->nlMNodeMatrixRef = new OSnLMNodeMatrixReference();
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixRef);
+    osnlData->idxAttributePresent = false;
+    osnlData->transposeAttributePresent = false;
 };
+
+matrixRefAttributeList: | matrixRefAttributeList matrixRefAttribute;
+
+matrixRefAttribute:
+    matrixIdxATT
+  | matrixTransposeATT 
 
               
 matrixReferenceEnd: ENDOFELEMENT
@@ -7693,10 +7691,26 @@ matrixReferenceEnd: ENDOFELEMENT
                            
 matrixIdxATT: IDXATT QUOTE INTEGER QUOTE 
 {
+    if (osnlData->idxAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "idx attribute repeated");
     if ( *$2 != *$4 )
         parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlMNodeMatrixRef->idx = $3;
+    osnlData->idxAttributePresent = true;
 }; 
+
+matrixTransposeATT: TRANSPOSEATT ATTRIBUTETEXT QUOTE 
+{
+    if (osnlData->transposeAttributePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "transpose attribute repeated");
+    if      (strcmp($2,"false") == 0) osnlData->matrixTransposeAttribute = false;
+    else if (strcmp($2,"true" ) == 0) osnlData->matrixTransposeAttribute = true;
+    else if (strcmp($2,"1"    ) == 0) osnlData->matrixTransposeAttribute = true;
+    else if (strcmp($2,"0"    ) == 0) osnlData->matrixTransposeAttribute = false;
+    else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "osnlData->includeDiagonal attribute must be \"true\" or \"false\"");
+    free($2);
+    osnlData->transposeAttributePresent = true;
+};
 
 
 matrixVarReference: matrixVarReferenceStart matrixVarIdxATT matrixVarReferenceEnd 
@@ -7839,6 +7853,8 @@ includeDiagonalATT: INCLUDEDIAGONALATT ATTRIBUTETEXT QUOTE
 {
     if      (strcmp($2,"false") == 0) osnlData->includeDiagonalAttribute = false;
     else if (strcmp($2,"true" ) == 0) osnlData->includeDiagonalAttribute = true;
+    else if (strcmp($2,"1"    ) == 0) osnlData->includeDiagonalAttribute = true;
+    else if (strcmp($2,"0"    ) == 0) osnlData->includeDiagonalAttribute = false;
     else parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "osnlData->includeDiagonal attribute must be \"true\" or \"false\"");
     free($2);
 };

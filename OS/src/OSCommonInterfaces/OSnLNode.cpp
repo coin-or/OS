@@ -116,6 +116,19 @@ std::string ExprNode::getTokenNumber()
     return outStr.str();
 }//getTokenNumber
 
+std::string ExprNode::getNodeInfo(bool recurse, int indent)
+{
+    ostringstream outStr;
+    for (int i=0; i < indent; i++)
+        outStr << " ";
+    outStr << "node address: " << this;
+    outStr << " type: " << inodeInt << "(" << &inodeInt << ")" << " number of Children: "; 
+    outStr << inumberOfChildren << "(" << &inumberOfChildren << ")" << std::endl;
+    if (recurse)
+        for (int i=0; i < inumberOfChildren; i++)
+            outStr << m_mChildren[i]->getNodeInfo(true, indent+2);
+    return outStr.str();
+}//getNodeInfo
 
 std::string ExprNode::getNonlinearExpressionInXML()
 {
@@ -161,14 +174,15 @@ std::vector<ExprNode*> ExprNode::preOrderOSnLNodeTraversal( std::vector<ExprNode
     if(inumberOfChildren > 0)
     {
         for(unsigned int i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->ExprNode::preOrderOSnLNodeTraversal( prefixVector);
+            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
     }
     return *prefixVector;
 }//end preOrderOSnLNodeTraversal
 
-std::vector<ExprNode*> ExprNode::getPostfixFromExpressionTree( )
+std::vector<ExprNode*> ExprNode::getPostfixFromExpressionTree()
 {
     std::vector<ExprNode*> postfixVector;
+std::cout << "get postfix from a generic expression node" << std::endl;
     return postOrderOSnLNodeTraversal( &postfixVector);
 }//getPostfixFromExpressionTree
 
@@ -179,11 +193,59 @@ std::vector<ExprNode*> ExprNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
     {
         unsigned int i;
         for(i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->ExprNode::postOrderOSnLNodeTraversal( postfixVector);
+            m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
     (*postfixVector).push_back( this);
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
+
+
+ExprNode* ExprNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
+{
+    std::vector<ExprNode*> stackVec;
+    int kount =  nlNodeVec.size() - 1;
+    while(kount >= 0)
+    {
+        int numkids = nlNodeVec[kount]->inumberOfChildren;
+
+        if(numkids > 0)
+        {
+            for(int i = 0; i < numkids; i++)
+            {
+                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+        stackVec.push_back( nlNodeVec[kount]);
+        kount--;
+    }
+    stackVec.clear();
+    return (ExprNode*)nlNodeVec[ 0];
+}//end createExpressionTreeFromPrefix
+
+ExprNode* ExprNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec)
+{
+    std::vector<ExprNode*> stackVec;
+
+    unsigned int kount =  0;
+    while(kount <= nlNodeVec.size() - 1)
+    {
+        int numkids = nlNodeVec[kount]->inumberOfChildren;
+        if (numkids  > 0)
+        {
+            for(int i = numkids - 1; i >= 0;  i--)
+            {
+                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                stackVec.pop_back();
+            }
+        }
+        stackVec.push_back( nlNodeVec[kount]);
+        kount++;
+    }
+    stackVec.clear();
+    return (ExprNode*)nlNodeVec[ kount - 1];
+}//end createExpressionTreeFromPostfix
+
 
 // Dummy implementations for calculate functions
 double ExprNode::calculateFunction(double *x)
@@ -191,23 +253,24 @@ double ExprNode::calculateFunction(double *x)
     return OSNaN();
 }
 
-ADdouble ExprNode::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
-{
-    return 0.0;
-}
-
 std::complex<double> ExprNode::calculateFunction_C(double *x)
 {
     return 0;
 }
 
-//ADdouble ExprNode::constructADTape_C(std::map<int, int> *ADIdx, ADvector *XAD){};
+OSMatrix* ExprNode::calculateFunction_M(double *x)
+{
+    return NULL;
+}
 
-//OSMatrix* ExprNode::calculateFunction_M(double *x)
-//{
-//}
+ADdouble ExprNode::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
+{
+    return 0.0;
+}
 
 //ADdouble ExprNode::constructADTape_M(std::map<int, int> *ADIdx, ADvector *XAD){};
+
+//ADdouble ExprNode::constructADTape_C(std::map<int, int> *ADIdx, ADvector *XAD){};
 
 bool ExprNode::IsEqual(ExprNode *that)
 {
@@ -277,16 +340,16 @@ ScalarNode::~ScalarNode()
 }//end ~ScalarNode
 
 
-std::string ScalarNode::getTokenNumber()
-{
-    return "0";
-}//getTokenNumber
-
 std::string ScalarNode::getTokenName()
 {
     return "generic scalar";
 }//getTokenName
 
+
+std::string ScalarNode::getTokenNumber()
+{
+    return "0";
+}//getTokenNumber
 
 bool ScalarNode::IsEqual(ScalarNode *that)
 {
@@ -356,6 +419,21 @@ OSnLNode::~OSnLNode()
 #endif
 }//end ~OSnLNode
 
+void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
+{
+    unsigned int i;
+    if(inodeInt != OS_VARIABLE)
+    {
+        for(i = 0; i < inumberOfChildren; i++)
+        {
+            if (!m_mChildren[ i]->inodeKind == 1)
+                throw ErrorClass("Can only evaluate real-valued nodes so far");
+            ((OSnLNode*)m_mChildren[ i])->getVariableIndexMap( varIdx);
+        }
+    }
+}//getVariableIndexMap
+
+
 OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
 {
     std::vector<ExprNode*> stackVec;
@@ -378,6 +456,25 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNode
     stackVec.clear();
     return (OSnLNode*)nlNodeVec[ 0];
 }//end createExpressionTreeFromPrefix
+
+#if 0
+std::vector<ExprNode*> OSnLNode::getPrefixFromExpressionTree()
+{
+    std::vector<ExprNode*> prefixVector;
+    return preOrderOSnLNodeTraversal( &prefixVector);
+}//getPrefixFromExpressionTree
+
+std::vector<ExprNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector)
+{
+    (*prefixVector).push_back( (OSnLNode*)this);
+    if(inumberOfChildren > 0)
+    {
+        for(unsigned int i = 0; i < inumberOfChildren; i++)
+            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
+    }
+    return *prefixVector;
+}//end preOrderOSnLNodeTraversal
+#endif
 
 OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec)
 {
@@ -402,30 +499,13 @@ OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNod
     return (OSnLNode*)nlNodeVec[ kount - 1];
 }//end createExpressionTreeFromPostfix
 
-
-std::vector<ExprNode*> OSnLNode::getPrefixFromExpressionTree()
-{
-    std::vector<ExprNode*> prefixVector;
-    return preOrderOSnLNodeTraversal( &prefixVector);
-}//getPrefixFromExpressionTree
-
-std::vector<ExprNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<ExprNode*> *prefixVector)
-{
-    (*prefixVector).push_back( (OSnLNode*)this);
-    if(inumberOfChildren > 0)
-    {
-        for(unsigned int i = 0; i < inumberOfChildren; i++)
-            m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
-    }
-    return *prefixVector;
-}//end preOrderOSnLNodeTraversal
-
+#if 0
 std::vector<ExprNode*> OSnLNode::getPostfixFromExpressionTree( )
 {
     std::vector<ExprNode*> postfixVector;
+std::cout << "get postfix from an OSnLNode" << std::endl;
     return postOrderOSnLNodeTraversal( &postfixVector);
 }//getPostfixFromExpressionTree
-
 
 std::vector<ExprNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<ExprNode*> *postfixVector)
 {
@@ -438,21 +518,7 @@ std::vector<ExprNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<ExprNod
     (*postfixVector).push_back( (OSnLNode*)this);
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
-
-void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx)
-{
-    unsigned int i;
-    if(inodeInt != OS_VARIABLE)
-    {
-        for(i = 0; i < inumberOfChildren; i++)
-        {
-            if (!m_mChildren[ i]->inodeKind == 1)
-                throw ErrorClass("Can only evaluate real-valued nodes so far");
-            ((OSnLNode*)m_mChildren[ i])->getVariableIndexMap( varIdx);
-        }
-    }
-}//getVariableIndexMap
-
+#endif
 
 bool OSnLNode::IsEqual(OSnLNode *that)
 {
@@ -557,7 +623,7 @@ ExprNode* OSnLNodePlus::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodePlus");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodePlus();
 #ifndef NDEBUG
     outStr.str( std::string() );
@@ -565,7 +631,18 @@ ExprNode* OSnLNodePlus::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                     
     return nlNodePoint;
 }//end OSnLNodePlus::cloneExprNode
 
@@ -624,13 +701,24 @@ ExprNode* OSnLNodeSum::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeSum");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeSum();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeSum::cloneExprNode
 //end OSnLNodeSum methods
@@ -705,13 +793,24 @@ ExprNode* OSnLNodeAllDiff::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeAllDiff");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeAllDiff();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeAllDiff::cloneExprNode
 //end OSnLNodeAllDiff methods
@@ -778,13 +877,24 @@ ExprNode* OSnLNodeMax::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeMax");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMax();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeMax::cloneExprNode
 
@@ -852,13 +962,24 @@ ExprNode* OSnLNodeMin::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeMin");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMin();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeMin::cloneExprNode
 
@@ -912,13 +1033,24 @@ ExprNode* OSnLNodeMinus::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeMinus");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeMinus();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeMinus::cloneExprNode
 
@@ -970,13 +1102,24 @@ ExprNode* OSnLNodeNegate::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeNegate");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeNegate();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeNegate::cloneExprNode
 
@@ -1028,13 +1171,24 @@ ExprNode* OSnLNodeTimes::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeTimes");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeTimes();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeTimes::cloneExprNode
 
@@ -1089,13 +1243,24 @@ ExprNode* OSnLNodeDivide::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeDivide");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeDivide();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeDivide::cloneExprNode
 
@@ -1170,13 +1335,24 @@ ExprNode* OSnLNodePower::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodePower");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodePower();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodePower::cloneExprNode
 
@@ -1238,13 +1414,24 @@ ExprNode* OSnLNodeProduct::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeProduct");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeProduct();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeProduct::cloneExprNode
 
@@ -1296,13 +1483,24 @@ ExprNode* OSnLNodeLn::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeLn");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeLn();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeLn::cloneExprNode
 
@@ -1354,13 +1552,24 @@ ExprNode* OSnLNodeSqrt::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeSqrt");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeSqrt();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeSqrt::cloneExprNode
 
@@ -1412,13 +1621,24 @@ ExprNode* OSnLNodeSquare::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeSquare");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeSquare();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeSquare::cloneExprNode
 
@@ -1470,13 +1690,24 @@ ExprNode* OSnLNodeSin::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeSin");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeSin();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeSin::cloneExprNode
 
@@ -1528,13 +1759,24 @@ ExprNode* OSnLNodeCos::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeCos");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeCos();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeCos::cloneExprNode
 
@@ -1586,13 +1828,24 @@ ExprNode* OSnLNodeExp::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeExp");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeExp();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeExp::cloneExprNode
 
@@ -1644,13 +1897,24 @@ ExprNode* OSnLNodeAbs::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeAbs");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeAbs();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeAbs::cloneExprNode
 // end OSnLNodeAbs methods
@@ -1696,10 +1960,8 @@ double OSnLNodeErf::calculateFunction(double *x)
 ADdouble OSnLNodeErf::constructADTape(std::map<int, int> *ADIdx, ADvector *XAD)
 {
     /***
-     *
      * This is a fast approximation (few numerical operations)
      * with relative error bound $latex 4 \times 10^{-4}$$; see
-
      * Vedder, J.D., "Simple approximations for the error function and its inverse",
      * American Journal of Physics, v 55, n 8, 1987, p 762-3. I took this reference from
      * Brad Bell's erf.hpp
@@ -1721,13 +1983,24 @@ ExprNode* OSnLNodeErf::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeErf");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeErf();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeErf::cloneExprNode
 // end OSnLNodeErf methods
@@ -1791,13 +2064,24 @@ ExprNode* OSnLNodeIf::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeIf");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeIf();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeIf::cloneExprNode
 // end OSnLNodeIf methods
@@ -1815,7 +2099,6 @@ OSnLNodeNumber::OSnLNodeNumber()
     value = 0.0;
     type = "real";
     id = "";
-
 }//end OSnLNodeNumber
 
 OSnLNodeNumber::~OSnLNodeNumber()
@@ -1825,30 +2108,40 @@ OSnLNodeNumber::~OSnLNodeNumber()
 #endif
 }//end ~OSnLNodeNumber
 
-std::string OSnLNodeNumber::getTokenNumber()
-{
-    ostringstream outStr;
-    outStr << inodeInt;
-    outStr << ":" ;
-    outStr << value ;
-//    //if(type.length() > 0){
-//        outStr << ":" ;
-//        outStr << type ;
-//    //}
-
-//    //if(id.length() > 0){
-//        outStr << ":" ;
-//        outStr << id;
-//    //}
-    return outStr.str();
-}//getTokenNumber
-
-
 std::string OSnLNodeNumber::getTokenName()
 {
     return "number";
 }//getTokenName
 
+std::string OSnLNodeNumber::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    outStr << "(number):" ;
+    outStr << value ;
+    if(type.length() > 0)
+    {
+        outStr << ":" ;
+        outStr << type ;
+    }
+
+    if(id.length() > 0)
+    {
+        outStr << ":" ;
+        outStr << id;
+    }
+    return outStr.str();
+}//getTokenNumber
+
+std::string OSnLNodeNumber::getNodeInfo(bool recurse, int indent)
+{
+    ostringstream outStr;
+    for (int i=0; i < indent; i++)
+        outStr << " ";
+    outStr << "node address: " << this;
+    outStr << " type: " << inodeInt << "(" << &inodeInt << ")" << " value = " << value << std::endl;
+    return outStr.str();
+}//getNodeInfo
 
 std::string OSnLNodeNumber::getNonlinearExpressionInXML()
 {
@@ -1904,7 +2197,20 @@ ExprNode* OSnLNodeNumber::cloneExprNode()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     ((OSnLNodeNumber*)nlNodePoint)->value = value;
-    CLONE_CHILDREN;
+    ((OSnLNodeNumber*)nlNodePoint)->type  = type;
+    ((OSnLNodeNumber*)nlNodePoint)->id    = id;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeNumber::cloneExprNode
 
@@ -1983,14 +2289,6 @@ OSnLNodeE::~OSnLNodeE()
 }//end ~OSnLNodeE
 
 
-std::string OSnLNodeE::getTokenNumber()
-{
-    ostringstream outStr;
-    outStr << inodeInt;
-    return outStr.str();
-}//getTokenNumber
-
-
 std::string OSnLNodeE::getTokenName()
 {
     ostringstream outStr;
@@ -1998,6 +2296,12 @@ std::string OSnLNodeE::getTokenName()
     return outStr.str();
 }//getTokenName
 
+std::string OSnLNodeE::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    return outStr.str();
+}//getTokenNumber
 
 std::string OSnLNodeE::getNonlinearExpressionInXML()
 {
@@ -2031,7 +2335,7 @@ ExprNode* OSnLNodeE::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodeE");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodeE();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
@@ -2060,20 +2364,20 @@ OSnLNodePI::~OSnLNodePI()
 }//end ~OSnLNodePI
 
 
-std::string OSnLNodePI::getTokenNumber()
-{
-    ostringstream outStr;
-    outStr << inodeInt;
-    return outStr.str();
-}//getTokenNumber
-
-
 std::string OSnLNodePI::getTokenName()
 {
     ostringstream outStr;
     outStr << "PI";
     return outStr.str();
 }//getTokenName
+
+
+std::string OSnLNodePI::getTokenNumber()
+{
+    ostringstream outStr;
+    outStr << inodeInt;
+    return outStr.str();
+}//getTokenNumber
 
 
 std::string OSnLNodePI::getNonlinearExpressionInXML()
@@ -2108,7 +2412,7 @@ ExprNode* OSnLNodePI::cloneExprNode()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "cloning an OSnLNodePI");
 #endif
-    OSnLNode *nlNodePoint;
+    ExprNode *nlNodePoint;
     nlNodePoint = new OSnLNodePI();
 #ifndef NDEBUG
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
@@ -2141,6 +2445,22 @@ OSnLNodeVariable::~OSnLNodeVariable()
 }//end ~OSnLNodeVariable
 
 
+std::string OSnLNodeVariable::getTokenName()
+{
+    ostringstream outStr;
+    outStr << "variable";
+    outStr << "[";
+    outStr << inumberOfChildren ;
+    outStr << "]";
+    outStr << ":" ;
+    outStr << idx;
+    outStr << ":" ;
+    outStr << coef;
+    outStr << ":real:" ;
+    return outStr.str();
+}//getTokenName
+
+
 std::string OSnLNodeVariable::getTokenNumber()
 {
     ostringstream outStr;
@@ -2157,21 +2477,18 @@ std::string OSnLNodeVariable::getTokenNumber()
 }//getTokenNumber
 
 
-std::string OSnLNodeVariable::getTokenName()
+std::string OSnLNodeVariable::getNodeInfo(bool recurse, int indent)
 {
     ostringstream outStr;
-    outStr << "variable";
-    outStr << "[";
-    outStr << inumberOfChildren ;
-    outStr << "]";
-    outStr << ":" ;
-    outStr << idx;
-    outStr << ":" ;
-    outStr << coef;
-    outStr << ":real:" ;
+    for (int i=0; i < indent; i++)
+        outStr << " ";
+    outStr << "node address: " << this;
+    outStr << " type: " << inodeInt << "(" << &inodeInt << ")" << " varRef = " << idx;
+    if (coef > 1 || coef < 1)
+        outStr << " coef = " << coef;
+    outStr << std::endl;
     return outStr.str();
-}//getTokenName
-
+}//getNodeInfo
 
 std::string OSnLNodeVariable::getNonlinearExpressionInXML()
 {
@@ -2254,7 +2571,18 @@ ExprNode* OSnLNodeVariable::cloneExprNode()
 #endif
     ((OSnLNodeVariable*)nlNodePoint)->idx  = idx;
     ((OSnLNodeVariable*)nlNodePoint)->coef = coef;
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLNodeVariable::cloneExprNode
 
@@ -2378,7 +2706,18 @@ ExprNode* OSnLNodeMatrixDeterminant::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLNodeMatrixDeterminant::cloneExprNode
 
@@ -2398,7 +2737,7 @@ OSnLNodeMatrixTrace::~OSnLNodeMatrixTrace()
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "inside OSnLNodeMatrixTrace destructor");
 #endif
-}//end ~OSnLNodeMatrixDeterminant
+}//end ~OSnLNodeMatrixTrace
 
 double OSnLNodeMatrixTrace::calculateFunction(double *x)
 {
@@ -2445,7 +2784,18 @@ ExprNode* OSnLNodeMatrixTrace::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLNodeMatrixTrace::cloneExprNode
 
@@ -2522,7 +2872,18 @@ ExprNode* OSnLNodeMatrixToScalar::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLNodeMatrixToScalar::cloneExprNode
 
@@ -2592,7 +2953,7 @@ OSnLMNode* OSnLMNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlN
     return (OSnLMNode*)nlNodeVec[ kount - 1];
 }//end createExpressionTreeFromPostfix
 
-
+#if 0
 std::vector<ExprNode*> OSnLMNode::getPrefixFromExpressionTree()
 {
     std::vector<ExprNode*> prefixVector;
@@ -2613,6 +2974,7 @@ std::vector<ExprNode*> OSnLMNode::preOrderOSnLNodeTraversal( std::vector<ExprNod
 std::vector<ExprNode*> OSnLMNode::getPostfixFromExpressionTree( )
 {
     std::vector<ExprNode*> postfixVector;
+std::cout << "get postfix from an OSnLMNode" << std::endl;
     return postOrderOSnLNodeTraversal( &postfixVector);
 }//getPostfixFromExpressionTree
 
@@ -2628,7 +2990,7 @@ std::vector<ExprNode*> OSnLMNode::postOrderOSnLNodeTraversal( std::vector<ExprNo
     (*postfixVector).push_back( (OSnLMNode*)this);
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
-
+#endif
 
 bool OSnLMNode::IsEqual(OSnLMNode *that)
 {
@@ -2717,7 +3079,18 @@ ExprNode* OSnLMNodeMatrixPlus::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixPlus::cloneExprNode
 
@@ -2759,7 +3132,18 @@ ExprNode* OSnLMNodeMatrixSum::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLMNodeMatrixSum::cloneExprNode
 
@@ -2800,7 +3184,18 @@ ExprNode* OSnLMNodeMatrixProduct::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return  nlNodePoint;
 }//end OSnLMNodeMatrixProduct::cloneExprNode
 
@@ -2844,7 +3239,18 @@ ExprNode* OSnLMNodeMatrixMinus::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixMinus::cloneExprNode
 
@@ -2886,7 +3292,18 @@ ExprNode* OSnLMNodeMatrixNegate::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixNegate::cloneExprNode
 
@@ -2929,7 +3346,18 @@ ExprNode* OSnLMNodeMatrixTimes::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixTimes::cloneExprNode
 
@@ -2971,7 +3399,18 @@ ExprNode* OSnLMNodeMatrixInverse::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixInverse::cloneExprNode
 
@@ -3014,7 +3453,18 @@ ExprNode* OSnLMNodeMatrixTranspose::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixTranspose::cloneExprNode
 
@@ -3057,7 +3507,18 @@ ExprNode* OSnLMNodeMatrixScalarTimes::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixScalarTimes::cloneExprNode
 
@@ -3100,7 +3561,18 @@ ExprNode* OSnLMNodeMatrixDotTimes::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixDotTimes::cloneExprNode
 
@@ -3143,7 +3615,18 @@ ExprNode* OSnLMNodeIdentityMatrix::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeIdentityMatrix::cloneExprNode
 
@@ -3188,7 +3671,18 @@ ExprNode* OSnLMNodeMatrixLowerTriangle::cloneExprNode()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     ((OSnLMNodeMatrixLowerTriangle*)nlNodePoint)->includeDiagonal = includeDiagonal;
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixLowerTriangle::cloneExprNode
 
@@ -3313,7 +3807,18 @@ ExprNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     ((OSnLMNodeMatrixUpperTriangle*)nlNodePoint)->includeDiagonal = includeDiagonal;
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixUpperTriangle::cloneExprNode
 
@@ -3406,7 +3911,18 @@ ExprNode* OSnLMNodeMatrixDiagonal::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixDiagonal::cloneExprNode
 
@@ -3449,7 +3965,18 @@ ExprNode* OSnLMNodeDiagonalMatrixFromVector::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeDiagonalMatrixFromVector::cloneExprNode
 
@@ -3496,14 +4023,26 @@ ExprNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixSubmatrixAt::cloneExprNode
 
 
 // OSnLMNodeMatrixReference Methods
 OSnLMNodeMatrixReference::OSnLMNodeMatrixReference():
-    idx(-1)
+    idx(-1),
+    transpose(false)
 {
     inumberOfChildren = 0;
     m_mChildren = NULL;
@@ -3520,6 +4059,12 @@ OSnLMNodeMatrixReference::~OSnLMNodeMatrixReference()
 #endif
 }//end ~OSnLMNodeMatrixReference
 
+
+std::string OSnLMNodeMatrixReference::getTokenName()
+{
+    return "matrixReference";
+}// end OSnLMNodeMatrixReference::getTokenName()
+
 std::string OSnLMNodeMatrixReference::getTokenNumber()
 {
     ostringstream outStr;
@@ -3533,11 +4078,19 @@ std::string OSnLMNodeMatrixReference::getTokenNumber()
     return outStr.str();
 }//getTokenNumber
 
-std::string OSnLMNodeMatrixReference::getTokenName()
-{
-    return "matrixReference";
-}// end OSnLMNodeMatrixReference::getTokenName()
 
+std::string OSnLMNodeMatrixReference::getNodeInfo(bool recurse, int indent)
+{
+    ostringstream outStr;
+    for (int i=0; i < indent; i++)
+        outStr << " ";
+    outStr << "node address: " << this;
+    outStr << " type: " << inodeInt << "(" << &inodeInt << ")" << " matrixRef = " << idx;
+    if (transpose)
+        outStr << " (transposed)";
+    outStr << std::endl;
+    return outStr.str();
+}//getNodeInfo
 
 std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
 {
@@ -3561,7 +4114,18 @@ ExprNode* OSnLMNodeMatrixReference::cloneExprNode()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     ((OSnLMNodeMatrixReference*)nlNodePoint)->idx = idx;
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixReference::cloneExprNode
 
@@ -3678,7 +4242,18 @@ ExprNode* OSnLMNodeMatrixVar::cloneExprNode()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     ((OSnLMNodeMatrixVar*)nlNodePoint)->idx = idx;
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixVar::cloneExprNode
 
@@ -3793,7 +4368,18 @@ ExprNode* OSnLMNodeMatrixObj::cloneExprNode()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     ((OSnLMNodeMatrixObj*)nlNodePoint)->idx = idx;
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixObj::cloneExprNode
 
@@ -3910,7 +4496,18 @@ ExprNode* OSnLMNodeMatrixCon::cloneExprNode()
 
 
     ((OSnLMNodeMatrixCon*)nlNodePoint)->idx = idx;
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixCon::cloneExprNode
 
@@ -3985,6 +4582,7 @@ OSnLCNode::~OSnLCNode()
 #endif
 }//end ~OSnLCNode
 
+#if 0
 OSnLCNode* OSnLCNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
 {
     std::vector<ExprNode*> stackVec;
@@ -4030,8 +4628,9 @@ OSnLCNode* OSnLCNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlN
     stackVec.clear();
     return (OSnLCNode*)nlNodeVec[ kount - 1];
 }//end createExpressionTreeFromPostfix
+#endif
 
-
+#if 0
 std::vector<ExprNode*> OSnLCNode::getPrefixFromExpressionTree()
 {
     std::vector<ExprNode*> prefixVector;
@@ -4052,6 +4651,7 @@ std::vector<ExprNode*> OSnLCNode::preOrderOSnLNodeTraversal( std::vector<ExprNod
 std::vector<ExprNode*> OSnLCNode::getPostfixFromExpressionTree( )
 {
     std::vector<ExprNode*> postfixVector;
+std::cout << "get postfix from an OSnLCNode" << std::endl;
     return postOrderOSnLNodeTraversal( &postfixVector);
 }//getPostfixFromExpressionTree
 
@@ -4064,9 +4664,10 @@ std::vector<ExprNode*> OSnLCNode::postOrderOSnLNodeTraversal( std::vector<ExprNo
         for(i = 0; i < inumberOfChildren; i++)
             m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
     }
-    (*postfixVector).push_back( (OSnLNode*)this);
+    (*postfixVector).push_back( (OSnLCNode*)this);
     return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
+#endif
 
 bool OSnLCNode::IsEqual(OSnLCNode *that)
 {
@@ -4170,7 +4771,18 @@ ExprNode* OSnLCNodeCreate::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLCNodeCreate::cloneExprNode
 
@@ -4239,7 +4851,18 @@ ExprNode* OSnLCNodePlus::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLCNodePlus::cloneExprNode
 
@@ -4315,7 +4938,18 @@ ExprNode* OSnLCNodeMinus::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLCNodeMinus::cloneExprNode
 
@@ -4378,7 +5012,18 @@ ExprNode* OSnLCNodeNegate::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLCNodeNegate::cloneExprNode
 
@@ -4442,7 +5087,18 @@ ExprNode* OSnLCNodeConjugate::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLCNodeConjugate::cloneExprNode
 
@@ -4509,7 +5165,18 @@ ExprNode* OSnLCNodeSum::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLCNodeSum::cloneExprNode
 
@@ -4582,7 +5249,18 @@ ExprNode* OSnLCNodeTimes::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLCNodeTimes::cloneExprNode
 
@@ -4648,7 +5326,18 @@ ExprNode* OSnLCNodeSquare::cloneExprNode()
     outStr << "Allocate memory at address " << nlNodePoint << std::endl;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 }//end OSnLCNodeSquare::cloneExprNode
 
@@ -4725,6 +5414,7 @@ void OSnLCNodeNumber::setValue(double Re, double Im)
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSExpressionTree, 
                       ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
+
 }// end of OSnLCNodeNumber::setValue(double Re, double Im)
 
 void OSnLCNodeNumber::setValue(std::complex<double> z)
@@ -4759,7 +5449,18 @@ ExprNode* OSnLCNodeNumber::cloneExprNode()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     ((OSnLCNodeNumber*)nlNodePoint)->value = value;
-    CLONE_CHILDREN;
+//    CLONE_CHILDREN;
+        if (inumberOfChildren > 0)                              
+        {                                                       
+            if (nlNodePoint->m_mChildren == NULL)               
+                nlNodePoint->m_mChildren                        
+                    = new ExprNode*[inumberOfChildren];         
+            for (unsigned int i=0; i < inumberOfChildren; i++)  
+            {                                                   
+                nlNodePoint->m_mChildren[i]                     
+                    = this->m_mChildren[i]->cloneExprNode();    
+            }                                                   
+        }                                                       
     return nlNodePoint;
 
 }//end OSnLCNodeNumber::cloneExprNode

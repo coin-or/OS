@@ -1040,8 +1040,6 @@ constantElementsAtt:
     osglNumberOfValuesATT
     {
         ((ConstantMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_constant;
     }
   | osglRowMajorATT
     {
@@ -1167,8 +1165,6 @@ varReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((VarReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_varReference;
     }
   | osglRowMajorATT
     {
@@ -1230,8 +1226,6 @@ linearElementsAtt:
     osglNumberOfValuesATT
     {
         ((LinearMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_linear;
     }
   | osglRowMajorATT
     {
@@ -1379,9 +1373,6 @@ realValuedExpressionsAtt:
     osglNumberOfValuesATT
     {
         ((RealValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
-                = ENUM_MATRIX_TYPE_realValuedExpressions;
     }
   | osglRowMajorATT
     {
@@ -1487,9 +1478,6 @@ complexValuedExpressionsAtt:
     osglNumberOfValuesATT
     {
         ((ComplexValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
-                = ENUM_MATRIX_TYPE_complexValuedExpressions;
     }
   | osglRowMajorATT
     {
@@ -1596,8 +1584,6 @@ objReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_objReference;
     }
   | osglRowMajorATT
     {
@@ -1659,8 +1645,6 @@ conReferenceElementsAtt:
     osglNumberOfValuesATT
     {
         ((ConReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_conReference;
     }
   | osglRowMajorATT
     {
@@ -1791,9 +1775,6 @@ complexElementsAtt:
     osglNumberOfValuesATT
     {
         ((ComplexMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType
-                = ENUM_MATRIX_TYPE_complexConstant;
     }
   | osglRowMajorATT
     {
@@ -1913,8 +1894,6 @@ stringValuedElementsAtt:
     osglNumberOfValuesATT
     {
         ((StringValuedMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
-//        if (osglData->numberOfValues > 0)
-            ((MatrixType*)osglData->mtxBlkVec.back())->inferredMatrixType = ENUM_MATRIX_TYPE_string;
     }
   | osglRowMajorATT
     {
@@ -2679,6 +2658,8 @@ baseTransposeAttContent: BASETRANSPOSEATT ATTRIBUTETEXT quote
     {
         if      (strcmp($2,"false") == 0) osglData->baseTranspose = false;
         else if (strcmp($2,"true" ) == 0) osglData->baseTranspose = true;
+        else if (strcmp($2,"1"    ) == 0) osglData->baseTranspose = true;
+        else if (strcmp($2,"0"    ) == 0) osglData->baseTranspose = false;
         else parserData->parser_errors += addErrorMsg( NULL, parserObjects, 
             "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
     }
@@ -2887,6 +2868,8 @@ rowMajorAttContent: ROWMAJORATT ATTRIBUTETEXT QUOTE
     {
         if      (strcmp($2,"false") == 0) osglData->rowMajor = false;
         else if (strcmp($2,"true" ) == 0) osglData->rowMajor = true;
+        else if (strcmp($2,"1"    ) == 0) osglData->rowMajor = true;
+        else if (strcmp($2,"0"    ) == 0) osglData->rowMajor = false;
         else parserData->parser_errors += addErrorMsg( NULL, parserObjects, "rowMajor attribute must be \"true\" or \"false\"");
     }
     osglData->rowMajorPresent = true;
