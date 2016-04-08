@@ -1008,7 +1008,8 @@ extern const OSSmartPtr<OSOutput> osoutput;
                 try
                 {
                     cout << endl << "Test expansion of matrix " << i << " in column major form" << endl;
-                    instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInColumnMajor();
+//                    instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInColumnMajor();
+                    instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(false);
                     cout << endl << "Matrix expanded" << endl << endl;
                     cout << endl << "Completed successfully" << endl << endl;
                     instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
@@ -1023,6 +1024,7 @@ extern const OSSmartPtr<OSOutput> osoutput;
                 {
 //                    cout << endl << "Test expansion of matrix " << i << " in row major form" << endl;
 //                    instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInRowMajor();
+//                    instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(true);
 //                    cout << endl << "Matrix expanded" << endl << endl;
 //                    cout << endl << "Completed successfully" << endl << endl;
 //                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);

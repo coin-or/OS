@@ -3598,13 +3598,15 @@ public:
     OSMatrix* getMatrix(int n);
 
     /**
-     * Get the (nonzero) elements of the matrix in column major form.
+     * Get the (nonzero) elements of the matrix in expanded form.
      *
      * @param n is the index number associated with the matrix.
      *
+     * @param rowMajor determines whether the elements should be
+     *        in row major form or colum major form. The default is column major form.
      * @return the (nonzero) matrix elements.
      */
-    GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor(int n);
+    GeneralSparseMatrix* getExpandedMatrix(int n, bool rowMajor = false);
 
     /**
      * Get the (nonzero) elements of the matrix in row major form.
@@ -3613,7 +3615,7 @@ public:
      *
      * @return the (nonzero) matrix elements.
      */
-    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor(int n);
+//    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor(int n);
 
     /**
      * Get the (nonzero) elements of the matrix in symmetric block form.

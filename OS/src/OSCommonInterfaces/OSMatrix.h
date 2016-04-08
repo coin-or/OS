@@ -2466,9 +2466,9 @@ public:
      *  The matrix can be held in expanded form by rows or by columns 
      *  and in a number of ways stored by blocks
      */
-    GeneralSparseMatrix* ExpandedMatrixInRowMajorForm;
-    GeneralSparseMatrix* ExpandedMatrixInColumnMajorForm;
-    std::vector<ExpandedMatrixBlocks*> ExpandedMatrixByBlocks;
+    GeneralSparseMatrix* expandedMatrixInRowMajorForm;
+    GeneralSparseMatrix* expandedMatrixInColumnMajorForm;
+    std::vector<ExpandedMatrixBlocks*> expandedMatrixByBlocks;
 
 private:
     /** m_miRowPartition is the partition vector of the matrix rows into blocks
@@ -2534,6 +2534,9 @@ public:
     int  getNumberOfElementConstructors();
     int  getNumberOfTransformationConstructors();
     int  getNumberOfBlocksConstructors();
+
+    GeneralSparseMatrix* getExpandedMatrix(bool rowMajor,
+                                 ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
 
     GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor(
                                  ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
@@ -2635,8 +2638,8 @@ public:
 
     /**
      *  A method to expand a blocks constructor into the form required in the referencing matrixType. 
-     *  Processing may include transposing the elements in some or all of the blocks, applying
-     *  symmetry, and may require that the blocks themselves be properly expanded first.
+     *  Processing may require that the blocks themselves be properly expanded first, and may include
+     *  applying symmetry and transposing the elements in some or all of the blocks.
      *
      *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
      *         or column major.

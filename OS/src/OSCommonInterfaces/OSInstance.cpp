@@ -3204,24 +3204,24 @@ int  OSInstance::getNumberOfBlocksConstructors(int n)
 }//getNumberOfBlocksConstructors
 
 
-GeneralSparseMatrix* OSInstance::getMatrixCoefficientsInColumnMajor(int n)
+GeneralSparseMatrix* OSInstance::getExpandedMatrix(int n, bool rowMajor)
 {
     try
     {
         int nMatrices = getMatrixNumber();
         if ( (instanceData->matrices == NULL) || (nMatrices == 0) )
-            throw ErrorClass("no matrices defined in method getMatrixCoefficientsInColumnMajor()");
+            throw ErrorClass("no matrices defined in method getExpandedMatrix()");
         if ( (n < 0) || (n >= nMatrices) )
-            throw ErrorClass("invalid matrix index in method getMatrixCoefficientsInColumnMajor()");
-        return instanceData->matrices->matrix[n]->getMatrixCoefficientsInColumnMajor();
+            throw ErrorClass("invalid matrix index in method getExpandedMatrix()");
+        return instanceData->matrices->matrix[n]->getExpandedMatrix(rowMajor);
     }
     catch(const ErrorClass& eclass)
     {
         throw ErrorClass( eclass.errormsg);
     }
-}//getMatrixCoefficientsInColumnMajor
+}//getExpandedMatrix
 
-
+#if 0
 GeneralSparseMatrix* OSInstance::getMatrixCoefficientsInRowMajor(int n)
 {
     try
@@ -3238,6 +3238,7 @@ GeneralSparseMatrix* OSInstance::getMatrixCoefficientsInRowMajor(int n)
         throw ErrorClass( eclass.errormsg);
     }
 }//getMatrixCoefficientsInRowMajor
+#endif
 
 //===========================================================================
 
