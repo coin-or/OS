@@ -99,7 +99,7 @@
 
 <!-- The matrices section can be expanded as needed. The first 32 matrices mostly test the parser,
      although some are reused later for testing various expansion methods -->
-        <matrices numberOfMatrices= " 54 " >
+        <matrices numberOfMatrices= " 55 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -503,7 +503,7 @@
                     </matrixTimes>
                 </transformation>
             </matrix>
-            <matrix numberOfColumns="2" numberOfRows="2" name="20-M0-times-M7---linear">
+            <matrix numberOfColumns="2" numberOfRows="1" name="20-M0-times-M7---linear">
                 <transformation>
                     <matrixTimes>
                         <matrixReference idx="0"></matrixReference>
@@ -511,7 +511,7 @@
                     </matrixTimes>
                 </transformation>
             </matrix>
-            <matrix numberOfColumns="2" numberOfRows="2" name="21-M5-times-M14---jumbled">
+            <matrix numberOfColumns="2" numberOfRows="2" name="21-M6-times-M14---jumbled">
                 <transformation>
                     <matrixTimes>
                         <matrixReference idx="5"></matrixReference>
@@ -2422,6 +2422,22 @@
 
 
 
+            <matrix numberOfColumns="2" numberOfRows="2" name="54-M0-times-M7---incompatible 1">
+                <transformation>
+                    <matrixTimes>
+                        <matrixReference idx="0"></matrixReference>
+                        <matrixReference idx="7"></matrixReference>
+                    </matrixTimes>
+                </transformation>
+            </matrix>
+            <matrix numberOfColumns="2" numberOfRows="2" name="55-M0-times-M1---incompatible 2">
+                <transformation>
+                    <matrixTimes>
+                        <matrixReference idx="0"></matrixReference>
+                        <matrixReference idx="7"></matrixReference>
+                    </matrixTimes>
+                </transformation>
+            </matrix>
         </matrices>
         <cones numberOfCones="11">
             <nonnegativeCone numberOfColumns="2" numberOfRows="2"></nonnegativeCone>

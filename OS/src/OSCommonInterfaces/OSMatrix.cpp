@@ -1932,7 +1932,7 @@ GeneralSparseMatrix* MatrixType::getExpandedMatrix(bool rowMajor, ENUM_MATRIX_TY
             else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
             {
                 //make sure the blocks have been expanded, then retrieve them 
-                if (!processBlocks(false, symmetry))
+                if (!processBlocks(rowMajor, symmetry))
                     throw ErrorClass("error processing blocks in getExpandedMatrix()");
 
                 ExpandedMatrixBlocks* currentBlocks
@@ -1961,8 +1961,8 @@ GeneralSparseMatrix* MatrixType::getExpandedMatrix(bool rowMajor, ENUM_MATRIX_TY
         else // two or more constructors --- worry about overwriting and number of elements
         {
             // Here we have (base matrix plus) elements
-            if (!matrixHasTransformations() && !matrixHasBlocks() )
-            {
+//            if (!matrixHasTransformations() && !matrixHasBlocks() )
+//            {
 //            expandedMatrixInColumnMajorForm = new GeneralSparseMatrix();
             tempMtx->symmetry = symmetry;
             if (rowMajor)
@@ -1993,9 +1993,28 @@ GeneralSparseMatrix* MatrixType::getExpandedMatrix(bool rowMajor, ENUM_MATRIX_TY
 
             for (unsigned int i=i0; i < inumberOfChildren; i++)
             {
+                if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
+                {
+                    throw ErrorClass("Cannot handle transformations yet in getExpandedMatrix()");
+                }
+                else if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
+                {
+                    //make sure the blocks have been expanded, then retrieve them 
+                    if (!processBlocks(rowMajor, symmetry))
+                        throw ErrorClass("error processing blocks in getExpandedMatrix()");
 
-                tempExpansion[i] = this->extractElements(i,rowMajor,symmetry);
-                tempExpansion[i]->matrixType = m_mChildren[i]->getMatrixType();
+                    ExpandedMatrixBlocks* currentBlocks
+                        = getBlocks(m_miRowPartition, m_iRowPartitionSize, m_miColumnPartition,
+                                m_iColumnPartitionSize, rowMajor, true);
+
+                    tempExpansion[i] = expandBlocks(currentBlocks, rowMajor, symmetry);
+                }
+                else
+                {
+                    tempExpansion[i] = this->extractElements(i,rowMajor,symmetry);
+                    tempExpansion[i]->matrixType = m_mChildren[i]->getMatrixType();
+                }
+
 #ifndef NDEBUG
                 tempExpansion[i]->printMatrix();
 #endif
@@ -2642,15 +2661,15 @@ GeneralSparseMatrix* MatrixType::getExpandedMatrix(bool rowMajor, ENUM_MATRIX_TY
 //            expandedMatrixInColumnMajorForm->printMatrix();
 
 //            return expandedMatrixInColumnMajorForm;
-            }
+//            }
 /*
         blocks should be doable --- but worry about cancellations
         maybe transformation (product) plus elements
         others: throw error
 */
-            else
-                throw ErrorClass(
-                    "Multiple constructors with transformations and blocks not yet implemented in getExpandedMatrix()");
+//            else
+//                throw ErrorClass(
+//                    "Multiple constructors with transformations and blocks not yet implemented in getExpandedMatrix()");
         }
 #ifndef NDEBUG
         tempMtx->printMatrix();

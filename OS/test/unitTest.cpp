@@ -129,7 +129,6 @@
  *   Then we use <b>createExpressionTreeFromPrefix</b> to create an expression. 
  *   We use <b>getPostfix()</b> to get the postfix vector back and compare with the 
  *   very first postfix vector and make sure they are the same. 
- * 
  */ 
 
 //#define DEBUG
@@ -268,7 +267,6 @@ using std::string;
 
 int main(int argC, char* argV[])
 {
-
     WindowsErrorPopupBlocker();
     double getObjVal(std::string osrl);
     int   getItCount(std::string osrl);
@@ -276,7 +274,6 @@ int main(int argC, char* argV[])
     //using CppAD::NearEqual;
     bool ok;
     double check;
-
     
     bool BASIC_TESTS;  // minimal functionality tests
     bool SOLVER_TESTS; // at least one problem for each solver
@@ -354,7 +351,6 @@ int main(int argC, char* argV[])
     if (PARSER_TESTS) std::cout << "Perform parser tests" << std::endl;
     if (OTHER_TESTS) std::cout << "Perform other tests" << std::endl;
     std::cout << std::endl << std::endl;
-
     // end level of testing    
     
     cout << "START UNIT TEST" << endl;
@@ -994,24 +990,20 @@ if (PARSER_TESTS)
             unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem testMatricesAndCones.osil" << std::endl;
             cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
+
             // now test the matrix manipulation routines 
             // (expansion, separation into blocks, transformations, etc.)
             cout << endl << "TEST " << ++nOfTest 
                  << ": Test matrix manipulation routines (using testMatricesAndCones.osil)"
                  << endl << endl;
 
-extern const OSSmartPtr<OSOutput> osoutput;
-        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL) 7);
-
             for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
             {
                 try
                 {
                     cout << endl << "Test expansion of matrix " << i << " in column major form" << endl;
-//                    instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInColumnMajor();
                     instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(false);
-                    cout << endl << "Matrix expanded" << endl << endl;
-                    cout << endl << "Completed successfully" << endl << endl;
+                    cout << endl << "Matrix expanded successfully" << endl << endl;
                     instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
                 }
                 catch(const ErrorClass& eclass)
@@ -1022,12 +1014,10 @@ extern const OSSmartPtr<OSOutput> osoutput;
 
                 try
                 {
-//                    cout << endl << "Test expansion of matrix " << i << " in row major form" << endl;
-//                    instance1->instanceData->matrices->matrix[i]->getMatrixCoefficientsInRowMajor();
-//                    instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(true);
-//                    cout << endl << "Matrix expanded" << endl << endl;
-//                    cout << endl << "Completed successfully" << endl << endl;
-//                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
+                    cout << endl << "Test expansion of matrix " << i << " in row major form" << endl;
+                    instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(true);
+                    cout << endl << "Matrix expanded successfully" << endl << endl;
+                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
                 }
                 catch(const ErrorClass& eclass)
                 {
