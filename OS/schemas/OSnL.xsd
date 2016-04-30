@@ -4006,7 +4006,11 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5865,6 +5869,7 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5880,6 +5885,7 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5895,6 +5901,7 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5910,6 +5917,7 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
