@@ -742,6 +742,7 @@ The result of this transformation is aligned with the top left corner of the tar
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="MatrixConstructors" mixed="false"/>
 	<xs:complexType name="BaseMatrix" mixed="false">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -776,22 +777,25 @@ The result of this transformation is aligned with the top left corner of the tar
 		<xs:attribute name="targetMatrixFirstRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="targetMatrixFirstCol" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
-	<xs:complexType name="MatrixConstructors" mixed="false"/>
-	<xs:complexType name="MatrixBlock">
-		<xs:complexContent>
-			<xs:extension base="MatrixType">
-				<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" use="required">
-					<xs:annotation>
-						<xs:documentation>blockRowIdx must be at least 0 and less than colOffset array size</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-				<xs:attribute name="blockColIdx" type="xs:nonNegativeInteger" use="required">
-					<xs:annotation>
-						<xs:documentation>blockColIdx must be at least 0 and less than rowOffset array size</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-			</xs:extension>
-		</xs:complexContent>
+	<xs:complexType name="MatrixTransformation">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLMNode"/>
+		</xs:sequence>
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="constant"/>
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="concave"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="MatrixElements">
 		<xs:sequence>
@@ -836,6 +840,19 @@ The result of this transformation is aligned with the top left corner of the tar
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="ComplexMatrixValues">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="el" type="ComplexMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ComplexMatrixElement">
+		<xs:attribute name="Re" type="xs:double" use="required"/>
+		<xs:attribute name="Im" type="xs:double" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
 	<xs:complexType name="VarReferenceMatrixElements">
 		<xs:complexContent>
 			<xs:extension base="MatrixElements">
@@ -877,6 +894,36 @@ Each value must refer to an existing (core) objective index</xs:documentation>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="ConReferenceMatrixValues">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="el" type="ConReferenceMatrixElement" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Each el must refer to an existing (core) constraint index.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConReferenceMatrixElement">
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="valueType" use="optional" default="value">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="value"/>
+							<xs:enumeration value="status"/>
+							<xs:enumeration value="surplus"/>
+							<xs:enumeration value="shortage"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="mult" type="xs:int"/>
+				<xs:attribute name="incr" type="xs:int" default="0"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 	<xs:complexType name="LinearMatrixElements">
 		<xs:complexContent>
 			<xs:extension base="MatrixElements">
@@ -892,6 +939,35 @@ a_0 + a_1*x_i + a_2*x_j * ...</xs:documentation>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="LinearMatrixValues">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LinearMatrixElement">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="varIdx" type="LinearMatrixElementTerm" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfVarIdx</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="LinearMatrixElementTerm">
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 	<xs:complexType name="RealValuedExpressions">
 		<xs:complexContent>
 			<xs:extension base="MatrixElements">
@@ -905,6 +981,19 @@ Each nonzero is a real-valued expression</xs:documentation>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealValuedExpressionArray">
+		<xs:sequence>
+			<xs:element name="el" type="RealValuedExpression" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RealValuedExpression">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLNode"/>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ComplexValuedExpressions">
 		<xs:complexContent>
@@ -920,6 +1009,19 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="ComplexValuedExpressionArray">
+		<xs:sequence>
+			<xs:element name="el" type="ComplexValuedExpression" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ComplexValuedExpression">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLCNode"/>
+		</xs:sequence>
+	</xs:complexType>
 	<xs:complexType name="StringValuedMatrixElements">
 		<xs:complexContent>
 			<xs:extension base="MatrixElements">
@@ -932,26 +1034,6 @@ Each nonzero is a complex-valued expression</xs:documentation>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
-	</xs:complexType>
-	<xs:complexType name="MatrixTransformation">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element ref="OSnLMNode"/>
-		</xs:sequence>
-		<xs:attribute name="shape" default="general">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="constant"/>
-					<xs:enumeration value="linear"/>
-					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="convex"/>
-					<xs:enumeration value="concave"/>
-					<xs:enumeration value="general"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="MatrixBlocks">
 		<xs:annotation>
@@ -976,6 +1058,23 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="MatrixBlock">
+		<xs:complexContent>
+			<xs:extension base="MatrixType">
+				<xs:attribute name="blockRowIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>blockRowIdx must be at least 0 and less than colOffset array size</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="blockColIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>blockColIdx must be at least 0 and less than rowOffset array size</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+<!-- dead code
 	<xs:complexType name="ConstantMatrix">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -984,32 +1083,11 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			<xs:extension base="OSMatrix"/>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="ComplexMatrixValues">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="el" type="ComplexMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="ComplexMatrixElement">
-		<xs:attribute name="Re" type="xs:double" use="required"/>
-		<xs:attribute name="Im" type="xs:double" use="required"/>
-		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-	</xs:complexType>
 	<xs:complexType name="LinearMatrixNonzeros">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence/>
-	</xs:complexType>
-	<xs:complexType name="LinearMatrixValues">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixBlocks">
 		<xs:annotation>
@@ -1023,27 +1101,6 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="LinearMatrixElementTerm">
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="LinearMatrixElement">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="varIdx" type="LinearMatrixElementTerm" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfVarIdx</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixBlock">
 		<xs:annotation>
@@ -1079,32 +1136,6 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			</xs:annotation>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="RealValuedExpressionArray">
-		<xs:sequence>
-			<xs:element name="el" type="RealValuedExpression" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="RealValuedExpression">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element ref="OSnLNode"/>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="ComplexValuedExpressionArray">
-		<xs:sequence>
-			<xs:element name="el" type="ComplexValuedExpression" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="ComplexValuedExpression">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element ref="OSnLCNode"/>
-		</xs:sequence>
-	</xs:complexType>
 	<xs:complexType name="GeneralMatrixBlock">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1117,35 +1148,50 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="ConReferenceMatrixValues">
+ end dead code -->
+	<xs:complexType name="SingleVariablePolynomial">
 		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" type="ConReferenceMatrixElement" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Each el must refer to an existing (core) constraint index.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="term" type="SingleVariablePolynomialTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="degree" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="constant" type="xs:double" default="0.0"/>
+		<xs:attribute name="numberOfTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="ConReferenceMatrixElement">
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="valueType" use="optional" default="value">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="value"/>
-							<xs:enumeration value="status"/>
-							<xs:enumeration value="surplus"/>
-							<xs:enumeration value="shortage"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="mult" type="xs:int"/>
-				<xs:attribute name="incr" type="xs:int" default="0"/>
-			</xs:extension>
-		</xs:simpleContent>
+	<xs:complexType name="SingleVariablePolynomialTerm">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="coef" type="xs:double" default="1.0"/>
+		<xs:attribute name="exponent" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MultiVariablePolynomial">
+		<xs:sequence>
+			<xs:element name="term" type="MultiVariablePolynomialTerm" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="degree" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="constant" type="xs:double" default="0.0"/>
+		<xs:attribute name="numberOfTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="MultiVariablePolynomialTerm">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="var" type="MultiVariablePolynomialTermVar"/>
+		</xs:sequence>
+		<xs:attribute name="coef" type="xs:double"/>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MultiVariablePolynomialTermVar">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="exponent" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Tensors">
 		<xs:annotation>
@@ -2656,12 +2702,12 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="Clieque">
+	<xs:complexType name="Clique">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
-	<xs:element name="clique" type="Clieque">
+	<xs:element name="clique" type="Clique">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -2854,129 +2900,6 @@ equal tensor rank</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
 	<xs:element name="topologicalSorting" type="TopologicalSorting">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="Polynomial">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="term">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="PolynomialTerm">
-							<xs:sequence>
-								<xs:element name="var">
-									<xs:complexType>
-										<xs:attribute name="exponent" type="xs:nonNegativeInteger" default="1"/>
-										<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="required"/>
-									</xs:complexType>
-								</xs:element>
-							</xs:sequence>
-							<xs:attribute name="coef" type="xs:double"/>
-							<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="degree" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="constant" type="xs:double" default="0.0"/>
-		<xs:attribute name="numberOfTerms" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:element name="polynomial" type="Polynomial">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="PolynomialTerm">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:complexType>
-	<xs:element name="term" type="PolynomialTerm">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="PolynomialTermVar">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:complexType>
-	<xs:element name="var" type="PolynomialTermVar">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="SingleVariablePolynomial">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="term" type="SingleVariablePolynomialTerm" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="degree" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="constant" type="xs:double" default="0.0"/>
-		<xs:attribute name="numberOfTerms" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:element name="singleVariablePolynomial" type="SingleVariablePolynomial">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="SingleVariablePolynomialTerm">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="coef" type="xs:double" default="1.0"/>
-		<xs:attribute name="exponent" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:element name="singleVariablePolynomialTerm" type="SingleVariablePolynomialTerm">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="MultiVariablePolynomial">
-		<xs:sequence>
-			<xs:element name="term" type="MultiVariablePolynomialTerm" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="degree" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="constant" type="xs:double" default="0.0"/>
-		<xs:attribute name="numberOfTerms" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" default="1"/>
-	</xs:complexType>
-	<xs:element name="multiVariablePolynomial" type="MultiVariablePolynomial">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="MultiVariablePolynomialTerm">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="var" type="MultiVariablePolynomialTermVar"/>
-		</xs:sequence>
-		<xs:attribute name="coef" type="xs:double"/>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:element name="multiVariablePolynomialTerm" type="MultiVariablePolynomialTerm">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="MultiVariablePolynomialTermVar">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="exponent" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:element name="multiVariablePolynomialTermVar" type="MultiVariablePolynomialTermVar">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
