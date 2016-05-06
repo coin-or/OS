@@ -1074,7 +1074,7 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-<!-- dead code
+	<!-- dead code
 	<xs:complexType name="ConstantMatrix">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -3389,7 +3389,7 @@ equal tensor rank</xs:documentation>
 	</xs:simpleType>
 	<xs:complexType name="Descriptor" mixed="true">
 		<xs:choice>
-			<xs:element name="matrix" type="OSMatrix" minOccurs="0"/>
+			<xs:element name="matrix" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="name" use="required">
