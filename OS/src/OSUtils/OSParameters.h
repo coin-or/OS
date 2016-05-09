@@ -906,30 +906,42 @@ enum ENUM_COMBINE_ARRAYS
 /* An enumeration to track the shape of a nonlinear expression */
 enum ENUM_NL_EXPR_SHAPE
 {
-    ENUM_NL_EXPR_SHAPE_general = 1,
-    ENUM_NL_EXPR_SHAPE_convex,
-    ENUM_NL_EXPR_SHAPE_quadratic,
+    ENUM_NL_EXPR_SHAPE_unknown = 1,
+    ENUM_NL_EXPR_SHAPE_constant,
     ENUM_NL_EXPR_SHAPE_linear,
-    ENUM_NL_EXPR_SHAPE_constant
+    ENUM_NL_EXPR_SHAPE_quadratic,
+    ENUM_NL_EXPR_SHAPE_convex,
+    ENUM_NL_EXPR_SHAPE_concave,
+    ENUM_NL_EXPR_SHAPE_general,
+    ENUM_NL_EXPR_SHAPE_string,
+    ENUM_NL_EXPR_SHAPE_illegal
 };
 
 inline int returnNlExprShape(std::string shape)
 {
-    if (shape == "general"  ) return ENUM_NL_EXPR_SHAPE_general;
-    if (shape == "convex"   ) return ENUM_NL_EXPR_SHAPE_convex;
-    if (shape == "quadratic") return ENUM_NL_EXPR_SHAPE_quadratic;
-    if (shape == "linear"   ) return ENUM_NL_EXPR_SHAPE_linear;
+    if (shape == "unknown"  ) return ENUM_NL_EXPR_SHAPE_unknown;
     if (shape == "constant" ) return ENUM_NL_EXPR_SHAPE_constant;
-    return 1;
+    if (shape == "linear"   ) return ENUM_NL_EXPR_SHAPE_linear;
+    if (shape == "quadratic") return ENUM_NL_EXPR_SHAPE_quadratic;
+    if (shape == "convex"   ) return ENUM_NL_EXPR_SHAPE_convex;
+    if (shape == "concave"  ) return ENUM_NL_EXPR_SHAPE_concave;
+    if (shape == "general"  ) return ENUM_NL_EXPR_SHAPE_general;
+    if (shape == "string"   ) return ENUM_NL_EXPR_SHAPE_string;
+    if (shape == "illegal"  ) return ENUM_NL_EXPR_SHAPE_illegal;
+    return 0;
 }//returnNlExprShape 
 
 inline std::string returnExprShapeString(ENUM_NL_EXPR_SHAPE shape)
 {
-    if (shape == ENUM_NL_EXPR_SHAPE_general  ) return "general";
-    if (shape == ENUM_NL_EXPR_SHAPE_convex   ) return "convex";
-    if (shape == ENUM_NL_EXPR_SHAPE_quadratic) return "quadratic";
-    if (shape == ENUM_NL_EXPR_SHAPE_linear   ) return "linear";
+    if (shape == ENUM_NL_EXPR_SHAPE_unknown  ) return "unknown";
     if (shape == ENUM_NL_EXPR_SHAPE_constant ) return "constant";
+    if (shape == ENUM_NL_EXPR_SHAPE_linear   ) return "linear";
+    if (shape == ENUM_NL_EXPR_SHAPE_quadratic) return "quadratic";
+    if (shape == ENUM_NL_EXPR_SHAPE_convex   ) return "convex";
+    if (shape == ENUM_NL_EXPR_SHAPE_concave  ) return "concave";
+    if (shape == ENUM_NL_EXPR_SHAPE_general  ) return "general";
+    if (shape == ENUM_NL_EXPR_SHAPE_string   ) return "string";
+    if (shape == ENUM_NL_EXPR_SHAPE_illegal  ) return "illegal";
     return "";
 }//returnExprShapeString 
  

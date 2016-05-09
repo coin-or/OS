@@ -99,7 +99,7 @@
 
 <!-- The matrices section can be expanded as needed. The first 32 matrices mostly test the parser,
      although some are reused later for testing various expansion methods -->
-        <matrices numberOfMatrices= " 55 " >
+        <matrices numberOfMatrices= " 56 " >
             <matrix numberOfColumns="2" numberOfRows="2" name="0-constant">
                 <constantElements numberOfValues="4">
                     <start>
@@ -582,7 +582,7 @@
                         <el mult="18">1</el>
                     </start>
                     <index>
-                        <el>0</el>
+                        <el>3</el>
                     </index>
                     <value>
                         <el>1.5</el>
@@ -611,23 +611,23 @@
                             </start>
                             <index>
                                 <el>3</el>
-                                <el>1</el>
-                                <el>6</el>
+                                <el>2</el>
+                                <el>0</el>
                                 <el>5</el>
                                 <el>4</el>
-                                <el>2</el>
+                                <el>1</el>
                             </index>
                             <value>
                                 <el mult="6">2.3</el>
                             </value>
                         </constantElements>
                         <transformation>
-                            <matrixUpperTriangle includeDiagonal="true">
+                            <matrixLowerTriangle includeDiagonal="true">
                                 <matrixReference idx="5"></matrixReference>
-                            </matrixUpperTriangle>
+                            </matrixLowerTriangle>
                         </transformation>
                     </block>
-                    <block blockRowIdx="2" blockColIdx="0">
+                    <block blockRowIdx="0" blockColIdx="2">
                         <blocks numberOfBlocks="5">
                             <colOffset numberOfEl="4">
                                 <el mult="4" incr="2">0</el>

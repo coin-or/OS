@@ -819,7 +819,8 @@ Nl::Nl()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Nl Constructor");
 #endif
     idx = 0;
-    shape = ENUM_NL_EXPR_SHAPE_general;
+    declaredShape = ENUM_NL_EXPR_SHAPE_unknown;
+    inferredShape = ENUM_NL_EXPR_SHAPE_unknown;
     osExpressionTree = NULL;
     m_bDeleteExpressionTree = true;
 }//end Nl
@@ -1599,7 +1600,8 @@ MatrixExpression::MatrixExpression()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the MatrixExpression Constructor");
 #endif
     idx = 0;
-    shape = ENUM_NL_EXPR_SHAPE_general;
+    declaredShape = ENUM_NL_EXPR_SHAPE_unknown;
+    inferredShape = ENUM_NL_EXPR_SHAPE_unknown;
     matrixExpressionTree = NULL;
     m_bDeleteExpressionTree = true;
 }
@@ -3218,6 +3220,7 @@ GeneralSparseMatrix* OSInstance::getExpandedMatrix(int n, bool rowMajor)
     catch(const ErrorClass& eclass)
     {
         throw ErrorClass( eclass.errormsg);
+
     }
 }//getExpandedMatrix
 
@@ -7225,6 +7228,7 @@ bool InstanceData::IsEqual(InstanceData *that)
                 return false;
 
             return true;
+
         }
     }
 }//InstanceData::IsEqual
@@ -8133,6 +8137,7 @@ bool DualCone::IsEqual(DualCone *that)
 #ifndef NDEBUG
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_debug, 
                 "First object is NULL, second is not");
+
 #endif
             return false;
         }
@@ -8666,8 +8671,9 @@ bool MatrixExpression::IsEqual(MatrixExpression *that)
         }
         else
         {
-            if (this->idx   != that->idx  ) return false;
-            if (this->shape != that->shape) return false;
+            if (this->idx           != that->idx          ) return false;
+            if (this->declaredShape != that->declaredShape) return false;
+            if (this->inferredShape != that->inferredShape) return false;
 
             if (this->matrixExpressionTree != NULL)
             {

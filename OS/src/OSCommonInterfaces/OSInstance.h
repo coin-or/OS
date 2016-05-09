@@ -413,11 +413,15 @@ public:
     /** idx holds the row index of the nonlinear expression */
     int idx;
 
-    /** shape holds the shape of the nonlinear expression 
-     *  (linear/quadratic/convex/general) (see further up in this file).
-     *  this might be useful in guiding solver selection.
+    /** Since release 2.10 we allow the declaration and tracking of the shape
+     *  of a nonlinear expression. Possible values are maintained in OSParameters.h
+     *  and include linear/quadratic/convex/general.
+     *  This information might be useful in guiding solver selection.
+     *  The user-declared shape is tracked in declaredShape; we can also infer
+     *  the shape in the variable inferredShape. 
      */
-    ENUM_NL_EXPR_SHAPE shape;
+    ENUM_NL_EXPR_SHAPE declaredShape;
+    ENUM_NL_EXPR_SHAPE inferredShape;
 
     /** m_bDeleteExpressionTree is true, if in garbage collection, we
      * should delete the osExpression tree object, if the OSInstance class
@@ -1819,11 +1823,15 @@ public:
     /** idx holds the row index of the nonlinear expression */
     int idx;
 
-    /** shape holds the shape of the nonlinear expression 
-     *  (linear/quadratic/convex/general) (see further up in this file).
-     *  this might be useful in guiding solver selection.
+    /** Since release 2.10 we allow the declaration and tracking of the shape
+     *  of a nonlinear expression. Possible values are maintained in OSParameters.h
+     *  and include linear/quadratic/convex/general.
+     *  This information might be useful in guiding solver selection.
+     *  The user-declared shape is tracked in declaredShape; we can also infer
+     *  the shape in the variable inferredShape. 
      */
-    ENUM_NL_EXPR_SHAPE shape;
+    ENUM_NL_EXPR_SHAPE declaredShape;
+    ENUM_NL_EXPR_SHAPE inferredShape;
 
     /** matrixExpressionTree contains the root of the MatrixExpressionTree */
     MatrixExpressionTree *matrixExpressionTree;

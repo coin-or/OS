@@ -503,7 +503,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                 outStr << "</value>" ;
                 if( m_bWhiteSpace == true) outStr << endl;
             }
-            outStr << "</linearConstraintCoefficients>" ;
+            outStr << "</linearConstraintCoefficients>";
             if( m_bWhiteSpace == true) outStr << endl;
         }
         if(m_OSInstance->instanceData->quadraticCoefficients != NULL && m_OSInstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0)
@@ -560,7 +560,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                     outStr << "\"";
 
                     // shape is an optional attribute, new since stable 2.9
-                    std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->nonlinearExpressions->nl[i]->shape);
+                    std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->nonlinearExpressions->nl[i]->declaredShape);
                     if (tempStr != "" && tempStr != "general")
                     {
                         outStr << " shape=\"" << tempStr << "\"";
@@ -732,6 +732,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
 
                     if (m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->objReferenceMatrixIdx >= 0)
                     {
+
                         outStr << " objReferenceMatrixIdx=\"";         
                         outStr << m_OSInstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i]->objReferenceMatrixIdx << "\"";
                     }
@@ -837,7 +838,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                         outStr << "\"";
 
                         // shape is an optional attribute, new since stable 2.9
-                        std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->shape);
+                        std::string tempStr = returnExprShapeString(m_OSInstance->instanceData->matrixProgramming->matrixExpressions->expr[i]->declaredShape);
                         if (tempStr != "" && tempStr != "general");
                         {
                             outStr << " shape=\"" << tempStr << "\"";
@@ -859,8 +860,8 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
         if( m_bWhiteSpace == true) outStr << endl;
     } // end instanceData if
     outStr << "</instanceData>";
-    outStr << "</osil>" ;
     if( m_bWhiteSpace == true) outStr << endl;
+    outStr << "</osil>";
     outStr << endl;
     return outStr.str();
 } // end writeOSiL

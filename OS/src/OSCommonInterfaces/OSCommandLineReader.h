@@ -1,7 +1,6 @@
 /* $Id: OSCommandLineReader.h 4263 2011-09-09 20:19:26Z Gassmann $ */
 /** @file OSCommandLineReader.h
  *
- *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
@@ -13,15 +12,11 @@
  *
  */
 
-
 #ifndef _OSCOMMANDLINEREADER_H
 #define _OSCOMMANDLINEREADER_H
 
-
 #include "OSCommandLine.h"
 #include "OSErrorClass.h"
-
-
 #include <string>
 
 
@@ -38,20 +33,14 @@
  */
 class OSCommandLineReader
 {
-
-
 public:
-
     /**
-     *
      * OSCommandLineReader class constructor.
-	 * @param osss is the command line to be parsed
-	 *
+     * @param osss is the command line to be parsed
      */
     OSCommandLineReader( );
 
     /**
-     *
      * OSCommandLineReader class destructor.
      */
     ~OSCommandLineReader();

@@ -655,9 +655,10 @@ osglMatrixWithMatrixObjIdx: matrixObjStart matrixWithMatrixObjIdxAttributes matr
 osglMatrixWithMatrixConIdx: matrixConStart matrixWithMatrixConIdxAttributes matrixConContent
 {
 //  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
-    osglData->matrixWithMatrixConIdx[osglData->matrixCounter] = 
-        (OSMatrixWithMatrixConIdx*)((OSMatrixWithMatrixConIdx*)osglData->mtxConstructorVec[0])
-            ->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    if (osglData->matrixCounter < osglData->numberOfMatrices)
+        osglData->matrixWithMatrixConIdx[osglData->matrixCounter] = 
+            (OSMatrixWithMatrixConIdx*)((OSMatrixWithMatrixConIdx*)osglData->mtxConstructorVec[0])
+                ->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
     osglData->matrixWithMatrixConIdx[osglData->matrixCounter]->idx = osglData->matrixCounter;
     osglData->matrixWithMatrixConIdx[osglData->matrixCounter]->matrixConIdx
         = osglData->matrixConIdxATT;
@@ -667,7 +668,7 @@ osglMatrixWithMatrixConIdx: matrixConStart matrixWithMatrixConIdxAttributes matr
 matrixStart: MATRIXSTART
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -720,7 +721,7 @@ matrixAttribute:
 matrixVarStart: MATRIXVARSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixVar)
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -779,7 +780,7 @@ matrixWithMatrixVarIdxATT:
 matrixObjStart: MATRIXOBJSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixObj)
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -838,7 +839,7 @@ matrixWithMatrixObjIdxATT:
 matrixConStart: MATRIXCONSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixCon)
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -1555,8 +1556,9 @@ complexValuedExpressionsElEmpty: ENDOFELEMENT;
 complexValuedExpressionsElLaden: GREATERTHAN OSnLCNode ELEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-        ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
-            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osglData->nonzeroCounter < osglData->numberOfValues) 
+            ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
+                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osglData->nonzeroCounter++;
     };
 
@@ -1708,7 +1710,7 @@ conReferenceElementsElStart: ELSTART
         osglData->incrPresent = false;
         osglData->mult = 1;
         osglData->incr = 0;
-        osglData->valueType = ""; //ENUM_CONREFERENCE_VALUETYPE_value;
+        osglData->valueType = "";
     };
 
 conReferenceElementsElAttributeList: | conReferenceElementsElAttributeList conReferenceElementsElAttribute;

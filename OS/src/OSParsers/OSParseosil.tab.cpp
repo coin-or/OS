@@ -1919,73 +1919,73 @@ static const yytype_uint16 yyrline[] =
     2435,  2437,  2446,  2448,  2448,  2450,  2450,  2452,  2468,  2471,
     2471,  2473,  2473,  2476,  2507,  2515,  2517,  2517,  2519,  2521,
     2529,  2529,  2531,  2547,  2549,  2549,  2551,  2551,  2553,  2584,
-    2594,  2594,  2596,  2598,  2606,  2606,  2608,  2877,  2928,  2951,
-    2970,  2970,  2973,  2974,  2975,  2976,  2977,  3159,  3159,  3161,
-    3163,  3203,  3205,  3205,  3210,  3228,  3255,  3255,  3258,  3259,
-    3260,  3261,  3262,  3263,  3264,  3265,  3266,  3269,  3269,  3271,
-    3271,  3276,  3276,  3276,  3277,  3277,  3277,  3278,  3278,  3278,
-    3279,  3279,  3281,  3283,  3292,  3298,  3298,  3301,  3305,  3311,
-    3313,  3313,  3319,  3329,  3339,  3339,  3341,  3343,  3345,  3348,
-    3348,  3359,  3367,  3367,  3369,  3371,  3373,  3379,  3389,  3397,
-    3397,  3399,  3401,  3403,  3406,  3408,  3417,  3423,  3423,  3426,
-    3430,  3436,  3438,  3440,  3440,  3450,  3458,  3458,  3460,  3462,
-    3464,  3467,  3469,  3478,  3484,  3484,  3487,  3491,  3497,  3499,
-    3502,  3507,  3518,  3534,  3534,  3536,  3538,  3540,  3542,  3542,
-    3544,  3551,  3558,  3577,  3577,  3580,  3581,  3583,  3583,  3585,
-    3587,  3589,  3589,  3592,  3594,  3602,  3602,  3607,  3614,  3616,
-    3625,  3631,  3631,  3634,  3638,  3645,  3647,  3650,  3654,  3665,
-    3681,  3681,  3683,  3685,  3687,  3687,  3689,  3691,  3706,  3706,
-    3708,  3710,  3719,  3721,  3730,  3736,  3736,  3739,  3743,  3750,
-    3752,  3755,  3759,  3770,  3787,  3787,  3789,  3791,  3793,  3793,
-    3795,  3797,  3812,  3812,  3814,  3816,  3825,  3827,  3836,  3842,
-    3842,  3845,  3849,  3855,  3857,  3859,  3859,  3869,  3877,  3877,
-    3879,  3881,  3883,  3886,  3888,  3897,  3903,  3903,  3906,  3910,
-    3916,  3918,  3921,  3925,  3936,  3952,  3952,  3954,  3956,  3958,
-    3958,  3960,  3963,  3975,  3975,  3978,  3979,  3980,  3982,  4015,
-    4017,  4027,  4033,  4033,  4036,  4040,  4046,  4048,  4051,  4055,
-    4066,  4079,  4079,  4081,  4083,  4085,  4085,  4087,  4114,  4125,
-    4125,  4128,  4129,  4130,  4132,  4132,  4135,  4137,  4146,  4152,
-    4152,  4155,  4159,  4165,  4167,  4169,  4169,  4179,  4187,  4187,
-    4189,  4191,  4193,  4196,  4199,  4217,  4217,  4228,  4235,  4245,
-    4253,  4259,  4261,  4275,  4287,  4293,  4299,  4299,  4301,  4303,
-    4305,  4307,  4317,  4323,  4329,  4329,  4331,  4333,  4335,  4337,
-    4337,  4342,  4347,  4359,  4361,  4361,  4364,  4365,  4366,  4374,
-    4381,  4381,  4383,  4385,  4403,  4414,  4458,  4581,  4592,  4614,
-    4639,  4650,  4664,  4679,  4694,  4706,  4718,  4738,  4758,  4768,
-    4805,  4816,  4828,  4842,  4855,  4868,  4878,  4888,  4901,  4901,
-    4903,  4913,  5077,  5077,  5079,  5086,  5113,  5113,  5115,  5124,
-    5140,  5140,  5142,  5149,  5176,  5176,  5178,  5185,  5194,  5194,
-    5196,  5203,  5230,  5230,  5234,  5242,  5251,  5251,  5253,  5260,
-    5269,  5269,  5271,  5278,  5317,  5318,  5324,  5330,  5351,  5352,
-    5354,  5362,  5382,  5389,  5389,  5392,  5398,  5408,  5409,  5410,
-    5411,  5412,  5413,  5414,  5415,  5416,  5417,  5418,  5419,  5420,
-    5421,  5422,  5423,  5424,  5425,  5426,  5427,  5428,  5429,  5430,
-    5431,  5433,  5434,  5435,  5439,  5439,  5442,  5443,  5445,  5445,
-    5448,  5449,  5453,  5453,  5458,  5458,  5463,  5463,  5468,  5468,
-    5473,  5473,  5478,  5478,  5483,  5483,  5488,  5488,  5493,  5493,
-    5498,  5498,  5503,  5503,  5508,  5508,  5513,  5515,  5521,  5528,
-    5528,  5534,  5534,  5546,  5546,  5551,  5551,  5556,  5556,  5566,
-    5573,  5579,  5580,  5582,  5583,  5586,  5590,  5594,  5598,  5597,
-    5618,  5617,  5624,  5625,  5627,  5626,  5633,  5634,  5637,  5643,
-    5651,  5658,  5676,  5676,  5687,  5687,  5690,  5690,  5704,  5705,
-    5708,  5708,  5721,  5722,  5725,  5725,  5738,  5739,  5742,  5742,
-    5752,  5753,  5759,  5760,  5761,  5762,  5763,  5764,  5765,  5766,
-    5767,  5768,  5769,  5770,  5771,  5772,  5773,  5774,  5775,  5776,
-    5777,  5780,  5791,  5799,  5799,  5802,  5803,  5806,  5807,  5809,
-    5819,  5833,  5838,  5845,  5846,  5848,  5855,  5860,  5867,  5868,
-    5870,  5877,  5882,  5889,  5890,  5892,  5899,  5901,  5907,  5909,
-    5911,  5917,  5919,  5921,  5927,  5929,  5931,  5937,  5939,  5941,
-    5947,  5947,  5952,  5954,  5956,  5962,  5962,  5967,  5969,  5980,
-    5982,  5987,  5987,  5989,  5991,  5997,  6000,  6002,  6008,  6011,
-    6013,  6019,  6022,  6024,  6030,  6034,  6033,  6045,  6045,  6052,
-    6054,  6060,  6062,  6064,  6070,  6073,  6075,  6081,  6091,  6091,
-    6097,  6105,  6107,  6127,  6127,  6129,  6131,  6133,  6133,  6135,
-    6145,  6164,  6170,  6170,  6173,  6181,  6197,  6197,  6201,  6202,
-    6203,  6204,  6205,  6206,  6207,  6208,  6209,  6213,  6217,  6226,
-    6227,  6229,  6236,  6236,  6239,  6240,  6244,  6246,  6252,  6255,
-    6257,  6263,  6266,  6266,  6276,  6277,  6283,  6285,  6291,  6294,
-    6296,  6302,  6305,  6307,  6313,  6316,  6318,  6324,  6327,  6329,
-    6335
+    2594,  2594,  2596,  2598,  2606,  2606,  2608,  2877,  2929,  2952,
+    2971,  2971,  2974,  2975,  2976,  2977,  2978,  3160,  3160,  3162,
+    3164,  3204,  3206,  3206,  3211,  3229,  3256,  3256,  3259,  3260,
+    3261,  3262,  3263,  3264,  3265,  3266,  3267,  3270,  3270,  3272,
+    3272,  3277,  3277,  3277,  3278,  3278,  3278,  3279,  3279,  3279,
+    3280,  3280,  3282,  3284,  3293,  3299,  3299,  3302,  3306,  3312,
+    3314,  3314,  3320,  3330,  3340,  3340,  3342,  3344,  3346,  3349,
+    3349,  3360,  3368,  3368,  3370,  3372,  3374,  3380,  3390,  3398,
+    3398,  3400,  3402,  3404,  3407,  3409,  3418,  3424,  3424,  3427,
+    3431,  3437,  3439,  3441,  3441,  3451,  3459,  3459,  3461,  3463,
+    3465,  3468,  3470,  3479,  3485,  3485,  3488,  3492,  3498,  3500,
+    3503,  3508,  3519,  3535,  3535,  3537,  3539,  3541,  3543,  3543,
+    3545,  3552,  3559,  3578,  3578,  3581,  3582,  3584,  3584,  3586,
+    3588,  3590,  3590,  3593,  3595,  3603,  3603,  3608,  3615,  3617,
+    3626,  3632,  3632,  3635,  3639,  3646,  3648,  3651,  3655,  3666,
+    3682,  3682,  3684,  3686,  3688,  3688,  3690,  3692,  3707,  3707,
+    3709,  3711,  3720,  3722,  3731,  3737,  3737,  3740,  3744,  3751,
+    3753,  3756,  3760,  3771,  3788,  3788,  3790,  3792,  3794,  3794,
+    3796,  3798,  3813,  3813,  3815,  3817,  3827,  3829,  3838,  3844,
+    3844,  3847,  3851,  3857,  3859,  3861,  3861,  3871,  3879,  3879,
+    3881,  3883,  3885,  3888,  3890,  3899,  3905,  3905,  3908,  3912,
+    3918,  3920,  3923,  3927,  3938,  3954,  3954,  3956,  3958,  3960,
+    3960,  3962,  3965,  3977,  3977,  3980,  3981,  3982,  3984,  4017,
+    4019,  4029,  4035,  4035,  4038,  4042,  4048,  4050,  4053,  4057,
+    4068,  4081,  4081,  4083,  4085,  4087,  4087,  4089,  4116,  4127,
+    4127,  4130,  4131,  4132,  4134,  4134,  4137,  4139,  4148,  4154,
+    4154,  4157,  4161,  4167,  4169,  4171,  4171,  4181,  4189,  4189,
+    4191,  4193,  4195,  4198,  4201,  4219,  4219,  4230,  4237,  4247,
+    4255,  4261,  4263,  4277,  4289,  4295,  4301,  4301,  4303,  4305,
+    4307,  4309,  4319,  4325,  4331,  4331,  4333,  4335,  4337,  4339,
+    4339,  4344,  4349,  4361,  4363,  4363,  4366,  4367,  4368,  4376,
+    4383,  4383,  4385,  4387,  4405,  4416,  4460,  4583,  4594,  4616,
+    4641,  4652,  4666,  4681,  4696,  4708,  4720,  4740,  4760,  4770,
+    4807,  4818,  4830,  4844,  4857,  4870,  4880,  4890,  4903,  4903,
+    4905,  4915,  5079,  5079,  5081,  5088,  5115,  5115,  5117,  5126,
+    5142,  5142,  5144,  5151,  5178,  5178,  5180,  5187,  5196,  5196,
+    5198,  5205,  5232,  5232,  5236,  5244,  5253,  5253,  5255,  5262,
+    5271,  5271,  5273,  5280,  5319,  5320,  5326,  5332,  5353,  5354,
+    5356,  5366,  5385,  5392,  5392,  5395,  5404,  5417,  5418,  5419,
+    5420,  5421,  5422,  5423,  5424,  5425,  5426,  5427,  5428,  5429,
+    5430,  5431,  5432,  5433,  5434,  5435,  5436,  5437,  5438,  5439,
+    5440,  5442,  5443,  5444,  5448,  5448,  5451,  5452,  5454,  5454,
+    5457,  5458,  5462,  5462,  5467,  5467,  5472,  5472,  5477,  5477,
+    5482,  5482,  5487,  5487,  5492,  5492,  5497,  5497,  5502,  5502,
+    5507,  5507,  5512,  5512,  5517,  5517,  5522,  5524,  5530,  5537,
+    5537,  5543,  5543,  5555,  5555,  5560,  5560,  5565,  5565,  5575,
+    5582,  5588,  5589,  5591,  5592,  5595,  5599,  5603,  5607,  5606,
+    5627,  5626,  5633,  5634,  5636,  5635,  5642,  5643,  5646,  5652,
+    5660,  5667,  5685,  5685,  5696,  5696,  5699,  5699,  5713,  5714,
+    5717,  5717,  5730,  5731,  5734,  5734,  5747,  5748,  5751,  5751,
+    5761,  5762,  5768,  5769,  5770,  5771,  5772,  5773,  5774,  5775,
+    5776,  5777,  5778,  5779,  5780,  5781,  5782,  5783,  5784,  5785,
+    5786,  5789,  5800,  5808,  5808,  5811,  5812,  5815,  5816,  5818,
+    5828,  5842,  5847,  5854,  5855,  5857,  5864,  5869,  5876,  5877,
+    5879,  5886,  5891,  5898,  5899,  5901,  5908,  5910,  5916,  5918,
+    5920,  5926,  5928,  5930,  5936,  5938,  5940,  5946,  5948,  5950,
+    5956,  5956,  5961,  5963,  5965,  5971,  5971,  5976,  5978,  5989,
+    5991,  5996,  5996,  5998,  6000,  6006,  6009,  6011,  6017,  6020,
+    6022,  6028,  6031,  6033,  6039,  6043,  6042,  6054,  6054,  6061,
+    6063,  6069,  6071,  6073,  6079,  6082,  6084,  6090,  6100,  6100,
+    6106,  6114,  6116,  6136,  6136,  6138,  6140,  6142,  6142,  6144,
+    6156,  6176,  6182,  6182,  6185,  6193,  6209,  6209,  6213,  6214,
+    6215,  6216,  6217,  6218,  6219,  6220,  6221,  6225,  6229,  6238,
+    6239,  6241,  6248,  6248,  6251,  6252,  6256,  6258,  6264,  6267,
+    6269,  6275,  6278,  6278,  6288,  6289,  6295,  6297,  6303,  6306,
+    6308,  6314,  6317,  6319,  6325,  6328,  6330,  6336,  6339,  6341,
+    6347
 };
 #endif
 
@@ -6441,7 +6441,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
     {
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -7040,8 +7040,9 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-        ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
-            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osglData->nonzeroCounter < osglData->numberOfValues) 
+            ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
+                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osglData->nonzeroCounter++;
     }
     break;
@@ -7183,7 +7184,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
         osglData->incrPresent = false;
         osglData->mult = 1;
         osglData->incr = 0;
-        osglData->valueType = ""; //ENUM_CONREFERENCE_VALUETYPE_value;
+        osglData->valueType = "";
     }
     break;
 
@@ -8170,8 +8171,10 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
-            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+            osinstance->instanceData->nonlinearExpressions
+                    ->nl[osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
+                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osnlData->tmpnlcount++;
     }
     break;
@@ -8179,9 +8182,8 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
   case 811:
 
     {
-        if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
-            parserData->parser_errors += 
-                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of nl terms greater than number attribute");
+        if (osnlData->tmpnlcount >= osnlData->nlnodenumber)
+            throw ErrorClass(  "actual number of nl terms greater than numberOfNonlinearExpressions");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 
@@ -8208,22 +8210,28 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
   case 815:
 
-    { 
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
-            = new RealValuedExpressionTree();
+    {
+//        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+//        {
+            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
+            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
+                = new RealValuedExpressionTree();
+//        }
     }
     break;
 
   case 816:
 
     {
-        if (returnNlExprShape(osglData->shape) > 0)
-            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->shape 
-                = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
-        else
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
-                "unknown shape specified in matrix transformation");
+//        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+//        {
+            if (returnNlExprShape(osglData->shape) > 0)
+                osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->declaredShape 
+                    = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
+            else
+                parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                    "unknown shape specified in real-valued expression");
+//        }
     }
     break;
 
@@ -8955,8 +8963,10 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
     #ifdef OSINSTANCE_AVAILABLE
-        osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
-            ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+            osinstance->instanceData->matrixProgramming->matrixExpressions->
+                    expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
+                ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
     #endif
         osnlData->tmpnlcount++;
     }
@@ -8967,7 +8977,8 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     {
         if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
             parserData->parser_errors += 
-                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrix expressions greater than number attribute");
+                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                    "actual number of matrix expressions greater than numberOfExpr attribute");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 
@@ -9008,11 +9019,11 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     #ifdef OSINSTANCE_AVAILABLE
         if (returnNlExprShape(osglData->shape) > 0)
             osinstance->instanceData->matrixProgramming->matrixExpressions
-                ->expr[ osnlData->tmpnlcount]->shape 
+                ->expr[ osnlData->tmpnlcount]->declaredShape 
                     = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
         else
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
-                "unknown shape specified in matrix transformation");
+                "unknown shape specified in matrix expression");
     #endif
     }
     break;
@@ -9943,7 +9954,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     long int numChar;
     char *attTextEnd;
     const char *ch = *p;
-    start = clock(); 
+    start = clock();
     const char *c_numberOfVariables = "numberOfVariables";
     const char *startVariables = "<variables";
     const char *endVariables = "</variables";
@@ -9952,7 +9963,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     // the attributes
     char *attText = NULL;
     const char *name = "name";
-    //const char *initString = "initString";
     const char *type = "type";
     const char *mult = "mult";
     // others
@@ -9961,12 +9971,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     int vt;
     int numberOfVariables = 0;
 // variable attribute boolean variables
-    bool varlbattON  = false;
-    bool varubattON = false ;
-    bool vartypeattON  = false;
-    bool varnameattON = false ;
-    //bool varinitattON = false ;
-    //bool varinitStringattON = false ;
+    bool varlbattON   = false;
+    bool varubattON   = false;
+    bool vartypeattON = false;
+    bool varnameattON = false;
     bool varmultattON = false;
     bool foundVar = false;
     int varmult; 
@@ -9987,25 +9995,23 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     *p = ch;
     while(*c_numberOfVariables++  == *ch) ch++;
     if( (ch - *p) != 17) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfVariables attribute in <variables tag>"); return false;}    
-    // buf_index should be pointing to the first character after numberOfVariables
+    // buf_index should be pointing to the first character after "numberOfVariables" attribute
     GETATTRIBUTETEXT;
     ch++;
     numberOfVariables = atoimod1( osillineno, attText, attTextEnd);
     delete [] attText;
-    if(numberOfVariables <  0) {
-        osilerror_wrapper( ch,osillineno,"there must be a nonnegative number of variables"); return false;
-    }
+    // get rid of white space after the numberOfVariables element
+    for ( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;                    
+
     osinstance->instanceData->variables->numberOfVariables = numberOfVariables;
-    if(numberOfVariables > 0){
+    if (numberOfVariables > 0)
+    {
         osinstance->instanceData->variables->var = new Variable*[ numberOfVariables];
-        for(i = 0; i < numberOfVariables; i++){
+        for (i = 0; i < numberOfVariables; i++)
+        {
             osinstance->instanceData->variables->var[ i] = new Variable();
         } 
-    }
-    // get rid of white space after the numberOfVariables element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;                    
-    // since there must be at least one variable,  this element must end with > 
-    if(numberOfVariables > 0){
+        // If there is at least one variable, this element must end with '>', not '/>' 
         // better have an > sign or not valid
         if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"variables element does not have a proper closing >"); return false;}
         ch++;
@@ -10015,9 +10021,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
         *p = ch;
         while(*startVar++  == *ch) ch++;
         if( (ch - *p) ==  4) foundVar = true;
-            else {  osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
+        else {osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
         startVar -= 5;
-        while(foundVar){
+        while(foundVar)
+        {
             varlbattON   = false;
             varubattON   = false;
             vartypeattON = false;
@@ -10029,8 +10036,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             // assume we are pointing to the first character after the r in <var
             // it should be whitespace
             for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-            while(*ch != '/' && *ch != '>'){
-                switch (*ch) {
+            while(*ch != '/' && *ch != '>')
+            {
+                switch (*ch) 
+                {
                 case 'n':
                     *p = ch;
                     while(*name++  == *ch) ch++;
@@ -10109,42 +10118,66 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             //
             // assume all the attributes have been processed
             // must have either /> or > and then whitespace and </var whitespace>
-            if( *ch != '/' && *ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
-            if(*ch == '/'){
+            if ( *ch != '/' && *ch != '>') 
+            {  
+                osilerror_wrapper( ch,osillineno,"incorrect end of <var> element");
+                return false;
+            }
+            if (*ch == '/')
+            {
                 ch++;
-                if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
+                if(*ch != '>') 
+                {
+                    osilerror_wrapper( ch,osillineno,"incorrect end of <var> element");
+                    return false;
+                }
                 // get rid of whitespace
                 ch++;
-                for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                for (; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
                 // either have another <var> element or foundVar = false;
                 *p = ch;
                 while(*startVar++  == *ch) ch++;
-                if( (ch - *p) == 4) {
+                if( (ch - *p) == 4)
+                {
                     foundVar = true;
                     startVar -= 5;
                 }
-                else {
+                else
+                {
                     foundVar = false;
                     ch = *p;
                 }
             }
-            else{
+            else
+            {
                 // the buf_index is the > at the end of the var element 
                 // double check to make sure it really is a >
-                if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <var> element"); return false;}
+                if(*ch != '>') 
+                {
+                    osilerror_wrapper( ch,osillineno,"improper ending to a <var> element");
+                    return false;
+                }
                 // look for </var
-                // fist get rid of white space
+                // first get rid of white space
                 ch++;
-                for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                for (; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
                 // we should be at </var or there is an error
                 *p = ch;
                 while(*endVar++  == *ch) ch++;
                 endVar -= 6;
-                if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"</var> element missing"); return false;}
+                if( (ch - *p) != 5) 
+                {
+                    osilerror_wrapper( ch,osillineno,"</var> element missing");
+                    return false;
+                }
                 // burn off the whitespace
                 for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
                 // better have an > to end </var
-                if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"</var> element missing >"); return false;}
+                if(*ch++ != '>')
+                {
+                    osilerror_wrapper( ch,osillineno,"</var> element missing >");
+                    return false;
+                }
                 // look for a new <var> element
                 // get rid of whitespace
                 ch++;
@@ -10152,63 +10185,111 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 // either have another <var> element or foundVar = false;
                 *p = ch;
                 while(*startVar++  == *ch) ch++;
-                if( (ch - *p) == 4) {
+                if( (ch - *p) == 4)
+                {
                     foundVar = true;
                     startVar -= 5;
                 }
-                else {
+                else
+                {
                     foundVar = false;
                     ch = *p;
                 }
             }
-            if( ((varcount+varmult) == numberOfVariables) && (foundVar == true) ) {   osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is less than actual number found");  return false;}
-            for (int k=1; k < varmult; k++)
+            if( ((varcount+varmult) <= numberOfVariables))
             {
-                osinstance->instanceData->variables->var[varcount+k]->name 
-                = osinstance->instanceData->variables->var[varcount]->name;
-                osinstance->instanceData->variables->var[varcount+k]->type 
-                = osinstance->instanceData->variables->var[varcount]->type;
-                osinstance->instanceData->variables->var[varcount+k]->lb 
-                = osinstance->instanceData->variables->var[varcount]->lb;
-                osinstance->instanceData->variables->var[varcount+k]->ub 
-                = osinstance->instanceData->variables->var[varcount]->ub;
+                for (int k=1; k < varmult; k++)
+                {
+                    osinstance->instanceData->variables->var[varcount+k]->name 
+                    = osinstance->instanceData->variables->var[varcount]->name;
+                    osinstance->instanceData->variables->var[varcount+k]->type 
+                    = osinstance->instanceData->variables->var[varcount]->type;
+                    osinstance->instanceData->variables->var[varcount+k]->lb 
+                    = osinstance->instanceData->variables->var[varcount]->lb;
+                    osinstance->instanceData->variables->var[varcount+k]->ub 
+                    = osinstance->instanceData->variables->var[varcount]->ub;
+                }
             }
             varcount += varmult;
+
+//            if( (varcount >= numberOfVariables) && (foundVar == true) ) 
+        // foundVar is bool, so =1 if true, =0 if false
+            if( (varcount+foundVar) > numberOfVariables)
+            {
+                osilerror_wrapper( ch,osillineno,"actual number of variables exceeds attribute numberOfVariables");
+                return false;
+            }
         }// end while(foundVar)
-        if(varcount < numberOfVariables) {  osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is greater than actual number found");   return false;}
+        if(varcount < numberOfVariables)
+        {
+            osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is greater than actual number found");   
+            return false;
+        }
         // get the </variables> tag
         *p = ch;
         while(*endVariables++  == *ch) ch++;
-        if( (ch - *p) != 11) {   osilerror_wrapper( ch,osillineno,"cannot find </variables> tag"); return false;}
+        if( (ch - *p) != 11)
+        {
+            osilerror_wrapper( ch,osillineno,"cannot find </variables> tag");
+            return false;
+        }
         for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
         // better have >
-        if(*ch != '>') {   osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}
+        if(*ch != '>')
+        {
+            osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag");
+            return false;
+        }
         ch++;
-    }else {//end if(numberOfVariables > 0)
+    }
+    else
+    {   // end if(numberOfVariables > 0)
         // error if the number is negative
-        if(numberOfVariables < 0) {  osilerror_wrapper( ch,osillineno,"cannot have a negative number of variables"); return false;}
+        if (numberOfVariables < 0)
+        {
+            osilerror_wrapper( ch,osillineno,"cannot have a negative number of variables");
+            return false;
+        }
         // if we are here we have numberOfVariables = 0
         // must close with /> or </variables>
         // get rid of white space
         for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-        if( *ch == '/'){
+        if( *ch == '/')
+        {
             // better have a >
             ch++;
-            if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed variables tag"); return false;}
+            if( *ch  != '>')
+            {
+                osilerror_wrapper( ch,osillineno,"improperly closed variables tag");
+                return false;
+            }
             ch++;
         }
-        else{
-            // if we are here we must have an '>' and then  </constraints> tag
-            if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed variables tag"); return false;}
+        else
+        {
+            // if we are here we must have an '>' and then  </variables> tag
+            if( *ch  != '>')
+            {
+                osilerror_wrapper( ch,osillineno,"improperly closed variables tag");
+                return false;
+            }
             ch++;
             // burn white space
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
             *p = ch;
             while( *endVariables++  == *ch) ch++;
-            if( (ch - *p) != 11) {  osilerror_wrapper( ch,osillineno, "cannot find </variables> tag"); return false; }
+            if ( (ch - *p) != 11)
+            {
+                osilerror_wrapper( ch,osillineno, "cannot find </variables> tag");
+                return false;
+            }
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
             // better have >
-            if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}    
+            if(*ch != '>')
+            {
+                osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag");
+                return false;
+            }
             ch++;
         }
     }
@@ -10227,8 +10308,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    long int ki;
-    long int numChar;
+    int ki, numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock();
@@ -10284,7 +10364,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     else{
         *p = ch;
         while( *c_numberOfObjectives++  == *ch) ch++;
-        if( (ch - *p) != 18) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfObjectives attribute in <objectives> tag"); return false;}    
+        if( (ch - *p) != 18) {  osilerror_wrapper( ch,osillineno,"<objectives> tag needs numberOfObjectives or <obj> element"); return false;}    
         GETATTRIBUTETEXT;
         numberOfObjectives = atoimod1( osillineno, attText, attTextEnd);
         delete [] attText;
@@ -10326,7 +10406,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         objmultattON = false;
         objnumberOfObjCoefattON = false;
         objmult = 1;
-        // assume we are pointing to the first character after the r in <obj
+        // assume we are pointing to the first character after the j in <obj
         // it should be a space so let's increment ch
         ch++;
         while(*ch != '/' && *ch != '>'){
@@ -10462,11 +10542,11 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
             // we should be at </obj or there is an error
             for(i = 0; endObj[i]  == *ch; i++, ch++);
-            if(i != 5) {  osilerror_wrapper( ch,osillineno,"</obj> element missing"); return false;}
+            if(i != 5) {  osilerror_wrapper( ch,osillineno,"</obj> element missing or too many <coef> elements"); return false;}
             // burn off the whitespace
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
             // better have an > to end </obj
-            if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element missing"); return false;}
+            if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element ill-formed"); return false;}
             // look for a new <obj> element
             // get rid of whitespace
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -10475,33 +10555,44 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
             if(i == 4) foundObj = true;
                 else foundObj = false;
         }
-        if( ((objcount+objmult) == numberOfObjectives) && (foundObj == true)) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is less than actual number found"); return false;}
-        for (int k=1; k < objmult; k++)
+        if ( (objcount+objmult) <= numberOfObjectives)
         {
-            osinstance->instanceData->objectives->obj[objcount+k]->name 
-            = osinstance->instanceData->objectives->obj[objcount]->name;
-            osinstance->instanceData->objectives->obj[objcount+k]->maxOrMin 
-            = osinstance->instanceData->objectives->obj[objcount]->maxOrMin;
-            osinstance->instanceData->objectives->obj[objcount+k]->constant 
-            = osinstance->instanceData->objectives->obj[objcount]->constant;
-            osinstance->instanceData->objectives->obj[objcount+k]->weight 
-            = osinstance->instanceData->objectives->obj[objcount]->weight;
-            osinstance->instanceData->objectives->obj[objcount+k]->numberOfObjCoef 
-            = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
-            if (osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef > 0)
+            for (int k=1; k < objmult; k++)
             {
-                osinstance->instanceData->objectives->obj[objcount+k]->coef = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
-                for(int i = 0; i < osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef; i++)
+                osinstance->instanceData->objectives->obj[objcount+k]->name 
+                = osinstance->instanceData->objectives->obj[objcount]->name;
+                osinstance->instanceData->objectives->obj[objcount+k]->maxOrMin 
+                = osinstance->instanceData->objectives->obj[objcount]->maxOrMin;
+                osinstance->instanceData->objectives->obj[objcount+k]->constant 
+                = osinstance->instanceData->objectives->obj[objcount]->constant;
+                osinstance->instanceData->objectives->obj[objcount+k]->weight 
+                = osinstance->instanceData->objectives->obj[objcount]->weight;
+                osinstance->instanceData->objectives->obj[objcount+k]->numberOfObjCoef 
+                = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
+                if (osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef > 0)
                 {
-                    osinstance->instanceData->objectives->obj[objcount+k]->coef[i] = new ObjCoef();
-                    osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->idx = 
-                      osinstance->instanceData->objectives->obj[objcount]->coef[i]->idx;
-                    osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->value = 
-                      osinstance->instanceData->objectives->obj[objcount]->coef[i]->value;
+                    osinstance->instanceData->objectives->obj[objcount+k]->coef
+                    = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
+                    for (int i = 0; 
+                             i < osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef;
+                             i++)
+                    {
+                        osinstance->instanceData->objectives->obj[objcount+k]->coef[i] = new ObjCoef();
+                        osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->idx = 
+                          osinstance->instanceData->objectives->obj[objcount]->coef[i]->idx;
+                        osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->value = 
+                          osinstance->instanceData->objectives->obj[objcount]->coef[i]->value;
+                    }
                 }
             }
         }
         objcount += objmult;
+//        if( (objcount >= numberOfObjectives) && (foundObj == true))
+        // foundObj is bool, so =1 if true, =0 if false
+        if( (objcount+foundObj) > numberOfObjectives)
+        {
+            osilerror_wrapper( ch,osillineno,"actual number of objectives exceeds attribute numberOfObjectives"); return false;
+        }
     }
     if(objcount < numberOfObjectives) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is greater than actual number found"); return false;}
     ch -= i;
@@ -10762,19 +10853,29 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
                  ch = *p;
             }
         }
-        if( ((concount+conmult) == numberOfConstraints) && (foundCon == true) ) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is less than actual number found"); return false;}
-        for (int k=1; k < conmult; k++)
+        if( (concount+conmult) <= numberOfConstraints)
         {
-            osinstance->instanceData->constraints->con[concount+k]->name
-            = osinstance->instanceData->constraints->con[concount]->name ;
-            osinstance->instanceData->constraints->con[concount+k]->constant
-            = osinstance->instanceData->constraints->con[concount]->constant ;
-            osinstance->instanceData->constraints->con[concount+k]->lb
-            = osinstance->instanceData->constraints->con[concount]->lb ;
-            osinstance->instanceData->constraints->con[concount+k]->ub
-            = osinstance->instanceData->constraints->con[concount]->ub ;
+            for (int k=1; k < conmult; k++)
+            {
+                osinstance->instanceData->constraints->con[concount+k]->name
+                = osinstance->instanceData->constraints->con[concount]->name;
+                osinstance->instanceData->constraints->con[concount+k]->constant
+                = osinstance->instanceData->constraints->con[concount]->constant;
+                osinstance->instanceData->constraints->con[concount+k]->lb
+                = osinstance->instanceData->constraints->con[concount]->lb;
+                osinstance->instanceData->constraints->con[concount+k]->ub
+                = osinstance->instanceData->constraints->con[concount]->ub;
+            }
         }
         concount += conmult;
+
+//        if( (concount >= numberOfConstraints) && (foundCon == true))
+        // foundCon is bool, so =1 if true, =0 if false
+        if( (concount+foundCon) > numberOfConstraints)
+        {
+            osilerror_wrapper( ch,osillineno,"actual number of constraints exceeds attribute numberOfConstraints");
+            return false;
+        }
     }
     if(concount < numberOfConstraints) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is greater than actual number found"); return false;}
     // get the </constraints> tag
@@ -11884,7 +11985,7 @@ void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg){
     strncpy(errorArray, ch, numErrorChar);
     std::ostringstream outStr;
     std::string error = errormsg;
-    error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
+    error = "PARSER ERROR:  Input is either invalid or ill-formed: "  + error;
     outStr << error << endl;
     outStr << "Here are " ;
     outStr << numErrorChar ;

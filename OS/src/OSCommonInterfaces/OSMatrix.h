@@ -48,6 +48,29 @@ class RealValuedExpressionTree;
  *  \brief a generic class from which we derive matrix constructors
  *  (BaseMatrix, MatrixElements, MatrixTransformation and MatrixBlocks)
  *  as well as matrix types (OSMatrix and MatrixBlock).
+ *
+ *  The full inheritance tree looks like this:
+ *  MatrixNode   
+ *      MatrixConstructor
+ *          BaseMatrix
+ *          MatrixTransformation
+ *          MatrixElements
+ *              ConstantMatrixElements
+ *              ComplexMatrixElements
+ *              VarReferenceMatrixElements
+ *              ObjReferenceMatrixElements
+ *              ConReferenceMatrixElements
+ *              MixedRowReferenceMatrixElements
+ *              LinearMatrixElements
+ *              RealValuedExpressions
+ *              ComplexValuedExpressions
+ *              StringValuedMatrixElements
+ *      MatrixType
+ *          MatrixBlock
+ *          OSMatrix
+ *              OSMatrixWithVarIdx
+ *              OSMatrixWithObjIdx
+ *              OSMatrixWithConIdx
  */
 class MatrixNode
 {
@@ -2241,6 +2264,12 @@ public:
     ENUM_MATRIX_SYMMETRY symmetry;
 
     /**
+     * elementType holds the type of values found in the value array.
+     * @remark See OSParameters.h for a list of possible types
+     */
+    ENUM_MATRIX_TYPE elementType;
+
+    /**
      * startSize is the dimension of the starts array
      */
     int startSize;
@@ -2336,16 +2365,23 @@ public:
     ENUM_MATRIX_TYPE matrixType;
 
     /**
-     * isRowMajor holds whether the (nonzero) values holding the
-     * data are stored by column or row. If false, the matrix is stored by column.
+     * isRowMajor holds whether the (nonzero) values holding the data in each block
+     * are stored by column or row. If false, each block is stored by column.
      */
     bool isRowMajor;
 
     /**
-     * blockNumber gives the number of blocks (which is the size of
-     * the blockRows and blockColumns arrays).
+     *  To track the type of symmetry present in the matrix or block
+     *  @remark for definitions, see OSParameters.h
+     *  @remark each block is stored in the same format
      */
-    int blockNumber;
+    ENUM_MATRIX_SYMMETRY symmetry;
+
+    /**
+     * elementType holds the type of values found in the value array.
+     * @remark See OSParameters.h for a list of possible types
+     */
+    ENUM_MATRIX_TYPE elementType;
 
     /** 
      * rowOffset gives the row offsets of the block decomposition
@@ -2370,6 +2406,12 @@ public:
     int colOffsetSize;
 
     /**
+     * blockNumber gives the number of blocks (which is the size of
+     * the blockRows and blockColumns arrays below).
+     */
+    int blockNumber;
+
+    /**
      * blockRows holds an integer array of the row to which a block belongs.
      * It must be of dimension blockNumber.
      * @Remark It is assumed that all blocks in a row have the same number of rows 
@@ -2387,8 +2429,8 @@ public:
 
     /**
      * blocks holds the blocks that make up the matrix.
-     * All blocks have the same type of values, which corresponds to the most
-     * general form found, and the same row/column major form.
+     * All blocks have the same type of values, the same symmetry, 
+     * and the same row/column major form.
      */
     GeneralSparseMatrix** blocks;
 
@@ -2463,11 +2505,13 @@ public:
     int numberOfColumns;
    
     /**
-     *  The matrix can be held in expanded form by rows or by columns 
-     *  and in a number of ways stored by blocks
-     */
+     *  The matrix can be held in expanded form elementwise or partitioned into blocks.
+     *  In both cases the elements or blocks cab be stored by row or by column, symmetry
+     *  can be exploited, and the elements can be represented in a number of different formats.
+     */  
     GeneralSparseMatrix* expandedMatrixInRowMajorForm;
     GeneralSparseMatrix* expandedMatrixInColumnMajorForm;
+    std::vector<GeneralSparseMatrix* > expandedMatrixByElements;
     std::vector<ExpandedMatrixBlocks*> expandedMatrixByBlocks;
 
 private:

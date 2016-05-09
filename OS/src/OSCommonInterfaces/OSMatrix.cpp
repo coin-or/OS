@@ -1844,9 +1844,15 @@ GeneralSparseMatrix* MatrixType::extractElements(int constructorNo_, bool rowMaj
 
 GeneralSparseMatrix* MatrixType::expandTransformation(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry)
 {
+    ostringstream outStr;
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance,
                       ENUM_OUTPUT_LEVEL_trace, "Inside expandTransformation()");
+    if (rowMajor)
+        outStr << "return matrix elements in row major form" << std::endl;
+    else    
+        outStr << "return matrix elements in column major form" << std::endl;
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
     throw ErrorClass("method expandTransformation() not implemented yet");
 }// end of expandTransformation
@@ -1940,22 +1946,18 @@ GeneralSparseMatrix* MatrixType::getExpandedMatrix(bool rowMajor, ENUM_MATRIX_TY
                                 m_iColumnPartitionSize, rowMajor, true);
 
                 tempMtx = expandBlocks(currentBlocks, rowMajor, symmetry);
-
-//                return expandedMatrixInColumnMajorForm; 
             }
 
             else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
             {
 //              transformation: see if we can do at least AB, A'B, AB'
-//              for now:
-                throw ErrorClass("transformations not yet implemented in getExpandedMatrix()");
+                tempMtx = expandTransformation(rowMajor, symmetry);
             }
             else // some kind of elements 
             {
                 tempMtx = this->extractElements(0,rowMajor,symmetry);
                 this->inferredMatrixType = tempMtx->matrixType;
 //                expandedMatrixInColumnMajorForm->printMatrix();
-//                return expandedMatrixInColumnMajorForm; 
             }
         }
         else // two or more constructors --- worry about overwriting and number of elements
@@ -1995,7 +1997,7 @@ GeneralSparseMatrix* MatrixType::getExpandedMatrix(bool rowMajor, ENUM_MATRIX_TY
             {
                 if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
                 {
-                    throw ErrorClass("Cannot handle transformations yet in getExpandedMatrix()");
+                    tempExpansion[i] = expandTransformation(rowMajor, symmetry);
                 }
                 else if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
                 {

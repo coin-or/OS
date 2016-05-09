@@ -5889,9 +5889,10 @@ osglMatrixWithMatrixObjIdx: matrixObjStart matrixWithMatrixObjIdxAttributes matr
 osglMatrixWithMatrixConIdx: matrixConStart matrixWithMatrixConIdxAttributes matrixConContent
 {
 //  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
-    osglData->matrixWithMatrixConIdx[osglData->matrixCounter] = 
-        (OSMatrixWithMatrixConIdx*)((OSMatrixWithMatrixConIdx*)osglData->mtxConstructorVec[0])
-            ->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    if (osglData->matrixCounter < osglData->numberOfMatrices)
+        osglData->matrixWithMatrixConIdx[osglData->matrixCounter] = 
+            (OSMatrixWithMatrixConIdx*)((OSMatrixWithMatrixConIdx*)osglData->mtxConstructorVec[0])
+                ->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
     osglData->matrixWithMatrixConIdx[osglData->matrixCounter]->idx = osglData->matrixCounter;
     osglData->matrixWithMatrixConIdx[osglData->matrixCounter]->matrixConIdx
         = osglData->matrixConIdxATT;
@@ -5901,7 +5902,7 @@ osglMatrixWithMatrixConIdx: matrixConStart matrixWithMatrixConIdxAttributes matr
 matrixStart: MATRIXSTART
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -5954,7 +5955,7 @@ matrixAttribute:
 matrixVarStart: MATRIXVARSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixVar)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -6013,7 +6014,7 @@ matrixWithMatrixVarIdxATT:
 matrixObjStart: MATRIXOBJSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixObj)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -6072,7 +6073,7 @@ matrixWithMatrixObjIdxATT:
 matrixConStart: MATRIXCONSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixCon)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -6789,8 +6790,9 @@ complexValuedExpressionsElEmpty: ENDOFELEMENT;
 complexValuedExpressionsElLaden: GREATERTHAN OSnLCNode ELEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-        ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
-            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osglData->nonzeroCounter < osglData->numberOfValues) 
+            ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
+                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osglData->nonzeroCounter++;
     };
 
@@ -6942,7 +6944,7 @@ conReferenceElementsElStart: ELSTART
         osglData->incrPresent = false;
         osglData->mult = 1;
         osglData->incr = 0;
-        osglData->valueType = ""; //ENUM_CONREFERENCE_VALUETYPE_value;
+        osglData->valueType = "";
     };
 
 conReferenceElementsElAttributeList: | conReferenceElementsElAttributeList conReferenceElementsElAttribute;
@@ -8327,16 +8329,17 @@ nlnodes:
 realValuedExpressionTree: nlstart nlAttributes GREATERTHAN nlnode NLEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
-            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+            osinstance->instanceData->nonlinearExpressions
+                    ->nl[osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
+                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osnlData->tmpnlcount++;
     };
 
 nlstart: NLSTART
     {
-        if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
-            parserData->parser_errors += 
-                addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "actual number of nl terms greater than number attribute");
+        if (osnlData->tmpnlcount >= osnlData->nlnodenumber)
+            throw ErrorClass(  "actual number of nl terms greater than numberOfNonlinearExpressions");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 
@@ -8363,19 +8366,25 @@ nlAttributeList: | nlAttributeList nlAttribute;
 
 nlAttribute: 
       osglIdxATT 
-    { 
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
-            = new RealValuedExpressionTree();
+    {
+//        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+//        {
+            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
+            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
+                = new RealValuedExpressionTree();
+//        }
     }
     | osglShapeATT
     {
-        if (returnNlExprShape(osglData->shape) > 0)
-            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->shape 
-                = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
-        else
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
-                "unknown shape specified in matrix transformation");
+//        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+//        {
+            if (returnNlExprShape(osglData->shape) > 0)
+                osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->declaredShape 
+                    = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
+            else
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                    "unknown shape specified in real-valued expression");
+//        }
     };
 
 nlnode: number
@@ -9109,8 +9118,10 @@ matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN OSnLMNode EXPREND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
     #ifdef OSINSTANCE_AVAILABLE
-        osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
-            ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+            osinstance->instanceData->matrixProgramming->matrixExpressions->
+                    expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
+                ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
     #endif
         osnlData->tmpnlcount++;
     };
@@ -9119,7 +9130,8 @@ matrixExprStart: EXPRSTART
     {
         if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
             parserData->parser_errors += 
-                addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "actual number of matrix expressions greater than number attribute");
+                addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                    "actual number of matrix expressions greater than numberOfExpr attribute");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 
@@ -9156,11 +9168,11 @@ exprAttribute:
     #ifdef OSINSTANCE_AVAILABLE
         if (returnNlExprShape(osglData->shape) > 0)
             osinstance->instanceData->matrixProgramming->matrixExpressions
-                ->expr[ osnlData->tmpnlcount]->shape 
+                ->expr[ osnlData->tmpnlcount]->declaredShape 
                     = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
         else
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
-                "unknown shape specified in matrix transformation");
+                "unknown shape specified in matrix expression");
     #endif
     };
 

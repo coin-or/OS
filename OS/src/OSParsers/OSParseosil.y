@@ -2916,9 +2916,10 @@ osglMatrixWithMatrixObjIdx: matrixObjStart matrixWithMatrixObjIdxAttributes matr
 osglMatrixWithMatrixConIdx: matrixConStart matrixWithMatrixConIdxAttributes matrixConContent
 {
 //  IMPORTANT -- HERE IS WHERE WE CREATE THE CONSTRUCTOR LISTS
-    osglData->matrixWithMatrixConIdx[osglData->matrixCounter] = 
-        (OSMatrixWithMatrixConIdx*)((OSMatrixWithMatrixConIdx*)osglData->mtxConstructorVec[0])
-            ->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
+    if (osglData->matrixCounter < osglData->numberOfMatrices)
+        osglData->matrixWithMatrixConIdx[osglData->matrixCounter] = 
+            (OSMatrixWithMatrixConIdx*)((OSMatrixWithMatrixConIdx*)osglData->mtxConstructorVec[0])
+                ->createConstructorTreeFromPrefix(osglData->mtxConstructorVec);
     osglData->matrixWithMatrixConIdx[osglData->matrixCounter]->idx = osglData->matrixCounter;
     osglData->matrixWithMatrixConIdx[osglData->matrixCounter]->matrixConIdx
         = osglData->matrixConIdxATT;
@@ -2928,7 +2929,7 @@ osglMatrixWithMatrixConIdx: matrixConStart matrixWithMatrixConIdxAttributes matr
 matrixStart: MATRIXSTART
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -2981,7 +2982,7 @@ matrixAttribute:
 matrixVarStart: MATRIXVARSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixVar)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -3040,7 +3041,7 @@ matrixWithMatrixVarIdxATT:
 matrixObjStart: MATRIXOBJSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixObj)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -3099,7 +3100,7 @@ matrixWithMatrixObjIdxATT:
 matrixConStart: MATRIXCONSTART 
 {
     if (osglData->matrixCounter >= osglData->numberOfMatrixCon)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more matrices than specified");
+        throw ErrorClass("more matrices than specified");
     osglData->symmetryPresent = false;
     osglData->typePresent = false;
     osglData->numberOfRowsPresent = false;
@@ -3816,8 +3817,9 @@ complexValuedExpressionsElEmpty: ENDOFELEMENT;
 complexValuedExpressionsElLaden: GREATERTHAN OSnLCNode ELEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-        ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
-            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osglData->nonzeroCounter < osglData->numberOfValues) 
+            ((ComplexValuedExpressions*)osglData->tempC)->value->el[osglData->nonzeroCounter]->m_treeRoot = 
+                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osglData->nonzeroCounter++;
     };
 
@@ -3969,7 +3971,7 @@ conReferenceElementsElStart: ELSTART
         osglData->incrPresent = false;
         osglData->mult = 1;
         osglData->incr = 0;
-        osglData->valueType = ""; //ENUM_CONREFERENCE_VALUETYPE_value;
+        osglData->valueType = "";
     };
 
 conReferenceElementsElAttributeList: | conReferenceElementsElAttributeList conReferenceElementsElAttribute;
@@ -5354,16 +5356,17 @@ nlnodes:
 realValuedExpressionTree: nlstart nlAttributes GREATERTHAN nlnode NLEND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
-            ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+            osinstance->instanceData->nonlinearExpressions
+                    ->nl[osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
+                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osnlData->tmpnlcount++;
     };
 
 nlstart: NLSTART
     {
-        if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
-            parserData->parser_errors += 
-                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of nl terms greater than number attribute");
+        if (osnlData->tmpnlcount >= osnlData->nlnodenumber)
+            throw ErrorClass(  "actual number of nl terms greater than numberOfNonlinearExpressions");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 
@@ -5390,19 +5393,25 @@ nlAttributeList: | nlAttributeList nlAttribute;
 
 nlAttribute: 
       osglIdxATT 
-    { 
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
-        osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
-            = new RealValuedExpressionTree();
+    {
+//        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+//        {
+            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->idx = osglData->idx;
+            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree
+                = new RealValuedExpressionTree();
+//        }
     }
     | osglShapeATT
     {
-        if (returnNlExprShape(osglData->shape) > 0)
-            osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->shape 
-                = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
-        else
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
-                "unknown shape specified in matrix transformation");
+//        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+//        {
+            if (returnNlExprShape(osglData->shape) > 0)
+                osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->declaredShape 
+                    = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
+            else
+                parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                    "unknown shape specified in real-valued expression");
+//        }
     };
 
 nlnode: number
@@ -6136,8 +6145,10 @@ matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN OSnLMNode EXPREND
     {
     // IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
     #ifdef OSINSTANCE_AVAILABLE
-        osinstance->instanceData->matrixProgramming->matrixExpressions->expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
-            ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+        if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
+            osinstance->instanceData->matrixProgramming->matrixExpressions->
+                    expr[ osnlData->tmpnlcount]->matrixExpressionTree->m_treeRoot = 
+                ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
     #endif
         osnlData->tmpnlcount++;
     };
@@ -6146,7 +6157,8 @@ matrixExprStart: EXPRSTART
     {
         if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
             parserData->parser_errors += 
-                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrix expressions greater than number attribute");
+                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                    "actual number of matrix expressions greater than numberOfExpr attribute");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 
@@ -6183,11 +6195,11 @@ exprAttribute:
     #ifdef OSINSTANCE_AVAILABLE
         if (returnNlExprShape(osglData->shape) > 0)
             osinstance->instanceData->matrixProgramming->matrixExpressions
-                ->expr[ osnlData->tmpnlcount]->shape 
+                ->expr[ osnlData->tmpnlcount]->declaredShape 
                     = (ENUM_NL_EXPR_SHAPE)returnNlExprShape(osglData->shape);
         else
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
-                "unknown shape specified in matrix transformation");
+                "unknown shape specified in matrix expression");
     #endif
     };
 
@@ -6954,7 +6966,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     long int numChar;
     char *attTextEnd;
     const char *ch = *p;
-    start = clock(); 
+    start = clock();
     const char *c_numberOfVariables = "numberOfVariables";
     const char *startVariables = "<variables";
     const char *endVariables = "</variables";
@@ -6963,7 +6975,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     // the attributes
     char *attText = NULL;
     const char *name = "name";
-    //const char *initString = "initString";
     const char *type = "type";
     const char *mult = "mult";
     // others
@@ -6972,12 +6983,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     int vt;
     int numberOfVariables = 0;
 // variable attribute boolean variables
-    bool varlbattON  = false;
-    bool varubattON = false ;
-    bool vartypeattON  = false;
-    bool varnameattON = false ;
-    //bool varinitattON = false ;
-    //bool varinitStringattON = false ;
+    bool varlbattON   = false;
+    bool varubattON   = false;
+    bool vartypeattON = false;
+    bool varnameattON = false;
     bool varmultattON = false;
     bool foundVar = false;
     int varmult; 
@@ -6998,25 +7007,23 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     *p = ch;
     while(*c_numberOfVariables++  == *ch) ch++;
     if( (ch - *p) != 17) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfVariables attribute in <variables tag>"); return false;}    
-    // buf_index should be pointing to the first character after numberOfVariables
+    // buf_index should be pointing to the first character after "numberOfVariables" attribute
     GETATTRIBUTETEXT;
     ch++;
     numberOfVariables = atoimod1( osillineno, attText, attTextEnd);
     delete [] attText;
-    if(numberOfVariables <  0) {
-        osilerror_wrapper( ch,osillineno,"there must be a nonnegative number of variables"); return false;
-    }
+    // get rid of white space after the numberOfVariables element
+    for ( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;                    
+
     osinstance->instanceData->variables->numberOfVariables = numberOfVariables;
-    if(numberOfVariables > 0){
+    if (numberOfVariables > 0)
+    {
         osinstance->instanceData->variables->var = new Variable*[ numberOfVariables];
-        for(i = 0; i < numberOfVariables; i++){
+        for (i = 0; i < numberOfVariables; i++)
+        {
             osinstance->instanceData->variables->var[ i] = new Variable();
         } 
-    }
-    // get rid of white space after the numberOfVariables element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;                    
-    // since there must be at least one variable,  this element must end with > 
-    if(numberOfVariables > 0){
+        // If there is at least one variable, this element must end with '>', not '/>' 
         // better have an > sign or not valid
         if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"variables element does not have a proper closing >"); return false;}
         ch++;
@@ -7026,9 +7033,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
         *p = ch;
         while(*startVar++  == *ch) ch++;
         if( (ch - *p) ==  4) foundVar = true;
-            else {  osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
+        else {osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
         startVar -= 5;
-        while(foundVar){
+        while(foundVar)
+        {
             varlbattON   = false;
             varubattON   = false;
             vartypeattON = false;
@@ -7040,8 +7048,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             // assume we are pointing to the first character after the r in <var
             // it should be whitespace
             for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-            while(*ch != '/' && *ch != '>'){
-                switch (*ch) {
+            while(*ch != '/' && *ch != '>')
+            {
+                switch (*ch) 
+                {
                 case 'n':
                     *p = ch;
                     while(*name++  == *ch) ch++;
@@ -7120,42 +7130,66 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             //
             // assume all the attributes have been processed
             // must have either /> or > and then whitespace and </var whitespace>
-            if( *ch != '/' && *ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
-            if(*ch == '/'){
+            if ( *ch != '/' && *ch != '>') 
+            {  
+                osilerror_wrapper( ch,osillineno,"incorrect end of <var> element");
+                return false;
+            }
+            if (*ch == '/')
+            {
                 ch++;
-                if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
+                if(*ch != '>') 
+                {
+                    osilerror_wrapper( ch,osillineno,"incorrect end of <var> element");
+                    return false;
+                }
                 // get rid of whitespace
                 ch++;
-                for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                for (; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
                 // either have another <var> element or foundVar = false;
                 *p = ch;
                 while(*startVar++  == *ch) ch++;
-                if( (ch - *p) == 4) {
+                if( (ch - *p) == 4)
+                {
                     foundVar = true;
                     startVar -= 5;
                 }
-                else {
+                else
+                {
                     foundVar = false;
                     ch = *p;
                 }
             }
-            else{
+            else
+            {
                 // the buf_index is the > at the end of the var element 
                 // double check to make sure it really is a >
-                if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <var> element"); return false;}
+                if(*ch != '>') 
+                {
+                    osilerror_wrapper( ch,osillineno,"improper ending to a <var> element");
+                    return false;
+                }
                 // look for </var
-                // fist get rid of white space
+                // first get rid of white space
                 ch++;
-                for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                for (; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
                 // we should be at </var or there is an error
                 *p = ch;
                 while(*endVar++  == *ch) ch++;
                 endVar -= 6;
-                if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"</var> element missing"); return false;}
+                if( (ch - *p) != 5) 
+                {
+                    osilerror_wrapper( ch,osillineno,"</var> element missing");
+                    return false;
+                }
                 // burn off the whitespace
                 for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
                 // better have an > to end </var
-                if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"</var> element missing >"); return false;}
+                if(*ch++ != '>')
+                {
+                    osilerror_wrapper( ch,osillineno,"</var> element missing >");
+                    return false;
+                }
                 // look for a new <var> element
                 // get rid of whitespace
                 ch++;
@@ -7163,63 +7197,111 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 // either have another <var> element or foundVar = false;
                 *p = ch;
                 while(*startVar++  == *ch) ch++;
-                if( (ch - *p) == 4) {
+                if( (ch - *p) == 4)
+                {
                     foundVar = true;
                     startVar -= 5;
                 }
-                else {
+                else
+                {
                     foundVar = false;
                     ch = *p;
                 }
             }
-            if( ((varcount+varmult) == numberOfVariables) && (foundVar == true) ) {   osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is less than actual number found");  return false;}
-            for (int k=1; k < varmult; k++)
+            if( ((varcount+varmult) <= numberOfVariables))
             {
-                osinstance->instanceData->variables->var[varcount+k]->name 
-                = osinstance->instanceData->variables->var[varcount]->name;
-                osinstance->instanceData->variables->var[varcount+k]->type 
-                = osinstance->instanceData->variables->var[varcount]->type;
-                osinstance->instanceData->variables->var[varcount+k]->lb 
-                = osinstance->instanceData->variables->var[varcount]->lb;
-                osinstance->instanceData->variables->var[varcount+k]->ub 
-                = osinstance->instanceData->variables->var[varcount]->ub;
+                for (int k=1; k < varmult; k++)
+                {
+                    osinstance->instanceData->variables->var[varcount+k]->name 
+                    = osinstance->instanceData->variables->var[varcount]->name;
+                    osinstance->instanceData->variables->var[varcount+k]->type 
+                    = osinstance->instanceData->variables->var[varcount]->type;
+                    osinstance->instanceData->variables->var[varcount+k]->lb 
+                    = osinstance->instanceData->variables->var[varcount]->lb;
+                    osinstance->instanceData->variables->var[varcount+k]->ub 
+                    = osinstance->instanceData->variables->var[varcount]->ub;
+                }
             }
             varcount += varmult;
+
+//            if( (varcount >= numberOfVariables) && (foundVar == true) ) 
+        // foundVar is bool, so =1 if true, =0 if false
+            if( (varcount+foundVar) > numberOfVariables)
+            {
+                osilerror_wrapper( ch,osillineno,"actual number of variables exceeds attribute numberOfVariables");
+                return false;
+            }
         }// end while(foundVar)
-        if(varcount < numberOfVariables) {  osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is greater than actual number found");   return false;}
+        if(varcount < numberOfVariables)
+        {
+            osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is greater than actual number found");   
+            return false;
+        }
         // get the </variables> tag
         *p = ch;
         while(*endVariables++  == *ch) ch++;
-        if( (ch - *p) != 11) {   osilerror_wrapper( ch,osillineno,"cannot find </variables> tag"); return false;}
+        if( (ch - *p) != 11)
+        {
+            osilerror_wrapper( ch,osillineno,"cannot find </variables> tag");
+            return false;
+        }
         for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
         // better have >
-        if(*ch != '>') {   osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}
+        if(*ch != '>')
+        {
+            osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag");
+            return false;
+        }
         ch++;
-    }else {//end if(numberOfVariables > 0)
+    }
+    else
+    {   // end if(numberOfVariables > 0)
         // error if the number is negative
-        if(numberOfVariables < 0) {  osilerror_wrapper( ch,osillineno,"cannot have a negative number of variables"); return false;}
+        if (numberOfVariables < 0)
+        {
+            osilerror_wrapper( ch,osillineno,"cannot have a negative number of variables");
+            return false;
+        }
         // if we are here we have numberOfVariables = 0
         // must close with /> or </variables>
         // get rid of white space
         for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-        if( *ch == '/'){
+        if( *ch == '/')
+        {
             // better have a >
             ch++;
-            if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed variables tag"); return false;}
+            if( *ch  != '>')
+            {
+                osilerror_wrapper( ch,osillineno,"improperly closed variables tag");
+                return false;
+            }
             ch++;
         }
-        else{
-            // if we are here we must have an '>' and then  </constraints> tag
-            if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed variables tag"); return false;}
+        else
+        {
+            // if we are here we must have an '>' and then  </variables> tag
+            if( *ch  != '>')
+            {
+                osilerror_wrapper( ch,osillineno,"improperly closed variables tag");
+                return false;
+            }
             ch++;
             // burn white space
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
             *p = ch;
             while( *endVariables++  == *ch) ch++;
-            if( (ch - *p) != 11) {  osilerror_wrapper( ch,osillineno, "cannot find </variables> tag"); return false; }
+            if ( (ch - *p) != 11)
+            {
+                osilerror_wrapper( ch,osillineno, "cannot find </variables> tag");
+                return false;
+            }
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
             // better have >
-            if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}    
+            if(*ch != '>')
+            {
+                osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag");
+                return false;
+            }
             ch++;
         }
     }
@@ -7238,8 +7320,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     #ifdef CHECK_PARSE_TIME
     double duration;
     #endif
-    long int ki;
-    long int numChar;
+    int ki, numChar;
     char *attTextEnd;
     const char *ch = *p;
     start = clock();
@@ -7295,7 +7376,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     else{
         *p = ch;
         while( *c_numberOfObjectives++  == *ch) ch++;
-        if( (ch - *p) != 18) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfObjectives attribute in <objectives> tag"); return false;}    
+        if( (ch - *p) != 18) {  osilerror_wrapper( ch,osillineno,"<objectives> tag needs numberOfObjectives or <obj> element"); return false;}    
         GETATTRIBUTETEXT;
         numberOfObjectives = atoimod1( osillineno, attText, attTextEnd);
         delete [] attText;
@@ -7337,7 +7418,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         objmultattON = false;
         objnumberOfObjCoefattON = false;
         objmult = 1;
-        // assume we are pointing to the first character after the r in <obj
+        // assume we are pointing to the first character after the j in <obj
         // it should be a space so let's increment ch
         ch++;
         while(*ch != '/' && *ch != '>'){
@@ -7473,11 +7554,11 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
             // we should be at </obj or there is an error
             for(i = 0; endObj[i]  == *ch; i++, ch++);
-            if(i != 5) {  osilerror_wrapper( ch,osillineno,"</obj> element missing"); return false;}
+            if(i != 5) {  osilerror_wrapper( ch,osillineno,"</obj> element missing or too many <coef> elements"); return false;}
             // burn off the whitespace
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
             // better have an > to end </obj
-            if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element missing"); return false;}
+            if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element ill-formed"); return false;}
             // look for a new <obj> element
             // get rid of whitespace
             for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -7486,33 +7567,44 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
             if(i == 4) foundObj = true;
                 else foundObj = false;
         }
-        if( ((objcount+objmult) == numberOfObjectives) && (foundObj == true)) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is less than actual number found"); return false;}
-        for (int k=1; k < objmult; k++)
+        if ( (objcount+objmult) <= numberOfObjectives)
         {
-            osinstance->instanceData->objectives->obj[objcount+k]->name 
-            = osinstance->instanceData->objectives->obj[objcount]->name;
-            osinstance->instanceData->objectives->obj[objcount+k]->maxOrMin 
-            = osinstance->instanceData->objectives->obj[objcount]->maxOrMin;
-            osinstance->instanceData->objectives->obj[objcount+k]->constant 
-            = osinstance->instanceData->objectives->obj[objcount]->constant;
-            osinstance->instanceData->objectives->obj[objcount+k]->weight 
-            = osinstance->instanceData->objectives->obj[objcount]->weight;
-            osinstance->instanceData->objectives->obj[objcount+k]->numberOfObjCoef 
-            = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
-            if (osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef > 0)
+            for (int k=1; k < objmult; k++)
             {
-                osinstance->instanceData->objectives->obj[objcount+k]->coef = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
-                for(int i = 0; i < osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef; i++)
+                osinstance->instanceData->objectives->obj[objcount+k]->name 
+                = osinstance->instanceData->objectives->obj[objcount]->name;
+                osinstance->instanceData->objectives->obj[objcount+k]->maxOrMin 
+                = osinstance->instanceData->objectives->obj[objcount]->maxOrMin;
+                osinstance->instanceData->objectives->obj[objcount+k]->constant 
+                = osinstance->instanceData->objectives->obj[objcount]->constant;
+                osinstance->instanceData->objectives->obj[objcount+k]->weight 
+                = osinstance->instanceData->objectives->obj[objcount]->weight;
+                osinstance->instanceData->objectives->obj[objcount+k]->numberOfObjCoef 
+                = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
+                if (osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef > 0)
                 {
-                    osinstance->instanceData->objectives->obj[objcount+k]->coef[i] = new ObjCoef();
-                    osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->idx = 
-                      osinstance->instanceData->objectives->obj[objcount]->coef[i]->idx;
-                    osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->value = 
-                      osinstance->instanceData->objectives->obj[objcount]->coef[i]->value;
+                    osinstance->instanceData->objectives->obj[objcount+k]->coef
+                    = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
+                    for (int i = 0; 
+                             i < osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef;
+                             i++)
+                    {
+                        osinstance->instanceData->objectives->obj[objcount+k]->coef[i] = new ObjCoef();
+                        osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->idx = 
+                          osinstance->instanceData->objectives->obj[objcount]->coef[i]->idx;
+                        osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->value = 
+                          osinstance->instanceData->objectives->obj[objcount]->coef[i]->value;
+                    }
                 }
             }
         }
         objcount += objmult;
+//        if( (objcount >= numberOfObjectives) && (foundObj == true))
+        // foundObj is bool, so =1 if true, =0 if false
+        if( (objcount+foundObj) > numberOfObjectives)
+        {
+            osilerror_wrapper( ch,osillineno,"actual number of objectives exceeds attribute numberOfObjectives"); return false;
+        }
     }
     if(objcount < numberOfObjectives) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is greater than actual number found"); return false;}
     ch -= i;
@@ -7773,19 +7865,29 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
                  ch = *p;
             }
         }
-        if( ((concount+conmult) == numberOfConstraints) && (foundCon == true) ) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is less than actual number found"); return false;}
-        for (int k=1; k < conmult; k++)
+        if( (concount+conmult) <= numberOfConstraints)
         {
-            osinstance->instanceData->constraints->con[concount+k]->name
-            = osinstance->instanceData->constraints->con[concount]->name ;
-            osinstance->instanceData->constraints->con[concount+k]->constant
-            = osinstance->instanceData->constraints->con[concount]->constant ;
-            osinstance->instanceData->constraints->con[concount+k]->lb
-            = osinstance->instanceData->constraints->con[concount]->lb ;
-            osinstance->instanceData->constraints->con[concount+k]->ub
-            = osinstance->instanceData->constraints->con[concount]->ub ;
+            for (int k=1; k < conmult; k++)
+            {
+                osinstance->instanceData->constraints->con[concount+k]->name
+                = osinstance->instanceData->constraints->con[concount]->name;
+                osinstance->instanceData->constraints->con[concount+k]->constant
+                = osinstance->instanceData->constraints->con[concount]->constant;
+                osinstance->instanceData->constraints->con[concount+k]->lb
+                = osinstance->instanceData->constraints->con[concount]->lb;
+                osinstance->instanceData->constraints->con[concount+k]->ub
+                = osinstance->instanceData->constraints->con[concount]->ub;
+            }
         }
         concount += conmult;
+
+//        if( (concount >= numberOfConstraints) && (foundCon == true))
+        // foundCon is bool, so =1 if true, =0 if false
+        if( (concount+foundCon) > numberOfConstraints)
+        {
+            osilerror_wrapper( ch,osillineno,"actual number of constraints exceeds attribute numberOfConstraints");
+            return false;
+        }
     }
     if(concount < numberOfConstraints) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is greater than actual number found"); return false;}
     // get the </constraints> tag
@@ -8895,7 +8997,7 @@ void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg){
     strncpy(errorArray, ch, numErrorChar);
     std::ostringstream outStr;
     std::string error = errormsg;
-    error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
+    error = "PARSER ERROR:  Input is either invalid or ill-formed: "  + error;
     outStr << error << endl;
     outStr << "Here are " ;
     outStr << numErrorChar ;

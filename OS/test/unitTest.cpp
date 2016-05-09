@@ -6637,10 +6637,19 @@ if( THOROUGH == true){
             cout << solver->osrl << endl;
 #endif
             cout << "Coin cbc solution for p0033MULT checks" << endl;
+
+            OSiLWriter tmp_osil_writer;
+            tmp_osil_writer.m_bWhiteSpace = true;
+            std::cout << tmp_osil_writer.writeOSiL( solver->osinstance) << std::endl;
         }
         else
-        {    cout << "Coin cbc solution for p0033MULT in error:" << endl;
+        {
+            cout << "Coin cbc solution for p0033MULT in error:" << endl;
             cout << solver->osrl << endl;
+
+            OSiLWriter tmp_osil_writer;
+            tmp_osil_writer.m_bWhiteSpace = true;
+            std::cout << tmp_osil_writer.writeOSiL( solver->osinstance) << std::endl;
         }
         if (ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033MULT.osil");
         delete solver;
