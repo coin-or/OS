@@ -128,53 +128,65 @@ bool parseInstanceHeader(const char **pchar, OSInstance *osinstance, int* osilli
 bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
 char *parseBase64( const char **p, long int *dataSize, int* osillineno);
 
-#define	ISWHITESPACE( char_) ((char_) == ' ' || \
+#define ISWHITESPACE( char_) ((char_) == ' ' || \
                      (char_) == '\t' ||  (char_) == '\r')
 
-#define	ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+#define BURNWHITESPACE( X ) for(; ISWHITESPACE( *X) || isnewline( *X, osillineno); X++ )
 
-#define GETATTRIBUTETEXT  	\
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
-	ch++; \
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
-	if(*ch == '\"'){ \
-		ch++; \
-	    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	    *p = ch; \
-	    for( ; *ch != '\"'; ch++); \
-	}\
-	else{\
-	    if(*ch == '\'') { \
-	    	ch++; \
-	        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	        *p = ch; \
-	        for( ; *ch != '\''; ch++); \
-	    } \
-	    else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
-	}\
-	numChar = ch - *p; \
-	attText = new char[numChar + 1]; \
-	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
-	attText[ki] = '\0'; \
-	attTextEnd = &attText[ki]; 
-	
+#define FINDNEXTTAG( X )         \
+    BURNWHITESPACE( X );                                                 \
+    while(*X == '<' && *(X+1) == '!' && *(X+2) == '-' && *(X+3) == '-')  \
+    {                                                                    \
+        X += 4;                                                          \
+        while (*X != '-' || *(X+1) != '-' || *(X+2) != '>')              \
+            X++;                                                         \
+        X += 3;                                                          \
+        BURNWHITESPACE( X );                                             \
+    }                                                 
+
+#define ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+
+#define GETATTRIBUTETEXT  \
+    BURNWHITESPACE( ch ); \
+    if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
+    ch++; \
+    BURNWHITESPACE( ch ); \
+    if(*ch == '\"'){ \
+        ch++; \
+        BURNWHITESPACE( ch ); \
+        *p = ch; \
+        for( ; *ch != '\"'; ch++); \
+    }\
+    else{\
+        if(*ch == '\'') { \
+            ch++; \
+            BURNWHITESPACE( ch ); \
+            *p = ch; \
+            for( ; *ch != '\''; ch++); \
+        } \
+        else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
+    }\
+    numChar = ch - *p; \
+    attText = new char[numChar + 1]; \
+    for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
+    attText[ki] = '\0'; \
+    attTextEnd = &attText[ki]; 
+
+    
 #define GAIL printf("GAIL ANN HONDA\n")
-
-
-	
+    
 #define ECHOCHECK \
-	GAIL; \
-	printf("%c", ch[-2]); \
-	printf("%c", ch[-1]); \
-	printf("%c", ch[0]); \
-	printf("%c", ch[1]); \
-	printf("%c", ch[2]); \
-	printf("%c", ch[3]); \
-	printf("%c", ch[4]); \
-	printf("%c", ch[5]); \
-	printf("%c \n", ch[6]); \
-	GAIL;
+    GAIL; \
+    printf("%c", ch[-2]); \
+    printf("%c", ch[-1]); \
+    printf("%c", ch[0]); \
+    printf("%c", ch[1]); \
+    printf("%c", ch[2]); \
+    printf("%c", ch[3]); \
+    printf("%c", ch[4]); \
+    printf("%c", ch[5]); \
+    printf("%c \n", ch[6]); \
+    GAIL;
 %}
 
 %pure-parser
@@ -198,10 +210,10 @@ this fails on in Mac OS X
 */
 
 %union {
-	double dval;
-	int ival;
-	char* sval;
-	
+    double dval;
+    int ival;
+    char* sval;
+    
 }
 %{
 int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
@@ -620,8 +632,8 @@ conesLaden: GREATERTHAN coneList CONESEND
 coneList: | coneList cone
 {
     parserData->coneCounter++;
-    if (parserData->coneCounter > parserData->numberOfCones) parserData->parser_errors +=
-        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "encountered more cones than specified");
+    if (parserData->coneCounter > parserData->numberOfCones) 
+        throw ErrorClass("encountered more cones than specified");
     osinstance->instanceData->cones->numberOfCones = parserData->coneCounter;
 };
 
@@ -1259,8 +1271,7 @@ matrixVariableAttributes: matrixVariableAttList
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixVar) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixVar greater than number attribute");
+        throw ErrorClass("actual number of matrixVar greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter+i]->numberOfRows
@@ -1375,8 +1386,7 @@ matrixObjectiveAttributes: matrixObjectiveAttList
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixObj) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixObj greater than number attribute");
+        throw ErrorClass("actual number of matrixObj greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->numberOfRows
@@ -1476,8 +1486,7 @@ matrixConstraintAttributes: matrixConstraintAttList
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixCon) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixCon greater than number attribute");
+        throw ErrorClass("actual number of matrixCon greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->numberOfRows
@@ -6156,9 +6165,7 @@ matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN OSnLMNode EXPREND
 matrixExprStart: EXPRSTART
     {
         if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
-            parserData->parser_errors += 
-                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
-                    "actual number of matrix expressions greater than numberOfExpr attribute");
+            throw ErrorClass("actual number of matrix expressions greater than numberOfExpr attribute");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 
@@ -6423,7 +6430,6 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
     *osillineno = 1;
     const char *pchar = *p;
     
-        
     //first check of osil start
     const char *startOSiL = "<osil";
     const char *pOSiLStart = strstr(pchar, startOSiL);
@@ -6480,7 +6486,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
      // move to the end of <instanceHeader
      pchar+=15;
     // burn any whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
+    BURNWHITESPACE( pchar );
     // pchar better be pointing to the '>' in the <instanceHeader> element
     // or to /> if we have <instanceHeader />
     if( *pchar == '/'){
@@ -6508,8 +6514,8 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 
     for (;;)
     {
-        // first burn any whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
+        // first burn any whitespace and comments
+        FINDNEXTTAG( pchar );
         // remember where we are
         *p = pchar;
         // The next character should be '<'
@@ -6536,7 +6542,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a name element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -6581,7 +6587,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </name
                         pchar += 6;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of name
                         if(*pchar++ != '>')
                         {
@@ -6611,7 +6617,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a source element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -6656,7 +6662,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </source
                         pchar += 8;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of source
                         if(*pchar++ != '>')
                         {
@@ -6686,7 +6692,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a description element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -6731,7 +6737,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </description
                         pchar += 13;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of description
                         if(*pchar++ != '>')
                         {
@@ -6761,7 +6767,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a fileCreator element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -6806,7 +6812,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </fileCreator
                         pchar += 13;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of fileCreator
                         if(*pchar++ != '>')
                         {
@@ -6836,7 +6842,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a licence element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -6881,7 +6887,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </licence
                         pchar += 9;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of licence
                         if(*pchar++ != '>')
                         {
@@ -6902,7 +6908,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 }
                 // pchar now points to the first character after </instanceHeader
                 // get rid of white space
-                for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                BURNWHITESPACE( pchar );
                 // pchar must point to '>' or there is an error
                 if(*pchar != '>')
                 {  
@@ -6926,8 +6932,8 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
     const char *pchar = *p;
     const char *startInstanceData = "<instanceData";
     // at this point *pchar should be pointing to the first char after the > in </instanceHeader>
-    // burn the white space
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+    // burn the white space and any comments
+    FINDNEXTTAG( pchar );
     // pchar should be point to a '<', if not there is an error
     if(*pchar != '<'){  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData element"); return false;}
     // make sure the element is <instanceData    
@@ -6935,13 +6941,13 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
     while(*startInstanceData++  == *pchar) pchar++;
     if( (pchar - *p) != 13) {  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); return false;}    
     // now burn whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+    BURNWHITESPACE( pchar );
     // pchar must point to '>' or there is an error
     if(*pchar == '>'){
         pchar++;
         // we are now pointing to the first char after <instanceData>
-        // burn any whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+        // burn any whitespace and comments
+        FINDNEXTTAG( pchar );    
         // we should be pointing to the '<' char in <variables>
         *p = pchar;
         if( parseVariables  ( p, osinstance, osillineno) != true) throw ErrorClass("error in parseVariables");
@@ -6992,8 +6998,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     int varmult; 
     //
     // start parsing -- okay not to have variables 
-    // burn white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // burn white space and comments
+    FINDNEXTTAG( ch );
     *p = ch;
     while(*startVariables++  == *ch) ch++;
     //if( (ch - *p) != 10) {  osilerror_wrapper( ch,osillineno,"incorrect <variables tag>"); return false;}
@@ -7003,7 +7009,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 
     // find numberOfVariables attribute
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     *p = ch;
     while(*c_numberOfVariables++  == *ch) ch++;
     if( (ch - *p) != 17) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfVariables attribute in <variables tag>"); return false;}    
@@ -7013,7 +7019,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     numberOfVariables = atoimod1( osillineno, attText, attTextEnd);
     delete [] attText;
     // get rid of white space after the numberOfVariables element
-    for ( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;                    
+    BURNWHITESPACE( ch );
 
     osinstance->instanceData->variables->numberOfVariables = numberOfVariables;
     if (numberOfVariables > 0)
@@ -7027,8 +7033,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
         // better have an > sign or not valid
         if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"variables element does not have a proper closing >"); return false;}
         ch++;
-        // get rid of white space
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        // get rid of white space and comments
+        FINDNEXTTAG( ch );
         // now loop over the var element when the numberOfVariables is strictly positive
         *p = ch;
         while(*startVar++  == *ch) ch++;
@@ -7047,7 +7053,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             vt = 0;
             // assume we are pointing to the first character after the r in <var
             // it should be whitespace
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>')
             {
                 switch (*ch) 
@@ -7143,9 +7149,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     osilerror_wrapper( ch,osillineno,"incorrect end of <var> element");
                     return false;
                 }
-                // get rid of whitespace
+                // get rid of whitespace and comments
                 ch++;
-                for (; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                FINDNEXTTAG( ch );
                 // either have another <var> element or foundVar = false;
                 *p = ch;
                 while(*startVar++  == *ch) ch++;
@@ -7172,7 +7178,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 // look for </var
                 // first get rid of white space
                 ch++;
-                for (; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                BURNWHITESPACE( ch );
                 // we should be at </var or there is an error
                 *p = ch;
                 while(*endVar++  == *ch) ch++;
@@ -7183,7 +7189,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     return false;
                 }
                 // burn off the whitespace
-                for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                BURNWHITESPACE( ch );
                 // better have an > to end </var
                 if(*ch++ != '>')
                 {
@@ -7193,7 +7199,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 // look for a new <var> element
                 // get rid of whitespace
                 ch++;
-                for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                FINDNEXTTAG( ch );
                 // either have another <var> element or foundVar = false;
                 *p = ch;
                 while(*startVar++  == *ch) ch++;
@@ -7245,7 +7251,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             osilerror_wrapper( ch,osillineno,"cannot find </variables> tag");
             return false;
         }
-        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+        BURNWHITESPACE( ch );
         // better have >
         if(*ch != '>')
         {
@@ -7265,7 +7271,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
         // if we are here we have numberOfVariables = 0
         // must close with /> or </variables>
         // get rid of white space
-        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+        BURNWHITESPACE( ch );
         if( *ch == '/')
         {
             // better have a >
@@ -7286,8 +7292,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 return false;
             }
             ch++;
-            // burn white space
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            // burn white space and comments
+            FINDNEXTTAG( ch );
             *p = ch;
             while( *endVariables++  == *ch) ch++;
             if ( (ch - *p) != 11)
@@ -7295,7 +7301,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 osilerror_wrapper( ch,osillineno, "cannot find </variables> tag");
                 return false;
             }
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+            BURNWHITESPACE( ch );
             // better have >
             if(*ch != '>')
             {
@@ -7351,8 +7357,8 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     bool foundObj;
     int objmult; 
     // start parsing
-    // burn white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // burn white space and comments
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <objectives element if there -- it is not required
     *p = ch;
     while( *startObjectives++  == *ch) ch++;
@@ -7364,9 +7370,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     osinstance->instanceData->objectives = new Objectives();
 
     // find numberOfObjectives attribute -- it is valid for this attribute to be missing. 
-    // However if the  number attribute is missing assume it is    1 
+    // However if the  number attribute is missing assume it is 1 
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // we just ate the white space. If numberOfObjectives is missing we assume it is 1
     // we therefore must have > char
     if(*ch == '>'){
@@ -7384,7 +7390,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     }
     if(numberOfObjectives > 0){
         // get rid of white space after the numberOfObjectives attribute
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        BURNWHITESPACE( ch );
         // we must have an >
         /*if(*ch == '/'){
             ch++;
@@ -7401,8 +7407,8 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         for(i = 0; i < numberOfObjectives; i++){
             osinstance->instanceData->objectives->obj[ i] = new Objective();
         }     
-    // get rid of white space after the <objectives> element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and any comments after the <objectives> element
+    FINDNEXTTAG( ch );
     // now loop over the obj elements, there must be at least one obj element
     *p = ch;
     while( *startObj++  == *ch) ch++;
@@ -7534,9 +7540,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         if(*ch == '/'){
             ch++;
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <obj> element"); return false;}
-            // get rid of whitespace
+            // get rid of whitespace and comments
             ch++;
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <obj> element or foundObj = false;
             for(i = 0; startObj[i]  == *ch; i++, ch++);
             if(i == 4) foundObj = true;
@@ -7545,23 +7551,23 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         else{
             // the ch is the > at the end of the obj element
             // double check to make sure it really is a >
-            if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <obj> element"); return false;}
+            if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to an <obj> element"); return false;}
             // look for </obj
             // fist get rid of white space
             ch++;
             // first get the <coef> elements
             parseObjCoef(&ch,  objcount, osinstance, osillineno);
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // we should be at </obj or there is an error
             for(i = 0; endObj[i]  == *ch; i++, ch++);
             if(i != 5) {  osilerror_wrapper( ch,osillineno,"</obj> element missing or too many <coef> elements"); return false;}
             // burn off the whitespace
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             // better have an > to end </obj
             if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element ill-formed"); return false;}
             // look for a new <obj> element
             // get rid of whitespace
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <obj> element or foundObj = false;
             for(i = 0; startObj[i]  == *ch; i++, ch++);
             if(i == 4) foundObj = true;
@@ -7611,7 +7617,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     // get the </objectives> tag
     for(i = 0; endObjectives[i]  == *ch; i++, ch++);
     if(i != 12) {  osilerror_wrapper( ch,osillineno, "cannot find </objectives> tag"); return false; }
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </objectives> tag"); return false;}    
     ch++;
@@ -7622,7 +7628,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         // if we are here we have exactly 0 objectives 
         // must close with /> or </objectives>
         // get rid of white space
-        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+        BURNWHITESPACE( ch );
         if( *ch == '/'){
             // better have a >
             ch++;
@@ -7633,11 +7639,11 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
             // if we are here we must have an '>' and then  </objectives> tag
             if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed objectives tag"); return false;}
             ch++;
-            // burn white space
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            // burn white space and comments
+            FINDNEXTTAG( ch );
             for(i = 0; endObjectives[i]  == *ch; i++, ch++);
             if(i != 12) {  osilerror_wrapper( ch,osillineno, "cannot find </objectives> tag"); return false; }
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+            BURNWHITESPACE( ch );
             // better have >
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </objectives> tag"); return false;}    
             ch++;
@@ -7687,7 +7693,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
     // 
     // start parsing -- ok not to have constraints
     // burn white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <constraints element if there -- it is not required
     *p = ch;
     for(i = 0; startConstraints[i]  == *ch; i++, ch++);
@@ -7701,7 +7707,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 
     // find numberOfConstraints attribute
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     *p = ch;
     while( *c_numberOfConstraints++  == *ch) ch++;
     if( (ch - *p) != 19) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfConstraints attribute in <constraints> tag"); return false;}    
@@ -7719,11 +7725,11 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
             osinstance->instanceData->constraints->con[ i] = new Constraint();
         } 
     // get rid of white space after the numberOfConstraints element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     //  we better have an > 
     if( *ch++ != '>') {   osilerror_wrapper( ch,osillineno,"the constraints element does not have a proper closing"); return false;} 
-    // get rid of white space after the <constraints> element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and comments after the <constraints> element
+    FINDNEXTTAG( ch );
     // now loop over the con elements, there must be at least one con element
     *p = ch;
     while( *startCon++  == *ch) ch++;
@@ -7740,7 +7746,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 
         // assume we are pointing to the first character after the n in <con
         // it should be a space so let's increment ch
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+        BURNWHITESPACE( ch );
         while(*ch != '/' && *ch != '>'){
             switch (*ch) {
             case 'n':
@@ -7819,7 +7825,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <con> element"); return false;}
             // get rid of whitespace
             ch++;
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <con> element or foundCon = false;
             *p = ch;
             while( *startCon++  == *ch) ch++;
@@ -7839,20 +7845,20 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
             // look for </con
             // fist get rid of white space
             ch++;
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // we should be at </con or there is an error
             *p = ch;
             while( *endCon++  == *ch) ch++;
             if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"</con> element missing"); return false;}
             endCon -= 6;
             // burn off the whitespace
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             // better have an > to end </con
             if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"</con> element missing >"); return false;}
             // look for a new <con> element
             // get rid of whitespace
             ch++;
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <con> element or foundVar = false;
             *p = ch;
             while( *startCon++  == *ch) ch++;
@@ -7894,7 +7900,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endConstraints++  == *ch) ch++;
     if( (ch - *p) != 13) {  osilerror_wrapper( ch,osillineno, "cannot find </constraints> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </constraints> tag");    return false;}
     ch++;
@@ -7905,7 +7911,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
         // if we are here we have numberOfConstraints = 0
         // must close with /> or </constraints>
         // get rid of white space
-        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+        FINDNEXTTAG( ch );
         if( *ch == '/'){
             // better have a >
             ch++;
@@ -7917,11 +7923,11 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
             if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed constraints tag"); return false;}
             ch++;
             // burn white space
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             *p = ch;
             while( *endConstraints++  == *ch) ch++;
             if( (ch - *p) != 13) {  osilerror_wrapper( ch,osillineno, "cannot find </constraints> tag"); return false; }
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+            BURNWHITESPACE( ch );
             // better have >
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </constraints> tag"); return false;}    
             ch++;
@@ -7949,8 +7955,8 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
     // others
     int numberOfValues;
     // start parsing
-    // burn white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // burn white space and comments
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <linearConstraintCoefficients element if there -- it is not required
     *p = ch;
     while( *startlinearConstraintCoefficients++  == *ch) ch++;
@@ -7964,7 +7970,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 
     // find numberOfValues attribute
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     *p = ch;
     while( *c_numberOfValues++  == *ch) ch++;
     if( (ch - *p) != 14) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfValues attribute in <linearConstraintCoefficients> tag"); return false;}
@@ -7977,7 +7983,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
     if(numberOfValues <= 0) {  osilerror_wrapper( ch,osillineno,"the number of nonlinear nonzeros must be positive"); return false;}
     osinstance->instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
     // get rid of white space after the numberOfConstraints element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // we should have either an />  OR an >
     if(*ch == '/'){
         ch++;
@@ -7989,8 +7995,8 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
     }
     //  we better have an > 
     if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the <linearConstraintCoefficients> element does not have a proper closing"); return false;}
-    // get rid of white space after the <linearConstraintCoefficients> element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and commentsafter the <linearConstraintCoefficients> element
+    FINDNEXTTAG( ch );
     if(  parseStart(  &ch, osinstance, osillineno) != true) {osilerror_wrapper( ch,osillineno,"error processing <start> element"); return false;}
 //    if( (parseColIdx( &ch, osinstance, osillineno) != true) && (parseRowIdx( &ch, osinstance, osillineno) != true)) return false;
 //    if( (parseColIdx( &ch, osinstance, osillineno) == true) && (parseRowIdx( &ch, osinstance, osillineno) == true)) {osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); return false;}
@@ -8021,12 +8027,12 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
     }
 
     if(  parseValue(  &ch, osinstance, osillineno) != true) {osilerror_wrapper( ch,osillineno, "could not parse <value> element"); return false;}
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
     // get the </linearConstraintCoefficients> tag
+    FINDNEXTTAG( ch );
     *p = ch;
     while( *endlinearConstraintCoefficients++  == *ch) ch++;
     if( (ch - *p) != 30) {  osilerror_wrapper( ch,osillineno, "cannot find </linearConstraintCoefficients> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </linearConstraintCoefficients> tag"); return false;}
     ch++;    
@@ -8060,8 +8066,8 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
     bool foundEl = false;
     int elmult;
     int elincr;
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-    // if, present we should be pointing to <start element 
+    FINDNEXTTAG( ch );
+    // if, present we should now be pointing to <start element 
     *p = ch;
     while( *startStart++  == *ch) ch++;
     if( (ch - *p) != 6) {
@@ -8070,12 +8076,12 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
         return false;
     }
     // get rid of white space after <start
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-    // we should have either an >
+    BURNWHITESPACE( ch );
+    // we should have an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <start> element"); return false;}
     ch++;
-    // get rid of white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and comments
+    FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
     while( *startEl++  == *ch) ch++;
@@ -8111,7 +8117,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 
             // assume we are pointing to the first character after the l in <el
             // it should be a space so let's increment ch
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>'){
                 switch (*ch) {
                 case 'i':
@@ -8154,10 +8160,10 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
             }
 
             // start eating white space until an '>' is found,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
             // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             // okay we better have a number, we will check later
             *p = ch;
             // find the end of the number, it better be an </el>
@@ -8187,10 +8193,10 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
             endEl -= 5;
             if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             // start eating white space until an '>' is found for </el>,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
             // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <el> element or foundEl = false;
             *p = ch;
             while( *startEl++  == *ch) ch++;
@@ -8212,7 +8218,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endStart++  == *ch) ch++;
     if( (ch - *p) != 7) {  osilerror_wrapper( ch,osillineno, "cannot find </start> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </start> tag");    return false;}
     ch++;    
@@ -8256,7 +8262,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
     int elincr;
     int numberOfEl;
     
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <rowIdx element 
     *p = ch;
     while( *startRowIdx++  == *ch) ch++;
@@ -8266,12 +8272,12 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
         return false;
     }
     // get rid of white space after <rowIdx
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // we should have either an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <rowIdx> element"); return false;}
     ch++;
-    // get rid of white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and comments
+    FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
     while( *startEl++  == *ch) ch++;
@@ -8319,7 +8325,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 
             // assume we are pointing to the first character after the l in <el
             // it should be a space so let's increment ch
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>'){
                 switch (*ch) {
                 case 'i':
@@ -8362,10 +8368,10 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
             }
 
             // start munging white space until an '>' is found,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
             // mung white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             // okay we better have a number, we will check later
             *p = ch;
             // find the end of the number, it better be an </el>
@@ -8394,10 +8400,10 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
             endEl -= 5;
             if( (ch - *p)  != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             // start munging white space until an '>' is found for </el>,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
-            // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            // eat white space and comments again,
+            FINDNEXTTAG( ch );
             // either have another <el> element or foundEl = false;
             *p = ch;
             while( *startEl++  == *ch) ch++;
@@ -8415,7 +8421,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endRowIdx++  == *ch) ch++;
     if( (ch - *p) != 8) {  osilerror_wrapper( ch,osillineno, "cannot find </rowIdx> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </rowIdx> tag");}    
     ch++;    
@@ -8459,7 +8465,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     int elincr;
     int numberOfEl;
     
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <colIdx element 
     *p = ch;
     while( *startColIdx++  == *ch) ch++;
@@ -8469,12 +8475,12 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
         return false;
     }
     // get rid of white space after <colIdx
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // we should have either an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <colIdx> element"); return false;}
     ch++;
     // get rid of white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
     while( *startEl++  == *ch) ch++;
@@ -8522,7 +8528,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 
             // assume we are pointing to the first character after the l in <el
             // it should be a space so let's increment ch
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>'){
                 switch (*ch) {
                 case 'i':
@@ -8565,10 +8571,10 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
             }
         
             // start eating white space until an '>' is found,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
             // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             // okay we better have a number, we will check later
             *p = ch;
             // find the end of the number, it better be an </el>
@@ -8596,10 +8602,10 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
             endEl -= 5;
             if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             // start eating white space until an '>' is found for </el>,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
-            // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            // eat white space and comments again,
+            FINDNEXTTAG( ch );
             // either have another <el> element or foundEl = false;
             *p = ch;
             while( *startEl++  == *ch) ch++;
@@ -8617,7 +8623,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endColIdx++  == *ch) ch++;        
     if( (ch - *p) != 8) {  osilerror_wrapper( ch,osillineno, "cannot find </colIdx> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </colIdx> tag"); return false;}    
     ch++;    
@@ -8659,7 +8665,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
     bool foundEl = false;
     int elmult;
     double elincr;
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
+    FINDNEXTTAG( ch );
     // if present we should be pointing to <value element 
     *p = ch;
     while( *startValue++  == *ch) ch++;
@@ -8669,12 +8675,12 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
         return false;
     }
     // get rid of white space after <value
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
+    BURNWHITESPACE( ch );
     // we should have either an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <value> element"); return false;}
     ch++;
     // get rid of white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
+    FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
     while( *startEl++  == *ch) ch++;
@@ -8727,7 +8733,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 
             // assume we are pointing to the first character after the l in <el
             // it should be a space so let's increment ch
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>'){
                 switch (*ch) {
                 case 'i':
@@ -8770,10 +8776,10 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
             }
         
             // start eat white space until an '>' is found,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
             // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
+            BURNWHITESPACE( ch );
             *p = ch;
             // find the end of the number, it better be an </el>
             // find the < which begins the </el
@@ -8800,10 +8806,10 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
             endEl -= 5;
             if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             // start eating white space until an '>' is found for </el>,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
-            // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
+            // eat white space and comments again,
+            FINDNEXTTAG( ch );
             // either have another <el> element or foundEl = false;
             *p = ch;
             while( *startEl++  == *ch) ch++;
@@ -8823,7 +8829,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endValue++  == *ch) ch++;
     if( (ch - *p) != 7) {  osilerror_wrapper( ch,osillineno, "cannot find </value> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </value> tag");     return false;}
     ch++;    
@@ -8853,7 +8859,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
     numberOfObjCoef = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
     if(numberOfObjCoef > 0)    {
     for(k = 0; k < numberOfObjCoef; k++){
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        FINDNEXTTAG( ch );
         // if, present we should be pointing to <coef element 
         *p = ch;
         while( *startCoef++  == *ch) ch++;
@@ -8861,7 +8867,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
         startCoef -= 6;
         // get the idx attribute
         // eat the white space after <coef
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        BURNWHITESPACE( ch );
         *p = ch;
         while( *c_idx++  == *ch) ch++;
         if( (ch - *p) != 3) {  osilerror_wrapper( ch,osillineno,"incorrect idx attribute in objective function <idx> tag"); return false;}    
@@ -8872,7 +8878,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
         delete [] attText;
         ch++;    
         // eat white space
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        BURNWHITESPACE( ch );
         // if we don't have a > there is an error
         if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"incorrect <coef> element")    ; return false;}    
         // we should be pointing to first character after <coef>
@@ -8889,7 +8895,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
         if( (ch - *p) != 6)  {  osilerror_wrapper( ch,osillineno,"improper </coef> element"); return false;}
         endCoef -= 7;
         // get rid of white space after </coef
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        BURNWHITESPACE( ch );
         // if we don't have a > there is an error
         if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"incorrect </coef> element")    ; return false;}
     }
@@ -8919,7 +8925,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     }
     // find sizeOf attribute
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     for(i = 0; sizeOf[i]  == *ch; i++, ch++);
     if(i != 6) {  osilerror_wrapper( ch,osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return false;}    
     // ch should be pointing to the first character after sizeOf
@@ -8929,7 +8935,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     delete [] attText;
     // since the element must contain b64 data,  this element must end with > 
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // better have an > sign or not valid
     if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"<base64BinaryData> element does not have a proper closing >"); return false;}
     ch++;
@@ -8946,11 +8952,11 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     for(ki = 0; ki < b64len; ki++) b64string[ki] = b64textstart[ ki]; 
     b64string[ki] = '\0';    
     // burn the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // better have an > sign or not valid
     if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"</base64BinaryData> element does not have a proper closing >"); return false;}
     ch++;
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     *p = ch;
     return b64string;
 }

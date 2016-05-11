@@ -9129,9 +9129,7 @@ matrixExpr: matrixExprStart matrixExprAttributes GREATERTHAN OSnLMNode EXPREND
 matrixExprStart: EXPRSTART
     {
         if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
-            parserData->parser_errors += 
-                addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
-                    "actual number of matrix expressions greater than numberOfExpr attribute");
+            throw ErrorClass("actual number of matrix expressions greater than numberOfExpr attribute");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 

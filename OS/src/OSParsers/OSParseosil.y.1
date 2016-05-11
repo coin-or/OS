@@ -128,53 +128,65 @@ bool parseInstanceHeader(const char **pchar, OSInstance *osinstance, int* osilli
 bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
 char *parseBase64( const char **p, long int *dataSize, int* osillineno);
 
-#define	ISWHITESPACE( char_) ((char_) == ' ' || \
+#define ISWHITESPACE( char_) ((char_) == ' ' || \
                      (char_) == '\t' ||  (char_) == '\r')
 
-#define	ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+#define BURNWHITESPACE( X ) for(; ISWHITESPACE( *X) || isnewline( *X, osillineno); X++ )
 
-#define GETATTRIBUTETEXT  	\
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
-	ch++; \
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
-	if(*ch == '\"'){ \
-		ch++; \
-	    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	    *p = ch; \
-	    for( ; *ch != '\"'; ch++); \
-	}\
-	else{\
-	    if(*ch == '\'') { \
-	    	ch++; \
-	        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	        *p = ch; \
-	        for( ; *ch != '\''; ch++); \
-	    } \
-	    else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
-	}\
-	numChar = ch - *p; \
-	attText = new char[numChar + 1]; \
-	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
-	attText[ki] = '\0'; \
-	attTextEnd = &attText[ki]; 
-	
+#define FINDNEXTTAG( X )         \
+    BURNWHITESPACE( X );                                                 \
+    while(*X == '<' && *(X+1) == '!' && *(X+2) == '-' && *(X+3) == '-')  \
+    {                                                                    \
+        X += 4;                                                          \
+        while (*X != '-' || *(X+1) != '-' || *(X+2) != '>')              \
+            X++;                                                         \
+        X += 3;                                                          \
+        BURNWHITESPACE( X );                                             \
+    }                                                 
+
+#define ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+
+#define GETATTRIBUTETEXT  \
+    BURNWHITESPACE( ch ); \
+    if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
+    ch++; \
+    BURNWHITESPACE( ch ); \
+    if(*ch == '\"'){ \
+        ch++; \
+        BURNWHITESPACE( ch ); \
+        *p = ch; \
+        for( ; *ch != '\"'; ch++); \
+    }\
+    else{\
+        if(*ch == '\'') { \
+            ch++; \
+            BURNWHITESPACE( ch ); \
+            *p = ch; \
+            for( ; *ch != '\''; ch++); \
+        } \
+        else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
+    }\
+    numChar = ch - *p; \
+    attText = new char[numChar + 1]; \
+    for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
+    attText[ki] = '\0'; \
+    attTextEnd = &attText[ki]; 
+
+    
 #define GAIL printf("GAIL ANN HONDA\n")
-
-
-	
+    
 #define ECHOCHECK \
-	GAIL; \
-	printf("%c", ch[-2]); \
-	printf("%c", ch[-1]); \
-	printf("%c", ch[0]); \
-	printf("%c", ch[1]); \
-	printf("%c", ch[2]); \
-	printf("%c", ch[3]); \
-	printf("%c", ch[4]); \
-	printf("%c", ch[5]); \
-	printf("%c \n", ch[6]); \
-	GAIL;
+    GAIL; \
+    printf("%c", ch[-2]); \
+    printf("%c", ch[-1]); \
+    printf("%c", ch[0]); \
+    printf("%c", ch[1]); \
+    printf("%c", ch[2]); \
+    printf("%c", ch[3]); \
+    printf("%c", ch[4]); \
+    printf("%c", ch[5]); \
+    printf("%c \n", ch[6]); \
+    GAIL;
 %}
 
 %pure-parser
@@ -198,10 +210,10 @@ this fails on in Mac OS X
 */
 
 %union {
-	double dval;
-	int ival;
-	char* sval;
-	
+    double dval;
+    int ival;
+    char* sval;
+    
 }
 %{
 int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );

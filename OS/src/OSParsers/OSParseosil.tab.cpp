@@ -175,53 +175,65 @@ bool parseInstanceHeader(const char **pchar, OSInstance *osinstance, int* osilli
 bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
 char *parseBase64( const char **p, long int *dataSize, int* osillineno);
 
-#define	ISWHITESPACE( char_) ((char_) == ' ' || \
+#define ISWHITESPACE( char_) ((char_) == ' ' || \
                      (char_) == '\t' ||  (char_) == '\r')
 
-#define	ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+#define BURNWHITESPACE( X ) for(; ISWHITESPACE( *X) || isnewline( *X, osillineno); X++ )
 
-#define GETATTRIBUTETEXT  	\
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
-	ch++; \
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
-	if(*ch == '\"'){ \
-		ch++; \
-	    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	    *p = ch; \
-	    for( ; *ch != '\"'; ch++); \
-	}\
-	else{\
-	    if(*ch == '\'') { \
-	    	ch++; \
-	        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	        *p = ch; \
-	        for( ; *ch != '\''; ch++); \
-	    } \
-	    else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
-	}\
-	numChar = ch - *p; \
-	attText = new char[numChar + 1]; \
-	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
-	attText[ki] = '\0'; \
-	attTextEnd = &attText[ki]; 
-	
+#define FINDNEXTTAG( X )         \
+    BURNWHITESPACE( X );                                                 \
+    while(*X == '<' && *(X+1) == '!' && *(X+2) == '-' && *(X+3) == '-')  \
+    {                                                                    \
+        X += 4;                                                          \
+        while (*X != '-' || *(X+1) != '-' || *(X+2) != '>')              \
+            X++;                                                         \
+        X += 3;                                                          \
+        BURNWHITESPACE( X );                                             \
+    }                                                 
+
+#define ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+
+#define GETATTRIBUTETEXT  \
+    BURNWHITESPACE( ch ); \
+    if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
+    ch++; \
+    BURNWHITESPACE( ch ); \
+    if(*ch == '\"'){ \
+        ch++; \
+        BURNWHITESPACE( ch ); \
+        *p = ch; \
+        for( ; *ch != '\"'; ch++); \
+    }\
+    else{\
+        if(*ch == '\'') { \
+            ch++; \
+            BURNWHITESPACE( ch ); \
+            *p = ch; \
+            for( ; *ch != '\''; ch++); \
+        } \
+        else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
+    }\
+    numChar = ch - *p; \
+    attText = new char[numChar + 1]; \
+    for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
+    attText[ki] = '\0'; \
+    attTextEnd = &attText[ki]; 
+
+    
 #define GAIL printf("GAIL ANN HONDA\n")
-
-
-	
+    
 #define ECHOCHECK \
-	GAIL; \
-	printf("%c", ch[-2]); \
-	printf("%c", ch[-1]); \
-	printf("%c", ch[0]); \
-	printf("%c", ch[1]); \
-	printf("%c", ch[2]); \
-	printf("%c", ch[3]); \
-	printf("%c", ch[4]); \
-	printf("%c", ch[5]); \
-	printf("%c \n", ch[6]); \
-	GAIL;
+    GAIL; \
+    printf("%c", ch[-2]); \
+    printf("%c", ch[-1]); \
+    printf("%c", ch[0]); \
+    printf("%c", ch[1]); \
+    printf("%c", ch[2]); \
+    printf("%c", ch[3]); \
+    printf("%c", ch[4]); \
+    printf("%c", ch[5]); \
+    printf("%c \n", ch[6]); \
+    GAIL;
 
 
 
@@ -1120,10 +1132,10 @@ typedef union YYSTYPE
 {
 
 
-	double dval;
-	int ival;
-	char* sval;
-	
+    double dval;
+    int ival;
+    char* sval;
+    
 
 
 
@@ -1876,116 +1888,116 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   438,   438,   441,   442,   444,   453,   454,   457,   458,
-     462,   467,   477,   477,   479,   492,   498,   499,   502,   503,
-     506,   509,   512,   515,   521,   528,   535,   543,   548,   548,
-     556,   562,   574,   574,   576,   578,   585,   585,   588,   588,
-     594,   600,   612,   612,   614,   616,   620,   620,   628,   629,
-     630,   631,   632,   633,   635,   642,   643,   648,   650,   659,
-     661,   661,   664,   669,   674,   679,   679,   681,   684,   693,
-     695,   695,   698,   703,   708,   713,   713,   716,   718,   727,
-     737,   737,   740,   745,   750,   756,   756,   762,   764,   764,
-     766,   768,   775,   813,   814,   816,   816,   818,   818,   820,
-     822,   824,   833,   835,   835,   838,   843,   848,   853,   858,
-     869,   869,   873,   875,   887,   889,   889,   892,   897,   902,
-     906,   911,   916,   923,   923,   925,   927,   940,   942,   942,
-     945,   950,   955,   960,   965,   970,   975,   982,   982,   986,
-     988,   998,  1000,  1000,  1003,  1008,  1013,  1017,  1024,  1024,
-    1038,  1040,  1049,  1051,  1051,  1054,  1059,  1064,  1069,  1071,
-    1073,  1079,  1085,  1085,  1087,  1089,  1091,  1093,  1107,  1110,
-    1112,  1121,  1123,  1123,  1126,  1131,  1136,  1141,  1143,  1145,
-    1151,  1157,  1157,  1159,  1161,  1163,  1165,  1179,  1188,  1188,
-    1190,  1195,  1195,  1197,  1200,  1202,  1202,  1209,  1214,  1224,
-    1224,  1226,  1228,  1230,  1232,  1232,  1234,  1239,  1255,  1303,
-    1303,  1306,  1307,  1308,  1309,  1310,  1311,  1312,  1313,  1314,
-    1315,  1316,  1319,  1320,  1322,  1322,  1328,  1333,  1343,  1343,
-    1345,  1347,  1349,  1351,  1351,  1353,  1358,  1371,  1404,  1404,
-    1407,  1408,  1409,  1410,  1411,  1412,  1413,  1414,  1417,  1418,
-    1421,  1421,  1427,  1432,  1442,  1442,  1444,  1446,  1448,  1450,
-    1450,  1452,  1457,  1472,  1511,  1511,  1514,  1515,  1516,  1517,
-    1518,  1519,  1520,  1521,  1522,  1525,  1526,  1569,  1569,  1571,
-    1573,  1573,  1575,  1576,  1579,  1580,  1583,  1634,  1636,  1650,
-    1651,  1653,  1653,  1677,  1678,  1681,  1682,  1684,  1686,  1687,
-    1691,  1692,  1694,  1695,  1697,  1716,  1727,  1734,  1739,  1740,
-    1742,  1743,  1745,  1745,  1748,  1760,  1761,  1763,  1764,  1768,
-    1769,  1771,  1772,  1774,  1793,  1804,  1811,  1816,  1817,  1819,
-    1820,  1822,  1822,  1825,  1837,  1838,  1840,  1850,  1854,  1855,
-    1857,  1858,  1860,  1879,  1886,  1891,  1892,  1894,  1895,  1897,
-    1897,  1900,  1912,  1913,  1918,  1918,  1926,  1927,  1929,  1930,
-    1932,  1936,  1942,  1953,  1958,  1973,  1984,  1995,  2003,  2011,
-    2030,  2041,  2052,  2064,  2075,  2086,  2098,  2109,  2121,  2133,
-    2145,  2157,  2169,  2181,  2193,  2205,  2217,  2244,  2245,  2252,
-    2254,  2254,  2256,  2257,  2258,  2259,  2423,  2431,  2433,  2433,
-    2435,  2437,  2446,  2448,  2448,  2450,  2450,  2452,  2468,  2471,
-    2471,  2473,  2473,  2476,  2507,  2515,  2517,  2517,  2519,  2521,
-    2529,  2529,  2531,  2547,  2549,  2549,  2551,  2551,  2553,  2584,
-    2594,  2594,  2596,  2598,  2606,  2606,  2608,  2877,  2929,  2952,
-    2971,  2971,  2974,  2975,  2976,  2977,  2978,  3160,  3160,  3162,
-    3164,  3204,  3206,  3206,  3211,  3229,  3256,  3256,  3259,  3260,
-    3261,  3262,  3263,  3264,  3265,  3266,  3267,  3270,  3270,  3272,
-    3272,  3277,  3277,  3277,  3278,  3278,  3278,  3279,  3279,  3279,
-    3280,  3280,  3282,  3284,  3293,  3299,  3299,  3302,  3306,  3312,
-    3314,  3314,  3320,  3330,  3340,  3340,  3342,  3344,  3346,  3349,
-    3349,  3360,  3368,  3368,  3370,  3372,  3374,  3380,  3390,  3398,
-    3398,  3400,  3402,  3404,  3407,  3409,  3418,  3424,  3424,  3427,
-    3431,  3437,  3439,  3441,  3441,  3451,  3459,  3459,  3461,  3463,
-    3465,  3468,  3470,  3479,  3485,  3485,  3488,  3492,  3498,  3500,
-    3503,  3508,  3519,  3535,  3535,  3537,  3539,  3541,  3543,  3543,
-    3545,  3552,  3559,  3578,  3578,  3581,  3582,  3584,  3584,  3586,
-    3588,  3590,  3590,  3593,  3595,  3603,  3603,  3608,  3615,  3617,
-    3626,  3632,  3632,  3635,  3639,  3646,  3648,  3651,  3655,  3666,
-    3682,  3682,  3684,  3686,  3688,  3688,  3690,  3692,  3707,  3707,
-    3709,  3711,  3720,  3722,  3731,  3737,  3737,  3740,  3744,  3751,
-    3753,  3756,  3760,  3771,  3788,  3788,  3790,  3792,  3794,  3794,
-    3796,  3798,  3813,  3813,  3815,  3817,  3827,  3829,  3838,  3844,
-    3844,  3847,  3851,  3857,  3859,  3861,  3861,  3871,  3879,  3879,
-    3881,  3883,  3885,  3888,  3890,  3899,  3905,  3905,  3908,  3912,
-    3918,  3920,  3923,  3927,  3938,  3954,  3954,  3956,  3958,  3960,
-    3960,  3962,  3965,  3977,  3977,  3980,  3981,  3982,  3984,  4017,
-    4019,  4029,  4035,  4035,  4038,  4042,  4048,  4050,  4053,  4057,
-    4068,  4081,  4081,  4083,  4085,  4087,  4087,  4089,  4116,  4127,
-    4127,  4130,  4131,  4132,  4134,  4134,  4137,  4139,  4148,  4154,
-    4154,  4157,  4161,  4167,  4169,  4171,  4171,  4181,  4189,  4189,
-    4191,  4193,  4195,  4198,  4201,  4219,  4219,  4230,  4237,  4247,
-    4255,  4261,  4263,  4277,  4289,  4295,  4301,  4301,  4303,  4305,
-    4307,  4309,  4319,  4325,  4331,  4331,  4333,  4335,  4337,  4339,
-    4339,  4344,  4349,  4361,  4363,  4363,  4366,  4367,  4368,  4376,
-    4383,  4383,  4385,  4387,  4405,  4416,  4460,  4583,  4594,  4616,
-    4641,  4652,  4666,  4681,  4696,  4708,  4720,  4740,  4760,  4770,
-    4807,  4818,  4830,  4844,  4857,  4870,  4880,  4890,  4903,  4903,
-    4905,  4915,  5079,  5079,  5081,  5088,  5115,  5115,  5117,  5126,
-    5142,  5142,  5144,  5151,  5178,  5178,  5180,  5187,  5196,  5196,
-    5198,  5205,  5232,  5232,  5236,  5244,  5253,  5253,  5255,  5262,
-    5271,  5271,  5273,  5280,  5319,  5320,  5326,  5332,  5353,  5354,
-    5356,  5366,  5385,  5392,  5392,  5395,  5404,  5417,  5418,  5419,
-    5420,  5421,  5422,  5423,  5424,  5425,  5426,  5427,  5428,  5429,
-    5430,  5431,  5432,  5433,  5434,  5435,  5436,  5437,  5438,  5439,
-    5440,  5442,  5443,  5444,  5448,  5448,  5451,  5452,  5454,  5454,
-    5457,  5458,  5462,  5462,  5467,  5467,  5472,  5472,  5477,  5477,
-    5482,  5482,  5487,  5487,  5492,  5492,  5497,  5497,  5502,  5502,
-    5507,  5507,  5512,  5512,  5517,  5517,  5522,  5524,  5530,  5537,
-    5537,  5543,  5543,  5555,  5555,  5560,  5560,  5565,  5565,  5575,
-    5582,  5588,  5589,  5591,  5592,  5595,  5599,  5603,  5607,  5606,
-    5627,  5626,  5633,  5634,  5636,  5635,  5642,  5643,  5646,  5652,
-    5660,  5667,  5685,  5685,  5696,  5696,  5699,  5699,  5713,  5714,
-    5717,  5717,  5730,  5731,  5734,  5734,  5747,  5748,  5751,  5751,
-    5761,  5762,  5768,  5769,  5770,  5771,  5772,  5773,  5774,  5775,
-    5776,  5777,  5778,  5779,  5780,  5781,  5782,  5783,  5784,  5785,
-    5786,  5789,  5800,  5808,  5808,  5811,  5812,  5815,  5816,  5818,
-    5828,  5842,  5847,  5854,  5855,  5857,  5864,  5869,  5876,  5877,
-    5879,  5886,  5891,  5898,  5899,  5901,  5908,  5910,  5916,  5918,
-    5920,  5926,  5928,  5930,  5936,  5938,  5940,  5946,  5948,  5950,
-    5956,  5956,  5961,  5963,  5965,  5971,  5971,  5976,  5978,  5989,
-    5991,  5996,  5996,  5998,  6000,  6006,  6009,  6011,  6017,  6020,
-    6022,  6028,  6031,  6033,  6039,  6043,  6042,  6054,  6054,  6061,
-    6063,  6069,  6071,  6073,  6079,  6082,  6084,  6090,  6100,  6100,
-    6106,  6114,  6116,  6136,  6136,  6138,  6140,  6142,  6142,  6144,
-    6156,  6176,  6182,  6182,  6185,  6193,  6209,  6209,  6213,  6214,
-    6215,  6216,  6217,  6218,  6219,  6220,  6221,  6225,  6229,  6238,
-    6239,  6241,  6248,  6248,  6251,  6252,  6256,  6258,  6264,  6267,
-    6269,  6275,  6278,  6278,  6288,  6289,  6295,  6297,  6303,  6306,
-    6308,  6314,  6317,  6319,  6325,  6328,  6330,  6336,  6339,  6341,
-    6347
+       0,   450,   450,   453,   454,   456,   465,   466,   469,   470,
+     474,   479,   489,   489,   491,   504,   510,   511,   514,   515,
+     518,   521,   524,   527,   533,   540,   547,   555,   560,   560,
+     568,   574,   586,   586,   588,   590,   597,   597,   600,   600,
+     606,   612,   624,   624,   626,   628,   632,   632,   640,   641,
+     642,   643,   644,   645,   647,   654,   655,   660,   662,   671,
+     673,   673,   676,   681,   686,   691,   691,   693,   696,   705,
+     707,   707,   710,   715,   720,   725,   725,   728,   730,   739,
+     749,   749,   752,   757,   762,   768,   768,   774,   776,   776,
+     778,   780,   787,   825,   826,   828,   828,   830,   830,   832,
+     834,   836,   845,   847,   847,   850,   855,   860,   865,   870,
+     881,   881,   885,   887,   899,   901,   901,   904,   909,   914,
+     918,   923,   928,   935,   935,   937,   939,   952,   954,   954,
+     957,   962,   967,   972,   977,   982,   987,   994,   994,   998,
+    1000,  1010,  1012,  1012,  1015,  1020,  1025,  1029,  1036,  1036,
+    1050,  1052,  1061,  1063,  1063,  1066,  1071,  1076,  1081,  1083,
+    1085,  1091,  1097,  1097,  1099,  1101,  1103,  1105,  1119,  1122,
+    1124,  1133,  1135,  1135,  1138,  1143,  1148,  1153,  1155,  1157,
+    1163,  1169,  1169,  1171,  1173,  1175,  1177,  1191,  1200,  1200,
+    1202,  1207,  1207,  1209,  1212,  1214,  1214,  1221,  1226,  1236,
+    1236,  1238,  1240,  1242,  1244,  1244,  1246,  1251,  1267,  1314,
+    1314,  1317,  1318,  1319,  1320,  1321,  1322,  1323,  1324,  1325,
+    1326,  1327,  1330,  1331,  1333,  1333,  1339,  1344,  1354,  1354,
+    1356,  1358,  1360,  1362,  1362,  1364,  1369,  1382,  1414,  1414,
+    1417,  1418,  1419,  1420,  1421,  1422,  1423,  1424,  1427,  1428,
+    1431,  1431,  1437,  1442,  1452,  1452,  1454,  1456,  1458,  1460,
+    1460,  1462,  1467,  1482,  1520,  1520,  1523,  1524,  1525,  1526,
+    1527,  1528,  1529,  1530,  1531,  1534,  1535,  1578,  1578,  1580,
+    1582,  1582,  1584,  1585,  1588,  1589,  1592,  1643,  1645,  1659,
+    1660,  1662,  1662,  1686,  1687,  1690,  1691,  1693,  1695,  1696,
+    1700,  1701,  1703,  1704,  1706,  1725,  1736,  1743,  1748,  1749,
+    1751,  1752,  1754,  1754,  1757,  1769,  1770,  1772,  1773,  1777,
+    1778,  1780,  1781,  1783,  1802,  1813,  1820,  1825,  1826,  1828,
+    1829,  1831,  1831,  1834,  1846,  1847,  1849,  1859,  1863,  1864,
+    1866,  1867,  1869,  1888,  1895,  1900,  1901,  1903,  1904,  1906,
+    1906,  1909,  1921,  1922,  1927,  1927,  1935,  1936,  1938,  1939,
+    1941,  1945,  1951,  1962,  1967,  1982,  1993,  2004,  2012,  2020,
+    2039,  2050,  2061,  2073,  2084,  2095,  2107,  2118,  2130,  2142,
+    2154,  2166,  2178,  2190,  2202,  2214,  2226,  2253,  2254,  2261,
+    2263,  2263,  2265,  2266,  2267,  2268,  2432,  2440,  2442,  2442,
+    2444,  2446,  2455,  2457,  2457,  2459,  2459,  2461,  2477,  2480,
+    2480,  2482,  2482,  2485,  2516,  2524,  2526,  2526,  2528,  2530,
+    2538,  2538,  2540,  2556,  2558,  2558,  2560,  2560,  2562,  2593,
+    2603,  2603,  2605,  2607,  2615,  2615,  2617,  2886,  2938,  2961,
+    2980,  2980,  2983,  2984,  2985,  2986,  2987,  3169,  3169,  3171,
+    3173,  3213,  3215,  3215,  3220,  3238,  3265,  3265,  3268,  3269,
+    3270,  3271,  3272,  3273,  3274,  3275,  3276,  3279,  3279,  3281,
+    3281,  3286,  3286,  3286,  3287,  3287,  3287,  3288,  3288,  3288,
+    3289,  3289,  3291,  3293,  3302,  3308,  3308,  3311,  3315,  3321,
+    3323,  3323,  3329,  3339,  3349,  3349,  3351,  3353,  3355,  3358,
+    3358,  3369,  3377,  3377,  3379,  3381,  3383,  3389,  3399,  3407,
+    3407,  3409,  3411,  3413,  3416,  3418,  3427,  3433,  3433,  3436,
+    3440,  3446,  3448,  3450,  3450,  3460,  3468,  3468,  3470,  3472,
+    3474,  3477,  3479,  3488,  3494,  3494,  3497,  3501,  3507,  3509,
+    3512,  3517,  3528,  3544,  3544,  3546,  3548,  3550,  3552,  3552,
+    3554,  3561,  3568,  3587,  3587,  3590,  3591,  3593,  3593,  3595,
+    3597,  3599,  3599,  3602,  3604,  3612,  3612,  3617,  3624,  3626,
+    3635,  3641,  3641,  3644,  3648,  3655,  3657,  3660,  3664,  3675,
+    3691,  3691,  3693,  3695,  3697,  3697,  3699,  3701,  3716,  3716,
+    3718,  3720,  3729,  3731,  3740,  3746,  3746,  3749,  3753,  3760,
+    3762,  3765,  3769,  3780,  3797,  3797,  3799,  3801,  3803,  3803,
+    3805,  3807,  3822,  3822,  3824,  3826,  3836,  3838,  3847,  3853,
+    3853,  3856,  3860,  3866,  3868,  3870,  3870,  3880,  3888,  3888,
+    3890,  3892,  3894,  3897,  3899,  3908,  3914,  3914,  3917,  3921,
+    3927,  3929,  3932,  3936,  3947,  3963,  3963,  3965,  3967,  3969,
+    3969,  3971,  3974,  3986,  3986,  3989,  3990,  3991,  3993,  4026,
+    4028,  4038,  4044,  4044,  4047,  4051,  4057,  4059,  4062,  4066,
+    4077,  4090,  4090,  4092,  4094,  4096,  4096,  4098,  4125,  4136,
+    4136,  4139,  4140,  4141,  4143,  4143,  4146,  4148,  4157,  4163,
+    4163,  4166,  4170,  4176,  4178,  4180,  4180,  4190,  4198,  4198,
+    4200,  4202,  4204,  4207,  4210,  4228,  4228,  4239,  4246,  4256,
+    4264,  4270,  4272,  4286,  4298,  4304,  4310,  4310,  4312,  4314,
+    4316,  4318,  4328,  4334,  4340,  4340,  4342,  4344,  4346,  4348,
+    4348,  4353,  4358,  4370,  4372,  4372,  4375,  4376,  4377,  4385,
+    4392,  4392,  4394,  4396,  4414,  4425,  4469,  4592,  4603,  4625,
+    4650,  4661,  4675,  4690,  4705,  4717,  4729,  4749,  4769,  4779,
+    4816,  4827,  4839,  4853,  4866,  4879,  4889,  4899,  4912,  4912,
+    4914,  4924,  5088,  5088,  5090,  5097,  5124,  5124,  5126,  5135,
+    5151,  5151,  5153,  5160,  5187,  5187,  5189,  5196,  5205,  5205,
+    5207,  5214,  5241,  5241,  5245,  5253,  5262,  5262,  5264,  5271,
+    5280,  5280,  5282,  5289,  5328,  5329,  5335,  5341,  5362,  5363,
+    5365,  5375,  5394,  5401,  5401,  5404,  5413,  5426,  5427,  5428,
+    5429,  5430,  5431,  5432,  5433,  5434,  5435,  5436,  5437,  5438,
+    5439,  5440,  5441,  5442,  5443,  5444,  5445,  5446,  5447,  5448,
+    5449,  5451,  5452,  5453,  5457,  5457,  5460,  5461,  5463,  5463,
+    5466,  5467,  5471,  5471,  5476,  5476,  5481,  5481,  5486,  5486,
+    5491,  5491,  5496,  5496,  5501,  5501,  5506,  5506,  5511,  5511,
+    5516,  5516,  5521,  5521,  5526,  5526,  5531,  5533,  5539,  5546,
+    5546,  5552,  5552,  5564,  5564,  5569,  5569,  5574,  5574,  5584,
+    5591,  5597,  5598,  5600,  5601,  5604,  5608,  5612,  5616,  5615,
+    5636,  5635,  5642,  5643,  5645,  5644,  5651,  5652,  5655,  5661,
+    5669,  5676,  5694,  5694,  5705,  5705,  5708,  5708,  5722,  5723,
+    5726,  5726,  5739,  5740,  5743,  5743,  5756,  5757,  5760,  5760,
+    5770,  5771,  5777,  5778,  5779,  5780,  5781,  5782,  5783,  5784,
+    5785,  5786,  5787,  5788,  5789,  5790,  5791,  5792,  5793,  5794,
+    5795,  5798,  5809,  5817,  5817,  5820,  5821,  5824,  5825,  5827,
+    5837,  5851,  5856,  5863,  5864,  5866,  5873,  5878,  5885,  5886,
+    5888,  5895,  5900,  5907,  5908,  5910,  5917,  5919,  5925,  5927,
+    5929,  5935,  5937,  5939,  5945,  5947,  5949,  5955,  5957,  5959,
+    5965,  5965,  5970,  5972,  5974,  5980,  5980,  5985,  5987,  5998,
+    6000,  6005,  6005,  6007,  6009,  6015,  6018,  6020,  6026,  6029,
+    6031,  6037,  6040,  6042,  6048,  6052,  6051,  6063,  6063,  6070,
+    6072,  6078,  6080,  6082,  6088,  6091,  6093,  6099,  6109,  6109,
+    6115,  6123,  6125,  6145,  6145,  6147,  6149,  6151,  6151,  6153,
+    6165,  6183,  6189,  6189,  6192,  6200,  6216,  6216,  6220,  6221,
+    6222,  6223,  6224,  6225,  6226,  6227,  6228,  6232,  6236,  6245,
+    6246,  6248,  6255,  6255,  6258,  6259,  6263,  6265,  6271,  6274,
+    6276,  6282,  6285,  6285,  6295,  6296,  6302,  6304,  6310,  6313,
+    6315,  6321,  6324,  6326,  6332,  6335,  6337,  6343,  6346,  6348,
+    6354
 };
 #endif
 
@@ -4723,8 +4735,8 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
     {
     parserData->coneCounter++;
-    if (parserData->coneCounter > parserData->numberOfCones) parserData->parser_errors +=
-        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "encountered more cones than specified");
+    if (parserData->coneCounter > parserData->numberOfCones) 
+        throw ErrorClass("encountered more cones than specified");
     osinstance->instanceData->cones->numberOfCones = parserData->coneCounter;
 }
     break;
@@ -5329,8 +5341,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixVar) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixVar greater than number attribute");
+        throw ErrorClass("actual number of matrixVar greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter+i]->numberOfRows
@@ -5428,8 +5439,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixObj) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixObj greater than number attribute");
+        throw ErrorClass("actual number of matrixObj greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->numberOfRows
@@ -5514,8 +5524,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixCon) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixCon greater than number attribute");
+        throw ErrorClass("actual number of matrixCon greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->numberOfRows
@@ -8976,9 +8985,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
     {
         if (osnlData->tmpnlcount >= osnlData->nlnodenumber) 
-            parserData->parser_errors += 
-                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
-                    "actual number of matrix expressions greater than numberOfExpr attribute");
+            throw ErrorClass("actual number of matrix expressions greater than numberOfExpr attribute");
         osglData->idxPresent = false;
         osglData->shapePresent = false;   
 
@@ -9411,7 +9418,6 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
     *osillineno = 1;
     const char *pchar = *p;
     
-        
     //first check of osil start
     const char *startOSiL = "<osil";
     const char *pOSiLStart = strstr(pchar, startOSiL);
@@ -9468,7 +9474,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
      // move to the end of <instanceHeader
      pchar+=15;
     // burn any whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
+    BURNWHITESPACE( pchar );
     // pchar better be pointing to the '>' in the <instanceHeader> element
     // or to /> if we have <instanceHeader />
     if( *pchar == '/'){
@@ -9496,8 +9502,8 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 
     for (;;)
     {
-        // first burn any whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
+        // first burn any whitespace and comments
+        FINDNEXTTAG( pchar );
         // remember where we are
         *p = pchar;
         // The next character should be '<'
@@ -9524,7 +9530,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a name element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -9569,7 +9575,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </name
                         pchar += 6;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of name
                         if(*pchar++ != '>')
                         {
@@ -9599,7 +9605,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a source element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -9644,7 +9650,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </source
                         pchar += 8;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of source
                         if(*pchar++ != '>')
                         {
@@ -9674,7 +9680,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a description element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -9719,7 +9725,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </description
                         pchar += 13;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of description
                         if(*pchar++ != '>')
                         {
@@ -9749,7 +9755,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a fileCreator element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -9794,7 +9800,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </fileCreator
                         pchar += 13;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of fileCreator
                         if(*pchar++ != '>')
                         {
@@ -9824,7 +9830,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 {
                     // we have a licence element, process the text
                     // burn the whitespace
-                    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                    BURNWHITESPACE( pchar );
                     if( *pchar == '/')
                     {
                         pchar++;
@@ -9869,7 +9875,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                         // move to first char after </licence
                         pchar += 9;
                         // get rid of the whitespace
-                        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                        BURNWHITESPACE( pchar );
                         // we better have the '>' for the end of licence
                         if(*pchar++ != '>')
                         {
@@ -9890,7 +9896,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
                 }
                 // pchar now points to the first character after </instanceHeader
                 // get rid of white space
-                for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+                BURNWHITESPACE( pchar );
                 // pchar must point to '>' or there is an error
                 if(*pchar != '>')
                 {  
@@ -9914,8 +9920,8 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
     const char *pchar = *p;
     const char *startInstanceData = "<instanceData";
     // at this point *pchar should be pointing to the first char after the > in </instanceHeader>
-    // burn the white space
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+    // burn the white space and any comments
+    FINDNEXTTAG( pchar );
     // pchar should be point to a '<', if not there is an error
     if(*pchar != '<'){  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData element"); return false;}
     // make sure the element is <instanceData    
@@ -9923,13 +9929,13 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
     while(*startInstanceData++  == *pchar) pchar++;
     if( (pchar - *p) != 13) {  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); return false;}    
     // now burn whitespace
-    for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+    BURNWHITESPACE( pchar );
     // pchar must point to '>' or there is an error
     if(*pchar == '>'){
         pchar++;
         // we are now pointing to the first char after <instanceData>
-        // burn any whitespace
-        for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;    
+        // burn any whitespace and comments
+        FINDNEXTTAG( pchar );    
         // we should be pointing to the '<' char in <variables>
         *p = pchar;
         if( parseVariables  ( p, osinstance, osillineno) != true) throw ErrorClass("error in parseVariables");
@@ -9980,8 +9986,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     int varmult; 
     //
     // start parsing -- okay not to have variables 
-    // burn white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // burn white space and comments
+    FINDNEXTTAG( ch );
     *p = ch;
     while(*startVariables++  == *ch) ch++;
     //if( (ch - *p) != 10) {  osilerror_wrapper( ch,osillineno,"incorrect <variables tag>"); return false;}
@@ -9991,7 +9997,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 
     // find numberOfVariables attribute
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     *p = ch;
     while(*c_numberOfVariables++  == *ch) ch++;
     if( (ch - *p) != 17) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfVariables attribute in <variables tag>"); return false;}    
@@ -10001,7 +10007,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
     numberOfVariables = atoimod1( osillineno, attText, attTextEnd);
     delete [] attText;
     // get rid of white space after the numberOfVariables element
-    for ( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;                    
+    BURNWHITESPACE( ch );
 
     osinstance->instanceData->variables->numberOfVariables = numberOfVariables;
     if (numberOfVariables > 0)
@@ -10015,8 +10021,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
         // better have an > sign or not valid
         if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"variables element does not have a proper closing >"); return false;}
         ch++;
-        // get rid of white space
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        // get rid of white space and comments
+        FINDNEXTTAG( ch );
         // now loop over the var element when the numberOfVariables is strictly positive
         *p = ch;
         while(*startVar++  == *ch) ch++;
@@ -10035,7 +10041,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             vt = 0;
             // assume we are pointing to the first character after the r in <var
             // it should be whitespace
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>')
             {
                 switch (*ch) 
@@ -10131,9 +10137,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     osilerror_wrapper( ch,osillineno,"incorrect end of <var> element");
                     return false;
                 }
-                // get rid of whitespace
+                // get rid of whitespace and comments
                 ch++;
-                for (; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                FINDNEXTTAG( ch );
                 // either have another <var> element or foundVar = false;
                 *p = ch;
                 while(*startVar++  == *ch) ch++;
@@ -10160,7 +10166,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 // look for </var
                 // first get rid of white space
                 ch++;
-                for (; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                BURNWHITESPACE( ch );
                 // we should be at </var or there is an error
                 *p = ch;
                 while(*endVar++  == *ch) ch++;
@@ -10171,7 +10177,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                     return false;
                 }
                 // burn off the whitespace
-                for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                BURNWHITESPACE( ch );
                 // better have an > to end </var
                 if(*ch++ != '>')
                 {
@@ -10181,7 +10187,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 // look for a new <var> element
                 // get rid of whitespace
                 ch++;
-                for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+                FINDNEXTTAG( ch );
                 // either have another <var> element or foundVar = false;
                 *p = ch;
                 while(*startVar++  == *ch) ch++;
@@ -10233,7 +10239,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
             osilerror_wrapper( ch,osillineno,"cannot find </variables> tag");
             return false;
         }
-        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+        BURNWHITESPACE( ch );
         // better have >
         if(*ch != '>')
         {
@@ -10253,7 +10259,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
         // if we are here we have numberOfVariables = 0
         // must close with /> or </variables>
         // get rid of white space
-        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+        BURNWHITESPACE( ch );
         if( *ch == '/')
         {
             // better have a >
@@ -10274,8 +10280,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 return false;
             }
             ch++;
-            // burn white space
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            // burn white space and comments
+            FINDNEXTTAG( ch );
             *p = ch;
             while( *endVariables++  == *ch) ch++;
             if ( (ch - *p) != 11)
@@ -10283,7 +10289,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
                 osilerror_wrapper( ch,osillineno, "cannot find </variables> tag");
                 return false;
             }
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+            BURNWHITESPACE( ch );
             // better have >
             if(*ch != '>')
             {
@@ -10339,8 +10345,8 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     bool foundObj;
     int objmult; 
     // start parsing
-    // burn white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // burn white space and comments
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <objectives element if there -- it is not required
     *p = ch;
     while( *startObjectives++  == *ch) ch++;
@@ -10352,9 +10358,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     osinstance->instanceData->objectives = new Objectives();
 
     // find numberOfObjectives attribute -- it is valid for this attribute to be missing. 
-    // However if the  number attribute is missing assume it is    1 
+    // However if the  number attribute is missing assume it is 1 
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // we just ate the white space. If numberOfObjectives is missing we assume it is 1
     // we therefore must have > char
     if(*ch == '>'){
@@ -10372,7 +10378,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     }
     if(numberOfObjectives > 0){
         // get rid of white space after the numberOfObjectives attribute
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        BURNWHITESPACE( ch );
         // we must have an >
         /*if(*ch == '/'){
             ch++;
@@ -10389,8 +10395,8 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         for(i = 0; i < numberOfObjectives; i++){
             osinstance->instanceData->objectives->obj[ i] = new Objective();
         }     
-    // get rid of white space after the <objectives> element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and any comments after the <objectives> element
+    FINDNEXTTAG( ch );
     // now loop over the obj elements, there must be at least one obj element
     *p = ch;
     while( *startObj++  == *ch) ch++;
@@ -10522,9 +10528,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         if(*ch == '/'){
             ch++;
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <obj> element"); return false;}
-            // get rid of whitespace
+            // get rid of whitespace and comments
             ch++;
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <obj> element or foundObj = false;
             for(i = 0; startObj[i]  == *ch; i++, ch++);
             if(i == 4) foundObj = true;
@@ -10533,23 +10539,23 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         else{
             // the ch is the > at the end of the obj element
             // double check to make sure it really is a >
-            if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <obj> element"); return false;}
+            if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to an <obj> element"); return false;}
             // look for </obj
             // fist get rid of white space
             ch++;
             // first get the <coef> elements
             parseObjCoef(&ch,  objcount, osinstance, osillineno);
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // we should be at </obj or there is an error
             for(i = 0; endObj[i]  == *ch; i++, ch++);
             if(i != 5) {  osilerror_wrapper( ch,osillineno,"</obj> element missing or too many <coef> elements"); return false;}
             // burn off the whitespace
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             // better have an > to end </obj
             if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element ill-formed"); return false;}
             // look for a new <obj> element
             // get rid of whitespace
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <obj> element or foundObj = false;
             for(i = 0; startObj[i]  == *ch; i++, ch++);
             if(i == 4) foundObj = true;
@@ -10599,7 +10605,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     // get the </objectives> tag
     for(i = 0; endObjectives[i]  == *ch; i++, ch++);
     if(i != 12) {  osilerror_wrapper( ch,osillineno, "cannot find </objectives> tag"); return false; }
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </objectives> tag"); return false;}    
     ch++;
@@ -10610,7 +10616,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         // if we are here we have exactly 0 objectives 
         // must close with /> or </objectives>
         // get rid of white space
-        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+        BURNWHITESPACE( ch );
         if( *ch == '/'){
             // better have a >
             ch++;
@@ -10621,11 +10627,11 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
             // if we are here we must have an '>' and then  </objectives> tag
             if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed objectives tag"); return false;}
             ch++;
-            // burn white space
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            // burn white space and comments
+            FINDNEXTTAG( ch );
             for(i = 0; endObjectives[i]  == *ch; i++, ch++);
             if(i != 12) {  osilerror_wrapper( ch,osillineno, "cannot find </objectives> tag"); return false; }
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+            BURNWHITESPACE( ch );
             // better have >
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </objectives> tag"); return false;}    
             ch++;
@@ -10675,7 +10681,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
     // 
     // start parsing -- ok not to have constraints
     // burn white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <constraints element if there -- it is not required
     *p = ch;
     for(i = 0; startConstraints[i]  == *ch; i++, ch++);
@@ -10689,7 +10695,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 
     // find numberOfConstraints attribute
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     *p = ch;
     while( *c_numberOfConstraints++  == *ch) ch++;
     if( (ch - *p) != 19) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfConstraints attribute in <constraints> tag"); return false;}    
@@ -10707,11 +10713,11 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
             osinstance->instanceData->constraints->con[ i] = new Constraint();
         } 
     // get rid of white space after the numberOfConstraints element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     //  we better have an > 
     if( *ch++ != '>') {   osilerror_wrapper( ch,osillineno,"the constraints element does not have a proper closing"); return false;} 
-    // get rid of white space after the <constraints> element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and comments after the <constraints> element
+    FINDNEXTTAG( ch );
     // now loop over the con elements, there must be at least one con element
     *p = ch;
     while( *startCon++  == *ch) ch++;
@@ -10728,7 +10734,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 
         // assume we are pointing to the first character after the n in <con
         // it should be a space so let's increment ch
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+        BURNWHITESPACE( ch );
         while(*ch != '/' && *ch != '>'){
             switch (*ch) {
             case 'n':
@@ -10807,7 +10813,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <con> element"); return false;}
             // get rid of whitespace
             ch++;
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <con> element or foundCon = false;
             *p = ch;
             while( *startCon++  == *ch) ch++;
@@ -10827,20 +10833,20 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
             // look for </con
             // fist get rid of white space
             ch++;
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // we should be at </con or there is an error
             *p = ch;
             while( *endCon++  == *ch) ch++;
             if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"</con> element missing"); return false;}
             endCon -= 6;
             // burn off the whitespace
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             // better have an > to end </con
             if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"</con> element missing >"); return false;}
             // look for a new <con> element
             // get rid of whitespace
             ch++;
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <con> element or foundVar = false;
             *p = ch;
             while( *startCon++  == *ch) ch++;
@@ -10882,7 +10888,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endConstraints++  == *ch) ch++;
     if( (ch - *p) != 13) {  osilerror_wrapper( ch,osillineno, "cannot find </constraints> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </constraints> tag");    return false;}
     ch++;
@@ -10893,7 +10899,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
         // if we are here we have numberOfConstraints = 0
         // must close with /> or </constraints>
         // get rid of white space
-        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+        FINDNEXTTAG( ch );
         if( *ch == '/'){
             // better have a >
             ch++;
@@ -10905,11 +10911,11 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
             if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed constraints tag"); return false;}
             ch++;
             // burn white space
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             *p = ch;
             while( *endConstraints++  == *ch) ch++;
             if( (ch - *p) != 13) {  osilerror_wrapper( ch,osillineno, "cannot find </constraints> tag"); return false; }
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+            BURNWHITESPACE( ch );
             // better have >
             if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </constraints> tag"); return false;}    
             ch++;
@@ -10937,8 +10943,8 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
     // others
     int numberOfValues;
     // start parsing
-    // burn white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // burn white space and comments
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <linearConstraintCoefficients element if there -- it is not required
     *p = ch;
     while( *startlinearConstraintCoefficients++  == *ch) ch++;
@@ -10952,7 +10958,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 
     // find numberOfValues attribute
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     *p = ch;
     while( *c_numberOfValues++  == *ch) ch++;
     if( (ch - *p) != 14) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfValues attribute in <linearConstraintCoefficients> tag"); return false;}
@@ -10965,7 +10971,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
     if(numberOfValues <= 0) {  osilerror_wrapper( ch,osillineno,"the number of nonlinear nonzeros must be positive"); return false;}
     osinstance->instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
     // get rid of white space after the numberOfConstraints element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // we should have either an />  OR an >
     if(*ch == '/'){
         ch++;
@@ -10977,8 +10983,8 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
     }
     //  we better have an > 
     if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the <linearConstraintCoefficients> element does not have a proper closing"); return false;}
-    // get rid of white space after the <linearConstraintCoefficients> element
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and commentsafter the <linearConstraintCoefficients> element
+    FINDNEXTTAG( ch );
     if(  parseStart(  &ch, osinstance, osillineno) != true) {osilerror_wrapper( ch,osillineno,"error processing <start> element"); return false;}
 //    if( (parseColIdx( &ch, osinstance, osillineno) != true) && (parseRowIdx( &ch, osinstance, osillineno) != true)) return false;
 //    if( (parseColIdx( &ch, osinstance, osillineno) == true) && (parseRowIdx( &ch, osinstance, osillineno) == true)) {osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); return false;}
@@ -11009,12 +11015,12 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
     }
 
     if(  parseValue(  &ch, osinstance, osillineno) != true) {osilerror_wrapper( ch,osillineno, "could not parse <value> element"); return false;}
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
     // get the </linearConstraintCoefficients> tag
+    FINDNEXTTAG( ch );
     *p = ch;
     while( *endlinearConstraintCoefficients++  == *ch) ch++;
     if( (ch - *p) != 30) {  osilerror_wrapper( ch,osillineno, "cannot find </linearConstraintCoefficients> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </linearConstraintCoefficients> tag"); return false;}
     ch++;    
@@ -11048,8 +11054,8 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
     bool foundEl = false;
     int elmult;
     int elincr;
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-    // if, present we should be pointing to <start element 
+    FINDNEXTTAG( ch );
+    // if, present we should now be pointing to <start element 
     *p = ch;
     while( *startStart++  == *ch) ch++;
     if( (ch - *p) != 6) {
@@ -11058,12 +11064,12 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
         return false;
     }
     // get rid of white space after <start
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-    // we should have either an >
+    BURNWHITESPACE( ch );
+    // we should have an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <start> element"); return false;}
     ch++;
-    // get rid of white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and comments
+    FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
     while( *startEl++  == *ch) ch++;
@@ -11099,7 +11105,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 
             // assume we are pointing to the first character after the l in <el
             // it should be a space so let's increment ch
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>'){
                 switch (*ch) {
                 case 'i':
@@ -11142,10 +11148,10 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
             }
 
             // start eating white space until an '>' is found,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
             // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             // okay we better have a number, we will check later
             *p = ch;
             // find the end of the number, it better be an </el>
@@ -11175,10 +11181,10 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
             endEl -= 5;
             if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             // start eating white space until an '>' is found for </el>,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
             // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            FINDNEXTTAG( ch );
             // either have another <el> element or foundEl = false;
             *p = ch;
             while( *startEl++  == *ch) ch++;
@@ -11200,7 +11206,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endStart++  == *ch) ch++;
     if( (ch - *p) != 7) {  osilerror_wrapper( ch,osillineno, "cannot find </start> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </start> tag");    return false;}
     ch++;    
@@ -11244,7 +11250,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
     int elincr;
     int numberOfEl;
     
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <rowIdx element 
     *p = ch;
     while( *startRowIdx++  == *ch) ch++;
@@ -11254,12 +11260,12 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
         return false;
     }
     // get rid of white space after <rowIdx
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // we should have either an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <rowIdx> element"); return false;}
     ch++;
-    // get rid of white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    // get rid of white space and comments
+    FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
     while( *startEl++  == *ch) ch++;
@@ -11307,7 +11313,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 
             // assume we are pointing to the first character after the l in <el
             // it should be a space so let's increment ch
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>'){
                 switch (*ch) {
                 case 'i':
@@ -11350,10 +11356,10 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
             }
 
             // start munging white space until an '>' is found,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
             // mung white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             // okay we better have a number, we will check later
             *p = ch;
             // find the end of the number, it better be an </el>
@@ -11382,10 +11388,10 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
             endEl -= 5;
             if( (ch - *p)  != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             // start munging white space until an '>' is found for </el>,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
-            // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            // eat white space and comments again,
+            FINDNEXTTAG( ch );
             // either have another <el> element or foundEl = false;
             *p = ch;
             while( *startEl++  == *ch) ch++;
@@ -11403,7 +11409,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endRowIdx++  == *ch) ch++;
     if( (ch - *p) != 8) {  osilerror_wrapper( ch,osillineno, "cannot find </rowIdx> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </rowIdx> tag");}    
     ch++;    
@@ -11447,7 +11453,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     int elincr;
     int numberOfEl;
     
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    FINDNEXTTAG( ch );
     // if, present we should be pointing to <colIdx element 
     *p = ch;
     while( *startColIdx++  == *ch) ch++;
@@ -11457,12 +11463,12 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
         return false;
     }
     // get rid of white space after <colIdx
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // we should have either an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <colIdx> element"); return false;}
     ch++;
     // get rid of white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
     while( *startEl++  == *ch) ch++;
@@ -11510,7 +11516,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 
             // assume we are pointing to the first character after the l in <el
             // it should be a space so let's increment ch
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>'){
                 switch (*ch) {
                 case 'i':
@@ -11553,10 +11559,10 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
             }
         
             // start eating white space until an '>' is found,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
             // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+            BURNWHITESPACE( ch );
             // okay we better have a number, we will check later
             *p = ch;
             // find the end of the number, it better be an </el>
@@ -11584,10 +11590,10 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
             endEl -= 5;
             if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             // start eating white space until an '>' is found for </el>,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
-            // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            // eat white space and comments again,
+            FINDNEXTTAG( ch );
             // either have another <el> element or foundEl = false;
             *p = ch;
             while( *startEl++  == *ch) ch++;
@@ -11605,7 +11611,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endColIdx++  == *ch) ch++;        
     if( (ch - *p) != 8) {  osilerror_wrapper( ch,osillineno, "cannot find </colIdx> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </colIdx> tag"); return false;}    
     ch++;    
@@ -11647,7 +11653,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
     bool foundEl = false;
     int elmult;
     double elincr;
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
+    FINDNEXTTAG( ch );
     // if present we should be pointing to <value element 
     *p = ch;
     while( *startValue++  == *ch) ch++;
@@ -11657,12 +11663,12 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
         return false;
     }
     // get rid of white space after <value
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
+    BURNWHITESPACE( ch );
     // we should have either an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <value> element"); return false;}
     ch++;
     // get rid of white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
+    FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
     while( *startEl++  == *ch) ch++;
@@ -11715,7 +11721,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 
             // assume we are pointing to the first character after the l in <el
             // it should be a space so let's increment ch
-            for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+            BURNWHITESPACE( ch );
             while(*ch != '/' && *ch != '>'){
                 switch (*ch) {
                 case 'i':
@@ -11758,10 +11764,10 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
             }
         
             // start eat white space until an '>' is found,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
             // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
+            BURNWHITESPACE( ch );
             *p = ch;
             // find the end of the number, it better be an </el>
             // find the < which begins the </el
@@ -11788,10 +11794,10 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
             endEl -= 5;
             if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             // start eating white space until an '>' is found for </el>,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
+            BURNWHITESPACE( ch );
             if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
-            // eat white space again,
-            for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
+            // eat white space and comments again,
+            FINDNEXTTAG( ch );
             // either have another <el> element or foundEl = false;
             *p = ch;
             while( *startEl++  == *ch) ch++;
@@ -11811,7 +11817,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
     while( *endValue++  == *ch) ch++;
     if( (ch - *p) != 7) {  osilerror_wrapper( ch,osillineno, "cannot find </value> tag"); return false;}
-    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );    
+    BURNWHITESPACE( ch );
     // better have >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </value> tag");     return false;}
     ch++;    
@@ -11841,7 +11847,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
     numberOfObjCoef = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
     if(numberOfObjCoef > 0)    {
     for(k = 0; k < numberOfObjCoef; k++){
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        FINDNEXTTAG( ch );
         // if, present we should be pointing to <coef element 
         *p = ch;
         while( *startCoef++  == *ch) ch++;
@@ -11849,7 +11855,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
         startCoef -= 6;
         // get the idx attribute
         // eat the white space after <coef
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        BURNWHITESPACE( ch );
         *p = ch;
         while( *c_idx++  == *ch) ch++;
         if( (ch - *p) != 3) {  osilerror_wrapper( ch,osillineno,"incorrect idx attribute in objective function <idx> tag"); return false;}    
@@ -11860,7 +11866,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
         delete [] attText;
         ch++;    
         // eat white space
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        BURNWHITESPACE( ch );
         // if we don't have a > there is an error
         if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"incorrect <coef> element")    ; return false;}    
         // we should be pointing to first character after <coef>
@@ -11877,7 +11883,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
         if( (ch - *p) != 6)  {  osilerror_wrapper( ch,osillineno,"improper </coef> element"); return false;}
         endCoef -= 7;
         // get rid of white space after </coef
-        for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+        BURNWHITESPACE( ch );
         // if we don't have a > there is an error
         if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"incorrect </coef> element")    ; return false;}
     }
@@ -11907,7 +11913,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     }
     // find sizeOf attribute
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     for(i = 0; sizeOf[i]  == *ch; i++, ch++);
     if(i != 6) {  osilerror_wrapper( ch,osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return false;}    
     // ch should be pointing to the first character after sizeOf
@@ -11917,7 +11923,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     delete [] attText;
     // since the element must contain b64 data,  this element must end with > 
     // eat the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // better have an > sign or not valid
     if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"<base64BinaryData> element does not have a proper closing >"); return false;}
     ch++;
@@ -11934,11 +11940,11 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     for(ki = 0; ki < b64len; ki++) b64string[ki] = b64textstart[ ki]; 
     b64string[ki] = '\0';    
     // burn the white space
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     // better have an > sign or not valid
     if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"</base64BinaryData> element does not have a proper closing >"); return false;}
     ch++;
-    for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+    BURNWHITESPACE( ch );
     *p = ch;
     return b64string;
 }

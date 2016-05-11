@@ -205,8 +205,8 @@ conesLaden: GREATERTHAN coneList CONESEND
 coneList: | coneList cone
 {
     parserData->coneCounter++;
-    if (parserData->coneCounter > parserData->numberOfCones) parserData->parser_errors +=
-        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "encountered more cones than specified");
+    if (parserData->coneCounter > parserData->numberOfCones) 
+        throw ErrorClass("encountered more cones than specified");
     osinstance->instanceData->cones->numberOfCones = parserData->coneCounter;
 };
 
@@ -844,8 +844,7 @@ matrixVariableAttributes: matrixVariableAttList
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixVar) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, parserObjects, "actual number of matrixVar greater than number attribute");
+        throw ErrorClass("actual number of matrixVar greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[parserData->kounter+i]->numberOfRows
@@ -960,8 +959,7 @@ matrixObjectiveAttributes: matrixObjectiveAttList
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixObj) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, parserObjects, "actual number of matrixObj greater than number attribute");
+        throw ErrorClass("actual number of matrixObj greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[parserData->kounter+i]->numberOfRows
@@ -1061,8 +1059,7 @@ matrixConstraintAttributes: matrixConstraintAttList
     if (osglData->numberOfColumnsPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute \"numberOfColumns\" missing");
     if (parserData->kounter + osglData->mult > parserData->numberOfMatrixCon) 
-        parserData->parser_errors += 
-            addErrorMsg( NULL, parserObjects, "actual number of matrixCon greater than number attribute");
+        throw ErrorClass("actual number of matrixCon greater than number attribute");
     for (int i=0; i<osglData->mult; i++)
     {
         osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[parserData->kounter+i]->numberOfRows
