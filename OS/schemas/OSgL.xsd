@@ -703,8 +703,8 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="OSMatrix">
 		<xs:complexContent>
 			<xs:extension base="MatrixType">
-				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
-				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="name" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -771,7 +771,13 @@ The result of this transformation is aligned with the top left corner of the tar
 		</xs:attribute>
 		<xs:attribute name="scalarMultiplier" type="xs:double" use="optional" default="1.0">
 			<xs:annotation>
-				<xs:documentation>real-valued only.</xs:documentation>
+				<xs:documentation>real-valued or real part only.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="scalarImaginaryPart" type="xs:double" default="0.0">
+			<xs:annotation>
+				<xs:documentation>scalar multiplier is
+      realPart + i*imagPart</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="targetMatrixFirstRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -994,6 +1000,7 @@ Each nonzero is a real-valued expression</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexValuedExpressions">
 		<xs:complexContent>
