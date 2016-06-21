@@ -1175,7 +1175,7 @@ int MatrixType::getExpandedMatrix(bool rowMajor_, ENUM_MATRIX_TYPE convertTo_,
 
         // Here we need to create a new expansion and add it to the collection
 
-        tempMtx = new GeneralSparseMatrix();
+        tempMtx = new GeneralSparseMatrix(); // leaks memory
         tempMtx->numberOfRows    = numberOfRows;
         tempMtx->numberOfColumns = numberOfColumns;
 
@@ -2135,9 +2135,9 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
                 tmpBlocks->colOffset     = colOffset;
 
                 tmpBlocks->blockNumber   = ((MatrixBlocks*)m_mChildren[0])->inumberOfChildren;
-                tmpBlocks->blocks        = new GeneralSparseMatrix*[tmpBlocks->blockNumber];
-                tmpBlocks->blockRows     = new int[tmpBlocks->blockNumber];
-                tmpBlocks->blockColumns  = new int[tmpBlocks->blockNumber];
+                tmpBlocks->blocks        = new GeneralSparseMatrix*[tmpBlocks->blockNumber]; //leaks memory
+                tmpBlocks->blockRows     = new int[tmpBlocks->blockNumber]; //apparently clean!
+                tmpBlocks->blockColumns  = new int[tmpBlocks->blockNumber]; //leaks memory
                 tmpBlockIdx              = new int[tmpBlocks->blockNumber];
 
                 for (int i=0; i < tmpBlocks->blockNumber; i++)

@@ -912,9 +912,10 @@ if (PARSER_TESTS)
         delete osinstance2;
         osinstance2 = NULL;
 
+#ifndef NDEBUG
         osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)(100*ENUM_OUTPUT_AREA_OSMatrix
                                                                 + ENUM_OUTPUT_LEVEL_detailed_trace));
-
+#endif
         unitTestResult << "TEST " << nOfTest << ": Passed OSInstance get() and set() methods" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
