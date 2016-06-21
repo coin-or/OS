@@ -12287,9 +12287,32 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     // eat the white space
     BURNWHITESPACE( ch );
     for(i = 0; sizeOf[i]  == *ch; i++, ch++);
-    if(i != 6) {  osilerror_wrapper( ch,osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return false;}    
+    if(i != 6) {  osilerror_wrapper( ch,osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return NULL;}    
     // ch should be pointing to the first character after sizeOf
-    GETATTRIBUTETEXT;
+    BURNWHITESPACE( ch ); \
+    if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return NULL;}  \
+    ch++; \
+    BURNWHITESPACE( ch ); \
+    if(*ch == '\"'){ \
+        ch++; \
+        BURNWHITESPACE( ch ); \
+        *p = ch; \
+        for( ; *ch != '\"'; ch++); \
+    }\
+    else{\
+        if(*ch == '\'') { \
+            ch++; \
+            BURNWHITESPACE( ch ); \
+            *p = ch; \
+            for( ; *ch != '\''; ch++); \
+        } \
+        else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return NULL;} \
+    }\
+    numChar = ch - *p; \
+    attText = new char[numChar + 1]; \
+    for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
+    attText[ki] = '\0'; \
+    attTextEnd = &attText[ki]; 
     ch++;
     *dataSize = atoimod1( osillineno, attText, attTextEnd);
     delete [] attText;
@@ -12297,7 +12320,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     // eat the white space
     BURNWHITESPACE( ch );
     // better have an > sign or not valid
-    if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"<base64BinaryData> element does not have a proper closing >"); return false;}
+    if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"<base64BinaryData> element does not have a proper closing >"); return NULL;}
     ch++;
     // we are now pointing start of the data
     const char *b64textstart = ch;
@@ -12306,7 +12329,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     const char *b64textend = ch;
     // we should be pointing to </base64BinaryData>
     for(i = 0; endBase64BinaryData[i]  == *ch; i++, ch++);
-    if(i != 18) { osilerror_wrapper( ch,osillineno," problem with <base64BinaryData> element"); return false;}
+    if(i != 18) { osilerror_wrapper( ch,osillineno," problem with <base64BinaryData> element"); return NULL;}
     long int b64len = b64textend - b64textstart;
     b64string = new char[ b64len + 1]; 
     for(ki = 0; ki < b64len; ki++) b64string[ki] = b64textstart[ ki]; 
@@ -12314,7 +12337,7 @@ char *parseBase64(const char **p, long int *dataSize, int* osillineno ){
     // burn the white space
     BURNWHITESPACE( ch );
     // better have an > sign or not valid
-    if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"</base64BinaryData> element does not have a proper closing >"); return false;}
+    if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"</base64BinaryData> element does not have a proper closing >"); return NULL;}
     ch++;
     BURNWHITESPACE( ch );
     *p = ch;
