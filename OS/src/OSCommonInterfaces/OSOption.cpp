@@ -3954,6 +3954,7 @@ OtherObjectiveOption* OSOption::getOtherObjectiveOption(int optionNumber)
  * get the array of all other objective options
  * @return an array of other objective options associated with this solver
  */
+
 OtherObjectiveOption** OSOption::getAllOtherObjectiveOptions()
 {
     OtherObjectiveOption** optionsVector;

@@ -3215,7 +3215,9 @@ GeneralSparseMatrix* OSInstance::getExpandedMatrix(int n, bool rowMajor)
             throw ErrorClass("no matrices defined in method getExpandedMatrix()");
         if ( (n < 0) || (n >= nMatrices) )
             throw ErrorClass("invalid matrix index in method getExpandedMatrix()");
-        return instanceData->matrices->matrix[n]->getExpandedMatrix(rowMajor);
+        int i = instanceData->matrices->matrix[n]->getExpandedMatrix(rowMajor);
+        if (i < 0) throw ErrorClass("Expanded matrix could not be retrieved");
+        return instanceData->matrices->matrix[n]->expandedMatrixByElements[i];
     }
     catch(const ErrorClass& eclass)
     {
@@ -5342,6 +5344,18 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
             m_mapExpressionTreesMod[ i]->getVariableIndicesMap();
         }
     }
+    //this is the only place where we can make sure that variable indices reference true variables
+    std::map<int, RealValuedExpressionTree*>::iterator ixpr;
+    std::map<int, int>::iterator ivar;
+    for (ixpr = m_mapExpressionTreesMod.begin(); ixpr != m_mapExpressionTreesMod.end(); ++ixpr)
+    {
+        RealValuedExpressionTree* tmpTree = ixpr->second;
+        for (ivar = (*tmpTree->mapVarIdx).begin(); ivar != (*tmpTree->mapVarIdx).end(); ++ivar)
+        {
+            if (ivar->first < 0 || ivar->first >= instanceData->variables->numberOfVariables)
+                throw ErrorClass("Variable index references nonexisting variable");
+        }
+    }
     // only execute the following code if there are linear constraint coefficients
     if (this->instanceData->linearConstraintCoefficients != NULL &&
         this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
@@ -5518,6 +5532,18 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
             // the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
             m_mapExpressionTreesMod[ i]->getVariableIndicesMap();
 
+        }
+    }
+    //make sure that variable indices reference true variables
+    std::map<int, RealValuedExpressionTree*>::iterator ixpr;
+    std::map<int, int>::iterator ivar;
+    for (ixpr = m_mapExpressionTreesMod.begin(); ixpr != m_mapExpressionTreesMod.end(); ++ixpr)
+    {
+        RealValuedExpressionTree* tmpTree = ixpr->second;
+        for (ivar = (*tmpTree->mapVarIdx).begin(); ivar != (*tmpTree->mapVarIdx).end(); ++ivar)
+        {
+            if (ivar->first < 0 || ivar->first >= instanceData->variables->numberOfVariables)
+                throw ErrorClass("Variable index references nonexisting variable");
         }
     }
     int loopLimit =  getConstraintNumber();

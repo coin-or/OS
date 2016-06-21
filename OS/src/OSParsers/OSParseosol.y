@@ -5392,6 +5392,13 @@ fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
  *  ==========================================================================
  */
 
+osglNonNegativeIntArrayData: osglIntArrayData
+{
+    for (int i=0; i<osglData->numberOfEl; i++)
+        if (osglData->osglIntArray < 0)
+            throw ErrorClass("negative entry detected in nonnegativeIntVector");
+};
+
 osglIntArrayData:
     osglIntVectorElArray 
     {
@@ -5425,14 +5432,7 @@ osglIntVectorElAtt: osglMultATT | osglIncrATT;
 osglIntVectorElContent: GREATERTHAN INTEGER ELEND
 {
     if (osglData->osglCounter + osglData->mult > osglData->numberOfEl)
-    {
-        if (!parserData->suppressFurtherErrorMessages)
-        {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more data elements than specified");
-            parserData->suppressFurtherErrorMessages = true;
-            parserData->ignoreDataAfterErrors = true;
-        }
-    }
+        throw ErrorClass("OSgL IntVector: more data elements than specified");
     else
         for (int i=0; i<osglData->mult; i++)
             osglData->osglIntArray[osglData->osglCounter++] = $2 + i*osglData->incr;    
@@ -5504,14 +5504,7 @@ osglDblVectorElAttributes: | osglMultATT;
 osglDblVectorElContent: GREATERTHAN aNumber ELEND
 {
     if (osglData->osglCounter + osglData->mult > osglData->numberOfEl)
-    {
-        if (!parserData->suppressFurtherErrorMessages)
-        {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more data elements than specified");
-            parserData->suppressFurtherErrorMessages = true;
-            parserData->ignoreDataAfterErrors = true;
-        }
-    }
+        throw ErrorClass("OSgL DblVector: more data elements than specified");
     else
         for (int i=0; i<osglData->mult; i++)
             osglData->osglDblArray[osglData->osglCounter++] = parserData->tempVal;    
@@ -5581,14 +5574,7 @@ osglStrVectorElAttributes: | osglMultATT;
 osglStrVectorElContent: GREATERTHAN  ELEMENTTEXT  ELEND
 {
     if (osglData->osglCounter + osglData->mult > osglData->numberOfEl)
-    {
-        if (!parserData->suppressFurtherErrorMessages)
-        {
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more data elements than specified");
-            parserData->suppressFurtherErrorMessages = true;
-            parserData->ignoreDataAfterErrors = true;
-        }
-    }
+        throw ErrorClass("OSgL StrVector: more data elements than specified");
     else
         for (int i=0; i<osglData->mult; i++)
             osglData->osglStrArray[osglData->osglCounter++] = $2;
@@ -6205,6 +6191,8 @@ baseMatrixAttributes: baseMatrixAttList
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "mandatory attribute baseMatrixIdx is missing");
     else
     {
+        if (osglData->baseMatrixIdx < 0 || osglData->baseMatrixIdx >= osglData->matrixCounter)
+            throw ErrorClass("Improper idx value for baseMatrix reference");
         ((BaseMatrix*)osglData->tempC)->baseMatrixIdx = osglData->baseMatrixIdx;
         ((BaseMatrix*)osglData->tempC)->baseMatrix = (OSMatrix*)osglData->matrix[osglData->baseMatrixIdx];
     }
@@ -6314,9 +6302,23 @@ matrixElementsStartVectorContent: matrixElementsStartVectorEmpty | matrixElement
 
 matrixElementsStartVectorEmpty: ENDOFELEMENT;
 
-matrixElementsStartVectorLaden: GREATERTHAN matrixElementsStartVectorBody STARTVECTOREND;
+matrixElementsStartVectorLaden: GREATERTHAN matrixElementsStartVectorBody STARTVECTOREND
+{
+    //verify start vector: first element must be zero, vector must be nondecreasing, 
+    //last element must equal numberOfValues; length must equal numberOfRows + 1 or numberOfColumns + 1
+    if (osglData->osglIntArray[0] != 0)
+        throw ErrorClass("first entry of matrix element start vector is not zero");
+    for (int i=1; i < osglData->numberOfEl; i++)
+    {
+        if (osglData->osglIntArray[i] < osglData->osglIntArray[i-1])
+            throw ErrorClass("matrix element start vector must be nondecreasing");
+    }
+    if (osglData->osglIntArray[osglData->numberOfEl-1] 
+        != ((MatrixElements*)osglData->tempC)->numberOfValues)
+            throw ErrorClass("last entry of matrix element start vector does not equal numberOfValues");
+};
 
-matrixElementsStartVectorBody: osglIntArrayData;
+matrixElementsStartVectorBody: osglNonNegativeIntArrayData;
 
 
 matrixElementsIndexVector: | matrixElementsIndexStart matrixElementsIndexContent
@@ -6324,6 +6326,9 @@ matrixElementsIndexVector: | matrixElementsIndexStart matrixElementsIndexContent
     ((MatrixElements*)osglData->tempC)->index = new IntVector();
     ((MatrixElements*)osglData->tempC)->index->numberOfEl
         = ((MatrixElements*)osglData->tempC)->numberOfValues;
+    //check whether the values of the index array are legal and satisfy symmetry assertions
+    int maxindex;
+    //symmetry.substr(0,5) == "upper"/"lower"
     ((MatrixElements*)osglData->tempC)->index->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
@@ -6344,7 +6349,7 @@ matrixElementsIndexEmpty: ENDOFELEMENT;
 
 matrixElementsIndexLaden: GREATERTHAN matrixElementsIndexBody INDEXEND;
 
-matrixElementsIndexBody: osglIntArrayData;
+matrixElementsIndexBody: osglNonNegativeIntArrayData;
 
 
 /**
@@ -6435,7 +6440,7 @@ varReferenceElementsValuesEmpty: ENDOFELEMENT;
 
 varReferenceElementsValuesLaden: GREATERTHAN varReferenceElementsValuesBody VALUEEND;
 
-varReferenceElementsValuesBody: osglIntArrayData;
+varReferenceElementsValuesBody: osglNonNegativeIntArrayData;
 
 
 linearElements: linearElementsStart linearElementsAttributes GREATERTHAN linearElementsContent; 
@@ -7560,6 +7565,7 @@ osglNumberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE
     if (osglData->numberOfRowsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "numberOfRows attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "number of <rows> cannot be negative");
+std::cout << "Number of rows present" << std::endl;
     osglData->numberOfRowsPresent = true;        
     osglData->numberOfRows = $3;
 };
@@ -8293,7 +8299,15 @@ nonlinearExpressions:
                 | nonlinearExpressionsStart nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
     {  
         if (osnlData->tmpnlcount < osnlData->nlnodenumber)  
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "actual number of nl terms less than number attribute");   
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+ 		"actual number of nl terms less than number attribute");   
+
+        if (parserData->parser_errors != "")
+        {
+            parserData->parser_errors += ("\n\nOSiL input is either invalid or not well-formed.\n"); 
+            osilerror( NULL, osinstance, parserData, osglData, osnlData, parserData->parser_errors);
+        }
+        parserData->parser_errors = "";
     };
 
 nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
@@ -8305,14 +8319,18 @@ nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
     { 
         if ( *$2 != *$4 ) 
-            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+                "start and end quotes are not the same");
         if ($3 < 0) parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of expressions cannot be negative");
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "number of expressions cannot be negative");
         osnlData->nlnodenumber = $3;
         osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
         if (osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) 
             osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
-        for (int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
+        for (int i = 0; 
+                 i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; 
+                 i++)
         {
             osinstance->instanceData->nonlinearExpressions->nl[i] = new Nl();
         }
@@ -8332,7 +8350,8 @@ realValuedExpressionTree: nlstart nlAttributes GREATERTHAN nlnode NLEND
         if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
             osinstance->instanceData->nonlinearExpressions
                     ->nl[osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
-                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+                ((OSnLNode*)
+                    osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osnlData->tmpnlcount++;
     };
 
@@ -8358,7 +8377,8 @@ nlstart: NLSTART
 nlAttributes: nlAttributeList
 {
     if (osglData->idxPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "mandatory attribute idx is missing");    
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData,
+            "mandatory attribute idx is missing");    
 };
 
 
@@ -8639,8 +8659,12 @@ variablecoefATT: COEFATT QUOTE aNumber QUOTE
                 
 variableidxATT: IDXATT QUOTE INTEGER QUOTE 
 { 
-    if ( *$2 != *$4 ) parserData->parser_errors += 
-        addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if ( *$2 != *$4 ) 
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if ($3 < 0)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "variable index cannot be negative");
     osnlData->nlNodeVariablePoint->idx = $3;
 }; 
 
@@ -8653,7 +8677,7 @@ variableidxATT: IDXATT QUOTE INTEGER QUOTE
  *  that there might be nested sums, etc.). Both vectors point to the same memory location,
  *  which can be manipulated through whichever vector is more convenient. This is used in
  *  SUMEND below to allocate the right number of descendants (once this is known) and in
- *  nlnode below it to increment the number of descendants.
+ *  nlnode below it to increment the number of child nodes.
  */
 sum: SUMSTART {
     osnlData->nlNodePoint = new OSnLNodeSum();
@@ -8794,6 +8818,8 @@ matrixIdxATT: IDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "idx attribute repeated");
     if ( *$2 != *$4 )
         parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if ($3 < 0)
+        throw ErrorClass("Matrix reference must be nonnegative");
     osnlData->nlMNodeMatrixRef->idx = $3;
     osnlData->idxAttributePresent = true;
 }; 

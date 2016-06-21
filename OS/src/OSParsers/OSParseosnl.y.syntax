@@ -32,7 +32,15 @@ nonlinearExpressions:
                 | nonlinearExpressionsStart nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
     {  
         if (osnlData->tmpnlcount < osnlData->nlnodenumber)  
-            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "actual number of nl terms less than number attribute");   
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+ 		"actual number of nl terms less than number attribute");   
+
+        if (parserData->parser_errors != "")
+        {
+            parserData->parser_errors += ("\n\nOSiL input is either invalid or not well-formed.\n"); 
+            osilerror( NULL, osinstance, parserData, osglData, osnlData, parserData->parser_errors);
+        }
+        parserData->parser_errors = "";
     };
 
 nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
@@ -44,14 +52,18 @@ nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
     { 
         if ( *$2 != *$4 ) 
-            parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+            parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+                "start and end quotes are not the same");
         if ($3 < 0) parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of expressions cannot be negative");
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "number of expressions cannot be negative");
         osnlData->nlnodenumber = $3;
         osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
         if (osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) 
             osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
-        for (int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
+        for (int i = 0; 
+                 i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; 
+                 i++)
         {
             osinstance->instanceData->nonlinearExpressions->nl[i] = new Nl();
         }
@@ -71,7 +83,8 @@ realValuedExpressionTree: nlstart nlAttributes GREATERTHAN nlnode NLEND
         if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
             osinstance->instanceData->nonlinearExpressions
                     ->nl[osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
-                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+                ((OSnLNode*)
+                    osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osnlData->tmpnlcount++;
     };
 
@@ -97,7 +110,8 @@ nlstart: NLSTART
 nlAttributes: nlAttributeList
 {
     if (osglData->idxPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, parserObjects, "mandatory attribute idx is missing");    
+        parserData->parser_errors += addErrorMsg( NULL, parserObjects,
+            "mandatory attribute idx is missing");    
 };
 
 
@@ -378,8 +392,12 @@ variablecoefATT: COEFATT QUOTE aNumber QUOTE
                 
 variableidxATT: IDXATT QUOTE INTEGER QUOTE 
 { 
-    if ( *$2 != *$4 ) parserData->parser_errors += 
-        addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    if ( *$2 != *$4 ) 
+        parserData->parser_errors += 
+            addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    if ($3 < 0)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, parserObjects, "variable index cannot be negative");
     osnlData->nlNodeVariablePoint->idx = $3;
 }; 
 
@@ -392,7 +410,7 @@ variableidxATT: IDXATT QUOTE INTEGER QUOTE
  *  that there might be nested sums, etc.). Both vectors point to the same memory location,
  *  which can be manipulated through whichever vector is more convenient. This is used in
  *  SUMEND below to allocate the right number of descendants (once this is known) and in
- *  nlnode below it to increment the number of descendants.
+ *  nlnode below it to increment the number of child nodes.
  */
 sum: SUMSTART {
     osnlData->nlNodePoint = new OSnLNodeSum();
@@ -533,6 +551,8 @@ matrixIdxATT: IDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "idx attribute repeated");
     if ( *$2 != *$4 )
         parserData->parser_errors += addErrorMsg( NULL, parserObjects, "start and end quotes are not the same");
+    if ($3 < 0)
+        throw ErrorClass("Matrix reference must be nonnegative");
     osnlData->nlMNodeMatrixRef->idx = $3;
     osnlData->idxAttributePresent = true;
 }; 

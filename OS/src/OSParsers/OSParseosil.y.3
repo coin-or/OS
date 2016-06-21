@@ -1004,7 +1004,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     // start parsing
     // burn white space and comments
     FINDNEXTTAG( ch );
-    // if, present we should be pointing to <objectives element if there -- it is not required
+    // if present, we should be pointing to <objectives element if there -- it is not required
     *p = ch;
     while( *startObjectives++  == *ch) ch++;
     if( (ch - *p) != 11) {
@@ -1048,7 +1048,13 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         //  we better have an > 
         if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the objectives element does not have a proper closing"); return false;} 
         osinstance->instanceData->objectives->numberOfObjectives = numberOfObjectives;
-        osinstance->instanceData->objectives->obj = new Objective*[ numberOfObjectives];
+        if (numberOfObjectives < 0)
+        {
+            osilerror_wrapper( ch,osillineno,"cannot have a negative number of objectives");
+            return false;
+        }
+        if (numberOfObjectives > 0)
+            osinstance->instanceData->objectives->obj = new Objective*[ numberOfObjectives];
         for(i = 0; i < numberOfObjectives; i++){
             osinstance->instanceData->objectives->obj[ i] = new Objective();
         }     
@@ -1743,8 +1749,18 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
         int *intvec = NULL;
         osinstance->instanceData->linearConstraintCoefficients->start->el = new int[(base64decodeddatalength/dataSize) ];
         intvec = (int*)&base64decodeddata[0];
-        for (i = 0; i < (base64decodeddatalength/dataSize); i++){
-            osinstance->instanceData->linearConstraintCoefficients->start->el[ i] = *(intvec++);
+        int k, kp;
+        kp = 0;
+        for (i = 0; i < (base64decodeddatalength/dataSize); i++)
+        {
+            k = *(intvec++);
+            if (k < kp)
+            {
+                osilerror_wrapper( ch,osillineno,"<start> must have nondecreasing entries ");
+                 return false;
+            }
+            osinstance->instanceData->linearConstraintCoefficients->start->el[ i] = k;
+            kp = k;
         }
         delete [] b64string;
     }
@@ -1774,6 +1790,11 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
                     elincrattON = true;
                     GETATTRIBUTETEXT;
                     elincr = atoimod1( osillineno,attText, attTextEnd);
+                    if (elincr < 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"incr of start array cannot be negative");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case 'm':
@@ -1785,6 +1806,11 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
                     elmultattON = true;
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
+                    if (elmult <= 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"el mult must be positive");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case ' ':
@@ -1820,16 +1846,31 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
             if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             
             // we better not exceed allocation
-            if(kount +elmult > std::max(osinstance->instanceData->constraints->numberOfConstraints,
-                                        osinstance->instanceData->variables->numberOfVariables) + 1 )
+            if(kount + elmult > std::max(osinstance->instanceData->constraints->numberOfConstraints,
+                                         osinstance->instanceData->variables->numberOfVariables) + 1 )
             {
-                 osilerror_wrapper( ch, osillineno,"number of start elements exceeds the maximum number of rows or columns plus  1");            
+                osilerror_wrapper( ch, osillineno,"number of start elements exceeds the maximum number of rows or columns plus  1");
+                return false; 
             }
-            osinstance->instanceData->linearConstraintCoefficients->start->el[kount] = atoimod1( osillineno, *p, ch);
-            for (int k=1; k < elmult; k++)
+
+            int k = atoimod1( osillineno, *p, ch);
+            int kp;
+            if (kount == 0)
+                kp = 0;
+            else
+                kp = osinstance->instanceData->linearConstraintCoefficients->start->el[ kount-1];
+
+            for (int j=0; j < elmult; j++)
             {
-                osinstance->instanceData->linearConstraintCoefficients->start->el[ kount+k]
-                = osinstance->instanceData->linearConstraintCoefficients->start->el[ kount] + k*elincr;
+                if (k < kp)
+                {
+                    osilerror_wrapper( ch,osillineno,
+                        "column starts in linear constraint coefficient matrix must be non-decreasing"); 
+                    return false;
+                }
+                osinstance->instanceData->linearConstraintCoefficients->start->el[ kount+j] = k;
+                kp = k;
+                k += elincr;
             }
             kount += elmult;
             // we are pointing to <, make sure there is /el
@@ -1944,8 +1985,16 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
         osinstance->instanceData->linearConstraintCoefficients->colIdx->numberOfEl = 0;
         osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->variables->numberOfVariables + 1;
         intvec = (int*)&base64decodeddata[0];
-        for(i = 0; i < numberOfEl; i++){
-            osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ i] = *(intvec++);
+        int k;
+        for(i = 0; i < numberOfEl; i++)
+        {
+            k = *(intvec++);
+            if (k < 0 || k >= osinstance->instanceData->constraints->numberOfConstraints)
+            {
+                osilerror_wrapper( ch,osillineno,"row index out of bounds"); 
+                return false;
+            }
+            osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ i] = k;
             kount++;
         }
         delete [] b64string;
@@ -1962,7 +2011,6 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
         osinstance->instanceData->linearConstraintCoefficients->colIdx->numberOfEl = 0;
         osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->variables->numberOfVariables + 1;
         while(foundEl){
-        
             elmultattON = false ;
             elincrattON  = false;
             elmult = 1;
@@ -1993,6 +2041,11 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
                     elmultattON = true;
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
+                    if (elmult <= 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"el mult must be positive");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case ' ':
@@ -2030,14 +2083,24 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
             // we better not exceed allocation
             if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
             {
-                osilerror_wrapper( ch, osillineno,"number of rowIdx elements exceeds the number declared");            
+                osilerror_wrapper( ch, osillineno,"number of rowIdx elements exceeds the number declared");
+                return false; 
             }
-            osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount] = atoimod1( osillineno, *p, ch);
-            for (int k=1; k < elmult; k++)
+
+            int k = atoimod1( osillineno, *p, ch);
+
+            for (int j=0; j < elmult; j++)
             {
-                osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount+k] 
-                = osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount] + k*elincr;
+                if (k < 0 || k >= osinstance->instanceData->constraints->numberOfConstraints)
+                {
+                    osilerror_wrapper( ch,osillineno,
+                        "row index out of bounds in linear constraint coefficient matrix"); 
+                    return false;
+                }
+                osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount+j] = k;
+                k += elincr;
             }
+
             kount += elmult;
             // we are pointing to <, make sure there is /el
             *p = ch;
@@ -2124,7 +2187,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     // we should have either an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <colIdx> element"); return false;}
     ch++;
-    // get rid of white space
+    // get rid of white space and comments
     FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
@@ -2147,8 +2210,16 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
         osinstance->instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = 0;
         osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->constraints->numberOfConstraints + 1;
         intvec = (int*)&base64decodeddata[0];
-        for(i = 0; i < numberOfEl; i++){
-            osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ i] = *(intvec++);
+        int k;
+        for(i = 0; i < numberOfEl; i++)
+        {
+            k = *(intvec++);
+            if (k < 0 || k >= osinstance->instanceData->variables->numberOfVariables)
+            {
+                osilerror_wrapper( ch,osillineno,"col index out of bounds"); 
+                return false;
+            }
+            osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ i] = k;
             kount++;
         }
         delete [] b64string;
@@ -2156,7 +2227,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     else{
         foundEl = true;
         // if we are here we are storing the problem by row
-        // this means the number of start elements must equal the number of rows
+        // this means the number of start elements must equal the number of rows + 1
         if(osinstance->instanceData->linearConstraintCoefficients->iNumberOfStartElements != osinstance->instanceData->constraints->numberOfConstraints  + 1)
         osilerror_wrapper( ch, osillineno,"we are storing in row major format, but number of start elements not equal number of rows + 1");
         osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
@@ -2196,6 +2267,11 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
                     elmultattON = true;
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
+                    if (elmult <= 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"el mult must be positive");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case ' ':
@@ -2232,13 +2308,22 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
             // we better not exceed allocation
             if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
             {
-                osilerror_wrapper( ch, osillineno,"number of colIdx elements exceeds the number declared");            
+                osilerror_wrapper( ch, osillineno,"number of colIdx elements exceeds the number declared");
+                return false; 
             }
-            osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] = atoimod1( osillineno, *p, ch);
-            for (int k=1; k < elmult; k++)
+
+            int k = atoimod1( osillineno, *p, ch);
+
+            for (int j=0; j < elmult; j++)
             {
-                osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount+k] 
-                = osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] + k*elincr;
+                if (k < 0 || k >= osinstance->instanceData->variables->numberOfVariables)
+                {
+                    osilerror_wrapper( ch,osillineno,
+                        "col index out of bounds in linear constraint coefficient matrix"); 
+                    return false;
+                }
+                osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount+j] = k;
+                k += elincr;
             }
             kount += elmult;
             // we are pointing to <, make sure there is /el
@@ -2282,7 +2367,6 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
      return true;
 }//end parseColIdx
-
 
 bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
     clock_t start, finish;
@@ -2401,6 +2485,11 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
                     elmultattON = true;
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
+                    if (elmult <= 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"el mult must be positive");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case ' ':
@@ -2436,7 +2525,8 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
             // we better not exceed allocation
             if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
             {
-                osilerror_wrapper( ch, osillineno,"number of nonzero elements exceeds the number declared");            
+                osilerror_wrapper( ch, osillineno,"number of nonzero elements exceeds the number declared");
+                return false;           
             }
             osinstance->instanceData->linearConstraintCoefficients->value->el[ kount] = atofmod1( osillineno, *p, ch);
             for (int k=1; k < elmult; k++)
@@ -2519,7 +2609,13 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
         c_idx -= 4;
         // ch should be pointing to the first character after idx attribute
         GETATTRIBUTETEXT;
-        osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod1( osillineno, attText, attTextEnd);
+        int idx = atoimod1( osillineno, attText, attTextEnd);
+        if (idx < 0 || idx >= osinstance->instanceData->variables->numberOfVariables)
+        {
+            osilerror_wrapper( ch,osillineno,"incorrect variable idx in objective function specification");
+            return false;
+        }
+        osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx = idx;
         delete [] attText;
         ch++;    
         // eat white space

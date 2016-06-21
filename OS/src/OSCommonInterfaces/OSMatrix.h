@@ -2141,8 +2141,11 @@ public:
 
     /**
      * to allow the base matrix to be scaled before it is attached to the target matrix
+     * since we permit complex matrix values, we cater to complex multipliers, 
+     * which are implemented in the schema as two separate reals for the real and imaginary parts
      */
     double scalarMultiplier;
+    double scalarImaginaryPart;
 
     /** Standard constructor and destructor methods */
     BaseMatrix();
@@ -2232,24 +2235,17 @@ public:
 class GeneralSparseMatrix
 {
 public:
+    /**
+     * numberOfRows and numberOfColumns give the dimensions of the matrix
+     */
+    int numberOfRows;
+    int numberOfColumns;
 
     /**
-     * b_deleteStartArray is true if we delete the start array
-     * in garbage collection --- set to true by default
+     * valueType holds the type of values found in the value array.
+     * @remark See OSParameters.h for a list of possible types
      */
-    bool b_deleteStartArray;
-
-    /**
-     * b_deleteIndexArray is true if we delete the index array
-     * in garbage collection --- set to true by default
-     */
-    bool b_deleteIndexArray;
-
-    /**
-     * b_deleteValueArray is true if we delete the value array
-     * in garbage collection --- set to true by default
-     */
-    bool b_deleteValueArray;
+    ENUM_MATRIX_TYPE valueType;
 
     /**
      * isRowMajor holds whether the matrix is stored by row. 
@@ -2262,12 +2258,6 @@ public:
      *  @remark for definitions, see OSParameters.h
      */
     ENUM_MATRIX_SYMMETRY symmetry;
-
-    /**
-     * elementType holds the type of values found in the value array.
-     * @remark See OSParameters.h for a list of possible types
-     */
-    ENUM_MATRIX_TYPE elementType;
 
     /**
      * startSize is the dimension of the starts array
@@ -2292,12 +2282,6 @@ public:
     int* index;
 
     /**
-     * matrixType holds the type of values found in the value array.
-     * @remark See OSParameters.h for a list of possible types
-     */
-    ENUM_MATRIX_TYPE matrixType;
-
-    /**
      * value holds a general array of value elements in the matrix,
      * which could be constants, linear expressions, general nonlinear expressions,
      * variable, constraint or objective references, etc. If mixed types are
@@ -2307,6 +2291,24 @@ public:
     MatrixElementValues* value;
 
     /**
+     * b_deleteStartArray is true if we delete the start array
+     * in garbage collection --- set to true by default
+     */
+    bool b_deleteStartArray;
+
+    /**
+     * b_deleteIndexArray is true if we delete the index array
+     * in garbage collection --- set to true by default
+     */
+    bool b_deleteIndexArray;
+
+    /**
+     * b_deleteValueArray is true if we delete the value array
+     * in garbage collection --- set to true by default
+     */
+    bool b_deleteValueArray;
+
+    /**
      * Default constructor.
      */
     GeneralSparseMatrix();
@@ -2314,13 +2316,16 @@ public:
     /**
      * Alternate constructor.
      *
-     * @param isRowMajor holds whether the matrix is stored by column. 
-     * If true, the matrix is stored by row.
-     * @param startSize holds the size of the start array.
-     * @param valueSize holds the size of the value and index arrays.
-     * @param type describes the type of values held in the matrix (see OSParameters.h).
+     * @param isRowMajor_ holds whether the matrix is stored by column. 
+     *        If true, the matrix is stored by row.
+     * @param numberOfRows holds the number of rows
+     * @param numberOfColumns holds the number of columns
+     * @param startSize_ holds the size of the start array.
+     * @param valueSize_ holds the size of the value and index arrays.
+     * @param type_ describes the type of values held in the matrix (see OSParameters.h).
      */
-    GeneralSparseMatrix(bool isRowMajor, int startSize, int valueSize, ENUM_MATRIX_TYPE type);
+    GeneralSparseMatrix(bool isRowMajor_, int numberOfRows_, int numberOfColumns_, 
+                        int startSize_, int valueSize_, ENUM_MATRIX_TYPE type_);
 
     /**
      *
@@ -2334,6 +2339,58 @@ public:
      * @return
      */
     bool printMatrix();
+
+    /**
+     *  A method to allocate the value array in a GeneralSparseMatrix
+     *  @param nValues gives the size of the value->el array
+     *  @return whether the allocation was successful
+     *  @remark it is assumed that the element type has been set previously into matrixType
+     */
+    bool allocateValueArray(int nValues); 
+
+    /**
+     *  A method to copy one value from one generalSparseMatrix to another 
+     *  of possibly different type
+     *  @param sourceMtx is the source from which to copy
+     *  @param sourceIndex gives the location within the source's value array to be copied from
+     *  @param targetIndex gives the location within the target's value array to be copied to
+     *  @param scalarMult if present, gives a real scalar by which to multiply the value to be copied
+     *  @param scalarImag if present, gives the imaginary part of the scalar multiplier
+     *  @return whether the copy operation was successful
+     */
+    bool copyValue(GeneralSparseMatrix* sourceMtx, int sourceIndex, int targetIndex, 
+                                                   double scalarMult = 1.0, double scalarImag = 0.0); 
+
+    /**
+     *  A method to change the orientation of a generalSparseMatrix 
+     *  and store the result into another of possibly different type
+     *  @remark The normal use of this procedure is to change from a column-wise representation
+     *          of a matrix to a row-wise one and vice versa. (This means that row indices are
+     *          changed into column indices and vice versa.) However, the same procedure can be
+     *          used to find the transpose of a matrix. In this case, the new indices have the
+     *          same meaning (row indices, resp. column indices) as in the old matrix.
+     *  @param convertTo_ gives the type of elements to be stored into the target matrix
+     *  @param transpose_ specifies whether the matrix is to be transposed in the process
+     *          (i.e., the identity of the index array is to be adjusted)
+     *  @return the transformed matrix
+     */
+    GeneralSparseMatrix* convertToOtherMajor(ENUM_MATRIX_TYPE convertTo_, bool transpose_);
+
+    /**
+     *  A method to change the type of elements in a generalSparseMatrix 
+     *  and store the result into another generalSparseMatrix
+     *  @param convertTo_ gives the type of elements to be stored into the target matrix
+     *  @return the transformed matrix
+     */
+    GeneralSparseMatrix* convertType(ENUM_MATRIX_TYPE convertTo_);
+
+    /**
+     *  A method to change the type of symmetry used in storing a generalSparseMatrix 
+     *  The result is stored into another generalSparseMatrix with the same type of values
+     *  @param symmetry_ gives the type of symmetry to be used in the target matrix
+     *  @return the transformed matrix
+     */
+    GeneralSparseMatrix* convertSymmetry(ENUM_MATRIX_SYMMETRY symmetry_);
 
     /**
      *  a method to determine whether the matrix is diagonal
@@ -2353,20 +2410,15 @@ class ExpandedMatrixBlocks
 {
 public:
     /**
-     * bDeleteArrays is true if we delete the arrays in garbage collection
-     * set to true by default
+     *  valueType holds the inferred (usually, the most general) type
+     *  of (nonzero) values in this collection of blocks. 
+     *  All blocks are assumed to have values of this type (converted, if necessary) 
      */
-    bool bDeleteArrays;
-
-    /**
-     * matrixType holds the inferred (i.e., most general) type
-     *  of (nonzero) values in this collection of blocks
-     */
-    ENUM_MATRIX_TYPE matrixType;
+    ENUM_MATRIX_TYPE valueType;
 
     /**
      * isRowMajor holds whether the (nonzero) values holding the data in each block
-     * are stored by column or row. If false, each block is stored by column.
+     * are stored by column or row. If false, every block is stored by column.
      */
     bool isRowMajor;
 
@@ -2377,17 +2429,11 @@ public:
      */
     ENUM_MATRIX_SYMMETRY symmetry;
 
-    /**
-     * elementType holds the type of values found in the value array.
-     * @remark See OSParameters.h for a list of possible types
-     */
-    ENUM_MATRIX_TYPE elementType;
-
     /** 
      * rowOffset gives the row offsets of the block decomposition
      * It does not have to correspond to the row offsets in the matrix's 
      * <blocks> element (indeed there does not have to be such an element
-     * at all, or there may be several, possibly incompatible).
+     * at all, or there may be several, possibly incompatible decompositions).
      */
     int* rowOffset;
 
@@ -2395,7 +2441,7 @@ public:
      * colOffset gives the column offsets of the block decomposition
      * It does not have to correspond to the column offsets in the matrix's 
      * <blocks> element (indeed there does not have to be such an element
-     * at all, or there may be several, possibly incompatible).
+     * at all, or there may be several, possibly incompatible decompositions).
      */
     int* colOffset;
 
@@ -2407,7 +2453,7 @@ public:
 
     /**
      * blockNumber gives the number of blocks (which is the size of
-     * the blockRows and blockColumns arrays below).
+     * the blockRows, blockColumns and blocks arrays below).
      */
     int blockNumber;
 
@@ -2435,33 +2481,22 @@ public:
     GeneralSparseMatrix** blocks;
 
     /**
+     * bDeleteArrays is true if we delete the arrays in garbage collection
+     * set to true by default
+     */
+    bool bDeleteArrays;
+
+    /**
      *
      * Default constructor.
      */
     ExpandedMatrixBlocks();
 
     /**
-     * Alternate constructor.
-     *
-     * @param isRowMajor_ holds whether the blocks are stored by row or by column.
-     * If true, the blocks are stored by row.
-     * @param startSize holds the size of the start array.
-     * @param valueSize holds the size of the value and index arrays.
-     */
-    ExpandedMatrixBlocks(bool isRowMajor_, int startSize, int valueSize);
-
-    /**
      *
      * Default destructor.
      */
     ~ExpandedMatrixBlocks();
-
-    /**
-     * This method displays data structure in the matrix format.
-     * </p>
-     * @return
-     */
-    bool display(int secondaryDim);
 
     /** 
      * a method to retrieve a particular block from a collection
@@ -2493,57 +2528,49 @@ public:
     ENUM_MATRIX_SYMMETRY symmetry;
 
     /**
-     *  To track the type of values present in the matrix or block
-     *  @remark for definitions, see OSParameters.h
-     *  type is the type declared by the user (if any)
-     *  inferredType is computed from the list of matrix constructors
+     *  numberOfRows and numberOfColumns track the dimsion of the matrix or block
      */
-//    ENUM_MATRIX_TYPE type;
-//    ENUM_MATRIX_TYPE inferredType;
-
     int numberOfRows;
     int numberOfColumns;
    
     /**
      *  The matrix can be held in expanded form elementwise or partitioned into blocks.
-     *  In both cases the elements or blocks cab be stored by row or by column, symmetry
+     *  In both cases the elements or blocks can be stored by row or by column, symmetry
      *  can be exploited, and the elements can be represented in a number of different formats.
-     */  
-    GeneralSparseMatrix* expandedMatrixInRowMajorForm;
-    GeneralSparseMatrix* expandedMatrixInColumnMajorForm;
+     */
     std::vector<GeneralSparseMatrix* > expandedMatrixByElements;
     std::vector<ExpandedMatrixBlocks*> expandedMatrixByBlocks;
 
 private:
-    /** m_miRowPartition is the partition vector of the matrix rows into blocks
-     *  @remark This only tracks the top-level partition and does not recurse
+    /** m_bHaveRowPartition tracks whether the row partition has been determined
+     *  from the constructor list and stored in m_miRowPartition
      */
-    int* m_miRowPartition;
+    bool m_bHaveRowPartition; 
 
     /** m_iRowPartitionSize gives the size of the m_miRowPartition array, 
      *  which is one more than the number of blocks in each row
      */
     int m_iRowPartitionSize;
 
-    /** m_miColumnPartition is the partition vector of the matrix columns into blocks
+    /** m_miRowPartition is the partition vector of the matrix rows into blocks
      *  @remark This only tracks the top-level partition and does not recurse
      */
-    int* m_miColumnPartition;
+    int* m_miRowPartition;
+
+    /** m_bHaveColumnPartition tracks whether the column partition has been determined
+     *  from the constructor list and stored in m_miColumnPartition
+     */
+    bool m_bHaveColumnPartition; 
 
     /** m_iColumnPartitionSize gives the size of the m_miColumnPartition array, 
      *  which is one more than the number of blocks in each column
      */
     int m_iColumnPartitionSize;
 
-    /** m_bHaveRowPartition tracks whether the row partition has been determined
-     *  from the constructor list and stored in m_miRowPartition
+    /** m_miColumnPartition is the partition vector of the matrix columns into blocks
+     *  @remark This only tracks the top-level partition and does not recurse
      */
-    bool m_bHaveRowPartition; 
-
-    /** m_bHaveColumnPartition tracks whether the column partition has been determined
-     *  from the constructor list and stored in m_miColumnPartition
-     */
-    bool m_bHaveColumnPartition; 
+    int* m_miColumnPartition;
 
 public:
     /** default constructor */
@@ -2551,11 +2578,6 @@ public:
 
     /** default destructor */
     virtual ~MatrixType();
-
-    /**
-     *  A method to check whether a matrix or block is diagonal
-     */
-    //virtual bool isDiagonal();
 
     /** 
      *  Check whether a submatrix aligns with the block partition of a matrix
@@ -2579,25 +2601,30 @@ public:
     int  getNumberOfTransformationConstructors();
     int  getNumberOfBlocksConstructors();
 
-    GeneralSparseMatrix* getExpandedMatrix(bool rowMajor,
-                                 ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
+    /**
+     *  a utility routine to expand a matrix into one of several different forms
+     *  the expansions are held in expandedMatrixByElements, a std::vector of GeneralSparseMatrix
+     *  @param rowMajor_ controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the index in the collection of expanded matrices corresponding to the current expansion
+     *  @remark the return value is -1 in case of any error
+     */
+    int getExpandedMatrix(bool rowMajor_, 
+                          ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                          ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
-    GeneralSparseMatrix* getMatrixCoefficientsInColumnMajor(
-                                 ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
-
-    GeneralSparseMatrix* getMatrixCoefficientsInRowMajor(
-                                 ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
 
     GeneralSparseMatrix* getMatrixBlockInColumnMajorForm(int columnIdx, int rowIdx,
                                  ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
 
     /**
      *  a utility routine to print the expanded matrix or block.
-     *  @param rowMajor controls whether the matrix should be printed in row or column major.
+     *  @param idx indicates which entry in the vector of expansions is to be printed
      *  @return whether the operation was successful
-     *  @remark if the expanded matrix does not exist, return false
      */
-    bool printExpandedMatrix(bool rowMajor);
+    bool printExpandedMatrix(int idx);
 
     /**
      *  get the size of the row partition of a matrix
@@ -2634,7 +2661,7 @@ public:
     int* getColumnPartition();
 
     /** 
-     *  A method to expand a matrix or block
+     *  A method to expand an element constructor of a matrix or block
      *  The result is a GeneralSparseMatrix object of constant matrix elements,
      *  variable references, linear or nonlinear expressions, or objective and 
      *  constraint references (possibly mixed). (Values depend on the matrixType.)
@@ -2658,13 +2685,18 @@ public:
      *  Processing may include cropping, scaling and transformation of the base matrix elements
      *  and may require that the baseMatrix itself be properly expanded first.
      *
-     *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
+     *  @param rowMajor_ indicates whether the baseMatrix should be stored in row major (if true)
      *         or column major.
-     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *  @param convertTo_ indicates the form of the value array in the expanded matrix
+     *         The default is "unknown", which infers the value type from the content of the matrix 
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the processed elements of the baseMatrix as a pointer to a GeneralSparseMatrix object.
      */
-     virtual GeneralSparseMatrix* processBaseMatrix(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+     virtual GeneralSparseMatrix* 
+                    processBaseMatrix(bool rowMajor_, 
+                                      ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                                      ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /**
      *  A method to determine the block structure of a matrixType 
@@ -2681,34 +2713,61 @@ public:
     bool processBlockPartition();
 
     /**
-     *  A method to expand a blocks constructor into the form required in the referencing matrixType. 
-     *  Processing may require that the blocks themselves be properly expanded first, and may include
-     *  applying symmetry and transposing the elements in some or all of the blocks.
+     *  A method to expand a blocks constructor into a single matrix of a particular form. 
+     *  Processing may require that the blocks themselves be properly expanded first,
+     *  and may include applying symmetry, changing the value type and transposing
+     *  the elements in some or all of the blocks.
      *
-     *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
-     *         or column major.
-     *  @param symmetry can be used to store only the upper or lower triangle, depending
-     *         on the parameter value --- see OSParameters.h for definitions
      *  @param currentBlocks is a pointer to the collection of blocks that is to be expanded
+     *  @param rowMajor_ indicates whether the expanded matrix should be stored in row major (if true)
+     *         or column major.
+     *  @param convertTo_ indicates the form of the value array in the expanded matrix
+     *         The default is "unknown", which infers the value type from the content of the matrix 
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
      *  @return the expanded elements of all blocks as a pointer to a GeneralSparseMatrix object.
      */
-     virtual GeneralSparseMatrix* expandBlocks(ExpandedMatrixBlocks* currentBlocks,
-                                               bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+     virtual GeneralSparseMatrix* 
+                expandBlocks( ExpandedMatrixBlocks* currentBlocks, bool rowMajor_,
+                                ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
+    /**
+     *  A method to expand a blocks constructor into a single matrix of a particular form. 
+     *  Processing may require that the blocks themselves be properly expanded first,
+     *  and may include applying symmetry, changing the value type and transposing
+     *  the elements in some or all of the blocks.
+     *
+     *  @param rowMajor_ indicates whether the expanded matrix should be stored in row major (if true)
+     *         or column major.
+     *  @param convertTo_ indicates the form of the value array in the expanded matrix
+     *         The default is "unknown", which infers the value type from the content of the matrix 
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *  @param i indicates the position of the constructor in the array m_mChildren, the child
+     *         elements of the current matrix (i.e., the list of constructors)
+     *  @return the expanded elements of all blocks as a pointer to a GeneralSparseMatrix object.
+     */
+     virtual GeneralSparseMatrix* 
+                    expandBlocks( int nConst, bool rowMajor_,
+                                  ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                                  ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /**
      *  A method to repackage an elements constructor into the form required in the referencing matrixType. 
      *  Processing may include transposing the elements and applying symmetry.
      *
-     *  @param constructorNo_ gives the number of the constructor within the constructor list
+     *  @param nConst gives the number of the constructor within the constructor list
      *         of the parent matrix or block
      *  @param rowMajor indicates whether the baseMatrix should be stored in row major (if true)
      *         or column major.
-     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the expanded elements as a pointer to a GeneralSparseMatrix object.
      */
-     virtual GeneralSparseMatrix* extractElements(int constructorNo_, bool rowMajor,
-                                                  ENUM_MATRIX_SYMMETRY symmetry);
+    virtual GeneralSparseMatrix* 
+        extractElements(int constructorNo_, bool rowMajor,
+                        ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
     /**
      *  A method to expand a matrix transformation into the form required in the referencing matrixType. 
      *  Processing may require recursion, transposing the elements, and applying symmetry.
@@ -2719,17 +2778,19 @@ public:
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the expanded elements of the transformation as a pointer to a GeneralSparseMatrix object.
      */
-     virtual GeneralSparseMatrix* expandTransformation(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+    virtual GeneralSparseMatrix* 
+        expandTransformation(bool rowMajor,
+                             ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /**
      *  A method to process a matrixType into a block structure defined by 
      *  the <blocks> element or elements.
-     *  @param rowMajor indicates whether the blocks should be stored in row major (if true)
+     *  @param rowMajor_ indicates whether the blocks should be stored in row major (if true)
      *         or column major.
-     *  @param symmetry can be used to store only the upper or lower triangle, depending
-     *         on the parameter value --- see OSParameters.h for definitions
-     *  @param convertTo is an optional parameter that can be used to covert the elements
+     *  @param convertTo_ is an optional parameter that can be used to covert the elements
      *         of all blocks to a different type 
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions. The default is "none"
      *  @return whether the operation was successful
      *
      *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
@@ -2737,8 +2798,9 @@ public:
      *          It is possible (though probably not advisable) to maintain multiple
      *          decompositions with different row and column partitions (see next method)
      */
-     virtual bool processBlocks(bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry,
-                                               ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
+     virtual bool processBlocks(bool rowMajor_, 
+                                ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
+                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /**
      *  A method to process a matrixType into a specific block structure.
@@ -2746,11 +2808,11 @@ public:
      *  @param rowOffsetSize gives the number of elements in the rowOffset array 
      *  @param colOffset defines a partition of the matrix columns into the blocks
      *  @param colOffsetSize gives the number of elements in the colOffset array 
-     *  @param rowMajor controls whether the blocks are stored by row or by column
-     *  @param symmetry can be used to store only the upper or lower triangle, depending
-     *         on the parameter value --- see OSParameters.h for definitions
-     *  @param convertTo is an optional parameter that can be used to covert the elements
+     *  @param rowMajor_ controls whether the blocks are stored by row or by column
+     *  @param convertTo_ is an optional parameter that can be used to covert the elements
      *         of all blocks to a different type 
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
      *  @return whether the operation was successful
      *
      *  @remark The blocks are stored into a std::vector of type expandedMatrixBlocks
@@ -2759,8 +2821,9 @@ public:
      *          decompositions with different row and column partitions
      */
      virtual bool processBlocks(int* rowOffset, int rowOffsetSize, int* colOffset,
-                                int colOffsetSize, bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry,
-                                ENUM_MATRIX_TYPE convertTo = ENUM_MATRIX_TYPE_unknown);
+                                int colOffsetSize, bool rowMajor_,
+                                ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
+                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /** 
      *  A method to extract a block from a larger matrix
@@ -2772,8 +2835,8 @@ public:
      *  @param firstcol gives the first column of the block
      *  @param lastrow gives the last row of the block  
      *  @param lastcol gives the last column of the block  
-     *  @param rowMajor can be used to store the objects in row major form.
-     *  @param symmetry can be used to store only the upper or lower triangle, depending
+     *  @param rowMajor_ can be used to store the objects in row major form.
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
      *         on the parameter value --- see OSParameters.h for definitions
      *  @return the block as a general sparse matrix
      *  @remark Before extracting a block it is necessary to call processBlocks()
@@ -2781,20 +2844,24 @@ public:
      *          block dimensions and positions has been defined or prepared.
      */
     GeneralSparseMatrix* extractBlock(int firstrow, int firstcol, int lastrow, int lastcol,
-                                      bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+                                      bool rowMajor_, 
+                                      ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /** 
-     *  A method to extract a block from a larger matrix
-     *  The result is a sparse matrix object, depending on the matrixType, 
+     *  A method to retrieve the blocks from a particular collection.
+     *  The result is an object of general sparse matrices, depending on the matrixType, 
      *  of constant matrix elements, variable references, linear or nonlinear expressions, 
      *  or objective and constraint references (possibly mixed).
-     *  Duplicate elements are removed according to the rules formulated in the OSiL schema.
      *  @param rowPartition defines the partition of the set of rows into the blocks  
      *  @param rowPartitionSize gives the size of the rowPartition array
      *  @param colPartition defines the partition of the set of columns into the blocks  
      *  @param colPartitionSize gives the size of the colPartition array
-     *  @param rowMajor indicates whether the blocks are stored in row major form or not.
      *  @param appendToBlockArray determines whether the blocks should be created if not found. 
+     *  @param rowMajor indicates whether the blocks are stored in row major form or not.
+     *  @param convertTo_ is an optional parameter that can be used to covert the elements
+     *         of all blocks to a different type. 
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
      *
      *  @return the blocks as an ExpandedMatrixBlocks object, which is essentially 
      *          an array of general sparse matrices. 
@@ -2806,7 +2873,34 @@ public:
      */
     ExpandedMatrixBlocks* getBlocks(int* rowPartition, int rowPartitionSize, 
                                     int* colPartition, int colPartitionSize, 
-                                    bool rowMajor, bool appendToBlockArray);
+                                    bool appendToBlockArray, bool rowMajor, 
+                                    ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
+                                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
+    /** 
+     *  A method to retrieve the blocks from a particular <blocks> constructor.
+     *  The result is an object of general sparse matrices, depending on the matrixType, 
+     *  of constant matrix elements, variable references, linear or nonlinear expressions, 
+     *  or objective and constraint references (possibly mixed).
+     *  @param i is the number of the <blocks> constructor in the array of matrix constructors.
+     *  @param appendToBlockArray determines whether the blocks should be created if not found. 
+     *  @param rowMajor indicates whether the blocks are stored in row major form or not.
+     *  @param convertTo_ is an optional parameter that can be used to covert the elements
+     *         of all blocks to a different type. 
+     *  @param symmetry_ can be used to store only the upper or lower triangle, depending
+     *         on the parameter value --- see OSParameters.h for definitions
+     *
+     *  @return the blocks as an ExpandedMatrixBlocks object, which is essentially 
+     *          an array of general sparse matrices. 
+     *
+     *  @remark If blocks corresponding to the indicated partition do not exist,
+     *          this method can try to create them. This can be quite storage-intensive
+     *          and is controlled by the parameter appendToBlockArray. If no blocks
+     *          found (and appending is inhibited) return NULL.
+     */
+    //ExpandedMatrixBlocks* getBlocks(int i, bool appendToBlockArray, bool rowMajor, 
+    //                                ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
+    //                                ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /** 
      *  A method to disassemble a MatrixType into individual blocks of specific structure
@@ -2814,15 +2908,19 @@ public:
      *  @param rowPartitionSize gives the size of the rowPartition array
      *  @param colPartition defines the partition of the set of columns into the blocks  
      *  @param colPartitionSize gives the size of the colPartition array
-     *  @param rowMajor indicates whether the blocks are stored in row major form or not.
-     *  @param symmetry determines what kind of symmetry to use in representing the blocks. 
+     *  @param rowMajor_ indicates whether the blocks are stored in row major form or not.
+     *  @param valueType_ indicates in which form to store the disassembled matrix
+     *         The default for this optional parameter is ENUM_MATRIX_TYPE_unknown
+     *  @param symmetry_ determines what kind of symmetry to use in representing the blocks.
+     *         If this parameter is missing, the default value is NO symmetry
      *
      *  @return the blocks as an ExpandedMatrixBlocks object, which is essentially 
      *          an array of general sparse matrices. 
      */
     ExpandedMatrixBlocks* disassembleMatrix(int* rowPartition, int rowPartitionSize, 
-                                    int* colPartition, int colPartitionSize, 
-                                    bool rowMajor, ENUM_MATRIX_SYMMETRY symmetry);
+                                    int* colPartition, int colPartitionSize, bool rowMajor_, 
+                                    ENUM_MATRIX_TYPE valueType_    = ENUM_MATRIX_TYPE_unknown,
+                                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /**
      *  A function to check for the equality of two objects
@@ -2833,7 +2931,9 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     *                    (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     *                    if false, then side constraints are not enforced,
+     *                    which can be useful for parser stress and compliance tests 
      * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
      * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
      */

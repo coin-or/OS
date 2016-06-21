@@ -885,8 +885,8 @@ if (PARSER_TESTS)
         cout << "Copy nonlinear expressions" << endl;
         Nl** rootPtr = NULL;
 
-        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)(100*ENUM_OUTPUT_AREA_OSInstance
-                                                                + ENUM_OUTPUT_LEVEL_detailed_trace));
+//        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)(100*ENUM_OUTPUT_AREA_OSInstance
+//                                                                + ENUM_OUTPUT_LEVEL_detailed_trace));
 
         if (osinstance->instanceData->nonlinearExpressions != NULL)
         {
@@ -912,7 +912,8 @@ if (PARSER_TESTS)
         delete osinstance2;
         osinstance2 = NULL;
 
-        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)ENUM_OUTPUT_LEVEL_error);
+        osoutput->SetPrintLevel("stdout", (ENUM_OUTPUT_LEVEL)(100*ENUM_OUTPUT_AREA_OSMatrix
+                                                                + ENUM_OUTPUT_LEVEL_detailed_trace));
 
         unitTestResult << "TEST " << nOfTest << ": Passed OSInstance get() and set() methods" << std::endl;
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -953,14 +954,16 @@ if (PARSER_TESTS)
 // Here we test extensions to the "core": <matrices>, <cones>, stochastic programming, etc.
     if( THOROUGH == true)
     {
-        try{ 
-            cout << endl << "TEST " << ++nOfTest << ": Test parsing another OSiL file (testMatricesAndCones.osil)" << endl << endl;
+        OSInstance *instance1, *instance2;
+
+        try
+        {
+            cout << endl << "TEST " << ++nOfTest 
+                 << ": Test parsing another OSiL file (testMatricesAndCones.osil)" << endl << endl;
 
             fileUtil = new FileUtil();
             osilreader = new OSiLReader(); 
             osilwriter = new OSiLWriter();
-
-            OSInstance *instance1, *instance2;
 
             cout << "First read the file into a string" << endl;
             osilFileName = dataDir  + "osilFiles" + dirsep + "testMatricesAndCones.osil";
@@ -990,21 +993,47 @@ if (PARSER_TESTS)
             unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem testMatricesAndCones.osil" << std::endl;
             cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
+        }
+        catch(const ErrorClass& eclass)
+        {
+            unitTestResultFailure << "Unit Test Failed OSiL parser methods for matrices and cones (Test " 
+                                  << nOfTest << "): "  + eclass.errormsg<< endl; 
+            if (osilreader2 != NULL)
+                delete osilreader2;
+            osilreader2 = NULL;
+            if (osilwriter != NULL)
+                delete osilwriter;
+            osilwriter = NULL;
+            if (fileUtil != NULL)
+                delete fileUtil;
+            fileUtil = NULL;
+        }    
 
-            // now test the matrix manipulation routines 
-            // (expansion, separation into blocks, transformations, etc.)
+        // now test the matrix manipulation routines 
+        // (expansion, separation into blocks, transformations, etc.)
+        try
+        {
             cout << endl << "TEST " << ++nOfTest 
                  << ": Test matrix manipulation routines (using testMatricesAndCones.osil)"
                  << endl << endl;
 
+            if (instance1 == NULL)
+                throw ErrorClass("matrix expansion impossible due to previous parser errors");
+
+            int expIdx;
             for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
             {
                 try
                 {
                     cout << endl << "Test expansion of matrix " << i << " in column major form" << endl;
-                    instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(false);
-                    cout << endl << "Matrix expanded successfully" << endl << endl;
-                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(false);
+                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(false);
+                    if (expIdx >= 0)
+                    {
+                        cout << endl << "Matrix expanded successfully" << endl << endl;
+                        instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(expIdx);
+                    }
+                    else
+                        cout << endl << "Error during matrix expansion" << endl << endl;
                 }
                 catch(const ErrorClass& eclass)
                 {
@@ -1015,9 +1044,14 @@ if (PARSER_TESTS)
                 try
                 {
                     cout << endl << "Test expansion of matrix " << i << " in row major form" << endl;
-                    instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(true);
-                    cout << endl << "Matrix expanded successfully" << endl << endl;
-                    instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(true);
+                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(true);
+                    if (expIdx >= 0)
+                    {
+                        cout << endl << "Matrix expanded successfully" << endl << endl;
+                        instance1->instanceData->matrices->matrix[i]->printExpandedMatrix(expIdx);
+                    }
+                    else
+                        cout << endl << "Error during matrix expansion" << endl << endl;
                 }
                 catch(const ErrorClass& eclass)
                 {
@@ -1177,6 +1211,12 @@ if (PARSER_TESTS)
 
             delete osilreader;
             osilreader = NULL;
+//            if (instance1 != NULL)
+//                delete instance1;
+//            instance1 = NULL;
+//            if (instance2 != NULL)
+//                delete instance2;
+//            instance2 = NULL;
 
             unitTestResult << "TEST " << nOfTest << ": Successful test of matrix manipulation routines" << std::endl;
             cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;

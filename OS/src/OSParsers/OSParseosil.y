@@ -468,8 +468,20 @@ osilEnding: OSILEND
 
 quadraticCoefficients: 
     |  quadraticCoefficientsStart osilQuadnumberATT qTermlist  QUADRATICCOEFFICIENTSEND 
-    {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) 
-    parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of qterms less than numberOfQuadraticTerms");};
+    {
+        if (osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms
+                                                             > parserData->qtermcount ) 
+            parserData->parser_errors += 
+                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+                    "actual number of qterms less than numberOfQuadraticTerms");
+
+        if (parserData->parser_errors != "")
+        {
+            parserData->parser_errors += ("\n\nOSiL input is either invalid or not well-formed.\n"); 
+            osilerror( NULL, osinstance, parserData, osglData, osnlData, parserData->parser_errors);
+        }
+        parserData->parser_errors = "";
+    };
    
 quadraticCoefficientsStart: QUADRATICCOEFFICIENTSSTART
 {
@@ -504,7 +516,7 @@ qterm: qtermStart anotherqTermATT  qtermend
 qtermStart: QTERMSTART
 {
     if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
-     parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many QuadraticTerms");
+        throw ErrorClass("encountered more quadratic terms than specified");
 } 
                 
 qtermend:  ENDOFELEMENT
@@ -512,7 +524,7 @@ qtermend:  ENDOFELEMENT
     
 
 anotherqTermATT: 
-    | anotherqTermATT qtermatt  ;
+    | anotherqTermATT qtermatt;
     
 
 qtermatt:    osilQtermidxOneATT   
@@ -532,29 +544,37 @@ qtermatt:    osilQtermidxOneATT
 
 osilQtermidxOneATT:  IDXONEATT QUOTE INTEGER QUOTE  {  if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = $3;
-    if( $3 >= osinstance->instanceData->variables->numberOfVariables){
-         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index exceeds number of variables");
-     }
-}  ;
+    if ($3 < 0)
+         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "variable index cannot be negative");
+    if ($3 >= osinstance->instanceData->variables->numberOfVariables)
+         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "variable index exceeds number of variables");
+};
 
 osilQtermidxTwoATT: IDXTWOATT QUOTE INTEGER QUOTE  { if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = $3;
-    if( $3 >= osinstance->instanceData->variables->numberOfVariables){
-         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index exceeds number of variables");
-     }
-}  ;
+    if ($3 < 0)
+         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "variable index cannot be negative");
+    if ($3 >= osinstance->instanceData->variables->numberOfVariables)
+         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "variable index exceeds number of variables");
+};
 
 osilQtermcoefATT: COEFATT QUOTE aNumber QUOTE  {if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = parserData->tempVal;}
-/* 
-| COEFATT QUOTE INTEGER  QUOTE  { 
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = $3;}  
-*/
-;
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = parserData->tempVal;
+};
 
 osilQtermidxATT: IDXATT QUOTE INTEGER  QUOTE {  if ( *$2 != *$4 ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $3;}  ;
-
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $3;
+    if ($3 >= osinstance->instanceData->constraints->numberOfConstraints)
+         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "row index for quadratic term exceeds number of constraints");
+    if ($3 < -osinstance->instanceData->objectives->numberOfObjectives)
+         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "row index for quadratic term refers to nonexisting objective");
+};
 
 
 matrices: | matricesStart matricesAttributes matricesContent
@@ -632,7 +652,7 @@ conesLaden: GREATERTHAN coneList CONESEND
 coneList: | coneList cone
 {
     parserData->coneCounter++;
-    if (parserData->coneCounter > parserData->numberOfCones) 
+    if (parserData->coneCounter > parserData->numberOfCones)
         throw ErrorClass("encountered more cones than specified");
     osinstance->instanceData->cones->numberOfCones = parserData->coneCounter;
 };
@@ -655,31 +675,47 @@ cone: nonnegativeCone
     | intersectionCone
 /*    | dualCone */
 /*    | polarCone */
+/*    | customCone */
 ;
 
 nonnegativeCone: nonnegativeConeStart nonnegativeConeAttributes nonnegativeConeEnd;
 
 nonnegativeConeStart: NONNEGATIVECONESTART
 {
+std::cout << "Start nonnegative cone" << std::endl;
     osglData->numberOfRowsPresent = false;
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new NonnegativeCone();
-    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_nonnegative;    
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType
+        = ENUM_CONE_TYPE_nonnegative;    
 };
 
-nonnegativeConeAttributes: nonnegativeConeAttList;
+nonnegativeConeAttributes: nonnegativeConeAttList
+{
+std::cout << "Finish attribute list" << std::endl;
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
+};
 
 nonnegativeConeAttList: | nonnegativeConeAttList nonnegativeConeAtt;
 
-nonnegativeConeAtt: 
+nonnegativeConeAtt:
       osglNumberOfRowsATT
         {
+std::cout << "Number of rows attribute" << std::endl;
             ((NonnegativeCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
     | osglNumberOfColumnsATT
         {
+std::cout << "Number of columns attribute" << std::endl;
             ((NonnegativeCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
@@ -690,8 +726,8 @@ nonnegativeConeAtt:
 
 nonnegativeConeEnd: ENDOFELEMENT | GREATERTHAN NONNEGATIVECONEEND;
 
-nonpositiveCone: nonpositiveConeStart nonpositiveConeAttributes nonpositiveConeEnd;
 
+nonpositiveCone: nonpositiveConeStart nonpositiveConeAttributes nonpositiveConeEnd;
 
 nonpositiveConeStart: NONPOSITIVECONESTART
 {
@@ -702,7 +738,18 @@ nonpositiveConeStart: NONPOSITIVECONESTART
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_nonpositive;    
 };
 
-nonpositiveConeAttributes: nonpositiveConeAttList;
+nonpositiveConeAttributes: nonpositiveConeAttList
+{
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
+};
+
 
 nonpositiveConeAttList: | nonpositiveConeAttList nonpositiveConeAtt;
 
@@ -738,6 +785,14 @@ generalOrthantConeStart: ORTHANTCONESTART
 
 generalOrthantConeAttributes: generalOrthantConeAttList
 {
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
     osglData->numberOfEl = (osglData->numberOfRows)*(osglData->numberOfColumns);
     ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->ub 
         = new double[osglData->numberOfEl];  
@@ -814,11 +869,12 @@ generalOrthantConeDirectionAttributes: generalOrthantConeDirectionAttributeList
     }
     if (osglData->osglCounter + osglData->mult > osglData->numberOfEl)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "Too many directions given");
-    for (int i=0; i < osglData->mult; i++)
-    {
-        ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->ub[osglData->osglCounter+i] = ubt;
-        ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->lb[osglData->osglCounter+i] = lbt;
-    }
+    else
+        for (int i=0; i < osglData->mult; i++)
+        {
+            ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->ub[osglData->osglCounter+i] = ubt;
+            ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->lb[osglData->osglCounter+i] = lbt;
+        }
     osglData->osglCounter += osglData->mult;
 };
 
@@ -831,6 +887,7 @@ generalOrthantConeDirectionEnd: ENDOFELEMENT | GREATERTHAN DIRECTIONEND;
 
 generalOrthantConeEnd: ORTHANTCONEEND;
 
+
 polyhedralCone: polyhedralConeStart polyhedralConeAttributes polyhedralConeEnd;
 
 polyhedralConeStart: POLYHEDRALCONESTART
@@ -839,10 +896,22 @@ polyhedralConeStart: POLYHEDRALCONESTART
     osglData->numberOfColumnsPresent = false;
     osglData->namePresent = false;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new PolyhedralCone();
-    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_polyhedral;    
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType
+        = ENUM_CONE_TYPE_polyhedral;    
 };
 
-polyhedralConeAttributes: polyhedralConeAttList;
+polyhedralConeAttributes: polyhedralConeAttList
+{
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
+};
+
 
 polyhedralConeAttList: | polyhedralConeAttList polyhedralConeAtt;
 
@@ -870,16 +939,21 @@ polyhedralConeAtt:
 referenceMatrixATT: REFERENCEMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
     if (*$2 != *$4) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "mismatched quotes");
     if (parserData->referenceMatrixIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "polyhedral cone referenceMatrixIdx attribute previously set");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "polyhedral cone reference matrix index cannot be negative");
     parserData->referenceMatrixIdxPresent = true;
-    parserData->referenceMatrixIdx = $3; 
+    if ($3 >= osinstance->instanceData->matrices->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "polyhedral cone reference matrix index exceeds number of matrices");
+    else if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "polyhedral cone reference matrix index cannot be negative");
+    else parserData->referenceMatrixIdx = $3; 
 };
 
 polyhedralConeEnd: ENDOFELEMENT | GREATERTHAN POLYHEDRALCONEEND;
-
 
 
 quadraticCone: quadraticConeStart quadraticConeAttributes quadraticConeEnd;
@@ -896,7 +970,30 @@ quadraticConeStart: QUADRATICCONESTART
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_quadratic;    
 };
 
-quadraticConeAttributes: quadraticConeAttList;
+quadraticConeAttributes: quadraticConeAttList
+{
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
+    if (parserData->axisDirectionPresent)
+    {
+        if (parserData->axisDirection >= 
+                ( ((QuadraticCone*)
+                        osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows *
+                    ((QuadraticCone*)
+                        osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns) )
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "axis direction index exceeds number of dimensions");
+        if (parserData->axisDirection < 0) 
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "axis direction index cannot be negative");
+    }
+};
 
 quadraticConeAttList: | quadraticConeAttList quadraticConeAtt;
 
@@ -934,6 +1031,7 @@ quadraticConeAtt:
 
 quadraticConeEnd: ENDOFELEMENT | GREATERTHAN QUADRATICCONEEND;
 
+
 rotatedQuadraticCone:  rotatedQuadraticConeStart rotatedQuadraticConeAttributes rotatedQuadraticConeEnd;
 
 rotatedQuadraticConeStart: ROTATEDQUADRATICCONESTART
@@ -949,7 +1047,44 @@ rotatedQuadraticConeStart: ROTATEDQUADRATICCONESTART
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_rotatedQuadratic;    
 };
 
-rotatedQuadraticConeAttributes: rotatedQuadraticConeAttList;
+rotatedQuadraticConeAttributes: rotatedQuadraticConeAttList
+{
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
+    if (parserData->firstAxisDirectionPresent)
+    {
+        if (parserData->firstAxisDirection >= 
+                ( ((RotatedQuadraticCone*)
+                        osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows *
+                    ((RotatedQuadraticCone*)
+                        osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns) )
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "first axis direction index exceeds number of dimensions");
+        if (parserData->firstAxisDirection < 0) 
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "first axis direction index cannot be negative");
+    }
+    if (parserData->secondAxisDirectionPresent)
+    {
+        if (parserData->secondAxisDirection >= 
+                ( ((RotatedQuadraticCone*)
+                        osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows *
+                    ((RotatedQuadraticCone*)
+                        osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns) )
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "second axis direction index exceeds number of dimensions");
+        if (parserData->secondAxisDirection < 0) 
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "second axis direction index cannot be negative");
+    }
+};
+
 
 rotatedQuadraticConeAttList: | rotatedQuadraticConeAttList rotatedQuadraticConeAtt;
 
@@ -1004,10 +1139,21 @@ semidefiniteConeStart: SEMIDEFINITECONESTART
     osglData->namePresent = false;
     parserData->semidefinitenessPresent = false;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new SemidefiniteCone();    
-    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_semidefinite;    
+    osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType
+        = ENUM_CONE_TYPE_semidefinite;    
 };
 
-semidefiniteConeAttributes: semidefiniteConeAttList;
+semidefiniteConeAttributes: semidefiniteConeAttList
+{
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
+};
 
 semidefiniteConeAttList: | semidefiniteConeAttList semidefiniteConeAtt;
 
@@ -1058,7 +1204,17 @@ productConeStart: PRODUCTCONESTART
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_product;    
 };
 
-productConeAttributes: productConeAttList;
+productConeAttributes: productConeAttList
+{
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
+};
 
 productConeAttList: | productConeAttList productConeAtt;
 
@@ -1100,7 +1256,15 @@ productConeFactorsEmpty: ENDOFELEMENT;
 
 productConeFactorsLaden: GREATERTHAN productConeFactorList productConeFactorsEnd;
 
-productConeFactorList: osglIntArrayData;
+productConeFactorList: osglNonNegativeIntArrayData
+{
+    // factors must appear earlier in the list of cones to rule out circular references
+    for (int i=0; i < osglData->numberOfEl; i++)
+        if (osglData->osglIntArray[i] >= parserData->coneCounter) 
+            parserData->parser_errors += 
+                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                    "product cone factor has illegal index");
+};
 
 productConeFactorsEnd: FACTORSEND
 {
@@ -1130,7 +1294,17 @@ intersectionConeStart: INTERSECTIONCONESTART
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_intersection;    
 };
 
-intersectionConeAttributes: intersectionConeAttList;
+intersectionConeAttributes: intersectionConeAttList
+{
+    if (!osglData->numberOfRowsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfRows is missing");
+    if (!osglData->numberOfColumnsPresent)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "mandatory attribute numberOfColumns is missing");
+};
 
 intersectionConeAttList: | intersectionConeAttList intersectionConeAtt;
 
@@ -1172,7 +1346,15 @@ intersectionConeComponentsEmpty: ENDOFELEMENT;
 
 intersectionConeComponentsLaden: GREATERTHAN intersectionConeComponentList intersectionConeComponentsEnd;
 
-intersectionConeComponentList: osglIntArrayData;
+intersectionConeComponentList: osglNonNegativeIntArrayData
+{
+    // components must appear earlier in the list of cones to rule out circular references
+    for (int i=0; i < osglData->numberOfEl; i++)
+        if (osglData->osglIntArray[i] >= parserData->coneCounter) 
+            parserData->parser_errors += 
+                addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                    "intersection cone component has illegal index");
+};
 
 intersectionConeComponentsEnd: COMPONENTSEND
 {
@@ -1193,6 +1375,8 @@ intersectionConeEnd: INTERSECTIONCONEEND;
 /* dualCone:  conesStart conesAttributes conesContent; */
 
 /* polarCone:  conesStart conesAttributes conesContent; */
+
+/* customCone:  conesStart conesAttributes conesContent; */
 
 
 
@@ -2050,46 +2234,59 @@ normScaleFactorATT: NORMSCALEFACTORATT QUOTE aNumber QUOTE
 distortionMatrixIdxATT: DISTORTIONMATRIXIDXATT QUOTE INTEGER QUOTE 
 {
     if (*$2 != *$4) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "mismatched quotes");
     if (parserData->distortionMatrixPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "distortionMatrixIdx attribute previously set");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "distortion matrix index cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "distortionMatrixIdx attribute previously set");
     parserData->distortionMatrixPresent = true;
-    parserData->distortionMatrix = $3; 
+    if ($3 >= osinstance->instanceData->matrices->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "distortion matrix index exceeds number of matrices");
+    else if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "distortion matrix index cannot be negative");
+    else parserData->distortionMatrix = $3; 
 };
  
 axisDirectionATT: AXISDIRECTIONATT QUOTE INTEGER QUOTE 
 {
     if (*$2 != *$4) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "mismatched quotes");
     if (parserData->axisDirectionPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axisDirection attribute previously set");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axis direction index cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "axisDirection attribute previously set");
     parserData->axisDirectionPresent = true;
-    parserData->axisDirection = $3; 
+    parserData->axisDirection = $3;
+std::cout << "found axis direction = " << parserData->axisDirection << std::endl;
 };
 
 
 firstAxisDirectionATT: FIRSTAXISDIRECTIONATT QUOTE INTEGER QUOTE 
 {
     if (*$2 != *$4) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,     
+            "mismatched quotes");
     if (parserData->firstAxisDirectionPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "firstAxisDirection attribute previously set");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axis direction index cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "firstAxisDirection attribute previously set");
     parserData->firstAxisDirectionPresent = true;
     parserData->firstAxisDirection = $3; 
+std::cout << "found first axis direction = " << parserData->firstAxisDirection << std::endl;
 };
 
 secondAxisDirectionATT: SECONDAXISDIRECTIONATT QUOTE INTEGER QUOTE 
 {
     if (*$2 != *$4) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "mismatched quotes");
     if (parserData->secondAxisDirectionPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "secondAxisDirection attribute previously set");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "axis direction index cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "secondAxisDirection attribute previously set");
     parserData->secondAxisDirectionPresent = true;
     parserData->secondAxisDirection = $3; 
+std::cout << "found second axis direction = " << parserData->secondAxisDirection << std::endl;
 };
 
 semidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE 
@@ -2107,12 +2304,19 @@ semidefinitenessATT: SEMIDEFINITENESSATT ATTRIBUTETEXT QUOTE
 matrixIdxATT: MATRIXIDXATT QUOTE INTEGER QUOTE 
 {
     if (*$2 != *$4) 
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "mismatched quotes");
     if (parserData->matrixIdxPresent)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrixIdx attribute previously set");
-    if ($3 <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix index cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "matrixIdx attribute previously set");
     parserData->matrixIdxPresent = true;
-    parserData->matrixIdx = $3; 
+    if ($3 >= osinstance->instanceData->matrices->numberOfMatrices)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "matrix index exceeds number of matrices");
+    else if ($3 < 0) 
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "matrix index cannot be negative");
+    else parserData->matrixIdx = $3; 
 };
 
 lbMatrixIdxATT: LBMATRIXIDXATT QUOTE INTEGER QUOTE 
@@ -2158,7 +2362,7 @@ templateMatrixIdxATT: TEMPLATEMATRIXIDXATT QUOTE INTEGER QUOTE
     if (parserData->templateMatrixIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "templateMatrixIdx attribute previously set");
     if ($3 < 0 || $3 >= osinstance->instanceData->matrices->numberOfMatrices)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "template matrix index cannot be negative");
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for template matrix index");
     parserData->templateMatrixIdxPresent = true;
     parserData->templateMatrixIdx = $3; 
 };
@@ -2260,7 +2464,7 @@ aNumber:
   
 quote: xmlWhiteSpace QUOTE;
 
-xmlWhiteSpace:  | xmlWhiteSpace xmlWhiteSpaceChar;
+xmlWhiteSpace:   | xmlWhiteSpace xmlWhiteSpaceChar;
 
 xmlWhiteSpaceChar: ' ' 
                  | '\t'
@@ -2428,6 +2632,13 @@ fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
  *  ==========================================================================
  */
 
+osglNonNegativeIntArrayData: osglIntArrayData
+{
+    for (int i=0; i<osglData->numberOfEl; i++)
+        if (osglData->osglIntArray < 0)
+            throw ErrorClass("negative entry detected in nonnegativeIntVector");
+};
+
 osglIntArrayData:
     osglIntVectorElArray 
     {
@@ -2461,14 +2672,7 @@ osglIntVectorElAtt: osglMultATT | osglIncrATT;
 osglIntVectorElContent: GREATERTHAN INTEGER ELEND
 {
     if (osglData->osglCounter + osglData->mult > osglData->numberOfEl)
-    {
-        if (!parserData->suppressFurtherErrorMessages)
-        {
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more data elements than specified");
-            parserData->suppressFurtherErrorMessages = true;
-            parserData->ignoreDataAfterErrors = true;
-        }
-    }
+        throw ErrorClass("OSgL IntVector: more data elements than specified");
     else
         for (int i=0; i<osglData->mult; i++)
             osglData->osglIntArray[osglData->osglCounter++] = $2 + i*osglData->incr;    
@@ -2540,14 +2744,7 @@ osglDblVectorElAttributes: | osglMultATT;
 osglDblVectorElContent: GREATERTHAN aNumber ELEND
 {
     if (osglData->osglCounter + osglData->mult > osglData->numberOfEl)
-    {
-        if (!parserData->suppressFurtherErrorMessages)
-        {
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more data elements than specified");
-            parserData->suppressFurtherErrorMessages = true;
-            parserData->ignoreDataAfterErrors = true;
-        }
-    }
+        throw ErrorClass("OSgL DblVector: more data elements than specified");
     else
         for (int i=0; i<osglData->mult; i++)
             osglData->osglDblArray[osglData->osglCounter++] = parserData->tempVal;    
@@ -2617,14 +2814,7 @@ osglStrVectorElAttributes: | osglMultATT;
 osglStrVectorElContent: GREATERTHAN  ELEMENTTEXT  ELEND
 {
     if (osglData->osglCounter + osglData->mult > osglData->numberOfEl)
-    {
-        if (!parserData->suppressFurtherErrorMessages)
-        {
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more data elements than specified");
-            parserData->suppressFurtherErrorMessages = true;
-            parserData->ignoreDataAfterErrors = true;
-        }
-    }
+        throw ErrorClass("OSgL StrVector: more data elements than specified");
     else
         for (int i=0; i<osglData->mult; i++)
             osglData->osglStrArray[osglData->osglCounter++] = $2;
@@ -3241,6 +3431,8 @@ baseMatrixAttributes: baseMatrixAttList
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute baseMatrixIdx is missing");
     else
     {
+        if (osglData->baseMatrixIdx < 0 || osglData->baseMatrixIdx >= osglData->matrixCounter)
+            throw ErrorClass("Improper idx value for baseMatrix reference");
         ((BaseMatrix*)osglData->tempC)->baseMatrixIdx = osglData->baseMatrixIdx;
         ((BaseMatrix*)osglData->tempC)->baseMatrix = (OSMatrix*)osglData->matrix[osglData->baseMatrixIdx];
     }
@@ -3350,9 +3542,23 @@ matrixElementsStartVectorContent: matrixElementsStartVectorEmpty | matrixElement
 
 matrixElementsStartVectorEmpty: ENDOFELEMENT;
 
-matrixElementsStartVectorLaden: GREATERTHAN matrixElementsStartVectorBody STARTVECTOREND;
+matrixElementsStartVectorLaden: GREATERTHAN matrixElementsStartVectorBody STARTVECTOREND
+{
+    //verify start vector: first element must be zero, vector must be nondecreasing, 
+    //last element must equal numberOfValues; length must equal numberOfRows + 1 or numberOfColumns + 1
+    if (osglData->osglIntArray[0] != 0)
+        throw ErrorClass("first entry of matrix element start vector is not zero");
+    for (int i=1; i < osglData->numberOfEl; i++)
+    {
+        if (osglData->osglIntArray[i] < osglData->osglIntArray[i-1])
+            throw ErrorClass("matrix element start vector must be nondecreasing");
+    }
+    if (osglData->osglIntArray[osglData->numberOfEl-1] 
+        != ((MatrixElements*)osglData->tempC)->numberOfValues)
+            throw ErrorClass("last entry of matrix element start vector does not equal numberOfValues");
+};
 
-matrixElementsStartVectorBody: osglIntArrayData;
+matrixElementsStartVectorBody: osglNonNegativeIntArrayData;
 
 
 matrixElementsIndexVector: | matrixElementsIndexStart matrixElementsIndexContent
@@ -3360,6 +3566,9 @@ matrixElementsIndexVector: | matrixElementsIndexStart matrixElementsIndexContent
     ((MatrixElements*)osglData->tempC)->index = new IntVector();
     ((MatrixElements*)osglData->tempC)->index->numberOfEl
         = ((MatrixElements*)osglData->tempC)->numberOfValues;
+    //check whether the values of the index array are legal and satisfy symmetry assertions
+    int maxindex;
+    //symmetry.substr(0,5) == "upper"/"lower"
     ((MatrixElements*)osglData->tempC)->index->el = osglData->osglIntArray;
     osglData->osglIntArray = NULL;   // to facilitate garbage collection without a segfault
     parserData->suppressFurtherErrorMessages = false;
@@ -3380,7 +3589,7 @@ matrixElementsIndexEmpty: ENDOFELEMENT;
 
 matrixElementsIndexLaden: GREATERTHAN matrixElementsIndexBody INDEXEND;
 
-matrixElementsIndexBody: osglIntArrayData;
+matrixElementsIndexBody: osglNonNegativeIntArrayData;
 
 
 /**
@@ -3471,7 +3680,7 @@ varReferenceElementsValuesEmpty: ENDOFELEMENT;
 
 varReferenceElementsValuesLaden: GREATERTHAN varReferenceElementsValuesBody VALUEEND;
 
-varReferenceElementsValuesBody: osglIntArrayData;
+varReferenceElementsValuesBody: osglNonNegativeIntArrayData;
 
 
 linearElements: linearElementsStart linearElementsAttributes GREATERTHAN linearElementsContent; 
@@ -4596,6 +4805,7 @@ osglNumberOfRowsATT: NUMBEROFROWSATT QUOTE INTEGER QUOTE
     if (osglData->numberOfRowsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfRows attribute previously set");
     if ($3 < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <rows> cannot be negative");
+std::cout << "Number of rows present" << std::endl;
     osglData->numberOfRowsPresent = true;        
     osglData->numberOfRows = $3;
 };
@@ -5329,7 +5539,15 @@ nonlinearExpressions:
                 | nonlinearExpressionsStart nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
     {  
         if (osnlData->tmpnlcount < osnlData->nlnodenumber)  
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of nl terms less than number attribute");   
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+ 		"actual number of nl terms less than number attribute");   
+
+        if (parserData->parser_errors != "")
+        {
+            parserData->parser_errors += ("\n\nOSiL input is either invalid or not well-formed.\n"); 
+            osilerror( NULL, osinstance, parserData, osglData, osnlData, parserData->parser_errors);
+        }
+        parserData->parser_errors = "";
     };
 
 nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
@@ -5341,14 +5559,18 @@ nonlinearExpressionsStart: NONLINEAREXPRESSIONSSTART
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE GREATERTHAN 
     { 
         if ( *$2 != *$4 ) 
-            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+            parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "start and end quotes are not the same");
         if ($3 < 0) parserData->parser_errors += 
-            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of expressions cannot be negative");
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+                "number of expressions cannot be negative");
         osnlData->nlnodenumber = $3;
         osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
         if (osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) 
             osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
-        for (int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++)
+        for (int i = 0; 
+                 i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; 
+                 i++)
         {
             osinstance->instanceData->nonlinearExpressions->nl[i] = new Nl();
         }
@@ -5368,7 +5590,8 @@ realValuedExpressionTree: nlstart nlAttributes GREATERTHAN nlnode NLEND
         if (osnlData->tmpnlcount < osnlData->nlnodenumber) 
             osinstance->instanceData->nonlinearExpressions
                     ->nl[osnlData->tmpnlcount]->osExpressionTree->m_treeRoot = 
-                ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
+                ((OSnLNode*)
+                    osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osnlData->tmpnlcount++;
     };
 
@@ -5394,7 +5617,8 @@ nlstart: NLSTART
 nlAttributes: nlAttributeList
 {
     if (osglData->idxPresent == false)
-        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute idx is missing");    
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
+            "mandatory attribute idx is missing");    
 };
 
 
@@ -5675,8 +5899,12 @@ variablecoefATT: COEFATT QUOTE aNumber QUOTE
                 
 variableidxATT: IDXATT QUOTE INTEGER QUOTE 
 { 
-    if ( *$2 != *$4 ) parserData->parser_errors += 
-        addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if ( *$2 != *$4 ) 
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if ($3 < 0)
+        parserData->parser_errors += 
+            addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index cannot be negative");
     osnlData->nlNodeVariablePoint->idx = $3;
 }; 
 
@@ -5689,7 +5917,7 @@ variableidxATT: IDXATT QUOTE INTEGER QUOTE
  *  that there might be nested sums, etc.). Both vectors point to the same memory location,
  *  which can be manipulated through whichever vector is more convenient. This is used in
  *  SUMEND below to allocate the right number of descendants (once this is known) and in
- *  nlnode below it to increment the number of descendants.
+ *  nlnode below it to increment the number of child nodes.
  */
 sum: SUMSTART {
     osnlData->nlNodePoint = new OSnLNodeSum();
@@ -5830,6 +6058,8 @@ matrixIdxATT: IDXATT QUOTE INTEGER QUOTE
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "idx attribute repeated");
     if ( *$2 != *$4 )
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if ($3 < 0)
+        throw ErrorClass("Matrix reference must be nonnegative");
     osnlData->nlMNodeMatrixRef->idx = $3;
     osnlData->idxAttributePresent = true;
 }; 
@@ -7359,7 +7589,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
     // start parsing
     // burn white space and comments
     FINDNEXTTAG( ch );
-    // if, present we should be pointing to <objectives element if there -- it is not required
+    // if present, we should be pointing to <objectives element if there -- it is not required
     *p = ch;
     while( *startObjectives++  == *ch) ch++;
     if( (ch - *p) != 11) {
@@ -7403,7 +7633,13 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
         //  we better have an > 
         if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the objectives element does not have a proper closing"); return false;} 
         osinstance->instanceData->objectives->numberOfObjectives = numberOfObjectives;
-        osinstance->instanceData->objectives->obj = new Objective*[ numberOfObjectives];
+        if (numberOfObjectives < 0)
+        {
+            osilerror_wrapper( ch,osillineno,"cannot have a negative number of objectives");
+            return false;
+        }
+        if (numberOfObjectives > 0)
+            osinstance->instanceData->objectives->obj = new Objective*[ numberOfObjectives];
         for(i = 0; i < numberOfObjectives; i++){
             osinstance->instanceData->objectives->obj[ i] = new Objective();
         }     
@@ -8098,8 +8334,18 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
         int *intvec = NULL;
         osinstance->instanceData->linearConstraintCoefficients->start->el = new int[(base64decodeddatalength/dataSize) ];
         intvec = (int*)&base64decodeddata[0];
-        for (i = 0; i < (base64decodeddatalength/dataSize); i++){
-            osinstance->instanceData->linearConstraintCoefficients->start->el[ i] = *(intvec++);
+        int k, kp;
+        kp = 0;
+        for (i = 0; i < (base64decodeddatalength/dataSize); i++)
+        {
+            k = *(intvec++);
+            if (k < kp)
+            {
+                osilerror_wrapper( ch,osillineno,"<start> must have nondecreasing entries ");
+                 return false;
+            }
+            osinstance->instanceData->linearConstraintCoefficients->start->el[ i] = k;
+            kp = k;
         }
         delete [] b64string;
     }
@@ -8129,6 +8375,11 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
                     elincrattON = true;
                     GETATTRIBUTETEXT;
                     elincr = atoimod1( osillineno,attText, attTextEnd);
+                    if (elincr < 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"incr of start array cannot be negative");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case 'm':
@@ -8140,6 +8391,11 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
                     elmultattON = true;
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
+                    if (elmult <= 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"el mult must be positive");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case ' ':
@@ -8175,16 +8431,31 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
             if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
             
             // we better not exceed allocation
-            if(kount +elmult > std::max(osinstance->instanceData->constraints->numberOfConstraints,
-                                        osinstance->instanceData->variables->numberOfVariables) + 1 )
+            if(kount + elmult > std::max(osinstance->instanceData->constraints->numberOfConstraints,
+                                         osinstance->instanceData->variables->numberOfVariables) + 1 )
             {
-                 osilerror_wrapper( ch, osillineno,"number of start elements exceeds the maximum number of rows or columns plus  1");            
+                osilerror_wrapper( ch, osillineno,"number of start elements exceeds the maximum number of rows or columns plus  1");
+                return false; 
             }
-            osinstance->instanceData->linearConstraintCoefficients->start->el[kount] = atoimod1( osillineno, *p, ch);
-            for (int k=1; k < elmult; k++)
+
+            int k = atoimod1( osillineno, *p, ch);
+            int kp;
+            if (kount == 0)
+                kp = 0;
+            else
+                kp = osinstance->instanceData->linearConstraintCoefficients->start->el[ kount-1];
+
+            for (int j=0; j < elmult; j++)
             {
-                osinstance->instanceData->linearConstraintCoefficients->start->el[ kount+k]
-                = osinstance->instanceData->linearConstraintCoefficients->start->el[ kount] + k*elincr;
+                if (k < kp)
+                {
+                    osilerror_wrapper( ch,osillineno,
+                        "column starts in linear constraint coefficient matrix must be non-decreasing"); 
+                    return false;
+                }
+                osinstance->instanceData->linearConstraintCoefficients->start->el[ kount+j] = k;
+                kp = k;
+                k += elincr;
             }
             kount += elmult;
             // we are pointing to <, make sure there is /el
@@ -8299,8 +8570,16 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
         osinstance->instanceData->linearConstraintCoefficients->colIdx->numberOfEl = 0;
         osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->variables->numberOfVariables + 1;
         intvec = (int*)&base64decodeddata[0];
-        for(i = 0; i < numberOfEl; i++){
-            osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ i] = *(intvec++);
+        int k;
+        for(i = 0; i < numberOfEl; i++)
+        {
+            k = *(intvec++);
+            if (k < 0 || k >= osinstance->instanceData->constraints->numberOfConstraints)
+            {
+                osilerror_wrapper( ch,osillineno,"row index out of bounds"); 
+                return false;
+            }
+            osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ i] = k;
             kount++;
         }
         delete [] b64string;
@@ -8317,7 +8596,6 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
         osinstance->instanceData->linearConstraintCoefficients->colIdx->numberOfEl = 0;
         osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->variables->numberOfVariables + 1;
         while(foundEl){
-        
             elmultattON = false ;
             elincrattON  = false;
             elmult = 1;
@@ -8348,6 +8626,11 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
                     elmultattON = true;
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
+                    if (elmult <= 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"el mult must be positive");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case ' ':
@@ -8385,14 +8668,24 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
             // we better not exceed allocation
             if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
             {
-                osilerror_wrapper( ch, osillineno,"number of rowIdx elements exceeds the number declared");            
+                osilerror_wrapper( ch, osillineno,"number of rowIdx elements exceeds the number declared");
+                return false; 
             }
-            osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount] = atoimod1( osillineno, *p, ch);
-            for (int k=1; k < elmult; k++)
+
+            int k = atoimod1( osillineno, *p, ch);
+
+            for (int j=0; j < elmult; j++)
             {
-                osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount+k] 
-                = osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount] + k*elincr;
+                if (k < 0 || k >= osinstance->instanceData->constraints->numberOfConstraints)
+                {
+                    osilerror_wrapper( ch,osillineno,
+                        "row index out of bounds in linear constraint coefficient matrix"); 
+                    return false;
+                }
+                osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount+j] = k;
+                k += elincr;
             }
+
             kount += elmult;
             // we are pointing to <, make sure there is /el
             *p = ch;
@@ -8479,7 +8772,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     // we should have either an >
     if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <colIdx> element"); return false;}
     ch++;
-    // get rid of white space
+    // get rid of white space and comments
     FINDNEXTTAG( ch );
     // look for an <el> -- if none present must have b64 data
     *p = ch;
@@ -8502,8 +8795,16 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
         osinstance->instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = 0;
         osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->constraints->numberOfConstraints + 1;
         intvec = (int*)&base64decodeddata[0];
-        for(i = 0; i < numberOfEl; i++){
-            osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ i] = *(intvec++);
+        int k;
+        for(i = 0; i < numberOfEl; i++)
+        {
+            k = *(intvec++);
+            if (k < 0 || k >= osinstance->instanceData->variables->numberOfVariables)
+            {
+                osilerror_wrapper( ch,osillineno,"col index out of bounds"); 
+                return false;
+            }
+            osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ i] = k;
             kount++;
         }
         delete [] b64string;
@@ -8511,7 +8812,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     else{
         foundEl = true;
         // if we are here we are storing the problem by row
-        // this means the number of start elements must equal the number of rows
+        // this means the number of start elements must equal the number of rows + 1
         if(osinstance->instanceData->linearConstraintCoefficients->iNumberOfStartElements != osinstance->instanceData->constraints->numberOfConstraints  + 1)
         osilerror_wrapper( ch, osillineno,"we are storing in row major format, but number of start elements not equal number of rows + 1");
         osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
@@ -8551,6 +8852,11 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
                     elmultattON = true;
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
+                    if (elmult <= 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"el mult must be positive");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case ' ':
@@ -8587,13 +8893,22 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
             // we better not exceed allocation
             if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
             {
-                osilerror_wrapper( ch, osillineno,"number of colIdx elements exceeds the number declared");            
+                osilerror_wrapper( ch, osillineno,"number of colIdx elements exceeds the number declared");
+                return false; 
             }
-            osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] = atoimod1( osillineno, *p, ch);
-            for (int k=1; k < elmult; k++)
+
+            int k = atoimod1( osillineno, *p, ch);
+
+            for (int j=0; j < elmult; j++)
             {
-                osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount+k] 
-                = osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] + k*elincr;
+                if (k < 0 || k >= osinstance->instanceData->variables->numberOfVariables)
+                {
+                    osilerror_wrapper( ch,osillineno,
+                        "col index out of bounds in linear constraint coefficient matrix"); 
+                    return false;
+                }
+                osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount+j] = k;
+                k += elincr;
             }
             kount += elmult;
             // we are pointing to <, make sure there is /el
@@ -8637,7 +8952,6 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
     *p = ch;
      return true;
 }//end parseColIdx
-
 
 bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
     clock_t start, finish;
@@ -8756,6 +9070,11 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
                     elmultattON = true;
                     GETATTRIBUTETEXT;
                     elmult = atoimod1( osillineno,attText, attTextEnd);
+                    if (elmult <= 0)
+                    {
+                        osilerror_wrapper( ch,osillineno,"el mult must be positive");
+                        return false;
+                    }
                     delete [] attText;
                     break;
                 case ' ':
@@ -8791,7 +9110,8 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
             // we better not exceed allocation
             if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
             {
-                osilerror_wrapper( ch, osillineno,"number of nonzero elements exceeds the number declared");            
+                osilerror_wrapper( ch, osillineno,"number of nonzero elements exceeds the number declared");
+                return false;           
             }
             osinstance->instanceData->linearConstraintCoefficients->value->el[ kount] = atofmod1( osillineno, *p, ch);
             for (int k=1; k < elmult; k++)
@@ -8874,7 +9194,13 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
         c_idx -= 4;
         // ch should be pointing to the first character after idx attribute
         GETATTRIBUTETEXT;
-        osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod1( osillineno, attText, attTextEnd);
+        int idx = atoimod1( osillineno, attText, attTextEnd);
+        if (idx < 0 || idx >= osinstance->instanceData->variables->numberOfVariables)
+        {
+            osilerror_wrapper( ch,osillineno,"incorrect variable idx in objective function specification");
+            return false;
+        }
+        osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx = idx;
         delete [] attText;
         ch++;    
         // eat white space

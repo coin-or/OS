@@ -55,6 +55,7 @@ using std::endl;
                     = this->m_mChildren[i]->cloneExprNode();    \
             }                                                   \
         }                                                       \
+        nlNodePoint->inumberOfChildren = inumberOfChildren;     \
 }
 
 
@@ -640,8 +641,9 @@ ExprNode* OSnLNodePlus::cloneExprNode()
             for (unsigned int i=0; i < inumberOfChildren; i++)  
             {                                                   
                 nlNodePoint->m_mChildren[i]                     
-                    = this->m_mChildren[i]->cloneExprNode();    
+                    = this->m_mChildren[i]->cloneExprNode();
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                     
     return nlNodePoint;
 }//end OSnLNodePlus::cloneExprNode
@@ -717,7 +719,8 @@ ExprNode* OSnLNodeSum::cloneExprNode()
             {                                                   
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
-            }                                                   
+            }
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeSum::cloneExprNode
@@ -810,6 +813,7 @@ ExprNode* OSnLNodeAllDiff::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeAllDiff::cloneExprNode
@@ -894,6 +898,7 @@ ExprNode* OSnLNodeMax::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeMax::cloneExprNode
@@ -979,8 +984,9 @@ ExprNode* OSnLNodeMin::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
-    return  nlNodePoint;
+    return nlNodePoint;
 }//end OSnLNodeMin::cloneExprNode
 
 
@@ -1050,6 +1056,7 @@ ExprNode* OSnLNodeMinus::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeMinus::cloneExprNode
@@ -1119,6 +1126,7 @@ ExprNode* OSnLNodeNegate::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeNegate::cloneExprNode
@@ -1188,6 +1196,7 @@ ExprNode* OSnLNodeTimes::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeTimes::cloneExprNode
@@ -1260,6 +1269,7 @@ ExprNode* OSnLNodeDivide::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeDivide::cloneExprNode
@@ -1352,6 +1362,7 @@ ExprNode* OSnLNodePower::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodePower::cloneExprNode
@@ -1431,6 +1442,7 @@ ExprNode* OSnLNodeProduct::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeProduct::cloneExprNode
@@ -1500,6 +1512,7 @@ ExprNode* OSnLNodeLn::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeLn::cloneExprNode
@@ -1569,6 +1582,7 @@ ExprNode* OSnLNodeSqrt::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeSqrt::cloneExprNode
@@ -1638,6 +1652,7 @@ ExprNode* OSnLNodeSquare::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeSquare::cloneExprNode
@@ -1707,6 +1722,7 @@ ExprNode* OSnLNodeSin::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeSin::cloneExprNode
@@ -1776,6 +1792,7 @@ ExprNode* OSnLNodeCos::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeCos::cloneExprNode
@@ -1845,6 +1862,7 @@ ExprNode* OSnLNodeExp::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeExp::cloneExprNode
@@ -1914,6 +1932,7 @@ ExprNode* OSnLNodeAbs::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeAbs::cloneExprNode
@@ -2000,6 +2019,7 @@ ExprNode* OSnLNodeErf::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeErf::cloneExprNode
@@ -2081,6 +2101,7 @@ ExprNode* OSnLNodeIf::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeIf::cloneExprNode
@@ -2210,6 +2231,7 @@ ExprNode* OSnLNodeNumber::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeNumber::cloneExprNode
@@ -2582,6 +2604,7 @@ ExprNode* OSnLNodeVariable::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLNodeVariable::cloneExprNode
@@ -2717,6 +2740,7 @@ ExprNode* OSnLNodeMatrixDeterminant::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLNodeMatrixDeterminant::cloneExprNode
@@ -2795,6 +2819,7 @@ ExprNode* OSnLNodeMatrixTrace::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLNodeMatrixTrace::cloneExprNode
@@ -2883,6 +2908,7 @@ ExprNode* OSnLNodeMatrixToScalar::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLNodeMatrixToScalar::cloneExprNode
@@ -3090,6 +3116,7 @@ ExprNode* OSnLMNodeMatrixPlus::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixPlus::cloneExprNode
@@ -3143,6 +3170,7 @@ ExprNode* OSnLMNodeMatrixSum::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLMNodeMatrixSum::cloneExprNode
@@ -3195,6 +3223,7 @@ ExprNode* OSnLMNodeMatrixProduct::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return  nlNodePoint;
 }//end OSnLMNodeMatrixProduct::cloneExprNode
@@ -3250,6 +3279,7 @@ ExprNode* OSnLMNodeMatrixMinus::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixMinus::cloneExprNode
@@ -3303,6 +3333,7 @@ ExprNode* OSnLMNodeMatrixNegate::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixNegate::cloneExprNode
@@ -3357,6 +3388,7 @@ ExprNode* OSnLMNodeMatrixTimes::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixTimes::cloneExprNode
@@ -3410,6 +3442,7 @@ ExprNode* OSnLMNodeMatrixInverse::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixInverse::cloneExprNode
@@ -3464,6 +3497,7 @@ ExprNode* OSnLMNodeMatrixTranspose::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixTranspose::cloneExprNode
@@ -3518,6 +3552,7 @@ ExprNode* OSnLMNodeMatrixScalarTimes::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixScalarTimes::cloneExprNode
@@ -3572,6 +3607,7 @@ ExprNode* OSnLMNodeMatrixDotTimes::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixDotTimes::cloneExprNode
@@ -3626,6 +3662,7 @@ ExprNode* OSnLMNodeIdentityMatrix::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeIdentityMatrix::cloneExprNode
@@ -3682,6 +3719,7 @@ ExprNode* OSnLMNodeMatrixLowerTriangle::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixLowerTriangle::cloneExprNode
@@ -3818,6 +3856,7 @@ ExprNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixUpperTriangle::cloneExprNode
@@ -3922,6 +3961,7 @@ ExprNode* OSnLMNodeMatrixDiagonal::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixDiagonal::cloneExprNode
@@ -3976,6 +4016,7 @@ ExprNode* OSnLMNodeDiagonalMatrixFromVector::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeDiagonalMatrixFromVector::cloneExprNode
@@ -4034,6 +4075,7 @@ ExprNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixSubmatrixAt::cloneExprNode
@@ -4125,6 +4167,7 @@ ExprNode* OSnLMNodeMatrixReference::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixReference::cloneExprNode
@@ -4253,6 +4296,7 @@ ExprNode* OSnLMNodeMatrixVar::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixVar::cloneExprNode
@@ -4379,6 +4423,7 @@ ExprNode* OSnLMNodeMatrixObj::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixObj::cloneExprNode
@@ -4507,6 +4552,7 @@ ExprNode* OSnLMNodeMatrixCon::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLMNodeMatrixCon::cloneExprNode
@@ -4782,6 +4828,7 @@ ExprNode* OSnLCNodeCreate::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodeCreate::cloneExprNode
@@ -4862,6 +4909,7 @@ ExprNode* OSnLCNodePlus::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodePlus::cloneExprNode
@@ -4949,6 +4997,7 @@ ExprNode* OSnLCNodeMinus::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodeMinus::cloneExprNode
@@ -5023,6 +5072,7 @@ ExprNode* OSnLCNodeNegate::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodeNegate::cloneExprNode
@@ -5098,6 +5148,7 @@ ExprNode* OSnLCNodeConjugate::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodeConjugate::cloneExprNode
@@ -5176,6 +5227,7 @@ ExprNode* OSnLCNodeSum::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodeSum::cloneExprNode
@@ -5260,6 +5312,7 @@ ExprNode* OSnLCNodeTimes::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodeTimes::cloneExprNode
@@ -5337,6 +5390,7 @@ ExprNode* OSnLCNodeSquare::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodeSquare::cloneExprNode
@@ -5460,6 +5514,7 @@ ExprNode* OSnLCNodeNumber::cloneExprNode()
                 nlNodePoint->m_mChildren[i]                     
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
+            nlNodePoint->inumberOfChildren = inumberOfChildren;
         }                                                       
     return nlNodePoint;
 

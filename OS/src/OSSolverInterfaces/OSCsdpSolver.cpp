@@ -363,8 +363,10 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         rhsValues = osinstance->getConstraintLowerBounds() - 1;
 
         // Set up storage and retrieve pointers.
-        mtxBlocks = new ExpandedMatrixBlocks*[ncon+1];
         GeneralSparseMatrix* tmpBlock;
+        mtxBlocks = new ExpandedMatrixBlocks*[ncon+1];
+        for (int j=0; j < ncon+1; j++)
+            mtxBlocks[j] = NULL;
 
         // At this point we know the dimensions of all blocks.
         // Keep track of diagonal blocks. Note: isdiag is 1-indexed
@@ -374,9 +376,15 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
 
         for (int j=0; j < ncon+1; j++)
         {
+            try
+            {
             mtxBlocks[j] = osinstance->instanceData->matrices->matrix[mtxRef[j]]
-                ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,false,true);  //leaks memory
-
+                ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,true,false);  //leaks memory
+            }
+            catch(const ErrorClass& eclass)
+            {
+                std::cout << "error during getBlocks()" << std::endl;
+            }
             if (!mtxBlocks[j]->isBlockDiagonal())
                 throw ErrorClass("Constraint matrix must be block-diagonal");
 
@@ -416,7 +424,7 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
             }
             else
             {
-                // There are off-diagonals (i.e., "matrix block")
+                // There are off-diagonal elements (i.e., "matrix block")
                 C_matrix.blocks[blk].blocksize = blksz;
                 C_matrix.blocks[blk].blockcategory = MATRIX;
                 C_matrix.blocks[blk].data.mat = new double[blksz*blksz];
@@ -520,10 +528,11 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         {
             for (int i=0; i < ncon+1; i++)
             {
-                if (mtxBlocks[i] != NULL) delete mtxBlocks[i];
+//                if (mtxBlocks[i] != NULL) delete mtxBlocks[i];
                 mtxBlocks[i] = NULL;
             }
             delete []mtxBlocks;
+            mtxBlocks = NULL;
         }
 
         this->bCallbuildSolverInstance = true;
@@ -539,10 +548,11 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         {
             for (int i=0; i <= ncon; i++)
             {
-                if (mtxBlocks[i] != NULL) delete mtxBlocks[i];
+//                if (mtxBlocks[i] != NULL) delete mtxBlocks[i];
                 mtxBlocks[i] = NULL;
             }
             delete []mtxBlocks;
+            mtxBlocks = NULL;
         }
 
         osresult = new OSResult();
