@@ -674,7 +674,7 @@ The result of this transformation is aligned with the top left corner of the tar
 		</xs:sequence>
 		<xs:attribute name="symmetry" type="SymmetryType" use="optional" default="none">
 			<xs:annotation>
-				<xs:documentation>If symmetry is "upper", "skewUpper" or "HermitianUpper, any elements below the main diagonal are ignored and inferred from the upper triangle. If symmetry is "lower", "skewLower" or "HermitianLower", any elements above the main diagonal are ignored and inferred from the lower triangle.</xs:documentation>
+				<xs:documentation>If symmetry is "upper", "skewUpper" or "HermitianUpper", any elements below the main diagonal are ignored and inferred from the upper triangle. If symmetry is "lower", "skewLower" or "HermitianLower", any elements above the main diagonal are ignored and inferred from the lower triangle.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="type" default="unknown">
@@ -1028,6 +1028,7 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLCNode"/>
 		</xs:sequence>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="StringValuedMatrixElements">
 		<xs:complexContent>
