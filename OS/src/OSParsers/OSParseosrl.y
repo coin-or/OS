@@ -4829,7 +4829,12 @@ matrixAttributes: matrixAttributeList
     else
         ((OSMatrix*)osglData->tempC)->numberOfColumns = osglData->numberOfColumns;
     if (osglData->symmetryPresent == true)
-        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    {
+        if (osglData->symmetry == "default")
+            osglData->symmetry =  "none";
+        ((OSMatrix*)osglData->tempC)->symmetry 
+            = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    }
     if (osglData->namePresent == true)
         ((OSMatrix*)osglData->tempC)->name = osglData->name;
     if (osglData->typePresent == true)
@@ -4888,7 +4893,12 @@ matrixWithMatrixVarIdxAttributes: matrixWithMatrixVarIdxATTList
     else
         ((OSMatrixWithMatrixVarIdx*)osglData->tempC)->matrixVarIdx = osglData->matrixVarIdx;
     if (osglData->symmetryPresent == true)
-        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    {
+        if (osglData->symmetry == "default")
+            osglData->symmetry =  "none";
+        ((OSMatrix*)osglData->tempC)->symmetry 
+            = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    }
     if (osglData->namePresent == true)
         ((OSMatrix*)osglData->tempC)->name = osglData->name;
     if (osglData->typePresent == true)
@@ -4947,7 +4957,12 @@ matrixWithMatrixObjIdxAttributes: matrixWithMatrixObjIdxATTList
     else
         ((OSMatrixWithMatrixObjIdx*)osglData->tempC)->matrixObjIdx = osglData->matrixObjIdx;
     if (osglData->symmetryPresent == true)
-        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    {
+        if (osglData->symmetry == "default")
+            osglData->symmetry =  "none";
+        ((OSMatrix*)osglData->tempC)->symmetry 
+            = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    }
     if (osglData->namePresent == true)
         ((OSMatrix*)osglData->tempC)->name = osglData->name;
     if (osglData->typePresent == true)
@@ -5006,7 +5021,12 @@ matrixWithMatrixConIdxAttributes: matrixWithMatrixConIdxATTList
     else
         ((OSMatrixWithMatrixConIdx*)osglData->tempC)->matrixConIdx = osglData->matrixConIdx;
     if (osglData->symmetryPresent == true)
-        ((OSMatrix*)osglData->tempC)->symmetry = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    {
+        if (osglData->symmetry == "default")
+            osglData->symmetry =  "none";
+        ((OSMatrix*)osglData->tempC)->symmetry 
+            = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
+    }
     if (osglData->namePresent == true)
         ((OSMatrix*)osglData->tempC)->name = osglData->name;
     if (osglData->typePresent == true)
@@ -6258,6 +6278,8 @@ matrixBlockAtt:
         if (verifyMatrixSymmetry(osglData->symmetry) == false)
             parserData->parser_errors += addErrorMsg( NULL, osresult, parserData, osglData, osnlData, "symmetry type not recognized");
         parserData->errorText = NULL;
+        if (osglData->symmetry == "none")
+            osglData->symmetry =  "default";
         ((MatrixBlock*)osglData->tempC)->symmetry
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
     }

@@ -165,7 +165,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         duration = (double) (finish - start) / CLOCKS_PER_SEC;
 
         // Can't handle multiobjective problems properly --- especially nonlinear ones
-        if (osinstance->getObjectiveNumber() > 1)
+        if (osinstance->getObjectiveNumber() > 1 && sSolverName != "symphony")
             throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
 
         // get the type of solver requested from OSoL string

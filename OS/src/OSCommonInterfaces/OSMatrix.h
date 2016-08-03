@@ -2874,7 +2874,7 @@ public:
     ExpandedMatrixBlocks* getBlocks(int* rowPartition, int rowPartitionSize, 
                                     int* colPartition, int colPartitionSize, 
                                     bool appendToBlockArray, bool rowMajor, 
-                                    ENUM_MATRIX_TYPE convertTo_ = ENUM_MATRIX_TYPE_unknown,
+                                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                                     ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /** 

@@ -214,7 +214,7 @@ MatrixConstructor::~MatrixConstructor()
 // methods for MatrixType
 MatrixType::MatrixType():
     MatrixNode(),
-    symmetry(ENUM_MATRIX_SYMMETRY_none),
+//    symmetry(ENUM_MATRIX_SYMMETRY_none),
     numberOfRows(0),
     numberOfColumns(0),
     m_bHaveRowPartition(false),
@@ -374,8 +374,13 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix(bool rowMajor_, ENUM_MATRIX_T
         if (symmetry == ENUM_MATRIX_SYMMETRY_default)
             symmetry  = this->symmetry;
         if (symmetry != this->symmetry)
-            throw ErrorClass("Symmetry changes not yet implemented in processBaseMatrix()");
-              
+        {
+            if (this->symmetry == ENUM_MATRIX_SYMMETRY_default)
+                this->symmetry  = symmetry;
+            else
+                throw ErrorClass("Symmetry changes not yet implemented in processBaseMatrix()");
+        }
+          
         OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
         m_mChildren[0]->inferredMatrixType = baseMtxPtr->getMatrixType();
 
@@ -578,9 +583,13 @@ GeneralSparseMatrix* MatrixType::expandBlocks( ExpandedMatrixBlocks* currentBloc
         ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
 
         if (symmetry == ENUM_MATRIX_SYMMETRY_default)
-//            symmetry  = this->symmetry;
-//        if (symmetry != this->symmetry)
-            throw ErrorClass("Cannot handle symmetry properly in processBaseMatrix()");
+            symmetry  = this->symmetry;
+        {
+            if (this->symmetry == ENUM_MATRIX_SYMMETRY_default)
+                this->symmetry  = symmetry;
+            else
+                throw ErrorClass("Symmetry changes not yet implemented in expandBlocks()");
+        }
 
         tempMtx->b_deleteStartArray  = true;
         tempMtx->b_deleteIndexArray  = true;
@@ -682,9 +691,14 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, bool rowMajor_,
         ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
 
         if (symmetry == ENUM_MATRIX_SYMMETRY_default)
-//            symmetry  = this->symmetry;
-//        if (symmetry != this->symmetry)
-            throw ErrorClass("Cannot handle symmetry properly in expandBlocks()");
+            symmetry  = this->symmetry;
+        if (symmetry != this->symmetry)
+        {
+            if (this->symmetry == ENUM_MATRIX_SYMMETRY_default)
+                this->symmetry  = symmetry;
+            else
+                throw ErrorClass("Cannot handle symmetry properly in expandBlocks()");
+        }
 
         tmpBlocks->bDeleteArrays = false;
         tmpBlocks->valueType     = convertTo;
@@ -1140,9 +1154,14 @@ int MatrixType::getExpandedMatrix(bool rowMajor_, ENUM_MATRIX_TYPE convertTo_,
         ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
 
         if (symmetry == ENUM_MATRIX_SYMMETRY_default)
-//            symmetry  = this->symmetry;
-//        if (symmetry != this->symmetry)
-            throw ErrorClass("Cannot handle symmetry properly in expandBlocks()");
+            symmetry  = this->symmetry;
+        if (symmetry != this->symmetry)
+        {
+            if (this->symmetry == ENUM_MATRIX_SYMMETRY_default)
+                this->symmetry  = symmetry;
+            else
+                throw ErrorClass("Cannot handle symmetry properly in getExpandedMatrix()");
+        }
 
         //Check if previous expansion available
         int bestMatch = 0;
@@ -2016,7 +2035,7 @@ ExpandedMatrixBlocks* MatrixType::getBlocks(int* rowPartition, int rowPartitionS
     }
 
     // not found; create a new collection
-    if (!appendToBlockArray) 
+    if (!appendToBlockArray)
         throw ErrorClass("getBlocks(): Cannot determine a suitable collection");
 
     if (!processBlocks(rowPartition, rowPartitionSize,
@@ -2104,9 +2123,31 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
 
         if (symmetry == ENUM_MATRIX_SYMMETRY_default)
             symmetry  = this->symmetry;
-        if (symmetry != this->symmetry)
-            throw ErrorClass("Cannot handle symmetry properly in expandBlocks()");
+        else
+        {
+            if (this->symmetry == ENUM_MATRIX_SYMMETRY_default)
+                this->symmetry  = symmetry;
+            else
+                throw ErrorClass("Symmetry changes not yet implemented in processBlocks()");
+        }
 
+        bool blockSym = (rowOffsetSize == colOffsetSize);
+
+        int ioff = 0;
+        while (blockSym && ioff < rowOffsetSize)
+        {
+            if (rowOffset[ioff] != colOffset[ioff])
+            {
+                blockSym = false;
+                break;
+            }
+            ioff++; 
+        }
+        if (//symmetry != ENUM_MATRIX_SYMMETRY_none    &&
+            //symmetry != ENUM_MATRIX_SYMMETRY_default && 
+            !blockSym)
+            throw ErrorClass("Requested symmetry conversion not implemented yet");
+        
         if (inumberOfChildren == 1)
         {
             if (m_mChildren[0]->nType == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
@@ -2129,6 +2170,7 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
                 tmpBlocks->bDeleteArrays = false;
                 tmpBlocks->valueType     = convertTo;
                 tmpBlocks->isRowMajor    = rowMajor_;
+                tmpBlocks->symmetry      = symmetry;
                 tmpBlocks->rowOffsetSize = rowOffsetSize;
                 tmpBlocks->colOffsetSize = colOffsetSize;
                 tmpBlocks->rowOffset     = rowOffset;
@@ -2154,7 +2196,13 @@ std::cout << "inferred matrix type: "   << returnMatrixTypeString(getInferredMat
                 for (unsigned int j=0; j < tmpBlocks->blockNumber; j++)
                 {
                     tmpChild = (MatrixBlock*)((MatrixBlocks*)m_mChildren[0])->m_mChildren[j];
-                    tmpBlockIdx[j] = tmpChild->getExpandedMatrix(rowMajor_, convertTo, symmetry);
+std::cout << "expand a block in row " << tmpChild->blockRowIdx << ", col " << tmpChild->blockColIdx
+          << std::endl;  
+                    if (tmpChild->blockRowIdx == tmpChild->blockColIdx)
+                        tmpBlockIdx[j] = tmpChild->getExpandedMatrix(rowMajor_, convertTo, symmetry);
+                    else
+                        tmpBlockIdx[j] = tmpChild->getExpandedMatrix(rowMajor_, convertTo,
+                                                                       ENUM_MATRIX_SYMMETRY_default);
                     if (tmpBlockIdx[j] < 0)
                         throw ErrorClass("expansion of matrix block failed in processBlocks()");
 
@@ -2648,7 +2696,8 @@ OSMatrix::OSMatrix():
     outStr << "Allocate OSMatrix at address" << this;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-    nType = ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
+    nType    = ENUM_MATRIX_CONSTRUCTOR_TYPE_matrix;
+    symmetry = ENUM_MATRIX_SYMMETRY_none;
 }// end of OSMatrix
 
 OSMatrix::~OSMatrix()
@@ -7237,7 +7286,8 @@ MatrixBlock::MatrixBlock():
     outStr << "Allocate MatrixBlock at address" << this;
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
 #endif
-    nType = ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
+    nType    = ENUM_MATRIX_CONSTRUCTOR_TYPE_block;
+    symmetry = ENUM_MATRIX_SYMMETRY_default;
 }// end of MatrixBlock
 
 MatrixBlock::~MatrixBlock()
