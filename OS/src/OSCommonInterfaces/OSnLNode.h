@@ -51,6 +51,7 @@ class OSnLCNode;
 class OSnLMNode;
 class ScalarNode;
 class OSMatrix;
+class GeneralSparseMatrix;
 
 /*! \class ExprNode 
  *  \brief A generic class from which we derive ScalarNode and OSnLMNode
@@ -1888,6 +1889,20 @@ public:
     virtual ~OSnLMNode();
 
     /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return whether the expansion was successful
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default) = 0;
+
+    /**
      * Take a vector of ExprNodes (OSnLNodes and OSnLMNodes) in prefix format
      * and create a matrix-valued OSExpressionTree root node
      * 
@@ -2013,6 +2028,20 @@ public:
      */
 //    virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2047,6 +2076,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
 //    virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2083,6 +2126,20 @@ public:
      */
 //    virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2117,6 +2174,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
 //    virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2153,6 +2224,20 @@ public:
      */
 //    virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2187,6 +2272,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
 //    virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2223,6 +2322,20 @@ public:
      */
 //    virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2257,6 +2370,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
 //    virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2293,6 +2420,20 @@ public:
      */
 //    virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2327,6 +2468,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
 //    virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2367,6 +2522,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
     virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2413,6 +2582,20 @@ public:
      */
     virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2454,6 +2637,20 @@ public:
      */
 //    virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2488,6 +2685,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
 //    virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2524,6 +2735,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrix>.
      */
 //    virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2580,6 +2805,20 @@ public:
      */
     virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2625,6 +2864,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrixReference>.
      */
     virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2672,6 +2925,20 @@ public:
      */
     virtual std::string getNonlinearExpressionInXML();
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
@@ -2718,6 +2985,20 @@ public:
      * @return the OSiL XML for the OSnLMNode <matrixCon>.
      */
     virtual std::string getNonlinearExpressionInXML();
+
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /*! \fn OSnLMNode *cloneOSnLMNode(double *x)
      *  \brief The implementation of the virtual functions.
@@ -2774,12 +3055,26 @@ public:
      */
     //virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD); 
 
+    /**
+     *  a utility routine to expand an OSNlMNode into one of several different forms
+     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
+     *  @param convertTo_ controls whether elements should be converted from one type to another
+     *  @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                    The default value does not change the symmetry 
+     *  @return the expanded matrix node
+     */
+    virtual GeneralSparseMatrix* 
+        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                   ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                   ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
+
     /*! \fn OSnLNode *cloneExprNode(double *x)
      *  \brief The implementation of the virtual functions.
      *  \return a pointer to a new OSnLMNode of the proper type.
      */
     virtual ExprNode *cloneExprNode();
-};//end OSnLNodeProduct
+};//end OSnLMNodeMatrixProduct
 
 
 /*! \class OSnLCNode 

@@ -362,10 +362,12 @@ OSInstance::~OSInstance()
     }
     if( m_bDuplicateExpressionTreesMap == true)
     {
-        for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+        for(posMapExpTree  = m_mapExpressionTreesMod.begin();
+            posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Deleting an expression tree from m_mapExpressionTreesMod");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                            "Deleting an expression tree from m_mapExpressionTreesMod");
 #endif
             delete m_mapExpressionTreesMod[ posMapExpTree->first ];
         }
@@ -2292,7 +2294,8 @@ SparseVector** OSInstance::getObjectiveCoefficients()
 
 double** OSInstance::getDenseObjectiveCoefficients()
 {
-    if(m_bGetDenseObjectives == true && bObjectivesModified == false) return m_mmdDenseObjectiveCoefficients;
+    if(m_bGetDenseObjectives == true && bObjectivesModified == false)
+        return m_mmdDenseObjectiveCoefficients;
     int i, j, numobjcoef;
     SparseVector *sparsevec;
     int m = getObjectiveNumber();
@@ -3029,17 +3032,12 @@ int OSInstance::getMatrixNumber()
 bool OSInstance::processMatrices()
 {
     if (m_bProcessMatrices == true) return true;
-    //m_bProcessMatrices = true;
+
     int n = getMatrixNumber();
     if((instanceData->matrices == NULL ) || (n == 0) ) return true;
 
     try
     {
-//        bool haveElements;
-//        bool haveBlocks;
-//        bool haveTransformation;
-//        bool rowMajor;
-
         if (n > 0)
         {
             if(m_bProcessMatrices != true)
@@ -3057,90 +3055,17 @@ bool OSInstance::processMatrices()
             //process each matrix
             for (int i=0; i < n; i++)
             {
-                int nCh = ((OSMatrix*)instanceData->matrices->matrix[i])->inumberOfChildren;
-
-                for (int j=0; j < nCh; j++)
-                {
-                    m_miMatrixSymmetry[i] = instanceData->matrices->matrix[i]->symmetry;
-                    m_miMatrixType[i] = mergeMatrixType(ENUM_MATRIX_TYPE_unknown, 
-                                        instanceData->matrices->matrix[i]->getMatrixType());
-                    m_miMatrixNumberOfColumns[i] = instanceData->matrices->matrix[i]->numberOfColumns;
-                    m_miMatrixNumberOfRows[i] = instanceData->matrices->matrix[i]->numberOfRows;
-                    m_msMatrixNames[i] = instanceData->matrices->matrix[i]->name;
-                    m_mMatrix[i] = (OSMatrix*)instanceData->matrices->matrix[i];
-
-#if 0
-/*
-Find the most suitable representation of the matrix.
-a matrix is essentially a sequence of constructors. The shape of each matrix depends on the shape of the constructors.
-If all constructors are elements, matrix form is elements
-    if first constructor is column-wise, matrix is column-wise, else row-wise
-    if any constructor is given as symmetric, check if other constructors are symmetric as well
-        if all constructors are symmetric, matrix is symmetric, else it is not
-If all constructors are blocks, matrix form is blocks (assume column-wise for now)
-    if any constructor is given as symmetric, check if other constructors are symmetric as well
-        if all constructors are symmetric, matrix is symmetric blocks, else it is not
-If all constructors are transformations, matrix is a single transformation: combine transformations by superposition(?)
-NOTE: question of symmetry and/or rowMajor does not arise in this case.
-Mixed constructors.
-a. Elements and blocks: convert elements to block-wise representation. 
-b. Elements and transformations: process elements and combine with transformations using matrixPlus
-c. transformations and blocks: 
-    if the transformation has block structure (check how?) combine into blockwise transformations (how?)
-    else convert blocks to elements and combine using matrixPlus
-If there is a baseMatrix in addition to this
-i. baseMatrix would have been processed before
- */
-                    if (nCh == 0)
-                    {
-                        m_miMatrixNumberOfValues[i] = 0;
-                        m_miMatrixNumberOfBlocks[i] = 0;
-                        break;
-                    }
-
-                    if (instanceData->matrices->matrix[i]->m_mChildren[j]->nType
-                           == ENUM_MATRIX_CONSTRUCTOR_TYPE_baseMatrix)
-                    {
-                        int bm;
-                        bm = (BaseMatrix*)instanceData->matrices->matrix[i]->m_mChildren[j])->baseMatrixIdx;
-                        if (bm >= i)
-                            throw ErrorClass("Illegal reference to baseMatrix while processing matrices");
-                        else
-                        {
-                            if (m_mExpandedMatricesInColumnMajor[bm] != NULL)
-                                haveElements = true;
-                            if (m_mExpandedMatricesInRowMajor[bm] != NULL)
-                            { 
-                                rowMajor = true;
-                                haveElements = true;
-                            }
-                            if (m_mMatrixBlocksInColumnMajor != NULL)
-                                haveBlocks = true;
-                            if (m_mMatrixTransformation != NULL)
-                                haveTransformation = true;
-                        }
-                    }
-                    else if (instanceData->matrices->matrix[i]->m_mChildren[j]->nType
-                            == ENUM_MATRIX_CONSTRUCTOR_TYPE_elements)
-                    {
-                        haveElements = true;
-                    }
-                    else if (instanceData->matrices->matrix[i]->m_mChildren[j]->nType
-                            == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
-                        haveTransformation = true;
-                    else if (instanceData->matrices->matrix[i]->m_mChildren[j]->nType
-                            == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
-                        haveBlocks = true;
-                    }
-                    m_miMatrixNumberOfValues[i] = new int[n];
-                    m_miMatrixNumberOfBlocks[i] = new int[n];
-#endif
-
-                }//end for j (number of the matrix constructor)
+                m_miMatrixSymmetry[i] = instanceData->matrices->matrix[i]->symmetry;
+                m_miMatrixType[i] = mergeMatrixType(ENUM_MATRIX_TYPE_unknown, 
+                                    instanceData->matrices->matrix[i]->getMatrixType());
+                m_miMatrixNumberOfColumns[i] = instanceData->matrices->matrix[i]->numberOfColumns;
+                m_miMatrixNumberOfRows[i] = instanceData->matrices->matrix[i]->numberOfRows;
+                m_msMatrixNames[i] = instanceData->matrices->matrix[i]->name;
+                m_mMatrix[i] = (OSMatrix*)instanceData->matrices->matrix[i];
 
             }// end for on i (number of the matrix)
         }// end if (n > 0)
-    return true;
+        return true;
     }// end try
     catch(const ErrorClass& eclass)
     {
@@ -3206,23 +3131,26 @@ int  OSInstance::getNumberOfBlocksConstructors(int n)
 }//getNumberOfBlocksConstructors
 
 
-GeneralSparseMatrix* OSInstance::getExpandedMatrix(int n, bool rowMajor)
+GeneralSparseMatrix* OSInstance::getExpandedMatrix(int n, bool rowMajor_,
+                                                   ENUM_MATRIX_TYPE convertTo_,
+                                                   ENUM_MATRIX_SYMMETRY symmetry_)
 {
     try
     {
+        if (!m_bProcessMatrices) processMatrices();
         int nMatrices = getMatrixNumber();
         if ( (instanceData->matrices == NULL) || (nMatrices == 0) )
             throw ErrorClass("no matrices defined in method getExpandedMatrix()");
         if ( (n < 0) || (n >= nMatrices) )
             throw ErrorClass("invalid matrix index in method getExpandedMatrix()");
-        int i = instanceData->matrices->matrix[n]->getExpandedMatrix(rowMajor);
+        int i = instanceData->matrices->matrix[n]->getExpandedMatrix(m_mMatrix, rowMajor_,
+                                                                     convertTo_, symmetry_);
         if (i < 0) throw ErrorClass("Expanded matrix could not be retrieved");
         return instanceData->matrices->matrix[n]->expandedMatrixByElements[i];
     }
     catch(const ErrorClass& eclass)
     {
         throw ErrorClass( eclass.errormsg);
-
     }
 }//getExpandedMatrix
 
@@ -4150,7 +4078,7 @@ bool OSInstance::initializeNonLinearStructures( )
     // now create all of the variable maps for each expression tree
     for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
     {
-        (posMapExpTree->second)->getVariableIndicesMap() ;
+        (posMapExpTree->second)->getVariableIndicesMap();
     }
     // add the quadratic terms if necessary
     if(getNumberOfQuadraticTerms() > 0) addQTermsToExpressionTree();
@@ -5112,7 +5040,8 @@ double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *o
         if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  )
         {
             std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
-            for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+            for(posMapExpTree =  m_mapExpressionTreesMod.begin(); 
+                posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
             {
                 if(posMapExpTree->first < 0)  // this nonlinear expression indexes an objective function
                 {
@@ -5146,7 +5075,8 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
             int iHighestOrderEvaluatedStore;
             unsigned int i;
             iHighestOrderEvaluatedStore = m_iHighestOrderEvaluated;
-            for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+            for(posMapExpTree  = m_mapExpressionTreesMod.begin(); 
+                posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
             {
                 //kipp: modify for more than one obj
                 if(posMapExpTree->first == objIdx)
@@ -5154,11 +5084,13 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
                     if( new_x == true )
                     {
                         if( m_vdX.size() > 0) m_vdX.clear();
-                        for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap)
+                        for(posVarIndexMap  = m_mapAllNonlinearVariablesIndex.begin(); 
+                            posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap)
                         {
                             m_vdX.push_back( x[ posVarIndexMap->first]) ;
                         }
-                        if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) )
+                        if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  &&
+                            (m_mapExpressionTreesMod.size() > 0) )
                         {
                             createOSADFun( m_vdX);
                         }
@@ -5203,7 +5135,8 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
         unsigned int i;
         int  iHighestOrderEvaluatedStore;
         iHighestOrderEvaluatedStore = m_iHighestOrderEvaluated;
-        for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+        for(posMapExpTree  = m_mapExpressionTreesMod.begin(); 
+            posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
         {
             if(posMapExpTree->first == objIdx)
             {
@@ -5214,7 +5147,8 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
                     {
                         m_vdX.push_back( x[ posVarIndexMap->first]) ;
                     }
-                    if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) )
+                    if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  &&
+                        (m_mapExpressionTreesMod.size() > 0) )
                     {
                         createOSADFun( m_vdX);
                     }
@@ -5372,7 +5306,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
                 // if so, increment m_miJacStart[ index[j] + 1]
                 //
                 if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
-                        ( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) )
+                        ( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) !=
+                          (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) )
                 {
                     // variable i appears in the expression tree for row index[ j]
                     // add the coefficient corresponding to variable i in row index[ j] to the expression tree
@@ -5433,7 +5368,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
                 // store this variable index in every row where the variable appears
                 // however, don't store this as constant term if it appears in mapVarIdx
                 if( (m_mapExpressionTreesMod.find( index[ j]) == m_mapExpressionTreesMod.end() ) ||
-                        ( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) == (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) )
+                        ( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) ==
+                          (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) )
                 {
                     iTemp = m_miJacStart[ index[j]];
                     m_miJacIndex[ iTemp] = i;
@@ -5453,8 +5389,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         // if the row is in the list of expression trees read in indices and values
         if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() )
         {
-            for(posVarIdx = (*m_mapExpressionTreesMod[ i]->mapVarIdx).begin(); posVarIdx
-                    != (*m_mapExpressionTreesMod[ i]->mapVarIdx).end(); ++posVarIdx)
+            for(posVarIdx  = (*m_mapExpressionTreesMod[ i]->mapVarIdx).begin(); 
+                posVarIdx != (*m_mapExpressionTreesMod[ i]->mapVarIdx).end(); ++posVarIdx)
             {
                 m_miJacIndex[ iTemp] = posVarIdx->first;
                 m_mdJacValue[ iTemp] = 0;
@@ -5562,7 +5498,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
                 // if we pass if test below then variable i is in the expresssion tree and we add
                 // the linear term to the expession tree
                 if( (m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() ) &&
-                        ( (*m_mapExpressionTreesMod[ i]->mapVarIdx).find( index[ j]) != (*m_mapExpressionTreesMod[ i]->mapVarIdx).end()) )
+                        ( (*m_mapExpressionTreesMod[ i]->mapVarIdx).find( index[ j]) !=
+                          (*m_mapExpressionTreesMod[ i]->mapVarIdx).end()) )
                 {
                     // variable index[ j] appears in the expression tree for row i
                     // add the coefficient corresponding to variable index[j] in row i to the expression tree
@@ -5592,7 +5529,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
     {
         if( m_mapExpressionTreesMod.find( i - 1) != m_mapExpressionTreesMod.end() )
         {
-            m_miJacStart[i] = m_miJacStart[i - 1] + (m_miJacNumConTerms[ i - 1] + (*m_mapExpressionTreesMod[ i - 1]->mapVarIdx).size() );
+            m_miJacStart[i] = m_miJacStart[i - 1] + (m_miJacNumConTerms[ i - 1]
+                                                  + (*m_mapExpressionTreesMod[ i - 1]->mapVarIdx).size() );
         }
         else
         {
@@ -5615,7 +5553,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
             for (j = start[i]; j < start[ i + 1 ]; j++)
             {
                 if( (m_mapExpressionTreesMod.find( i) == m_mapExpressionTreesMod.end() ) ||
-                        ( (*m_mapExpressionTreesMod[ i]->mapVarIdx).find( index[ j]) == (*m_mapExpressionTreesMod[ i]->mapVarIdx).end()) )
+                        ( (*m_mapExpressionTreesMod[ i]->mapVarIdx).find( index[ j]) ==
+                          (*m_mapExpressionTreesMod[ i]->mapVarIdx).end()) )
                 {
                     m_miJacIndex[ m_miJacStart[i] + k ] = index[ j];
                     m_mdJacValue[ m_miJacStart[i] + k ] = value[ j];
@@ -5631,8 +5570,8 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
         // if the row is in the list of expression trees read in indices and values
         if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() )
         {
-            for(posVarIdx = (*m_mapExpressionTreesMod[ i]->mapVarIdx).begin(); posVarIdx
-                    != (*m_mapExpressionTreesMod[ i]->mapVarIdx).end(); ++posVarIdx)
+            for(posVarIdx  = (*m_mapExpressionTreesMod[ i]->mapVarIdx).begin();
+                posVarIdx != (*m_mapExpressionTreesMod[ i]->mapVarIdx).end(); ++posVarIdx)
             {
                 m_miJacIndex[ k] = posVarIdx->first;
                 m_mdJacValue[ k] = 0;
@@ -5694,7 +5633,8 @@ RealValuedExpressionTree* OSInstance::getLagrangianExpTree( )
     m_LagrangianExpTree = new RealValuedExpressionTree();
     m_LagrangianExpTree->m_treeRoot = nlNodeSum;
     // now create the children of the sum node
-    for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+    for(posMapExpTree  = m_mapExpressionTreesMod.begin(); 
+        posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
     {
         // this variable is the Lagrange multiplier
         nlNodeVariable = new OSnLNodeVariable();
@@ -5715,7 +5655,8 @@ RealValuedExpressionTree* OSInstance::getLagrangianExpTree( )
         // now create a times multiply the new variable times the root of the expression tree
         nlNodeTimes = new OSnLNodeTimes();
         nlNodeTimes->m_mChildren[ 0] = nlNodeVariable;
-        nlNodeTimes->m_mChildren[ 1] = ((OSnLNode*)m_mapExpressionTreesMod[ posMapExpTree->first ]->m_treeRoot);
+        nlNodeTimes->m_mChildren[ 1]
+                = ((OSnLNode*)m_mapExpressionTreesMod[ posMapExpTree->first ]->m_treeRoot);
         // the times node is the new child
         nlNodeSum->m_mChildren[ numChildren] = nlNodeTimes;
         numChildren++;
@@ -5736,7 +5677,8 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( )
     std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
     std::map<int, int>::iterator posVarIdx;
     RealValuedExpressionTree *expTree;
-    for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+    for(posMapExpTree  = m_mapExpressionTreesMod.begin(); 
+        posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
     {
         // get the index map for the expression tree
 
@@ -5787,7 +5729,8 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
     //
     std::vector<double> vx;
     std::map<int, int>::iterator posMap1, posMap2;
-    if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) )
+    if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && 
+        (m_mapExpressionTreesMod.size() > 0) )
     {
         for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1)
         {
@@ -5874,7 +5817,8 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
             {
                 m_vdX.push_back( x[ posVarIndexMap->first]) ;
             }
-            if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) )
+            if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  &&
+                (m_mapExpressionTreesMod.size() > 0) )
             {
                 createOSADFun( m_vdX);
             }
@@ -5888,7 +5832,8 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
                 {
                     m_vdX.push_back( x[ posVarIndexMap->first]) ;
                 }
-                if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) )
+                if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  &&
+                    (m_mapExpressionTreesMod.size() > 0) )
                 {
                     createOSADFun( m_vdX);
                 }
@@ -6026,7 +5971,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
         {
             // calculate the gradient by doing a reverse sweep over each row
             // loop over the constraints that have a nonlinear term and get their gradients
-            for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+            for(posMapExpTree  = m_mapExpressionTreesMod.begin();
+                posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
             {
                 idx = posMapExpTree->first;
                 // we are considering only constraints, not objective function
@@ -6047,7 +5993,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                     {
                         // we are working with variable posVarIdx->first in the original variable space
                         // we need to see which variable this is in the individual constraint map
-                        if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( posVarIdx->first) != (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end())
+                        if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( posVarIdx->first) !=
+                            (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end())
                         {
                             m_mdJacValue[ jstart] = m_vdYjacval[ jacIndex];
                             jstart++;
@@ -6078,7 +6025,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                 }
                 // fill in Jacobian here, we have column i
                 // start Jacobian calculation
-                for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+                for(posMapExpTree  = m_mapExpressionTreesMod.begin();
+                    posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
                 {
                     idx = posMapExpTree->first;
                     // we are considering only constraints, not objective function
@@ -6145,7 +6093,8 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 
         if( conMultipliers == NULL) throw ErrorClass("cannot have a null vector of lagrange multipliers when calling getSecondOrderResults -- okay if  zero");
         if( m_vdLambda.size() > 0) m_vdLambda.clear();
-        for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+        for(posMapExpTree  = m_mapExpressionTreesMod.begin();
+            posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
         {
             if( posMapExpTree->first >= 0)
             {
@@ -6167,7 +6116,8 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
             }
             // fill in Jacobian here, we have column i
             // start Jacobian calculation
-            for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+            for(posMapExpTree  = m_mapExpressionTreesMod.begin();
+                posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
             {
                 idx = posMapExpTree->first;
                 // we are considering only constraints, not objective function
@@ -6178,7 +6128,8 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
                     //to figure out which variable it is within row idx
                     //m_mapAllNonlinearVariablesIndex
                     expTree = m_mapExpressionTreesMod[ idx];
-                    if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  )
+                    if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != 
+                        (*expTree->mapVarIdx).end()  )
                     {
                         jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
                         jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
@@ -6252,7 +6203,8 @@ bool OSInstance::initForAlgDiff()
     //see if we need to retape
     //loop over expression tree and see if one requires it
     std::map<int, RealValuedExpressionTree*>::iterator posMapExpTree;
-    for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+    for(posMapExpTree  = m_mapExpressionTreesMod.begin();
+        posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
     {
         if(posMapExpTree->second->bADMustReTape == true) m_bCppADMustReTape = true;
     }
@@ -6821,7 +6773,8 @@ bool OSInstance::createOSADFun(std::vector<double> vdX)
          */
         CppAD::vector< CppAD::AD<double> > m_vFG;
         int kount = 0;
-        for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
+        for(posMapExpTree  = m_mapExpressionTreesMod.begin();
+            posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
         {
             m_vFG.push_back( ((OSnLNode*)posMapExpTree->second->m_treeRoot)->constructADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
             if( m_mapOSADFunRangeIndex.find( posMapExpTree->first) == m_mapOSADFunRangeIndex.end() )
@@ -7809,6 +7762,7 @@ bool Matrices::IsEqual(Matrices *that)
             return false;
         }
         else
+
         {
             if (this->numberOfMatrices != that->numberOfMatrices)
                 return false;

@@ -378,8 +378,8 @@ void CsdpSolver::buildSolverInstance() throw (ErrorClass)
         {
             try
             {
-            mtxBlocks[j] = osinstance->instanceData->matrices->matrix[mtxRef[j]]
-                ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,true,false);  //leaks memory
+                mtxBlocks[j] = osinstance->instanceData->matrices->matrix[mtxRef[j]]
+                    ->getBlocks(blockOffset,nBlocks,blockOffset,nBlocks,NULL,true,false);  //leaks memory
             }
             catch(const ErrorClass& eclass)
             {

@@ -2766,7 +2766,7 @@ private:
      * We incorporate the linear and quadratic term for a variable 
      * into the corresponding expression tree before gradient and Hessian calculations
      */
-    std::map<int, RealValuedExpressionTree*> m_mapExpressionTreesMod ;
+    std::map<int, RealValuedExpressionTree*> m_mapExpressionTreesMod;
 
     /**
      * m_bOSADFunIsCreated is true if we have created the OSInstanc
@@ -2911,6 +2911,12 @@ private:
      * send the data to the solver.
      */
     OSMatrix** m_mMatrix;
+
+    /**
+     * m_mapMatrices holds a map of the matrices. 
+     * The key is the index of the matrix; the value is a pointer to the matrix.
+     */
+    std::map<int, OSMatrix*> m_mapMatrices;
 
 
     /** ------- data items for matrix programming ------- **/
@@ -3316,7 +3322,8 @@ public:
 
     /**
      * Get linear constraint coefficients in column major.
-     * @return a sparse matrix representation of linear constraint coefficients in column major, null if no linear constraint coefficients.
+     * @return a sparse matrix representation of linear constraint coefficients in column major, 
+     *         null if no linear constraint coefficients.
      * @throws Exception if the elements in linear constraint coefficients are logically inconsistent.
      * @see org.optimizationservices.oscommon.datastructure.SparseMatrix
      */
@@ -3324,7 +3331,8 @@ public:
 
     /**
      * Get linear constraint coefficients in row major.
-     * @return a sparse matrix representation of linear constraint coefficients in row major, null if no linear constraint coefficients.
+     * @return a sparse matrix representation of linear constraint coefficients in row major, 
+     *         null if no linear constraint coefficients.
      * @throws Exception if the elements in linear constraint coefficients are logically inconsistent.
      * @see org.optimizationservices.oscommon.datastructure.SparseMatrix
      */
@@ -3609,12 +3617,16 @@ public:
      * Get the (nonzero) elements of the matrix in expanded form.
      *
      * @param n is the index number associated with the matrix.
-     *
      * @param rowMajor determines whether the elements should be
      *        in row major form or colum major form. The default is column major form.
+     * @param convertTo_ controls whether elements should be converted from one type to another
+     * @param symmetry_  controls whether a particular type of symmetry should be enforced
+     *                   The default value does not change the symmetry 
      * @return the (nonzero) matrix elements.
      */
-    GeneralSparseMatrix* getExpandedMatrix(int n, bool rowMajor = false);
+    GeneralSparseMatrix* getExpandedMatrix(int n, bool rowMajor_ = false,
+                                           ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
+                                           ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
     /**
      * Get the (nonzero) elements of the matrix in row major form.

@@ -213,7 +213,7 @@ ExprNode* ExprNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNode
         {
             for(int i = 0; i < numkids; i++)
             {
-                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                nlNodeVec[kount]->m_mChildren[i] = stackVec.back();
                 stackVec.pop_back();
             }
         }
@@ -236,7 +236,7 @@ ExprNode* ExprNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNod
         {
             for(int i = numkids - 1; i >= 0;  i--)
             {
-                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                nlNodeVec[kount]->m_mChildren[i] = stackVec.back();
                 stackVec.pop_back();
             }
         }
@@ -2944,7 +2944,7 @@ OSnLMNode* OSnLMNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNo
         {
             for(int i = 0; i < numkids;  i++)
             {
-                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                nlNodeVec[kount]->m_mChildren[i] = stackVec.back();
                 stackVec.pop_back();
             }
         }
@@ -3090,6 +3090,19 @@ std::string OSnLMNodeMatrixPlus::getTokenName()
     return "matrixPlus";
 }// end OSnLMNodeMatrixPlus::getTokenName()
 
+GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                      ENUM_MATRIX_TYPE convertTo_, 
+                                                      ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixPlus");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixPlus: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixPlus::expandNode()
+
+
 ExprNode* OSnLMNodeMatrixPlus::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -3145,6 +3158,18 @@ std::string OSnLMNodeMatrixSum::getTokenName()
     return "matrixSum";
 }// end OSnLMNodeMatrixSum::getTokenName()
 
+GeneralSparseMatrix* OSnLMNodeMatrixSum::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                    ENUM_MATRIX_TYPE convertTo_, 
+                                                    ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixSum");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixSum: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixSum::expandNode()
+
 ExprNode* OSnLMNodeMatrixSum::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -3197,6 +3222,18 @@ std::string OSnLMNodeMatrixProduct::getTokenName()
 {
     return "matrixProduct";
 }// end OSnLMNodeMatrixProduct::getTokenName(
+
+GeneralSparseMatrix* OSnLMNodeMatrixProduct::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                        ENUM_MATRIX_TYPE convertTo_, 
+                                                        ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixProduct");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixPruduct: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixProduct::expandNode()
 
 ExprNode* OSnLMNodeMatrixProduct::cloneExprNode()
 {
@@ -3254,6 +3291,18 @@ std::string OSnLMNodeMatrixMinus::getTokenName()
     return "matrixMinus";
 }// end OSnLMNodeMatrixMinus::getTokenName()
 
+GeneralSparseMatrix* OSnLMNodeMatrixMinus::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                      ENUM_MATRIX_TYPE convertTo_, 
+                                                      ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixMinus");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixMinus: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixMinus::expandNode()
+
 ExprNode* OSnLMNodeMatrixMinus::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -3307,6 +3356,18 @@ std::string OSnLMNodeMatrixNegate::getTokenName()
 {
     return "matrixNegate";
 }// end OSnLMNodeMatrixNegate::getTokenName()
+
+GeneralSparseMatrix* OSnLMNodeMatrixNegate::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                       ENUM_MATRIX_TYPE convertTo_, 
+                                                       ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixNegate");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixNegate: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixNegate::expandNode()
 
 ExprNode* OSnLMNodeMatrixNegate::cloneExprNode()
 {
@@ -3363,6 +3424,18 @@ std::string OSnLMNodeMatrixTimes::getTokenName()
     return "matrixTimes";
 }// end OSnLMNodeMatrixTimes::getTokenName()
 
+GeneralSparseMatrix* OSnLMNodeMatrixTimes::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                      ENUM_MATRIX_TYPE convertTo_, 
+                                                      ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixTimes");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixTimes: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixTimes::expandNode()
+
 ExprNode* OSnLMNodeMatrixTimes::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -3416,6 +3489,18 @@ std::string OSnLMNodeMatrixInverse::getTokenName()
 {
     return "matrixInverse";
 }// end OSnLMNodeMatrixInverse::getTokenName()
+
+GeneralSparseMatrix* OSnLMNodeMatrixInverse::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                        ENUM_MATRIX_TYPE convertTo_, 
+                                                        ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixInverse");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixInverse: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixInverse::expandNode()
 
 ExprNode* OSnLMNodeMatrixInverse::cloneExprNode()
 {
@@ -3472,6 +3557,18 @@ std::string OSnLMNodeMatrixTranspose::getTokenName()
     return "matrixTranspose";
 }// end OSnLMNodeMatrixTranspose::getTokenName()
 
+GeneralSparseMatrix* OSnLMNodeMatrixTranspose::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                          ENUM_MATRIX_TYPE convertTo_, 
+                                                          ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixTranspose");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixTranspose: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixTranspose::expandNode()
+
 ExprNode* OSnLMNodeMatrixTranspose::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -3526,6 +3623,18 @@ std::string OSnLMNodeMatrixScalarTimes::getTokenName()
 {
     return "matrixScalarTimes";
 }// end OSnLMNodeMatrixScalarTimes::getTokenName()
+
+GeneralSparseMatrix* OSnLMNodeMatrixScalarTimes::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                            ENUM_MATRIX_TYPE convertTo_, 
+                                                            ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixScalarTimes");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixScalarTimes: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixScalarTimes::expandNode()
 
 ExprNode* OSnLMNodeMatrixScalarTimes::cloneExprNode()
 {
@@ -3582,6 +3691,18 @@ std::string OSnLMNodeMatrixDotTimes::getTokenName()
     return "matrixDotTimes";
 }// end OSnLMNodeMatrixDotTimes::getTokenName()
 
+GeneralSparseMatrix* OSnLMNodeMatrixDotTimes::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                         ENUM_MATRIX_TYPE convertTo_, 
+                                                         ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixDotTimes");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixDotTimes: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixDotTimes::expandNode()
+
 ExprNode* OSnLMNodeMatrixDotTimes::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -3636,6 +3757,18 @@ std::string OSnLMNodeIdentityMatrix::getTokenName()
 {
     return "identityMatrix";
 }// end OSnLMNodeIdentityMatrix::getTokenName()
+
+GeneralSparseMatrix* OSnLMNodeIdentityMatrix::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                         ENUM_MATRIX_TYPE convertTo_, 
+                                                         ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeIdentityMatrix");
+#endif
+    throw ErrorClass("OSnLMNodeIdentityMatrix: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeIdentityMatrix::expandNode()
 
 ExprNode* OSnLMNodeIdentityMatrix::cloneExprNode()
 {
@@ -3692,6 +3825,18 @@ std::string OSnLMNodeMatrixLowerTriangle::getTokenName()
 {
     return "matrixLowerTriangle";
 }// end OSnLMNodeMatrixLowerTriangle::getTokenName()
+
+GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                              ENUM_MATRIX_TYPE convertTo_, 
+                                                              ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixLowerTriangle");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixLowerTriangle: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixLowerTriangle::expandNode()
 
 ExprNode* OSnLMNodeMatrixLowerTriangle::cloneExprNode()
 {
@@ -3830,6 +3975,18 @@ std::string OSnLMNodeMatrixUpperTriangle::getTokenName()
     return "matrixUpperTriangle";
 }// end OSnLMNodeMatrixUpperTriangle::getTokenName()
 
+GeneralSparseMatrix* OSnLMNodeMatrixUpperTriangle::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                              ENUM_MATRIX_TYPE convertTo_, 
+                                                              ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixUpperTriangle");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixUpperTriangle: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixUpperTriangle::expandNode()
+
 ExprNode* OSnLMNodeMatrixUpperTriangle::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -3936,6 +4093,18 @@ std::string OSnLMNodeMatrixDiagonal::getTokenName()
     return "matrixDiagonal";
 }// end OSnLMNodeMatrixDiagonal::getTokenName()
 
+GeneralSparseMatrix* OSnLMNodeMatrixDiagonal::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                         ENUM_MATRIX_TYPE convertTo_, 
+                                                         ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixDiagonal");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixDiagonal: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixDiagonal::expandNode()
+
 ExprNode* OSnLMNodeMatrixDiagonal::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -3990,6 +4159,18 @@ std::string OSnLMNodeDiagonalMatrixFromVector::getTokenName()
 {
     return "diagonalMatrixFromVector";
 }// end OSnLMNodeDiagonalMatrixFromVector::getTokenName()
+
+GeneralSparseMatrix* OSnLMNodeDiagonalMatrixFromVector::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                                   ENUM_MATRIX_TYPE convertTo_, 
+                                                                   ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeDiagonalMatrixFromVector");
+#endif
+    throw ErrorClass("OSnLMNodeDiagonalMatrixFromVector: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeDiagonalMatrixFromVector::expandNode()
 
 ExprNode* OSnLMNodeDiagonalMatrixFromVector::cloneExprNode()
 {
@@ -4049,6 +4230,18 @@ std::string OSnLMNodeMatrixSubmatrixAt::getTokenName()
 {
     return "matrixSubmatrixAt";
 }// end OSnLMNodeMatrixSubmatrixAt::getTokenName()
+
+GeneralSparseMatrix* OSnLMNodeMatrixSubmatrixAt::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                            ENUM_MATRIX_TYPE convertTo_, 
+                                                            ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixSubmatrixAt");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixSubmatrixAt: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixSubmatrixAt::expandNode()
 
 ExprNode* OSnLMNodeMatrixSubmatrixAt::cloneExprNode()
 {
@@ -4140,6 +4333,24 @@ std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
     outStr << "<matrixReference idx=\"" << idx << "\"/>" << std::endl;
     return outStr.str();
 }//OSnLMNodeMatrixReference::getNonlinearExpressionInXML
+
+GeneralSparseMatrix* OSnLMNodeMatrixReference::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                          ENUM_MATRIX_TYPE convertTo_, 
+                                                          ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixReference");
+#endif
+    try
+    {
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+    return NULL;
+}//end OSnLMNodeMatrixReference::expandNode()
 
 ExprNode* OSnLMNodeMatrixReference::cloneExprNode()
 {
@@ -4270,6 +4481,18 @@ std::string OSnLMNodeMatrixVar::getNonlinearExpressionInXML()
 }//OSnLMNodeMatrixVar::getNonlinearExpressionInXML
 
 
+GeneralSparseMatrix* OSnLMNodeMatrixVar::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                    ENUM_MATRIX_TYPE convertTo_, 
+                                                    ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixVar");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixVBar: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixVar::expandNode()
+
 ExprNode* OSnLMNodeMatrixVar::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -4396,6 +4619,18 @@ std::string OSnLMNodeMatrixObj::getNonlinearExpressionInXML()
     outStr << "<matrixObj idx=\"" << idx << "\"/>" << std::endl;
     return outStr.str();
 }//OSnLMNodeMatrixObj::getNonlinearExpressionInXML
+
+GeneralSparseMatrix* OSnLMNodeMatrixObj::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                    ENUM_MATRIX_TYPE convertTo_, 
+                                                    ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixObj");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixObj: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixObj::expandNode()
 
 ExprNode* OSnLMNodeMatrixObj::cloneExprNode()
 {
@@ -4524,6 +4759,18 @@ std::string OSnLMNodeMatrixCon::getNonlinearExpressionInXML()
     return outStr.str();
 }//OSnLMNodeMatrixCon::getNonlinearExpressionInXML
 
+GeneralSparseMatrix* OSnLMNodeMatrixCon::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+                                                    ENUM_MATRIX_TYPE convertTo_, 
+                                                    ENUM_MATRIX_SYMMETRY symmetry_)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+                      "expanding an OSnLMNodeMatrixCon");
+#endif
+    throw ErrorClass("OSnLMNodeMatrixCon: expandNode method not yet implemented");
+    return NULL;
+}//end OSnLMNodeMatrixCon::expandNode()
+
 ExprNode* OSnLMNodeMatrixCon::cloneExprNode()
 {
     std::ostringstream outStr;
@@ -4628,7 +4875,7 @@ OSnLCNode::~OSnLCNode()
 #endif
 }//end ~OSnLCNode
 
-#if 0
+
 OSnLCNode* OSnLCNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNodeVec)
 {
     std::vector<ExprNode*> stackVec;
@@ -4641,7 +4888,7 @@ OSnLCNode* OSnLCNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNo
         {
             for(int i = 0; i < numkids; i++)
             {
-                nlNodeVec[kount]->m_mChildren[i] = (OSnLNode*)stackVec.back();
+                nlNodeVec[kount]->m_mChildren[i] = stackVec.back();
                 stackVec.pop_back();
             }
         }
@@ -4652,6 +4899,7 @@ OSnLCNode* OSnLCNode::createExpressionTreeFromPrefix(std::vector<ExprNode*> nlNo
     return (OSnLCNode*)nlNodeVec[ 0];
 }//end createExpressionTreeFromPrefix
 
+#if 0
 OSnLCNode* OSnLCNode::createExpressionTreeFromPostfix(std::vector<ExprNode*> nlNodeVec)
 {
     std::vector<ExprNode*> stackVec;
