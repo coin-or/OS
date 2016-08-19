@@ -90,11 +90,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>since version 2.0</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="complexProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
@@ -107,6 +102,16 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 						<xs:element name="complexExpressions"/>
 					</xs:sequence>
 				</xs:complexType>
+			</xs:element>
+			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorProgramming" type="TensorProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
 			</xs:element>
 			<xs:element name="old_disjunctiveInformation" type="old_DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
@@ -412,238 +417,6 @@ quadratic term</xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<!--MatrixProgramming: proposal-->
-	<xs:complexType name="MatrixProgramming">
-		<xs:annotation>
-			<xs:documentation>since version 2.0</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
-			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0"/>
-			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
-			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions should be set up as nonlinearExpressions</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="MatrixVariables">
-		<xs:sequence>
-			<xs:element name="matrixVar" type="MatrixVar" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixVar after "mult" has been considered</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixVar">
-		<xs:sequence>
-			<xs:element name="descriptor" type="MatrixVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfDescriptiors
-can be used, e.g., to set up Toeplitz or Cauchy matrices</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="name"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="symmetry" type="SymmetryType" default="none">
-			<xs:annotation>
-				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>matrix variable has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="varReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>controls reuse of core variables instead of creation of new ones. 
-Note: only where template matrix indicates a nonzero.
-If missing, all variables indicated  by the use of the template matrix are created fresh.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="varType" type="GeneralEnumerationVarType" use="optional" default="C">
-			<xs:annotation>
-				<xs:documentation>same type for every newly created variable; default is 'C'; variables inherited from the core keep the type and bounds declared in the core.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>contains varMtx - lbMtx; assumed all R^n if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixVarOrConDescriptor" mixed="true">
-		<xs:attribute name="name" use="required">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:minLength value="1"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixObjectives">
-		<xs:sequence>
-			<xs:element name="matrixObj" type="MatrixObj" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixObj after "mult" has been considered</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixObj">
-		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="symmetry" type="SymmetryType" default="none">
-			<xs:annotation>
-				<xs:documentation>e.g., if symmetry = "upper", only objectives in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>matrix objective has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="objReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
-Note: only where template matrix indicates a nonzero.
-If missing, all objectives indicated  by the use of the template matrix are created fresh. </xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses only core objectives, orderConeIdx can be omitted and defaults to the corresponding orthant cone</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>added to objective;        zero if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixConstraints">
-		<xs:sequence>
-			<xs:element name="matrixCon" type="MatrixCon" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must match numberOfMatrixCon after "mult" has been considered</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixCon">
-		<xs:sequence>
-			<xs:element name="descriptor" type="MatrixVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfDescriptiors
-can be used, e.g., to set up Toeplitz matrices</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="symmetry" type="SymmetryType" default="none">
-			<xs:annotation>
-				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>matrix constraint has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="conReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
-Note: only where template matrix indicates a nonzero.
-If missing, all constraints indicated  by the use of the template matrix are created fresh.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>contains mtx expr - lbMtx; assumed all R^n if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixExpressions">
-		<xs:sequence>
-			<xs:element name="expr" type="MatrixExpression" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Number must agree with numberOfExpr</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="MatrixExpression">
-		<xs:annotation>
-			<xs:documentation>since version 2.0</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element ref="OSnLMNode"/>
-		</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
-			<xs:annotation>
-				<xs:documentation>refers to existing matrix objective (if negative) or matrix constraint (if nonnegative)</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="shape" default="general">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="linear"/>
-					<xs:enumeration value="quadratic"/>
-					<xs:enumeration value="general"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-	</xs:complexType>
 	<!--ComplexProgramming: experiment-->
 	<xs:complexType name="ComplexProgramming">
 		<xs:annotation>
@@ -881,6 +654,469 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 					<xs:enumeration value="linear"/>
 					<xs:enumeration value="quadratic"/>
 					<xs:enumeration value="convex"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<!--MatrixProgramming: proposal-->
+	<xs:complexType name="MatrixProgramming">
+		<xs:annotation>
+			<xs:documentation>since version 2.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
+			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0"/>
+			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
+			<xs:element name="matrixExpressions" type="MatrixExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>For matrix-valued expressions only - scalar-valued expressions should be set up as nonlinearExpressions</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MatrixVariables">
+		<xs:sequence>
+			<xs:element name="matrixVar" type="MatrixVar" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfMatrixVar after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixVar">
+		<xs:sequence>
+			<xs:element name="descriptor" type="MatrixVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfDescriptiors
+can be used, e.g., to set up Toeplitz or Cauchy matrices</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="symmetry" type="SymmetryType" default="none">
+			<xs:annotation>
+				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>matrix variable has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="varReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core variables instead of creation of new ones. 
+Note: only where template matrix indicates a nonzero.
+If missing, all variables indicated  by the use of the template matrix are created fresh.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="varType" type="GeneralEnumerationVarType" use="optional" default="C">
+			<xs:annotation>
+				<xs:documentation>same type for every newly created variable; default is 'C'; variables inherited from the core keep the type and bounds declared in the core.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains varMtx - lbMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixVarOrConDescriptor" mixed="true">
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixObjectives">
+		<xs:sequence>
+			<xs:element name="matrixObj" type="MatrixObj" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfMatrixObj after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixObj">
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="symmetry" type="SymmetryType" default="none">
+			<xs:annotation>
+				<xs:documentation>e.g., if symmetry = "upper", only objectives in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>matrix objective has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="objReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
+Note: only where template matrix indicates a nonzero.
+If missing, all objectives indicated  by the use of the template matrix are created fresh. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses only core objectives, orderConeIdx can be omitted and defaults to the corresponding orthant cone</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>added to objective;        zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixConstraints">
+		<xs:sequence>
+			<xs:element name="matrixCon" type="MatrixCon" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfMatrixCon after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixCon">
+		<xs:sequence>
+			<xs:element name="descriptor" type="MatrixVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfDescriptiors
+can be used, e.g., to set up Toeplitz matrices</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="symmetry" type="SymmetryType" default="none">
+			<xs:annotation>
+				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>matrix constraint has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="conReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
+Note: only where template matrix indicates a nonzero.
+If missing, all constraints indicated  by the use of the template matrix are created fresh.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains mtx expr - lbMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixExpressions">
+		<xs:sequence>
+			<xs:element name="expr" type="MatrixExpression" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number must agree with numberOfExpr</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MatrixExpression">
+		<xs:annotation>
+			<xs:documentation>since version 2.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLMNode"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to existing matrix objective (if negative) or matrix constraint (if nonnegative)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="general"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<!--TensorProgramming: experiment-->
+	<xs:complexType name="TensorProgramming">
+		<xs:annotation>
+			<xs:documentation>experiment--</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tensorVariables" type="TensorVariables" minOccurs="0"/>
+			<xs:element name="tensorObjectives" type="TensorObjectives" minOccurs="0"/>
+			<xs:element name="tensorConstraints" type="TensorConstraints" minOccurs="0"/>
+			<xs:element name="tensorExpressions" type="TensorExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>For tensor-valued expressions only - scalar-valued expressions should be set up as nonlinearExpressions</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TensorVariables">
+		<xs:sequence>
+			<xs:element name="tensorVar" type="TensorVar" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfTensorVar after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TensorVar">
+		<xs:sequence>
+			<xs:element name="dimensions" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number of dimensions must equal the tensor rank</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="descriptor" type="TensorVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfDescriptiors
+can be used to set up special tensors with properties not otherwise available</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name"/>
+		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="templateTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>tensor variable has a nonzero entry wherever the template tensor does also. If templateTensorIdx missing: Completely dense tensor.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="varReferenceTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core variables instead of creation of new ones. 
+Note: only where template tensor indicates a nonzero.
+If missing, all variables indicated  by the use of the template tensor are created fresh.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="varType" type="GeneralEnumerationVarType" use="optional" default="C">
+			<xs:annotation>
+				<xs:documentation>same type for every newly created variable; default is 'C'; variables inherited from the core keep the type and bounds declared in the core.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant tensor; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains varMtx - lbMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant tensor; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="TensorVarOrConDescriptor" mixed="true">
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="TensorObjectives">
+		<xs:sequence>
+			<xs:element name="tensorObj" type="TensorObj" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfTensorObj after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TensorObj">
+		<xs:sequence>
+			<xs:element name="dimensions" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number of dimensions must equal the tensor rank</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name"/>
+		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="templateTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>tensor objective has a nonzero entry wherever the template rtensor does also. If templateTensorIdx missing: Completely dense tensor.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="objReferenceTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
+Note: only where template tensor indicates a nonzero.
+If missing, all objectives indicated  by the use of the template tensor are created fresh. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses only core objectives, orderConeIdx can be omitted and defaults to the corresponding orthant cone</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="constantTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>added to objective;        zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="TensorConstraints">
+		<xs:sequence>
+			<xs:element name="tensorCon" type="TensorCon" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must match numberOfTensorCon after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TensorCon">
+		<xs:sequence>
+			<xs:element name="dimensions" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number of dimensions must equal the tensor rank</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="descriptor" type="TensorVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfDescriptiors
+can be used, e.g., to set up Toeplitz matrices</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name"/>
+		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="templateTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>tensor constraint has a nonzero entry wherever the template tensor does also. If templateTensorIdx missing: Completely dense tensor.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="conReferenceTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
+Note: only where template tensor indicates a nonzero.
+If missing, all constraints indicated  by the use of the template tensor are created fresh.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant tensor; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains tensor expr - lbTensor; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubTensorIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant tensor; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="TensorExpressions">
+		<xs:sequence>
+			<xs:element name="expr" type="TensorExpression" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number must agree with numberOfExpr</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TensorExpression">
+		<xs:annotation>
+			<xs:documentation>since version 2.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLMNode"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to existing tensor objective (if negative) or tensor constraint (if nonnegative)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="shape" default="general">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
 					<xs:enumeration value="general"/>
 				</xs:restriction>
 			</xs:simpleType>

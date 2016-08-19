@@ -781,7 +781,11 @@ The result of this transformation is aligned with the top left corner of the tar
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="targetMatrixFirstRow" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="targetMatrixFirstCol" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="targetMatrixFirstCol" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>Can be used to shift the position of the base matrix within the target (parent). Default is (0,0)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="MatrixTransformation">
 		<xs:annotation>
