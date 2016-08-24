@@ -381,7 +381,8 @@ GeneralSparseMatrix* MatrixType::processBaseMatrix( OSMatrix** mtxIdx, bool rowM
             else
                 throw ErrorClass("Symmetry changes not yet implemented in processBaseMatrix()");
         }
-          
+
+        // Note: base matrix is always the first child
         OSMatrix* baseMtxPtr = ((BaseMatrix*)m_mChildren[0])->baseMatrix;
         m_mChildren[0]->inferredMatrixType = baseMtxPtr->getMatrixType();
 
@@ -814,7 +815,7 @@ GeneralSparseMatrix* MatrixType::expandBlocks( int nConst, OSMatrix** mtxIdx, bo
 }// end of expandBlocks
 
 
-GeneralSparseMatrix* MatrixType::extractElements(int constructorNo_, bool rowMajor, 
+GeneralSparseMatrix* MatrixType::extractElements(int nConst, bool rowMajor, 
                                                  ENUM_MATRIX_SYMMETRY symmetry_)
 {
 #ifndef NDEBUG
@@ -825,7 +826,7 @@ GeneralSparseMatrix* MatrixType::extractElements(int constructorNo_, bool rowMaj
 
     try
     {
-        if (!((MatrixElements*)m_mChildren[constructorNo_])->rowMajor)
+        if (!((MatrixElements*)m_mChildren[nConst])->rowMajor)
         {
             ENUM_MATRIX_SYMMETRY symmetry = symmetry_;
 
@@ -844,39 +845,39 @@ GeneralSparseMatrix* MatrixType::extractElements(int constructorNo_, bool rowMaj
             tempMtx->b_deleteIndexArray = false;
             tempMtx->b_deleteValueArray = false;
             tempMtx->isRowMajor = false;
-            tempMtx->valueType  = m_mChildren[constructorNo_]->getMatrixType();
+            tempMtx->valueType  = m_mChildren[nConst]->getMatrixType();
             tempMtx->numberOfRows    = numberOfRows;
             tempMtx->numberOfColumns = numberOfColumns;
             tempMtx->startSize  = numberOfColumns + 1;
-            tempMtx->valueSize  = ((MatrixElements*)m_mChildren[constructorNo_])->numberOfValues;
-            tempMtx->start      = ((MatrixElements*)m_mChildren[constructorNo_])->start->el;
-            tempMtx->index      = ((MatrixElements*)m_mChildren[constructorNo_])->index->el;
+            tempMtx->valueSize  = ((MatrixElements*)m_mChildren[nConst])->numberOfValues;
+            tempMtx->start      = ((MatrixElements*)m_mChildren[nConst])->start->el;
+            tempMtx->index      = ((MatrixElements*)m_mChildren[nConst])->index->el;
 
             if (tempMtx->valueType == ENUM_MATRIX_TYPE_constant)
-                tempMtx->value  = ((ConstantMatrixElements*)m_mChildren[constructorNo_])->value;
+                tempMtx->value  = ((ConstantMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_varReference)
-                tempMtx->value  = ((VarReferenceMatrixElements*)m_mChildren[constructorNo_])->value;
+                tempMtx->value  = ((VarReferenceMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_linear)
-                tempMtx->value  = ((LinearMatrixElements*)m_mChildren[constructorNo_])->value;
+                tempMtx->value  = ((LinearMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType 
                     == ENUM_MATRIX_TYPE_realValuedExpressions)
-                tempMtx->value  = ((RealValuedExpressions*)m_mChildren[constructorNo_])->value;
+                tempMtx->value  = ((RealValuedExpressions*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType 
                     == ENUM_MATRIX_TYPE_complexValuedExpressions)
-                tempMtx->value  = ((ComplexValuedExpressions*)m_mChildren[constructorNo_])->value;
+                tempMtx->value  = ((ComplexValuedExpressions*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_objReference)
-                tempMtx->value  = ((ObjReferenceMatrixElements*)m_mChildren[constructorNo_])->value;
+                tempMtx->value  = ((ObjReferenceMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_conReference)
-                tempMtx->value  = ((ConReferenceMatrixElements*)m_mChildren[constructorNo_])->value;
+                tempMtx->value  = ((ConReferenceMatrixElements*)m_mChildren[nConst])->value;
 
             else if (tempMtx->valueType == ENUM_MATRIX_TYPE_string)
-                tempMtx->value  = ((StringValuedMatrixElements*)m_mChildren[constructorNo_])->value;
+                tempMtx->value  = ((StringValuedMatrixElements*)m_mChildren[nConst])->value;
 
             else
                 throw ErrorClass("Unknown element type in extractElements()");
@@ -891,13 +892,13 @@ GeneralSparseMatrix* MatrixType::extractElements(int constructorNo_, bool rowMaj
                 symmetry != ENUM_MATRIX_SYMMETRY_default )
                 throw ErrorClass("Cannot handle symmetry and transposition in extractElements()");
 
-            MatrixElements* refMtx = (MatrixElements*)m_mChildren[constructorNo_];
+            MatrixElements* refMtx = (MatrixElements*)m_mChildren[nConst];
 
             tempMtx = new GeneralSparseMatrix();
             tempMtx->symmetry = symmetry;
             tempMtx->start = new int[numberOfColumns + 1];
             tempMtx->startSize = numberOfColumns + 1;
-            tempMtx->valueType = m_mChildren[constructorNo_]->getMatrixType();
+            tempMtx->valueType = m_mChildren[nConst]->getMatrixType();
             tempMtx->numberOfRows    = numberOfRows;
             tempMtx->numberOfColumns = numberOfColumns;
 
@@ -1112,7 +1113,7 @@ GeneralSparseMatrix* MatrixType::extractElements(int constructorNo_, bool rowMaj
 }// end of extractElements
 
 
-GeneralSparseMatrix* MatrixType::expandTransformation(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* MatrixType::expandTransformation(int nConst, OSMatrix** mtxIdx, bool rowMajor_, 
                                                       ENUM_MATRIX_TYPE convertTo_, 
                                                       ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -1127,7 +1128,8 @@ GeneralSparseMatrix* MatrixType::expandTransformation(OSMatrix** mtxIdx, bool ro
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
 
-    GeneralSparseMatrix* tempMtx;
+    GeneralSparseMatrix* tempMtx = NULL;
+
     try
     {
         ENUM_MATRIX_TYPE convertTo = convertTo_;
@@ -1150,7 +1152,8 @@ GeneralSparseMatrix* MatrixType::expandTransformation(OSMatrix** mtxIdx, bool ro
         }
 
         tempMtx = ((MatrixTransformation*)
-                    m_mChildren[0])->transformation->expandNode(mtxIdx, rowMajor_, convertTo, symmetry);
+                    m_mChildren[nConst])->transformation->expandNode(mtxIdx, rowMajor_, 
+                                                                     convertTo, symmetry);
 
         if (tempMtx == NULL)
             throw ErrorClass("Error while expanding a matrix transformation");
@@ -1345,7 +1348,7 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             else if (m_mChildren[0]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
             {
 //              transformation: see if we can do at least AB, A'B, AB'
-                tempMtx = expandTransformation(mtxIdx, rowMajor_, convertTo, symmetry);
+                tempMtx = expandTransformation(0, mtxIdx, rowMajor_, convertTo, symmetry);
             }
             else // some kind of elements 
             {
@@ -1392,7 +1395,7 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
             {
                 if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_transformation)
                 {
-                    tempExpansion[i] = expandTransformation(mtxIdx, rowMajor_, convertTo, symmetry);
+                    tempExpansion[i] = expandTransformation(i, mtxIdx, rowMajor_, convertTo, symmetry);
                 }
                 else if (m_mChildren[i]->getNodeType() == ENUM_MATRIX_CONSTRUCTOR_TYPE_blocks)
                 {
@@ -8416,13 +8419,13 @@ GeneralSparseMatrix* GeneralSparseMatrix::convertToOtherMajor(ENUM_MATRIX_TYPE c
         }
         else
         {
-            tempMtx->isRowMajor      = !this->isRowMajor;
+            tempMtx->isRowMajor      = !(this->isRowMajor);
             tempMtx->numberOfRows    = numberOfRows;
             tempMtx->numberOfColumns = numberOfColumns;
         }
 
-        tempMtx->startSize = (tempMtx->isRowMajor) ? numberOfRows+1 : numberOfColumns+1;
-        tempMtx->valueSize = this->valueSize;
+        tempMtx->startSize = (this->isRowMajor) ? numberOfColumns+1 : numberOfRows+1;
+        tempMtx->valueSize =  this->valueSize;
 
         tempMtx->start = new int[tempMtx->startSize]; 
         tempMtx->index = new int[tempMtx->valueSize];

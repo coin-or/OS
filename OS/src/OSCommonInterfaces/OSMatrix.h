@@ -2771,12 +2771,14 @@ public:
      *  @return the expanded elements as a pointer to a GeneralSparseMatrix object.
      */
     virtual GeneralSparseMatrix* 
-        extractElements(int constructorNo_, bool rowMajor,
+        extractElements(int nConst, bool rowMajor,
                         ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
     /**
      *  A method to expand a matrix transformation into the form required in the referencing matrixType. 
      *  Processing may require recursion, transposing the elements, and applying symmetry.
      *
+     *  @param nConst     indicates the position of the constructor in the array m_mChildren, the child
+     *                    elements of the current matrix (i.e., the list of constructors)
      *  @param mtxIdx     provides pointers to all defined matrices for use within transformations.
      *  @param rowMajor_  indicates whether the baseMatrix should be stored in row major (if true)
      *                    or column major.
@@ -2786,7 +2788,7 @@ public:
      *  @return the expanded elements of the transformation as a pointer to a GeneralSparseMatrix object.
      */
     virtual GeneralSparseMatrix* 
-        expandTransformation(OSMatrix** mtxIdx, bool rowMajor,
+        expandTransformation(int nConst, OSMatrix** mtxIdx, bool rowMajor,
                              ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                              ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 

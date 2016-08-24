@@ -432,65 +432,26 @@ OSInstance::~OSInstance()
         {
             for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
             {
-                if (m_mMatrix[i] != NULL) 
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "DESTROYING MATRIX " << i << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, 
+                                  ENUM_OUTPUT_LEVEL_detailed_trace, outStr.str());
+#endif
+                if (m_mMatrix[i] != NULL)
+                {
                     delete m_mMatrix[i];
-                m_mMatrix[i] = NULL;
+                    m_mMatrix[i] = NULL;
+                    instanceData->matrices->matrix[i] = NULL;
+                }
             }
             delete[] m_mMatrix;
             m_mMatrix = NULL;
+            delete[] instanceData->matrices->matrix;
+            instanceData->matrices->matrix = NULL;
         }
 
-#if 0
-        if (m_mExpandedMatricesInColumnMajor != NULL) 
-        {
-            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
-            {
-                if (m_mExpandedMatricesInColumnMajor[i] != NULL) 
-                    delete m_mExpandedMatricesInColumnMajor[i];
-                m_mExpandedMatricesInColumnMajor[i] = NULL;
-            }
-            delete[] m_mExpandedMatricesInColumnMajor;
-            m_mExpandedMatricesInColumnMajor = NULL;
-        }
-
-        if (m_mExpandedMatricesInRowMajor != NULL) 
-        {
-            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
-            {
-                if (m_mExpandedMatricesInRowMajor[i] != NULL) 
-                    delete m_mExpandedMatricesInRowMajor[i];
-                m_mExpandedMatricesInRowMajor[i] = NULL;
-            }
-            delete[] m_mExpandedMatricesInRowMajor;
-            m_mExpandedMatricesInRowMajor = NULL;
-        }
-
-        if (m_mMatrixBlocksInColumnMajor != NULL) 
-        {
-            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
-            {
-                if (m_mMatrixBlocksInColumnMajor[i] != NULL) 
-                    delete m_mMatrixBlocksInColumnMajor[i];
-                m_mMatrixBlocksInColumnMajor[i] = NULL;
-            }
-            delete[] m_mMatrixBlocksInColumnMajor;
-            m_mMatrixBlocksInColumnMajor = NULL;
-        }
-    }
-
-        if (m_mMatrixTransformation != NULL) 
-        {
-            for (int i=0; i < instanceData->matrices->numberOfMatrices; i++)
-            {
-                if (m_mMatrixTransformation[i] != NULL) 
-                    delete m_mMatrixTransformation[i];
-                m_mMatrixTransformation[i] = NULL;
-            }
-            delete[] m_mMatrixTransformation;
-            m_mMatrixTransformation = NULL;
-        }
-    }
-#endif
 
 
 //    if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
@@ -849,7 +810,8 @@ NonlinearExpressions::NonlinearExpressions():
     nl(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the NonlinearExpressions Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+        "Inside the NonlinearExpressions Constructor");
 #endif
 }//end NonlinearExpressions()
 
@@ -895,7 +857,8 @@ Matrices::Matrices():
     matrix(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Matrices Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+        "Inside the Matrices Constructor");
 #endif
 }//end Matrices()
 
@@ -904,7 +867,8 @@ Matrices::~Matrices()
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace, "Inside the Matrices Destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
+        "Inside the Matrices Destructor");
     outStr.str("");
     outStr.clear();
     outStr << "NUMBER OF MATRICES = " << numberOfMatrices << endl;

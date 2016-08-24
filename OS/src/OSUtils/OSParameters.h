@@ -20,6 +20,7 @@
 #define OSPARAMETERS
 
 #include "OSConfig.h"
+#include "OSErrorClass.h"
 
 #include <string>
 #include <limits>
@@ -686,6 +687,7 @@ inline bool verifyMatrixType(std::string type)
 
 /**
  *  A function to merge two matrix types so we can infer the type of a matrix recursively
+ *  In this table the matrix elements are superimposed on each other; no arithmetic operations are involved
  */
 inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE type2)
 {
@@ -749,6 +751,134 @@ inline ENUM_MATRIX_TYPE mergeMatrixType(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE
                     return type1;
     }
     return ENUM_MATRIX_TYPE_unknown;
+}//end of mergeMatrixType
+
+
+/**
+ *  A function to merge two matrix types so we can infer the type of a matrix recursively
+ *  In this table the matrix elements are added together (see also mergeMatrixType() )
+ */
+inline ENUM_MATRIX_TYPE mergeMatrixTypeSum(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE type2)
+{
+    try
+    {
+        if (type1 == ENUM_MATRIX_TYPE_unknown || 
+            type2 == ENUM_MATRIX_TYPE_unknown ||
+            type1 == ENUM_MATRIX_TYPE_string  ||
+            type2 == ENUM_MATRIX_TYPE_string  )
+            throw ErrorClass("Matrix types do not support addition");
+
+        if (type1 == ENUM_MATRIX_TYPE_empty) return type2;
+        if (type2 == ENUM_MATRIX_TYPE_empty) return type1;
+
+        if (type1 == ENUM_MATRIX_TYPE_complexValuedExpressions || 
+            type2 == ENUM_MATRIX_TYPE_complexValuedExpressions) 
+            return   ENUM_MATRIX_TYPE_complexValuedExpressions;
+
+        if (type1 == ENUM_MATRIX_TYPE_complexConstant)
+        {
+            if (type2 == ENUM_MATRIX_TYPE_constant ||
+                type2 == ENUM_MATRIX_TYPE_complexConstant)
+                return   ENUM_MATRIX_TYPE_complexConstant;
+            else
+                return   ENUM_MATRIX_TYPE_complexValuedExpressions;
+        }
+
+        if (type2 == ENUM_MATRIX_TYPE_complexConstant)
+        {
+            if (type1 == ENUM_MATRIX_TYPE_constant ||
+                type1 == ENUM_MATRIX_TYPE_complexConstant)
+                return   ENUM_MATRIX_TYPE_complexConstant;
+            else
+                return   ENUM_MATRIX_TYPE_complexValuedExpressions;
+        }
+
+        if (type1 == ENUM_MATRIX_TYPE_constant && 
+            type2 == ENUM_MATRIX_TYPE_constant) 
+            return   ENUM_MATRIX_TYPE_constant;
+
+        if (type1 <= ENUM_MATRIX_TYPE_linear && 
+            type2 <= ENUM_MATRIX_TYPE_linear) 
+            return   ENUM_MATRIX_TYPE_linear;
+
+        if (type1 <= ENUM_MATRIX_TYPE_quadratic && 
+            type2 <= ENUM_MATRIX_TYPE_quadratic) 
+            return   ENUM_MATRIX_TYPE_quadratic;
+
+        return       ENUM_MATRIX_TYPE_realValuedExpressions;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
+}//end of mergeMatrixType
+
+
+/**
+ *  A function to merge two matrix types so we can infer the type of a matrix recursively
+ *  In this table the matrix elements are multiplied together (see also mergeMatrixType() )
+ */
+inline ENUM_MATRIX_TYPE mergeMatrixTypeProduct(ENUM_MATRIX_TYPE type1, ENUM_MATRIX_TYPE type2)
+{
+    try
+    {
+        if (type1 == ENUM_MATRIX_TYPE_unknown || 
+            type2 == ENUM_MATRIX_TYPE_unknown ||
+            type1 == ENUM_MATRIX_TYPE_string  ||
+            type2 == ENUM_MATRIX_TYPE_string  )
+            throw ErrorClass("Matrix types do not support addition");
+
+        if (type1 == ENUM_MATRIX_TYPE_empty) return type2;
+        if (type2 == ENUM_MATRIX_TYPE_empty) return type1;
+
+        if (type1 == ENUM_MATRIX_TYPE_complexValuedExpressions || 
+            type2 == ENUM_MATRIX_TYPE_complexValuedExpressions) 
+            return   ENUM_MATRIX_TYPE_complexValuedExpressions;
+
+        if (type1 == ENUM_MATRIX_TYPE_complexConstant)
+        {
+            if (type2 == ENUM_MATRIX_TYPE_constant ||
+                type2 == ENUM_MATRIX_TYPE_complexConstant)
+                return   ENUM_MATRIX_TYPE_complexConstant;
+            else
+                return   ENUM_MATRIX_TYPE_complexValuedExpressions;
+        }
+
+        if (type2 == ENUM_MATRIX_TYPE_complexConstant)
+        {
+            if (type1 == ENUM_MATRIX_TYPE_constant ||
+                type1 == ENUM_MATRIX_TYPE_complexConstant)
+                return   ENUM_MATRIX_TYPE_complexConstant;
+            else
+                return   ENUM_MATRIX_TYPE_complexValuedExpressions;
+        }
+
+        if (type1 == ENUM_MATRIX_TYPE_constant && 
+            type2 == ENUM_MATRIX_TYPE_constant) 
+            return   ENUM_MATRIX_TYPE_constant;
+
+        if (type1 <= ENUM_MATRIX_TYPE_linear && 
+            type2 <= ENUM_MATRIX_TYPE_linear )
+        {
+            if (type1 == ENUM_MATRIX_TYPE_constant ||
+                type2 == ENUM_MATRIX_TYPE_constant )
+                return   ENUM_MATRIX_TYPE_linear;
+            else
+                return   ENUM_MATRIX_TYPE_quadratic;
+        }
+
+        if ( (type1 == ENUM_MATRIX_TYPE_quadratic && 
+              type2 == ENUM_MATRIX_TYPE_constant ) ||
+             (type2 == ENUM_MATRIX_TYPE_quadratic && 
+              type1 == ENUM_MATRIX_TYPE_constant ) )
+            return     ENUM_MATRIX_TYPE_quadratic;
+
+        return ENUM_MATRIX_TYPE_realValuedExpressions;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end of mergeMatrixType
 
 /**

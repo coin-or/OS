@@ -17,6 +17,7 @@
 #include "OSParameters.h"
 #include "OSMathUtil.h"
 #include "OSOutput.h"
+#include "OSMatrix.h"
 
 #include <string>
 #include <cstdlib>
@@ -3090,7 +3091,7 @@ std::string OSnLMNodeMatrixPlus::getTokenName()
     return "matrixPlus";
 }// end OSnLMNodeMatrixPlus::getTokenName()
 
-GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix*  OSnLMNodeMatrixPlus::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                       ENUM_MATRIX_TYPE convertTo_, 
                                                       ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3158,7 +3159,7 @@ std::string OSnLMNodeMatrixSum::getTokenName()
     return "matrixSum";
 }// end OSnLMNodeMatrixSum::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixSum::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixSum::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                     ENUM_MATRIX_TYPE convertTo_, 
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3223,7 +3224,7 @@ std::string OSnLMNodeMatrixProduct::getTokenName()
     return "matrixProduct";
 }// end OSnLMNodeMatrixProduct::getTokenName(
 
-GeneralSparseMatrix* OSnLMNodeMatrixProduct::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixProduct::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                         ENUM_MATRIX_TYPE convertTo_, 
                                                         ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3291,7 +3292,7 @@ std::string OSnLMNodeMatrixMinus::getTokenName()
     return "matrixMinus";
 }// end OSnLMNodeMatrixMinus::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixMinus::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixMinus::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                       ENUM_MATRIX_TYPE convertTo_, 
                                                       ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3357,7 +3358,7 @@ std::string OSnLMNodeMatrixNegate::getTokenName()
     return "matrixNegate";
 }// end OSnLMNodeMatrixNegate::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixNegate::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixNegate::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                        ENUM_MATRIX_TYPE convertTo_, 
                                                        ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3424,7 +3425,7 @@ std::string OSnLMNodeMatrixTimes::getTokenName()
     return "matrixTimes";
 }// end OSnLMNodeMatrixTimes::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixTimes::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixTimes::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                       ENUM_MATRIX_TYPE convertTo_, 
                                                       ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3432,8 +3433,134 @@ GeneralSparseMatrix* OSnLMNodeMatrixTimes::expandNode(OSMatrix** mtxIdx, bool ro
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixTimes");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixTimes: expandNode method not yet implemented");
-    return NULL;
+
+    GeneralSparseMatrix* returnMtx = NULL;
+
+    try
+    {
+        if (rowMajor_)
+            throw ErrorClass("Row-wise multiplication not implemented yet in OSnLMNodeMatrixTimes");
+
+        GeneralSparseMatrix* factorA
+            = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, true,  convertTo_, symmetry_);
+        GeneralSparseMatrix* factorB
+            = ((OSnLMNode*)m_mChildren[1])->expandNode(mtxLoc, false, convertTo_, symmetry_);
+
+        if (factorA->numberOfColumns != factorB->numberOfRows)
+            throw ErrorClass("Incompatible matrix dimensions in OSnLMNodeMatrixTimes::expandNode()");
+
+        returnMtx = new GeneralSparseMatrix();
+
+        returnMtx->numberOfRows    = factorA->numberOfRows;
+        returnMtx->numberOfColumns = factorB->numberOfColumns;
+        returnMtx->isRowMajor      = rowMajor_;
+        returnMtx->symmetry        = symmetry_;
+        returnMtx->startSize       = returnMtx->numberOfColumns + 1;
+        returnMtx->start           = new int[returnMtx->startSize];
+
+        ENUM_MATRIX_TYPE rType = mergeMatrixTypeProduct(factorA->valueType, factorB->valueType);
+
+        int i, j, k, l;
+
+        int* loc = new int[factorB->numberOfRows];
+
+        int nonz = 0;
+        returnMtx->start[0] = 0;
+        
+        for (j=0; j < factorB->numberOfRows; ++j)
+            loc[j] = 0;
+
+        // in the first pass, count the nonzeroes 
+        for (i=0; i < factorB->numberOfColumns; ++i)
+        {
+            for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
+                loc[factorB->index[j]] = 1;
+
+            for (k = 0; k < factorA->numberOfRows; ++k)
+            {
+                for (l = factorA->start[k]; l < factorA->start[k+1]; ++l)
+                    if (loc[factorA->index[l]] == 1)
+                    {
+                        ++nonz;
+                        break;
+                    }
+            }
+            returnMtx->start[i+1] = nonz;
+
+            for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
+                loc[factorB->index[j]] = 0;
+        }
+
+        returnMtx->valueType = rType;
+        returnMtx->valueSize = nonz;
+        returnMtx->index     = new int[nonz];
+
+        // in the second pass, store the nonzeroes. This must be done separately for each type 
+        nonz = 0;
+        switch (rType)
+        {
+            case ENUM_MATRIX_TYPE_constant:
+            {
+                double val;
+                bool   putVal;
+                double* denseCol     = new double[factorB->numberOfRows];
+                returnMtx->value     = new ConstantMatrixValues();
+                ((ConstantMatrixValues*)returnMtx->value)->el = new double[returnMtx->valueSize];
+
+                for (i=0; i < factorB->numberOfColumns; ++i)
+                {
+                    for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
+                    {
+                             loc[factorB->index[j]] = 1;
+                        denseCol[factorB->index[j]] = ((ConstantMatrixValues*)factorB->value)->el[j];
+                    }
+
+                    for (k = 0; k < factorA->numberOfRows; ++k)
+                    {
+                        val = 0.0;
+                        putVal = false;
+                        for (l = factorA->start[k]; l < factorA->start[k+1]; ++l)
+                            if (loc[factorA->index[l]] == 1)
+                            {
+                                putVal = true;
+                                val   += ((ConstantMatrixValues*)factorA->value)->el[l]
+                                            *denseCol[factorA->index[l]];
+                            }
+
+                        if (putVal)
+                        {
+                            returnMtx->index[nonz] = k;
+                            ((ConstantMatrixValues*)returnMtx->value)->el[nonz] = val;
+                            nonz++;
+                        }
+                    }
+    
+                    for (j = factorB->start[i]; j < factorB->start[i+1]; ++j)
+                    {
+                             loc[factorB->index[j]] = 0;
+                        denseCol[factorB->index[j]] = 0.0;
+                    }
+                }
+                break;
+            }
+
+            default:
+            {
+                throw ErrorClass("Attempting to compute matrix product with unimplemented types");
+                break;
+            }
+        }
+
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+std::cout << "error catch" << std::endl;
+        if (returnMtx != NULL)
+            delete returnMtx;
+        returnMtx = NULL;
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end OSnLMNodeMatrixTimes::expandNode()
 
 ExprNode* OSnLMNodeMatrixTimes::cloneExprNode()
@@ -3490,7 +3617,7 @@ std::string OSnLMNodeMatrixInverse::getTokenName()
     return "matrixInverse";
 }// end OSnLMNodeMatrixInverse::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixInverse::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixInverse::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                         ENUM_MATRIX_TYPE convertTo_, 
                                                         ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3557,7 +3684,7 @@ std::string OSnLMNodeMatrixTranspose::getTokenName()
     return "matrixTranspose";
 }// end OSnLMNodeMatrixTranspose::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixTranspose::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixTranspose::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                           ENUM_MATRIX_TYPE convertTo_, 
                                                           ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3565,8 +3692,17 @@ GeneralSparseMatrix* OSnLMNodeMatrixTranspose::expandNode(OSMatrix** mtxIdx, boo
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSInstance, ENUM_OUTPUT_LEVEL_trace,
                       "expanding an OSnLMNodeMatrixTranspose");
 #endif
-    throw ErrorClass("OSnLMNodeMatrixTranspose: expandNode method not yet implemented");
-    return NULL;
+    try
+    {
+        GeneralSparseMatrix* refMtx
+            = ((OSnLMNode*)m_mChildren[0])->expandNode(mtxLoc, rowMajor_, convertTo_, symmetry_);
+        GeneralSparseMatrix* returnMtx = refMtx->convertToOtherMajor(convertTo_, true);
+        return returnMtx;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        throw ErrorClass( eclass.errormsg);
+    }
 }//end OSnLMNodeMatrixTranspose::expandNode()
 
 ExprNode* OSnLMNodeMatrixTranspose::cloneExprNode()
@@ -3624,7 +3760,7 @@ std::string OSnLMNodeMatrixScalarTimes::getTokenName()
     return "matrixScalarTimes";
 }// end OSnLMNodeMatrixScalarTimes::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixScalarTimes::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixScalarTimes::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                             ENUM_MATRIX_TYPE convertTo_, 
                                                             ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3691,7 +3827,7 @@ std::string OSnLMNodeMatrixDotTimes::getTokenName()
     return "matrixDotTimes";
 }// end OSnLMNodeMatrixDotTimes::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixDotTimes::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixDotTimes::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                          ENUM_MATRIX_TYPE convertTo_, 
                                                          ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3758,7 +3894,7 @@ std::string OSnLMNodeIdentityMatrix::getTokenName()
     return "identityMatrix";
 }// end OSnLMNodeIdentityMatrix::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeIdentityMatrix::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeIdentityMatrix::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                          ENUM_MATRIX_TYPE convertTo_, 
                                                          ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3826,7 +3962,7 @@ std::string OSnLMNodeMatrixLowerTriangle::getTokenName()
     return "matrixLowerTriangle";
 }// end OSnLMNodeMatrixLowerTriangle::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixLowerTriangle::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                               ENUM_MATRIX_TYPE convertTo_, 
                                                               ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -3975,7 +4111,7 @@ std::string OSnLMNodeMatrixUpperTriangle::getTokenName()
     return "matrixUpperTriangle";
 }// end OSnLMNodeMatrixUpperTriangle::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixUpperTriangle::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixUpperTriangle::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                               ENUM_MATRIX_TYPE convertTo_, 
                                                               ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -4093,7 +4229,7 @@ std::string OSnLMNodeMatrixDiagonal::getTokenName()
     return "matrixDiagonal";
 }// end OSnLMNodeMatrixDiagonal::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixDiagonal::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixDiagonal::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                          ENUM_MATRIX_TYPE convertTo_, 
                                                          ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -4160,7 +4296,7 @@ std::string OSnLMNodeDiagonalMatrixFromVector::getTokenName()
     return "diagonalMatrixFromVector";
 }// end OSnLMNodeDiagonalMatrixFromVector::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeDiagonalMatrixFromVector::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeDiagonalMatrixFromVector::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                                    ENUM_MATRIX_TYPE convertTo_, 
                                                                    ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -4231,7 +4367,7 @@ std::string OSnLMNodeMatrixSubmatrixAt::getTokenName()
     return "matrixSubmatrixAt";
 }// end OSnLMNodeMatrixSubmatrixAt::getTokenName()
 
-GeneralSparseMatrix* OSnLMNodeMatrixSubmatrixAt::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixSubmatrixAt::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                             ENUM_MATRIX_TYPE convertTo_, 
                                                             ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -4334,7 +4470,7 @@ std::string OSnLMNodeMatrixReference::getNonlinearExpressionInXML()
     return outStr.str();
 }//OSnLMNodeMatrixReference::getNonlinearExpressionInXML
 
-GeneralSparseMatrix* OSnLMNodeMatrixReference::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixReference::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                           ENUM_MATRIX_TYPE convertTo_, 
                                                           ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -4344,6 +4480,12 @@ GeneralSparseMatrix* OSnLMNodeMatrixReference::expandNode(OSMatrix** mtxIdx, boo
 #endif
     try
     {
+        GeneralSparseMatrix* refMtx;
+        int i = mtxLoc[idx]->getExpandedMatrix(mtxLoc, rowMajor_, convertTo_, symmetry_);
+        if (i < 0)
+            throw ErrorClass("OSnLMNodeMatrixReference::expandNode(): Matrix reference failed");
+        refMtx = mtxLoc[idx]->expandedMatrixByElements[i];
+        return refMtx;
     }
     catch(const ErrorClass& eclass)
     {
@@ -4481,7 +4623,7 @@ std::string OSnLMNodeMatrixVar::getNonlinearExpressionInXML()
 }//OSnLMNodeMatrixVar::getNonlinearExpressionInXML
 
 
-GeneralSparseMatrix* OSnLMNodeMatrixVar::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixVar::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                     ENUM_MATRIX_TYPE convertTo_, 
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -4620,7 +4762,7 @@ std::string OSnLMNodeMatrixObj::getNonlinearExpressionInXML()
     return outStr.str();
 }//OSnLMNodeMatrixObj::getNonlinearExpressionInXML
 
-GeneralSparseMatrix* OSnLMNodeMatrixObj::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixObj::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                     ENUM_MATRIX_TYPE convertTo_, 
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -4759,7 +4901,7 @@ std::string OSnLMNodeMatrixCon::getNonlinearExpressionInXML()
     return outStr.str();
 }//OSnLMNodeMatrixCon::getNonlinearExpressionInXML
 
-GeneralSparseMatrix* OSnLMNodeMatrixCon::expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+GeneralSparseMatrix* OSnLMNodeMatrixCon::expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                                                     ENUM_MATRIX_TYPE convertTo_, 
                                                     ENUM_MATRIX_SYMMETRY symmetry_)
 {
@@ -5476,6 +5618,7 @@ ExprNode* OSnLCNodeSum::cloneExprNode()
                     = this->m_mChildren[i]->cloneExprNode();    
             }                                                   
             nlNodePoint->inumberOfChildren = inumberOfChildren;
+
         }                                                       
     return nlNodePoint;
 }//end OSnLCNodeSum::cloneExprNode

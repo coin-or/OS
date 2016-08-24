@@ -1890,7 +1890,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -1898,7 +1898,7 @@ public:
      *  @return whether the expansion was successful
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default) = 0;
 
@@ -2030,7 +2030,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2038,7 +2038,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2079,7 +2079,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2087,7 +2087,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2128,7 +2128,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2136,7 +2136,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2177,7 +2177,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2185,7 +2185,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2226,7 +2226,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2234,7 +2234,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2275,7 +2275,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2283,7 +2283,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2324,7 +2324,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2332,7 +2332,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2373,7 +2373,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2381,7 +2381,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2422,7 +2422,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2430,7 +2430,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2471,7 +2471,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2479,7 +2479,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2525,7 +2525,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2533,7 +2533,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2584,7 +2584,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2592,7 +2592,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2639,7 +2639,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2647,7 +2647,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2688,7 +2688,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2696,7 +2696,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2738,7 +2738,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2746,7 +2746,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2807,7 +2807,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2815,7 +2815,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2867,7 +2867,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2875,7 +2875,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2927,7 +2927,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2935,7 +2935,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -2988,7 +2988,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -2996,7 +2996,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
@@ -3057,7 +3057,7 @@ public:
 
     /**
      *  a utility routine to expand an OSNlMNode into one of several different forms
-     *  @param mtxIdx     pointer array to all defined matrices to resolve matrix references
+     *  @param mtxLoc     pointer array to all defined matrices to resolve matrix references
      *  @param rowMajor_  controls whether the matrix should be expanded into row or column major format
      *  @param convertTo_ controls whether elements should be converted from one type to another
      *  @param symmetry_  controls whether a particular type of symmetry should be enforced
@@ -3065,7 +3065,7 @@ public:
      *  @return the expanded matrix node
      */
     virtual GeneralSparseMatrix* 
-        expandNode(OSMatrix** mtxIdx, bool rowMajor_, 
+        expandNode(OSMatrix** mtxLoc, bool rowMajor_, 
                    ENUM_MATRIX_TYPE convertTo_    = ENUM_MATRIX_TYPE_unknown,
                    ENUM_MATRIX_SYMMETRY symmetry_ = ENUM_MATRIX_SYMMETRY_default);
 
