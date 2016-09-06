@@ -133,6 +133,11 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="distributions" type="Distributions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="uncertaintySets" type="UncertaintySets" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -3200,6 +3205,35 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="disjunctiveSet" type="ParamDisjunctiveSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Distributions">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the dist child elements must agree with numberOfDist</xs:documentation>
+			</xs:annotation>
+			<xs:element name="dist" type="Distribution" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfDist" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Distribution">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0">
+			<xs:element name="mean" type="StochasticNumberVar" minOccurs="0"/>
+			<xs:element name="variance" type="StochasticNumberObj" minOccurs="0"/>
+			<xs:element name="correlation" type="StochasticNumberCon" minOccurs="0"/>
+			<xs:element name="covariance" type="StochasticNumberLinearConstraintCoefficientsEl" minOccurs="0"/>
+			<xs:element name="param" type="StochasticNumberQuadraticCoefficientsQTerm" minOccurs="0"/>
+		</xs:choice>
+		<xs:attribute name="type" use="required"/>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" default="0"/>
+		<!--type="DistributionType"-->
 	</xs:complexType>
 	<xs:complexType name="UncertaintySets">
 		<xs:annotation>

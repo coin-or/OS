@@ -745,7 +745,7 @@ The result of this transformation is aligned with the top left corner of the tar
 	<xs:complexType name="MatrixConstructors" mixed="false"/>
 	<xs:complexType name="BaseMatrix" mixed="false">
 		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
+			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="baseMatrixIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
@@ -1857,18 +1857,18 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="mu" minOccurs="2" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="xs:double">
-							<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
-						</xs:extension>
-					</xs:simpleContent>
-				</xs:complexType>
+			<xs:element name="mu" type="MeanVector">
+				<xs:annotation>
+					<xs:documentation>Either idx or mean element must be present</xs:documentation>
+				</xs:annotation>
 			</xs:element>
-			<xs:element name="covariance" type="MatrixMarket" minOccurs="0"/>
+			<xs:element name="covariance" type="CovarianceMatrix">
+				<xs:annotation>
+					<xs:documentation>Either idx or cov element must be present</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="multivariateNormal" type="MultivariateNormal">
 		<xs:annotation>
@@ -1891,6 +1891,160 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="MixtureDist">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="dist" type="NonNegativeIntVector">
+				<xs:annotation>
+					<xs:documentation>Each entry of the el vector must refer to a previously defined distribution. Each distribution must have the same dimension. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="mixture" type="MixtureDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ProductDist">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="dist" type="NonNegativeIntVector">
+				<xs:annotation>
+					<xs:documentation>Each entry of the el vector must refer to a previously defined scalar or vector-valued distribution. The sum of the dimensions must add up to "dimension". </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="productDist" type="ProductDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="MatrixNormal">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowMtxIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colMtxIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="matrixNormal" type="MatrixNormal">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="Wishart">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="degreesOfFreedom" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>must be at least :dimension"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="scaleMtxIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="wishart" type="Wishart">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="CustomDistribution">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="param" type="DistributionParameter" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfParam</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="custom" type="CustomDistribution">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="CustomMatrixDistribution">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="param" type="DistributionParameter" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfParam</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="customMtxDist" type="CustomMatrixDistribution">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="MeanVector">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="mean" type="SizelessDoubleVector" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>If present, refers to a matrix of size 1 x "dimension"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CovarianceMatrix">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="cov" type="MatrixMarket" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger"/>
+	</xs:complexType>
+	<xs:complexType name="DistributionParameter">
+		<xs:choice>
+			<xs:element name="matrix" type="OSMatrix" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfMatrices</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfItems</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string"/>
+		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" default="0"/>
+	</xs:complexType>
 	<xs:complexType name="GeneralMultivariateDistribution">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>

@@ -3566,6 +3566,106 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodePDF">
+		<xs:annotation>
+			<xs:documentation>probability density function. experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Coordinates of the point of evaluation. Number must equal the dimension of the r.v. referenced in distIdx</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="pdf" type="OSnLNodePDF" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeCDF">
+		<xs:annotation>
+			<xs:documentation>cumulative distribution function. experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Coordinates of the point of evaluation. Number must equal the dimension of the r.v. referenced in distIdx</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="cdf" type="OSnLNodeCDF" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeInvCDF">
+		<xs:annotation>
+			<xs:documentation>Inverse c.d.f. experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>Probability level to be evaluated. The r.v. referenced in distIdx must be univariate.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="invCdf" type="OSnLNodeInvCDF" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeRGen">
+		<xs:annotation>
+			<xs:documentation>random number generator. Returns one value of the type corresponding to the r.v. referenced in distIdx. experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ExprNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Parameters passed to the random number generator (such as seed values)</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="rGen" type="OSnLNodeRGen" substitutionGroup="ExprNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<!--Terminal Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeNumber">
 		<xs:annotation>
