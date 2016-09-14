@@ -3211,7 +3211,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the dist child elements must agree with numberOfDist</xs:documentation>
 			</xs:annotation>
-			<xs:element name="dist" type="Distribution" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="dist" type="StochasticUnivariateDistribution" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -3233,6 +3233,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="type" use="required"/>
 		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="optional" default="1"/>
 		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="description" type="xs:string"/>
 		<!--type="DistributionType"-->
 	</xs:complexType>
 	<xs:complexType name="UncertaintySets">
@@ -4157,7 +4159,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:group ref="MultiDimensionalDistributionGroup"/>
+			<xs:group ref="MultivariateDistributionGroup"/>
 			<xs:element ref="generalMultivariateDistribution"/>
 			<xs:element name="userF" type="StochasticMultivariateDistributionUserFunction"/>
 		</xs:choice>
