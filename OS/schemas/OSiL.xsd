@@ -7,7 +7,7 @@
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
-	<xs:element name="osil" type="OSiL"/>
+	<xs:element name="osil" type="NodeData-2016-10-05"/>
 	<!--OSiL: since version 1.0 -->
 	<xs:complexType name="OSiL">
 		<xs:annotation>
@@ -154,6 +154,11 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="stochasticData_mark3" type="StochasticData_mark3" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticData-2016-10-05" type="StochasticData-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -4209,10 +4214,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="matrixCoefficients" type="StochasticLinearTransformationMatrixCoefficients"/>
-			<xs:element name="autoregressiveTerms" type="StochasticLinearTransformationAutoregressiveTerms" minOccurs="0"/>
-		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StochasticElements">
 		<xs:annotation>
@@ -4220,50 +4221,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
-				<xs:documentation>Number must agree with numberOfElements</xs:documentation>
+				<xs:documentation>Number must agree with numberOfStElem</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" type="StochasticElementVar">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="obj" type="StochasticElementObj">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="con" type="StochasticElementCon">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="el" type="StochasticElementEl">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="qTerm" type="StochasticElementQTerm">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="nlNumber" type="StochasticElementNumber">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="coneVar" type="StochasticElementConeVar">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="genericParameter" type="StochasticElementDistributionParam">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="stElem" type="UpdateableProblemComponent"/>
 		</xs:choice>
-		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfStElem" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticElementParam">
 		<xs:annotation>
@@ -4739,6 +4701,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
+				<xs:attribute name="linkingStages" type="xs:nonNegativeInteger" default="0">
+					<xs:annotation>
+						<xs:documentation>number of past nodes in the tree that enter the linking constraints</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -4917,6 +4884,427 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="lag" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="varRefMtxIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="coefMtxIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticData-2016-10-05">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="scenarioTree-2016-10-05" type="ScenarioTree-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nodalTree-2016-10-05" type="NodalTree-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="implicitTree-2016-10-05" type="ImplicitTree-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ScenarioTree-2016-10-05">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="rootScenario-2016-10-05" type="RootScenario-2016-10-05"/>
+			<xs:element name="scenario-2016-10-05" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mode" default="replace">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="replace"/>
+					<xs:enumeration value="add"/>
+					<xs:enumeration value="multiply"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="RootScenario-2016-10-05">
+		<xs:sequence>
+			<xs:element name="stochEl" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfStochEl</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="changesFromCore" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="idx" type="SizelessNonNegativeIntVector">
+							<xs:annotation>
+								<xs:documentation>index refers to location within list of stochastic elements. Size of vector must agree with numberOfChanges</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="value" type="SizelessDoubleVector">
+							<xs:annotation>
+								<xs:documentation>size of vector must agree with numberOfChanges</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="prob" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="base" type="xs:string"/>
+		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfChanges" type="xs:nonNegativeInteger" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="Scenario-2016-10-05">
+		<xs:sequence>
+			<xs:element name="idx" type="SizelessNonNegativeIntVector">
+				<xs:annotation>
+					<xs:documentation>index refers to location within list of stochastic elements. Size of vector must agree with numberOfChanges</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="value" type="SizelessDoubleVector">
+				<xs:annotation>
+					<xs:documentation>size of vector must agree with numberOfChanges</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="prob" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="base">
+			<xs:simpleType>
+				<xs:restriction base="xs:string"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfChanges" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NodalTree-2016-10-05">
+		<xs:complexContent>
+			<xs:extension base="StochasticNodalTree-2016-10-05"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNodalTree-2016-10-05">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the sNode child elements must match numberOfNodes</xs:documentation>
+			</xs:annotation>
+			<xs:element ref="sNode-2016-10-05"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfNodes" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNode-2016-10-05">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="StochasticScenarioNode-2016-10-05">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:choice minOccurs="0">
+						<xs:element name="nodeData" type="NodeData-2016-10-05"/>
+						<xs:element name="changes" type="StochasticNumbers"/>
+					</xs:choice>
+					<xs:element ref="scenarioNode-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="prob" type="Probability" use="required"/>
+				<xs:attribute name="base" use="optional" default="coreProgram">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="none"/>
+							<xs:enumeration value="coreProgram"/>
+							<xs:enumeration value="firstSibling"/>
+							<xs:enumeration value="lastSibling"/>
+							<xs:enumeration value="parent"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="linkingStages" type="xs:nonNegativeInteger" default="0">
+					<xs:annotation>
+						<xs:documentation>number of past nodes in the tree that enter the linking constraints</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticScenarioNode-2016-10-05" mixed="false">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:element name="scenarioNode-2016-10-05" type="StochasticScenarioNode-2016-10-05" abstract="true">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="sNode-2016-10-05" type="StochasticNode-2016-10-05" substitutionGroup="scenarioNode-2016-10-05">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="NodeData-2016-10-05">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="variables" type="Variables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectives" type="Objectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="constraints" type="Constraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g. the expression 2x + 3y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0
+We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin in "Studies on Graphs and Discrete Programming", 1981. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="complexVariables"/>
+						<xs:element name="complexObjectives"/>
+						<xs:element name="complexConstraints"/>
+						<xs:element name="complexExpressions"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorProgramming" type="TensorProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="decomposition" type="TimeDomainStages" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="parameters" type="Parameters" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="uncertaintySets" type="UncertaintySets" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticData-2016-10-05" type="StochasticData-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="softConstraints" type="SoftConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ambiguityResolution" type="AmbiguityResolution" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="modifications" type="Modifications" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="userFunctions" type="UserFunctions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="simulations" type="Simulations" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="updateableData" type="UpdateableData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>realTimeData and simulations. experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="new_simulations" type="new_SimulationData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xmlData" type="XMLData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ImplicitTree-2016-10-05">
+		<xs:sequence>
+			<xs:element name="stage" type="ImplicitTreeStage-2016-10-05">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfStages</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="softConstraints" type="SoftConstraints-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="probabilisticObjectives" type="SoftConstraintsProbabilisticObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfStages" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="ambiguityResolution">
+			<xs:annotation>
+				<xs:documentation>default is "max" for minimization problems, "min" for maximization problems</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="any"/>
+					<xs:enumeration value="all"/>
+					<xs:enumeration value="avg"/>
+					<xs:enumeration value="max"/>
+					<xs:enumeration value="min"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ImplicitTreeStage-2016-10-05">
+		<xs:sequence>
+			<xs:element name="stochEl" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfStochEl</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="rv" type="RV-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfRV</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ma" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfMA</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ar" type="AutoRegressiveComponent-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfAR</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="transformation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term) and transforms this into the vector of stochastic elements. Any random matrices are expanded column by column. </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="StochasticLinearTransformation">
+							<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger" use="required">
+								<xs:annotation>
+									<xs:documentation>refers to a matrix in the "matrices" section.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>number of the stage in which the information is revealed</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRV" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfAR" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>autoregressive terms</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfMA" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>moving average terms</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="addConstant" type="xs:boolean" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="RV-2016-10-05">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>gives the index of the distribution in the "distributions" element</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AutoRegressiveComponent-2016-10-05">
+		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>must be LESS than the index of the current stage</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>gives the index of the distribution in the "distributions" element</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<!--SoftConstraints: proposal-->
 	<xs:complexType name="SoftConstraints">
@@ -5254,6 +5642,54 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SoftConstraints-2016-10-05">
+		<xs:sequence>
+			<xs:element name="con" type="SoftConstraint-2016-10-05">
+				<xs:annotation>
+					<xs:documentation>must agree with numberOfCon</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SoftConstraint-2016-10-05">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="single" type="SingleSoftConstraint-2016-10-05">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="joint" type="JointSoftConstraint-2016-10-05">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="SingleSoftConstraint-2016-10-05">
+		<xs:choice>
+			<xs:element name="penalty" type="SoftConstraintsPenaltiesRow"/>
+			<xs:element name="chanceConstraint" type="SoftConstraintsSimpleChanceConstraint"/>
+			<xs:element name="integratedChanceConstraint" type="SoftConstraintsSimpleIntegratedChanceConstraint"/>
+		</xs:choice>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" default="-1"/>
+	</xs:complexType>
+	<xs:complexType name="JointSoftConstraint-2016-10-05">
+		<xs:sequence>
+			<xs:element name="row" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfRows</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="chanceConstraint" type="SoftConstraintsJointChanceConstraint"/>
+				<xs:element name="integratedChanceConstraint" type="SoftConstraintsJointIntegratedChanceConstraint"/>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" default="-1"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:simpleType name="RefreshPointEnum">
 		<xs:restriction base="xs:string">
