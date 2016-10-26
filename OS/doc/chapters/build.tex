@@ -1064,6 +1064,39 @@ and~\ref{section:examples} are included in the build, as well.
 \fi     %------------------------------------ end of \iffalse
 \fi     % end of \ifipopt
 
+\ifbible
+\subdivision{CSDP}\label{section:csdp}
+
+CSDP is a package to solve semidefinite programming problems. 
+It is available as a COIN-OR project (\url{https://projects.coin-or.org/Csdp}) 
+and can be called from OS. However, it does not have an integrated build system and is currently
+not part of CoinAll. In order to use CSDP with OS, it is necessary to either download 
+a binary distribution or to check out the source with svn and use the included makefile to build the package locally.
+
+Subsequently OS must be configured so that it can find the required library and header files, for instance using
+
+\begin{verbatim}
+configure --with-csdp-lib="-L$(HOME)/Csdp/lib -lsdp"        \
+          --with-csdp-incdir="$HOME/Csdp/include
+\end{verbatim}
+
+Once the OptimizationServices has been built successfully, the CSDP solver can be invoked as follows to solve 
+the sample problem {\tt SDPA\_ex.osil}:
+
+{\tt ./OSSolverService solver csdp osil \$DATA/osilFiles/SDPA\_ex.osil}
+
+{\tt SDPA\_ex.osil} is included in the OS distribution. However, at present OS uses a stand-alone converter
+for other semidefnite programming problems in the SDPA format. The converter is written in Fortran 
+and is found at
+
+{\tt OS/misc/ConeProgramming/SDPA2OSiL.f90}
+
+It is a completely stand-alone program and can be compiled with any Fortran90 compiler. 
+It reads an SDPA file from standard input and writes an osil file to standard output. 
+
+
+\fi
+
 
 \subdivision{Other Third-Party Software} \label{section:otherthirdparty}
 
