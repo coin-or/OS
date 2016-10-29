@@ -1909,32 +1909,30 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="ModifyingOperations">
-				<xs:sequence minOccurs="0">
-					<xs:element name="reference">
+				<xs:choice>
+					<xs:element name="baseFile" default="this" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>reference to an osil file containing the base for the current modifications</xs:documentation>
+						</xs:annotation>
 						<xs:complexType>
-							<xs:choice>
-								<xs:element name="base" default="this">
-									<xs:annotation>
-										<xs:documentation>experiment - refers to an osil file that may contain modifications from another base reference</xs:documentation>
-									</xs:annotation>
-									<xs:complexType>
-										<xs:simpleContent>
-											<xs:extension base="xs:string">
-												<xs:attribute name="uri" type="xs:string" use="optional" default="."/>
-											</xs:extension>
-										</xs:simpleContent>
-									</xs:complexType>
-								</xs:element>
-							</xs:choice>
+							<xs:simpleContent>
+								<xs:extension base="xs:string">
+									<xs:attribute name="uri" type="xs:string" use="optional" default="."/>
+								</xs:extension>
+							</xs:simpleContent>
 						</xs:complexType>
 					</xs:element>
-					<xs:element name="identifier" type="xs:string" minOccurs="0"/>
-				</xs:sequence>
-				<xs:attribute name="identifier" type="xs:string">
-									<xs:annotation>
-										<xs:documentation>refers to a previous modification available in memory</xs:documentation>
-									</xs:annotation>
-									</xs:attribute>
+					<xs:element name="baseID" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>reference to a previous modification available in memory</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:choice>
+				<xs:attribute name="refID" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>defines a reference for subsequent reuse of this modification.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5158,11 +5156,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="objectives" type="Objectives" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="constraints" type="Constraints" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
@@ -5301,12 +5294,12 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="baseID">
+				<xs:attribute name="baseID" type="xs:ID">
 					<xs:annotation>
 						<xs:documentation>can be used to provide a reference for later inheritance of data</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="nodeRef">
+				<xs:attribute name="nodeRef" type="xs:IDREF">
 					<xs:annotation>
 						<xs:documentation>can be used to reference another node in the tree from which the current node inherits data</xs:documentation>
 					</xs:annotation>

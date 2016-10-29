@@ -3566,6 +3566,106 @@
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodePDF">
+		<xs:annotation>
+			<xs:documentation>probability density function. experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Coordinates of the point of evaluation. Number must equal the dimension of the r.v. referenced in distIdx</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="pdf" type="OSnLNodePDF" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeCDF">
+		<xs:annotation>
+			<xs:documentation>cumulative distribution function. experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Coordinates of the point of evaluation. Number must equal the dimension of the r.v. referenced in distIdx</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="cdf" type="OSnLNodeCDF" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeInvCDF">
+		<xs:annotation>
+			<xs:documentation>Inverse c.d.f. experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>Probability level to be evaluated. The r.v. referenced in distIdx must be univariate.</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="invCdf" type="OSnLNodeInvCDF" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeRGen">
+		<xs:annotation>
+			<xs:documentation>random number generator. Returns one value of the type corresponding to the r.v. referenced in distIdx. experimental </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ExprNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Parameters passed to the random number generator (such as seed values)</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+				<xs:attribute name="distIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Must refer to an entry in "distributions" element</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="rGen" type="OSnLNodeRGen" substitutionGroup="ExprNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<!--Terminal Nodes: since version 1.0.0-->
 	<xs:complexType name="OSnLNodeNumber">
 		<xs:annotation>
@@ -3631,7 +3731,8 @@
 	</xs:complexType>
 	<xs:element name="identifier" type="OSnLNodeIdentifier" substitutionGroup="OSnLNode">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
+			<xs:documentation>since version 1.0.0. 
+For symbolic programming, NOT to identify a nonlinear expression or node.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<!--Constant Nodes: since version 1.0.0  -->
@@ -3845,7 +3946,7 @@ Returns the current value of the indicated objective</xs:documentation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-<!-- removed 23 October 2015 	
+	<!-- removed 23 October 2015 	
 	<xs:complexType name="OSnLNodeQTerm">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -4005,7 +4106,11 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5181,6 +5286,19 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 				<xs:sequence minOccurs="2" maxOccurs="2">
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
+				<xs:attribute name="transpose" default="neither">
+					<xs:annotation>
+						<xs:documentation>To allow one or both of the factors to be transposed. transpose="first" calculates A'B, "second" calculates AB',etc. default is "neither".</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="neither"/>
+							<xs:enumeration value="first"/>
+							<xs:enumeration value="second"/>
+							<xs:enumeration value="both"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5487,8 +5605,8 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence>
-					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
+					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -5505,8 +5623,8 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence>
-					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
+					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -5523,8 +5641,8 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence>
-					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
+					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -5541,8 +5659,8 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:sequence>
-					<xs:element ref="OSnLNode"/>
 					<xs:element ref="OSnLMNode"/>
+					<xs:element ref="ScalarNode"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -5851,6 +5969,7 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5866,6 +5985,7 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5881,6 +6001,7 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -5896,6 +6017,7 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -6475,6 +6597,40 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLCNodeToPolar">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexCartesianToPolar" type="OSnLCNodeToPolar" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeToCartesian">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence>
+					<xs:element ref="ScalarNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexPolarToCartesian" type="OSnLCNodeToCartesian" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>experiment.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLCNodeSin">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -6670,8 +6826,8 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
-				<xs:attribute name="real" type="xs:double" default="0.0"/>
-				<xs:attribute name="imag" type="xs:double" default="0.0"/>
+				<xs:attribute name="Re" type="xs:double" default="0.0"/>
+				<xs:attribute name="Im" type="xs:double" default="0.0"/>
 				<xs:attribute name="id" type="xs:ID">
 					<xs:annotation>
 						<xs:documentation>required if realtime or random is true</xs:documentation>
@@ -7045,7 +7201,7 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="isComplexNaN"/>
 			<xs:enumeration value="complexEq"/>
 			<xs:enumeration value="isComplexNeq"/>
-			<xs:enumeration value="complexCreate"/>
+			<xs:enumeration value="createComplex"/>
 			<xs:enumeration value="complexPlus"/>
 			<xs:enumeration value="complexSum"/>
 			<xs:enumeration value="complexMinus"/>
