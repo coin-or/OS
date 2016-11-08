@@ -123,7 +123,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="decomposition" type="TimeDomainStages" minOccurs="0">
+			<xs:element name="decomposition" type="InstanceDecomposition" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -3840,7 +3840,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:choice>
 	</xs:complexType>
-	<xs:complexType name="TimeDomainStages">
+	<xs:complexType name="InstanceDecomposition">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -3848,13 +3848,14 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the component elements must agree with numberOfComponents</xs:documentation>
 			</xs:annotation>
-			<xs:element name="component" type="TimeDomainStage" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="component" type="DecompositionComponent" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation> </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfComponents" type="xs:positiveInteger" use="required"/>
+		<!-- not neede here (?)
 		<xs:attribute name="decisionEventSequence">
 			<xs:annotation>
 				<xs:documentation>used for time-staged decomposition</xs:documentation>
@@ -3866,31 +3867,62 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+-->
 	</xs:complexType>
-	<xs:complexType name="TimeDomainStage">
+	<xs:complexType name="DecompositionComponent">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="variables" type="TimeDomainStageVariables">
-				<xs:annotation>
-					<xs:documentation>If missing, assume numberOfVariables=0</xs:documentation>
-				</xs:annotation>
+			<xs:element name="variables" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="IntVector">
+							<xs:attribute name="startIdx" type="xs:nonNegativeInteger">
+								<xs:annotation>
+									<xs:documentation>Index list must be empty if startIdx is used and must match numberOfEl otherwise</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
-			<xs:element name="constraints" type="TimeDomainStageConstraints">
-				<xs:annotation>
-					<xs:documentation>If missing, assume numberOfConstraints=0</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="objectives" type="TimeDomainStageObjectives">
+			<xs:element name="objectives" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>If missing, assume ALL objectives are included</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="IntVector">
+							<xs:attribute name="startIdx" type="xs:negativeInteger">
+								<xs:annotation>
+									<xs:documentation>Index list must be empty if startIdx is used and must match numberOfEl otherwise</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="constraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If missing, assume numberOfConstraints=0</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="IntVector">
+							<xs:attribute name="startIdx" type="xs:nonNegativeInteger">
+								<xs:annotation>
+									<xs:documentation>Index list must be empty if startIdx is used and must match numberOfEl otherwise</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="TimeDomainStageVariables">
+	<xs:complexType name="ComponentVariables">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -3898,7 +3930,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>List must be empty if startIdx is used and must match numberOfVariables otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" type="TimeDomainStageVar" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="IntVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
@@ -3913,7 +3945,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="TimeDomainStageConstraints">
+	<xs:complexType name="ComponentConstraints">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -3936,7 +3968,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="TimeDomainStageObjectives">
+	<xs:complexType name="ComponentObjectives">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -5210,7 +5242,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="decomposition" type="TimeDomainStages" minOccurs="0">
+			<xs:element name="decomposition" type="InstanceDecomposition" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
