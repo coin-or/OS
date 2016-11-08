@@ -1683,7 +1683,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:complexContent>
 						<xs:extension base="UpdateableProblemComponent">
 							<xs:attribute name="constant" type="xs:double" default="0.0"/>
-							<xs:attribute name="coeff" type="xs:double" default="1.0"/>
+							<xs:attribute name="coef" type="xs:double" default="1.0"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -1984,400 +1984,403 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="ModificationUpdates">
 		<xs:sequence>
-			<xs:element name="update" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="subst" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="UpdateableProblemComponent">
+							<xs:attribute name="value" type="xs:double"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfUpdates" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeletions">
 		<xs:sequence>
-			<xs:element name="variables" minOccurs="0">
+			<xs:element name="variables" type="ModificationDeleteVariables" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="var" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>delete a variable, its cost and constraint coefficients, and all quadratic terms and nonlinear expressions in which the variable occurs.</xs:documentation>
-							</xs:annotation>
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-								<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="objectives" minOccurs="0">
+			<xs:element name="objectives" type="ModificationDeleteObjectives" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="obj" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-								<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-								<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
-								<xs:attribute name="colIdx">
-									<xs:annotation>
-										<xs:documentation>If present, delete only the objective coefficient in this column</xs:documentation>
-									</xs:annotation>
-								</xs:attribute>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="constraints" minOccurs="0">
+			<xs:element name="constraints" type="ModificationDeleteConstraints" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-								<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="linearConstraintCoefficients" minOccurs="0">
+			<xs:element name="linearConstraintCoefficients" type="ModificationDeleteLinearConstraintCoefficients" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="colIdx" use="required"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="quadraticCoefficients" minOccurs="0">
+			<xs:element name="quadraticCoefficients" type="ModificationDeleteQuadraticCoefficients" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="qTerm" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="idxOne" use="required"/>
-								<xs:attribute name="idxTwo" use="required"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfQTerms" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="nonlinearExpressions" minOccurs="0">
+			<xs:element name="nonlinearExpressions" type="ModificationDeleteNonlinearExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence minOccurs="0" maxOccurs="unbounded">
-						<xs:element name="nl">
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:int" use="required"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="matrixVariables" minOccurs="0">
+			<xs:element name="matrixVariables" type="ModificationDeleteMatrixVariables" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="matrixVar" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>delete a matrix variable and all terms in all nonlinear and matrix expressions in which the matrix variable occurs.</xs:documentation>
-							</xs:annotation>
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-								<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="matrixObjectives" minOccurs="0">
+			<xs:element name="matrixObjectives" type="ModificationDeleteMatrixObjectives" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="matrixObj" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-								<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-								<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="matrixConstraints" minOccurs="0">
+			<xs:element name="matrixConstraints" type="ModificationDeleteMatrixConstraints" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="matrixCon" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
-								<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="matrixExpressions" minOccurs="0">
+			<xs:element name="matrixExpressions" type="ModificationDeleteMatrixExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence minOccurs="0" maxOccurs="unbounded">
-						<xs:element name="expr">
-							<xs:complexType>
-								<xs:attribute name="idx" type="xs:int" use="required"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="ModificationAdditions">
+	<xs:complexType name="ModificationDeleteVariables">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="variables" minOccurs="0">
+			<xs:element name="var" type="ModificationDeleteVar" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>delete a variable, its cost and constraint coefficients, and all quadratic terms and nonlinear expressions in which the variable occurs.</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="var" type="Variable" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>since version 1.0</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="objectives" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="obj" type="Objective" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="constraints" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="con" type="Constraint" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="linearConstraintCoefficients" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="el" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="quadraticCoefficients" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="qTerm" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="nonlinearExpressions" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element name="number" type="xs:string"/>
-						<xs:element name="string" type="xs:string"/>
-						<xs:element name="nl">
-							<xs:complexType>
-								<xs:choice maxOccurs="unbounded">
-									<xs:element ref="OSnLNode"/>
-								</xs:choice>
-								<xs:attribute name="idx" type="xs:int" use="required"/>
-								<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:choice>
-					<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="matrixVariables" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="matrixVar" type="MatrixVar" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>since version 1.0</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="matrixObjectives" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="matrixObj" type="MatrixObj" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="matrixConstraints" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="matrixCon" type="MatrixCon" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="matrixExpressions" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element name="number" type="xs:string"/>
-						<xs:element name="string" type="xs:string"/>
-						<xs:element name="expr">
-							<xs:complexType>
-								<xs:choice maxOccurs="unbounded">
-									<xs:element ref="OSnLMNode"/>
-								</xs:choice>
-								<xs:attribute name="idx" type="xs:int" use="required"/>
-								<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:choice>
-					<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="complexVariables" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="complexVar" type="ComplexVar" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>since version 1.0</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfComplexVar" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="complexObjectives" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="complexObj" type="ComplexObj" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="complexConstraints" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="con" type="ComplexCon" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="complexExpressions" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element name="number" type="xs:string"/>
-						<xs:element name="string" type="xs:string"/>
-						<xs:element name="expr">
-							<xs:complexType>
-								<xs:choice maxOccurs="unbounded">
-									<xs:element ref="OSnLCNode"/>
-								</xs:choice>
-								<xs:attribute name="idx" type="xs:int" use="required"/>
-								<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:choice>
-					<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteVar">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteObjectives">
+		<xs:sequence>
+			<xs:element name="obj" type="ModificationDeleteObj" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteObj">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="colIdx">
+			<xs:annotation>
+				<xs:documentation>If present, delete only the objective coefficient in this column</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteConstraints">
+		<xs:sequence>
+			<xs:element name="con" type="ModificationDeleteCon" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteCon">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteLinearConstraintCoefficients">
+		<xs:sequence>
+			<xs:element name="el" type="ModificationDeleteLinearConstraintEl" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteLinearConstraintEl">
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteQuadraticCoefficients">
+		<xs:sequence>
+			<xs:element name="qTerm" type="ModificationDeleteQTerm" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfQTerms" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteQTerm">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idxOne" use="required"/>
+		<xs:attribute name="idxTwo" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteNonlinearExpressions">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="nl" type="ModificationDeleteNl"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteNl">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteMatrixVariables">
+		<xs:sequence>
+			<xs:element name="matrixVar" type="ModificationDeleteMatrixVar" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>delete a matrix variable and all terms in all nonlinear and matrix expressions in which the matrix variable occurs.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteMatrixVar">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteMatrixObjectives">
+		<xs:sequence>
+			<xs:element name="matrixObj" type="ModificationDeleteMatrixObj" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteMatrixObj">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteMatrixConstraints">
+		<xs:sequence>
+			<xs:element name="matrixCon" type="ModificationDeleteMatrixCon" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteMatrixCon">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteMatrixExpressions">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="expr" type="ModificationDeleteMatrixExpr"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteMatrixExpr">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAdditions">
+		<xs:sequence>
+			<xs:element name="variables" type="ModificationAddVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectives" type="ModificationAddObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="constraints" type="ModificationAddConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="linearConstraintCoefficients" type="ModificationAddLinearConstraintCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="quadraticCoefficients" type="ModificationAddQuadraticCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nonlinearExpressions" type="ModificationAddNonlinearExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixVariables" type="ModificationAddMatrixVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixObjectives" type="ModificationAddMatrixObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixConstraints" type="ModificationAddMatrixConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixExpressions" type="ModificationAddMatrixExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexVariables" type="ModificationAddComplexVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexObjectives" type="ModificationAddComplexObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexConstraints" type="ModificationAddComplexConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexExpressions" type="ModificationAddComplexExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddVariables">
+		<xs:sequence>
+			<xs:element name="var" type="Variable" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddObjectives">
+		<xs:sequence>
+			<xs:element name="obj" type="Objective" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddConstraints">
+		<xs:sequence>
+			<xs:element name="con" type="Constraint" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddLinearConstraintCoefficients">
+		<xs:sequence>
+			<xs:element name="el" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddQuadraticCoefficients">
+		<xs:sequence>
+			<xs:element name="qTerm" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddNonlinearExpressions">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="number" type="xs:string"/>
+			<xs:element name="string" type="xs:string"/>
+			<xs:element name="nl">
+				<xs:complexType>
+					<xs:choice maxOccurs="unbounded">
+						<xs:element ref="OSnLNode"/>
+					</xs:choice>
+					<xs:attribute name="idx" type="xs:int" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddMatrixVariables">
+		<xs:sequence>
+			<xs:element name="matrixVar" type="MatrixVar" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddMatrixObjectives">
+		<xs:sequence>
+			<xs:element name="matrixObj" type="MatrixObj" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddMatrixConstraints">
+		<xs:sequence>
+			<xs:element name="matrixCon" type="MatrixCon" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddMatrixExpressions">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="number" type="xs:string"/>
+			<xs:element name="string" type="xs:string"/>
+			<xs:element name="expr">
+				<xs:complexType>
+					<xs:choice maxOccurs="unbounded">
+						<xs:element ref="OSnLMNode"/>
+					</xs:choice>
+					<xs:attribute name="idx" type="xs:int" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddComplexVariables">
+		<xs:sequence>
+			<xs:element name="complexVar" type="ComplexVar" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfComplexVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddComplexObjectives">
+		<xs:sequence>
+			<xs:element name="complexObj" type="ComplexObj" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddComplexConstraints">
+		<xs:sequence>
+			<xs:element name="con" type="ComplexCon" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddComplexExpressions">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="number" type="xs:string"/>
+			<xs:element name="string" type="xs:string"/>
+			<xs:element name="expr">
+				<xs:complexType>
+					<xs:choice maxOccurs="unbounded">
+						<xs:element ref="OSnLCNode"/>
+					</xs:choice>
+					<xs:attribute name="idx" type="xs:int" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
 	</xs:complexType>
 	<xs:simpleType name="ModificationType">
 		<xs:annotation>
@@ -3855,7 +3858,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfComponents" type="xs:positiveInteger" use="required"/>
-		<!-- not neede here (?)
+		<!-- not needed here (?)
 		<xs:attribute name="decisionEventSequence">
 			<xs:annotation>
 				<xs:documentation>used for time-staged decomposition</xs:documentation>
