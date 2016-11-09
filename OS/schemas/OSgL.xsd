@@ -1485,6 +1485,18 @@ equal tensor rank</xs:documentation>
 		</xs:annotation>
 		<xs:choice/>
 	</xs:group>
+	<xs:group name="DistributionTransformationGroup">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element ref="mixtureDist"/>
+			<xs:element ref="sumDist"/>
+			<xs:element ref="maxDist"/>
+			<xs:element ref="productDist"/>
+		</xs:choice>
+	</xs:group>
+
 	<xs:complexType name="EmpiricalDiscreteElement">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
@@ -2024,13 +2036,13 @@ equal tensor rank</xs:documentation>
 		<xs:sequence>
 			<xs:element name="dist" type="NonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>Each entry of the el vector must refer to a previously defined distribution. Each distribution must have the same dimension. </xs:documentation>
+					<xs:documentation>Each entry of the el vector must refer to a previously defined distribution. All distributions must have the same dimensions. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:element name="mixture" type="MixtureDist">
+	<xs:element name="mixtureDist" type="MixtureDist">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
@@ -2053,6 +2065,45 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+
+	<xs:complexType name="MaxDist">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="dist" type="NonNegativeIntVector">
+				<xs:annotation>
+					<xs:documentation>Each entry of the el vector must refer to a previously defined distribution. All distributions must have the same dimensions. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="maxDist" type="MaxDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="SumDist">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="dist" type="NonNegativeIntVector">
+				<xs:annotation>
+					<xs:documentation>Each entry of the el vector must refer to a previously defined distribution. All distributions must have the same dimensions. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="sumDist" type="SumDist">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+
 	<xs:complexType name="MatrixNormal">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
