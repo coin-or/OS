@@ -1383,7 +1383,7 @@ equal tensor rank</xs:documentation>
 			<xs:group ref="UnivariateDistributionGroup"/>
 			<xs:group ref="MultivariateDistributionGroup"/>
 			<xs:group ref="MatrixValuedDistributionGroup"/>
-<!-- Use and define as the need arises			
+			<!-- Use and define as the need arises			
 			<xs:group ref="ComplexValuedDistributionGroup"/> 
 			<xs:group ref="TensorValuedDistributionGroup"/>
 			<xs:group ref="NonNumericDistributionGroup"/>
@@ -1471,22 +1471,19 @@ equal tensor rank</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
-		</xs:choice>
+		<xs:choice/>
 	</xs:group>
 	<xs:group name="TensorValuedDistributionGroup">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
-		</xs:choice>
+		<xs:choice/>
 	</xs:group>
 	<xs:group name="NonNumericDistributionGroup">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
-		</xs:choice>
+		<xs:choice/>
 	</xs:group>
 	<xs:complexType name="EmpiricalDiscreteElement">
 		<xs:annotation>
@@ -2275,7 +2272,7 @@ equal tensor rank</xs:documentation>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="quantile1" type="Probability" use="required"/>
-		<xs:attribute name="percent2" type="Probability" use="required"/>
+		<xs:attribute name="quantile2" type="Probability" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>

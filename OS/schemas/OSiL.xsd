@@ -4226,8 +4226,10 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:group ref="DistributionGroup"/>
+			<!-- Superseded by CustomDistribution			
 			<xs:element ref="generalUnivariateDistribution"/>
 			<xs:element name="userF" type="StochasticUnivariateDistributionUserFunction"/>
+-->
 		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="StochasticUnivariateDistributionUserFunction">
