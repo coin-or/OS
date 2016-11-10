@@ -1747,7 +1747,6 @@ public:
     bool addVar(int idx, double value);
 
     /**
-     *
      * Alternative signature for this function
      *
      * A function to add an array of <var> elements simultaneously
@@ -1765,10 +1764,6 @@ public:
  * @since OS 1.1
  *
  * \remarks
-
-
-
-
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
@@ -1822,7 +1817,6 @@ public:
     bool deepCopyFrom(SOSWeights *that);
 
     /**
-     *
      * A function to set an array of <var> elements
      * @param numberOfVar: number of <var> elements to be set
      * @param var: the array of <var> elements that are to be set
@@ -1865,6 +1859,7 @@ public:
      * Default constructor.
      */
     SOSVariableBranchingWeights();
+
     /**
      *
      * Class destructor.
@@ -1878,7 +1873,6 @@ public:
     bool IsEqual(SOSVariableBranchingWeights *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -3330,6 +3324,1079 @@ public:
 }; //ConstraintOption
 
 
+
+/*! \class InitMatrixVariableValues
+ *  \brief the InitMatrixVariableValues class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class InitMatrixVariableValues
+{
+
+public:
+
+    /** number of <matrixVar> children */
+    int numberOfMatrixVar;
+
+    /** initial value for each variable */
+    OSMatrixWithMatrixVarIdx **matrixVar;
+
+    /**
+     *
+     * Default constructor.
+     */
+    InitMatrixVariableValues();
+    /**
+     *
+     * Class destructor.
+     */
+    ~InitMatrixVariableValues();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(InitMatrixVariableValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitMatrixVariableValues *that);
+#if 0
+    /**
+     * A function to set an array of <matrixVar> elements
+     * @param numberOfVar: number of <matrixVar> elements to be set
+     * @param var: the array of <matrixVar> elements that are to be set
+     */
+    bool setMatrixVar(int numberOfMatrixVar, InitMatrixVariableValues **matrixVar);
+
+    /**
+     * Alternative signature for this function
+     * @param numberOfVar: number of <matrixVar> elements to be set
+     * @param var: the array of <matrixVar> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setMatrixVar(int numberOfMatrixVar, InitMatrixVariableValues **matrixVar,
+ 			    ENUM_COMBINE_ARRAYS disp);
+
+
+    /**
+     * Another alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
+     * @param idx: the array of indices
+     * @param value: the array of corresponding values
+     * @param name: the array of corresponding names
+     */
+    bool setMatrixVar(int numberOfMatrixVar, int *idx, double *value, std::string *name);
+
+    /**
+     * A function to add a <matrixVar> element
+     * @param idx: the index of the variable to be given an initial value
+     * @param value: the initial variable value to be added
+     */
+    bool addMatrixVar(int idx, double value);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <matrixVar> elements simultaneously
+     * @param numberOfVar: number of <matrixVar> elements to be set
+     * @param matrixVar: the array of <matrixVar> elements that are to be set
+     */
+    bool addMatrixVar(int numberOfMatrixVar, InitMatrixVariableValues **matrixVar);
+#endif
+}; //InitMatrixVariableValues
+
+#if 0
+/*! \class OtherMatrixVarOption
+ *  \brief the OtherMatrixVarOption class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherMatrixVarOption
+{
+
+public:
+    /** the name of the option */
+    std::string name;
+
+    /** value of the option */
+    std::string value;
+
+    /**
+     *
+     * Default constructor.
+     */
+    OtherMatrixVarOption();
+    /**
+     *
+     * Class destructor.
+     */
+    ~OtherMatrixVarOption();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixVarOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixVarOption *that);
+}; //OtherMatrixVarOption
+
+
+/*! \class OtherMatrixVariableOption
+ *  \brief the OtherMatrixVariableOption class.
+ *
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherMatrixVariableOption
+{
+
+public:
+    /** number of <matrixVar> child elements */
+    int numberOfMatrixVar;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** name of the option */
+    std::string name;
+
+    /** value of the option */
+    std::string value;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** description of the option */
+    std::string description;
+
+    /** array of option values */
+    OSMatrixWithMatrixVarIdx **matrixVar;
+
+    /** type of the values in the var array */
+    std::string matrixVarType;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /**
+     *
+     * Default constructor.
+     */
+    OtherMatrixVariableOption();
+    /**
+     *
+     * Class destructor.
+     */
+    ~OtherMatrixVariableOption();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixVariableOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixVariableOption *that);
+
+    /**
+     *
+     * A function to set an array of <var> elements
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool setVar(int numberOfVar, OtherMatrixVarOption **var);
+
+    /**
+     *
+     * A function to add a <var> element
+     * @param idx: the index of the variable
+     * @param value: the value associated with this variable
+     * @param lbValue: a lower bound associated with this variable
+     * @param ubValue: an upper bound associated with this variable
+     */
+    bool addVar(int idx, std::string value, std::string lbValue, std::string ubValue);
+}; //OtherMatrixVariableOption
+#endif
+
+
+
+/*! \class MatrixVariableOption
+ *  \brief the MatrixVariableOption class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.10, 21/10/2016
+ * @since OS 2.10
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class MatrixVariableOption
+{
+
+public:
+    /** number of <other> child elements */
+    int numberOfOtherMatrixVariableOptions;
+
+    /** initial values for the variables */
+    InitMatrixVariableValues *initialMatrixVariableValues;
+
+    /** other variable options */
+    OtherMatrixVariableOptionOrResult **other;
+
+    /**
+     *
+     * Default constructor.
+     */
+    MatrixVariableOption();
+    /**
+     *
+     * Class destructor.
+     */
+    ~MatrixVariableOption();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixVariableOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixVariableOption *that);
+
+    /**
+     *
+     * A function to set an array of <other> elements
+     * @param numberOfOptions: number of <other> elements to be set
+     * @param other: the array of <other> elements that are to be set
+     */
+    bool setOther(int numberOfOptions, OtherMatrixVariableOptionOrResult  **other);
+
+    /**
+     *
+     * A function to add an <other> element
+
+     * @param other: the content of the <other> element to be added
+     */
+    bool addOther(OtherMatrixVariableOptionOrResult *other);
+}; //MatrixVariableOption
+
+
+
+/*! \class InitMatrixObjectiveValues
+ *  \brief the InitMatrixObjectiveValues class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class InitMatrixObjectiveValues
+{
+
+public:
+
+    /** number of <matrixObj> children */
+    int numberOfMatrixObj;
+
+    /** initial value for each variable */
+    OtherMatrixObjectiveOptionOrResult **matrixObj;
+
+    /**
+     * Default constructor.
+     */
+    InitMatrixObjectiveValues();
+
+    /**
+     * Class destructor.
+     */
+    ~InitMatrixObjectiveValues();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(InitMatrixObjectiveValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitMatrixObjectiveValues *that);
+#if 0
+    /**
+     * A function to set an array of <var> elements
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool setMatrixObj(int numberOfMatrixObj, InitMatrixObjectiveValues **var);
+
+    /**
+     * Alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setMatrixObj(int numberOfMatrixObj, InitMatrixObjectiveValues **var, ENUM_COMBINE_ARRAYS disp);
+
+    /**
+     * Another alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
+     * @param idx: the array of indices
+     * @param value: the array of corresponding values
+     * @param name: the array of corresponding names
+     */
+    bool setMatrixObj(int numberOfMatrixObj, int *idx, double *value, std::string *name);
+
+    /**
+     * A function to add a <var> element
+     * @param idx: the index of the variable to be given an initial value
+     * @param value: the initial variable value to be added
+     */
+    bool addMatrixObj(int idx, double value);
+
+    /**
+     * Alternative signature for this function
+     *
+     * A function to add an array of <var> elements simultaneously
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool addMatrixObj(int numberOfVar, InitMatrixObjectiveValues **var);
+#endif
+}; //InitMatrixObjectiveValues
+
+
+/*! \class OtherMatrixObjOption
+ *  \brief the OtherMatrixObjOption class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherMatrixObjOption
+{
+
+public:
+    /** variable index*/
+    int idx;
+
+    /** optional variable name */
+    std::string name;
+
+    /** value of the option */
+    std::string value;
+
+    /** lower bound on the value */
+    std::string lbValue;
+
+    /** lower bound on the value */
+    std::string ubValue;
+
+    /**
+     * Default constructor.
+     */
+    OtherMatrixObjOption();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherMatrixObjOption();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixObjOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixObjOption *that);
+}; //OtherMatrixObjOption
+
+
+/*! \class OtherMatrixObjectiveOption
+ *  \brief the OtherMatrixObjectiveOption class.
+ *
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherMatrixObjectiveOption
+{
+
+public:
+    /** number of <matrixObj> child elements */
+    int numberOfMatrixObj;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** name of the option */
+    std::string name;
+
+    /** value of the option */
+    std::string value;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** description of the option */
+    std::string description;
+
+    /** array of option values */
+    OSMatrixWithMatrixObjIdx **matrixObj;
+
+    /** type of the values in the var array */
+    std::string matrixObjType;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /**
+     * Default constructor.
+     */
+    OtherMatrixObjectiveOption();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherMatrixObjectiveOption();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixObjectiveOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixObjectiveOption *that);
+#if 0
+    /**
+     *
+     * A function to set an array of <var> elements
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool setMatrixObj(int numberOfVar, OtherMatrixObjectiveOption **var);
+
+    /**
+     *
+     * A function to add a <var> element
+     * @param idx: the index of the variable
+     * @param value: the value associated with this variable
+     * @param lbValue: a lower bound associated with this variable
+     * @param ubValue: an upper bound associated with this variable
+     */
+    bool addVar(int idx, std::string value, std::string lbValue, std::string ubValue);
+#endif
+}; //OtherMatrixObjectiveOption
+
+
+
+
+/*! \class MatrixObjectiveOption
+ *  \brief the MatrixObjectiveOption class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.10, 21/10/2016
+ * @since OS 2.10
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class MatrixObjectiveOption
+{
+
+public:
+    /** number of <other> child elements */
+    int numberOfOtherMatrixObjectiveOptions;
+
+    /** initial values for the variables */
+    InitMatrixObjectiveValues *initialMatrixObjectiveValues;
+
+    /** other variable options */
+    OtherMatrixObjectiveOption **other;
+
+    /**
+     * Default constructor.
+     */
+    MatrixObjectiveOption();
+
+    /**
+     * Class destructor.
+     */
+    ~MatrixObjectiveOption();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixObjectiveOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixObjectiveOption *that);
+
+    /**
+     *
+     * A function to set an array of <other> elements
+     * @param numberOfOptions: number of <other> elements to be set
+     * @param other: the array of <other> elements that are to be set
+     */
+    bool setOther(int numberOfOptions, OtherMatrixObjectiveOption  **other);
+
+    /**
+     *
+     * A function to add an <other> element
+     * @param other: the content of the <other> element to be added
+     */
+    bool addOther(OtherMatrixObjectiveOption *other);
+}; //MatrixObjectiveOption
+
+
+/*! \class InitMatrixConstraintValues
+ *  \brief the InitMatrixConstraintValues class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class InitMatrixConstraintValues
+{
+
+public:
+
+    /** number of <matrixCon> children */
+    int numberOfMatrixCon;
+
+    /** initial value for each variable */
+    OtherMatrixConstraintOptionOrResult **matrixCon;
+
+    /**
+     *
+     * Default constructor.
+     */
+    InitMatrixConstraintValues();
+    /**
+     *
+     * Class destructor.
+     */
+    ~InitMatrixConstraintValues();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(InitMatrixConstraintValues *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(InitMatrixConstraintValues *that);
+#if 0
+    /**
+     * A function to set an array of <var> elements
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool setVar(int numberOfVar, InitMatrixConstraintValues **var);
+
+    /**
+     * Alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setVar(int numberOfVar, InitMatrixConstraintValues **var, ENUM_COMBINE_ARRAYS disp);
+
+
+    /**
+     * Another alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
+     * @param idx: the array of indices
+     * @param value: the array of corresponding values
+     * @param name: the array of corresponding names
+     */
+    bool setVar(int numberOfVar, int *idx, double *value, std::string *name);
+
+    /**
+     * A function to add a <var> element
+     * @param idx: the index of the variable to be given an initial value
+     * @param value: the initial variable value to be added
+     */
+    bool addVar(int idx, double value);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <var> elements simultaneously
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool addVar(int numberOfVar, InitMatrixConstraintValues **var);
+#endif
+}; //InitMatrixConstraintValues
+
+
+/*! \class OtherMatrixConOption
+ *  \brief the OtherMatrixConOption class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherMatrixConOption
+{
+
+public:
+    /** variable index*/
+    int idx;
+
+    /** optional variable name */
+    std::string name;
+
+    /** value of the option */
+    std::string value;
+
+    /** lower bound on the value */
+    std::string lbValue;
+
+    /** lower bound on the value */
+    std::string ubValue;
+
+    /**
+     * Default constructor.
+     */
+    OtherMatrixConOption();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherMatrixConOption();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixConOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixConOption *that);
+}; //OtherMatrixConOption
+
+
+/*! \class OtherMatrixConstraintOption
+ *  \brief the OtherMatrixConstraintOption class.
+ *
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherMatrixConstraintOption
+{
+
+public:
+    /** number of <matrixCon> child elements */
+    int numberOfMatrixCon;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** name of the option */
+    std::string name;
+
+    /** value of the option */
+    std::string value;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** description of the option */
+    std::string description;
+
+    /** array of option values */
+    OSMatrixWithMatrixConIdx **matrixCon;
+
+    /** type of the values in the matrixCon array */
+    std::string matrixConType;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /**
+     * Default constructor.
+     */
+
+    OtherMatrixConstraintOption();
+    /**
+     * Class destructor.
+     */
+    ~OtherMatrixConstraintOption();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixConstraintOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixConstraintOption *that);
+#if 0
+    /**
+     *
+     * A function to set an array of <var> elements
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool setMatrixCon(int numberOfMatrixCon, OtherMatrixConOption **var);
+
+    /**
+     *
+     * A function to add a <var> element
+     * @param idx: the index of the variable
+     * @param value: the value associated with this variable
+     * @param lbValue: a lower bound associated with this variable
+     * @param ubValue: an upper bound associated with this variable
+     */
+    bool addVar(int idx, std::string value, std::string lbValue, std::string ubValue);
+#endif
+}; //OtherMatrixConstraintOption
+
+
+
+
+/*! \class MatrixConstraintOption
+ *  \brief the MatrixConstraintOption class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.10, 21/10/2016
+ * @since OS 2.10
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class MatrixConstraintOption
+{
+
+public:
+    /** number of <other> child elements */
+    int numberOfOtherMatrixConstraintOptions;
+
+    /** initial values for the variables */
+    InitMatrixConstraintValues *initialMatrixConstraintValues;
+
+    /** other matrix constraint options */
+    OtherMatrixConstraintOption **other;
+
+    /**
+     *
+     * Default constructor.
+     */
+    MatrixConstraintOption();
+
+    /**
+     *
+     * Class destructor.
+     */
+    ~MatrixConstraintOption();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixConstraintOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(MatrixConstraintOption *that);
+
+    /**
+     *
+     * A function to set an array of <other> elements
+     * @param numberOfOptions: number of <other> elements to be set
+     * @param other: the array of <other> elements that are to be set
+     */
+    bool setOther(int numberOfOptions, OtherMatrixConstraintOption  **other);
+
+    /**
+     *
+     * A function to add an <other> element
+     * @param other: the content of the <other> element to be added
+     */
+    bool addOther(OtherMatrixConstraintOption *other);
+}; //MatrixConstraintOption
+
+
+/*! \class MatrixProgrammingOption
+ * \brief The in-memory representation of the 
+   <b><matrixProgramming></b> element.
+ */
+class MatrixProgrammingOption
+{
+public:
+    /** The number of other matrixProgramming options */
+    int numberOfOtherMatrixProgrammingOptions;
+
+    /** a pointer to the matrixVariables object */
+    MatrixVariableOption* matrixVariables;
+
+    /** a pointer to the matrixObjectives object */
+    MatrixObjectiveOption* matrixObjectives;
+
+    /** a pointer to the matrixConstraints object */
+    MatrixConstraintOption* matrixConstraints;
+
+    /** a pointer to other options associated with the matrix variables */
+    SolverOptionOrResult **other;
+
+
+    /** The MatrixProgrammingOption class constructor */
+    MatrixProgrammingOption();
+
+    /** The MatrixProgrammingOption class destructor */
+    ~MatrixProgrammingOption();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(MatrixProgrammingOption *that);
+
+    /**
+     *
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */    
+    bool deepCopyFrom(MatrixProgrammingOption *that);
+}; // MatrixProgrammingOption
+
+#if 0
 /*! \class SolverOption
  *  \brief the SolverOption class.
  *
@@ -3402,7 +4469,7 @@ public:
      */
     bool deepCopyFrom(SolverOption *that);
 }; //SolverOption
-
+#endif
 
 /*! \class SolverOptions
  *  \brief the SolverOptions class.
@@ -3423,7 +4490,7 @@ public:
     int numberOfSolverOptions;
 
     /** the list of solver options */
-    SolverOption **solverOption;
+    SolverOptionOrResult **solverOption;
 
     /**
      *
@@ -3464,7 +4531,7 @@ public:
      * @param numberOfOptions: number of solver options to be set
      * @param solverOption: the array of solver options that are to be set
      */
-    bool setSolverOptions(int numberOfOptions, SolverOption **solverOption);
+    bool setSolverOptions(int numberOfOptions, SolverOptionOrResult **solverOption);
 
     /**
      *
@@ -3514,8 +4581,12 @@ public:
     /** the options for the constraints */
     ConstraintOption *constraints;
 
+    /** the options for the matrixProgramming section */
+    MatrixProgrammingOption *matrixProgramming;
+
     /** other solver options */
     SolverOptions *solverOptions;
+
     /**
      *
      * Default constructor.
@@ -4623,10 +5694,10 @@ public:
      * <p>
      *
      * @param solver_name is the name of the solver whose options we want
-     * @return a vector of pointers to SolverOption objects that
+     * @return a vector of pointers to SolverOptionOrResult objects that
      * correspond to the solver named.
      */
-    std::vector<SolverOption*> getSolverOptions( std::string solver_name);
+    std::vector<SolverOptionOrResult*> getSolverOptions( std::string solver_name);
 
 
     /**
@@ -4640,7 +5711,7 @@ public:
      * @return a vector of pointers to SolverOption objects that
      * correspond to the solver named.
      */
-    std::vector<SolverOption*> getSolverOptions( std::string solver_name, bool getFreeOptions);
+    std::vector<SolverOptionOrResult*> getSolverOptions( std::string solver_name, bool getFreeOptions);
 
     /**
      * Get all solver options
@@ -4648,7 +5719,7 @@ public:
      *
      * @return a pointer to an array SolverOption objects
      */
-    SolverOption** getAllSolverOptions();
+    SolverOptionOrResult** getAllSolverOptions();
 
     /* --------------------------------------------------
     *  set() methods
@@ -5103,7 +6174,7 @@ public:
                                 std::string category, std::string type,
                                 std::string description, std::string *itemList);
 
-    bool setSolverOptions(int numberOfSolverOptions, SolverOption** solverOption);
+    bool setSolverOptions(int numberOfSolverOptions, SolverOptionOrResult** solverOption);
     bool setAnotherSolverOption(std::string name, std::string value, std::string solver,
                                 std::string category, std::string type, std::string description);
 

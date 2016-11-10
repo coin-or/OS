@@ -2282,6 +2282,7 @@ public:
 
     /** variables holds the solution information for
      *  the variables
+
      */
     VariableSolution *variables;
     /** constraints holds the solution information
@@ -3491,7 +3492,7 @@ public:
     /**
      * Set the general otherResult value
      *
-     * @param name holds the general otherResult value
+     * @param value holds the general otherResult value
      * @param idx holds the index of the otherResult in the array
      * @return whether the general otherResult value is set successfully or not.
      */
@@ -3500,11 +3501,22 @@ public:
     /**
      * Set the general otherResult description
      *
-     * @param name holds the general otherResult description
+     * @param description holds the general otherResult description
      * @param idx holds the index of the otherResult in the array
      * @return whether the general otherResult description is set successfully or not.
      */
     bool setOtherGeneralResultDescription(int idx, std::string description);
+
+    /**
+     * Set an otherGeneralResult 
+     *
+     * @param idx holds the index of the otherResult in the array
+     * @param name holds the general otherResult description
+     * @param value holds the general otherResult value
+     * @param description holds the general otherResult description
+     * @return whether the otherGeneralResult was set successfully or not.
+     */
+    bool setOtherGeneralResult(int idx, std::string name, std::string value, std::string description);
 
     /**
      * Set the system information

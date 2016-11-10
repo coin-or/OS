@@ -939,7 +939,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
             outStr << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-            std::vector<SolverOption*> optionsVector;
+            std::vector<SolverOptionOrResult*> optionsVector;
             optionsVector = osoption->getSolverOptions( "ipopt",true);
             char *pEnd;
             int i;

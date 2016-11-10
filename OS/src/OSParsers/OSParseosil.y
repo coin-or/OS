@@ -5023,7 +5023,8 @@ osglMatrixConIdxATT: MATRIXCONIDXATT quote INTEGER quote
     if (osglData->matrixConIdxPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one matrixConIdx attribute in <matrixCon> element");
     osglData->matrixConIdxPresent = true;
-    if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "<matrixConIdx> cannot be negative");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<matrixConIdx> cannot be negative");
     osglData->matrixConIdx = $3; 
 };
 
@@ -5032,7 +5033,8 @@ osglMatrixObjIdxATT: MATRIXOBJIDXATT quote INTEGER quote
     if (osglData->matrixObjIdxPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one matrixObjIdx attribute in <matrixObj> element");
     osglData->matrixObjIdxPresent = true;
-    if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "<matrixObjIdx> cannot be negative");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<matrixObjIdx> cannot be negative");
     osglData->matrixObjIdx = $3; 
 };
 
@@ -5041,7 +5043,8 @@ osglMatrixVarIdxATT: MATRIXVARIDXATT quote INTEGER quote
     if (osglData->matrixVarIdxPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one matrixVarIdx attribute in <matrixVar> element");
     osglData->matrixVarIdxPresent = true;
-    if ($3 < 0) osrlerror(NULL, NULL, parserData, osglData, osnlData, "<matrixVarIdx> cannot be negative");
+    if ($3 < 0)
+        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<matrixVarIdx> cannot be negative");
     osglData->matrixVarIdx = $3; 
 };
 

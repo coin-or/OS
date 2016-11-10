@@ -59,6 +59,19 @@ CsdpSolver::CsdpSolver()
     m_osilreader = NULL;
     m_osolreader = NULL;
     csdpErrorMsg = new std::string("");
+
+    nC_rows = -1;
+    nC_blks = -1;
+    ncon    = -1;
+
+    //C_matrix     = NULL;
+    C_matrix.nblocks = -1;
+    rhsValues    = NULL;
+    mconstraints = NULL;
+
+    X.nblocks = -1;
+    y = NULL;
+    Z.nblocks = -1;
 }
 
 CsdpSolver::~CsdpSolver()
@@ -84,8 +97,10 @@ CsdpSolver::~CsdpSolver()
     if (y != NULL)
         free(y); 
     y = NULL;
-    free_mat(X);
-    free_mat(Z);
+    if (X.nblocks != -1)
+        free_mat(X);
+    if (Z.nblocks != -1)
+        free_mat(Z);
 
     for (int i=1; i<=C_matrix.nblocks; i++)
     {
@@ -623,7 +638,7 @@ void  CsdpSolver::setSolverOptions() throw(ErrorClass)
             outStr << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-            std::vector<SolverOption*> optionsVector;
+            std::vector<SolverOptionOrResult*> optionsVector;
             optionsVector = osoption->getSolverOptions( "csdp",true);
             char *pEnd;
             int i;
@@ -763,7 +778,7 @@ void  CsdpSolver::setInitialValues() throw (ErrorClass)
             outStr << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSSolverInterfaces, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-            std::vector<SolverOption*> optionsVector;
+            std::vector<SolverOptionOrResult*> optionsVector;
             optionsVector = osoption->getSolverOptions( "ipopt",true);
             char *pEnd;
             int i;
@@ -846,13 +861,16 @@ void  CsdpSolver::solve() throw (ErrorClass)
     {
 
 // what about initial values for X and Y? perhaps even y?
-//if osoption->...->initialmatrix != NUll, set initial values. Make sure that defaults are there
+//if osoption->optimization->constraints != NULL or
+//osoption->optimization->matrixVariables != NULL or
+//...->initialmatrix != NUll, set initial values. Make sure that defaults are there
 //in case X or Z is empty
   
         /*
          * Create an initial solution.  This allocates space for X, y, and Z,
          * and sets initial values.
          */
+        //setInitialValues(nC_rows,ncon,C_matrix,mconstraints,&X,&y,&Z);
 //else
         initsoln(nC_rows,ncon,C_matrix,rhsValues,mconstraints,&X,&y,&Z);
 

@@ -183,10 +183,15 @@ public:
     bool initialConstraintValuesPresent;
     bool initialDualVariableValuesPresent;
     int  numberOfDuals;
+    int  numberOfMatrixVar;
+    int  numberOfMatrixObj;
+    int  numberOfMatrixCon;
     int  numberOfSolverOptions;
     double groupWeight;
     double lbDualValue;
     double ubDualValue;
+    int  numberOfOtherMatrixProgrammingOptions;
+    int  numberOfOtherMatrixVariableOptions;
     int numberOfEnumerations;
     int otherOptionType;
 

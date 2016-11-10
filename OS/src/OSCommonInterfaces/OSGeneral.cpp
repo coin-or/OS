@@ -1711,3 +1711,203 @@ bool TimeSpan::deepCopyFrom(TimeSpan *that)
     return true;
 }// end of TimeSpan::deepCopyFrom
 
+
+OtherMatrixVariableOptionOrResult::OtherMatrixVariableOptionOrResult():
+    name(""),
+    description(""),
+    value(""),
+    type(""),
+    solver(""),
+    category(""),
+    numberOfMatrixVar(0),
+    matrixType(""),
+    numberOfEnumerations(0),
+    enumType(""),
+    matrixVar(NULL),
+    enumeration(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherMatrixVariableOptionOrResult Constructor");
+#endif
+}// end OtherMatrixVariableOptionOrResult constructor
+
+OtherMatrixVariableOptionOrResult::~OtherMatrixVariableOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherMatrixVariableOptionOrResult Destructor Called");
+#endif
+    if (numberOfMatrixVar > 0)
+        if (matrixVar != NULL)
+        {
+            for (int i=0; i< numberOfMatrixVar; ++i)
+                if (matrixVar[i] != NULL)
+                    delete matrixVar[i];
+            delete [] matrixVar;
+            matrixVar = NULL;
+        }
+
+    if (numberOfEnumerations > 0)
+        if (enumeration != NULL)
+        {
+            for (int i=0; i < numberOfEnumerations; i++)
+                if (enumeration[i] != NULL)
+                    delete enumeration[i];
+            delete[] enumeration;
+            enumeration = NULL;
+        }
+}//end OtherMatrixVariableOptionOrResult destructor
+
+
+SolverOptionOrResult::SolverOptionOrResult():
+    name (""),
+    description (""),
+    value (""),
+    type (""),
+    solver(""),
+    category (""),
+    numberOfMatrices(0),
+    numberOfItems(0),
+    matrix(NULL),
+    item(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside SolverOptionOrResult Constructor");
+#endif
+}// end SolverOptionOrResult constructor
+
+SolverOptionOrResult::~SolverOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "SolverOptionOrResult Destructor Called");
+#endif
+    if (numberOfMatrices > 0)
+        if (matrix != NULL)
+        {
+            for (int i=0; i< numberOfMatrices; ++i)
+                if (matrix[i] != NULL)
+                    delete matrix[i];
+            delete [] matrix;
+            matrix = NULL;
+        }
+        
+    if (item != NULL) delete[] item;
+    item = NULL;
+}//end SolverOptionOrResult destructor
+
+
+bool SolverOptionOrResult::IsEqual(SolverOptionOrResult *that )
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SolverOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->name        != that->name)     ||
+                (this->value       != that->value)    ||
+                (this->solver      != that->solver)   ||
+                (this->category    != that->category) ||
+                (this->type        != that->type)     ||
+                (this->description != that->description))
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            return true;
+        }
+    }
+}//SolverOptionOrResult::IsEqual
+
+
+bool SolverOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random SolverOptionOrResult");
+#endif
+    if (OSRand() <= density || conformant) this->name = "random string";
+
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->description = "random string";
+
+    if (OSRand() <= density)
+    {
+        this->numberOfItems = (int)(4*OSRand());
+
+        int n;
+
+        if (conformant)    n = this->numberOfItems;
+        else            n = (int)(4*OSRand());
+
+        item = new std::string[n];
+        for (int i = 0; i < n; i++)
+            item[i] = "random string";
+    }
+    return true;
+}//SolverOptionOrResult::setRandom
+
+bool SolverOptionOrResult::deepCopyFrom(SolverOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of SolverOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->value       = that->value;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->type        = that->type;
+    this->description = that->description;
+
+    this->numberOfItems = that->numberOfItems;
+    int n = this->numberOfItems;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->item = new std::string[n];
+    for (int i = 0; i < n; i++)
+        this->item[i] = that->item[i];
+
+    return true;
+}//SolverOption::deepCopyFrom
+

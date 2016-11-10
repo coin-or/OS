@@ -467,7 +467,7 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass)
         if(osoption != NULL && osoption->getNumberOfSolverOptions() > 0 )
         {
             int i;
-            std::vector<SolverOption*> optionsVector;
+            std::vector<SolverOptionOrResult*> optionsVector;
             optionsVector = osoption->getSolverOptions( "couenne",true);
             int num_bonmin_options = optionsVector.size();
             std::string optionName;

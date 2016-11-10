@@ -719,7 +719,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass)
         {
             char *pEnd;
             int i;
-            std::vector<SolverOption*> optionsVector;
+            std::vector<SolverOptionOrResult*> optionsVector;
             optionsVector = osoption->getSolverOptions( "bonmin",true);
             int num_bonmin_options = optionsVector.size();
 
@@ -907,6 +907,7 @@ void BonminSolver::solve() throw (ErrorClass)
                 throw ErrorClass("OSResult error: setInstanceName");
             if(osresult->setVariableNumber( osinstance->getVariableNumber()  ) != true)
                 throw ErrorClass("OSResult error: setVariableNumber");
+
             if(osresult->setObjectiveNumber( 1) != true)
                 throw ErrorClass("OSResult error: setObjectiveNumber");
             if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
@@ -1083,6 +1084,7 @@ void BonminSolver::writeResult()
         if(osinstance->getVariableNumber()  > 0) delete[] x;
         x = NULL;
         delete[] z;
+
         z = NULL;
         osresult->setGeneralMessage( eclass.errormsg);
         osresult->setGeneralStatusType( "error");

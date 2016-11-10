@@ -9,7 +9,6 @@
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- *
  */
 
 #ifndef OSMATRIX_H
@@ -18,6 +17,7 @@
 #include "OSConfig.h"
 #include "OSParameters.h"
 #include "OSnLNode.h"
+#include "OSGeneral.h"
 #include "OSExpressionTree.h"
 
 #include <string>
@@ -42,7 +42,13 @@ class OSnLNode;
 class OSnLMNode;
 class OSnLCNode;
 class RealValuedExpressionTree;
+class ComplexValuedExpressionTree;
+class OSMatrix;
 
+/** 
+ * The inclusion of OSGeneral also creates circular dependencies, which require forward declarations
+ */  
+class IntVector;
 
 /*! \class MatrixNode
  *  \brief a generic class from which we derive matrix constructors

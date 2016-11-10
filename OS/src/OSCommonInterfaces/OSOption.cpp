@@ -1176,29 +1176,112 @@ ConstraintOption::~ConstraintOption()
 }//end ConstraintOption destructor
 
 
-SolverOption::SolverOption():
-    name (""),
-    value (""),
-    solver(""),
-    category (""),
-    type (""),
-    description (""),
-    numberOfItems(0),
-    item(NULL)
+InitMatrixVariableValues::InitMatrixVariableValues():
+    numberOfMatrixVar(0),
+    matrixVar(NULL)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Inside SolverOption Constructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside InitMatrixVariableValues Constructor");
 #endif
-}// end SolverOption constructor
+}// end InitMatrixVariableValues constructor
 
-SolverOption::~SolverOption()
+InitMatrixVariableValues::~InitMatrixVariableValues()
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "SolverOption Destructor Called");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, 
+        "InitMatrixVariableValues Destructor Called");
 #endif
-    if (item != NULL) delete[] item;
-    item = NULL;
-}//end SolverOption destructor
+    if (numberOfMatrixVar > 0)
+        if (matrixVar != NULL)
+        {
+            for (int i=0; i< numberOfMatrixVar; ++i)
+                if (matrixVar[i] != NULL)
+                    delete matrixVar[i];
+            delete [] matrixVar;
+            matrixVar = NULL;
+        }
+}//end InitMatrixVariableValues destructor
+
+
+MatrixVariableOption::MatrixVariableOption():
+    numberOfOtherMatrixVariableOptions(0)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Inside MatrixVariableOption Constructor");
+#endif
+    initialMatrixVariableValues = NULL;
+    other = NULL;
+}// end MatrixVariableOption constructor
+
+MatrixVariableOption::~MatrixVariableOption()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "MatrixVariableOption Destructor Called");
+#endif
+    if (initialMatrixVariableValues != NULL)
+    {
+        delete initialMatrixVariableValues;
+        initialMatrixVariableValues = NULL;
+    }
+
+    if (numberOfOtherMatrixVariableOptions > 0)
+        if (other != NULL)
+        {
+            for (int i=0; i< numberOfOtherMatrixVariableOptions; ++i)
+                if (other[i] != NULL)
+                    delete other[i];
+            delete [] other;
+            other = NULL;
+        }
+}//end MatrixVariableOption destructor
+
+
+MatrixProgrammingOption::MatrixProgrammingOption():
+    numberOfOtherMatrixProgrammingOptions(0)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Inside MatrixProgrammingOption Constructor");
+#endif
+    matrixVariables = NULL;
+    matrixObjectives = NULL;
+    matrixConstraints = NULL;
+    other = NULL;
+}// end MatrixProgrammingOption constructor
+
+MatrixProgrammingOption::~MatrixProgrammingOption()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "MatrixProgrammingOption Destructor Called");
+#endif
+    if (matrixVariables != NULL)
+    {
+        delete matrixVariables;
+        matrixVariables = NULL;
+    }
+#if 0
+    if (matrixObjectives != NULL)
+    {
+        delete matrixObjectives;
+        matrixObjectives = NULL;
+    }
+
+    if (matrixConstraints != NULL)
+    {
+        delete matrixConstraints;
+        matrixConstraints = NULL;
+    }
+#endif
+    if (numberOfOtherMatrixProgrammingOptions > 0)
+        if (other != NULL)
+        {
+            for (int i=0; i< numberOfOtherMatrixProgrammingOptions; ++i)
+                if (other[i] != NULL)
+                    delete other[i];
+            delete [] other;
+            other = NULL;
+        }
+}//end MatrixProgrammingOption destructor
 
 
 SolverOptions::SolverOptions():
@@ -3955,6 +4038,7 @@ OtherObjectiveOption* OSOption::getOtherObjectiveOption(int optionNumber)
  * @return an array of other objective options associated with this solver
  */
 
+
 OtherObjectiveOption** OSOption::getAllOtherObjectiveOptions()
 {
     OtherObjectiveOption** optionsVector;
@@ -4506,9 +4590,9 @@ OtherConstraintOption* OSOption::getOtherConstraintOption(int optionNumber)
  * @param solver_name is the name of the solver
  * @return an array of solver options associated with this solver
  */
-std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
+std::vector<SolverOptionOrResult*>  OSOption::getSolverOptions( std::string solver_name)
 {
-    std::vector<SolverOption*> optionsVector;
+    std::vector<SolverOptionOrResult*> optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->solverOptions != NULL)
@@ -4537,9 +4621,9 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
  *        options should be returned or not
  * @return an array of solver options associated with this solver
  */
-std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name, bool getFreeOptions)
+std::vector<SolverOptionOrResult*>  OSOption::getSolverOptions( std::string solver_name, bool getFreeOptions)
 {
-    std::vector<SolverOption*> optionsVector;
+    std::vector<SolverOptionOrResult*> optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->solverOptions != NULL)
@@ -4565,9 +4649,9 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name,
  * get the array of all solver options
  * @return an array of other constraint options associated with this solver
  */
-SolverOption** OSOption::getAllSolverOptions()
+SolverOptionOrResult** OSOption::getAllSolverOptions()
 {
-    SolverOption** optionsVector;
+    SolverOptionOrResult** optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->solverOptions != NULL)
@@ -7422,7 +7506,7 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
  * @param numberOfOptions: number of solver options to be set
  * @param solverOption: the array of solver options that are to be set
  */
-bool SolverOptions::setSolverOptions(int numberOfOptions, SolverOption **solverOption)
+bool SolverOptions::setSolverOptions(int numberOfOptions, SolverOptionOrResult **solverOption)
 {
     try
     {
@@ -7436,12 +7520,12 @@ bool SolverOptions::setSolverOptions(int numberOfOptions, SolverOption **solverO
         if (numberOfOptions == 0)
             return true;
 
-        this->solverOption = new SolverOption*[numberOfOptions];
+        this->solverOption = new SolverOptionOrResult*[numberOfOptions];
 
         int  i;
         for (i = 0; i < numberOfOptions; i++)
         {
-            this->solverOption[i] = new SolverOption();
+            this->solverOption[i] = new SolverOptionOrResult();
 
             this->solverOption[i]->numberOfItems = solverOption[i]->numberOfItems;
             this->solverOption[i]->name = solverOption[i]->name;
@@ -7493,14 +7577,14 @@ bool SolverOptions::addSolverOption(std::string name, std::string value, std::st
         else
             nopt = this->numberOfSolverOptions;
 
-        SolverOption** temp = new SolverOption*[nopt+1];  //Allocate the new pointers
+        SolverOptionOrResult** temp = new SolverOptionOrResult*[nopt+1];  //Allocate the new pointers
         for (i = 0; i < nopt; i++)
             temp[i] = this->solverOption[i];  //copy the pointers
 
         delete[] this->solverOption; //delete old pointers
 
 //    add in the new element
-        temp[ nopt] = new SolverOption();
+        temp[ nopt] = new SolverOptionOrResult();
 
         temp[ nopt]->numberOfItems = 0;
         temp[ nopt]->name = name;
@@ -9453,10 +9537,10 @@ bool OSOption::setNumberOfSolverOptions(int numberOfOptions)
 
     optimization->solverOptions = new SolverOptions();
     optimization->solverOptions->numberOfSolverOptions = numberOfOptions;
-    optimization->solverOptions->solverOption = new SolverOption*[numberOfOptions];
+    optimization->solverOptions->solverOption = new SolverOptionOrResult*[numberOfOptions];
 
     for (int j=0; j < numberOfOptions; j++)
-        optimization->solverOptions->solverOption[j] = new SolverOption();
+        optimization->solverOptions->solverOption[j] = new SolverOptionOrResult();
     return true;
 }//setNumberOfSolverOptions
 
@@ -9490,7 +9574,7 @@ bool OSOption::setSolverOptionContent(int iOption, int numberOfItems,
     return true;
 }//setSolverOptionContent
 
-bool OSOption::setSolverOptions(int numberOfSolverOptions, SolverOption** solverOption)
+bool OSOption::setSolverOptions(int numberOfSolverOptions, SolverOptionOrResult** solverOption)
 {
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
@@ -12083,7 +12167,8 @@ bool SolverOptions::IsEqual(SolverOptions *that)
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SolverOptions");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in SolverOptions");
 #endif
     if (this == NULL)
     {
@@ -12128,61 +12213,6 @@ bool SolverOptions::IsEqual(SolverOptions *that)
         }
     }
 }//SolverOptions::IsEqual
-
-bool SolverOption::IsEqual(SolverOption *that )
-{
-    std::ostringstream outStr;
-
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SolverOption");
-#endif
-    if (this == NULL)
-    {
-        if (that == NULL)
-            return true;
-        else
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
-#endif
-            return false;
-        }
-    }
-    else
-    {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if ((this->name        != that->name)     ||
-                (this->value       != that->value)    ||
-                (this->solver      != that->solver)   ||
-                (this->category    != that->category) ||
-                (this->type        != that->type)     ||
-                (this->description != that->description))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
-                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
-                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
-                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
-                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
-                outStr << "description: " << this->description << " vs. " << that->description << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
-    }
-}//SolverOption::IsEqual
 
 
 /***********************************************************************
@@ -13259,43 +13289,14 @@ bool SolverOptions::setRandom( double density, bool conformant )
     if (conformant)    n = this->numberOfSolverOptions;
     else            n = (int)(1+4*OSRand());
 
-    solverOption = new SolverOption*[n];
+    solverOption = new SolverOptionOrResult*[n];
     for (int i = 0; i < n; i++)
     {
-        solverOption[i] = new SolverOption();
+        solverOption[i] = new SolverOptionOrResult();
         solverOption[i]->setRandom(density, conformant);
     }
     return true;
 }//SolverOptions::setRandom
-
-bool SolverOption::setRandom( double density, bool conformant )
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Set random SolverOption");
-#endif
-    if (OSRand() <= density || conformant) this->name = "random string";
-
-    if (OSRand() <= density) this->value       = "random string";
-    if (OSRand() <= density) this->solver      = "random string";
-    if (OSRand() <= density) this->category    = "random string";
-    if (OSRand() <= density) this->type        = "random string";
-    if (OSRand() <= density) this->description = "random string";
-
-    if (OSRand() <= density)
-    {
-        this->numberOfItems = (int)(4*OSRand());
-
-        int n;
-
-        if (conformant)    n = this->numberOfItems;
-        else            n = (int)(4*OSRand());
-
-        item = new std::string[n];
-        for (int i = 0; i < n; i++)
-            item[i] = "random string";
-    }
-    return true;
-}//SolverOption::setRandom
 
 
 /***********************************************************************
@@ -13837,6 +13838,7 @@ bool InitVariableValuesString::deepCopyFrom(InitVariableValuesString *that)
 
 bool InitVarValueString::deepCopyFrom(InitVarValueString *that)
 {
+
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of InitVarValueString");
 #endif
@@ -14330,38 +14332,13 @@ bool SolverOptions::deepCopyFrom(SolverOptions *that)
     if (n  < 0) return false;
     if (n == 0) return true;
 
-    this->solverOption = new SolverOption*[n];
+    this->solverOption = new SolverOptionOrResult*[n];
     for (int i = 0; i < n; i++)
     {
-        this->solverOption[i] = new SolverOption();
+        this->solverOption[i] = new SolverOptionOrResult();
         if (!this->solverOption[i]->deepCopyFrom(that->solverOption[i]))
             return false;
     }
     return true;
 }//SolverOptions::deepCopyFrom
-
-bool SolverOption::deepCopyFrom(SolverOption *that)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of SolverOption");
-#endif
-    this->name        = that->name;
-    this->value       = that->value;
-    this->solver      = that->solver;
-    this->category    = that->category;
-    this->type        = that->type;
-    this->description = that->description;
-
-    this->numberOfItems = that->numberOfItems;
-    int n = this->numberOfItems;
-
-    if (n  < 0) return false;
-    if (n == 0) return true;
-
-    this->item = new std::string[n];
-    for (int i = 0; i < n; i++)
-        this->item[i] = that->item[i];
-
-    return true;
-}//SolverOption::deepCopyFrom
 

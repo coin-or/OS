@@ -20,7 +20,7 @@
  * to place temporary data into the correct parser data object.
  */
 %{
-//#define OSOLPARSERDEBUG
+#define OSOLPARSERDEBUG
 
 #ifdef OSOLPARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext)
@@ -189,6 +189,10 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfOtherConstraintOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTOPTIONSATT);}
 ({xmlwhitespace}+numberOfOtherObjectiveOptions{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVEOPTIONSATT);}
 ({xmlwhitespace}+numberOfOtherVariableOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERVARIABLEOPTIONSATT);}
+({xmlwhitespace}+numberOfOtherMatrixProgrammingOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERMATRIXPROGRAMMINGOPTIONSATT);}
+({xmlwhitespace}+numberOfOtherMatrixConstraintOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERMATRIXCONSTRAINTOPTIONSATT);}
+({xmlwhitespace}+numberOfOtherMatrixObjectiveOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERMATRIXOBJECTIVEOPTIONSATT);}
+({xmlwhitespace}+numberOfOtherMatrixVariableOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERMATRIXVARIABLEOPTIONSATT);}
 ({xmlwhitespace}+numberOfPaths{equality}) {YY_PRINT; return(NUMBEROFPATHSATT);}
 ({xmlwhitespace}+numberOfPathPairs{equality}) {YY_PRINT; return(NUMBEROFPATHPAIRSATT);}
 ({xmlwhitespace}+numberOfProcesses{equality}) {YY_PRINT; return(NUMBEROFPROCESSESATT);}
@@ -298,6 +302,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/initialConstraintValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALCONSTRAINTVALUESEND);}
 {xmlwhitespace}*\<initialDualValues {YY_PRINT; return(INITIALDUALVALUESSTART);}
 {xmlwhitespace}*\<\/initialDualValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALDUALVALUESEND);}
+{xmlwhitespace}*\<initialMatrixVariableValues {YY_PRINT; return(INITIALMATRIXVARIABLEVALUESSTART);}
+{xmlwhitespace}*\<\/initialMatrixVariableValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALMATRIXVARIABLEVALUESEND);}
 {xmlwhitespace}*\<solverOptions {YY_PRINT; return(SOLVEROPTIONSSTART);}
 {xmlwhitespace}*\<\/solverOptions{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SOLVEROPTIONSEND);}
 {xmlwhitespace}*\<solverOption {YY_PRINT; return(SOLVEROPTIONSTART);}

@@ -142,6 +142,8 @@ OSoLParserData::OSoLParserData() :
     groupWeight(0.0),
     lbDualValue(0.0),
     ubDualValue(0.0),
+    numberOfOtherMatrixProgrammingOptions(0),
+    numberOfOtherMatrixVariableOptions(0),
     numberOfEnumerations(0),
     otherOptionType(0),
 

@@ -17,11 +17,20 @@
 
 #include "OSConfig.h"
 #include "OSParameters.h"
+#include "OSMatrix.h"
 #include "OSnLNode.h"
 #include "OSExpressionTree.h"
 
 #include <string>
 #include <vector>
+
+/**
+ *  Some forward declarations in order to work around circular referecnes
+ */
+class OSMatrix;
+class OSMatrixWithMatrixVarIdx;
+class OSMatrixWithMatrixObjIdx;
+class OSMatrixWithMatrixConIdx;
 
 
 
@@ -62,24 +71,20 @@ public:
 
     /**
      * Constructor.
-     *
      */
     GeneralFileHeader();
 
     /**
-     *
      * Default destructor.
      */
     ~GeneralFileHeader();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(GeneralFileHeader *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -602,7 +607,6 @@ public:
 
 };//class OtherOptionOrResultEnumeration
 
-
 /*! \class DoubleVector
  * \brief a double vector data structure
  */
@@ -965,6 +969,367 @@ public:
     bool deepCopyFrom(TimeSpan *that);
 }; //TimeSpan
 
+
+/*! \class OtherMatrixVariableOptionOrResult
+ *  brief a data structure used in OSOption and OSResult
+ */
+class OtherMatrixVariableOptionOrResult
+{
+public:
+    /** name of the option */
+    std::string name;
+
+    /** description of the option */
+    std::string description;
+
+    /** value of the option */
+    std::string value;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** number of <matrixVar> child elements */
+    int numberOfMatrixVar;
+
+    /** type of the values in the matrixVar array */
+    std::string matrixType;
+
+    /** array of option values */
+    OSMatrixWithMatrixVarIdx **matrixVar;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /**
+     * Default constructor.
+     */
+    OtherMatrixVariableOptionOrResult();
+    /**
+     * Class destructor.
+     */
+    ~OtherMatrixVariableOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixVariableOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixVariableOptionOrResult *that);
+
+    /**
+     *
+     * A function to set an array of <var> elements
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool setVar(int numberOfVar, OtherMatrixVariableOptionOrResult **var);
+
+    /**
+     * A function to add a <var> element
+     * @param idx: the index of the variable
+     * @param value: the value associated with this variable
+     * @param lbValue: a lower bound associated with this variable
+     * @param ubValue: an upper bound associated with this variable
+     */
+    bool addVar(int idx, std::string value, std::string lbValue, std::string ubValue);
+};// OtherMatrixVariableOptionOrResult 
+
+
+/*! \class OtherMatrixObjectiveOptionOrResult
+ *  brief a data structure used in OSOption and OSResult
+ */
+class OtherMatrixObjectiveOptionOrResult : public IntVector
+{
+public:
+    /** name of the option */
+    std::string name;
+
+    /** description of the option */
+    std::string description;
+
+    /** value of the option */
+    std::string value;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** number of <matrixObj> child elements */
+    int numberOfMatrixObj;
+
+    /** type of the values in the matrixVar array */
+    std::string matrixObjType;
+
+    /** array of option values */
+    OSMatrixWithMatrixObjIdx **matrixObj;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /**
+     * Default constructor.
+     */
+    OtherMatrixObjectiveOptionOrResult();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherMatrixObjectiveOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixObjectiveOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixObjectiveOptionOrResult *that);
+
+    /**
+     *
+     * A function to set an array of <matrixObj> elements
+     * @param numberOfVar: number of <matrixObj> elements to be set
+     * @param matrixObj: the array of <matrixObj> elements that are to be set
+     */
+    bool setMatrixObj(int numberOfMatrixObj, OtherMatrixObjectiveOptionOrResult **matrixObj);
+
+    /**
+     * A function to add a <var> element
+     * @param idx: the index of the variable
+     * @param value: the value associated with this variable
+     * @param lbValue: a lower bound associated with this variable
+     * @param ubValue: an upper bound associated with this variable
+     */
+    bool addMatrixObj(int idx, std::string value, std::string lbValue, std::string ubValue);
+};// OtherMatrixObjectiveOptionOrResult 
+
+
+/*! \class OtherMatrixConstraintOptionOrResult
+ *  brief a data structure used in OSOption and OSResult
+ */
+class OtherMatrixConstraintOptionOrResult : public IntVector
+{
+public:
+    /** name of the option */
+    std::string name;
+
+    /** description of the option */
+    std::string description;
+
+    /** value of the option */
+    std::string value;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** number of <matrixCon> child elements */
+    int numberOfMatrixCon;
+
+    /** type of the values in the matrixCon array */
+    std::string matrixConType;
+
+    /** array of option values */
+    OSMatrixWithMatrixConIdx **matrixCon;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /**
+     * Default constructor.
+     */
+    OtherMatrixConstraintOptionOrResult();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherMatrixConstraintOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherMatrixConstraintOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherMatrixConstraintOptionOrResult *that);
+
+    /**
+     *
+     * A function to set an array of <matrixCon> elements
+     * @param numberOfVar: number of <matrixCon> elements to be set
+     * @param matrixCon: the array of <matrixCon> elements that are to be set
+     */
+    bool setMatrixCon(int numberOfMatrixCon, OtherMatrixConstraintOptionOrResult **matrixCon);
+
+    /**
+     * A function to add a <matrixCon> element
+     * @param idx: the index of the matrix constraint
+     * @param value: the value associated with this matrix constraint
+     * @param lbValue: a lower bound associated with this matrix constraint
+     * @param ubValue: an upper bound associated with this matrix constraint
+     */
+    bool addMatrixCon(int idx, std::string value, std::string lbValue, std::string ubValue);
+};// OtherMatrixConstraintOptionOrResult 
+
+/*! \class SolverOptionOrResult
+ *  \brief The SolverOptionOrResult  Class.
+ *
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ *
+ * \remarks
+ * A class that allows aritrary input or output communication with the solver
+ * concerning an option or result associated with the solution.
+ */
+class SolverOptionOrResult
+{
+public:
+    /** the name of the option or result the user is defining */
+    std::string name;
+
+    /** a brief description of the type of option or result */
+    std::string description;
+
+    /** the value of the option or result */
+    std::string value;
+
+    /** the type of the option or result value (integer, double, boolean, string) */
+    std::string type;
+
+    /** the solver to which the option or result applies */
+    std::string solver;
+
+    /** this element allows a specific category to be associated with this
+        particular type of option or result
+     */
+    std::string category;
+
+    /** the number of matrix valued input contained in this SolverOptionOrResult
+     */
+    int numberOfMatrices;
+
+    /** the number of items contained in this SolverOptionOrResult
+     */
+    int numberOfItems;
+
+        /** an array of matrices
+     */
+    OSMatrix **matrix;
+
+    /** an array of items (string-valued)
+     */
+    std::string *item;
+
+    /**
+     * Default constructor.
+     */
+    SolverOptionOrResult();
+
+    /**
+     * Class destructor.
+     */
+    ~SolverOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(SolverOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(SolverOptionOrResult *that);
+};//SolverOptionOrResult
 
 class OSGeneral
 {
