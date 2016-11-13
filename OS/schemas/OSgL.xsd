@@ -1496,7 +1496,6 @@ equal tensor rank</xs:documentation>
 			<xs:element ref="productDist"/>
 		</xs:choice>
 	</xs:group>
-
 	<xs:complexType name="EmpiricalDiscreteElement">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
@@ -2065,7 +2064,6 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="MaxDist">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
@@ -2102,8 +2100,6 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
 	<xs:complexType name="MatrixNormal">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
@@ -2174,13 +2170,14 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:element name="dim" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="param" type="DistributionParameter" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfParam</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDim" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="custom" type="CustomDistribution">
@@ -3441,7 +3438,7 @@ equal tensor rank</xs:documentation>
 	</xs:simpleType>
 	<xs:complexType name="OtherVariableOptionOrResult">
 		<xs:choice>
-			<xs:element name="var" type="OptionOrResultElementString" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="var" type="OtherOptionOrResultElementString" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
 				</xs:annotation>
@@ -3471,7 +3468,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveOptionOrResult">
 		<xs:choice>
-			<xs:element name="obj" type="ObjOptionOrResultElementString" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="obj" type="OtherObjOptionOrResultElementString" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
 				</xs:annotation>
@@ -3501,7 +3498,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="OtherConstraintOptionOrResult">
 		<xs:choice>
-			<xs:element name="con" type="OptionOrResultElementString" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="con" type="OtherOptionOrResultElementString" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfCon must be set in parent, and the number of entries must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
@@ -3561,7 +3558,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="OtherSOSOptionOrResult">
 		<xs:choice>
-			<xs:element name="var" type="OptionOrResultElementString" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="var" type="OtherOptionOrResultElementString" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
 				</xs:annotation>
@@ -3669,7 +3666,7 @@ equal tensor rank</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attributeGroup ref="otherOptionOrResultType"/>
+		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="matrixType" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -3720,21 +3717,21 @@ equal tensor rank</xs:documentation>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string"/>
 	</xs:complexType>
-	<xs:complexType name="OptionOrResultElementString">
+	<xs:complexType name="OtherOptionOrResultElementString">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="ObjOptionOrResultElementString">
+	<xs:complexType name="OtherObjOptionOrResultElementString">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:attributeGroup name="otherOptionOrResultType">
+	<xs:attributeGroup name="otherOptionOrResultAttributes">
 		<xs:attribute name="name" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">

@@ -1641,7 +1641,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onOptimizationStart" minOccurs="0"/>
 			<xs:element name="realTimeDataSource" type="RealTimeDataSource" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with  numberOfDataItems</xs:documentation>
+					<xs:documentation>number must agree with  numberOfDataSources</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -1988,7 +1988,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="UpdateableProblemComponent">
-							<xs:attribute name="value" type="xs:double"/>
+							<xs:attribute name="value" type="xs:double" use="required"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -2880,9 +2880,26 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="nl" type="Nl" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="nl" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="DisjunctionNl">
+							<xs:attribute name="idx" use="required">
+								<xs:annotation>
+									<xs:documentation>refers to an idx in the list of nonlinear expressions</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionNl">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionMatrixExpressions">
 		<xs:annotation>
@@ -2911,6 +2928,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:documentation>Number of the disjunction child elements must agree with numberOfDisjunctions</xs:documentation>
 			</xs:annotation>
 			<xs:element name="disjunction" type="Disjunction" minOccurs="2" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>different disjunctions are connected by exclusive OR</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="disjunction_try" type="DisjunctiveModifications" minOccurs="2" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>different disjunctions are connected by exclusive OR</xs:documentation>
 				</xs:annotation>
@@ -2986,7 +3008,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:annotation>
 			<xs:element name="var" type="DisjunctionVar" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>if lb or up are mentioned, they replace core information</xs:documentation>
+					<xs:documentation>if lb or ub are mentioned, they replace core information</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3097,6 +3119,25 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctiveModifications">
+		<xs:annotation>
+			<xs:documentation>experiment </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ModifyingOperations">
+				<xs:attribute name="conditioningVariableIdx" type="xs:nonNegativeInteger">
+					<xs:annotation>
+						<xs:documentation>disjunction is enforced only if logical conditioning variable is TRUE</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="conditioningConstraintIdx">
+					<xs:annotation>
+						<xs:documentation>disjunction is enforced only if logical conditioning constraint is TRUE</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<!-- end of new disjunctions -->
 	<!--Parameters: proposal-->
@@ -5114,7 +5155,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:sequence>
 					<xs:choice minOccurs="0">
 						<xs:element name="nodeData" type="NodeData-2016-10-05"/>
-						<xs:element name="changes" type="UpdateableProblemComponent"/>
+						<xs:element name="changes">
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="UpdateableProblemComponent">
+										<xs:attribute name="value" type="xs:double" use="required"/>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
 					</xs:choice>
 					<xs:element ref="scenarioNode-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
