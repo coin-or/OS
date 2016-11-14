@@ -98,3 +98,24 @@ by using the rule name {\it childArray\/}, which expands into
 \item	Each $<${\it childElement\/}$>$ would then be treated again as under point~\ref{enum:element}.
 
 \end{enumerate}
+
+
+\subsubsection{Parser development}\label{section:ParserDevelopment}
+
+Since trunk revision 4818 (September 2014) the parser files have been maintained 
+in several pieces to facilitate the development of shared data elements 
+(mostly contained in the OSgL schema). 
+The {\tt make} step assembles these pieces into the flex and bison files before 
+calling the {\tt flex} \index{flex{\tt flex}} and {\tt bison}  \index{bison{\tt bison}} processors. 
+To maintain the parsers it is therefore useful to adhere to a common six-step procedure:
+
+\begin{enumerate}
+\item Update the schema files.
+\item Update the corresponding header files to reflect changes to the schemata.
+\item Write or modify constructor and destructor methods for the changed C++ classes.
+\item Update the parser files. (It is best to make sure the XML elements are recognized
+        properly before adding any code.)
+\item Implement {\tt get()} and {\tt set()} methods for the modified classes.
+\item Add code to the parsers that properly populates the new classes.
+\end{enumerate} 
+         
