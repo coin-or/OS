@@ -3451,6 +3451,11 @@ equal tensor rank</xs:documentation>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="varType" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>use to declare a type for attributes value, lbValue, ubValue in "var" children</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveOptionOrResult">
 		<xs:choice>
@@ -3467,6 +3472,11 @@ equal tensor rank</xs:documentation>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="objType">
+			<xs:annotation>
+				<xs:documentation>use to declare a type for value, constantValue, weightValue in "obj" children</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherConstraintOptionOrResult">
 		<xs:choice>
@@ -3483,6 +3493,11 @@ equal tensor rank</xs:documentation>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="conType">
+			<xs:annotation>
+				<xs:documentation>use to declare a type for attributes value, lbValue, ubValue in "con" children</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherSpecialOrderedSetsOptionOrResult">
 		<xs:choice>
@@ -3521,6 +3536,11 @@ equal tensor rank</xs:documentation>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="varType" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>use to declare a type for attributes value, lbValue, ubValue in "var" children</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixVariableOptionOrResult">
 		<xs:choice>
@@ -3634,46 +3654,18 @@ equal tensor rank</xs:documentation>
 	<xs:complexType name="OtherOptionOrResultElementString">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="valueType" type="xs:string">
-			<xs:annotation>
-				<xs:documentation>gives the type of value (integer, string, etc.) Required if value is present</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
-		<xs:attribute name="lbValueType" type="xs:string">
-			<xs:annotation>
-				<xs:documentation>gives the type of lbValue (integer, string, etc.) Required if lbValue is present</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
-		<xs:attribute name="ubValueType" type="xs:string">
-			<xs:annotation>
-				<xs:documentation>gives the type of ubValue (integer, string, etc.) Required if ubValue present</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherObjOptionOrResultElementString">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="valueType" type="xs:string">
-			<xs:annotation>
-				<xs:documentation>gives the type of value (integer, string, etc.) Required if value is present</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 		<xs:attribute name="constantValue" type="xs:string" use="optional"/>
-		<xs:attribute name="constantValueType" type="xs:string">
-			<xs:annotation>
-				<xs:documentation>gives the type of value (integer, string, etc.) associated with the constant of the objective. Required if constantValue is present</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 		<xs:attribute name="weightValue" type="xs:string" use="optional"/>
-		<xs:attribute name="weightValueType" type="xs:string">
-			<xs:annotation>
-				<xs:documentation>gives the type of value (integer, string, etc.) associated with the weight of the objective. Required if weightValue is present</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:attributeGroup name="otherOptionOrResultAttributes">
 		<xs:attribute name="name" use="required">
