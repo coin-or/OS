@@ -47,25 +47,21 @@ public:
     std::string value;
 
     /**
-     *
      * Default constructor.
      */
     InstanceLocationOption();
 
     /**
-     *
      * Class destructor.
      */
     ~InstanceLocationOption();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(InstanceLocationOption *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -108,8 +104,8 @@ public:
      * Default constructor.
      */
     ContactOption();
+
     /**
-     *
      * Class destructor.
      */
     ~ContactOption();
@@ -137,7 +133,7 @@ public:
     bool deepCopyFrom(ContactOption *that);
 }; //ContactOption
 
-
+#if 0
 /*! \class OtherOption
  *  \brief the OtherOption class.
  *
@@ -167,6 +163,7 @@ public:
      * Default constructor.
      */
     OtherOption();
+
     /**
      *
      * Class destructor.
@@ -195,7 +192,7 @@ public:
      */
     bool deepCopyFrom(OtherOption *that);
 }; //OtherOption
-
+#endif
 
 /*! \class OtherOptions
  *  \brief the OtherOptions class.
@@ -216,15 +213,14 @@ public:
     int numberOfOtherOptions;
 
     /** the list of other options */
-    OtherOption **other;
+    OtherOptionOrResult **other;
 
     /**
-     *
      * Default constructor.
      */
     OtherOptions();
+
     /**
-     *
      * Class destructor.
      */
     ~OtherOptions();
@@ -257,7 +253,7 @@ public:
      * @param numberOfOptions: number of <other> elements to be set
      * @param other: the array of <other> elements that are to be set
      */
-    bool setOther(int numberOfOptions, OtherOption** other);
+    bool setOther(int numberOfOptions, OtherOptionOrResult** other);
 
     /**
      *
@@ -324,6 +320,7 @@ public:
      * Default constructor.
      */
     GeneralOption();
+
     /**
      *
      * Class destructor.
@@ -385,6 +382,7 @@ public:
      * Default constructor.
      */
     MinDiskSpace();
+
     /**
      *
      * Class destructor.
@@ -430,6 +428,7 @@ public:
      * Default constructor.
      */
     MinMemorySize();
+
     /**
      *
      * Class destructor.
@@ -475,6 +474,7 @@ public:
      * Default constructor.
      */
     MinCPUSpeed();
+
     /**
      *
      * Class destructor.
@@ -517,6 +517,7 @@ public:
      * Default constructor.
      */
     MinCPUNumber();
+
     /**
      *
      * Class destructor.
@@ -566,6 +567,7 @@ public:
      * Default constructor.
      */
     SystemOption();
+
     /**
      *
      * Class destructor.
@@ -622,6 +624,7 @@ public:
      * Default constructor.
      */
     ServiceOption();
+
     /**
      *
      * Class destructor.
@@ -681,6 +684,7 @@ public:
      * Default constructor.
      */
     MaxTime();
+
     /**
      *
      * Class destructor.
@@ -721,6 +725,7 @@ public:
      * Default constructor.
      */
     JobDependencies();
+
     /**
      *
      * Class destructor.
@@ -792,6 +797,7 @@ public:
      * Default constructor.
      */
     DirectoriesAndFiles();
+
     /**
      *
      * Class destructor.
@@ -866,6 +872,7 @@ public:
      * Default constructor.
      */
     PathPair();
+
     /**
      *
      * Class destructor.
@@ -922,6 +929,7 @@ public:
      * Default constructor.
      */
     PathPairs();
+
     /**
      *
      * Class destructor.
@@ -1005,6 +1013,7 @@ public:
      * Default constructor.
      */
     Processes();
+
     /**
      *
      * Class destructor.
@@ -1111,24 +1120,21 @@ public:
     OtherOptions *otherOptions;
 
     /**
-     *
      * Default constructor.
      */
     JobOption();
+
     /**
-     *
      * Class destructor.
      */
     ~JobOption();
 
     /**
-     *
      * A function to check for the equality of two objects
      */
     bool IsEqual(JobOption *that);
 
     /**
-     *
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
@@ -1174,6 +1180,7 @@ public:
      * Default constructor.
      */
     InitVarValue();
+
     /**
      *
      * Class destructor.
@@ -1230,6 +1237,7 @@ public:
      * Default constructor.
      */
     InitVariableValues();
+
     /**
      *
      * Class destructor.
@@ -1335,6 +1343,7 @@ public:
      * Default constructor.
      */
     InitVarValueString();
+
     /**
      *
      * Class destructor.
@@ -1391,6 +1400,7 @@ public:
      * Default constructor.
      */
     InitVariableValuesString();
+
     /**
      *
      * Class destructor.
@@ -1494,6 +1504,7 @@ public:
 
      */
     InitBasStatus();
+
     /**
      *
      * Class destructor.
@@ -1552,6 +1563,7 @@ public:
      * Default constructor.
      */
     InitialBasisStatus();
+
     /**
      *
      * Class destructor.
@@ -1626,6 +1638,7 @@ public:
      * Default constructor.
      */
     BranchingWeight();
+
     /**
      *
      * Class destructor.
@@ -1683,6 +1696,7 @@ public:
      * Default constructor.
      */
     IntegerVariableBranchingWeights();
+
     /**
      *
      * Class destructor.
@@ -1788,6 +1802,7 @@ public:
      * Default constructor.
      */
     SOSWeights();
+
     /**
      *
      * Class destructor.
@@ -1942,6 +1957,7 @@ public:
      * Default constructor.
      */
     OtherVarOption();
+
     /**
      *
      * Class destructor.
@@ -1971,7 +1987,7 @@ public:
     bool deepCopyFrom(OtherVarOption *that);
 }; //OtherVarOption
 
-
+#if 0
 /*! \class OtherVariableOption
  *  \brief the OtherVariableOption class.
  *
@@ -2028,6 +2044,7 @@ public:
      * Default constructor.
      */
     OtherVariableOption();
+
     /**
      *
      * Class destructor.
@@ -2074,7 +2091,7 @@ public:
      */
     bool addVar(int idx, std::string value, std::string lbValue, std::string ubValue);
 }; //OtherVariableOption
-
+#endif
 
 /*! \class VariableOption
  *  \brief the VariableOption class.
@@ -2110,13 +2127,14 @@ public:
     SOSVariableBranchingWeights *sosVariableBranchingWeights;
 
     /** other variable options */
-    OtherVariableOption **other;
+    OtherVariableOptionOrResult **other;
 
     /**
      *
      * Default constructor.
      */
     VariableOption();
+
     /**
      *
      * Class destructor.
@@ -2151,14 +2169,14 @@ public:
      * @param numberOfOptions: number of <other> elements to be set
      * @param other: the array of <other> elements that are to be set
      */
-    bool setOther(int numberOfOptions, OtherVariableOption  **other);
+    bool setOther(int numberOfOptions, OtherVariableOptionOrResult  **other);
 
     /**
      *
      * A function to add an <other> element
      * @param other: the content of the <other> element to be added
      */
-    bool addOther(OtherVariableOption *other);
+    bool addOther(OtherVariableOptionOrResult *other);
 }; //VariableOption
 
 
@@ -2191,6 +2209,7 @@ public:
      * Default constructor.
      */
     InitObjValue();
+
     /**
      *
      * Class destructor.
@@ -2247,6 +2266,7 @@ public:
      * Default constructor.
      */
     InitObjectiveValues();
+
     /**
      *
      * Class destructor.
@@ -2355,6 +2375,7 @@ public:
      * Default constructor.
      */
     InitObjBound();
+
     /**
      *
      * Class destructor.
@@ -2411,6 +2432,7 @@ public:
      * Default constructor.
      */
     InitObjectiveBounds();
+
     /**
      *
      * Class destructor.
@@ -2524,6 +2546,7 @@ public:
      * Default constructor.
      */
     OtherObjOption();
+
     /**
      *
      * Class destructor.
@@ -2554,6 +2577,7 @@ public:
 }; //OtherObjOption
 
 
+#if 0
 /*! \class OtherObjectiveOption
  *  \brief the OtherObjectiveOption class.
  *
@@ -2613,6 +2637,7 @@ public:
      * Default constructor.
      */
     OtherObjectiveOption();
+
     /**
      *
      * Class destructor.
@@ -2659,7 +2684,7 @@ public:
      */
     bool addObj(int idx, std::string value, std::string lbValue, std::string ubValue);
 }; //OtherObjectiveOption
-
+#endif
 
 /*! \class ObjectiveOption
  *  \brief the ObjectiveOption class.
@@ -2689,15 +2714,14 @@ public:
     BasisStatus *initialBasisStatus;
 
     /** other information about the objectives */
-    OtherObjectiveOption **other;
+    OtherObjectiveOptionOrResult **other;
 
     /**
-     *
      * Default constructor.
      */
     ObjectiveOption();
+
     /**
-     *
      * Class destructor.
      */
     ~ObjectiveOption();
@@ -2730,16 +2754,14 @@ public:
      * @param numberOfOptions: number of <other> elements to be set
      * @param other: the array of <other> elements that are to be set
      */
-    bool setOther(int numberOfOptions, OtherObjectiveOption  **other);
-
-
+    bool setOther(int numberOfOptions, OtherObjectiveOptionOrResult  **other);
 
     /**
      *
      * A function to add an <other> element
      * @param other: the content of the <other> element to be added
      */
-    bool addOther(OtherObjectiveOption *other);
+    bool addOther(OtherObjectiveOptionOrResult *other);
 }; //ObjectiveOption
 
 
@@ -2772,6 +2794,7 @@ public:
      * Default constructor.
      */
     InitConValue();
+
     /**
      *
      * Class destructor.
@@ -2828,6 +2851,7 @@ public:
      * Default constructor.
      */
     InitConstraintValues();
+
     /**
      *
      * Class destructor.
@@ -2993,6 +3017,7 @@ public:
      * Default constructor.
      */
     InitDualVariableValues();
+
     /**
      *
      * Class destructor.
@@ -3106,6 +3131,7 @@ public:
      * Default constructor.
      */
     OtherConOption();
+
     /**
      *
      * Class destructor.
@@ -3135,7 +3161,7 @@ public:
     bool deepCopyFrom(OtherConOption *that);
 }; //OtherConOption
 
-
+#if 0
 /*! \class OtherConstraintOption
  *  \brief the OtherConstraintOption class.
  *
@@ -3195,6 +3221,7 @@ public:
      * Default constructor.
      */
     OtherConstraintOption();
+
     /**
      *
      * Class destructor.
@@ -3241,7 +3268,7 @@ public:
      */
     bool addCon(int idx, std::string value, std::string lbValue, std::string ubValue);
 }; //OtherConstraintOption
-
+#endif
 
 /*! \class ConstraintOption
  *  \brief the ConstraintOption class.
@@ -3271,13 +3298,14 @@ public:
     BasisStatus *initialBasisStatus;
 
     /** other information about the constraints */
-    OtherConstraintOption **other;
+    OtherConstraintOptionOrResult **other;
 
     /**
      *
      * Default constructor.
      */
     ConstraintOption();
+
     /**
      *
      * Class destructor.
@@ -3312,7 +3340,7 @@ public:
      * @param numberOfOptions: number of <other> elements to be set
      * @param other: the array of <other> elements that are to be set
      */
-    bool setOther(int numberOfOptions, OtherConstraintOption  **other);
+    bool setOther(int numberOfOptions, OtherConstraintOptionOrResult  **other);
 
 
     /**
@@ -3320,7 +3348,7 @@ public:
      * A function to add an <other> element
      * @param other: the content of the <other> element to be added
      */
-    bool addOther(OtherConstraintOption *other);
+    bool addOther(OtherConstraintOptionOrResult *other);
 }; //ConstraintOption
 
 
@@ -3352,6 +3380,7 @@ public:
      * Default constructor.
      */
     InitMatrixVariableValues();
+
     /**
      *
      * Class destructor.
@@ -3450,6 +3479,7 @@ public:
      * Default constructor.
      */
     OtherMatrixVarOption();
+
     /**
      *
      * Class destructor.
@@ -3537,6 +3567,7 @@ public:
      * Default constructor.
      */
     OtherMatrixVariableOption();
+
     /**
      *
      * Class destructor.
@@ -3617,6 +3648,7 @@ public:
      * Default constructor.
      */
     MatrixVariableOption();
+
     /**
      *
      * Class destructor.
@@ -3996,7 +4028,7 @@ public:
      * A function to add an <other> element
      * @param other: the content of the <other> element to be added
      */
-    bool addOther(OtherMatrixObjectiveOption *other);
+    bool addOther(OtherMatrixObjectiveOptionOrResult *other);
 }; //MatrixObjectiveOption
 
 
@@ -4027,6 +4059,7 @@ public:
      * Default constructor.
      */
     InitMatrixConstraintValues();
+
     /**
      *
      * Class destructor.
@@ -4097,7 +4130,7 @@ public:
 #endif
 }; //InitMatrixConstraintValues
 
-
+#if 0
 /*! \class OtherMatrixConOption
  *  \brief the OtherMatrixConOption class.
  *
@@ -4216,8 +4249,8 @@ public:
     /**
      * Default constructor.
      */
-
     OtherMatrixConstraintOption();
+
     /**
      * Class destructor.
      */
@@ -4227,7 +4260,7 @@ public:
      *
      * A function to check for the equality of two objects
      */
-    bool IsEqual(OtherMatrixConstraintOption *that);
+    bool IsEqual(OtherMatrixConstraintOptionOrResult *that);
 
     /**
      *
@@ -4264,7 +4297,7 @@ public:
     bool addVar(int idx, std::string value, std::string lbValue, std::string ubValue);
 #endif
 }; //OtherMatrixConstraintOption
-
+#endif
 
 
 
@@ -4290,7 +4323,7 @@ public:
     InitMatrixConstraintValues *initialMatrixConstraintValues;
 
     /** other matrix constraint options */
-    OtherMatrixConstraintOption **other;
+    OtherMatrixConstraintOptionOrResult **other;
 
     /**
      *
@@ -4332,14 +4365,14 @@ public:
      * @param numberOfOptions: number of <other> elements to be set
      * @param other: the array of <other> elements that are to be set
      */
-    bool setOther(int numberOfOptions, OtherMatrixConstraintOption  **other);
+    bool setOther(int numberOfOptions, OtherMatrixConstraintOptionOrResult  **other);
 
     /**
      *
      * A function to add an <other> element
      * @param other: the content of the <other> element to be added
      */
-    bool addOther(OtherMatrixConstraintOption *other);
+    bool addOther(OtherMatrixConstraintOptionOrResult *other);
 }; //MatrixConstraintOption
 
 
@@ -4441,6 +4474,7 @@ public:
      * Default constructor.
      */
     SolverOption();
+
     /**
      *
      * Class destructor.
@@ -4497,6 +4531,7 @@ public:
      * Default constructor.
      */
     SolverOptions();
+
     /**
      *
      * Class destructor.
@@ -4592,6 +4627,7 @@ public:
      * Default constructor.
      */
     OptimizationOption();
+
     /**
      *
      * Class destructor.
@@ -4671,6 +4707,7 @@ public:
      * Default constructor.
      */
     OSOption();
+
     /**
      *
      * Class destructor.
@@ -5138,7 +5175,7 @@ public:
      * @return a vector of pointers to otherOptions objects
      * associated with the <general> element
      */
-    OtherOption** getOtherGeneralOptions();
+    OtherOptionOrResult** getOtherGeneralOptions();
 
     /**
      * Get the array of other options associated with the <system> element
@@ -5147,7 +5184,7 @@ public:
      * @return a vector of pointers to otherOptions objects
      * associated with the <system> element
      */
-    OtherOption** getOtherSystemOptions();
+    OtherOptionOrResult** getOtherSystemOptions();
 
     /**
      * Get the array of other options associated with the <service> element
@@ -5156,7 +5193,7 @@ public:
      * @return a vector of pointers to otherOptions objects
      * associated with the <service> element
      */
-    OtherOption** getOtherServiceOptions();
+    OtherOptionOrResult** getOtherServiceOptions();
 
     /**
      * Get the array of other options associated with the <job> element
@@ -5165,7 +5202,7 @@ public:
      * @return a vector of pointers to otherOptions objects
      * associated with the <job> element
      */
-    OtherOption** getOtherJobOptions();
+    OtherOptionOrResult** getOtherJobOptions();
 
     /**
      * Get the array of other options associated with any element
@@ -5174,7 +5211,7 @@ public:
      * @return a vector of pointers to otherOptions objects
      * associated with the element whose name matches elementName
      */
-    OtherOption** getOtherOptions(std::string elementName);
+    OtherOptionOrResult** getOtherOptions(std::string elementName);
 
 
     /**
@@ -5184,7 +5221,7 @@ public:
      *
      * @return a vector of pointers to all otherOptions objects
      */
-    OtherOption** getAllOtherOptions();
+    OtherOptionOrResult** getAllOtherOptions();
 
     /**
      * Get the array of job dependencies
@@ -5447,7 +5484,7 @@ public:
      * @return a vector of pointers to OtherVariableOption objects
      * that correspond to the solver named.
      */
-    std::vector<OtherVariableOption*> getOtherVariableOptions(std::string solver_name);
+    std::vector<OtherVariableOptionOrResult*> getOtherVariableOptions(std::string solver_name);
 
     /**
      * Get one particular <other> variable option from the array of options
@@ -5456,7 +5493,7 @@ public:
      * @param optionNumber is the index of the option in the array
      * @return a pointer to one OtherVariableOption object
      */
-    OtherVariableOption* getOtherVariableOption(int optionNumber);
+    OtherVariableOptionOrResult* getOtherVariableOption(int optionNumber);
 
     /**
      * Get all <other> variable options
@@ -5464,7 +5501,7 @@ public:
      *
      * @return a pointer to an array of OtherVariableOption objects
      */
-    OtherVariableOption** getAllOtherVariableOptions();
+    OtherVariableOptionOrResult** getAllOtherVariableOptions();
 
     /**
      * Get the initial values associated with the objectives in sparse form
@@ -5558,7 +5595,7 @@ public:
      * @param solver_name is the name of the solver whose options we want
      * @return a vector of pointers to OtherConstraintOption objects
      */
-    std::vector<OtherObjectiveOption*> getOtherObjectiveOptions(std::string solver_name);
+    std::vector<OtherObjectiveOptionOrResult*> getOtherObjectiveOptions(std::string solver_name);
 
     /**
      * Get one particular <other> objective option from the array of options
@@ -5567,7 +5604,7 @@ public:
      * @param optionNumber is the index of the option in the array
      * @return a pointer to one OtherObjectiveOption object
      */
-    OtherObjectiveOption* getOtherObjectiveOption(int optionNumber);
+    OtherObjectiveOptionOrResult* getOtherObjectiveOption(int optionNumber);
 
     /**
      * Get all <other> objective options
@@ -5575,7 +5612,7 @@ public:
      *
      * @return a pointer to an array of OtherObjectiveOption objects
      */
-    OtherObjectiveOption** getAllOtherObjectiveOptions();
+    OtherObjectiveOptionOrResult** getAllOtherObjectiveOptions();
 
     /**
      * Get the initial values associated with the constraints in sparse form
@@ -5670,7 +5707,7 @@ public:
      * @param solver_name is the name of the solver whose options we want
      * @return a vector of pointers to OtherConstraintOption objects
      */
-    std::vector<OtherConstraintOption*> getOtherConstraintOptions(std::string solver_name);
+    std::vector<OtherConstraintOptionOrResult*> getOtherConstraintOptions(std::string solver_name);
 
     /**
      * Get one particular <other> constraint option from the array of options
@@ -5679,7 +5716,7 @@ public:
      * @param optionNumber is the index of the option in the array
      * @return a pointer to one OtherConstraintOption object
      */
-    OtherConstraintOption* getOtherConstraintOption(int optionNumber);
+    OtherConstraintOptionOrResult* getOtherConstraintOption(int optionNumber);
 
     /**
      * Get all <other> constraint options
@@ -5687,7 +5724,7 @@ public:
      *
      * @return a pointer to an array of OtherConstraintOption objects
      */
-    OtherConstraintOption** getAllOtherConstraintOptions();
+    OtherConstraintOptionOrResult** getAllOtherConstraintOptions();
 
     /**
      * Get the options associated with a given solver
@@ -5802,7 +5839,7 @@ public:
 	 * @param numberOfOptions contains the number of other options to be set
 	 * @param other is a pointer to an array of OtherOption objects
      */
-    bool setOtherGeneralOptions(int numberOfOptions, OtherOption** other);
+    bool setOtherGeneralOptions(int numberOfOptions, OtherOptionOrResult** other);
 
     /**
      * Add another general option to the <other> option array
@@ -5869,14 +5906,14 @@ public:
 	 */
     bool setMinCPUNumber( int number);
 
-    bool setOtherSystemOptions(int numberOfOptions, OtherOption** other);
+    bool setOtherSystemOptions(int numberOfOptions, OtherOptionOrResult** other);
 
     bool setAnOtherSystemOption(std::string name, std::string value, std::string description);
 
 
     bool setServiceType( std::string serviceType);
 
-    bool setOtherServiceOptions(int numberOfOptions, OtherOption** other);
+    bool setOtherServiceOptions(int numberOfOptions, OtherOptionOrResult** other);
 
     bool setAnOtherServiceOption(std::string name, std::string value, std::string description);
 
@@ -5944,7 +5981,7 @@ public:
     bool setProcessesToKill(int numberOfProcesses, std::string* processes);
     bool setAnotherProcessToKill(std::string process);
 
-    bool setOtherJobOptions(int numberOfOptions, OtherOption** other);
+    bool setOtherJobOptions(int numberOfOptions, OtherOptionOrResult** other);
     bool setAnOtherJobOption(std::string name, std::string value, std::string description);
 
 
@@ -5991,8 +6028,8 @@ public:
     bool setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, double* value, std::string* name);
 
     bool setNumberOfOtherVariableOptions(int numberOfOther);
-    bool setOtherVariableOptions(int numberOfVar, OtherVariableOption** var);
-    bool setAnOtherVariableOption(OtherVariableOption* varOption);
+    bool setOtherVariableOptions(int numberOfVar, OtherVariableOptionOrResult** var);
+    bool setAnOtherVariableOption(OtherVariableOptionOrResult* varOption);
 
     /**
      *
@@ -6020,6 +6057,7 @@ public:
     /**
      *  Set one enumeration associated with an <other> option in
      *  the <variables>, <objectives> or <constraints> element
+
      *  @param object: the object into which the enumeration is to be stored
      *		(legal values see ENUM_PROBLEM_COMPONENT in OSGeneral.h)
      *  @param otherOptionNumber: number of the <other> option in the list of <other> options (zero-based)
@@ -6058,9 +6096,9 @@ public:
     bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
 
     bool setNumberOfOtherObjectiveOptions(int numberOfOther);
-    bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOption** obj);
+    bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOptionOrResult** obj);
     //bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOption** obj, ENUM_COMBINE_ARRAYS disp);
-    bool setAnOtherObjectiveOption(OtherObjectiveOption* objOption);
+    bool setAnOtherObjectiveOption(OtherObjectiveOptionOrResult* objOption);
 
     /**
      *
@@ -6112,9 +6150,9 @@ public:
     bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
 
     bool setNumberOfOtherConstraintOptions(int numberOfOther);
-    bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other);
+    bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOptionOrResult** other);
     //bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other, ENUM_COMBINE_ARRAYS disp);
-    bool setAnOtherConstraintOption(OtherConstraintOption* optionValue);
+    bool setAnOtherConstraintOption(OtherConstraintOptionOrResult* optionValue);
 
     /**
      *
@@ -6159,20 +6197,22 @@ public:
      *
      * Set the attributes for one particular solver option
      * @param iOption: position of this element in the array of options
-     * @param numberOfVar: number of <var> children contained in this <other> element
+     * @param numberOfMatricess: number of <matrix> children contained in this <other> element
+     * @param numberOfItems: number of <item> children contained in this <other> element
      * @param name: name of this solver option
      * @param value: a value associated with this option
      * @param solver: the solver to which this option applies
      * @param category: the category of this option (solver specific)
      * @param type: type of this option (e.g., numeric or string)
      * @param description: further description of this option
-     * "param itemList: the list of items associated with this option (could be NULL)
+     * @param matrix: an array of matrices associated with this option (could be NULL)
+     * @param itemList: the list of items associated with this option (could be NULL)
      */
-    bool setSolverOptionContent(int iOption, int numberOfItems,
-                                std::string name,
-                                std::string value, std::string solver,
-                                std::string category, std::string type,
-                                std::string description, std::string *itemList);
+    bool setSolverOptionContent(int iOption, int numberOfMatrices, int numberOfItems,
+                                std::string name, std::string value,
+                                std::string solver, std::string category,
+                                std::string type, std::string description,
+                                OSMatrix **matrix, std::string *itemList);
 
     bool setSolverOptions(int numberOfSolverOptions, SolverOptionOrResult** solverOption);
     bool setAnotherSolverOption(std::string name, std::string value, std::string solver,

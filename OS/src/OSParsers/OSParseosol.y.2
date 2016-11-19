@@ -3663,14 +3663,14 @@ otherMatrixVariableOptionsArray: | otherMatrixVariableOptionsArray otherMatrixVa
 {
 };
 
-otherMatrixVariableOptionOrResult: otherMatrixVariableOptionOrResultStart
-                                   otherMatrixVariableOptionOrResultAttributes
-                                   otherMatrixVariableOptionOrResult
+otherMatrixVariableOption: otherMatrixVariableOptionStart
+                           otherMatrixVariableOptionOrResultAttributes
+                           otherMatrixVariableOption
 {
         parserData->iOther++;
 };
 
-otherMatrixVariableOptionOrResultStart: OTHERSTART
+otherMatrixVariableOptionStart: OTHERSTART
 {
     if (parserData->iOther >= parserData->numberOfOtherVariableOptions)
         if (!parserData->suppressFurtherErrorMessages)
@@ -3749,7 +3749,7 @@ otherMatrixVariableOptionOrResultATT:
   ;
   
 otherMatrixVariableOptionOrResultContent: 
-    otherMatrixVariableOptionOrResultEmpty | otherMatrixVariableOptionLaden;
+    otherMatrixVariableOptionOrResultEmpty | otherMatrixVariableOptionOrResultLaden;
 
 otherMatrixVariableOptionOrResultEmpty: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
@@ -3832,7 +3832,77 @@ matrixObjectives: ;
 
 matrixConstraints: ;
 
-otherMatrixProgrammingOptionArray: | otherMatrixProgrammingOptionArray solverOptionArray;
+otherMatrixProgrammingOptionArray: | otherMatrixProgrammingOptionArray otherMatrixProgrammingOption
+{
+/*
+    if (!parserData->ignoreDataAfterErrors)
+        if (!osoption->setSolverOptionContent(
+                    parserData->iOption,
+                    osglData->numberOfMatrices,
+                    osglData->numberOfItems,
+                    osglData->name,
+                    osglData->value,
+                    osglData->solver,
+                    osglData->category,
+                    osglData->type,
+                    osglData->description,
+                    osglData->matrix,
+                    osglData->itemList) )
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setSolverOptionContent failed");
+*/
+    if (osglData->numberOfMatrices > 0)
+        delete[] osglData->matrix;
+    osglData->matrix = NULL;
+    if (osglData->numberOfItems > 0)
+        delete[] osglData->itemList;
+    osglData->itemList = NULL;
+    parserData->iOption++;
+};
+
+/* -------------------------------------------- */
+otherMatrixProgrammingOption: 
+    otherMatrixProgrammingStart osglSolverOptionOrResultAttributes emptyOtherMatrixProgrammingEnd
+    {
+        if (osglData->numberOfItems > 0)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <item> element");
+            parserData->ignoreDataAfterErrors = true;        
+        }
+    }
+
+  | otherMatrixProgrammingStart osglSolverOptionOrResultAttributes 
+                    GREATERTHAN osglSolverOptionOrResultBody otherMatrixProgrammingEnd
+    {
+        if (parserData->kounter < osglData->numberOfItems)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <item> elements than specified");
+            parserData->ignoreDataAfterErrors = true;        
+        }
+    };
+
+otherMatrixProgrammingStart: OTHERSTART
+{
+    osglData->namePresent = false;
+    osglData->descriptionPresent = false;
+    osglData->valuePresent = false;
+    osglData->typePresent = false;
+    osglData->solverPresent = false;
+    osglData->categoryPresent = false;
+    osglData->numberOfMatricesPresent = false;
+    osglData->numberOfItemsPresent = false;
+    osglData->description = "";
+    osglData->value = "";
+    osglData->type = "";
+    osglData->solver = "";
+    osglData->category = "";
+    osglData->numberOfMatrices = 0;
+    osglData->numberOfItems = 0;
+    osglData->kounter = 0;
+};
+												
+emptyOtherMatrixProgrammingEnd: ENDOFELEMENT | GREATERTHAN otherMatrixProgrammingEnd;
+
+otherMatrixProgrammingEnd: OTHEREND;
 
 
 /**
@@ -3858,6 +3928,8 @@ numberOfSolverOptionsATT: numberOfSolverOptionsAttribute
 solverOptionsContent:
     solverOptionsEmpty
     {
+std::cout << "number of solver options: " << parserData->numberOfSolverOptions;
+std::cout << " why is solverOptions element empty?" << std::endl; 
         if (parserData->numberOfSolverOptions > 0)
         {
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <solverOption> element");
@@ -3866,6 +3938,8 @@ solverOptionsContent:
     }
   | solverOptionsLaden
     {
+std::cout << "number of solver options specified: " << parserData->numberOfSolverOptions << std::endl;
+std::cout << " number seen: " << parserData->iOption  << std::endl; 
         if (parserData->iOption != parserData->numberOfSolverOptions)
         {
             parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <solverOption> elements than specified");
@@ -3877,11 +3951,84 @@ solverOptionsEmpty: ENDOFELEMENT;
 
 solverOptionsLaden: GREATERTHAN solverOptionArray SOLVEROPTIONSEND;
 
-solverOptionArray: | solverOptionArray solverOption;
-
+solverOptionArray: | solverOptionArray solverOption
+{
+    if (!parserData->ignoreDataAfterErrors)
+        if (!osoption->setSolverOptionContent(
+                    parserData->iOption,
+                    osglData->numberOfMatrices,
+                    osglData->numberOfItems,
+                    osglData->name,
+                    osglData->value,
+                    osglData->solver,
+                    osglData->category,
+                    osglData->type,
+                    osglData->description,
+                    osglData->matrix,
+                    osglData->itemList) )
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "setSolverOptionContent failed");
+    if (osglData->numberOfMatrices > 0)
+        delete[] osglData->matrix;
+    osglData->matrix = NULL;
+    if (osglData->numberOfItems > 0)
+        delete[] osglData->itemList;
+    osglData->itemList = NULL;
+    parserData->iOption++;
+};
 
 /* -------------------------------------------- */
-solverOption: solverOptionStart solverOptionAttributes solverOptionContent
+solverOption: 
+    solverOptionStart osglSolverOptionOrResultAttributes emptySolverOptionEnd
+    {
+std::cout << "number of items specified: " << osglData->numberOfItems << std::endl;
+std::cout << " number of items seen: " << osglData->kounter << std::endl; 
+        if (osglData->numberOfItems > 0)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "expected at least one <item> element");
+            parserData->ignoreDataAfterErrors = true;        
+        }
+    }
+
+  | solverOptionStart osglSolverOptionOrResultAttributes 
+                GREATERTHAN osglSolverOptionOrResultBody solverOptionEnd
+    {
+std::cout << "number of items specified: " << osglData->numberOfItems << std::endl;
+std::cout << " number of items seen: " << osglData->kounter << std::endl; 
+        if (osglData->kounter < osglData->numberOfItems)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "fewer <item> elements than specified");
+            parserData->ignoreDataAfterErrors = true;        
+        }
+    };
+
+solverOptionStart: SOLVEROPTIONSTART
+{
+    osglData->namePresent = false;
+    osglData->descriptionPresent = false;
+    osglData->valuePresent = false;
+    osglData->typePresent = false;
+    osglData->solverPresent = false;
+    osglData->categoryPresent = false;
+    osglData->numberOfMatricesPresent = false;
+    osglData->numberOfItemsPresent = false;
+    osglData->description = "";
+    osglData->value = "";
+    osglData->type = "";
+    osglData->solver = "";
+    osglData->category = "";
+    osglData->numberOfMatrices = 0;
+    osglData->numberOfItems = 0;
+    osglData->kounter = 0;
+};
+												
+emptySolverOptionEnd: ENDOFELEMENT | GREATERTHAN solverOptionEnd;
+
+solverOptionEnd: SOLVEROPTIONEND;
+
+
+
+/*
+    solverOptionStart solverOptionAttributes solverOptionContent
 {
     if (!parserData->ignoreDataAfterErrors)
         if (!osoption->setSolverOptionContent(
@@ -4002,7 +4149,7 @@ solverOptionItemBody:  ITEMTEXT
     parserData->itemContent = $1; 
     free($1);
 };
-
+*/
 
 /**
  *  PathList is an object used repeatedly within the <job> element

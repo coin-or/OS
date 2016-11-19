@@ -10,6 +10,35 @@
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
  *
+ * This file contains the following classes that correspond to ComplexTypes in the OSgL schema:
+ *      GeneralFileHeader
+ *      SparseVector
+ *      SparseIntVector
+ *      SparseMatrix
+ *      SparseJacobianMatrix
+ *      SparseHessianMatrix
+ *      QuadraticTerms
+ *      IntVector
+ *      DoubleVector
+ *      IndexValuePair
+ *      BasisStatus
+ *      StorageCapacity
+ *      CPUSpeed
+ *      CPUNumber
+ *      TimeSpan
+ *      OtherOptionOrResultElementString
+ *      OtherObjOptionOrResultElementString
+ *      OtherOptionOrResultEnumeration : public IntVector
+ *      OtherVariableOptionOrResult
+ *      OtherObjectiveOptionOrResult
+ *      OtherConstraintOptionOrResult
+ *      OtherSOSOptionOrResult
+ *      OtherSpecialOrderedSetsOptionOrResult
+ *      OtherMatrixVariableOptionOrResult
+ *      OtherMatrixObjectiveOptionOrResult
+ *      OtherMatrixConstraintOptionOrResult
+ *      OtherOptionOrResult
+ *      SolverOptionOrResult
  */
 
 #ifndef OSGENERAL_H
@@ -546,67 +575,6 @@ public:
 };//class IntVector
 
 
-/*! \class OtherOptionOrResultEnumeration
- *  brief an integer vector data structure used in OSOption and OSResult
- *
- *  This class extends IntVector by adding two string-valued elements, value and description
- */
-class OtherOptionOrResultEnumeration : public IntVector
-{
-public:
-    std::string value;
-    std::string description;
-
-    OtherOptionOrResultEnumeration();
-    ~OtherOptionOrResultEnumeration();
-
-    /** alternate constructor */
-    OtherOptionOrResultEnumeration(int n);
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(OtherOptionOrResultEnumeration *that);
-
-    /**
-     * A function to make a random instance of this class
-     * @param density: corresponds to the probability that a particular child element is created
-     * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest value (inclusive) that an entry in this vector can take
-     * @param iMax: greatest value (inclusive) that an entry in this vector can take
-     */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
-
-    /**
-     * A function to make a deep copy of an instance of this class
-     * @param that: the instance from which information is to be copied
-     * @return whether the copy was created successfully
-     */
-    bool deepCopyFrom(OtherOptionOrResultEnumeration *that);
-
-    /**
-     *  Set the indices for a particular level in an enumeration
-     *  @param value represents the value of this enumeration member
-     *  @param description holds additional information about this value
-     *  @param i contains the array of indices
-     *  @param ni contains the number of elements in i
-     */
-    bool setOtherOptionOrResultEnumeration(std::string value, std::string description, int *i, int ni);
-
-
-    /**
-     *  Get the value for a particular level in an enumeration
-     */
-    std::string getValue();
-
-    /**
-     *  Get the description for a particular level in an enumeration
-     */
-    std::string getDescription();
-
-};//class OtherOptionOrResultEnumeration
-
 /*! \class DoubleVector
  * \brief a double vector data structure
  */
@@ -927,7 +895,6 @@ public:
  */
 class TimeSpan
 {
-
 public:
     /** the unit in which time is measured */
     std::string unit;
@@ -970,6 +937,861 @@ public:
 }; //TimeSpan
 
 
+/*! \class OtherOptionOrResultElementString
+ *  \brief the OtherOptionOrResultElementString class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A class that implements an xml schema element
+ */
+class OtherOptionOrResultElementString
+{
+public:
+    /** the index of the variable or constraint associated with this option or result */
+    int idx;
+
+    /** the name of the option or result the user is defining */
+    std::string name;
+
+    /** a brief description of the type of option or result */
+    std::string description;
+
+    /** the value of the option or result */
+    std::string value;
+
+    /** the type of the option or result value (integer, double, boolean, string, etc.) */
+//    std::string valueType;
+
+    /** the value of the option or result associated with the lower bound on the variable or constraint */
+    std::string lbValue;
+
+    /** the type of the option or result value associated with the lower bound */
+//    std::string lbValueType;
+
+    /** the value of the option or result associated with the upper bound on the variable or constraint */
+    std::string ubValue;
+
+    /** the type of the option or result value associated with the upper bound */
+//    std::string ubValueType;
+
+    /**
+     * Default constructor.
+     */
+    OtherOptionOrResultElementString();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherOptionOrResultElementString();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherOptionOrResultElementString *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherOptionOrResultElementString *that);
+}; //OtherOptionOrResultElementString
+
+
+/*! \class OtherObjOptionOrResultElementString
+ *  \brief the OtherObjOptionOrResultElementString class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherObjOptionOrResultElementString
+{
+
+public:
+    /** the index of the objective associated with this option or result */
+    int idx;
+
+    /** the name of the option or result the user is defining */
+    std::string name;
+
+    /** a brief description of the type of option or result */
+    std::string description;
+
+    /** the value of the option or result */
+    std::string value;
+
+    /** the type of the option or result value (integer, double, boolean, string, etc.) */
+//    std::string valueType;
+
+    /** the value of the option or result associated with the constant part of the objective */
+    std::string constantValue;
+
+    /** the type of the option or result value associated with the objective constant */
+//    std::string constantValueType;
+
+    /** the value of the option or result associated with the weight of the objective */
+    std::string weightValue;
+
+    /** the type of the option or result value associated with the objective weight */
+//    std::string weightValueType;
+
+    /**
+     * Default constructor.
+     */
+    OtherObjOptionOrResultElementString();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherObjOptionOrResultElementString();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherObjOptionOrResultElementString *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherObjOptionOrResultElementString *that);
+}; //OtherObjOptionOrResultElementString
+
+
+/*! \class OtherOptionOrResultEnumeration
+ *  brief an integer vector data structure used in OSOption and OSResult
+ *
+ *  This class extends IntVector by adding two string-valued elements, value and description
+ */
+class OtherOptionOrResultEnumeration : public IntVector
+{
+public:
+    std::string value;
+    std::string description;
+
+    OtherOptionOrResultEnumeration();
+    ~OtherOptionOrResultEnumeration();
+
+    /** alternate constructor */
+    OtherOptionOrResultEnumeration(int n);
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherOptionOrResultEnumeration *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     * @param iMin: lowest value (inclusive) that an entry in this vector can take
+     * @param iMax: greatest value (inclusive) that an entry in this vector can take
+     */
+    bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherOptionOrResultEnumeration *that);
+
+    /**
+     *  Set the indices for a particular level in an enumeration
+     *  @param value represents the value of this enumeration member
+     *  @param description holds additional information about this value
+     *  @param i contains the array of indices
+     *  @param ni contains the number of elements in i
+     */
+    bool setOtherOptionOrResultEnumeration(std::string value, std::string description, int *i, int ni);
+
+    /**
+     *  Get the value for a particular level in an enumeration
+     */
+    std::string getValue();
+
+    /**
+     *  Get the description for a particular level in an enumeration
+     */
+    std::string getDescription();
+
+};//class OtherOptionOrResultEnumeration
+
+
+
+/*! \class OtherVariableOptionOrResult
+ *  \brief the OtherVariableOptionOrResult class.
+ *
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherVariableOptionOrResult
+{
+
+public:
+    /** name of the option */
+    std::string name;
+
+    /** description of the option */
+    std::string description;
+
+    /** value of the option */
+    std::string value;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /** number of <var> child elements */
+    int numberOfVar;
+
+    /** 
+     *  type of values in the elements "value", "lbValue" and/or "ubValue"
+     *  of the descendant array var
+     */
+    std::string varType;
+
+    /** array of option values */
+    OtherOptionOrResultElementString **var;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /**
+     * Default constructor.
+     */
+    OtherVariableOptionOrResult();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherVariableOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherVariableOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherVariableOptionOrResult *that);
+
+    /**
+     *
+     * A function to set an array of <var> elements
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool setVar(int numberOfVar, OtherOptionOrResultElementString **var);
+
+    /**
+     *
+     * A function to add a <var> element
+     * @param idx: the index of the variable
+     * @param value: the value associated with this variable
+     * @param lbValue: a lower bound associated with this variable
+     * @param ubValue: an upper bound associated with this variable
+     */
+    bool addVar(int idx, std::string value, std::string lbValue, std::string ubValue);
+}; //OtherVariableOptionOrResult
+
+#if 0
+/*! \class OtherObjOptionOrResult
+ *  \brief the OtherObjOptionOrResult class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherObjOptionOrResult
+{
+
+public:
+    /** variable index*/
+    int idx;
+
+    /** optional variable name */
+    std::string name;
+
+    /** value of the option */
+    std::string value;
+
+    /** lower bound on the value */
+    std::string lbValue;
+
+    /** lower bound on the value */
+    std::string ubValue;
+
+    /**
+     * Default constructor.
+     */
+    OtherObjOptionOrResult();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherObjOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherObjOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherObjOptionOrResult *that);
+}; //OtherObjOptionOrResult
+#endif
+
+/*! \class OtherObjectiveOptionOrResult
+ *  \brief the OtherObjectiveOptionOrResult class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherObjectiveOptionOrResult
+{
+public:
+    /** name of the option */
+    std::string name;
+
+    /** description of the option */
+    std::string description;
+
+    /** value of the option */
+    std::string value;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /** number of <obj> children */
+    int numberOfObj;
+
+    /** 
+     *  type of values in the elements "value", "constantValue"
+     *  and/or "ubValue" of the descendant array obj
+     */
+    std::string objType;
+
+    /** array of option values */
+    OtherObjOptionOrResultElementString **obj;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /**
+     * Default constructor.
+     */
+    OtherObjectiveOptionOrResult();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherObjectiveOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherObjectiveOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherObjectiveOptionOrResult *that);
+
+    /**
+     *
+     * A function to set an array of <obj> elements
+     * @param numberOfObj: number of <obj> elements to be set
+     * @param obj: the array of <obj> elements that are to be set
+     */
+    bool setObj(int numberOfObj, OtherObjOptionOrResultElementString **obj);
+
+    /**
+     *
+     * A function to add a <obj> element
+     * @param idx: the index of the objective
+     * @param value: the value associated with this objective
+     * @param lbValue: a lower bound associated with this objective
+     * @param ubValue: an upper bound associated with this objective
+     */
+    bool addObj(int idx, std::string value, std::string lbValue, std::string ubValue);
+}; //OtherObjectiveOptionOrResult
+
+
+#if 0
+/*! \class OtherConOptionOrResult
+ *  \brief the OtherConOptionOrResult class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherConOptionOrResult
+{
+
+public:
+    /** variable index*/
+    int idx;
+
+    /** optional variable name */
+    std::string name;
+
+    /** value of the option */
+    std::string value;
+
+    /** lower bound of the option */
+    std::string lbValue;
+
+    /** upper bound of the option */
+    std::string ubValue;
+
+    /**
+     * Default constructor.
+     */
+    OtherConOptionOrResult();
+
+	/**
+     * Class destructor.
+     */
+    ~OtherConOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherConOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherConOptionOrResult *that);
+}; //OtherConOptionOrResult
+#endif
+
+/*! \class OtherConstraintOptionOrResult
+ *  \brief the OtherConstraintOptionOrResult class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherConstraintOptionOrResult
+{
+
+public:
+    /** name of the option */
+    std::string name;
+
+    /** description of the option */
+    std::string description;
+
+    /** value of the option */
+    std::string value;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /** number of <con> children */
+    int numberOfCon;
+
+    /** 
+     *  type of values in the elements "value", "lbValue" and/or "ubValue"
+     *  of the descendant array con
+     */
+    std::string conType;
+
+    /** array of option values */
+    OtherOptionOrResultElementString **con;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /**
+     * Default constructor.
+     */
+    OtherConstraintOptionOrResult();
+
+	/**
+     * Class destructor.
+     */
+    ~OtherConstraintOptionOrResult();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherConstraintOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherConstraintOptionOrResult *that);
+
+    /**
+     *
+     * A function to set an array of <con> elements
+     * @param numberOfCon: number of <con> elements to be set
+     * @param obj: the array of <con> elements that are to be set
+     */
+    bool setCon(int numberOfCon, OtherOptionOrResultElementString **con);
+
+    /**
+     *
+     * A function to add a <con> element
+     * @param idx: the index of the constraint
+     * @param value: the value associated with this constraint
+     * @param lbValue: a lower bound associated with this constraint
+     * @param ubValue: an upper bound associated with this constraint
+     */
+    bool addCon(int idx, std::string value, std::string lbValue, std::string ubValue);
+}; //OtherConstraintOptionOrResult
+
+
+/*! \class OtherSOSOptionOrResult
+ *  \brief the OtherSOSOptionOrResult class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherSOSOptionOrResult
+{
+public:
+    /** the index of the special ordered set to which this option pertains */
+    int idx;
+
+    /** name of the option */
+    std::string name;
+
+    /** description of the option */
+    std::string description;
+
+    /** value of the option */
+    std::string value;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /** number of <var> children */
+    int numberOfVar;
+
+    /** 
+     *  type of values in the elements "value", "lbValue" and/or "ubValue"
+     *  of the descendant array var
+     */
+    std::string varType;
+
+    /** array of option values */
+    OtherOptionOrResultElementString **var;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /**
+     * Default constructor.
+     */
+    OtherSOSOptionOrResult();
+
+	/**
+     * Class destructor.
+     */
+    ~OtherSOSOptionOrResult();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherSOSOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherSOSOptionOrResult *that);
+
+    /**
+     * A function to set an array of <sos> elements
+     * @param numberOfSOS: number of <sos> elements to be set
+     * @param obj: the array of <sos> elements that are to be set
+     */
+    bool setSOS(int numberOfVar, OtherOptionOrResultElementString **var);
+
+    /**
+     * A function to add a <sos> element
+     * @param idx: the index of the constraint
+     * @param value: the value associated with this constraint
+     * @param lbValue: a lower bound associated with this constraint
+     * @param ubValue: an upper bound associated with this constraint
+     */
+    bool addSOS(int idx, std::string value, std::string lbValue, std::string ubValue);
+}; //OtherSOSOptionOrResult
+
+
+/*! \class OtherSpecialOrderedSetsOptionOrResult
+ *  \brief the OtherSpecialOrderedSetsOptionOrResult class.
+ *
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ *
+ * \remarks
+ * A data structure class that corresponds to an xml element in
+ * the OSoL schema.
+ */
+class OtherSpecialOrderedSetsOptionOrResult
+{
+
+public:
+    /** name of the option */
+    std::string name;
+
+    /** description of the option */
+    std::string description;
+
+    /** value of the option */
+    std::string value;
+
+    /** type of the option value (integer, double, boolean, string) */
+    std::string type;
+
+    /** name of the solver to which this option applies */
+    std::string solver;
+
+    /** name of the category into which this option falls */
+    std::string category;
+
+    /** number of <enumeration> child elements */
+    int numberOfEnumerations;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
+
+    /** number of <sos> children */
+    int numberOfSOS;
+
+    /** array of option values */
+    OtherSOSOptionOrResult **sos;
+
+    /* a pointer to OtherOptionOrResultEnumeration objects that will
+     * give for each distinct value the set of indices for
+     * this user defined variable result
+     */
+    OtherOptionOrResultEnumeration** enumeration;
+
+    /**
+     * Default constructor.
+     */
+    OtherSpecialOrderedSetsOptionOrResult();
+
+	/**
+     * Class destructor.
+     */
+    ~OtherSpecialOrderedSetsOptionOrResult();
+
+    /**
+     *
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherSpecialOrderedSetsOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherSpecialOrderedSetsOptionOrResult *that);
+
+    /**
+     *
+     * A function to set an array of <sos> elements
+     * @param numberOfSOS: number of <sos> elements to be set
+     * @param obj: the array of <sos> elements that are to be set
+     */
+    bool setSos(int numberOfVar, OtherSOSOptionOrResult **sos);
+
+    /**
+     *
+     * A function to add a <sos> element
+     * @param idx: the index of the constraint
+     * @param value: the value associated with this constraint
+     * @param lbValue: a lower bound associated with this constraint
+     * @param ubValue: an upper bound associated with this constraint
+     */
+    bool addSOS(int idx, std::string value, std::string lbValue, std::string ubValue);
+}; //OtherSpecialOrderedSetsOptionOrResult
+
+
 /*! \class OtherMatrixVariableOptionOrResult
  *  brief a data structure used in OSOption and OSResult
  */
@@ -994,20 +1816,17 @@ public:
     /** name of the category into which this option falls */
     std::string category;
 
-    /** number of <matrixVar> child elements */
-    int numberOfMatrixVar;
-
-    /** type of the values in the matrixVar array */
-    std::string matrixType;
-
-    /** array of option values */
-    OSMatrixWithMatrixVarIdx **matrixVar;
-
     /** number of <enumeration> child elements */
     int numberOfEnumerations;
 
     /** type of the values in the enumeration array */
     std::string enumType;
+
+    /** number of <matrixVar> child elements */
+    int numberOfMatrixVar;
+
+    /** array of option values */
+    OSMatrixWithMatrixVarIdx **matrixVar;
 
     /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
@@ -1087,20 +1906,17 @@ public:
     /** name of the category into which this option falls */
     std::string category;
 
-    /** number of <matrixObj> child elements */
-    int numberOfMatrixObj;
-
-    /** type of the values in the matrixVar array */
-    std::string matrixObjType;
-
-    /** array of option values */
-    OSMatrixWithMatrixObjIdx **matrixObj;
-
     /** number of <enumeration> child elements */
     int numberOfEnumerations;
 
     /** type of the values in the enumeration array */
     std::string enumType;
+
+    /** number of <matrixObj> child elements */
+    int numberOfMatrixObj;
+
+    /** array of option values */
+    OSMatrixWithMatrixObjIdx **matrixObj;
 
     /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
@@ -1139,7 +1955,6 @@ public:
     bool deepCopyFrom(OtherMatrixObjectiveOptionOrResult *that);
 
     /**
-     *
      * A function to set an array of <matrixObj> elements
      * @param numberOfVar: number of <matrixObj> elements to be set
      * @param matrixObj: the array of <matrixObj> elements that are to be set
@@ -1181,20 +1996,17 @@ public:
     /** name of the category into which this option falls */
     std::string category;
 
-    /** number of <matrixCon> child elements */
-    int numberOfMatrixCon;
-
-    /** type of the values in the matrixCon array */
-    std::string matrixConType;
-
-    /** array of option values */
-    OSMatrixWithMatrixConIdx **matrixCon;
-
     /** number of <enumeration> child elements */
     int numberOfEnumerations;
 
     /** type of the values in the enumeration array */
     std::string enumType;
+
+    /** number of <matrixCon> child elements */
+    int numberOfMatrixCon;
+
+    /** array of option values */
+    OSMatrixWithMatrixConIdx **matrixCon;
 
     /* a pointer to OtherOptionOrResultEnumeration objects that will
      * give for each distinct value the set of indices for
@@ -1233,7 +2045,6 @@ public:
     bool deepCopyFrom(OtherMatrixConstraintOptionOrResult *that);
 
     /**
-     *
      * A function to set an array of <matrixCon> elements
      * @param numberOfVar: number of <matrixCon> elements to be set
      * @param matrixCon: the array of <matrixCon> elements that are to be set
@@ -1243,12 +2054,72 @@ public:
     /**
      * A function to add a <matrixCon> element
      * @param idx: the index of the matrix constraint
+
      * @param value: the value associated with this matrix constraint
      * @param lbValue: a lower bound associated with this matrix constraint
      * @param ubValue: an upper bound associated with this matrix constraint
      */
     bool addMatrixCon(int idx, std::string value, std::string lbValue, std::string ubValue);
 };// OtherMatrixConstraintOptionOrResult 
+
+
+/*! \class OtherOptionOrResult
+ *  \brief The OtherOptionOrResult  Class.
+ *
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ *
+ * \remarks
+ * A class that implements an xml schema element
+ */
+class OtherOptionOrResult
+{
+public:
+    /** the name of the option or result the user is defining */
+    std::string name;
+
+    /** a brief description of the type of option or result */
+    std::string description;
+
+    /** the value of the option or result */
+    std::string value;
+
+    /** the type of the option or result value (integer, double, boolean, string) */
+    std::string type;
+
+    /**
+     * Default constructor.
+     */
+    OtherOptionOrResult();
+
+    /**
+     * Class destructor.
+     */
+    ~OtherOptionOrResult();
+
+    /**
+     * A function to check for the equality of two objects
+     */
+    bool IsEqual(OtherOptionOrResult *that);
+
+    /**
+     * A function to make a random instance of this class
+     * @param density: corresponds to the probability that a particular child element is created
+     * @param conformant: if true enforces side constraints not enforceable in the schema
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+     */
+    bool setRandom(double density, bool conformant);
+
+    /**
+     * A function to make a deep copy of an instance of this class
+     * @param that: the instance from which information is to be copied
+     * @return whether the copy was created successfully
+     */
+    bool deepCopyFrom(OtherOptionOrResult *that);
+};//OtherOptionOrResult
+
+
 
 /*! \class SolverOptionOrResult
  *  \brief The SolverOptionOrResult  Class.
@@ -1258,7 +2129,7 @@ public:
  * @since OS 1.0
  *
  * \remarks
- * A class that allows aritrary input or output communication with the solver
+ * A class that allows arbitrary input or output communication with the solver
  * concerning an option or result associated with the solution.
  */
 class SolverOptionOrResult
@@ -1280,7 +2151,7 @@ public:
     std::string solver;
 
     /** this element allows a specific category to be associated with this
-        particular type of option or result
+     *  particular type of option or result
      */
     std::string category;
 

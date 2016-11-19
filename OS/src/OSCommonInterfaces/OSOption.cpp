@@ -62,7 +62,7 @@ ContactOption::~ContactOption()
 #endif
 }//end ContactOption destructor
 
-
+#if 0
 OtherOption::OtherOption():
     name (""),
     value (""),
@@ -79,7 +79,7 @@ OtherOption::~OtherOption()
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "OtherOption Destructor Called");
 #endif
 }//end OtherOption destructor
-
+#endif
 
 OtherOptions::OtherOptions():
     numberOfOtherOptions(0)
@@ -688,7 +688,7 @@ OtherVarOption::~OtherVarOption()
 #endif
 }//end OtherVarOption destructor
 
-
+#if 0
 OtherVariableOption::OtherVariableOption():
     numberOfVar(0),
     numberOfEnumerations(0),
@@ -735,7 +735,7 @@ OtherVariableOption::~OtherVariableOption()
         enumeration = NULL;
     }
 }//end OtherVariableOption destructor
-
+#endif
 
 VariableOption::VariableOption():
     numberOfOtherVariableOptions(0)
@@ -894,13 +894,14 @@ OtherObjOption::~OtherObjOption()
 #endif
 }//end OtherObjOption destructor
 
-
+#if 0
 OtherObjectiveOption::OtherObjectiveOption():
     numberOfObj(0),
     numberOfEnumerations(0),
     name (""),
     value (""),
     solver(""),
+
     category (""),
     type (""),
     description (""),
@@ -940,7 +941,7 @@ OtherObjectiveOption::~OtherObjectiveOption()
         enumeration = NULL;
     }
 }//end OtherObjectiveOption destructor
-
+#endif
 
 ObjectiveOption::ObjectiveOption():
     numberOfOtherObjectiveOptions (0)
@@ -1091,7 +1092,7 @@ OtherConOption::~OtherConOption()
 #endif
 }//end OtherConOption destructor
 
-
+#if 0
 OtherConstraintOption::OtherConstraintOption():
     numberOfCon(0),
     numberOfEnumerations(0),
@@ -1137,7 +1138,7 @@ OtherConstraintOption::~OtherConstraintOption()
         enumeration = NULL;
     }
 }//end OtherConstraintOption destructor
-
+#endif
 
 ConstraintOption::ConstraintOption():
     numberOfOtherConstraintOptions (0)
@@ -2411,7 +2412,7 @@ int  OSOption::getOptionInt(std::string optionName)
 /**
  * get the array of other <general> options
  */
-OtherOption** OSOption::getOtherGeneralOptions()
+OtherOptionOrResult** OSOption::getOtherGeneralOptions()
 {
     if (this->general != NULL)
     {
@@ -2424,7 +2425,7 @@ OtherOption** OSOption::getOtherGeneralOptions()
 /**
  * get the array of other <system> options
  */
-OtherOption** OSOption::getOtherSystemOptions()
+OtherOptionOrResult** OSOption::getOtherSystemOptions()
 {
     if (this->system != NULL)
     {
@@ -2437,7 +2438,7 @@ OtherOption** OSOption::getOtherSystemOptions()
 /**
  * get the array of other <service> options
  */
-OtherOption** OSOption::getOtherServiceOptions()
+OtherOptionOrResult** OSOption::getOtherServiceOptions()
 {
     if (this->service != NULL)
     {
@@ -2450,7 +2451,7 @@ OtherOption** OSOption::getOtherServiceOptions()
 /**
  * get the array of other <job> options
  */
-OtherOption** OSOption::getOtherJobOptions()
+OtherOptionOrResult** OSOption::getOtherJobOptions()
 {
     if (this->job != NULL)
     {
@@ -2466,7 +2467,7 @@ OtherOption** OSOption::getOtherJobOptions()
  * @return other options associated with the element <"category">
  * @note This function returns NULL if category is not found
  */
-OtherOption** OSOption::getOtherOptions(std::string category)
+OtherOptionOrResult** OSOption::getOtherOptions(std::string category)
 {
     if (category == "general")
         return this->getOtherGeneralOptions();
@@ -2486,9 +2487,9 @@ OtherOption** OSOption::getOtherOptions(std::string category)
 /**
  * get the array of other options associated with all children of <osol>
  */
-OtherOption** OSOption::getAllOtherOptions()
+OtherOptionOrResult** OSOption::getAllOtherOptions()
 {
-    OtherOption** optionVector = NULL;
+    OtherOptionOrResult** optionVector = NULL;
     int prev_options[4];
     int num_options[4];
     int num_opt;
@@ -2539,7 +2540,7 @@ OtherOption** OSOption::getAllOtherOptions()
     prev_options[3] = prev_options[2] + num_options[2];
 
     num_opt = num_options[0] + num_options[1] + num_options[2] + num_options[3];
-    optionVector = new OtherOption*[num_opt];
+    optionVector = new OtherOptionOrResult*[num_opt];
 
     if (num_options[0] > 0)
     {
@@ -3395,9 +3396,9 @@ SOSWeights**  OSOption::getSOSVariableBranchingWeightsSparse()
  * @param solver_name is the name of the solver
  * @return an array of other variable options associated with this solver
  */
-std::vector<OtherVariableOption*>  OSOption::getOtherVariableOptions( std::string solver_name)
+std::vector<OtherVariableOptionOrResult*>  OSOption::getOtherVariableOptions( std::string solver_name)
 {
-    std::vector<OtherVariableOption*> optionsVector;
+    std::vector<OtherVariableOptionOrResult*> optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->variables != NULL)
@@ -3421,9 +3422,9 @@ std::vector<OtherVariableOption*>  OSOption::getOtherVariableOptions( std::strin
  * get the array of all other variable options
  * @return an array of other variable options associated with this solver
  */
-OtherVariableOption** OSOption::getAllOtherVariableOptions()
+OtherVariableOptionOrResult** OSOption::getAllOtherVariableOptions()
 {
-    OtherVariableOption** optionsVector;
+    OtherVariableOptionOrResult** optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->variables != NULL)
@@ -3443,7 +3444,7 @@ OtherVariableOption** OSOption::getAllOtherVariableOptions()
  * @param optionNumber is the index of the option in the array
  * @return a pointer to one OtherVariableOption object
  */
-OtherVariableOption* OSOption::getOtherVariableOption(int optionNumber)
+OtherVariableOptionOrResult* OSOption::getOtherVariableOption(int optionNumber)
 {
     if (this->optimization != NULL)
     {
@@ -3549,6 +3550,7 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives)
     try
     {
         if (numberOfObjectives < 0)
+
             throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");
 
         if (this->optimization != NULL)
@@ -3985,9 +3987,9 @@ int* OSOption::getObjectiveInitialBasisStatusDense(int numberOfObjectives)
  * @param solver_name is the name of the solver
  * @return an array of other objective options associated with this solver
  */
-std::vector<OtherObjectiveOption*>  OSOption::getOtherObjectiveOptions( std::string solver_name)
+std::vector<OtherObjectiveOptionOrResult*>  OSOption::getOtherObjectiveOptions( std::string solver_name)
 {
-    std::vector<OtherObjectiveOption*> optionsVector;
+    std::vector<OtherObjectiveOptionOrResult*> optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->variables != NULL)
@@ -4014,7 +4016,7 @@ std::vector<OtherObjectiveOption*>  OSOption::getOtherObjectiveOptions( std::str
  * @param optionNumber is the index of the option in the array
  * @return a pointer to one OtherObjectiveOption object
  */
-OtherObjectiveOption* OSOption::getOtherObjectiveOption(int optionNumber)
+OtherObjectiveOptionOrResult* OSOption::getOtherObjectiveOption(int optionNumber)
 {
     if (this->optimization != NULL)
     {
@@ -4039,9 +4041,9 @@ OtherObjectiveOption* OSOption::getOtherObjectiveOption(int optionNumber)
  */
 
 
-OtherObjectiveOption** OSOption::getAllOtherObjectiveOptions()
+OtherObjectiveOptionOrResult** OSOption::getAllOtherObjectiveOptions()
 {
-    OtherObjectiveOption** optionsVector;
+    OtherObjectiveOptionOrResult** optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->objectives != NULL)
@@ -4517,9 +4519,9 @@ int* OSOption::getSlackVariableInitialBasisStatusDense(int numberOfConstraints)
  * @param solver_name is the name of the solver
  * @return an array of other constraint options associated with this solver
  */
-std::vector<OtherConstraintOption*>  OSOption::getOtherConstraintOptions( std::string solver_name)
+std::vector<OtherConstraintOptionOrResult*>  OSOption::getOtherConstraintOptions( std::string solver_name)
 {
-    std::vector<OtherConstraintOption*> optionsVector;
+    std::vector<OtherConstraintOptionOrResult*> optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->constraints != NULL)
@@ -4543,9 +4545,9 @@ std::vector<OtherConstraintOption*>  OSOption::getOtherConstraintOptions( std::s
  * get the array of all other constraint options
  * @return an array of other constraint options associated with this solver
  */
-OtherConstraintOption** OSOption::getAllOtherConstraintOptions()
+OtherConstraintOptionOrResult** OSOption::getAllOtherConstraintOptions()
 {
-    OtherConstraintOption** optionsVector;
+    OtherConstraintOptionOrResult** optionsVector;
     if (this->optimization != NULL)
     {
         if (this->optimization->constraints != NULL)
@@ -4565,7 +4567,7 @@ OtherConstraintOption** OSOption::getAllOtherConstraintOptions()
  * @param optionNumber is the index of the option in the array
  * @return a pointer to one OtherConstraintOption object
  */
-OtherConstraintOption* OSOption::getOtherConstraintOption(int optionNumber)
+OtherConstraintOptionOrResult* OSOption::getOtherConstraintOption(int optionNumber)
 {
     if (this->optimization != NULL)
     {
@@ -4681,7 +4683,7 @@ SolverOptionOrResult** OSOption::getAllSolverOptions()
 /** setOther()
  *  set an array of <other> elements in <general>, <system>, <service> and <job>
  */
-bool OtherOptions::setOther(int numberOfOptions, OtherOption** other)
+bool OtherOptions::setOther(int numberOfOptions, OtherOptionOrResult** other)
 {
     try
     {
@@ -4695,12 +4697,12 @@ bool OtherOptions::setOther(int numberOfOptions, OtherOption** other)
         if (numberOfOptions == 0)
             return true;
 
-        this->other = new OtherOption*[numberOfOptions];
+        this->other = new OtherOptionOrResult*[numberOfOptions];
 
         int  i;
         for (i = 0; i < numberOfOptions; i++)
         {
-            this->other[i] = new OtherOption();
+            this->other[i] = new OtherOptionOrResult();
             *this->other[i] = *other[i];
         }
         return true;
@@ -4729,14 +4731,14 @@ bool OtherOptions::addOther(std::string name, std::string value, std::string des
         else
             nopt = this->numberOfOtherOptions;
 
-        OtherOption** temp = new OtherOption*[nopt+1];  //Allocate the new pointers
+        OtherOptionOrResult** temp = new OtherOptionOrResult*[nopt+1];  //Allocate the new pointers
         for (i = 0; i < nopt; i++)
             temp[i] = this->other[i];  //copy the pointers
 
         delete[] this->other; //delete old pointers
 
 //    add in the new element
-        temp[ nopt] = new OtherOption();
+        temp[ nopt] = new OtherOptionOrResult();
 
         temp[ nopt]->name = name;
         temp[ nopt]->value = value;
@@ -5713,6 +5715,7 @@ bool IntegerVariableBranchingWeights::setVar(int numberOfVar, int *idx, double *
 
 
 
+
 /**
  *
  * A function to add a <var> element
@@ -5992,7 +5995,7 @@ bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, in
  * @param numberOfVar: number of <var> elements to be set
  * @param var: the array of <var> elements that are to be set
  */
-bool OtherVariableOption::setVar(int numberOfVar, OtherVarOption **var)
+bool OtherVariableOptionOrResult::setVar(int numberOfVar, OtherOptionOrResultElementString **var)
 {
     try
     {
@@ -6005,12 +6008,12 @@ bool OtherVariableOption::setVar(int numberOfVar, OtherVarOption **var)
         this->numberOfVar = numberOfVar;
         if (numberOfVar == 0) return true;
 
-        this->var = new OtherVarOption*[numberOfVar];
+        this->var = new OtherOptionOrResultElementString*[numberOfVar];
 
         int  i;
         for (i = 0; i < numberOfVar; i++)
         {
-            this->var[i] = new OtherVarOption();
+            this->var[i] = new OtherOptionOrResultElementString();
            *this->var[i] = *var[i];
         }
         return true;
@@ -6030,7 +6033,8 @@ bool OtherVariableOption::setVar(int numberOfVar, OtherVarOption **var)
  * @param lbValue: a lower bound associated with this variable
  * @param ubValue: an upper bound associated with this variable
  */
-bool OtherVariableOption::addVar(int idx, std::string value, std::string lbValue, std::string ubValue)
+bool OtherVariableOptionOrResult::addVar(int idx, std::string value,
+                                         std::string lbValue, std::string ubValue)
 {
     try
     {
@@ -6044,14 +6048,14 @@ bool OtherVariableOption::addVar(int idx, std::string value, std::string lbValue
         else
             nopt = this->numberOfVar;
 
-        OtherVarOption** temp = new OtherVarOption*[nopt+1];  //Allocate the new pointers
+        OtherOptionOrResultElementString** temp = new OtherOptionOrResultElementString*[nopt+1];  //Allocate the new pointers
         for (i = 0; i < nopt; i++)
             temp[i] = this->var[i];  //copy the pointers
 
         delete[] this->var; //delete old pointers
 
 //    add in the new element
-        temp[ nopt] = new OtherVarOption();
+        temp[ nopt] = new OtherOptionOrResultElementString();
 
         temp[ nopt]->idx = idx;
         temp[ nopt]->value = value;
@@ -6076,7 +6080,7 @@ bool OtherVariableOption::addVar(int idx, std::string value, std::string lbValue
  * @param numberOfOptions: number of <other> elements to be set
  * @param other: the array of <other> elements that are to be set
  */
-bool VariableOption::setOther(int numberOfOptions, OtherVariableOption  **other)
+bool VariableOption::setOther(int numberOfOptions, OtherVariableOptionOrResult  **other)
 {
     try
     {
@@ -6089,18 +6093,20 @@ bool VariableOption::setOther(int numberOfOptions, OtherVariableOption  **other)
         this->numberOfOtherVariableOptions = numberOfOptions;
         if (numberOfOptions == 0) return true;
 
-        this->other = new OtherVariableOption*[numberOfOptions];
+        this->other = new OtherVariableOptionOrResult*[numberOfOptions];
 
         int  i, j;
         for (i = 0; i < numberOfOptions; i++)
         {
-            this->other[i] = new OtherVariableOption();
+            this->other[i] = new OtherVariableOptionOrResult();
             this->other[i]->name        = other[i]->name;
+            this->other[i]->description = other[i]->description;
             this->other[i]->value       = other[i]->value;
+            this->other[i]->type        = other[i]->type;
             this->other[i]->solver      = other[i]->solver;
             this->other[i]->category    = other[i]->category;
-            this->other[i]->type        = other[i]->type;
-            this->other[i]->description = other[i]->description;
+            this->other[i]->enumType    = other[i]->enumType;
+            this->other[i]->varType     = other[i]->varType;
 
             if (other[i]->numberOfVar < 0)
                 throw ErrorClass( "the number of variables in otherVariableOption cannot be negative.");
@@ -6109,10 +6115,10 @@ bool VariableOption::setOther(int numberOfOptions, OtherVariableOption  **other)
 
             if (other[i]->numberOfVar > 0)
             {
-                this->other[i]->var = new OtherVarOption*[other[i]->numberOfVar];
+                this->other[i]->var = new OtherOptionOrResultElementString*[other[i]->numberOfVar];
                 for (j = 0; j < other[i]->numberOfVar; j++)
                 {
-                    this->other[i]->var[j] = new OtherVarOption();
+                    this->other[i]->var[j] = new OtherOptionOrResultElementString();
                     *this->other[i]->var[j] = *other[i]->var[j];
                 }
             }
@@ -6146,7 +6152,7 @@ bool VariableOption::setOther(int numberOfOptions, OtherVariableOption  **other)
  * A function to add an <other> element
  * @param other: the content of the <other> element to be added
  */
-bool VariableOption::addOther(OtherVariableOption *other)
+bool VariableOption::addOther(OtherVariableOptionOrResult *other)
 {
     try
     {
@@ -6156,20 +6162,20 @@ bool VariableOption::addOther(OtherVariableOption *other)
         else
             nopt = this->numberOfOtherVariableOptions;
 
-        OtherVariableOption** temp = new OtherVariableOption*[nopt+1];  //Allocate the new pointers
+        OtherVariableOptionOrResult** temp
+            = new OtherVariableOptionOrResult*[nopt+1];  //Allocate the new pointers
         for (i = 0; i < nopt; i++)
             temp[i] = this->other[i];  //copy the pointers
 
         delete[] this->other; //delete old pointers
 
 //    add in the new element
-        temp[ nopt] = new OtherVariableOption();
+        temp[ nopt] = new OtherVariableOptionOrResult();
         temp[ nopt]->name        = other->name;
         temp[ nopt]->value       = other->value;
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
-        temp[ nopt]->varType     = other->varType;
         temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
@@ -6180,10 +6186,10 @@ bool VariableOption::addOther(OtherVariableOption *other)
 
         if (other->numberOfVar > 0)
         {
-            temp[ nopt]->var = new OtherVarOption*[other->numberOfVar];
+            temp[ nopt]->var = new OtherOptionOrResultElementString*[other->numberOfVar];
             for (j = 0; j < other->numberOfVar; j++)
             {
-                temp[nopt]->var[j] = new OtherVarOption();
+                temp[nopt]->var[j] = new OtherOptionOrResultElementString();
                *temp[nopt]->var[j] = *other->var[j];
             }
         }
@@ -6487,6 +6493,7 @@ bool InitObjectiveBounds::setObj(int numberOfObj, InitObjBound **obj, ENUM_COMBI
 
         this->obj = new InitObjBound*[numberOfObj];
 
+
         int  i;
         for (i = 0; i < numberOfObj; i++)
         {
@@ -6617,11 +6624,9 @@ bool InitObjectiveBounds::addObj(int numberOfObj, InitObjBound **obj)
     }
 }//addObj
 
+#if 0
 /**
  *
-
-
-
  * A function to set an array of <obj> elements
  * @param numberOfObj: number of <obj> elements to be set
  * @param obj: the array of <obj> elements that are to be set
@@ -6704,6 +6709,7 @@ bool OtherObjectiveOption::addObj(int idx, std::string value, std::string lbValu
         return false;
     }
 }//addObj
+#endif
 
 /**
  *
@@ -6711,7 +6717,7 @@ bool OtherObjectiveOption::addObj(int idx, std::string value, std::string lbValu
  * @param numberOfOptions: number of <other> elements to be set
  * @param other: the array of <other> elements that are to be set
  */
-bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **other)
+bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOptionOrResult **other)
 {
     try
     {
@@ -6724,18 +6730,20 @@ bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **othe
         this->numberOfOtherObjectiveOptions = numberOfOptions;
         if (numberOfOptions == 0) return true;
 
-        this->other = new OtherObjectiveOption*[numberOfOptions];
+        this->other = new OtherObjectiveOptionOrResult*[numberOfOptions];
 
         int  i, j;
         for (i = 0; i < numberOfOptions; i++)
         {
-            this->other[i] = new OtherObjectiveOption();
+            this->other[i] = new OtherObjectiveOptionOrResult();
             this->other[i]->name        = other[i]->name;
             this->other[i]->value       = other[i]->value;
             this->other[i]->solver      = other[i]->solver;
             this->other[i]->category    = other[i]->category;
             this->other[i]->type        = other[i]->type;
             this->other[i]->description = other[i]->description;
+            this->other[i]->enumType    = other[i]->enumType;
+            this->other[i]->objType     = other[i]->objType;
 
             if (other[i]->numberOfObj < 0)
                 throw ErrorClass( "the number of objectives in otherObjectiveOption cannot be negative.");
@@ -6744,10 +6752,10 @@ bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **othe
 
             if (other[i]->numberOfObj > 0)
             {
-                this->other[i]->obj = new OtherObjOption*[other[i]->numberOfObj];
+                this->other[i]->obj = new OtherObjOptionOrResultElementString*[other[i]->numberOfObj];
                 for (j = 0; j < other[i]->numberOfObj; j++)
                 {
-                    this->other[i]->obj[j] = new OtherObjOption();
+                    this->other[i]->obj[j] = new OtherObjOptionOrResultElementString();
                     *this->other[i]->obj[j] = *other[i]->obj[j];
                 }
             }
@@ -6755,7 +6763,9 @@ bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **othe
 
             if (this->other[i]->numberOfEnumerations > 0)
             {
-                this->other[i]->enumeration = new OtherOptionOrResultEnumeration*[this->other[i]->numberOfEnumerations];
+
+                this->other[i]->enumeration
+                    = new OtherOptionOrResultEnumeration*[this->other[i]->numberOfEnumerations];
                 for (j = 0; j < this->other[i]->numberOfEnumerations; j++)
                 {
                     this->other[i]->enumeration[j]  = new OtherOptionOrResultEnumeration();
@@ -6781,7 +6791,7 @@ bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **othe
  * A function to add an <other> element
  * @param other: the content of the <other> element to be added
  */
-bool ObjectiveOption::addOther(OtherObjectiveOption *other)
+bool ObjectiveOption::addOther(OtherObjectiveOptionOrResult *other)
 {
     try
     {
@@ -6791,20 +6801,19 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
         else
             nopt = this->numberOfOtherObjectiveOptions;
 
-        OtherObjectiveOption** temp = new OtherObjectiveOption*[nopt+1];  //Allocate the new pointers
+        OtherObjectiveOptionOrResult** temp = new OtherObjectiveOptionOrResult*[nopt+1];  //Allocate the new pointers
         for (i = 0; i < nopt; i++)
             temp[i] = this->other[i];  //copy the pointers
 
         delete[] this->other; //delete old pointers
 
 //    add in the new element
-        temp[ nopt] = new OtherObjectiveOption();
+        temp[ nopt] = new OtherObjectiveOptionOrResult();
         temp[ nopt]->name        = other->name;
         temp[ nopt]->value       = other->value;
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
-        temp[ nopt]->objType     = other->objType;
         temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
@@ -6815,10 +6824,10 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
 
         if (other->numberOfObj > 0)
         {
-            temp[ nopt]->obj = new OtherObjOption*[other->numberOfObj];
+            temp[ nopt]->obj = new OtherObjOptionOrResultElementString*[other->numberOfObj];
             for (j = 0; j < other->numberOfObj; j++)
             {
-                temp[nopt]->obj[j] = new OtherObjOption();
+                temp[nopt]->obj[j] = new OtherObjOptionOrResultElementString();
                *temp[nopt]->obj[j] = *other->obj[j];
             }
         }
@@ -7262,6 +7271,7 @@ bool InitDualVariableValues::addCon(int numberOfCon, InitDualVarValue **con)
     }
 }//addCon
 
+#if 0
 /**
  *
  * A function to set an array of <con> elements
@@ -7281,7 +7291,6 @@ bool OtherConstraintOption::setCon(int numberOfCon, OtherConOption **con)
         this->numberOfCon = numberOfCon;
         if (numberOfCon == 0)
             return true;
-
         this->con = new OtherConOption*[numberOfCon];
 
         int  i;
@@ -7346,6 +7355,7 @@ bool OtherConstraintOption::addCon(int idx, std::string value, std::string lbVal
         return false;
     }
 }//addCon
+#endif
 
 /**
  *
@@ -7353,7 +7363,7 @@ bool OtherConstraintOption::addCon(int idx, std::string value, std::string lbVal
  * @param numberOfOptions: number of <other> elements to be set
  * @param other: the array of <other> elements that are to be set
  */
-bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **other)
+bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOptionOrResult  **other)
 {
     try
     {
@@ -7367,32 +7377,32 @@ bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **ot
         if (numberOfOptions == 0)
             return true;
 
-        this->other = new OtherConstraintOption*[numberOfOptions];
+        this->other = new OtherConstraintOptionOrResult*[numberOfOptions];
 
         int  i, j;
         for (i = 0; i < numberOfOptions; i++)
         {
-            this->other[i] = new OtherConstraintOption();
+            this->other[i] = new OtherConstraintOptionOrResult();
             this->other[i]->name        = other[i]->name;
             this->other[i]->value       = other[i]->value;
             this->other[i]->solver      = other[i]->solver;
             this->other[i]->category    = other[i]->category;
             this->other[i]->type        = other[i]->type;
             this->other[i]->description = other[i]->description;
+            this->other[i]->enumType    = other[i]->enumType;
+            this->other[i]->conType     = other[i]->conType;
 
             if (other[i]->numberOfCon < 0)
                 throw ErrorClass( "the number of constraints in otherConstraintOption cannot be negative.");
 
             this->other[i]->numberOfCon = other[i]->numberOfCon;
 
-
             if (other[i]->numberOfCon > 0)
             {
-                this->other[i]->con = new OtherConOption*[other[i]->numberOfCon];
+                this->other[i]->con = new OtherOptionOrResultElementString*[other[i]->numberOfCon];
                 for (j = 0; j < other[i]->numberOfCon; j++)
                 {
-                    this->other[i]->con[j] = new OtherConOption();
-
+                    this->other[i]->con[j] = new OtherOptionOrResultElementString();
                    *this->other[i]->con[j] = *other[i]->con[j];
                 }
             }
@@ -7412,7 +7422,6 @@ bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **ot
                         other[i]->enumeration[j]->numberOfEl);
                 }
             }
-
         }
         return true;
     }
@@ -7428,7 +7437,7 @@ bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **ot
  * A function to add an <other> element
  * @param other: the content of the <other> element to be added
  */
-bool ConstraintOption::addOther(OtherConstraintOption *other)
+bool ConstraintOption::addOther(OtherConstraintOptionOrResult *other)
 {
     try
     {
@@ -7438,20 +7447,20 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
         else
             nopt = this->numberOfOtherConstraintOptions;
 
-        OtherConstraintOption** temp = new OtherConstraintOption*[nopt+1];  //Allocate the new pointers
+        OtherConstraintOptionOrResult** temp
+            = new OtherConstraintOptionOrResult*[nopt+1];  //Allocate the new pointers
         for (i = 0; i < nopt; i++)
             temp[i] = this->other[i];  //copy the pointers
 
         delete[] this->other; //delete old pointers
 
 //    add in the new element
-        temp[ nopt] = new OtherConstraintOption();
+        temp[ nopt] = new OtherConstraintOptionOrResult();
         temp[ nopt]->name        = other->name;
         temp[ nopt]->value       = other->value;
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
-        temp[ nopt]->conType     = other->conType;
         temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
@@ -7459,20 +7468,21 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
             throw ErrorClass( "the number of constraints in otherConstraintOption cannot be negative.");
 
         temp[ nopt]->numberOfCon = other->numberOfCon;
-        temp[ nopt]->numberOfEnumerations = other->numberOfEnumerations;
 
         if (other->numberOfCon > 0)
         {
-            temp[ nopt]->con = new OtherConOption*[other->numberOfCon];
+            temp[ nopt]->con = new OtherOptionOrResultElementString*[other->numberOfCon];
             for (j = 0; j < other->numberOfCon; j++)
             {
-                temp[nopt]->con[j] = new OtherConOption();
+                temp[nopt]->con[j] = new OtherOptionOrResultElementString();
                *temp[nopt]->con[j] = *other->con[j];
             }
         }
 
+        temp[ nopt]->numberOfEnumerations = other->numberOfEnumerations;
+
         if (other->numberOfEnumerations < 0)
-            throw ErrorClass( "the number of enumerations in otherObjectiveOption cannot be negative.");
+            throw ErrorClass( "the number of enumerations in otherConstraintOption cannot be negative.");
 
         if (other->numberOfEnumerations > 0)
         {
@@ -7499,6 +7509,7 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
         return false;
     }
 }//addOther
+
 
 /**
  *
@@ -7633,9 +7644,6 @@ bool OSOption::setServiceURI( std::string serviceURI)
 bool OSOption::setServiceName( std::string serviceName)
 {
     if (this->general == NULL)
-
-
-
         this->general = new GeneralOption();
     this->general->serviceName = serviceName;
     return true;
@@ -7781,7 +7789,7 @@ bool OSOption::setContactTransportType( std::string transportType)
     }
 }//setContactTransportType
 
-bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other)
+bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOptionOrResult** other)
 {
     if (this->general == NULL)
         this->general = new GeneralOption();
@@ -7806,7 +7814,6 @@ bool OSOption::setAnOtherGeneralOption(std::string name, std::string value, std:
         this->general->otherOptions = new OtherOptions();
     return this->general->otherOptions->addOther(name, value, description);
 }//setAnOtherGeneralOption
-
 
 
 /**
@@ -7975,7 +7982,7 @@ bool OSOption::setMinCPUNumber(int number, std::string description)
     return true;
 }//setMinCPUNumber
 
-bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOption** other)
+bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOptionOrResult** other)
 {
     if (this->system == NULL)
         this->system = new SystemOption();
@@ -8027,7 +8034,7 @@ bool OSOption::setServiceType( std::string serviceType)
     }
 }//setServiceType
 
-bool OSOption::setOtherServiceOptions(int numberOfOptions, OtherOption** other)
+bool OSOption::setOtherServiceOptions(int numberOfOptions, OtherOptionOrResult** other)
 {
     if (this->service == NULL)
         this->service = new ServiceOption();
@@ -8222,7 +8229,8 @@ bool OSOption::setAnotherFileToMake(std::string path)
     return this->job->filesToMake->addPath(path);
 }//setAnotherFileToMake
 
-bool OSOption::setPathPairs(int object, std::string *from, std::string *to, bool *makeCopy, int numberOfPathPairs)
+bool OSOption::setPathPairs(int object, std::string *from, std::string *to,
+                                bool *makeCopy, int numberOfPathPairs)
 {
     if (numberOfPathPairs < 0) return false;
     if (this->job == NULL)
@@ -8414,7 +8422,7 @@ bool OSOption::setAnotherProcessToKill(std::string process)
 }//setAnotherProcessToKill
 
 
-bool OSOption::setOtherJobOptions(int numberOfOptions, OtherOption** other)
+bool OSOption::setOtherJobOptions(int numberOfOptions, OtherOptionOrResult** other)
 {
     if (this->job == NULL)
         this->job = new JobOption();
@@ -8439,7 +8447,6 @@ bool OSOption::setAnOtherJobOption(std::string name, std::string value, std::str
         this->job->otherOptions = new OtherOptions();
     return this->job->otherOptions->addOther(name, value, description);
 }//setAnOtherJobOption
-
 
 
 bool OSOption::setNumberOfVariables(int numberOfVariables)
@@ -8569,8 +8576,6 @@ bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString*
     if (this->optimization->variables->initialVariableValuesString == NULL)
         this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
     else
-
-
     {
         int i;
         for (i = 0; i < this->optimization->variables->initialVariableValuesString->numberOfVar; i++)
@@ -8827,7 +8832,7 @@ bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double
 bool OSOption::setNumberOfOtherVariableOptions(int numberOfOther)
 {
     if (optimization == NULL) 
-    optimization = new OptimizationOption();
+        optimization = new OptimizationOption();
     if (optimization->variables == NULL)
         optimization->variables = new VariableOption();
     if(optimization->variables->numberOfOtherVariableOptions < 0) return false;
@@ -8836,10 +8841,10 @@ bool OSOption::setNumberOfOtherVariableOptions(int numberOfOther)
 
     if (numberOfOther > 0)
     {
-        optimization->variables->other = new OtherVariableOption*[numberOfOther];
+        optimization->variables->other = new OtherVariableOptionOrResult*[numberOfOther];
 
         for (int j=0; j < numberOfOther; j++)
-            optimization->variables->other[j] = new OtherVariableOption();
+            optimization->variables->other[j] = new OtherVariableOptionOrResult();
     }
 
     return true;
@@ -8858,7 +8863,6 @@ bool OSOption::setOtherVariableOptionAttributes(int iOther, int numberOfVar,
 
     if (iOther < 0 || iOther >= optimization->variables->numberOfOtherVariableOptions) return false;
 
-
     optimization->variables->other[iOther]->numberOfVar          = numberOfVar;
     optimization->variables->other[iOther]->numberOfEnumerations = numberOfEnumerations;
     optimization->variables->other[iOther]->name                 = name;
@@ -8866,25 +8870,27 @@ bool OSOption::setOtherVariableOptionAttributes(int iOther, int numberOfVar,
     optimization->variables->other[iOther]->solver               = solver;
     optimization->variables->other[iOther]->category             = category;
     optimization->variables->other[iOther]->type                 = type;
-    optimization->variables->other[iOther]->varType              = varType;
     optimization->variables->other[iOther]->enumType             = enumType;
     optimization->variables->other[iOther]->description          = description;
 
     if (numberOfVar > 0)
     {
-        optimization->variables->other[iOther]->var = new OtherVarOption*[numberOfVar];
+        optimization->variables->other[iOther]->var = new OtherOptionOrResultElementString*[numberOfVar];
         for (int j=0; j<numberOfVar; j++)
-            optimization->variables->other[iOther]->var[j] = new OtherVarOption();
+            optimization->variables->other[iOther]->var[j] = new OtherOptionOrResultElementString();
     }
 
     if (numberOfEnumerations > 0)
     {
-        optimization->variables->other[iOther]->enumeration = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
+        optimization->variables->other[iOther]->enumeration
+            = new OtherOptionOrResultEnumeration*[numberOfEnumerations];
         for (int j=0; j<numberOfEnumerations; j++)
-            optimization->variables->other[iOther]->enumeration[j] = new OtherOptionOrResultEnumeration();
+            optimization->variables->other[iOther]->enumeration[j]
+                = new OtherOptionOrResultEnumeration();
     }
     return true;
 }//setOtherVariableOptionAttributes
+
 
 bool OSOption::setOtherOptionOrResultEnumeration(int object, int otherOptionNumber, int enumerationNumber,
         int numberOfEl, std::string value, std::string description, int* idxArray)
@@ -8942,8 +8948,8 @@ bool OSOption::setOtherOptionOrResultEnumeration(int object, int otherOptionNumb
     default:
         throw ErrorClass("target object not implemented in setOtherOptionOrResultEnumeration");
     }
-
 }//setOtherOptionOrResultEnumeration
+
 
 bool OSOption::setOtherVariableOptionVar(int otherOptionNumber, int varNumber,
         int idx, std::string name, std::string value, std::string lbValue, std::string ubValue)
@@ -8968,8 +8974,7 @@ bool OSOption::setOtherVariableOptionVar(int otherOptionNumber, int varNumber,
     return true;
 }//setOtherVariableOptionVar
 
-
-bool OSOption::setOtherVariableOptions(int numberOfOptions, OtherVariableOption** other)
+bool OSOption::setOtherVariableOptions(int numberOfOptions, OtherVariableOptionOrResult** other)
 {
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
@@ -8986,7 +8991,7 @@ bool OSOption::setOtherVariableOptions(int numberOfOptions, OtherVariableOption*
     return this->optimization->variables->setOther(numberOfOptions, other);
 }//setOtherVariableOptions
 
-bool OSOption::setAnOtherVariableOption(OtherVariableOption* optionValue)
+bool OSOption::setAnOtherVariableOption(OtherVariableOptionOrResult* optionValue)
 {
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
@@ -9151,8 +9156,9 @@ bool OSOption::setAnotherInitObjBound(int idx, double lb, double ub)
     return this->optimization->objectives->initialObjectiveBounds->addObj(idx, lb, ub);
 }//setAnotherInitObjBound
 
+
 bool OSOption::setOtherObjectiveOptionObj(int otherOptionNumber, int objNumber,
-        int idx, std::string name, std::string value, std::string lbValue, std::string ubValue)
+        int idx, std::string name, std::string value, std::string constantValue, std::string weightValue)
 {
     if (optimization == NULL) return false;
 
@@ -9169,8 +9175,8 @@ bool OSOption::setOtherObjectiveOptionObj(int otherOptionNumber, int objNumber,
     optimization->objectives->other[otherOptionNumber]->obj[objNumber]->idx = idx;
     optimization->objectives->other[otherOptionNumber]->obj[objNumber]->name = name;
     optimization->objectives->other[otherOptionNumber]->obj[objNumber]->value = value;
-    optimization->objectives->other[otherOptionNumber]->obj[objNumber]->lbValue = lbValue;
-    optimization->objectives->other[otherOptionNumber]->obj[objNumber]->ubValue = ubValue;
+    optimization->objectives->other[otherOptionNumber]->obj[objNumber]->constantValue = constantValue;
+    optimization->objectives->other[otherOptionNumber]->obj[objNumber]->weightValue = weightValue;
     return true;
 }//setOtherOptionObj
 
@@ -9185,10 +9191,10 @@ bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfOther)
 
     if (numberOfOther > 0)
     {
-        optimization->objectives->other = new OtherObjectiveOption*[numberOfOther];
+        optimization->objectives->other = new OtherObjectiveOptionOrResult*[numberOfOther];
 
         for (int j=0; j < numberOfOther; j++)
-            optimization->objectives->other[j] = new OtherObjectiveOption();
+            optimization->objectives->other[j] = new OtherObjectiveOptionOrResult();
     }
     return true;
 
@@ -9214,15 +9220,15 @@ bool OSOption::setOtherObjectiveOptionAttributes(int iOther, int numberOfObj,
     optimization->objectives->other[iOther]->solver               = solver;
     optimization->objectives->other[iOther]->category             = category;
     optimization->objectives->other[iOther]->type                 = type;
-    optimization->objectives->other[iOther]->objType              = objType;
     optimization->objectives->other[iOther]->enumType             = enumType;
     optimization->objectives->other[iOther]->description          = description;
 
     if (numberOfObj > 0)
     {
-        optimization->objectives->other[iOther]->obj = new OtherObjOption*[numberOfObj];
+        optimization->objectives->other[iOther]->obj
+            = new OtherObjOptionOrResultElementString*[numberOfObj];
         for (int j=0; j<numberOfObj; j++)
-            optimization->objectives->other[iOther]->obj[j] = new OtherObjOption();
+            optimization->objectives->other[iOther]->obj[j] = new OtherObjOptionOrResultElementString();
     }
 
     if (numberOfEnumerations > 0)
@@ -9234,7 +9240,7 @@ bool OSOption::setOtherObjectiveOptionAttributes(int iOther, int numberOfObj,
     return true;
 }//setOtherObjOptionAttributes
 
-bool OSOption::setOtherObjectiveOptions(int numberOfOptions, OtherObjectiveOption** other)
+bool OSOption::setOtherObjectiveOptions(int numberOfOptions, OtherObjectiveOptionOrResult** other)
 {
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
@@ -9251,7 +9257,7 @@ bool OSOption::setOtherObjectiveOptions(int numberOfOptions, OtherObjectiveOptio
     return this->optimization->objectives->setOther(numberOfOptions, other);
 }//setOtherObjectiveOptions
 
-bool OSOption::setAnOtherObjectiveOption(OtherObjectiveOption* optionValue)
+bool OSOption::setAnOtherObjectiveOption(OtherObjectiveOptionOrResult* optionValue)
 {
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
@@ -9259,7 +9265,6 @@ bool OSOption::setAnOtherObjectiveOption(OtherObjectiveOption* optionValue)
         this->optimization->objectives = new ObjectiveOption();
     return this->optimization->objectives->addOther(optionValue);
 }//setAnOtherObjectiveOption
-
 
 bool OSOption::setInitConValues(int numberOfCon, int* idx, double* value, std::string* name)
 {
@@ -9429,10 +9434,10 @@ bool OSOption::setNumberOfOtherConstraintOptions(int numberOfOther)
 
     if (numberOfOther > 0)
     {
-        optimization->constraints->other = new OtherConstraintOption*[numberOfOther];
+        optimization->constraints->other = new OtherConstraintOptionOrResult*[numberOfOther];
 
         for (int j=0; j < numberOfOther; j++)
-            optimization->constraints->other[j] = new OtherConstraintOption();
+            optimization->constraints->other[j] = new OtherConstraintOptionOrResult();
     }
 
     return true;
@@ -9457,15 +9462,14 @@ bool OSOption::setOtherConstraintOptionAttributes(int iOther, int numberOfCon,
     optimization->constraints->other[iOther]->solver               = solver;
     optimization->constraints->other[iOther]->category             = category;
     optimization->constraints->other[iOther]->type                 = type;
-    optimization->constraints->other[iOther]->conType              = conType;
     optimization->constraints->other[iOther]->enumType             = enumType;
     optimization->constraints->other[iOther]->description          = description;
 
     if (numberOfCon > 0)
     {
-        optimization->constraints->other[iOther]->con = new OtherConOption*[numberOfCon];
+        optimization->constraints->other[iOther]->con = new OtherOptionOrResultElementString*[numberOfCon];
         for (int j=0; j<numberOfCon; j++)
-            optimization->constraints->other[iOther]->con[j] = new OtherConOption();
+            optimization->constraints->other[iOther]->con[j] = new OtherOptionOrResultElementString();
     }
 
     if (numberOfEnumerations > 0)
@@ -9503,7 +9507,7 @@ bool OSOption::setOtherConstraintOptionCon(int otherOptionNumber, int conNumber,
 
 
 
-bool OSOption::setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other)
+bool OSOption::setOtherConstraintOptions(int numberOfOptions, OtherConstraintOptionOrResult** other)
 {
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
@@ -9520,7 +9524,7 @@ bool OSOption::setOtherConstraintOptions(int numberOfOptions, OtherConstraintOpt
     return this->optimization->constraints->setOther(numberOfOptions, other);
 }//setOtherConstraintOptions
 
-bool OSOption::setAnOtherConstraintOption(OtherConstraintOption* optionValue)
+bool OSOption::setAnOtherConstraintOption(OtherConstraintOptionOrResult* optionValue)
 {
     if (this->optimization == NULL)
         this->optimization = new OptimizationOption();
@@ -9528,7 +9532,6 @@ bool OSOption::setAnOtherConstraintOption(OtherConstraintOption* optionValue)
         this->optimization->constraints = new ConstraintOption();
     return this->optimization->constraints->addOther(optionValue);
 }//setAnOtherConstraintOption
-
 
 bool OSOption::setNumberOfSolverOptions(int numberOfOptions)
 {
@@ -9544,11 +9547,11 @@ bool OSOption::setNumberOfSolverOptions(int numberOfOptions)
     return true;
 }//setNumberOfSolverOptions
 
-bool OSOption::setSolverOptionContent(int iOption, int numberOfItems,
-                                      std::string name,
-                                      std::string value, std::string solver,
-                                      std::string category, std::string type,
-                                      std::string description, std::string *itemList)
+bool OSOption::setSolverOptionContent(int iOption, int numberOfMatrices, int numberOfItems,
+                                      std::string name, std::string value,
+                                      std::string solver, std::string category,
+                                      std::string type, std::string description,
+                                      OSMatrix **matrix, std::string *itemList)
 {
     if (optimization == NULL) return false;
     if (optimization->solverOptions == NULL) return false;
@@ -9556,13 +9559,17 @@ bool OSOption::setSolverOptionContent(int iOption, int numberOfItems,
 
     if (iOption < 0 || iOption >= optimization->solverOptions->numberOfSolverOptions) return false;
 
-    optimization->solverOptions->solverOption[iOption]->numberOfItems = numberOfItems;
-    optimization->solverOptions->solverOption[iOption]->name          = name;
-    optimization->solverOptions->solverOption[iOption]->value         = value;
-    optimization->solverOptions->solverOption[iOption]->solver        = solver;
-    optimization->solverOptions->solverOption[iOption]->category      = category;
-    optimization->solverOptions->solverOption[iOption]->type          = type;
-    optimization->solverOptions->solverOption[iOption]->description   = description;
+    optimization->solverOptions->solverOption[iOption]->numberOfMatrices = numberOfMatrices;
+    optimization->solverOptions->solverOption[iOption]->numberOfItems    = numberOfItems;
+    optimization->solverOptions->solverOption[iOption]->name             = name;
+    optimization->solverOptions->solverOption[iOption]->value            = value;
+    optimization->solverOptions->solverOption[iOption]->solver           = solver;
+    optimization->solverOptions->solverOption[iOption]->category         = category;
+    optimization->solverOptions->solverOption[iOption]->type             = type;
+    optimization->solverOptions->solverOption[iOption]->description      = description;
+
+    if (numberOfMatrices > 0)
+        optimization->solverOptions->solverOption[iOption]->matrix = matrix;
 
     if (numberOfItems > 0)
     {
@@ -10201,55 +10208,6 @@ bool OtherOptions::IsEqual(OtherOptions *that)
     }
 }//OtherOptions::IsEqual
 
-
-bool OtherOption::IsEqual(OtherOption *that)
-{
-    std::ostringstream outStr;
-
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOption");
-#endif
-    if (this == NULL)
-    {
-        if (that == NULL)
-            return true;
-        else
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
-#endif
-            return false;
-        }
-    }
-    else
-    {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if ((this->name  != that->name)  ||
-                    (this->value != that->value) ||
-                    (this->description != that->description) )
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
-                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
-                outStr << "description: " << this->description << " vs. " << that->description << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
-    }
-}//OtherOption::IsEqual
 
 bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 {
@@ -11288,6 +11246,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
     }
 }//BranchingWeight::IsEqual
 
+#if 0
 bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 {
     std::ostringstream outStr;
@@ -11420,6 +11379,7 @@ bool OtherVarOption::IsEqual(OtherVarOption *that)
         }
     }
 }//OtherVarOption::IsEqual
+#endif
 
 bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 {
@@ -11672,6 +11632,7 @@ bool InitObjBound::IsEqual(InitObjBound *that)
     }
 }//InitObjBound::IsEqual
 
+#if 0
 bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 {
     std::ostringstream outStr;
@@ -11790,6 +11751,7 @@ bool OtherObjOption::IsEqual(OtherObjOption *that)
         }
     }
 }//OtherObjOption::IsEqual
+#endif
 
 bool ConstraintOption::IsEqual(ConstraintOption *that)
 {
@@ -12041,6 +12003,7 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
     }
 }//InitDualVarValue::IsEqual
 
+#if 0
 bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 {
     std::ostringstream outStr;
@@ -12160,7 +12123,7 @@ bool OtherConOption::IsEqual(OtherConOption *that)
         }
     }
 }//OtherConOption::IsEqual
-
+#endif
 
 bool SolverOptions::IsEqual(SolverOptions *that)
 {
@@ -12522,28 +12485,16 @@ bool OtherOptions::setRandom( double density, bool conformant )
     if (conformant)    n = this->numberOfOtherOptions;
     else            n = (int)(1+4*OSRand());
 
-    other = new OtherOption*[n];
+    other = new OtherOptionOrResult*[n];
 
     for (int i = 0; i < n; i++)
     {
-        other[i] = new OtherOption();
+        other[i] = new OtherOptionOrResult();
         other[i]->setRandom(density, conformant);
     }
 
     return true;
 }//OtherOptions::setRandom
-
-bool OtherOption::setRandom( double density, bool conformant )
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Set random OtherOption");
-#endif
-    if (OSRand() <= density || conformant) this->name = "random string";
-    if (OSRand() <= density) this->value       = "random string";
-    if (OSRand() <= density) this->description = "random string";
-    return true;
-}//OtherOption::setRandom
-
 
 
 bool JobDependencies::setRandom( double density, bool conformant )
@@ -12669,7 +12620,6 @@ bool VariableOption::setRandom( double density, bool conformant )
         this->sosVariableBranchingWeights->setRandom(density, conformant);
     }
 
-
     this->numberOfOtherVariableOptions = (int)(4*OSRand());
 
     int n;
@@ -12677,10 +12627,10 @@ bool VariableOption::setRandom( double density, bool conformant )
     if (conformant)    n = this->numberOfOtherVariableOptions;
     else            n = (int)(4*OSRand());
 
-    other = new OtherVariableOption*[n];
+    other = new OtherVariableOptionOrResult*[n];
     for (int i = 0; i < n; i++)
     {
-        other[i] = new OtherVariableOption();
+        other[i] = new OtherVariableOptionOrResult();
         other[i]->setRandom(density, conformant);
     }
     return true;
@@ -12814,7 +12764,6 @@ bool SOSWeights::setRandom( double density, bool conformant )
 
     if (OSRand() <= density) this->groupWeight = OSRand();
 
-
     int n;
 
     if (conformant)    n = this->numberOfVar;
@@ -12844,6 +12793,7 @@ bool BranchingWeight::setRandom( double density, bool conformant )
     return true;
 }//BranchingWeight::setRandom
 
+#if 0
 bool OtherVariableOption::setRandom( double density, bool conformant )
 {
 #ifndef NDEBUG
@@ -12906,6 +12856,7 @@ bool OtherVarOption::setRandom( double density, bool conformant )
     if (OSRand() <= density) this->ubValue = "random string";
     return true;
 }//OtherVarOption::setRandom
+#endif
 
 bool ObjectiveOption::setRandom( double density, bool conformant )
 {
@@ -12938,10 +12889,10 @@ bool ObjectiveOption::setRandom( double density, bool conformant )
         if (conformant)    n = this->numberOfOtherObjectiveOptions;
         else            n = (int)(4*OSRand());
 
-        other = new OtherObjectiveOption*[n];
+        other = new OtherObjectiveOptionOrResult*[n];
         for (int i = 0; i < n; i++)
         {
-            other[i] = new OtherObjectiveOption();
+            other[i] = new OtherObjectiveOptionOrResult();
             other[i]->setRandom(density, conformant);
         }
     }
@@ -13029,6 +12980,7 @@ bool InitObjBound::setRandom( double density, bool conformant )
     return true;
 }//InitObjBound::setRandom
 
+#if 0
 bool OtherObjectiveOption::setRandom( double density, bool conformant )
 {
 #ifndef NDEBUG
@@ -13092,6 +13044,7 @@ bool OtherObjOption::setRandom( double density, bool conformant )
     if (OSRand() <= density) this->ubValue = "random string";
     return true;
 }//OtherObjOption::setRandom
+#endif
 
 bool ConstraintOption::setRandom( double density, bool conformant )
 {
@@ -13124,10 +13077,10 @@ bool ConstraintOption::setRandom( double density, bool conformant )
         if (conformant)    n = this->numberOfOtherConstraintOptions;
         else            n = (int)(4*OSRand());
 
-        other = new OtherConstraintOption*[n];
+        other = new OtherConstraintOptionOrResult*[n];
         for (int i = 0; i < n; i++)
         {
-            other[i] = new OtherConstraintOption();
+            other[i] = new OtherConstraintOptionOrResult();
             other[i]->setRandom(density, conformant);
         }
     }
@@ -13213,6 +13166,7 @@ bool InitDualVarValue::setRandom( double density, bool conformant )
     return true;
 }//InitDualVarValue::setRandom
 
+#if 0
 bool OtherConstraintOption::setRandom( double density, bool conformant )
 {
 #ifndef NDEBUG
@@ -13275,7 +13229,7 @@ bool OtherConOption::setRandom( double density, bool conformant )
     if (OSRand() <= density) this->ubValue = "random string";
     return true;
 }//OtherConOption::setRandom
-
+#endif
 
 bool SolverOptions::setRandom( double density, bool conformant )
 {
@@ -13609,28 +13563,17 @@ bool OtherOptions::deepCopyFrom(OtherOptions *that)
     if (n  < 0) return false;
     if (n == 0) return true;
 
-    this->other = new OtherOption*[n];
+    this->other = new OtherOptionOrResult*[n];
 
     for (int i = 0; i < n; i++)
     {
-        this->other[i] = new OtherOption();
+        this->other[i] = new OtherOptionOrResult();
         if (!this->other[i]->deepCopyFrom(that->other[i]))
             return false;
     }
 
     return true;
 }//OtherOptions::deepCopyFrom
-
-bool OtherOption::deepCopyFrom(OtherOption *that)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherOption");
-#endif
-    this->name        = that->name;
-    this->value       = that->value;
-    this->description = that->description;
-    return true;
-}//OtherOption::deepCopyFrom
 
 
 bool JobDependencies::deepCopyFrom(JobDependencies *that)
@@ -13771,10 +13714,10 @@ bool VariableOption::deepCopyFrom(VariableOption *that)
     if (n  < 0) return false;
     if (n == 0) return true;
 
-    this->other = new OtherVariableOption*[n];
+    this->other = new OtherVariableOptionOrResult*[n];
     for (int i = 0; i < n; i++)
     {
-        this->other[i] = new OtherVariableOption();
+        this->other[i] = new OtherVariableOptionOrResult();
         if (!this->other[i]->deepCopyFrom(that->other[i]))
             return false;
     }
@@ -13928,64 +13871,6 @@ bool BranchingWeight::deepCopyFrom(BranchingWeight *that)
     return true;
 }//BranchingWeight::deepCopyFrom
 
-bool OtherVariableOption::deepCopyFrom(OtherVariableOption *that)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherVariableOption");
-#endif
-    this->name        = that->name;
-    this->value       = that->value;
-    this->solver      = that->solver;
-    this->category    = that->category;
-    this->type        = that->type;
-    this->varType     = that->varType;
-    this->enumType    = that->enumType;
-    this->description = that->description;
-
-    int n;
-    this->numberOfVar = that->numberOfVar;
-    n = this->numberOfVar;
-
-    if (n < 0) return false;
-    if (n > 0) 
-    {
-        this->var = new OtherVarOption*[n];
-        for (int i = 0; i < n; i++)
-        {
-            this->var[i] = new OtherVarOption();
-            if (!this->var[i]->deepCopyFrom(that->var[i]))
-                return false;
-        }
-    }
-
-    this->numberOfEnumerations = that->numberOfEnumerations;
-    n = this->numberOfEnumerations;
-
-    if (n  < 0) return false;
-    if (n == 0) return true;
-
-    this->enumeration = new OtherOptionOrResultEnumeration*[n];
-    for (int i = 0; i < n; i++)
-    {
-        this->enumeration[i] = new OtherOptionOrResultEnumeration();
-        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
-            return false;
-    }
-    return true;
-}//OtherVariableOption::deepCopyFrom
-
-bool OtherVarOption::deepCopyFrom(OtherVarOption *that)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherVarOption");
-#endif
-    this->idx     = that->idx;
-    this->name    = that->name;
-    this->value   = that->value;
-    this->lbValue = that->lbValue;
-    this->ubValue = that->ubValue;
-    return true;
-}//OtherVarOption::deepCopyFrom
 
 bool ObjectiveOption::deepCopyFrom(ObjectiveOption *that)
 {
@@ -14017,10 +13902,10 @@ bool ObjectiveOption::deepCopyFrom(ObjectiveOption *that)
     if (n  < 0) return false;
     if (n == 0) return true;
 
-    this->other = new OtherObjectiveOption*[n];
+    this->other = new OtherObjectiveOptionOrResult*[n];
     for (int i = 0; i < n; i++)
     {
-        this->other[i] = new OtherObjectiveOption();
+        this->other[i] = new OtherObjectiveOptionOrResult();
         if (!this->other[i]->deepCopyFrom(that->other[i]))
             return false;
     }
@@ -14092,6 +13977,7 @@ bool InitObjBound::deepCopyFrom(InitObjBound *that)
     return true;
 }//InitObjBound::deepCopyFrom
 
+#if 0
 bool OtherObjectiveOption::deepCopyFrom(OtherObjectiveOption *that)
 {
 #ifndef NDEBUG
@@ -14153,6 +14039,7 @@ bool OtherObjOption::deepCopyFrom(OtherObjOption *that)
     this->ubValue = that->ubValue;
     return true;
 }//OtherObjOption::deepCopyFrom
+#endif
 
 bool ConstraintOption::deepCopyFrom(ConstraintOption *that)
 {
@@ -14184,10 +14071,10 @@ bool ConstraintOption::deepCopyFrom(ConstraintOption *that)
     if (n  < 0) return false;
     if (n == 0) return true;
 
-    this->other = new OtherConstraintOption*[n];
+    this->other = new OtherConstraintOptionOrResult*[n];
     for (int i = 0; i < n; i++)
     {
-        this->other[i] = new OtherConstraintOption();
+        this->other[i] = new OtherConstraintOptionOrResult();
         if (!this->other[i]->deepCopyFrom(that->other[i]))
             return false;
     }
@@ -14259,6 +14146,7 @@ bool InitDualVarValue::deepCopyFrom(InitDualVarValue *that)
     return true;
 }//InitDualVarValue::deepCopyFrom
 
+#if 0
 bool OtherConstraintOption::deepCopyFrom(OtherConstraintOption *that)
 {
 #ifndef NDEBUG
@@ -14319,7 +14207,7 @@ bool OtherConOption::deepCopyFrom(OtherConOption *that)
     this->ubValue = that->ubValue;
     return true;
 }//OtherConOption::deepCopyFrom
-
+#endif
 
 bool SolverOptions::deepCopyFrom(SolverOptions *that)
 {

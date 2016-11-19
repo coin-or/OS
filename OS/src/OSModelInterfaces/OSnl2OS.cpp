@@ -24,6 +24,7 @@
 #include "OSoLWriter.h"
 #include "OSoLReader.h"
 #include "OSnl2OS.h"
+#include "OSGeneral.h"
 #include "OSOption.h"
 #include "OSOutput.h"
 #include "OSErrorClass.h"
@@ -974,7 +975,7 @@ bool OSnl2OS::createOSObjects()
                     if (osoption->optimization->variables->other[i]->numberOfVar > 0)
                         otherOptionNames[nOther++] = osoption->optimization->variables->other[i]->name;
             }
-            OtherVariableOption* varopt;
+            OtherVariableOptionOrResult* varopt;
             for (d=asl->i.suffixes[suffixType]; d; d=d->next)
             {
 #ifndef NDEBUG
@@ -1098,11 +1099,11 @@ bool OSnl2OS::createOSObjects()
                 else       // not one of the special cases
                 {
                     // allocate space
-                    varopt = new OtherVariableOption();
+                    varopt = new OtherVariableOptionOrResult();
 
                     varopt->name = d->sufname;
                     varopt->numberOfEnumerations = 0;
-                    varopt->var = new OtherVarOption*[n_var];
+                    varopt->var = new OtherOptionOrResultElementString*[n_var];
 
                     // check if the option was present in the OSoL file
                     found = false;
@@ -1119,7 +1120,7 @@ bool OSnl2OS::createOSObjects()
                     // merge values by overwriting .nl file info 
                     if (found)
                     {
-                        OtherVariableOption* otherOption;
+                        OtherVariableOptionOrResult* otherOption;
                         otherOption = osoption->getOtherVariableOption(iopt);
                         for (int i=0; i < otherOption->numberOfVar; i++)
                         {
@@ -1147,7 +1148,7 @@ bool OSnl2OS::createOSObjects()
                         {
                             if (d->u.r[k] != 0)
                             {
-                                varopt->var[nOtherIdx] = new OtherVarOption();
+                                varopt->var[nOtherIdx] = new OtherOptionOrResultElementString();
                                 varopt->var[nOtherIdx]->idx = k;    
                                 varopt->var[nOtherIdx]->value = os_dtoa_format(d->u.r[k]);
                                 nOtherIdx++;
@@ -1162,7 +1163,7 @@ bool OSnl2OS::createOSObjects()
                         {
                             if (d->u.i[k] != 0)
                             {
-                                varopt->var[nOtherIdx] = new OtherVarOption();
+                                varopt->var[nOtherIdx] = new OtherOptionOrResultElementString();
                                 varopt->var[nOtherIdx]->idx = k;    
                                 varopt->var[nOtherIdx]->value = os_dtoa_format((double)d->u.i[k]);
                                 nOtherIdx++;
@@ -1213,7 +1214,7 @@ bool OSnl2OS::createOSObjects()
                     if (osoption->optimization->constraints->other[i]->numberOfCon > 0)
                         otherOptionNames[nOther++] = osoption->optimization->constraints->other[i]->name;
             }
-            OtherConstraintOption* conopt;
+            OtherConstraintOptionOrResult* conopt;
             for (d=asl->i.suffixes[suffixType]; d; d=d->next)
             {
 #ifndef NDEBUG
@@ -1337,11 +1338,11 @@ bool OSnl2OS::createOSObjects()
                 else  // not one of the special cases
                 {
                     // allocate space
-                    conopt = new OtherConstraintOption();
+                    conopt = new OtherConstraintOptionOrResult();
 
                     conopt->name = d->sufname;
                     conopt->numberOfEnumerations = 0;
-                    conopt->con = new OtherConOption*[n_con];
+                    conopt->con = new OtherOptionOrResultElementString*[n_con];
 
                     // check if the option was present in the OSoL file
                     found = false;
@@ -1358,7 +1359,7 @@ bool OSnl2OS::createOSObjects()
                     // merge values by overwriting .nl file info 
                     if (found)
                     {
-                        OtherConstraintOption* otherOption;
+                        OtherConstraintOptionOrResult* otherOption;
                         otherOption = osoption->getOtherConstraintOption(iopt);
                         for (int i=0; i < otherOption->numberOfCon; i++)
                         {
@@ -1386,7 +1387,7 @@ bool OSnl2OS::createOSObjects()
                         {
                             if (d->u.r[k] != 0)
                             {
-                                conopt->con[nOtherIdx] = new OtherConOption();
+                                conopt->con[nOtherIdx] = new OtherOptionOrResultElementString();
                                 conopt->con[nOtherIdx]->idx = k;    
                                 conopt->con[nOtherIdx]->value = os_dtoa_format(d->u.r[k]);
                                 nOtherIdx++;
@@ -1401,7 +1402,7 @@ bool OSnl2OS::createOSObjects()
                         {
                             if (d->u.i[k] != 0)
                             {
-                                conopt->con[nOtherIdx] = new OtherConOption();
+                                conopt->con[nOtherIdx] = new OtherOptionOrResultElementString();
                                 conopt->con[nOtherIdx]->idx = k;    
                                 conopt->con[nOtherIdx]->value = os_dtoa_format((double)d->u.i[k]);
                                 nOtherIdx++;
@@ -1452,7 +1453,7 @@ bool OSnl2OS::createOSObjects()
                     if (osoption->optimization->objectives->other[i]->numberOfObj > 0)
                         otherOptionNames[nOther++] = osoption->optimization->objectives->other[i]->name;
             }
-            OtherObjectiveOption* objopt;
+            OtherObjectiveOptionOrResult* objopt;
             for (d=asl->i.suffixes[suffixType]; d; d=d->next)
             {
 #ifndef NDEBUG
@@ -1463,11 +1464,11 @@ bool OSnl2OS::createOSObjects()
 #endif
 
                 // allocate space
-                objopt = new OtherObjectiveOption();
+                objopt = new OtherObjectiveOptionOrResult();
 
                 objopt->name = d->sufname;
                 objopt->numberOfEnumerations = 0;
-                objopt->obj = new OtherObjOption*[n_obj];
+                objopt->obj = new OtherObjOptionOrResultElementString*[n_obj];
 
                 // check if the option was present in the OSoL file
                 found = false;
@@ -1484,7 +1485,7 @@ bool OSnl2OS::createOSObjects()
                 // merge values by overwriting .nl file info 
                 if (found)
                 {
-                    OtherObjectiveOption* otherOption;
+                    OtherObjectiveOptionOrResult* otherOption;
                     otherOption = osoption->getOtherObjectiveOption(iopt);
 #ifndef NDEBUG
                     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSModelInterfaces, ENUM_OUTPUT_LEVEL_debug, "Merge data\n");
@@ -1515,7 +1516,7 @@ bool OSnl2OS::createOSObjects()
                     {
                         if (d->u.r[k] != 0)
                         {
-                            objopt->obj[nOtherIdx] = new OtherObjOption();
+                            objopt->obj[nOtherIdx] = new OtherObjOptionOrResultElementString();
                             objopt->obj[nOtherIdx]->idx = -1 - k;    
                             objopt->obj[nOtherIdx]->value = os_dtoa_format(d->u.r[k]);
                             nOtherIdx++;
@@ -1530,7 +1531,7 @@ bool OSnl2OS::createOSObjects()
                     {
                         if (d->u.i[k] != 0)
                         {
-                            objopt->obj[nOtherIdx] = new OtherObjOption();
+                            objopt->obj[nOtherIdx] = new OtherObjOptionOrResultElementString();
                             objopt->obj[nOtherIdx]->idx = -1 - k;    
                             objopt->obj[nOtherIdx]->value = os_dtoa_format((double)d->u.i[k]);
                             nOtherIdx++;

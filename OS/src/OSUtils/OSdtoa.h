@@ -20,6 +20,9 @@
 #ifndef OSDTOA_H
 #define OSDTOA_H
 
+#include "OSConfig.h"
+#include "OSParameters.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

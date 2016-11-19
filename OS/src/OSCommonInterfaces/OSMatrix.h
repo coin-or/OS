@@ -3177,7 +3177,7 @@ public:
      * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
      * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
      */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
+    bool setRandom(double density, bool conformant, int iMin = 0, int iMax = 3);
 
     /**
      * A function to make a deep copy of an instance of this class
@@ -3229,10 +3229,10 @@ public:
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
      *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
-     * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
-     * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
+     * @param iMin: lowest index value (inclusive) that an objective reference in this matrix can take
+     * @param iMax: greatest index value (inclusive) that an objective reference in this matrix can take
      */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
+    bool setRandom(double density, bool conformant, int iMin = -5, int iMax = -1);
 
     /**
      * A function to make a deep copy of an instance of this class
@@ -3286,7 +3286,7 @@ public:
      * @param iMin: lowest index value (inclusive) that a variable reference in this matrix can take
      * @param iMax: greatest index value (inclusive) that a variable reference in this matrix can take
      */
-    bool setRandom(double density, bool conformant, int iMin, int iMax);
+    bool setRandom(double density, bool conformant, int iMin = 0, int iMax = 4);
 
     /**
      * A function to make a deep copy of an instance of this class

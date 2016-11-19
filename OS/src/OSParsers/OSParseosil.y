@@ -3066,6 +3066,91 @@ osglBasisNumberOfElAttribute: osglNumberOfElATT
         osglData->osglIntArray = new int[osglData->numberOfEl];
 }; 
 
+/** ========================================================================================
+ *  This portion parses the guts of a SolverOptionOrResult object used in both OSoL and OSrL
+ *  ========================================================================================
+ */
+osglSolverOptionOrResultAttributes: osglSolverOptionOrResultAttList
+{
+    if (!osglData->namePresent)
+        parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "name attribute must be present");
+};
+
+osglSolverOptionOrResultAttList:
+    osglSolverOptionOrResultATT 
+  | osglSolverOptionOrResultAttList osglSolverOptionOrResultATT;
+
+osglSolverOptionOrResultATT:
+    osglNameATT
+  | osglValueATT
+  | osglSolverATT
+  | osglCategoryATT
+  | osglTypeATT
+  | osglDescriptionATT
+  | osglNumberOfItemsATT
+    {
+        osglData->itemList = new std::string[osglData->numberOfItems];
+    }
+  ;
+
+
+osglSolverOptionOrResultBody: osglSolverOptionOrResultMatrixArray | osglSolverOptionOrResultItemArray;
+
+osglSolverOptionOrResultMatrixArray: 
+    osglSolverOptionOrResultMatrix
+  | osglSolverOptionOrResultMatrixArray osglSolverOptionOrResultMatrix;
+
+osglSolverOptionOrResultMatrix: osglMatrix;
+
+
+
+osglSolverOptionOrResultItemArray: 
+    osglSolverOptionOrResultItem 
+  | osglSolverOptionOrResultItemArray osglSolverOptionOrResultItem;
+
+osglSolverOptionOrResultItem: osglSolverOptionOrResultItemContent
+{    
+    osglData->itemList[osglData->kounter] = osglData->itemContent;
+std::cout << " number of items seen so far: " << osglData->kounter << std::endl; 
+    osglData->kounter++;
+};    
+
+osglSolverOptionOrResultItemContent: 
+    osglSolverOptionOrResultItemEmpty
+    {
+std::cout << "number of items specified: " << osglData->numberOfItems << std::endl;
+std::cout << " number of items seen: " << osglData->kounter << std::endl; 
+        if (osglData->kounter >= osglData->numberOfItems)
+            if (!parserData->suppressFurtherErrorMessages)
+            {
+                parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <item> elements than specified");
+                parserData->suppressFurtherErrorMessages = true;
+                parserData->ignoreDataAfterErrors = true;
+            }
+        osglData->itemContent = "";            
+    }    
+  | osglSolverOptionOrResultItemLaden; 
+
+osglSolverOptionOrResultItemEmpty: ITEMSTARTANDEND | ITEMEMPTY;
+
+osglSolverOptionOrResultItemLaden: ITEMSTART osglSolverOptionOrResultItemBody ITEMEND;
+
+osglSolverOptionOrResultItemBody:  ITEMTEXT 
+{
+std::cout << "number of items specified: " << osglData->numberOfItems << std::endl;
+std::cout << " number of items seen: " << osglData->kounter << std::endl; 
+    if (osglData->kounter >= osglData->numberOfItems)
+        if (!parserData->suppressFurtherErrorMessages)
+        {
+            parserData->parser_errors += addErrorMsg( NULL, osoption, parserData, osglData, osnlData, "more <item> elements than specified");
+            parserData->suppressFurtherErrorMessages = true;
+            parserData->ignoreDataAfterErrors = true;
+        }
+    osglData->itemContent = $1; 
+    free($1);
+};
+
+
 /** ===================================================================================
  *    This portion parses an OSMatrix object used in OSiL, OSoL and OSrL schema files
  *  ===================================================================================

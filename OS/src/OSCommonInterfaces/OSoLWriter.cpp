@@ -47,9 +47,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
     m_OSOption = theosoption;
     std::ostringstream osolStr, outStr;
 #ifdef WIN_
-    const char	dirsep='\\';
+    const char    dirsep='\\';
 #else
-    const char	dirsep='/';
+    const char    dirsep='/';
 #endif
     // Set directory containing stylesheet files.
     std::string xsltDir;
@@ -226,7 +226,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
     };
 
     /**
-     * 	Put the <system> element
+     *     Put the <system> element
      */
     if(m_OSOption->system != NULL)
     {
@@ -304,7 +304,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
     }
 
     /**
-     * 	Put the <service> element
+     *     Put the <service> element
      */
     if(m_OSOption->service != NULL)
     {
@@ -335,7 +335,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
     };
 
     /**
-     * 	Put the <job> element
+     *     Put the <job> element
      */
     if(m_OSOption->job != NULL)
     {
@@ -500,7 +500,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
     };
 
     /**
-     * 	Put the <optimization> element
+     *     Put the <optimization> element
      */
     if (m_OSOption->optimization != NULL)
     {
@@ -668,30 +668,30 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                    << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
-//			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
+//            if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
             for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
             {
                 osolStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
-//					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
-                osolStr << " numberOfVar=\"" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\"";
-//					if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
-                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->variables->other[i]->numberOfEnumerations << "\"";
+                if (m_OSOption->optimization->variables->other[i]->description != "")
+                    osolStr << " description=" << writeStringData(m_OSOption->optimization->variables->other[i]->description);
                 if (m_OSOption->optimization->variables->other[i]->value != "")
                     osolStr << " value=\"" << m_OSOption->optimization->variables->other[i]->value << "\"";
+                if (m_OSOption->optimization->variables->other[i]->type != "")
+                    osolStr << " type=\"" << m_OSOption->optimization->variables->other[i]->type << "\"";
                 if (m_OSOption->optimization->variables->other[i]->solver != "")
                     osolStr << " solver=\"" << m_OSOption->optimization->variables->other[i]->solver << "\"";
                 if (m_OSOption->optimization->variables->other[i]->category != "")
                     osolStr << " category=\"" << m_OSOption->optimization->variables->other[i]->category << "\"";
-                if (m_OSOption->optimization->variables->other[i]->type != "")
-                    osolStr << " type=\"" << m_OSOption->optimization->variables->other[i]->type << "\"";
-                if (m_OSOption->optimization->variables->other[i]->description != "")
-                    osolStr << " description=" << writeStringData(m_OSOption->optimization->variables->other[i]->description);
+//                    if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
+                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->variables->other[i]->numberOfEnumerations << "\"";
                 if (m_OSOption->optimization->variables->other[i]->varType != "")
                     osolStr << " varType=\"" << m_OSOption->optimization->variables->other[i]->varType << "\"";
                 if (m_OSOption->optimization->variables->other[i]->enumType != "")
                     osolStr << " enumType=\"" << m_OSOption->optimization->variables->other[i]->enumType << "\"";
+//                    if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
+                osolStr << " numberOfVar=\"" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\"";
                 osolStr << ">" << endl;
-//					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
+//                    if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
                 for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfVar; j++)
                 {
                     osolStr << "<var idx=\"" << m_OSOption->optimization->variables->other[i]->var[j]->idx << "\"";
@@ -705,9 +705,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                         osolStr << " ubValue=\"" << m_OSOption->optimization->variables->other[i]->var[j]->ubValue << "\"";
                     osolStr << "/>" << endl;
                 }
-//					else
+//                    else
                 {
-//						if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
+//                        if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
                     for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfEnumerations; j++)
                         osolStr << writeOtherOptionOrResultEnumeration(m_OSOption->optimization->variables->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
                 }
@@ -718,7 +718,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
         if (m_OSOption->optimization->objectives != NULL)
         {
             osolStr << "<objectives";
-//			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
+//            if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
             osolStr << " numberOfOtherObjectiveOptions=\"" << m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions << "\"";
             osolStr << ">" << endl;
             if (m_OSOption->optimization->objectives->initialObjectiveValues != NULL)
@@ -786,30 +786,30 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                    << m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-//			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
+//            if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
             for (int i=0; i < m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
             {
                 osolStr << "<other name=\"" << m_OSOption->optimization->objectives->other[i]->name << "\"";
-//					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
-                osolStr << " numberOfObj=\"" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\"";
-//					if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
-                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->objectives->other[i]->numberOfEnumerations << "\"";
+                if (m_OSOption->optimization->objectives->other[i]->description != "")
+                    osolStr << " description=" << writeStringData(m_OSOption->optimization->objectives->other[i]->description);
                 if (m_OSOption->optimization->objectives->other[i]->value != "")
                     osolStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->value << "\"";
+                if (m_OSOption->optimization->objectives->other[i]->type != "")
+                    osolStr << " type=\"" << m_OSOption->optimization->objectives->other[i]->type << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->solver != "")
                     osolStr << " solver=\"" << m_OSOption->optimization->objectives->other[i]->solver << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->category != "")
                     osolStr << " category=\"" << m_OSOption->optimization->objectives->other[i]->category << "\"";
-                if (m_OSOption->optimization->objectives->other[i]->type != "")
-                    osolStr << " type=\"" << m_OSOption->optimization->objectives->other[i]->type << "\"";
-                if (m_OSOption->optimization->objectives->other[i]->description != "")
-                    osolStr << " description=" << writeStringData(m_OSOption->optimization->objectives->other[i]->description);
+//                    if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
+                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->objectives->other[i]->numberOfEnumerations << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->objType != "")
                     osolStr << " objType=\"" << m_OSOption->optimization->objectives->other[i]->objType << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->enumType != "")
                     osolStr << " enumType=\"" << m_OSOption->optimization->objectives->other[i]->enumType << "\"";
+//                    if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
+                osolStr << " numberOfObj=\"" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\"";
                 osolStr << ">" << endl;
-//					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
+//                    if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
                 for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfObj; j++)
                 {
                     osolStr << "<obj idx=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->idx << "\"";
@@ -819,7 +819,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                         osolStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->value << "\"";
                     osolStr << "/>" << endl;
                 }
-//					else if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
+//                    else if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
                 for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfEnumerations; j++)
                     osolStr << writeOtherOptionOrResultEnumeration(m_OSOption->optimization->objectives->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 
@@ -833,7 +833,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
         if (m_OSOption->optimization->constraints != NULL)
         {
             osolStr << "<constraints";
-//			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
+//            if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
             osolStr << " numberOfOtherConstraintOptions=\"" << m_OSOption->optimization->constraints->numberOfOtherConstraintOptions << "\"";
             osolStr << ">" << endl;
             if (m_OSOption->optimization->constraints->initialConstraintValues != NULL)
@@ -903,31 +903,30 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                    << std::endl;
             osoutput->OSPrint(ENUM_OUTPUT_AREA_OSoLwriter, ENUM_OUTPUT_LEVEL_trace, outStr.str());
 #endif
-//			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
+//            if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
             for (int i=0; i < m_OSOption->optimization->constraints->numberOfOtherConstraintOptions; i++)
             {
                 osolStr << "<other name=\"" << m_OSOption->optimization->constraints->other[i]->name << "\"";
-
-//					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
-                osolStr << " numberOfCon=\"" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\"";
-//					if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
-                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->constraints->other[i]->numberOfEnumerations << "\"";
+                if (m_OSOption->optimization->constraints->other[i]->description != "")
+                    osolStr << " description=" << writeStringData(m_OSOption->optimization->constraints->other[i]->description);
                 if (m_OSOption->optimization->constraints->other[i]->value != "")
                     osolStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->value << "\"";
+                if (m_OSOption->optimization->constraints->other[i]->type != "")
+                    osolStr << " type=\"" << m_OSOption->optimization->constraints->other[i]->type << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->solver != "")
                     osolStr << " solver=\"" << m_OSOption->optimization->constraints->other[i]->solver << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->category != "")
                     osolStr << " category=\"" << m_OSOption->optimization->constraints->other[i]->category << "\"";
-                if (m_OSOption->optimization->constraints->other[i]->type != "")
-                    osolStr << " type=\"" << m_OSOption->optimization->constraints->other[i]->type << "\"";
-                if (m_OSOption->optimization->constraints->other[i]->description != "")
-                    osolStr << " description=" << writeStringData(m_OSOption->optimization->constraints->other[i]->description);
-                if (m_OSOption->optimization->constraints->other[i]->conType != "")
-                    osolStr << " conType=\"" << m_OSOption->optimization->constraints->other[i]->conType << "\"";
+//                    if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
+                osolStr << " numberOfEnumerations=\"" << m_OSOption->optimization->constraints->other[i]->numberOfEnumerations << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->enumType != "")
                     osolStr << " enumType=\"" << m_OSOption->optimization->constraints->other[i]->enumType << "\"";
+//                    if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
+                osolStr << " numberOfCon=\"" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\"";
+                if (m_OSOption->optimization->constraints->other[i]->conType != "")
+                    osolStr << " conType=\"" << m_OSOption->optimization->constraints->other[i]->conType << "\"";
                 osolStr << ">" << endl;
-//					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
+//                    if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
                 for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfCon; j++)
                 {
                     osolStr << "<con idx=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->idx << "\"";
@@ -941,7 +940,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                         osolStr << " ubValue=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->ubValue << "\"";
                     osolStr << "/>" << endl;
                 }
-//					else if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
+//                    else if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
                 for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfEnumerations; j++)
                     osolStr << writeOtherOptionOrResultEnumeration(m_OSOption->optimization->constraints->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 
@@ -954,7 +953,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #endif
         if (m_OSOption->optimization->solverOptions != NULL)
         {
-//			if (m_OSOption->optimization->solverOptions->numberOfSolverOptions > 0)
+//            if (m_OSOption->optimization->solverOptions->numberOfSolverOptions > 0)
             {
                 osolStr << "<solverOptions numberOfSolverOptions=\"";
                 osolStr << m_OSOption->optimization->solverOptions->numberOfSolverOptions << "\">" << endl;

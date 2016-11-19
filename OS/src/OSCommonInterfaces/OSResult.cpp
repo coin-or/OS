@@ -76,7 +76,7 @@ GeneralStatus::~GeneralStatus()
     }
 }//end GeneralStatus destructor
 
-
+#if 0
 OtherResult::OtherResult():
     name( ""),
     value( ""),
@@ -87,13 +87,14 @@ OtherResult::OtherResult():
 #endif
 }// end OtherResult constructor
 
+
 OtherResult::~OtherResult()
 {
 #ifndef NDEBUG
     osoutput->OSPrint(ENUM_OUTPUT_AREA_OSResult, ENUM_OUTPUT_LEVEL_trace, "Inside the OtherResult Destructor");
 #endif
 }// end OtherResult destructor
-
+#endif
 
 OtherResults::OtherResults():
     numberOfOtherResults( 0),
@@ -4183,9 +4184,9 @@ bool OSResult::setNumberOfOtherGeneralResults(int num)
     general->otherResults->numberOfOtherResults = num;
     if (num > 0)
     {
-        general->otherResults->other = new OtherResult*[num];
+        general->otherResults->other = new OtherOptionOrResult*[num];
         for(int i = 0; i < num; i++)
-            general->otherResults->other[i] = new OtherResult();
+            general->otherResults->other[i] = new OtherOptionOrResult();
     }
     return true;
 }//setNumberOfOtherGeneralResults
@@ -4328,9 +4329,9 @@ bool OSResult::setNumberOfOtherSystemResults(int num)
     system->otherResults->numberOfOtherResults = num;
     if (num > 0)
     {
-        system->otherResults->other = new OtherResult*[num];
+        system->otherResults->other = new OtherOptionOrResult*[num];
         for(int i = 0; i < num; i++)
-            system->otherResults->other[i] = new OtherResult();
+            system->otherResults->other[i] = new OtherOptionOrResult();
     }
     return true;
 }//setNumberOfOtherSystemResults
@@ -4413,9 +4414,9 @@ bool OSResult::setNumberOfOtherServiceResults(int num)
     service->otherResults->numberOfOtherResults = num;
     if (num > 0)
     {
-        service->otherResults->other = new OtherResult*[num];
+        service->otherResults->other = new OtherOptionOrResult*[num];
         for(int i = 0; i < num; i++)
-            service->otherResults->other[i] = new OtherResult();
+            service->otherResults->other[i] = new OtherOptionOrResult();
     }
     return true;
 }//setNumberOfOtherServiceResults
@@ -4679,9 +4680,9 @@ bool OSResult::setNumberOfOtherJobResults(int num)
     job->otherResults->numberOfOtherResults = num;
     if (num > 0)
     {
-        job->otherResults->other = new OtherResult*[num];
+        job->otherResults->other = new OtherOptionOrResult*[num];
         for(int i = 0; i < num; i++)
-            job->otherResults->other[i] = new OtherResult();
+            job->otherResults->other[i] = new OtherOptionOrResult();
     }
     return true;
 }//setNumberOfOtherJobResults
@@ -5489,6 +5490,7 @@ bool OSResult::setOtherVariableResultVarType(int solIdx, int otherIdx, std::stri
     if (optimization->solution == NULL ||
             solIdx < 0 || solIdx >=  nSols) return false;
     if (optimization->solution[solIdx] == NULL) return false;
+
 
     if (optimization->solution[solIdx]->variables == NULL)return false;
     if (optimization->solution[solIdx]->variables->other == NULL) return false;
@@ -7766,7 +7768,7 @@ bool OtherResults::IsEqual(OtherResults *that)
     }
 }//OtherResults::IsEqual
 
-
+#if 0
 bool OtherResult::IsEqual(OtherResult *that)
 {
     std::ostringstream outStr;
@@ -7818,7 +7820,7 @@ bool OtherResult::IsEqual(OtherResult *that)
         }
     }
 }//OtherResult::IsEqual
-
+#endif
 
 bool SystemResult::IsEqual(SystemResult *that)
 {
@@ -8461,6 +8463,7 @@ bool VariableSolution::IsEqual(VariableSolution *that)
         }
     }
 }//VariableSolution::IsEqual
+
 
 bool VariableValues::IsEqual(VariableValues *that)
 {
@@ -9823,18 +9826,18 @@ bool OtherResults::setRandom(double density, bool conformant)
     if (conformant)	n = this->numberOfOtherResults;
     else            n = (int)(1+4*OSRand());
 
-    other = new OtherResult*[n];
+    other = new OtherOptionOrResult*[n];
 
     for (int i = 0; i < n; i++)
     {
-        other[i] = new OtherResult();
+        other[i] = new OtherOptionOrResult();
         other[i]->setRandom(density, conformant);
     }
 
     return true;
 }//OtherResults::setRandom
 
-
+#if 0
 bool OtherResult::setRandom(double density, bool conformant)
 {
 #ifndef NDEBUG
@@ -9845,7 +9848,7 @@ bool OtherResult::setRandom(double density, bool conformant)
     description = "random string";
     return true;
 }//OtherResult::setRandom
-
+#endif
 
 bool SystemResult::setRandom(double density, bool conformant)
 {

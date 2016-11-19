@@ -223,8 +223,6 @@ SparseMatrix::SparseMatrix():
 {
 }// end SparseMatrix Constructor
 
-
-
 SparseMatrix::SparseMatrix(bool isColumnMajor_, int startSize_, int valueSize_):
     isColumnMajor(isColumnMajor_),
     startSize(startSize_),
@@ -234,7 +232,6 @@ SparseMatrix::SparseMatrix(bool isColumnMajor_, int startSize_, int valueSize_):
     starts = new int[startSize];
     indexes = new int[valueSize];
     values = new double[valueSize];
-
 }//end SparseMatrix constructor
 
 
@@ -588,128 +585,6 @@ bool IntVector::deepCopyFrom(IntVector *that)
     return true;
 }//IntVector::deepCopyFrom
 
-OtherOptionOrResultEnumeration::OtherOptionOrResultEnumeration():
-    IntVector(),
-    value(""),
-    description("")
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
-        "Inside the OtherOptionOrResultEnumeration Constructor");
-#endif
-}
-
-OtherOptionOrResultEnumeration::OtherOptionOrResultEnumeration(int n):
-    IntVector(n),
-    value(""),
-    description("")
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
-        "Inside the alternate OtherOptionOrResultEnumeration Constructor");
-#endif
-}
-
-OtherOptionOrResultEnumeration::~OtherOptionOrResultEnumeration()
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
-        "Inside the OtherOptionOrResultEnumeration Destructor");
-#endif
-}
-
-bool OtherOptionOrResultEnumeration::setOtherOptionOrResultEnumeration(std::string value, std::string description, int *i, int ni)
-{
-    this->value = value;
-    this->description = description;
-    return this->IntVector::setIntVector(i, ni);
-}
-
-std::string OtherOptionOrResultEnumeration::getValue()
-{
-    return this->value;
-}
-
-std::string OtherOptionOrResultEnumeration::getDescription()
-{
-    return this->description;
-}
-
-
-bool OtherOptionOrResultEnumeration::IsEqual(OtherOptionOrResultEnumeration *that)
-{
-    std::ostringstream outStr;
-
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOptionOrResultEnumeration");
-#endif
-    if (this == NULL)
-    {
-        if (that == NULL)
-            return true;
-        else
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
-#endif
-            return false;
-        }
-    }
-    else
-    {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->value != that->value || this->description != that->description)
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
-                outStr << "description: " << this->description << " vs. " << that->description << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-
-            return this->IntVector::IsEqual(that);
-        }
-    }
-}//OtherOptionOrResultEnumeration::IsEqual
-
-bool OtherOptionOrResultEnumeration::setRandom(double density, bool conformant, int iMin, int iMax)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Set random OtherOptionOrResultEnumeration");
-#endif
-    if (OSRand() <= density) this->value       = "random string";
-    if (OSRand() <= density) this->description = "random string";
-
-    if (OSRand() <= density) this->IntVector::setRandom(density,conformant,iMin,iMax);
-    return true;
-}//OtherOptionOrResultEnumeration::setRandom
-
-bool OtherOptionOrResultEnumeration::deepCopyFrom(OtherOptionOrResultEnumeration *that)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherOptionOrResultEnumeration");
-#endif
-    this->value       = that->value;
-    this->description = that->description;
-
-    if (!this->IntVector::deepCopyFrom(that))
-        return false;
-
-    return true;
-}//OtherOptionOrResultEnumeration::deepCopyFrom
-
-
 DoubleVector::DoubleVector():
     bDeleteArrays(true),
     el(NULL)
@@ -791,6 +666,369 @@ bool DoubleVector::IsEqual(DoubleVector *that)
         }
     }
 }//DoubleVector::IsEqual
+
+
+StorageCapacity::StorageCapacity():
+    unit("byte"),
+    description(""),
+    value(0.0)
+{
+}// end StorageCapacity constructor
+
+StorageCapacity::~StorageCapacity()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside StorageCapacity destructor");
+#endif
+}// end StorageCapacity destructor
+
+bool StorageCapacity::IsEqual(StorageCapacity *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in StorageCapacity");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ( (this->unit        != that->unit)        ||
+                 (this->description != that->description) ||
+                 !OSIsEqual(this->value, that->value))
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            return true;
+        }
+    }
+}// end of StorageCapacity::IsEqual
+
+bool StorageCapacity::setRandom(double density, bool conformant)
+{
+    if (OSRand() <= density)
+    {
+
+        double temp = OSRand();
+        if (conformant) temp = 0.5*temp;
+
+        if      (temp <= 0.25) this->unit = "byte";
+        else if (temp <= 0.50) this->unit = "megabyte";
+        else if (temp <= 0.75) this->unit = "";
+        else                   this->unit = "overbyte";
+    }
+    if (OSRand() <= density) this->description   = "random string";
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5) this->value = 3.14156;
+        else                 this->value = 2.71828;
+    }
+    return true;
+}// end of StorageCapacity::setRandom
+
+bool StorageCapacity::deepCopyFrom(StorageCapacity *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of StorageCapacity");
+#endif
+    this->unit        = that->unit;
+    this->description = that->description;
+    this->value       = that->value;
+    return true;
+}// end of StorageCapacity::deepCopyFrom
+
+CPUSpeed::CPUSpeed():
+    unit("hertz"),
+    description(""),
+    value(0.0)
+{
+}// end CPUSpeed constructor
+
+CPUSpeed::~CPUSpeed()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside CPUSpeed destructor");
+#endif
+}// end CPUSpeed destructor
+
+bool CPUSpeed::IsEqual(CPUSpeed *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in CPUSpeed");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->unit        != that->unit)        ||
+                (this->description != that->description) ||
+                !OSIsEqual(this->value, that->value))
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            return true;
+        }
+    }
+}// end of CPUSpeed::IsEqual
+
+bool CPUSpeed::setRandom(double density, bool conformant)
+{
+    if (OSRand() <= density)
+    {
+        double temp = OSRand();
+        if (conformant) temp = 0.5*temp;
+
+        if      (temp <= 0.25) this->unit = "hertz";
+        else if (temp <= 0.50) this->unit = "gigaflops";
+        else if (temp <= 0.75) this->unit = "";
+        else                   this->unit = "bellyflops";
+    }
+    if (OSRand() <= density) this->description   = "random string";
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5) this->value = 3.14156;
+        else                 this->value = 2.71828;
+    }
+    return true;
+}// end of CPUSpeed::setRandom
+
+bool CPUSpeed::deepCopyFrom(CPUSpeed *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of CPUSpeed");
+#endif
+    this->unit        = that->unit;
+    this->description = that->description;
+    this->value       = that->value;
+    return true;
+}// end of CPUSpeed::deepCopyFrom
+
+CPUNumber::CPUNumber():
+    description(""),
+    value(0)
+{
+}// end CPUNumber constructor
+
+CPUNumber::~CPUNumber()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside CPUNumber destructor");
+#endif
+}// end CPUNumber destructor
+
+bool CPUNumber::IsEqual(CPUNumber *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in CPUNumber");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+
+        {
+            if ((this->description != that->description) ||
+                (this->value       != that->value))
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            return true;
+        }
+    }
+}// end of CPUNumber::IsEqual
+
+bool CPUNumber::setRandom(double density, bool conformant)
+{
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value = (int)(4*OSRand());
+    return true;
+}// end of CPUNumber::setRandom
+
+bool CPUNumber::deepCopyFrom(CPUNumber *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of CPUNumber");
+#endif
+    this->description = that->description;
+    this->value       = that->value;
+    return true;
+}// end of CPUNumber::deepCopyFrom
+
+
+TimeSpan::TimeSpan():
+    unit("second"),
+    value(0.0)
+{
+}// end TimeSpan constructor
+
+TimeSpan::~TimeSpan()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside TimeSpan destructor");
+#endif
+}// end TimeSpan destructor
+
+bool TimeSpan::IsEqual(TimeSpan *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in TimeSpan");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (!OSIsEqual(this->value,  that->value) ||
+                           this->unit != that->unit )
+
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+                outStr << "value: " << this->value << " vs. " << that->value << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            return true;
+        }
+    }
+}// end of TimeSpan::IsEqual
+
+bool TimeSpan::setRandom(double density, bool conformant)
+{
+    if (OSRand() <= density)
+    {
+        double temp = OSRand();
+        if (conformant) temp = 0.5*temp;
+
+        if      (temp <= 0.25) this->unit = "second";
+        else if (temp <= 0.50) this->unit = "tick";
+        else if (temp <= 0.75) this->unit = "";
+
+        else                   this->unit = "flea";
+    }
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5) this->value = 3.14156;
+        else                 this->value = 2.71828;
+    }
+    return true;
+}// end of TimeSpan::setRandom
+
+bool TimeSpan::deepCopyFrom(TimeSpan *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of TimeSpan");
+#endif
+    this->unit        = that->unit;
+    this->value       = that->value;
+    return true;
+}// end of TimeSpan::deepCopyFrom
 
 
 BasisStatus::BasisStatus():
@@ -1349,26 +1587,39 @@ bool BasisStatus::deepCopyFrom(BasisStatus *that)
     return true;
 }//BasisStatus::deepCopyFrom
 
-StorageCapacity::StorageCapacity():
-    unit("byte"),
-    description(""),
-    value(0.0)
-{
-}// end StorageCapacity constructor
 
-StorageCapacity::~StorageCapacity()
+OtherOptionOrResultElementString::OtherOptionOrResultElementString():
+    idx(-1),
+    name(""),
+    description(""),
+    value(""),
+//    valueType(""),
+    lbValue(""),
+//    lbValueType(""),
+    ubValue("")
+//    ubValueType("")
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside StorageCapacity destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherOptionOrResultElementString Constructor");
 #endif
-}// end StorageCapacity destructor
+}
 
-bool StorageCapacity::IsEqual(StorageCapacity *that)
+OtherOptionOrResultElementString::~OtherOptionOrResultElementString()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherOptionOrResultElementString Destructor");
+#endif
+}
+
+bool OtherOptionOrResultElementString::IsEqual(OtherOptionOrResultElementString *that)
 {
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in StorageCapacity");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherOptionOrResultElementString");
 #endif
     if (this == NULL)
     {
@@ -1377,7 +1628,287 @@ bool StorageCapacity::IsEqual(StorageCapacity *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->idx         != that->idx)         ||
+                (this->name        != that->name)        ||
+                (this->description != that->description) ||
+                (this->value       != that->value)       ||
+//                (this->valueType   != that->valueType)   ||
+                (this->lbValue     != that->lbValue)     ||
+//                (this->lbValueType != that->lbValueType) ||
+                (this->ubValue     != that->ubValue)     )    // ||
+//                (this->ubValueType != that->ubValueType)   )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "idx: "         << this->idx         << " vs. " << that->idx         << endl;
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+//                outStr << "valueType: "   << this->valueType   << " vs. " << that->valueType   << endl;
+                outStr << "lbValue: "     << this->lbValue     << " vs. " << that->lbValue     << endl;
+//                outStr << "lbValueType: " << this->lbValueType << " vs. " << that->lbValueType << endl;
+                outStr << "ubValue: "     << this->ubValue     << " vs. " << that->ubValue     << endl;
+//                outStr << "ubValueType: " << this->ubValueType << " vs. " << that->ubValueType << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            return true;
+        }
+    }
+}//OtherOptionOrResultElementString::IsEqual
+
+bool OtherOptionOrResultElementString::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherOptionOrResultElementString");
+#endif
+    if (OSRand() <= density || conformant) this->idx = 17;
+    if (OSRand() <= density) this->name        = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+//    if (OSRand() <= density) this->valueType   = "random string";
+    if (OSRand() <= density) this->lbValue     = "random string";
+//    if (OSRand() <= density) this->lbValueType = "random string";
+    if (OSRand() <= density) this->ubValue     = "random string";
+//    if (OSRand() <= density) this->ubValueType = "random string";
+    return true;
+}//OtherOptionOrResultElementString::setRandom
+
+bool OtherOptionOrResultElementString::deepCopyFrom(OtherOptionOrResultElementString *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherOptionOrResultElementString");
+#endif
+    this->idx         = that->idx;
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+//    this->valueType   = that->valueType;
+    this->lbValue     = that->lbValue;
+//    this->lbValueType = that->lbValueType;
+    this->ubValue     = that->ubValue;
+//    this->ubValueType = that->ubValueType;
+    return true;
+}//OtherOptionOrResultElementString::deepCopyFrom
+
+
+OtherObjOptionOrResultElementString::OtherObjOptionOrResultElementString():
+    idx(0),
+    name(""),
+    description(""),
+    value(""),
+//    valueType(""),
+    constantValue(""),
+//    constantValueType(""),
+    weightValue("")
+//    weightValueType("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherObjOptionOrResultElementString Constructor");
+#endif
+}
+
+OtherObjOptionOrResultElementString::~OtherObjOptionOrResultElementString()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherObjOptionOrResultElementString Destructor");
+#endif
+}
+
+bool OtherObjOptionOrResultElementString::IsEqual(OtherObjOptionOrResultElementString *that)
+{
+    std::ostringstream outStr;
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherObjOptionOrResultElementString");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->idx               != that->idx)               ||
+                (this->name              != that->name)              ||
+                (this->description       != that->description)       ||
+                (this->value             != that->value)             ||
+//                (this->valueType         != that->valueType)         ||
+                (this->constantValue     != that->constantValue)     ||
+//                (this->constantValueType != that->constantValueType) ||
+                (this->weightValue       != that->weightValue)      )   // ||
+//                (this->weightValueType   != that->weightValueType)     )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "idx: "
+                       << this->idx               << " vs. " << that->idx               << endl;
+                outStr << "name: "
+                       << this->name              << " vs. " << that->name              << endl;
+                outStr << "description: "
+                       << this->description       << " vs. " << that->description       << endl;
+                outStr << "value: "
+                       << this->value             << " vs. " << that->value             << endl;
+//                outStr << "valueType: "
+//                       << this->valueType         << " vs. " << that->valueType         << endl;
+                outStr << "constantValue: "
+                       << this->constantValue     << " vs. " << that->constantValue     << endl;
+//                outStr << "constantValueType: "
+//                       << this->constantValueType << " vs. " << that->constantValueType << endl;
+                outStr << "weightValue: "
+                       << this->weightValue       << " vs. " << that->weightValue       << endl;
+//                outStr << "weightValueType: "
+//                       << this->weightValueType   << " vs. " << that->weightValueType   << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            return true;
+        }
+    }
+}//OtherObjOptionOrResultElementString::IsEqual
+
+bool OtherObjOptionOrResultElementString::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherObjOptionOrResultElementString");
+#endif
+    if (OSRand() <= density || conformant) this->idx = -3;
+    if (OSRand() <= density) this->name              = "random string";
+    if (OSRand() <= density) this->description       = "random string";
+    if (OSRand() <= density) this->value             = "random string";
+//    if (OSRand() <= density) this->valueType         = "random string";
+    if (OSRand() <= density) this->constantValue     = "random string";
+//    if (OSRand() <= density) this->constantValueType = "random string";
+    if (OSRand() <= density) this->weightValue       = "random string";
+//    if (OSRand() <= density) this->weightValueType   = "random string";
+    return true;
+
+}//OtherObjOptionOrResultElementString::setRandom
+
+
+bool OtherObjOptionOrResultElementString::deepCopyFrom(OtherObjOptionOrResultElementString *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherObjOptionOrResultElementString");
+#endif
+    this->idx               = that->idx;
+    this->name              = that->name;
+    this->description       = that->description;
+    this->value             = that->value;
+//    this->valueType         = that->valueType;
+    this->constantValue     = that->constantValue;
+//    this->constantValueType = that->constantValueType;
+    this->weightValue       = that->weightValue;
+//    this->weightValueType   = that->weightValueType;
+    return true;
+}//OtherObjOptionOrResultElementString::deepCopyFrom
+
+
+OtherOptionOrResultEnumeration::OtherOptionOrResultEnumeration():
+    IntVector(),
+    value(""),
+    description("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherOptionOrResultEnumeration Constructor");
+#endif
+}
+
+OtherOptionOrResultEnumeration::OtherOptionOrResultEnumeration(int n):
+    IntVector(n),
+    value(""),
+    description("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the alternate OtherOptionOrResultEnumeration Constructor");
+#endif
+}
+
+OtherOptionOrResultEnumeration::~OtherOptionOrResultEnumeration()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, 
+        "Inside the OtherOptionOrResultEnumeration Destructor");
+#endif
+}
+
+bool OtherOptionOrResultEnumeration::setOtherOptionOrResultEnumeration(std::string value, std::string description, int *i, int ni)
+{
+    this->value = value;
+    this->description = description;
+    return this->IntVector::setIntVector(i, ni);
+}
+
+std::string OtherOptionOrResultEnumeration::getValue()
+{
+    return this->value;
+}
+
+std::string OtherOptionOrResultEnumeration::getDescription()
+{
+    return this->description;
+}
+
+
+bool OtherOptionOrResultEnumeration::IsEqual(OtherOptionOrResultEnumeration *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in OtherOptionOrResultEnumeration");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -1393,251 +1924,105 @@ bool StorageCapacity::IsEqual(StorageCapacity *that)
         }
         else
         {
-            if ( (this->unit        != that->unit)        ||
-                 (this->description != that->description) ||
-                 !OSIsEqual(this->value, that->value))
+            if (this->value != that->value || this->description != that->description)
             {
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
-                outStr << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
+                outStr << "value:       " << this->value       << " vs. " << that->value       << endl;
                 outStr << "description: " << this->description << " vs. " << that->description << endl;
-                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
                 osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
-            return true;
+
+            return this->IntVector::IsEqual(that);
         }
     }
-}// end of StorageCapacity::IsEqual
+}//OtherOptionOrResultEnumeration::IsEqual
 
-bool StorageCapacity::setRandom(double density, bool conformant)
-{
-    if (OSRand() <= density)
-    {
-
-        double temp = OSRand();
-        if (conformant) temp = 0.5*temp;
-
-        if      (temp <= 0.25) this->unit = "byte";
-        else if (temp <= 0.50) this->unit = "megabyte";
-        else if (temp <= 0.75) this->unit = "";
-        else                   this->unit = "overbyte";
-    }
-    if (OSRand() <= density) this->description   = "random string";
-    if (OSRand() <= density)
-    {
-        if (OSRand() <= 0.5) this->value = 3.14156;
-        else                 this->value = 2.71828;
-    }
-    return true;
-}// end of StorageCapacity::setRandom
-
-bool StorageCapacity::deepCopyFrom(StorageCapacity *that)
+bool OtherOptionOrResultEnumeration::setRandom(double density, bool conformant, int iMin, int iMax)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of StorageCapacity");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Set random OtherOptionOrResultEnumeration");
 #endif
-    this->unit        = that->unit;
-    this->description = that->description;
-    this->value       = that->value;
-    return true;
-}// end of StorageCapacity::deepCopyFrom
-
-CPUSpeed::CPUSpeed():
-    unit("hertz"),
-    description(""),
-    value(0.0)
-{
-}// end CPUSpeed constructor
-
-CPUSpeed::~CPUSpeed()
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside CPUSpeed destructor");
-#endif
-}// end CPUSpeed destructor
-
-bool CPUSpeed::IsEqual(CPUSpeed *that)
-{
-    std::ostringstream outStr;
-
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in CPUSpeed");
-#endif
-    if (this == NULL)
-    {
-        if (that == NULL)
-            return true;
-        else
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
-#endif
-            return false;
-        }
-    }
-    else
-    {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-        {
-            if ((this->unit        != that->unit)        ||
-                (this->description != that->description) ||
-                !OSIsEqual(this->value, that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
-                outStr << "description: " << this->description << " vs. " << that->description << endl;
-                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
-    }
-}// end of CPUSpeed::IsEqual
-
-bool CPUSpeed::setRandom(double density, bool conformant)
-{
-    if (OSRand() <= density)
-    {
-        double temp = OSRand();
-        if (conformant) temp = 0.5*temp;
-
-        if      (temp <= 0.25) this->unit = "hertz";
-        else if (temp <= 0.50) this->unit = "gigaflops";
-        else if (temp <= 0.75) this->unit = "";
-        else                   this->unit = "bellyflops";
-    }
-    if (OSRand() <= density) this->description   = "random string";
-    if (OSRand() <= density)
-    {
-        if (OSRand() <= 0.5) this->value = 3.14156;
-        else                 this->value = 2.71828;
-    }
-    return true;
-}// end of CPUSpeed::setRandom
-
-bool CPUSpeed::deepCopyFrom(CPUSpeed *that)
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of CPUSpeed");
-#endif
-    this->unit        = that->unit;
-    this->description = that->description;
-    this->value       = that->value;
-    return true;
-}// end of CPUSpeed::deepCopyFrom
-
-CPUNumber::CPUNumber():
-    description(""),
-    value(0)
-{
-}// end CPUNumber constructor
-
-CPUNumber::~CPUNumber()
-{
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside CPUNumber destructor");
-#endif
-}// end CPUNumber destructor
-
-bool CPUNumber::IsEqual(CPUNumber *that)
-{
-    std::ostringstream outStr;
-
-#ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in CPUNumber");
-#endif
-    if (this == NULL)
-    {
-        if (that == NULL)
-            return true;
-        else
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
-#endif
-            return false;
-        }
-    }
-    else
-    {
-        if (that == NULL)
-        {
-#ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
-#endif
-            return false;
-        }
-        else
-
-        {
-            if ((this->description != that->description) ||
-                (this->value       != that->value))
-            {
-#ifndef NDEBUG
-                outStr.str("");
-                outStr.clear();
-                outStr << "description: " << this->description << " vs. " << that->description << endl;
-                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
-#endif
-                return false;
-            }
-            return true;
-        }
-    }
-}// end of CPUNumber::IsEqual
-
-bool CPUNumber::setRandom(double density, bool conformant)
-{
+    if (OSRand() <= density) this->value       = "random string";
     if (OSRand() <= density) this->description = "random string";
-    if (OSRand() <= density) this->value = (int)(4*OSRand());
-    return true;
-}// end of CPUNumber::setRandom
 
-bool CPUNumber::deepCopyFrom(CPUNumber *that)
+    if (OSRand() <= density) this->IntVector::setRandom(density,conformant,iMin,iMax);
+    return true;
+}//OtherOptionOrResultEnumeration::setRandom
+
+bool OtherOptionOrResultEnumeration::deepCopyFrom(OtherOptionOrResultEnumeration *that)
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of CPUNumber");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of OtherOptionOrResultEnumeration");
 #endif
-    this->description = that->description;
     this->value       = that->value;
+    this->description = that->description;
+
+    if (!this->IntVector::deepCopyFrom(that))
+        return false;
+
     return true;
-}// end of CPUNumber::deepCopyFrom
+}//OtherOptionOrResultEnumeration::deepCopyFrom
 
 
-TimeSpan::TimeSpan():
-    unit("second"),
-    value(0.0)
-{
-}// end TimeSpan constructor
-
-TimeSpan::~TimeSpan()
+OtherVariableOptionOrResult::OtherVariableOptionOrResult():
+    name (""),
+    description (""),
+    value (""),
+    type (""),
+    solver(""),
+    category (""),
+    numberOfEnumerations(0),
+    enumType (""),
+    numberOfVar(0),
+    varType("")
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "inside TimeSpan destructor");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherVariableOptionOrResult Constructor");
 #endif
-}// end TimeSpan destructor
+    var = NULL;
+    enumeration = NULL;
+}// end OtherVariableOptionOrResult constructor
 
-bool TimeSpan::IsEqual(TimeSpan *that)
+OtherVariableOptionOrResult::~OtherVariableOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherVariableOptionOrResult Destructor Called");
+#endif
+    if (numberOfVar > 0)
+        if (var != NULL)
+        {
+            for (int i=0; i< numberOfVar; ++i)
+                if (var[i] != NULL)
+                    delete var[i];
+            delete [] var;
+            var = NULL;
+        }
+
+    if (numberOfEnumerations > 0)
+        if (enumeration != NULL)
+        {
+            for (int i=0; i< numberOfEnumerations; ++i)
+                if (enumeration[i] != NULL)
+                    delete enumeration[i];
+            delete [] var;
+            enumeration = NULL;
+        }
+}//end OtherVariableOptionOrResult destructor
+
+
+bool OtherVariableOptionOrResult::IsEqual(OtherVariableOptionOrResult *that)
 {
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, "Start comparing in TimeSpan");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherVariableOptionOrResult");
 #endif
     if (this == NULL)
     {
@@ -1646,7 +2031,7 @@ bool TimeSpan::IsEqual(TimeSpan *that)
         else
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "First object is NULL, second is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
 #endif
             return false;
         }
@@ -1656,60 +2041,1108 @@ bool TimeSpan::IsEqual(TimeSpan *that)
         if (that == NULL)
         {
 #ifndef NDEBUG
-            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Second object is NULL, first is not");
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
 #endif
             return false;
         }
         else
         {
-            if (!OSIsEqual(this->value,  that->value) ||
-                           this->unit != that->unit )
-
+            if ((this->name                 != that->name)        ||
+                (this->description          != that->description) ||
+                (this->value                != that->value)       ||
+                (this->type                 != that->type)        ||
+                (this->solver               != that->solver)      ||
+                (this->category             != that->category)    ||
+                (this->enumType             != that->enumType)    || 
+                (this->varType              != that->varType)      )
             {
 #ifndef NDEBUG
                 outStr.str("");
                 outStr.clear();
-                outStr << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
-                outStr << "value: " << this->value << " vs. " << that->value << endl;
-                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
+                outStr << "enumType: "    << this->enumType    << " vs. " << that->enumType    << endl;
+                outStr << "varType: "     << this->varType     << " vs. " << that->varType     << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
 #endif
                 return false;
             }
+
+            if (this->numberOfVar != that->numberOfVar)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            int i;
+            for (i = 0; i < numberOfVar; i++)
+                if (!this->var[i]->IsEqual(that->var[i]))
+                    return false;
+
+            if (this->numberOfEnumerations != that->numberOfEnumerations)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            for (i = 0; i < numberOfEnumerations; i++)
+                if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+                    return false;
             return true;
         }
     }
-}// end of TimeSpan::IsEqual
+}//OtherVariableOptionOrResult::IsEqual
 
-bool TimeSpan::setRandom(double density, bool conformant)
-{
-    if (OSRand() <= density)
-    {
-        double temp = OSRand();
-        if (conformant) temp = 0.5*temp;
-
-        if      (temp <= 0.25) this->unit = "second";
-        else if (temp <= 0.50) this->unit = "tick";
-        else if (temp <= 0.75) this->unit = "";
-
-        else                   this->unit = "flea";
-    }
-    if (OSRand() <= density)
-    {
-        if (OSRand() <= 0.5) this->value = 3.14156;
-        else                 this->value = 2.71828;
-    }
-    return true;
-}// end of TimeSpan::setRandom
-
-bool TimeSpan::deepCopyFrom(TimeSpan *that)
+bool OtherVariableOptionOrResult::setRandom( double density, bool conformant )
 {
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSGeneral, ENUM_OUTPUT_LEVEL_trace, "Make deep copy of TimeSpan");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherVariableOptionOrResult");
 #endif
-    this->unit        = that->unit;
-    this->value       = that->value;
+    this->name = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->enumType    = "random string";
+    if (OSRand() <= density) this->varType     = "random string";
+
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5)
+        {
+            this->numberOfVar = (int)(4*OSRand());
+
+            int n;
+
+            if (conformant) n = this->numberOfVar;
+            else            n = (int)(4*OSRand());
+
+            var = new OtherOptionOrResultElementString*[n];
+            for (int i = 0; i < n; i++)
+            {
+                var[i] = new OtherOptionOrResultElementString();
+                var[i]->setRandom(density, conformant);
+            }
+        }
+        else
+        {
+            this->numberOfEnumerations = (int)(4*OSRand());
+
+            int n;
+
+            if (conformant) n = this->numberOfEnumerations;
+            else            n = (int)(4*OSRand());
+
+            enumeration = new OtherOptionOrResultEnumeration*[n];
+            for (int i = 0; i < n; i++)
+            {
+                enumeration[i] = new OtherOptionOrResultEnumeration();
+                enumeration[i]->setRandom(density, conformant, 0, 9);
+            }
+        }
+    }
     return true;
-}// end of TimeSpan::deepCopyFrom
+}//OtherVariableOptionOrResult::setRandom
+
+
+bool OtherVariableOptionOrResult::deepCopyFrom(OtherVariableOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherVariableOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->enumType    = that->enumType;
+    this->varType     = that->varType;
+
+    int n;
+    this->numberOfVar = that->numberOfVar;
+    n = this->numberOfVar;
+
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->var = new OtherOptionOrResultElementString*[n];
+        for (int i = 0; i < n; i++)
+        {
+            this->var[i] = new OtherOptionOrResultElementString();
+            if (!this->var[i]->deepCopyFrom(that->var[i]))
+                return false;
+        }
+    }
+
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherVariableOptionOrResult::deepCopyFrom
+
+
+OtherObjectiveOptionOrResult::OtherObjectiveOptionOrResult():
+    name (""),
+    description (""),
+    value (""),
+    type (""),
+    solver(""),
+    category (""),
+    numberOfEnumerations(0),
+    enumType (""),
+    numberOfObj(0),
+    objType ("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherObjectiveOptionOrResult Constructor");
+#endif
+    obj = NULL;
+    enumeration = NULL;
+}// end OtherObjectiveOptionOrResult constructor
+
+OtherObjectiveOptionOrResult::~OtherObjectiveOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherObjectiveOptionOrResult Destructor Called");
+#endif
+    if (numberOfObj > 0)
+        if (obj != NULL)
+        {
+            for (int i=0; i< numberOfObj; ++i)
+                if (obj[i] != NULL)
+                    delete obj[i];
+            delete [] obj;
+            obj = NULL;
+        }
+
+    if (numberOfEnumerations > 0)
+        if (enumeration != NULL)
+        {
+            for (int i=0; i< numberOfEnumerations; ++i)
+                if (enumeration[i] != NULL)
+                    delete enumeration[i];
+            delete [] enumeration;
+            enumeration = NULL;
+        }
+}//end OtherObjectiveOptionOrResult destructor
+
+
+bool OtherObjectiveOptionOrResult::IsEqual(OtherObjectiveOptionOrResult *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherObjectiveOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->name                 != that->name)        ||
+                (this->description          != that->description) ||
+                (this->value                != that->value)       ||
+                (this->type                 != that->type)        ||
+                (this->solver               != that->solver)      ||
+                (this->category             != that->category)    ||
+                (this->enumType             != that->enumType)    ||
+                (this->objType              != that->objType)      )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
+                outStr << "enumType: "    << this->enumType    << " vs. " << that->enumType    << endl;
+                outStr << "objType: "     << this->objType     << " vs. " << that->objType     << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+
+            if (this->numberOfObj != that->numberOfObj)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+
+            int i;
+
+            for (i = 0; i < numberOfObj; i++)
+                if (!this->obj[i]->IsEqual(that->obj[i]))
+                    return false;
+
+            if (this->numberOfEnumerations != that->numberOfEnumerations)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEnumerations: "
+                       << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+
+            for (i = 0; i < numberOfEnumerations; i++)
+                if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+                    return false;
+            return true;
+        }
+    }
+}//OtherObjectiveOptionOrResult::IsEqual
+
+
+bool OtherObjectiveOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherObjectiveOptionOrResult");
+#endif
+    this->name = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->enumType    = "random string";
+    if (OSRand() <= density) this->objType     = "random string";
+
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5)
+        {
+            this->numberOfObj = (int)(4*OSRand());
+
+            int n;
+
+            if (conformant) n = this->numberOfObj;
+            else            n = (int)(4*OSRand());
+
+            obj = new OtherObjOptionOrResultElementString*[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                obj[i] = new OtherObjOptionOrResultElementString();
+                obj[i]->setRandom(density, conformant);
+            }
+        }
+        else
+        {
+            this->numberOfEnumerations = (int)(4*OSRand());
+
+            int n;
+
+            if (conformant) n = this->numberOfEnumerations;
+            else            n = (int)(4*OSRand());
+
+            enumeration = new OtherOptionOrResultEnumeration*[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                enumeration[i] = new OtherOptionOrResultEnumeration();
+                enumeration[i]->setRandom(density, conformant, 0, 9);
+            }
+        }
+    }
+    return true;
+}//OtherObjectiveOptionOrResult::setRandom
+
+
+bool OtherObjectiveOptionOrResult::deepCopyFrom(OtherObjectiveOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherObjectiveOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->enumType    = that->enumType;
+    this->objType     = that->objType;
+
+    int n;
+
+    this->numberOfObj = that->numberOfObj;
+
+    n = this->numberOfObj;
+
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->obj = new OtherObjOptionOrResultElementString*[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            this->obj[i] = new OtherObjOptionOrResultElementString();
+
+            if (!this->obj[i]->deepCopyFrom(that->obj[i]))
+                return false;
+        }
+    }
+    this->numberOfEnumerations = that->numberOfEnumerations;
+
+    n = this->numberOfEnumerations;
+
+    if (n  < 0) return false;
+    if (n == 0) return true;
+
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherObjectiveOptionOrResult::deepCopyFrom
+
+
+OtherConstraintOptionOrResult::OtherConstraintOptionOrResult():
+    name (""),
+    description (""),
+    value (""),
+    type (""),
+    solver(""),
+    category (""),
+    numberOfEnumerations(0),
+    enumType (""),
+    numberOfCon(0),
+    conType ("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherConstraintOptionOrResult Constructor");
+#endif
+    con = NULL;
+    enumeration = NULL;
+}// end OtherConstraintOptionOrResult constructor
+
+OtherConstraintOptionOrResult::~OtherConstraintOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherConstraintOptionOrResult Destructor Called");
+#endif
+    if (numberOfCon > 0)
+        if (con != NULL)
+        {
+            for (int i=0; i< numberOfCon; ++i)
+                if (con[i] != NULL)
+                    delete con[i];
+            delete [] con;
+            con = NULL;
+        }
+
+    if (numberOfEnumerations > 0)
+        if (enumeration != NULL)
+        {
+            for (int i=0; i< numberOfEnumerations; ++i)
+                if (enumeration[i] != NULL)
+                    delete enumeration[i];
+            delete [] enumeration;
+            enumeration = NULL;
+        }
+}//end OtherConstraintOptionOrResult destructor
+
+
+bool OtherConstraintOptionOrResult::IsEqual(OtherConstraintOptionOrResult *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherConstraintOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->name                 != that->name)        ||
+                (this->description          != that->description) ||
+                (this->value                != that->value)       ||
+                (this->type                 != that->type)        ||
+                (this->solver               != that->solver)      ||
+                (this->category             != that->category)    ||
+                (this->enumType             != that->enumType)    ||
+                (this->conType              != that->conType)      )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
+                outStr << "enumType: "    << this->enumType    << " vs. " << that->enumType    << endl;
+                outStr << "conType: "     << this->conType     << " vs. " << that->conType     << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+
+            if (this->numberOfCon != that->numberOfCon)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            int i;
+
+            for (i = 0; i < numberOfCon; i++)
+                if (!this->con[i]->IsEqual(that->con[i]))
+                    return false;
+
+            if (this->numberOfEnumerations != that->numberOfEnumerations)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEnumerations: "
+                       << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+
+            for (i = 0; i < numberOfEnumerations; i++)
+                if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+                    return false;
+            return true;
+        }
+    }
+}//OtherConstraintOptionOrResult::IsEqual
+
+
+bool OtherConstraintOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherConstraintOptionOrResult");
+#endif
+    this->name = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->enumType    = "random string";
+    if (OSRand() <= density) this->conType     = "random string";
+
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5)
+        {
+            this->numberOfCon = (int)(4*OSRand());
+
+            int n;
+
+            if (conformant) n = this->numberOfCon;
+            else            n = (int)(4*OSRand());
+
+            con = new OtherOptionOrResultElementString*[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                con[i] = new OtherOptionOrResultElementString();
+                con[i]->setRandom(density, conformant);
+            }
+        }
+        else
+        {
+            this->numberOfEnumerations = (int)(4*OSRand());
+
+            int n;
+
+            if (conformant) n = this->numberOfEnumerations;
+            else            n = (int)(4*OSRand());
+
+            enumeration = new OtherOptionOrResultEnumeration*[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                enumeration[i] = new OtherOptionOrResultEnumeration();
+                enumeration[i]->setRandom(density, conformant, 0, 9);
+            }
+        }
+    }
+    return true;
+}//OtherConstraintOptionOrResult::setRandom
+
+
+bool OtherConstraintOptionOrResult::deepCopyFrom(OtherConstraintOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherConstraintOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->enumType    = that->enumType;
+    this->conType     = that->conType;
+
+    int n;
+
+    this->numberOfCon = that->numberOfCon;
+
+    n = this->numberOfCon;
+
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->con = new OtherOptionOrResultElementString*[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            this->con[i] = new OtherOptionOrResultElementString();
+
+            if (!this->con[i]->deepCopyFrom(that->con[i]))
+                return false;
+        }
+    }
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+    if (n  < 0) return false;
+    if (n == 0) return true;
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherConstraintOptionOrResult::deepCopyFrom
+
+
+OtherSOSOptionOrResult::OtherSOSOptionOrResult():
+    idx(-1),
+    name (""),
+    description (""),
+    value (""),
+    type (""),
+    numberOfEnumerations(0),
+    enumType (""),
+    numberOfVar(0),
+    varType ("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherSOSOptionOrResult Constructor");
+#endif
+    var = NULL;
+    enumeration = NULL;
+}// end OtherSOSOptionOrResult constructor
+
+OtherSOSOptionOrResult::~OtherSOSOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherSOSOptionOrResult Destructor Called");
+#endif
+    if (numberOfVar > 0)
+        if (var != NULL)
+        {
+            for (int i=0; i< numberOfVar; ++i)
+                if (var[i] != NULL)
+                    delete var[i];
+            delete [] var;
+            var = NULL;
+        }
+
+    if (numberOfEnumerations > 0)
+        if (enumeration != NULL)
+        {
+            for (int i=0; i< numberOfEnumerations; ++i)
+                if (enumeration[i] != NULL)
+                    delete enumeration[i];
+            delete [] enumeration;
+            enumeration = NULL;
+        }
+}//end OtherSOSOptionOrResult destructor
+
+
+bool OtherSOSOptionOrResult::IsEqual(OtherSOSOptionOrResult *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherSOSOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->idx                  != that->idx)         ||
+                (this->name                 != that->name)        ||
+                (this->description          != that->description) ||
+                (this->value                != that->value)       ||
+                (this->type                 != that->type)        ||
+                (this->enumType             != that->enumType)    ||
+                (this->varType              != that->varType)      )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "idx: "         << this->idx         << " vs. " << that->idx         << endl;
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "enumType: "    << this->enumType    << " vs. " << that->enumType    << endl;
+                outStr << "varType: "     << this->varType     << " vs. " << that->varType     << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            if (this->numberOfVar != that->numberOfVar)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            int i;
+            for (i = 0; i < numberOfVar; i++)
+                if (!this->var[i]->IsEqual(that->var[i]))
+                    return false;
+            if (this->numberOfEnumerations != that->numberOfEnumerations)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            for (i = 0; i < numberOfEnumerations; i++)
+                if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+                    return false;
+            return true;
+        }
+    }
+}//OtherSOSOptionOrResult::IsEqual
+
+bool OtherSOSOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherSOSOptionOrResult");
+#endif
+    this->idx = (int)(4*OSRand());
+    if (OSRand() <= density) this->name        = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->enumType    = "random string";
+    if (OSRand() <= density) this->varType     = "random string";
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5)
+        {
+            this->numberOfVar = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfVar;
+            else            n = (int)(4*OSRand());
+            var = new OtherOptionOrResultElementString*[n];
+            for (int i = 0; i < n; i++)
+            {
+                var[i] = new OtherOptionOrResultElementString();
+                var[i]->setRandom(density, conformant);
+            }
+        }
+        else
+        {
+            this->numberOfEnumerations = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfEnumerations;
+            else            n = (int)(4*OSRand());
+            enumeration = new OtherOptionOrResultEnumeration*[n];
+            for (int i = 0; i < n; i++)
+            {
+                enumeration[i] = new OtherOptionOrResultEnumeration();
+                enumeration[i]->setRandom(density, conformant, 0, 9);
+            }
+        }
+    }
+    return true;
+}//OtherSOSOptionOrResult::setRandom
+
+bool OtherSOSOptionOrResult::deepCopyFrom(OtherSOSOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherSOSOptionOrResult");
+#endif
+    this->idx         = that->idx;
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    this->enumType    = that->enumType;
+    this->varType     = that->varType;
+
+    int n;
+
+    this->numberOfVar = that->numberOfVar;
+    n = this->numberOfVar;
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->var = new OtherOptionOrResultElementString*[n];
+        for (int i = 0; i < n; i++)
+        {
+            this->var[i] = new OtherOptionOrResultElementString();
+            if (!this->var[i]->deepCopyFrom(that->var[i]))
+                return false;
+        }
+    }
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+    if (n  < 0) return false;
+    if (n == 0) return true;
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherSOSOptionOrResult::deepCopyFrom
+
+
+OtherSpecialOrderedSetsOptionOrResult::OtherSpecialOrderedSetsOptionOrResult():
+    name (""),
+    description (""),
+    value (""),
+    type (""),
+    solver(""),
+    category (""),
+    numberOfEnumerations(0),
+    enumType (""),
+    numberOfSOS(0)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherSpecialOrderedSetsOptionOrResult Constructor");
+#endif
+    sos = NULL;
+    enumeration = NULL;
+}// end OtherSpecialOrderedSetsOptionOrResult constructor
+
+OtherSpecialOrderedSetsOptionOrResult::~OtherSpecialOrderedSetsOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherSpecialOrderedSetsOptionOrResult Destructor Called");
+#endif
+    if (numberOfSOS> 0)
+        if (sos != NULL)
+        {
+            for (int i=0; i< numberOfSOS; ++i)
+                if (sos[i] != NULL)
+                    delete sos[i];
+            delete [] sos;
+            sos = NULL;
+        }
+
+    if (numberOfEnumerations > 0)
+        if (enumeration != NULL)
+        {
+            for (int i=0; i< numberOfEnumerations; ++i)
+                if (enumeration[i] != NULL)
+                    delete enumeration[i];
+            delete [] enumeration;
+            enumeration = NULL;
+        }
+}//end OtherSpecialOrderedSetsOptionOrResult destructor
+
+
+bool OtherSpecialOrderedSetsOptionOrResult::IsEqual(OtherSpecialOrderedSetsOptionOrResult *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherSpecialOrderedSetsOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->name                 != that->name)        ||
+                (this->description          != that->description) ||
+                (this->value                != that->value)       ||
+                (this->type                 != that->type)        ||
+                (this->solver               != that->solver)      ||
+                (this->category             != that->category)    ||
+                (this->enumType             != that->enumType)      )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
+                outStr << "enumType: "    << this->enumType    << " vs. " << that->enumType    << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            if (this->numberOfSOS != that->numberOfSOS)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfSOS: " << this->numberOfSOS << " vs. " << that->numberOfSOS << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            int i;
+            for (i = 0; i < numberOfSOS; i++)
+                if (!this->sos[i]->IsEqual(that->sos[i]))
+                    return false;
+            if (this->numberOfEnumerations != that->numberOfEnumerations)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            for (i = 0; i < numberOfEnumerations; i++)
+                if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+                    return false;
+            return true;
+        }
+    }
+}//OtherSpecialOrderedSetsOptionOrResult::IsEqual
+
+bool OtherSpecialOrderedSetsOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherSpecialOrderedSetsOptionOrResult");
+#endif
+    this->name = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->enumType    = "random string";
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5)
+        {
+            this->numberOfSOS = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfSOS;
+            else            n = (int)(4*OSRand());
+            sos = new OtherSOSOptionOrResult*[n];
+            for (int i = 0; i < n; i++)
+            {
+                sos[i] = new OtherSOSOptionOrResult();
+                sos[i]->setRandom(density, conformant);
+            }
+        }
+        else
+        {
+            this->numberOfEnumerations = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfEnumerations;
+            else            n = (int)(4*OSRand());
+            enumeration = new OtherOptionOrResultEnumeration*[n];
+            for (int i = 0; i < n; i++)
+            {
+                enumeration[i] = new OtherOptionOrResultEnumeration();
+                enumeration[i]->setRandom(density, conformant, 0, 9);
+            }
+        }
+    }
+    return true;
+}//OtherSpecialOrderedSetsOptionOrResult::setRandom
+
+bool OtherSpecialOrderedSetsOptionOrResult::deepCopyFrom(OtherSpecialOrderedSetsOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherSpecialOrderedSetsOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->enumType    = that->enumType;
+    int n;
+
+    this->numberOfSOS = that->numberOfSOS;
+    n = this->numberOfSOS;
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->sos = new OtherSOSOptionOrResult*[n];
+        for (int i = 0; i < n; i++)
+        {
+            this->sos[i] = new OtherSOSOptionOrResult();
+            if (!this->sos[i]->deepCopyFrom(that->sos[i]))
+                return false;
+        }
+    }
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+    if (n  < 0) return false;
+    if (n == 0) return true;
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherSpecialOrderedSetsOptionOrResult::deepCopyFrom
 
 
 OtherMatrixVariableOptionOrResult::OtherMatrixVariableOptionOrResult():
@@ -1719,10 +3152,9 @@ OtherMatrixVariableOptionOrResult::OtherMatrixVariableOptionOrResult():
     type(""),
     solver(""),
     category(""),
-    numberOfMatrixVar(0),
-    matrixType(""),
     numberOfEnumerations(0),
     enumType(""),
+    numberOfMatrixVar(0),
     matrixVar(NULL),
     enumeration(NULL)
 {
@@ -1758,6 +3190,727 @@ OtherMatrixVariableOptionOrResult::~OtherMatrixVariableOptionOrResult()
             enumeration = NULL;
         }
 }//end OtherMatrixVariableOptionOrResult destructor
+
+
+bool OtherMatrixVariableOptionOrResult::IsEqual(OtherMatrixVariableOptionOrResult *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherMatrixVariableOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->name                 != that->name)        ||
+                (this->description          != that->description) ||
+                (this->value                != that->value)       ||
+                (this->type                 != that->type)        ||
+                (this->solver               != that->solver)      ||
+                (this->category             != that->category)    ||
+                (this->enumType             != that->enumType)      )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
+                outStr << "enumType: "    << this->enumType    << " vs. " << that->enumType    << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            if (this->numberOfMatrixVar != that->numberOfMatrixVar)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfMatrixVar: "
+                       << this->numberOfMatrixVar << " vs. " << that->numberOfMatrixVar << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            int i;
+            for (i = 0; i < numberOfMatrixVar; i++)
+                if (!this->matrixVar[i]->IsEqual(that->matrixVar[i]))
+                    return false;
+
+            if (this->numberOfEnumerations != that->numberOfEnumerations)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            for (i = 0; i < numberOfEnumerations; i++)
+                if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+                    return false;
+            return true;
+        }
+    }
+}//OtherMatrixVariableOptionOrResult::IsEqual
+
+bool OtherMatrixVariableOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherMatrixVariableOptionOrResult");
+#endif
+    this->name = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->enumType    = "random string";
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5)
+        {
+            this->numberOfMatrixVar = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfMatrixVar;
+            else            n = (int)(4*OSRand());
+            matrixVar = new OSMatrixWithMatrixVarIdx*[n];
+            for (int i = 0; i < n; i++)
+            {
+                matrixVar[i] = new OSMatrixWithMatrixVarIdx();
+                matrixVar[i]->setRandom(density, conformant);
+            }
+        }
+        else
+        {
+            this->numberOfEnumerations = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfEnumerations;
+            else            n = (int)(4*OSRand());
+            enumeration = new OtherOptionOrResultEnumeration*[n];
+            for (int i = 0; i < n; i++)
+            {
+                enumeration[i] = new OtherOptionOrResultEnumeration();
+                enumeration[i]->setRandom(density, conformant, 0, 9);
+            }
+        }
+    }
+    return true;
+}//OtherMatrixVariableOptionOrResult::setRandom
+
+bool OtherMatrixVariableOptionOrResult::deepCopyFrom(OtherMatrixVariableOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherMatrixVariableOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->enumType    = that->enumType;
+    int n;
+    this->numberOfMatrixVar = that->numberOfMatrixVar;
+    n = this->numberOfMatrixVar;
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->matrixVar = new OSMatrixWithMatrixVarIdx*[n];
+        for (int i = 0; i < n; i++)
+        {
+//            this->matrixVar[i] = new OSMatrixWithMatrixVarIdx();
+//            if (!this->matrixVar[i]->deepCopyFrom(that->matrixVar[i]))
+//                return false;
+            this->matrixVar[i] = that->matrixVar[i]->cloneMatrixNode();
+        }
+    }
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+    if (n  < 0) return false;
+    if (n == 0) return true;
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherMatrixVariableOptionOrResult::deepCopyFrom
+
+
+OtherMatrixObjectiveOptionOrResult::OtherMatrixObjectiveOptionOrResult():
+    name(""),
+    description(""),
+    value(""),
+    type(""),
+    solver(""),
+    category(""),
+    numberOfEnumerations(0),
+    enumType(""),
+    numberOfMatrixObj(0),
+    matrixObj(NULL),
+    enumeration(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherMatrixObjectiveOptionOrResult Constructor");
+#endif
+}// end OtherMatrixObjectiveOptionOrResult constructor
+
+
+OtherMatrixObjectiveOptionOrResult::~OtherMatrixObjectiveOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherMatrixObjectiveOptionOrResult Destructor Called");
+#endif
+    if (numberOfMatrixObj > 0)
+        if (matrixObj != NULL)
+        {
+            for (int i=0; i< numberOfMatrixObj; ++i)
+                if (matrixObj[i] != NULL)
+                    delete matrixObj[i];
+            delete [] matrixObj;
+            matrixObj = NULL;
+        }
+
+    if (numberOfEnumerations > 0)
+        if (enumeration != NULL)
+        {
+            for (int i=0; i < numberOfEnumerations; i++)
+                if (enumeration[i] != NULL)
+                    delete enumeration[i];
+            delete[] enumeration;
+            enumeration = NULL;
+        }
+}//end OtherMatrixObjectiveOptionOrResult destructor
+
+
+bool OtherMatrixObjectiveOptionOrResult::IsEqual(OtherMatrixObjectiveOptionOrResult *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherMatrixObjectiveOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->name                 != that->name)        ||
+                (this->description          != that->description) ||
+                (this->value                != that->value)       ||
+                (this->type                 != that->type)        ||
+                (this->solver               != that->solver)      ||
+                (this->category             != that->category)    ||
+                (this->enumType             != that->enumType)      )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
+                outStr << "enumType: "    << this->enumType    << " vs. " << that->enumType    << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            if (this->numberOfMatrixObj != that->numberOfMatrixObj)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfMatrixObj: "
+                       << this->numberOfMatrixObj << " vs. " << that->numberOfMatrixObj << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            int i;
+            for (i = 0; i < numberOfMatrixObj; i++)
+                if (!this->matrixObj[i]->IsEqual(that->matrixObj[i]))
+                    return false;
+
+            if (this->numberOfEnumerations != that->numberOfEnumerations)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            for (i = 0; i < numberOfEnumerations; i++)
+                if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+                    return false;
+            return true;
+        }
+    }
+}//OtherMatrixObjectiveOptionOrResult::IsEqual
+
+bool OtherMatrixObjectiveOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherMatrixObjectiveOptionOrResult");
+#endif
+    this->name = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->enumType    = "random string";
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5)
+        {
+            this->numberOfMatrixObj = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfMatrixObj;
+            else            n = (int)(4*OSRand());
+            matrixObj = new OSMatrixWithMatrixObjIdx*[n];
+            for (int i = 0; i < n; i++)
+            {
+                matrixObj[i] = new OSMatrixWithMatrixObjIdx();
+                matrixObj[i]->setRandom(density, conformant);
+            }
+        }
+        else
+        {
+            this->numberOfEnumerations = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfEnumerations;
+            else            n = (int)(4*OSRand());
+            enumeration = new OtherOptionOrResultEnumeration*[n];
+            for (int i = 0; i < n; i++)
+            {
+                enumeration[i] = new OtherOptionOrResultEnumeration();
+                enumeration[i]->setRandom(density, conformant, 0, 9);
+            }
+        }
+    }
+    return true;
+}//OtherMatrixObjectiveOptionOrResult::setRandom
+
+bool OtherMatrixObjectiveOptionOrResult::deepCopyFrom(OtherMatrixObjectiveOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherMatrixObjectiveOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->enumType    = that->enumType;
+    int n;
+    this->numberOfMatrixObj = that->numberOfMatrixObj;
+    n = this->numberOfMatrixObj;
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->matrixObj = new OSMatrixWithMatrixObjIdx*[n];
+        for (int i = 0; i < n; i++)
+        {
+//            this->matrixObj[i] = new OSMatrixWithMatrixObjIdx();
+//            if (!this->matrixObj[i]->deepCopyFrom(that->matrixObj[i]))
+//                return false;
+            this->matrixObj[i] = that->matrixObj[i]->cloneMatrixNode();
+        }
+    }
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+    if (n  < 0) return false;
+    if (n == 0) return true;
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherMatrixObjectiveOptionOrResult::deepCopyFrom
+
+
+OtherMatrixConstraintOptionOrResult::OtherMatrixConstraintOptionOrResult():
+    name(""),
+    description(""),
+    value(""),
+    type(""),
+    solver(""),
+    category(""),
+    numberOfEnumerations(0),
+    enumType(""),
+    numberOfMatrixCon(0),
+    matrixCon(NULL),
+    enumeration(NULL)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherMatrixConstraintOptionOrResult Constructor");
+#endif
+}// end OtherMatrixConstraintOptionOrResult constructor
+
+OtherMatrixConstraintOptionOrResult::~OtherMatrixConstraintOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherMatrixConstraintOptionOrResult Destructor Called");
+#endif
+    if (numberOfMatrixCon > 0)
+        if (matrixCon != NULL)
+        {
+            for (int i=0; i< numberOfMatrixCon; ++i)
+                if (matrixCon[i] != NULL)
+                    delete matrixCon[i];
+            delete [] matrixCon;
+            matrixCon = NULL;
+        }
+
+    if (numberOfEnumerations > 0)
+        if (enumeration != NULL)
+        {
+            for (int i=0; i < numberOfEnumerations; i++)
+                if (enumeration[i] != NULL)
+                    delete enumeration[i];
+            delete[] enumeration;
+            enumeration = NULL;
+        }
+}//end OtherMatrixConstraintOptionOrResult destructor
+
+
+bool OtherMatrixConstraintOptionOrResult::IsEqual(OtherMatrixConstraintOptionOrResult *that)
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherMatrixConstraintOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->name                 != that->name)        ||
+                (this->description          != that->description) ||
+                (this->value                != that->value)       ||
+                (this->type                 != that->type)        ||
+                (this->solver               != that->solver)      ||
+                (this->category             != that->category)    ||
+                (this->enumType             != that->enumType)      )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                outStr << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+                outStr << "category: "    << this->category    << " vs. " << that->category    << endl;
+                outStr << "enumType: "    << this->enumType    << " vs. " << that->enumType    << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            if (this->numberOfMatrixCon != that->numberOfMatrixCon)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfMatrixCon: "
+                       << this->numberOfMatrixCon << " vs. " << that->numberOfMatrixCon << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            int i;
+            for (i = 0; i < numberOfMatrixCon; i++)
+                if (!this->matrixCon[i]->IsEqual(that->matrixCon[i]))
+                    return false;
+
+            if (this->numberOfEnumerations != that->numberOfEnumerations)
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            for (i = 0; i < numberOfEnumerations; i++)
+                if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+                    return false;
+            return true;
+        }
+    }
+}//OtherMatrixConstraintOptionOrResult::IsEqual
+
+bool OtherMatrixConstraintOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OtherMatrixConstraintOptionOrResult");
+#endif
+    this->name = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    if (OSRand() <= density) this->solver      = "random string";
+    if (OSRand() <= density) this->category    = "random string";
+    if (OSRand() <= density) this->enumType    = "random string";
+    if (OSRand() <= density)
+    {
+        if (OSRand() <= 0.5)
+        {
+            this->numberOfMatrixCon = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfMatrixCon;
+            else            n = (int)(4*OSRand());
+            matrixCon = new OSMatrixWithMatrixConIdx*[n];
+            for (int i = 0; i < n; i++)
+            {
+                matrixCon[i] = new OSMatrixWithMatrixConIdx();
+                matrixCon[i]->setRandom(density, conformant);
+            }
+        }
+        else
+        {
+            this->numberOfEnumerations = (int)(4*OSRand());
+            int n;
+            if (conformant) n = this->numberOfEnumerations;
+            else            n = (int)(4*OSRand());
+            enumeration = new OtherOptionOrResultEnumeration*[n];
+            for (int i = 0; i < n; i++)
+            {
+                enumeration[i] = new OtherOptionOrResultEnumeration();
+                enumeration[i]->setRandom(density, conformant, 0, 9);
+            }
+        }
+    }
+    return true;
+}//OtherMatrixConstraintOptionOrResult::setRandom
+
+bool OtherMatrixConstraintOptionOrResult::deepCopyFrom(OtherMatrixConstraintOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherMatrixConstraintOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    this->solver      = that->solver;
+    this->category    = that->category;
+    this->enumType    = that->enumType;
+    int n;
+    this->numberOfMatrixCon = that->numberOfMatrixCon;
+    n = this->numberOfMatrixCon;
+    if (n < 0) return false;
+    if (n > 0) 
+    {
+        this->matrixCon = new OSMatrixWithMatrixConIdx*[n];
+        for (int i = 0; i < n; i++)
+        {
+//            this->matrixCon[i] = new OSMatrixWithMatrixConIdx();
+//            if (!this->matrixCon[i]->deepCopyFrom(that->matrixCon[i]))
+//                return false;
+            this->matrixCon[i] = that->matrixCon[i]->cloneMatrixNode();
+        }
+    }
+    this->numberOfEnumerations = that->numberOfEnumerations;
+    n = this->numberOfEnumerations;
+    if (n  < 0) return false;
+    if (n == 0) return true;
+    this->enumeration = new OtherOptionOrResultEnumeration*[n];
+    for (int i = 0; i < n; i++)
+    {
+        this->enumeration[i] = new OtherOptionOrResultEnumeration();
+        if (!this->enumeration[i]->deepCopyFrom(that->enumeration[i]))
+            return false;
+    }
+    return true;
+}//OtherMatrixConstraintOptionOrResult::deepCopyFrom
+
+
+OtherOptionOrResult::OtherOptionOrResult():
+    name (""),
+    description (""),
+    value (""),
+    type ("")
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Inside OtherOptionOrResult Constructor");
+#endif
+}// end OtherOptionOrResult constructor
+
+OtherOptionOrResult::~OtherOptionOrResult()
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "OtherOptionOrResult Destructor Called");
+#endif
+}//end OtherOptionOrResult destructor
+
+
+bool OtherOptionOrResult::IsEqual(OtherOptionOrResult *that )
+{
+    std::ostringstream outStr;
+
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OtherOptionOrResult");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if ((this->name        != that->name)        ||
+                (this->description != that->description) ||
+                (this->value       != that->value)       ||
+                (this->type        != that->type)          )
+            {
+#ifndef NDEBUG
+                outStr.str("");
+                outStr.clear();
+                outStr << "name: "        << this->name        << " vs. " << that->name        << endl;
+                outStr << "description: " << this->description << " vs. " << that->description << endl;
+                outStr << "value: "       << this->value       << " vs. " << that->value       << endl;
+                outStr << "type: "        << this->type        << " vs. " << that->type        << endl;
+                osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, outStr.str());
+#endif
+                return false;
+            }
+            return true;
+        }
+    }
+}//OtherOptionOrResult::IsEqual
+
+
+bool OtherOptionOrResult::setRandom( double density, bool conformant )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random SolverOptionOrResult");
+#endif
+    if (OSRand() <= density || conformant) this->name = "random string";
+    if (OSRand() <= density) this->description = "random string";
+    if (OSRand() <= density) this->value       = "random string";
+    if (OSRand() <= density) this->type        = "random string";
+    return true;
+}//OtherOptionOrResult::setRandom
+
+bool OtherOptionOrResult::deepCopyFrom(OtherOptionOrResult *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Make deep copy of OtherOptionOrResult");
+#endif
+    this->name        = that->name;
+    this->description = that->description;
+    this->value       = that->value;
+    this->type        = that->type;
+    return true;
+}//OtherOptionOrResult::deepCopyFrom
 
 
 SolverOptionOrResult::SolverOptionOrResult():
@@ -1804,7 +3957,8 @@ bool SolverOptionOrResult::IsEqual(SolverOptionOrResult *that )
     std::ostringstream outStr;
 
 #ifndef NDEBUG
-    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug, "Start comparing in SolverOptionOrResult");
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in SolverOptionOrResult");
 #endif
     if (this == NULL)
     {
@@ -1909,5 +4063,5 @@ bool SolverOptionOrResult::deepCopyFrom(SolverOptionOrResult *that)
         this->item[i] = that->item[i];
 
     return true;
-}//SolverOption::deepCopyFrom
+}//SolverOptionOrResult::deepCopyFrom
 

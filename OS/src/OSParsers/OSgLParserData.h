@@ -247,7 +247,13 @@ public:
     std::string valueType;
     std::string varType;
     double realPart; 
-    double imagPart; 
+    double imagPart;
+
+    /** Data elements for parsing schema elements shared between OSoL and OSrL */
+    std::string  itemContent;
+    std::string* itemList;
+    int kounter;
+
 };//OSgLParserData
 
 inline void osgl_empty_vectors( OSgLParserData* osglData)

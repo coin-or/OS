@@ -18,9 +18,7 @@
  * put bigendian check here
  *
  */
-#include "OSConfig.h"
 #include "OSdtoa.h"
-#include "OSParameters.h"
 
 #ifdef WORDS_BIGENDIAN
 #define IEEE_MC68k

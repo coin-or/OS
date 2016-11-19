@@ -3638,6 +3638,64 @@ OSMatrixWithMatrixVarIdx* OSMatrixWithMatrixVarIdx::cloneMatrixNode()
     return  (OSMatrixWithMatrixVarIdx*)nodePtr;
 }// end of OSMatrixWithMatrixVarIdx::cloneMatrixNode
 
+
+bool OSMatrixWithMatrixVarIdx::setRandom( double density, bool conformant, int iMin, int Imax )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OSMatrixWithMatrixVarIdx");
+#endif
+    this->numberOfRows    = (int)(4*OSRand());
+    this->numberOfColumns = (int)(4*OSRand());
+    this->matrixVarIdx    = (int)(4*OSRand());
+    if (OSRand() <= density) this->name = "random string";
+    if (OSRand() <= density) this->declaredMatrixType
+        = /*returnMatrixTypeString(*/(ENUM_MATRIX_TYPE)(12*OSRand()+1)/*)*/;
+    if (OSRand() <= density) this->symmetry
+        = /*returnMatrixSymmetryString(*/(ENUM_MATRIX_SYMMETRY)(9*OSRand()+1/*)*/);
+    return true;
+}//OSMatrixWithMatrixVarIdx::setRandom
+
+bool OSMatrixWithMatrixVarIdx::IsEqual(OSMatrixWithMatrixVarIdx *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OSMatrixWithMatrixVarIdx");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->idx  != this->idx)  return false; 
+            if (this->name != this->name) return false; 
+            if (!this->OSMatrix::IsEqual(that)) return false;
+
+            return true;
+        }
+    }
+}// end of OSMatrixWithMatrixVarIdx::IsEqual()
+
 /** ---------- Methods for class OSMatrixWithMatrixObjIdx ---------- */
 OSMatrixWithMatrixObjIdx::OSMatrixWithMatrixObjIdx():
     OSMatrix(),
@@ -3697,6 +3755,64 @@ OSMatrixWithMatrixObjIdx* OSMatrixWithMatrixObjIdx::cloneMatrixNode()
     return  (OSMatrixWithMatrixObjIdx*)nodePtr;
 }// end of OSMatrixWithMatrixObjIdx::cloneMatrixNode
 
+bool OSMatrixWithMatrixObjIdx::setRandom( double density, bool conformant, int iMin, int Imax )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OSMatrixWithMatrixObjIdx");
+#endif
+    this->numberOfRows    = (int)(4*OSRand());
+    this->numberOfColumns = (int)(4*OSRand());
+    this->matrixObjIdx    = -1 - (int)(4*OSRand());
+    if (OSRand() <= density) this->name = "random string";
+    if (OSRand() <= density) this->declaredMatrixType
+        = /*returnMatrixTypeString(*/(ENUM_MATRIX_TYPE)(12*OSRand()+1)/*)*/;
+    if (OSRand() <= density) this->symmetry
+        = /*returnMatrixSymmetryString(*/(ENUM_MATRIX_SYMMETRY)(9*OSRand()+1/*)*/);
+    return true;
+}//OSMatrixWithMatrixObjIdx::setRandom
+
+bool OSMatrixWithMatrixObjIdx::IsEqual(OSMatrixWithMatrixObjIdx *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OSMatrixWithMatrixObjIdx");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->idx  != this->idx)  return false; 
+            if (this->name != this->name) return false; 
+            if (!this->OSMatrix::IsEqual(that)) return false;
+
+            return true;
+        }
+    }
+}// end of OSMatrixWithMatrixObjIdx::IsEqual()
+
+
 /** ---------- Methods for class OSMatrixWithMatrixConIdx ---------- */
 OSMatrixWithMatrixConIdx::OSMatrixWithMatrixConIdx():
     OSMatrix(),
@@ -3754,6 +3870,64 @@ OSMatrixWithMatrixConIdx* OSMatrixWithMatrixConIdx::cloneMatrixNode()
     nodePtr = new OSMatrixWithMatrixConIdx();
     return  (OSMatrixWithMatrixConIdx*)nodePtr;
 }// end of OSMatrixWithMatrixConIdx::cloneMatrixNode
+
+bool OSMatrixWithMatrixConIdx::setRandom( double density, bool conformant, int iMin, int Imax )
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSOption, ENUM_OUTPUT_LEVEL_trace,
+        "Set random OSMatrixWithMatrixConIdx");
+#endif
+    this->numberOfRows    = (int)(4*OSRand());
+    this->numberOfColumns = (int)(4*OSRand());
+    this->matrixConIdx    = (int)(4*OSRand());
+    if (OSRand() <= density) this->name = "random string";
+    if (OSRand() <= density) this->declaredMatrixType
+        = /*returnMatrixTypeString(*/(ENUM_MATRIX_TYPE)(12*OSRand()+1)/*)*/;
+    if (OSRand() <= density) this->symmetry
+        = /*returnMatrixSymmetryString(*/(ENUM_MATRIX_SYMMETRY)(9*OSRand()+1/*)*/);
+    return true;
+}//OSMatrixWithMatrixConIdx::setRandom
+
+
+bool OSMatrixWithMatrixConIdx::IsEqual(OSMatrixWithMatrixConIdx *that)
+{
+#ifndef NDEBUG
+    osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug,
+        "Start comparing in OSMatrixWithMatrixConIdx");
+#endif
+    if (this == NULL)
+    {
+        if (that == NULL)
+            return true;
+        else
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
+                "First object is NULL, second is not");
+#endif
+            return false;
+        }
+    }
+    else
+    {
+        if (that == NULL)
+        {
+#ifndef NDEBUG
+            osoutput->OSPrint(ENUM_OUTPUT_AREA_OSMatrix, ENUM_OUTPUT_LEVEL_debug, 
+                "Second object is NULL, first is not");
+#endif
+            return false;
+        }
+        else
+        {
+            if (this->idx  != this->idx)  return false; 
+            if (this->name != this->name) return false; 
+            if (!this->OSMatrix::IsEqual(that)) return false;
+
+            return true;
+        }
+    }
+}// end of OSMatrixWithMatrixConIdx::IsEqual()
 
 /** ---------- Methods for class BaseMatrix ---------- */
 BaseMatrix::BaseMatrix():

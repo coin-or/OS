@@ -147,7 +147,7 @@ public:
 
 };//GeneralStatus
 
-
+#if 0
 /*! \class OtherResult
  *  \brief The OtherResult Class.
  *
@@ -200,7 +200,7 @@ public:
     bool setRandom(double density, bool conformant);
 
 };//OtherResult
-
+#endif
 
 /*! \class OtherResults
  *  \brief The OtherResults  Class.
@@ -222,7 +222,7 @@ public:
     int numberOfOtherResults;
 
     /** the array of other results */
-    OtherResult** other;
+    OtherOptionOrResult** other;
 
     /**
      *
@@ -312,6 +312,7 @@ public:
      * Default constructor.
      */
     GeneralResult();
+
     /**
      *
      * Class destructor.
@@ -2283,6 +2284,7 @@ public:
     /** variables holds the solution information for
      *  the variables
 
+
      */
     VariableSolution *variables;
     /** constraints holds the solution information
@@ -2933,6 +2935,7 @@ public:
     OptimizationSolutionStatus* getSolutionStatus( int solIdx);
 
     /**
+
      * Get the [i]th optimization solution status type, where i equals the given solution index.
      * The solution status type can be:
      * unbounded, globallyOptimal, locallyOptimal, optimal, bestSoFar, feasible, infeasible,
