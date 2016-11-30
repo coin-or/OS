@@ -119,24 +119,24 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:choice>
 			<xs:element name="el" type="IntVectorEl" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-		</xs:sequence>
+		</xs:choice>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SizelessIntVector">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:choice>
 			<xs:element name="el" type="IntVectorEl" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-		</xs:sequence>
+		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="NonNegativeIntVectorEl">
 		<xs:simpleContent>
