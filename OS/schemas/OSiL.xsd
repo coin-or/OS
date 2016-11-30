@@ -23,16 +23,6 @@
 		</xs:sequence>
 	</xs:complexType>
 	<!--InstanceHeader: since version 1.0 -->
-	<xs:complexType name="InstanceHeader">
-		<xs:annotation>
-			<xs:documentation>since version 1.0</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string" minOccurs="0"/>
-			<xs:element name="source" type="xs:string" minOccurs="0"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-		</xs:sequence>
-	</xs:complexType>
 	<!--InstanceData: since version 1.0 -->
 	<xs:complexType name="InstanceData">
 		<xs:annotation>
@@ -113,17 +103,19 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<!-- dead code
 			<xs:element name="old_disjunctiveInformation" type="old_DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
+-->
+			<xs:element name="disjunctions" type="DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="decomposition" type="InstanceDecomposition" minOccurs="0">
+			<xs:element name="timeStages" type="InstanceDecomposition" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -143,6 +135,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<!-- dead code
 			<xs:element name="stochasticData" type="StochasticData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -158,6 +151,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<xs:element name="stochasticData-2016-10-05" type="StochasticData-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -2925,20 +2919,18 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of the disjunction child elements must agree with numberOfDisjunctions</xs:documentation>
+				<xs:documentation>Number of alternatives must agree with numberOfAlternatives</xs:documentation>
 			</xs:annotation>
+			<!-- dead code	
 			<xs:element name="disjunction" type="Disjunction" minOccurs="2" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>different disjunctions are connected by exclusive OR</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="disjunction_try" type="DisjunctiveModifications" minOccurs="2" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>different disjunctions are connected by exclusive OR</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+-->
+			<xs:element name="disjunctiveTerm" type="DisjunctiveModifications" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDisjunctiveTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionVar">
 		<xs:annotation>
@@ -3100,7 +3092,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of the disjunctiveSet child elements must agree with numberOfDisjunctiveSets</xs:documentation>
+				<xs:documentation>Number of disjunctions must agree with numberOfDisjunctions</xs:documentation>
 			</xs:annotation>
 			<xs:element name="conditioningVariables" type="NonNegativeIntVector" minOccurs="0">
 				<xs:annotation>
@@ -3112,13 +3104,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>to identify core contraints that describe additional restrictions on the logical conditioningVariables</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="disjunctiveSet" type="DisjunctiveSet" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="disjunction" type="DisjunctiveSet" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>different disjunctive sets are connected by AND</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctiveModifications">
 		<xs:annotation>
@@ -3892,13 +3884,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the component elements must agree with numberOfComponents</xs:documentation>
 			</xs:annotation>
-			<xs:element name="component" type="DecompositionComponent" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="stage" type="DecompositionComponent" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation> </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfComponents" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfStages" type="xs:positiveInteger" use="required"/>
 		<!-- not needed here (?)
 		<xs:attribute name="decisionEventSequence">
 			<xs:annotation>
@@ -5035,6 +5027,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="nodalTree-2016-11-24" type="NodalTree-2016-11-24" minOccurs="0"/>
 			<xs:element name="implicitTree-2016-10-05" type="ImplicitTree-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -5164,6 +5157,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 								</xs:complexContent>
 							</xs:complexType>
 						</xs:element>
+						<xs:element name="changes2" type="NodeModifications-2016-10-05"/>
 					</xs:choice>
 					<xs:element ref="scenarioNode-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
@@ -5230,6 +5224,70 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="sNode-2016-10-05" type="StochasticNode-2016-10-05" substitutionGroup="scenarioNode-2016-10-05">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="NodalTree-2016-11-24">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the nodes in this tree must match numberOfNodes</xs:documentation>
+			</xs:annotation>
+			<xs:element name="rootNode" type="RootNode-2016-11-24"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfNodes" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RootNode-2016-11-24">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="sNode-2016-11-24">
+				<xs:attribute name="prob" type="Probability" use="optional" default="1"/>
+				<xs:attribute name="useCoreData" type="xs:boolean" use="optional" default="false">
+					<xs:annotation>
+						<xs:documentation>must be present if nodeData element is missing; if useCoreData is TRUE, ignore nodeData if present</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNode-2016-11-24">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="sNode-2016-11-24">
+				<xs:attribute name="prob" type="Probability" use="required"/>
+				<xs:attribute name="numberOfLinkingStages" type="xs:nonNegativeInteger" default="1">
+					<xs:annotation>
+						<xs:documentation>governs the length of the history that can influence the present node as well as the offsets for variable and constraint references</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="sNode-2016-11-24" mixed="false">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice minOccurs="0">
+				<xs:element name="nodeData" type="NodeData-2016-10-05"/>
+				<xs:element name="modifications" type="NodeModifications-2016-10-05"/>
+			</xs:choice>
+			<xs:element name="sNode" type="StochasticNode-2016-11-24" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="nodeID" type="xs:ID">
+			<xs:annotation>
+				<xs:documentation>can be used to provide a reference for later inheritance of data</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="scenarioNode-2016-11-24" type="sNode-2016-11-24" abstract="true">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -5371,25 +5429,9 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="ModifyingOperations">
-				<xs:attribute name="base" use="optional" default="coreProgram">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="none"/>
-							<xs:enumeration value="coreProgram"/>
-							<xs:enumeration value="firstSibling"/>
-							<xs:enumeration value="lastSibling"/>
-							<xs:enumeration value="parent"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="baseID" type="xs:ID">
+				<xs:attribute name="baseRef" type="xs:IDREF">
 					<xs:annotation>
-						<xs:documentation>can be used to provide a reference for later inheritance of data</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-				<xs:attribute name="nodeRef" type="xs:IDREF">
-					<xs:annotation>
-						<xs:documentation>can be used to reference another node in the tree from which the current node inherits data</xs:documentation>
+						<xs:documentation>can be used to reference another node in the tree as a base from which the current node inherits data</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
