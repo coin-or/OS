@@ -252,6 +252,9 @@ public:
     /** Data elements for parsing schema elements shared between OSoL and OSrL */
     std::string  itemContent;
     std::string* itemList;
+    OtherOptionOrResultEnumeration** enumList;
+    OSMatrix** matrixList;
+    OSMatrixWithMatrixVarIdx** matrixVarList;
     int kounter;
 
 };//OSgLParserData

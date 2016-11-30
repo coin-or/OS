@@ -6176,6 +6176,7 @@ bool VariableOption::addOther(OtherVariableOptionOrResult *other)
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
+        temp[ nopt]->varType     = other->varType;
         temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
@@ -6814,6 +6815,7 @@ bool ObjectiveOption::addOther(OtherObjectiveOptionOrResult *other)
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
+        temp[ nopt]->objType     = other->objType;
         temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
@@ -7461,6 +7463,7 @@ bool ConstraintOption::addOther(OtherConstraintOptionOrResult *other)
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
+        temp[ nopt]->conType     = other->conType;
         temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
@@ -8871,6 +8874,7 @@ bool OSOption::setOtherVariableOptionAttributes(int iOther, int numberOfVar,
     optimization->variables->other[iOther]->category             = category;
     optimization->variables->other[iOther]->type                 = type;
     optimization->variables->other[iOther]->enumType             = enumType;
+    optimization->variables->other[iOther]->varType              = varType;
     optimization->variables->other[iOther]->description          = description;
 
     if (numberOfVar > 0)
@@ -9221,6 +9225,7 @@ bool OSOption::setOtherObjectiveOptionAttributes(int iOther, int numberOfObj,
     optimization->objectives->other[iOther]->category             = category;
     optimization->objectives->other[iOther]->type                 = type;
     optimization->objectives->other[iOther]->enumType             = enumType;
+    optimization->objectives->other[iOther]->objType              = objType;
     optimization->objectives->other[iOther]->description          = description;
 
     if (numberOfObj > 0)
@@ -9463,6 +9468,7 @@ bool OSOption::setOtherConstraintOptionAttributes(int iOther, int numberOfCon,
     optimization->constraints->other[iOther]->category             = category;
     optimization->constraints->other[iOther]->type                 = type;
     optimization->constraints->other[iOther]->enumType             = enumType;
+    optimization->constraints->other[iOther]->conType              = conType;
     optimization->constraints->other[iOther]->description          = description;
 
     if (numberOfCon > 0)

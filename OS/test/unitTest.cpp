@@ -1027,7 +1027,7 @@ if (PARSER_TESTS)
                 try
                 {
                     cout << endl << "Test expansion of matrix " << i << " in column major form" << endl;
-                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(false);
+                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix,false);
                     if (expIdx >= 0)
                     {
                         cout << endl << "Matrix expanded successfully" << endl << endl;
@@ -1045,7 +1045,7 @@ if (PARSER_TESTS)
                 try
                 {
                     cout << endl << "Test expansion of matrix " << i << " in row major form" << endl;
-                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(true);
+                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix,true);
                     if (expIdx >= 0)
                     {
                         cout << endl << "Matrix expanded successfully" << endl << endl;
@@ -1748,16 +1748,16 @@ if (PARSER_TESTS)
         cout << endl << "another SOS has been added" << endl << endl;
 #endif
 
-        OtherVariableOption *varopt;
-        varopt = new OtherVariableOption();
+        OtherVariableOptionOrResult *varopt;
+        varopt = new OtherVariableOptionOrResult();
         varopt->name = "testVarOpt";
         varopt->numberOfVar = 2;
         varopt->numberOfEnumerations = 0;
-        varopt->var = new OtherVarOption*[2];
-        varopt->var[0] = new OtherVarOption();
+        varopt->var = new OtherOptionOrResultElementString*[2];
+        varopt->var[0] = new OtherOptionOrResultElementString();
         varopt->var[0]->idx = 0;
         varopt->var[0]->value = "3.0";
-        varopt->var[1] = new OtherVarOption();
+        varopt->var[1] = new OtherOptionOrResultElementString();
         varopt->var[1]->idx = 1;
         varopt->var[1]->lbValue = "0.0";
         varopt->var[1]->ubValue = "10.0";
@@ -1768,8 +1768,8 @@ if (PARSER_TESTS)
         cout << endl << "another variable option has been added" << endl << endl;
 #endif
 
-        OtherObjectiveOption *objopt;
-        objopt = new OtherObjectiveOption();
+        OtherObjectiveOptionOrResult *objopt;
+        objopt = new OtherObjectiveOptionOrResult();
         objopt->name = "testObjOpt";
         objopt->numberOfObj = 0;
         objopt->numberOfEnumerations = 0;
@@ -1783,8 +1783,8 @@ if (PARSER_TESTS)
         ok = osoption->setAnotherInitConValue(2,17.0) && ok;
         ok = osoption->setAnotherInitDualVarValue(2,0.0,DBL_MAX) && ok;
 
-        OtherConstraintOption *conopt;
-        conopt = new OtherConstraintOption();
+        OtherConstraintOptionOrResult *conopt;
+        conopt = new OtherConstraintOptionOrResult();
         conopt->name = "testConOpt";
 
         conopt->numberOfCon = 0;
@@ -1919,7 +1919,7 @@ if (PARSER_TESTS)
 #endif
 
         int nopt;
-        OtherOption** otherOpt;
+        OtherOptionOrResult** otherOpt;
         nopt = osoption->getNumberOfOtherGeneralOptions();
         otherOpt = osoption->getOtherGeneralOptions();
         ok = osoption2->setOtherGeneralOptions(nopt, otherOpt) && ok;
@@ -1965,7 +1965,7 @@ if (PARSER_TESTS)
             throw ErrorClass(" error in get/set MinCPUNumber");
 #endif
 
-        OtherOption** otherOpt2;
+        OtherOptionOrResult** otherOpt2;
         nopt = osoption->getNumberOfOtherSystemOptions();
         otherOpt2 = osoption->getOtherSystemOptions();
         ok = osoption2->setOtherSystemOptions(nopt, otherOpt2) && ok;
@@ -1982,7 +1982,7 @@ if (PARSER_TESTS)
             throw ErrorClass(" error in get/set ServiceType");
 #endif
 
-        OtherOption** otherOpt3;
+        OtherOptionOrResult** otherOpt3;
         nopt = osoption->getNumberOfOtherServiceOptions();
         otherOpt3 = osoption->getOtherServiceOptions();
         ok = osoption2->setOtherServiceOptions(nopt, otherOpt3) && ok;
@@ -2109,7 +2109,7 @@ if (PARSER_TESTS)
             throw ErrorClass(" error in get/set ProcessesToKill");
 #endif
 
-        OtherOption** otherOpt4;
+        OtherOptionOrResult** otherOpt4;
         nopt = osoption->getNumberOfOtherJobOptions();
         otherOpt4 = osoption->getOtherJobOptions();
         ok = osoption2->setOtherJobOptions(nopt, otherOpt4) && ok;
@@ -2267,7 +2267,7 @@ if (PARSER_TESTS)
             throw ErrorClass(" error in get/set SOSVariableBranchingWeights");
 #endif
 
-        OtherVariableOption** otherV;
+        OtherVariableOptionOrResult** otherV;
         otherV = osoption->getAllOtherVariableOptions();
         nopt = osoption->getNumberOfOtherVariableOptions();
         ok = osoption2->setOtherVariableOptions(nopt, otherV) && ok;
@@ -2387,7 +2387,7 @@ if (PARSER_TESTS)
 #endif
         }
 
-        OtherObjectiveOption** otherO;
+        OtherObjectiveOptionOrResult** otherO;
         otherO = osoption->getAllOtherObjectiveOptions();
         nopt = osoption->getNumberOfOtherObjectiveOptions();
         ok = osoption2->setOtherObjectiveOptions(nopt, otherO) && ok;
@@ -2506,7 +2506,7 @@ if (PARSER_TESTS)
 #endif
         }
 
-        OtherConstraintOption** otherC;
+        OtherConstraintOptionOrResult** otherC;
         otherC = osoption->getAllOtherConstraintOptions();
         nopt = osoption->getNumberOfOtherConstraintOptions();
         ok = osoption2->setOtherConstraintOptions(nopt, otherC) && ok;
@@ -2515,7 +2515,7 @@ if (PARSER_TESTS)
             throw ErrorClass(" error in get/set OtherConstraintOptions");
 #endif
 
-        SolverOption** SO;
+        SolverOptionOrResult** SO;
 
         SO = osoption->getAllSolverOptions();
         nopt = osoption->getNumberOfSolverOptions();
@@ -9752,7 +9752,7 @@ if (OTHER_TESTS)
             throw ErrorClass(" Fail setting numberOfOtherVariableResults in AMPL suffix handler");
         for (int i=0; i<nOther; i++)
         {
-            OtherVariableOption *otherVar = nl2osil->osoption->getOtherVariableOption(i);
+            OtherVariableOptionOrResult *otherVar = nl2osil->osoption->getOtherVariableOption(i);
 
  
             std::cout << "transfer variable suffix " << otherVar->name << std::endl;
@@ -9898,7 +9898,7 @@ if (OTHER_TESTS)
             throw ErrorClass(" Fail setting numberOfOtherConstraintResults in AMPL suffix handler");
         for (int i=0; i<nOther; i++)
         {
-            OtherConstraintOption *otherCon = nl2osil->osoption->getOtherConstraintOption(i);
+            OtherConstraintOptionOrResult *otherCon = nl2osil->osoption->getOtherConstraintOption(i);
 
         std::cout << "transfer constraint suffix " << otherCon->name  << std::endl;
 
@@ -9946,7 +9946,7 @@ if (OTHER_TESTS)
 
         // add three special results. The first is "moreconinteger", mentioned in the .mod file with kind=OUT 
 
-        std::cout << "add variable suffix moreconinteger" << std::endl;
+        std::cout << "add constraint suffix moreconinteger" << std::endl;
 
 
         if (!osresult->setOtherConstraintResultNumberOfCon(0, nOther, nCons))
@@ -10040,7 +10040,7 @@ if (OTHER_TESTS)
             throw ErrorClass(" Fail setting numberOfOtherVariableResults in AMPL suffix handler");
         for (int i=0; i<nOther; i++)
         {
-            OtherObjectiveOption *otherObj = nl2osil->osoption->getOtherObjectiveOption(i);
+            OtherObjectiveOptionOrResult *otherObj = nl2osil->osoption->getOtherObjectiveOption(i);
 
             std::cout << "transfer objective suffix " << otherObj->name << std::endl;
 
@@ -10089,7 +10089,7 @@ if (OTHER_TESTS)
 
         // add three special results. The first is "moreobjinteger", mentioned in the .mod file with kind=OUT 
 
-        std::cout << "add variable suffix moreobjinteger" << std::endl;
+        std::cout << "add objective suffix moreobjinteger" << std::endl;
 
 
         if (!osresult->setOtherObjectiveResultNumberOfObj(0, nOther, nObjs))
@@ -10188,8 +10188,21 @@ if (OTHER_TESTS)
 
         std::cout << std::endl << "write AMPL solution file" << std::endl << std::endl;
 
+extern const OSSmartPtr<OSOutput> osoutput;
+        osoutput->SetPrintLevel("stdout", 
+            (ENUM_OUTPUT_LEVEL)
+                (100*ENUM_OUTPUT_AREA_OSModelInterfaces + 
+                    ENUM_OUTPUT_LEVEL_debug));
+
+
         writeOK = solWriter->writeSolFile(osrl, nl2osil->getASL("asl"), dataDir +  "amplFiles" + dirsep + "suffixTest.sol");
 
+        if (!writeOK)
+        {   
+            cout << "AMPL .sol file writer failed writing solution file" << endl;
+            cout << osrl << endl;
+            throw ErrorClass(" Fail unit test with AMPL .sol writer");
+        } 
 
 // compare suffixtest.sol to suffixtest.cmp
 
@@ -10212,7 +10225,10 @@ if (OTHER_TESTS)
         else
         {   
             cout << "AMPL .sol file writer creates incorrect output" << endl;
+            cout << endl << endl << "suffixTest.sol" << endl << endl;
             cout << osrl1 << endl;
+            cout << endl << endl << "suffixTest.cmp" << endl << endl;
+            cout << osrl2 << endl;
             throw ErrorClass(" Fail unit test with AMPL .sol writer");
         } 
 

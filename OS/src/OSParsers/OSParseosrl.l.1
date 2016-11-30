@@ -36,9 +36,11 @@
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 #include "OSrLParserData.h"
-#include "OSParseosrl.tab.hpp"
+#include "OSnLParserData.h"
+#include "OSgLParserData.h"
 #include "OSResult.h"
 #include "OSGeneral.h"
+#include "OSParseosrl.tab.hpp"
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>

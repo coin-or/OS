@@ -425,7 +425,12 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
                                 suf_iput(resultName.c_str(), ASL_Sufkind_var, iData[iSuf]);
                             }
                             else
-                                throw ErrorClass("otherVariableResult has unsupported type in OSosrl2ampl()");
+                            {
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "otherVariableResult " << i << " (" << resultName << ")" << " has unsupported type " << resultType<< " in OSosrl2ampl()" << std::endl;
+                                throw ErrorClass(outStr.str());
+                            }
                         } 
                     }
                 }
@@ -499,7 +504,12 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
 //                                delete [] iData; //creates a segfault...
                             }
                             else
-                                throw ErrorClass("otherObjectiveResult has unsupported type in OSosrl2ampl()");
+                            {
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "otherObjectiveResult " << i << " (" << resultName << ")" << " has unsupported type " << resultType<< " in OSosrl2ampl()" << std::endl;
+                                throw ErrorClass(outStr.str());
+                            }
                         }
                     }
                 }
@@ -576,7 +586,12 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl, std::string solfile)
 //                                delete [] iData; //creates a segfault...
                             }
                             else
-                                throw ErrorClass("otherConstraintResult has unsupported type in OSosrl2ampl()");
+                            {
+                                outStr.str("");
+                                outStr.clear();
+                                outStr << "otherConstraintResult " << i << " (" << resultName << ")" << " has unsupported type " << resultType<< " in OSosrl2ampl()" << std::endl;
+                                throw ErrorClass(outStr.str());
+                            }
                         }
                     }
                 }

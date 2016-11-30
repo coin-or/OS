@@ -1,21 +1,19 @@
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
-/* A Bison parser, made by GNU Bison 2.4.1.  */
+/* Bison implementation for Yacc-like parsers in C
 
-/* Skeleton implementation for Bison's Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
-   
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -28,7 +26,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
@@ -46,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "2.4.1"
+#define YYBISON_VERSION "3.0.2"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -60,18 +58,14 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
-/* Using locations.  */
-#define YYLSP_NEEDED 1
 
 /* Substitute the variable and function names.  */
 #define yyparse         osilparse
 #define yylex           osillex
 #define yyerror         osilerror
-#define yylval          osillval
-#define yychar          osilchar
 #define yydebug         osildebug
 #define yynerrs         osilnerrs
-#define yylloc          osillloc
+
 
 /* Copy the first part of user declarations.  */
 
@@ -237,10 +231,13 @@ char *parseBase64( const char **p, long int *dataSize, int* osillineno);
 
 
 
-/* Enabling traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
+# ifndef YY_NULLPTR
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULLPTR nullptr
+#  else
+#   define YY_NULLPTR 0
+#  endif
+# endif
 
 /* Enabling verbose error messages.  */
 #ifdef YYERROR_VERBOSE
@@ -250,448 +247,453 @@ char *parseBase64( const char **p, long int *dataSize, int* osillineno);
 # define YYERROR_VERBOSE 1
 #endif
 
-/* Enabling the token table.  */
-#ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 0
+/* In a future release of Bison, this section will be replaced
+   by #include "OSParseosil.tab.hpp".  */
+#ifndef YY_OSIL_OS_SRC_OSPARSERS_OSPARSEOSIL_TAB_HPP_INCLUDED
+# define YY_OSIL_OS_SRC_OSPARSERS_OSPARSEOSIL_TAB_HPP_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int osildebug;
 #endif
 
-
-/* Tokens.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     ATTRIBUTETEXT = 258,
-     ELEMENTTEXT = 259,
-     ITEMTEXT = 260,
-     INTEGER = 261,
-     DOUBLE = 262,
-     QUOTE = 263,
-     TWOQUOTES = 264,
-     BOOLEAN = 265,
-     ENDOFELEMENT = 266,
-     GREATERTHAN = 267,
-     EMPTYSEMIDEFINITENESSATT = 268,
-     SEMIDEFINITENESSATT = 269,
-     NUMBEROFQTERMSATT = 270,
-     NUMBEROFCONESATT = 271,
-     NUMBEROFSTAGESATT = 272,
-     IDXONEATT = 273,
-     IDXTWOATT = 274,
-     HORIZONATT = 275,
-     STARTATT = 276,
-     STARTIDXATT = 277,
-     MATRIXIDXATT = 278,
-     LBMATRIXIDXATT = 279,
-     LBCONEIDXATT = 280,
-     UBMATRIXIDXATT = 281,
-     UBCONEIDXATT = 282,
-     TEMPLATEMATRIXIDXATT = 283,
-     REFERENCEMATRIXIDXATT = 284,
-     VARREFERENCEMATRIXIDXATT = 285,
-     OBJREFERENCEMATRIXIDXATT = 286,
-     CONREFERENCEMATRIXIDXATT = 287,
-     ORDERCONEIDXATT = 288,
-     CONSTANTMATRIXIDXATT = 289,
-     NORMSCALEFACTORATT = 290,
-     DISTORTIONMATRIXIDXATT = 291,
-     AXISDIRECTIONATT = 292,
-     FIRSTAXISDIRECTIONATT = 293,
-     SECONDAXISDIRECTIONATT = 294,
-     OSILEND = 295,
-     INSTANCEDATAEND = 296,
-     INSTANCEDATASTARTEND = 297,
-     QUADRATICCOEFFICIENTSSTART = 298,
-     QUADRATICCOEFFICIENTSEND = 299,
-     QTERMSTART = 300,
-     QTERMEND = 301,
-     CONESSTART = 302,
-     CONESEND = 303,
-     NONNEGATIVECONESTART = 304,
-     NONNEGATIVECONEEND = 305,
-     NONPOSITIVECONESTART = 306,
-     NONPOSITIVECONEEND = 307,
-     ORTHANTCONESTART = 308,
-     ORTHANTCONEEND = 309,
-     POLYHEDRALCONESTART = 310,
-     POLYHEDRALCONEEND = 311,
-     QUADRATICCONESTART = 312,
-     QUADRATICCONEEND = 313,
-     ROTATEDQUADRATICCONESTART = 314,
-     ROTATEDQUADRATICCONEEND = 315,
-     SEMIDEFINITECONESTART = 316,
-     SEMIDEFINITECONEEND = 317,
-     PRODUCTCONESTART = 318,
-     PRODUCTCONEEND = 319,
-     INTERSECTIONCONESTART = 320,
-     INTERSECTIONCONEEND = 321,
-     DUALCONESTART = 322,
-     DUALCONEEND = 323,
-     POLARCONESTART = 324,
-     POLARCONEEND = 325,
-     DIRECTIONSTART = 326,
-     DIRECTIONEND = 327,
-     FACTORSSTART = 328,
-     FACTORSEND = 329,
-     COMPONENTSSTART = 330,
-     COMPONENTSEND = 331,
-     TIMEDOMAINSTART = 332,
-     TIMEDOMAINEND = 333,
-     STAGESSTART = 334,
-     STAGESEND = 335,
-     STAGESTART = 336,
-     STAGEEND = 337,
-     INTERVALSTART = 338,
-     INTERVALEND = 339,
-     HEADERSTART = 340,
-     HEADEREND = 341,
-     FILENAMESTART = 342,
-     FILENAMEEND = 343,
-     FILENAMEEMPTY = 344,
-     FILENAMESTARTANDEND = 345,
-     FILESOURCESTART = 346,
-     FILESOURCEEND = 347,
-     FILESOURCEEMPTY = 348,
-     FILESOURCESTARTANDEND = 349,
-     FILEDESCRIPTIONSTART = 350,
-     FILEDESCRIPTIONEND = 351,
-     FILEDESCRIPTIONEMPTY = 352,
-     FILEDESCRIPTIONSTARTANDEND = 353,
-     FILECREATORSTART = 354,
-     FILECREATOREND = 355,
-     FILECREATOREMPTY = 356,
-     FILECREATORSTARTANDEND = 357,
-     FILELICENCESTART = 358,
-     FILELICENCEEND = 359,
-     FILELICENCEEMPTY = 360,
-     FILELICENCESTARTANDEND = 361,
-     INDEXESSTART = 362,
-     INDEXESEND = 363,
-     VALUESSTART = 364,
-     VALUESEND = 365,
-     NONZEROSSTART = 366,
-     NONZEROSEND = 367,
-     ELSTART = 368,
-     ELEND = 369,
-     ENUMERATIONSTART = 370,
-     ENUMERATIONEND = 371,
-     ITEMEMPTY = 372,
-     ITEMSTART = 373,
-     ITEMEND = 374,
-     ITEMSTARTANDEND = 375,
-     BASE64START = 376,
-     BASE64END = 377,
-     NUMBEROFELATT = 378,
-     NUMBEROFENUMERATIONSATT = 379,
-     NUMBEROFITEMSATT = 380,
-     EMPTYCATEGORYATT = 381,
-     CATEGORYATT = 382,
-     EMPTYDESCRIPTIONATT = 383,
-     DESCRIPTIONATT = 384,
-     EMPTYSOLVERATT = 385,
-     SOLVERATT = 386,
-     EMPTYNAMEATT = 387,
-     NAMEATT = 388,
-     EMPTYTYPEATT = 389,
-     TYPEATT = 390,
-     EMPTYENUMTYPEATT = 391,
-     ENUMTYPEATT = 392,
-     EMPTYSHAPEATT = 393,
-     SHAPEATT = 394,
-     EMPTYUNITATT = 395,
-     UNITATT = 396,
-     EMPTYVALUEATT = 397,
-     VALUEATT = 398,
-     EMPTYVALUETYPEATT = 399,
-     VALUETYPEATT = 400,
-     EMPTYCONTYPEATT = 401,
-     CONTYPEATT = 402,
-     EMPTYOBJTYPEATT = 403,
-     OBJTYPEATT = 404,
-     EMPTYVARTYPEATT = 405,
-     VARTYPEATT = 406,
-     EMPTYMATRIXCONTYPEATT = 407,
-     MATRIXCONTYPEATT = 408,
-     EMPTYMATRIXOBJTYPEATT = 409,
-     MATRIXOBJTYPEATT = 410,
-     EMPTYMATRIXVARTYPEATT = 411,
-     MATRIXVARTYPEATT = 412,
-     EMPTYMATRIXTYPEATT = 413,
-     MATRIXTYPEATT = 414,
-     EMPTYSYMMETRYATT = 415,
-     SYMMETRYATT = 416,
-     EMPTYROWMAJORATT = 417,
-     ROWMAJORATT = 418,
-     EMPTYBASETRANSPOSEATT = 419,
-     BASETRANSPOSEATT = 420,
-     NUMBEROFBLOCKSATT = 421,
-     NUMBEROFCOLUMNSATT = 422,
-     NUMBEROFROWSATT = 423,
-     NUMBEROFMATRICESATT = 424,
-     NUMBEROFVALUESATT = 425,
-     NUMBEROFCONSTRAINTSATT = 426,
-     NUMBEROFCONATT = 427,
-     NUMBEROFCONIDXATT = 428,
-     NUMBEROFOBJECTIVESATT = 429,
-     NUMBEROFOBJATT = 430,
-     NUMBEROFOBJIDXATT = 431,
-     NUMBEROFVARIABLESATT = 432,
-     NUMBEROFVARATT = 433,
-     NUMBEROFVARIDXATT = 434,
-     NUMBEROFMATRIXCONATT = 435,
-     NUMBEROFMATRIXOBJATT = 436,
-     NUMBEROFMATRIXVARATT = 437,
-     BASEMATRIXIDXATT = 438,
-     TARGETMATRIXFIRSTROWATT = 439,
-     TARGETMATRIXFIRSTCOLATT = 440,
-     BASEMATRIXSTARTROWATT = 441,
-     BASEMATRIXSTARTCOLATT = 442,
-     BASEMATRIXENDROWATT = 443,
-     BASEMATRIXENDCOLATT = 444,
-     SCALARMULTIPLIERATT = 445,
-     BLOCKROWIDXATT = 446,
-     BLOCKCOLIDXATT = 447,
-     REATT = 448,
-     IMATT = 449,
-     MATRIXVARIDXATT = 450,
-     MATRIXOBJIDXATT = 451,
-     MATRIXCONIDXATT = 452,
-     IDXATT = 453,
-     INCRATT = 454,
-     MULTATT = 455,
-     SIZEOFATT = 456,
-     COEFATT = 457,
-     CONSTANTATT = 458,
-     MATRICESSTART = 459,
-     MATRICESEND = 460,
-     MATRIXSTART = 461,
-     MATRIXEND = 462,
-     BASEMATRIXEND = 463,
-     BASEMATRIXSTART = 464,
-     BLOCKSSTART = 465,
-     BLOCKSEND = 466,
-     BLOCKSTART = 467,
-     BLOCKEND = 468,
-     COLOFFSETSTART = 469,
-     COLOFFSETEND = 470,
-     ROWOFFSETSTART = 471,
-     ROWOFFSETEND = 472,
-     ELEMENTSSTART = 473,
-     ELEMENTSEND = 474,
-     CONSTANTELEMENTSSTART = 475,
-     CONSTANTELEMENTSEND = 476,
-     COMPLEXELEMENTSSTART = 477,
-     COMPLEXELEMENTSEND = 478,
-     VARREFERENCEELEMENTSSTART = 479,
-     VARREFERENCEELEMENTSEND = 480,
-     LINEARELEMENTSSTART = 481,
-     LINEARELEMENTSEND = 482,
-     CONREFERENCEELEMENTSSTART = 483,
-     CONREFERENCEELEMENTSEND = 484,
-     OBJREFERENCEELEMENTSSTART = 485,
-     OBJREFERENCEELEMENTSEND = 486,
-     REALVALUEDEXPRESSIONSSTART = 487,
-     REALVALUEDEXPRESSIONSSEND = 488,
-     COMPLEXVALUEDEXPRESSIONSSTART = 489,
-     COMPLEXVALUEDEXPRESSIONSSEND = 490,
-     STRINGVALUEDELEMENTSSTART = 491,
-     STRINGVALUEDELEMENTSEND = 492,
-     STARTVECTORSTART = 493,
-     STARTVECTOREND = 494,
-     INDEXSTART = 495,
-     INDEXEND = 496,
-     VALUESTART = 497,
-     VALUEEND = 498,
-     VARIDXSTART = 499,
-     VARIDXEND = 500,
-     TRANSFORMATIONSTART = 501,
-     TRANSFORMATIONEND = 502,
-     MATRIXPROGRAMMINGSTART = 503,
-     MATRIXPROGRAMMINGEND = 504,
-     MATRIXVARIABLESSTART = 505,
-     MATRIXVARIABLESEND = 506,
-     MATRIXVARSTART = 507,
-     MATRIXVAREND = 508,
-     MATRIXOBJECTIVESSTART = 509,
-     MATRIXOBJECTIVESEND = 510,
-     MATRIXOBJSTART = 511,
-     MATRIXOBJEND = 512,
-     MATRIXCONSTRAINTSSTART = 513,
-     MATRIXCONSTRAINTSEND = 514,
-     MATRIXCONSTART = 515,
-     MATRIXCONEND = 516,
-     CONSTART = 517,
-     CONEND = 518,
-     CONSTRAINTSSTART = 519,
-     CONSTRAINTSEND = 520,
-     OBJSTART = 521,
-     OBJEND = 522,
-     OBJECTIVESSTART = 523,
-     OBJECTIVESEND = 524,
-     VARSTART = 525,
-     VAREND = 526,
-     VARIABLESSTART = 527,
-     VARIABLESEND = 528,
-     GENERALSTART = 529,
-     GENERALEND = 530,
-     SYSTEMSTART = 531,
-     SYSTEMEND = 532,
-     SERVICESTART = 533,
-     SERVICEEND = 534,
-     JOBSTART = 535,
-     JOBEND = 536,
-     OPTIMIZATIONSTART = 537,
-     OPTIMIZATIONEND = 538,
-     ATEQUALITYSTART = 539,
-     ATEQUALITYEND = 540,
-     ATLOWERSTART = 541,
-     ATLOWEREND = 542,
-     ATUPPERSTART = 543,
-     ATUPPEREND = 544,
-     BASICSTART = 545,
-     BASICEND = 546,
-     ISFREESTART = 547,
-     ISFREEEND = 548,
-     SUPERBASICSTART = 549,
-     SUPERBASICEND = 550,
-     UNKNOWNSTART = 551,
-     UNKNOWNEND = 552,
-     SERVICEURISTART = 553,
-     SERVICEURIEND = 554,
-     SERVICENAMESTART = 555,
-     SERVICENAMEEND = 556,
-     INSTANCENAMESTART = 557,
-     INSTANCENAMEEND = 558,
-     JOBIDSTART = 559,
-     JOBIDEND = 560,
-     OTHERSTART = 561,
-     OTHEREND = 562,
-     DUMMY = 563,
-     NONLINEAREXPRESSIONSSTART = 564,
-     NONLINEAREXPRESSIONSEND = 565,
-     NUMBEROFNONLINEAREXPRESSIONS = 566,
-     NLSTART = 567,
-     NLEND = 568,
-     MATRIXEXPRESSIONSSTART = 569,
-     MATRIXEXPRESSIONSEND = 570,
-     NUMBEROFEXPR = 571,
-     EXPRSTART = 572,
-     EXPREND = 573,
-     NUMBEROFMATRIXTERMSATT = 574,
-     MATRIXTERMSTART = 575,
-     MATRIXTERMEND = 576,
-     POWERSTART = 577,
-     POWEREND = 578,
-     PLUSSTART = 579,
-     PLUSEND = 580,
-     MINUSSTART = 581,
-     MINUSEND = 582,
-     DIVIDESTART = 583,
-     DIVIDEEND = 584,
-     LNSTART = 585,
-     LNEND = 586,
-     SQRTSTART = 587,
-     SQRTEND = 588,
-     SUMSTART = 589,
-     SUMEND = 590,
-     PRODUCTSTART = 591,
-     PRODUCTEND = 592,
-     EXPSTART = 593,
-     EXPEND = 594,
-     NEGATESTART = 595,
-     NEGATEEND = 596,
-     IFSTART = 597,
-     IFEND = 598,
-     SQUARESTART = 599,
-     SQUAREEND = 600,
-     COSSTART = 601,
-     COSEND = 602,
-     SINSTART = 603,
-     SINEND = 604,
-     VARIABLESTART = 605,
-     VARIABLEEND = 606,
-     ABSSTART = 607,
-     ABSEND = 608,
-     ERFSTART = 609,
-     ERFEND = 610,
-     MAXSTART = 611,
-     MAXEND = 612,
-     ALLDIFFSTART = 613,
-     ALLDIFFEND = 614,
-     MINSTART = 615,
-     MINEND = 616,
-     ESTART = 617,
-     EEND = 618,
-     PISTART = 619,
-     PIEND = 620,
-     TIMESSTART = 621,
-     TIMESEND = 622,
-     NUMBERSTART = 623,
-     NUMBEREND = 624,
-     MATRIXDETERMINANTSTART = 625,
-     MATRIXDETERMINANTEND = 626,
-     MATRIXTRACESTART = 627,
-     MATRIXTRACEEND = 628,
-     MATRIXTOSCALARSTART = 629,
-     MATRIXTOSCALAREND = 630,
-     MATRIXDIAGONALSTART = 631,
-     MATRIXDIAGONALEND = 632,
-     MATRIXDOTTIMESSTART = 633,
-     MATRIXDOTTIMESEND = 634,
-     MATRIXLOWERTRIANGLESTART = 635,
-     MATRIXLOWERTRIANGLEEND = 636,
-     MATRIXUPPERTRIANGLESTART = 637,
-     MATRIXUPPERTRIANGLEEND = 638,
-     MATRIXMERGESTART = 639,
-     MATRIXMERGEEND = 640,
-     MATRIXMINUSSTART = 641,
-     MATRIXMINUSEND = 642,
-     MATRIXNEGATESTART = 643,
-     MATRIXNEGATEEND = 644,
-     MATRIXPLUSSTART = 645,
-     MATRIXPLUSEND = 646,
-     MATRIXTIMESSTART = 647,
-     MATRIXTIMESEND = 648,
-     MATRIXPRODUCTSTART = 649,
-     MATRIXPRODUCTEND = 650,
-     MATRIXSCALARTIMESSTART = 651,
-     MATRIXSCALARTIMESEND = 652,
-     MATRIXSUBMATRIXATSTART = 653,
-     MATRIXSUBMATRIXATEND = 654,
-     MATRIXTRANSPOSESTART = 655,
-     MATRIXTRANSPOSEEND = 656,
-     MATRIXREFERENCESTART = 657,
-     MATRIXREFERENCEEND = 658,
-     IDENTITYMATRIXSTART = 659,
-     IDENTITYMATRIXEND = 660,
-     MATRIXINVERSESTART = 661,
-     MATRIXINVERSEEND = 662,
-     COMPLEXCONJUGATESTART = 663,
-     COMPLEXCONJUGATEEND = 664,
-     COMPLEXMINUSSTART = 665,
-     COMPLEXMINUSEND = 666,
-     COMPLEXNEGATESTART = 667,
-     COMPLEXNEGATEEND = 668,
-     COMPLEXNUMBERSTART = 669,
-     COMPLEXNUMBEREND = 670,
-     COMPLEXPLUSSTART = 671,
-     COMPLEXPLUSEND = 672,
-     COMPLEXSQUARESTART = 673,
-     COMPLEXSQUAREEND = 674,
-     COMPLEXSUMSTART = 675,
-     COMPLEXSUMEND = 676,
-     COMPLEXTIMESSTART = 677,
-     COMPLEXTIMESEND = 678,
-     CREATECOMPLEXSTART = 679,
-     CREATECOMPLEXEND = 680,
-     EMPTYINCLUDEDIAGONALATT = 681,
-     INCLUDEDIAGONALATT = 682,
-     EMPTYTRANSPOSEATT = 683,
-     TRANSPOSEATT = 684,
-     EMPTYIDATT = 685,
-     IDATT = 686
-   };
+  enum yytokentype
+  {
+    ATTRIBUTETEXT = 258,
+    ELEMENTTEXT = 259,
+    ITEMTEXT = 260,
+    INTEGER = 261,
+    DOUBLE = 262,
+    QUOTE = 263,
+    TWOQUOTES = 264,
+    BOOLEAN = 265,
+    ENDOFELEMENT = 266,
+    GREATERTHAN = 267,
+    EMPTYSEMIDEFINITENESSATT = 268,
+    SEMIDEFINITENESSATT = 269,
+    NUMBEROFQTERMSATT = 270,
+    NUMBEROFCONESATT = 271,
+    NUMBEROFSTAGESATT = 272,
+    IDXONEATT = 273,
+    IDXTWOATT = 274,
+    HORIZONATT = 275,
+    STARTATT = 276,
+    STARTIDXATT = 277,
+    MATRIXIDXATT = 278,
+    LBMATRIXIDXATT = 279,
+    LBCONEIDXATT = 280,
+    UBMATRIXIDXATT = 281,
+    UBCONEIDXATT = 282,
+    TEMPLATEMATRIXIDXATT = 283,
+    REFERENCEMATRIXIDXATT = 284,
+    VARREFERENCEMATRIXIDXATT = 285,
+    OBJREFERENCEMATRIXIDXATT = 286,
+    CONREFERENCEMATRIXIDXATT = 287,
+    ORDERCONEIDXATT = 288,
+    CONSTANTMATRIXIDXATT = 289,
+    NORMSCALEFACTORATT = 290,
+    DISTORTIONMATRIXIDXATT = 291,
+    AXISDIRECTIONATT = 292,
+    FIRSTAXISDIRECTIONATT = 293,
+    SECONDAXISDIRECTIONATT = 294,
+    OSILEND = 295,
+    INSTANCEDATAEND = 296,
+    INSTANCEDATASTARTEND = 297,
+    QUADRATICCOEFFICIENTSSTART = 298,
+    QUADRATICCOEFFICIENTSEND = 299,
+    QTERMSTART = 300,
+    QTERMEND = 301,
+    CONESSTART = 302,
+    CONESEND = 303,
+    NONNEGATIVECONESTART = 304,
+    NONNEGATIVECONEEND = 305,
+    NONPOSITIVECONESTART = 306,
+    NONPOSITIVECONEEND = 307,
+    ORTHANTCONESTART = 308,
+    ORTHANTCONEEND = 309,
+    POLYHEDRALCONESTART = 310,
+    POLYHEDRALCONEEND = 311,
+    QUADRATICCONESTART = 312,
+    QUADRATICCONEEND = 313,
+    ROTATEDQUADRATICCONESTART = 314,
+    ROTATEDQUADRATICCONEEND = 315,
+    SEMIDEFINITECONESTART = 316,
+    SEMIDEFINITECONEEND = 317,
+    PRODUCTCONESTART = 318,
+    PRODUCTCONEEND = 319,
+    INTERSECTIONCONESTART = 320,
+    INTERSECTIONCONEEND = 321,
+    DUALCONESTART = 322,
+    DUALCONEEND = 323,
+    POLARCONESTART = 324,
+    POLARCONEEND = 325,
+    DIRECTIONSTART = 326,
+    DIRECTIONEND = 327,
+    FACTORSSTART = 328,
+    FACTORSEND = 329,
+    COMPONENTSSTART = 330,
+    COMPONENTSEND = 331,
+    TIMEDOMAINSTART = 332,
+    TIMEDOMAINEND = 333,
+    STAGESSTART = 334,
+    STAGESEND = 335,
+    STAGESTART = 336,
+    STAGEEND = 337,
+    INTERVALSTART = 338,
+    INTERVALEND = 339,
+    HEADERSTART = 340,
+    HEADEREND = 341,
+    FILENAMESTART = 342,
+    FILENAMEEND = 343,
+    FILENAMEEMPTY = 344,
+    FILENAMESTARTANDEND = 345,
+    FILESOURCESTART = 346,
+    FILESOURCEEND = 347,
+    FILESOURCEEMPTY = 348,
+    FILESOURCESTARTANDEND = 349,
+    FILEDESCRIPTIONSTART = 350,
+    FILEDESCRIPTIONEND = 351,
+    FILEDESCRIPTIONEMPTY = 352,
+    FILEDESCRIPTIONSTARTANDEND = 353,
+    FILECREATORSTART = 354,
+    FILECREATOREND = 355,
+    FILECREATOREMPTY = 356,
+    FILECREATORSTARTANDEND = 357,
+    FILELICENCESTART = 358,
+    FILELICENCEEND = 359,
+    FILELICENCEEMPTY = 360,
+    FILELICENCESTARTANDEND = 361,
+    INDEXESSTART = 362,
+    INDEXESEND = 363,
+    VALUESSTART = 364,
+    VALUESEND = 365,
+    NONZEROSSTART = 366,
+    NONZEROSEND = 367,
+    ELSTART = 368,
+    ELEND = 369,
+    ENUMERATIONSTART = 370,
+    ENUMERATIONEND = 371,
+    ITEMEMPTY = 372,
+    ITEMSTART = 373,
+    ITEMEND = 374,
+    ITEMSTARTANDEND = 375,
+    BASE64START = 376,
+    BASE64END = 377,
+    NUMBEROFELATT = 378,
+    NUMBEROFENUMERATIONSATT = 379,
+    NUMBEROFITEMSATT = 380,
+    EMPTYCATEGORYATT = 381,
+    CATEGORYATT = 382,
+    EMPTYDESCRIPTIONATT = 383,
+    DESCRIPTIONATT = 384,
+    EMPTYSOLVERATT = 385,
+    SOLVERATT = 386,
+    EMPTYNAMEATT = 387,
+    NAMEATT = 388,
+    EMPTYTYPEATT = 389,
+    TYPEATT = 390,
+    EMPTYENUMTYPEATT = 391,
+    ENUMTYPEATT = 392,
+    EMPTYSHAPEATT = 393,
+    SHAPEATT = 394,
+    EMPTYUNITATT = 395,
+    UNITATT = 396,
+    EMPTYVALUEATT = 397,
+    VALUEATT = 398,
+    EMPTYVALUETYPEATT = 399,
+    VALUETYPEATT = 400,
+    EMPTYCONTYPEATT = 401,
+    CONTYPEATT = 402,
+    EMPTYOBJTYPEATT = 403,
+    OBJTYPEATT = 404,
+    EMPTYVARTYPEATT = 405,
+    VARTYPEATT = 406,
+    EMPTYMATRIXCONTYPEATT = 407,
+    MATRIXCONTYPEATT = 408,
+    EMPTYMATRIXOBJTYPEATT = 409,
+    MATRIXOBJTYPEATT = 410,
+    EMPTYMATRIXVARTYPEATT = 411,
+    MATRIXVARTYPEATT = 412,
+    EMPTYMATRIXTYPEATT = 413,
+    MATRIXTYPEATT = 414,
+    EMPTYSYMMETRYATT = 415,
+    SYMMETRYATT = 416,
+    EMPTYROWMAJORATT = 417,
+    ROWMAJORATT = 418,
+    EMPTYBASETRANSPOSEATT = 419,
+    BASETRANSPOSEATT = 420,
+    NUMBEROFBLOCKSATT = 421,
+    NUMBEROFCOLUMNSATT = 422,
+    NUMBEROFROWSATT = 423,
+    NUMBEROFMATRICESATT = 424,
+    NUMBEROFVALUESATT = 425,
+    NUMBEROFCONSTRAINTSATT = 426,
+    NUMBEROFCONATT = 427,
+    NUMBEROFCONIDXATT = 428,
+    NUMBEROFOBJECTIVESATT = 429,
+    NUMBEROFOBJATT = 430,
+    NUMBEROFOBJIDXATT = 431,
+    NUMBEROFVARIABLESATT = 432,
+    NUMBEROFVARATT = 433,
+    NUMBEROFVARIDXATT = 434,
+    NUMBEROFMATRIXCONATT = 435,
+    NUMBEROFMATRIXOBJATT = 436,
+    NUMBEROFMATRIXVARATT = 437,
+    BASEMATRIXIDXATT = 438,
+    TARGETMATRIXFIRSTROWATT = 439,
+    TARGETMATRIXFIRSTCOLATT = 440,
+    BASEMATRIXSTARTROWATT = 441,
+    BASEMATRIXSTARTCOLATT = 442,
+    BASEMATRIXENDROWATT = 443,
+    BASEMATRIXENDCOLATT = 444,
+    SCALARMULTIPLIERATT = 445,
+    BLOCKROWIDXATT = 446,
+    BLOCKCOLIDXATT = 447,
+    REATT = 448,
+    IMATT = 449,
+    MATRIXVARIDXATT = 450,
+    MATRIXOBJIDXATT = 451,
+    MATRIXCONIDXATT = 452,
+    IDXATT = 453,
+    INCRATT = 454,
+    MULTATT = 455,
+    SIZEOFATT = 456,
+    COEFATT = 457,
+    CONSTANTATT = 458,
+    MATRICESSTART = 459,
+    MATRICESEND = 460,
+    MATRIXSTART = 461,
+    MATRIXEND = 462,
+    BASEMATRIXEND = 463,
+    BASEMATRIXSTART = 464,
+    BLOCKSSTART = 465,
+    BLOCKSEND = 466,
+    BLOCKSTART = 467,
+    BLOCKEND = 468,
+    COLOFFSETSTART = 469,
+    COLOFFSETEND = 470,
+    ROWOFFSETSTART = 471,
+    ROWOFFSETEND = 472,
+    ELEMENTSSTART = 473,
+    ELEMENTSEND = 474,
+    CONSTANTELEMENTSSTART = 475,
+    CONSTANTELEMENTSEND = 476,
+    COMPLEXELEMENTSSTART = 477,
+    COMPLEXELEMENTSEND = 478,
+    VARREFERENCEELEMENTSSTART = 479,
+    VARREFERENCEELEMENTSEND = 480,
+    LINEARELEMENTSSTART = 481,
+    LINEARELEMENTSEND = 482,
+    CONREFERENCEELEMENTSSTART = 483,
+    CONREFERENCEELEMENTSEND = 484,
+    OBJREFERENCEELEMENTSSTART = 485,
+    OBJREFERENCEELEMENTSEND = 486,
+    REALVALUEDEXPRESSIONSSTART = 487,
+    REALVALUEDEXPRESSIONSSEND = 488,
+    COMPLEXVALUEDEXPRESSIONSSTART = 489,
+    COMPLEXVALUEDEXPRESSIONSSEND = 490,
+    STRINGVALUEDELEMENTSSTART = 491,
+    STRINGVALUEDELEMENTSEND = 492,
+    STARTVECTORSTART = 493,
+    STARTVECTOREND = 494,
+    INDEXSTART = 495,
+    INDEXEND = 496,
+    VALUESTART = 497,
+    VALUEEND = 498,
+    VARIDXSTART = 499,
+    VARIDXEND = 500,
+    TRANSFORMATIONSTART = 501,
+    TRANSFORMATIONEND = 502,
+    MATRIXPROGRAMMINGSTART = 503,
+    MATRIXPROGRAMMINGEND = 504,
+    MATRIXVARIABLESSTART = 505,
+    MATRIXVARIABLESEND = 506,
+    MATRIXVARSTART = 507,
+    MATRIXVAREND = 508,
+    MATRIXOBJECTIVESSTART = 509,
+    MATRIXOBJECTIVESEND = 510,
+    MATRIXOBJSTART = 511,
+    MATRIXOBJEND = 512,
+    MATRIXCONSTRAINTSSTART = 513,
+    MATRIXCONSTRAINTSEND = 514,
+    MATRIXCONSTART = 515,
+    MATRIXCONEND = 516,
+    CONSTART = 517,
+    CONEND = 518,
+    CONSTRAINTSSTART = 519,
+    CONSTRAINTSEND = 520,
+    OBJSTART = 521,
+    OBJEND = 522,
+    OBJECTIVESSTART = 523,
+    OBJECTIVESEND = 524,
+    VARSTART = 525,
+    VAREND = 526,
+    VARIABLESSTART = 527,
+    VARIABLESEND = 528,
+    GENERALSTART = 529,
+    GENERALEND = 530,
+    SYSTEMSTART = 531,
+    SYSTEMEND = 532,
+    SERVICESTART = 533,
+    SERVICEEND = 534,
+    JOBSTART = 535,
+    JOBEND = 536,
+    OPTIMIZATIONSTART = 537,
+    OPTIMIZATIONEND = 538,
+    ATEQUALITYSTART = 539,
+    ATEQUALITYEND = 540,
+    ATLOWERSTART = 541,
+    ATLOWEREND = 542,
+    ATUPPERSTART = 543,
+    ATUPPEREND = 544,
+    BASICSTART = 545,
+    BASICEND = 546,
+    ISFREESTART = 547,
+    ISFREEEND = 548,
+    SUPERBASICSTART = 549,
+    SUPERBASICEND = 550,
+    UNKNOWNSTART = 551,
+    UNKNOWNEND = 552,
+    SERVICEURISTART = 553,
+    SERVICEURIEND = 554,
+    SERVICENAMESTART = 555,
+    SERVICENAMEEND = 556,
+    INSTANCENAMESTART = 557,
+    INSTANCENAMEEND = 558,
+    JOBIDSTART = 559,
+    JOBIDEND = 560,
+    OTHERSTART = 561,
+    OTHEREND = 562,
+    DUMMY = 563,
+    NONLINEAREXPRESSIONSSTART = 564,
+    NONLINEAREXPRESSIONSEND = 565,
+    NUMBEROFNONLINEAREXPRESSIONS = 566,
+    NLSTART = 567,
+    NLEND = 568,
+    MATRIXEXPRESSIONSSTART = 569,
+    MATRIXEXPRESSIONSEND = 570,
+    NUMBEROFEXPR = 571,
+    EXPRSTART = 572,
+    EXPREND = 573,
+    NUMBEROFMATRIXTERMSATT = 574,
+    MATRIXTERMSTART = 575,
+    MATRIXTERMEND = 576,
+    POWERSTART = 577,
+    POWEREND = 578,
+    PLUSSTART = 579,
+    PLUSEND = 580,
+    MINUSSTART = 581,
+    MINUSEND = 582,
+    DIVIDESTART = 583,
+    DIVIDEEND = 584,
+    LNSTART = 585,
+    LNEND = 586,
+    SQRTSTART = 587,
+    SQRTEND = 588,
+    SUMSTART = 589,
+    SUMEND = 590,
+    PRODUCTSTART = 591,
+    PRODUCTEND = 592,
+    EXPSTART = 593,
+    EXPEND = 594,
+    NEGATESTART = 595,
+    NEGATEEND = 596,
+    IFSTART = 597,
+    IFEND = 598,
+    SQUARESTART = 599,
+    SQUAREEND = 600,
+    COSSTART = 601,
+    COSEND = 602,
+    SINSTART = 603,
+    SINEND = 604,
+    VARIABLESTART = 605,
+    VARIABLEEND = 606,
+    ABSSTART = 607,
+    ABSEND = 608,
+    ERFSTART = 609,
+    ERFEND = 610,
+    MAXSTART = 611,
+    MAXEND = 612,
+    ALLDIFFSTART = 613,
+    ALLDIFFEND = 614,
+    MINSTART = 615,
+    MINEND = 616,
+    ESTART = 617,
+    EEND = 618,
+    PISTART = 619,
+    PIEND = 620,
+    TIMESSTART = 621,
+    TIMESEND = 622,
+    NUMBERSTART = 623,
+    NUMBEREND = 624,
+    MATRIXDETERMINANTSTART = 625,
+    MATRIXDETERMINANTEND = 626,
+    MATRIXTRACESTART = 627,
+    MATRIXTRACEEND = 628,
+    MATRIXTOSCALARSTART = 629,
+    MATRIXTOSCALAREND = 630,
+    MATRIXDIAGONALSTART = 631,
+    MATRIXDIAGONALEND = 632,
+    MATRIXDOTTIMESSTART = 633,
+    MATRIXDOTTIMESEND = 634,
+    MATRIXLOWERTRIANGLESTART = 635,
+    MATRIXLOWERTRIANGLEEND = 636,
+    MATRIXUPPERTRIANGLESTART = 637,
+    MATRIXUPPERTRIANGLEEND = 638,
+    MATRIXMERGESTART = 639,
+    MATRIXMERGEEND = 640,
+    MATRIXMINUSSTART = 641,
+    MATRIXMINUSEND = 642,
+    MATRIXNEGATESTART = 643,
+    MATRIXNEGATEEND = 644,
+    MATRIXPLUSSTART = 645,
+    MATRIXPLUSEND = 646,
+    MATRIXTIMESSTART = 647,
+    MATRIXTIMESEND = 648,
+    MATRIXPRODUCTSTART = 649,
+    MATRIXPRODUCTEND = 650,
+    MATRIXSCALARTIMESSTART = 651,
+    MATRIXSCALARTIMESEND = 652,
+    MATRIXSUBMATRIXATSTART = 653,
+    MATRIXSUBMATRIXATEND = 654,
+    MATRIXTRANSPOSESTART = 655,
+    MATRIXTRANSPOSEEND = 656,
+    MATRIXREFERENCESTART = 657,
+    MATRIXREFERENCEEND = 658,
+    IDENTITYMATRIXSTART = 659,
+    IDENTITYMATRIXEND = 660,
+    MATRIXINVERSESTART = 661,
+    MATRIXINVERSEEND = 662,
+    COMPLEXCONJUGATESTART = 663,
+    COMPLEXCONJUGATEEND = 664,
+    COMPLEXMINUSSTART = 665,
+    COMPLEXMINUSEND = 666,
+    COMPLEXNEGATESTART = 667,
+    COMPLEXNEGATEEND = 668,
+    COMPLEXNUMBERSTART = 669,
+    COMPLEXNUMBEREND = 670,
+    COMPLEXPLUSSTART = 671,
+    COMPLEXPLUSEND = 672,
+    COMPLEXSQUARESTART = 673,
+    COMPLEXSQUAREEND = 674,
+    COMPLEXSUMSTART = 675,
+    COMPLEXSUMEND = 676,
+    COMPLEXTIMESSTART = 677,
+    COMPLEXTIMESEND = 678,
+    CREATECOMPLEXSTART = 679,
+    CREATECOMPLEXEND = 680,
+    EMPTYINCLUDEDIAGONALATT = 681,
+    INCLUDEDIAGONALATT = 682,
+    EMPTYTRANSPOSEATT = 683,
+    TRANSPOSEATT = 684,
+    EMPTYIDATT = 685,
+    IDATT = 686
+  };
 #endif
 /* Tokens.  */
 #define ATTRIBUTETEXT 258
@@ -1124,11 +1126,10 @@ char *parseBase64( const char **p, long int *dataSize, int* osillineno);
 #define EMPTYIDATT 685
 #define IDATT 686
 
-
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
+typedef union YYSTYPE YYSTYPE;
+union YYSTYPE
 {
 
 
@@ -1138,26 +1139,30 @@ typedef union YYSTYPE
     
 
 
-
-} YYSTYPE;
+};
 # define YYSTYPE_IS_TRIVIAL 1
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
+/* Location type.  */
 #if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
-typedef struct YYLTYPE
+typedef struct YYLTYPE YYLTYPE;
+struct YYLTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
-} YYLTYPE;
-# define yyltype YYLTYPE /* obsolescent; will be withdrawn */
+};
 # define YYLTYPE_IS_DECLARED 1
 # define YYLTYPE_IS_TRIVIAL 1
 #endif
 
+
+
+int osilparse (OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData);
+
+#endif /* !YY_OSIL_OS_SRC_OSPARSERS_OSPARSEOSIL_TAB_HPP_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
@@ -1182,11 +1187,8 @@ typedef unsigned char yytype_uint8;
 
 #ifdef YYTYPE_INT8
 typedef YYTYPE_INT8 yytype_int8;
-#elif (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-typedef signed char yytype_int8;
 #else
-typedef short int yytype_int8;
+typedef signed char yytype_int8;
 #endif
 
 #ifdef YYTYPE_UINT16
@@ -1206,8 +1208,7 @@ typedef short int yytype_int16;
 #  define YYSIZE_T __SIZE_TYPE__
 # elif defined size_t
 #  define YYSIZE_T size_t
-# elif ! defined YYSIZE_T && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+# elif ! defined YYSIZE_T
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
@@ -1218,41 +1219,70 @@ typedef short int yytype_int16;
 #define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
 
 #ifndef YY_
-# if YYENABLE_NLS
+# if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
-#   define YY_(msgid) dgettext ("bison-runtime", msgid)
+#   define YY_(Msgid) dgettext ("bison-runtime", Msgid)
 #  endif
 # endif
 # ifndef YY_
-#  define YY_(msgid) msgid
+#  define YY_(Msgid) Msgid
+# endif
+#endif
+
+#ifndef YY_ATTRIBUTE
+# if (defined __GNUC__                                               \
+      && (2 < __GNUC__ || (__GNUC__ == 2 && 96 <= __GNUC_MINOR__)))  \
+     || defined __SUNPRO_C && 0x5110 <= __SUNPRO_C
+#  define YY_ATTRIBUTE(Spec) __attribute__(Spec)
+# else
+#  define YY_ATTRIBUTE(Spec) /* empty */
+# endif
+#endif
+
+#ifndef YY_ATTRIBUTE_PURE
+# define YY_ATTRIBUTE_PURE   YY_ATTRIBUTE ((__pure__))
+#endif
+
+#ifndef YY_ATTRIBUTE_UNUSED
+# define YY_ATTRIBUTE_UNUSED YY_ATTRIBUTE ((__unused__))
+#endif
+
+#if !defined _Noreturn \
+     && (!defined __STDC_VERSION__ || __STDC_VERSION__ < 201112)
+# if defined _MSC_VER && 1200 <= _MSC_VER
+#  define _Noreturn __declspec (noreturn)
+# else
+#  define _Noreturn YY_ATTRIBUTE ((__noreturn__))
 # endif
 #endif
 
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
-# define YYUSE(e) ((void) (e))
+# define YYUSE(E) ((void) (E))
 #else
-# define YYUSE(e) /* empty */
+# define YYUSE(E) /* empty */
 #endif
 
-/* Identity function, used to suppress warnings about constant conditions.  */
-#ifndef lint
-# define YYID(n) (n)
+#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+/* Suppress an incorrect diagnostic about yylval being uninitialized.  */
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
+    _Pragma ("GCC diagnostic push") \
+    _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")\
+    _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END \
+    _Pragma ("GCC diagnostic pop")
 #else
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-static int
-YYID (int yyi)
-#else
-static int
-YYID (yyi)
-    int yyi;
+# define YY_INITIAL_VALUE(Value) Value
 #endif
-{
-  return yyi;
-}
+#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END
 #endif
+#ifndef YY_INITIAL_VALUE
+# define YY_INITIAL_VALUE(Value) /* Nothing. */
+#endif
+
 
 #if ! defined yyoverflow || YYERROR_VERBOSE
 
@@ -1271,11 +1301,11 @@ YYID (yyi)
 #    define alloca _alloca
 #   else
 #    define YYSTACK_ALLOC alloca
-#    if ! defined _ALLOCA_H && ! defined _STDLIB_H && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS
 #     include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
-#     ifndef _STDLIB_H
-#      define _STDLIB_H 1
+      /* Use EXIT_SUCCESS as a witness for stdlib.h.  */
+#     ifndef EXIT_SUCCESS
+#      define EXIT_SUCCESS 0
 #     endif
 #    endif
 #   endif
@@ -1283,8 +1313,8 @@ YYID (yyi)
 # endif
 
 # ifdef YYSTACK_ALLOC
-   /* Pacify GCC's `empty if-body' warning.  */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (YYID (0))
+   /* Pacify GCC's 'empty if-body' warning.  */
+#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
 #  ifndef YYSTACK_ALLOC_MAXIMUM
     /* The OS might guarantee only one guard page at the bottom of the stack,
        and a page size can be as small as 4096 bytes.  So we cannot safely
@@ -1298,25 +1328,23 @@ YYID (yyi)
 #  ifndef YYSTACK_ALLOC_MAXIMUM
 #   define YYSTACK_ALLOC_MAXIMUM YYSIZE_MAXIMUM
 #  endif
-#  if (defined __cplusplus && ! defined _STDLIB_H \
+#  if (defined __cplusplus && ! defined EXIT_SUCCESS \
        && ! ((defined YYMALLOC || defined malloc) \
-	     && (defined YYFREE || defined free)))
+             && (defined YYFREE || defined free)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
-#   ifndef _STDLIB_H
-#    define _STDLIB_H 1
+#   ifndef EXIT_SUCCESS
+#    define EXIT_SUCCESS 0
 #   endif
 #  endif
 #  ifndef YYMALLOC
 #   define YYMALLOC malloc
-#   if ! defined malloc && ! defined _STDLIB_H && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#   if ! defined malloc && ! defined EXIT_SUCCESS
 void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
 #   define YYFREE free
-#   if ! defined free && ! defined _STDLIB_H && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#   if ! defined free && ! defined EXIT_SUCCESS
 void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
@@ -1326,8 +1354,8 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-	 || (defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL \
-	     && defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+         || (defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL \
+             && defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -1346,41 +1374,45 @@ union yyalloc
      ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE) + sizeof (YYLTYPE)) \
       + 2 * YYSTACK_GAP_MAXIMUM)
 
-/* Copy COUNT objects from FROM to TO.  The source and destination do
-   not overlap.  */
-# ifndef YYCOPY
-#  if defined __GNUC__ && 1 < __GNUC__
-#   define YYCOPY(To, From, Count) \
-      __builtin_memcpy (To, From, (Count) * sizeof (*(From)))
-#  else
-#   define YYCOPY(To, From, Count)		\
-      do					\
-	{					\
-	  YYSIZE_T yyi;				\
-	  for (yyi = 0; yyi < (Count); yyi++)	\
-	    (To)[yyi] = (From)[yyi];		\
-	}					\
-      while (YYID (0))
-#  endif
-# endif
+# define YYCOPY_NEEDED 1
 
 /* Relocate STACK from its old location to the new one.  The
    local variables YYSIZE and YYSTACKSIZE give the old and new number of
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack_alloc, Stack)				\
-    do									\
-      {									\
-	YYSIZE_T yynewbytes;						\
-	YYCOPY (&yyptr->Stack_alloc, Stack, yysize);			\
-	Stack = &yyptr->Stack_alloc;					\
-	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
-	yyptr += yynewbytes / sizeof (*yyptr);				\
-      }									\
-    while (YYID (0))
+# define YYSTACK_RELOCATE(Stack_alloc, Stack)                           \
+    do                                                                  \
+      {                                                                 \
+        YYSIZE_T yynewbytes;                                            \
+        YYCOPY (&yyptr->Stack_alloc, Stack, yysize);                    \
+        Stack = &yyptr->Stack_alloc;                                    \
+        yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
+        yyptr += yynewbytes / sizeof (*yyptr);                          \
+      }                                                                 \
+    while (0)
 
 #endif
+
+#if defined YYCOPY_NEEDED && YYCOPY_NEEDED
+/* Copy COUNT objects from SRC to DST.  The source and destination do
+   not overlap.  */
+# ifndef YYCOPY
+#  if defined __GNUC__ && 1 < __GNUC__
+#   define YYCOPY(Dst, Src, Count) \
+      __builtin_memcpy (Dst, Src, (Count) * sizeof (*(Src)))
+#  else
+#   define YYCOPY(Dst, Src, Count)              \
+      do                                        \
+        {                                       \
+          YYSIZE_T yyi;                         \
+          for (yyi = 0; yyi < (Count); yyi++)   \
+            (Dst)[yyi] = (Src)[yyi];            \
+        }                                       \
+      while (0)
+#  endif
+# endif
+#endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
@@ -1393,17 +1425,19 @@ union yyalloc
 #define YYNNTS  732
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  1091
-/* YYNRULES -- Number of states.  */
+/* YYNSTATES -- Number of states.  */
 #define YYNSTATES  1690
 
-/* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
+/* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
+   by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   686
 
-#define YYTRANSLATE(YYX)						\
+#define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
-/* YYTRANSLATE[YYLEX] -- Bison symbol number corresponding to YYLEX.  */
+/* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
+   as returned by yylex, without out-of-bounds checking.  */
 static const yytype_uint16 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,   433,
@@ -1478,415 +1512,7 @@ static const yytype_uint16 yytranslate[] =
 };
 
 #if YYDEBUG
-/* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
-   YYRHS.  */
-static const yytype_uint16 yyprhs[] =
-{
-       0,     0,     3,    12,    14,    16,    18,    20,    21,    22,
-      27,    29,    35,    36,    39,    43,    45,    47,    50,    51,
-      54,    56,    58,    60,    62,    67,    72,    77,    82,    83,
-      87,    89,    91,    93,    95,    97,   101,   102,   105,   106,
-     110,   112,   114,   116,   118,   120,   124,   125,   128,   130,
-     132,   134,   136,   138,   140,   142,   144,   146,   150,   152,
-     154,   155,   158,   160,   162,   164,   166,   169,   173,   175,
-     177,   178,   181,   183,   185,   187,   189,   192,   196,   198,
-     200,   201,   204,   206,   208,   210,   212,   216,   218,   219,
-     222,   226,   228,   230,   231,   234,   236,   238,   240,   243,
-     245,   249,   251,   253,   254,   257,   259,   261,   263,   265,
-     270,   272,   275,   279,   281,   283,   284,   287,   289,   291,
-     293,   295,   297,   299,   301,   304,   308,   310,   312,   313,
-     316,   318,   320,   322,   324,   326,   328,   330,   332,   335,
-     339,   341,   343,   344,   347,   349,   351,   353,   355,   357,
-     360,   364,   366,   368,   369,   372,   374,   376,   378,   382,
-     386,   388,   390,   392,   394,   396,   400,   402,   404,   406,
-     410,   412,   414,   415,   418,   420,   422,   424,   428,   432,
-     434,   436,   438,   440,   442,   446,   448,   450,   452,   453,
-     456,   458,   460,   462,   464,   471,   472,   476,   478,   480,
-     482,   484,   486,   490,   492,   493,   496,   500,   502,   504,
-     505,   508,   510,   512,   514,   516,   518,   520,   522,   524,
-     526,   528,   530,   532,   535,   536,   540,   542,   544,   546,
-     548,   550,   554,   556,   557,   560,   564,   566,   568,   569,
-     572,   574,   576,   578,   580,   582,   584,   586,   588,   590,
-     593,   594,   598,   600,   602,   604,   606,   608,   612,   614,
-     615,   618,   622,   624,   626,   627,   630,   632,   634,   636,
-     638,   640,   642,   644,   646,   648,   650,   653,   654,   657,
-     659,   661,   663,   665,   668,   672,   676,   681,   683,   689,
-     691,   694,   695,   700,   701,   705,   707,   711,   715,   716,
-     720,   721,   724,   726,   728,   733,   738,   740,   744,   746,
-     749,   751,   754,   755,   760,   765,   767,   770,   771,   775,
-     776,   779,   781,   783,   788,   793,   795,   799,   801,   804,
-     806,   809,   810,   815,   820,   822,   825,   826,   830,   831,
-     834,   836,   838,   843,   845,   849,   851,   854,   856,   859,
-     860,   865,   870,   872,   875,   876,   881,   883,   886,   887,
-     890,   892,   894,   899,   904,   909,   914,   919,   924,   929,
-     934,   939,   944,   949,   954,   959,   963,   968,   973,   978,
-     983,   988,   993,   998,  1003,  1008,  1013,  1018,  1022,  1026,
-    1029,  1030,  1033,  1035,  1037,  1039,  1041,  1043,  1045,  1047,
-    1048,  1051,  1055,  1057,  1059,  1060,  1063,  1065,  1067,  1071,
-    1075,  1077,  1079,  1082,  1084,  1088,  1090,  1092,  1093,  1096,
-    1100,  1102,  1103,  1105,  1109,  1113,  1115,  1117,  1120,  1122,
-    1126,  1128,  1129,  1132,  1136,  1138,  1139,  1141,  1145,  1149,
-    1151,  1153,  1154,  1157,  1159,  1161,  1163,  1165,  1167,  1169,
-    1171,  1173,  1177,  1180,  1181,  1185,  1187,  1189,  1190,  1193,
-    1195,  1197,  1199,  1201,  1203,  1205,  1207,  1209,  1211,  1214,
-    1216,  1217,  1220,  1222,  1224,  1226,  1228,  1230,  1232,  1234,
-    1236,  1238,  1240,  1242,  1247,  1249,  1251,  1252,  1255,  1257,
-    1259,  1263,  1264,  1267,  1270,  1272,  1274,  1276,  1278,  1282,
-    1284,  1285,  1288,  1290,  1292,  1294,  1296,  1300,  1302,  1305,
-    1307,  1309,  1311,  1313,  1317,  1319,  1324,  1326,  1328,  1329,
-    1332,  1334,  1336,  1340,  1343,  1344,  1347,  1349,  1351,  1353,
-    1355,  1359,  1361,  1366,  1368,  1370,  1371,  1374,  1376,  1378,
-    1382,  1385,  1386,  1389,  1391,  1393,  1395,  1397,  1401,  1403,
-    1404,  1407,  1411,  1413,  1415,  1416,  1419,  1421,  1423,  1425,
-    1427,  1429,  1433,  1434,  1437,  1441,  1443,  1444,  1446,  1450,
-    1455,  1457,  1459,  1460,  1463,  1465,  1467,  1471,  1474,  1475,
-    1478,  1480,  1482,  1484,  1486,  1490,  1491,  1494,  1497,  1499,
-    1501,  1503,  1505,  1509,  1514,  1516,  1518,  1519,  1522,  1524,
-    1526,  1530,  1533,  1534,  1537,  1539,  1541,  1543,  1545,  1549,
-    1550,  1553,  1556,  1558,  1560,  1562,  1564,  1568,  1573,  1575,
-    1577,  1578,  1581,  1583,  1585,  1589,  1592,  1593,  1596,  1598,
-    1600,  1602,  1604,  1608,  1610,  1615,  1617,  1619,  1620,  1623,
-    1625,  1627,  1631,  1634,  1635,  1638,  1640,  1642,  1644,  1646,
-    1650,  1651,  1654,  1658,  1660,  1661,  1664,  1666,  1668,  1670,
-    1674,  1679,  1681,  1683,  1684,  1687,  1689,  1691,  1695,  1698,
-    1699,  1702,  1704,  1706,  1708,  1710,  1714,  1715,  1718,  1722,
-    1724,  1725,  1728,  1730,  1732,  1734,  1737,  1739,  1744,  1746,
-    1748,  1749,  1752,  1754,  1756,  1760,  1763,  1764,  1767,  1769,
-    1771,  1773,  1775,  1779,  1781,  1787,  1789,  1790,  1792,  1794,
-    1798,  1800,  1802,  1808,  1810,  1814,  1816,  1818,  1820,  1822,
-    1824,  1828,  1830,  1834,  1836,  1838,  1840,  1842,  1844,  1848,
-    1850,  1851,  1854,  1858,  1860,  1862,  1863,  1866,  1868,  1870,
-    1872,  1874,  1876,  1878,  1880,  1884,  1889,  1894,  1899,  1904,
-    1909,  1914,  1919,  1924,  1929,  1934,  1939,  1944,  1949,  1954,
-    1959,  1964,  1969,  1974,  1979,  1984,  1989,  1994,  1999,  2004,
-    2006,  2008,  2010,  2014,  2016,  2018,  2020,  2024,  2026,  2028,
-    2030,  2034,  2036,  2038,  2040,  2044,  2046,  2048,  2050,  2054,
-    2056,  2058,  2060,  2064,  2066,  2068,  2070,  2074,  2076,  2078,
-    2080,  2084,  2086,  2088,  2090,  2094,  2095,  2100,  2102,  2108,
-    2109,  2112,  2118,  2120,  2122,  2123,  2126,  2128,  2130,  2132,
-    2134,  2136,  2138,  2140,  2142,  2144,  2146,  2148,  2150,  2152,
-    2154,  2156,  2158,  2160,  2162,  2164,  2166,  2168,  2170,  2172,
-    2174,  2176,  2178,  2180,  2182,  2184,  2185,  2189,  2191,  2194,
-    2195,  2199,  2201,  2204,  2205,  2211,  2212,  2218,  2219,  2225,
-    2226,  2231,  2232,  2238,  2239,  2245,  2246,  2251,  2252,  2257,
-    2258,  2263,  2264,  2269,  2270,  2275,  2276,  2281,  2285,  2287,
-    2289,  2290,  2295,  2296,  2303,  2304,  2309,  2310,  2315,  2316,
-    2321,  2325,  2327,  2329,  2332,  2333,  2336,  2338,  2340,  2342,
-    2343,  2348,  2349,  2354,  2356,  2359,  2360,  2365,  2366,  2369,
-    2371,  2373,  2378,  2383,  2384,  2389,  2390,  2393,  2394,  2399,
-    2400,  2403,  2404,  2409,  2410,  2413,  2414,  2419,  2420,  2423,
-    2424,  2429,  2430,  2433,  2435,  2437,  2439,  2441,  2443,  2445,
-    2447,  2449,  2451,  2453,  2455,  2457,  2459,  2461,  2463,  2465,
-    2467,  2469,  2471,  2475,  2477,  2478,  2481,  2483,  2485,  2487,
-    2490,  2495,  2499,  2503,  2505,  2507,  2510,  2515,  2519,  2521,
-    2523,  2526,  2531,  2535,  2537,  2539,  2542,  2547,  2550,  2552,
-    2555,  2558,  2560,  2564,  2567,  2569,  2572,  2575,  2577,  2580,
-    2585,  2587,  2588,  2590,  2593,  2598,  2600,  2601,  2603,  2606,
-    2610,  2613,  2615,  2617,  2620,  2623,  2625,  2629,  2632,  2634,
-    2637,  2640,  2642,  2646,  2649,  2651,  2655,  2656,  2661,  2662,
-    2665,  2668,  2670,  2674,  2677,  2679,  2686,  2689,  2691,  2694,
-    2695,  2699,  2701,  2703,  2708,  2710,  2712,  2714,  2718,  2719,
-    2722,  2728,  2730,  2732,  2733,  2736,  2738,  2740,  2742,  2744,
-    2746,  2748,  2750,  2752,  2754,  2756,  2758,  2760,  2762,  2766,
-    2768,  2770,  2773,  2775,  2776,  2779,  2781,  2783,  2787,  2789,
-    2793,  2797,  2799,  2803,  2804,  2810,  2811,  2814,  2818,  2820,
-    2824,  2828,  2830,  2833,  2837,  2839,  2842,  2846,  2848,  2852,
-    2856,  2858
-};
-
-/* YYRHS -- A `-1'-separated list of the rules' RHS.  */
-static const yytype_int16 yyrhs[] =
-{
-     437,     0,    -1,   441,   973,   454,   461,   551,   598,   438,
-     439,    -1,    42,    -1,    41,    -1,   440,    -1,    40,    -1,
-      -1,    -1,   442,   443,   444,    44,    -1,    43,    -1,    15,
-       8,     6,     8,    12,    -1,    -1,   444,   445,    -1,   446,
-     448,   447,    -1,    45,    -1,    11,    -1,    12,    46,    -1,
-      -1,   448,   449,    -1,   450,    -1,   451,    -1,   452,    -1,
-     453,    -1,    18,     8,     6,     8,    -1,    19,     8,     6,
-       8,    -1,   202,     8,   677,     8,    -1,   198,     8,     6,
-       8,    -1,    -1,   455,   456,   457,    -1,   204,    -1,   655,
-      -1,   458,    -1,   459,    -1,    11,    -1,    12,   460,   205,
-      -1,    -1,   460,   710,    -1,    -1,   462,   463,   464,    -1,
-      47,    -1,   656,    -1,   465,    -1,   466,    -1,    11,    -1,
-      12,   467,    48,    -1,    -1,   467,   468,    -1,   469,    -1,
-     475,    -1,   481,    -1,   496,    -1,   503,    -1,   509,    -1,
-     515,    -1,   521,    -1,   536,    -1,   470,   471,   474,    -1,
-      49,    -1,   472,    -1,    -1,   472,   473,    -1,   925,    -1,
-     923,    -1,   949,    -1,    11,    -1,    12,    50,    -1,   476,
-     477,   480,    -1,    51,    -1,   478,    -1,    -1,   478,   479,
-      -1,   925,    -1,   923,    -1,   949,    -1,    11,    -1,    12,
-      52,    -1,   482,   483,   486,    -1,    53,    -1,   484,    -1,
-      -1,   484,   485,    -1,   925,    -1,   923,    -1,   949,    -1,
-      11,    -1,    12,   487,   495,    -1,   488,    -1,    -1,   488,
-     489,    -1,   490,   491,   494,    -1,    71,    -1,   492,    -1,
-      -1,   492,   493,    -1,   961,    -1,   938,    -1,    11,    -1,
-      12,    72,    -1,    54,    -1,   497,   498,   502,    -1,    55,
-      -1,   499,    -1,    -1,   499,   500,    -1,   925,    -1,   923,
-      -1,   501,    -1,   949,    -1,    29,     8,     6,     8,    -1,
-      11,    -1,    12,    56,    -1,   504,   505,   508,    -1,    57,
-      -1,   506,    -1,    -1,   506,   507,    -1,   925,    -1,   923,
-      -1,   949,    -1,   661,    -1,   660,    -1,   662,    -1,    11,
-      -1,    12,    58,    -1,   510,   511,   514,    -1,    59,    -1,
-     512,    -1,    -1,   512,   513,    -1,   925,    -1,   923,    -1,
-     949,    -1,   661,    -1,   660,    -1,   663,    -1,   664,    -1,
-      11,    -1,    12,    60,    -1,   516,   517,   520,    -1,    61,
-      -1,   518,    -1,    -1,   518,   519,    -1,   925,    -1,   923,
-      -1,   949,    -1,   665,    -1,    11,    -1,    12,    62,    -1,
-     522,   523,   526,    -1,    63,    -1,   524,    -1,    -1,   524,
-     525,    -1,   925,    -1,   923,    -1,   949,    -1,    12,   527,
-     535,    -1,   528,   529,   530,    -1,    73,    -1,   924,    -1,
-     531,    -1,   532,    -1,    11,    -1,    12,   533,   534,    -1,
-     681,    -1,    74,    -1,    64,    -1,   537,   538,   541,    -1,
-      65,    -1,   539,    -1,    -1,   539,   540,    -1,   925,    -1,
-     923,    -1,   949,    -1,    12,   542,   550,    -1,   543,   544,
-     545,    -1,    75,    -1,   924,    -1,   546,    -1,   547,    -1,
-      11,    -1,    12,   548,   549,    -1,   681,    -1,    76,    -1,
-      66,    -1,    -1,   552,   553,    -1,   248,    -1,   554,    -1,
-     555,    -1,    11,    -1,    12,   556,   570,   584,  1123,   249,
-      -1,    -1,   557,   558,   559,    -1,   250,    -1,   657,    -1,
-     560,    -1,   561,    -1,    11,    -1,    12,   563,   562,    -1,
-     251,    -1,    -1,   563,   564,    -1,   565,   566,   569,    -1,
-     252,    -1,   567,    -1,    -1,   567,   568,    -1,   925,    -1,
-     923,    -1,   670,    -1,   671,    -1,   667,    -1,   674,    -1,
-     668,    -1,   675,    -1,   949,    -1,   970,    -1,   938,    -1,
-      11,    -1,    12,   253,    -1,    -1,   571,   572,   573,    -1,
-     254,    -1,   658,    -1,   574,    -1,   575,    -1,    11,    -1,
-      12,   577,   576,    -1,   255,    -1,    -1,   577,   578,    -1,
-     579,   580,   583,    -1,   256,    -1,   581,    -1,    -1,   581,
-     582,    -1,   925,    -1,   923,    -1,   670,    -1,   672,    -1,
-     676,    -1,   669,    -1,   949,    -1,   938,    -1,    11,    -1,
-      12,   257,    -1,    -1,   585,   586,   587,    -1,   258,    -1,
-     659,    -1,   588,    -1,   589,    -1,    11,    -1,    12,   591,
-     590,    -1,   259,    -1,    -1,   591,   592,    -1,   593,   594,
-     597,    -1,   260,    -1,   595,    -1,    -1,   595,   596,    -1,
-     925,    -1,   923,    -1,   670,    -1,   673,    -1,   667,    -1,
-     674,    -1,   668,    -1,   675,    -1,   949,    -1,    11,    -1,
-      12,   261,    -1,    -1,   599,   600,    -1,    77,    -1,   601,
-      -1,   602,    -1,    11,    -1,    12,    78,    -1,    12,   603,
-      78,    -1,    12,   647,    78,    -1,   604,   605,   606,    80,
-      -1,    79,    -1,    17,     8,     6,     8,    12,    -1,   607,
-      -1,   606,   607,    -1,    -1,   608,    81,   609,   610,    -1,
-      -1,   133,     3,     8,    -1,    11,    -1,    12,   611,    82,
-      -1,   612,   624,   636,    -1,    -1,   272,   613,   617,    -1,
-      -1,   613,   614,    -1,   615,    -1,   616,    -1,   177,     8,
-       6,     8,    -1,    22,     8,     6,     8,    -1,   618,    -1,
-      12,   619,   273,    -1,    11,    -1,    12,   273,    -1,   620,
-      -1,   619,   620,    -1,    -1,   621,   270,   622,   623,    -1,
-     198,     8,     6,     8,    -1,    11,    -1,    12,   271,    -1,
-      -1,   264,   625,   629,    -1,    -1,   625,   626,    -1,   627,
-      -1,   628,    -1,   171,     8,     6,     8,    -1,    22,     8,
-       6,     8,    -1,   630,    -1,    12,   631,   265,    -1,    11,
-      -1,    12,   265,    -1,   632,    -1,   631,   632,    -1,    -1,
-     633,   262,   634,   635,    -1,   198,     8,     6,     8,    -1,
-      11,    -1,    12,   263,    -1,    -1,   268,   637,   640,    -1,
-      -1,   637,   638,    -1,   639,    -1,   652,    -1,   174,     8,
-       6,     8,    -1,   641,    -1,    12,   642,   269,    -1,    11,
-      -1,    12,   269,    -1,   643,    -1,   642,   643,    -1,    -1,
-     644,   266,   645,   646,    -1,   198,     8,     6,     8,    -1,
-      11,    -1,    12,   267,    -1,    -1,   648,    83,   650,   649,
-      -1,    11,    -1,    12,    84,    -1,    -1,   650,   651,    -1,
-     653,    -1,   654,    -1,    22,     8,     6,     8,    -1,    20,
-       8,   677,     8,    -1,    21,     8,   677,     8,    -1,   169,
-       8,     6,     8,    -1,    16,     8,     6,     8,    -1,   182,
-       8,     6,     8,    -1,   181,     8,     6,     8,    -1,   180,
-       8,     6,     8,    -1,    35,     8,   677,     8,    -1,    36,
-       8,     6,     8,    -1,    37,     8,     6,     8,    -1,    38,
-       8,     6,     8,    -1,    39,     8,     6,     8,    -1,    14,
-       3,     8,    -1,    23,     8,     6,     8,    -1,    24,     8,
-       6,     8,    -1,    26,     8,     6,     8,    -1,    34,     8,
-       6,     8,    -1,    28,     8,     6,     8,    -1,    30,     8,
-       6,     8,    -1,    31,     8,     6,     8,    -1,    32,     8,
-       6,     8,    -1,    25,     8,     6,     8,    -1,    27,     8,
-       6,     8,    -1,    33,     8,     6,     8,    -1,   679,     6,
-     679,    -1,   679,     7,   679,    -1,   679,     8,    -1,    -1,
-     679,   680,    -1,   432,    -1,   433,    -1,   434,    -1,   435,
-      -1,   682,    -1,   683,    -1,   690,    -1,    -1,   683,   684,
-      -1,   685,   686,   689,    -1,   113,    -1,   687,    -1,    -1,
-     687,   688,    -1,   938,    -1,   937,    -1,    12,     6,   114,
-      -1,   121,   928,   691,    -1,   692,    -1,   693,    -1,    12,
-     122,    -1,    11,    -1,    12,     4,   122,    -1,   695,    -1,
-     700,    -1,    -1,   695,   696,    -1,   697,   698,   699,    -1,
-     113,    -1,    -1,   938,    -1,    12,   677,   114,    -1,   121,
-     928,   701,    -1,   702,    -1,   703,    -1,    12,   122,    -1,
-      11,    -1,    12,     4,   122,    -1,   705,    -1,    -1,   705,
-     706,    -1,   707,   708,   709,    -1,   113,    -1,    -1,   938,
-      -1,    12,     4,   114,    -1,   711,   712,   715,    -1,   206,
-      -1,   713,    -1,    -1,   713,   714,    -1,   958,    -1,   925,
-      -1,   923,    -1,   949,    -1,   961,    -1,   716,    -1,   717,
-      -1,    11,    -1,    12,   718,   207,    -1,   719,   725,    -1,
-      -1,   720,   721,   724,    -1,   209,    -1,   722,    -1,    -1,
-     722,   723,    -1,   929,    -1,   939,    -1,   940,    -1,   930,
-      -1,   931,    -1,   932,    -1,   933,    -1,   946,    -1,   945,
-      -1,    12,   208,    -1,    11,    -1,    -1,   725,   726,    -1,
-     727,    -1,   859,    -1,   877,    -1,   752,    -1,   828,    -1,
-     841,    -1,   765,    -1,   792,    -1,   810,    -1,   890,    -1,
-     894,    -1,   728,   729,    12,   732,    -1,   220,    -1,   730,
-      -1,    -1,   730,   731,    -1,   926,    -1,   952,    -1,   734,
-     733,   221,    -1,    -1,   740,   746,    -1,   735,   736,    -1,
-     238,    -1,   737,    -1,   738,    -1,    11,    -1,    12,   739,
-     239,    -1,   681,    -1,    -1,   741,   742,    -1,   240,    -1,
-     743,    -1,   744,    -1,    11,    -1,    12,   745,   241,    -1,
-     681,    -1,   747,   748,    -1,   242,    -1,   749,    -1,   750,
-      -1,    11,    -1,    12,   751,   243,    -1,   694,    -1,   753,
-     754,    12,   757,    -1,   224,    -1,   755,    -1,    -1,   755,
-     756,    -1,   926,    -1,   952,    -1,   734,   758,   225,    -1,
-     740,   759,    -1,    -1,   760,   761,    -1,   242,    -1,   762,
-      -1,   763,    -1,    11,    -1,    12,   764,   243,    -1,   681,
-      -1,   766,   767,    12,   770,    -1,   226,    -1,   768,    -1,
-      -1,   768,   769,    -1,   926,    -1,   952,    -1,   734,   771,
-     227,    -1,   740,   772,    -1,    -1,   773,   774,    -1,   242,
-      -1,   775,    -1,   776,    -1,    11,    -1,    12,   777,   243,
-      -1,   778,    -1,    -1,   778,   779,    -1,   780,   781,   784,
-      -1,   113,    -1,   782,    -1,    -1,   782,   783,    -1,   927,
-      -1,   942,    -1,   785,    -1,   786,    -1,    11,    -1,    12,
-     787,   114,    -1,    -1,   787,   788,    -1,   789,   790,   791,
-      -1,   244,    -1,    -1,   941,    -1,    12,     6,   245,    -1,
-     793,   794,    12,   797,    -1,   232,    -1,   795,    -1,    -1,
-     795,   796,    -1,   926,    -1,   952,    -1,   734,   798,   233,
-      -1,   740,   799,    -1,    -1,   800,   801,    -1,   242,    -1,
-     802,    -1,   803,    -1,    11,    -1,    12,   804,   243,    -1,
-      -1,   804,   805,    -1,   806,   807,    -1,   113,    -1,   808,
-      -1,   809,    -1,    11,    -1,    12,   982,   114,    -1,   811,
-     812,    12,   815,    -1,   234,    -1,   813,    -1,    -1,   813,
-     814,    -1,   926,    -1,   952,    -1,   734,   816,   235,    -1,
-     740,   817,    -1,    -1,   818,   819,    -1,   242,    -1,   820,
-      -1,   821,    -1,    11,    -1,    12,   822,   243,    -1,    -1,
-     822,   823,    -1,   824,   825,    -1,   113,    -1,   826,    -1,
-     827,    -1,    11,    -1,    12,  1137,   114,    -1,   829,   830,
-      12,   833,    -1,   230,    -1,   831,    -1,    -1,   831,   832,
-      -1,   926,    -1,   952,    -1,   734,   834,   231,    -1,   740,
-     835,    -1,    -1,   836,   837,    -1,   242,    -1,   838,    -1,
-     839,    -1,    11,    -1,    12,   840,   243,    -1,   682,    -1,
-     842,   843,    12,   846,    -1,   228,    -1,   844,    -1,    -1,
-     844,   845,    -1,   926,    -1,   952,    -1,   734,   847,   229,
-      -1,   740,   848,    -1,    -1,   849,   850,    -1,   242,    -1,
-     851,    -1,   852,    -1,    11,    -1,    12,   853,   243,    -1,
-      -1,   853,   854,    -1,   855,   856,   858,    -1,   113,    -1,
-      -1,   856,   857,    -1,   967,    -1,   938,    -1,   937,    -1,
-      12,     6,   114,    -1,   860,   861,    12,   864,    -1,   222,
-      -1,   862,    -1,    -1,   862,   863,    -1,   926,    -1,   952,
-      -1,   734,   865,   223,    -1,   740,   866,    -1,    -1,   867,
-     868,    -1,   242,    -1,   869,    -1,   870,    -1,    11,    -1,
-      12,   871,   243,    -1,    -1,   871,   872,    -1,   873,   874,
-     876,    -1,   113,    -1,    -1,   874,   875,    -1,   944,    -1,
-     943,    -1,   938,    -1,    12,   114,    -1,    11,    -1,   878,
-     879,    12,   882,    -1,   236,    -1,   880,    -1,    -1,   880,
-     881,    -1,   926,    -1,   952,    -1,   734,   883,   237,    -1,
-     740,   884,    -1,    -1,   885,   886,    -1,   242,    -1,   887,
-      -1,   888,    -1,    11,    -1,    12,   889,   243,    -1,   704,
-      -1,   891,   892,    12,  1056,   893,    -1,   246,    -1,    -1,
-     955,    -1,   247,    -1,   895,   896,   897,    -1,   210,    -1,
-     922,    -1,    12,   899,   906,   913,   898,    -1,   211,    -1,
-     900,   901,   902,    -1,   214,    -1,   924,    -1,   903,    -1,
-     904,    -1,    11,    -1,    12,   905,   215,    -1,   682,    -1,
-     907,   908,   909,    -1,   216,    -1,   924,    -1,   910,    -1,
-     911,    -1,    11,    -1,    12,   912,   217,    -1,   682,    -1,
-      -1,   913,   914,    -1,   915,   916,   919,    -1,   212,    -1,
-     917,    -1,    -1,   917,   918,    -1,   934,    -1,   935,    -1,
-     958,    -1,   961,    -1,   920,    -1,   921,    -1,    11,    -1,
-      12,   718,   213,    -1,   166,     8,     6,     8,    -1,   167,
-       8,     6,     8,    -1,   123,     8,     6,     8,    -1,   168,
-       8,     6,     8,    -1,   170,     8,     6,     8,    -1,   179,
-       8,     6,     8,    -1,   201,     8,     6,     8,    -1,   183,
-       8,     6,     8,    -1,   186,     8,     6,     8,    -1,   187,
-       8,     6,     8,    -1,   188,     8,     6,     8,    -1,   189,
-       8,     6,     8,    -1,   191,     8,     6,     8,    -1,   192,
-       8,     6,     8,    -1,   198,     8,     6,     8,    -1,   199,
-       8,     6,     8,    -1,   200,     8,     6,     8,    -1,   184,
-       8,     6,     8,    -1,   185,     8,     6,     8,    -1,   202,
-       8,   677,     8,    -1,   203,     8,   677,     8,    -1,   194,
-       8,   677,     8,    -1,   193,     8,   677,     8,    -1,   190,
-       8,   677,     8,    -1,   947,    -1,   948,    -1,   164,    -1,
-     165,     3,   678,    -1,   950,    -1,   951,    -1,   132,    -1,
-     133,     3,     8,    -1,   953,    -1,   954,    -1,   162,    -1,
-     163,     3,     8,    -1,   956,    -1,   957,    -1,   138,    -1,
-     139,     3,     8,    -1,   959,    -1,   960,    -1,   160,    -1,
-     161,     3,     8,    -1,   962,    -1,   963,    -1,   134,    -1,
-     135,     3,     8,    -1,   965,    -1,   966,    -1,   142,    -1,
-     143,     3,     8,    -1,   968,    -1,   969,    -1,   144,    -1,
-     145,     3,     8,    -1,   971,    -1,   972,    -1,   150,    -1,
-     151,     3,     8,    -1,    -1,   974,   975,   976,   310,    -1,
-     309,    -1,   311,     8,     6,     8,    12,    -1,    -1,   976,
-     977,    -1,   978,   979,    12,   982,   313,    -1,   312,    -1,
-     980,    -1,    -1,   980,   981,    -1,   936,    -1,   955,    -1,
-    1026,    -1,  1033,    -1,   989,    -1,   991,    -1,  1041,    -1,
-     993,    -1,   995,    -1,   997,    -1,   999,    -1,  1053,    -1,
-    1001,    -1,  1003,    -1,  1005,    -1,  1009,    -1,  1007,    -1,
-    1011,    -1,  1018,    -1,  1013,    -1,  1016,    -1,  1047,    -1,
-    1050,    -1,   983,    -1,   986,    -1,  1044,    -1,  1020,    -1,
-    1022,    -1,  1024,    -1,    -1,   362,   984,   985,    -1,    11,
-      -1,    12,   363,    -1,    -1,   364,   987,   988,    -1,    11,
-      -1,    12,   365,    -1,    -1,   366,   990,   982,   982,   367,
-      -1,    -1,   324,   992,   982,   982,   325,    -1,    -1,   326,
-     994,   982,   982,   327,    -1,    -1,   340,   996,   982,   341,
-      -1,    -1,   328,   998,   982,   982,   329,    -1,    -1,   322,
-    1000,   982,   982,   323,    -1,    -1,   330,  1002,   982,   331,
-      -1,    -1,   332,  1004,   982,   333,    -1,    -1,   344,  1006,
-     982,   345,    -1,    -1,   346,  1008,   982,   347,    -1,    -1,
-     348,  1010,   982,   349,    -1,    -1,   338,  1012,   982,   339,
-      -1,  1014,   982,  1015,    -1,   352,    -1,   353,    -1,    -1,
-     354,  1017,   982,   355,    -1,    -1,   342,  1019,   982,   982,
-     982,   343,    -1,    -1,   370,  1021,  1056,   371,    -1,    -1,
-     372,  1023,  1056,   373,    -1,    -1,   374,  1025,  1056,   375,
-      -1,  1027,  1029,  1028,    -1,   368,    -1,    11,    -1,    12,
-     369,    -1,    -1,  1029,  1030,    -1,   961,    -1,   964,    -1,
-    1031,    -1,    -1,   431,     3,  1032,     8,    -1,    -1,   350,
-    1034,  1037,  1035,    -1,    11,    -1,    12,   351,    -1,    -1,
-      12,   982,  1036,   351,    -1,    -1,  1037,  1038,    -1,  1039,
-      -1,  1040,    -1,   202,     8,   677,     8,    -1,   198,     8,
-       6,     8,    -1,    -1,   334,  1042,  1043,   335,    -1,    -1,
-    1043,   982,    -1,    -1,   358,  1045,  1046,   359,    -1,    -1,
-    1046,   982,    -1,    -1,   356,  1048,  1049,   357,    -1,    -1,
-    1049,   982,    -1,    -1,   360,  1051,  1052,   361,    -1,    -1,
-    1052,   982,    -1,    -1,   336,  1054,  1055,   337,    -1,    -1,
-    1055,   982,    -1,  1057,    -1,  1063,    -1,  1067,    -1,  1071,
-      -1,  1075,    -1,  1078,    -1,  1084,    -1,  1087,    -1,  1091,
-      -1,  1096,    -1,  1099,    -1,  1102,    -1,  1105,    -1,  1108,
-      -1,  1111,    -1,  1114,    -1,  1117,    -1,  1120,    -1,  1081,
-      -1,  1058,  1059,  1061,    -1,   402,    -1,    -1,  1059,  1060,
-      -1,   666,    -1,  1062,    -1,    11,    -1,    12,   403,    -1,
-     198,     8,     6,     8,    -1,   429,     3,     8,    -1,  1064,
-    1066,  1065,    -1,   252,    -1,    11,    -1,    12,   253,    -1,
-     198,     8,     6,     8,    -1,  1068,  1070,  1069,    -1,   256,
-      -1,    11,    -1,    12,   257,    -1,   198,     8,     6,     8,
-      -1,  1072,  1074,  1073,    -1,   260,    -1,    11,    -1,    12,
-     261,    -1,   198,     8,     6,     8,    -1,  1076,  1077,    -1,
-     376,    -1,  1056,   377,    -1,  1079,  1080,    -1,   378,    -1,
-    1056,  1056,   379,    -1,  1082,  1083,    -1,   404,    -1,   982,
-     405,    -1,  1085,  1086,    -1,   406,    -1,  1056,   407,    -1,
-    1088,  1089,    12,  1090,    -1,   380,    -1,    -1,  1095,    -1,
-    1056,   381,    -1,  1092,  1093,    12,  1094,    -1,   382,    -1,
-      -1,  1095,    -1,  1056,   383,    -1,   427,     3,     8,    -1,
-    1097,  1098,    -1,   384,    -1,    11,    -1,    12,   385,    -1,
-    1100,  1101,    -1,   386,    -1,  1056,  1056,   387,    -1,  1103,
-    1104,    -1,   388,    -1,  1056,   389,    -1,  1106,  1107,    -1,
-     390,    -1,  1056,  1056,   391,    -1,  1109,  1110,    -1,   392,
-      -1,  1056,  1056,   393,    -1,    -1,   394,  1112,  1113,   395,
-      -1,    -1,  1113,  1056,    -1,  1115,  1116,    -1,   396,    -1,
-    1056,  1136,   397,    -1,  1118,  1119,    -1,   398,    -1,   982,
-     982,   982,   982,  1056,   399,    -1,  1121,  1122,    -1,   400,
-      -1,  1056,   401,    -1,    -1,  1124,  1125,  1127,    -1,   314,
-      -1,  1126,    -1,   316,     8,     6,     8,    -1,  1128,    -1,
-    1129,    -1,    11,    -1,    12,  1130,   315,    -1,    -1,  1130,
-    1131,    -1,  1132,  1133,    12,  1056,   318,    -1,   317,    -1,
-    1134,    -1,    -1,  1134,  1135,    -1,   936,    -1,   955,    -1,
-     982,    -1,  1137,    -1,  1138,    -1,  1144,    -1,  1147,    -1,
-    1150,    -1,  1153,    -1,  1156,    -1,  1159,    -1,  1162,    -1,
-    1165,    -1,  1139,  1141,  1140,    -1,   414,    -1,    11,    -1,
-      12,   415,    -1,  1142,    -1,    -1,  1142,  1143,    -1,   944,
-      -1,   943,    -1,  1145,    12,  1146,    -1,   424,    -1,   982,
-     982,   425,    -1,  1148,    12,  1149,    -1,   416,    -1,  1136,
-    1136,   417,    -1,    -1,   420,    12,  1151,  1152,   421,    -1,
-      -1,  1152,  1136,    -1,  1154,    12,  1155,    -1,   410,    -1,
-    1136,  1136,   411,    -1,  1157,    12,  1158,    -1,   412,    -1,
-    1136,   413,    -1,  1160,    12,  1161,    -1,   408,    -1,  1136,
-     409,    -1,  1163,    12,  1164,    -1,   422,    -1,  1136,  1136,
-     423,    -1,  1166,    12,  1167,    -1,   418,    -1,  1136,   419,
-      -1
-};
-
-/* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
+  /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
        0,   450,   450,   453,   454,   456,   465,   466,   469,   470,
@@ -1932,77 +1558,77 @@ static const yytype_uint16 yyrline[] =
     2653,  2655,  2657,  2666,  2668,  2668,  2670,  2670,  2672,  2681,
     2684,  2684,  2686,  2686,  2689,  2720,  2728,  2730,  2730,  2732,
     2734,  2742,  2742,  2744,  2753,  2755,  2755,  2757,  2757,  2759,
-    2790,  2800,  2800,  2802,  2804,  2812,  2812,  2814,  3161,  3213,
-    3236,  3260,  3260,  3263,  3264,  3265,  3266,  3267,  3464,  3464,
-    3466,  3468,  3508,  3510,  3510,  3515,  3533,  3562,  3562,  3565,
-    3566,  3567,  3568,  3569,  3570,  3571,  3572,  3573,  3576,  3576,
-    3578,  3578,  3583,  3583,  3583,  3584,  3584,  3584,  3585,  3585,
-    3585,  3586,  3586,  3588,  3590,  3599,  3605,  3605,  3608,  3612,
-    3618,  3620,  3620,  3626,  3636,  3646,  3646,  3648,  3650,  3666,
-    3669,  3669,  3683,  3691,  3691,  3693,  3695,  3697,  3703,  3713,
-    3721,  3721,  3723,  3725,  3727,  3730,  3732,  3741,  3747,  3747,
-    3750,  3754,  3760,  3762,  3764,  3764,  3774,  3782,  3782,  3784,
-    3786,  3788,  3791,  3793,  3802,  3808,  3808,  3811,  3815,  3821,
-    3823,  3826,  3831,  3842,  3858,  3858,  3860,  3862,  3864,  3866,
-    3866,  3868,  3875,  3882,  3901,  3901,  3904,  3905,  3907,  3907,
-    3909,  3911,  3913,  3913,  3916,  3918,  3926,  3926,  3931,  3938,
-    3940,  3949,  3955,  3955,  3958,  3962,  3969,  3971,  3974,  3978,
-    3989,  4005,  4005,  4007,  4009,  4011,  4011,  4013,  4015,  4030,
-    4030,  4032,  4034,  4043,  4045,  4054,  4060,  4060,  4063,  4067,
-    4074,  4076,  4079,  4083,  4094,  4111,  4111,  4113,  4115,  4117,
-    4117,  4119,  4121,  4136,  4136,  4138,  4140,  4150,  4152,  4161,
-    4167,  4167,  4170,  4174,  4180,  4182,  4184,  4184,  4194,  4202,
-    4202,  4204,  4206,  4208,  4211,  4213,  4222,  4228,  4228,  4231,
-    4235,  4241,  4243,  4246,  4250,  4261,  4277,  4277,  4279,  4281,
-    4283,  4283,  4285,  4288,  4300,  4300,  4303,  4304,  4305,  4307,
-    4340,  4342,  4352,  4358,  4358,  4361,  4365,  4371,  4373,  4376,
-    4380,  4391,  4404,  4404,  4406,  4408,  4410,  4410,  4412,  4439,
-    4450,  4450,  4453,  4454,  4455,  4457,  4457,  4460,  4462,  4471,
-    4477,  4477,  4480,  4484,  4490,  4492,  4494,  4494,  4504,  4512,
-    4512,  4514,  4516,  4518,  4521,  4524,  4542,  4542,  4553,  4560,
-    4570,  4578,  4584,  4586,  4600,  4612,  4618,  4624,  4624,  4626,
-    4628,  4630,  4632,  4642,  4648,  4654,  4654,  4656,  4658,  4660,
-    4662,  4662,  4667,  4672,  4684,  4686,  4686,  4689,  4690,  4691,
-    4701,  4708,  4708,  4710,  4712,  4730,  4741,  4785,  4908,  4920,
-    4942,  4967,  4978,  4992,  5007,  5022,  5034,  5046,  5066,  5086,
-    5096,  5136,  5147,  5159,  5173,  5186,  5199,  5209,  5219,  5232,
-    5232,  5234,  5244,  5408,  5408,  5410,  5417,  5444,  5444,  5446,
-    5455,  5471,  5471,  5473,  5480,  5507,  5507,  5509,  5516,  5525,
-    5525,  5527,  5534,  5561,  5561,  5565,  5573,  5582,  5582,  5584,
-    5591,  5600,  5600,  5602,  5609,  5648,  5649,  5663,  5669,  5694,
-    5695,  5697,  5708,  5727,  5735,  5735,  5738,  5747,  5760,  5761,
-    5762,  5763,  5764,  5765,  5766,  5767,  5768,  5769,  5770,  5771,
-    5772,  5773,  5774,  5775,  5776,  5777,  5778,  5779,  5780,  5781,
-    5782,  5783,  5785,  5786,  5787,  5791,  5791,  5794,  5795,  5797,
-    5797,  5800,  5801,  5805,  5805,  5810,  5810,  5815,  5815,  5820,
-    5820,  5825,  5825,  5830,  5830,  5835,  5835,  5840,  5840,  5845,
-    5845,  5850,  5850,  5855,  5855,  5860,  5860,  5865,  5867,  5873,
-    5880,  5880,  5886,  5886,  5898,  5898,  5903,  5903,  5908,  5908,
-    5918,  5925,  5931,  5932,  5934,  5935,  5938,  5942,  5946,  5950,
-    5949,  5970,  5969,  5976,  5977,  5979,  5978,  5985,  5986,  5989,
-    5995,  6003,  6010,  6032,  6032,  6043,  6043,  6046,  6046,  6060,
-    6061,  6064,  6064,  6077,  6078,  6081,  6081,  6094,  6095,  6098,
-    6098,  6108,  6109,  6115,  6116,  6117,  6118,  6119,  6120,  6121,
-    6122,  6123,  6124,  6125,  6126,  6127,  6128,  6129,  6130,  6131,
-    6132,  6133,  6136,  6147,  6155,  6155,  6158,  6159,  6162,  6163,
-    6165,  6177,  6191,  6196,  6203,  6204,  6206,  6213,  6218,  6225,
-    6226,  6228,  6235,  6240,  6247,  6248,  6250,  6257,  6259,  6265,
-    6267,  6269,  6275,  6277,  6279,  6285,  6287,  6289,  6295,  6297,
-    6299,  6305,  6305,  6310,  6312,  6314,  6320,  6320,  6325,  6327,
-    6338,  6340,  6345,  6345,  6347,  6349,  6355,  6358,  6360,  6366,
-    6369,  6371,  6377,  6380,  6382,  6388,  6392,  6391,  6403,  6403,
-    6410,  6412,  6418,  6420,  6422,  6428,  6431,  6433,  6439,  6449,
-    6449,  6455,  6463,  6465,  6485,  6485,  6487,  6489,  6491,  6491,
-    6493,  6505,  6523,  6529,  6529,  6532,  6540,  6556,  6556,  6560,
-    6561,  6562,  6563,  6564,  6565,  6566,  6567,  6568,  6572,  6576,
-    6585,  6586,  6588,  6595,  6595,  6598,  6599,  6603,  6605,  6611,
-    6614,  6616,  6622,  6625,  6625,  6635,  6636,  6642,  6644,  6650,
-    6653,  6655,  6661,  6664,  6666,  6672,  6675,  6677,  6683,  6686,
-    6688,  6694
+    2790,  2800,  2800,  2802,  2804,  2812,  2812,  2814,  3261,  3313,
+    3336,  3360,  3360,  3363,  3364,  3365,  3366,  3367,  3564,  3564,
+    3566,  3568,  3608,  3610,  3610,  3615,  3633,  3662,  3662,  3665,
+    3666,  3667,  3668,  3669,  3670,  3671,  3672,  3673,  3676,  3676,
+    3678,  3678,  3683,  3683,  3683,  3684,  3684,  3684,  3685,  3685,
+    3685,  3686,  3686,  3688,  3690,  3699,  3705,  3705,  3708,  3712,
+    3718,  3720,  3720,  3726,  3736,  3746,  3746,  3748,  3750,  3766,
+    3769,  3769,  3783,  3791,  3791,  3793,  3795,  3797,  3803,  3813,
+    3821,  3821,  3823,  3825,  3827,  3830,  3832,  3841,  3847,  3847,
+    3850,  3854,  3860,  3862,  3864,  3864,  3874,  3882,  3882,  3884,
+    3886,  3888,  3891,  3893,  3902,  3908,  3908,  3911,  3915,  3921,
+    3923,  3926,  3931,  3942,  3958,  3958,  3960,  3962,  3964,  3966,
+    3966,  3968,  3975,  3982,  4001,  4001,  4004,  4005,  4007,  4007,
+    4009,  4011,  4013,  4013,  4016,  4018,  4026,  4026,  4031,  4038,
+    4040,  4049,  4055,  4055,  4058,  4062,  4069,  4071,  4074,  4078,
+    4089,  4105,  4105,  4107,  4109,  4111,  4111,  4113,  4115,  4130,
+    4130,  4132,  4134,  4143,  4145,  4154,  4160,  4160,  4163,  4167,
+    4174,  4176,  4179,  4183,  4194,  4211,  4211,  4213,  4215,  4217,
+    4217,  4219,  4221,  4236,  4236,  4238,  4240,  4250,  4252,  4261,
+    4267,  4267,  4270,  4274,  4280,  4282,  4284,  4284,  4294,  4302,
+    4302,  4304,  4306,  4308,  4311,  4313,  4322,  4328,  4328,  4331,
+    4335,  4341,  4343,  4346,  4350,  4361,  4377,  4377,  4379,  4381,
+    4383,  4383,  4385,  4388,  4400,  4400,  4403,  4404,  4405,  4407,
+    4440,  4442,  4452,  4458,  4458,  4461,  4465,  4471,  4473,  4476,
+    4480,  4491,  4504,  4504,  4506,  4508,  4510,  4510,  4512,  4539,
+    4550,  4550,  4553,  4554,  4555,  4557,  4557,  4560,  4562,  4571,
+    4577,  4577,  4580,  4584,  4590,  4592,  4594,  4594,  4604,  4612,
+    4612,  4614,  4616,  4618,  4621,  4624,  4642,  4642,  4653,  4660,
+    4670,  4678,  4684,  4686,  4700,  4712,  4718,  4724,  4724,  4726,
+    4728,  4730,  4732,  4742,  4748,  4754,  4754,  4756,  4758,  4760,
+    4762,  4762,  4767,  4772,  4784,  4786,  4786,  4789,  4790,  4791,
+    4801,  4808,  4808,  4810,  4812,  4830,  4841,  4885,  5008,  5020,
+    5042,  5067,  5078,  5092,  5107,  5122,  5134,  5146,  5166,  5186,
+    5196,  5236,  5247,  5259,  5273,  5286,  5299,  5309,  5319,  5332,
+    5332,  5334,  5344,  5508,  5508,  5510,  5517,  5544,  5544,  5546,
+    5555,  5571,  5571,  5573,  5580,  5607,  5607,  5609,  5616,  5625,
+    5625,  5627,  5634,  5661,  5661,  5665,  5673,  5682,  5682,  5684,
+    5691,  5700,  5700,  5702,  5709,  5749,  5750,  5764,  5770,  5795,
+    5796,  5798,  5809,  5828,  5836,  5836,  5839,  5848,  5861,  5862,
+    5863,  5864,  5865,  5866,  5867,  5868,  5869,  5870,  5871,  5872,
+    5873,  5874,  5875,  5876,  5877,  5878,  5879,  5880,  5881,  5882,
+    5883,  5884,  5886,  5887,  5888,  5892,  5892,  5895,  5896,  5898,
+    5898,  5901,  5902,  5906,  5906,  5911,  5911,  5916,  5916,  5921,
+    5921,  5926,  5926,  5931,  5931,  5936,  5936,  5941,  5941,  5946,
+    5946,  5951,  5951,  5956,  5956,  5961,  5961,  5966,  5968,  5974,
+    5981,  5981,  5987,  5987,  5999,  5999,  6004,  6004,  6009,  6009,
+    6019,  6026,  6032,  6033,  6035,  6036,  6039,  6043,  6047,  6051,
+    6050,  6071,  6070,  6077,  6078,  6080,  6079,  6086,  6087,  6090,
+    6096,  6104,  6111,  6133,  6133,  6144,  6144,  6147,  6147,  6161,
+    6162,  6165,  6165,  6178,  6179,  6182,  6182,  6195,  6196,  6199,
+    6199,  6209,  6210,  6216,  6217,  6218,  6219,  6220,  6221,  6222,
+    6223,  6224,  6225,  6226,  6227,  6228,  6229,  6230,  6231,  6232,
+    6233,  6234,  6237,  6248,  6256,  6256,  6259,  6260,  6263,  6264,
+    6266,  6278,  6292,  6297,  6304,  6305,  6307,  6314,  6319,  6326,
+    6327,  6329,  6336,  6341,  6348,  6349,  6351,  6358,  6360,  6366,
+    6368,  6370,  6376,  6378,  6380,  6386,  6388,  6390,  6396,  6398,
+    6400,  6406,  6406,  6411,  6413,  6415,  6421,  6421,  6426,  6428,
+    6439,  6441,  6446,  6446,  6448,  6450,  6456,  6459,  6461,  6467,
+    6470,  6472,  6478,  6481,  6483,  6489,  6493,  6492,  6504,  6504,
+    6511,  6513,  6519,  6521,  6523,  6529,  6532,  6534,  6540,  6550,
+    6550,  6556,  6564,  6566,  6586,  6586,  6588,  6590,  6592,  6592,
+    6594,  6606,  6624,  6630,  6630,  6633,  6641,  6657,  6657,  6661,
+    6662,  6663,  6664,  6665,  6666,  6667,  6668,  6669,  6673,  6677,
+    6686,  6687,  6689,  6696,  6696,  6699,  6700,  6704,  6706,  6712,
+    6715,  6717,  6723,  6726,  6726,  6736,  6737,  6743,  6745,  6751,
+    6754,  6756,  6762,  6765,  6767,  6773,  6776,  6778,  6784,  6787,
+    6789,  6795
 };
 #endif
 
-#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
+#if YYDEBUG || YYERROR_VERBOSE || 1
 /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
@@ -2393,13 +2019,13 @@ static const char *const yytname[] =
   "complexNegateContent", "complexConjugate", "complexConjugateStart",
   "complexConjugateContent", "complexTimes", "complexTimesStart",
   "complexTimesContent", "complexSquare", "complexSquareStart",
-  "complexSquareContent", 0
+  "complexSquareContent", YY_NULLPTR
 };
 #endif
 
 # ifdef YYPRINT
-/* YYTOKNUM[YYLEX-NUM] -- Internal token number corresponding to
-   token YYLEX-NUM.  */
+/* YYTOKNUM[NUM] -- (External) token number corresponding to the
+   (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
@@ -2449,494 +2075,18 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-/* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
-static const yytype_uint16 yyr1[] =
-{
-       0,   436,   437,   438,   438,   439,   440,   440,   441,   441,
-     442,   443,   444,   444,   445,   446,   447,   447,   448,   448,
-     449,   449,   449,   449,   450,   451,   452,   453,   454,   454,
-     455,   456,   457,   457,   458,   459,   460,   460,   461,   461,
-     462,   463,   464,   464,   465,   466,   467,   467,   468,   468,
-     468,   468,   468,   468,   468,   468,   468,   469,   470,   471,
-     472,   472,   473,   473,   473,   474,   474,   475,   476,   477,
-     478,   478,   479,   479,   479,   480,   480,   481,   482,   483,
-     484,   484,   485,   485,   485,   486,   486,   487,   488,   488,
-     489,   490,   491,   492,   492,   493,   493,   494,   494,   495,
-     496,   497,   498,   499,   499,   500,   500,   500,   500,   501,
-     502,   502,   503,   504,   505,   506,   506,   507,   507,   507,
-     507,   507,   507,   508,   508,   509,   510,   511,   512,   512,
-     513,   513,   513,   513,   513,   513,   513,   514,   514,   515,
-     516,   517,   518,   518,   519,   519,   519,   519,   520,   520,
-     521,   522,   523,   524,   524,   525,   525,   525,   526,   527,
-     528,   529,   530,   530,   531,   532,   533,   534,   535,   536,
-     537,   538,   539,   539,   540,   540,   540,   541,   542,   543,
-     544,   545,   545,   546,   547,   548,   549,   550,   551,   551,
-     552,   553,   553,   554,   555,   556,   556,   557,   558,   559,
-     559,   560,   561,   562,   563,   563,   564,   565,   566,   567,
-     567,   568,   568,   568,   568,   568,   568,   568,   568,   568,
-     568,   568,   569,   569,   570,   570,   571,   572,   573,   573,
-     574,   575,   576,   577,   577,   578,   579,   580,   581,   581,
-     582,   582,   582,   582,   582,   582,   582,   582,   583,   583,
-     584,   584,   585,   586,   587,   587,   588,   589,   590,   591,
-     591,   592,   593,   594,   595,   595,   596,   596,   596,   596,
-     596,   596,   596,   596,   596,   597,   597,   598,   598,   599,
-     600,   600,   601,   601,   602,   602,   603,   604,   605,   606,
-     606,   608,   607,   609,   609,   610,   610,   611,   612,   612,
-     613,   613,   614,   614,   615,   616,   617,   617,   618,   618,
-     619,   619,   621,   620,   622,   623,   623,   624,   624,   625,
-     625,   626,   626,   627,   628,   629,   629,   630,   630,   631,
-     631,   633,   632,   634,   635,   635,   636,   636,   637,   637,
-     638,   638,   639,   640,   640,   641,   641,   642,   642,   644,
-     643,   645,   646,   646,   648,   647,   649,   649,   650,   650,
-     651,   651,   652,   653,   654,   655,   656,   657,   658,   659,
-     660,   661,   662,   663,   664,   665,   666,   667,   668,   669,
-     670,   671,   672,   673,   674,   675,   676,   677,   677,   678,
-     679,   679,   680,   680,   680,   680,   681,   682,   682,   683,
-     683,   684,   685,   686,   687,   687,   688,   688,   689,   690,
-     691,   691,   692,   692,   693,   694,   694,   695,   695,   696,
-     697,   698,   698,   699,   700,   701,   701,   702,   702,   703,
-     704,   705,   705,   706,   707,   708,   708,   709,   710,   711,
-     712,   713,   713,   714,   714,   714,   714,   714,   715,   715,
-     716,   717,   718,   719,   719,   720,   721,   722,   722,   723,
-     723,   723,   723,   723,   723,   723,   723,   723,   724,   724,
-     725,   725,   726,   726,   726,   726,   726,   726,   726,   726,
-     726,   726,   726,   727,   728,   729,   730,   730,   731,   731,
-     732,   733,   733,   734,   735,   736,   736,   737,   738,   739,
-     740,   740,   741,   742,   742,   743,   744,   745,   746,   747,
-     748,   748,   749,   750,   751,   752,   753,   754,   755,   755,
-     756,   756,   757,   758,   759,   759,   760,   761,   761,   762,
-     763,   764,   765,   766,   767,   768,   768,   769,   769,   770,
-     771,   772,   772,   773,   774,   774,   775,   776,   777,   778,
-     778,   779,   780,   781,   782,   782,   783,   783,   784,   784,
-     785,   786,   787,   787,   788,   789,   790,   790,   791,   792,
-     793,   794,   795,   795,   796,   796,   797,   798,   799,   799,
-     800,   801,   801,   802,   803,   804,   804,   805,   806,   807,
-     807,   808,   809,   810,   811,   812,   813,   813,   814,   814,
-     815,   816,   817,   817,   818,   819,   819,   820,   821,   822,
-     822,   823,   824,   825,   825,   826,   827,   828,   829,   830,
-     831,   831,   832,   832,   833,   834,   835,   835,   836,   837,
-     837,   838,   839,   840,   841,   842,   843,   844,   844,   845,
-     845,   846,   847,   848,   848,   849,   850,   850,   851,   852,
-     853,   853,   854,   855,   856,   856,   857,   857,   857,   858,
-     859,   860,   861,   862,   862,   863,   863,   864,   865,   866,
-     866,   867,   868,   868,   869,   870,   871,   871,   872,   873,
-     874,   874,   875,   875,   875,   876,   876,   877,   878,   879,
-     880,   880,   881,   881,   882,   883,   884,   884,   885,   886,
-     886,   887,   888,   889,   890,   891,   892,   892,   893,   894,
-     895,   896,   897,   898,   899,   900,   901,   902,   902,   903,
-     904,   905,   906,   907,   908,   909,   909,   910,   911,   912,
-     913,   913,   914,   915,   916,   917,   917,   918,   918,   918,
-     918,   919,   919,   920,   921,   922,   923,   924,   925,   926,
-     927,   928,   929,   930,   931,   932,   933,   934,   935,   936,
-     937,   938,   939,   940,   941,   942,   943,   944,   945,   946,
-     946,   947,   948,   949,   949,   950,   951,   952,   952,   953,
-     954,   955,   955,   956,   957,   958,   958,   959,   960,   961,
-     961,   962,   963,   964,   964,   965,   966,   967,   967,   968,
-     969,   970,   970,   971,   972,   973,   973,   974,   975,   976,
-     976,   977,   978,   979,   980,   980,   981,   981,   982,   982,
-     982,   982,   982,   982,   982,   982,   982,   982,   982,   982,
-     982,   982,   982,   982,   982,   982,   982,   982,   982,   982,
-     982,   982,   982,   982,   982,   984,   983,   985,   985,   987,
-     986,   988,   988,   990,   989,   992,   991,   994,   993,   996,
-     995,   998,   997,  1000,   999,  1002,  1001,  1004,  1003,  1006,
-    1005,  1008,  1007,  1010,  1009,  1012,  1011,  1013,  1014,  1015,
-    1017,  1016,  1019,  1018,  1021,  1020,  1023,  1022,  1025,  1024,
-    1026,  1027,  1028,  1028,  1029,  1029,  1030,  1030,  1030,  1032,
-    1031,  1034,  1033,  1035,  1035,  1036,  1035,  1037,  1037,  1038,
-    1038,  1039,  1040,  1042,  1041,  1043,  1043,  1045,  1044,  1046,
-    1046,  1048,  1047,  1049,  1049,  1051,  1050,  1052,  1052,  1054,
-    1053,  1055,  1055,  1056,  1056,  1056,  1056,  1056,  1056,  1056,
-    1056,  1056,  1056,  1056,  1056,  1056,  1056,  1056,  1056,  1056,
-    1056,  1056,  1057,  1058,  1059,  1059,  1060,  1060,  1061,  1061,
-     666,  1062,  1063,  1064,  1065,  1065,  1066,  1067,  1068,  1069,
-    1069,  1070,  1071,  1072,  1073,  1073,  1074,  1075,  1076,  1077,
-    1078,  1079,  1080,  1081,  1082,  1083,  1084,  1085,  1086,  1087,
-    1088,  1089,  1089,  1090,  1091,  1092,  1093,  1093,  1094,  1095,
-    1096,  1097,  1098,  1098,  1099,  1100,  1101,  1102,  1103,  1104,
-    1105,  1106,  1107,  1108,  1109,  1110,  1112,  1111,  1113,  1113,
-    1114,  1115,  1116,  1117,  1118,  1119,  1120,  1121,  1122,  1123,
-    1123,  1124,  1125,  1126,  1127,  1127,  1128,  1129,  1130,  1130,
-    1131,  1132,  1133,  1134,  1134,  1135,  1135,  1136,  1136,  1137,
-    1137,  1137,  1137,  1137,  1137,  1137,  1137,  1137,  1138,  1139,
-    1140,  1140,  1141,  1142,  1142,  1143,  1143,  1144,  1145,  1146,
-    1147,  1148,  1149,  1151,  1150,  1152,  1152,  1153,  1154,  1155,
-    1156,  1157,  1158,  1159,  1160,  1161,  1162,  1163,  1164,  1165,
-    1166,  1167
-};
-
-/* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
-static const yytype_uint8 yyr2[] =
-{
-       0,     2,     8,     1,     1,     1,     1,     0,     0,     4,
-       1,     5,     0,     2,     3,     1,     1,     2,     0,     2,
-       1,     1,     1,     1,     4,     4,     4,     4,     0,     3,
-       1,     1,     1,     1,     1,     3,     0,     2,     0,     3,
-       1,     1,     1,     1,     1,     3,     0,     2,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     3,     1,     1,
-       0,     2,     1,     1,     1,     1,     2,     3,     1,     1,
-       0,     2,     1,     1,     1,     1,     2,     3,     1,     1,
-       0,     2,     1,     1,     1,     1,     3,     1,     0,     2,
-       3,     1,     1,     0,     2,     1,     1,     1,     2,     1,
-       3,     1,     1,     0,     2,     1,     1,     1,     1,     4,
-       1,     2,     3,     1,     1,     0,     2,     1,     1,     1,
-       1,     1,     1,     1,     2,     3,     1,     1,     0,     2,
-       1,     1,     1,     1,     1,     1,     1,     1,     2,     3,
-       1,     1,     0,     2,     1,     1,     1,     1,     1,     2,
-       3,     1,     1,     0,     2,     1,     1,     1,     3,     3,
-       1,     1,     1,     1,     1,     3,     1,     1,     1,     3,
-       1,     1,     0,     2,     1,     1,     1,     3,     3,     1,
-       1,     1,     1,     1,     3,     1,     1,     1,     0,     2,
-       1,     1,     1,     1,     6,     0,     3,     1,     1,     1,
-       1,     1,     3,     1,     0,     2,     3,     1,     1,     0,
-       2,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     2,     0,     3,     1,     1,     1,     1,
-       1,     3,     1,     0,     2,     3,     1,     1,     0,     2,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     2,
-       0,     3,     1,     1,     1,     1,     1,     3,     1,     0,
-       2,     3,     1,     1,     0,     2,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     2,     0,     2,     1,
-       1,     1,     1,     2,     3,     3,     4,     1,     5,     1,
-       2,     0,     4,     0,     3,     1,     3,     3,     0,     3,
-       0,     2,     1,     1,     4,     4,     1,     3,     1,     2,
-       1,     2,     0,     4,     4,     1,     2,     0,     3,     0,
-       2,     1,     1,     4,     4,     1,     3,     1,     2,     1,
-       2,     0,     4,     4,     1,     2,     0,     3,     0,     2,
-       1,     1,     4,     1,     3,     1,     2,     1,     2,     0,
-       4,     4,     1,     2,     0,     4,     1,     2,     0,     2,
-       1,     1,     4,     4,     4,     4,     4,     4,     4,     4,
-       4,     4,     4,     4,     4,     3,     4,     4,     4,     4,
-       4,     4,     4,     4,     4,     4,     4,     3,     3,     2,
-       0,     2,     1,     1,     1,     1,     1,     1,     1,     0,
-       2,     3,     1,     1,     0,     2,     1,     1,     3,     3,
-       1,     1,     2,     1,     3,     1,     1,     0,     2,     3,
-       1,     0,     1,     3,     3,     1,     1,     2,     1,     3,
-       1,     0,     2,     3,     1,     0,     1,     3,     3,     1,
-       1,     0,     2,     1,     1,     1,     1,     1,     1,     1,
-       1,     3,     2,     0,     3,     1,     1,     0,     2,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     2,     1,
-       0,     2,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     4,     1,     1,     0,     2,     1,     1,
-       3,     0,     2,     2,     1,     1,     1,     1,     3,     1,
-       0,     2,     1,     1,     1,     1,     3,     1,     2,     1,
-       1,     1,     1,     3,     1,     4,     1,     1,     0,     2,
-       1,     1,     3,     2,     0,     2,     1,     1,     1,     1,
-       3,     1,     4,     1,     1,     0,     2,     1,     1,     3,
-       2,     0,     2,     1,     1,     1,     1,     3,     1,     0,
-       2,     3,     1,     1,     0,     2,     1,     1,     1,     1,
-       1,     3,     0,     2,     3,     1,     0,     1,     3,     4,
-       1,     1,     0,     2,     1,     1,     3,     2,     0,     2,
-       1,     1,     1,     1,     3,     0,     2,     2,     1,     1,
-       1,     1,     3,     4,     1,     1,     0,     2,     1,     1,
-       3,     2,     0,     2,     1,     1,     1,     1,     3,     0,
-       2,     2,     1,     1,     1,     1,     3,     4,     1,     1,
-       0,     2,     1,     1,     3,     2,     0,     2,     1,     1,
-       1,     1,     3,     1,     4,     1,     1,     0,     2,     1,
-       1,     3,     2,     0,     2,     1,     1,     1,     1,     3,
-       0,     2,     3,     1,     0,     2,     1,     1,     1,     3,
-       4,     1,     1,     0,     2,     1,     1,     3,     2,     0,
-       2,     1,     1,     1,     1,     3,     0,     2,     3,     1,
-       0,     2,     1,     1,     1,     2,     1,     4,     1,     1,
-       0,     2,     1,     1,     3,     2,     0,     2,     1,     1,
-       1,     1,     3,     1,     5,     1,     0,     1,     1,     3,
-       1,     1,     5,     1,     3,     1,     1,     1,     1,     1,
-       3,     1,     3,     1,     1,     1,     1,     1,     3,     1,
-       0,     2,     3,     1,     1,     0,     2,     1,     1,     1,
-       1,     1,     1,     1,     3,     4,     4,     4,     4,     4,
-       4,     4,     4,     4,     4,     4,     4,     4,     4,     4,
-       4,     4,     4,     4,     4,     4,     4,     4,     4,     1,
-       1,     1,     3,     1,     1,     1,     3,     1,     1,     1,
-       3,     1,     1,     1,     3,     1,     1,     1,     3,     1,
-       1,     1,     3,     1,     1,     1,     3,     1,     1,     1,
-       3,     1,     1,     1,     3,     0,     4,     1,     5,     0,
-       2,     5,     1,     1,     0,     2,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     0,     3,     1,     2,     0,
-       3,     1,     2,     0,     5,     0,     5,     0,     5,     0,
-       4,     0,     5,     0,     5,     0,     4,     0,     4,     0,
-       4,     0,     4,     0,     4,     0,     4,     3,     1,     1,
-       0,     4,     0,     6,     0,     4,     0,     4,     0,     4,
-       3,     1,     1,     2,     0,     2,     1,     1,     1,     0,
-       4,     0,     4,     1,     2,     0,     4,     0,     2,     1,
-       1,     4,     4,     0,     4,     0,     2,     0,     4,     0,
-       2,     0,     4,     0,     2,     0,     4,     0,     2,     0,
-       4,     0,     2,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     3,     1,     0,     2,     1,     1,     1,     2,
-       4,     3,     3,     1,     1,     2,     4,     3,     1,     1,
-       2,     4,     3,     1,     1,     2,     4,     2,     1,     2,
-       2,     1,     3,     2,     1,     2,     2,     1,     2,     4,
-       1,     0,     1,     2,     4,     1,     0,     1,     2,     3,
-       2,     1,     1,     2,     2,     1,     3,     2,     1,     2,
-       2,     1,     3,     2,     1,     3,     0,     4,     0,     2,
-       2,     1,     3,     2,     1,     6,     2,     1,     2,     0,
-       3,     1,     1,     4,     1,     1,     1,     3,     0,     2,
-       5,     1,     1,     0,     2,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     3,     1,
-       1,     2,     1,     0,     2,     1,     1,     3,     1,     3,
-       3,     1,     3,     0,     5,     0,     2,     3,     1,     3,
-       3,     1,     2,     3,     1,     2,     3,     1,     3,     3,
-       1,     2
-};
-
-/* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
-   STATE-NUM when YYTABLE doesn't specify something else to do.  Zero
-   means the default is an error.  */
-static const yytype_uint16 yydefact[] =
-{
-       8,    10,     0,   805,     0,     1,   807,    28,     0,     0,
-      12,    30,    38,     0,     0,   809,     0,     0,    40,   188,
-       0,     0,     0,    31,     0,     0,     0,     9,    15,    13,
-      18,   190,   277,     0,     0,     0,    41,     0,    34,    36,
-      29,    32,    33,     0,   806,   812,   810,   814,     0,     0,
-     279,     0,     0,   193,   195,   189,   191,   192,     0,    44,
-      46,    39,    42,    43,     0,     0,     0,     0,   813,    11,
-      16,     0,     0,     0,     0,     0,    14,    19,    20,    21,
-      22,    23,     4,     3,     7,   282,   354,   278,   280,   281,
-     197,   224,     0,     0,     0,   365,    35,   439,    37,   441,
-     808,     0,   783,     0,     0,   816,   817,   781,   782,   815,
-      17,     0,     0,     0,   390,     6,     2,     5,   283,   287,
-       0,     0,     0,     0,   226,   250,     0,     0,     0,   198,
-     366,    45,    58,    68,    78,   101,   113,   126,   140,   151,
-     170,    47,    48,    60,    49,    70,    50,    80,    51,   103,
-      52,   115,    53,   128,    54,   142,    55,   153,    56,   172,
-       0,   440,   863,   855,   857,   861,   865,   867,   913,   929,
-     875,   859,   882,   869,   871,   873,   901,   878,   880,   921,
-     917,   925,   845,   849,   853,   891,   884,   886,   888,     0,
-     839,   840,   820,   821,   823,   824,   825,   826,   828,   829,
-     830,   832,   831,   833,   835,     0,   836,   834,   842,   843,
-     844,   818,   894,   819,   822,   841,   837,   838,   827,     0,
-       0,     0,     0,     0,     0,     0,   284,     0,   291,   285,
-     358,   252,  1029,     0,     0,     0,   227,     0,   201,   204,
-     196,   199,   200,     0,    59,     0,    69,     0,    79,     0,
-     102,     0,   114,     0,   127,     0,   141,     0,   152,     0,
-     171,   450,   453,   438,   448,   449,   775,     0,   791,     0,
-     787,     0,     0,     0,   442,   445,   444,   446,   773,   774,
-     443,   785,   786,   447,   789,   790,     0,     0,     0,     0,
-       0,     0,   915,   931,     0,     0,     0,     0,     0,     0,
-     907,     0,   923,   919,   927,     0,     0,     0,     0,     0,
-       0,   811,     0,     0,   784,     0,    24,    25,    27,    26,
-     390,   390,   392,   393,   394,   395,   391,     0,   291,   289,
-       0,     0,  1031,     0,     0,     0,     0,   253,     0,   230,
-     233,   225,   228,   229,     0,     0,    65,     0,    57,    61,
-      63,    62,    64,    75,     0,    67,    71,    73,    72,    74,
-      85,    88,    77,    81,    83,    82,    84,   110,     0,   100,
-       0,   104,   107,   106,   105,   108,   123,     0,   112,     0,
-       0,     0,   116,   121,   120,   122,   118,   117,   119,   137,
-       0,   125,     0,     0,   129,   134,   133,   135,   136,   131,
-     130,   132,   148,     0,   139,     0,   143,   147,   145,   144,
-     146,     0,   150,   154,   156,   155,   157,     0,   169,   173,
-     175,   174,   176,   455,     0,   470,   457,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,   847,     0,   846,   851,     0,   850,     0,   963,   968,
-     973,   978,   981,   990,   995,  1001,  1005,  1008,  1011,  1014,
-    1016,  1021,  1024,  1027,   953,   984,   987,     0,   933,   954,
-     934,     0,   935,     0,   936,     0,   937,     0,   938,     0,
-     951,     0,   939,     0,   940,   991,   941,   996,   942,     0,
-     943,     0,   944,     0,   945,     0,   946,     0,   947,   948,
-       0,   949,     0,   950,     0,     0,     0,   879,   877,   892,
-       0,   795,     0,     0,   896,   897,   793,   794,   890,   895,
-     898,   759,   387,   388,     0,   286,   290,   293,   356,     0,
-       0,     0,   355,   359,   360,   361,   194,     0,     0,  1032,
-       0,   256,   259,   251,   254,   255,     0,     0,   367,   203,
-     207,   202,   205,   209,    66,    76,     0,    87,   111,     0,
-     124,   390,     0,     0,   138,     0,     0,   149,     0,   160,
-       0,     0,   179,     0,     0,   451,   452,     0,   456,   776,
-     792,   788,     0,     0,     0,     0,     0,     0,   866,   868,
-     914,   916,   930,   932,   876,   860,     0,   870,   872,   874,
-     903,     0,     0,     0,   902,   908,   909,   910,   881,   922,
-     924,   918,   920,   926,   928,   848,   852,     0,  1018,   885,
-       0,     0,     0,     0,     0,     0,     0,     0,   977,     0,
-     980,     0,   983,     0,   986,     0,     0,   992,     0,   997,
-    1002,     0,  1000,     0,  1004,     0,  1007,     0,  1010,     0,
-    1013,     0,  1020,     0,  1023,     0,  1026,   887,   889,   893,
-       0,   899,     0,     0,     0,   357,   390,   390,     0,  1036,
-    1038,  1030,  1034,  1035,     0,     0,   368,   232,   236,   231,
-     234,   238,     0,   208,    99,    86,    91,    89,    93,     0,
-       0,     0,     0,     0,     0,   375,   168,   158,     0,     0,
-     161,   187,   177,     0,   180,   710,   484,   661,   516,   533,
-     635,   618,   570,   594,   688,   705,   471,   472,   486,   475,
-     518,   478,   535,   479,   572,   480,   596,   476,   620,   477,
-     637,   473,   663,   474,   690,   481,   706,   482,     0,   469,
-       0,   454,   771,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,   458,   459,   462,   463,   464,   465,   460,   461,
-     467,   466,   769,   770,   746,   748,   864,   856,   858,   862,
-       0,   904,   905,     0,   390,   854,     0,   958,     0,     0,
-       0,     0,   956,   955,   952,   957,     0,   964,     0,   962,
-       0,   969,     0,   967,     0,   974,     0,   972,   979,     0,
-     985,   988,     0,     0,     0,  1003,     0,  1009,     0,     0,
-    1084,  1078,  1081,  1059,  1071,  1090,     0,  1087,  1068,  1047,
-       0,  1048,  1049,  1063,  1050,     0,  1051,     0,  1052,  1053,
-       0,  1054,     0,  1055,     0,  1056,     0,  1057,     0,     0,
-    1028,   796,     0,   288,     0,   295,   298,   292,     0,     0,
-       0,     0,   369,   258,   262,   257,   260,   264,     0,   237,
-     222,     0,   206,     0,     0,     0,     0,     0,     0,   803,
-       0,     0,   210,   215,   217,   213,   214,   216,   218,   212,
-     211,   221,   219,   220,   801,   802,     0,    92,   109,   370,
-     371,   372,   373,   374,     0,   164,   399,   159,   162,   163,
-     183,   399,   178,   181,   182,     0,   485,     0,   517,     0,
-     534,     0,   571,     0,   595,     0,   619,     0,   636,     0,
-     662,     0,   689,     0,   707,     0,     0,   711,   468,   390,
-       0,     0,     0,     0,     0,     0,     0,   390,   883,     0,
-       0,     0,  1017,  1019,   959,     0,     0,     0,     0,   965,
-       0,   970,     0,   975,   982,   999,     0,   989,     0,   994,
-    1006,  1012,  1015,  1073,  1022,     0,  1062,     0,     0,     0,
-       0,     0,     0,     0,     0,   900,   294,   300,     0,   317,
-     363,   364,  1033,  1037,  1041,  1039,  1043,     0,   263,   248,
-       0,   235,     0,     0,     0,   239,   245,   242,   243,   244,
-     241,   240,   247,   246,   223,     0,     0,     0,     0,     0,
-       0,     0,     0,    97,     0,    90,    94,    96,    95,     0,
-       0,     0,   166,   396,   397,   398,     0,   185,     0,   779,
-       0,     0,   487,   488,   489,   777,   778,     0,   519,   520,
-     521,     0,   536,   537,   538,     0,   573,   574,   575,     0,
-     597,   598,   599,     0,   621,   622,   623,     0,   638,   639,
-     640,     0,   664,   665,   666,     0,   691,   692,   693,     0,
-       0,     0,   709,   772,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,   906,   912,   911,     0,     0,   961,   966,
-     971,   976,   993,   998,  1075,  1060,     0,  1058,     0,     0,
-    1066,  1065,  1064,     0,  1067,     0,  1070,     0,  1077,     0,
-    1080,     0,  1083,     0,  1086,     0,  1089,     0,     0,   296,
-     319,   336,     0,  1042,   275,     0,   261,     0,   265,   270,
-     272,   268,   269,   271,   273,   267,   266,   274,   249,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,   804,     0,
-      98,   747,     0,     0,   167,   165,   402,   400,   404,   186,
-     184,   494,   483,   491,     0,     0,     0,   500,   515,   500,
-     532,   500,   569,   500,   593,   500,   617,   500,   634,   500,
-     660,   500,   687,     0,     0,   715,     0,     0,   389,   752,
-     762,   763,   753,   754,   755,   756,   768,   376,   960,     0,
-    1061,   390,   390,     0,     0,     0,  1082,  1085,     0,  1091,
-       0,   308,   312,     0,     0,   301,   302,   303,   299,   306,
-       0,   338,   297,     0,  1045,  1046,  1044,   276,     0,     0,
-       0,     0,   377,   384,   378,   385,   380,   381,   761,     0,
-     413,     0,   409,   410,   411,     0,   403,   502,     0,     0,
-       0,   497,   399,   493,   495,   496,   780,     0,   524,     0,
-     541,     0,   578,     0,   602,     0,   626,     0,   643,     0,
-     669,     0,   696,     0,   708,   704,   745,   723,   730,     0,
-       0,   716,  1074,  1076,     0,     0,  1069,  1072,  1079,  1088,
-    1025,   309,   312,   310,     0,     0,     0,   327,   331,     0,
-       0,   320,   321,   322,   318,   325,     0,     0,     0,   382,
-     386,   379,     0,     0,   412,     0,   401,     0,   405,   407,
-     406,   490,   509,   492,     0,   505,   399,   501,   503,   504,
-     499,     0,   749,   526,   523,     0,   522,   543,   540,     0,
-     539,   580,   577,     0,   576,   604,   601,     0,   600,   628,
-     625,     0,   624,   645,   642,     0,   641,   671,   668,     0,
-     667,   698,   695,     0,   694,     0,     0,   724,   719,   399,
-     714,   717,   718,   767,   766,   307,   311,     0,     0,     0,
-     328,   331,   329,     0,     0,     0,   345,   349,     0,     0,
-     339,   340,   337,   343,   341,  1040,   383,   751,   414,     0,
-       0,   512,   417,   508,   510,   511,   507,     0,   498,   529,
-     399,   525,   527,   528,   546,   549,   542,   544,   545,   583,
-     585,   579,   581,   582,   607,   609,   603,   605,   606,   631,
-     399,   627,   629,   630,   648,   650,   644,   646,   647,   674,
-     676,   670,   672,   673,   701,   431,   697,   699,   700,   713,
-     733,   712,   731,   735,   727,   399,   722,   725,   726,   721,
-       0,     0,     0,   305,   304,   326,   330,     0,     0,     0,
-     346,   349,   347,     0,     0,     0,   408,     0,     0,   514,
-     415,   416,     0,   506,   531,     0,     0,   548,     0,     0,
-     633,     0,     0,     0,   703,   430,     0,     0,   734,   729,
-       0,   720,     0,   315,     0,   313,     0,     0,   324,   323,
-     344,   348,     0,     0,     0,   760,     0,   420,   418,   421,
-     513,   530,   547,   552,   550,   554,   588,   584,   586,     0,
-     612,   608,   610,     0,   632,   653,   649,   651,   654,   679,
-     675,   677,   680,   434,   432,   435,   702,   743,   453,   732,
-     741,   742,     0,     0,   736,   737,   738,   739,   740,   728,
-       0,   316,     0,   334,     0,   332,     0,     0,   362,   342,
-     428,     0,   424,   425,   426,     0,   422,     0,   553,   591,
-       0,   587,   589,   590,   615,     0,   611,   613,   614,     0,
-       0,     0,   436,     0,     0,     0,   314,     0,   335,     0,
-     352,     0,   350,     0,   427,   390,   419,   560,   562,   551,
-     558,   559,     0,     0,   555,   556,   557,     0,     0,     0,
-     799,     0,   655,   652,   658,   657,   656,   797,   798,   686,
-       0,   681,   678,   684,   683,   682,     0,   433,   744,     0,
-       0,   333,     0,   353,   429,     0,     0,     0,   390,   592,
-     616,     0,     0,   685,     0,   757,   758,   351,   423,   561,
-     565,   563,   566,     0,     0,   659,   800,   437,     0,     0,
-     567,   750,   765,   390,     0,   564,     0,     0,   764,   568
-};
-
-/* YYDEFGOTO[NTERM-NUM].  */
-static const yytype_int16 yydefgoto[] =
-{
-      -1,     2,    84,   116,   117,     3,     4,    10,    17,    29,
-      30,    76,    49,    77,    78,    79,    80,    81,    12,    13,
-      22,    40,    41,    42,    65,    19,    20,    35,    61,    62,
-      63,    94,   141,   142,   143,   243,   244,   349,   348,   144,
-     145,   245,   246,   356,   355,   146,   147,   247,   248,   363,
-     362,   566,   567,   697,   698,   896,   897,  1026,  1025,   695,
-     148,   149,   249,   250,   371,   372,   369,   150,   151,   251,
-     252,   382,   378,   152,   153,   253,   254,   394,   391,   154,
-     155,   255,   256,   406,   404,   156,   157,   257,   258,   413,
-     412,   580,   581,   709,   907,   908,   909,  1031,  1165,   707,
-     158,   159,   259,   260,   419,   418,   583,   584,   713,   912,
-     913,   914,  1036,  1170,   712,    32,    33,    55,    56,    57,
-      91,    92,   128,   240,   241,   242,   561,   345,   562,   563,
-     692,   693,   882,   872,   125,   126,   235,   341,   342,   343,
-     689,   557,   690,   691,   868,   869,  1005,  1001,   232,   233,
-     336,   553,   554,   555,   865,   685,   866,   867,   997,   998,
-    1138,  1136,    51,    52,    87,    88,    89,   120,   121,   228,
-     328,   329,   330,   674,   857,   988,   989,  1128,  1225,  1226,
-    1227,  1228,  1229,  1302,  1303,  1304,  1472,  1515,  1131,  1230,
-    1311,  1312,  1313,  1314,  1315,  1391,  1392,  1393,  1517,  1575,
-    1232,  1316,  1400,  1401,  1402,  1403,  1481,  1482,  1483,  1577,
-    1612,   122,   123,   542,   331,   543,  1404,   544,   545,    23,
-      36,   129,   236,   337,   383,   384,   385,   397,   398,   407,
-     792,   883,   884,  1006,   885,   886,  1008,  1142,   887,   888,
-    1009,   224,  1083,   225,   326,  1032,  1033,  1034,  1167,  1168,
-    1255,  1256,  1328,  1326,  1035,  1252,  1253,  1254,  1489,  1490,
-    1528,  1529,  1585,  1616,  1491,  1582,  1583,  1584,  1504,  1505,
-    1554,  1555,  1601,  1647,    98,    99,   160,   161,   274,   263,
-     264,   265,   424,   425,   426,   587,   588,   762,   751,   586,
-     726,   727,   728,   915,   916,  1042,  1172,  1258,  1173,  1174,
-    1263,  1264,  1265,  1341,  1259,  1260,  1337,  1338,  1339,  1417,
-    1333,  1334,  1413,  1414,  1415,  1492,   729,   730,   917,   918,
-    1048,  1178,  1269,  1344,  1345,  1421,  1422,  1423,  1495,   731,
-     732,   919,   920,  1052,  1180,  1271,  1348,  1349,  1426,  1427,
-    1428,  1496,  1497,  1534,  1535,  1587,  1588,  1624,  1619,  1620,
-    1621,  1656,  1671,  1672,  1679,  1685,   733,   734,   921,   922,
-    1056,  1182,  1273,  1352,  1353,  1431,  1432,  1433,  1498,  1538,
-    1539,  1591,  1592,  1593,   735,   736,   923,   924,  1060,  1184,
-    1275,  1356,  1357,  1436,  1437,  1438,  1499,  1542,  1543,  1596,
-    1597,  1598,   737,   738,   925,   926,  1064,  1186,  1277,  1360,
-    1361,  1441,  1442,  1443,  1501,   739,   740,   927,   928,  1068,
-    1188,  1279,  1364,  1365,  1446,  1447,  1448,  1502,  1547,  1548,
-    1599,  1632,  1633,   741,   742,   929,   930,  1072,  1190,  1281,
-    1368,  1369,  1451,  1452,  1453,  1503,  1551,  1552,  1600,  1641,
-    1642,   743,   744,   931,   932,  1076,  1192,  1283,  1372,  1373,
-    1456,  1457,  1458,  1506,   745,   746,   933,  1285,   747,   748,
-     936,  1082,  1461,  1196,  1197,  1290,  1380,  1381,  1382,  1470,
-    1288,  1289,  1376,  1466,  1467,  1468,  1510,  1375,  1462,  1463,
-    1507,  1508,  1564,  1559,  1560,  1561,   937,   275,   710,   276,
-    1043,  1625,  1163,   763,   764,   765,   766,   767,  1565,  1566,
-     105,  1329,   891,   768,   769,  1680,  1626,  1110,  1111,   770,
-     771,   772,   773,   277,   278,   279,  1044,  1045,  1046,   106,
-     107,   108,   280,   281,   282,   283,   284,   285,   525,   526,
-     527,  1636,  1637,  1638,   893,   894,   895,     7,     8,    15,
-      25,    46,    47,    67,    68,   109,   829,   190,   305,   453,
-     191,   306,   456,   192,   307,   193,   287,   194,   288,   195,
-     295,   196,   289,   197,   286,   198,   290,   199,   291,   200,
-     297,   201,   298,   202,   299,   203,   294,   204,   205,   518,
-     206,   301,   207,   296,   208,   308,   209,   309,   210,   310,
-     211,   212,   528,   313,   529,   530,   852,   213,   300,   614,
-     949,   446,   615,   616,   617,   214,   292,   438,   215,   303,
-     449,   216,   302,   448,   217,   304,   450,   218,   293,   439,
-     477,   478,   479,   630,   793,   794,   795,   480,   481,   799,
-     632,   482,   483,   803,   634,   484,   485,   807,   636,   486,
-     487,   638,   488,   489,   640,   490,   491,   642,   492,   493,
-     644,   494,   495,   646,   967,   496,   497,   648,   969,   647,
-     498,   499,   652,   500,   501,   654,   502,   503,   656,   504,
-     505,   658,   506,   507,   660,   508,   628,   786,   509,   510,
-     662,   511,   512,   664,   513,   514,   666,   333,   334,   548,
-     549,   681,   682,   683,   861,   995,   996,  1132,  1133,  1236,
-     830,   831,   832,   833,  1107,   975,   976,  1112,   834,   835,
-    1114,   836,   837,  1116,   838,  1104,  1209,   839,   840,  1118,
-     841,   842,  1120,   843,   844,  1122,   845,   846,  1124,   847,
-     848,  1126
-};
-
-/* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
-   STATE-NUM.  */
 #define YYPACT_NINF -1323
+
+#define yypact_value_is_default(Yystate) \
+  (!!((Yystate) == (-1323)))
+
+#define YYTABLE_NINF -501
+
+#define yytable_value_is_error(Yytable_value) \
+  0
+
+  /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
+     STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
       29, -1323,    79,  -224,    80, -1323, -1323,  -105,  -188,   121,
@@ -3110,7 +2260,183 @@ static const yytype_int16 yypact[] =
    -1323, -1323, -1323, -1323,  1252, -1323,  1251,  1004, -1323, -1323
 };
 
-/* YYPGOTO[NTERM-NUM].  */
+  /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
+     Performed when YYTABLE does not specify something else to do.  Zero
+     means the default is an error.  */
+static const yytype_uint16 yydefact[] =
+{
+       8,    10,     0,   805,     0,     1,   807,    28,     0,     0,
+      12,    30,    38,     0,     0,   809,     0,     0,    40,   188,
+       0,     0,     0,    31,     0,     0,     0,     9,    15,    13,
+      18,   190,   277,     0,     0,     0,    41,     0,    34,    36,
+      29,    32,    33,     0,   806,   812,   810,   814,     0,     0,
+     279,     0,     0,   193,   195,   189,   191,   192,     0,    44,
+      46,    39,    42,    43,     0,     0,     0,     0,   813,    11,
+      16,     0,     0,     0,     0,     0,    14,    19,    20,    21,
+      22,    23,     4,     3,     7,   282,   354,   278,   280,   281,
+     197,   224,     0,     0,     0,   365,    35,   439,    37,   441,
+     808,     0,   783,     0,     0,   816,   817,   781,   782,   815,
+      17,     0,     0,     0,   390,     6,     2,     5,   283,   287,
+       0,     0,     0,     0,   226,   250,     0,     0,     0,   198,
+     366,    45,    58,    68,    78,   101,   113,   126,   140,   151,
+     170,    47,    48,    60,    49,    70,    50,    80,    51,   103,
+      52,   115,    53,   128,    54,   142,    55,   153,    56,   172,
+       0,   440,   863,   855,   857,   861,   865,   867,   913,   929,
+     875,   859,   882,   869,   871,   873,   901,   878,   880,   921,
+     917,   925,   845,   849,   853,   891,   884,   886,   888,     0,
+     839,   840,   820,   821,   823,   824,   825,   826,   828,   829,
+     830,   832,   831,   833,   835,     0,   836,   834,   842,   843,
+     844,   818,   894,   819,   822,   841,   837,   838,   827,     0,
+       0,     0,     0,     0,     0,     0,   284,     0,   291,   285,
+     358,   252,  1029,     0,     0,     0,   227,     0,   201,   204,
+     196,   199,   200,     0,    59,     0,    69,     0,    79,     0,
+     102,     0,   114,     0,   127,     0,   141,     0,   152,     0,
+     171,   450,   453,   438,   448,   449,   775,     0,   791,     0,
+     787,     0,     0,     0,   442,   445,   444,   446,   773,   774,
+     443,   785,   786,   447,   789,   790,     0,     0,     0,     0,
+       0,     0,   915,   931,     0,     0,     0,     0,     0,     0,
+     907,     0,   923,   919,   927,     0,     0,     0,     0,     0,
+       0,   811,     0,     0,   784,     0,    24,    25,    27,    26,
+     390,   390,   392,   393,   394,   395,   391,     0,   291,   289,
+       0,     0,  1031,     0,     0,     0,     0,   253,     0,   230,
+     233,   225,   228,   229,     0,     0,    65,     0,    57,    61,
+      63,    62,    64,    75,     0,    67,    71,    73,    72,    74,
+      85,    88,    77,    81,    83,    82,    84,   110,     0,   100,
+       0,   104,   107,   106,   105,   108,   123,     0,   112,     0,
+       0,     0,   116,   121,   120,   122,   118,   117,   119,   137,
+       0,   125,     0,     0,   129,   134,   133,   135,   136,   131,
+     130,   132,   148,     0,   139,     0,   143,   147,   145,   144,
+     146,     0,   150,   154,   156,   155,   157,     0,   169,   173,
+     175,   174,   176,   455,     0,   470,   457,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,   847,     0,   846,   851,     0,   850,     0,   963,   968,
+     973,   978,   981,   990,   995,  1001,  1005,  1008,  1011,  1014,
+    1016,  1021,  1024,  1027,   953,   984,   987,     0,   933,   954,
+     934,     0,   935,     0,   936,     0,   937,     0,   938,     0,
+     951,     0,   939,     0,   940,   991,   941,   996,   942,     0,
+     943,     0,   944,     0,   945,     0,   946,     0,   947,   948,
+       0,   949,     0,   950,     0,     0,     0,   879,   877,   892,
+       0,   795,     0,     0,   896,   897,   793,   794,   890,   895,
+     898,   759,   387,   388,     0,   286,   290,   293,   356,     0,
+       0,     0,   355,   359,   360,   361,   194,     0,     0,  1032,
+       0,   256,   259,   251,   254,   255,     0,     0,   367,   203,
+     207,   202,   205,   209,    66,    76,     0,    87,   111,     0,
+     124,   390,     0,     0,   138,     0,     0,   149,     0,   160,
+       0,     0,   179,     0,     0,   451,   452,     0,   456,   776,
+     792,   788,     0,     0,     0,     0,     0,     0,   866,   868,
+     914,   916,   930,   932,   876,   860,     0,   870,   872,   874,
+     903,     0,     0,     0,   902,   908,   909,   910,   881,   922,
+     924,   918,   920,   926,   928,   848,   852,     0,  1018,   885,
+       0,     0,     0,     0,     0,     0,     0,     0,   977,     0,
+     980,     0,   983,     0,   986,     0,     0,   992,     0,   997,
+    1002,     0,  1000,     0,  1004,     0,  1007,     0,  1010,     0,
+    1013,     0,  1020,     0,  1023,     0,  1026,   887,   889,   893,
+       0,   899,     0,     0,     0,   357,   390,   390,     0,  1036,
+    1038,  1030,  1034,  1035,     0,     0,   368,   232,   236,   231,
+     234,   238,     0,   208,    99,    86,    91,    89,    93,     0,
+       0,     0,     0,     0,     0,   375,   168,   158,     0,     0,
+     161,   187,   177,     0,   180,   710,   484,   661,   516,   533,
+     635,   618,   570,   594,   688,   705,   471,   472,   486,   475,
+     518,   478,   535,   479,   572,   480,   596,   476,   620,   477,
+     637,   473,   663,   474,   690,   481,   706,   482,     0,   469,
+       0,   454,   771,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,   458,   459,   462,   463,   464,   465,   460,   461,
+     467,   466,   769,   770,   746,   748,   864,   856,   858,   862,
+       0,   904,   905,     0,   390,   854,     0,   958,     0,     0,
+       0,     0,   956,   955,   952,   957,     0,   964,     0,   962,
+       0,   969,     0,   967,     0,   974,     0,   972,   979,     0,
+     985,   988,     0,     0,     0,  1003,     0,  1009,     0,     0,
+    1084,  1078,  1081,  1059,  1071,  1090,     0,  1087,  1068,  1047,
+       0,  1048,  1049,  1063,  1050,     0,  1051,     0,  1052,  1053,
+       0,  1054,     0,  1055,     0,  1056,     0,  1057,     0,     0,
+    1028,   796,     0,   288,     0,   295,   298,   292,     0,     0,
+       0,     0,   369,   258,   262,   257,   260,   264,     0,   237,
+     222,     0,   206,     0,     0,     0,     0,     0,     0,   803,
+       0,     0,   210,   215,   217,   213,   214,   216,   218,   212,
+     211,   221,   219,   220,   801,   802,     0,    92,   109,   370,
+     371,   372,   373,   374,     0,   164,   399,   159,   162,   163,
+     183,   399,   178,   181,   182,     0,   485,     0,   517,     0,
+     534,     0,   571,     0,   595,     0,   619,     0,   636,     0,
+     662,     0,   689,     0,   707,     0,     0,   711,   468,   390,
+       0,     0,     0,     0,     0,     0,     0,   390,   883,     0,
+       0,     0,  1017,  1019,   959,     0,     0,     0,     0,   965,
+       0,   970,     0,   975,   982,   999,     0,   989,     0,   994,
+    1006,  1012,  1015,  1073,  1022,     0,  1062,     0,     0,     0,
+       0,     0,     0,     0,     0,   900,   294,   300,     0,   317,
+     363,   364,  1033,  1037,  1041,  1039,  1043,     0,   263,   248,
+       0,   235,     0,     0,     0,   239,   245,   242,   243,   244,
+     241,   240,   247,   246,   223,     0,     0,     0,     0,     0,
+       0,     0,     0,    97,     0,    90,    94,    96,    95,     0,
+       0,     0,   166,   396,   397,   398,     0,   185,     0,   779,
+       0,     0,   487,   488,   489,   777,   778,     0,   519,   520,
+     521,     0,   536,   537,   538,     0,   573,   574,   575,     0,
+     597,   598,   599,     0,   621,   622,   623,     0,   638,   639,
+     640,     0,   664,   665,   666,     0,   691,   692,   693,     0,
+       0,     0,   709,   772,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,   906,   912,   911,     0,     0,   961,   966,
+     971,   976,   993,   998,  1075,  1060,     0,  1058,     0,     0,
+    1066,  1065,  1064,     0,  1067,     0,  1070,     0,  1077,     0,
+    1080,     0,  1083,     0,  1086,     0,  1089,     0,     0,   296,
+     319,   336,     0,  1042,   275,     0,   261,     0,   265,   270,
+     272,   268,   269,   271,   273,   267,   266,   274,   249,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,   804,     0,
+      98,   747,     0,     0,   167,   165,   402,   400,   404,   186,
+     184,   494,   483,   491,     0,     0,     0,   500,   515,   500,
+     532,   500,   569,   500,   593,   500,   617,   500,   634,   500,
+     660,   500,   687,     0,     0,   715,     0,     0,   389,   752,
+     762,   763,   753,   754,   755,   756,   768,   376,   960,     0,
+    1061,   390,   390,     0,     0,     0,  1082,  1085,     0,  1091,
+       0,   308,   312,     0,     0,   301,   302,   303,   299,   306,
+       0,   338,   297,     0,  1045,  1046,  1044,   276,     0,     0,
+       0,     0,   377,   384,   378,   385,   380,   381,   761,     0,
+     413,     0,   409,   410,   411,     0,   403,   502,     0,     0,
+       0,   497,   399,   493,   495,   496,   780,     0,   524,     0,
+     541,     0,   578,     0,   602,     0,   626,     0,   643,     0,
+     669,     0,   696,     0,   708,   704,   745,   723,   730,     0,
+       0,   716,  1074,  1076,     0,     0,  1069,  1072,  1079,  1088,
+    1025,   309,   312,   310,     0,     0,     0,   327,   331,     0,
+       0,   320,   321,   322,   318,   325,     0,     0,     0,   382,
+     386,   379,     0,     0,   412,     0,   401,     0,   405,   407,
+     406,   490,   509,   492,     0,   505,   399,   501,   503,   504,
+     499,     0,   749,   526,   523,     0,   522,   543,   540,     0,
+     539,   580,   577,     0,   576,   604,   601,     0,   600,   628,
+     625,     0,   624,   645,   642,     0,   641,   671,   668,     0,
+     667,   698,   695,     0,   694,     0,     0,   724,   719,   399,
+     714,   717,   718,   767,   766,   307,   311,     0,     0,     0,
+     328,   331,   329,     0,     0,     0,   345,   349,     0,     0,
+     339,   340,   337,   343,   341,  1040,   383,   751,   414,     0,
+       0,   512,   417,   508,   510,   511,   507,     0,   498,   529,
+     399,   525,   527,   528,   546,   549,   542,   544,   545,   583,
+     585,   579,   581,   582,   607,   609,   603,   605,   606,   631,
+     399,   627,   629,   630,   648,   650,   644,   646,   647,   674,
+     676,   670,   672,   673,   701,   431,   697,   699,   700,   713,
+     733,   712,   731,   735,   727,   399,   722,   725,   726,   721,
+       0,     0,     0,   305,   304,   326,   330,     0,     0,     0,
+     346,   349,   347,     0,     0,     0,   408,     0,     0,   514,
+     415,   416,     0,   506,   531,     0,     0,   548,     0,     0,
+     633,     0,     0,     0,   703,   430,     0,     0,   734,   729,
+       0,   720,     0,   315,     0,   313,     0,     0,   324,   323,
+     344,   348,     0,     0,     0,   760,     0,   420,   418,   421,
+     513,   530,   547,   552,   550,   554,   588,   584,   586,     0,
+     612,   608,   610,     0,   632,   653,   649,   651,   654,   679,
+     675,   677,   680,   434,   432,   435,   702,   743,   453,   732,
+     741,   742,     0,     0,   736,   737,   738,   739,   740,   728,
+       0,   316,     0,   334,     0,   332,     0,     0,   362,   342,
+     428,     0,   424,   425,   426,     0,   422,     0,   553,   591,
+       0,   587,   589,   590,   615,     0,   611,   613,   614,     0,
+       0,     0,   436,     0,     0,     0,   314,     0,   335,     0,
+     352,     0,   350,     0,   427,   390,   419,   560,   562,   551,
+     558,   559,     0,     0,   555,   556,   557,     0,     0,     0,
+     799,     0,   655,   652,   658,   657,   656,   797,   798,   686,
+       0,   681,   678,   684,   683,   682,     0,   433,   744,     0,
+       0,   333,     0,   353,   429,     0,     0,     0,   390,   592,
+     616,     0,     0,   685,     0,   757,   758,   351,   423,   561,
+     565,   563,   566,     0,     0,   659,   800,   437,     0,     0,
+     567,   750,   765,   390,     0,   564,     0,     0,   764,   568
+};
+
+  /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
    -1323, -1323, -1323, -1323, -1323, -1323, -1323, -1323, -1323, -1323,
@@ -3189,11 +2515,88 @@ static const yytype_int16 yypgoto[] =
    -1323, -1323
 };
 
-/* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
-   positive, shift that token.  If negative, reduce the rule which
-   number is the opposite.  If zero, do what YYDEFACT says.
-   If YYTABLE_NINF, syntax error.  */
-#define YYTABLE_NINF -501
+  /* YYDEFGOTO[NTERM-NUM].  */
+static const yytype_int16 yydefgoto[] =
+{
+      -1,     2,    84,   116,   117,     3,     4,    10,    17,    29,
+      30,    76,    49,    77,    78,    79,    80,    81,    12,    13,
+      22,    40,    41,    42,    65,    19,    20,    35,    61,    62,
+      63,    94,   141,   142,   143,   243,   244,   349,   348,   144,
+     145,   245,   246,   356,   355,   146,   147,   247,   248,   363,
+     362,   566,   567,   697,   698,   896,   897,  1026,  1025,   695,
+     148,   149,   249,   250,   371,   372,   369,   150,   151,   251,
+     252,   382,   378,   152,   153,   253,   254,   394,   391,   154,
+     155,   255,   256,   406,   404,   156,   157,   257,   258,   413,
+     412,   580,   581,   709,   907,   908,   909,  1031,  1165,   707,
+     158,   159,   259,   260,   419,   418,   583,   584,   713,   912,
+     913,   914,  1036,  1170,   712,    32,    33,    55,    56,    57,
+      91,    92,   128,   240,   241,   242,   561,   345,   562,   563,
+     692,   693,   882,   872,   125,   126,   235,   341,   342,   343,
+     689,   557,   690,   691,   868,   869,  1005,  1001,   232,   233,
+     336,   553,   554,   555,   865,   685,   866,   867,   997,   998,
+    1138,  1136,    51,    52,    87,    88,    89,   120,   121,   228,
+     328,   329,   330,   674,   857,   988,   989,  1128,  1225,  1226,
+    1227,  1228,  1229,  1302,  1303,  1304,  1472,  1515,  1131,  1230,
+    1311,  1312,  1313,  1314,  1315,  1391,  1392,  1393,  1517,  1575,
+    1232,  1316,  1400,  1401,  1402,  1403,  1481,  1482,  1483,  1577,
+    1612,   122,   123,   542,   331,   543,  1404,   544,   545,    23,
+      36,   129,   236,   337,   383,   384,   385,   397,   398,   407,
+     792,   883,   884,  1006,   885,   886,  1008,  1142,   887,   888,
+    1009,   224,  1083,   225,   326,  1032,  1033,  1034,  1167,  1168,
+    1255,  1256,  1328,  1326,  1035,  1252,  1253,  1254,  1489,  1490,
+    1528,  1529,  1585,  1616,  1491,  1582,  1583,  1584,  1504,  1505,
+    1554,  1555,  1601,  1647,    98,    99,   160,   161,   274,   263,
+     264,   265,   424,   425,   426,   587,   588,   762,   751,   586,
+     726,   727,   728,   915,   916,  1042,  1172,  1258,  1173,  1174,
+    1263,  1264,  1265,  1341,  1259,  1260,  1337,  1338,  1339,  1417,
+    1333,  1334,  1413,  1414,  1415,  1492,   729,   730,   917,   918,
+    1048,  1178,  1269,  1344,  1345,  1421,  1422,  1423,  1495,   731,
+     732,   919,   920,  1052,  1180,  1271,  1348,  1349,  1426,  1427,
+    1428,  1496,  1497,  1534,  1535,  1587,  1588,  1624,  1619,  1620,
+    1621,  1656,  1671,  1672,  1679,  1685,   733,   734,   921,   922,
+    1056,  1182,  1273,  1352,  1353,  1431,  1432,  1433,  1498,  1538,
+    1539,  1591,  1592,  1593,   735,   736,   923,   924,  1060,  1184,
+    1275,  1356,  1357,  1436,  1437,  1438,  1499,  1542,  1543,  1596,
+    1597,  1598,   737,   738,   925,   926,  1064,  1186,  1277,  1360,
+    1361,  1441,  1442,  1443,  1501,   739,   740,   927,   928,  1068,
+    1188,  1279,  1364,  1365,  1446,  1447,  1448,  1502,  1547,  1548,
+    1599,  1632,  1633,   741,   742,   929,   930,  1072,  1190,  1281,
+    1368,  1369,  1451,  1452,  1453,  1503,  1551,  1552,  1600,  1641,
+    1642,   743,   744,   931,   932,  1076,  1192,  1283,  1372,  1373,
+    1456,  1457,  1458,  1506,   745,   746,   933,  1285,   747,   748,
+     936,  1082,  1461,  1196,  1197,  1290,  1380,  1381,  1382,  1470,
+    1288,  1289,  1376,  1466,  1467,  1468,  1510,  1375,  1462,  1463,
+    1507,  1508,  1564,  1559,  1560,  1561,   937,   275,   710,   276,
+    1043,  1625,  1163,   763,   764,   765,   766,   767,  1565,  1566,
+     105,  1329,   891,   768,   769,  1680,  1626,  1110,  1111,   770,
+     771,   772,   773,   277,   278,   279,  1044,  1045,  1046,   106,
+     107,   108,   280,   281,   282,   283,   284,   285,   525,   526,
+     527,  1636,  1637,  1638,   893,   894,   895,     7,     8,    15,
+      25,    46,    47,    67,    68,   109,   829,   190,   305,   453,
+     191,   306,   456,   192,   307,   193,   287,   194,   288,   195,
+     295,   196,   289,   197,   286,   198,   290,   199,   291,   200,
+     297,   201,   298,   202,   299,   203,   294,   204,   205,   518,
+     206,   301,   207,   296,   208,   308,   209,   309,   210,   310,
+     211,   212,   528,   313,   529,   530,   852,   213,   300,   614,
+     949,   446,   615,   616,   617,   214,   292,   438,   215,   303,
+     449,   216,   302,   448,   217,   304,   450,   218,   293,   439,
+     477,   478,   479,   630,   793,   794,   795,   480,   481,   799,
+     632,   482,   483,   803,   634,   484,   485,   807,   636,   486,
+     487,   638,   488,   489,   640,   490,   491,   642,   492,   493,
+     644,   494,   495,   646,   967,   496,   497,   648,   969,   647,
+     498,   499,   652,   500,   501,   654,   502,   503,   656,   504,
+     505,   658,   506,   507,   660,   508,   628,   786,   509,   510,
+     662,   511,   512,   664,   513,   514,   666,   333,   334,   548,
+     549,   681,   682,   683,   861,   995,   996,  1132,  1133,  1236,
+     830,   831,   832,   833,  1107,   975,   976,  1112,   834,   835,
+    1114,   836,   837,  1116,   838,  1104,  1209,   839,   840,  1118,
+     841,   842,  1120,   843,   844,  1122,   845,   846,  1124,   847,
+     848,  1126
+};
+
+  /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
+     positive, shift that token.  If negative, reduce the rule whose
+     number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
      189,   524,   700,   350,   351,   357,   358,   364,   365,   373,
@@ -3500,8 +2903,8 @@ static const yytype_int16 yycheck[] =
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,  1590
 };
 
-/* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
-   symbol of state STATE-NUM.  */
+  /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
+     symbol of state STATE-NUM.  */
 static const yytype_uint16 yystos[] =
 {
        0,    43,   437,   441,   442,     0,   309,   973,   974,    15,
@@ -3675,95 +3078,297 @@ static const yytype_uint16 yystos[] =
      941,     8,     8,     8,    12,   791,   677,     6,     8,   245
 };
 
-#define yyerrok		(yyerrstatus = 0)
-#define yyclearin	(yychar = YYEMPTY)
-#define YYEMPTY		(-2)
-#define YYEOF		0
+  /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
+static const yytype_uint16 yyr1[] =
+{
+       0,   436,   437,   438,   438,   439,   440,   440,   441,   441,
+     442,   443,   444,   444,   445,   446,   447,   447,   448,   448,
+     449,   449,   449,   449,   450,   451,   452,   453,   454,   454,
+     455,   456,   457,   457,   458,   459,   460,   460,   461,   461,
+     462,   463,   464,   464,   465,   466,   467,   467,   468,   468,
+     468,   468,   468,   468,   468,   468,   468,   469,   470,   471,
+     472,   472,   473,   473,   473,   474,   474,   475,   476,   477,
+     478,   478,   479,   479,   479,   480,   480,   481,   482,   483,
+     484,   484,   485,   485,   485,   486,   486,   487,   488,   488,
+     489,   490,   491,   492,   492,   493,   493,   494,   494,   495,
+     496,   497,   498,   499,   499,   500,   500,   500,   500,   501,
+     502,   502,   503,   504,   505,   506,   506,   507,   507,   507,
+     507,   507,   507,   508,   508,   509,   510,   511,   512,   512,
+     513,   513,   513,   513,   513,   513,   513,   514,   514,   515,
+     516,   517,   518,   518,   519,   519,   519,   519,   520,   520,
+     521,   522,   523,   524,   524,   525,   525,   525,   526,   527,
+     528,   529,   530,   530,   531,   532,   533,   534,   535,   536,
+     537,   538,   539,   539,   540,   540,   540,   541,   542,   543,
+     544,   545,   545,   546,   547,   548,   549,   550,   551,   551,
+     552,   553,   553,   554,   555,   556,   556,   557,   558,   559,
+     559,   560,   561,   562,   563,   563,   564,   565,   566,   567,
+     567,   568,   568,   568,   568,   568,   568,   568,   568,   568,
+     568,   568,   569,   569,   570,   570,   571,   572,   573,   573,
+     574,   575,   576,   577,   577,   578,   579,   580,   581,   581,
+     582,   582,   582,   582,   582,   582,   582,   582,   583,   583,
+     584,   584,   585,   586,   587,   587,   588,   589,   590,   591,
+     591,   592,   593,   594,   595,   595,   596,   596,   596,   596,
+     596,   596,   596,   596,   596,   597,   597,   598,   598,   599,
+     600,   600,   601,   601,   602,   602,   603,   604,   605,   606,
+     606,   608,   607,   609,   609,   610,   610,   611,   612,   612,
+     613,   613,   614,   614,   615,   616,   617,   617,   618,   618,
+     619,   619,   621,   620,   622,   623,   623,   624,   624,   625,
+     625,   626,   626,   627,   628,   629,   629,   630,   630,   631,
+     631,   633,   632,   634,   635,   635,   636,   636,   637,   637,
+     638,   638,   639,   640,   640,   641,   641,   642,   642,   644,
+     643,   645,   646,   646,   648,   647,   649,   649,   650,   650,
+     651,   651,   652,   653,   654,   655,   656,   657,   658,   659,
+     660,   661,   662,   663,   664,   665,   666,   667,   668,   669,
+     670,   671,   672,   673,   674,   675,   676,   677,   677,   678,
+     679,   679,   680,   680,   680,   680,   681,   682,   682,   683,
+     683,   684,   685,   686,   687,   687,   688,   688,   689,   690,
+     691,   691,   692,   692,   693,   694,   694,   695,   695,   696,
+     697,   698,   698,   699,   700,   701,   701,   702,   702,   703,
+     704,   705,   705,   706,   707,   708,   708,   709,   710,   711,
+     712,   713,   713,   714,   714,   714,   714,   714,   715,   715,
+     716,   717,   718,   719,   719,   720,   721,   722,   722,   723,
+     723,   723,   723,   723,   723,   723,   723,   723,   724,   724,
+     725,   725,   726,   726,   726,   726,   726,   726,   726,   726,
+     726,   726,   726,   727,   728,   729,   730,   730,   731,   731,
+     732,   733,   733,   734,   735,   736,   736,   737,   738,   739,
+     740,   740,   741,   742,   742,   743,   744,   745,   746,   747,
+     748,   748,   749,   750,   751,   752,   753,   754,   755,   755,
+     756,   756,   757,   758,   759,   759,   760,   761,   761,   762,
+     763,   764,   765,   766,   767,   768,   768,   769,   769,   770,
+     771,   772,   772,   773,   774,   774,   775,   776,   777,   778,
+     778,   779,   780,   781,   782,   782,   783,   783,   784,   784,
+     785,   786,   787,   787,   788,   789,   790,   790,   791,   792,
+     793,   794,   795,   795,   796,   796,   797,   798,   799,   799,
+     800,   801,   801,   802,   803,   804,   804,   805,   806,   807,
+     807,   808,   809,   810,   811,   812,   813,   813,   814,   814,
+     815,   816,   817,   817,   818,   819,   819,   820,   821,   822,
+     822,   823,   824,   825,   825,   826,   827,   828,   829,   830,
+     831,   831,   832,   832,   833,   834,   835,   835,   836,   837,
+     837,   838,   839,   840,   841,   842,   843,   844,   844,   845,
+     845,   846,   847,   848,   848,   849,   850,   850,   851,   852,
+     853,   853,   854,   855,   856,   856,   857,   857,   857,   858,
+     859,   860,   861,   862,   862,   863,   863,   864,   865,   866,
+     866,   867,   868,   868,   869,   870,   871,   871,   872,   873,
+     874,   874,   875,   875,   875,   876,   876,   877,   878,   879,
+     880,   880,   881,   881,   882,   883,   884,   884,   885,   886,
+     886,   887,   888,   889,   890,   891,   892,   892,   893,   894,
+     895,   896,   897,   898,   899,   900,   901,   902,   902,   903,
+     904,   905,   906,   907,   908,   909,   909,   910,   911,   912,
+     913,   913,   914,   915,   916,   917,   917,   918,   918,   918,
+     918,   919,   919,   920,   921,   922,   923,   924,   925,   926,
+     927,   928,   929,   930,   931,   932,   933,   934,   935,   936,
+     937,   938,   939,   940,   941,   942,   943,   944,   945,   946,
+     946,   947,   948,   949,   949,   950,   951,   952,   952,   953,
+     954,   955,   955,   956,   957,   958,   958,   959,   960,   961,
+     961,   962,   963,   964,   964,   965,   966,   967,   967,   968,
+     969,   970,   970,   971,   972,   973,   973,   974,   975,   976,
+     976,   977,   978,   979,   980,   980,   981,   981,   982,   982,
+     982,   982,   982,   982,   982,   982,   982,   982,   982,   982,
+     982,   982,   982,   982,   982,   982,   982,   982,   982,   982,
+     982,   982,   982,   982,   982,   984,   983,   985,   985,   987,
+     986,   988,   988,   990,   989,   992,   991,   994,   993,   996,
+     995,   998,   997,  1000,   999,  1002,  1001,  1004,  1003,  1006,
+    1005,  1008,  1007,  1010,  1009,  1012,  1011,  1013,  1014,  1015,
+    1017,  1016,  1019,  1018,  1021,  1020,  1023,  1022,  1025,  1024,
+    1026,  1027,  1028,  1028,  1029,  1029,  1030,  1030,  1030,  1032,
+    1031,  1034,  1033,  1035,  1035,  1036,  1035,  1037,  1037,  1038,
+    1038,  1039,  1040,  1042,  1041,  1043,  1043,  1045,  1044,  1046,
+    1046,  1048,  1047,  1049,  1049,  1051,  1050,  1052,  1052,  1054,
+    1053,  1055,  1055,  1056,  1056,  1056,  1056,  1056,  1056,  1056,
+    1056,  1056,  1056,  1056,  1056,  1056,  1056,  1056,  1056,  1056,
+    1056,  1056,  1057,  1058,  1059,  1059,  1060,  1060,  1061,  1061,
+     666,  1062,  1063,  1064,  1065,  1065,  1066,  1067,  1068,  1069,
+    1069,  1070,  1071,  1072,  1073,  1073,  1074,  1075,  1076,  1077,
+    1078,  1079,  1080,  1081,  1082,  1083,  1084,  1085,  1086,  1087,
+    1088,  1089,  1089,  1090,  1091,  1092,  1093,  1093,  1094,  1095,
+    1096,  1097,  1098,  1098,  1099,  1100,  1101,  1102,  1103,  1104,
+    1105,  1106,  1107,  1108,  1109,  1110,  1112,  1111,  1113,  1113,
+    1114,  1115,  1116,  1117,  1118,  1119,  1120,  1121,  1122,  1123,
+    1123,  1124,  1125,  1126,  1127,  1127,  1128,  1129,  1130,  1130,
+    1131,  1132,  1133,  1134,  1134,  1135,  1135,  1136,  1136,  1137,
+    1137,  1137,  1137,  1137,  1137,  1137,  1137,  1137,  1138,  1139,
+    1140,  1140,  1141,  1142,  1142,  1143,  1143,  1144,  1145,  1146,
+    1147,  1148,  1149,  1151,  1150,  1152,  1152,  1153,  1154,  1155,
+    1156,  1157,  1158,  1159,  1160,  1161,  1162,  1163,  1164,  1165,
+    1166,  1167
+};
 
-#define YYACCEPT	goto yyacceptlab
-#define YYABORT		goto yyabortlab
-#define YYERROR		goto yyerrorlab
+  /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
+static const yytype_uint8 yyr2[] =
+{
+       0,     2,     8,     1,     1,     1,     1,     0,     0,     4,
+       1,     5,     0,     2,     3,     1,     1,     2,     0,     2,
+       1,     1,     1,     1,     4,     4,     4,     4,     0,     3,
+       1,     1,     1,     1,     1,     3,     0,     2,     0,     3,
+       1,     1,     1,     1,     1,     3,     0,     2,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     3,     1,     1,
+       0,     2,     1,     1,     1,     1,     2,     3,     1,     1,
+       0,     2,     1,     1,     1,     1,     2,     3,     1,     1,
+       0,     2,     1,     1,     1,     1,     3,     1,     0,     2,
+       3,     1,     1,     0,     2,     1,     1,     1,     2,     1,
+       3,     1,     1,     0,     2,     1,     1,     1,     1,     4,
+       1,     2,     3,     1,     1,     0,     2,     1,     1,     1,
+       1,     1,     1,     1,     2,     3,     1,     1,     0,     2,
+       1,     1,     1,     1,     1,     1,     1,     1,     2,     3,
+       1,     1,     0,     2,     1,     1,     1,     1,     1,     2,
+       3,     1,     1,     0,     2,     1,     1,     1,     3,     3,
+       1,     1,     1,     1,     1,     3,     1,     1,     1,     3,
+       1,     1,     0,     2,     1,     1,     1,     3,     3,     1,
+       1,     1,     1,     1,     3,     1,     1,     1,     0,     2,
+       1,     1,     1,     1,     6,     0,     3,     1,     1,     1,
+       1,     1,     3,     1,     0,     2,     3,     1,     1,     0,
+       2,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     2,     0,     3,     1,     1,     1,     1,
+       1,     3,     1,     0,     2,     3,     1,     1,     0,     2,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     2,
+       0,     3,     1,     1,     1,     1,     1,     3,     1,     0,
+       2,     3,     1,     1,     0,     2,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     2,     0,     2,     1,
+       1,     1,     1,     2,     3,     3,     4,     1,     5,     1,
+       2,     0,     4,     0,     3,     1,     3,     3,     0,     3,
+       0,     2,     1,     1,     4,     4,     1,     3,     1,     2,
+       1,     2,     0,     4,     4,     1,     2,     0,     3,     0,
+       2,     1,     1,     4,     4,     1,     3,     1,     2,     1,
+       2,     0,     4,     4,     1,     2,     0,     3,     0,     2,
+       1,     1,     4,     1,     3,     1,     2,     1,     2,     0,
+       4,     4,     1,     2,     0,     4,     1,     2,     0,     2,
+       1,     1,     4,     4,     4,     4,     4,     4,     4,     4,
+       4,     4,     4,     4,     4,     3,     4,     4,     4,     4,
+       4,     4,     4,     4,     4,     4,     4,     3,     3,     2,
+       0,     2,     1,     1,     1,     1,     1,     1,     1,     0,
+       2,     3,     1,     1,     0,     2,     1,     1,     3,     3,
+       1,     1,     2,     1,     3,     1,     1,     0,     2,     3,
+       1,     0,     1,     3,     3,     1,     1,     2,     1,     3,
+       1,     0,     2,     3,     1,     0,     1,     3,     3,     1,
+       1,     0,     2,     1,     1,     1,     1,     1,     1,     1,
+       1,     3,     2,     0,     3,     1,     1,     0,     2,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     2,     1,
+       0,     2,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     4,     1,     1,     0,     2,     1,     1,
+       3,     0,     2,     2,     1,     1,     1,     1,     3,     1,
+       0,     2,     1,     1,     1,     1,     3,     1,     2,     1,
+       1,     1,     1,     3,     1,     4,     1,     1,     0,     2,
+       1,     1,     3,     2,     0,     2,     1,     1,     1,     1,
+       3,     1,     4,     1,     1,     0,     2,     1,     1,     3,
+       2,     0,     2,     1,     1,     1,     1,     3,     1,     0,
+       2,     3,     1,     1,     0,     2,     1,     1,     1,     1,
+       1,     3,     0,     2,     3,     1,     0,     1,     3,     4,
+       1,     1,     0,     2,     1,     1,     3,     2,     0,     2,
+       1,     1,     1,     1,     3,     0,     2,     2,     1,     1,
+       1,     1,     3,     4,     1,     1,     0,     2,     1,     1,
+       3,     2,     0,     2,     1,     1,     1,     1,     3,     0,
+       2,     2,     1,     1,     1,     1,     3,     4,     1,     1,
+       0,     2,     1,     1,     3,     2,     0,     2,     1,     1,
+       1,     1,     3,     1,     4,     1,     1,     0,     2,     1,
+       1,     3,     2,     0,     2,     1,     1,     1,     1,     3,
+       0,     2,     3,     1,     0,     2,     1,     1,     1,     3,
+       4,     1,     1,     0,     2,     1,     1,     3,     2,     0,
+       2,     1,     1,     1,     1,     3,     0,     2,     3,     1,
+       0,     2,     1,     1,     1,     2,     1,     4,     1,     1,
+       0,     2,     1,     1,     3,     2,     0,     2,     1,     1,
+       1,     1,     3,     1,     5,     1,     0,     1,     1,     3,
+       1,     1,     5,     1,     3,     1,     1,     1,     1,     1,
+       3,     1,     3,     1,     1,     1,     1,     1,     3,     1,
+       0,     2,     3,     1,     1,     0,     2,     1,     1,     1,
+       1,     1,     1,     1,     3,     4,     4,     4,     4,     4,
+       4,     4,     4,     4,     4,     4,     4,     4,     4,     4,
+       4,     4,     4,     4,     4,     4,     4,     4,     4,     1,
+       1,     1,     3,     1,     1,     1,     3,     1,     1,     1,
+       3,     1,     1,     1,     3,     1,     1,     1,     3,     1,
+       1,     1,     3,     1,     1,     1,     3,     1,     1,     1,
+       3,     1,     1,     1,     3,     0,     4,     1,     5,     0,
+       2,     5,     1,     1,     0,     2,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     0,     3,     1,     2,     0,
+       3,     1,     2,     0,     5,     0,     5,     0,     5,     0,
+       4,     0,     5,     0,     5,     0,     4,     0,     4,     0,
+       4,     0,     4,     0,     4,     0,     4,     3,     1,     1,
+       0,     4,     0,     6,     0,     4,     0,     4,     0,     4,
+       3,     1,     1,     2,     0,     2,     1,     1,     1,     0,
+       4,     0,     4,     1,     2,     0,     4,     0,     2,     1,
+       1,     4,     4,     0,     4,     0,     2,     0,     4,     0,
+       2,     0,     4,     0,     2,     0,     4,     0,     2,     0,
+       4,     0,     2,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     3,     1,     0,     2,     1,     1,     1,     2,
+       4,     3,     3,     1,     1,     2,     4,     3,     1,     1,
+       2,     4,     3,     1,     1,     2,     4,     2,     1,     2,
+       2,     1,     3,     2,     1,     2,     2,     1,     2,     4,
+       1,     0,     1,     2,     4,     1,     0,     1,     2,     3,
+       2,     1,     1,     2,     2,     1,     3,     2,     1,     2,
+       2,     1,     3,     2,     1,     3,     0,     4,     0,     2,
+       2,     1,     3,     2,     1,     6,     2,     1,     2,     0,
+       3,     1,     1,     4,     1,     1,     1,     3,     0,     2,
+       5,     1,     1,     0,     2,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     3,     1,
+       1,     2,     1,     0,     2,     1,     1,     3,     1,     3,
+       3,     1,     3,     0,     5,     0,     2,     3,     1,     3,
+       3,     1,     2,     3,     1,     2,     3,     1,     3,     3,
+       1,     2
+};
 
 
-/* Like YYERROR except do call yyerror.  This remains here temporarily
-   to ease the transition to the new meaning of YYERROR, for GCC.
-   Once GCC version 2 has supplanted version 1, this can go.  */
+#define yyerrok         (yyerrstatus = 0)
+#define yyclearin       (yychar = YYEMPTY)
+#define YYEMPTY         (-2)
+#define YYEOF           0
 
-#define YYFAIL		goto yyerrlab
+#define YYACCEPT        goto yyacceptlab
+#define YYABORT         goto yyabortlab
+#define YYERROR         goto yyerrorlab
+
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)					\
-do								\
-  if (yychar == YYEMPTY && yylen == 1)				\
-    {								\
-      yychar = (Token);						\
-      yylval = (Value);						\
-      yytoken = YYTRANSLATE (yychar);				\
-      YYPOPSTACK (1);						\
-      goto yybackup;						\
-    }								\
-  else								\
-    {								\
+#define YYBACKUP(Token, Value)                                  \
+do                                                              \
+  if (yychar == YYEMPTY)                                        \
+    {                                                           \
+      yychar = (Token);                                         \
+      yylval = (Value);                                         \
+      YYPOPSTACK (yylen);                                       \
+      yystate = *yyssp;                                         \
+      goto yybackup;                                            \
+    }                                                           \
+  else                                                          \
+    {                                                           \
       yyerror (&yylloc, osinstance, parserData, osglData, osnlData, YY_("syntax error: cannot back up")); \
-      YYERROR;							\
-    }								\
-while (YYID (0))
+      YYERROR;                                                  \
+    }                                                           \
+while (0)
 
-
-#define YYTERROR	1
-#define YYERRCODE	256
+/* Error token number */
+#define YYTERROR        1
+#define YYERRCODE       256
 
 
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
    If N is 0, then set CURRENT to the empty location which ends
    the previous symbol: RHS[0] (always defined).  */
 
-#define YYRHSLOC(Rhs, K) ((Rhs)[K])
 #ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)				\
-    do									\
-      if (YYID (N))                                                    \
-	{								\
-	  (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;	\
-	  (Current).first_column = YYRHSLOC (Rhs, 1).first_column;	\
-	  (Current).last_line    = YYRHSLOC (Rhs, N).last_line;		\
-	  (Current).last_column  = YYRHSLOC (Rhs, N).last_column;	\
-	}								\
-      else								\
-	{								\
-	  (Current).first_line   = (Current).last_line   =		\
-	    YYRHSLOC (Rhs, 0).last_line;				\
-	  (Current).first_column = (Current).last_column =		\
-	    YYRHSLOC (Rhs, 0).last_column;				\
-	}								\
-    while (YYID (0))
+# define YYLLOC_DEFAULT(Current, Rhs, N)                                \
+    do                                                                  \
+      if (N)                                                            \
+        {                                                               \
+          (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;        \
+          (Current).first_column = YYRHSLOC (Rhs, 1).first_column;      \
+          (Current).last_line    = YYRHSLOC (Rhs, N).last_line;         \
+          (Current).last_column  = YYRHSLOC (Rhs, N).last_column;       \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          (Current).first_line   = (Current).last_line   =              \
+            YYRHSLOC (Rhs, 0).last_line;                                \
+          (Current).first_column = (Current).last_column =              \
+            YYRHSLOC (Rhs, 0).last_column;                              \
+        }                                                               \
+    while (0)
 #endif
 
+#define YYRHSLOC(Rhs, K) ((Rhs)[K])
 
-/* YY_LOCATION_PRINT -- Print the location on the stream.
-   This macro was not mandated originally: define only if we know
-   we won't break user code: when these are the locations we know.  */
-
-#ifndef YY_LOCATION_PRINT
-# if YYLTYPE_IS_TRIVIAL
-#  define YY_LOCATION_PRINT(File, Loc)			\
-     fprintf (File, "%d.%d-%d.%d",			\
-	      (Loc).first_line, (Loc).first_column,	\
-	      (Loc).last_line,  (Loc).last_column)
-# else
-#  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
-# endif
-#endif
-
-
-/* YYLEX -- calling `yylex' with the right arguments.  */
-
-#ifdef YYLEX_PARAM
-# define YYLEX yylex (&yylval, &yylloc, YYLEX_PARAM)
-#else
-# define YYLEX yylex (&yylval, &yylloc, scanner)
-#endif
 
 /* Enable debugging if requested.  */
 #if YYDEBUG
@@ -3773,64 +3378,90 @@ while (YYID (0))
 #  define YYFPRINTF fprintf
 # endif
 
-# define YYDPRINTF(Args)			\
-do {						\
-  if (yydebug)					\
-    YYFPRINTF Args;				\
-} while (YYID (0))
-
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)			  \
-do {									  \
-  if (yydebug)								  \
-    {									  \
-      YYFPRINTF (stderr, "%s ", Title);					  \
-      yy_symbol_print (stderr,						  \
-		  Type, Value, Location, osinstance, parserData, osglData, osnlData); \
-      YYFPRINTF (stderr, "\n");						  \
-    }									  \
-} while (YYID (0))
+# define YYDPRINTF(Args)                        \
+do {                                            \
+  if (yydebug)                                  \
+    YYFPRINTF Args;                             \
+} while (0)
 
 
-/*--------------------------------.
-| Print this symbol on YYOUTPUT.  |
-`--------------------------------*/
+/* YY_LOCATION_PRINT -- Print the location on the stream.
+   This macro was not mandated originally: define only if we know
+   we won't break user code: when these are the locations we know.  */
 
-/*ARGSUSED*/
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#ifndef YY_LOCATION_PRINT
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+
+/* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
+
+YY_ATTRIBUTE_UNUSED
+static unsigned
+yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
+{
+  unsigned res = 0;
+  int end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
+  if (0 <= yylocp->first_line)
+    {
+      res += YYFPRINTF (yyo, "%d", yylocp->first_line);
+      if (0 <= yylocp->first_column)
+        res += YYFPRINTF (yyo, ".%d", yylocp->first_column);
+    }
+  if (0 <= yylocp->last_line)
+    {
+      if (yylocp->first_line < yylocp->last_line)
+        {
+          res += YYFPRINTF (yyo, "-%d", yylocp->last_line);
+          if (0 <= end_col)
+            res += YYFPRINTF (yyo, ".%d", end_col);
+        }
+      else if (0 <= end_col && yylocp->first_column < end_col)
+        res += YYFPRINTF (yyo, "-%d", end_col);
+    }
+  return res;
+ }
+
+#  define YY_LOCATION_PRINT(File, Loc)          \
+  yy_location_print_ (File, &(Loc))
+
+# else
+#  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+# endif
+#endif
+
+
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)                    \
+do {                                                                      \
+  if (yydebug)                                                            \
+    {                                                                     \
+      YYFPRINTF (stderr, "%s ", Title);                                   \
+      yy_symbol_print (stderr,                                            \
+                  Type, Value, Location, osinstance, parserData, osglData, osnlData); \
+      YYFPRINTF (stderr, "\n");                                           \
+    }                                                                     \
+} while (0)
+
+
+/*----------------------------------------.
+| Print this symbol's value on YYOUTPUT.  |
+`----------------------------------------*/
+
 static void
 yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
-#else
-static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, parserData, osglData, osnlData)
-    FILE *yyoutput;
-    int yytype;
-    YYSTYPE const * const yyvaluep;
-    YYLTYPE const * const yylocationp;
-    OSInstance *osinstance;
-    OSiLParserData *parserData;
-    OSgLParserData *osglData;
-    OSnLParserData *osnlData;
-#endif
 {
-  if (!yyvaluep)
-    return;
+  FILE *yyo = yyoutput;
+  YYUSE (yyo);
   YYUSE (yylocationp);
   YYUSE (osinstance);
   YYUSE (parserData);
   YYUSE (osglData);
   YYUSE (osnlData);
+  if (!yyvaluep)
+    return;
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
-# else
-  YYUSE (yyoutput);
 # endif
-  switch (yytype)
-    {
-      default:
-	break;
-    }
+  YYUSE (yytype);
 }
 
 
@@ -3838,27 +3469,11 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, pars
 | Print this symbol on YYOUTPUT.  |
 `--------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
-#else
-static void
-yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, parserData, osglData, osnlData)
-    FILE *yyoutput;
-    int yytype;
-    YYSTYPE const * const yyvaluep;
-    YYLTYPE const * const yylocationp;
-    OSInstance *osinstance;
-    OSiLParserData *parserData;
-    OSgLParserData *osglData;
-    OSnLParserData *osnlData;
-#endif
 {
-  if (yytype < YYNTOKENS)
-    YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
-  else
-    YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
+  YYFPRINTF (yyoutput, "%s %s (",
+             yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
 
   YY_LOCATION_PRINT (yyoutput, *yylocationp);
   YYFPRINTF (yyoutput, ": ");
@@ -3871,16 +3486,8 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, parserData
 | TOP (included).                                                   |
 `------------------------------------------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
-#else
-static void
-yy_stack_print (yybottom, yytop)
-    yytype_int16 *yybottom;
-    yytype_int16 *yytop;
-#endif
 {
   YYFPRINTF (stderr, "Stack now");
   for (; yybottom <= yytop; yybottom++)
@@ -3891,54 +3498,42 @@ yy_stack_print (yybottom, yytop)
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Bottom, Top)				\
-do {								\
-  if (yydebug)							\
-    yy_stack_print ((Bottom), (Top));				\
-} while (YYID (0))
+# define YY_STACK_PRINT(Bottom, Top)                            \
+do {                                                            \
+  if (yydebug)                                                  \
+    yy_stack_print ((Bottom), (Top));                           \
+} while (0)
 
 
 /*------------------------------------------------.
 | Report that the YYRULE is going to be reduced.  |
 `------------------------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
-#else
-static void
-yy_reduce_print (yyvsp, yylsp, yyrule, osinstance, parserData, osglData, osnlData)
-    YYSTYPE *yyvsp;
-    YYLTYPE *yylsp;
-    int yyrule;
-    OSInstance *osinstance;
-    OSiLParserData *parserData;
-    OSgLParserData *osglData;
-    OSnLParserData *osnlData;
-#endif
+yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
 {
+  unsigned long int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
-  unsigned long int yylno = yyrline[yyrule];
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
-	     yyrule - 1, yylno);
+             yyrule - 1, yylno);
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
-      yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
-		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       , &(yylsp[(yyi + 1) - (yynrhs)])		       , osinstance, parserData, osglData, osnlData);
+      yy_symbol_print (stderr,
+                       yystos[yyssp[yyi + 1 - yynrhs]],
+                       &(yyvsp[(yyi + 1) - (yynrhs)])
+                       , &(yylsp[(yyi + 1) - (yynrhs)])                       , osinstance, parserData, osglData, osnlData);
       YYFPRINTF (stderr, "\n");
     }
 }
 
-# define YY_REDUCE_PRINT(Rule)		\
-do {					\
-  if (yydebug)				\
-    yy_reduce_print (yyvsp, yylsp, Rule, osinstance, parserData, osglData, osnlData); \
-} while (YYID (0))
+# define YY_REDUCE_PRINT(Rule)          \
+do {                                    \
+  if (yydebug)                          \
+    yy_reduce_print (yyssp, yyvsp, yylsp, Rule, osinstance, parserData, osglData, osnlData); \
+} while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
@@ -3952,7 +3547,7 @@ int yydebug;
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
-#ifndef	YYINITDEPTH
+#ifndef YYINITDEPTH
 # define YYINITDEPTH 200
 #endif
 
@@ -3967,7 +3562,6 @@ int yydebug;
 # define YYMAXDEPTH 10000
 #endif
 
-
 
 #if YYERROR_VERBOSE
 
@@ -3976,15 +3570,8 @@ int yydebug;
 #   define yystrlen strlen
 #  else
 /* Return the length of YYSTR.  */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static YYSIZE_T
 yystrlen (const char *yystr)
-#else
-static YYSIZE_T
-yystrlen (yystr)
-    const char *yystr;
-#endif
 {
   YYSIZE_T yylen;
   for (yylen = 0; yystr[yylen]; yylen++)
@@ -4000,16 +3587,8 @@ yystrlen (yystr)
 #  else
 /* Copy YYSRC to YYDEST, returning the address of the terminating '\0' in
    YYDEST.  */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static char *
 yystpcpy (char *yydest, const char *yysrc)
-#else
-static char *
-yystpcpy (yydest, yysrc)
-    char *yydest;
-    const char *yysrc;
-#endif
 {
   char *yyd = yydest;
   const char *yys = yysrc;
@@ -4039,27 +3618,27 @@ yytnamerr (char *yyres, const char *yystr)
       char const *yyp = yystr;
 
       for (;;)
-	switch (*++yyp)
-	  {
-	  case '\'':
-	  case ',':
-	    goto do_not_strip_quotes;
+        switch (*++yyp)
+          {
+          case '\'':
+          case ',':
+            goto do_not_strip_quotes;
 
-	  case '\\':
-	    if (*++yyp != '\\')
-	      goto do_not_strip_quotes;
-	    /* Fall through.  */
-	  default:
-	    if (yyres)
-	      yyres[yyn] = *yyp;
-	    yyn++;
-	    break;
+          case '\\':
+            if (*++yyp != '\\')
+              goto do_not_strip_quotes;
+            /* Fall through.  */
+          default:
+            if (yyres)
+              yyres[yyn] = *yyp;
+            yyn++;
+            break;
 
-	  case '"':
-	    if (yyres)
-	      yyres[yyn] = '\0';
-	    return yyn;
-	  }
+          case '"':
+            if (yyres)
+              yyres[yyn] = '\0';
+            return yyn;
+          }
     do_not_strip_quotes: ;
     }
 
@@ -4070,137 +3649,148 @@ yytnamerr (char *yyres, const char *yystr)
 }
 # endif
 
-/* Copy into YYRESULT an error message about the unexpected token
-   YYCHAR while in state YYSTATE.  Return the number of bytes copied,
-   including the terminating null byte.  If YYRESULT is null, do not
-   copy anything; just return the number of bytes that would be
-   copied.  As a special case, return 0 if an ordinary "syntax error"
-   message will do.  Return YYSIZE_MAXIMUM if overflow occurs during
-   size calculation.  */
-static YYSIZE_T
-yysyntax_error (char *yyresult, int yystate, int yychar)
+/* Copy into *YYMSG, which is of size *YYMSG_ALLOC, an error message
+   about the unexpected token YYTOKEN for the state stack whose top is
+   YYSSP.
+
+   Return 0 if *YYMSG was successfully written.  Return 1 if *YYMSG is
+   not large enough to hold the message.  In that case, also set
+   *YYMSG_ALLOC to the required number of bytes.  Return 2 if the
+   required number of bytes is too large to store.  */
+static int
+yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
+                yytype_int16 *yyssp, int yytoken)
 {
-  int yyn = yypact[yystate];
+  YYSIZE_T yysize0 = yytnamerr (YY_NULLPTR, yytname[yytoken]);
+  YYSIZE_T yysize = yysize0;
+  enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
+  /* Internationalized format string. */
+  const char *yyformat = YY_NULLPTR;
+  /* Arguments of yyformat. */
+  char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
+  /* Number of reported tokens (one for the "unexpected", one per
+     "expected"). */
+  int yycount = 0;
 
-  if (! (YYPACT_NINF < yyn && yyn <= YYLAST))
-    return 0;
-  else
+  /* There are many possibilities here to consider:
+     - If this state is a consistent state with a default action, then
+       the only way this function was invoked is if the default action
+       is an error action.  In that case, don't check for expected
+       tokens because there are none.
+     - The only way there can be no lookahead present (in yychar) is if
+       this state is a consistent state with a default action.  Thus,
+       detecting the absence of a lookahead is sufficient to determine
+       that there is no unexpected or expected token to report.  In that
+       case, just report a simple "syntax error".
+     - Don't assume there isn't a lookahead just because this state is a
+       consistent state with a default action.  There might have been a
+       previous inconsistent state, consistent state with a non-default
+       action, or user semantic action that manipulated yychar.
+     - Of course, the expected token list depends on states to have
+       correct lookahead information, and it depends on the parser not
+       to perform extra reductions after fetching a lookahead from the
+       scanner and before detecting a syntax error.  Thus, state merging
+       (from LALR or IELR) and default reductions corrupt the expected
+       token list.  However, the list is correct for canonical LR with
+       one exception: it will still contain any token that will not be
+       accepted due to an error action in a later state.
+  */
+  if (yytoken != YYEMPTY)
     {
-      int yytype = YYTRANSLATE (yychar);
-      YYSIZE_T yysize0 = yytnamerr (0, yytname[yytype]);
-      YYSIZE_T yysize = yysize0;
-      YYSIZE_T yysize1;
-      int yysize_overflow = 0;
-      enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
-      char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
-      int yyx;
+      int yyn = yypact[*yyssp];
+      yyarg[yycount++] = yytname[yytoken];
+      if (!yypact_value_is_default (yyn))
+        {
+          /* Start YYX at -YYN if negative to avoid negative indexes in
+             YYCHECK.  In other words, skip the first -YYN actions for
+             this state because they are default actions.  */
+          int yyxbegin = yyn < 0 ? -yyn : 0;
+          /* Stay within bounds of both yycheck and yytname.  */
+          int yychecklim = YYLAST - yyn + 1;
+          int yyxend = yychecklim < YYNTOKENS ? yychecklim : YYNTOKENS;
+          int yyx;
 
-# if 0
-      /* This is so xgettext sees the translatable formats that are
-	 constructed on the fly.  */
-      YY_("syntax error, unexpected %s");
-      YY_("syntax error, unexpected %s, expecting %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s or %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s");
-# endif
-      char *yyfmt;
-      char const *yyf;
-      static char const yyunexpected[] = "syntax error, unexpected %s";
-      static char const yyexpecting[] = ", expecting %s";
-      static char const yyor[] = " or %s";
-      char yyformat[sizeof yyunexpected
-		    + sizeof yyexpecting - 1
-		    + ((YYERROR_VERBOSE_ARGS_MAXIMUM - 2)
-		       * (sizeof yyor - 1))];
-      char const *yyprefix = yyexpecting;
-
-      /* Start YYX at -YYN if negative to avoid negative indexes in
-	 YYCHECK.  */
-      int yyxbegin = yyn < 0 ? -yyn : 0;
-
-      /* Stay within bounds of both yycheck and yytname.  */
-      int yychecklim = YYLAST - yyn + 1;
-      int yyxend = yychecklim < YYNTOKENS ? yychecklim : YYNTOKENS;
-      int yycount = 1;
-
-      yyarg[0] = yytname[yytype];
-      yyfmt = yystpcpy (yyformat, yyunexpected);
-
-      for (yyx = yyxbegin; yyx < yyxend; ++yyx)
-	if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
-	  {
-	    if (yycount == YYERROR_VERBOSE_ARGS_MAXIMUM)
-	      {
-		yycount = 1;
-		yysize = yysize0;
-		yyformat[sizeof yyunexpected - 1] = '\0';
-		break;
-	      }
-	    yyarg[yycount++] = yytname[yyx];
-	    yysize1 = yysize + yytnamerr (0, yytname[yyx]);
-	    yysize_overflow |= (yysize1 < yysize);
-	    yysize = yysize1;
-	    yyfmt = yystpcpy (yyfmt, yyprefix);
-	    yyprefix = yyor;
-	  }
-
-      yyf = YY_(yyformat);
-      yysize1 = yysize + yystrlen (yyf);
-      yysize_overflow |= (yysize1 < yysize);
-      yysize = yysize1;
-
-      if (yysize_overflow)
-	return YYSIZE_MAXIMUM;
-
-      if (yyresult)
-	{
-	  /* Avoid sprintf, as that infringes on the user's name space.
-	     Don't have undefined behavior even if the translation
-	     produced a string with the wrong number of "%s"s.  */
-	  char *yyp = yyresult;
-	  int yyi = 0;
-	  while ((*yyp = *yyf) != '\0')
-	    {
-	      if (*yyp == '%' && yyf[1] == 's' && yyi < yycount)
-		{
-		  yyp += yytnamerr (yyp, yyarg[yyi++]);
-		  yyf += 2;
-		}
-	      else
-		{
-		  yyp++;
-		  yyf++;
-		}
-	    }
-	}
-      return yysize;
+          for (yyx = yyxbegin; yyx < yyxend; ++yyx)
+            if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR
+                && !yytable_value_is_error (yytable[yyx + yyn]))
+              {
+                if (yycount == YYERROR_VERBOSE_ARGS_MAXIMUM)
+                  {
+                    yycount = 1;
+                    yysize = yysize0;
+                    break;
+                  }
+                yyarg[yycount++] = yytname[yyx];
+                {
+                  YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULLPTR, yytname[yyx]);
+                  if (! (yysize <= yysize1
+                         && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
+                    return 2;
+                  yysize = yysize1;
+                }
+              }
+        }
     }
+
+  switch (yycount)
+    {
+# define YYCASE_(N, S)                      \
+      case N:                               \
+        yyformat = S;                       \
+      break
+      YYCASE_(0, YY_("syntax error"));
+      YYCASE_(1, YY_("syntax error, unexpected %s"));
+      YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
+      YYCASE_(3, YY_("syntax error, unexpected %s, expecting %s or %s"));
+      YYCASE_(4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
+      YYCASE_(5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
+# undef YYCASE_
+    }
+
+  {
+    YYSIZE_T yysize1 = yysize + yystrlen (yyformat);
+    if (! (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
+      return 2;
+    yysize = yysize1;
+  }
+
+  if (*yymsg_alloc < yysize)
+    {
+      *yymsg_alloc = 2 * yysize;
+      if (! (yysize <= *yymsg_alloc
+             && *yymsg_alloc <= YYSTACK_ALLOC_MAXIMUM))
+        *yymsg_alloc = YYSTACK_ALLOC_MAXIMUM;
+      return 1;
+    }
+
+  /* Avoid sprintf, as that infringes on the user's name space.
+     Don't have undefined behavior even if the translation
+     produced a string with the wrong number of "%s"s.  */
+  {
+    char *yyp = *yymsg;
+    int yyi = 0;
+    while ((*yyp = *yyformat) != '\0')
+      if (*yyp == '%' && yyformat[1] == 's' && yyi < yycount)
+        {
+          yyp += yytnamerr (yyp, yyarg[yyi++]);
+          yyformat += 2;
+        }
+      else
+        {
+          yyp++;
+          yyformat++;
+        }
+  }
+  return 0;
 }
 #endif /* YYERROR_VERBOSE */
-
 
 /*-----------------------------------------------.
 | Release the memory associated to this symbol.  |
 `-----------------------------------------------*/
 
-/*ARGSUSED*/
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
-#else
-static void
-yydestruct (yymsg, yytype, yyvaluep, yylocationp, osinstance, parserData, osglData, osnlData)
-    const char *yymsg;
-    int yytype;
-    YYSTYPE *yyvaluep;
-    YYLTYPE *yylocationp;
-    OSInstance *osinstance;
-    OSiLParserData *parserData;
-    OSgLParserData *osglData;
-    OSnLParserData *osnlData;
-#endif
 {
   YYUSE (yyvaluep);
   YYUSE (yylocationp);
@@ -4208,75 +3798,42 @@ yydestruct (yymsg, yytype, yyvaluep, yylocationp, osinstance, parserData, osglDa
   YYUSE (parserData);
   YYUSE (osglData);
   YYUSE (osnlData);
-
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
-  switch (yytype)
-    {
-
-      default:
-	break;
-    }
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+  YYUSE (yytype);
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
-/* Prevent warnings from -Wmissing-prototypes.  */
-#ifdef YYPARSE_PARAM
-#if defined __STDC__ || defined __cplusplus
-int yyparse (void *YYPARSE_PARAM);
-#else
-int yyparse ();
-#endif
-#else /* ! YYPARSE_PARAM */
-#if defined __STDC__ || defined __cplusplus
-int yyparse (OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData);
-#else
-int yyparse ();
-#endif
-#endif /* ! YYPARSE_PARAM */
 
 
 
+/*----------.
+| yyparse.  |
+`----------*/
 
-
-/*-------------------------.
-| yyparse or yypush_parse.  |
-`-------------------------*/
-
-#ifdef YYPARSE_PARAM
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-int
-yyparse (void *YYPARSE_PARAM)
-#else
-int
-yyparse (YYPARSE_PARAM)
-    void *YYPARSE_PARAM;
-#endif
-#else /* ! YYPARSE_PARAM */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 int
 yyparse (OSInstance *osinstance, OSiLParserData *parserData, OSgLParserData *osglData, OSnLParserData *osnlData)
-#else
-int
-yyparse (osinstance, parserData, osglData, osnlData)
-    OSInstance *osinstance;
-    OSiLParserData *parserData;
-    OSgLParserData *osglData;
-    OSnLParserData *osnlData;
-#endif
-#endif
 {
 /* The lookahead symbol.  */
 int yychar;
 
+
 /* The semantic value of the lookahead symbol.  */
-YYSTYPE yylval;
+/* Default value used for initialization, for pacifying older GCCs
+   or non-GCC compilers.  */
+YY_INITIAL_VALUE (static YYSTYPE yyval_default;)
+YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
 /* Location data for the lookahead symbol.  */
-YYLTYPE yylloc;
+static YYLTYPE yyloc_default
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+  = { 1, 1, 1, 1 }
+# endif
+;
+YYLTYPE yylloc = yyloc_default;
 
     /* Number of syntax errors so far.  */
     int yynerrs;
@@ -4286,11 +3843,11 @@ YYLTYPE yylloc;
     int yyerrstatus;
 
     /* The stacks and their tools:
-       `yyss': related to states.
-       `yyvs': related to semantic values.
-       `yyls': related to locations.
+       'yyss': related to states.
+       'yyvs': related to semantic values.
+       'yyls': related to locations.
 
-       Refer to the stacks thru separate pointers, to allow yyoverflow
+       Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
 
     /* The state stack.  */
@@ -4309,14 +3866,14 @@ YYLTYPE yylloc;
     YYLTYPE *yylsp;
 
     /* The locations where the error started and ended.  */
-    YYLTYPE yyerror_range[2];
+    YYLTYPE yyerror_range[3];
 
     YYSIZE_T yystacksize;
 
   int yyn;
   int yyresult;
   /* Lookahead token as an internal (translated) token number.  */
-  int yytoken;
+  int yytoken = 0;
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;
@@ -4335,10 +3892,9 @@ YYLTYPE yylloc;
      Keep to zero when no symbol should be popped.  */
   int yylen = 0;
 
-  yytoken = 0;
-  yyss = yyssa;
-  yyvs = yyvsa;
-  yyls = yylsa;
+  yyssp = yyss = yyssa;
+  yyvsp = yyvs = yyvsa;
+  yylsp = yyls = yylsa;
   yystacksize = YYINITDEPTH;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
@@ -4347,21 +3903,7 @@ YYLTYPE yylloc;
   yyerrstatus = 0;
   yynerrs = 0;
   yychar = YYEMPTY; /* Cause a token to be read.  */
-
-  /* Initialize stack pointers.
-     Waste one element of value and location stack
-     so that they stay on the same level as the state stack.
-     The wasted elements are never initialized.  */
-  yyssp = yyss;
-  yyvsp = yyvs;
-  yylsp = yyls;
-
-#if YYLTYPE_IS_TRIVIAL
-  /* Initialize the default location before parsing starts.  */
-  yylloc.first_line   = yylloc.last_line   = 1;
-  yylloc.first_column = yylloc.last_column = 1;
-#endif
-
+  yylsp[0] = yylloc;
   goto yysetstate;
 
 /*------------------------------------------------------------.
@@ -4382,26 +3924,26 @@ YYLTYPE yylloc;
 
 #ifdef yyoverflow
       {
-	/* Give user a chance to reallocate the stack.  Use copies of
-	   these so that the &'s don't force the real ones into
-	   memory.  */
-	YYSTYPE *yyvs1 = yyvs;
-	yytype_int16 *yyss1 = yyss;
-	YYLTYPE *yyls1 = yyls;
+        /* Give user a chance to reallocate the stack.  Use copies of
+           these so that the &'s don't force the real ones into
+           memory.  */
+        YYSTYPE *yyvs1 = yyvs;
+        yytype_int16 *yyss1 = yyss;
+        YYLTYPE *yyls1 = yyls;
 
-	/* Each stack pointer address is followed by the size of the
-	   data in use in that stack, in bytes.  This used to be a
-	   conditional around just the two extra args, but that might
-	   be undefined if yyoverflow is a macro.  */
-	yyoverflow (YY_("memory exhausted"),
-		    &yyss1, yysize * sizeof (*yyssp),
-		    &yyvs1, yysize * sizeof (*yyvsp),
-		    &yyls1, yysize * sizeof (*yylsp),
-		    &yystacksize);
+        /* Each stack pointer address is followed by the size of the
+           data in use in that stack, in bytes.  This used to be a
+           conditional around just the two extra args, but that might
+           be undefined if yyoverflow is a macro.  */
+        yyoverflow (YY_("memory exhausted"),
+                    &yyss1, yysize * sizeof (*yyssp),
+                    &yyvs1, yysize * sizeof (*yyvsp),
+                    &yyls1, yysize * sizeof (*yylsp),
+                    &yystacksize);
 
-	yyls = yyls1;
-	yyss = yyss1;
-	yyvs = yyvs1;
+        yyls = yyls1;
+        yyss = yyss1;
+        yyvs = yyvs1;
       }
 #else /* no yyoverflow */
 # ifndef YYSTACK_RELOCATE
@@ -4409,23 +3951,23 @@ YYLTYPE yylloc;
 # else
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
-	goto yyexhaustedlab;
+        goto yyexhaustedlab;
       yystacksize *= 2;
       if (YYMAXDEPTH < yystacksize)
-	yystacksize = YYMAXDEPTH;
+        yystacksize = YYMAXDEPTH;
 
       {
-	yytype_int16 *yyss1 = yyss;
-	union yyalloc *yyptr =
-	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
-	if (! yyptr)
-	  goto yyexhaustedlab;
-	YYSTACK_RELOCATE (yyss_alloc, yyss);
-	YYSTACK_RELOCATE (yyvs_alloc, yyvs);
-	YYSTACK_RELOCATE (yyls_alloc, yyls);
+        yytype_int16 *yyss1 = yyss;
+        union yyalloc *yyptr =
+          (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
+        if (! yyptr)
+          goto yyexhaustedlab;
+        YYSTACK_RELOCATE (yyss_alloc, yyss);
+        YYSTACK_RELOCATE (yyvs_alloc, yyvs);
+        YYSTACK_RELOCATE (yyls_alloc, yyls);
 #  undef YYSTACK_RELOCATE
-	if (yyss1 != yyssa)
-	  YYSTACK_FREE (yyss1);
+        if (yyss1 != yyssa)
+          YYSTACK_FREE (yyss1);
       }
 # endif
 #endif /* no yyoverflow */
@@ -4435,10 +3977,10 @@ YYLTYPE yylloc;
       yylsp = yyls + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-		  (unsigned long int) yystacksize));
+                  (unsigned long int) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
-	YYABORT;
+        YYABORT;
     }
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
@@ -4458,7 +4000,7 @@ yybackup:
 
   /* First try to decide what to do without reference to lookahead token.  */
   yyn = yypact[yystate];
-  if (yyn == YYPACT_NINF)
+  if (yypact_value_is_default (yyn))
     goto yydefault;
 
   /* Not known => get a lookahead token if don't already have one.  */
@@ -4467,7 +4009,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token: "));
-      yychar = YYLEX;
+      yychar = yylex (&yylval, &yylloc, scanner);
     }
 
   if (yychar <= YYEOF)
@@ -4489,8 +4031,8 @@ yybackup:
   yyn = yytable[yyn];
   if (yyn <= 0)
     {
-      if (yyn == 0 || yyn == YYTABLE_NINF)
-	goto yyerrlab;
+      if (yytable_value_is_error (yyn))
+        goto yyerrlab;
       yyn = -yyn;
       goto yyreduce;
     }
@@ -4507,7 +4049,9 @@ yybackup:
   yychar = YYEMPTY;
 
   yystate = yyn;
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
   *++yylsp = yylloc;
   goto yynewstate;
 
@@ -4530,7 +4074,7 @@ yyreduce:
   yylen = yyr2[yyn];
 
   /* If YYLEN is nonzero, implement the default value of the action:
-     `$$ = $1'.
+     '$$ = $1'.
 
      Otherwise, the following line sets YYVAL to garbage.
      This behavior is undocumented and Bison
@@ -4553,11 +4097,13 @@ yyreduce:
             osilerror( NULL, osinstance, parserData, osglData, osnlData, parserData->parser_errors);
         }
     }
+
     break;
 
   case 7:
 
     { parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "unexpected end of file, expecting </osil>");}
+
     break;
 
   case 9:
@@ -4576,6 +4122,7 @@ yyreduce:
         }
         parserData->parser_errors = "";
     }
+
     break;
 
   case 10:
@@ -4583,18 +4130,20 @@ yyreduce:
     {
     osinstance->instanceData->quadraticCoefficients = new QuadraticCoefficients();
 }
+
     break;
 
   case 11:
 
     { 
-if ( *(yyvsp[(2) - (5)].sval) != *(yyvsp[(4) - (5)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms = (yyvsp[(3) - (5)].ival);  
+if ( *(yyvsp[-3].sval) != *(yyvsp[-1].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms = (yyvsp[-2].ival);  
 if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0 ) 
-osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ (yyvsp[(3) - (5)].ival) ];
-for(int i = 0; i < (yyvsp[(3) - (5)].ival); i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();
+osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ (yyvsp[-2].ival) ];
+for(int i = 0; i < (yyvsp[-2].ival); i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();
 parserData->qtermcount = 0;
 }
+
     break;
 
   case 14:
@@ -4610,6 +4159,7 @@ parserData->qtermcount = 0;
     parserData->qtermidxTwoattON = false;
     parserData->qtermcoefattON = false;
 }
+
     break;
 
   case 15:
@@ -4618,76 +4168,85 @@ parserData->qtermcount = 0;
     if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
         throw ErrorClass("encountered more quadratic terms than specified");
 }
+
     break;
 
   case 20:
 
     { if(parserData->qtermidxOneattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idxOne attributes"); 
             parserData->qtermidxOneattON = true;  }
+
     break;
 
   case 21:
 
     { if(parserData->qtermidxTwoattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idxTwo attributes"); 
             parserData->qtermidxTwoattON = true;  }
+
     break;
 
   case 22:
 
     { if(parserData->qtermcoefattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm coef attributes"); 
             parserData->qtermcoefattON = true;  }
+
     break;
 
   case 23:
 
     { if(parserData->qtermidxattON) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many qTerm idx attributes"); 
             parserData->qtermidxattON = true;  }
+
     break;
 
   case 24:
 
-    {  if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = (yyvsp[(3) - (4)].ival);
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    {  if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = (yyvsp[-1].ival);
+    if ((yyvsp[-1].ival) < 0)
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "variable index cannot be negative");
-    if ((yyvsp[(3) - (4)].ival) >= osinstance->instanceData->variables->numberOfVariables)
+    if ((yyvsp[-1].ival) >= osinstance->instanceData->variables->numberOfVariables)
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "variable index exceeds number of variables");
 }
+
     break;
 
   case 25:
 
-    { if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = (yyvsp[(3) - (4)].ival);
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    { if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = (yyvsp[-1].ival);
+    if ((yyvsp[-1].ival) < 0)
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "variable index cannot be negative");
-    if ((yyvsp[(3) - (4)].ival) >= osinstance->instanceData->variables->numberOfVariables)
+    if ((yyvsp[-1].ival) >= osinstance->instanceData->variables->numberOfVariables)
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "variable index exceeds number of variables");
 }
+
     break;
 
   case 26:
 
-    {if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+    {if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = parserData->tempVal;
 }
+
     break;
 
   case 27:
 
-    {  if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = (yyvsp[(3) - (4)].ival);
-    if ((yyvsp[(3) - (4)].ival) >= osinstance->instanceData->constraints->numberOfConstraints)
+    {  if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = (yyvsp[-1].ival);
+    if ((yyvsp[-1].ival) >= osinstance->instanceData->constraints->numberOfConstraints)
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "row index for quadratic term exceeds number of constraints");
-    if ((yyvsp[(3) - (4)].ival) < -osinstance->instanceData->objectives->numberOfObjectives)
+    if ((yyvsp[-1].ival) < -osinstance->instanceData->objectives->numberOfObjectives)
          parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "row index for quadratic term refers to nonexisting objective");
 }
+
     break;
 
   case 29:
@@ -4698,6 +4257,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     osinstance->instanceData->matrices->numberOfMatrices = osglData->numberOfMatrices;
     osinstance->instanceData->matrices->matrix = osglData->matrix;
 }
+
     break;
 
   case 30:
@@ -4706,6 +4266,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     osinstance->instanceData->matrices = new Matrices();
     osglData->numberOfMatricesPresent = false;
 }
+
     break;
 
   case 31:
@@ -4720,6 +4281,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
             osglData->matrix[i] = NULL;
     }
 }
+
     break;
 
   case 39:
@@ -4728,6 +4290,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     if (parserData->coneCounter < parserData->numberOfCones) parserData->parser_errors += 
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "fewer cones than specified");
 }
+
     break;
 
   case 40:
@@ -4736,6 +4299,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
     osinstance->instanceData->cones = new Cones();
     parserData->coneCounter = 0;
 }
+
     break;
 
   case 41:
@@ -4750,12 +4314,14 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
             osinstance->instanceData->cones->cone[i] = NULL;
     }
 }
+
     break;
 
   case 45:
 
     {
 }
+
     break;
 
   case 47:
@@ -4766,6 +4332,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
         throw ErrorClass("encountered more cones than specified");
     osinstance->instanceData->cones->numberOfCones = parserData->coneCounter;
 }
+
     break;
 
   case 58:
@@ -4779,6 +4346,7 @@ std::cout << "Start nonnegative cone" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType
         = ENUM_CONE_TYPE_nonnegative;    
 }
+
     break;
 
   case 59:
@@ -4794,6 +4362,7 @@ std::cout << "Finish attribute list" << std::endl;
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                 "mandatory attribute numberOfColumns is missing");
 }
+
     break;
 
   case 62:
@@ -4803,6 +4372,7 @@ std::cout << "Number of rows attribute" << std::endl;
             ((NonnegativeCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 63:
@@ -4812,6 +4382,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((NonnegativeCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 64:
@@ -4819,6 +4390,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
             ((NonnegativeCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
         }
+
     break;
 
   case 68:
@@ -4830,6 +4402,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new NonpositiveCone();    
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_nonpositive;    
 }
+
     break;
 
   case 69:
@@ -4844,6 +4417,7 @@ std::cout << "Number of columns attribute" << std::endl;
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                 "mandatory attribute numberOfColumns is missing");
 }
+
     break;
 
   case 72:
@@ -4852,6 +4426,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((NonpositiveCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 73:
@@ -4860,6 +4435,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((NonpositiveCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 74:
@@ -4867,6 +4443,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
             ((NonpositiveCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
         }
+
     break;
 
   case 78:
@@ -4878,6 +4455,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new OrthantCone();
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_orthant;
 }
+
     break;
 
   case 79:
@@ -4898,6 +4476,7 @@ std::cout << "Number of columns attribute" << std::endl;
         = new double[osglData->numberOfEl];   
     osglData->osglCounter = 0;
 }
+
     break;
 
   case 82:
@@ -4906,6 +4485,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 83:
@@ -4914,6 +4494,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 84:
@@ -4921,6 +4502,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
             ((OrthantCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
         }
+
     break;
 
   case 86:
@@ -4929,6 +4511,7 @@ std::cout << "Number of columns attribute" << std::endl;
     if (osglData->osglCounter != osglData->numberOfEl)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of directions does not match");
 }
+
     break;
 
   case 91:
@@ -4938,6 +4521,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osglData->multPresent = false;
     osglData->mult = 1;
 }
+
     break;
 
   case 92:
@@ -4979,6 +4563,7 @@ std::cout << "Number of columns attribute" << std::endl;
         }
     osglData->osglCounter += osglData->mult;
 }
+
     break;
 
   case 101:
@@ -4991,6 +4576,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType
         = ENUM_CONE_TYPE_polyhedral;    
 }
+
     break;
 
   case 102:
@@ -5005,6 +4591,7 @@ std::cout << "Number of columns attribute" << std::endl;
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                 "mandatory attribute numberOfColumns is missing");
 }
+
     break;
 
   case 105:
@@ -5013,6 +4600,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((PolyhedralCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 106:
@@ -5021,6 +4609,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((PolyhedralCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 107:
@@ -5029,6 +4618,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((PolyhedralCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->referenceMatrixIdx
                 = parserData->referenceMatrixIdx;
         }
+
     break;
 
   case 108:
@@ -5036,25 +4626,27 @@ std::cout << "Number of columns attribute" << std::endl;
     {
             ((PolyhedralCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
         }
+
     break;
 
   case 109:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "mismatched quotes");
     if (parserData->referenceMatrixIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "polyhedral cone referenceMatrixIdx attribute previously set");
     parserData->referenceMatrixIdxPresent = true;
-    if ((yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "polyhedral cone reference matrix index exceeds number of matrices");
-    else if ((yyvsp[(3) - (4)].ival) < 0)
+    else if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "polyhedral cone reference matrix index cannot be negative");
-    else parserData->referenceMatrixIdx = (yyvsp[(3) - (4)].ival); 
+    else parserData->referenceMatrixIdx = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 113:
@@ -5069,6 +4661,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new QuadraticCone();    
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_quadratic;    
 }
+
     break;
 
   case 114:
@@ -5096,6 +4689,7 @@ std::cout << "Number of columns attribute" << std::endl;
                 "axis direction index cannot be negative");
     }
 }
+
     break;
 
   case 117:
@@ -5104,6 +4698,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 118:
@@ -5112,6 +4707,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 119:
@@ -5119,6 +4715,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
             ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
         }
+
     break;
 
   case 120:
@@ -5127,6 +4724,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->distortionMatrixIdx
                 = parserData->distortionMatrix;
         }
+
     break;
 
   case 121:
@@ -5135,6 +4733,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->normScaleFactor
                 = parserData->normScaleFactor;
         }
+
     break;
 
   case 122:
@@ -5143,6 +4742,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((QuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->axisDirection
                 = parserData->axisDirection;
         }
+
     break;
 
   case 126:
@@ -5158,6 +4758,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new RotatedQuadraticCone();    
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_rotatedQuadratic;    
 }
+
     break;
 
   case 127:
@@ -5198,6 +4799,7 @@ std::cout << "Number of columns attribute" << std::endl;
                 "second axis direction index cannot be negative");
     }
 }
+
     break;
 
   case 130:
@@ -5206,6 +4808,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 131:
@@ -5214,6 +4817,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 132:
@@ -5222,6 +4826,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name
                 = osglData->name;
         }
+
     break;
 
   case 133:
@@ -5230,6 +4835,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->distortionMatrixIdx
                 = parserData->distortionMatrix;
         }
+
     break;
 
   case 134:
@@ -5238,6 +4844,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->normScaleFactor
                 = parserData->normScaleFactor;
         }
+
     break;
 
   case 135:
@@ -5246,6 +4853,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->firstAxisDirection
                 = parserData->firstAxisDirection;
         }
+
     break;
 
   case 136:
@@ -5254,6 +4862,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((RotatedQuadraticCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->secondAxisDirection
                 = parserData->secondAxisDirection;
         }
+
     break;
 
   case 140:
@@ -5267,6 +4876,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType
         = ENUM_CONE_TYPE_semidefinite;    
 }
+
     break;
 
   case 141:
@@ -5281,6 +4891,7 @@ std::cout << "Number of columns attribute" << std::endl;
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                 "mandatory attribute numberOfColumns is missing");
 }
+
     break;
 
   case 144:
@@ -5289,6 +4900,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((SemidefiniteCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 145:
@@ -5297,6 +4909,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((SemidefiniteCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 146:
@@ -5304,6 +4917,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
             ((SemidefiniteCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
         }
+
     break;
 
   case 147:
@@ -5312,6 +4926,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((SemidefiniteCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->semidefiniteness
                 = parserData->semidefiniteness;
         }
+
     break;
 
   case 151:
@@ -5323,6 +4938,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new ProductCone();
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_product;    
 }
+
     break;
 
   case 152:
@@ -5337,6 +4953,7 @@ std::cout << "Number of columns attribute" << std::endl;
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                 "mandatory attribute numberOfColumns is missing");
 }
+
     break;
 
   case 155:
@@ -5345,6 +4962,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 156:
@@ -5353,6 +4971,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 157:
@@ -5360,6 +4979,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
             ((ProductCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
         }
+
     break;
 
   case 160:
@@ -5368,6 +4988,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osglData->numberOfEl = 0;
     osglData->numberOfElPresent = false;
 }
+
     break;
 
   case 161:
@@ -5376,6 +4997,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->numberOfEl];
 }
+
     break;
 
   case 166:
@@ -5388,6 +5010,7 @@ std::cout << "Number of columns attribute" << std::endl;
                 addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                     "product cone factor has illegal index");
 }
+
     break;
 
   case 167:
@@ -5404,6 +5027,7 @@ std::cout << "Number of columns attribute" << std::endl;
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 170:
@@ -5415,6 +5039,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->cones->cone[parserData->coneCounter] = new IntersectionCone();    
     osinstance->instanceData->cones->cone[parserData->coneCounter]->coneType = ENUM_CONE_TYPE_intersection;    
 }
+
     break;
 
   case 171:
@@ -5429,6 +5054,7 @@ std::cout << "Number of columns attribute" << std::endl;
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                 "mandatory attribute numberOfColumns is missing");
 }
+
     break;
 
   case 174:
@@ -5437,6 +5063,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfRows
                 = osglData->numberOfRows;
         }
+
     break;
 
   case 175:
@@ -5445,6 +5072,7 @@ std::cout << "Number of columns attribute" << std::endl;
             ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->numberOfColumns
                 = osglData->numberOfColumns;
         }
+
     break;
 
   case 176:
@@ -5452,6 +5080,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
             ((IntersectionCone*)osinstance->instanceData->cones->cone[parserData->coneCounter])->name = osglData->name;
         }
+
     break;
 
   case 179:
@@ -5460,6 +5089,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osglData->numberOfEl = 0;
     osglData->numberOfElPresent = false;
 }
+
     break;
 
   case 180:
@@ -5468,6 +5098,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->numberOfEl];
 }
+
     break;
 
   case 185:
@@ -5480,6 +5111,7 @@ std::cout << "Number of columns attribute" << std::endl;
                 addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                     "intersection cone component has illegal index");
 }
+
     break;
 
   case 186:
@@ -5496,6 +5128,7 @@ std::cout << "Number of columns attribute" << std::endl;
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 190:
@@ -5503,6 +5136,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
     osinstance->instanceData->matrixProgramming = new MatrixProgramming();
 }
+
     break;
 
   case 196:
@@ -5511,6 +5145,7 @@ std::cout << "Number of columns attribute" << std::endl;
         if (parserData->kounter < parserData->numberOfMatrixVar)  
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixVar less than number attribute");   
     }
+
     break;
 
   case 197:
@@ -5518,6 +5153,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
     osinstance->instanceData->matrixProgramming->matrixVariables = new MatrixVariables(); 
 }
+
     break;
 
   case 198:
@@ -5530,6 +5166,7 @@ std::cout << "Number of columns attribute" << std::endl;
         osinstance->instanceData->matrixProgramming->matrixVariables->matrixVar[i] = new MatrixVar();
     parserData->kounter = 0;
 }
+
     break;
 
   case 206:
@@ -5537,6 +5174,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
     parserData->kounter += osglData->mult;
 }
+
     break;
 
   case 207:
@@ -5555,6 +5193,7 @@ std::cout << "Number of columns attribute" << std::endl;
     parserData->ubMatrixIdxPresent = false;
     parserData->ubConeIdxPresent = false;
 }
+
     break;
 
   case 208:
@@ -5604,6 +5243,7 @@ std::cout << "Number of columns attribute" << std::endl;
         }
     }
 }
+
     break;
 
   case 225:
@@ -5612,6 +5252,7 @@ std::cout << "Number of columns attribute" << std::endl;
         if (parserData->kounter < parserData->numberOfMatrixObj)  
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixObj less than number attribute");
     }
+
     break;
 
   case 226:
@@ -5619,6 +5260,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
     osinstance->instanceData->matrixProgramming->matrixObjectives = new MatrixObjectives(); 
 }
+
     break;
 
   case 227:
@@ -5631,6 +5273,7 @@ std::cout << "Number of columns attribute" << std::endl;
         osinstance->instanceData->matrixProgramming->matrixObjectives->matrixObj[i] = new MatrixObj();
     parserData->kounter = 0;
 }
+
     break;
 
   case 235:
@@ -5638,6 +5281,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
     parserData->kounter += osglData->mult;
 }
+
     break;
 
   case 236:
@@ -5653,6 +5297,7 @@ std::cout << "Number of columns attribute" << std::endl;
     parserData->orderConeIdxPresent = false;
     parserData->constantMatrixIdxPresent = false;
 }
+
     break;
 
   case 237:
@@ -5687,6 +5332,7 @@ std::cout << "Number of columns attribute" << std::endl;
                 = parserData->constantMatrixIdx;
     }
 }
+
     break;
 
   case 251:
@@ -5695,6 +5341,7 @@ std::cout << "Number of columns attribute" << std::endl;
         if (parserData->kounter < parserData->numberOfMatrixCon)  
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrixCon less than number attribute");   
     }
+
     break;
 
   case 252:
@@ -5702,6 +5349,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
     osinstance->instanceData->matrixProgramming->matrixConstraints = new MatrixConstraints(); 
 }
+
     break;
 
   case 253:
@@ -5714,6 +5362,7 @@ std::cout << "Number of columns attribute" << std::endl;
         osinstance->instanceData->matrixProgramming->matrixConstraints->matrixCon[i] = new MatrixCon();
     parserData->kounter = 0;
 }
+
     break;
 
   case 261:
@@ -5721,6 +5370,7 @@ std::cout << "Number of columns attribute" << std::endl;
     {
     parserData->kounter += osglData->mult;
 }
+
     break;
 
   case 262:
@@ -5738,6 +5388,7 @@ std::cout << "Number of columns attribute" << std::endl;
     parserData->ubMatrixIdxPresent = false;
     parserData->ubConeIdxPresent = false;
 }
+
     break;
 
   case 263:
@@ -5778,11 +5429,13 @@ std::cout << "Number of columns attribute" << std::endl;
                 = parserData->ubConeIdx;
     }
 }
+
     break;
 
   case 279:
 
     {osinstance->instanceData->timeDomain = new TimeDomain();}
+
     break;
 
   case 286:
@@ -5836,28 +5489,31 @@ std::cout << "Number of columns attribute" << std::endl;
         if (parserData->m_miObjStageInfo[i] == -1)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "some objectives not assigned to any stage");
 }
+
     break;
 
   case 287:
 
     {osinstance->instanceData->timeDomain->stages = new TimeDomainStages();}
+
     break;
 
   case 288:
 
     {
-    if ( *(yyvsp[(2) - (5)].sval) != *(yyvsp[(4) - (5)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-    if ((yyvsp[(3) - (5)].ival) < 1) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of stages must be positive");
-    osinstance->instanceData->timeDomain->stages->numberOfStages = (yyvsp[(3) - (5)].ival);
+    if ( *(yyvsp[-3].sval) != *(yyvsp[-1].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+    if ((yyvsp[-2].ival) < 1) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of stages must be positive");
+    osinstance->instanceData->timeDomain->stages->numberOfStages = (yyvsp[-2].ival);
     if (osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
-        osinstance->instanceData->timeDomain->stages->stage = new TimeDomainStage*[ (yyvsp[(3) - (5)].ival) ];
-    for(int i = 0; i < (yyvsp[(3) - (5)].ival); i++) 
+        osinstance->instanceData->timeDomain->stages->stage = new TimeDomainStage*[ (yyvsp[-2].ival) ];
+    for(int i = 0; i < (yyvsp[-2].ival); i++) 
     {    osinstance->instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
         osinstance->instanceData->timeDomain->stages->stage[i]->variables   = new TimeDomainStageVariables();
         osinstance->instanceData->timeDomain->stages->stage[i]->constraints = new TimeDomainStageConstraints();
         osinstance->instanceData->timeDomain->stages->stage[i]->objectives  = new TimeDomainStageObjectives();
     }
 }
+
     break;
 
   case 291:
@@ -5869,6 +5525,7 @@ std::cout << "Number of columns attribute" << std::endl;
     osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints = 0;
     osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = 0;
 }
+
     break;
 
   case 292:
@@ -5889,12 +5546,14 @@ std::cout << "Number of columns attribute" << std::endl;
     parserData->stageobjcount = 0;
     parserData->stagecount++;
 }
+
     break;
 
   case 294:
 
     {
-          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
+          osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = (yyvsp[-1].sval); free((yyvsp[-1].sval));}
+
     break;
 
   case 299:
@@ -5902,40 +5561,43 @@ std::cout << "Number of columns attribute" << std::endl;
     {
         parserData->stageVariablesON = true;
         }
+
     break;
 
   case 304:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of variables cannot be negative");
-    if ((yyvsp[(3) - (4)].ival) > osinstance->instanceData->variables->numberOfVariables)
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of variables cannot be negative");
+    if ((yyvsp[-1].ival) > osinstance->instanceData->variables->numberOfVariables)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variables in this stage");         
-    if ((yyvsp[(3) - (4)].ival) > 0) {
+    if ((yyvsp[-1].ival) > 0) {
         if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables > 0)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfVariables");
-        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables = (yyvsp[(3) - (4)].ival);
-        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var = new TimeDomainStageVar*[ (yyvsp[(3) - (4)].ival) ];
-        for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++) 
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables = (yyvsp[-1].ival);
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var = new TimeDomainStageVar*[ (yyvsp[-1].ival) ];
+        for (int i = 0; i < (yyvsp[-1].ival); i++) 
         {    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i] = new TimeDomainStageVar;
             osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i]->idx = 0; 
         }
     };
 }
+
     break;
 
   case 305:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->stageVariablesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
-    if ((yyvsp[(3) - (4)].ival) < 0 && (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->variables->numberOfVariables)
+    if ((yyvsp[-1].ival) < 0 && (yyvsp[-1].ival) >= osinstance->instanceData->variables->numberOfVariables)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index out of range");
     parserData->stageVariablesOrdered = true;
-    parserData->stageVariableStartIdx = (yyvsp[(3) - (4)].ival);
+    parserData->stageVariableStartIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 306:
@@ -5947,6 +5609,7 @@ std::cout << "Number of columns attribute" << std::endl;
     for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables; i++)
         osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i]->idx = parserData->stageVariableStartIdx + i;
     }
+
     break;
 
   case 307:
@@ -5955,25 +5618,28 @@ std::cout << "Number of columns attribute" << std::endl;
       if (parserData->stagevarcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables)
           parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few variables supplied");
       }
+
     break;
 
   case 312:
 
     {if (parserData->stageVariablesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no varlist expected");}
+
     break;
 
   case 314:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->variables->numberOfVariables)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->variables->numberOfVariables)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index out of range");         
     if (parserData->stagevarcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variables in this stage");
-    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[parserData->stagevarcount]->idx = (yyvsp[(3) - (4)].ival);
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[parserData->stagevarcount]->idx = (yyvsp[-1].ival);
     parserData->stagevarcount++;
 }
+
     break;
 
   case 318:
@@ -5981,40 +5647,43 @@ std::cout << "Number of columns attribute" << std::endl;
     {
         parserData->stageConstraintsON = true;
     }
+
     break;
 
   case 323:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of constraints cannot be negative");
-    if ((yyvsp[(3) - (4)].ival) > osinstance->instanceData->constraints->numberOfConstraints)
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of constraints cannot be negative");
+    if ((yyvsp[-1].ival) > osinstance->instanceData->constraints->numberOfConstraints)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many constraints in this stage");         
-    if ((yyvsp[(3) - (4)].ival) > 0) {
+    if ((yyvsp[-1].ival) > 0) {
         if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints > 0)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfConstraints");
-        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints = (yyvsp[(3) - (4)].ival);
-        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con = new TimeDomainStageCon*[ (yyvsp[(3) - (4)].ival) ];
-        for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++) 
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints = (yyvsp[-1].ival);
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con = new TimeDomainStageCon*[ (yyvsp[-1].ival) ];
+        for (int i = 0; i < (yyvsp[-1].ival); i++) 
         {    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i] = new TimeDomainStageCon;
             osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i]->idx = 0; 
         }
     };
 }
+
     break;
 
   case 324:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->stageConstraintsOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
-    if ((yyvsp[(3) - (4)].ival) < 0 && (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->constraints->numberOfConstraints)
+    if ((yyvsp[-1].ival) < 0 && (yyvsp[-1].ival) >= osinstance->instanceData->constraints->numberOfConstraints)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint index out of range");
     parserData->stageConstraintsOrdered = true;
-    parserData->stageConstraintStartIdx = (yyvsp[(3) - (4)].ival);
+    parserData->stageConstraintStartIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 325:
@@ -6026,6 +5695,7 @@ std::cout << "Number of columns attribute" << std::endl;
     for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints; i++)
         osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i]->idx = parserData->stageConstraintStartIdx + i;
     }
+
     break;
 
   case 326:
@@ -6034,25 +5704,28 @@ std::cout << "Number of columns attribute" << std::endl;
       if (parserData->stageconcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints)
           parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few constraints supplied");
       }
+
     break;
 
   case 331:
 
     {if (parserData->stageConstraintsOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no conlist expected");}
+
     break;
 
   case 333:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->constraints->numberOfConstraints)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->constraints->numberOfConstraints)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "constraint index out of range");         
     if (parserData->stageconcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many constraints in this stage");
-    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[parserData->stageconcount]->idx = (yyvsp[(3) - (4)].ival);
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[parserData->stageconcount]->idx = (yyvsp[-1].ival);
     parserData->stageconcount++;
 }
+
     break;
 
   case 336:
@@ -6067,6 +5740,7 @@ std::cout << "Number of columns attribute" << std::endl;
                 osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = -(i+1); 
             }
     }
+
     break;
 
   case 337:
@@ -6074,27 +5748,29 @@ std::cout << "Number of columns attribute" << std::endl;
     {
       parserData->stageObjectivesON = true;
     }
+
     break;
 
   case 342:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of objectives cannot be negative");
-    if ((yyvsp[(3) - (4)].ival) > osinstance->instanceData->objectives->numberOfObjectives)
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of objectives cannot be negative");
+    if ((yyvsp[-1].ival) > osinstance->instanceData->objectives->numberOfObjectives)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many objectives in this stage");         
-    if ((yyvsp[(3) - (4)].ival) > 0) {
+    if ((yyvsp[-1].ival) > 0) {
         if (osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives > 0)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute numberOfObjectives");
-        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = (yyvsp[(3) - (4)].ival);
-        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj = new TimeDomainStageObj*[ (yyvsp[(3) - (4)].ival) ];
-        for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++) 
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = (yyvsp[-1].ival);
+        osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj = new TimeDomainStageObj*[ (yyvsp[-1].ival) ];
+        for (int i = 0; i < (yyvsp[-1].ival); i++) 
         {    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i] = new TimeDomainStageObj;
             osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = 0; 
         }
     };
 }
+
     break;
 
   case 343:
@@ -6106,6 +5782,7 @@ std::cout << "Number of columns attribute" << std::endl;
     for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives; i++)
         osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = parserData->stageObjectiveStartIdx - i;
     }
+
     break;
 
   case 344:
@@ -6114,31 +5791,35 @@ std::cout << "Number of columns attribute" << std::endl;
       if (parserData->stageobjcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives)
           parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too few objectives supplied");
     }
+
     break;
 
   case 349:
 
     {if (parserData->stageObjectivesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "no objlist expected");}
+
     break;
 
   case 351:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) >= 0 || (yyvsp[(3) - (4)].ival) >= -osinstance->instanceData->objectives->numberOfObjectives - 1)
+    if ((yyvsp[-1].ival) >= 0 || (yyvsp[-1].ival) >= -osinstance->instanceData->objectives->numberOfObjectives - 1)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");         
     if (parserData->stageobjcount >= osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many objectives in this stage");
-    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[parserData->stageobjcount]->idx = (yyvsp[(3) - (4)].ival);
+    osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[parserData->stageobjcount]->idx = (yyvsp[-1].ival);
     parserData->stageobjcount++;
 }
+
     break;
 
   case 354:
 
     {osinstance->instanceData->timeDomain->interval = new TimeDomainInterval();
         }
+
     break;
 
   case 355:
@@ -6148,6 +5829,7 @@ std::cout << "Number of columns attribute" << std::endl;
         parserData->intervalstartON = false;
         printf("Interval not yet supported.\n\n");
 }
+
     break;
 
   case 360:
@@ -6155,6 +5837,7 @@ std::cout << "Number of columns attribute" << std::endl;
     { if(parserData->intervalhorizonON) 
        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many interval horizon attributes");
         parserData->intervalhorizonON = true; }
+
     break;
 
   case 361:
@@ -6162,95 +5845,104 @@ std::cout << "Number of columns attribute" << std::endl;
     { if(parserData->intervalstartON) 
        parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many interval start attributes");
         parserData->intervalstartON = true; }
+
     break;
 
   case 362:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->stageObjectivesOrdered == true) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "duplicate attribute");
-    if ((yyvsp[(3) - (4)].ival) >= 0 && (yyvsp[(3) - (4)].ival) <= -osinstance->instanceData->objectives->numberOfObjectives - 1)
+    if ((yyvsp[-1].ival) >= 0 && (yyvsp[-1].ival) <= -osinstance->instanceData->objectives->numberOfObjectives - 1)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "objective index out of range");
     parserData->stageObjectivesOrdered = true;
-    parserData->stageObjectiveStartIdx = (yyvsp[(3) - (4)].ival);
+    parserData->stageObjectiveStartIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 363:
 
     {
-        if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+        if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
         parserData->intervalhorizon = parserData->tempVal;}
+
     break;
 
   case 364:
 
     {
-        if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
+        if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
         parserData->intervalstart = parserData->tempVal;}
+
     break;
 
   case 365:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (osglData->numberOfMatricesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfMatrices attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <matrix> elements cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <matrix> elements cannot be negative");
     osglData->numberOfMatricesPresent = true;
-    osglData->numberOfMatrices = (yyvsp[(3) - (4)].ival);
+    osglData->numberOfMatrices = (yyvsp[-1].ival);
 }
+
     break;
 
   case 366:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->numberOfConesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfCones attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <cone> elements cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <cone> elements cannot be negative");
     parserData->numberOfConesPresent = true;
-    parserData->numberOfCones = (yyvsp[(3) - (4)].ival); 
+    parserData->numberOfCones = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 367:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix variables cannot be negative");
-    parserData->numberOfMatrixVar = (yyvsp[(3) - (4)].ival); 
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix variables cannot be negative");
+    parserData->numberOfMatrixVar = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 368:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix objectives cannot be negative");
-    parserData->numberOfMatrixObj = (yyvsp[(3) - (4)].ival); 
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix objectives cannot be negative");
+    parserData->numberOfMatrixObj = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 369:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix constraints cannot be negative");
-    parserData->numberOfMatrixCon = (yyvsp[(3) - (4)].ival); 
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of matrix constraints cannot be negative");
+    parserData->numberOfMatrixCon = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 370:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->normScaleFactorPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "normScaleFactor attribute previously set");
@@ -6258,71 +5950,76 @@ std::cout << "Number of columns attribute" << std::endl;
     parserData->normScaleFactorPresent = true;
     parserData->normScaleFactor = parserData->tempVal; 
 }
+
     break;
 
   case 371:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "mismatched quotes");
     if (parserData->distortionMatrixPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "distortionMatrixIdx attribute previously set");
     parserData->distortionMatrixPresent = true;
-    if ((yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "distortion matrix index exceeds number of matrices");
-    else if ((yyvsp[(3) - (4)].ival) < 0)
+    else if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "distortion matrix index cannot be negative");
-    else parserData->distortionMatrix = (yyvsp[(3) - (4)].ival); 
+    else parserData->distortionMatrix = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 372:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "mismatched quotes");
     if (parserData->axisDirectionPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "axisDirection attribute previously set");
     parserData->axisDirectionPresent = true;
-    parserData->axisDirection = (yyvsp[(3) - (4)].ival);
+    parserData->axisDirection = (yyvsp[-1].ival);
 std::cout << "found axis direction = " << parserData->axisDirection << std::endl;
 }
+
     break;
 
   case 373:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,     
             "mismatched quotes");
     if (parserData->firstAxisDirectionPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "firstAxisDirection attribute previously set");
     parserData->firstAxisDirectionPresent = true;
-    parserData->firstAxisDirection = (yyvsp[(3) - (4)].ival); 
+    parserData->firstAxisDirection = (yyvsp[-1].ival); 
 std::cout << "found first axis direction = " << parserData->firstAxisDirection << std::endl;
 }
+
     break;
 
   case 374:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "mismatched quotes");
     if (parserData->secondAxisDirectionPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "secondAxisDirection attribute previously set");
     parserData->secondAxisDirectionPresent = true;
-    parserData->secondAxisDirection = (yyvsp[(3) - (4)].ival); 
+    parserData->secondAxisDirection = (yyvsp[-1].ival); 
 std::cout << "found second axis direction = " << parserData->secondAxisDirection << std::endl;
 }
+
     break;
 
   case 375:
@@ -6331,182 +6028,196 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (parserData->semidefinitenessPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "name attribute previously set");
     parserData->semidefinitenessPresent = true;
-    parserData->semidefiniteness = (yyvsp[(2) - (3)].sval); 
-    free((yyvsp[(2) - (3)].sval));
+    parserData->semidefiniteness = (yyvsp[-1].sval); 
+    free((yyvsp[-1].sval));
     if (parserData->semidefiniteness != "positive" && parserData->semidefiniteness != "negative")
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "semidefiniteness must be either \"positive\" or \"negative\"");
 }
+
     break;
 
   case 376:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "mismatched quotes");
     if (parserData->matrixIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "matrixIdx attribute previously set");
     parserData->matrixIdxPresent = true;
-    if ((yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "matrix index exceeds number of matrices");
-    else if ((yyvsp[(3) - (4)].ival) < 0) 
+    else if ((yyvsp[-1].ival) < 0) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "matrix index cannot be negative");
-    else parserData->matrixIdx = (yyvsp[(3) - (4)].ival); 
+    else parserData->matrixIdx = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 377:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->lbMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one lbMatrix attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for lbMatrix attribute");
     parserData->lbMatrixIdxPresent = true;
-    parserData->lbMatrixIdx = (yyvsp[(3) - (4)].ival);
+    parserData->lbMatrixIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 378:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->ubMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one ubMatrix attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for ubMatrix attribute");
     parserData->ubMatrixIdxPresent = true;
-    parserData->ubMatrixIdx = (yyvsp[(3) - (4)].ival);
+    parserData->ubMatrixIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 379:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->constantMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one constant matrix attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for constant matrix attribute");
     parserData->constantMatrixIdxPresent = true;
-    parserData->constantMatrixIdx = (yyvsp[(3) - (4)].ival);
+    parserData->constantMatrixIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 380:
 
     {
-    if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+    if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
     if (parserData->templateMatrixIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "templateMatrixIdx attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for template matrix index");
     parserData->templateMatrixIdxPresent = true;
-    parserData->templateMatrixIdx = (yyvsp[(3) - (4)].ival); 
+    parserData->templateMatrixIdx = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 381:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->varReferenceMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one varReference matrix attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for varReference matrix attribute");
     parserData->varReferenceMatrixIdxPresent = true;
-    parserData->varReferenceMatrixIdx = (yyvsp[(3) - (4)].ival);
+    parserData->varReferenceMatrixIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 382:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->objReferenceMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one objReference matrix attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for objReference matrix attribute");
     parserData->objReferenceMatrixIdxPresent = true;
-    parserData->objReferenceMatrixIdx = (yyvsp[(3) - (4)].ival);
+    parserData->objReferenceMatrixIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 383:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->conReferenceMatrixIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one conReference matrix attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->matrices->numberOfMatrices)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for conReference matrix attribute");
     parserData->conReferenceMatrixIdxPresent = true;
-    parserData->conReferenceMatrixIdx = (yyvsp[(3) - (4)].ival);
+    parserData->conReferenceMatrixIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 384:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->lbConeIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one lbCone attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->cones->numberOfCones)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->cones->numberOfCones)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for lbCone attribute");
     parserData->lbConeIdxPresent = true;
-    parserData->lbConeIdx = (yyvsp[(3) - (4)].ival);
+    parserData->lbConeIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 385:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->ubConeIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one ubCone attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->cones->numberOfCones)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->cones->numberOfCones)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for ubCone attribute");
     parserData->ubConeIdxPresent = true;
-    parserData->ubConeIdx = (yyvsp[(3) - (4)].ival);
+    parserData->ubConeIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 386:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (parserData->orderConeIdxPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one orderCone attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) < 0 || (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->cones->numberOfCones)
+    if ((yyvsp[-1].ival) < 0 || (yyvsp[-1].ival) >= osinstance->instanceData->cones->numberOfCones)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "illegal value for orderCone attribute");
     parserData->orderConeIdxPresent = true;
-    parserData->orderConeIdx = (yyvsp[(3) - (4)].ival);
+    parserData->orderConeIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 387:
 
-    {parserData->tempVal = (yyvsp[(2) - (3)].ival);}
+    {parserData->tempVal = (yyvsp[-1].ival);}
+
     break;
 
   case 388:
 
-    {parserData->tempVal = (yyvsp[(2) - (3)].dval);}
+    {parserData->tempVal = (yyvsp[-1].dval);}
+
     break;
 
   case 396:
@@ -6516,6 +6227,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         if (osglData->osglIntArray < 0)
             throw ErrorClass("negative entry detected in nonnegativeIntVector");
 }
+
     break;
 
   case 397:
@@ -6527,6 +6239,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
             parserData->ignoreDataAfterErrors = true;
         }
     }
+
     break;
 
   case 402:
@@ -6537,6 +6250,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->mult = 1;
     osglData->incr = 0;
 }
+
     break;
 
   case 408:
@@ -6546,14 +6260,15 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         throw ErrorClass("OSgL IntVector: more data elements than specified");
     else
         for (int i=0; i<osglData->mult; i++)
-            osglData->osglIntArray[osglData->osglCounter++] = (yyvsp[(2) - (3)].ival) + i*osglData->incr;    
+            osglData->osglIntArray[osglData->osglCounter++] = (yyvsp[-1].ival) + i*osglData->incr;    
 }
+
     break;
 
   case 414:
 
     {
-    char* b64string = (yyvsp[(2) - (3)].sval);
+    char* b64string = (yyvsp[-1].sval);
     if( b64string == NULL) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "base 64 data expected"); 
     if (osglData->base64Size != sizeof(int))
@@ -6573,8 +6288,9 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         }
     }
     //delete[] b64string;
-    free((yyvsp[(2) - (3)].sval));
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 415:
@@ -6586,6 +6302,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
             parserData->ignoreDataAfterErrors = true;
         }
     }
+
     break;
 
   case 420:
@@ -6595,6 +6312,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->incrPresent = false;
     osglData->mult = 1;
 }
+
     break;
 
   case 423:
@@ -6606,12 +6324,13 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         for (int i=0; i<osglData->mult; i++)
             osglData->osglDblArray[osglData->osglCounter++] = parserData->tempVal;    
 }
+
     break;
 
   case 429:
 
     {
-    char* b64string = (yyvsp[(2) - (3)].sval);
+    char* b64string = (yyvsp[-1].sval);
     if( b64string == NULL) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "base 64 data expected"); 
     if (osglData->base64Size != sizeof(int))
@@ -6631,8 +6350,9 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         }
     }
     //delete[] b64string;
-    free((yyvsp[(2) - (3)].sval));
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 430:
@@ -6644,6 +6364,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
             parserData->ignoreDataAfterErrors = true;
         }
     }
+
     break;
 
   case 434:
@@ -6653,6 +6374,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->incrPresent = false;
     osglData->mult = 1;
 }
+
     break;
 
   case 437:
@@ -6662,9 +6384,10 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         throw ErrorClass("OSgL StrVector: more data elements than specified");
     else
         for (int i=0; i<osglData->mult; i++)
-            osglData->osglStrArray[osglData->osglCounter++] = (yyvsp[(2) - (3)].sval);
-    free((yyvsp[(2) - (3)].sval));    
+            osglData->osglStrArray[osglData->osglCounter++] = (yyvsp[-1].sval);
+    free((yyvsp[-1].sval));    
 }
+
     break;
 
   case 438:
@@ -6676,6 +6399,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->matrix[osglData->matrixCounter]->idx = osglData->matrixCounter;
     osglData->matrixCounter++;
 }
+
     break;
 
   case 439:
@@ -6701,6 +6425,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->mtxConstructorVec.push_back((OSMatrix*)osglData->tempC);
     osglData->mtxBlkVec.push_back((OSMatrix*)osglData->tempC);
 }
+
     break;
 
   case 440:
@@ -6727,6 +6452,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         ((OSMatrix*)osglData->tempC)->declaredMatrixType
             = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
 }
+
     break;
 
   case 451:
@@ -6736,6 +6462,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         new MatrixNode*[osglData->mtxBlkVec.back()->inumberOfChildren];
     osglData->mtxBlkVec.pop_back();
 }
+
     break;
 
   case 454:
@@ -6743,6 +6470,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
     osglData->mtxBlkVec.back()->inumberOfChildren++; 
 }
+
     break;
 
   case 455:
@@ -6763,6 +6491,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->baseMatrixEndRow = -1;
     osglData->baseMatrixEndCol = -1;
 }
+
     break;
 
   case 456:
@@ -6794,6 +6523,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->scalarMultiplierPresent == true)
         ((BaseMatrix*)osglData->tempC)->scalarMultiplier = osglData->scalarMultiplier;
 }
+
     break;
 
   case 471:
@@ -6801,6 +6531,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
     osglData->mtxBlkVec.back()->inumberOfChildren++;
 }
+
     break;
 
   case 484:
@@ -6812,6 +6543,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 485:
@@ -6820,6 +6552,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<constantElements>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 488:
@@ -6827,6 +6560,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ConstantMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 489:
@@ -6834,6 +6568,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ConstantMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 493:
@@ -6846,6 +6581,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 494:
@@ -6858,6 +6594,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->osglIntArray = new int[osglData->numberOfEl];
     osglData->osglCounter = 0;
 }
+
     break;
 
   case 498:
@@ -6876,6 +6613,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         != ((MatrixElements*)osglData->tempC)->numberOfValues)
             throw ErrorClass("last entry of matrix element start vector does not equal numberOfValues");
 }
+
     break;
 
   case 501:
@@ -6892,6 +6630,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 502:
@@ -6902,6 +6641,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->osglIntArray = new int[osglData->numberOfEl];
     osglData->osglCounter = 0;
 }
+
     break;
 
   case 508:
@@ -6914,6 +6654,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 509:
@@ -6924,6 +6665,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->osglDblArray = new double[osglData->numberOfEl];
     osglData->osglCounter = 0;
 }
+
     break;
 
   case 516:
@@ -6935,6 +6677,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 517:
@@ -6943,6 +6686,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<varReferenceElements>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 520:
@@ -6950,6 +6694,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((VarReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 521:
@@ -6957,6 +6702,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((VarReferenceMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 525:
@@ -6969,6 +6715,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 526:
@@ -6979,6 +6726,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->osglIntArray = new int[osglData->numberOfEl];
     osglData->osglCounter = 0;
 }
+
     break;
 
   case 533:
@@ -6990,6 +6738,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 534:
@@ -6998,6 +6747,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<linearElements>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 537:
@@ -7005,6 +6755,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((LinearMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 538:
@@ -7012,6 +6763,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((LinearMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 541:
@@ -7020,6 +6772,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         if (osglData->numberOfValues > 0)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "expected <value> element");
     }
+
     break;
 
   case 542:
@@ -7033,6 +6786,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     }
+
     break;
 
   case 543:
@@ -7051,6 +6805,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->osglCounter = 0;
     osglData->numberOfVarIdxPresent = false;
 }
+
     break;
 
   case 551:
@@ -7060,6 +6815,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->nonzeroCounter > osglData->numberOfValues)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "linear matrix elements: too many nonzeros");    
 }
+
     break;
 
   case 552:
@@ -7069,6 +6825,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->constantPresent = false;
     osglData->constant = 0.0;
 }
+
     break;
 
   case 553:
@@ -7090,6 +6847,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     }
     osglData->osglCounter = 0;
 }
+
     break;
 
   case 565:
@@ -7100,6 +6858,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->varIdx[osglData->osglCounter]
         = new LinearMatrixElementTerm();
 }
+
     break;
 
   case 567:
@@ -7107,14 +6866,16 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
     ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->varIdx[osglData->osglCounter]->coef = osglData->coef;
 }
+
     break;
 
   case 568:
 
     {
-    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->varIdx[osglData->osglCounter]->idx = (yyvsp[(2) - (3)].ival);
+    ((LinearMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter]->varIdx[osglData->osglCounter]->idx = (yyvsp[-1].ival);
     osglData->osglCounter++;
 }
+
     break;
 
   case 570:
@@ -7126,6 +6887,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 571:
@@ -7134,6 +6896,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<realValuedExpressions>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 574:
@@ -7141,6 +6904,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((RealValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 575:
@@ -7148,6 +6912,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((RealValuedExpressions*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 578:
@@ -7156,6 +6921,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         if (osglData->numberOfValues > 0)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "expected <value> element");
     }
+
     break;
 
   case 579:
@@ -7169,6 +6935,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     }
+
     break;
 
   case 580:
@@ -7187,6 +6954,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     for (int i=0; i<osglData->numberOfValues; i++)
         ((RealValuedExpressions*)osglData->tempC)->value->el[i] = new RealValuedExpressionTree();
 }
+
     break;
 
   case 588:
@@ -7204,6 +6972,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osnlData->matrixSumVec.clear();
         osnlData->matrixProductVec.clear();
     }
+
     break;
 
   case 592:
@@ -7214,6 +6983,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
             ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osglData->nonzeroCounter++;
     }
+
     break;
 
   case 594:
@@ -7225,6 +6995,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 595:
@@ -7233,6 +7004,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<complexValuedExpressions>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 598:
@@ -7240,6 +7012,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ComplexValuedExpressions*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 599:
@@ -7247,6 +7020,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ComplexValuedExpressions*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 602:
@@ -7255,6 +7029,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         if (osglData->numberOfValues > 0)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "expected <value> element");
     }
+
     break;
 
   case 603:
@@ -7268,6 +7043,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     }
+
     break;
 
   case 604:
@@ -7286,6 +7062,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     for (int i=0; i<osglData->numberOfValues; i++)
         ((ComplexValuedExpressions*)osglData->tempC)->value->el[i] = new ComplexValuedExpressionTree();
 }
+
     break;
 
   case 612:
@@ -7303,6 +7080,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osnlData->matrixSumVec.clear();
         osnlData->matrixProductVec.clear();
     }
+
     break;
 
   case 616:
@@ -7314,6 +7092,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
                 ((OSnLNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osglData->nonzeroCounter++;
     }
+
     break;
 
   case 618:
@@ -7325,6 +7104,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 619:
@@ -7333,6 +7113,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<objReferenceElements>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 622:
@@ -7340,6 +7121,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ObjReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 623:
@@ -7347,6 +7129,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ObjReferenceMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 627:
@@ -7359,6 +7142,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 628:
@@ -7369,6 +7153,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->osglIntArray = new int[osglData->numberOfEl];
     osglData->osglCounter = 0;
 }
+
     break;
 
   case 635:
@@ -7380,6 +7165,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 636:
@@ -7388,6 +7174,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<conReferenceElements>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 639:
@@ -7395,6 +7182,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ConReferenceMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 640:
@@ -7402,6 +7190,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ConReferenceMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 643:
@@ -7410,6 +7199,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         if (osglData->numberOfValues > 0)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "expected <value> element");
     }
+
     break;
 
   case 644:
@@ -7423,6 +7213,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     }
+
     break;
 
   case 645:
@@ -7441,6 +7232,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     for (int i=0; i<osglData->numberOfValues; i++)
         ((ConReferenceMatrixElements*)osglData->tempC)->value->el[i] = new ConReferenceMatrixElement();
 }
+
     break;
 
   case 653:
@@ -7455,6 +7247,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->incr = 0;
         osglData->valueType = "";
     }
+
     break;
 
   case 659:
@@ -7481,7 +7274,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
             for (int i=0; i<osglData->mult; i++)
             {
                 ((ConReferenceMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter + i]->conReference
-                    = (yyvsp[(2) - (3)].ival) + i*osglData->incr;
+                    = (yyvsp[-1].ival) + i*osglData->incr;
                 ((ConReferenceMatrixElements*)osglData->tempC)->value->el[osglData->nonzeroCounter + i]->valueType
                     = (ENUM_CONREFERENCE_VALUETYPE)returnConReferenceValueType(osglData->valueType);
             }
@@ -7489,6 +7282,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->nonzeroCounter += osglData->mult;
     }
 }
+
     break;
 
   case 661:
@@ -7500,6 +7294,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 662:
@@ -7508,6 +7303,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<complexElements>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 665:
@@ -7515,6 +7311,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ComplexMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 666:
@@ -7522,6 +7319,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((ComplexMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 669:
@@ -7530,6 +7328,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         if (osglData->numberOfValues > 0)
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "expected <value> element");
     }
+
     break;
 
   case 670:
@@ -7543,6 +7342,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->suppressFurtherErrorMessages = false;
         parserData->ignoreDataAfterErrors = false;        
     }
+
     break;
 
   case 671:
@@ -7558,6 +7358,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     ((ComplexMatrixElements*)osglData->tempC)->value->el
         = new std::complex<double>[osglData->numberOfValues];
 }
+
     break;
 
   case 678:
@@ -7587,6 +7388,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->nonzeroCounter += osglData->mult;
     }
 }
+
     break;
 
   case 679:
@@ -7600,6 +7402,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->multPresent = false;
         osglData->mult = 1;
     }
+
     break;
 
   case 688:
@@ -7611,6 +7414,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowMajorPresent = false;
     osglData->rowMajor = false;
 }
+
     break;
 
   case 689:
@@ -7619,6 +7423,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     if (osglData->numberOfValuesPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "<stringValuedElements>: numberOfValues attribute missing");    
 }
+
     break;
 
   case 692:
@@ -7626,6 +7431,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((StringValuedMatrixElements*)osglData->tempC)->numberOfValues = osglData->numberOfValues;
     }
+
     break;
 
   case 693:
@@ -7633,6 +7439,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
         ((StringValuedMatrixElements*)osglData->tempC)->rowMajor = osglData->rowMajor;
     }
+
     break;
 
   case 697:
@@ -7645,6 +7452,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 698:
@@ -7655,6 +7463,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         osglData->osglStrArray = new std::string[osglData->numberOfEl];
     osglData->osglCounter = 0;
 }
+
     break;
 
   case 705:
@@ -7675,6 +7484,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
 
     osglData->shapePresent = false;   
 }
+
     break;
 
   case 707:
@@ -7687,6 +7497,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "unknown shape specified in matrix transformation");
 }
+
     break;
 
   case 708:
@@ -7696,6 +7507,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     ((MatrixTransformation*)osglData->tempC)->transformation = 
         ((OSnLMNode*)osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
 }
+
     break;
 
   case 709:
@@ -7708,6 +7520,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->rowOffsets.pop_back();
     osglData->colOffsets.pop_back();
 }
+
     break;
 
   case 710:
@@ -7718,6 +7531,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->mtxBlocksVec.push_back((MatrixBlocks*)osglData->tempC);
     osglData->numberOfBlocksPresent = false;
 }
+
     break;
 
   case 711:
@@ -7726,6 +7540,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->nBlocksVec.push_back(osglData->numberOfBlocks);
     ((MatrixBlocks*)osglData->tempC)->inumberOfChildren = 0;
 }
+
     break;
 
   case 713:
@@ -7741,6 +7556,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->mtxBlocksVec.pop_back();
     osglData->nBlocksVec.pop_back();
 }
+
     break;
 
   case 714:
@@ -7755,6 +7571,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 715:
@@ -7763,6 +7580,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->numberOfEl = 0;
     osglData->numberOfElPresent = false;
 }
+
     break;
 
   case 716:
@@ -7771,6 +7589,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->numberOfEl];
 }
+
     break;
 
   case 722:
@@ -7783,6 +7602,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     parserData->suppressFurtherErrorMessages = false;
     parserData->ignoreDataAfterErrors = false;        
 }
+
     break;
 
   case 723:
@@ -7791,6 +7611,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->numberOfEl = 0;
     osglData->numberOfElPresent = false;
 }
+
     break;
 
   case 724:
@@ -7799,6 +7620,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->osglCounter = 0; 
     osglData->osglIntArray = new int[osglData->numberOfEl];
 }
+
     break;
 
   case 731:
@@ -7806,6 +7628,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
     ((MatrixBlocks*)osglData->mtxBlocksVec.back())->inumberOfChildren++;
 }
+
     break;
 
   case 732:
@@ -7813,6 +7636,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     {
     osglData->mtxBlkVec.pop_back();
 }
+
     break;
 
   case 733:
@@ -7827,6 +7651,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->blockRowIdxPresent = false;
     osglData->blockColIdxPresent = false;   
 }
+
     break;
 
   case 739:
@@ -7840,6 +7665,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         ((MatrixBlock*)osglData->tempC)->symmetry
             = (ENUM_MATRIX_SYMMETRY)returnMatrixSymmetry(osglData->symmetry);
     }
+
     break;
 
   case 740:
@@ -7848,6 +7674,7 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
         ((MatrixBlock*)osglData->tempC)->declaredMatrixType
             = (ENUM_MATRIX_TYPE)returnMatrixType(osglData->type);
     }
+
     break;
 
   case 744:
@@ -7856,191 +7683,204 @@ std::cout << "found second axis direction = " << parserData->secondAxisDirection
     osglData->mtxBlkVec.back()->m_mChildren = 
         new MatrixNode*[osglData->mtxBlkVec.back()->inumberOfChildren];
 }
+
     break;
 
   case 745:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfBlocksPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfBlocks attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
     osglData->numberOfBlocksPresent = true;        
-    osglData->numberOfBlocks = (yyvsp[(3) - (4)].ival);
+    osglData->numberOfBlocks = (yyvsp[-1].ival);
 }
+
     break;
 
   case 746:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfColumnsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfColumns attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <blocks> cannot be negative");
     osglData->numberOfColumnsPresent = true;        
-    osglData->numberOfColumns = (yyvsp[(3) - (4)].ival);
+    osglData->numberOfColumns = (yyvsp[-1].ival);
 }
+
     break;
 
   case 747:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfElPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfEl attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <el> cannot be negative");
     osglData->numberOfElPresent = true;        
-    osglData->numberOfEl = (yyvsp[(3) - (4)].ival);
+    osglData->numberOfEl = (yyvsp[-1].ival);
 }
+
     break;
 
   case 748:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfRowsPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfRows attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <rows> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <rows> cannot be negative");
 std::cout << "Number of rows present" << std::endl;
     osglData->numberOfRowsPresent = true;        
-    osglData->numberOfRows = (yyvsp[(3) - (4)].ival);
+    osglData->numberOfRows = (yyvsp[-1].ival);
 }
+
     break;
 
   case 749:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfValuesPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfValues attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <values> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <values> cannot be negative");
     osglData->numberOfValuesPresent = true;        
-    osglData->numberOfValues = (yyvsp[(3) - (4)].ival);
+    osglData->numberOfValues = (yyvsp[-1].ival);
 }
+
     break;
 
   case 750:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->numberOfVarIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "numberOfVarIdx attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <varIdx> cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "number of <varIdx> cannot be negative");
     osglData->numberOfVarIdxPresent = true;        
-    osglData->numberOfVarIdx = (yyvsp[(3) - (4)].ival);
+    osglData->numberOfVarIdx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 751:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->base64SizePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "base64Size attribute previously set");
-    if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "base64Size cannot be negative");
+    if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "base64Size cannot be negative");
     osglData->base64SizePresent = true;        
-    osglData->base64Size = (yyvsp[(3) - (4)].ival);
+    osglData->base64Size = (yyvsp[-1].ival);
 }
+
     break;
 
   case 752:
 
     { 
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->baseMatrixIdxPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixIdx attribute in <baseMatrix> element");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx cannot be negative");
-    if ((yyvsp[(3) - (4)].ival) > osglData->matrixCounter)
+    if ((yyvsp[-1].ival) > osglData->matrixCounter)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix idx exceeds number of matrices so far");
     osglData->baseMatrixIdxPresent = true;   
-    osglData->baseMatrixIdx = (yyvsp[(3) - (4)].ival); 
+    osglData->baseMatrixIdx = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 753:
 
     { 
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
                                          "start and end quotes are not the same");
     if (osglData->baseMatrixStartRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
             "more than one baseMatrixStartRow attribute in <baseMatrix> element");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
                                          "baseMatrix first row cannot be negative");
     osglData->baseMatrixStartRowPresent = true;   
-    osglData->baseMatrixStartRow = (yyvsp[(3) - (4)].ival); 
+    osglData->baseMatrixStartRow = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 754:
 
     { 
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
                                          "start and end quotes are not the same");
     if (osglData->baseMatrixStartColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
             "more than one baseMatrixStartCol attribute in <baseMatrix> element");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
                                          "baseMatrix first column cannot be negative");
     osglData->baseMatrixStartColPresent = true;   
-    osglData->baseMatrixStartCol = (yyvsp[(3) - (4)].ival); 
+    osglData->baseMatrixStartCol = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 755:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->baseMatrixEndRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndRow attribute in <baseMatrix> element");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix end row cannot be negative");
     osglData->baseMatrixEndRowPresent = true;   
-    osglData->baseMatrixEndRow = (yyvsp[(3) - (4)].ival); 
+    osglData->baseMatrixEndRow = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 756:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->baseMatrixEndColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one baseMatrixEndCol attribute in <baseMatrix> element");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "baseMatrix end col cannot be negative");
     osglData->baseMatrixEndColPresent = true;   
-    osglData->baseMatrixEndCol = (yyvsp[(3) - (4)].ival); 
+    osglData->baseMatrixEndCol = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 757:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->blockRowIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockRowIdx attribute previously set");
     else
     {
-        if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockRowIdx cannot be negative");
+        if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockRowIdx cannot be negative");
         osglData->blockRowIdxPresent = true;        
-        osglData->blockRowIdx = (yyvsp[(3) - (4)].ival);
-        ((MatrixBlock*)osglData->tempC)->blockRowIdx = (yyvsp[(3) - (4)].ival);
+        osglData->blockRowIdx = (yyvsp[-1].ival);
+        ((MatrixBlock*)osglData->tempC)->blockRowIdx = (yyvsp[-1].ival);
     }
 
     // compute the size of the block
@@ -8048,21 +7888,22 @@ std::cout << "Number of rows present" << std::endl;
         = osglData->rowOffsets.back()[osglData->blockRowIdx+1]
         - osglData->rowOffsets.back()[osglData->blockRowIdx];
 }
+
     break;
 
   case 758:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->blockColIdxPresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockColIdx attribute previously set");
     else
     {
-        if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockColIdx cannot be negative");
+        if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "blockColIdx cannot be negative");
         osglData->blockColIdxPresent = true;
-        osglData->blockColIdx = (yyvsp[(3) - (4)].ival);       
-        ((MatrixBlock*)osglData->tempC)->blockColIdx = (yyvsp[(3) - (4)].ival);
+        osglData->blockColIdx = (yyvsp[-1].ival);       
+        ((MatrixBlock*)osglData->tempC)->blockColIdx = (yyvsp[-1].ival);
     }
 
     // compute the size of the block
@@ -8070,77 +7911,83 @@ std::cout << "Number of rows present" << std::endl;
         = osglData->colOffsets.back()[osglData->blockColIdx+1] 
         - osglData->colOffsets.back()[osglData->blockColIdx];
 }
+
     break;
 
   case 759:
 
     { 
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->idxPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one idx attribute");
     osglData->idxPresent = true;
-    osglData->idx = (yyvsp[(3) - (4)].ival);
+    osglData->idx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 760:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->incrPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one incr attribute allowed");
     osglData->incrPresent = true;
-    osglData->incr = (yyvsp[(3) - (4)].ival);
+    osglData->incr = (yyvsp[-1].ival);
 }
+
     break;
 
   case 761:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->multPresent) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "only one mult attribute allowed");
-    if ((yyvsp[(3) - (4)].ival) <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mult must be positive");
+    if ((yyvsp[-1].ival) <= 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mult must be positive");
     osglData->multPresent = true;
-    osglData->mult = (yyvsp[(3) - (4)].ival);
+    osglData->mult = (yyvsp[-1].ival);
 }
+
     break;
 
   case 762:
 
     { 
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->targetMatrixFirstRowPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one targetMatrixFirstRow attribute in <baseMatrix> element");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "targetMatrix first row cannot be negative");
     osglData->targetMatrixFirstRowPresent = true;   
-    osglData->targetMatrixFirstRow = (yyvsp[(3) - (4)].ival); 
+    osglData->targetMatrixFirstRow = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 763:
 
     { 
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->targetMatrixFirstColPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one targetMatrixFirstCol attribute in <baseMatrix> element");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "targetMatrix first col cannot be negative");
     osglData->targetMatrixFirstColPresent = true;   
-    osglData->targetMatrixFirstCol = (yyvsp[(3) - (4)].ival); 
+    osglData->targetMatrixFirstCol = (yyvsp[-1].ival); 
 }
+
     break;
 
   case 764:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->coefPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "linear matrix elements: duplicate coef");    
@@ -8150,12 +7997,13 @@ std::cout << "Number of rows present" << std::endl;
         osglData->coefPresent = true;
     }
 }
+
     break;
 
   case 765:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->constantPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "linear matrix elements: duplicate constant");    
@@ -8165,42 +8013,46 @@ std::cout << "Number of rows present" << std::endl;
         osglData->constantPresent = true;
     }
 }
+
     break;
 
   case 766:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->imagPartPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one imaginary part in <complexElement> element");
     osglData->imagPartPresent = true;   
     osglData->imagPart = parserData->tempVal;
 }
+
     break;
 
   case 767:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->realPartPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one real part in <complexElement> element");
     osglData->realPartPresent = true;   
     osglData->realPart = parserData->tempVal;
 }
+
     break;
 
   case 768:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     if (osglData->scalarMultiplierPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one scalar multiplier attribute in <baseMatrix> element");
     osglData->scalarMultiplierPresent = true;   
     osglData->scalarMultiplier = parserData->tempVal;
 }
+
     break;
 
   case 771:
@@ -8213,6 +8065,7 @@ std::cout << "Number of rows present" << std::endl;
         osglData->baseTranspose    = true;
     osglData->baseTransposePresent = true;   
 }
+
     break;
 
   case 772:
@@ -8223,16 +8076,17 @@ std::cout << "Number of rows present" << std::endl;
             "more than one baseTranspose attribute in <baseMatrix> element");
     else
     {
-        if      (strcmp((yyvsp[(2) - (3)].sval),"false") == 0) osglData->baseTranspose = false;
-        else if (strcmp((yyvsp[(2) - (3)].sval),"true" ) == 0) osglData->baseTranspose = true;
-        else if (strcmp((yyvsp[(2) - (3)].sval),"1"    ) == 0) osglData->baseTranspose = true;
-        else if (strcmp((yyvsp[(2) - (3)].sval),"0"    ) == 0) osglData->baseTranspose = false;
+        if      (strcmp((yyvsp[-1].sval),"false") == 0) osglData->baseTranspose = false;
+        else if (strcmp((yyvsp[-1].sval),"true" ) == 0) osglData->baseTranspose = true;
+        else if (strcmp((yyvsp[-1].sval),"1"    ) == 0) osglData->baseTranspose = true;
+        else if (strcmp((yyvsp[-1].sval),"0"    ) == 0) osglData->baseTranspose = false;
         else parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
             "baseTranspose attribute in <baseMatrix> element must be \"true\" or \"false\"");
     }
     osglData->baseTransposePresent = true;
-    free((yyvsp[(2) - (3)].sval));
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 775:
@@ -8242,6 +8096,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one name attribute");
     osglData->namePresent = true;   
 }
+
     break;
 
   case 776:
@@ -8250,9 +8105,10 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->namePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one name attribute");
     osglData->namePresent = true;   
-    osglData->name = (yyvsp[(2) - (3)].sval); 
-    free((yyvsp[(2) - (3)].sval));
+    osglData->name = (yyvsp[-1].sval); 
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 779:
@@ -8264,6 +8120,7 @@ std::cout << "Number of rows present" << std::endl;
         osglData->rowMajor = true;
     osglData->rowMajorPresent = true;
 }
+
     break;
 
   case 780:
@@ -8273,15 +8130,16 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "rowMajor attribute encountered more than once");
     else
     {
-        if      (strcmp((yyvsp[(2) - (3)].sval),"false") == 0) osglData->rowMajor = false;
-        else if (strcmp((yyvsp[(2) - (3)].sval),"true" ) == 0) osglData->rowMajor = true;
-        else if (strcmp((yyvsp[(2) - (3)].sval),"1"    ) == 0) osglData->rowMajor = true;
-        else if (strcmp((yyvsp[(2) - (3)].sval),"0"    ) == 0) osglData->rowMajor = false;
+        if      (strcmp((yyvsp[-1].sval),"false") == 0) osglData->rowMajor = false;
+        else if (strcmp((yyvsp[-1].sval),"true" ) == 0) osglData->rowMajor = true;
+        else if (strcmp((yyvsp[-1].sval),"1"    ) == 0) osglData->rowMajor = true;
+        else if (strcmp((yyvsp[-1].sval),"0"    ) == 0) osglData->rowMajor = false;
         else parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "rowMajor attribute must be \"true\" or \"false\"");
     }
     osglData->rowMajorPresent = true;
-    free((yyvsp[(2) - (3)].sval));
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 783:
@@ -8291,6 +8149,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one shape attribute");
     osglData->shapePresent = true;   
 }
+
     break;
 
   case 784:
@@ -8299,9 +8158,10 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->shapePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one shape attribute");
     osglData->shapePresent = true;   
-    osglData->shape = (yyvsp[(2) - (3)].sval);
-    free((yyvsp[(2) - (3)].sval));
+    osglData->shape = (yyvsp[-1].sval);
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 787:
@@ -8311,6 +8171,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one symmetry attribute in <matrix> element");
     osglData->symmetryPresent = true;   
 }
+
     break;
 
   case 788:
@@ -8319,9 +8180,10 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->symmetryPresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one symmetry attribute in <matrix> element");
     osglData->symmetryPresent = true;   
-    osglData->symmetry = (yyvsp[(2) - (3)].sval); 
-    free((yyvsp[(2) - (3)].sval));
+    osglData->symmetry = (yyvsp[-1].sval); 
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 791:
@@ -8331,6 +8193,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one type attribute");
     osglData->typePresent = true;
 }
+
     break;
 
   case 792:
@@ -8339,9 +8202,10 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->typePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one type attribute");
     osglData->typePresent = true;
-    osglData->type = (yyvsp[(2) - (3)].sval); 
-    free((yyvsp[(2) - (3)].sval));
+    osglData->type = (yyvsp[-1].sval); 
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 795:
@@ -8352,6 +8216,7 @@ std::cout << "Number of rows present" << std::endl;
     osglData->valuePresent = true;   
     osglData->value = "";   
 }
+
     break;
 
   case 796:
@@ -8360,9 +8225,10 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->valuePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one value attribute");
     osglData->valuePresent = true;   
-    osglData->value = (yyvsp[(2) - (3)].sval); 
-    free((yyvsp[(2) - (3)].sval));
+    osglData->value = (yyvsp[-1].sval); 
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 799:
@@ -8372,6 +8238,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one valueType attribute");
     osglData->valueTypePresent = true;   
 }
+
     break;
 
   case 800:
@@ -8380,9 +8247,10 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->valueTypePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one valueType attribute");
     osglData->valueTypePresent = true;   
-    osglData->valueType = (yyvsp[(2) - (3)].sval); 
-    free((yyvsp[(2) - (3)].sval));
+    osglData->valueType = (yyvsp[-1].sval); 
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 803:
@@ -8392,6 +8260,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one varType attribute");
     osglData->varTypePresent = true;   
 }
+
     break;
 
   case 804:
@@ -8400,9 +8269,10 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->varTypePresent == true)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "more than one varType attribute");
     osglData->varTypePresent = true;   
-    osglData->varType = (yyvsp[(2) - (3)].sval); 
-    free((yyvsp[(2) - (3)].sval));
+    osglData->varType = (yyvsp[-1].sval); 
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 806:
@@ -8419,6 +8289,7 @@ std::cout << "Number of rows present" << std::endl;
         }
         parserData->parser_errors = "";
     }
+
     break;
 
   case 807:
@@ -8427,21 +8298,22 @@ std::cout << "Number of rows present" << std::endl;
         osinstance->instanceData->nonlinearExpressions = new NonlinearExpressions();
         osnlData->tmpnlcount = 0;
     }
+
     break;
 
   case 808:
 
     { 
-        if ( *(yyvsp[(2) - (5)].sval) != *(yyvsp[(4) - (5)].sval) ) 
+        if ( *(yyvsp[-3].sval) != *(yyvsp[-1].sval) ) 
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                 "start and end quotes are not the same");
-        if ((yyvsp[(3) - (5)].ival) < 0) parserData->parser_errors += 
+        if ((yyvsp[-2].ival) < 0) parserData->parser_errors += 
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
                 "number of expressions cannot be negative");
-        osnlData->nlnodenumber = (yyvsp[(3) - (5)].ival);
-        osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = (yyvsp[(3) - (5)].ival);  
+        osnlData->nlnodenumber = (yyvsp[-2].ival);
+        osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = (yyvsp[-2].ival);  
         if (osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) 
-            osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ (yyvsp[(3) - (5)].ival) ];
+            osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ (yyvsp[-2].ival) ];
         for (int i = 0; 
                  i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; 
                  i++)
@@ -8449,6 +8321,7 @@ std::cout << "Number of rows present" << std::endl;
             osinstance->instanceData->nonlinearExpressions->nl[i] = new Nl();
         }
     }
+
     break;
 
   case 811:
@@ -8462,6 +8335,7 @@ std::cout << "Number of rows present" << std::endl;
                     osnlData->nlNodeVec[ 0])->createExpressionTreeFromPrefix( osnlData->nlNodeVec);
         osnlData->tmpnlcount++;
     }
+
     break;
 
   case 812:
@@ -8483,6 +8357,7 @@ std::cout << "Number of rows present" << std::endl;
         osnlData->matrixProductVec.clear();
         osnlData->cSumVec.clear();
     }
+
     break;
 
   case 813:
@@ -8492,6 +8367,7 @@ std::cout << "Number of rows present" << std::endl;
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,
             "mandatory attribute idx is missing");    
 }
+
     break;
 
   case 816:
@@ -8504,6 +8380,7 @@ std::cout << "Number of rows present" << std::endl;
                 = new RealValuedExpressionTree();
 //        }
     }
+
     break;
 
   case 817:
@@ -8519,18 +8396,21 @@ std::cout << "Number of rows present" << std::endl;
                     "unknown shape specified in real-valued expression");
 //        }
     }
+
     break;
 
   case 845:
 
     {    osnlData->nlNodePoint = new OSnLNodeE();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);}
+
     break;
 
   case 849:
 
     {    osnlData->nlNodePoint = new OSnLNodePI();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);}
+
     break;
 
   case 853:
@@ -8539,6 +8419,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeTimes();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 855:
@@ -8547,6 +8428,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodePlus();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 857:
@@ -8555,6 +8437,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeMinus();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 859:
@@ -8563,6 +8446,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeNegate();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 861:
@@ -8571,6 +8455,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeDivide();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 863:
@@ -8579,6 +8464,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodePower();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 865:
@@ -8587,6 +8473,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeLn();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 867:
@@ -8595,6 +8482,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeSqrt();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 869:
@@ -8603,6 +8491,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeSquare();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 871:
@@ -8611,6 +8500,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeCos();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 873:
@@ -8619,6 +8509,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeSin();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 875:
@@ -8627,6 +8518,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeExp();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 878:
@@ -8635,6 +8527,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeAbs();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 879:
@@ -8644,6 +8537,7 @@ std::cout << "Number of rows present" << std::endl;
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 #endif
 }
+
     break;
 
   case 880:
@@ -8652,12 +8546,14 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeErf();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 881:
 
     {
 }
+
     break;
 
   case 882:
@@ -8666,6 +8562,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeIf();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 883:
@@ -8675,6 +8572,7 @@ std::cout << "Number of rows present" << std::endl;
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 #endif
 }
+
     break;
 
   case 884:
@@ -8683,6 +8581,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeMatrixDeterminant();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 886:
@@ -8691,6 +8590,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeMatrixTrace();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 888:
@@ -8699,6 +8599,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLNodeMatrixToScalar();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 890:
@@ -8708,6 +8609,7 @@ std::cout << "Number of rows present" << std::endl;
     osglData->typePresent  = false; 
     osnlData->numberidattON = false;
 }
+
     break;
 
   case 891:
@@ -8716,6 +8618,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodeNumberPoint = new OSnLNodeNumber();
     osnlData->nlNodeVec.push_back( osnlData->nlNodeNumberPoint);
 }
+
     break;
 
   case 896:
@@ -8723,6 +8626,7 @@ std::cout << "Number of rows present" << std::endl;
     {
         osnlData->nlNodeNumberPoint->type = osglData->type;
     }
+
     break;
 
   case 897:
@@ -8730,6 +8634,7 @@ std::cout << "Number of rows present" << std::endl;
     {
         osnlData->nlNodeNumberPoint->value = atof(osglData->value.c_str());
     }
+
     break;
 
   case 899:
@@ -8738,9 +8643,10 @@ std::cout << "Number of rows present" << std::endl;
     if (osnlData->numberidattON) parserData->parser_errors += 
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData,"too many number id attributes"); 
     osnlData->numberidattON = true;
-    osnlData->nlNodeNumberPoint->id = (yyvsp[(2) - (2)].sval);
-    free((yyvsp[(2) - (2)].sval));
+    osnlData->nlNodeNumberPoint->id = (yyvsp[0].sval);
+    free((yyvsp[0].sval));
 }
+
     break;
 
   case 901:
@@ -8749,11 +8655,13 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodeVariablePoint = new OSnLNodeVariable();
     osnlData->nlNodeVec.push_back( osnlData->nlNodeVariablePoint);
 }
+
     break;
 
   case 902:
 
     {osnlData->variablecoefattON = false; osnlData->variableidxattON = false;}
+
     break;
 
   case 905:
@@ -8762,6 +8670,7 @@ std::cout << "Number of rows present" << std::endl;
             osnlData->nlNodeVariablePoint->inumberOfChildren = 1;
             osnlData->nlNodeVariablePoint->m_mChildren = new ExprNode*[ 1];
         }
+
     break;
 
   case 909:
@@ -8771,6 +8680,7 @@ std::cout << "Number of rows present" << std::endl;
                 addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variable coef attributes"); 
             osnlData->variablecoefattON = true; 
         }
+
     break;
 
   case 910:
@@ -8780,28 +8690,31 @@ std::cout << "Number of rows present" << std::endl;
                 addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "too many variable idx attributes"); 
             osnlData->variableidxattON = true; 
         }
+
     break;
 
   case 911:
 
     { 
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) parserData->parser_errors += 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) parserData->parser_errors += 
         addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
     osnlData->nlNodeVariablePoint->coef = parserData->tempVal;
 }
+
     break;
 
   case 912:
 
     { 
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) 
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) ) 
         parserData->parser_errors += 
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         parserData->parser_errors += 
             addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "variable index cannot be negative");
-    osnlData->nlNodeVariablePoint->idx = (yyvsp[(3) - (4)].ival);
+    osnlData->nlNodeVariablePoint->idx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 913:
@@ -8811,6 +8724,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
     osnlData->sumVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 914:
@@ -8820,11 +8734,13 @@ std::cout << "Number of rows present" << std::endl;
         = new ExprNode*[ ((OSnLNode*)osnlData->sumVec.back())->inumberOfChildren];
     osnlData->sumVec.pop_back();
 }
+
     break;
 
   case 916:
 
     { ((OSnLNode*)osnlData->sumVec.back())->inumberOfChildren++; }
+
     break;
 
   case 917:
@@ -8834,6 +8750,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
     osnlData->allDiffVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 918:
@@ -8846,11 +8763,13 @@ std::cout << "Number of rows present" << std::endl;
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 #endif
 }
+
     break;
 
   case 920:
 
     { ((OSnLNode*)osnlData->allDiffVec.back())->inumberOfChildren++; }
+
     break;
 
   case 921:
@@ -8860,6 +8779,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
     osnlData->maxVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 922:
@@ -8871,11 +8791,13 @@ std::cout << "Number of rows present" << std::endl;
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 #endif
 }
+
     break;
 
   case 924:
 
     { osnlData->maxVec.back()->inumberOfChildren++; }
+
     break;
 
   case 925:
@@ -8885,6 +8807,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
     osnlData->minVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 926:
@@ -8896,11 +8819,13 @@ std::cout << "Number of rows present" << std::endl;
     osinstance->instanceData->nonlinearExpressions->nl[ osnlData->tmpnlcount]->osExpressionTree->bADMustReTape = true;
 #endif
 }
+
     break;
 
   case 928:
 
     { osnlData->minVec.back()->inumberOfChildren++; }
+
     break;
 
   case 929:
@@ -8910,6 +8835,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
     osnlData->productVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 930:
@@ -8918,11 +8844,13 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->productVec.back()->m_mChildren = new ExprNode*[ osnlData->productVec.back()->inumberOfChildren];
     osnlData->productVec.pop_back();
 }
+
     break;
 
   case 932:
 
     { osnlData->productVec.back()->inumberOfChildren++; }
+
     break;
 
   case 952:
@@ -8936,6 +8864,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->idxAttributePresent = false;
     osnlData->transposeAttributePresent = false;
 }
+
     break;
 
   case 953:
@@ -8946,6 +8875,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->idxAttributePresent = false;
     osnlData->transposeAttributePresent = false;
 }
+
     break;
 
   case 960:
@@ -8953,13 +8883,14 @@ std::cout << "Number of rows present" << std::endl;
     {
     if (osnlData->idxAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "idx attribute repeated");
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) )
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) )
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-    if ((yyvsp[(3) - (4)].ival) < 0)
+    if ((yyvsp[-1].ival) < 0)
         throw ErrorClass("Matrix reference must be nonnegative");
-    osnlData->nlMNodeMatrixRef->idx = (yyvsp[(3) - (4)].ival);
+    osnlData->nlMNodeMatrixRef->idx = (yyvsp[-1].ival);
     osnlData->idxAttributePresent = true;
 }
+
     break;
 
   case 961:
@@ -8967,14 +8898,15 @@ std::cout << "Number of rows present" << std::endl;
     {
     if (osnlData->transposeAttributePresent)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "transpose attribute repeated");
-    if      (strcmp((yyvsp[(2) - (3)].sval),"false") == 0) osnlData->matrixTransposeAttribute = false;
-    else if (strcmp((yyvsp[(2) - (3)].sval),"true" ) == 0) osnlData->matrixTransposeAttribute = true;
-    else if (strcmp((yyvsp[(2) - (3)].sval),"1"    ) == 0) osnlData->matrixTransposeAttribute = true;
-    else if (strcmp((yyvsp[(2) - (3)].sval),"0"    ) == 0) osnlData->matrixTransposeAttribute = false;
+    if      (strcmp((yyvsp[-1].sval),"false") == 0) osnlData->matrixTransposeAttribute = false;
+    else if (strcmp((yyvsp[-1].sval),"true" ) == 0) osnlData->matrixTransposeAttribute = true;
+    else if (strcmp((yyvsp[-1].sval),"1"    ) == 0) osnlData->matrixTransposeAttribute = true;
+    else if (strcmp((yyvsp[-1].sval),"0"    ) == 0) osnlData->matrixTransposeAttribute = false;
     else parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "osnlData->includeDiagonal attribute must be \"true\" or \"false\"");
-    free((yyvsp[(2) - (3)].sval));
+    free((yyvsp[-1].sval));
     osnlData->transposeAttributePresent = true;
 }
+
     break;
 
   case 962:
@@ -8982,6 +8914,7 @@ std::cout << "Number of rows present" << std::endl;
     {
     osnlData->matrixidxattON = false;
 }
+
     break;
 
   case 963:
@@ -8990,15 +8923,17 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlMNodeMatrixVar = new OSnLMNodeMatrixVar();
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixVar);
 }
+
     break;
 
   case 966:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) )
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) )
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlMNodeMatrixVar->idx = (yyvsp[(3) - (4)].ival);
+    osnlData->nlMNodeMatrixVar->idx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 967:
@@ -9006,6 +8941,7 @@ std::cout << "Number of rows present" << std::endl;
     {
     osnlData->matrixidxattON = false;
 }
+
     break;
 
   case 968:
@@ -9014,15 +8950,17 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlMNodeMatrixObj = new OSnLMNodeMatrixObj();
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixObj);
 }
+
     break;
 
   case 971:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) )
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) )
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlMNodeMatrixObj->idx = (yyvsp[(3) - (4)].ival);
+    osnlData->nlMNodeMatrixObj->idx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 972:
@@ -9030,6 +8968,7 @@ std::cout << "Number of rows present" << std::endl;
     {
     osnlData->matrixidxattON = false;
 }
+
     break;
 
   case 973:
@@ -9038,15 +8977,17 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlMNodeMatrixCon = new OSnLMNodeMatrixCon();
     osnlData->nlNodeVec.push_back(osnlData->nlMNodeMatrixCon);
 }
+
     break;
 
   case 976:
 
     {
-    if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) )
+    if ( *(yyvsp[-2].sval) != *(yyvsp[0].sval) )
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "start and end quotes are not the same");
-    osnlData->nlMNodeMatrixCon->idx = (yyvsp[(3) - (4)].ival);
+    osnlData->nlMNodeMatrixCon->idx = (yyvsp[-1].ival);
 }
+
     break;
 
   case 978:
@@ -9055,6 +8996,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixDiagonal();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 981:
@@ -9063,6 +9005,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixDotTimes();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 984:
@@ -9071,6 +9014,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeIdentityMatrix();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 987:
@@ -9079,6 +9023,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixInverse();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 990:
@@ -9087,6 +9032,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixLowerTriangle();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 992:
@@ -9094,6 +9040,7 @@ std::cout << "Number of rows present" << std::endl;
     {
     ((OSnLMNodeMatrixLowerTriangle*)osnlData->nlNodeVec.back())->includeDiagonal = osnlData->includeDiagonalAttribute;
 }
+
     break;
 
   case 995:
@@ -9102,6 +9049,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixUpperTriangle();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 997:
@@ -9109,18 +9057,20 @@ std::cout << "Number of rows present" << std::endl;
     {
     ((OSnLMNodeMatrixUpperTriangle*)osnlData->nlNodeVec.back())->includeDiagonal = osnlData->includeDiagonalAttribute;
 }
+
     break;
 
   case 999:
 
     {
-    if      (strcmp((yyvsp[(2) - (3)].sval),"false") == 0) osnlData->includeDiagonalAttribute = false;
-    else if (strcmp((yyvsp[(2) - (3)].sval),"true" ) == 0) osnlData->includeDiagonalAttribute = true;
-    else if (strcmp((yyvsp[(2) - (3)].sval),"1"    ) == 0) osnlData->includeDiagonalAttribute = true;
-    else if (strcmp((yyvsp[(2) - (3)].sval),"0"    ) == 0) osnlData->includeDiagonalAttribute = false;
+    if      (strcmp((yyvsp[-1].sval),"false") == 0) osnlData->includeDiagonalAttribute = false;
+    else if (strcmp((yyvsp[-1].sval),"true" ) == 0) osnlData->includeDiagonalAttribute = true;
+    else if (strcmp((yyvsp[-1].sval),"1"    ) == 0) osnlData->includeDiagonalAttribute = true;
+    else if (strcmp((yyvsp[-1].sval),"0"    ) == 0) osnlData->includeDiagonalAttribute = false;
     else parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "osnlData->includeDiagonal attribute must be \"true\" or \"false\"");
-    free((yyvsp[(2) - (3)].sval));
+    free((yyvsp[-1].sval));
 }
+
     break;
 
   case 1001:
@@ -9128,6 +9078,7 @@ std::cout << "Number of rows present" << std::endl;
     {
      parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "matrix merge not yet implemented");
 }
+
     break;
 
   case 1005:
@@ -9136,6 +9087,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixMinus();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1008:
@@ -9144,6 +9096,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixNegate();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1011:
@@ -9152,6 +9105,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixPlus();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1014:
@@ -9160,6 +9114,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixTimes();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1016:
@@ -9169,6 +9124,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
     osnlData->matrixProductVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1017:
@@ -9177,6 +9133,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->matrixProductVec.back()->m_mChildren = new ExprNode*[ osnlData->matrixProductVec.back()->inumberOfChildren];
     osnlData->matrixProductVec.pop_back();
 }
+
     break;
 
   case 1019:
@@ -9184,6 +9141,7 @@ std::cout << "Number of rows present" << std::endl;
     { 
     osnlData->matrixProductVec.back()->inumberOfChildren++; 
 }
+
     break;
 
   case 1021:
@@ -9192,6 +9150,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixScalarTimes();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1024:
@@ -9200,6 +9159,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixSubmatrixAt();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1027:
@@ -9208,6 +9168,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLMNodeMatrixTranspose();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1030:
@@ -9216,6 +9177,7 @@ std::cout << "Number of rows present" << std::endl;
         if (osnlData->tmpnlcount < osnlData->nlnodenumber)  
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "actual number of matrix expressions less than number attribute");   
     }
+
     break;
 
   case 1031:
@@ -9226,21 +9188,22 @@ std::cout << "Number of rows present" << std::endl;
         osnlData->tmpnlcount = 0;
     #endif
     }
+
     break;
 
   case 1033:
 
     {
     #ifdef OSINSTANCE_AVAILABLE
-        if (*(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval)) 
+        if (*(yyvsp[-2].sval) != *(yyvsp[0].sval)) 
             parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mismatched quotes");
-        if ((yyvsp[(3) - (4)].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
+        if ((yyvsp[-1].ival) < 0) parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, 
                         "number of expressions cannot be negative");
-        osnlData->nlnodenumber = (yyvsp[(3) - (4)].ival);
-        osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr = (yyvsp[(3) - (4)].ival);  
+        osnlData->nlnodenumber = (yyvsp[-1].ival);
+        osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr = (yyvsp[-1].ival);  
         if (osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr > 0 ) 
             osinstance->instanceData->matrixProgramming->matrixExpressions->expr
-                = new MatrixExpression*[ (yyvsp[(3) - (4)].ival) ];
+                = new MatrixExpression*[ (yyvsp[-1].ival) ];
         for (int i = 0; 
                  i < osinstance->instanceData->matrixProgramming->matrixExpressions->numberOfExpr;
                  i++)
@@ -9248,6 +9211,7 @@ std::cout << "Number of rows present" << std::endl;
                 = new MatrixExpression();
     #endif
     }
+
     break;
 
   case 1040:
@@ -9262,6 +9226,7 @@ std::cout << "Number of rows present" << std::endl;
     #endif
         osnlData->tmpnlcount++;
     }
+
     break;
 
   case 1041:
@@ -9282,6 +9247,7 @@ std::cout << "Number of rows present" << std::endl;
         osnlData->matrixSumVec.clear();
         osnlData->matrixProductVec.clear();
     }
+
     break;
 
   case 1042:
@@ -9290,6 +9256,7 @@ std::cout << "Number of rows present" << std::endl;
     if (osglData->idxPresent == false)
         parserData->parser_errors += addErrorMsg( NULL, osinstance, parserData, osglData, osnlData, "mandatory attribute idx is missing");    
 }
+
     break;
 
   case 1045:
@@ -9301,6 +9268,7 @@ std::cout << "Number of rows present" << std::endl;
             = new MatrixExpressionTree();
     #endif
     }
+
     break;
 
   case 1046:
@@ -9316,12 +9284,14 @@ std::cout << "Number of rows present" << std::endl;
                 "unknown shape specified in matrix expression");
     #endif
     }
+
     break;
 
   case 1058:
 
     {
 }
+
     break;
 
   case 1059:
@@ -9332,6 +9302,7 @@ std::cout << "Number of rows present" << std::endl;
     osnlData->nlNodePoint = new OSnLCNodeNumber();
     osnlData->nlNodeVec.push_back(osnlData->nlNodePoint);
 }
+
     break;
 
   case 1062:
@@ -9341,6 +9312,7 @@ std::cout << "Number of rows present" << std::endl;
 std::cout << "just to verify: value = " 
           << ((OSnLCNodeNumber*)osnlData->nlNodePoint)->getValue() << std::endl;
 }
+
     break;
 
   case 1068:
@@ -9349,6 +9321,7 @@ std::cout << "just to verify: value = "
     osnlData->nlNodePoint = new OSnLCNodeCreate();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1071:
@@ -9357,6 +9330,7 @@ std::cout << "just to verify: value = "
     osnlData->nlNodePoint = new OSnLCNodePlus();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1073:
@@ -9366,6 +9340,7 @@ std::cout << "just to verify: value = "
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
     osnlData->cSumVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1074:
@@ -9374,6 +9349,7 @@ std::cout << "just to verify: value = "
     osnlData->cSumVec.back()->m_mChildren = new ExprNode*[ osnlData->cSumVec.back()->inumberOfChildren];
     osnlData->cSumVec.pop_back();
 }
+
     break;
 
   case 1076:
@@ -9381,6 +9357,7 @@ std::cout << "just to verify: value = "
     { 
     osnlData->cSumVec.back()->inumberOfChildren++; 
 }
+
     break;
 
   case 1078:
@@ -9389,6 +9366,7 @@ std::cout << "just to verify: value = "
     osnlData->nlNodePoint = new OSnLCNodeMinus();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1081:
@@ -9397,6 +9375,7 @@ std::cout << "just to verify: value = "
     osnlData->nlNodePoint = new OSnLCNodeNegate();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1084:
@@ -9405,6 +9384,7 @@ std::cout << "just to verify: value = "
     osnlData->nlNodePoint = new OSnLCNodeConjugate();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1087:
@@ -9413,6 +9393,7 @@ std::cout << "just to verify: value = "
     osnlData->nlNodePoint = new OSnLCNodeTimes();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
   case 1090:
@@ -9421,12 +9402,24 @@ std::cout << "just to verify: value = "
     osnlData->nlNodePoint = new OSnLCNodeSquare();
     osnlData->nlNodeVec.push_back( osnlData->nlNodePoint);
 }
+
     break;
 
 
 
       default: break;
     }
+  /* User semantic actions sometimes alter yychar, and that requires
+     that yytoken be updated with the new translation.  We take the
+     approach of translating immediately before every use of yytoken.
+     One alternative is translating here after every semantic action,
+     but that translation would be missed if the semantic action invokes
+     YYABORT, YYACCEPT, or YYERROR immediately after altering yychar or
+     if it invokes YYBACKUP.  In the case of YYABORT or YYACCEPT, an
+     incorrect destructor might then be invoked immediately.  In the
+     case of YYERROR or YYBACKUP, subsequent parser actions might lead
+     to an incorrect destructor call or verbose syntax error message
+     before the lookahead is translated.  */
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
 
   YYPOPSTACK (yylen);
@@ -9436,7 +9429,7 @@ std::cout << "just to verify: value = "
   *++yyvsp = yyval;
   *++yylsp = yyloc;
 
-  /* Now `shift' the result of the reduction.  Determine what state
+  /* Now 'shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
 
@@ -9451,10 +9444,14 @@ std::cout << "just to verify: value = "
   goto yynewstate;
 
 
-/*------------------------------------.
-| yyerrlab -- here on detecting error |
-`------------------------------------*/
+/*--------------------------------------.
+| yyerrlab -- here on detecting error.  |
+`--------------------------------------*/
 yyerrlab:
+  /* Make sure we have latest lookahead translation.  See comments at
+     user semantic actions for why this is necessary.  */
+  yytoken = yychar == YYEMPTY ? YYEMPTY : YYTRANSLATE (yychar);
+
   /* If not already recovering from an error, report this error.  */
   if (!yyerrstatus)
     {
@@ -9462,59 +9459,58 @@ yyerrlab:
 #if ! YYERROR_VERBOSE
       yyerror (&yylloc, osinstance, parserData, osglData, osnlData, YY_("syntax error"));
 #else
+# define YYSYNTAX_ERROR yysyntax_error (&yymsg_alloc, &yymsg, \
+                                        yyssp, yytoken)
       {
-	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
-	if (yymsg_alloc < yysize && yymsg_alloc < YYSTACK_ALLOC_MAXIMUM)
-	  {
-	    YYSIZE_T yyalloc = 2 * yysize;
-	    if (! (yysize <= yyalloc && yyalloc <= YYSTACK_ALLOC_MAXIMUM))
-	      yyalloc = YYSTACK_ALLOC_MAXIMUM;
-	    if (yymsg != yymsgbuf)
-	      YYSTACK_FREE (yymsg);
-	    yymsg = (char *) YYSTACK_ALLOC (yyalloc);
-	    if (yymsg)
-	      yymsg_alloc = yyalloc;
-	    else
-	      {
-		yymsg = yymsgbuf;
-		yymsg_alloc = sizeof yymsgbuf;
-	      }
-	  }
-
-	if (0 < yysize && yysize <= yymsg_alloc)
-	  {
-	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (&yylloc, osinstance, parserData, osglData, osnlData, yymsg);
-	  }
-	else
-	  {
-	    yyerror (&yylloc, osinstance, parserData, osglData, osnlData, YY_("syntax error"));
-	    if (yysize != 0)
-	      goto yyexhaustedlab;
-	  }
+        char const *yymsgp = YY_("syntax error");
+        int yysyntax_error_status;
+        yysyntax_error_status = YYSYNTAX_ERROR;
+        if (yysyntax_error_status == 0)
+          yymsgp = yymsg;
+        else if (yysyntax_error_status == 1)
+          {
+            if (yymsg != yymsgbuf)
+              YYSTACK_FREE (yymsg);
+            yymsg = (char *) YYSTACK_ALLOC (yymsg_alloc);
+            if (!yymsg)
+              {
+                yymsg = yymsgbuf;
+                yymsg_alloc = sizeof yymsgbuf;
+                yysyntax_error_status = 2;
+              }
+            else
+              {
+                yysyntax_error_status = YYSYNTAX_ERROR;
+                yymsgp = yymsg;
+              }
+          }
+        yyerror (&yylloc, osinstance, parserData, osglData, osnlData, yymsgp);
+        if (yysyntax_error_status == 2)
+          goto yyexhaustedlab;
       }
+# undef YYSYNTAX_ERROR
 #endif
     }
 
-  yyerror_range[0] = yylloc;
+  yyerror_range[1] = yylloc;
 
   if (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
-	 error, discard it.  */
+         error, discard it.  */
 
       if (yychar <= YYEOF)
-	{
-	  /* Return failure if at end of input.  */
-	  if (yychar == YYEOF)
-	    YYABORT;
-	}
+        {
+          /* Return failure if at end of input.  */
+          if (yychar == YYEOF)
+            YYABORT;
+        }
       else
-	{
-	  yydestruct ("Error: discarding",
-		      yytoken, &yylval, &yylloc, osinstance, parserData, osglData, osnlData);
-	  yychar = YYEMPTY;
-	}
+        {
+          yydestruct ("Error: discarding",
+                      yytoken, &yylval, &yylloc, osinstance, parserData, osglData, osnlData);
+          yychar = YYEMPTY;
+        }
     }
 
   /* Else will try to reuse lookahead token after shifting the error
@@ -9533,8 +9529,8 @@ yyerrorlab:
   if (/*CONSTCOND*/ 0)
      goto yyerrorlab;
 
-  yyerror_range[0] = yylsp[1-yylen];
-  /* Do not reclaim the symbols of the rule which action triggered
+  yyerror_range[1] = yylsp[1-yylen];
+  /* Do not reclaim the symbols of the rule whose action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
   yylen = 0;
@@ -9547,40 +9543,42 @@ yyerrorlab:
 | yyerrlab1 -- common code for both syntax error and YYERROR.  |
 `-------------------------------------------------------------*/
 yyerrlab1:
-  yyerrstatus = 3;	/* Each real token shifted decrements this.  */
+  yyerrstatus = 3;      /* Each real token shifted decrements this.  */
 
   for (;;)
     {
       yyn = yypact[yystate];
-      if (yyn != YYPACT_NINF)
-	{
-	  yyn += YYTERROR;
-	  if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
-	    {
-	      yyn = yytable[yyn];
-	      if (0 < yyn)
-		break;
-	    }
-	}
+      if (!yypact_value_is_default (yyn))
+        {
+          yyn += YYTERROR;
+          if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
+            {
+              yyn = yytable[yyn];
+              if (0 < yyn)
+                break;
+            }
+        }
 
       /* Pop the current state because it cannot handle the error token.  */
       if (yyssp == yyss)
-	YYABORT;
+        YYABORT;
 
-      yyerror_range[0] = *yylsp;
+      yyerror_range[1] = *yylsp;
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp, yylsp, osinstance, parserData, osglData, osnlData);
+                  yystos[yystate], yyvsp, yylsp, osinstance, parserData, osglData, osnlData);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
     }
 
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 
-  yyerror_range[1] = yylloc;
+  yyerror_range[2] = yylloc;
   /* Using YYLLOC is tempting, but would change the location of
      the lookahead.  YYLOC is available though.  */
-  YYLLOC_DEFAULT (yyloc, (yyerror_range - 1), 2);
+  YYLLOC_DEFAULT (yyloc, yyerror_range, 2);
   *++yylsp = yyloc;
 
   /* Shift the error token.  */
@@ -9604,7 +9602,7 @@ yyabortlab:
   yyresult = 1;
   goto yyreturn;
 
-#if !defined(yyoverflow) || YYERROR_VERBOSE
+#if !defined yyoverflow || YYERROR_VERBOSE
 /*-------------------------------------------------.
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
@@ -9616,16 +9614,21 @@ yyexhaustedlab:
 
 yyreturn:
   if (yychar != YYEMPTY)
-     yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval, &yylloc, osinstance, parserData, osglData, osnlData);
-  /* Do not reclaim the symbols of the rule which action triggered
+    {
+      /* Make sure we have latest lookahead translation.  See comments at
+         user semantic actions for why this is necessary.  */
+      yytoken = YYTRANSLATE (yychar);
+      yydestruct ("Cleanup: discarding lookahead",
+                  yytoken, &yylval, &yylloc, osinstance, parserData, osglData, osnlData);
+    }
+  /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
   YY_STACK_PRINT (yyss, yyssp);
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp, yylsp, osinstance, parserData, osglData, osnlData);
+                  yystos[*yyssp], yyvsp, yylsp, osinstance, parserData, osglData, osnlData);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -9636,11 +9639,8 @@ yyreturn:
   if (yymsg != yymsgbuf)
     YYSTACK_FREE (yymsg);
 #endif
-  /* Make sure YYID is used.  */
-  return YYID (yyresult);
+  return yyresult;
 }
-
-
 
 
 
@@ -12423,5 +12423,4 @@ void osil_empty_vectors( OSiLParserData* parserData){
       parserData->primalVals.clear();
 */      
 }//end osil_empty_vectors
-
 

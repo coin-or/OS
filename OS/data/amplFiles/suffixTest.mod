@@ -5,8 +5,8 @@
 # 3. primal and dual initial values, with some numbers missing, others equal to zero
 # 4. built-in suffixes: .sstatus
 # 5. user-defined suffixes with various characteristics:
-#    a. integer, binary, string and real
-#    b. IN, OUT, INOUT, LOCAL and default
+#    a. integer, binary, string and real (i.e., numeric, which is the default)
+#    b. IN, OUT, INOUT, LOCAL and default (which is INOUT)
 #
 #
 #  Copyright (C) 2012, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -121,6 +121,35 @@ option moreprobstring_table '\
    0    real \
    1    test \
    2    more ';                          let rbrock2.moreprobstring  := "more";
+
+# suffixes are available simultaneously for all problem components; let's test this...
+
+suffix globalnumeric;                    let {i in 0..3}    x[i].globalnumeric := 2.71828*i;
+                                         let {i in 0..3} boxU[i].globalnumeric := 3.14154*i;
+                                         let                obj1.globalnumeric := 1.73205;
+                                         let                obj2.globalnumeric := 3.46411;
+                                         let          Rosenbrock.globalnumeric := 0.1101001;
+
+suffix globalinteger, integer;           let {i in 0..3}    x[i].globalinteger := 3*i;
+                                         let {i in 0..3} boxU[i].globalinteger := 4*i;
+                                         let                obj1.globalinteger := 5;
+                                         let                obj2.globalinteger := 6;
+                                         let          Rosenbrock.globalinteger := 7;
+
+suffix globalbinary, binary;             let {i in 0..1}    x[i].globalbinary := 1;
+                                         let {i in 0..1} boxU[i].globalbinary := 1;
+                                         let                obj1.globalbinary := 1;
+                                         let          Rosenbrock.globalbinary := 1;
+
+suffix globalsymbolic, symbolic;
+option globalsymbolic_table '\
+   0    zero \
+   1    one  \
+   2    two  \
+   3    three';                          let {i in 0..3}    x[i].globalsymbolic_num := i;
+                                         let {i in 0..1} boxU[i].globalsymbolic_num := i;
+                                         let                obj1.globalsymbolic_num := 1;
+                                         let          Rosenbrock.globalsymbolic_num := 2;
 
 ### basis information
 let x[1].sstatus_num := 1;

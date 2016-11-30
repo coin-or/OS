@@ -28,7 +28,7 @@
 			<el>3</el>
 		</atLower>
 	</initialBasisStatus>
-	<other name="fromOsolFile" varType="integer" description="meaningless option used to verify that OSoL file is processed correctly" numberOfVar="4"  >
+	<other name="varFromOsolFile" varType="integer" description="meaningless option used to verify that OSoL file is processed correctly" numberOfVar="4"  >
 		<var idx="0" value="5"></var>
 		<var idx="1" value="6"></var>
 		<var idx="2" value="7"></var>
@@ -41,7 +41,7 @@
 	</other>
 </variables>
 <objectives numberOfOtherObjectiveOptions="2">
-	<other name="fromOsolFile" objType="real" description="meaningless option used to verify that OSoL file is processed correctly" numberOfObj="1"  >
+	<other name="objFromOsolFile" objType="real" description="meaningless option used to verify that OSoL file is processed correctly" numberOfObj="1"  >
 		<obj idx="-1" value="-1.0" ></obj>
 	</other>
 	<other name="someobjinteger" objType="integer" description="this option also occurs in the .nl file" numberOfObj="1" >
@@ -57,7 +57,7 @@
 			<el>3</el>
 		</isFree>
 	</initialBasisStatus>
-	<other name="fromOsolFile" conType="real" description="meaningless option used to verify that OSoL file is processed correctly" numberOfCon="1"  >
+	<other name="conFromOsolFile" conType="real" description="meaningless option used to verify that OSoL file is processed correctly" numberOfCon="1"  >
 		<con idx="0" value="1234.56789" ></con>
 	</other>
 	<other name="someconinteger" conType="integer" description="this option also occurs in the .nl file" numberOfCon="1" >

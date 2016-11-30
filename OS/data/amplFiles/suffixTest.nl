@@ -1,4 +1,4 @@
-g3 2 1 0	# problem suffixTest
+g3 2 1 0	# problem test
  4 6 2 0 2	# vars, constraints, objectives, ranges, eqns
  4 2	# nonlinear constraints, objectives
  0 0	# network constraints: nonlinear, linear
@@ -50,6 +50,21 @@ S0 4 morevarstring
 1 1
 2 1
 3 1
+S4 3 globalnumeric
+1 2.71828
+2 5.43656
+3 8.15484
+S0 3 globalinteger
+1 3
+2 6
+3 9
+S0 2 globalbinary
+0 1
+1 1
+S0 3 globalsymbolic
+1 1
+2 2
+3 3
 S1 2 sstatus
 1 5
 2 6
@@ -73,10 +88,39 @@ S6 1 moreobjnumeric
 0 0.001
 S2 1 moreobjbinary
 0 1
+S6 2 globalnumeric
+0 1.73205
+1 3.46411
+S2 2 globalinteger
+0 5
+1 6
+S2 1 globalbinary
+0 1
+S2 1 globalsymbolic
+0 1
 S3 1 moreprobbinary
 0 1
 S3 1 moreprobstring
 0 2
+b
+0 1 10
+0 1 10
+0 1 10
+0 1 10
+x3
+0 7.73
+1 7.73
+3 0
+r
+1 100
+1 100
+1 100
+1 100
+4 25
+4 25
+d2
+4 125
+5 125
 C0
 o5
 o16
@@ -178,25 +222,6 @@ o5
 v3
 n2
 n2
-d2
-4 125
-5 125
-x3
-0 7.73
-1 7.73
-3 0
-r
-1 100
-1 100
-1 100
-1 100
-4 25
-4 25
-b
-0 1 10
-0 1 10
-0 1 10
-0 1 10
 k3
 2
 4

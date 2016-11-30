@@ -3230,9 +3230,11 @@ static yyconst flex_int32_t yy_rule_can_match_eol[519] =
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 #include "OSrLParserData.h"
-#include "OSParseosrl.tab.hpp"
+#include "OSnLParserData.h"
+#include "OSgLParserData.h"
 #include "OSResult.h"
 #include "OSGeneral.h"
+#include "OSParseosrl.tab.hpp"
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -3296,9 +3298,9 @@ using std::ostringstream;
 
 
 
-#line 117 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 119 "../../../../OS/src/OSParsers/OSParseosrl.l"
 #define YY_EXTRA_TYPE OSrLParserData*
-#line 3302 "../../../../OS/src/OSParsers/OSParseosrl.cpp"
+#line 3304 "../../../../OS/src/OSParsers/OSParseosrl.cpp"
 
 #define INITIAL 0
 #define osrlattributetext 1
@@ -3550,10 +3552,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 128 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 130 "../../../../OS/src/OSParsers/OSParseosrl.l"
 
 
-#line 3557 "../../../../OS/src/OSParsers/OSParseosrl.cpp"
+#line 3559 "../../../../OS/src/OSParsers/OSParseosrl.cpp"
 
     yylval = yylval_param;
 
@@ -3655,36 +3657,36 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 130 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 132 "../../../../OS/src/OSParsers/OSParseosrl.l"
 
 	YY_BREAK
 /* General patterns matched in more than one element */
 case 2:
 YY_RULE_SETUP
-#line 134 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 136 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 135 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 137 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 136 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 138 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GREATERTHAN);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 137 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 139 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 139 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 141 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
@@ -3692,681 +3694,681 @@ return(DOUBLE);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 144 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 146 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  yylval->sval = yytext; return(BOOLEAN);}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 146 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 148 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ENDOFELEMENT);}
 	YY_BREAK
 /* Patterns for attributes returning strings (that are potentially empty)*/
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 150 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 152 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTARGETOBJECTIVENAMEATT);}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 151 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 153 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTARGETOBJECTIVENAMEATT);}
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 152 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 154 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(TARGETOBJECTIVENAMEATT);}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 153 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 155 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(TARGETOBJECTIVENAMEATT);}
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 155 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 157 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYWEIGHTEDOBJECTIVESATT);}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 156 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 158 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYWEIGHTEDOBJECTIVESATT);}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 157 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 159 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(WEIGHTEDOBJECTIVESATT);}
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 158 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 160 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(WEIGHTEDOBJECTIVESATT);}
 	YY_BREAK
 /* Patterns for attributes returning numeric values*/
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 162 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 164 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 163 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 165 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERMATRIXPROGRAMMINGRESULTSATT);}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 164 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 166 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERMATRIXCONSTRAINTRESULTSATT);}
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 165 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 167 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERMATRIXOBJECTIVERESULTSATT);}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 166 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 168 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERMATRIXVARIABLERESULTSATT);}
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 167 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 169 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 168 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 170 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERRESULTSATT);}
 	YY_BREAK
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 169 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 171 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
 	YY_BREAK
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 170 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 172 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERVARIABLERESULTSATT);}
 	YY_BREAK
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 171 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 173 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFSOLUTIONSATT);}
 	YY_BREAK
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 172 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 174 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFSOLVEROUTPUTSATT);}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 173 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 175 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFSUBSTATUSESATT);}
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 174 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 176 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFTIMESATT);}
 	YY_BREAK
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 176 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 178 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(TARGETOBJECTIVEIDXATT);}
 	YY_BREAK
 /* Generic patterns matched in more than one element */
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 180 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 182 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(STATUSSTART);}
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 181 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 183 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(STATUSEND);}
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 182 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 184 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SUBSTATUSSTART);}
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 183 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 185 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SUBSTATUSEND);}
 	YY_BREAK
 /* Patterns for top level elements */
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 187 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 189 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {return(OSRLSTARTEMPTY);}
 	YY_BREAK
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 188 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 190 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN osrlattributetext;  return(OSRLSTART);}
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 189 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 191 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OSRLEND);}
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 190 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 192 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(HEADERSTART);}
 	YY_BREAK
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 191 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 193 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(HEADEREND);}
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 192 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 194 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MESSAGESTART);}
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 193 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 195 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MESSAGEEND);}
 	YY_BREAK
 /* Patterns for the <general> element */
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 197 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 199 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GENERALSTATUSSTART);}
 	YY_BREAK
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 198 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 200 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GENERALSTATUSEND);}
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 199 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 201 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SOLVERINVOKEDSTART);}
 	YY_BREAK
 case 45:
 /* rule 45 can match eol */
 YY_RULE_SETUP
-#line 200 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 202 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SOLVERINVOKEDEND);}
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 201 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 203 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESTAMPSTART);}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 202 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 204 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESTAMPEND);}
 	YY_BREAK
 /* Patterns for the <system> element */
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 206 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 208 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SYSTEMINFORMATIONSTART);}
 	YY_BREAK
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 207 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 209 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SYSTEMINFORMATIONEND);}
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 208 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 210 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(AVAILABLEDISKSPACESTART);}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 209 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 211 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(AVAILABLEDISKSPACEEND);}
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 210 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 212 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(AVAILABLEMEMORYSTART);}
 	YY_BREAK
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 211 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 213 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(AVAILABLEMEMORYEND);}
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 212 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 214 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(AVAILABLECPUSPEEDSTART);}
 	YY_BREAK
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 213 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 215 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(AVAILABLECPUSPEEDEND);}
 	YY_BREAK
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 214 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 216 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(AVAILABLECPUNUMBERSTART);}
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 215 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 217 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(AVAILABLECPUNUMBEREND);}
 	YY_BREAK
 /* Patterns for the <service> element */
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 219 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 221 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CURRENTSTATESTART);}
 	YY_BREAK
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 220 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 222 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CURRENTSTATEEND);}
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 221 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 223 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CURRENTJOBCOUNTSTART);}
 	YY_BREAK
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 222 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 224 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CURRENTJOBCOUNTEND);}
 	YY_BREAK
 case 62:
 /* rule 62 can match eol */
 YY_RULE_SETUP
-#line 223 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 225 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TOTALJOBSSOFARSTART);}
 	YY_BREAK
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 224 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 226 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TOTALJOBSSOFAREND);}
 	YY_BREAK
 case 64:
 /* rule 64 can match eol */
 YY_RULE_SETUP
-#line 225 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 227 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESERVICESTARTEDSTART);}
 	YY_BREAK
 case 65:
 /* rule 65 can match eol */
 YY_RULE_SETUP
-#line 226 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 228 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESERVICESTARTEDEND);}
 	YY_BREAK
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 227 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 229 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICEUTILIZATIONSTART);}
 	YY_BREAK
 case 67:
 /* rule 67 can match eol */
 YY_RULE_SETUP
-#line 228 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 230 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICEUTILIZATIONEND);}
 	YY_BREAK
 /* Patterns for the <job> element */
 case 68:
 /* rule 68 can match eol */
 YY_RULE_SETUP
-#line 232 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 234 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SUBMITTIMESTART);}
 	YY_BREAK
 case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
-#line 233 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 235 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SUBMITTIMEEND);}
 	YY_BREAK
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 234 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 236 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SCHEDULEDSTARTTIMESTART);}
 	YY_BREAK
 case 71:
 /* rule 71 can match eol */
 YY_RULE_SETUP
-#line 235 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 237 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SCHEDULEDSTARTTIMEEND);}
 	YY_BREAK
 case 72:
 /* rule 72 can match eol */
 YY_RULE_SETUP
-#line 236 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 238 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ACTUALSTARTTIMESTART);}
 	YY_BREAK
 case 73:
 /* rule 73 can match eol */
 YY_RULE_SETUP
-#line 237 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 239 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ACTUALSTARTTIMEEND);}
 	YY_BREAK
 case 74:
 /* rule 74 can match eol */
 YY_RULE_SETUP
-#line 238 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 240 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENDTIMESTART);}
 	YY_BREAK
 case 75:
 /* rule 75 can match eol */
 YY_RULE_SETUP
-#line 239 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 241 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENDTIMEEND);}
 	YY_BREAK
 case 76:
 /* rule 76 can match eol */
 YY_RULE_SETUP
-#line 240 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 242 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESTART);}
 	YY_BREAK
 case 77:
 /* rule 77 can match eol */
 YY_RULE_SETUP
-#line 241 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 243 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMEEND);}
 	YY_BREAK
 case 78:
 /* rule 78 can match eol */
 YY_RULE_SETUP
-#line 242 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 244 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(TIMINGINFORMATIONSTART);}
 	YY_BREAK
 case 79:
 /* rule 79 can match eol */
 YY_RULE_SETUP
-#line 243 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 245 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMINGINFORMATIONEND);}
 	YY_BREAK
 case 80:
 /* rule 80 can match eol */
 YY_RULE_SETUP
-#line 244 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 246 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDDISKSPACESTART);}
 	YY_BREAK
 case 81:
 /* rule 81 can match eol */
 YY_RULE_SETUP
-#line 245 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 247 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDDISKSPACEEND);}
 	YY_BREAK
 case 82:
 /* rule 82 can match eol */
 YY_RULE_SETUP
-#line 246 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 248 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDMEMORYSTART);}
 	YY_BREAK
 case 83:
 /* rule 83 can match eol */
 YY_RULE_SETUP
-#line 247 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 249 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDMEMORYEND);}
 	YY_BREAK
 case 84:
 /* rule 84 can match eol */
 YY_RULE_SETUP
-#line 248 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 250 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDCPUSPEEDSTART);}
 	YY_BREAK
 case 85:
 /* rule 85 can match eol */
 YY_RULE_SETUP
-#line 249 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 251 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDCPUSPEEDEND);} 
 	YY_BREAK
 case 86:
 /* rule 86 can match eol */
 YY_RULE_SETUP
-#line 250 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 252 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDCPUNUMBERSTART);}
 	YY_BREAK
 case 87:
 /* rule 87 can match eol */
 YY_RULE_SETUP
-#line 251 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 253 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDCPUNUMBEREND);}
 	YY_BREAK
 /* General patterns for the <optimization> element */
 case 88:
 /* rule 88 can match eol */
 YY_RULE_SETUP
-#line 255 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 257 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SOLUTIONSTART);}
 	YY_BREAK
 case 89:
 /* rule 89 can match eol */
 YY_RULE_SETUP
-#line 256 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 258 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SOLUTIONEND);}
 	YY_BREAK
 case 90:
 /* rule 90 can match eol */
 YY_RULE_SETUP
-#line 257 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 259 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VALUESSTART);}
 	YY_BREAK
 case 91:
 /* rule 91 can match eol */
 YY_RULE_SETUP
-#line 258 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 260 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VALUESEND);}
 	YY_BREAK
 case 92:
 /* rule 92 can match eol */
 YY_RULE_SETUP
-#line 259 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 261 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BASISSTATUSSTART);}
 	YY_BREAK
 case 93:
 /* rule 93 can match eol */
 YY_RULE_SETUP
-#line 260 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 262 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASISSTATUSEND);}
 	YY_BREAK
 case 94:
 /* rule 94 can match eol */
 YY_RULE_SETUP
-#line 261 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 263 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IDXSTART);}
 	YY_BREAK
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 262 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 264 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IDXEND);}
 	YY_BREAK
 /* Patterns for the <variables> element */
 case 96:
 /* rule 96 can match eol */
 YY_RULE_SETUP
-#line 266 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 268 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VALUESSTRINGSTART);}
 	YY_BREAK
 case 97:
 /* rule 97 can match eol */
 YY_RULE_SETUP
-#line 267 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 269 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VALUESSTRINGEND);}
 	YY_BREAK
 /* Patterns for the <constraints> element */
 case 98:
 /* rule 98 can match eol */
 YY_RULE_SETUP
-#line 270 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 272 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(DUALVALUESSTART);}
 	YY_BREAK
 case 99:
 /* rule 99 can match eol */
 YY_RULE_SETUP
-#line 271 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 273 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(DUALVALUESEND);}
 	YY_BREAK
 /* Patterns for <matrixProgramming> */
 case 100:
 /* rule 100 can match eol */
 YY_RULE_SETUP
-#line 275 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 277 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERMATRIXVARIABLERESULTSTART);}
 	YY_BREAK
 case 101:
 /* rule 101 can match eol */
 YY_RULE_SETUP
-#line 276 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 278 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERMATRIXVARIABLERESULTEND);}
 	YY_BREAK
 case 102:
 /* rule 102 can match eol */
 YY_RULE_SETUP
-#line 277 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 279 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERMATRIXPROGRAMMINGRESULTSTART);}
 	YY_BREAK
 case 103:
 /* rule 103 can match eol */
 YY_RULE_SETUP
-#line 278 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 280 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERMATRIXPROGRAMMINGRESULTEND);}
 	YY_BREAK
 /* Other patterns */
 case 104:
 /* rule 104 can match eol */
 YY_RULE_SETUP
-#line 282 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 284 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERRESULTSSTART);}
 	YY_BREAK
 case 105:
 /* rule 105 can match eol */
 YY_RULE_SETUP
-#line 283 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 285 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERRESULTSEND);}
 	YY_BREAK
 case 106:
 /* rule 106 can match eol */
 YY_RULE_SETUP
-#line 284 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 286 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
 	YY_BREAK
 case 107:
 /* rule 107 can match eol */
 YY_RULE_SETUP
-#line 285 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 287 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
 	YY_BREAK
 case 108:
 /* rule 108 can match eol */
 YY_RULE_SETUP
-#line 286 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 288 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHERSOLUTIONRESULTSSTART);}
 	YY_BREAK
 case 109:
 /* rule 109 can match eol */
 YY_RULE_SETUP
-#line 287 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 289 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHERSOLUTIONRESULTSEND);}
 	YY_BREAK
 case 110:
 /* rule 110 can match eol */
 YY_RULE_SETUP
-#line 288 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 290 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERSOLVEROUTPUTSTART);}
 	YY_BREAK
 case 111:
 /* rule 111 can match eol */
 YY_RULE_SETUP
-#line 289 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 291 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERSOLVEROUTPUTEND);}
 	YY_BREAK
 case 112:
 /* rule 112 can match eol */
 YY_RULE_SETUP
-#line 290 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 292 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SOLVEROUTPUTSTART);}
 	YY_BREAK
 case 113:
 /* rule 113 can match eol */
 YY_RULE_SETUP
-#line 291 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 293 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SOLVEROUTPUTEND);}
 	YY_BREAK
 /* include file OSParseosgl.l.patterns --- patterns for OSgL schema elements */
 case 114:
 /* rule 114 can match eol */
 YY_RULE_SETUP
-#line 295 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 297 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASE64START);}
 	YY_BREAK
 case 115:
 /* rule 115 can match eol */
 YY_RULE_SETUP
-#line 296 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 298 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASE64END);}
 	YY_BREAK
 case 116:
 /* rule 116 can match eol */
 YY_RULE_SETUP
-#line 297 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 299 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ELSTART);}
 	YY_BREAK
 case 117:
 /* rule 117 can match eol */
 YY_RULE_SETUP
-#line 298 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 300 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ELEND);}
 	YY_BREAK
 /* The <item> element and the children of the file header element are treated specially 
@@ -4374,1320 +4376,1320 @@ YY_RULE_SETUP
 case 118:
 /* rule 118 can match eol */
 YY_RULE_SETUP
-#line 303 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 305 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(ITEMEMPTY);}
 	YY_BREAK
 case 119:
 /* rule 119 can match eol */
 YY_RULE_SETUP
-#line 304 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 306 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
 	YY_BREAK
 case 120:
 /* rule 120 can match eol */
 YY_RULE_SETUP
-#line 305 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 307 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(ITEMEND);}
 	YY_BREAK
 case 121:
 /* rule 121 can match eol */
 YY_RULE_SETUP
-#line 306 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 308 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(ITEMSTARTANDEND);}
 	YY_BREAK
 case 122:
 /* rule 122 can match eol */
 YY_RULE_SETUP
-#line 308 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 310 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILENAMEEMPTY);}
 	YY_BREAK
 case 123:
 /* rule 123 can match eol */
 YY_RULE_SETUP
-#line 309 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 311 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILENAMESTART);}
 	YY_BREAK
 case 124:
 /* rule 124 can match eol */
 YY_RULE_SETUP
-#line 310 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 312 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILENAMEEND);}
 	YY_BREAK
 case 125:
 /* rule 125 can match eol */
 YY_RULE_SETUP
-#line 311 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 313 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILENAMESTARTANDEND);}
 	YY_BREAK
 case 126:
 /* rule 126 can match eol */
 YY_RULE_SETUP
-#line 313 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 315 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILESOURCEEMPTY);}
 	YY_BREAK
 case 127:
 /* rule 127 can match eol */
 YY_RULE_SETUP
-#line 314 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 316 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILESOURCESTART);}
 	YY_BREAK
 case 128:
 /* rule 128 can match eol */
 YY_RULE_SETUP
-#line 315 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 317 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILESOURCEEND);}
 	YY_BREAK
 case 129:
 /* rule 129 can match eol */
 YY_RULE_SETUP
-#line 316 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 318 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILESOURCESTARTANDEND);}
 	YY_BREAK
 case 130:
 /* rule 130 can match eol */
 YY_RULE_SETUP
-#line 318 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 320 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILEDESCRIPTIONEMPTY);}
 	YY_BREAK
 case 131:
 /* rule 131 can match eol */
 YY_RULE_SETUP
-#line 319 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 321 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILEDESCRIPTIONSTART);}
 	YY_BREAK
 case 132:
 /* rule 132 can match eol */
 YY_RULE_SETUP
-#line 320 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 322 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILEDESCRIPTIONEND);}
 	YY_BREAK
 case 133:
 /* rule 133 can match eol */
 YY_RULE_SETUP
-#line 321 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 323 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILEDESCRIPTIONSTARTANDEND);}
 	YY_BREAK
 case 134:
 /* rule 134 can match eol */
 YY_RULE_SETUP
-#line 323 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 325 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILECREATOREMPTY);}
 	YY_BREAK
 case 135:
 /* rule 135 can match eol */
 YY_RULE_SETUP
-#line 324 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 326 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILECREATORSTART);}
 	YY_BREAK
 case 136:
 /* rule 136 can match eol */
 YY_RULE_SETUP
-#line 325 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 327 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILECREATOREND);}
 	YY_BREAK
 case 137:
 /* rule 137 can match eol */
 YY_RULE_SETUP
-#line 326 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 328 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILECREATORSTARTANDEND);}
 	YY_BREAK
 case 138:
 /* rule 138 can match eol */
 YY_RULE_SETUP
-#line 328 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 330 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILELICENCEEMPTY);}
 	YY_BREAK
 case 139:
 /* rule 139 can match eol */
 YY_RULE_SETUP
-#line 329 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 331 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILELICENCESTART);}
 	YY_BREAK
 case 140:
 /* rule 140 can match eol */
 YY_RULE_SETUP
-#line 330 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 332 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILELICENCEEND);}
 	YY_BREAK
 case 141:
 /* rule 141 can match eol */
 YY_RULE_SETUP
-#line 331 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 333 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILELICENCESTARTANDEND);}
 	YY_BREAK
 /* Patterns for attributes returning strings (that are potentially empty)*/
 case 142:
 /* rule 142 can match eol */
 YY_RULE_SETUP
-#line 335 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 337 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
 	YY_BREAK
 case 143:
 /* rule 143 can match eol */
 YY_RULE_SETUP
-#line 336 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 338 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYBASETRANSPOSEATT);}
 	YY_BREAK
 case 144:
 /* rule 144 can match eol */
 YY_RULE_SETUP
-#line 337 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 339 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(BASETRANSPOSEATT);}
 	YY_BREAK
 case 145:
 /* rule 145 can match eol */
 YY_RULE_SETUP
-#line 338 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 340 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(BASETRANSPOSEATT);}
 	YY_BREAK
 case 146:
 /* rule 146 can match eol */
 YY_RULE_SETUP
-#line 340 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 342 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYCATEGORYATT);}
 	YY_BREAK
 case 147:
 /* rule 147 can match eol */
 YY_RULE_SETUP
-#line 341 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 343 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYCATEGORYATT);}
 	YY_BREAK
 case 148:
 /* rule 148 can match eol */
 YY_RULE_SETUP
-#line 342 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 344 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
 	YY_BREAK
 case 149:
 /* rule 149 can match eol */
 YY_RULE_SETUP
-#line 343 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 345 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
 	YY_BREAK
 case 150:
 /* rule 150 can match eol */
 YY_RULE_SETUP
-#line 345 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 347 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYCONTYPEATT);}
 	YY_BREAK
 case 151:
 /* rule 151 can match eol */
 YY_RULE_SETUP
-#line 346 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 348 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYCONTYPEATT);}
 	YY_BREAK
 case 152:
 /* rule 152 can match eol */
 YY_RULE_SETUP
-#line 347 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 349 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(CONTYPEATT);}
 	YY_BREAK
 case 153:
 /* rule 153 can match eol */
 YY_RULE_SETUP
-#line 348 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 350 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(CONTYPEATT);}
 	YY_BREAK
 case 154:
 /* rule 154 can match eol */
 YY_RULE_SETUP
-#line 350 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 352 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
 	YY_BREAK
 case 155:
 /* rule 155 can match eol */
 YY_RULE_SETUP
-#line 351 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 353 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
 	YY_BREAK
 case 156:
 /* rule 156 can match eol */
 YY_RULE_SETUP
-#line 352 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 354 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
 	YY_BREAK
 case 157:
 /* rule 157 can match eol */
 YY_RULE_SETUP
-#line 353 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 355 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
 	YY_BREAK
 case 158:
 /* rule 158 can match eol */
 YY_RULE_SETUP
-#line 355 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 357 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYENUMTYPEATT);}
 	YY_BREAK
 case 159:
 /* rule 159 can match eol */
 YY_RULE_SETUP
-#line 356 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 358 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYENUMTYPEATT);}
 	YY_BREAK
 case 160:
 /* rule 160 can match eol */
 YY_RULE_SETUP
-#line 357 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 359 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(ENUMTYPEATT);}
 	YY_BREAK
 case 161:
 /* rule 161 can match eol */
 YY_RULE_SETUP
-#line 358 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 360 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(ENUMTYPEATT);}
 	YY_BREAK
 case 162:
 /* rule 162 can match eol */
 YY_RULE_SETUP
-#line 360 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 362 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYMATRIXCONTYPEATT);}
 	YY_BREAK
 case 163:
 /* rule 163 can match eol */
 YY_RULE_SETUP
-#line 361 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 363 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYMATRIXCONTYPEATT);}
 	YY_BREAK
 case 164:
 /* rule 164 can match eol */
 YY_RULE_SETUP
-#line 362 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 364 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(MATRIXCONTYPEATT);}
 	YY_BREAK
 case 165:
 /* rule 165 can match eol */
 YY_RULE_SETUP
-#line 363 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 365 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(MATRIXCONTYPEATT);}
 	YY_BREAK
 case 166:
 /* rule 166 can match eol */
 YY_RULE_SETUP
-#line 365 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 367 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYMATRIXOBJTYPEATT);}
 	YY_BREAK
 case 167:
 /* rule 167 can match eol */
 YY_RULE_SETUP
-#line 366 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 368 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYMATRIXOBJTYPEATT);}
 	YY_BREAK
 case 168:
 /* rule 168 can match eol */
 YY_RULE_SETUP
-#line 367 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 369 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(MATRIXOBJTYPEATT);}
 	YY_BREAK
 case 169:
 /* rule 169 can match eol */
 YY_RULE_SETUP
-#line 368 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 370 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(MATRIXOBJTYPEATT);}
 	YY_BREAK
 case 170:
 /* rule 170 can match eol */
 YY_RULE_SETUP
-#line 370 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 372 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYMATRIXTYPEATT);}
 	YY_BREAK
 case 171:
 /* rule 171 can match eol */
 YY_RULE_SETUP
-#line 371 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 373 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYMATRIXTYPEATT);}
 	YY_BREAK
 case 172:
 /* rule 172 can match eol */
 YY_RULE_SETUP
-#line 372 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 374 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(MATRIXTYPEATT);}
 	YY_BREAK
 case 173:
 /* rule 173 can match eol */
 YY_RULE_SETUP
-#line 373 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 375 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(MATRIXTYPEATT);}
 	YY_BREAK
 case 174:
 /* rule 174 can match eol */
 YY_RULE_SETUP
-#line 375 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 377 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYMATRIXVARTYPEATT);}
 	YY_BREAK
 case 175:
 /* rule 175 can match eol */
 YY_RULE_SETUP
-#line 376 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 378 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYMATRIXVARTYPEATT);}
 	YY_BREAK
 case 176:
 /* rule 176 can match eol */
 YY_RULE_SETUP
-#line 377 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 379 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(MATRIXVARTYPEATT);}
 	YY_BREAK
 case 177:
 /* rule 177 can match eol */
 YY_RULE_SETUP
-#line 378 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 380 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(MATRIXVARTYPEATT);}
 	YY_BREAK
 case 178:
 /* rule 178 can match eol */
 YY_RULE_SETUP
-#line 380 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 382 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYNAMEATT);}
 	YY_BREAK
 case 179:
 /* rule 179 can match eol */
 YY_RULE_SETUP
-#line 381 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 383 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYNAMEATT);}
 	YY_BREAK
 case 180:
 /* rule 180 can match eol */
 YY_RULE_SETUP
-#line 382 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 384 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
 	YY_BREAK
 case 181:
 /* rule 181 can match eol */
 YY_RULE_SETUP
-#line 383 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 385 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
 	YY_BREAK
 case 182:
 /* rule 182 can match eol */
 YY_RULE_SETUP
-#line 385 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 387 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYOBJTYPEATT);}
 	YY_BREAK
 case 183:
 /* rule 183 can match eol */
 YY_RULE_SETUP
-#line 386 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 388 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYOBJTYPEATT);}
 	YY_BREAK
 case 184:
 /* rule 184 can match eol */
 YY_RULE_SETUP
-#line 387 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 389 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(OBJTYPEATT);}
 	YY_BREAK
 case 185:
 /* rule 185 can match eol */
 YY_RULE_SETUP
-#line 388 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 390 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(OBJTYPEATT);}
 	YY_BREAK
 case 186:
 /* rule 186 can match eol */
 YY_RULE_SETUP
-#line 390 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 392 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYROWMAJORATT);}
 	YY_BREAK
 case 187:
 /* rule 187 can match eol */
 YY_RULE_SETUP
-#line 391 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 393 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYROWMAJORATT);}
 	YY_BREAK
 case 188:
 /* rule 188 can match eol */
 YY_RULE_SETUP
-#line 392 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 394 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(ROWMAJORATT);}
 	YY_BREAK
 case 189:
 /* rule 189 can match eol */
 YY_RULE_SETUP
-#line 393 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 395 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(ROWMAJORATT);}
 	YY_BREAK
 case 190:
 /* rule 190 can match eol */
 YY_RULE_SETUP
-#line 395 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 397 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYSHAPEATT);}
 	YY_BREAK
 case 191:
 /* rule 191 can match eol */
 YY_RULE_SETUP
-#line 396 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 398 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYSHAPEATT);}
 	YY_BREAK
 case 192:
 /* rule 192 can match eol */
 YY_RULE_SETUP
-#line 397 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 399 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(SHAPEATT);}
 	YY_BREAK
 case 193:
 /* rule 193 can match eol */
 YY_RULE_SETUP
-#line 398 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 400 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(SHAPEATT);}
 	YY_BREAK
 case 194:
 /* rule 194 can match eol */
 YY_RULE_SETUP
-#line 400 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 402 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYSOLVERATT);}
 	YY_BREAK
 case 195:
 /* rule 195 can match eol */
 YY_RULE_SETUP
-#line 401 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 403 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYSOLVERATT);}
 	YY_BREAK
 case 196:
 /* rule 196 can match eol */
 YY_RULE_SETUP
-#line 402 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 404 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(SOLVERATT);}
 	YY_BREAK
 case 197:
 /* rule 197 can match eol */
 YY_RULE_SETUP
-#line 403 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 405 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(SOLVERATT);}
 	YY_BREAK
 case 198:
 /* rule 198 can match eol */
 YY_RULE_SETUP
-#line 405 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 407 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYSYMMETRYATT);}
 	YY_BREAK
 case 199:
 /* rule 199 can match eol */
 YY_RULE_SETUP
-#line 406 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 408 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYSYMMETRYATT);}
 	YY_BREAK
 case 200:
 /* rule 200 can match eol */
 YY_RULE_SETUP
-#line 407 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 409 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(SYMMETRYATT);}
 	YY_BREAK
 case 201:
 /* rule 201 can match eol */
 YY_RULE_SETUP
-#line 408 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 410 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(SYMMETRYATT);}
 	YY_BREAK
 case 202:
 /* rule 202 can match eol */
 YY_RULE_SETUP
-#line 410 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 412 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTYPEATT);}
 	YY_BREAK
 case 203:
 /* rule 203 can match eol */
 YY_RULE_SETUP
-#line 411 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 413 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTYPEATT);}
 	YY_BREAK
 case 204:
 /* rule 204 can match eol */
 YY_RULE_SETUP
-#line 412 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 414 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 	YY_BREAK
 case 205:
 /* rule 205 can match eol */
 YY_RULE_SETUP
-#line 413 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 415 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
 	YY_BREAK
 case 206:
 /* rule 206 can match eol */
 YY_RULE_SETUP
-#line 415 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 417 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYUNITATT);}
 	YY_BREAK
 case 207:
 /* rule 207 can match eol */
 YY_RULE_SETUP
-#line 416 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 418 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYUNITATT);}
 	YY_BREAK
 case 208:
 /* rule 208 can match eol */
 YY_RULE_SETUP
-#line 417 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 419 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
 	YY_BREAK
 case 209:
 /* rule 209 can match eol */
 YY_RULE_SETUP
-#line 418 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 420 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(UNITATT);}
 	YY_BREAK
 case 210:
 /* rule 210 can match eol */
 YY_RULE_SETUP
-#line 420 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 422 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYVALUEATT);}
 	YY_BREAK
 case 211:
 /* rule 211 can match eol */
 YY_RULE_SETUP
-#line 421 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 423 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYVALUEATT);}
 	YY_BREAK
 case 212:
 /* rule 212 can match eol */
 YY_RULE_SETUP
-#line 422 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 424 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
 	YY_BREAK
 case 213:
 /* rule 213 can match eol */
 YY_RULE_SETUP
-#line 423 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 425 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
 	YY_BREAK
 case 214:
 /* rule 214 can match eol */
 YY_RULE_SETUP
-#line 425 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 427 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYVARTYPEATT);}
 	YY_BREAK
 case 215:
 /* rule 215 can match eol */
 YY_RULE_SETUP
-#line 426 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 428 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYVARTYPEATT);}
 	YY_BREAK
 case 216:
 /* rule 216 can match eol */
 YY_RULE_SETUP
-#line 427 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 429 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(VARTYPEATT);}
 	YY_BREAK
 case 217:
 /* rule 217 can match eol */
 YY_RULE_SETUP
-#line 428 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 430 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(VARTYPEATT);}
 	YY_BREAK
 case 218:
 /* rule 218 can match eol */
 YY_RULE_SETUP
-#line 430 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 432 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYVALUETYPEATT);}
 	YY_BREAK
 case 219:
 /* rule 219 can match eol */
 YY_RULE_SETUP
-#line 431 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 433 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYVALUETYPEATT);}
 	YY_BREAK
 case 220:
 /* rule 220 can match eol */
 YY_RULE_SETUP
-#line 432 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 434 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(VALUETYPEATT);}
 	YY_BREAK
 case 221:
 /* rule 221 can match eol */
 YY_RULE_SETUP
-#line 433 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 435 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(VALUETYPEATT);}
 	YY_BREAK
 /* Patterns for attributes returning numeric values*/
 case 222:
 /* rule 222 can match eol */
 YY_RULE_SETUP
-#line 437 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 439 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFBLOCKSATT);}
 	YY_BREAK
 case 223:
 /* rule 223 can match eol */
 YY_RULE_SETUP
-#line 438 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 440 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFCOLUMNSATT);}
 	YY_BREAK
 case 224:
 /* rule 224 can match eol */
 YY_RULE_SETUP
-#line 439 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 441 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFCONATT);}
 	YY_BREAK
 case 225:
 /* rule 225 can match eol */
 YY_RULE_SETUP
-#line 440 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 442 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
 	YY_BREAK
 case 226:
 /* rule 226 can match eol */
 YY_RULE_SETUP
-#line 441 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 443 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NUMBEROFELATT);}
 	YY_BREAK
 case 227:
 /* rule 227 can match eol */
 YY_RULE_SETUP
-#line 442 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 444 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NUMBEROFENUMERATIONSATT);}
 	YY_BREAK
 case 228:
 /* rule 228 can match eol */
 YY_RULE_SETUP
-#line 443 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 445 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NUMBEROFITEMSATT);}
 	YY_BREAK
 case 229:
 /* rule 229 can match eol */
 YY_RULE_SETUP
-#line 444 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 446 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFMATRICESATT);}
 	YY_BREAK
 case 230:
 /* rule 230 can match eol */
 YY_RULE_SETUP
-#line 445 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 447 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFMATRIXCONATT);}
 	YY_BREAK
 case 231:
 /* rule 231 can match eol */
 YY_RULE_SETUP
-#line 446 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 448 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFMATRIXOBJATT);}
 	YY_BREAK
 case 232:
 /* rule 232 can match eol */
 YY_RULE_SETUP
-#line 447 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 449 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFMATRIXVARATT);}
 	YY_BREAK
 case 233:
 /* rule 233 can match eol */
 YY_RULE_SETUP
-#line 448 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 450 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOBJATT);}
 	YY_BREAK
 case 234:
 /* rule 234 can match eol */
 YY_RULE_SETUP
-#line 449 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 451 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
 	YY_BREAK
 case 235:
 /* rule 235 can match eol */
 YY_RULE_SETUP
-#line 450 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 452 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFROWSATT);}
 	YY_BREAK
 case 236:
 /* rule 236 can match eol */
 YY_RULE_SETUP
-#line 451 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 453 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFVALUESATT);}
 	YY_BREAK
 case 237:
 /* rule 237 can match eol */
 YY_RULE_SETUP
-#line 452 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 454 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFVARATT);}
 	YY_BREAK
 case 238:
 /* rule 238 can match eol */
 YY_RULE_SETUP
-#line 453 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 455 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFVARIABLESATT);}
 	YY_BREAK
 case 239:
 /* rule 239 can match eol */
 YY_RULE_SETUP
-#line 454 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 456 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFVARIDXATT);}
 	YY_BREAK
 case 240:
 /* rule 240 can match eol */
 YY_RULE_SETUP
-#line 456 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 458 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASEMATRIXIDXATT);}
 	YY_BREAK
 case 241:
 /* rule 241 can match eol */
 YY_RULE_SETUP
-#line 457 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 459 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(TARGETMATRIXFIRSTROWATT);}
 	YY_BREAK
 case 242:
 /* rule 242 can match eol */
 YY_RULE_SETUP
-#line 458 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 460 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(TARGETMATRIXFIRSTCOLATT);}
 	YY_BREAK
 case 243:
 /* rule 243 can match eol */
 YY_RULE_SETUP
-#line 459 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 461 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASEMATRIXSTARTROWATT);}
 	YY_BREAK
 case 244:
 /* rule 244 can match eol */
 YY_RULE_SETUP
-#line 460 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 462 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASEMATRIXSTARTCOLATT);}
 	YY_BREAK
 case 245:
 /* rule 245 can match eol */
 YY_RULE_SETUP
-#line 461 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 463 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASEMATRIXENDROWATT);}
 	YY_BREAK
 case 246:
 /* rule 246 can match eol */
 YY_RULE_SETUP
-#line 462 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 464 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASEMATRIXENDCOLATT);}
 	YY_BREAK
 case 247:
 /* rule 247 can match eol */
 YY_RULE_SETUP
-#line 463 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 465 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SCALARMULTIPLIERATT);}
 	YY_BREAK
 case 248:
 /* rule 248 can match eol */
 YY_RULE_SETUP
-#line 464 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 466 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BLOCKROWIDXATT);}
 	YY_BREAK
 case 249:
 /* rule 249 can match eol */
 YY_RULE_SETUP
-#line 465 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 467 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BLOCKCOLIDXATT);}
 	YY_BREAK
 case 250:
 /* rule 250 can match eol */
 YY_RULE_SETUP
-#line 466 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 468 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONSTANTATT);}
 	YY_BREAK
 case 251:
 /* rule 251 can match eol */
 YY_RULE_SETUP
-#line 467 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 469 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(REATT);}
 	YY_BREAK
 case 252:
 /* rule 252 can match eol */
 YY_RULE_SETUP
-#line 468 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 470 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IMATT);}
 	YY_BREAK
 case 253:
 /* rule 253 can match eol */
 YY_RULE_SETUP
-#line 470 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 472 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXVARIDXATT);}
 	YY_BREAK
 case 254:
 /* rule 254 can match eol */
 YY_RULE_SETUP
-#line 471 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 473 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXOBJIDXATT);}
 	YY_BREAK
 case 255:
 /* rule 255 can match eol */
 YY_RULE_SETUP
-#line 472 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 474 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXCONIDXATT);}
 	YY_BREAK
 case 256:
 /* rule 256 can match eol */
 YY_RULE_SETUP
-#line 474 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 476 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(IDXATT);}
 	YY_BREAK
 case 257:
 /* rule 257 can match eol */
 YY_RULE_SETUP
-#line 475 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 477 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(INCRATT);}
 	YY_BREAK
 case 258:
 /* rule 258 can match eol */
 YY_RULE_SETUP
-#line 476 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 478 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MULTATT);}
 	YY_BREAK
 case 259:
 /* rule 259 can match eol */
 YY_RULE_SETUP
-#line 477 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 479 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COEFATT);}
 	YY_BREAK
 case 260:
 /* rule 260 can match eol */
 YY_RULE_SETUP
-#line 478 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 480 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SIZEOFATT);}
 	YY_BREAK
 /* Patterns for the <matrices> element */
 case 261:
 /* rule 261 can match eol */
 YY_RULE_SETUP
-#line 482 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 484 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRICESSTART);}
 	YY_BREAK
 case 262:
 /* rule 262 can match eol */
 YY_RULE_SETUP
-#line 483 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 485 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRICESEND);}
 	YY_BREAK
 case 263:
 /* rule 263 can match eol */
 YY_RULE_SETUP
-#line 484 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 486 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXSTART);}
 	YY_BREAK
 case 264:
 /* rule 264 can match eol */
 YY_RULE_SETUP
-#line 485 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 487 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXEND);}
 	YY_BREAK
 case 265:
 /* rule 265 can match eol */
 YY_RULE_SETUP
-#line 486 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 488 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BASEMATRIXSTART);}
 	YY_BREAK
 case 266:
 /* rule 266 can match eol */
 YY_RULE_SETUP
-#line 487 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 489 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BASEMATRIXEND);}
 	YY_BREAK
 case 267:
 /* rule 267 can match eol */
 YY_RULE_SETUP
-#line 488 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 490 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BLOCKSSTART);}
 	YY_BREAK
 case 268:
 /* rule 268 can match eol */
 YY_RULE_SETUP
-#line 489 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 491 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BLOCKSEND);}
 	YY_BREAK
 case 269:
 /* rule 269 can match eol */
 YY_RULE_SETUP
-#line 490 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 492 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BLOCKSTART);}
 	YY_BREAK
 case 270:
 /* rule 270 can match eol */
 YY_RULE_SETUP
-#line 491 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 493 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BLOCKEND);}
 	YY_BREAK
 case 271:
 /* rule 271 can match eol */
 YY_RULE_SETUP
-#line 492 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 494 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ELEMENTSSTART);}
 	YY_BREAK
 case 272:
 /* rule 272 can match eol */
 YY_RULE_SETUP
-#line 493 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 495 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ELEMENTSEND);}
 	YY_BREAK
 case 273:
 /* rule 273 can match eol */
 YY_RULE_SETUP
-#line 494 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 496 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CONSTANTELEMENTSSTART);}
 	YY_BREAK
 case 274:
 /* rule 274 can match eol */
 YY_RULE_SETUP
-#line 495 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 497 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CONSTANTELEMENTSEND);}
 	YY_BREAK
 case 275:
 /* rule 275 can match eol */
 YY_RULE_SETUP
-#line 496 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 498 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXELEMENTSSTART);}
 	YY_BREAK
 case 276:
 /* rule 276 can match eol */
 YY_RULE_SETUP
-#line 497 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 499 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXELEMENTSEND);}
 	YY_BREAK
 case 277:
 /* rule 277 can match eol */
 YY_RULE_SETUP
-#line 498 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 500 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VARREFERENCEELEMENTSSTART);}
 	YY_BREAK
 case 278:
 /* rule 278 can match eol */
 YY_RULE_SETUP
-#line 499 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 501 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VARREFERENCEELEMENTSEND);}
 	YY_BREAK
 case 279:
 /* rule 279 can match eol */
 YY_RULE_SETUP
-#line 500 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 502 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OBJREFERENCEELEMENTSSTART);}
 	YY_BREAK
 case 280:
 /* rule 280 can match eol */
 YY_RULE_SETUP
-#line 501 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 503 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OBJREFERENCEELEMENTSEND);}
 	YY_BREAK
 case 281:
 /* rule 281 can match eol */
 YY_RULE_SETUP
-#line 502 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 504 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CONREFERENCEELEMENTSSTART);}
 	YY_BREAK
 case 282:
 /* rule 282 can match eol */
 YY_RULE_SETUP
-#line 503 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 505 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CONREFERENCEELEMENTSEND);}
 	YY_BREAK
 case 283:
 /* rule 283 can match eol */
 YY_RULE_SETUP
-#line 504 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 506 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(LINEARELEMENTSSTART);}
 	YY_BREAK
 case 284:
 /* rule 284 can match eol */
 YY_RULE_SETUP
-#line 505 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 507 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(LINEARELEMENTSEND);}
 	YY_BREAK
 case 285:
 /* rule 285 can match eol */
 YY_RULE_SETUP
-#line 506 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 508 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(REALVALUEDEXPRESSIONSSTART);}
 	YY_BREAK
 case 286:
 /* rule 286 can match eol */
 YY_RULE_SETUP
-#line 507 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 509 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(REALVALUEDEXPRESSIONSSEND);}
 	YY_BREAK
 case 287:
 /* rule 287 can match eol */
 YY_RULE_SETUP
-#line 508 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 510 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXVALUEDEXPRESSIONSSTART);}
 	YY_BREAK
 case 288:
 /* rule 288 can match eol */
 YY_RULE_SETUP
-#line 509 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 511 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXVALUEDEXPRESSIONSSEND);}
 	YY_BREAK
 case 289:
 /* rule 289 can match eol */
 YY_RULE_SETUP
-#line 510 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 512 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(STRINGVALUEDELEMENTSSTART);}
 	YY_BREAK
 case 290:
 /* rule 290 can match eol */
 YY_RULE_SETUP
-#line 511 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 513 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(STRINGVALUEDELEMENTSEND);}
 	YY_BREAK
 case 291:
 /* rule 291 can match eol */
 YY_RULE_SETUP
-#line 513 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 515 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(STARTVECTORSTART);}
 	YY_BREAK
 case 292:
 /* rule 292 can match eol */
 YY_RULE_SETUP
-#line 514 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 516 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(STARTVECTOREND);}
 	YY_BREAK
 case 293:
 /* rule 293 can match eol */
 YY_RULE_SETUP
-#line 515 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 517 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(INDEXSTART);}
 	YY_BREAK
 case 294:
 /* rule 294 can match eol */
 YY_RULE_SETUP
-#line 516 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 518 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(INDEXEND);}
 	YY_BREAK
 case 295:
 /* rule 295 can match eol */
 YY_RULE_SETUP
-#line 517 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 519 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VALUESTART);}
 	YY_BREAK
 case 296:
 /* rule 296 can match eol */
 YY_RULE_SETUP
-#line 518 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 520 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VALUEEND);}
 	YY_BREAK
 case 297:
 /* rule 297 can match eol */
 YY_RULE_SETUP
-#line 519 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 521 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NONZEROSSTART);}
 	YY_BREAK
 case 298:
 /* rule 298 can match eol */
 YY_RULE_SETUP
-#line 520 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 522 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NONZEROSEND);}
 	YY_BREAK
 case 299:
 /* rule 299 can match eol */
 YY_RULE_SETUP
-#line 521 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 523 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(INDEXESSTART);}
 	YY_BREAK
 case 300:
 /* rule 300 can match eol */
 YY_RULE_SETUP
-#line 522 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 524 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(INDEXESEND);}
 	YY_BREAK
 case 301:
 /* rule 301 can match eol */
 YY_RULE_SETUP
-#line 523 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 525 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VALUESSTART);}
 	YY_BREAK
 case 302:
 /* rule 302 can match eol */
 YY_RULE_SETUP
-#line 524 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 526 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VALUESEND);}
 	YY_BREAK
 case 303:
 /* rule 303 can match eol */
 YY_RULE_SETUP
-#line 525 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 527 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COLOFFSETSTART);}
 	YY_BREAK
 case 304:
 /* rule 304 can match eol */
 YY_RULE_SETUP
-#line 526 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 528 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COLOFFSETEND);}
 	YY_BREAK
 case 305:
 /* rule 305 can match eol */
 YY_RULE_SETUP
-#line 527 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 529 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ROWOFFSETSTART);}
 	YY_BREAK
 case 306:
 /* rule 306 can match eol */
 YY_RULE_SETUP
-#line 528 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 530 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ROWOFFSETEND);}
 	YY_BREAK
 case 307:
 /* rule 307 can match eol */
 YY_RULE_SETUP
-#line 529 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 531 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VARIDXSTART);}
 	YY_BREAK
 case 308:
 /* rule 308 can match eol */
 YY_RULE_SETUP
-#line 530 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 532 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VARIDXEND);}
 	YY_BREAK
 case 309:
 /* rule 309 can match eol */
 YY_RULE_SETUP
-#line 531 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 533 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TRANSFORMATIONSTART);}
 	YY_BREAK
 case 310:
 /* rule 310 can match eol */
 YY_RULE_SETUP
-#line 532 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 534 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TRANSFORMATIONEND);}
 	YY_BREAK
 /* Patterns for <matrixProgramming> element */
 case 311:
 /* rule 311 can match eol */
 YY_RULE_SETUP
-#line 537 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 539 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXPROGRAMMINGSTART);}
 	YY_BREAK
 case 312:
 /* rule 312 can match eol */
 YY_RULE_SETUP
-#line 538 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 540 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXPROGRAMMINGEND);}
 	YY_BREAK
 case 313:
 /* rule 313 can match eol */
 YY_RULE_SETUP
-#line 539 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 541 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXVARIABLESSTART);}
 	YY_BREAK
 case 314:
 /* rule 314 can match eol */
 YY_RULE_SETUP
-#line 540 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 542 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXVARIABLESEND);}
 	YY_BREAK
 case 315:
 /* rule 315 can match eol */
 YY_RULE_SETUP
-#line 541 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 543 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXVARSTART);}
 	YY_BREAK
 case 316:
 /* rule 316 can match eol */
 YY_RULE_SETUP
-#line 542 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 544 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXVAREND);}
 	YY_BREAK
 case 317:
 /* rule 317 can match eol */
 YY_RULE_SETUP
-#line 543 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 545 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXOBJECTIVESSTART);}
 	YY_BREAK
 case 318:
 /* rule 318 can match eol */
 YY_RULE_SETUP
-#line 544 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 546 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXOBJECTIVESEND);}
 	YY_BREAK
 case 319:
 /* rule 319 can match eol */
 YY_RULE_SETUP
-#line 545 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 547 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXOBJSTART);}
 	YY_BREAK
 case 320:
 /* rule 320 can match eol */
 YY_RULE_SETUP
-#line 546 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 548 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXOBJEND);}
 	YY_BREAK
 case 321:
 /* rule 321 can match eol */
 YY_RULE_SETUP
-#line 547 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 549 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXCONSTRAINTSSTART);}
 	YY_BREAK
 case 322:
 /* rule 322 can match eol */
 YY_RULE_SETUP
-#line 548 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 550 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXCONSTRAINTSEND);}
 	YY_BREAK
 case 323:
 /* rule 323 can match eol */
 YY_RULE_SETUP
-#line 549 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 551 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXCONSTART);}
 	YY_BREAK
 case 324:
 /* rule 324 can match eol */
 YY_RULE_SETUP
-#line 550 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 552 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXCONEND);}
 	YY_BREAK
 /* Other patterns shared among all three major schemas */
 case 325:
 /* rule 325 can match eol */
 YY_RULE_SETUP
-#line 554 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 556 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONSTART);}
 	YY_BREAK
 case 326:
 /* rule 326 can match eol */
 YY_RULE_SETUP
-#line 555 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 557 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONEND);}
 	YY_BREAK
 case 327:
 /* rule 327 can match eol */
 YY_RULE_SETUP
-#line 556 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 558 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONSTRAINTSSTART);}
 	YY_BREAK
 case 328:
 /* rule 328 can match eol */
 YY_RULE_SETUP
-#line 557 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 559 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONSTRAINTSEND);}
 	YY_BREAK
 case 329:
 /* rule 329 can match eol */
 YY_RULE_SETUP
-#line 558 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 560 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OBJSTART);}
 	YY_BREAK
 case 330:
 /* rule 330 can match eol */
 YY_RULE_SETUP
-#line 559 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 561 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OBJEND);}
 	YY_BREAK
 case 331:
 /* rule 331 can match eol */
 YY_RULE_SETUP
-#line 560 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 562 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OBJECTIVESSTART);}
 	YY_BREAK
 case 332:
 /* rule 332 can match eol */
 YY_RULE_SETUP
-#line 561 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 563 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OBJECTIVESEND);}
 	YY_BREAK
 case 333:
 /* rule 333 can match eol */
 YY_RULE_SETUP
-#line 562 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 564 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARSTART);}
 	YY_BREAK
 case 334:
 /* rule 334 can match eol */
 YY_RULE_SETUP
-#line 563 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 565 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VAREND);}
 	YY_BREAK
 case 335:
 /* rule 335 can match eol */
 YY_RULE_SETUP
-#line 564 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 566 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARIABLESSTART);}
 	YY_BREAK
 case 336:
 /* rule 336 can match eol */
 YY_RULE_SETUP
-#line 565 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 567 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARIABLESEND);}
 	YY_BREAK
 /* The remaining patterns are shared between OSoL and OSrL. 
@@ -5696,220 +5698,220 @@ YY_RULE_SETUP
 case 337:
 /* rule 337 can match eol */
 YY_RULE_SETUP
-#line 573 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 575 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GENERALSTART);}
 	YY_BREAK
 case 338:
 /* rule 338 can match eol */
 YY_RULE_SETUP
-#line 574 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 576 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GENERALEND);}
 	YY_BREAK
 case 339:
 /* rule 339 can match eol */
 YY_RULE_SETUP
-#line 576 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 578 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SYSTEMSTART);}
 	YY_BREAK
 case 340:
 /* rule 340 can match eol */
 YY_RULE_SETUP
-#line 577 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 579 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SYSTEMEND);}
 	YY_BREAK
 case 341:
 /* rule 341 can match eol */
 YY_RULE_SETUP
-#line 579 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 581 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SERVICESTART);}
 	YY_BREAK
 case 342:
 /* rule 342 can match eol */
 YY_RULE_SETUP
-#line 580 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 582 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SERVICEEND);}
 	YY_BREAK
 case 343:
 /* rule 343 can match eol */
 YY_RULE_SETUP
-#line 582 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 584 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(JOBSTART);}
 	YY_BREAK
 case 344:
 /* rule 344 can match eol */
 YY_RULE_SETUP
-#line 583 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 585 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(JOBEND);}
 	YY_BREAK
 case 345:
 /* rule 345 can match eol */
 YY_RULE_SETUP
-#line 585 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 587 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OPTIMIZATIONSTART);}
 	YY_BREAK
 case 346:
 /* rule 346 can match eol */
 YY_RULE_SETUP
-#line 586 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 588 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OPTIMIZATIONEND);}
 	YY_BREAK
 /* Patterns for representing a basis in LP */
 case 347:
 /* rule 347 can match eol */
 YY_RULE_SETUP
-#line 590 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 592 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATEQUALITYSTART);}
 	YY_BREAK
 case 348:
 /* rule 348 can match eol */
 YY_RULE_SETUP
-#line 591 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 593 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATEQUALITYEND);}
 	YY_BREAK
 case 349:
 /* rule 349 can match eol */
 YY_RULE_SETUP
-#line 592 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 594 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATLOWERSTART);}
 	YY_BREAK
 case 350:
 /* rule 350 can match eol */
 YY_RULE_SETUP
-#line 593 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 595 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATLOWEREND);}
 	YY_BREAK
 case 351:
 /* rule 351 can match eol */
 YY_RULE_SETUP
-#line 594 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 596 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATUPPERSTART);}
 	YY_BREAK
 case 352:
 /* rule 352 can match eol */
 YY_RULE_SETUP
-#line 595 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 597 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATUPPEREND);}
 	YY_BREAK
 case 353:
 /* rule 353 can match eol */
 YY_RULE_SETUP
-#line 596 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 598 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASICSTART);}
 	YY_BREAK
 case 354:
 /* rule 354 can match eol */
 YY_RULE_SETUP
-#line 597 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 599 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASICEND);}
 	YY_BREAK
 case 355:
 /* rule 355 can match eol */
 YY_RULE_SETUP
-#line 598 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 600 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ISFREESTART);}
 	YY_BREAK
 case 356:
 /* rule 356 can match eol */
 YY_RULE_SETUP
-#line 599 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 601 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ISFREEEND);}
 	YY_BREAK
 case 357:
 /* rule 357 can match eol */
 YY_RULE_SETUP
-#line 600 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 602 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SUPERBASICSTART);}
 	YY_BREAK
 case 358:
 /* rule 358 can match eol */
 YY_RULE_SETUP
-#line 601 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 603 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SUPERBASICEND);}
 	YY_BREAK
 case 359:
 /* rule 359 can match eol */
 YY_RULE_SETUP
-#line 602 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 604 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(UNKNOWNSTART);}
 	YY_BREAK
 case 360:
 /* rule 360 can match eol */
 YY_RULE_SETUP
-#line 603 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 605 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(UNKNOWNEND);}
 	YY_BREAK
 /* Patterns for the <general> element */
 case 361:
 /* rule 361 can match eol */
 YY_RULE_SETUP
-#line 607 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 609 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICEURISTART);}
 	YY_BREAK
 case 362:
 /* rule 362 can match eol */
 YY_RULE_SETUP
-#line 608 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 610 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICEURIEND);}
 	YY_BREAK
 case 363:
 /* rule 363 can match eol */
 YY_RULE_SETUP
-#line 609 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 611 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICENAMESTART);}
 	YY_BREAK
 case 364:
 /* rule 364 can match eol */
 YY_RULE_SETUP
-#line 610 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 612 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICENAMEEND);}
 	YY_BREAK
 case 365:
 /* rule 365 can match eol */
 YY_RULE_SETUP
-#line 611 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 613 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(INSTANCENAMESTART);}
 	YY_BREAK
 case 366:
 /* rule 366 can match eol */
 YY_RULE_SETUP
-#line 612 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 614 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(INSTANCENAMEEND);}
 	YY_BREAK
 case 367:
 /* rule 367 can match eol */
 YY_RULE_SETUP
-#line 613 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 615 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(JOBIDSTART);}
 	YY_BREAK
 case 368:
 /* rule 368 can match eol */
 YY_RULE_SETUP
-#line 614 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 616 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(JOBIDEND);}
 	YY_BREAK
 /* Other patterns */
 case 369:
 /* rule 369 can match eol */
 YY_RULE_SETUP
-#line 618 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 620 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENUMERATIONSTART);}
 	YY_BREAK
 case 370:
 /* rule 370 can match eol */
 YY_RULE_SETUP
-#line 619 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 621 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENUMERATIONEND);}
 	YY_BREAK
 case 371:
 /* rule 371 can match eol */
 YY_RULE_SETUP
-#line 620 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 622 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHERSTART);}
 	YY_BREAK
 case 372:
 /* rule 372 can match eol */
 YY_RULE_SETUP
-#line 621 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 623 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHEREND);}
 	YY_BREAK
 /* include file OSParseosnl.l.patterns --- patterns for OSnL schema elements */
@@ -5917,791 +5919,791 @@ YY_RULE_SETUP
 case 373:
 /* rule 373 can match eol */
 YY_RULE_SETUP
-#line 627 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 629 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NONLINEAREXPRESSIONSSTART);}
 	YY_BREAK
 case 374:
 /* rule 374 can match eol */
 YY_RULE_SETUP
-#line 628 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 630 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NONLINEAREXPRESSIONSEND);}
 	YY_BREAK
 case 375:
 /* rule 375 can match eol */
 YY_RULE_SETUP
-#line 629 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 631 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFNONLINEAREXPRESSIONS);}
 	YY_BREAK
 case 376:
 /* rule 376 can match eol */
 YY_RULE_SETUP
-#line 630 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 632 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NLSTART);}
 	YY_BREAK
 case 377:
 /* rule 377 can match eol */
 YY_RULE_SETUP
-#line 631 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 633 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NLEND);}
 	YY_BREAK
 case 378:
 /* rule 378 can match eol */
 YY_RULE_SETUP
-#line 633 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 635 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(TIMESSTART);}
 	YY_BREAK
 case 379:
 /* rule 379 can match eol */
 YY_RULE_SETUP
-#line 634 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 636 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(TIMESEND);}
 	YY_BREAK
 case 380:
 /* rule 380 can match eol */
 YY_RULE_SETUP
-#line 635 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 637 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(DIVIDESTART);}
 	YY_BREAK
 case 381:
 /* rule 381 can match eol */
 YY_RULE_SETUP
-#line 636 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 638 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(DIVIDEEND);}
 	YY_BREAK
 case 382:
 /* rule 382 can match eol */
 YY_RULE_SETUP
-#line 637 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 639 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(PLUSSTART);}
 	YY_BREAK
 case 383:
 /* rule 383 can match eol */
 YY_RULE_SETUP
-#line 638 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 640 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(PLUSEND);}
 	YY_BREAK
 case 384:
 /* rule 384 can match eol */
 YY_RULE_SETUP
-#line 639 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 641 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MINUSSTART);}
 	YY_BREAK
 case 385:
 /* rule 385 can match eol */
 YY_RULE_SETUP
-#line 640 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 642 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MINUSEND);}
 	YY_BREAK
 case 386:
 /* rule 386 can match eol */
 YY_RULE_SETUP
-#line 641 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 643 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NEGATESTART);}
 	YY_BREAK
 case 387:
 /* rule 387 can match eol */
 YY_RULE_SETUP
-#line 642 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 644 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NEGATEEND);}
 	YY_BREAK
 case 388:
 /* rule 388 can match eol */
 YY_RULE_SETUP
-#line 643 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 645 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(POWERSTART);}
 	YY_BREAK
 case 389:
 /* rule 389 can match eol */
 YY_RULE_SETUP
-#line 644 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 646 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(POWEREND);}
 	YY_BREAK
 case 390:
 /* rule 390 can match eol */
 YY_RULE_SETUP
-#line 645 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 647 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(LNSTART);}
 	YY_BREAK
 case 391:
 /* rule 391 can match eol */
 YY_RULE_SETUP
-#line 646 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 648 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(LNEND);}
 	YY_BREAK
 case 392:
 /* rule 392 can match eol */
 YY_RULE_SETUP
-#line 647 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 649 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SQRTSTART);}
 	YY_BREAK
 case 393:
 /* rule 393 can match eol */
 YY_RULE_SETUP
-#line 648 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 650 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SQRTEND);}
 	YY_BREAK
 case 394:
 /* rule 394 can match eol */
 YY_RULE_SETUP
-#line 649 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 651 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SQRTSTART);}
 	YY_BREAK
 case 395:
 /* rule 395 can match eol */
 YY_RULE_SETUP
-#line 650 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 652 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SQRTEND);}
 	YY_BREAK
 case 396:
 /* rule 396 can match eol */
 YY_RULE_SETUP
-#line 651 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 653 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SQUARESTART);}
 	YY_BREAK
 case 397:
 /* rule 397 can match eol */
 YY_RULE_SETUP
-#line 652 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 654 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SQUAREEND);}
 	YY_BREAK
 case 398:
 /* rule 398 can match eol */
 YY_RULE_SETUP
-#line 653 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 655 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SINSTART);}
 	YY_BREAK
 case 399:
 /* rule 399 can match eol */
 YY_RULE_SETUP
-#line 654 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 656 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SINEND);}
 	YY_BREAK
 case 400:
 /* rule 400 can match eol */
 YY_RULE_SETUP
-#line 655 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 657 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COSSTART);}
 	YY_BREAK
 case 401:
 /* rule 401 can match eol */
 YY_RULE_SETUP
-#line 656 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 658 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COSEND);}
 	YY_BREAK
 case 402:
 /* rule 402 can match eol */
 YY_RULE_SETUP
-#line 657 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 659 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EXPSTART);}
 	YY_BREAK
 case 403:
 /* rule 403 can match eol */
 YY_RULE_SETUP
-#line 658 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 660 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EXPEND);}
 	YY_BREAK
 case 404:
 /* rule 404 can match eol */
 YY_RULE_SETUP
-#line 659 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 661 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ABSSTART);}
 	YY_BREAK
 case 405:
 /* rule 405 can match eol */
 YY_RULE_SETUP
-#line 660 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 662 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ABSEND);}
 	YY_BREAK
 case 406:
 /* rule 406 can match eol */
 YY_RULE_SETUP
-#line 661 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 663 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ERFSTART);}
 	YY_BREAK
 case 407:
 /* rule 407 can match eol */
 YY_RULE_SETUP
-#line 662 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 664 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ERFEND);}
 	YY_BREAK
 case 408:
 /* rule 408 can match eol */
 YY_RULE_SETUP
-#line 663 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 665 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IFSTART);}
 	YY_BREAK
 case 409:
 /* rule 409 can match eol */
 YY_RULE_SETUP
-#line 664 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 666 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IFEND);}
 	YY_BREAK
 case 410:
 /* rule 410 can match eol */
 YY_RULE_SETUP
-#line 665 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 667 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MAXSTART);}
 	YY_BREAK
 case 411:
 /* rule 411 can match eol */
 YY_RULE_SETUP
-#line 666 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 668 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MAXEND);}
 	YY_BREAK
 case 412:
 /* rule 412 can match eol */
 YY_RULE_SETUP
-#line 667 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 669 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MINSTART);}
 	YY_BREAK
 case 413:
 /* rule 413 can match eol */
 YY_RULE_SETUP
-#line 668 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 670 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MINEND);}
 	YY_BREAK
 case 414:
 /* rule 414 can match eol */
 YY_RULE_SETUP
-#line 669 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 671 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SUMSTART);}
 	YY_BREAK
 case 415:
 /* rule 415 can match eol */
 YY_RULE_SETUP
-#line 670 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 672 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SUMEND);}
 	YY_BREAK
 case 416:
 /* rule 416 can match eol */
 YY_RULE_SETUP
-#line 671 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 673 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ALLDIFFSTART);}
 	YY_BREAK
 case 417:
 /* rule 417 can match eol */
 YY_RULE_SETUP
-#line 672 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 674 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ALLDIFFEND);}
 	YY_BREAK
 case 418:
 /* rule 418 can match eol */
 YY_RULE_SETUP
-#line 673 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 675 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(PRODUCTSTART);}
 	YY_BREAK
 case 419:
 /* rule 419 can match eol */
 YY_RULE_SETUP
-#line 674 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 676 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(PRODUCTEND);}
 	YY_BREAK
 case 420:
 /* rule 420 can match eol */
 YY_RULE_SETUP
-#line 675 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 677 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBERSTART);}
 	YY_BREAK
 case 421:
 /* rule 421 can match eol */
 YY_RULE_SETUP
-#line 676 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 678 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEREND);}
 	YY_BREAK
 case 422:
 /* rule 422 can match eol */
 YY_RULE_SETUP
-#line 677 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 679 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ESTART);}
 	YY_BREAK
 case 423:
 /* rule 423 can match eol */
 YY_RULE_SETUP
-#line 678 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 680 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EEND);}
 	YY_BREAK
 case 424:
 /* rule 424 can match eol */
 YY_RULE_SETUP
-#line 679 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 681 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(PISTART);}
 	YY_BREAK
 case 425:
 /* rule 425 can match eol */
 YY_RULE_SETUP
-#line 680 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 682 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(PIEND);}
 	YY_BREAK
 case 426:
 /* rule 426 can match eol */
 YY_RULE_SETUP
-#line 681 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 683 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VARIABLESTART);}
 	YY_BREAK
 case 427:
 /* rule 427 can match eol */
 YY_RULE_SETUP
-#line 682 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 684 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARIABLEEND);}
 	YY_BREAK
 /* patterns for <matrixExpressions> */
 case 428:
 /* rule 428 can match eol */
 YY_RULE_SETUP
-#line 686 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 688 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXEXPRESSIONSSTART);}
 	YY_BREAK
 case 429:
 /* rule 429 can match eol */
 YY_RULE_SETUP
-#line 687 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 689 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXEXPRESSIONSEND);}
 	YY_BREAK
 case 430:
 /* rule 430 can match eol */
 YY_RULE_SETUP
-#line 688 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 690 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFEXPR);}
 	YY_BREAK
 case 431:
 /* rule 431 can match eol */
 YY_RULE_SETUP
-#line 689 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 691 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EXPRSTART);}
 	YY_BREAK
 case 432:
 /* rule 432 can match eol */
 YY_RULE_SETUP
-#line 690 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 692 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EXPREND);}
 	YY_BREAK
 case 433:
 /* rule 433 can match eol */
 YY_RULE_SETUP
-#line 692 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 694 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXDETERMINANTSTART);}
 	YY_BREAK
 case 434:
 /* rule 434 can match eol */
 YY_RULE_SETUP
-#line 693 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 695 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXDETERMINANTEND);}
 	YY_BREAK
 case 435:
 /* rule 435 can match eol */
 YY_RULE_SETUP
-#line 694 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 696 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXTRACESTART);}
 	YY_BREAK
 case 436:
 /* rule 436 can match eol */
 YY_RULE_SETUP
-#line 695 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 697 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXTRACEEND);}
 	YY_BREAK
 case 437:
 /* rule 437 can match eol */
 YY_RULE_SETUP
-#line 696 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 698 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXTOSCALARSTART);}
 	YY_BREAK
 case 438:
 /* rule 438 can match eol */
 YY_RULE_SETUP
-#line 697 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 699 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXTOSCALAREND);}
 	YY_BREAK
 /* patterns for <matrixTerms> in <matrixConstraints> and <matrixObjectives>*/
 case 439:
 /* rule 439 can match eol */
 YY_RULE_SETUP
-#line 701 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 703 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFMATRIXTERMSATT);}
 	YY_BREAK
 case 440:
 /* rule 440 can match eol */
 YY_RULE_SETUP
-#line 702 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 704 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXTERMSTART);}
 	YY_BREAK
 case 441:
 /* rule 441 can match eol */
 YY_RULE_SETUP
-#line 703 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 705 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXTERMEND);}
 	YY_BREAK
 case 442:
 /* rule 442 can match eol */
 YY_RULE_SETUP
-#line 705 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 707 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MATRIXREFERENCESTART);}
 	YY_BREAK
 case 443:
 /* rule 443 can match eol */
 YY_RULE_SETUP
-#line 706 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 708 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXREFERENCEEND);}
 	YY_BREAK
 case 444:
 /* rule 444 can match eol */
 YY_RULE_SETUP
-#line 707 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 709 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXDIAGONALSTART);}
 	YY_BREAK
 case 445:
 /* rule 445 can match eol */
 YY_RULE_SETUP
-#line 708 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 710 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXDIAGONALEND);}
 	YY_BREAK
 case 446:
 /* rule 446 can match eol */
 YY_RULE_SETUP
-#line 709 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 711 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXDOTTIMESSTART);}
 	YY_BREAK
 case 447:
 /* rule 447 can match eol */
 YY_RULE_SETUP
-#line 710 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 712 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXDOTTIMESEND);}
 	YY_BREAK
 case 448:
 /* rule 448 can match eol */
 YY_RULE_SETUP
-#line 711 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 713 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXINVERSESTART);}
 	YY_BREAK
 case 449:
 /* rule 449 can match eol */
 YY_RULE_SETUP
-#line 712 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 714 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXINVERSEEND);}
 	YY_BREAK
 case 450:
 /* rule 450 can match eol */
 YY_RULE_SETUP
-#line 713 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 715 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXLOWERTRIANGLESTART);}
 	YY_BREAK
 case 451:
 /* rule 451 can match eol */
 YY_RULE_SETUP
-#line 714 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 716 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXLOWERTRIANGLEEND);}
 	YY_BREAK
 case 452:
 /* rule 452 can match eol */
 YY_RULE_SETUP
-#line 715 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 717 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXUPPERTRIANGLESTART);}
 	YY_BREAK
 case 453:
 /* rule 453 can match eol */
 YY_RULE_SETUP
-#line 716 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 718 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXUPPERTRIANGLEEND);}
 	YY_BREAK
 case 454:
 /* rule 454 can match eol */
 YY_RULE_SETUP
-#line 717 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 719 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXMERGESTART);}
 	YY_BREAK
 case 455:
 /* rule 455 can match eol */
 YY_RULE_SETUP
-#line 718 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 720 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXMERGEEND);}
 	YY_BREAK
 case 456:
 /* rule 456 can match eol */
 YY_RULE_SETUP
-#line 719 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 721 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXMINUSSTART);}
 	YY_BREAK
 case 457:
 /* rule 457 can match eol */
 YY_RULE_SETUP
-#line 720 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 722 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXMINUSEND);}
 	YY_BREAK
 case 458:
 /* rule 458 can match eol */
 YY_RULE_SETUP
-#line 721 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 723 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXNEGATESTART);}
 	YY_BREAK
 case 459:
 /* rule 459 can match eol */
 YY_RULE_SETUP
-#line 722 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 724 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXNEGATEEND);}
 	YY_BREAK
 case 460:
 /* rule 460 can match eol */
 YY_RULE_SETUP
-#line 723 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 725 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXPLUSSTART);}
 	YY_BREAK
 case 461:
 /* rule 461 can match eol */
 YY_RULE_SETUP
-#line 724 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 726 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXPLUSEND);}
 	YY_BREAK
 case 462:
 /* rule 462 can match eol */
 YY_RULE_SETUP
-#line 725 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 727 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXTIMESSTART);}
 	YY_BREAK
 case 463:
 /* rule 463 can match eol */
 YY_RULE_SETUP
-#line 726 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 728 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXTIMESEND);}
 	YY_BREAK
 case 464:
 /* rule 464 can match eol */
 YY_RULE_SETUP
-#line 727 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 729 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXPRODUCTSTART);}
 	YY_BREAK
 case 465:
 /* rule 465 can match eol */
 YY_RULE_SETUP
-#line 728 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 730 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXPRODUCTEND);}
 	YY_BREAK
 case 466:
 /* rule 466 can match eol */
 YY_RULE_SETUP
-#line 729 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 731 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXSCALARTIMESSTART);}
 	YY_BREAK
 case 467:
 /* rule 467 can match eol */
 YY_RULE_SETUP
-#line 730 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 732 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXSCALARTIMESEND);}
 	YY_BREAK
 case 468:
 /* rule 468 can match eol */
 YY_RULE_SETUP
-#line 731 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 733 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXSUBMATRIXATSTART);}
 	YY_BREAK
 case 469:
 /* rule 469 can match eol */
 YY_RULE_SETUP
-#line 732 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 734 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXSUBMATRIXATEND);}
 	YY_BREAK
 case 470:
 /* rule 470 can match eol */
 YY_RULE_SETUP
-#line 733 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 735 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXTRANSPOSESTART);}
 	YY_BREAK
 case 471:
 /* rule 471 can match eol */
 YY_RULE_SETUP
-#line 734 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 736 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MATRIXTRANSPOSEEND);}
 	YY_BREAK
 case 472:
 /* rule 472 can match eol */
 YY_RULE_SETUP
-#line 735 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 737 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IDENTITYMATRIXSTART);}
 	YY_BREAK
 case 473:
 /* rule 473 can match eol */
 YY_RULE_SETUP
-#line 736 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 738 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IDENTITYMATRIXEND);}
 	YY_BREAK
 /* patterns for complex expressions and functions */
 case 474:
 /* rule 474 can match eol */
 YY_RULE_SETUP
-#line 740 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 742 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXNUMBERSTART);}
 	YY_BREAK
 case 475:
 /* rule 475 can match eol */
 YY_RULE_SETUP
-#line 741 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 743 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COMPLEXNUMBEREND);}
 	YY_BREAK
 case 476:
 /* rule 476 can match eol */
 YY_RULE_SETUP
-#line 742 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 744 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CREATECOMPLEXSTART);}
 	YY_BREAK
 case 477:
 /* rule 477 can match eol */
 YY_RULE_SETUP
-#line 743 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 745 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CREATECOMPLEXEND);}
 	YY_BREAK
 case 478:
 /* rule 478 can match eol */
 YY_RULE_SETUP
-#line 744 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 746 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXPLUSSTART);}
 	YY_BREAK
 case 479:
 /* rule 479 can match eol */
 YY_RULE_SETUP
-#line 745 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 747 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COMPLEXPLUSEND);}
 	YY_BREAK
 case 480:
 /* rule 480 can match eol */
 YY_RULE_SETUP
-#line 746 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 748 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXSUMSTART);}
 	YY_BREAK
 case 481:
 /* rule 481 can match eol */
 YY_RULE_SETUP
-#line 747 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 749 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COMPLEXSUMEND);}
 	YY_BREAK
 case 482:
 /* rule 482 can match eol */
 YY_RULE_SETUP
-#line 748 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 750 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXMINUSSTART);}
 	YY_BREAK
 case 483:
 /* rule 483 can match eol */
 YY_RULE_SETUP
-#line 749 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 751 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COMPLEXMINUSEND);}
 	YY_BREAK
 case 484:
 /* rule 484 can match eol */
 YY_RULE_SETUP
-#line 750 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 752 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXNEGATESTART);}
 	YY_BREAK
 case 485:
 /* rule 485 can match eol */
 YY_RULE_SETUP
-#line 751 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 753 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COMPLEXNEGATEEND);}
 	YY_BREAK
 case 486:
 /* rule 486 can match eol */
 YY_RULE_SETUP
-#line 752 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 754 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXCONJUGATESTART);}
 	YY_BREAK
 case 487:
 /* rule 487 can match eol */
 YY_RULE_SETUP
-#line 753 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 755 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COMPLEXCONJUGATEEND);}
 	YY_BREAK
 case 488:
 /* rule 488 can match eol */
 YY_RULE_SETUP
-#line 754 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 756 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXTIMESSTART);}
 	YY_BREAK
 case 489:
 /* rule 489 can match eol */
 YY_RULE_SETUP
-#line 755 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 757 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COMPLEXTIMESEND);}
 	YY_BREAK
 case 490:
 /* rule 490 can match eol */
 YY_RULE_SETUP
-#line 756 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 758 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(COMPLEXSQUARESTART);}
 	YY_BREAK
 case 491:
 /* rule 491 can match eol */
 YY_RULE_SETUP
-#line 757 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 759 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(COMPLEXSQUAREEND);}
 	YY_BREAK
 /* attributes returning strings (that are potentially empty)*/
 case 492:
 /* rule 492 can match eol */
 YY_RULE_SETUP
-#line 762 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 764 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYIDATT);}
 	YY_BREAK
 case 493:
 /* rule 493 can match eol */
 YY_RULE_SETUP
-#line 763 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 765 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYIDATT);}
 	YY_BREAK
 case 494:
 /* rule 494 can match eol */
 YY_RULE_SETUP
-#line 764 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 766 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(IDATT);}
 	YY_BREAK
 case 495:
 /* rule 495 can match eol */
 YY_RULE_SETUP
-#line 765 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 767 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(IDATT);}
 	YY_BREAK
 case 496:
 /* rule 496 can match eol */
 YY_RULE_SETUP
-#line 767 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 769 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYINCLUDEDIAGONALATT);}
 	YY_BREAK
 case 497:
 /* rule 497 can match eol */
 YY_RULE_SETUP
-#line 768 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 770 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYINCLUDEDIAGONALATT);}
 	YY_BREAK
 case 498:
 /* rule 498 can match eol */
 YY_RULE_SETUP
-#line 769 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 771 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(INCLUDEDIAGONALATT);}
 	YY_BREAK
 case 499:
 /* rule 499 can match eol */
 YY_RULE_SETUP
-#line 770 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 772 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(INCLUDEDIAGONALATT);}
 	YY_BREAK
 case 500:
 /* rule 500 can match eol */
 YY_RULE_SETUP
-#line 772 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 774 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTRANSPOSEATT);}
 	YY_BREAK
 case 501:
 /* rule 501 can match eol */
 YY_RULE_SETUP
-#line 773 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 775 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTRANSPOSEATT);}
 	YY_BREAK
 case 502:
 /* rule 502 can match eol */
 YY_RULE_SETUP
-#line 774 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 776 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(TRANSPOSEATT);}
 	YY_BREAK
 case 503:
 /* rule 503 can match eol */
 YY_RULE_SETUP
-#line 775 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 777 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(TRANSPOSEATT);}
 	YY_BREAK
 /* last section of OSParseosrl.l */
@@ -6709,74 +6711,74 @@ YY_RULE_SETUP
 case 504:
 /* rule 504 can match eol */
 YY_RULE_SETUP
-#line 781 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 783 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; yylval->sval = strdup( yytext);  yyextra->errorText = yylval->sval;  /*  yylval->sval = yytext;*/  return (ELEMENTTEXT); }
 	YY_BREAK
 case 505:
 /* rule 505 can match eol */
 YY_RULE_SETUP
-#line 782 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 784 "../../../../OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ITEMTEXT); }
 	YY_BREAK
 case 506:
 YY_RULE_SETUP
-#line 784 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 786 "../../../../OS/src/OSParsers/OSParseosrl.l"
 BEGIN comment;
 	YY_BREAK
 case 507:
-#line 786 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 788 "../../../../OS/src/OSParsers/OSParseosrl.l"
 case 508:
 /* rule 508 can match eol */
 YY_RULE_SETUP
-#line 786 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 788 "../../../../OS/src/OSParsers/OSParseosrl.l"
 ;
 	YY_BREAK
 case 509:
 YY_RULE_SETUP
-#line 787 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 789 "../../../../OS/src/OSParsers/OSParseosrl.l"
 BEGIN 0;
 	YY_BREAK
 case 510:
 YY_RULE_SETUP
-#line 789 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 791 "../../../../OS/src/OSParsers/OSParseosrl.l"
 BEGIN xmldeclaration;
 	YY_BREAK
 case 511:
-#line 791 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 793 "../../../../OS/src/OSParsers/OSParseosrl.l"
 case 512:
 /* rule 512 can match eol */
 YY_RULE_SETUP
-#line 791 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 793 "../../../../OS/src/OSParsers/OSParseosrl.l"
 ;
 	YY_BREAK
 case 513:
 YY_RULE_SETUP
-#line 792 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 794 "../../../../OS/src/OSParsers/OSParseosrl.l"
 BEGIN 0;
 	YY_BREAK
 case 514:
 /* rule 514 can match eol */
 YY_RULE_SETUP
-#line 795 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 797 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 515:
 /* rule 515 can match eol */
 YY_RULE_SETUP
-#line 796 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 798 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 516:
 /* rule 516 can match eol */
 YY_RULE_SETUP
-#line 797 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 799 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  BEGIN 0;  /*yylval->sval = strdup(yytext);*/  yylval->sval = yytext; return(OSRLATTRIBUTETEXT);}
 	YY_BREAK
 /* error trap */
 case 517:
 /* rule 517 can match eol */
 YY_RULE_SETUP
-#line 801 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 803 "../../../../OS/src/OSParsers/OSParseosrl.l"
 {
 	std::string error;
 	std::ostringstream outStr;
@@ -6791,10 +6793,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 518:
 YY_RULE_SETUP
-#line 813 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 815 "../../../../OS/src/OSParsers/OSParseosrl.l"
 ECHO;
 	YY_BREAK
-#line 6798 "../../../../OS/src/OSParsers/OSParseosrl.cpp"
+#line 6800 "../../../../OS/src/OSParsers/OSParseosrl.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(osrlattributetext):
 case YY_STATE_EOF(doublequoteattributetext):
@@ -7950,7 +7952,7 @@ void osrlfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 813 "../../../../OS/src/OSParsers/OSParseosrl.l"
+#line 815 "../../../../OS/src/OSParsers/OSParseosrl.l"
 
 
 
