@@ -1022,12 +1022,16 @@ if (PARSER_TESTS)
                 throw ErrorClass("matrix expansion impossible due to previous parser errors");
 
             int expIdx;
+            bool rowMajor = false;
+
             for (int i=0; i < instance1->instanceData->matrices->numberOfMatrices; i++)
             {
                 try
                 {
-                    cout << endl << "Test expansion of matrix " << i << " in column major form" << endl;
-                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix,false);
+                    cout << endl << "Test expansion of matrix " << i << " in " 
+                         << (rowMajor?"row":"column") << " major form" << endl;
+
+                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix,rowMajor);
                     if (expIdx >= 0)
                     {
                         cout << endl << "Matrix expanded successfully" << endl << endl;
@@ -1042,10 +1046,14 @@ if (PARSER_TESTS)
                     cout << "Error message: " << eclass.errormsg  << endl << endl;
                 }
 
+                rowMajor = !rowMajor;
+
                 try
                 {
-                    cout << endl << "Test expansion of matrix " << i << " in row major form" << endl;
-                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix,true);
+                    cout << endl << "Test expansion of matrix " << i << " in " 
+                         << (rowMajor?"row":"column") << " major form" << endl;
+
+                    expIdx = instance1->instanceData->matrices->matrix[i]->getExpandedMatrix(instance1->instanceData->matrices->matrix,rowMajor);
                     if (expIdx >= 0)
                     {
                         cout << endl << "Matrix expanded successfully" << endl << endl;

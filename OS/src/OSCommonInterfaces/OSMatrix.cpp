@@ -1418,8 +1418,10 @@ int MatrixType::getExpandedMatrix(OSMatrix** mtxIdx, bool rowMajor_,
 #ifndef NDEBUG
                 tempExpansion[i]->printMatrix();
 #endif
-                nv += ((MatrixElements*)m_mChildren[i])->numberOfValues;
+                nv += tempExpansion[i]->valueSize;;
             }
+
+            if (nv > numberOfRows*numberOfColumns) nv = numberOfRows*numberOfColumns;
 
             if (convertTo == ENUM_MATRIX_TYPE_unknown) 
                 convertTo  = inferredType;

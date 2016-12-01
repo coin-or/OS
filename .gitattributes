@@ -296,6 +296,7 @@ OS/data/osilFiles/volumeTest.osil -text
 OS/data/osilFiles/wayneQuadratic.osil -text
 OS/data/osolFiles/HS071_NLPMod_ipopt.osol -text
 OS/data/osolFiles/HS071_NLP_knitro.osol -text
+OS/data/osolFiles/SDPA_ex.osol -text
 OS/data/osolFiles/avion2_ipopt.osol -text
 OS/data/osolFiles/bonminEx1_Bonmin.osol -text
 OS/data/osolFiles/bonminEx1_Couenne.osol -text
