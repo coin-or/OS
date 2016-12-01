@@ -22,7 +22,6 @@
 			<xs:element name="instanceData" type="InstanceData"/>
 		</xs:sequence>
 	</xs:complexType>
-	<!--InstanceHeader: since version 1.0 -->
 	<!--InstanceData: since version 1.0 -->
 	<xs:complexType name="InstanceData">
 		<xs:annotation>
@@ -110,7 +109,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 -->
-			<xs:element name="disjunctions" type="DisjunctiveInformation" minOccurs="0">
+			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
