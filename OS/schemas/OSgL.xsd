@@ -1282,34 +1282,34 @@ Each nonzero is a complex-valued expression</xs:documentation>
 					<xs:documentation>numnber of elements in dimensions vector must equal tensor rank</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="element" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="element" type="tensorElement" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number of elements must equal numberOfElements</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="indexes" type="NonNegativeIntVector">
-							<xs:annotation>
-								<xs:documentation>numnber of elements 
-in indexes vector must 
-equal tensor rank</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-						<xs:choice>
-							<xs:element name="constantValue" type="xs:double"/>
-							<xs:element name="complexValue" type="ComplexNumber"/>
-							<xs:element name="varReference" type="xs:nonNegativeInteger"/>
-							<xs:element name="realValuedExpression" type="RealValuedExpression"/>
-							<xs:element name="complexValuedExpression" type="ComplexValuedExpression"/>
-							<xs:element name="stringValue" type="xs:string"/>
-						</xs:choice>
-					</xs:sequence>
-				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="tensorElement">
+		<xs:sequence>
+			<xs:element name="indexes" type="NonNegativeIntVector">
+				<xs:annotation>
+					<xs:documentation>number of elements 
+in indexes vector must 
+equal tensor rank</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="constantValue" type="xs:double"/>
+				<xs:element name="complexValue" type="ComplexNumber"/>
+				<xs:element name="varReference" type="xs:nonNegativeInteger"/>
+				<xs:element name="realValuedExpression" type="RealValuedExpression"/>
+				<xs:element name="complexValuedExpression" type="ComplexValuedExpression"/>
+				<xs:element name="stringValue" type="xs:string"/>
+			</xs:choice>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="XMLData">
 		<xs:annotation>
@@ -1490,10 +1490,26 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element ref="mixtureDist"/>
-			<xs:element ref="sumDist"/>
-			<xs:element ref="maxDist"/>
-			<xs:element ref="productDist"/>
+			<xs:element ref="mixtureDist">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="maxDist">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="sumDist">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="productDist">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 	</xs:group>
 	<xs:complexType name="EmpiricalDiscreteElement">

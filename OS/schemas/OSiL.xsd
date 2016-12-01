@@ -151,7 +151,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 -->
-			<xs:element name="stochasticData-2016-10-05" type="StochasticData-2016-10-05" minOccurs="0">
+			<xs:element name="stochasticData" type="StochasticData-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -5016,18 +5016,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="scenarioTree-2016-10-05" type="ScenarioTree-2016-10-05" minOccurs="0">
+			<xs:element name="scenarioTree" type="ScenarioTree-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="nodalTree-2016-10-05" type="NodalTree-2016-10-05" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="nodalTree-2016-11-24" type="NodalTree-2016-11-24" minOccurs="0"/>
-			<xs:element name="implicitTree-2016-10-05" type="ImplicitTree-2016-10-05" minOccurs="0">
+			<xs:element name="nodalTree" type="NodalTree-2016-11-24" minOccurs="0"/>
+			<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -5039,8 +5034,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="rootScenario-2016-10-05" type="RootScenario-2016-10-05"/>
-			<xs:element name="scenario-2016-10-05" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="rootScenario" type="RootScenario-2016-10-05"/>
+			<xs:element name="scenario" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="mode" default="replace">
@@ -5105,6 +5100,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="parent" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="prob" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
@@ -5113,13 +5109,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="base">
-			<xs:simpleType>
-				<xs:restriction base="xs:string"/>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="base" type="xs:nonNegativeInteger"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfChanges" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfChanges" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>changes are relative to parent or, if presnt, the base scenario</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="NodalTree-2016-10-05">
 		<xs:complexContent>
