@@ -2186,14 +2186,19 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="dim" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="dimensions" type="NonNegativeIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of entries in vector of dimensions determines the "rank" of the random object: 
+1 for random vector, 
+2 for random matrix, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="param" type="DistributionParameter" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfParam</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDim" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="custom" type="CustomDistribution">

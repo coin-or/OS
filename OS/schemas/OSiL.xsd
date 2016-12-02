@@ -3306,7 +3306,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the dist child elements must agree with numberOfDist</xs:documentation>
 			</xs:annotation>
-			<xs:element name="dist" type="StochasticUnivariateDistribution" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="dist" type="StochasticDistribution" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -4241,6 +4241,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfDistributions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<!--
 	<xs:complexType name="StochasticDistribution">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
@@ -4251,6 +4252,21 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+-->
+	<xs:complexType name="StochasticDistribution">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:group ref="DistributionGroup"/>
+			<!-- Superseded by CustomDistribution			
+			<xs:element ref="generalUnivariateDistribution"/>
+			<xs:element name="userF" type="StochasticUnivariateDistributionUserFunction"/>
+-->
+			<xs:group ref="DistributionTransformationGroup"/>
+			<xs:element ref="custom"/>
+		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="StochasticUnivariateDistribution">
 		<xs:annotation>
@@ -5490,7 +5506,8 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:element>
 			<xs:element name="transformation" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term) and transforms this into the vector of stochastic elements. Any random matrices are expanded column by column. </xs:documentation>
+					<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term) and transforms this into the vector of stochastic elements. Any random matrices are expanded column by column. 
+Default: identity matrix.</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:complexContent>
@@ -5522,7 +5539,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:documentation>moving average terms</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="addConstant" type="xs:boolean" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="RV-2016-10-05">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
