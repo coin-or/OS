@@ -114,7 +114,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="timeStages" type="InstanceDecomposition" minOccurs="0">
+			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -1903,17 +1903,10 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="ModifyingOperations">
 				<xs:choice>
-					<xs:element name="baseFile" default="this" minOccurs="0">
+					<xs:element name="baseFile" type="ModificationBaseFile" default="this" minOccurs="0">
 						<xs:annotation>
-							<xs:documentation>reference to an osil file containing the base for the current modifications</xs:documentation>
+							<xs:documentation>reference to an OSiL file containing the base for the current modifications</xs:documentation>
 						</xs:annotation>
-						<xs:complexType>
-							<xs:simpleContent>
-								<xs:extension base="xs:string">
-									<xs:attribute name="uri" type="xs:string" use="optional" default="."/>
-								</xs:extension>
-							</xs:simpleContent>
-						</xs:complexType>
 					</xs:element>
 					<xs:element name="baseID" type="xs:string" minOccurs="0">
 						<xs:annotation>
@@ -1928,6 +1921,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ModificationBaseFile">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="uri" type="xs:string" use="optional" default="."/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="Modifications_save">
 		<xs:annotation>
@@ -2927,7 +2927,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 -->
-			<xs:element name="disjunctiveTerm" type="DisjunctiveModifications" minOccurs="2" maxOccurs="unbounded"/>
+			<xs:element name="disjunctiveTerm" type="DisjunctiveModifications" minOccurs="2" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>different disjunctive terms are connected by logical OR</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctiveTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -3105,7 +3109,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="disjunction" type="DisjunctiveSet" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>different disjunctive sets are connected by AND</xs:documentation>
+					<xs:documentation>different disjunctive sets are connected by logical AND</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3478,17 +3482,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="part" default="real">
-			<xs:annotation>
-				<xs:documentation>used only for complex matrix entries</xs:documentation>
-			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="real"/>
-					<xs:enumeration value="imaginary"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponent">
 		<xs:choice minOccurs="0">
@@ -3520,11 +3513,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="OSnLNode" type="UpdateableProblemComponentNlNode">
 				<xs:annotation>
 					<xs:documentation>draft - refer to any OSnLNode in any nonlinear expression, including matrix constructs</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="OSnLCNode" type="UpdateableProblemComponentNlCNode">
-				<xs:annotation>
-					<xs:documentation>draft - refer to any OSnLCNode in any nonlinear expression, including matrix constructs</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixElement" type="UpdateableProblemComponentMatrixElement">
@@ -3875,15 +3863,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:choice>
 	</xs:complexType>
-	<xs:complexType name="InstanceDecomposition">
+	<xs:complexType name="TimeStages">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of the component elements must agree with numberOfComponents</xs:documentation>
+				<xs:documentation>Number of stages must agree with numberOfStages</xs:documentation>
 			</xs:annotation>
-			<xs:element name="stage" type="DecompositionComponent" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="stage" type="TimeStage" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation> </xs:documentation>
 				</xs:annotation>
@@ -3904,7 +3892,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:attribute>
 -->
 	</xs:complexType>
-	<xs:complexType name="DecompositionComponent">
+	<xs:complexType name="TimeStage">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -3915,7 +3903,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 						<xs:extension base="IntVector">
 							<xs:attribute name="startIdx" type="xs:nonNegativeInteger">
 								<xs:annotation>
-									<xs:documentation>Index list must be empty if startIdx is used and must match numberOfEl otherwise</xs:documentation>
+									<xs:documentation>Index list must be empty if startIdx is used and else must match numberOfEl </xs:documentation>
 								</xs:annotation>
 							</xs:attribute>
 						</xs:extension>
@@ -5294,7 +5282,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="nodeID" type="xs:ID">
 			<xs:annotation>
-				<xs:documentation>can be used to provide a reference for later inheritance of data</xs:documentation>
+				<xs:documentation>used to provide a reference for later inheritance of data</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -5367,11 +5355,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="decomposition" type="InstanceDecomposition" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="parameters" type="Parameters" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -5442,7 +5425,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:extension base="ModifyingOperations">
 				<xs:attribute name="baseRef" type="xs:IDREF">
 					<xs:annotation>
-						<xs:documentation>can be used to reference another node in the tree as a base from which the current node inherits data</xs:documentation>
+						<xs:documentation>used to identify another node in the tree as a base from which the current node inherits data</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
