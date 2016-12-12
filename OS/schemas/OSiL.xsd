@@ -3401,6 +3401,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="lb"/>
 					<xs:enumeration value="ub"/>
+					<xs:enumeration value="lbAndUb"/>
+					<xs:enumeration value="type"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -5433,9 +5435,9 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 	</xs:complexType>
 	<xs:complexType name="ImplicitTree-2016-10-05">
 		<xs:sequence>
-			<xs:element name="stage" type="ImplicitTreeStage-2016-10-05">
+			<xs:element name="stoch" type="ImplicitTreeStage-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfStages</xs:documentation>
+					<xs:documentation>number must agree with numberOfStoch</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="softConstraints" type="SoftConstraints-2016-10-05" minOccurs="0">
@@ -5449,7 +5451,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfStages" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfStoch" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="ambiguityResolution">
 			<xs:annotation>
 				<xs:documentation>default is "max" for minimization problems, "min" for maximization problems</xs:documentation>
@@ -5472,20 +5474,27 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>number must agree with numberOfStochEl</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="rv" type="RV-2016-10-05" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfRV</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="ma" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfMA</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="ar" type="AutoRegressiveComponent-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfAR</xs:documentation>
+					<xs:documentation>number must agree with numberOfAR. 
+Each term adds rows to the input vector for the transformation, first the random variable, followed by any references to stochEl.</xs:documentation>
 				</xs:annotation>
+			</xs:element>
+			<xs:element name="ma" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfMA. Each moving average term refers to a previously set decision variable, matrix variable, etc. Each reference adds one or more rows to the input vector of the transformation</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="idx" type="xs:integer" use="required"/>
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="var"/>
+								<xs:enumeration value="matrixVar"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
 			</xs:element>
 			<xs:element name="transformation" minOccurs="0">
 				<xs:annotation>
@@ -5510,6 +5519,11 @@ Default: identity matrix.</xs:documentation>
 				<xs:documentation>number of the stage in which the information is revealed</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="distributionIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>gives the index of the distribution in the "distributions" element</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfRV" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfAR" type="xs:nonNegativeInteger" default="0">
@@ -5531,16 +5545,22 @@ Default: identity matrix.</xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="AutoRegressiveComponent-2016-10-05">
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required">
+		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>must be LESS than the index of the current stage</xs:documentation>
+				<xs:documentation>experiment</xs:documentation>
 			</xs:annotation>
-		</xs:attribute>
+			<xs:element name="stochElIdx" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfStochEl. Each index refers back to the list of stochEl in the first definition of this stochastic component</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>gives the index of the distribution in the "distributions" element</xs:documentation>
+				<xs:documentation>gives the index of a previously defined stochastic component ("stoch")</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<!--SoftConstraints: proposal-->
 	<xs:complexType name="SoftConstraints">
