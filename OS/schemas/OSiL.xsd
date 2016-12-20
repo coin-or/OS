@@ -3310,10 +3310,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the dist child elements must agree with numberOfDist</xs:documentation>
 			</xs:annotation>
-			<xs:element name="dist" type="StochasticDistribution" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="dist" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="StochasticDistribution"/>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfDist" type="xs:nonNegativeInteger" use="required"/>
@@ -4257,6 +4262,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:group ref="DistributionTransformationGroup"/>
 			<xs:element ref="custom"/>
 		</xs:choice>
+		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticUnivariateDistribution">
 		<xs:annotation>
@@ -5027,7 +5033,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="nodalTree" type="NodalTree-2016-11-24" minOccurs="0"/>
+			<xs:element name="nodalTree" type="NodalTree-2016-11-24" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -5435,9 +5445,10 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 	</xs:complexType>
 	<xs:complexType name="ImplicitTree-2016-10-05">
 		<xs:sequence>
-			<xs:element name="stoch" type="ImplicitTreeStage-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="block" type="ImplicitTreeBlock-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfStoch</xs:documentation>
+					<xs:documentation>number must agree with numberOfBlocks.
+The random variables referened by distributionIdx are independent from one block to another.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="softConstraints" type="SoftConstraints-2016-10-05" minOccurs="0">
@@ -5451,7 +5462,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfStoch" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="ambiguityResolution">
 			<xs:annotation>
 				<xs:documentation>default is "max" for minimization problems, "min" for maximization problems</xs:documentation>
@@ -5467,7 +5478,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="ImplicitTreeStage-2016-10-05">
+	<xs:complexType name="ImplicitTreeBlock-2016-10-05">
 		<xs:sequence>
 			<xs:element name="stochEl" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
@@ -5477,7 +5488,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:element name="ar" type="AutoRegressiveComponent-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfAR. 
-Each term adds rows to the input vector for the transformation, first the random variable, followed by any references to stochEl.</xs:documentation>
+Each term adds rows to the input vector for the transformation, first the random variable or vector, followed by any references to stochEl.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="ma" minOccurs="0" maxOccurs="unbounded">
@@ -5514,7 +5525,7 @@ Default: identity matrix.</xs:documentation>
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger" use="required">
+		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
 				<xs:documentation>number of the stage in which the information is revealed</xs:documentation>
 			</xs:annotation>
@@ -5525,7 +5536,6 @@ Default: identity matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfRV" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfAR" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>autoregressive terms</xs:documentation>
