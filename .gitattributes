@@ -247,6 +247,8 @@ OS/data/osilFiles/LP_noconstraint.osil -text
 OS/data/osilFiles/LP_unbounded.osil -text
 OS/data/osilFiles/NaNTest2.osil -text
 OS/data/osilFiles/SDPA_ex.osil -text
+OS/data/osilFiles/StochProg/parincScen.osil -text
+OS/data/osilFiles/StochProg/productionNodal.osil -text
 OS/data/osilFiles/_ProblemsClassified.pdf -text
 OS/data/osilFiles/_ProblemsClassified.xlsx -text
 OS/data/osilFiles/avion2.osil -text

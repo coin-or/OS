@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	 xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd"> 
+	<instanceHeader>
+		<description> A simple production problem with trap states and stochastic problem dimensions.</description>
+		<fileCreator>H.I. Gassmann, J. Ma and R.K. Martin </fileCreator>
+		<licence>This file is distributed under the Eclipse Public License</licence>
+	</instanceHeader>
+	<instanceData>
+		<objectives numberOfObjectives="1">
+			<obj maxOrMin="max" numberOfObjCoef="0"/>
+		</objectives>
+		<stochasticData>
+			<nodalTree numberOfNodes="45">
+				<rootNode>
+					<nodeData>
+						<variables numberOfVariables="1">
+							<var name="prod1" ub="10"/>
+						</variables>
+						<objectiveCoefficients>
+							<obj numberOfObjCoef="1">
+								<coef idx="0">-3.0</coef>
+							</obj>
+						</objectiveCoefficients>
+					</nodeData>
+					<sNode prob="0.3" nodeID="nd1"> <!-- node 1 -->
+						<nodeData>
+							<variables numberOfVariables="3">
+								<var ub="3.0" name="sale1"/>
+								<var name="short1"/>
+								<var name="surpl1"/>
+							</variables>
+							<objectiveCoefficients>
+								<obj numberOfObjCoef="2">
+									<coef idx="1">4.0</coef>
+									<!--									<coef idx="2">0.0</coef> -->
+									<!-- needed in current schema to allow copying for node 2 - node 3 is not even possible at the moment -->
+									<coef idx="3">1.0</coef>
+								</obj>
+							</objectiveCoefficients>
+							<constraints numberOfConstraints="2">
+								<con name="bal1" lb="0" ub="0"/>
+								<con name="avail1" ub="0"/>
+							</constraints>
+							<linearConstraintCoefficients numberOfValues="6">
+								<start>
+									<el mult="3" incr="2">0</el>
+									<el>5</el>
+									<el>6</el>
+								</start>
+								<rowIdx>
+									<el>0</el>
+									<el>1</el>
+									<el>0</el>
+									<el>1</el>
+									<el>0</el>
+									<el>0</el>
+								</rowIdx>
+								<value>
+									<el>1.0</el>
+									<el>-1.0</el>
+									<el>-1.0</el>
+									<el>1.0</el>
+									<el>1.0</el>
+									<el>-1.0</el>
+								</value>
+							</linearConstraintCoefficients>
+						</nodeData>
+					</sNode>
+					<sNode prob="0.5" nodeID="nd2"> <!-- node 2 -->
+<!-- try modifications instead of separate build?? - won't work now because nd1 does not have the same sparsity structure -->
+						<nodeData>
+							<variables numberOfVariables="3">
+								<var name="sale1" ub="5.0"/>
+								<var name="prod1" ub="10.0"/>
+								<var name="inv1"/>
+							</variables>
+							<objectiveCoefficients>
+								<obj numberOfObjCoef="3">
+									<coef idx="1">4.0</coef>
+									<coef idx="2">-3.0</coef>
+									<coef idx="3">-0.5</coef>
+								</obj>
+							</objectiveCoefficients>
+							<constraints numberOfConstraints="2">
+								<con name="bal1" lb="0" ub="0"/>
+								<con name="avail1" ub="0"/>
+							</constraints>
+							<linearConstraintCoefficients numberOfValues="6">
+								<start>
+									<el mult="3" incr="2">0</el>
+									<el>5</el>
+									<el>6</el>
+								</start>
+								<rowIdx>
+									<el>0</el>
+									<el>1</el>
+									<el>0</el>
+									<el>1</el>
+									<el>0</el>
+									<el>0</el>
+								</rowIdx>
+								<value>
+									<el>1.0</el>
+									<el>-1.0</el>
+									<el>-1.0</el>
+									<el>1.0</el>
+									<el>1.0</el>
+									<el>-1.0</el>
+								</value>
+							</linearConstraintCoefficients>
+						</nodeData>
+<!-- Can we set things up so we copy from nd1 and modify?
+						<modifications baseRef="nd1">
+							<substitutions numberOfSubst="4">
+								<subst value="5">
+									<var idx="1" attr="ub"/>
+								</subst>
+								<subst value="10">
+									<var idx="2" attr="ub"/>
+								</subst>
+								<subst value="-3.0">
+									<obj idx="-1" attr="coef" varIdx="2"/>
+								</subst>
+								<subst value="-0.5">
+									<obj idx="-1" attr="coef" varIdx="3"/>
+								</subst>
+							</substitutions>
+						</modifications>
+-->
+						<sNode prob="0.3" nodeID="nd4">							<!-- node 4 -->
+							<nodeData>
+								<variables numberOfVariables="3">
+									<var ub="3.0" name="sale1"/>
+									<var name="short1"/>
+									<var name="surpl1"/>
+								</variables>
+								<objectiveCoefficients>
+									<obj numberOfObjCoef="2">
+										<coef idx="3">4.0</coef>
+										<!--									<coef idx="2">0.0</coef> -->
+										<!-- needed in current schema to allow copying for node 2 - node 3 is not even possible at the moment -->
+										<coef idx="5">1.0</coef>
+									</obj>
+								</objectiveCoefficients>
+								<constraints numberOfConstraints="2">
+									<con name="bal1" lb="0" ub="0"/>
+									<con name="avail1" ub="0"/>
+								</constraints>
+								<linearConstraintCoefficients numberOfValues="6">
+									<start>
+										<el mult="3">0</el>
+										<el>2</el>
+										<el mult="3" incr="1">4</el>
+									</start>
+									<rowIdx>
+										<el>0</el>
+										<el>1</el>
+										<el>0</el>
+										<el>1</el>
+										<el>0</el>
+										<el>0</el>
+									</rowIdx>
+									<value>
+										<el>1.0</el>
+										<el>-1.0</el>
+										<el>-1.0</el>
+										<el>1.0</el>
+										<el>1.0</el>
+										<el>-1.0</el>
+									</value>
+								</linearConstraintCoefficients>
+							</nodeData>
+						</sNode>
+						<sNode prob="0.5">							<!-- node 5 -->
+							<nodeData>
+								<variables numberOfVariables="3">
+									<var name="sale1" ub="5.0"/>
+									<var name="prod1" ub="10.0"/>
+									<var name="inv1"/>
+								</variables>
+								<objectiveCoefficients>
+									<obj numberOfObjCoef="3">
+										<coef idx="3">4.0</coef>
+										<coef idx="4">-3.0</coef>
+										<coef idx="5">-0.5</coef>
+									</obj>
+								</objectiveCoefficients>
+								<constraints numberOfConstraints="2">
+									<con name="bal1" lb="0" ub="0"/>
+									<con name="avail1" ub="0"/>
+								</constraints>
+								<linearConstraintCoefficients numberOfValues="6">
+									<start>
+										<el mult="3">0</el>
+										<el>2</el>
+										<el mult="3" incr="1">4</el>
+									</start>
+									<rowIdx>
+										<el>0</el>										<el>1</el>
+										<el>0</el>										<el>1</el>
+										<el>0</el>
+										<el>0</el>
+									</rowIdx>
+									<value>
+										<el>1.0</el>										<el>-1.0</el>
+										<el>-1.0</el>									<el>1.0</el>
+										<el>1.0</el>
+										<el>-1.0</el>
+									</value>
+								</linearConstraintCoefficients>
+							</nodeData>
+<!-- not possible in current schema
+							<modifications baseRef="nd2">
+							</modifications>
+-->
+							<sNode prob="0.3">								<!-- node 14 -->
+								<modifications baseRef="nd4">
+								</modifications>
+							</sNode>
+							<sNode prob="0.5">								<!-- node 15 -->
+								<modifications baseRef="nd4">
+									<substitutions numberOfSubst="1">
+										<subst value="5.0">
+											<var idx="1" attr="ub"/>
+										</subst>
+									</substitutions>
+								</modifications>
+							</sNode>
+							<sNode prob="0.2">								<!-- node 16 -->
+								<modifications baseRef="nd4">
+									<substitutions numberOfSubst="1">
+										<subst value="7.0">
+											<var idx="1" attr="ub"/>
+										</subst>
+									</substitutions>
+								</modifications>
+							</sNode>
+						</sNode>
+						<sNode prob="0.2">							<!-- node 6 -->
+						<nodeData>
+							<variables numberOfVariables="4">
+								<var name="sale1" ub="7.0"/>
+								<var name="prod1" ub="10.0"/>
+								<var name="inv1"/>
+								<var name="prod2" ub="10.0"/>
+							</variables>
+							<objectiveCoefficients>
+								<obj numberOfObjCoef="4">
+									<coef idx="3">4.0</coef>
+									<coef idx="4">-3.0</coef>
+									<coef idx="5">-0.5</coef>
+									<coef idx="6">-3.0</coef>
+								</obj>
+							</objectiveCoefficients>
+							<constraints numberOfConstraints="2">
+								<con name="bal1" lb="0" ub="0"/>
+								<con name="avail1" ub="0"/>
+							</constraints>
+							<linearConstraintCoefficients numberOfValues="6">
+								<start>
+									<el mult="3">0</el>
+									<el>2</el>
+									<el mult="3" incr="1">4</el>
+									<el>6</el>
+								</start>
+								<rowIdx>
+									<el>0</el>									<el>1</el>
+									<el>0</el>									<el>1</el>
+									<el>0</el>
+									<el>0</el>
+								</rowIdx>
+								<value>
+									<el>1.0</el>									<el>-1.0</el>
+									<el>-1.0</el>								<el>1.0</el>
+									<el>1.0</el>
+									<el>-1.0</el>
+								</value>
+							</linearConstraintCoefficients>
+						</nodeData>
+<!-- not possible at present due to different ancestor nodes
+							<modifications baseRef="nd3">
+							</modifications>
+-->
+							<sNode prob="0.15" nodeID="nd17">       <!-- node 17 -->
+								<nodeData>
+									<variables numberOfVariables="6">
+										<var name="prod" mult="2" ub="3.0"/>
+										<var name="short" mult="2"/>
+										<var name="surpl" mult="2"/>
+									</variables>
+									<objectiveCoefficients>
+										<obj numberOfObjCoef="2">
+											<coef idx="6">1.0</coef>
+											<coef idx="9">1.0</coef>
+										</obj>
+									</objectiveCoefficients>
+									<linearConstraintCoefficients numberOfValues="12">
+										<start>
+											<el mult="5">0</el>
+											<el mult="4" incr="2">2</el>
+											<el mult="4" incr="1">9</el>
+										</start>
+										<rowIdx>
+											<el>0</el>      <el>2</el>
+											<el>1</el>      <el>3</el>
+											<el>0</el>      <el>2</el>
+											<el>1</el>      <el>3</el>
+											<el>0</el>
+											<el>1</el>
+											<el>0</el>
+											<el>1</el>
+										</rowIdx>
+										<value>
+											<el>1</el>       <el>-1</el>
+											<el>1</el>       <el>-1</el>
+											<el>-1</el>       <el>1</el>
+											<el>-1</el>       <el>1</el>
+											<el>1</el>
+											<el>1</el>
+											<el>-1</el>
+											<el>-1</el>
+										</value>
+									</linearConstraintCoefficients>
+								</nodeData>
+							</sNode>
+							<sNode prob="0.15">								<!-- node 18 -->
+								<modifications baseRef="nd17">
+									<substitutions numberOfSubst="1">
+										<subst value="5.0">
+											<var idx="5" attr="ub"/>
+										</subst>
+									</substitutions>
+								</modifications>
+							</sNode>
+							<sNode prob="0.15">								<!-- node 19 -->
+								<modifications baseRef="nd17">
+									<substitutions numberOfSubst="1">
+										<subst value="5.0">
+											<var idx="4" attr="ub"/>
+										</subst>
+									</substitutions>
+								</modifications>
+							</sNode>
+							<sNode prob="0.25" nodeID="nd20">								<!-- node 20 -->
+								<modifications baseRef="nd17">
+									<substitutions numberOfSubst="2">
+										<subst value="5.0">
+											<var idx="4" attr="ub"/>
+										</subst>
+										<subst value="5.0">
+											<var idx="4" attr="ub"/>
+										</subst>
+									</substitutions>
+								</modifications>
+							</sNode>
+							<sNode prob="0.10">								<!-- node 21 -->
+								<modifications baseRef="nd17">
+									<substitutions numberOfSubst="2">
+										<subst value="7.0">
+											<var idx="4" attr="ub"/>
+										</subst>
+										<subst value="5.0">
+											<var idx="5" attr="ub"/>
+										</subst>
+									</substitutions>
+								</modifications>
+							</sNode>
+							<sNode prob="0.10">								<!-- node 22 -->
+								<modifications baseRef="nd17">
+									<substitutions numberOfSubst="2">
+										<subst value="5.0">
+											<var idx="4" attr="ub"/>
+										</subst>
+										<subst value="7.0">
+											<var idx="5" attr="ub"/>
+										</subst>
+									</substitutions>
+								</modifications>
+							</sNode>
+							<sNode prob="0.10" nodeID="nd23">								<!-- node 23 -->
+								<modifications baseRef="nd17">
+									<substitutions numberOfSubst="2">
+										<subst value="7.0">
+											<var idx="4" attr="ub"/>
+										</subst>
+										<subst value="7.0">
+											<var idx="5" attr="ub"/>
+										</subst>
+									</substitutions>
+								</modifications>
+							</sNode>
+						</sNode>
+					</sNode>
+					<sNode prob="0.2" nodeID="nd3"> <!-- node 3 -->
+<!-- Try modifications instead of a separate build 		- this requires more work -->
+						<nodeData>
+							<variables numberOfVariables="4">
+								<var name="sale1" ub="7.0"/>
+								<var name="prod1" ub="10.0"/>
+								<var name="inv1"/>
+								<var name="prod2" ub="10.0"/>
+							</variables>
+							<objectiveCoefficients>
+								<obj numberOfObjCoef="4">
+									<coef idx="1">4.0</coef>
+									<coef idx="2">-3.0</coef>
+									<coef idx="3">-0.5</coef>
+									<coef idx="4">-3.0</coef>
+								</obj>
+							</objectiveCoefficients>
+							<constraints numberOfConstraints="2">
+								<con name="bal1" lb="0" ub="0"/>
+								<con name="avail1" ub="0"/>
+							</constraints>
+							<linearConstraintCoefficients numberOfValues="6">
+								<start>
+									<el mult="3" incr="2">0</el>
+									<el>5</el>
+									<el mult="2">6</el>
+								</start>
+								<rowIdx>
+									<el>0</el>
+									<el>1</el>
+									<el>0</el>
+									<el>1</el>
+									<el>0</el>
+									<el>0</el>
+								</rowIdx>
+								<value>
+									<el>1.0</el>
+									<el>-1.0</el>
+									<el>-1.0</el>
+									<el>1.0</el>
+									<el>1.0</el>
+									<el>-1.0</el>
+								</value>
+							</linearConstraintCoefficients>
+						</nodeData>
+<!--  Make sure the schema allows this...
+						<modifications baseRef="nd2">
+							<substitutions numberOfSubst="1">
+								<subst value="7">
+									<var idx="1" attr="ub"/>
+								</subst>
+							</substitutions>
+							<additions>
+								<variables numberOfVariables="1">
+									<var ub="10.0"/>
+								</variables> 
+								<objectives numberOfObjectives=""   !!!Uh oh - now what??
+							</additions>
+						</modifications>
+-->
+<!-- Node 7: double production, double inventory -->
+						<sNode prob="0.15" nodeID="nd7">							<!-- node 7 -->
+							<nodeData>
+								<variables numberOfVariables="6">
+									<var mult="2" name="sale" ub="3.0"/>
+									<var mult="2" name="prod" ub="10.0"/>
+									<var mult="2" name="inv"/>
+								</variables>
+								<objectiveCoefficients>
+									<obj numberOfObjCoef="6">
+										<coef idx="4">4.0</coef>
+										<coef idx="5">4.0</coef>
+										<coef idx="6">-3.0</coef>
+										<coef idx="7">-3.0</coef>
+										<coef idx="8">-0.5</coef>
+										<coef idx="9">-0.5</coef>
+									</obj>
+								</objectiveCoefficients>
+								<constraints numberOfConstraints="4">
+									<con mult="2" name="bal" ub="0"/>
+									<con mult="2" name="cap"/>
+								</constraints>
+								<linearConstraintCoefficients numberOfValues="12">
+									<start>
+										<el mult="2">0</el>
+										<el mult="2">2</el>
+										<el mult="3" incr="2">4</el>
+										<el mult="4" incr="1">9</el>
+									</start>
+									<rowIdx>
+										<el>0</el>										<el>2</el>
+										<el>1</el>										<el>3</el>
+										<el>0</el>										<el>2</el>
+										<el>1</el>										<el>3</el>
+										<el>0</el>
+										<el>1</el>
+										<el>0</el>
+										<el>1</el>
+									</rowIdx>
+									<value>
+										<el>1.0</el>										<el>-1.0</el>
+										<el>1.0</el>										<el>-1.0</el>
+										<el>-1.0</el>									<el>1.0</el>
+										<el>-1.0</el>									<el>1.0</el>
+										<el>1.0</el>
+										<el>1.0</el>
+										<el>-1.0</el>
+										<el>-1.0</el>
+									</value>
+								</linearConstraintCoefficients>
+							</nodeData>
+							<sNode prob="0.25">       <!-- node 24 -->
+								<modifications baseRef="nd17"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 25 -->
+								<modifications baseRef="nd20"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 26 -->
+								<modifications baseRef="nd23"/>
+							</sNode>
+						</sNode>
+						<sNode prob="0.15">							<!-- node 8 -->
+							<modifications baseRef="nd7">
+								<substitutions numberOfSubst="1">
+									<subst value="5.0">
+										<var idx="5" attr="ub"/>
+									</subst>
+								</substitutions>
+							</modifications>
+							<sNode prob="0.25">       <!-- node 27 -->
+								<modifications baseRef="nd17"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 28 -->
+								<modifications baseRef="nd20"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 29 -->
+								<modifications baseRef="nd23"/>
+							</sNode>
+						</sNode>
+						<sNode prob="0.15">							<!-- node 9 -->
+							<modifications baseRef="nd7">
+								<substitutions numberOfSubst="1">
+									<subst value="5.0">
+										<var idx="4" attr="ub"/>
+									</subst>
+								</substitutions>
+							</modifications>
+							<sNode prob="0.25">       <!-- node 30 -->
+								<modifications baseRef="nd17"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 31 -->
+								<modifications baseRef="nd20"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 32 -->
+								<modifications baseRef="nd23"/>
+							</sNode>
+						</sNode>
+						<sNode prob="0.25">							<!-- node 10 -->
+							<modifications baseRef="nd7">
+								<substitutions numberOfSubst="2">
+									<subst value="5.0">
+										<var idx="4" attr="ub"/>
+									</subst>
+									<subst value="5.0">
+										<var idx="5" attr="ub"/>
+									</subst>
+								</substitutions>
+							</modifications>
+							<sNode prob="0.25">       <!-- node 33 -->
+								<modifications baseRef="nd17"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 34 -->
+								<modifications baseRef="nd20"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 35 -->
+								<modifications baseRef="nd23"/>
+							</sNode>
+						</sNode>
+						<sNode prob="0.10">							<!-- node 11 -->
+							<modifications baseRef="nd7">
+								<substitutions numberOfSubst="2">
+									<subst value="5.0">
+										<var idx="4" attr="ub"/>
+									</subst>
+									<subst value="7.0">
+										<var idx="5" attr="ub"/>
+									</subst>
+								</substitutions>
+							</modifications>
+							<sNode prob="0.25">       <!-- node 36 -->
+								<modifications baseRef="nd17"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 37 -->
+								<modifications baseRef="nd20"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 38 -->
+								<modifications baseRef="nd23"/>
+							</sNode>
+						</sNode>
+						<sNode prob="0.10">							<!-- node 12 -->
+							<modifications baseRef="nd7">
+								<substitutions numberOfSubst="2">
+									<subst value="7.0">
+										<var idx="4" attr="ub"/>
+									</subst>
+									<subst value="5.0">
+										<var idx="5" attr="ub"/>
+									</subst>
+								</substitutions>
+							</modifications>
+							<sNode prob="0.25">       <!-- node 39-->
+								<modifications baseRef="nd17"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 40 -->
+								<modifications baseRef="nd20"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 41 -->
+								<modifications baseRef="nd23"/>
+							</sNode>
+						</sNode>
+						<sNode prob="0.10">							<!-- node 13 -->
+							<modifications baseRef="nd7">
+								<substitutions numberOfSubst="2">
+									<subst value="7.0">
+										<var idx="4" attr="ub"/>
+									</subst>
+									<subst value="7.0">
+										<var idx="5" attr="ub"/>
+									</subst>
+								</substitutions>
+							</modifications>
+							<sNode prob="0.25">       <!-- node 42 -->
+								<modifications baseRef="nd17"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 43 -->
+								<modifications baseRef="nd20"/>
+							</sNode>
+							<sNode prob="0.25">       <!-- node 44 -->
+								<modifications baseRef="nd23"/>
+							</sNode>
+						</sNode>
+					</sNode>
+				</rootNode>
+			</nodalTree>
+		</stochasticData>
+	</instanceData>
+</osil>
