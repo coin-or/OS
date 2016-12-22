@@ -3426,7 +3426,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="coefIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="varIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
 				<xs:documentation>required if attr="coef"</xs:documentation>
 			</xs:annotation>
@@ -3491,18 +3491,18 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponent">
-		<xs:choice minOccurs="0">
-			<xs:element name="variable" type="UpdateableProblemComponentVariable">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="var" type="UpdateableProblemComponentVariable">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="objective" type="UpdateableProblemComponentObjective">
+			<xs:element name="obj" type="UpdateableProblemComponentObjective">
 				<xs:annotation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the objective</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="constraint" type="UpdateableProblemComponentConstraint">
+			<xs:element name="con" type="UpdateableProblemComponentConstraint">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
@@ -3512,7 +3512,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the constraint matrix</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="quadraticCoefficient" type="UpdateableProblemComponentQuadraticCoefficient">
+			<xs:element name="qCoef" type="UpdateableProblemComponentQuadraticCoefficient">
 				<xs:annotation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the quadratic expressions</xs:documentation>
 				</xs:annotation>
@@ -5050,10 +5050,16 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:element name="stochasticElements" type="UpdateableProblemComponent" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of children must agree with numberOfStochasticElements</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="rootScenario" type="RootScenario-2016-10-05"/>
 			<xs:element name="scenario" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfStochasticElements" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="mode" default="replace">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -5066,29 +5072,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="RootScenario-2016-10-05">
 		<xs:sequence>
-			<xs:element name="stochEl" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfStochEl</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="changesFromCore" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="idx" type="SizelessNonNegativeIntVector">
-							<xs:annotation>
-								<xs:documentation>index refers to location within list of stochastic elements. Size of vector must agree with numberOfChanges</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-						<xs:element name="value" type="SizelessDoubleVector">
-							<xs:annotation>
-								<xs:documentation>size of vector must agree with numberOfChanges</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="changesFromCore" type="ChangesInScenario" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="prob" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
@@ -5097,12 +5082,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="base" type="xs:string"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0"/>
-		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfChanges" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>
-	<xs:complexType name="Scenario-2016-10-05">
+	<xs:complexType name="ChangesInScenario">
 		<xs:sequence>
 			<xs:element name="idx" type="SizelessNonNegativeIntVector">
 				<xs:annotation>
@@ -5115,7 +5099,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="Scenario-2016-10-05">
+		<xs:sequence>
+			<xs:element name="changesFromParentOrBase" type="ChangesInScenario" minOccurs="0"/>
+		</xs:sequence>
 		<xs:attribute name="parent" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="prob" use="required">
 			<xs:simpleType>
@@ -5129,9 +5117,10 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfChanges" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>changes are relative to parent or, if presnt, the base scenario</xs:documentation>
+				<xs:documentation>changes are relative to parent or, if present, the base scenario</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTree-2016-10-05">
 		<xs:complexContent>
@@ -5310,17 +5299,27 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element name="variables" type="Variables" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the variables in the linking ancestor nodes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectiveCoefficients" type="NodalObjectiveCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>to add objective coefficients for variables in the currrent node into previously defined objectives</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="additionalObjectives" type="Objectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>the indexing is cumulative. additional objectives are added below the indices of previously defined objectives.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="constraints" type="Constraints" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the constraints in the linking ancestor nodes.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0</xs:documentation>
+					<xs:documentation>includes matrices on and below the diagonal. Variable indices are offset by the variables in the linking ancestor nodes</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0">
@@ -5330,7 +5329,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the expressions in the linking ancestor nodes.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
@@ -5428,6 +5427,19 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NodalObjectiveCoefficients">
+		<xs:sequence>
+			<xs:element name="obj" type="NodalObjective" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="NodalObjective">
+		<xs:sequence>
+			<xs:element name="coef" type="ObjCoef" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:negativeInteger" default="-1"/>
+		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodeModifications-2016-10-05">
 		<xs:annotation>
