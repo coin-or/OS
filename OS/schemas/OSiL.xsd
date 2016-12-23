@@ -5639,11 +5639,12 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
-			<xs:element name="simpleRecourse" type="SoftConstraintsSimpleRecourse" minOccurs="0"/>
-			<xs:element name="quadraticPenalty" type="SoftConstraintsRobustOptimization" minOccurs="0"/>
-			<xs:element name="piecewiseLinearQuadratic" type="SoftConstraintsPiecewiseLinearQuadraticPenalty" minOccurs="0"/>
-			<xs:element name="userDefinedPenalty" type="SoftConstraintsUserDefinedPenalty" minOccurs="0"/>
+		<xs:choice minOccurs="0">
+			<xs:element name="simpleRecourse" type="SoftConstraintsSimpleRecourse"/>
+			<xs:element name="quadraticPenalty" type="SoftConstraintsQuadraticPenalty"/>
+			<xs:element name="userDefinedPenalty" type="SoftConstraintsUserDefinedPenalty"/>
+			<xs:element name="chanceConstraint" type="SoftConstraintsSimpleChanceConstraint"/>
+			<xs:element name="integratedChanceConstraint" type="SoftConstraintsSimpleIntegratedChanceConstraint"/>
 		</xs:choice>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional" default="-1"/>
@@ -5663,7 +5664,7 @@ Default: identity matrix.</xs:documentation>
 		<xs:attribute name="quadraticSurplusPenalty" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticFactor" type="PositiveDouble" use="optional" default="2.0"/>
 	</xs:complexType>
-	<xs:complexType name="SoftConstraintsPiecewiseLinearQuadraticPenalty">
+	<xs:complexType name="SoftConstraintsQuadraticPenalty">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -5671,7 +5672,11 @@ Default: identity matrix.</xs:documentation>
 		<xs:attribute name="linearSurplusParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticShortageParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticSurplusParam" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="quadraticFactor" type="PositiveDouble" use="optional" default="2.0"/>
+		<xs:attribute name="piecewiseLinearQuadratic" type="xs:boolean" default="false">
+			<xs:annotation>
+				<xs:documentation>if true, sets up Rockafellar's piecewise linear-quadratic penalties</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsUserDefinedPenalty">
 		<xs:annotation>
@@ -5777,7 +5782,6 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" type="Probability" use="optional" default="0.0"/>
 		<xs:attribute name="ub" type="Probability" use="optional" default="1.0"/>
 	</xs:complexType>
@@ -5824,7 +5828,6 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 	</xs:complexType>
@@ -5919,36 +5922,33 @@ Default: identity matrix.</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraints-2016-10-05">
 		<xs:sequence>
-			<xs:element name="con" type="SoftConstraint-2016-10-05">
+			<xs:element name="single" type="SingleSoftConstraint-2016-10-05" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>must agree with numberOfCon</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="joint-2016-dec-23">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="con" type="JointSoftConstraint-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+					<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SoftConstraint-2016-10-05">
+		<xs:choice minOccurs="0" maxOccurs="unbounded"/>
+	</xs:complexType>
+	<xs:complexType name="SingleSoftConstraint-2016-10-05">
+		<xs:sequence>
+			<xs:element name="con" type="SoftConstraintsPenaltiesRow">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="SoftConstraint-2016-10-05">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="single" type="SingleSoftConstraint-2016-10-05">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="joint" type="JointSoftConstraint-2016-10-05">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:choice>
-	</xs:complexType>
-	<xs:complexType name="SingleSoftConstraint-2016-10-05">
-		<xs:choice>
-			<xs:element name="penalty" type="SoftConstraintsPenaltiesRow"/>
-			<xs:element name="chanceConstraint" type="SoftConstraintsSimpleChanceConstraint"/>
-			<xs:element name="integratedChanceConstraint" type="SoftConstraintsSimpleIntegratedChanceConstraint"/>
-		</xs:choice>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" default="-1"/>
 	</xs:complexType>
 	<xs:complexType name="JointSoftConstraint-2016-10-05">
 		<xs:sequence>
@@ -5958,6 +5958,7 @@ Default: identity matrix.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:choice>
+				<xs:element name="userDefinedPenalty" type="SoftConstraintsUserDefinedPenalty"/>
 				<xs:element name="chanceConstraint" type="SoftConstraintsJointChanceConstraint"/>
 				<xs:element name="integratedChanceConstraint" type="SoftConstraintsJointIntegratedChanceConstraint"/>
 			</xs:choice>
