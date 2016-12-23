@@ -3904,65 +3904,43 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="variables" minOccurs="0">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="IntVector">
-							<xs:attribute name="startIdx" type="xs:nonNegativeInteger">
-								<xs:annotation>
-									<xs:documentation>Index list must be empty if startIdx is used and else must match numberOfEl </xs:documentation>
-								</xs:annotation>
-							</xs:attribute>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="objectives" minOccurs="0">
+			<xs:element name="variables" type="TimeStageVariables-2016-Dec-23" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>If missing, assume ALL objectives are included</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="IntVector">
-							<xs:attribute name="startIdx" type="xs:negativeInteger">
-								<xs:annotation>
-									<xs:documentation>Index list must be empty if startIdx is used and must match numberOfEl otherwise</xs:documentation>
-								</xs:annotation>
-							</xs:attribute>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
 			</xs:element>
-			<xs:element name="constraints" minOccurs="0">
+			<xs:element name="objectives" type="TimeStageObjectives-2016-Dec-23" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>If missing, assume numberOfConstraints=0</xs:documentation>
+					<xs:documentation>proposal. If missing, assume ALL objectives are included</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="IntVector">
-							<xs:attribute name="startIdx" type="xs:nonNegativeInteger">
-								<xs:annotation>
-									<xs:documentation>Index list must be empty if startIdx is used and must match numberOfEl otherwise</xs:documentation>
-								</xs:annotation>
-							</xs:attribute>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
+			</xs:element>
+			<xs:element name="constraints" type="TimeStageConstraints-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal. If missing, assume numberOfConstraints=0</xs:documentation>
+				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="ComponentVariables">
+	<xs:complexType name="TimeStageVariables-2016-Dec-23">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfVariables otherwise</xs:documentation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfVar otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" type="IntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="SizelessNonNegativeIntVector">
+							<xs:attribute name="linking" type="xs:boolean" default="false"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageVar">
@@ -3975,17 +3953,25 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="ComponentConstraints">
+	<xs:complexType name="TimeStageConstraints-2016-Dec-23">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfConstraints otherwise</xs:documentation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfCon otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="con" type="TimeDomainStageCon" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="SizelessNonNegativeIntVector">
+							<xs:attribute name="linking" type="xs:boolean" default="false"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageCon">
@@ -3998,17 +3984,17 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="ComponentObjectives">
+	<xs:complexType name="TimeStageObjectives-2016-Dec-23">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfObjectives otherwise</xs:documentation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfObj otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="obj" type="TimeDomainStageObj" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageObj">
@@ -5050,6 +5036,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="stochasticElements" type="UpdateableProblemComponent" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>number of children must agree with numberOfStochasticElements</xs:documentation>
@@ -5457,6 +5448,11 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 	</xs:complexType>
 	<xs:complexType name="ImplicitTree-2016-10-05">
 		<xs:sequence>
+			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="block" type="ImplicitTreeBlock-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfBlocks.
