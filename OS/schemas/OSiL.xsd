@@ -1902,13 +1902,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="ModifyingOperations">
-				<xs:choice>
-					<xs:element name="baseFile" type="ModificationBaseFile" default="this" minOccurs="0">
+				<xs:choice minOccurs="0">
+					<xs:element name="baseFile" type="ModificationBaseFile" default="this">
 						<xs:annotation>
 							<xs:documentation>reference to an OSiL file containing the base for the current modifications</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-					<xs:element name="baseID" type="xs:string" minOccurs="0">
+					<xs:element name="baseID" type="xs:string">
 						<xs:annotation>
 							<xs:documentation>reference to a previous modification available in memory</xs:documentation>
 						</xs:annotation>
@@ -2108,12 +2108,16 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteQuadraticCoefficients">
 		<xs:sequence>
-			<xs:element name="qTerm" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="qTerm" minOccurs="0">
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="ModificationDeleteQTerm">
-							<xs:attribute name="lagOne" type="xs:nonNegativeInteger" default="0"/>
-							<xs:attribute name="lagTwo" type="xs:nonNegativeInteger" default="0"/>
+							<xs:attribute name="idxType" type="NodalTreeIndexType" default="local"/>
+							<xs:attribute name="idxModifier" type="xs:nonNegativeInteger" default="0"/>
+							<xs:attribute name="idxOneType" type="NodalTreeIndexType" default="local"/>
+							<xs:attribute name="idxOneModifier" type="xs:nonNegativeInteger" default="0"/>
+							<xs:attribute name="idxTwoType" type="NodalTreeIndexType" default="local"/>
+							<xs:attribute name="idxTwoModifier" type="xs:nonNegativeInteger" default="0"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -2456,8 +2460,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:annotation>
 			<xs:documentation>experiment </xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="substitutions" type="NodalTreeModificationUpdates-2016-12-26" minOccurs="0">
+		<xs:sequence>
+			<xs:element name="substitutions" type="ModificationUpdates" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -3985,11 +3989,56 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>proposal. If missing, assume numberOfConstraints=0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="matrixVariables" type="TimeStageMatrixVariables-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixObjectives" type="TimeStageMatrixObjectives-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal. If missing, assume ALL objectives are included</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixConstraints" type="TimeStageMatrixConstraints-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal. If missing, assume numberOfConstraints=0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexVariables" type="TimeStageComplexVariables-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexObjectives" type="TimeStageComplexObjectives-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment. If missing, assume ALL objectives are included</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexConstraints" type="TimeStageComplexConstraints-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment. If missing, assume numberOfConstraints=0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorVariables" type="TimeStageTensorVariables-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorObjectives" type="TimeStageTensorObjectives-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment. If missing, assume ALL objectives are included</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorConstraints" type="TimeStageTensorConstraints-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment. If missing, assume numberOfConstraints=0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="eventsFollowDecisions" type="xs:boolean" default="false">
 			<xs:annotation>
-				<xs:documentation>events and decisions can share a stage. By default events precede all decisions. This attribute can be used to reverse the order. </xs:documentation>
+				<xs:documentation>events and decisions can share a stage. By default events precede all decisions in a stage. This attribute can be used to reverse the order. </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -4001,15 +4050,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>List must be empty if startIdx is used and must match numberOfVar otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="SizelessNonNegativeIntVector">
-							<xs:attribute name="linking" type="xs:boolean" default="false"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
@@ -4032,15 +4073,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>List must be empty if startIdx is used and must match numberOfCon otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="SizelessNonNegativeIntVector">
-							<xs:attribute name="linking" type="xs:boolean" default="false"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
@@ -4071,6 +4104,201 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	<xs:complexType name="TimeDomainStageObj">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TimeStageMatrixVariables-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfMatrixVar otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="matrixVar" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageMatrixVar">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="TimeStageMatrixConstraints-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfMatrixCon otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="matrixCon" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageMatrixCon">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="TimeStageMatrixObjectives-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfMatrixObj otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="matrixObj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageMatrixObj">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TimeStageComplexVariables-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfVar otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageComplexVar">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="TimeStageComplexConstraints-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfCon otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageComplexCon">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="TimeStageComplexObjectives-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfObj otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageComplexObj">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TimeStageTensorVariables-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfTensorVar otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageTensorVar">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="TimeStageTensorConstraints-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfTensorCon otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageTensorCon">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="TimeStageTensorObjectives-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfTensorObj otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeDomainStageTensorObj">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
 	</xs:complexType>
@@ -5546,14 +5774,29 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:documentation>index of the constraint or objective</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local">
+			<xs:annotation>
+				<xs:documentation>LOCAL/lag/stage/node</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxModifier" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>completes the index references if idxType is not local.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>index of the first variable</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lagOne" type="xs:integer" default="0">
+		<xs:attribute name="idxOneType" type="NodalTreeIndexType" default="local">
 			<xs:annotation>
-				<xs:documentation>lag for the first variable</xs:documentation>
+				<xs:documentation>LOCAL/lag/stage/node</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxOneModifier" type="xs:integer" default="0">
+			<xs:annotation>
+				<xs:documentation>completes the index references if idxType is not local.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required">
@@ -5561,9 +5804,14 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				<xs:documentation>index of the second variable</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lagTwo" type="xs:integer" default="0">
+		<xs:attribute name="idxTwoType" type="NodalTreeIndexType" default="local">
 			<xs:annotation>
-				<xs:documentation>lag for the second variable</xs:documentation>
+				<xs:documentation>LOCAL/lag/stage/node</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxTwoModifier" type="xs:integer" default="0">
+			<xs:annotation>
+				<xs:documentation>completes the index references if idxType is not local.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="coef" type="xs:double" use="optional" default="1">
@@ -5579,7 +5827,11 @@ quadratic term</xs:documentation>
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="LinearConstraintCoefficients">
-							<xs:attribute name="lag" type="xs:integer"/>
+							<xs:attribute name="lag" type="xs:integer" default="0">
+								<xs:annotation>
+									<xs:documentation>positive lag refrs to  ancestor nodes, negative lag pertains to ALL descendant nodes at the indicated level</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -5591,29 +5843,50 @@ quadratic term</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>experiment </xs:documentation>
 		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="ModifyingOperations">
-				<xs:attribute name="baseRef" type="xs:IDREF">
-					<xs:annotation>
-						<xs:documentation>used to identify another node in the tree as a base from which the current node inherits data</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-			</xs:extension>
-		</xs:complexContent>
+		<xs:sequence>
+			<xs:element name="substitutions" type="ModificationUpdates" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="deletions" type="NodalTreeModificationDeletions-2016-12-26" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="additions" type="NodalTreeModificationAdditions-2016-12-26" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="NodeModifications-2016-12-26">
 		<xs:annotation>
 			<xs:documentation>experiment </xs:documentation>
 		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="ModifyingOperations">
-				<xs:attribute name="baseRef" type="xs:IDREF">
-					<xs:annotation>
-						<xs:documentation>used to identify another node in the tree as a base from which the current node inherits data</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-			</xs:extension>
-		</xs:complexContent>
+		<xs:sequence>
+			<xs:element name="substitutions" type="NodalTreeModificationUpdates-2016-12-26" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="deletions" type="NodalTreeModificationDeletions-2016-12-26" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="additions" type="NodalTreeModificationAdditions-2016-12-26" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="baseRef" type="xs:IDREF">
+			<xs:annotation>
+				<xs:documentation>used to identify another node in the tree as a base from which the current node inherits data</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="NodalUpdateableProblemComponentVariable-2016-12-26">
 		<xs:annotation>
@@ -5726,17 +5999,10 @@ quadratic term</xs:documentation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="linearConstraintCoefficient">
+			<xs:element name="linearConstraintCoefficient" type="NodelTreeUpdateableProblemComponentLinearConstraintCoefficient-2016-12-26">
 				<xs:annotation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the constraint matrix</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="UpdateableProblemComponentLinearConstraintCoefficient">
-							<xs:attribute name="blockIdx" type="xs:nonNegativeInteger" default="0"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
 			</xs:element>
 			<xs:element name="qCoef">
 				<xs:annotation>
@@ -5745,8 +6011,12 @@ quadratic term</xs:documentation>
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="UpdateableProblemComponentQuadraticCoefficient">
-							<xs:attribute name="lagOne" type="xs:nonNegativeInteger" default="0"/>
-							<xs:attribute name="lagTwo" type="xs:nonNegativeInteger" default="0"/>
+							<xs:attribute name="rowIdxType" type="NodalTreeIndexType" default="local"/>
+							<xs:attribute name="rowIdxModifier" type="xs:nonNegativeInteger" default="0"/>
+							<xs:attribute name="idxOneType" type="NodalTreeIndexType" default="local"/>
+							<xs:attribute name="idxOneModifier" type="xs:nonNegativeInteger" default="0"/>
+							<xs:attribute name="idxTwoType" type="NodalTreeIndexType" default="local"/>
+							<xs:attribute name="idxTwoModifier" type="xs:nonNegativeInteger" default="0"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -5769,6 +6039,13 @@ quadratic term</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="NodelTreeUpdateableProblemComponentLinearConstraintCoefficient-2016-12-26">
+		<xs:complexContent>
+			<xs:extension base="UpdateableProblemComponentLinearConstraintCoefficient">
+				<xs:attribute name="blockIdx" type="xs:nonNegativeInteger" default="0"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationDeletions-2016-12-26">
 		<xs:sequence>
 			<xs:element name="variables" type="ModificationDeleteVariables" minOccurs="0">
@@ -5785,6 +6062,14 @@ quadratic term</xs:documentation>
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
+			</xs:element>
+			<xs:element name="linearConstraintBlocks" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="block" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+					<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
 			</xs:element>
 			<xs:element name="linearConstraintCoefficients" type="ModificationDeleteLinearConstraintCoefficients" minOccurs="0">
 				<xs:annotation>
@@ -5966,9 +6251,16 @@ quadratic term</xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="linearConstraintCoefficients" type="ModificationAddLinearConstraintCoefficients" minOccurs="0">
+			<xs:element name="linearConstraintCoefficients" type="NodalTreeModificationAddLinearConstraintCoefficients-2016-12-26" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>experiment
+To add coefficients one at a time</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="linearConstraintBlocks" type="NodalTreeModificationAddLinearConstraintBlocks-2016-12-26" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment
+To add entire coefficient blocks more efficiently</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="quadraticCoefficients" type="ModificationAddQuadraticCoefficients" minOccurs="0">
@@ -6086,6 +6378,13 @@ quadratic term</xs:documentation>
 		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationAddLinearConstraintCoefficients-2016-12-26">
+		<xs:sequence>
+			<xs:element name="el" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
+	<xs:complexType name="NodalTreeModificationAddLinearConstraintBlocks-2016-12-26">
 		<xs:sequence>
 			<xs:element name="el" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>

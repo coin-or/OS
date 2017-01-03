@@ -3715,6 +3715,14 @@ equal tensor rank</xs:documentation>
 			<xs:enumeration value="HermitianLower"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="NodalTreeIndexType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="local"/>
+			<xs:enumeration value="lag"/>
+			<xs:enumeration value="stage"/>
+			<xs:enumeration value="node"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="Descriptor" mixed="true">
 		<xs:choice>
 			<xs:element name="matrix" type="OSMatrix" minOccurs="0" maxOccurs="unbounded"/>
