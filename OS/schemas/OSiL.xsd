@@ -2348,19 +2348,18 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="number" type="xs:string"/>
 			<xs:element name="string" type="xs:string"/>
-			<xs:element name="expr" type="ModificationAddComplexExpr">
-			</xs:element>
+			<xs:element name="expr" type="ModificationAddComplexExpr"/>
 		</xs:choice>
 		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
 	</xs:complexType>
-				<xs:complexType name="ModificationAddComplexExpr" >
-					<xs:choice maxOccurs="unbounded">
-						<xs:element ref="OSnLCNode"/>
-					</xs:choice>
-					<xs:attribute name="idx" type="xs:int" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
+	<xs:complexType name="ModificationAddComplexExpr">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element ref="OSnLCNode"/>
+		</xs:choice>
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
 	<xs:simpleType name="ModificationType">
 		<xs:annotation>
 			<xs:documentation>experiment </xs:documentation>
@@ -2382,7 +2381,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="deletions" type="NodalTreeModificationDeletions-2016-12-26" minOccurs="0">
+			<xs:element name="deletions" type="ModificationDeletions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -2859,8 +2858,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="nl" minOccurs="0" maxOccurs="unbounded" type="DisjunctionNl">
-			</xs:element>
+			<xs:element name="nl" type="DisjunctionNl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2868,11 +2866,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-							<xs:attribute name="idx" use="required">
-								<xs:annotation>
-									<xs:documentation>refers to an idx in the list of nonlinear expressions</xs:documentation>
-								</xs:annotation>
-							</xs:attribute>
+		<xs:attribute name="idx" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to an idx in the list of nonlinear expressions</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionMatrixExpressions">
 		<xs:annotation>
@@ -3175,29 +3173,21 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0">
-			<xs:element name="var" type="StochasticNumberVar"/>
-			<xs:element name="obj" type="StochasticNumberObj"/>
-			<xs:element name="con" type="StochasticNumberCon"/>
-			<xs:element name="el" type="StochasticNumberLinearConstraintCoefficientsEl"/>
-			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm"/>
-			<xs:element name="nlNumber" type="StochasticNumberNonlinearExpressionsNumber"/>
-			<xs:element name="coneVar" type="StochasticNumberConeVar"/>
-			<xs:element name="genericParam" type="StochasticNumberGeneric"/>
-		</xs:choice>
-		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="GeneralEnumerationVarType" use="optional" default="C"/>
-		<xs:attribute name="lb" type="xs:double" use="optional"/>
-		<xs:attribute name="ub" type="xs:double" use="optional"/>
-		<xs:attribute name="nominalValue" type="xs:double" use="optional"/>
-		<xs:attribute name="incr">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minInclusive value="0"/>
-					<xs:maxInclusive value="INF"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:complexContent>
+			<xs:extension base="UpdateableProblemComponent">
+				<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
+				<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+				<xs:attribute name="type" type="GeneralEnumerationVarType" use="optional" default="C"/>
+				<xs:attribute name="nominalValue" type="xs:double" use="optional" default="0.0"/>
+				<xs:attribute name="incr" type="xs:double">
+					<xs:annotation>
+						<xs:documentation>default is (ub-lb)</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="id" type="xs:ID"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="ParamSetRowInCore">
 		<xs:annotation>
@@ -3290,7 +3280,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number of the dist child elements must agree with numberOfDist</xs:documentation>
 			</xs:annotation>
-			<xs:element name="dist" minOccurs="0" maxOccurs="unbounded" type="StochasticDistribution">
+			<xs:element name="dist" type="StochasticDistribution" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -3503,6 +3493,74 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
+	</xs:complexType>
+	<xs:group name="UpdateableProblemComponent_test">
+		<xs:choice>
+			<xs:element name="var" type="UpdateableProblemComponentVariable">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="obj" type="UpdateableProblemComponentObjective">
+				<xs:annotation>
+					<xs:documentation>draft - may NOT change the sparsity pattern of the objective</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="con" type="UpdateableProblemComponentConstraint">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="linearConstraintCoefficient" type="UpdateableProblemComponentLinearConstraintCoefficient">
+				<xs:annotation>
+					<xs:documentation>draft - may NOT change the sparsity pattern of the constraint matrix</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qCoef" type="UpdateableProblemComponentQuadraticCoefficient">
+				<xs:annotation>
+					<xs:documentation>draft - may NOT change the sparsity pattern of the quadratic expressions</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OSnLNode" type="UpdateableProblemComponentNlNode">
+				<xs:annotation>
+					<xs:documentation>draft - refer to any OSnLNode in any nonlinear expression, including matrix constructs</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixElement" type="UpdateableProblemComponentMatrixElement">
+				<xs:annotation>
+					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="Param_test">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="UpdateableProblemComponent_test"/>
+			<xs:element name="genericParameter" type="StochasticNumberGeneric"/>
+		</xs:choice>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="type" type="GeneralEnumerationVarType" use="optional" default="C"/>
+		<xs:attribute name="nominalValue" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="incr" type="xs:double">
+			<xs:annotation>
+				<xs:documentation>default is (ub-lb)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationUpdates_test">
+		<xs:sequence>
+			<xs:element name="subst" type="ModificationsUpdateableProblemComponent_test" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationsUpdateableProblemComponent_test">
+		<xs:sequence>
+			<xs:group ref="UpdateableProblemComponent_test"/>
+		</xs:sequence>
+		<xs:attribute name="value" type="xs:double" use="required"/>
 	</xs:complexType>
 	<!--RealTimeData: recommendation-->
 	<xs:complexType name="old_RealTimeData">
@@ -3841,10 +3899,10 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:choice>
 	</xs:complexType>
-				<xs:complexType name="TimeDomainInterval">
-					<xs:attribute name="start" type="xs:double" use="optional" default="0"/>
-					<xs:attribute name="horizon" type="xs:double" use="optional" default="INF"/>
-				</xs:complexType>
+	<xs:complexType name="TimeDomainInterval">
+		<xs:attribute name="start" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="horizon" type="xs:double" use="optional" default="INF"/>
+	</xs:complexType>
 	<xs:complexType name="TimeStages">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
@@ -4213,20 +4271,19 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="uncertaintySets" minOccurs="0" type="UncertaintySets">
-			</xs:element>
+			<xs:element name="uncertaintySets" type="UncertaintySets" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
-				<xs:complexType name="UncertaintySets-save">
-					<xs:sequence>
-						<xs:element name="uncertaintySet" type="UncertaintySet" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>proposal</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfUncertaintySets" use="required"/>
-				</xs:complexType>
+	<xs:complexType name="UncertaintySets-save">
+		<xs:sequence>
+			<xs:element name="uncertaintySet" type="UncertaintySet" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfUncertaintySets" use="required"/>
+	</xs:complexType>
 	<!--StochasticInformation: proposal-->
 	<xs:complexType name="StochasticData">
 		<xs:annotation>
@@ -4397,8 +4454,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:annotation>
 				<xs:documentation>Number must match numberOfRandomFunctions</xs:documentation>
 			</xs:annotation>
-			<xs:element name="randomFunction" minOccurs="0" maxOccurs="unbounded" type="StochasticRandomFunction">
-			</xs:element>
+			<xs:element name="randomFunction" type="StochasticRandomFunction" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRandomFunctions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -4706,7 +4762,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
-							<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticRandomFunctionRows">
 		<xs:annotation>
@@ -5051,7 +5107,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="distIdx" type="xs:nonNegativeInteger"/>
-			<xs:element name="randomElement" minOccurs="0" maxOccurs="unbounded" type="RandomElement">
+			<xs:element name="randomElement" type="RandomElement" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfRandomElements</xs:documentation>
 				</xs:annotation>
@@ -5061,17 +5117,17 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="refreshPoint"/>
 		<xs:attribute name="numberOfRandomElements" use="required"/>
 	</xs:complexType>
-				<xs:complexType name="RandomElement">
-					<xs:sequence>
-						<xs:element name="idx" type="xs:nonNegativeInteger"/>
-						<xs:element name="targetComponent" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>number must agree with numberOfTargetComponents</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfTargetComponents" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
+	<xs:complexType name="RandomElement">
+		<xs:sequence>
+			<xs:element name="idx" type="xs:nonNegativeInteger"/>
+			<xs:element name="targetComponent" type="UpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfTargetComponents</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfTargetComponents" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="new_StochasticDataElement">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
@@ -5125,7 +5181,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>number must agree with numberOfDataPoints</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="targetComponent" minOccurs="0" maxOccurs="unbounded" type="TargetComponent_mark3">
+			<xs:element name="targetComponent" type="TargetComponent_mark3" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfTargetComponents</xs:documentation>
 				</xs:annotation>
@@ -5140,13 +5196,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
-				<xs:complexType name="TargetComponent_mark3">
-					<xs:complexContent>
-						<xs:extension base="UpdateableProblemComponent">
-							<xs:attribute name="constant" type="xs:double" default="0.0"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
+	<xs:complexType name="TargetComponent_mark3">
+		<xs:complexContent>
+			<xs:extension base="UpdateableProblemComponent">
+				<xs:attribute name="constant" type="xs:double" default="0.0"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="StochasticDataElement_mark3">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
@@ -5337,8 +5393,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:sequence>
 					<xs:choice minOccurs="0">
 						<xs:element name="nodeData" type="NodeData-2016-10-05"/>
-						<xs:element name="changes" type="ModificationsUpdateableProblemComponent">
-						</xs:element>
+						<xs:element name="changes" type="ModificationsUpdateableProblemComponent"/>
 						<xs:element name="changes2" type="NodeModifications-2016-10-05"/>
 					</xs:choice>
 					<xs:element ref="scenarioNode-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
@@ -5537,7 +5592,7 @@ Experiment.</xs:documentation>
 We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin in "Studies on Graphs and Discrete Programming", 1981. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="complexProgramming" minOccurs="0" type="ComplexProgramming">
+			<xs:element name="complexProgramming" type="ComplexProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -5702,22 +5757,21 @@ quadratic term</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="NodalLinearConstraintCoefficients-2016-12-26">
 		<xs:sequence>
-			<xs:element name="block" minOccurs="0" maxOccurs="unbounded" type="NodalLinearConstraintCoefficientBlock-2016-12-26">
-			</xs:element>
+			<xs:element name="block" type="NodalLinearConstraintCoefficientBlock-2016-12-26" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
-				<xs:complexType name="NodalLinearConstraintCoefficientBlock-2016-12-26">
-					<xs:complexContent>
-						<xs:extension base="LinearConstraintCoefficients">
-							<xs:attribute name="lag" type="xs:integer" default="0">
-								<xs:annotation>
-									<xs:documentation>positive lag refers to  ancestor nodes, negative lag pertains to ALL descendant nodes at the indicated level</xs:documentation>
-								</xs:annotation>
-							</xs:attribute>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
+	<xs:complexType name="NodalLinearConstraintCoefficientBlock-2016-12-26">
+		<xs:complexContent>
+			<xs:extension base="LinearConstraintCoefficients">
+				<xs:attribute name="lag" type="xs:integer" default="0">
+					<xs:annotation>
+						<xs:documentation>positive lag refers to  ancestor nodes, negative lag pertains to ALL descendant nodes at the indicated level</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="NodeModifications-2016-10-05">
 		<xs:annotation>
 			<xs:documentation>experiment </xs:documentation>
@@ -5942,8 +5996,7 @@ quadratic term</xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="linearConstraintBlocks" minOccurs="0" type="NodalTreeModificationDeleteLinearConstraintBlocks-2016-12-26">
-			</xs:element>
+			<xs:element name="linearConstraintBlocks" type="NodalTreeModificationDeleteLinearConstraintBlocks-2016-12-26" minOccurs="0"/>
 			<xs:element name="linearConstraintCoefficients" type="ModificationDeleteLinearConstraintCoefficients" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
@@ -6026,48 +6079,46 @@ quadratic term</xs:documentation>
 		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
-				<xs:complexType name="NodalTreeModificationDeleteLinearConstraintBlocks-2016-12-26">
-					<xs:sequence>
-						<xs:element name="block" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-					<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
+	<xs:complexType name="NodalTreeModificationDeleteLinearConstraintBlocks-2016-12-26">
+		<xs:sequence>
+			<xs:element name="block" type="ModificationDeleteLinearConstraintCoefficients" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationDeleteLinearConstraintCoefficients-2016-12-26">
 		<xs:sequence>
-			<xs:element name="el" minOccurs="0" maxOccurs="unbounded" type="NodalTreeModificationDeleteLinearConstraintEl-2016-12-26">
-			</xs:element>
+			<xs:element name="el" type="NodalTreeModificationDeleteLinearConstraintEl-2016-12-26" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationDeleteLinearConstraintEl-2016-12-26">
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
-							<xs:attribute name="blockIdx" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="blockIdx" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationDeleteQuadraticCoefficients-2016-12-26">
 		<xs:sequence>
-			<xs:element name="qTerm" minOccurs="0" type="NodalTreeModificationDeleteQTerm-2016-12-26">
-			</xs:element>
+			<xs:element name="qTerm" type="NodalTreeModificationDeleteQTerm-2016-12-26" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfQTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationDeleteQTerm-2016-12-26">
-	<!--
+		<xs:complexContent>
+			<xs:extension base="ModificationDeleteQTerm">
+				<xs:attribute name="idxType" type="NodalTreeIndexType" default="local"/>
+				<xs:attribute name="idxModifier" type="xs:nonNegativeInteger" default="0"/>
+				<xs:attribute name="idxOneType" type="NodalTreeIndexType" default="local"/>
+				<xs:attribute name="idxOneModifier" type="xs:nonNegativeInteger" default="0"/>
+				<xs:attribute name="idxTwoType" type="NodalTreeIndexType" default="local"/>
+				<xs:attribute name="idxTwoModifier" type="xs:nonNegativeInteger" default="0"/>
+			</xs:extension>
+		</xs:complexContent>
+		<!--
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="idxOne" use="required"/>
 		<xs:attribute name="idxTwo" use="required"/>
 -->
-					<xs:complexContent>
-						<xs:extension base="ModificationDeleteQTerm">
-							<xs:attribute name="idxType" type="NodalTreeIndexType" default="local"/>
-							<xs:attribute name="idxModifier" type="xs:nonNegativeInteger" default="0"/>
-							<xs:attribute name="idxOneType" type="NodalTreeIndexType" default="local"/>
-							<xs:attribute name="idxOneModifier" type="xs:nonNegativeInteger" default="0"/>
-							<xs:attribute name="idxTwoType" type="NodalTreeIndexType" default="local"/>
-							<xs:attribute name="idxTwoModifier" type="xs:nonNegativeInteger" default="0"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
+	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationDeleteNonlinearExpressions-2016-12-26">
 		<xs:sequence minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="nl" type="ModificationDeleteNl"/>
@@ -6296,19 +6347,18 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="number" type="xs:string"/>
 			<xs:element name="string" type="xs:string"/>
-			<xs:element name="nl" type="NodalTreeModificationAddNl-2016-12-26">
-			</xs:element>
+			<xs:element name="nl" type="NodalTreeModificationAddNl-2016-12-26"/>
 		</xs:choice>
 		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
 	</xs:complexType>
-				<xs:complexType name="NodalTreeModificationAddNl-2016-12-26">
-					<xs:choice maxOccurs="unbounded">
-						<xs:element ref="OSnLNode"/>
-					</xs:choice>
-					<xs:attribute name="idx" type="xs:int" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
+	<xs:complexType name="NodalTreeModificationAddNl-2016-12-26">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element ref="OSnLNode"/>
+		</xs:choice>
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationAddMatrixVariables-2016-12-26">
 		<xs:sequence>
 			<xs:element name="matrixVar" type="MatrixVar" minOccurs="0" maxOccurs="unbounded">
@@ -6337,19 +6387,18 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="number" type="xs:string"/>
 			<xs:element name="string" type="xs:string"/>
-			<xs:element name="expr" type="NodalTreeModificationAddMatrixExpr-2016-12-26">
-			</xs:element>
+			<xs:element name="expr" type="NodalTreeModificationAddMatrixExpr-2016-12-26"/>
 		</xs:choice>
 		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
 	</xs:complexType>
-				<xs:complexType name="NodalTreeModificationAddMatrixExpr-2016-12-26">
-					<xs:choice maxOccurs="unbounded">
-						<xs:element ref="OSnLMNode"/>
-					</xs:choice>
-					<xs:attribute name="idx" type="xs:int" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
+	<xs:complexType name="NodalTreeModificationAddMatrixExpr-2016-12-26">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element ref="OSnLMNode"/>
+		</xs:choice>
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationAddComplexVariables-2016-12-26">
 		<xs:sequence>
 			<xs:element name="complexVar" type="ComplexVar" minOccurs="0" maxOccurs="unbounded">
@@ -6378,19 +6427,18 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="number" type="xs:string"/>
 			<xs:element name="string" type="xs:string"/>
-			<xs:element name="expr" type="NodalTreeModificationAddComplexExpr-2016-12-26">
-			</xs:element>
+			<xs:element name="expr" type="NodalTreeModificationAddComplexExpr-2016-12-26"/>
 		</xs:choice>
 		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
 	</xs:complexType>
-				<xs:complexType name="NodalTreeModificationAddComplexExpr-2016-12-26">
-					<xs:choice maxOccurs="unbounded">
-						<xs:element ref="OSnLCNode"/>
-					</xs:choice>
-					<xs:attribute name="idx" type="xs:int" use="required"/>
-					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
-				</xs:complexType>
+	<xs:complexType name="NodalTreeModificationAddComplexExpr-2016-12-26">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element ref="OSnLCNode"/>
+		</xs:choice>
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+	</xs:complexType>
 	<xs:complexType name="ImplicitTree-2016-10-05">
 		<xs:sequence>
 			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
@@ -6444,12 +6492,12 @@ The random variables referened by distributionIdx are independent from one block
 Each term adds rows to the input vector for the transformation, first the random variable or vector, followed by any references to stochEl.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="ma" minOccurs="0" maxOccurs="unbounded" type="AR-2016-10-05">
+			<xs:element name="ma" type="AR-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfMA. Each moving average term refers to a previously set decision variable, matrix variable, etc. Each reference adds one or more rows to the input vector of the transformation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="transformation" minOccurs="0" type="ImplicitTreeStochasticTransformation-2016-10-05">
+			<xs:element name="transformation" type="ImplicitTreeStochasticTransformation-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term) and transforms this into the vector of stochastic elements. Any random matrices are expanded column by column. 
 Default: identity matrix.</xs:documentation>
@@ -6478,17 +6526,17 @@ Default: identity matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
-				<xs:complexType name="ImplicitTreeStochasticTransformation-2016-10-05">
-					<xs:complexContent>
-						<xs:extension base="StochasticLinearTransformation">
-							<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger" use="required">
-								<xs:annotation>
-									<xs:documentation>refers to a matrix in the "matrices" section.</xs:documentation>
-								</xs:annotation>
-							</xs:attribute>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
+	<xs:complexType name="ImplicitTreeStochasticTransformation-2016-10-05">
+		<xs:complexContent>
+			<xs:extension base="StochasticLinearTransformation">
+				<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>refers to a matrix in the "matrices" section.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="RV-2016-10-05">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
@@ -6514,24 +6562,24 @@ Default: identity matrix.</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
-				<xs:complexType name="AR-2016-10-05">
-					<xs:attribute name="idx" type="xs:integer" use="required"/>
-					<xs:attribute name="type" use="required">
-						<xs:simpleType>
-							<xs:restriction base="xs:string">
-								<xs:enumeration value="var"/>
-								<xs:enumeration value="matrixVar"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:attribute>
-				</xs:complexType>
+	<xs:complexType name="AR-2016-10-05">
+		<xs:attribute name="idx" type="xs:integer" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="var"/>
+					<xs:enumeration value="matrixVar"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
 	<!--SoftConstraints: proposal-->
 	<xs:complexType name="SoftConstraints">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:all>
-			<xs:element name="penalties" minOccurs="0" type="SoftConstraintsPenalties">
+			<xs:element name="penalties" type="SoftConstraintsPenalties" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -6541,7 +6589,7 @@ Default: identity matrix.</xs:documentation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="chanceConstraints" minOccurs="0" type="SoftConstraintsChanceConstraints">
+			<xs:element name="chanceConstraints" type="SoftConstraintsChanceConstraints" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
