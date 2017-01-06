@@ -1180,10 +1180,16 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 2.0 </xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
 				<xs:documentation>Number of various cone child elements must match numberOfCones</xs:documentation>
 			</xs:annotation>
+			<xs:group ref="ConeGroup"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:group name="ConeGroup">
+		<xs:choice>
 			<xs:element name="nonnegativeCone" type="NonnegativeCone"/>
 			<xs:element name="nonpositiveCone" type="NonpositiveCone"/>
 			<xs:element name="generalOrthantCone" type="OrthantCone"/>
@@ -1212,8 +1218,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="polarCone" type="PolarCone"/>
 			<xs:element name="customCone" type="CustomCone"/>
 		</xs:choice>
-		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
+	</xs:group>
 	<xs:complexType name="GenericCone">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
@@ -3456,7 +3461,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponent">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
+		<xs:choice>
+			<!-- minOccurs="0" maxOccurs="unbounded">  -->
 			<xs:element name="var" type="UpdateableProblemComponentVariable">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
