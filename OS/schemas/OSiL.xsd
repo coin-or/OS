@@ -182,19 +182,21 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<!--			
+<!--			
 			<xs:element name="simulations" type="Simulations" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 -->
+<!--			
 			<xs:element name="updateableData" type="UpdateableData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>realTimeData and simulations. experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="new_simulations" type="new_SimulationData" minOccurs="0">
+-->
+			<xs:element name="new_simulations" type="new_Simulations" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -1708,7 +1710,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="new_SimulationData">
+	<xs:complexType name="new_Simulations">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -1728,15 +1730,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:restriction base="RefreshPointEnum"/>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element name="new_simulationDataItem" type="new_SimulationDataItem" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="new_simulation" type="new_Simulation" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with  numberOfDataItems</xs:documentation>
+					<xs:documentation>number must agree with  numberOfSimulations</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfDataItems" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSimulations" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="new_SimulationDataItem">
+	<xs:complexType name="new_Simulation">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
@@ -1748,12 +1750,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:element name="uri" type="xs:anyURI" minOccurs="0"/>
 				<xs:element name="uriAlias" type="xs:nonNegativeInteger" minOccurs="0"/>
 			</xs:choice>
-			<xs:element name="input" type="new_SimulationDataItemInputOrOutput" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="input" type="new_SimulationInputOrOutput" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="output" type="new_SimulationDataItemInputOrOutput" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="output" type="new_SimulationInputOrOutput" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
@@ -1764,20 +1766,20 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="numberOfOutputs" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="refreshPoint"/>
 	</xs:complexType>
-	<xs:complexType name="new_SimulationDataItemInputOrOutput">
+	<xs:complexType name="new_SimulationInputOrOutput">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="new_SimulationDataElement" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="el" type="new_SimulationElement" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>finalization</xs:documentation>
+					<xs:documentation>finalization.  number must agree with numberOfEl</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="new_SimulationDataElement">
+	<xs:complexType name="new_SimulationElement">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
@@ -5679,12 +5681,14 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+<!--
 			<xs:element name="updateableData" type="UpdateableData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>realTimeData and simulations. experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="new_simulations" type="new_SimulationData" minOccurs="0">
+-->
+			<xs:element name="new_simulations" type="new_Simulations" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
