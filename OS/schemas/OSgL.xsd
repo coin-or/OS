@@ -1768,7 +1768,7 @@ equal tensor rank</xs:documentation>
 		<xs:attribute name="min" type="xs:double" use="required"/>
 		<xs:attribute name="max" type="xs:double" use="required"/>
 	</xs:complexType>
-	<xs:element name="betaGeneral">
+	<xs:element name="betaGeneral" type="BetaGeneral">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
@@ -2279,13 +2279,7 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="marginals" minOccurs="0">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="GeneralDistributionRandomVariables"/>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="marginals" type="GeneralDistributionRandomVariables" minOccurs="0"/>
 			<xs:element name="jointDistribution" type="GeneralDistributionMultivariate" minOccurs="0"/>
 			<xs:element name="baseDistribution" type="GeneralDistributionBase" minOccurs="0"/>
 		</xs:sequence>

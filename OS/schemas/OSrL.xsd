@@ -122,19 +122,9 @@
 					<xs:documentation>Dependent jobs that finished before the current job started.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="directoriesPresent" minOccurs="0">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="DirectoriesAndFiles"/>
-					</xs:complexContent>
-				</xs:complexType>
+			<xs:element name="directoriesPresent" minOccurs="0" type="DirectoriesAndFiles">
 			</xs:element>
-			<xs:element name="filesPresent" minOccurs="0">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="DirectoriesAndFiles"/>
-					</xs:complexContent>
-				</xs:complexType>
+			<xs:element name="filesPresent" minOccurs="0" type="DirectoriesAndFiles">
 			</xs:element>
 			<xs:element name="directoriesMade" type="DirectoriesAndFiles" minOccurs="0"/>
 			<xs:element name="filesMade" type="DirectoriesAndFiles" minOccurs="0"/>
@@ -155,12 +145,7 @@
 	</xs:complexType>
 	<xs:complexType name="TimingInformation">
 		<xs:sequence>
-			<xs:element name="time" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="TimeMeasurement"/>
-					</xs:simpleContent>
-				</xs:complexType>
+			<xs:element name="time" minOccurs="0" maxOccurs="unbounded" type="TimeMeasurement">
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfTimes" type="xs:nonNegativeInteger" use="required"/>
@@ -759,18 +744,10 @@ Can specify explicit zeros, which  replace (and perhaps remove) prior informatio
 	</xs:complexType>
 	<xs:complexType name="OtherMatrixProgrammingResult">
 		<xs:sequence>
-			<xs:element name="enumeration" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" minOccurs="0" maxOccurs="unbounded" type="OtherOptionOrResultEnumeration">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="IntVector">
-							<xs:attribute name="value" type="xs:string" use="required"/>
-							<xs:attribute name="description" type="xs:string" use="optional"/>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" use="required">
