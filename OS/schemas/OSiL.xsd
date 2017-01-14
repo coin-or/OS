@@ -182,14 +182,14 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-<!--			
+			<!--			
 			<xs:element name="simulations" type="Simulations" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 -->
-<!--			
+			<!--			
 			<xs:element name="updateableData" type="UpdateableData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>realTimeData and simulations. experiment</xs:documentation>
@@ -5285,6 +5285,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
+			<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="scenarioTree" type="ScenarioTree-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -5300,11 +5305,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="nodalTree-2016-12-26" type="NodalTree-2016-12-26" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
@@ -5605,7 +5605,7 @@ Experiment.</xs:documentation>
 					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g. the expression 2x + 3y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
+			<xs:element name="nonlinearExpressions" type="NodalTreeNonlinearExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the expressions in the linking ancestor nodes.</xs:documentation>
 				</xs:annotation>
@@ -5681,7 +5681,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-<!--
+			<!--
 			<xs:element name="updateableData" type="UpdateableData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>realTimeData and simulations. experiment</xs:documentation>
@@ -5736,12 +5736,12 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 		</xs:attribute>
 		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local">
 			<xs:annotation>
-				<xs:documentation>LOCAL/lag/stage/node</xs:documentation>
+				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxModifier" type="xs:nonNegativeInteger" default="0">
+		<xs:attribute name="idxModifier" type="xs:string">
 			<xs:annotation>
-				<xs:documentation>completes the index references if idxType is not local.</xs:documentation>
+				<xs:documentation>completes the index reference if idxType is not 'local'. For 'lag' and 'stage' must evaluate to a nonnegative integer; for 'node' must be a valid IDREF.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required">
@@ -5751,12 +5751,12 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 		</xs:attribute>
 		<xs:attribute name="idxOneType" type="NodalTreeIndexType" default="local">
 			<xs:annotation>
-				<xs:documentation>LOCAL/lag/stage/node</xs:documentation>
+				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxOneModifier" type="xs:integer" default="0">
+		<xs:attribute name="idxOneModifier" type="xs:string">
 			<xs:annotation>
-				<xs:documentation>completes the index references if idxType is not local.</xs:documentation>
+				<xs:documentation>completes the index reference if idxOneType is not 'local'. For 'lag' and 'stage' must evaluate to a nonnegative integer; for 'node' must be a valid IDREF.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required">
@@ -5766,12 +5766,12 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 		</xs:attribute>
 		<xs:attribute name="idxTwoType" type="NodalTreeIndexType" default="local">
 			<xs:annotation>
-				<xs:documentation>LOCAL/lag/stage/node</xs:documentation>
+				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idxTwoModifier" type="xs:integer" default="0">
+		<xs:attribute name="idxTwoModifier" type="xs:string">
 			<xs:annotation>
-				<xs:documentation>completes the index references if idxType is not local.</xs:documentation>
+				<xs:documentation>completes the index reference if idxTwoType is not 'local'. For 'lag' and 'stage' must evaluate to a nonnegative integer; for 'node' must be a valid IDREF.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="coef" type="xs:double" use="optional" default="1">
@@ -5790,13 +5790,67 @@ quadratic term</xs:documentation>
 	<xs:complexType name="NodalLinearConstraintCoefficientBlock-2016-12-26">
 		<xs:complexContent>
 			<xs:extension base="LinearConstraintCoefficients">
-				<xs:attribute name="lag" type="xs:integer" default="0">
+				<xs:attribute name="lag" type="xs:nonNegativeInteger" default="0"/>
+				<xs:attribute name="laggedConstraints" type="xs:boolean" default="false">
 					<xs:annotation>
-						<xs:documentation>positive lag refers to  ancestor nodes, negative lag pertains to ALL descendant nodes at the indicated level</xs:documentation>
+						<xs:documentation>by default, variables are lagged. If laggedConstraints is TRUE, then constraints are lagged instead.</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NodalTreeNonlinearExpressions">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the child nl elements must agree with numberOfNonlinearExpressions</xs:documentation>
+			</xs:annotation>
+			<xs:element name="nl" type="NodalTreeNl" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>shape attribute added in version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NodalTreeNl">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element ref="OSnLNode"/>
+			<xs:element name="TimeStagedVariable"/>
+		</xs:choice>
+		<xs:attribute name="idx" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>index of constraint or objective row</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local">
+			<xs:annotation>
+				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxModifier" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>completes the index reference if idxType is not 'local'. For 'lag' and 'stage' must evaluate to a nonnegative integer; for 'node' must be a valid IDREF.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="shape" default="unknown">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="constant"/>
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="concave"/>
+					<xs:enumeration value="general"/>
+					<xs:enumeration value="unknown"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="NodeModifications-2016-10-05">
 		<xs:annotation>

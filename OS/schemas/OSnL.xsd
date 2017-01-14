@@ -3869,7 +3869,7 @@ Smallest representable positive number. </xs:documentation>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
 				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
 					<xs:annotation>
-						<xs:documentation>The value of the valueType attribute can be either of
+						<xs:documentation>The value of the valueType attribute must be one of
 “value” (default), “status” (whether the variable is between the bounds, a boolean), “surplus”
 ( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
 					</xs:annotation>
@@ -7245,4 +7245,44 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="weight"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:complexType name="TimeStagedVariable">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="0">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+		<xs:attribute name="idx" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>index of constraint or objective row</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxType" type="xs:string" default="local">
+			<xs:annotation>
+				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxModifier" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>completes the index reference if idxType is not 'local'. For 'lag' and 'stage' must evaluate to a nonnegative integer; for 'node' must be a valid IDREF.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
+				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
+					<xs:annotation>
+						<xs:documentation>The value of the valueType attribute must be one of
+“value” (default), “status” (whether the variable is between the bounds, a boolean), “surplus”
+( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="timeStagedVariable" type="TimeStagedVariable" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to provide a child OSnLNode which evaluates to a nonnegative integer variable index.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 </xs:schema>
