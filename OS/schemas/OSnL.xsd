@@ -4,6 +4,7 @@
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
+	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osnl">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -3866,6 +3867,26 @@ Smallest representable positive number. </xs:documentation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
 				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
 					<xs:annotation>
@@ -3931,6 +3952,26 @@ Returns the current value of the indicated objective</xs:documentation>
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
 					<xs:annotation>
 						<xs:documentation>The value of the valueType attribute can be either of
@@ -5985,6 +6026,26 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -6017,6 +6078,26 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		<xs:complexContent>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -6861,6 +6942,111 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>experiment.. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLCNodeComplexVar">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local" use="optional">
+			<xs:annotation>
+				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexVar" type="OSnLCNodeComplexVar" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a complexVar object. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeComplexObj">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local" use="optional">
+			<xs:annotation>
+				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexObj" type="OSnLCNodeComplexObj" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a complexObj object. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeComplexCon">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local" use="optional">
+			<xs:annotation>
+				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="complexCon" type="OSnLCNodeComplexCon" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a complexCon object. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:simpleType name="NlNodeEnumeration">
 		<xs:annotation>
 			<xs:documentation>since version 2.0.0. </xs:documentation>
@@ -7245,44 +7431,4 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="weight"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:complexType name="TimeStagedVariable">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0">
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-		<xs:attribute name="idx" type="xs:int" use="required">
-			<xs:annotation>
-				<xs:documentation>index of constraint or objective row</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxType" type="xs:string" default="local">
-			<xs:annotation>
-				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxModifier" type="xs:string">
-			<xs:annotation>
-				<xs:documentation>completes the index reference if idxType is not 'local'. For 'lag' and 'stage' must evaluate to a nonnegative integer; for 'node' must be a valid IDREF.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-				<xs:attribute name="valueType" type="rangedConstraintValueType" use="optional" default="value">
-					<xs:annotation>
-						<xs:documentation>The value of the valueType attribute must be one of
-“value” (default), “status” (whether the variable is between the bounds, a boolean), “surplus”
-( (value − ub)+ ), or “shortage” ( (lb − value)+ ), "lb" (value of the lower bound), "ub" (value of the upper bound).</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="timeStagedVariable" type="TimeStagedVariable" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0.  If idx attribute is absent, you will need to provide a child OSnLNode which evaluates to a nonnegative integer variable index.</xs:documentation>
-		</xs:annotation>
-	</xs:element>
 </xs:schema>
