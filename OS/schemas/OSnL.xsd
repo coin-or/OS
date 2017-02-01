@@ -4000,49 +4000,6 @@ Returns the current value of the indicated objective</xs:documentation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!-- removed 23 October 2015 	
-	<xs:complexType name="OSnLNodeQTerm">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>the tree can serve as an alternate way to specify the coefficient.</xs:documentation>
-					</xs:annotation>
-					<xs:element ref="OSnLNode"/>
-				</xs:sequence>
-				<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="qTerm" type="OSnLNodeQTerm" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="OSnLNodeQuadratic">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
-					<xs:element ref="qTerm"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="quadratic" type="OSnLNodeQuadratic" substitutionGroup="OSnLNode">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0. 
-Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:documentation>
-		</xs:annotation>
-	</xs:element>
--->
 	<xs:complexType name="OSnLNodeParameter">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0. </xs:documentation>
@@ -5788,6 +5745,23 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixDotExp" type="OSnLNodeMatrixDotExp" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixKroneckerProduct">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixKroneckerProduct" type="OSnLNodeMatrixKroneckerProduct" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>

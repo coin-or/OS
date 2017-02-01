@@ -1279,7 +1279,7 @@ Each nonzero is a complex-valued expression</xs:documentation>
 		<xs:sequence>
 			<xs:element name="dimensions" type="PositiveIntVector" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>numnber of elements in dimensions vector must equal tensor rank</xs:documentation>
+					<xs:documentation>number of elements in dimensions vector must equal tensor rank. Dimensions may be omitted if rank=0.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="element" type="tensorElement" minOccurs="0" maxOccurs="unbounded">
