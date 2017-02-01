@@ -34,6 +34,19 @@
 			<xs:documentation> recommendation. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLTNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation> experiment. This is a generic tensor node from which we derive tensor operator nodes</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent mixed="false">
+			<xs:extension base="ExprNode"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OSnLTNode" type="OSnLTNode" abstract="true" substitutionGroup="ExprNode">
+		<xs:annotation>
+			<xs:documentation> experiment. Set abstract to true in order to create a substitution group</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="ScalarNode" mixed="false">
 		<xs:annotation>
 			<xs:documentation> draft. This is a generic expression node from which we derive OSnLNode and OSnLCNode</xs:documentation>
@@ -6003,6 +6016,23 @@ Short-hand notation for a quadratic subtree (sum of quadratic terms).</xs:docume
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixKroneckerProduct">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixKroneckerProduct" type="OSnLNodeMatrixKroneckerProduct" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixReference">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -6949,26 +6979,26 @@ second is imaginary part</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local" use="optional">
-			<xs:annotation>
-				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -6984,26 +7014,26 @@ second is imaginary part</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local" use="optional">
-			<xs:annotation>
-				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -7019,26 +7049,26 @@ second is imaginary part</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLCNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="idxType" type="NodalTreeIndexType" default="local" use="optional">
-			<xs:annotation>
-				<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
-			<xs:annotation>
-				<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -7047,6 +7077,291 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. Must refer to a valid index of a complexCon object. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<!--Tensor Nodes: experimental  -->
+
+
+	<xs:complexType name="OSnLNodeTensorRank">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLTNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorRank" type="OSnLNodeTensorRank" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="OSnLNodeTensorCovalence">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLTNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorCovalence" type="OSnLNodeTensorCovalence" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="OSnLNodeTensorContravalence">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLTNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorContravalence" type="OSnLNodeTensorContravalence" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="OSnLNodeTensorDimension">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLTNode"/>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorDimension" type="OSnLNodeTensorDimension" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="OSnLNodeTensorPlus">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLTNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorPlus" type="OSnLNodeTensorPlus" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeTensorMinus">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLTNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorMinus" type="OSnLNodeTensorMinus" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeTensorNegate">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:sequence>
+					<xs:element ref="OSnLTNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorNegate" type="OSnLNodeTensorNegate" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeTensorTimes">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLTNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorTimes" type="OSnLNodeTensorTimes" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="OSnLNodeTensorWedgeProduct">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLTNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorWedgeProduct" type="OSnLNodeTensorWedgeProduct" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="OSnLNodeTensorReference">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorReference" type="OSnLNodeTensorReference" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeTensorVar">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorVar" type="OSnLNodeTensorVar" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a tensorVar object. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeTensorObj">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorObj" type="OSnLNodeTensorObj" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a tensorObj object.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeTensorCon">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tensorCon" type="OSnLNodeTensorCon" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. Must refer to a valid index of a tensorCon object. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="OSnLNodeMatrixToTensor">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixToTensor" type="OSnLNodeMatrixToTensor" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+
+
+
 	<xs:simpleType name="NlNodeEnumeration">
 		<xs:annotation>
 			<xs:documentation>since version 2.0.0. </xs:documentation>
@@ -7338,11 +7653,8 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="matrixGeneralizedInverse"/>
 			<xs:enumeration value="matrixExp"/>
 			<xs:enumeration value="matrixSquareRoot"/>
+			<xs:enumeration value="matrixModulus"/>
 			<xs:enumeration value="matrixLog"/>
-			<xs:enumeration value="matrixTranspose"/>
-			<xs:enumeration value="matrixBlock"/>
-			<xs:enumeration value="matrixMerge"/>
-			<xs:enumeration value="matrixSubmatrixAt"/>
 			<xs:enumeration value="matrixScalarPlus"/>
 			<xs:enumeration value="matrixScalarMinus"/>
 			<xs:enumeration value="matrixScalarTimes"/>
@@ -7351,6 +7663,7 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="matrixDotDivide"/>
 			<xs:enumeration value="matrixDotPower"/>
 			<xs:enumeration value="matrixDotExp"/>
+			<xs:enumeration value="matrixKroneckerProduct"/>
 			<xs:enumeration value="matrixEigenValues"/>
 			<xs:enumeration value="matrixLeftEigenVectors"/>
 			<xs:enumeration value="matrixRightEigenVectors"/>
@@ -7367,6 +7680,10 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="matrixVar"/>
 			<xs:enumeration value="matrixObj"/>
 			<xs:enumeration value="matrixCon"/>
+			<xs:enumeration value="matrixTranspose"/>
+			<xs:enumeration value="matrixBlock"/>
+			<xs:enumeration value="matrixMerge"/>
+			<xs:enumeration value="matrixSubmatrixAt"/>
 			<xs:enumeration value="identityMatrix"/>
 			<xs:enumeration value="matrixLowerTriangle"/>
 			<xs:enumeration value="matrixUpperTriangle"/>
@@ -7385,9 +7702,8 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="complexArgument"/>
 			<xs:enumeration value="isComplexInf"/>
 			<xs:enumeration value="isComplexNaN"/>
-			<xs:enumeration value="complexEq"/>
+			<xs:enumeration value="isComplexEq"/>
 			<xs:enumeration value="isComplexNeq"/>
-			<xs:enumeration value="createComplex"/>
 			<xs:enumeration value="complexPlus"/>
 			<xs:enumeration value="complexSum"/>
 			<xs:enumeration value="complexMinus"/>
@@ -7400,6 +7716,9 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="complexSquareRoot"/>
 			<xs:enumeration value="complexPower"/>
 			<xs:enumeration value="complexProduct"/>
+			<xs:enumeration value="complexConstruct"/>
+			<xs:enumeration value="complexCartesianToPolar"/>
+			<xs:enumeration value="complexPolarToCartesian"/>
 			<xs:enumeration value="complexExp"/>
 			<xs:enumeration value="complexSin"/>
 			<xs:enumeration value="complexCos"/>
@@ -7407,11 +7726,30 @@ second is imaginary part</xs:documentation>
 			<xs:enumeration value="complexSinh"/>
 			<xs:enumeration value="complexCosh"/>
 			<xs:enumeration value="complexTanh"/>
+			<xs:enumeration value="complexDiscrete"/>
+			<xs:enumeration value="complexNormal"/>
+			<xs:enumeration value="complexNumber"/>
+			<xs:enumeration value="complexVar"/>
+			<xs:enumeration value="complexObj"/>
+			<xs:enumeration value="complexCon"/>
 			<xs:enumeration value="complexMatrixDeterminant"/>
 			<xs:enumeration value="complexMatrixTrace"/>
 			<xs:enumeration value="complexMatrixToScalar"/>
 			<xs:enumeration value="complexMatrixElementAt"/>
-			<xs:enumeration value="complexNumber"/>
+			<xs:enumeration value="tensorRank"/>
+			<xs:enumeration value="tensorCovalence"/>
+			<xs:enumeration value="tensorContravalence"/>
+			<xs:enumeration value="tensorDimension"/>
+			<xs:enumeration value="tensorPlus"/>
+			<xs:enumeration value="tensorMinus"/>
+			<xs:enumeration value="tensorNegate"/>
+			<xs:enumeration value="tensorTimes"/>
+			<xs:enumeration value="tensorReference"/>
+			<xs:enumeration value="tensorVar"/>
+			<xs:enumeration value="tensorObj"/>
+			<xs:enumeration value="tensorCon"/>
+			<xs:enumeration value="matrixToTensor"/>
+			<xs:enumeration value="tensorDimensions"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="rangedConstraintValueType">

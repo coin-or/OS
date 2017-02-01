@@ -1289,6 +1289,7 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="contravalence" type="xs:nonNegativeInteger" default="0"/>
 		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>

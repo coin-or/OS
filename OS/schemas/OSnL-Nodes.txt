@@ -1,372 +1,382 @@
-Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented			
-1	basic arithmetic functions	1001	plus	2			yes			
-2		1002	sum	0 or more			yes			
-3		1003	minus	2			yes			
-4		1004	negate	1			yes			
-5		1005	times	2			yes			
-6		1006	divide	2			yes			
-7		1007	quotient	2						
-8		1008	rem	2						
-9		1009	power	2			yes			
-10		1010	product	0 or more			yes			
-11	other non-trig functions	2001	abs	1			yes			
-12		2002	floor	1						
-13		2003	ceiling	1						
-14		2004	percent	1						
-15		2005	square	1			yes			
-16		2006	squareRoot	1		also sqrt	yes			
-17		2007	ln	1			yes			
-18		2008	log	2						
-19		2009	log10	1			yes			
-20		2010	exp	1			yes			
-21		2011	factorial	1						
-22		2012	combination	2						
-23		2013	permutation	2						
-24		2014	gcd	0 or more						
-25		2015	lcm	0 or more						
-26		2016	roundToInt	1						
-27		2017	round	2						
-28		2018	truncate	2						
-29		2019	sign	1						
-30		2020	rand	1		two attributes				
-31		2021	gammaFn	1						
-32		2022	gammaLn	1						
-33		2023	erf	1			yes			
-34	trig functions	3001	sin	1			yes			
-35		3002	cos	1			yes			
-36		3003	tan	1						
-37		3004	arcsin	1						
-38		3005	arccos	1						
-39		3006	arctan	1						
-40		3007	sinh	1						
-41		3008	cosh	1						
-42		3009	tanh	1						
-43		3010	arcsinh	1						
-44		3011	arccosh	1						
-45		3012	arctanh	1						
-46		3013	cot	1						
-47		3014	coth	1						
-48		3015	arccot	1						
-49		3016	arccoth	1						
-50		3017	sec	1						
-51		3018	sech	1						
-52		3019	arcsec	1						
-53		3020	arcsech	1						
-54		3021	csc	1						
-55		3022	csch	1						
-56		3023	arccsc	1						
-57		3024	arccsch	1						
-58	statistical functions	4001	mean	0 or more		one for each data point				
-59		4002	geometricMean	0 or more		one for each data point				
-60		4003	harmonicMean	0 or more		one for each data point				
-61		4004	trimMean	>=1*		"first is %, others are data points"				
-62		4005	count	0 or more		one for each data point				
-63		4006	median	0 or more		one for each data point				
-64		4007	firstQuartile	0 or more		one for each data point				
-65		4008	thirdQuartile	0 or more		one for each data point				
-66		4009	mode	0 or more		one for each data point				
-67		4010	min	0 or more		one for each data point	yes			
-68		4011	max	0 or more		one for each data point	yes			
-69		4012	percentile	>=1*		"first is %, others are data points"				
-70		4013	kLargest	>=1*		kth largest?				
-71		4014	kSmallest	>=1*		kth smallest?				
-72		4015	range	0 or more						
-73		4016	interQuartileRange	0 or more						
-74		4017	absdev	0 or more						
-75		4018	stddev	0 or more						
-76		4019	variance	0 or more						
-77		4020	cv	0 or more						
-78		4021	skewness	0 or more						
-79		4022	kurtosis	0 or more						
-80		4023	covariance	>=4		1st half is first data set				
-81		4024	correlation	>=4		1st half is first data set				
-82		4025	pearsonCorrelation	>=4		1st half is first data set				
-83		4026	rankCorrelation	>=4		1st half is first data set				
-84		4027	autoCorrelation1	>=2		one for each data point				
-85		4028	autoCorrelation	>=3		first is lag				
-86		4029	npv	>=2		"first is interest rate, all other are equally spaced payment amounts"				
-87		4030	irr	>=2		?				
-88	discrete probability distributions	4101	empiricalDiscreteDist	>=3		"first is ""x"", others are observations; prob in optional attribute"				
-89		4102	empiricalDiscreteCum	>=3		"first is ""x"", others are observations; prob in optional attribute"				
-90		4111	discreteUniformDist	2		"first is ""x"", second is N. (values 1,2,…,N with prob 1/N)"				
-91		4112	discreteUniformCum	2		"first is ""x"", second is N. (values 1,2,…,N with prob 1/N)"				
-92		4113	discreteUniformInv	2		"first is ""x"", second is N. (values 1,2,…,N with prob 1/N)"				
-93		4121	bernoulliDist	2						
-94		4122	bernoulliCum	2						
-95		4123	bernoulliInv	2						
-96		4131	binomialDist	3						
-97		4132	binomialCum	3						
-98		4133	binomialInv	3						
-99		4141	multinomialDist	>=3		"first is ""x"", 2d ""N"", p_i follow"				
-100		4142	multinomialCum	>=3		"first is ""x"""				
-101		4143	multinomialInv	>=3		"first is ""x"""				
-102		4151	hypergeometricDist	4		"first is ""x"""				
-103		4152	hypergeometricCum	4		"first is ""x"""				
-104		4153	hypergeometricInv	4		"first is ""x"""				
-105		4161	poissonDist	2		"first is ""x"""				
-106		4162	poissonCum	2		"first is ""x"""				
-107		4163	poissonInv	2		"first is ""x"""				
-108		4171	geometricDist	2		"first is ""x"""				
-109		4172	geometricCum	2		"first is ""x"""				
-110		4173	geometricInv	2		"first is ""x"""				
-111		4181	negativeBinomialDist	3		"first is ""x"""				
-112		4182	negativeBinomialCum	3		"first is ""x"""				
-113		4183	negativeBinomialInv	3		"first is ""x"""				
-114		4191	logarithmicDist	2						
-115		4192	logarithmicCum	2						
-116		4193	logarithmicInv	2						
-117	continuous distributions	4411	uniformDist	3		"first is ""x"""				
-118		4412	uniformCum	3		"first is ""x"""				
-119		4413	uniformInv	3		"first is ""x"""				
-120		4421	normalDist	3		"first is ""x"""				
-121		4422	normalCum	3		"first is ""x"""				
-122		4423	normalInv	3		"first is ""x"""				
-123		4431	stdNormalDist	1		"first is ""x"""				
-124		4432	stdNormalCum	1		"first is ""x"""				
-125		4433	stdNormalInv	1		"first is ""x"""				
-126		4434	unitNormalLinearLoss	1						
-127		4441	bivariateNormalDist	7		"first two should be x's.mu1, mu2, sigma1, sigma2, rho"				
-128		4442	bivariateNormalCum	7		"first two should be x's.mu1, mu2, sigma1, sigma2, rho"				
-129		4451	exponentialDist	2		"first is ""x"""				
-130		4452	exponentialCum	2		"first is ""x"""				
-131		4453	exponentialInv	2		"first is ""x"""				
-132		4461	weibullDist	4		check				
-133		4462	weibullCum	4		check				
-134		4463	weibullInv	4		check				
-135		4471	erlangDist	3		check				
-136		4472	erlangCum	3		check				
-137		4473	erlangInv	3		check				
-138		4481	gammaDist	3		"first is ""x"""				
-139		4482	gammaCum	3		"first is ""x"""				
-140		4483	gammaInv	3		"first is ""x"""				
-141		4491	generalizedGammaDist	5		"first is ""x"""				
-142		4492	generalizedGammaCum	5		"first is ""x"""				
-143		4493	generalizedGammaInv	5		"first is ""x"""				
-144		4501	betaDist	3		"first is ""x"""				
-145		4502	betaCum	3		"first is ""x"""				
-146		4503	betaInv	3		"first is ""x"""				
-147		4511	generalizedBetaDist	5		"first is ""x"""				
-148		4512	generalizedBetaCum	5		"first is ""x"""				
-149		4513	generalizedBetaInv	5		"first is ""x"""				
-150		4521	lognormalDist	3		"first is ""x"""				
-151		4522	lognormalCum	3		"first is ""x"""				
-152		4523	lognormalInv	3		"first is ""x"""				
-153		4531	cauchyDist	1		"first is ""x"""				
-154		4532	cauchyCum	1		"first is ""x"""				
-155		4533	cauchyInv	1		"first is ""x"""				
-156		4541	tDist	2		"first is ""x"""				
-157		4542	tCum	2		"first is ""x"""				
-158		4543	tInv	2		"first is ""x"""				
-159		4551	chiSquareDist	2		"first is ""x"""				
-160		4552	chiSquareCum	2		"first is ""x"""				
-161		4553	chiSquareInv	2		"first is ""x"""				
-162		4561	fDist	3		"first is ""x"""				
-163		4562	fCum	3		"first is ""x"""				
-164		4563	fInv	3		"first is ""x"""				
-165		4571	logisticDist	3		"first is ""x"""				
-166		4572	logisticCum	3		"first is ""x"""				
-167		4573	logisticInv	3		"first is ""x"""				
-168		4581	logLogisticDist	3						
-169		4582	logLogisticCum	3						
-170		4583	logLogisticInv	3						
-171		4591	expLogDist	3						
-172		4592	expLogCum	3						
-173		4593	expLogInv	3						
-174		4601	paretoDist	3						
-175		4602	paretoCum	3						
-176		4603	paretoInv	3						
-177		4611	rayleighDist	2						
-178		4612	rayleighCum	2						
-179		4613	rayleighInv	2						
-180		4621	pertDist	4						
-181		4622	pertCum	4						
-182		4623	pertInv	4						
-183		4631	triangularDist	4		"3 parameters, one attribute"				
-184		4632	triangularCum	4		"4 parameters, one attribute"				
-185		4633	triangularInv	4		"5 parameters, one attribute"				
-186	reference and constants	5001	number	0		three attributes	yes			
-187	(terminal nodes)	5002	string	0		three attributes				
-188		5003	identifier	0		one attribute				
-189		5004	PI	0			yes			
-190		5005	E	0			yes			
-191		5006	INF	0						
-192		5007	EPS	0						
-193		5008	TINY	0						
-194		5009	TRUE	0						
-195		5010	FALSE	0						
-196		5011	EULERGAMMA	0						
-197		5012	NAN	0						
-198	reference to problem components	5101	variable	0*		"one optional argument, two attributes"	yes			
-199		5102	objective	0*		"one optional argument, one attribute"				
-200		5103	constraint	0*		"one optional argument, two attributes"				
-201	other lookups	5201	quadratic	***		one or more qTerm				
-202		5202	qTerm	0*		"one optional argument, three attributes"				
-203		5203	parameter	0		two attributes				
-204		5204	randomVariable	0		two attributes --- need to revisit			need to revisit	
-205		5205	sim	***		"0 or more simInput, 1 simOutput, one attribute"			need to revisit	
-206		5206	simInput	0*		"one optional argument, two attributes"			need to revisit	
-207		5207	simOutput	0*		"one optional argument, two attributes"			need to revisit	
-208		5208	userF	-1		one attribute				
-209		5209	arg	0		one attribute				
-210		5210	xPath	***		"one argument of type xPathIndex, two attributes"				
-211		5211	xPathIndex	0*		"one optional argument, two attributes"				
-212		5212	nodeRef	0*		"one optional argument, two attributes --- need to revisit"			need to revisit	
-213		5213	arcRef	0*		"one optional argument, two attributes --- need to revisit"			need to revisit	
-214		5214	complements	2						
-215	logical functions	6001	if	3		"return value 0 is ""false"", 1 is ""true"""	yes			
-216		6002	lt	2		"return value 0 is ""false"", 1 is ""true"""				
-217		6003	leq	2		"return value 0 is ""false"", 1 is ""true"""				
-218		6004	gt	2		"return value 0 is ""false"", 1 is ""true"""				
-219		6005	geq	2		"return value 0 is ""false"", 1 is ""true"""				
-220		6006	eq	2		"return value 0 is ""false"", 1 is ""true"""				
-221		6007	neq	2		"return value 0 is ""false"", 1 is ""true"""				
-222		6008	and	2		"return value 0 is ""false"", 1 is ""true"""				
-223		6009	or	2		"return value 0 is ""false"", 1 is ""true"""				
-224		6010	xor	2		"return value 0 is ""false"", 1 is ""true"""				
-225		6011	implies	2		"return value 0 is ""false"", 1 is ""true"""				
-226		6012	not	1		"return value 0 is ""false"", 1 is ""true"""				
-227		6013	forAll	>=1		"True (i.e., 1) if all children evaluate to true"				
-228		6014	exists	>=1		"True (i.e., 1 ) if at least one child evaluates to true"				
-229		6015	logicCount	>=1						
-230		6016	allDiff	0 or more			yes			
-231		6017	allDisjoint	>=1						
-232		6018	atMost	>=2		"1st is k, others are conditions"				
-233		6019	atLeast	>=2		"1st is k, others are conditions"				
-234		6020	exactly	>=2		"1st is k, others are conditions"				
-235		6021	inSet	>=2		1 if 1st argument is equal to one of the others				
-236		6022	inRealSet	1		returns 1 if argument is a real number				
-237		6023	inPositiveRealSet	1		returns 1 if argument is a positive real				
-238		6024	inNonnegativeRealSet	1		returns 1 if argument is a nonnegative real				
-239		6025	inIntegerSet	1		returns 1 if argument is an integer				
-240		6026	inPositiveIntegerSet	1		returns 1 if argument is a positive integer				
-241		6027	inNonnegativeIntegerSet	1		returns 1 if argument is a nonnegative integer				
-242		6028	isInf	1		returns 1 if argument is infinite (in magnitude - plus/minus or modulus)				
-243		6029	isNaN	1		returns 1 if either real or imaginary part (or both) is NaN				
-244		7001	matrixDeterminant		1	"for complex-valued matrices, use complexMatrixDeterminant"	yes			
-245		7002	matrixTrace		1	"for complex-valued matrices, use complexMatrixTrace"	yes			
-246		7003	matrixToScalar		1	"for complex-valued matrices, use complexMatrixToScalar"	yes			
-247		7004	matrixElementAt	2	1	"for complex-valued matrices, use complexMatrixElementAt"				
-248	real-valued matrix functions	7011	matrixNorm	1	1	real-valued				
-249		7012	matrixFrobeniusNorm		1	real-valued				
-250		7013	matrixCondition	1	1	real-valued				
-251		7014	matrixFrobeniusNormCondition		1	real-valued				
-252		7021	matrixLargestEigenValue	0	1	must be real; not well-defined for non-symmetric real or non-Hermitian complex matrices				
-253		7022	matrixNthLargestEigenValue	1	1	must be real; not well-defined for non-symmetric real or non-Hermitian complex matrices				
-254		7023	matrixSmallestEigenValue	0	1	must be real; not well-defined for non-symmetric real or non-Hermitian complex matrices				
-255		7024	matrixSubspaceAngle		>=2	real-valued				
-256		7051	matrixColumnNumber		1	real-valued				
-257		7052	matrixRowNumber		1	real-valued				
-258		7053	matrixRank		1	real-valued				
-259		7054	matrixColumnRank		1	real-valued				
-260		7055	matrixRowRank		1	real-valued				
-261		7061	matrixIsNonsingular		1	"returns 1 if matrix is nonsingular, 0 otherwise"				
-262		7062	matrixIsPositiveDefinite		1					
-263		7063	matrixIsPositiveSemidefinite		1					
-264		7064	matrixIsNegativeDefinite		1					
-265		7065	matrixIsNegativeSemidefinite		1					
-266		7066	matrixIsIndefinite		1					
-267		7067	matrixIsFullRank		1					
-268		7068	matrixIsFullColumnRank		1					
-269		7069	matrixIsFullRowRank		1					
-270		7070	matrixIsIdentical		2					
-271		7071	matrixIsSymmetric		1					
-272		7072	matrixIsHermitian		1					
-273		7101	matrixPlus		2	uses complex function if one matrix is complex-valued	yes			
-274		7102	matrixSum		0 or more	uses complex function if one matrix is complex-valued	yes			
-275		7103	matrixMinus		2	uses complex function if one matrix is complex-valued	yes			
-276		7104	matrixNegate		1	uses complex function if one matrix is complex-valued	yes			
-277	matrix-valued functions	7105	matrixTimes		2	uses complex function if one matrix is complex-valued	yes			
-278		7106	matrixProduct		0 or more	uses complex function if one matrix is complex-valued	yes			
-279		7107	matrixLeftDivide		2	uses complex function if one matrix is complex-valued				
-280		7108	matrixRightDivide		2	uses complex function if one matrix is complex-valued				
-281		7109	matrixPower	1	1	uses complex function if one matrix is complex-valued				
-282		7110	matrixInverse		1		yes			
-283		7111	matrixGeneralizedInverse		1	one attribute (value records the type of generalized inverse)				
-284		7201	matrixExp		1	uses complex function if one matrix is complex-valued				
-285		7202	matrixSquareRoot		1					
-286		7203	matrixModulus		1	(A'A)^(1/2) - must be symmetric and positive semidefinite				
-287		7204	matrixLog		1					
-288		7211	matrixScalarPlus	1	1	uses complex function if matrix or scalar is complex-valued				
-289		7212	matrixScalarMinus	1	1	uses complex function if matrix or scalar is complex-valued				
-290		7213	matrixScalarTimes	1	1	uses complex function if matrix or scalar is complex-valued	yes			
-291		7214	matrixScalarDivide	1	1	uses complex function if matrix or scalar is complex-valued				
-292		7221	matrixDotTimes		2	uses complex function if one matrix is complex-valued	yes			
-293		7222	matrixDotDivide		2	uses complex function if one matrix is complex-valued				
-294		7223	matrixDotPower		2	uses complex function if one matrix is complex-valued				
-295		7224	matrixDotExp		1	uses complex function if one matrix is complex-valued				
-296		7231	matrixEigenValues		1	complex? Attribute?				
-297		7232	matrixLeftEigenVectors		1	complex? Attribute?				
-298		7233	matrixRightEigenVectors		1	complex? Attribute?				
-299		7241	matrixCholeskyDecomposition		1					
-300		7242	matrixLDLDecomposition		1	one attribute				
-301		7243	matrixLUDecomposition		1	one attribute				
-302		7251	matrixColumnSpace		1					
-303		7252	matrixRowSpace		1					
-304		7253	matrixNullSpace		1					
-305		7254	matrixLeftNullSpace		1					
-306		7255	matrixRightNullSpace		1					
-307		7256	matrixReducedRowEchelon		1					
-308		7501	matrixReference		0	one attribute: existing matrix	yes			
-309		7502	matrixVar		0	one attribute: existing matrixVar	yes			
-310		7503	matrixObj		0	one attribute: existing matrixObj	yes			
-311		7504	matrixCon		0	one attribute: existing matrixCon	yes			
-312		7512	matrixTranspose		1		yes			
-313		7513	matrixBlock		1	two attributes				
-314		7514	matrixMerge		>=1*	"matrixBlock objects, plus four attributes"				
-315		7515	matrixSubmatrixAt	4	1		yes			
-316		7516	identityMatrix	1	0	dimension!	yes			
-317		7517	matrixLowerTriangle		1	one attribute	yes			
-318		7518	matrixUpperTriangle		1	one attribute	yes			
-319		7519	matrixDiagonal		1		yes			
-320		7520	diagonalMatrixFromVector		1		yes			
-321		7601	matrixAnd		2	1 wherever both matrices have a nonzero				
-322		7602	matrixOr		2	1 wherever either matrix has a nonzero				
-323		7603	matrixXor		2	1 wherever exactly one matrix has a nonzero				
-324		7604	matrixPattern		1	1 wherever the matrix has a nonzero				
-325		7605	matrixNot		1	1 wherever the matrix has a zero				
-326		7606	matrixForAll		>=1	1 wherever every matrix has a nonzero				
-327		7607	matrixExists		>=1	1 wherever at least one matrix has a nonzero				
-328		8001	realPart	1 (complex)		returns real-valued 		x		
-329		8002	imaginaryPart	1 (complex)		returns real-valued 		y		
-330		8003	complexModulus	1 (complex)		returns real-valued 		sqrt(x^2 + y^2)		
-331		8004	complexArgument	1 (complex)		returns real-valued 		q in |z|e^(iq)		
-332	functions of complex arguments	8061	isComplexInf	1 (complex)		returns 0 or 1 			z=x+iy	
-333		8062	isComplexNaN	1 (complex)		returns 0 or 1 				
-334		8063	isComplexEq	1 (complex)		returns 0 or 1 				
-335		8064	isComplexNeq	1 (complex)		returns 0 or 1 				
-336		8101	complexPlus	2 (scalar)		returns complex-valued 				
-337		8102	complexSum	0 or more (scalar)		returns complex-valued 				
-338		8103	complexMinus	2 (scalar)		returns complex-valued 				
-339		8104	complexNegate	1 (complex)		returns complex-valued 		-x-iy		
-340		8105	complexConjugate	1 (complex)		returns complex-valued 		x-iy		
-341		8106	complexNegativeConjugate	1 (complex)		returns complex-valued 		-x+iy		
-342		8107	complexTimes	2 (scalar)		returns complex-valued 				
-343		8108	complexDivide	2 (scalar)		returns complex-valued 				
-344		8109	complexConstruct	2 (real)	0	"First child is real part, second is imaginary part"				
-345		8110	complexPower	2 (scalar)		returns complex-valued 				
-346		8111	complexProduct	0 or more (scalar)		returns complex-valued 				
-347		8112	complexCartesianToPolar	1		returns complex-valued 				
-348		8113	complexPolarToCartesian	1		returns complex-valued 				
-349		8201	complexExp	1 (complex)		returns complex-valued 				
-350		8202	complexSquare	1 (complex)		returns complex-valued 				
-351		8203	complexSquareRoot	1 (scalar)		returns complex-valued 				
-352		8301	complexSin	1 (complex)		returns complex-valued 				
-353		8302	complexCos	1 (complex)		returns complex-valued 				
-354		8303	complexTan	1 (complex)		returns complex-valued 				
-355		8304	complexSinh	1 (complex)		returns complex-valued 				
-356		8305	complexCosh	1 (complex)		returns complex-valued 				
-357		8306	complexTanh	1 (complex)		returns complex-valued 				
-358		8401	complexDiscrete							
-359		8411	complexNormal							
-360		8501	complexNumber			"several attributes, including real and imaginary part, realTime etc. "				
-361		8701	complexMatrixDeterminant		1	can be complex if matrix complex-valued				
-362		8702	complexMatrixTrace		1	can be complex if matrix complex-valued				
-363		8703	complexMatrixToScalar		1	can be complex if matrix complex-valued				
-364		8704	complexMatrixElementAt	2 (integer)	1	can be complex if matrix complex-valued				
-										
-										
-										
-										
-										
-										
-										
+Seq	Category	Code	function	scalar children	matrix children	Remarks	Implemented		
+1	basic arithmetic functions	1001	plus	2			yes		
+2		1002	sum	0 or more			yes		
+3		1003	minus	2			yes		
+4		1004	negate	1			yes		
+5		1005	times	2			yes		
+6		1006	divide	2			yes		
+7		1007	quotient	2					
+8		1008	rem	2					
+9		1009	power	2			yes		
+10		1010	product	0 or more			yes		
+11	other non-trig functions	2001	abs	1			yes		
+12		2002	floor	1					
+13		2003	ceiling	1					
+14		2004	percent	1					
+15		2005	square	1			yes		
+16		2006	squareRoot	1		also sqrt	yes		
+17		2007	ln	1			yes		
+18		2008	log	2					
+19		2009	log10	1			yes		
+20		2010	exp	1			yes		
+21		2011	factorial	1					
+22		2012	combination	2					
+23		2013	permutation	2					
+24		2014	gcd	0 or more					
+25		2015	lcm	0 or more					
+26		2016	roundToInt	1					
+27		2017	round	2					
+28		2018	truncate	2					
+29		2019	sign	1					
+30		2020	rand	1		two attributes			
+31		2021	gammaFn	1					
+32		2022	gammaLn	1					
+33		2023	erf	1			yes		
+34	trig functions	3001	sin	1			yes		
+35		3002	cos	1			yes		
+36		3003	tan	1					
+37		3004	arcsin	1					
+38		3005	arccos	1					
+39		3006	arctan	1					
+40		3007	sinh	1					
+41		3008	cosh	1					
+42		3009	tanh	1					
+43		3010	arcsinh	1					
+44		3011	arccosh	1					
+45		3012	arctanh	1					
+46		3013	cot	1					
+47		3014	coth	1					
+48		3015	arccot	1					
+49		3016	arccoth	1					
+50		3017	sec	1					
+51		3018	sech	1					
+52		3019	arcsec	1					
+53		3020	arcsech	1					
+54		3021	csc	1					
+55		3022	csch	1					
+56		3023	arccsc	1					
+57		3024	arccsch	1					
+58	statistical functions	4001	mean	0 or more		one for each data point			
+59		4002	geometricMean	0 or more		one for each data point			
+60		4003	harmonicMean	0 or more		one for each data point			
+61		4004	trimMean	>=1*		"first is %, others are data points"			
+62		4005	count	0 or more		one for each data point			
+63		4006	median	0 or more		one for each data point			
+64		4007	firstQuartile	0 or more		one for each data point			
+65		4008	thirdQuartile	0 or more		one for each data point			
+66		4009	mode	0 or more		one for each data point			
+67		4010	min	0 or more		one for each data point	yes		
+68		4011	max	0 or more		one for each data point	yes		
+69		4012	percentile	>=1*		"first is %, others are data points"			
+70		4013	kLargest	>=1*		kth largest?			
+71		4014	kSmallest	>=1*		kth smallest?			
+72		4015	range	0 or more					
+73		4016	interQuartileRange	0 or more					
+74		4017	absdev	0 or more					
+75		4018	stddev	0 or more					
+76		4019	variance	0 or more					
+77		4020	cv	0 or more					
+78		4021	skewness	0 or more					
+79		4022	kurtosis	0 or more					
+80		4023	covariance	>=4		1st half is first data set			
+81		4024	correlation	>=4		1st half is first data set			
+82		4025	pearsonCorrelation	>=4		1st half is first data set			
+83		4026	rankCorrelation	>=4		1st half is first data set			
+84		4027	autoCorrelation1	>=2		one for each data point			
+85		4028	autoCorrelation	>=3		first is lag			
+86		4029	npv	>=2		"first is interest rate, all other are equally spaced payment amounts"			
+87		4030	irr	>=2		?			
+88	discrete probability distributions	4101	empiricalDiscreteDist	>=3		"first is ""x"", others are observations; prob in optional attribute"			
+89		4102	empiricalDiscreteCum	>=3		"first is ""x"", others are observations; prob in optional attribute"			
+90		4111	discreteUniformDist	2		"first is ""x"", second is N. (values 1,2,…,N with prob 1/N)"			
+91		4112	discreteUniformCum	2		"first is ""x"", second is N. (values 1,2,…,N with prob 1/N)"			
+92		4113	discreteUniformInv	2		"first is ""x"", second is N. (values 1,2,…,N with prob 1/N)"			
+93		4121	bernoulliDist	2					
+94		4122	bernoulliCum	2					
+95		4123	bernoulliInv	2					
+96		4131	binomialDist	3					
+97		4132	binomialCum	3					
+98		4133	binomialInv	3					
+99		4141	multinomialDist	>=3		"first is ""x"", 2d ""N"", p_i follow"			
+100		4142	multinomialCum	>=3		"first is ""x"""			
+101		4143	multinomialInv	>=3		"first is ""x"""			
+102		4151	hypergeometricDist	4		"first is ""x"""			
+103		4152	hypergeometricCum	4		"first is ""x"""			
+104		4153	hypergeometricInv	4		"first is ""x"""			
+105		4161	poissonDist	2		"first is ""x"""			
+106		4162	poissonCum	2		"first is ""x"""			
+107		4163	poissonInv	2		"first is ""x"""			
+108		4171	geometricDist	2		"first is ""x"""			
+109		4172	geometricCum	2		"first is ""x"""			
+110		4173	geometricInv	2		"first is ""x"""			
+111		4181	negativeBinomialDist	3		"first is ""x"""			
+112		4182	negativeBinomialCum	3		"first is ""x"""			
+113		4183	negativeBinomialInv	3		"first is ""x"""			
+114		4191	logarithmicDist	2					
+115		4192	logarithmicCum	2					
+116		4193	logarithmicInv	2					
+117	continuous distributions	4411	uniformDist	3		"first is ""x"""			
+118		4412	uniformCum	3		"first is ""x"""			
+119		4413	uniformInv	3		"first is ""x"""			
+120		4421	normalDist	3		"first is ""x"""			
+121		4422	normalCum	3		"first is ""x"""			
+122		4423	normalInv	3		"first is ""x"""			
+123		4431	stdNormalDist	1		"first is ""x"""			
+124		4432	stdNormalCum	1		"first is ""x"""			
+125		4433	stdNormalInv	1		"first is ""x"""			
+126		4434	unitNormalLinearLoss	1					
+127		4441	bivariateNormalDist	7		"first two should be x's.mu1, mu2, sigma1, sigma2, rho"			
+128		4442	bivariateNormalCum	7		"first two should be x's.mu1, mu2, sigma1, sigma2, rho"			
+129		4451	exponentialDist	2		"first is ""x"""			
+130		4452	exponentialCum	2		"first is ""x"""			
+131		4453	exponentialInv	2		"first is ""x"""			
+132		4461	weibullDist	4		check			
+133		4462	weibullCum	4		check			
+134		4463	weibullInv	4		check			
+135		4471	erlangDist	3		check			
+136		4472	erlangCum	3		check			
+137		4473	erlangInv	3		check			
+138		4481	gammaDist	3		"first is ""x"""			
+139		4482	gammaCum	3		"first is ""x"""			
+140		4483	gammaInv	3		"first is ""x"""			
+141		4491	generalizedGammaDist	5		"first is ""x"""			
+142		4492	generalizedGammaCum	5		"first is ""x"""			
+143		4493	generalizedGammaInv	5		"first is ""x"""			
+144		4501	betaDist	3		"first is ""x"""			
+145		4502	betaCum	3		"first is ""x"""			
+146		4503	betaInv	3		"first is ""x"""			
+147		4511	generalizedBetaDist	5		"first is ""x"""			
+148		4512	generalizedBetaCum	5		"first is ""x"""			
+149		4513	generalizedBetaInv	5		"first is ""x"""			
+150		4521	lognormalDist	3		"first is ""x"""			
+151		4522	lognormalCum	3		"first is ""x"""			
+152		4523	lognormalInv	3		"first is ""x"""			
+153		4531	cauchyDist	1		"first is ""x"""			
+154		4532	cauchyCum	1		"first is ""x"""			
+155		4533	cauchyInv	1		"first is ""x"""			
+156		4541	tDist	2		"first is ""x"""			
+157		4542	tCum	2		"first is ""x"""			
+158		4543	tInv	2		"first is ""x"""			
+159		4551	chiSquareDist	2		"first is ""x"""			
+160		4552	chiSquareCum	2		"first is ""x"""			
+161		4553	chiSquareInv	2		"first is ""x"""			
+162		4561	fDist	3		"first is ""x"""			
+163		4562	fCum	3		"first is ""x"""			
+164		4563	fInv	3		"first is ""x"""			
+165		4571	logisticDist	3		"first is ""x"""			
+166		4572	logisticCum	3		"first is ""x"""			
+167		4573	logisticInv	3		"first is ""x"""			
+168		4581	logLogisticDist	3					
+169		4582	logLogisticCum	3					
+170		4583	logLogisticInv	3					
+171		4591	expLogDist	3					
+172		4592	expLogCum	3					
+173		4593	expLogInv	3					
+174		4601	paretoDist	3					
+175		4602	paretoCum	3					
+176		4603	paretoInv	3					
+177		4611	rayleighDist	2					
+178		4612	rayleighCum	2					
+179		4613	rayleighInv	2					
+180		4621	pertDist	4					
+181		4622	pertCum	4					
+182		4623	pertInv	4					
+183		4631	triangularDist	4		"3 parameters, one attribute"			
+184		4632	triangularCum	4		"4 parameters, one attribute"			
+185		4633	triangularInv	4		"5 parameters, one attribute"			
+186	reference and constants	5001	number	0		three attributes	yes		
+187	(terminal nodes)	5002	string	0		three attributes			
+188		5003	identifier	0		one attribute			
+189		5004	PI	0			yes		
+190		5005	E	0			yes		
+191		5006	INF	0					
+192		5007	EPS	0					
+193		5008	TINY	0					
+194		5009	TRUE	0					
+195		5010	FALSE	0					
+196		5011	EULERGAMMA	0					
+197		5012	NAN	0					
+198	reference to problem components	5101	variable	0*		"one optional argument, two attributes"	yes		
+199		5102	objective	0*		"one optional argument, one attribute"			
+200		5103	constraint	0*		"one optional argument, two attributes"			
+201	other lookups	5201	quadratic	***		one or more qTerm			
+202		5202	qTerm	0*		"one optional argument, three attributes"			
+203		5203	parameter	0		two attributes			
+204		5204	randomVariable	0		two attributes --- need to revisit			need to revisit
+205		5205	sim	***		"0 or more simInput, 1 simOutput, one attribute"			need to revisit
+206		5206	simInput	0*		"one optional argument, two attributes"			need to revisit
+207		5207	simOutput	0*		"one optional argument, two attributes"			need to revisit
+208		5208	userF	-1		one attribute			
+209		5209	arg	0		one attribute			
+210		5210	xPath	***		"one argument of type xPathIndex, two attributes"			
+211		5211	xPathIndex	0*		"one optional argument, two attributes"			
+212		5212	nodeRef	0*		"one optional argument, two attributes --- need to revisit"			need to revisit
+213		5213	arcRef	0*		"one optional argument, two attributes --- need to revisit"			need to revisit
+214		5214	complements	2					
+215	logical functions	6001	if	3		"return value 0 is ""false"", 1 is ""true"""	yes		
+216		6002	lt	2		"return value 0 is ""false"", 1 is ""true"""			
+217		6003	leq	2		"return value 0 is ""false"", 1 is ""true"""			
+218		6004	gt	2		"return value 0 is ""false"", 1 is ""true"""			
+219		6005	geq	2		"return value 0 is ""false"", 1 is ""true"""			
+220		6006	eq	2		"return value 0 is ""false"", 1 is ""true"""			
+221		6007	neq	2		"return value 0 is ""false"", 1 is ""true"""			
+222		6008	and	2		"return value 0 is ""false"", 1 is ""true"""			
+223		6009	or	2		"return value 0 is ""false"", 1 is ""true"""			
+224		6010	xor	2		"return value 0 is ""false"", 1 is ""true"""			
+225		6011	implies	2		"return value 0 is ""false"", 1 is ""true"""			
+226		6012	not	1		"return value 0 is ""false"", 1 is ""true"""			
+227		6013	forAll	>=1		"True (i.e., 1) if all children evaluate to true"			
+228		6014	exists	>=1		"True (i.e., 1 ) if at least one child evaluates to true"			
+229		6015	logicCount	>=1					
+230		6016	allDiff	0 or more			yes		
+231		6017	allDisjoint	>=1					
+232		6018	atMost	>=2		"1st is k, others are conditions"			
+233		6019	atLeast	>=2		"1st is k, others are conditions"			
+234		6020	exactly	>=2		"1st is k, others are conditions"			
+235		6021	inSet	>=2		1 if 1st argument is equal to one of the others			
+236		6022	inRealSet	1		returns 1 if argument is a real number			
+237		6023	inPositiveRealSet	1		returns 1 if argument is a positive real			
+238		6024	inNonnegativeRealSet	1		returns 1 if argument is a nonnegative real			
+239		6025	inIntegerSet	1		returns 1 if argument is an integer			
+240		6026	inPositiveIntegerSet	1		returns 1 if argument is a positive integer			
+241		6027	inNonnegativeIntegerSet	1		returns 1 if argument is a nonnegative integer			
+242		6028	isInf	1		returns 1 if argument is infinite (in magnitude - plus/minus or modulus)			
+243		6029	isNaN	1		returns 1 if either real or imaginary part (or both) is NaN			
+244	real-valued matrix functions	7001	matrixDeterminant		1	"for complex-valued matrices, use complexMatrixDeterminant"	yes		
+245		7002	matrixTrace		1	"for complex-valued matrices, use complexMatrixTrace"	yes		
+246		7003	matrixToScalar		1	"for complex-valued matrices, use complexMatrixToScalar"	yes		
+247		7004	matrixElementAt	2	1	"for complex-valued matrices, use complexMatrixElementAt"			
+248		7011	matrixNorm	1	1	real-valued			
+249		7012	matrixFrobeniusNorm		1	real-valued			
+250		7013	matrixCondition	1	1	real-valued			
+251		7014	matrixFrobeniusNormCondition		1	real-valued			
+252		7021	matrixLargestEigenValue	0	1	must be real; not well-defined for non-symmetric real or non-Hermitian complex matrices			
+253		7022	matrixNthLargestEigenValue	1	1	must be real; not well-defined for non-symmetric real or non-Hermitian complex matrices			
+254		7023	matrixSmallestEigenValue	0	1	must be real; not well-defined for non-symmetric real or non-Hermitian complex matrices			
+255		7024	matrixSubspaceAngle		>=2	real-valued			
+256		7051	matrixColumnNumber		1	real-valued			
+257		7052	matrixRowNumber		1	real-valued			
+258		7053	matrixRank		1	real-valued			
+259		7054	matrixColumnRank		1	real-valued			
+260		7055	matrixRowRank		1	real-valued			
+261		7061	matrixIsNonsingular		1	"returns 1 if matrix is nonsingular, 0 otherwise"			
+262		7062	matrixIsPositiveDefinite		1				
+263		7063	matrixIsPositiveSemidefinite		1				
+264		7064	matrixIsNegativeDefinite		1				
+265		7065	matrixIsNegativeSemidefinite		1				
+266		7066	matrixIsIndefinite		1				
+267		7067	matrixIsFullRank		1				
+268		7068	matrixIsFullColumnRank		1				
+269		7069	matrixIsFullRowRank		1				
+270		7070	matrixIsIdentical		2				
+271		7071	matrixIsSymmetric		1				
+272		7072	matrixIsHermitian		1				
+273	matrix-valued functions	7101	matrixPlus		2	uses complex function if one matrix is complex-valued	yes		
+274		7102	matrixSum		0 or more	uses complex function if one matrix is complex-valued	yes		
+275		7103	matrixMinus		2	uses complex function if one matrix is complex-valued	yes		
+276		7104	matrixNegate		1	uses complex function if one matrix is complex-valued	yes		
+277		7105	matrixTimes		2	uses complex function if one matrix is complex-valued	yes		
+278		7106	matrixProduct		0 or more	uses complex function if one matrix is complex-valued	yes		
+279		7107	matrixLeftDivide		2	uses complex function if one matrix is complex-valued			
+280		7108	matrixRightDivide		2	uses complex function if one matrix is complex-valued			
+281		7109	matrixPower	1	1	uses complex function if one matrix is complex-valued			
+282		7110	matrixInverse		1		yes		
+283		7111	matrixGeneralizedInverse		1	one attribute (value records the type of generalized inverse)			
+284		7201	matrixExp		1	uses complex function if one matrix is complex-valued			
+285		7202	matrixSquareRoot		1				
+286		7203	matrixModulus		1	(A'A)^(1/2) - must be symmetric and positive semidefinite			
+287		7204	matrixLog		1				
+288		7211	matrixScalarPlus	1	1	uses complex function if matrix or scalar is complex-valued			
+289		7212	matrixScalarMinus	1	1	uses complex function if matrix or scalar is complex-valued			
+290		7213	matrixScalarTimes	1	1	uses complex function if matrix or scalar is complex-valued	yes		
+291		7214	matrixScalarDivide	1	1	uses complex function if matrix or scalar is complex-valued			
+292		7221	matrixDotTimes		2	uses complex function if one matrix is complex-valued	yes		
+293		7222	matrixDotDivide		2	uses complex function if one matrix is complex-valued			
+294		7223	matrixDotPower		2	uses complex function if one matrix is complex-valued			
+295		7224	matrixDotExp		1	uses complex function if one matrix is complex-valued			
+296		7231	matrixEigenValues		1	complex? Attribute?			
+297		7232	matrixLeftEigenVectors		1	complex? Attribute?			
+298		7233	matrixRightEigenVectors		1	complex? Attribute?			
+299		7241	matrixCholeskyDecomposition		1				
+300		7242	matrixLDLDecomposition		1	one attribute			
+301		7243	matrixLUDecomposition		1	one attribute			
+302		7251	matrixColumnSpace		1				
+303		7252	matrixRowSpace		1				
+304		7253	matrixNullSpace		1				
+305		7254	matrixLeftNullSpace		1				
+306		7255	matrixRightNullSpace		1				
+307		7256	matrixReducedRowEchelon		1				
+308		7261	matrixKroneckerProduct		2				
+309		7501	matrixReference		0	one attribute: existing matrix	yes		
+310		7502	matrixVar		0	one attribute: existing matrixVar	yes		
+311		7503	matrixObj		0	one attribute: existing matrixObj	yes		
+312		7504	matrixCon		0	one attribute: existing matrixCon	yes		
+313		7512	matrixTranspose		1		yes		
+314		7513	matrixBlock		1	two attributes			
+315		7514	matrixMerge		>=1*	"matrixBlock objects, plus four attributes"			
+316		7515	matrixSubmatrixAt	4	1		yes		
+317		7516	identityMatrix	1	0	dimension!	yes		
+318		7517	matrixLowerTriangle		1	one attribute	yes		
+319		7518	matrixUpperTriangle		1	one attribute	yes		
+320		7519	matrixDiagonal		1		yes		
+321		7520	diagonalMatrixFromVector		1		yes		
+322		7601	matrixAnd		2	1 wherever both matrices have a nonzero			
+323		7602	matrixOr		2	1 wherever either matrix has a nonzero			
+324		7603	matrixXor		2	1 wherever exactly one matrix has a nonzero			
+325		7604	matrixPattern		1	1 wherever the matrix has a nonzero			
+326		7605	matrixNot		1	1 wherever the matrix has a zero			
+327		7606	matrixForAll		>=1	1 wherever every matrix has a nonzero			
+328		7607	matrixExists		>=1	1 wherever at least one matrix has a nonzero			
+329	functions of complex arguments	8001	realPart	1 (complex)		returns real-valued 		x	
+330		8002	imaginaryPart	1 (complex)		returns real-valued 		y	
+331		8003	complexModulus	1 (complex)		returns real-valued 		sqrt(x^2 + y^2)	
+332		8004	complexArgument	1 (complex)		returns real-valued 		q in |z|e^(iq)	
+333		8061	isComplexInf	1 (complex)		returns 0 or 1 			z=x+iy
+334		8062	isComplexNaN	1 (complex)		returns 0 or 1 			
+335		8063	isComplexEq	1 (complex)		returns 0 or 1 			
+336		8064	isComplexNeq	1 (complex)		returns 0 or 1 			
+337		8101	complexPlus	2 (scalar)		returns complex-valued 			
+338		8102	complexSum	0 or more (scalar)		returns complex-valued 			
+339		8103	complexMinus	2 (scalar)		returns complex-valued 			
+340		8104	complexNegate	1 (complex)		returns complex-valued 			
+341		8105	complexConjugate	1 (complex)		returns complex-valued 		x-iy	
+342		8106	complexNegativeConjugate	1 (complex)		returns complex-valued 			
+343		8107	complexTimes	2 (scalar)		returns complex-valued 			
+344		8108	complexDivide	2 (scalar)		returns complex-valued 			
+345		8109	complexPower	2 (scalar)		returns complex-valued 			
+346		8110	complexProduct	0 or more (scalar)		returns complex-valued 			
+347		8201	createComplex	2 (real)	0	"First child is real part, second is imaginary part"			
+348		8202	complexPolarToCartesian	2 (real)		"First child is modulus, second is argument (angle in radians)"			
+349		8205	complexSquare	1 (complex)		returns complex-valued 			
+350		8206	complexSquareRoot	1 (scalar)		returns complex-valued 			
+351		8210	complexExp	1 (complex)		returns complex-valued 			
+352		8301	complexSin	1 (complex)		returns complex-valued 			
+353		8302	complexCos	1 (complex)		returns complex-valued 			
+354		8303	complexTan	1 (complex)		returns complex-valued 			
+355		8307	complexSinh	1 (complex)		returns complex-valued 			
+356		8308	complexCosh	1 (complex)		returns complex-valued 			
+357		8309	complexTanh	1 (complex)		returns complex-valued 			
+358		8401	complexDiscrete						
+359		8411	complexNormal						
+360		8501	complexNumber			"several attributes, including real and imaginary part, realTime etc. "			
+361		8502	complexVar	1 (integer)					
+362		8503	complexObj	1 (integer)					
+363		8504	complexCon	1 (integer)					
+364		8701	complexMatrixDeterminant		1	can be complex if matrix complex-valued			
+365		8702	complexMatrixTrace		1	can be complex if matrix complex-valued			
+366		8703	complexMatrixToScalar		1	can be complex if matrix complex-valued			
+367		8704	complexMatrixElementAt	2 (integer)	1	can be complex if matrix complex-valued			
+368	real-valued tensor functions	9053	tensorRank		1 (tensor)				
+369		9054	tensorCovalence		1 (tensor)				
+370		9056	tensorContravalence		1 (tensor)				
+371		9057	tensorDimension	1 (integer)	1 (tensor)				
+372	tensor-valued functions	9101	tensorPlus						
+373		9103	tensorMinus		2 (tensor)				
+374		9104	tensorNegate						
+375		9105	tensorTimes		2 (tensor)				
+376		9225	tensorWedgeProduct		2 (tensor)				
+377		9501	tensor Reference	1 (integer)					
+378		9502	tensorVar	1 (integer)					
+379		9503	tensorObj	1 (integer)					
+380		9504	tensorCon	1 (integer)					
+381	matrix-valued functions	9701	matrixToTensor		1 (matrix)				
