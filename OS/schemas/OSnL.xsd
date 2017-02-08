@@ -5749,23 +5749,6 @@ Returns the current value of the indicated objective</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixKroneckerProduct">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLMNode">
-				<xs:sequence minOccurs="2" maxOccurs="2">
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="matrixKroneckerProduct" type="OSnLNodeMatrixKroneckerProduct" substitutionGroup="OSnLMNode">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixEigenValues">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -7052,8 +7035,6 @@ second is imaginary part</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<!--Tensor Nodes: experimental  -->
-
-
 	<xs:complexType name="OSnLNodeTensorRank">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -7071,7 +7052,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeTensorCovalence">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -7089,7 +7069,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeTensorContravalence">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -7107,7 +7086,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeTensorDimension">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -7126,7 +7104,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeTensorPlus">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -7195,7 +7172,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeTensorWedgeProduct">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -7213,7 +7189,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeTensorReference">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -7314,14 +7289,13 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. Must refer to a valid index of a tensorCon object. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
 	<xs:complexType name="OSnLNodeMatrixToTensor">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLTNode">
-				<xs:sequence minOccurs="1" maxOccurs="1">
+				<xs:sequence>
 					<xs:element ref="OSnLMNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -7332,10 +7306,6 @@ second is imaginary part</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-
-
-
 	<xs:simpleType name="NlNodeEnumeration">
 		<xs:annotation>
 			<xs:documentation>since version 2.0.0. </xs:documentation>

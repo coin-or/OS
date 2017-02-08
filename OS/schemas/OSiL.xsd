@@ -5614,7 +5614,7 @@ Experiment.</xs:documentation>
 					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the expressions in the linking ancestor nodes.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
+			<xs:element name="specialOrderedSets" type="NodalTreeSpecialOrderedSets" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 2.0
 We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin in "Studies on Graphs and Discrete Programming", 1981. </xs:documentation>
@@ -5929,7 +5929,64 @@ quadratic term</xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-
+	<xs:complexType name="NodalTreeSpecialOrderedSets">
+		<xs:annotation>
+			<xs:documentation>recommendation</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of child elements must match numberOfSOS
+				</xs:documentation>
+			</xs:annotation>
+			<xs:element name="sos" type="NodalTreeSOS" minOccurs="0" maxOccurs="unbounded">
+				<!--
+SOS type 1 means "at most, or usually, exactly one of these variables can be nonzero (usually, in fact, 1)". This is used most commonly to model disjunctions. Type 2 means "at most two of these variables can be nonzero, and the two variables must be consecutive". This is used to model piecewise linear (typically nonconvex) functions in one variable. Tomlin used SOS to model nonconvex functions in two variables, using a triangulation of the domain. This idea can also be used for approximations in higher dimensions. In addition there may be the requirement that all the nonzero variables in an SOS must add up to 1. If present, this is called the convexity constraint. (It is the user's responsibility to add the convexity constraint to the problem.) The attribute "convexityRowIdx" can be used to identify the
+convexity row to the solver, which might speed up the execution time.
+-->
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfSOS" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NodalTreeSOS">
+		<xs:annotation>
+			<xs:documentation>recommendation</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="variables" type="NodalTreeSOSIntVector" minOccurs="0"/>
+			<xs:element name="adjacentVariableSets" type="NodalTreeSOSAdjacentVariableSets" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Only required if type >= 3.      All nonzero variables must belong to the same adjacency set. Adjacency variable sets must be subsets of the SOS variable set.
+If type = 2 adjacent variables are by default consecutive entries in the variables list.</xs:documentation>
+				</xs:annotation>
+				<!--
+In an SOS2, adjacency usually means that nonzero variables must be consecutive within the set. They are used to model piecewise linear functions of one variable, and what is adjacent should be reasonably clear. In an SOS3 the adjacent points are the vertices of a triangle (a two-dimensional simplex), and one cannot infer the adjacency from the order of the variables in the SOS. One also cannot infer  the size of the triangulation. That's why one needs to specify adjacency lists here. Since it is possible to omit such lists for SOS2 (and certainly for SOS1), it makes sense to allow for 0 adjacencySets. (And each triangle forms its own set, hence the plural.)-->
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="type" type="xs:positiveInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>"type = k" means at most k of the variables in this SOS can be nonzero, and the nonzeros must be "adjacent"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="convexityRowIdx" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>if present must refer to a previously defined constraint of the form 
+x_i1 + x_i2 + ... = 1. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="NodalTreeSOSAdjacentVariableSets">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="set" type="NonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Number of sets must match numberOfSets.  Elements of each set are indices that refer back to the list of variables in the SOS, that is, each value must be less than the number of elements in the variables - el vector.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfSets" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="NodalTreeMatrixProgramming">
 		<xs:annotation>
 			<xs:documentation>since version 2.0</xs:documentation>
@@ -5949,7 +6006,6 @@ quadratic term</xs:documentation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-
 	<xs:complexType name="NodalTreeMatrixExpressions">
 		<xs:annotation>
 			<xs:documentation>experimental</xs:documentation>
@@ -6033,7 +6089,6 @@ quadratic term</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-
 	<xs:complexType name="NodalTreeComplexExpression">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -6077,7 +6132,6 @@ quadratic term</xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-
 	<xs:complexType name="NodalTreeTensorProgramming">
 		<xs:annotation>
 			<xs:documentation>experiment--</xs:documentation>
@@ -6106,7 +6160,6 @@ quadratic term</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-
 	<xs:complexType name="NodalTreeTensorExpression">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -6150,7 +6203,6 @@ quadratic term</xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-
 	<xs:complexType name="NodeModifications-2016-10-05">
 		<xs:annotation>
 			<xs:documentation>experiment </xs:documentation>

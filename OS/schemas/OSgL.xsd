@@ -171,6 +171,47 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="NodalTreeSOSIntVector">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="el" type="NodalTreeSOSIntVectorEl" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NodalTreeSOSIntVectorEl">
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
+				<xs:attribute name="idxType" type="NodalTreeIndexType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>The value of this attribute must be one of "local" (the default), "lag", "stage" (an absolute reference to the number of the stage --- starting from 0 for the root), or "node" (an absolute reference to the ID given to another node).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxLag" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the lag of this row if  idxType="lag"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxStage" type="xs:nonNegativeInteger" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives the stage number of this row if idxType="stage"; ignored otherwise</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="idxNode" type="xs:IDREF" use="optional">
+					<xs:annotation>
+						<xs:documentation>Gives a reference to another node in the tree if idxType="node"; ignored otherwise.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 	<xs:complexType name="SizelessNonNegativeIntVector">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
