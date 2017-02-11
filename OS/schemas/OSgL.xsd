@@ -178,7 +178,7 @@
 		<xs:sequence>
 			<xs:element name="el" type="NodalTreeSOSIntVectorEl" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+					<xs:documentation>number must agree with numberOfEl (after "mult" has been considered). The content of each el, together with the idx-related attribute values, identifies a variable within the nodal tree. is to be used as an entry in the adjacencySet (if present) contains the _position_ of the variable within this list.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>

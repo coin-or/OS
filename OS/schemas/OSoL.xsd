@@ -65,14 +65,10 @@
 	<xs:complexType name="InstanceLocationOption">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="locationType" use="optional" default="local">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="local"/>
-							<xs:enumeration value="http"/>
-							<xs:enumeration value="ftp"/>
-						</xs:restriction>
-					</xs:simpleType>
+				<xs:attribute name="locationType" type="instanceLocationType" use="optional" default="local">
+					<xs:annotation>
+						<xs:documentation>if not one of the supported types, use "other:" followed by the type (in lower case)</xs:documentation>
+					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
@@ -484,4 +480,20 @@
 		<xs:attribute name="lbValue" type="xs:double" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:double" use="optional"/>
 	</xs:complexType>
+	<xs:simpleType name="instanceLocationEnumeration">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="local"/>
+			<xs:enumeration value="ftp"/>
+			<xs:enumeration value="http"/>
+			<xs:enumeration value="https"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="instanceLocationExtension">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="other:[a-z]+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="instanceLocationType">
+		<xs:union memberTypes="instanceLocationEnumeration instanceLocationExtension"/>
+	</xs:simpleType>
 </xs:schema>
