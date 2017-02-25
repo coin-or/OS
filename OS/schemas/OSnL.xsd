@@ -3720,7 +3720,7 @@
 				<xs:attribute name="value" type="xs:string" use="optional"/>
 				<xs:attribute name="id" type="xs:ID" use="optional">
 					<xs:annotation>
-						<xs:documentation>required if realtime or random is true</xs:documentation>
+						<xs:documentation>required if this node is later accessed as an updateable problem component</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 				<xs:attribute name="realtime" type="xs:boolean" default="false"/>
@@ -5990,7 +5990,7 @@ Returns the current value of the indicated objective</xs:documentation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixReference">
+	<xs:complexType name="OSnLMNodeMatrixReference">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
@@ -5998,10 +5998,15 @@ Returns the current value of the indicated objective</xs:documentation>
 			<xs:extension base="OSnLMNode">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="transpose" type="xs:boolean" use="optional"/>
+				<xs:attribute name="id" type="xs:ID" use="optional">
+					<xs:annotation>
+						<xs:documentation>required if this node is later accessed as an updateable problem component</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixReference" type="OSnLNodeMatrixReference" substitutionGroup="OSnLMNode">
+	<xs:element name="matrixReference" type="OSnLMNodeMatrixReference" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>

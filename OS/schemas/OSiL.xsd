@@ -1669,7 +1669,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>number must agree with numberOfDataPoints</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="sourceXPath" type="xs:string"/>
+			<xs:element name="sourceXPath" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>contains a string in W3C XPath syntax. Must return a single value</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="targetComponent" type="RealTimeUpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfTargetComponents</xs:documentation>
@@ -1940,7 +1944,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="UpdateableProblemComponent_test"/>
 		</xs:sequence>
-		<xs:attribute name="value" type="xs:double" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeletions">
 		<xs:sequence>
@@ -3423,6 +3427,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:enumeration value="constant"/>
 					<xs:enumeration value="lb"/>
 					<xs:enumeration value="ub"/>
+					<xs:enumeration value="lbAndUb"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -3470,6 +3475,19 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentTensorElement">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="dimensions" type="PositiveIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of elements in dimensions vector must equal tensor rank. Dimensions may be omitted if rank=0.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="tensorIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponent">
 		<xs:choice>
 			<!-- minOccurs="0" maxOccurs="unbounded">  -->
@@ -3500,10 +3518,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="OSnLNode" type="UpdateableProblemComponentNlNode">
 				<xs:annotation>
-					<xs:documentation>draft - refer to any OSnLNode in any nonlinear expression, including matrix constructs</xs:documentation>
+					<xs:documentation>draft - cannot change a tree structure, so it is restricted to OSnLNodeNumber</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixElement" type="UpdateableProblemComponentMatrixElement">
+				<xs:annotation>
+					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorElement" type="UpdateableProblemComponentTensorElement">
 				<xs:annotation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
 				</xs:annotation>
