@@ -1926,7 +1926,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="UpdateableProblemComponent_test"/>
 		</xs:sequence>
-		<xs:attribute name="value" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>the value is read as xs:string  and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeletions">
 		<xs:sequence>
@@ -3433,7 +3437,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:IDREF" use="required"/>
+		<xs:attribute name="id" type="xs:IDREF" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to an OSnLNode given an ID in the core section</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentNlCNode">
 		<xs:annotation>
