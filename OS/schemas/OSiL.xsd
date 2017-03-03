@@ -464,7 +464,7 @@ quadratic term</xs:documentation>
 			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
 			<xs:element name="matrixObjectives" type="MatrixObjectives" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>As scalar objectives,  additional matrix objectives are added below the indices of previously defined matrix objectives.</xs:documentation>
+					<xs:documentation>Like scalar objectives,  additional matrix objectives are added below the indices of previously defined matrix objectives.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
@@ -724,7 +724,12 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbRealPart" type="xs:double" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lbImaginaryPart" type="xs:double" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
@@ -734,7 +739,12 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				<xs:documentation>contains var - lb; assumed all of C if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubRealPart" type="xs:double" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubImaginaryPart" type="xs:double" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
@@ -745,11 +755,6 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name"/>
-		<xs:attribute name="varType" type="GeneralEnumerationVarType" use="optional" default="C">
-			<xs:annotation>
-				<xs:documentation>same type for every newly created variable</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ComplexObjectives">
@@ -769,33 +774,19 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="symmetry" type="SymmetryType" default="none">
+		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>e.g., if symmetry = "upper", only objectives in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
+				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="additiveConstantRealPart" type="xs:double" use="optional">
 			<xs:annotation>
-				<xs:documentation>matrix objective has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
+				<xs:documentation>added to objective; Zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="objReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="additiveConstantImaginaryPart" type="xs:double" use="optional">
 			<xs:annotation>
-				<xs:documentation>controls reuse of core objectives instead of creation of new ones. 
-Note: only where template matrix indicates a nonzero.
-If missing, all objectives indicated  by the use of the template matrix are created fresh. </xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="orderConeIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>x is (weakly) preferred to y if obj(x) - obj(y) lies in cone. If reference uses only core objectives, orderConeIdx can be omitted and defaults to the corresponding orthant cone</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>added to objective;        zero if missing</xs:documentation>
+				<xs:documentation>added to objective; Zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
@@ -818,26 +809,12 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="symmetry" type="SymmetryType" default="none">
+		<xs:attribute name="lbRealPart" type="xs:double" use="optional">
 			<xs:annotation>
-				<xs:documentation>e.g., if symmetry = "upper", only variables in the upper triangle (including diagonal) are generated and passed to the solver interface.</xs:documentation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="templateMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>matrix constraint has a nonzero entry wherever the template matrix does also. If templateMatrixIdx missing: Completely dense matrix.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="conReferenceMatrixIdx" type="xs:nonNegativeInteger" use="optional">
-			<xs:annotation>
-				<xs:documentation>controls reuse of core constraints instead of creation of new ones. 
-Note: only where template matrix indicates a nonzero.
-If missing, all constraints indicated  by the use of the template matrix are created fresh.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="lbImaginaryPart" type="xs:double" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
@@ -847,7 +824,12 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 				<xs:documentation>contains mtx expr - lbMtx; assumed all R^n if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="ubRealPart" type="xs:double" use="optional">
+			<xs:annotation>
+				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ubImaginaryPart" type="xs:double" use="optional">
 			<xs:annotation>
 				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
 			</xs:annotation>
@@ -3467,6 +3449,45 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentNlMNode">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:string" use="required"/>
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="part" default="real">
+			<xs:annotation>
+				<xs:documentation>default is "real", but can be set to "imaginary" for complex-valued matrix elements</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="real"/>
+					<xs:enumeration value="imaginary"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentNlTNode">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="indexes" type="NonNegativeIntVector"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required"/>
+		<xs:attribute name="part" use="required">
+			<xs:annotation>
+				<xs:documentation>default is "real", but can be set to "imaginary" for complex-valued tensor elements</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="real"/>
+					<xs:enumeration value="imaginary"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentMatrixElement">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -3474,6 +3495,17 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="realOrImaginary" default="real">
+			<xs:annotation>
+				<xs:documentation>to access either the real or the imaginary part of a complex number</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="real"/>
+					<xs:enumeration value="imaginary"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentTensorElement">
 		<xs:annotation>
@@ -3487,7 +3519,185 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="tensorIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="realOrImaginary" default="real">
+			<xs:annotation>
+				<xs:documentation>to access either the real or the imaginary part of a complex number</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="real"/>
+					<xs:enumeration value="imaginary"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentMatrixVariable">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lbMatrixIdx"/>
+					<xs:enumeration value="ubMatrixIdx"/>
+					<xs:enumeration value="lbConeIdx"/>
+					<xs:enumeration value="ubConeIdx"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentMatrixObjective">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="orderConeIdx"/>
+					<xs:enumeration value="constantMatrixIdx"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentMatrixConstraint">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lbMatrixIdx"/>
+					<xs:enumeration value="ubMatrixIdx"/>
+					<xs:enumeration value="lbConeIdx"/>
+					<xs:enumeration value="ubConeIdx"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentComplexVariable">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lbRealPart"/>
+					<xs:enumeration value="lbImaginaryPart"/>
+					<xs:enumeration value="ubRealPart"/>
+					<xs:enumeration value="ubImaginaryPart"/>
+					<xs:enumeration value="lbConeIdx"/>
+					<xs:enumeration value="ubConeIdx"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentComplexObjective">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="orderConeIdx"/>
+					<xs:enumeration value="additiveConstantRealPart"/>
+					<xs:enumeration value="additiveConstantImaginaryPart"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentComplexConstraint">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lbRealPart"/>
+					<xs:enumeration value="lbImaginaryPart"/>
+					<xs:enumeration value="ubRealPart"/>
+					<xs:enumeration value="ubImaginaryPart"/>
+					<xs:enumeration value="lbConeIdx"/>
+					<xs:enumeration value="ubConeIdx"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentTensorVariable">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lbTensorIdx"/>
+					<xs:enumeration value="ubTensordx"/>
+					<xs:enumeration value="lbConeIdx"/>
+					<xs:enumeration value="ubConeIdx"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentTensorObjective">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="orderConeIdx"/>
+					<xs:enumeration value="constantTensorIdx"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentTensorConstraint">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lbTensordx"/>
+					<xs:enumeration value="ubTensorIdx"/>
+					<xs:enumeration value="lbConeIdx"/>
+					<xs:enumeration value="ubConeIdx"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:group name="UpdateableProblemComponentMatrixProgrammingGroup">
+		<xs:choice>
+			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>
+			<xs:element name="matrixObj" type="UpdateableProblemComponentMatrixObjective"/>
+			<xs:element name="matrixCon" type="UpdateableProblemComponentMatrixConstraint"/>
+			<xs:element name="OSnLMNode" type="UpdateableProblemComponentNlMNode"/>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="UpdateableProblemComponentComplexProgrammingGroup">
+		<xs:choice>
+			<xs:element name="complexVar" type="UpdateableProblemComponentComplexVariable"/>
+			<xs:element name="complexObj" type="UpdateableProblemComponentComplexObjective"/>
+			<xs:element name="complexCon" type="UpdateableProblemComponentComplexConstraint"/>
+			<xs:element name="OSnLCNode" type="UpdateableProblemComponentNlCNode"/>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="UpdateableProblemComponentTensorProgrammingGroup">
+		<xs:choice>
+			<xs:element name="tensorVar" type="UpdateableProblemComponentTensorVariable"/>
+			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
+			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
+			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
+		</xs:choice>
+	</xs:group>
 	<xs:complexType name="UpdateableProblemComponent">
 		<xs:choice>
 			<!-- minOccurs="0" maxOccurs="unbounded">  -->
@@ -3531,6 +3741,23 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>
+			<xs:element name="matrixObj" type="UpdateableProblemComponentMatrixObjective"/>
+			<xs:element name="matrixCon" type="UpdateableProblemComponentMatrixConstraint"/>
+			<xs:element name="OSnLMNode" type="UpdateableProblemComponentNlMNode"/>
+			<xs:element name="complexVar" type="UpdateableProblemComponentComplexVariable"/>
+			<xs:element name="complexObj" type="UpdateableProblemComponentComplexObjective"/>
+			<xs:element name="complexCon" type="UpdateableProblemComponentComplexConstraint"/>
+			<xs:element name="OSnLCNode" type="UpdateableProblemComponentNlCNode"/>
+			<xs:element name="tensorVar" type="UpdateableProblemComponentTensorVariable"/>
+			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
+			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
+			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
+			<!--			
+			<xs:group ref="UpdateableProblemComponentMatrixProgrammingGroup"/>
+			<xs:group ref="UpdateableProblemComponentComplexProgrammingGroup"/>
+			<xs:group ref="UpdateableProblemComponentTensorProgrammingGroup"/>
+-->
 		</xs:choice>
 	</xs:complexType>
 	<xs:group name="UpdateableProblemComponent_test">
