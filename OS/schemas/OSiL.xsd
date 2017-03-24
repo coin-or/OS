@@ -1092,7 +1092,7 @@ If missing, all constraints indicated  by the use of the template tensor are cre
 			<xs:documentation>since version 2.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="OSnLMNode"/>
+			<xs:element ref="OSnLTNode"/>
 		</xs:sequence>
 		<xs:attribute name="idx" type="xs:int" use="required">
 			<xs:annotation>
@@ -1984,7 +1984,69 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="complexVariables" type="ModificationDeleteComplexVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexObjectives" type="ModificationDeleteComplexObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexConstraints" type="ModificationDeleteComplexConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexExpressions" type="ModificationDeleteComplexExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorVariables" type="ModificationDeleteTensorVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorObjectives" type="ModificationDeleteTensorObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorConstraints" type="ModificationDeleteTensorConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorExpressions" type="ModificationDeleteTensorExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticTree" type="ModificationDeleteStochasticTree" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteStochasticTree">
+		<xs:annotation>
+			<xs:documentation>experiment </xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="treeType">
+			<xs:annotation>
+				<xs:documentation>experiment - treeType is optional since there should be only one tree defined</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="implicit"/>
+					<xs:enumeration value="scenarios"/>
+					<xs:enumeration value="nodal"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteVariables">
 		<xs:annotation>
@@ -2107,6 +2169,98 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	<xs:complexType name="ModificationDeleteMatrixExpr">
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="ModificationDeleteComplexVariables">
+		<xs:sequence>
+			<xs:element name="complexVar" type="ModificationDeleteComplexVar" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>delete a complex variable and all terms in all nonlinear and complex expressions in which the complex variable occurs.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfComplexVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteComplexVar">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteComplexObjectives">
+		<xs:sequence>
+			<xs:element name="complexObj" type="ModificationDeleteComplexObj" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfComplexObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteComplexObj">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:int" default="-1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteComplexConstraints">
+		<xs:sequence>
+			<xs:element name="complexCon" type="ModificationDeleteComplexCon" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfComplexCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteComplexCon">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteComplexExpressions">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="expr" type="ModificationDeleteComplexExpr"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteComplexExpr">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteTensorVariables">
+		<xs:sequence>
+			<xs:element name="tensorVar" type="ModificationDeleteTensorVar" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>delete a tensor variable and all terms in all nonlinear and tensor expressions in which the tensor variable occurs.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteTensorVar">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteTensorObjectives">
+		<xs:sequence>
+			<xs:element name="tensorObj" type="ModificationDeleteTensorObj" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteTensorObj">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:int" default="-1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteTensorConstraints">
+		<xs:sequence>
+			<xs:element name="tensorCon" type="ModificationDeleteTensorCon" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfTensorCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteTensorCon">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteTensorExpressions">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="expr" type="ModificationDeleteTensorExpr"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteTensorExpr">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="ModificationAdditions">
 		<xs:sequence>
 			<xs:element name="variables" type="Variables" minOccurs="0">
@@ -2140,6 +2294,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="nonlinearExpressions" type="ModificationAddNonlinearExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -2182,6 +2341,31 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="complexExpressions" type="ComplexExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorVariables" type="TensorVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorObjectives" type="TensorObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorConstraints" type="TensorConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorExpressions" type="TensorExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticTree" type="StochasticData-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3682,6 +3866,20 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentImplicitTree">
+		<xs:annotation>
+			<xs:documentation>draft - to replace one distribution in an implicit tree block by another distribution with the same dimensions</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="blockIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="distributionIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentScenarioTree">
+		<xs:annotation>
+			<xs:documentation>draft - to replace one stochastic value in a scenario</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:group name="UpdateableProblemComponentMatrixProgrammingGroup">
 		<xs:choice>
 			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>
@@ -3749,6 +3947,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<!--
 			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>
 			<xs:element name="matrixObj" type="UpdateableProblemComponentMatrixObjective"/>
 			<xs:element name="matrixCon" type="UpdateableProblemComponentMatrixConstraint"/>
@@ -3761,11 +3960,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
-			<!--			
+-->
 			<xs:group ref="UpdateableProblemComponentMatrixProgrammingGroup"/>
 			<xs:group ref="UpdateableProblemComponentComplexProgrammingGroup"/>
 			<xs:group ref="UpdateableProblemComponentTensorProgrammingGroup"/>
--->
+			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree"/>
+			<xs:element name="scenarioTree" type="UpdateableProblemComponentScenarioTree"/>
 		</xs:choice>
 	</xs:complexType>
 	<xs:group name="UpdateableProblemComponent_test">
@@ -3780,8 +3980,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the objective</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-
-
 			<xs:element name="con" type="UpdateableProblemComponentConstraint">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
@@ -3824,8 +4022,16 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
-
-
+			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree">
+				<xs:annotation>
+					<xs:documentation>experiment - to substitute one distribution for another of the same dimensions</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scenarioTree" type="UpdateableProblemComponentScenarioTree">
+				<xs:annotation>
+					<xs:documentation>experiment - to change the value of one element  in a scenario</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 	</xs:group>
 	<xs:complexType name="Param_test">
@@ -6742,6 +6948,46 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="complexVariables" type="ModificationDeleteComplexVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexObjectives" type="ModificationDeleteComplexObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexConstraints" type="ModificationDeleteComplexConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexExpressions" type="ModificationDeleteComplexExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorVariables" type="ModificationDeleteTensorVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorObjectives" type="ModificationDeleteTensorObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorConstraints" type="ModificationDeleteTensorConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorExpressions" type="ModificationDeleteTensorExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationDeleteVariables-2016-12-26">
@@ -6964,6 +7210,26 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="complexExpressions" type="ModificationAddComplexExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorVariables" type="TensorVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorObjectives" type="TensorObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorConstraints" type="TensorConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorExpressions" type="TensorExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
