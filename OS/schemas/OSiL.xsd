@@ -1916,6 +1916,39 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+					<xs:complexType name="UpdateableProblemComponentRealTimeDataItem">
+						<xs:attribute name="attr" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="uriAlias"/>
+									<xs:enumeration value="uri"/>
+									<xs:enumeration value="refreshPoint"/>
+									<xs:enumeration value="sourceXPath"/>
+									<xs:enumeration value="targetComponent"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="realTimeDataSourceIdx" type="xs:nonNegativeInteger" use="required"/>
+						<xs:attribute name="dataPointIdx" type="xs:nonNegativeInteger"/>
+						<xs:attribute name="targetComponentIdx" type="xs:nonNegativeInteger">
+							<xs:annotation>
+								<xs:documentation>must be present if attr="targetComponent"</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+					<xs:complexType name="UpdateableProblemComponentDisjunctiveTerm">
+						<xs:attribute name="attr" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="conditioningVariable"/>
+									<xs:enumeration value="conditioningConstraint"/>
+									<xs:enumeration value="disjunctiveTermElement"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
+						<xs:attribute name="disjunctiveTermIdx" type="xs:nonNegativeInteger" use="required"/>
+					</xs:complexType>
 	<xs:complexType name="ModificationUpdates">
 		<xs:sequence>
 			<xs:element name="subst" type="ModificationsUpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded"/>
@@ -1923,9 +1956,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationsUpdateableProblemComponent">
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="UpdateableProblemComponent_test"/>
-		</xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:choice>
+				<xs:group ref="UpdateableProblemComponent_test"/>
+				<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree"/>
+				<xs:element name="scenarioTree" type="UpdateableProblemComponentScenarioTree"/>
+				<xs:element name="realTimeDataItem" type="UpdateableProblemComponentRealTimeDataItem"/>
+				<xs:element name="disjunctiveTerm" type="UpdateableProblemComponentDisjunctiveTerm"/>
+			</xs:choice>
+		</xs:choice>
 		<xs:attribute name="value" type="xs:string" use="required">
 			<xs:annotation>
 				<xs:documentation>the value is read as xs:string  and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
@@ -3964,8 +4003,10 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:group ref="UpdateableProblemComponentMatrixProgrammingGroup"/>
 			<xs:group ref="UpdateableProblemComponentComplexProgrammingGroup"/>
 			<xs:group ref="UpdateableProblemComponentTensorProgrammingGroup"/>
+			<!--			
 			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree"/>
 			<xs:element name="scenarioTree" type="UpdateableProblemComponentScenarioTree"/>
+-->
 		</xs:choice>
 	</xs:complexType>
 	<xs:group name="UpdateableProblemComponent_test">
@@ -4022,6 +4063,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
+			<!--			
 			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree">
 				<xs:annotation>
 					<xs:documentation>experiment - to substitute one distribution for another of the same dimensions</xs:documentation>
@@ -4029,9 +4071,10 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="scenarioTree" type="UpdateableProblemComponentScenarioTree">
 				<xs:annotation>
-					<xs:documentation>experiment - to change the value of one element  in a scenario</xs:documentation>
+					<xs:documentation>experiment - to change the value of one element in a scenario</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 		</xs:choice>
 	</xs:group>
 	<xs:complexType name="Param_test">
@@ -6868,6 +6911,23 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="tensorElement" type="UpdateableProblemComponentTensorElement">
+				<xs:annotation>
+					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>
+			<xs:element name="matrixObj" type="UpdateableProblemComponentMatrixObjective"/>
+			<xs:element name="matrixCon" type="UpdateableProblemComponentMatrixConstraint"/>
+			<xs:element name="OSnLMNode" type="UpdateableProblemComponentNlMNode"/>
+			<xs:element name="complexVar" type="UpdateableProblemComponentComplexVariable"/>
+			<xs:element name="complexObj" type="UpdateableProblemComponentComplexObjective"/>
+			<xs:element name="complexCon" type="UpdateableProblemComponentComplexConstraint"/>
+			<xs:element name="OSnLCNode" type="UpdateableProblemComponentNlCNode"/>
+			<xs:element name="tensorVar" type="UpdateableProblemComponentTensorVariable"/>
+			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
+			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
+			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
 		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationUpdates-2016-12-26">
