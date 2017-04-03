@@ -1916,39 +1916,39 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-					<xs:complexType name="UpdateableProblemComponentRealTimeDataItem">
-						<xs:attribute name="attr" use="required">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="uriAlias"/>
-									<xs:enumeration value="uri"/>
-									<xs:enumeration value="refreshPoint"/>
-									<xs:enumeration value="sourceXPath"/>
-									<xs:enumeration value="targetComponent"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:attribute>
-						<xs:attribute name="realTimeDataSourceIdx" type="xs:nonNegativeInteger" use="required"/>
-						<xs:attribute name="dataPointIdx" type="xs:nonNegativeInteger"/>
-						<xs:attribute name="targetComponentIdx" type="xs:nonNegativeInteger">
-							<xs:annotation>
-								<xs:documentation>must be present if attr="targetComponent"</xs:documentation>
-							</xs:annotation>
-						</xs:attribute>
-					</xs:complexType>
-					<xs:complexType name="UpdateableProblemComponentDisjunctiveTerm">
-						<xs:attribute name="attr" use="required">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="conditioningVariable"/>
-									<xs:enumeration value="conditioningConstraint"/>
-									<xs:enumeration value="disjunctiveTermElement"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:attribute>
-						<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
-						<xs:attribute name="disjunctiveTermIdx" type="xs:nonNegativeInteger" use="required"/>
-					</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentRealTimeDataItem">
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="uriAlias"/>
+					<xs:enumeration value="uri"/>
+					<xs:enumeration value="refreshPoint"/>
+					<xs:enumeration value="sourceXPath"/>
+					<xs:enumeration value="targetComponent"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="realTimeDataSourceIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dataPointIdx" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="targetComponentIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>must be present if attr="targetComponent"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentDisjunctiveTerm">
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="conditioningVariable"/>
+					<xs:enumeration value="conditioningConstraint"/>
+					<xs:enumeration value="disjunctiveTermElement"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="disjunctiveTermIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="ModificationUpdates">
 		<xs:sequence>
 			<xs:element name="subst" type="ModificationsUpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded"/>
@@ -2059,6 +2059,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="tensorExpressions" type="ModificationDeleteTensorExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="ModificationDeleteRealTimeData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -2300,6 +2305,22 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	<xs:complexType name="ModificationDeleteTensorExpr">
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="ModificationDeleteRealTimeDataSource">
+		<xs:attribute name="realTimeDataSourceIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dataPointIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="targetComponentIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>if attribute is present, only replace the indicated target component. Otherwise delete all target components for the indicated data point.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="replacementValue" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteRealTimeData">
+		<xs:sequence>
+			<xs:element name="dataSource" type="ModificationDeleteRealTimeDataSource" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDataSources" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="ModificationAdditions">
 		<xs:sequence>
 			<xs:element name="variables" type="Variables" minOccurs="0">
@@ -2398,6 +2419,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="tensorExpressions" type="TensorExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="ModificationAddRealTimeData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -2585,6 +2611,19 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:choice>
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 		<!--		<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>  -->
+	</xs:complexType>
+	<xs:complexType name="ModificationAddRealTimeData">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="realTimeDataSource" type="RealTimeDataSource" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with  numberOfDataSources</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfDataSources" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<!--	
 	<xs:simpleType name="ModificationType">
@@ -7044,6 +7083,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="tensorExpressions" type="ModificationDeleteTensorExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="ModificationDeleteRealTimeData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>

@@ -328,10 +328,6 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
-			<xs:element name="el" type="DoubleVectorEl" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="StringVectorEl">
 		<xs:simpleContent>
@@ -1464,6 +1460,7 @@ equal tensor rank</xs:documentation>
 			<xs:element ref="empiricalContinuous"/>
 			<xs:element ref="uniform"/>
 			<xs:element ref="normal"/>
+			<xs:element ref="new_normal"/>
 			<xs:element ref="stdNormal"/>
 			<xs:element ref="exponential"/>
 			<xs:element ref="weibull"/>
@@ -1708,6 +1705,30 @@ equal tensor rank</xs:documentation>
 		<xs:attribute name="sigma" type="NonNegativeDouble" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:element name="normal" type="Normal">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="New_Normal">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="mu" type="OSnLNode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>this element can only be present if the attribute of the same name is absent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="sigma" type="OSnLNode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>this element can only be present if the attribute of the same name is absent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mu" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="sigma" type="NonNegativeDouble" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:element name="new_normal" type="New_Normal">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
@@ -1964,7 +1985,11 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" type="xs:double" minOccurs="2" maxOccurs="unbounded"/>
+			<xs:annotation>
+				<xs:documentation>number of "el" children must equal "dimension" after mult and incr have been considered</xs:documentation>
+			</xs:annotation>
+			<xs:element name="el" type="DoubleVectorEl" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:sequence>
 		<xs:attribute name="prob" type="Probability" use="required"/>
 	</xs:complexType>
@@ -1973,8 +1998,14 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="scenario" type="MultivariateDiscreteScenario" minOccurs="2" maxOccurs="unbounded"/>
+			<xs:element name="scenario" type="MultivariateDiscreteScenario" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="multivariateDiscrete" type="MultivariateDiscrete">
 		<xs:annotation>
@@ -1986,7 +2017,11 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" type="Probability" maxOccurs="unbounded"/>
+			<xs:element name="prob" type="Probability" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with N; each must be nonnegative and they must sum to 1</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="N" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
@@ -2288,7 +2323,11 @@ equal tensor rank</xs:documentation>
 		<xs:sequence>
 			<xs:element name="cov" type="MatrixMarket" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>if present, must reference a symmetric, positive semidefinite matrix  </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="DistributionParameter">
 		<xs:choice>
