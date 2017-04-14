@@ -19,7 +19,14 @@
 					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="instanceData" type="InstanceData"/>
+			<xs:choice>
+				<xs:element name="instanceData" type="InstanceData" minOccurs="0"/>
+				<xs:element name="modifications" type="InstanceModifications" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>experiment</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
 	<!--InstanceData: since version 1.0 -->
@@ -156,11 +163,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="ambiguityResolution" type="AmbiguityResolution" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="modifications" type="InstanceModifications" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -3983,7 +3985,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:choice>
 	</xs:group>
 	<xs:complexType name="UpdateableProblemComponent">
-		<xs:choice>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<!-- minOccurs="0" maxOccurs="unbounded">  -->
 			<xs:element name="var" type="UpdateableProblemComponentVariable">
 				<xs:annotation>
