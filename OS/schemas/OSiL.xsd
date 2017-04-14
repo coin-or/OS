@@ -420,6 +420,22 @@ quadratic term</xs:documentation>
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="RealValuedConstant">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>expression tree must evaluate to a constant (i.e., no variable references, etc.)</xs:documentation>
+			</xs:annotation>
+			<xs:element ref="OSnLNode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ComplexValuedConstant">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>expression tree must evaluate to a constant (i.e., no variable references, etc.)</xs:documentation>
+			</xs:annotation>
+			<xs:element ref="OSnLCNode"/>
+		</xs:sequence>
+	</xs:complexType>
 	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - -->
 	<xs:complexType name="nonlinearComplexValuedExpressions">
 		<xs:annotation>

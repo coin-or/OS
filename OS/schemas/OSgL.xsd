@@ -1719,12 +1719,12 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="mu" type="OSnLNode" minOccurs="0">
+			<xs:element name="mu" type="RealValuedConstant" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>this element can only be present if the attribute of the same name is absent</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="sigma" type="OSnLNode" minOccurs="0">
+			<xs:element name="sigma" type="RealValuedConstant" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>this element can only be present if the attribute of the same name is absent</xs:documentation>
 				</xs:annotation>
