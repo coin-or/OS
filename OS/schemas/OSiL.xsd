@@ -86,6 +86,16 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="distributions" type="Distributions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="parameters" type="Parameters" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 2.0</xs:documentation>
@@ -114,16 +124,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="parameters" type="Parameters" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="distributions" type="Distributions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -3976,6 +3976,19 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentDistributionElement">
+		<xs:attribute name="distribIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>value must match one of the attribute names in the corresponding distribution, e.g., "mean".</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>used to identify an element within a one-dimensional array of parameters, e.g., mean of multivariateNormal.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
 	<xs:group name="UpdateableProblemComponentMatrixProgrammingGroup">
 		<xs:choice>
 			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>
@@ -4040,7 +4053,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="tensorElement" type="UpdateableProblemComponentTensorElement">
 				<xs:annotation>
-					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
+					<xs:documentation>draft - may NOT change the sparsity pattern of the tensor</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<!--
@@ -4057,6 +4070,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
 -->
+			<xs:element name="distributionElement" type="UpdateableProblemComponentDistributionElement"/>
 			<xs:group ref="UpdateableProblemComponentMatrixProgrammingGroup"/>
 			<xs:group ref="UpdateableProblemComponentComplexProgrammingGroup"/>
 			<xs:group ref="UpdateableProblemComponentTensorProgrammingGroup"/>
@@ -4120,6 +4134,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
+			<xs:element name="distributionElement" type="UpdateableProblemComponentDistributionElement"/>
 			<!--			
 			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree">
 				<xs:annotation>
