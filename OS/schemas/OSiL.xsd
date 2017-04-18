@@ -3976,7 +3976,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="UpdateableProblemComponentDistributionElement">
+	<xs:complexType name="UpdateableProblemComponentDistributionParameter">
 		<xs:attribute name="distribIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="attr" type="xs:string" use="required">
 			<xs:annotation>
@@ -4070,7 +4070,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
 -->
-			<xs:element name="distributionElement" type="UpdateableProblemComponentDistributionElement"/>
+			<xs:element name="distributionParameter" type="UpdateableProblemComponentDistributionParameter"/>
 			<xs:group ref="UpdateableProblemComponentMatrixProgrammingGroup"/>
 			<xs:group ref="UpdateableProblemComponentComplexProgrammingGroup"/>
 			<xs:group ref="UpdateableProblemComponentTensorProgrammingGroup"/>
@@ -4134,7 +4134,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
-			<xs:element name="distributionElement" type="UpdateableProblemComponentDistributionElement"/>
+			<xs:element name="distributionParameter" type="UpdateableProblemComponentDistributionParameter"/>
 			<!--			
 			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree">
 				<xs:annotation>
@@ -6220,14 +6220,14 @@ Experiment.</xs:documentation>
 We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin in "Studies on Graphs and Discrete Programming", 1981. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="complexProgramming" type="NodalTreeComplexProgramming" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="matrixProgramming" type="NodalTreeMatrixProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 2.0. The indexing is cumulative; current node indices are added after the indices of the ancestor nodes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexProgramming" type="NodalTreeComplexProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="tensorProgramming" type="NodalTreeTensorProgramming" minOccurs="0">
@@ -6240,6 +6240,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+<!--			
 			<xs:element name="parameters" type="Parameters" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -6250,11 +6251,13 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<xs:element name="stochasticData-2016-10-05" type="StochasticData-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+<!--			
 			<xs:element name="softConstraints" type="SoftConstraints" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
@@ -6270,6 +6273,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
@@ -6280,12 +6284,14 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+<!--			
 			<xs:element name="simulations" type="Simulations" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<!--
+-->
+<!--
 			<xs:element name="updateableData" type="UpdateableData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>realTimeData and simulations. experiment</xs:documentation>

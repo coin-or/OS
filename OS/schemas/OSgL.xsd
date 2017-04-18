@@ -1454,7 +1454,9 @@ equal tensor rank</xs:documentation>
 			<xs:element ref="hypergeometric"/>
 			<xs:element ref="poisson"/>
 			<xs:element ref="geometric"/>
+			<xs:element ref="shiftedGeometric"/>
 			<xs:element ref="negativeBinomial"/>
+			<xs:element ref="logSeries"/>
 		</xs:choice>
 	</xs:group>
 	<xs:group name="ContinuousDistributionGroup">
@@ -1467,12 +1469,15 @@ equal tensor rank</xs:documentation>
 			<xs:element ref="normal"/>
 			<xs:element ref="new_normal"/>
 			<xs:element ref="stdNormal"/>
+			<xs:element ref="truncNormal"/>
 			<xs:element ref="exponential"/>
 			<xs:element ref="weibull"/>
 			<xs:element ref="erlang"/>
 			<xs:element ref="gamma"/>
+			<xs:element ref="generalizedGamma"/>
 			<xs:element ref="beta"/>
-			<xs:element ref="betaGeneral"/>
+			<xs:element ref="generalBeta"/>
+			<xs:element ref="shiftedBeta"/>
 			<xs:element ref="lognormal"/>
 			<xs:element ref="cauchy"/>
 			<xs:element ref="t"/>
@@ -1714,6 +1719,18 @@ until stopping</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="LogSeries">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0  
+according to WolframMathWorld</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="p" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:element name="logSeries" type="LogSeries">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="EmpiricalContinuousElement">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
@@ -1891,7 +1908,7 @@ until stopping</xs:documentation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="BetaGeneral">
+	<xs:complexType name="GeneralBeta">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
@@ -1900,7 +1917,7 @@ until stopping</xs:documentation>
 		<xs:attribute name="min" type="xs:double" use="required"/>
 		<xs:attribute name="max" type="xs:double" use="required"/>
 	</xs:complexType>
-	<xs:element name="betaGeneral" type="BetaGeneral">
+	<xs:element name="generalBeta" type="GeneralBeta">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
@@ -2026,18 +2043,6 @@ according to WolframMathWorld</xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:element name="logarithmic" type="Logarithmic">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="LogSeries">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0  
-according to WolframMathWorld</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="p" type="xs:double" use="required"/>
-	</xs:complexType>
-	<xs:element name="logSeries" type="LogSeries">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
