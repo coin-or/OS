@@ -2381,6 +2381,31 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="matrices" type="Matrices" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensors" type="Tensors" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cones" type="Cones" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="distributions" type="Distributions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="disjunctions" type="DisjunctiveInformation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
@@ -3367,12 +3392,13 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="conditioningConstraints" type="NonNegativeIntVector" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>to identify core contraints that describe additional restrictions on the logical conditioningVariables</xs:documentation>
+					<xs:documentation>to identify core constraints that describe additional restrictions on the logical conditioningVariables</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="disjunction" type="DisjunctiveSet" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>different disjunctive sets are connected by logical AND</xs:documentation>
+					<xs:documentation>different disjunctive sets are connected by logical AND.
+If the problem exhibits time structure, especially stochastic structure, then a disjunction can be associated with a time stage. (See "timeStages" element.)</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -4627,7 +4653,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="eventsFollowDecisions" type="xs:boolean" default="false">
 			<xs:annotation>
-				<xs:documentation>events and decisions can share a stage. By default events precede all decisions in a stage. This attribute can be used to reverse the order. </xs:documentation>
+				<xs:documentation>events and decisions, constraints, disjunctions, etc. can share a stage. By default events precede all decisions, etc. in a stage. This attribute can be used to reverse the order. </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -6240,7 +6266,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-<!--			
+			<!--			
 			<xs:element name="parameters" type="Parameters" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -6257,7 +6283,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-<!--			
+			<!--			
 			<xs:element name="softConstraints" type="SoftConstraints" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
@@ -6284,14 +6310,14 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-<!--			
+			<!--			
 			<xs:element name="simulations" type="Simulations" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 -->
-<!--
+			<!--
 			<xs:element name="updateableData" type="UpdateableData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>realTimeData and simulations. experiment</xs:documentation>

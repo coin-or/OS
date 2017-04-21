@@ -21,9 +21,9 @@
 			<xs:element name="description" type="xs:string" minOccurs="0"/>
 			<xs:element name="fileCreator" type="xs:string" minOccurs="0"/>
 			<xs:element name="licence" type="xs:string" minOccurs="0"/>
-			<xs:element name="refID" type="xs:ID" minOccurs="0">
+			<xs:element name="ID" type="xs:string" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>defines a reference for reuse in subsequent modifications.</xs:documentation>
+					<xs:documentation>defines a reference for reuse in subsequent modifications. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:all>
@@ -1467,7 +1467,6 @@ equal tensor rank</xs:documentation>
 			<xs:element ref="empiricalContinuous"/>
 			<xs:element ref="uniform"/>
 			<xs:element ref="normal"/>
-			<xs:element ref="new_normal"/>
 			<xs:element ref="stdNormal"/>
 			<xs:element ref="truncNormal"/>
 			<xs:element ref="exponential"/>
@@ -1782,30 +1781,6 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="sigma" type="NonNegativeDouble" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:element name="normal" type="Normal">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:complexType name="New_Normal">
-		<xs:annotation>
-			<xs:documentation>experiment</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="mu" type="RealValuedConstant" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>this element can only be present if the attribute of the same name is absent</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="sigma" type="RealValuedConstant" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>this element can only be present if the attribute of the same name is absent</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="mu" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="sigma" type="NonNegativeDouble" use="optional" default="1"/>
-	</xs:complexType>
-	<xs:element name="new_normal" type="New_Normal">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
