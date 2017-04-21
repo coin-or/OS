@@ -4570,19 +4570,11 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfStages" type="xs:positiveInteger" use="required"/>
-		<!-- not needed here (?)
-		<xs:attribute name="decisionEventSequence">
+		<xs:attribute name="eventsFollowDecisions" type="xs:boolean" default="false">
 			<xs:annotation>
-				<xs:documentation>used for time-staged decomposition</xs:documentation>
+				<xs:documentation>events and decisions, constraints, disjunctions, etc. can share a stage. By default events precede all decisions, etc. in a stage. This attribute can be used to reverse the order. </xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="decisionBeforeEvent"/>
-					<xs:enumeration value="decisionAfterEvent"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
--->
 	</xs:complexType>
 	<xs:complexType name="TimeStage">
 		<xs:annotation>
@@ -4602,6 +4594,11 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:element name="constraints" type="TimeStageConstraints-2016-Dec-23" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal. If missing, assume numberOfConstraints=0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="disjunctions" type="TimeStageDisjunctions-2016-Dec-23" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal. If missing, assume numberOfDisjunctions=0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixVariables" type="TimeStageMatrixVariables-2016-Dec-23" minOccurs="0">
@@ -4651,11 +4648,6 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="eventsFollowDecisions" type="xs:boolean" default="false">
-			<xs:annotation>
-				<xs:documentation>events and decisions, constraints, disjunctions, etc. can share a stage. By default events precede all decisions, etc. in a stage. This attribute can be used to reverse the order. </xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="TimeStageVariables-2016-Dec-23">
 		<xs:annotation>
@@ -4691,6 +4683,19 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TimeStageDisjunctions-2016-Dec-23">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>List must be empty if startIdx is used and must match numberOfDisjunctions otherwise</xs:documentation>
+			</xs:annotation>
+			<xs:element name="disjunction" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageCon">
