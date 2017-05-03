@@ -2088,8 +2088,50 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="stochasticTree" type="ModificationDeleteStochasticTree" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>experiment - Delete the entire scenario tree or implicit tree</xs:documentation>
 				</xs:annotation>
+			</xs:element>
+			<xs:element name="scenarios" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="scenarios" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:attribute name="scenIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
+									<xs:annotation>
+										<xs:documentation>first stage that is to be deleted - default value: start of the scenario</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="deleteMode" default="path">
+									<xs:annotation>
+										<xs:documentation>delete just one scenario path (default) or the entire subtree</xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="path"/>
+											<xs:enumeration value="subtree"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="probAdjust" use="required">
+									<xs:annotation>
+										<xs:documentation>determines whether the freed probability is to be distributed among the sibling scenarios only (default if deleteMode = "path") or all remaining scenarios in the tree (default if deleteMode = "subtree").</xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="siblings"/>
+											<xs:enumeration value="allScenarios"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberOfScenarios"/>
+				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
@@ -2476,6 +2518,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="scenarios" type="ModificationAddScenarios" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddVariables">
@@ -2667,6 +2710,28 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfDataSources" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddScenarios">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="scenario" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mode" default="replace">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="replace"/>
+					<xs:enumeration value="add"/>
+					<xs:enumeration value="multiply"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<!--	
 	<xs:simpleType name="ModificationType">
@@ -5959,8 +6024,14 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:documentation>number of children must agree with numberOfStochasticElements</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<!--			
 			<xs:element name="rootScenario" type="RootScenario-2016-10-05"/>
-			<xs:element name="scenario" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded"/>
+ -->
+			<xs:element name="scenario" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfStochasticElements" type="xs:nonNegativeInteger" use="required"/>
@@ -5979,10 +6050,24 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:element name="changesFromCore" type="ChangesInScenario" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="prob" use="required">
+			<xs:annotation>
+				<xs:documentation>scenario probability</xs:documentation>
+			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
 					<xs:minInclusive value="0"/>
 					<xs:maxInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="probType">
+			<xs:annotation>
+				<xs:documentation>path probability or conditional probability - default is "path"</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="path"/>
+					<xs:enumeration value="cond"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -6006,10 +6091,17 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 	</xs:complexType>
 	<xs:complexType name="Scenario-2016-10-05">
 		<xs:sequence>
-			<xs:element name="changesFromParentOrBase" type="ChangesInScenario" minOccurs="0"/>
+			<xs:element name="changesFromBase" type="ChangesInScenario" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="parent" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="parentIdx" type="xs:integer" use="required">
+			<xs:annotation>
+				<xs:documentation>gives the index of the parent scenario. The root scenario has parentIdx = -1.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="prob" use="required">
+			<xs:annotation>
+				<xs:documentation>scenario probability</xs:documentation>
+			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
 					<xs:minInclusive value="0"/>
@@ -6017,8 +6109,27 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="base" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="probType">
+			<xs:annotation>
+				<xs:documentation>path probability or conditional probability - default is "path"</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="path"/>
+					<xs:enumeration value="cond"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="baseIdx" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>gives the index of a scenario that contains the default data. The default value is parentIdx; use -1 to indicate the core.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>gives the first stage in which this scenario has data that differ from its parent.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="numberOfChanges" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>changes are relative to parent or, if present, the base scenario</xs:documentation>

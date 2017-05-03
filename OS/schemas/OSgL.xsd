@@ -333,6 +333,10 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
+		<xs:choice>
+			<xs:element name="el" type="DoubleVectorEl" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="StringVectorEl">
 		<xs:simpleContent>
