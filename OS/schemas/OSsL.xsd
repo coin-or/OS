@@ -3,7 +3,7 @@
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<!--OSsL: version - 2.0.0-->
+	<!--OSsL: version - 2.0-->
 	<xs:element name="ossl" type="OSsL">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>

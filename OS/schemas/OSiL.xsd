@@ -3,7 +3,7 @@
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1, 2.0, ... -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
-	<!--OSiL.xsd: version 2.0.0 -->
+	<!--OSiL.xsd: version 2.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -86,6 +86,11 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="distributions" type="Distributions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -121,11 +126,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<!--			
@@ -6014,11 +6014,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<!--
 			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<xs:element name="stochasticElements" type="UpdateableProblemComponent" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>number of children must agree with numberOfStochasticElements</xs:documentation>
@@ -7708,11 +7710,13 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="ImplicitTree-2016-10-05">
 		<xs:sequence>
+			<!--		
 			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<xs:element name="block" type="ImplicitTreeBlock-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfBlocks.

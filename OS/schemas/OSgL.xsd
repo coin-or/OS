@@ -3,12 +3,12 @@
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<!--OSgL: version - 2.0.0-->
+	<!--OSgL: version - 2.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
 	<xs:element name="osgl">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="GeneralFileHeader">
@@ -30,7 +30,7 @@
 	</xs:complexType>
 	<xs:simpleType name="NumericType">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="double"/>
@@ -355,7 +355,7 @@
 	</xs:complexType>
 	<xs:complexType name="El">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="description" minOccurs="0"/>
@@ -365,7 +365,7 @@
 	</xs:complexType>
 	<xs:complexType name="MapType">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="el" type="El" maxOccurs="unbounded"/>
@@ -373,7 +373,7 @@
 	</xs:complexType>
 	<xs:complexType name="Property">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:element ref="OSnLNode" minOccurs="0"/>
@@ -385,7 +385,7 @@
 	</xs:complexType>
 	<xs:complexType name="PropertyRef">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
@@ -395,7 +395,7 @@
 	</xs:complexType>
 	<xs:complexType name="Base64BinaryData">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:base64Binary">
@@ -457,7 +457,7 @@
 	</xs:complexType>
 	<xs:complexType name="ListMatrix">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="start" type="IntVector"/>
@@ -496,7 +496,7 @@
 	</xs:complexType>
 	<xs:complexType name="MPSMatrix">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:sequence>
@@ -509,7 +509,7 @@
 	</xs:complexType>
 	<xs:complexType name="MatrixMarketElement">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
@@ -520,7 +520,7 @@
 	</xs:complexType>
 	<xs:complexType name="MatrixMarket">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="el" type="MatrixMarketElement" minOccurs="2" maxOccurs="unbounded"/>
@@ -606,7 +606,7 @@
 	</xs:complexType>
 	<xs:complexType name="UserFunctions">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -624,7 +624,7 @@
 	</xs:complexType>
 	<xs:complexType name="UserVariables">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="userVariable" type="UserVariable" maxOccurs="unbounded"/>
@@ -1360,7 +1360,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="XMLData">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:any processContents="skip" maxOccurs="unbounded"/>
@@ -1368,7 +1368,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="JobDependencies">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="jobID" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -1377,7 +1377,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="DirectoriesAndFiles">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="path" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -1397,7 +1397,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="Processes">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="process" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -1406,7 +1406,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="News">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="el" type="NewsElement" minOccurs="0" maxOccurs="unbounded"/>
@@ -1414,7 +1414,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="NewsElement">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
@@ -1424,31 +1424,29 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:group name="DistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:group ref="UnivariateDistributionGroup"/>
 			<xs:group ref="MultivariateDistributionGroup"/>
+			<xs:group ref="ComplexValuedDistributionGroup"/>
 			<xs:group ref="MatrixValuedDistributionGroup"/>
-			<!-- Use and define as the need arises			
-			<xs:group ref="ComplexValuedDistributionGroup"/> 
 			<xs:group ref="TensorValuedDistributionGroup"/>
-			<xs:group ref="NonNumericDistributionGroup"/>
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		</xs:choice>
 	</xs:group>
 	<xs:group name="UnivariateDistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:group ref="DiscreteDistributionGroup"/>
 			<xs:group ref="ContinuousDistributionGroup"/>
+			<xs:group ref="NonNumericDistributionGroup"/>
 		</xs:choice>
 	</xs:group>
 	<xs:group name="DiscreteDistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:element ref="empiricalDiscrete"/>
@@ -1465,7 +1463,7 @@ equal tensor rank</xs:documentation>
 	</xs:group>
 	<xs:group name="ContinuousDistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:element ref="empiricalContinuous"/>
@@ -1497,10 +1495,15 @@ equal tensor rank</xs:documentation>
 	</xs:group>
 	<xs:group name="MultivariateDistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:element ref="multivariateDiscrete"/>
+			<xs:element ref="nonNumericMultivariateDiscrete">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element ref="multinomial"/>
 			<xs:element ref="bivariateNormal"/>
 			<xs:element ref="multivariateNormal"/>
@@ -1510,9 +1513,10 @@ equal tensor rank</xs:documentation>
 	</xs:group>
 	<xs:group name="MatrixValuedDistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
+			<xs:element ref="matrixDiscrete"/>
 			<xs:element ref="matrixNormal"/>
 			<xs:element ref="matrixT"/>
 			<xs:element ref="wishart"/>
@@ -1521,25 +1525,31 @@ equal tensor rank</xs:documentation>
 	</xs:group>
 	<xs:group name="ComplexValuedDistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:choice/>
+		<xs:choice>
+			<xs:element ref="complexNormal"/>
+		</xs:choice>
 	</xs:group>
 	<xs:group name="TensorValuedDistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:choice/>
+		<xs:choice>
+			<xs:element ref="tensorDiscrete"/>
+		</xs:choice>
 	</xs:group>
 	<xs:group name="NonNumericDistributionGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:choice/>
+		<xs:choice>
+			<xs:element ref="nonNumericalDiscrete"/>
+		</xs:choice>
 	</xs:group>
 	<xs:group name="DistributionTransformationGroup">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
 			<xs:element ref="mixtureDist">
@@ -1566,7 +1576,7 @@ equal tensor rank</xs:documentation>
 	</xs:group>
 	<xs:complexType name="EmpiricalDiscreteElement">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="prob" type="Probability" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional" default="0.0"/>
@@ -1580,7 +1590,7 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="EmpiricalDiscrete">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="el" type="EmpiricalDiscreteElement" maxOccurs="unbounded"/>
@@ -1588,12 +1598,12 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:element name="empiricalDiscrete" type="EmpiricalDiscrete">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="DiscreteUniform">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="N" type="xs:positiveInteger" use="required">
 			<xs:annotation>
@@ -1603,12 +1613,12 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:element name="discreteUniform" type="DiscreteUniform">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Bernoulli">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="p" type="Probability" use="required">
 			<xs:annotation>
@@ -1618,24 +1628,24 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:element name="bernoulli" type="Bernoulli">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Binomial">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="N" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="p" type="Probability" use="required"/>
 	</xs:complexType>
 	<xs:element name="binomial" type="Binomial">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Hypergeometric">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="N" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
@@ -1655,23 +1665,23 @@ equal tensor rank</xs:documentation>
 	</xs:complexType>
 	<xs:element name="hypergeometric" type="Hypergeometric">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Poisson">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="lambda" type="PositiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="poisson" type="Poisson">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Geometric">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0 - 
+			<xs:documentation>since version 1.0 - 
 support: {0, 1, 2, 3,...}</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="p" type="Probability" use="required">
@@ -1682,12 +1692,12 @@ support: {0, 1, 2, 3,...}</xs:documentation>
 	</xs:complexType>
 	<xs:element name="geometric" type="Geometric">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="ShiftedGeometric">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0 - 
+			<xs:documentation>since version 1.0 - 
 support: {1, 2, 3,...}</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="p" type="Probability" use="required">
@@ -1698,12 +1708,12 @@ support: {1, 2, 3,...}</xs:documentation>
 	</xs:complexType>
 	<xs:element name="shiftedGeometric" type="ShiftedGeometric">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="NegativeBinomial">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="r" type="xs:positiveInteger" use="required">
 			<xs:annotation>
@@ -1719,24 +1729,24 @@ until stopping</xs:documentation>
 	</xs:complexType>
 	<xs:element name="negativeBinomial" type="NegativeBinomial">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="LogSeries">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0  
+			<xs:documentation>since version 1.0  
 according to WolframMathWorld</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="p" type="xs:double" use="required"/>
 	</xs:complexType>
 	<xs:element name="logSeries" type="LogSeries">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="EmpiricalContinuousElement">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
@@ -1746,7 +1756,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="EmpiricalContinuous">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="el" type="EmpiricalContinuousElement" maxOccurs="unbounded"/>
@@ -1754,12 +1764,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="empiricalContinuous" type="EmpiricalContinuous">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Uniform">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="a" type="xs:double" use="required">
 			<xs:annotation>
@@ -1774,29 +1784,29 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="uniform" type="Uniform">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Normal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="mu" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="sigma" type="NonNegativeDouble" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:element name="normal" type="Normal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="StdNormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
 	<xs:element name="stdNormal" type="StdNormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="TruncNormal">
@@ -1810,23 +1820,23 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="truncNormal" type="TruncNormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Exponential">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="lambda" type="PositiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="exponential" type="Exponential">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Weibull">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="location" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="scale" type="xs:double" use="optional" default="1"/>
@@ -1834,24 +1844,24 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="weibull" type="Weibull">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Erlang">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="lambda" type="PositiveDouble" use="required"/>
 		<xs:attribute name="n" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="erlang" type="Erlang">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Gamma">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="scale" type="NonNegativeDouble" use="required"/>
 		<xs:attribute name="shape" type="NonNegativeDouble" use="required"/>
@@ -1859,12 +1869,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="gamma" type="Gamma">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="GeneralizedGamma">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="scale" type="PositiveDouble" use="required"/>
 		<xs:attribute name="shape" type="PositiveDouble" use="required"/>
@@ -1872,24 +1882,24 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="generalizedGamma" type="GeneralizedGamma">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Beta">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="degree1" type="PositiveDouble" use="required"/>
 		<xs:attribute name="degree2" type="PositiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="beta" type="Beta">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="GeneralBeta">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="degree1" type="PositiveDouble" use="required"/>
 		<xs:attribute name="degree2" type="PositiveDouble" use="required"/>
@@ -1898,12 +1908,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="generalBeta" type="GeneralBeta">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="ShiftedBeta">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="degree1" type="PositiveDouble" use="required"/>
 		<xs:attribute name="degree2" type="PositiveDouble" use="required"/>
@@ -1912,36 +1922,36 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="shiftedBeta" type="ShiftedBeta">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Lognormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="mu" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="sigma" type="NonNegativeDouble" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:element name="lognormal" type="Lognormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Cauchy">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="location" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="scale" type="PositiveDouble" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:element name="cauchy" type="Cauchy">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="T">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="df" type="xs:positiveInteger" use="required">
 			<xs:annotation>
@@ -1951,12 +1961,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="t" type="T">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="ChiSquare">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="df" type="PositiveDouble" use="required">
 			<xs:annotation>
@@ -1966,48 +1976,48 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="chiSquare" type="ChiSquare">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="F">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="dfNum" type="PositiveDouble" use="required"/>
 		<xs:attribute name="dfDenom" type="PositiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="f" type="F">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Logistic">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="mu" type="xs:double" use="required"/>
 		<xs:attribute name="beta" type="PositiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="logistic" type="Logistic">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="LogLogistic">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="mu" type="xs:double" use="required"/>
 		<xs:attribute name="beta" type="PositiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="logLogistic" type="LogLogistic">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Logarithmic">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0  
+			<xs:documentation>since version 1.0  
 according to WolframMathWorld</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="a" type="xs:double" use="required">
@@ -2023,24 +2033,24 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="logarithmic" type="Logarithmic">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Pareto">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="shape" type="PositiveDouble" use="required"/>
 		<xs:attribute name="scale" type="PositiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="pareto" type="Pareto">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Rayleigh">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="beta" type="PositiveDouble" use="required">
 			<xs:annotation>
@@ -2050,12 +2060,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="rayleigh" type="Rayleigh">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Pert">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="min" type="xs:double" use="required"/>
 		<xs:attribute name="max" type="xs:double" use="required"/>
@@ -2063,12 +2073,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="pert" type="Pert">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Triangular">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="min" type="xs:double" use="required"/>
 		<xs:attribute name="max" type="xs:double" use="required"/>
@@ -2076,12 +2086,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="triangular" type="Triangular">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="MultivariateDiscreteScenario">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -2094,7 +2104,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="MultivariateDiscrete">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="scenario" type="MultivariateDiscreteScenario" minOccurs="0" maxOccurs="unbounded">
@@ -2108,12 +2118,44 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="multivariateDiscrete" type="MultivariateDiscrete">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="NonNumericMultivariateDiscreteScenario">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>number of "el" children must equal "dimension" after mult and incr have been considered</xs:documentation>
+			</xs:annotation>
+			<xs:element name="el" type="StringVectorEl" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+		</xs:sequence>
+		<xs:attribute name="prob" type="Probability" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NonNumericMultivariateDiscrete">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="scenario" type="NonNumericMultivariateDiscreteScenario" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:element name="nonNumericMultivariateDiscrete" type="NonNumericMultivariateDiscrete">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Multinomial">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="prob" type="Probability" maxOccurs="unbounded">
@@ -2126,12 +2168,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="multinomial" type="Multinomial">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="NegativeMultinomial">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="el" type="Probability" maxOccurs="unbounded"/>
@@ -2140,12 +2182,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="negativeMultinomial" type="NegativeMultinomial">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="BivariateNormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="mu1" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="sigma1" type="NonNegativeDouble" use="optional" default="1"/>
@@ -2155,12 +2197,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="bivariateNormal" type="BivariateNormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="MultivariateNormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="mu" type="MeanVector">
@@ -2178,12 +2220,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="multivariateNormal" type="MultivariateNormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="MultivariateT">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="mu" type="MeanVector">
@@ -2202,12 +2244,12 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="multivariateT" type="MultivariateT">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="Dirichlet">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="cat" type="DirichletCategory" minOccurs="0" maxOccurs="unbounded">
@@ -2225,7 +2267,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="dirichlet" type="Dirichlet">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="MixtureDist">
@@ -2243,7 +2285,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="mixtureDist" type="MixtureDist">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="ProductDist">
@@ -2261,7 +2303,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="productDist" type="ProductDist">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="MaxDist">
@@ -2279,7 +2321,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="maxDist" type="MaxDist">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="SumDist">
@@ -2297,18 +2339,70 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:element name="sumDist" type="SumDist">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="MatrixDiscreteScenario">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="prob" type="Probability" use="required"/>
+		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant with dimensions equal to numberOfRows and numberOfColumns and values conformal with valueType</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="MatrixDiscrete">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="scenario" type="MatrixDiscreteScenario" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="valueType" default="real">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="real"/>
+					<xs:enumeration value="complex"/>
+					<xs:enumeration value="string"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="matrixDiscrete" type="MatrixDiscrete">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="MatrixNormal">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="locationMtxIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rowScaleMtxIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colScaleMtxIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="locationMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="rowScaleMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="colScaleMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:element name="matrixNormal" type="MatrixNormal">
 		<xs:annotation>
@@ -2317,13 +2411,25 @@ according to WolframMathWorld</xs:documentation>
 	</xs:element>
 	<xs:complexType name="MatrixT">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="locationMtxIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rowMtxIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colMtxIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="locationMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="rowMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="colMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="degreesOfFreedom" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="matrixT" type="MatrixT">
@@ -2333,7 +2439,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:element>
 	<xs:complexType name="Wishart">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="degreesOfFreedom" type="xs:positiveInteger" use="required">
@@ -2341,7 +2447,11 @@ according to WolframMathWorld</xs:documentation>
 				<xs:documentation>must be at least "dimension"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="scaleMtxIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="scaleMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:element name="wishart" type="Wishart">
 		<xs:annotation>
@@ -2350,7 +2460,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:element>
 	<xs:complexType name="InverseWishart">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="dimension" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="degreesOfFreedom" type="xs:positiveInteger" use="required">
@@ -2358,16 +2468,114 @@ according to WolframMathWorld</xs:documentation>
 				<xs:documentation>must be at least :dimension"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="scaleMtxIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="scaleMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:element name="inverseWishart" type="InverseWishart">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="TensorDiscreteScenario">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="prob" type="Probability" use="required"/>
+		<xs:attribute name="tensorIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>tensor must be constant with dimensions and values conformal to definition</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="TensorDiscrete">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="dimensions" type="PositiveIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of elements in dimensions vector must equal tensor rank. Dimensions may be omitted if rank=0.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scenario" type="TensorDiscreteScenario" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="valueType" default="real">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="real"/>
+					<xs:enumeration value="complex"/>
+					<xs:enumeration value="string"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="tensorDiscrete" type="TensorDiscrete">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ComplexNormal">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="dim" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>dimension of the complex vector</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="meanVectorIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>referenced matrix must be if dimension 1x dim, constant, complex-valued</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="covarianceMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, complex-valued, Hermitian positive semidefinite, dimensioned dim x dim</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="relationMtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>matrix must be constant, real-valued, symmetric, dimensioned dim x dim</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="complexNormal" type="ComplexNormal">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="NonNumericalDiscreteElement">
+		<xs:annotation>
+			<xs:documentation>experimental</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="prob" type="Probability" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="NonNumericalDiscrete">
+		<xs:annotation>
+			<xs:documentation>experimental</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="el" type="NonNumericalDiscreteElement" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="nonNumericalDiscrete" type="NonNumericalDiscrete">
+		<xs:annotation>
+			<xs:documentation>experimental</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="CustomDistribution">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="dimensions" type="NonNegativeIntVector" minOccurs="0">
@@ -2392,7 +2600,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:element>
 	<xs:complexType name="CustomMatrixDistribution">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="param" type="DistributionParameter" minOccurs="0" maxOccurs="unbounded">
@@ -2412,7 +2620,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:element>
 	<xs:complexType name="MeanVector">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="mean" type="DoubleVector" minOccurs="0"/>
@@ -2425,7 +2633,7 @@ according to WolframMathWorld</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="CovarianceMatrix">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="cov" type="MatrixMarket" minOccurs="0"/>
