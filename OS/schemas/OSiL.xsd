@@ -35,6 +35,7 @@
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<!--
 			<xs:element name="variables" type="Variables" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0</xs:documentation>
@@ -116,6 +117,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<!-- dead code
 			<xs:element name="old_disjunctiveInformation" type="old_DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
@@ -123,11 +125,13 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 -->
+			<!--
 			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<!--			
 			<xs:element name="uncertaintySets" type="UncertaintySets" minOccurs="0">
 				<xs:annotation>
@@ -152,6 +156,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 -->
+			<!--
 			<xs:element name="stochasticData" type="StochasticData-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -167,6 +172,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<!--			
 			<xs:element name="old_realTimeData" type="old_RealTimeData" minOccurs="0">
 				<xs:annotation>
@@ -174,6 +180,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 -->
+			<!--
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
@@ -184,6 +191,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<!--			
 			<xs:element name="simulations" type="Simulations" minOccurs="0">
 				<xs:annotation>
@@ -198,6 +206,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 -->
+			<!--
 			<xs:element name="new_simulations" type="new_Simulations" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
@@ -208,8 +217,135 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
+			<xs:group ref="CoreData"/>
+			<xs:group ref="DefinitionData"/>
+			<xs:group ref="ExtensionData"/>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:group name="CoreData">
+		<xs:sequence>
+			<xs:element name="variables" type="Variables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectives" type="Objectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="constraints" type="Constraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g. the expression 2x + 3y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0
+We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin in "Studies on Graphs and Discrete Programming", 1981. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:group>
+	<xs:group name="DefinitionData">
+		<xs:sequence>
+			<xs:element name="matrices" type="Matrices" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensors" type="Tensors" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cones" type="Cones" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="distributions" type="Distributions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="parameters" type="Parameters" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="userFunctions" type="UserFunctions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xmlData" type="XMLData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>finalization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:group>
+	<xs:group name="ExtensionData">
+		<xs:sequence>
+			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexProgramming" type="ComplexProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorProgramming" type="TensorProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticData" type="StochasticData-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="new_simulations" type="new_Simulations" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:group>
 	<!--Variables: since version 1.0 -->
 	<xs:complexType name="Variables">
 		<xs:annotation>
@@ -1969,19 +2105,47 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="ModificationUpdates">
 		<xs:sequence>
-			<xs:element name="subst" type="ModificationsUpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="subst" type="ModificationsUpdateableProblemComponent" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfSubst</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationsUpdateableProblemComponent">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:choice>
-				<xs:group ref="UpdateableProblemComponent_test"/>
-				<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree"/>
-				<xs:element name="scenarioTree" type="UpdateableProblemComponentScenarioTree"/>
-				<xs:element name="realTimeDataItem" type="UpdateableProblemComponentRealTimeDataItem"/>
-				<xs:element name="disjunctiveTerm" type="UpdateableProblemComponentDisjunctiveTerm"/>
-			</xs:choice>
+		<xs:choice>
+			<xs:group ref="UpdateableProblemComponent_test"/>
+			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree">
+				<xs:annotation>
+					<xs:documentation>draft - to replace one distribution in an implicit tree by another distribution with the same dimensions</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scenarioTree" type="UpdateableProblemComponentScenarioTree">
+				<xs:annotation>
+					<xs:documentation>draft - to replace the probability or one stochastic value in a scenario</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nodalTree">
+				<xs:annotation>
+					<xs:documentation>draft - to replace the probability or one stochastic value in a node of a nodalTree</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="nodeId" type="xs:IDREF" use="required"/>
+					<xs:attribute name="component" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation>"prob", "var", etc.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="attr" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>if component is not "prob", this attribute is required to pinpoint where the value is to be stored (e.g. if component="var", attr could be "lb", "ub", etc.)</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="disjunctiveTerm" type="UpdateableProblemComponentDisjunctiveTerm"/>
+			<xs:element name="realTimeDataItem" type="UpdateableProblemComponentRealTimeDataItem"/>
 		</xs:choice>
 		<xs:attribute name="value" type="xs:string" use="required">
 			<xs:annotation>
@@ -2091,47 +2255,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment - Delete the entire scenario tree or implicit tree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="scenarios" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="scenarios" minOccurs="0" maxOccurs="unbounded">
-							<xs:annotation>
-								<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
-							</xs:annotation>
-							<xs:complexType>
-								<xs:attribute name="scenIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
-									<xs:annotation>
-										<xs:documentation>first stage that is to be deleted - default value: start of the scenario</xs:documentation>
-									</xs:annotation>
-								</xs:attribute>
-								<xs:attribute name="deleteMode" default="path">
-									<xs:annotation>
-										<xs:documentation>delete just one scenario path (default) or the entire subtree</xs:documentation>
-									</xs:annotation>
-									<xs:simpleType>
-										<xs:restriction base="xs:string">
-											<xs:enumeration value="path"/>
-											<xs:enumeration value="subtree"/>
-										</xs:restriction>
-									</xs:simpleType>
-								</xs:attribute>
-								<xs:attribute name="probAdjust" use="required">
-									<xs:annotation>
-										<xs:documentation>determines whether the freed probability is to be distributed among the sibling scenarios only (default if deleteMode = "path") or all remaining scenarios in the tree (default if deleteMode = "subtree").</xs:documentation>
-									</xs:annotation>
-									<xs:simpleType>
-										<xs:restriction base="xs:string">
-											<xs:enumeration value="siblings"/>
-											<xs:enumeration value="allScenarios"/>
-										</xs:restriction>
-									</xs:simpleType>
-								</xs:attribute>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfScenarios"/>
-				</xs:complexType>
+			<xs:element name="scenarios" type="ModificationDeleteScenarios" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - delete one or more scenarios from a scenario tree</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nodes" type="ModificationDeleteNodes" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - delete one or more nodess from a nodalTree</xs:documentation>
+				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
@@ -2150,6 +2282,63 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:enumeration value="nodal"/>
 				</xs:restriction>
 			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteScenarios">
+		<xs:sequence>
+			<xs:element name="scen" type="ModificationDeleteScenario" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfScen"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteScenario">
+		<xs:attribute name="scenIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>first stage that is to be deleted - default value: start of the scenario</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="deleteMode" default="path">
+			<xs:annotation>
+				<xs:documentation>delete just one scenario path (default) or the entire subtree</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="path"/>
+					<xs:enumeration value="subtree"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="probAdjust" use="required">
+			<xs:annotation>
+				<xs:documentation>determines whether the freed probability is to be distributed among the sibling scenarios only (default if deleteMode = "path") or all remaining scenarios in the tree (default if deleteMode = "subtree").</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="siblings"/>
+					<xs:enumeration value="allScenarios"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteNodes">
+		<xs:sequence>
+			<xs:element name="node" type="ModificationDeleteNode" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfNodes</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfNodes"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteNode">
+		<xs:attribute name="nodeId" type="xs:IDREF" use="required">
+			<xs:annotation>
+				<xs:documentation>Delete the referenced node and all its direct and indirect descendant; distribute the probability among the siblings of the node.</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteVariables">
@@ -2518,7 +2707,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="scenarios" type="ModificationAddScenarios" minOccurs="0"/>
+			<xs:element name="scenarios" type="ModificationAddScenarios" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - add one or more scenarios to an existing scenario tree</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddVariables">
@@ -4055,17 +4248,53 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentImplicitTree">
 		<xs:annotation>
-			<xs:documentation>draft - to replace one distribution in an implicit tree block by another distribution with the same dimensions</xs:documentation>
+			<xs:documentation>draft - to replace one distribution in an implicit tree by another distribution with the same dimensions</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="blockIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rvIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="distributionIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentScenarioTree">
 		<xs:annotation>
-			<xs:documentation>draft - to replace one stochastic value in a scenario</xs:documentation>
+			<xs:documentation>draft - to replace the probability or one stochastic value in a scenario</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="prob"/>
+					<xs:enumeration value="element"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="probType">
+			<xs:annotation>
+				<xs:documentation>path probability or conditional probability - default is "path"</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="path"/>
+					<xs:enumeration value="cond"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>must be present if attr="element"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentNodalTree">
+		<xs:attribute name="nodeId" type="xs:IDREF" use="required"/>
+		<xs:attribute name="component" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>"prob", "var", etc.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="attr" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>if component is not "prob", this attribute is required to pinpoint where the value is to be stored (e.g. if component="var", attr could be "lb", "ub", etc.)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentDistributionParameter">
 		<xs:attribute name="distribIdx" type="xs:nonNegativeInteger" use="required"/>
@@ -6282,7 +6511,11 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="sNode-2016-11-24">
-				<xs:attribute name="prob" type="Probability" use="required"/>
+				<xs:attribute name="prob" type="Probability" use="required">
+					<xs:annotation>
+						<xs:documentation>This is the conditional probability of reaching this node given its parent node.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 				<xs:attribute name="numberOfLinkingStages" type="xs:nonNegativeInteger" default="1">
 					<xs:annotation>
 						<xs:documentation>governs the length of the history that can influence the present node as well as the offsets for variable and constraint references</xs:documentation>
@@ -7717,10 +7950,10 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 -->
-			<xs:element name="block" type="ImplicitTreeBlock-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="rv" type="ImplicitTreeBlock-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfBlocks.
-The random variables referened by distributionIdx are independent from one block to another.</xs:documentation>
+					<xs:documentation>number must agree with numberOfRV. Each random variable or vector is
+referenced by distributionIdx and is independent from all other rv's.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="softConstraints" type="SoftConstraints-2016-10-05" minOccurs="0">
@@ -7734,7 +7967,7 @@ The random variables referened by distributionIdx are independent from one block
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRV" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="ambiguityResolution">
 			<xs:annotation>
 				<xs:documentation>default is "max" for minimization problems, "min" for maximization problems</xs:documentation>
