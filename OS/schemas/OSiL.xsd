@@ -2702,17 +2702,86 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="stochasticTree" type="StochasticData-2016-10-05" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
-				</xs:annotation>
+			<xs:element name="stochasticData" minOccurs="0">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="scenarioTree" type="ScenarioTree-2016-10-05" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="scenarios" type="ModificationAddScenarios" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>experiment - add one or more scenarios to an existing scenario tree</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="nodalTree-2016-12-26" type="NodalTree-2016-12-26" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="nodalSubtrees" type="ModificationAddNodalSubtrees" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>experiment - add subtrees to an existing nodalTree</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
 			</xs:element>
-			<xs:element name="scenarios" type="ModificationAddScenarios" minOccurs="0">
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ModificationAddNodalSubtrees">
+		<xs:sequence>
+			<xs:element name="subtree" type="NodalSubtree-2016-12-26" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>experiment - add one or more scenarios to an existing scenario tree</xs:documentation>
+					<xs:documentation>number must agree with numberOfSubtrees</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfSubtrees" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NodalSubtree-2016-12-26">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the nodes 
+in this tree must match numberOfNodes</xs:documentation>
+			</xs:annotation>
+			<xs:element name="rootNode" type="NodalSubtreeRootNode-2016-11-24">
+				<xs:annotation>
+					<xs:documentation>defines the root node
+of the subtree</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfNodes" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NodalSubtreeRootNode-2016-11-24">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="sNode-2016-11-24">
+				<xs:attribute name="prob" type="Probability" use="required"/>
+				<xs:attribute name="parentNodeID" type="xs:IDREF" use="required">
+					<xs:annotation>
+						<xs:documentation>must be present to identify location of the subtree root</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="numberOfLinkingStages" type="xs:nonNegativeInteger" default="1">
+					<xs:annotation>
+						<xs:documentation>governs the length of the history that can influence the present node as well as the offsets for variable and constraint references</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="ModificationAddVariables">
 		<xs:sequence>
@@ -2916,15 +2985,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="mode" default="replace">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="replace"/>
-					<xs:enumeration value="add"/>
-					<xs:enumeration value="multiply"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<!--	
 	<xs:simpleType name="ModificationType">
@@ -6214,16 +6274,6 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="scenarioTree" type="ScenarioTree-2016-10-05" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<!--			
 			<xs:element name="nodalTree" type="NodalTree-2016-11-24" minOccurs="0">
 				<xs:annotation>
@@ -6231,11 +6281,6 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 -->
-			<xs:element name="nodalTree-2016-12-26" type="NodalTree-2016-12-26" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="ScenarioTree-2016-10-05">
@@ -6267,6 +6312,9 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfStochasticElements" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="mode" default="replace">
+			<xs:annotation>
+				<xs:documentation>scenario values can replace deterministic base values, or can be given as additive of multiplicative modifications </xs:documentation>
+			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="replace"/>
