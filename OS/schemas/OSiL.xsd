@@ -2702,8 +2702,14 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="stochasticData" minOccurs="0">
-				<xs:complexType>
+			<xs:element name="stochasticData" type="ModificationAddStochasticData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+				<xs:complexType name="ModificationAddStochasticData">
 					<xs:choice>
 						<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
 							<xs:annotation>
@@ -2732,9 +2738,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 						</xs:element>
 					</xs:choice>
 				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
 	<xs:complexType name="ModificationAddNodalSubtrees">
 		<xs:sequence>
 			<xs:element name="subtree" type="NodalSubtree-2016-12-26" minOccurs="0" maxOccurs="unbounded">
@@ -2750,10 +2753,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the nodes 
-in this tree must match numberOfNodes</xs:documentation>
-			</xs:annotation>
 			<xs:element name="rootNode" type="NodalSubtreeRootNode-2016-11-24">
 				<xs:annotation>
 					<xs:documentation>defines the root node
@@ -2761,7 +2760,6 @@ of the subtree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfNodes" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NodalSubtreeRootNode-2016-11-24">
 		<xs:annotation>
@@ -6274,6 +6272,35 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
+			<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scenarioTree" type="ScenarioTree-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<!--			
+			<xs:element name="nodalTree" type="NodalTree-2016-11-24" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+-->
+			<xs:element name="nodalTree-2016-12-26" type="NodalTree-2016-12-26" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="StochasticDataModifications">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
 			<!--			
 			<xs:element name="nodalTree" type="NodalTree-2016-11-24" minOccurs="0">
 				<xs:annotation>
@@ -6531,12 +6558,8 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the nodes in this tree must match numberOfNodes</xs:documentation>
-			</xs:annotation>
 			<xs:element name="rootNode" type="RootNode-2016-11-24"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNodes" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="RootNode-2016-11-24">
 		<xs:annotation>
@@ -6677,7 +6700,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 -->
-			<xs:element name="stochasticData-2016-10-05" type="StochasticData-2016-10-05" minOccurs="0">
+			<xs:element name="stochasticData-2016-10-05" type="StochasticDataModifications" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
