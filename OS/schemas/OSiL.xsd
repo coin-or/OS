@@ -290,11 +290,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="parameters" type="Parameters" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="userFunctions" type="UserFunctions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
@@ -335,6 +330,16 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="stochasticData" type="StochasticData-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="multilevelProgramming" type="MultilevelProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="parametricAnalysis" type="ParametricAnalysis" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -2709,35 +2714,35 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-				<xs:complexType name="ModificationAddStochasticData">
-					<xs:choice>
-						<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
-							<xs:annotation>
-								<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-						<xs:element name="scenarioTree" type="ScenarioTree-2016-10-05" minOccurs="0">
-							<xs:annotation>
-								<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-						<xs:element name="scenarios" type="ModificationAddScenarios" minOccurs="0">
-							<xs:annotation>
-								<xs:documentation>experiment - add one or more scenarios to an existing scenario tree</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-						<xs:element name="nodalTree-2016-12-26" type="NodalTree-2016-12-26" minOccurs="0">
-							<xs:annotation>
-								<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-						<xs:element name="nodalSubtrees" type="ModificationAddNodalSubtrees" minOccurs="0">
-							<xs:annotation>
-								<xs:documentation>experiment - add subtrees to an existing nodalTree</xs:documentation>
-							</xs:annotation>
-						</xs:element>
-					</xs:choice>
-				</xs:complexType>
+	<xs:complexType name="ModificationAddStochasticData">
+		<xs:choice>
+			<xs:element name="implicitTree" type="ImplicitTree-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scenarioTree" type="ScenarioTree-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scenarios" type="ModificationAddScenarios" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - add one or more scenarios to an existing scenario tree</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nodalTree-2016-12-26" type="NodalTree-2016-12-26" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - can only add if there is no tree currently defined</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nodalSubtrees" type="ModificationAddNodalSubtrees" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - add subtrees to an existing nodalTree</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
 	<xs:complexType name="ModificationAddNodalSubtrees">
 		<xs:sequence>
 			<xs:element name="subtree" type="NodalSubtree-2016-12-26" minOccurs="0" maxOccurs="unbounded">
@@ -3783,10 +3788,10 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="Parameters">
+	<xs:complexType name="ParametricAnalysis">
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of the param child elements must agree with numberOfParameters</xs:documentation>
+				<xs:documentation>Number of the param child elements must agree with numberOfParam</xs:documentation>
 			</xs:annotation>
 			<xs:element name="param" type="Param_test" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
@@ -3794,7 +3799,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Param">
 		<xs:annotation>
@@ -4535,13 +4540,11 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 		<xs:attribute name="type" type="GeneralEnumerationVarType" use="optional" default="C"/>
-		<xs:attribute name="nominalValue" type="xs:double" use="optional" default="0.0"/>
 		<xs:attribute name="incr" type="xs:double">
 			<xs:annotation>
 				<xs:documentation>default is (ub-lb)</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="id" type="xs:ID"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="GenericParameter">
@@ -4907,6 +4910,22 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:attribute name="start" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="horizon" type="xs:double" use="optional" default="INF"/>
 	</xs:complexType>
+	<xs:complexType name="MultilevelProgramming">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of levels must agree with numberOfLevels</xs:documentation>
+			</xs:annotation>
+			<xs:element name="level" type="TimeStageOrLevel" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation> </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfStages" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="TimeStages">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
@@ -4915,7 +4934,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:annotation>
 				<xs:documentation>Number of stages must agree with numberOfStages</xs:documentation>
 			</xs:annotation>
-			<xs:element name="stage" type="TimeStage" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="stage" type="TimeStageOrLevel" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation> </xs:documentation>
 				</xs:annotation>
@@ -4928,9 +4947,9 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="TimeStage">
+	<xs:complexType name="TimeStageOrLevel">
 		<xs:annotation>
-			<xs:documentation>proposal</xs:documentation>
+			<xs:documentation>proposal - for use in both stochastic programming and multilevel programming</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="variables" type="TimeStageVariables-2016-Dec-23" minOccurs="0">
@@ -8027,9 +8046,9 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 referenced by distributionIdx and is independent from all other rv's.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="softConstraints" type="SoftConstraints-2016-10-05" minOccurs="0">
+			<xs:element name="softConstraints" type="SingleSoftConstraint-2016-10-05" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="probabilisticObjectives" type="SoftConstraintsProbabilisticObjectives" minOccurs="0">
@@ -8187,30 +8206,61 @@ Default: identity matrix.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of the row child elements must match numberOfPenalties</xs:documentation>
+				<xs:documentation>Number of the penalty child elements must match numberOfPenalties</xs:documentation>
 			</xs:annotation>
-			<xs:element name="row" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="penalty" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfPenalties" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="SoftConstraintsPenaltiesRow">
-		<xs:annotation>
-			<xs:documentation>proposal</xs:documentation>
-		</xs:annotation>
-		<xs:choice minOccurs="0">
+	<xs:group name="SingleSoftConstraintGroup">
+		<xs:choice>
 			<xs:element name="simpleRecourse" type="SoftConstraintsSimpleRecourse"/>
 			<xs:element name="quadraticPenalty" type="SoftConstraintsQuadraticPenalty"/>
 			<xs:element name="userDefinedPenalty" type="SoftConstraintsUserDefinedPenalty"/>
 			<xs:element name="chanceConstraint" type="SoftConstraintsSimpleChanceConstraint"/>
 			<xs:element name="integratedChanceConstraint" type="SoftConstraintsSimpleIntegratedChanceConstraint"/>
 		</xs:choice>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional" default="-1"/>
+	</xs:group>
+	<xs:group name="JointSoftConstraintGroup">
+		<xs:choice>
+			<xs:element name="jointChanceConstraint" type="SoftConstraintsJointChanceConstraint"/>
+			<xs:element name="jointICC" type="SoftConstraintsJointIntegratedChanceConstraint"/>
+			<xs:element name="jointUserDefinedPenalty" type="SoftConstraintsJointUserDefinedPenalty"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="SoftConstraintsPenaltiesRow">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0">
+			<xs:group ref="SingleSoftConstraintGroup"/>
+			<xs:group ref="JointSoftConstraintGroup"/>
+			<!--		
+			<xs:element name="simpleRecourse" type="SoftConstraintsSimpleRecourse"/>
+			<xs:element name="quadraticPenalty" type="SoftConstraintsQuadraticPenalty"/>
+			<xs:element name="userDefinedPenalty" type="SoftConstraintsUserDefinedPenalty"/>
+			<xs:element name="chanceConstraint" type="SoftConstraintsSimpleChanceConstraint"/>
+			<xs:element name="integratedChanceConstraint" type="SoftConstraintsSimpleIntegratedChanceConstraint"/>
+			<xs:element name="jointChanceConstraint" type="SoftConstraintsJointChanceConstraint"/>
+			<xs:element name="jointICC" type="SoftConstraintsJointIntegratedChanceConstraint"/>
+			<xs:element name="jointUserDefinedPenalty" type="SoftConstraintsJointUserDefinedPenalty"/>
+-->
+		</xs:choice>
+		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional" default="-1">
+			<xs:annotation>
+				<xs:documentation>objective to which the penalty is to be added; default is -1</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsSimpleRecourse">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the row to be penalized</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="shortagePenalty" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="surplusPenalty" type="xs:double" use="optional" default="0"/>
 	</xs:complexType>
@@ -8218,6 +8268,11 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the row to be penalized</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="quadraticShortagePenalty" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticSurplusPenalty" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticFactor" type="PositiveDouble" use="optional" default="2.0"/>
@@ -8226,6 +8281,11 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the row to be penalized</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="linearShortageParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="linearSurplusParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticShortageParam" type="xs:double" use="optional" default="0"/>
@@ -8241,15 +8301,24 @@ Default: identity matrix.</xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="surplusPenalty" type="SoftConstraintsUserDefinedSurplusPenalty" minOccurs="0"/>
-			<xs:element name="shortagePenalty" type="SoftConstraintsUserDefinedShortagePenalty" minOccurs="0"/>
+			<xs:element name="surplusPenalty" type="SoftConstraintsUserDefinedPenaltyFunction" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>penalty term added if constraint body exceeds upper bound</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="shortagePenalty" type="SoftConstraintsUserDefinedShortagePenalty" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>penalty term added if constraint body falls below lower bound</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:ID" use="required"/>
-		<xs:attribute name="default" type="xs:string" use="optional"/>
-		<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="variableType" type="GeneralEnumerationVarType" use="optional" default="C"/>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the constraint to be penalized</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="SoftConstraintsUserDefinedSurplusPenalty">
+	<xs:complexType name="SoftConstraintsUserDefinedPenaltyFunction">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -8282,8 +8351,29 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="maxOrMin" use="required">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>index of the constraint</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="constraintType">
+			<xs:annotation>
+				<xs:documentation>type of constraint; 
+default is "scalar"</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="scalar"/>
+					<xs:enumeration value="matrix"/>
+					<xs:enumeration value="complex"/>
+					<xs:enumeration value="tensor"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="maxOrMin" default="max">
+			<xs:annotation>
+				<xs:documentation>maximize or minimize the probability of constraint satisfaction; default is "max"</xs:documentation>
+			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="min"/>
@@ -8297,13 +8387,17 @@ Default: identity matrix.</xs:documentation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the row child elements must match numberOfRows</xs:documentation>
-			</xs:annotation>
-			<xs:element name="row" type="SoftConstraintsConstraintRow" maxOccurs="unbounded"/>
+			<xs:element name="con" type="SoftConstraintsJointProbabiliticObjectiveRow" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must equal numberOfCon</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="maxOrMin" use="required">
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="maxOrMin" default="max">
+			<xs:annotation>
+				<xs:documentation>maximize or minimize the probability of constraint satisfaction; default is "max"</xs:documentation>
+			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="min"/>
@@ -8319,6 +8413,26 @@ Default: identity matrix.</xs:documentation>
 					<xs:enumeration value="sum"/>
 					<xs:enumeration value="and"/>
 					<xs:enumeration value="or"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="SoftConstraintsJointProbabiliticObjectiveRow">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="constraintType">
+			<xs:annotation>
+				<xs:documentation>type of constraint; 
+default is "scalar"</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="scalar"/>
+					<xs:enumeration value="matrix"/>
+					<xs:enumeration value="complex"/>
+					<xs:enumeration value="tensor"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -8340,22 +8454,26 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the row to be penalized</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="lb" type="Probability" use="optional" default="0.0"/>
 		<xs:attribute name="ub" type="Probability" use="optional" default="1.0"/>
 	</xs:complexType>
-	<xs:complexType name="SoftConstraintsJointChanceConstraint">
+	<xs:complexType name="SoftConstraintsJointConstraint">
 		<xs:annotation>
-			<xs:documentation>proposal</xs:documentation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the row child elements must match numberOfRows</xs:documentation>
-			</xs:annotation>
-			<xs:element name="row" type="SoftConstraintsConstraintRow" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfCon after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="lb" type="Probability" use="optional" default="0.0"/>
-		<xs:attribute name="ub" type="Probability" use="optional" default="1.0"/>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="aggregatingFunction" use="optional" default="and">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -8364,10 +8482,20 @@ Default: identity matrix.</xs:documentation>
 					<xs:enumeration value="sum"/>
 					<xs:enumeration value="and"/>
 					<xs:enumeration value="or"/>
-					<xs:enumeration value=""/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="SoftConstraintsJointChanceConstraint">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="SoftConstraintsJointConstraint">
+				<xs:attribute name="lb" type="Probability" use="optional" default="0.0"/>
+				<xs:attribute name="ub" type="Probability" use="optional" default="1.0"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsIntegratedChanceConstraints">
 		<xs:annotation>
@@ -8386,6 +8514,11 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the row to be penalized</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 	</xs:complexType>
@@ -8393,26 +8526,24 @@ Default: identity matrix.</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the row child elements must match numberOfRows</xs:documentation>
-			</xs:annotation>
-			<xs:element name="row" type="SoftConstraintsConstraintRow" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
-		<xs:attribute name="aggregatingFunction" use="optional" default="and">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="min"/>
-					<xs:enumeration value="max"/>
-					<xs:enumeration value="sum"/>
-					<xs:enumeration value="and"/>
-					<xs:enumeration value="or"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:complexContent>
+			<xs:extension base="SoftConstraintsJointConstraint">
+				<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+				<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SoftConstraintsJointUserDefinedPenalty">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="SoftConstraintsJointConstraint">
+				<xs:sequence>
+					<xs:element name="customPenalty" type="SoftConstraintsUserDefinedPenaltyFunction"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsUserDefinedRiskMeasures">
 		<xs:annotation>
@@ -8478,21 +8609,12 @@ Default: identity matrix.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="SoftConstraints-2016-10-05">
-		<xs:sequence>
-			<xs:element name="single" type="SingleSoftConstraint-2016-10-05" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
 	<xs:complexType name="SoftConstraint-2016-10-05">
 		<xs:choice minOccurs="0" maxOccurs="unbounded"/>
 	</xs:complexType>
 	<xs:complexType name="SingleSoftConstraint-2016-10-05">
 		<xs:sequence>
-			<xs:element name="con" type="SoftConstraintsPenaltiesRow">
+			<xs:element name="con" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
