@@ -4005,6 +4005,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="ub"/>
 					<xs:enumeration value="lbAndUb"/>
 					<xs:enumeration value="type"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4020,6 +4021,8 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="constant"/>
 					<xs:enumeration value="weight"/>
 					<xs:enumeration value="coef"/>
+					<xs:enumeration value="maxOrMin"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4041,6 +4044,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="lb"/>
 					<xs:enumeration value="ub"/>
 					<xs:enumeration value="lbAndUb"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4088,39 +4092,30 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="part" default="real">
+		<xs:attribute name="id" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>default is "real", but can be set to "imaginary" for complex-valued matrix elements</xs:documentation>
+				<xs:documentation>identifies the OSNlMNode in the nonlinear expression trees</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="real"/>
-					<xs:enumeration value="imaginary"/>
-				</xs:restriction>
-			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the referenced matrix within the array of matrices</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentNlTNode">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="indexes" type="NonNegativeIntVector"/>
-		</xs:sequence>
-		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="part" use="required">
+		<xs:attribute name="id" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>default is "real", but can be set to "imaginary" for complex-valued tensor elements</xs:documentation>
+				<xs:documentation>identifies the OSNlTNode in the nonlinear expression trees</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="real"/>
-					<xs:enumeration value="imaginary"/>
-				</xs:restriction>
-			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="tensorIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the referenced tensor within the array of tensors</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentMatrixElement">
@@ -4372,6 +4367,32 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentLinearOrQuadraticPenalty">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>index within the array of softConstraint objects</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="attr" use="required">
+			<xs:annotation>
+				<xs:documentation>allowable attribute values depend on the type of soft constraint; e.g., for simple recourse, possible values are "surplusPenalty" and "shortage Penalty".</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="shortagePenalty"/>
+					<xs:enumeration value="surplusPenalty"/>
+					<xs:enumeration value="linearShortageParam"/>
+					<xs:enumeration value="linearSurplusParam"/>
+					<xs:enumeration value="quadraticShortageParam"/>
+					<xs:enumeration value="quadraticSurplusParam"/>
+					<xs:enumeration value="lb"/>
+					<xs:enumeration value="ub"/>
+					<xs:enumeration value="aggregatingFunction"/>
+					<xs:enumeration value="maxOrMin"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
 	<xs:group name="UpdateableProblemComponentMatrixProgrammingGroup">
 		<xs:choice>
 			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>
@@ -4505,6 +4526,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="distributionParameter" type="UpdateableProblemComponentDistributionParameter"/>
 			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>
 			<xs:element name="matrixObj" type="UpdateableProblemComponentMatrixObjective"/>
 			<xs:element name="matrixCon" type="UpdateableProblemComponentMatrixConstraint"/>
@@ -4517,7 +4539,6 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
-			<xs:element name="distributionParameter" type="UpdateableProblemComponentDistributionParameter"/>
 			<!--			
 			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree">
 				<xs:annotation>
@@ -4530,6 +4551,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 -->
+			<xs:element name="softConstraintOrObjective" type="UpdateableProblemComponentLinearOrQuadraticPenalty"/>
 		</xs:choice>
 	</xs:group>
 	<xs:complexType name="Param_test">
@@ -8048,7 +8070,7 @@ referenced by distributionIdx and is independent from all other rv's.</xs:docume
 			</xs:element>
 			<xs:element name="softConstraints" type="SingleSoftConstraint-2016-10-05" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>proposal - use for penalties, chance constraints and probabilistic objectives.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="probabilisticObjectives" type="SoftConstraintsProbabilisticObjectives" minOccurs="0">
@@ -8214,18 +8236,19 @@ Default: identity matrix.</xs:documentation>
 	</xs:complexType>
 	<xs:group name="SingleSoftConstraintGroup">
 		<xs:choice>
-			<xs:element name="simpleRecourse" type="SoftConstraintsSimpleRecourse"/>
+			<xs:element name="linearPenalty" type="SoftConstraintsSimpleRecourse"/>
 			<xs:element name="quadraticPenalty" type="SoftConstraintsQuadraticPenalty"/>
 			<xs:element name="userDefinedPenalty" type="SoftConstraintsUserDefinedPenalty"/>
 			<xs:element name="chanceConstraint" type="SoftConstraintsSimpleChanceConstraint"/>
 			<xs:element name="integratedChanceConstraint" type="SoftConstraintsSimpleIntegratedChanceConstraint"/>
+			<xs:element name="probabilisticObjective" type="SoftConstraintsSimpleProbabilisticObjective"/>
 		</xs:choice>
 	</xs:group>
 	<xs:group name="JointSoftConstraintGroup">
 		<xs:choice>
 			<xs:element name="jointChanceConstraint" type="SoftConstraintsJointChanceConstraint"/>
-			<xs:element name="jointICC" type="SoftConstraintsJointIntegratedChanceConstraint"/>
 			<xs:element name="jointUserDefinedPenalty" type="SoftConstraintsJointUserDefinedPenalty"/>
+			<xs:element name="jointProbabilisticObjective" type="SoftConstraintsJointProbabilisticObjective"/>
 		</xs:choice>
 	</xs:group>
 	<xs:complexType name="SoftConstraintsPenaltiesRow">
@@ -8242,13 +8265,17 @@ Default: identity matrix.</xs:documentation>
 			<xs:element name="chanceConstraint" type="SoftConstraintsSimpleChanceConstraint"/>
 			<xs:element name="integratedChanceConstraint" type="SoftConstraintsSimpleIntegratedChanceConstraint"/>
 			<xs:element name="jointChanceConstraint" type="SoftConstraintsJointChanceConstraint"/>
-			<xs:element name="jointICC" type="SoftConstraintsJointIntegratedChanceConstraint"/>
 			<xs:element name="jointUserDefinedPenalty" type="SoftConstraintsJointUserDefinedPenalty"/>
 -->
+			<xs:element name="userDefinedLossFunction" type="SoftConstraintsUserDefinedPenaltyFunction" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - use for arbitrary loss functions f(x,w)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional" default="-1">
 			<xs:annotation>
-				<xs:documentation>objective to which the penalty is to be added; default is -1</xs:documentation>
+				<xs:documentation>objective to which the term is to be added; default is -1</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -8506,7 +8533,6 @@ default is "scalar"</xs:documentation>
 				<xs:documentation>Number of the integratedChanceConstraint child elements (simple or joint) must match numberOfIntegratedChanceConstraints</xs:documentation>
 			</xs:annotation>
 			<xs:element name="simpleIntegratedChanceConstraint" type="SoftConstraintsSimpleIntegratedChanceConstraint" minOccurs="0"/>
-			<xs:element name="jointIntegratedChanceConstraint" type="SoftConstraintsJointIntegratedChanceConstraint" minOccurs="0"/>
 		</xs:choice>
 		<xs:attribute name="numberOfIntegratedChanceConstraints" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -8521,17 +8547,6 @@ default is "scalar"</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
-	</xs:complexType>
-	<xs:complexType name="SoftConstraintsJointIntegratedChanceConstraint">
-		<xs:annotation>
-			<xs:documentation>proposal</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="SoftConstraintsJointConstraint">
-				<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
-				<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
-			</xs:extension>
-		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsJointUserDefinedPenalty">
 		<xs:annotation>
@@ -8614,13 +8629,13 @@ default is "scalar"</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="SingleSoftConstraint-2016-10-05">
 		<xs:sequence>
-			<xs:element name="con" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="row" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfCon</xs:documentation>
+					<xs:documentation>number must agree with numberOfRows</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="JointSoftConstraint-2016-10-05">
 		<xs:sequence>
@@ -8632,7 +8647,6 @@ default is "scalar"</xs:documentation>
 			<xs:choice>
 				<xs:element name="userDefinedPenalty" type="SoftConstraintsUserDefinedPenalty"/>
 				<xs:element name="chanceConstraint" type="SoftConstraintsJointChanceConstraint"/>
-				<xs:element name="integratedChanceConstraint" type="SoftConstraintsJointIntegratedChanceConstraint"/>
 			</xs:choice>
 		</xs:sequence>
 		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" default="-1"/>
