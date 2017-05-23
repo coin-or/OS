@@ -2131,23 +2131,10 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>draft - to replace the probability or one stochastic value in a scenario</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="nodalTree">
+			<xs:element name="nodalTree" type="UpdateableProblemComponentNodalTree">
 				<xs:annotation>
 					<xs:documentation>draft - to replace the probability or one stochastic value in a node of a nodalTree</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:attribute name="nodeId" type="xs:IDREF" use="required"/>
-					<xs:attribute name="component" type="xs:string" use="required">
-						<xs:annotation>
-							<xs:documentation>"prob", "var", etc.</xs:documentation>
-						</xs:annotation>
-					</xs:attribute>
-					<xs:attribute name="attr" type="xs:string">
-						<xs:annotation>
-							<xs:documentation>if component is not "prob", this attribute is required to pinpoint where the value is to be stored (e.g. if component="var", attr could be "lb", "ub", etc.)</xs:documentation>
-						</xs:annotation>
-					</xs:attribute>
-				</xs:complexType>
 			</xs:element>
 			<xs:element name="disjunctiveTerm" type="UpdateableProblemComponentDisjunctiveTerm"/>
 			<xs:element name="realTimeDataItem" type="UpdateableProblemComponentRealTimeDataItem"/>
@@ -4173,6 +4160,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="ubMatrixIdx"/>
 					<xs:enumeration value="lbConeIdx"/>
 					<xs:enumeration value="ubConeIdx"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4187,6 +4175,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="orderConeIdx"/>
 					<xs:enumeration value="constantMatrixIdx"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4203,6 +4192,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="ubMatrixIdx"/>
 					<xs:enumeration value="lbConeIdx"/>
 					<xs:enumeration value="ubConeIdx"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4221,6 +4211,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="ubImaginaryPart"/>
 					<xs:enumeration value="lbConeIdx"/>
 					<xs:enumeration value="ubConeIdx"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4236,6 +4227,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="orderConeIdx"/>
 					<xs:enumeration value="additiveConstantRealPart"/>
 					<xs:enumeration value="additiveConstantImaginaryPart"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4254,6 +4246,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="ubImaginaryPart"/>
 					<xs:enumeration value="lbConeIdx"/>
 					<xs:enumeration value="ubConeIdx"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4270,6 +4263,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="ubTensordx"/>
 					<xs:enumeration value="lbConeIdx"/>
 					<xs:enumeration value="ubConeIdx"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4284,6 +4278,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="orderConeIdx"/>
 					<xs:enumeration value="constantTensorIdx"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4300,6 +4295,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:enumeration value="ubTensorIdx"/>
 					<xs:enumeration value="lbConeIdx"/>
 					<xs:enumeration value="ubConeIdx"/>
+					<xs:enumeration value="name"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4309,7 +4305,24 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>draft - to replace one distribution in an implicit tree by another distribution with the same dimensions</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="rvIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="distributionIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="attr" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="distribution"/>
+					<xs:enumeration value="transformationMatrix"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="distributionIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>required if attr="distribution"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="transformationMatrixIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>required if attr="transformationMatrix</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentScenarioTree">
 		<xs:annotation>
@@ -4350,7 +4363,12 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:attribute>
 		<xs:attribute name="attr" type="xs:string">
 			<xs:annotation>
-				<xs:documentation>if component is not "prob", this attribute is required to pinpoint where the value is to be stored (e.g. if component="var", attr could be "lb", "ub", etc.)</xs:documentation>
+				<xs:documentation>if component is not "prob", this attribute is required to pinpoint where the value is to be stored (e.g., if component="var", attr could be "lb", "ub", etc.)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idx" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>if comonent is not "prob", this attribute is required to identify the array element (e.g, variable number) where the value is to be stored.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -8071,11 +8089,6 @@ referenced by distributionIdx and is independent from all other rv's.</xs:docume
 			<xs:element name="softConstraints" type="SingleSoftConstraint-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal - use for penalties, chance constraints and probabilistic objectives.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="probabilisticObjectives" type="SoftConstraintsProbabilisticObjectives" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
