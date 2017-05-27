@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--OSoL.xsd: version 2.0 (The entire schema)-->
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:element name="osol" type="OSoL">
+		<xs:annotation>
+			<xs:documentation>version 2.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSoL">
+		<xs:annotation>
+			<xs:documentation>version 2.0, all descendant elements included</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="optionHeader" type="GeneralFileHeader" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.3</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="general" type="GeneralOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="system" type="SystemOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="service" type="ServiceOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="job" type="JobOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="optimization" type="OptimizationOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeneralOption">
+		<xs:all>
+			<xs:element name="serviceURI" type="xs:string" minOccurs="0"/>
+			<xs:element name="serviceName" type="xs:string" minOccurs="0"/>
+			<xs:element name="instanceName" type="xs:string" minOccurs="0"/>
+			<xs:element name="instanceLocation" type="InstanceLocationOption" minOccurs="0"/>
+			<xs:element name="jobID" type="xs:string" minOccurs="0"/>
+			<xs:element name="solverToInvoke" type="xs:string" minOccurs="0"/>
+			<xs:element name="license" type="xs:string" minOccurs="0"/>
+			<xs:element name="userName" type="xs:string" minOccurs="0"/>
+			<xs:element name="password" type="xs:string" minOccurs="0"/>
+			<xs:element name="contact" type="ContactOption" minOccurs="0"/>
+			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="InstanceLocationOption">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="locationType" use="optional" default="local">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="local"/>
+							<xs:enumeration value="http"/>
+							<xs:enumeration value="ftp"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ContactOption">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="transportType" use="optional" default="osp">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="osp"/>
+							<xs:enumeration value="smtp"/>
+							<xs:enumeration value="http"/>
+							<xs:enumeration value="ftp"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="SystemOption">
+		<xs:all>
+			<xs:element name="minDiskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
+			<xs:element name="minMemorySize" type="StorageCapacity" default="0.0" minOccurs="0"/>
+			<xs:element name="minCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
+			<xs:element name="minCPUNumber" type="CPUNumber" default="1" minOccurs="0"/>
+			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="ServiceOption">
+		<xs:all>
+			<xs:element name="type" default="solver" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="solver"/>
+						<xs:enumeration value="analyzer"/>
+						<xs:enumeration value="scheduler"/>
+						<xs:enumeration value="simulation"/>
+						<xs:enumeration value="registry"/>
+						<xs:enumeration value="modeler"/>
+						<xs:enumeration value="agent"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="JobOption">
+		<xs:all>
+			<xs:element name="maxTime" type="TimeSpan" default="INF" minOccurs="0"/>
+			<xs:element name="requestedStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
+			<xs:element name="dependencies" type="JobDependencies" minOccurs="0"/>
+			<xs:element name="requiredDirectories" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="DirectoriesAndFiles"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="requiredFiles" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="DirectoriesAndFiles"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="directoriesToMake" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="filesToMake" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="inputDirectoriesToMove" type="PathPairs" minOccurs="0"/>
+			<xs:element name="inputFilesToMove" type="PathPairs" minOccurs="0"/>
+			<xs:element name="outputDirectoriesToMove" type="PathPairs" minOccurs="0"/>
+			<xs:element name="outputFilesToMove" type="PathPairs" minOccurs="0"/>
+			<xs:element name="filesToDelete" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="directoriesToDelete" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="processesToKill" type="Processes" minOccurs="0"/>
+			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="MaxTime">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" type="GeneralEnumerationTimeUnit" use="optional" default="second"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="PathPairs">
+		<xs:sequence>
+			<xs:element name="pathPair" type="PathPair" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfPathPairs" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="PathPair">
+		<xs:attribute name="from" type="xs:string" use="required"/>
+		<xs:attribute name="to" type="xs:string" use="required"/>
+		<xs:attribute name="makeCopy" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="OtherOption">
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherOptions">
+		<xs:sequence>
+			<xs:element name="other" type="OtherOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfOtherOptions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OptimizationOption">
+		<xs:annotation>
+			<xs:documentation>numberOfVariables, numberOfObjectives and numberOfConstraints are the numbers in the original optimization instance and should match those in the corresponding OSiL file. The default value -1 can be used if no dense methods are called in the API.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="variables" type="VariableOption" minOccurs="0"/>
+			<xs:element name="objectives" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="ObjectiveOption"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="constraints" type="ConstraintOption" minOccurs="0"/>
+			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" use="optional">
+			<xs:annotation>
+				<xs:documentation>Required if dense methods are used for initial values, etc.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="-1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="numberOfObjectives" use="optional">
+			<xs:annotation>
+				<xs:documentation>Required if dense methods are used for initial objective values and bounds</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="-1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="numberOfConstraints" use="optional">
+			<xs:annotation>
+				<xs:documentation>Required if dense methods are used for initial dual values, etc.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="-1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="VariableOption">
+		<xs:sequence>
+			<xs:element name="initialVariableValues" type="InitVariableValues" minOccurs="0"/>
+			<xs:element name="initialVariableValuesString" type="InitVariableValuesString" minOccurs="0"/>
+			<xs:element name="initialBasisStatus" type="BasisStatus" minOccurs="0"/>
+			<xs:element name="integerVariableBranchingWeights" type="IntegerVariableBranchingWeights" minOccurs="0"/>
+			<xs:element name="sosVariableBranchingWeights" type="SOSVariableBranchingWeights" minOccurs="0"/>
+			<xs:element name="other" type="OtherVariableOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfOtherVariableOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="InitVariableValues">
+		<xs:sequence>
+			<xs:element name="var" type="InitVarValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="InitVariableValuesString">
+		<xs:sequence>
+			<xs:element name="var" type="InitVarValueString" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="InitVarValue">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="InitVarValueString">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="InitBasStatus">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" use="optional" default="unknown">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="unknown"/>
+					<xs:enumeration value="basic"/>
+					<xs:enumeration value="atLower"/>
+					<xs:enumeration value="atUpper"/>
+					<xs:enumeration value="superbasic"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="IntegerVariableBranchingWeights">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the var child elements must agree with numberOfVar</xs:documentation>
+			</xs:annotation>
+			<xs:element name="var" type="BranchingWeight" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVar" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SOSVariableBranchingWeights">
+		<xs:sequence>
+			<xs:element name="sos" type="SOSWeights" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfSOS" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SOSWeights">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the var child elements must agree with numberOfVar</xs:documentation>
+			</xs:annotation>
+			<xs:element name="var" type="BranchingWeight" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="sosIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="groupWeight" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="BranchingWeight">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherVariableOption">
+		<xs:choice>
+			<xs:element name="var" type="OtherVarOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherOptionEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherVarOption">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ObjectiveOption">
+		<xs:sequence>
+			<xs:element name="initialObjectiveValues" type="InitObjectiveValues" minOccurs="0"/>
+			<xs:element name="initialObjectiveBounds" type="InitObjectiveBounds" minOccurs="0"/>
+			<xs:element name="initialBasisStatus" type="BasisStatus" minOccurs="0"/>
+			<xs:element name="other" type="OtherObjectiveOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="InitObjectiveValues">
+		<xs:sequence>
+			<xs:element name="obj" type="InitObjValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="InitObjValue">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="InitObjectiveBounds">
+		<xs:sequence>
+			<xs:element name="obj" type="InitObjBound" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="InitObjBound">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:double" use="optional" default="-INF"/>
+		<xs:attribute name="ubValue" type="xs:double" use="optional" default="INF"/>
+	</xs:complexType>
+	<xs:complexType name="OtherObjectiveOption">
+		<xs:choice>
+			<xs:element name="obj" type="OtherObjOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherOptionEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherObjOption">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ConstraintOption">
+		<xs:sequence>
+			<xs:element name="initialConstraintValues" type="InitConstraintValues" minOccurs="0"/>
+			<xs:element name="initialDualValues" type="InitDualVariableValues" minOccurs="0"/>
+			<xs:element name="initialBasisStatus" type="BasisStatus" minOccurs="0"/>
+			<xs:element name="other" type="OtherConstraintOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="InitConstraintValues">
+		<xs:sequence>
+			<xs:element name="con" type="InitConValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="InitConValue">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="InitConStatus">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" use="optional" default="unknown">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="unknown"/>
+					<xs:enumeration value="nonBinding"/>
+					<xs:enumeration value="atLb"/>
+					<xs:enumeration value="atUb"/>
+					<xs:enumeration value="tight"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="InitDualVariableValues">
+		<xs:sequence>
+			<xs:element name="con" type="InitDualVarValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="InitDualVarValue">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="lbDualValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubDualValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OtherConstraintOption">
+		<xs:choice>
+			<xs:element name="con" type="OtherConOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfCon must be set in parent, and the number of entries must agree with numberOfCon</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherOptionEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherConOption">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="SolverOption">
+		<xs:sequence>
+			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfItems</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="SolverOptions">
+		<xs:sequence>
+			<xs:element name="solverOption" type="SolverOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+</xs:schema>

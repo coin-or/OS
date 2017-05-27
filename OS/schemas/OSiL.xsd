@@ -341,7 +341,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:element>
 			<xs:element name="parametricAnalysis" type="ParametricAnalysis" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="new_simulations" type="new_Simulations" minOccurs="0">
@@ -1829,9 +1829,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 	</xs:complexType>
 	<xs:complexType name="RealTimeUpdateableProblemComponent">
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="UpdateableProblemComponent_test"/>
-		</xs:sequence>
+			<xs:element name="implicitTree" type="UpdateableProblemComponentImplicitTree"/>
+			<xs:element name="scenarioTree" type="UpdateableProblemComponentScenarioTreeProbability"/>
+			<xs:element name="nodalTree" type="UpdateableProblemComponentNodalTreeProbability"/>
+		</xs:choice>
 		<xs:attribute name="constant" type="xs:double" default="0.0"/>
 		<xs:attribute name="coef" type="xs:double" default="1.0"/>
 	</xs:complexType>
@@ -2109,17 +2112,30 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentDisjunctiveTerm">
+		<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="disjunctiveTermIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="attr" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="conditioningVariable"/>
 					<xs:enumeration value="conditioningConstraint"/>
-					<xs:enumeration value="disjunctiveTermElement"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentDisjunctiveElement">
 		<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="disjunctiveTermIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>identifies the element within the element array of the indicated disjunctive term.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="attr" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>value depends on the element type (which is inferred from the element array). E.g., if the element is a var, then possible values for attr are "lb", "ub", etc.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ModificationUpdates">
 		<xs:sequence>
@@ -2150,6 +2166,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="disjunctiveTerm" type="UpdateableProblemComponentDisjunctiveTerm"/>
+			<xs:element name="disjunctiveElement" type="UpdateableProblemComponentDisjunctiveElement"/>
 			<xs:element name="realTimeDataItem" type="UpdateableProblemComponentRealTimeDataItem"/>
 		</xs:choice>
 		<xs:attribute name="value" type="xs:string" use="required">
@@ -4383,7 +4400,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:attribute>
 		<xs:attribute name="transformationMatrixIdx" type="xs:nonNegativeInteger">
 			<xs:annotation>
-				<xs:documentation>required if attr="transformationMatrix</xs:documentation>
+				<xs:documentation>required if attr="transformationMatrix"</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -4417,6 +4434,30 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentScenarioTreeProbability">
+		<xs:annotation>
+			<xs:documentation>draft - to replace the probability of a scenario</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="probType">
+			<xs:annotation>
+				<xs:documentation>path probability or conditional probability - default is "path"</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="path"/>
+					<xs:enumeration value="cond"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentScenarioTreeElement">
+		<xs:annotation>
+			<xs:documentation>draft - to parametrize one stochastic value in a scenario</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="scenarioIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="elementIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="UpdateableProblemComponentNodalTree">
 		<xs:attribute name="nodeId" type="xs:IDREF" use="required"/>
 		<xs:attribute name="component" type="xs:string" use="required">
@@ -4431,7 +4472,42 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:attribute>
 		<xs:attribute name="idx" type="xs:integer">
 			<xs:annotation>
-				<xs:documentation>if comonent is not "prob", this attribute is required to identify the array element (e.g, variable number) where the value is to be stored.</xs:documentation>
+				<xs:documentation>if comonent is not "prob", this attribute is required to identify the array element (e.g., variable number) where the value is to be stored.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentNodalTreeProbability">
+		<xs:annotation>
+			<xs:documentation>draft - to replace the probability of a scenario</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="nodeId" type="xs:IDREF" use="required"/>
+		<xs:attribute name="probType">
+			<xs:annotation>
+				<xs:documentation>path probability or conditional probability - default is "path"</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="path"/>
+					<xs:enumeration value="cond"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UpdateableProblemComponentNodalTreeElement">
+		<xs:attribute name="nodeId" type="xs:IDREF" use="required"/>
+		<xs:attribute name="component" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>"var", "obj", etc.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="idx" type="xs:integer" use="required">
+			<xs:annotation>
+				<xs:documentation>identifyies the array element (e.g., variable number) where the value is to be stored.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="attr" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>needed to pinpoint where the value is to be stored (e.g., if component="var", attr could be "lb", "ub", etc.)</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -4638,7 +4714,8 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 	<xs:complexType name="Param_test">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="UpdateableProblemComponent_test"/>
-			<xs:element name="genericParameter" type="GenericParameter"/>
+			<xs:element name="scenarioTreeElement" type="UpdateableProblemComponentScenarioTreeElement"/>
+			<xs:element name="nodalTreeElement" type="UpdateableProblemComponentNodalTreeElement"/>
 		</xs:choice>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
@@ -5018,16 +5095,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of levels must agree with numberOfLevels</xs:documentation>
-			</xs:annotation>
 			<xs:element name="level" type="TimeStageOrLevel" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation> </xs:documentation>
+					<xs:documentation>Number must agree with numberOfLevels</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfStages" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfLevels" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStages">
 		<xs:annotation>
@@ -7552,16 +7626,6 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="OSnLNode" type="UpdateableProblemComponentNlNode">
 				<xs:annotation>
 					<xs:documentation>draft - refer to any OSnLNode in any nonlinear expression, including matrix constructs</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="matrixElement" type="UpdateableProblemComponentMatrixElement">
-				<xs:annotation>
-					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="tensorElement" type="UpdateableProblemComponentTensorElement">
-				<xs:annotation>
-					<xs:documentation>draft - may NOT change the sparsity pattern of the matrix</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="matrixVar" type="UpdateableProblemComponentMatrixVariable"/>

@@ -1,0 +1,20 @@
+scope / frequency / timeliness / currency / update / updateable / updatePoint
+defaultScope? / defaultUpdatePoint 
+what are scope values?
+
+system / beforeTransmission
+service / remoteSystem
+job
+optimization / firstEvaluation
+eachEvaluation
+mostCurrent
+
+default value? optimization
+
+refresh
+    always
+    onInputChange
+    onSolverStart
+    onJobStart
+    onServiceStart
+    onSystemStart

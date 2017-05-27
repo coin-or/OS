@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:include schemaLocation="OSnL.xsd"/>
+	<xs:include schemaLocation="OSsL.xsd"/>
+	<!--xs:import namespace="http://www.w3.org/1998/Math/MathML" schemaLocation="http://www.w3.org/Math/XMLSchema/mathml2/mathml2.xsd"/-->
+	<xs:element name="OSiL" type="OSiL"/>
+	<xs:complexType name="OSiL">
+		<xs:sequence>
+			<xs:element name="programDescription" type="programDescription"/>
+			<xs:element name="programData" type="programData"/>
+			<!--xs:element name="math" type="mathML:math.type" minOccurs="0"/-->
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="programDescription">
+		<xs:sequence>
+			<xs:element name="source" type="xs:string" minOccurs="0"/>
+			<xs:element name="description" minOccurs="0"/>
+			<xs:element name="objName" type="xs:string" minOccurs="0"/>
+			<xs:element name="maxOrMin" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="max"/>
+						<xs:enumeration value="min"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="objConstant" type="xs:double" minOccurs="0"/>
+			<xs:element name="numberObjectives" type="xs:nonNegativeInteger"/>
+			<xs:element name="numberConstraints" type="xs:nonNegativeInteger"/>
+			<xs:element name="numberVariables" type="xs:nonNegativeInteger"/>
+			<xs:element name="networkAndGraphProblem" minOccurs="0">
+				<xs:complexType>
+					<xs:group ref="networkAndGraphHeuristicsGroup"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="baseProgramData">
+		<xs:sequence>
+			<xs:element name="constraints" type="constraints" minOccurs="0"/>
+			<xs:element name="variables" type="variables"/>
+			<xs:element name="multiObjectives" type="multiObjectives" minOccurs="0"/>
+			<xs:element name="coefMatrix" type="coefMatrix" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="programData">
+		<xs:complexContent>
+			<xs:extension base="baseProgramData">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="nl" type="nl" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="cones" type="cones" minOccurs="0"/>
+					<xs:element name="stages" type="stages" minOccurs="0"/>
+					<xs:element name="stochastic" type="stochastic" minOccurs="0"/>
+					<xs:element name="networkAndGraph" type="networkAndGraph" minOccurs="0"/>
+					<xs:element name="userFunctions" type="userFunctions" minOccurs="0"/>
+					<xs:element name="simulations" type="simulations" minOccurs="0"/>
+					<xs:element name="xmlData" type="xmlData" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="variables">
+		<xs:sequence>
+			<xs:element name="var" type="var" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="var">
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="init" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="C">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="C"/>
+					<xs:enumeration value="B"/>
+					<xs:enumeration value="I"/>
+					<xs:enumeration value="S"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="objCoef" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="constraints">
+		<xs:sequence>
+			<xs:element name="con" type="con" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="con">
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="coefMatrix">
+		<xs:sequence>
+			<xs:choice minOccurs="0">
+				<xs:element name="listMatrix" type="listMatrix"/>
+				<xs:element name="mpsMatrix" type="mpsMatrix"/>
+			</xs:choice>
+			<xs:element name="sparseSDPA" type="sparseSDPA" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="multiObjectives">
+		<xs:sequence>
+			<xs:element name="obj" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="obj"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="networkAndGraphProblem" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:group ref="networkAndGraphHeuristicsGroup"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="obj">
+		<xs:sequence>
+			<xs:element name="el" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="maxOrMin" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="weight" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="nl">
+		<xs:sequence>
+			<xs:element ref="OSnLNode"/>
+		</xs:sequence>
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="-1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="cones">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="rCone" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="el" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="quadCone" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="el" minOccurs="2" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="rotatedQuadCone" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="el" minOccurs="3" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="stages">
+		<xs:choice minOccurs="0">
+			<xs:element name="implicitOrder" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="el" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="startRowNum" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:int"/>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="startColNum" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:int">
+											<xs:minInclusive value="0"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="endRowNum" use="optional">
+									<xs:simpleType>
+										<xs:restriction base="xs:int"/>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="endColNum" use="optional">
+									<xs:simpleType>
+										<xs:restriction base="xs:int">
+											<xs:minInclusive value="0"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="type" use="optional" default="implicit">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="implicit"/>
+								<xs:enumeration value="explicit"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="explictOrder" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="rows" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="row" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="rowNum" use="required">
+														<xs:simpleType>
+															<xs:restriction base="xs:int"/>
+														</xs:simpleType>
+													</xs:attribute>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="type" use="optional" default="implicit">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="implicit"/>
+											<xs:enumeration value="explicit"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="columns" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="col" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="colNum" use="required">
+														<xs:simpleType>
+															<xs:restriction base="xs:int">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:attribute>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="type" use="optional" default="implicit">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="implicit"/>
+											<xs:enumeration value="explicit"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="nodes" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="node" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="nodeID" type="xs:nonNegativeInteger" use="optional"/>
+													<xs:attribute name="propName" type="xs:string" use="required"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="arcs" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="arc" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="arcID" type="xs:nonNegativeInteger" use="optional"/>
+													<xs:attribute name="propName" type="xs:string" use="required"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="number" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="scenarioNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation>This is a generic node from which we derive sNode</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:element name="scenarioNode" type="scenarioNode" abstract="true"/>
+	<xs:element name="sNode" substitutionGroup="scenarioNode">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="scenarioNode">
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:choice minOccurs="0">
+							<xs:element ref="OSiL"/>
+							<xs:element name="changes" type="stochasticNumbers"/>
+						</xs:choice>
+						<xs:element ref="scenarioNode" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+					<xs:attribute name="prob" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="0.0"/>
+								<xs:maxInclusive value="1.0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="base" use="optional" default="coreProgram">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="none"/>
+								<xs:enumeration value="coreProgram"/>
+								<xs:enumeration value="firstSibling"/>
+								<xs:enumeration value="lastSibling"/>
+								<xs:enumeration value="parent"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="stochasticNumbers">
+		<xs:sequence>
+			<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="rowNum" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:int"/>
+								</xs:simpleType>
+							</xs:attribute>
+							<xs:attribute name="colNum" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:int">
+										<xs:minInclusive value="-2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="bound" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType mixed="true">
+					<xs:attribute name="varIdx" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:minInclusive value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="lower"/>
+								<xs:enumeration value="upper"/>
+								<xs:enumeration value="fixed"/>
+								<xs:enumeration value="free"/>
+								<xs:enumeration value="nonPositive"/>
+								<xs:enumeration value="nonNegative"/>
+								<xs:enumeration value="binary"/>
+								<xs:enumeration value="integer"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="num" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="numID" type="xs:IDREF" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="node" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="nodeID" type="xs:nonNegativeInteger" use="optional"/>
+							<xs:attribute name="propName" type="xs:string" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arc" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="arcID" type="xs:nonNegativeInteger" use="optional"/>
+							<xs:attribute name="propName" type="xs:string" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="stochasticNumber">
+		<xs:choice>
+			<xs:element name="el">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="rowNum" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:int"/>
+								</xs:simpleType>
+							</xs:attribute>
+							<xs:attribute name="colNum" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:int">
+										<xs:minInclusive value="-2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="bound">
+				<xs:complexType mixed="true">
+					<xs:attribute name="varIdx" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:minInclusive value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="lower"/>
+								<xs:enumeration value="upper"/>
+								<xs:enumeration value="fixed"/>
+								<xs:enumeration value="free"/>
+								<xs:enumeration value="nonPositive"/>
+								<xs:enumeration value="nonNegative"/>
+								<xs:enumeration value="binary"/>
+								<xs:enumeration value="integer"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="num">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="numID" type="xs:IDREF" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="node">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="nodeID" type="xs:nonNegativeInteger" use="optional"/>
+							<xs:attribute name="propName" type="xs:string" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arc">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="arcID" type="xs:nonNegativeInteger" use="optional"/>
+							<xs:attribute name="propName" type="xs:string" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="stochastic">
+		<xs:sequence>
+			<xs:choice minOccurs="0">
+				<xs:element name="explicitScenario">
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="scenarioPaths">
+								<xs:complexType>
+									<xs:sequence minOccurs="0">
+										<xs:element name="rootScenario">
+											<xs:complexType>
+												<xs:complexContent>
+													<xs:extension base="stochasticNumbers">
+														<xs:attribute name="name" type="xs:string" use="optional"/>
+														<xs:attribute name="prob" use="required">
+															<xs:simpleType>
+																<xs:restriction base="xs:double">
+																	<xs:minInclusive value="0.0"/>
+																	<xs:maxInclusive value="1.0"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:attribute>
+														<xs:attribute name="base" use="optional" default="coreProgram">
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:enumeration value="none"/>
+																	<xs:enumeration value="coreProgram"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:attribute>
+														<xs:attribute name="stage" type="xs:nonNegativeInteger" use="optional"/>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="scenario" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:complexContent>
+													<xs:extension base="stochasticNumbers">
+														<xs:attribute name="name" type="xs:string" use="optional"/>
+														<xs:attribute name="prob" use="required">
+															<xs:simpleType>
+																<xs:restriction base="xs:double">
+																	<xs:minInclusive value="0.0"/>
+																	<xs:maxInclusive value="1.0"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:attribute>
+														<xs:attribute name="parent" type="xs:nonNegativeInteger" use="required"/>
+														<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="scenarioTree">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="sNode"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="implicitScenario">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="distributions">
+								<xs:complexType>
+									<xs:sequence minOccurs="0">
+										<xs:element name="univariate" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="distr" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:choice>
+																<xs:group ref="distributionGroup"/>
+																<xs:element name="userF">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
+																		</xs:sequence>
+																		<xs:attribute name="name" type="xs:IDREF" use="required"/>
+																	</xs:complexType>
+																</xs:element>
+															</xs:choice>
+															<xs:attribute name="name" type="xs:ID" use="required"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="multivariate" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="distr" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:choice>
+																	<xs:group ref="multiDimensionalDistributionGroup"/>
+																	<xs:element name="userF" maxOccurs="unbounded">
+																		<xs:complexType>
+																			<xs:sequence>
+																				<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
+																			</xs:sequence>
+																			<xs:attribute name="name" type="xs:IDREF" use="required"/>
+																		</xs:complexType>
+																	</xs:element>
+																</xs:choice>
+															</xs:sequence>
+															<xs:attribute name="name" type="xs:ID" use="required"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="stochasticElements">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="elementGroup" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="el" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:complexContent>
+																<xs:extension base="stochasticNumber">
+																	<xs:attribute name="distributionName" type="xs:IDREF"/>
+																</xs:extension>
+															</xs:complexContent>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="historyList" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="matrix" type="matrixMarket"/>
+																<xs:element name="el" type="stochasticNumber" maxOccurs="unbounded"/>
+															</xs:sequence>
+															<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="randomVariableList">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="matrix" type="matrixMarket"/>
+																<xs:element name="randomVariable" maxOccurs="unbounded">
+																	<xs:complexType>
+																		<xs:attribute name="distributionName" type="xs:IDREF" use="required"/>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="constants" type="doubleVector"/>
+												</xs:sequence>
+												<xs:attribute name="stage" type="xs:nonNegativeInteger"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="rowNum" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:int">
+												<xs:minInclusive value="-1"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="colNum" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:int">
+												<xs:minInclusive value="-2"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="additiveConstant" type="xs:double" use="optional" default="0"/>
+									<xs:attribute name="processMode" use="optional" default="add">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="add"/>
+												<xs:enumeration value="multiply"/>
+												<xs:enumeration value="replace"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+			<xs:element name="penalties" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="row">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="simpleRecourse" minOccurs="0">
+										<xs:complexType>
+											<xs:attribute name="shortagePenalty" type="xs:double" use="optional" default="0"/>
+											<xs:attribute name="surplusPenalty" type="xs:double" use="optional" default="0"/>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="robustOptimization" minOccurs="0">
+										<xs:complexType>
+											<xs:attribute name="quadraticShortagePenalty" type="xs:double" use="optional" default="0"/>
+											<xs:attribute name="quadraticSurplusPenalty" type="xs:double" use="optional" default="0"/>
+											<xs:attribute name="quardraticFactor" use="optional" default="2.0">
+												<xs:simpleType>
+													<xs:restriction base="xs:double">
+														<xs:minInclusive value="0.0"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="piecewiseLinearQuadratic" minOccurs="0">
+										<xs:complexType>
+											<xs:attribute name="linearShortageParam" type="xs:double" default="0"/>
+											<xs:attribute name="linearSurplusParam" type="xs:double" use="optional" default="0"/>
+											<xs:attribute name="quadraticShortageParam" type="xs:double" use="optional" default="0"/>
+											<xs:attribute name="quadraticSurplusParam" type="xs:double" use="optional" default="0"/>
+											<xs:attribute name="quadraticFactor" use="optional" default="2.0">
+												<xs:simpleType>
+													<xs:restriction base="xs:double">
+														<xs:minInclusive value="0.0"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="userDefinedPenalty" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="surplusPenalty" minOccurs="0">
+													<xs:complexType>
+														<xs:sequence minOccurs="0">
+															<xs:element ref="OSnLNode" minOccurs="0"/>
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="shortagePenalty" minOccurs="0">
+													<xs:complexType>
+														<xs:sequence minOccurs="0">
+															<xs:element ref="OSnLNode" minOccurs="0"/>
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+											<xs:attribute name="name" type="xs:ID" use="required"/>
+											<xs:attribute name="default" type="xs:string" use="optional"/>
+											<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
+											<xs:attribute name="variableType" use="optional" default="C">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="C"/>
+														<xs:enumeration value="B"/>
+														<xs:enumeration value="I"/>
+														<xs:enumeration value="S"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+								</xs:choice>
+								<xs:attribute name="rowNum" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:int">
+											<xs:minInclusive value="0"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="riskMeasures" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="simpleChance" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="rowNum" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:int"/>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="type" use="optional" default="geq">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="geq"/>
+											<xs:enumeration value="leq"/>
+											<xs:enumeration value="eq"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="prob" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:double">
+											<xs:minInclusive value="0.0"/>
+											<xs:maxInclusive value="1.0"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="jointChance" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="row" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attribute name="rowNum" use="required">
+												<xs:simpleType>
+													<xs:restriction base="xs:int"/>
+												</xs:simpleType>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="type" use="optional" default="geq">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="geq"/>
+											<xs:enumeration value="leq"/>
+											<xs:enumeration value="eq"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="prob" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:double">
+											<xs:minInclusive value="0.0"/>
+											<xs:maxInclusive value="1.0"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="integratedChance" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="rowNum" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:int"/>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="type" use="optional" default="geq">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="geq"/>
+											<xs:enumeration value="leq"/>
+											<xs:enumeration value="eq"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="bound" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:double">
+											<xs:minInclusive value="0"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+	</xs:complexType>
+</xs:schema>

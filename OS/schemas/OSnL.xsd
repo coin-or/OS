@@ -3688,21 +3688,11 @@
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:attribute name="value" type="xs:double" use="optional"/>
-				<xs:attribute name="type">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="real"/>
-							<xs:enumeration value="string"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
 				<xs:attribute name="id" type="xs:ID" use="optional">
 					<xs:annotation>
 						<xs:documentation>required if realtime or random is true</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="realtime" type="xs:boolean" default="false"/>
-				<xs:attribute name="random" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -3723,8 +3713,6 @@
 						<xs:documentation>required if this node is later accessed as an updateable problem component</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="realtime" type="xs:boolean" default="false"/>
-				<xs:attribute name="random" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
