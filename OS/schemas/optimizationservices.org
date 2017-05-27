@@ -1,3 +1,0 @@
- ftp://ftp.optimizationservices.org
-optservo
-orgoptserv
