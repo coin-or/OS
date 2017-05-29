@@ -572,11 +572,9 @@ OS/schemas/OSbL.xsd -text
 OS/schemas/OSeL.xsd -text
 OS/schemas/OSgL.xsd -text
 OS/schemas/OSiL.xsd -text
-OS/schemas/OSiL2.xsd -text
 OS/schemas/OSlL.xsd -text
 OS/schemas/OSmL.xsd -text
 OS/schemas/OSnL.xsd -text
-OS/schemas/OSnL2.xsd -text
 OS/schemas/OSoL.xsd -text
 OS/schemas/OSpL.xsd -text
 OS/schemas/OSqL.xsd -text
@@ -587,8 +585,6 @@ OS/schemas/OSuL.xsd -text
 OS/schemas/fml.xsl -text
 OS/schemas/lpfml.xsd -text
 OS/schemas/testMatricesAndCones.osil -text
-OS/schemas/~$OSnL-Nodes.xlsx -text
-OS/schemas/~$stributionDesign.rtf -text
 OS/src/Makefile.am -text
 OS/src/Makefile.in -text
 OS/src/OSAgent/Makefile.am -text
