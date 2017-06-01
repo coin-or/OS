@@ -2176,6 +2176,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeletions">
+		<xs:choice>
+			<xs:group ref="DeletableProblemComponent_test"/>
+			<xs:element name="disjunctions" type="ModificationDeleteDisjunctions"/>
+			<xs:element name="disjunctiveTerms" type="ModificationDeleteDisjunctiveTerms"/>
+		</xs:choice>
+		<!--	
 		<xs:sequence>
 			<xs:element name="variables" type="ModificationDeleteVariables" minOccurs="0">
 				<xs:annotation>
@@ -2298,6 +2304,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+-->
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteVariables">
 		<xs:annotation>
@@ -2653,6 +2660,130 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
+	<xs:group name="DeletableProblemComponent_test">
+		<xs:choice>
+			<xs:element name="variables" type="ModificationDeleteVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectives" type="ModificationDeleteObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="constraints" type="ModificationDeleteConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="linearConstraintCoefficients" type="ModificationDeleteLinearConstraintCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="quadraticCoefficients" type="ModificationDeleteQuadraticCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nonlinearExpressions" type="ModificationDeleteNonlinearExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixVariables" type="ModificationDeleteMatrixVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixObjectives" type="ModificationDeleteMatrixObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixConstraints" type="ModificationDeleteMatrixConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixExpressions" type="ModificationDeleteMatrixExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexVariables" type="ModificationDeleteComplexVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexObjectives" type="ModificationDeleteComplexObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexConstraints" type="ModificationDeleteComplexConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexExpressions" type="ModificationDeleteComplexExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorVariables" type="ModificationDeleteTensorVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorObjectives" type="ModificationDeleteTensorObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorConstraints" type="ModificationDeleteTensorConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorExpressions" type="ModificationDeleteTensorExpressions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="ModificationDeleteRealTimeData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticTree" type="ModificationDeleteStochasticTree" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - Delete the entire scenario tree or implicit tree</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="softConstraints" type="ModificationDeleteSoftConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experimentt</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scenarios" type="ModificationDeleteScenarios" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - delete one or more scenarios from a scenario tree</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nodes" type="ModificationDeleteNodes" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment - delete one or more nodess from a nodalTree</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="parametricAnalysis" type="ModificationDeleteParametricAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:group>
 	<xs:complexType name="ModificationAdditions">
 		<xs:sequence>
 			<xs:element name="variables" type="Variables" minOccurs="0">
@@ -3840,6 +3971,12 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="DisjunctionDeletions">
+		<xs:sequence>
+			<xs:group ref="DeletableProblemComponent_test"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="DisjunctiveModifications">
 		<xs:annotation>
 			<xs:documentation>experiment </xs:documentation>
@@ -3850,7 +3987,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="deletions" type="ModificationDeletions" minOccurs="0">
+			<xs:element name="deletions" type="DisjunctionDeletions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
