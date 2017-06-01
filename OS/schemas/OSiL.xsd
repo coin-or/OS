@@ -2277,6 +2277,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment - Delete the entire scenario tree or implicit tree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="softConstraints" type="ModificationDeleteSoftConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experimentt</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="scenarios" type="ModificationDeleteScenarios" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment - delete one or more scenarios from a scenario tree</xs:documentation>
@@ -2287,81 +2292,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment - delete one or more nodess from a nodalTree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="ModificationDeleteStochasticTree">
-		<xs:annotation>
-			<xs:documentation>experiment </xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="treeType">
-			<xs:annotation>
-				<xs:documentation>experiment - treeType is optional since there should be only one tree defined</xs:documentation>
-			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="implicit"/>
-					<xs:enumeration value="scenarios"/>
-					<xs:enumeration value="nodal"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-	</xs:complexType>
-	<xs:complexType name="ModificationDeleteScenarios">
-		<xs:sequence>
-			<xs:element name="scen" type="ModificationDeleteScenario" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="parametricAnalysis" type="ModificationDeleteParametricAnalysis" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfScen"/>
-	</xs:complexType>
-	<xs:complexType name="ModificationDeleteScenario">
-		<xs:attribute name="scenIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>first stage that is to be deleted - default value: start of the scenario</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="deleteMode" default="path">
-			<xs:annotation>
-				<xs:documentation>delete just one scenario path (default) or the entire subtree</xs:documentation>
-			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="path"/>
-					<xs:enumeration value="subtree"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="probAdjust" use="required">
-			<xs:annotation>
-				<xs:documentation>determines whether the freed probability is to be distributed among the sibling scenarios only (default if deleteMode = "path") or all remaining scenarios in the tree (default if deleteMode = "subtree").</xs:documentation>
-			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="siblings"/>
-					<xs:enumeration value="allScenarios"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-	</xs:complexType>
-	<xs:complexType name="ModificationDeleteNodes">
-		<xs:sequence>
-			<xs:element name="node" type="ModificationDeleteNode" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfNodes</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfNodes"/>
-	</xs:complexType>
-	<xs:complexType name="ModificationDeleteNode">
-		<xs:attribute name="nodeId" type="xs:IDREF" use="required">
-			<xs:annotation>
-				<xs:documentation>Delete the referenced node and all its direct and indirect descendant; distribute the probability among the siblings of the node.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteVariables">
 		<xs:annotation>
@@ -2430,8 +2366,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="idxTwo" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteNonlinearExpressions">
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="nl" type="ModificationDeleteNl"/>
+		<xs:sequence>
+			<xs:element name="nl" type="ModificationDeleteNl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2476,8 +2412,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteMatrixExpressions">
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="expr" type="ModificationDeleteMatrixExpr"/>
+		<xs:sequence>
+			<xs:element name="expr" type="ModificationDeleteMatrixExpr" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2522,8 +2458,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteComplexExpressions">
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="expr" type="ModificationDeleteComplexExpr"/>
+		<xs:sequence>
+			<xs:element name="expr" type="ModificationDeleteComplexExpr" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2568,13 +2504,35 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorExpressions">
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="expr" type="ModificationDeleteTensorExpr"/>
+		<xs:sequence>
+			<xs:element name="expr" type="ModificationDeleteTensorExpr" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfExpr" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteTensorExpr">
 		<xs:attribute name="idx" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteDisjunctions">
+		<xs:sequence>
+			<xs:element name="disjunction" type="ModificationDeleteDisjunction" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteDisjunction">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteDisjunctiveTerms">
+		<xs:sequence>
+			<xs:element name="disjunctiveTerm" type="ModificationDeleteDisjunctiveTerm" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDisjunctiveTerms" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteDisjunctiveTerm">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteRealTimeDataSource">
 		<xs:attribute name="realTimeDataSourceIdx" type="xs:nonNegativeInteger" use="required"/>
@@ -2584,13 +2542,116 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:documentation>if attribute is present, only replace the indicated target component. Otherwise delete all target components for the indicated data point.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="replacementValue" type="xs:double" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteRealTimeData">
 		<xs:sequence>
 			<xs:element name="dataSource" type="ModificationDeleteRealTimeDataSource" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfDataSources" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteStochasticTree">
+		<xs:annotation>
+			<xs:documentation>experiment </xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="treeType">
+			<xs:annotation>
+				<xs:documentation>experiment - treeType is optional since there should be only one tree defined</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="implicit"/>
+					<xs:enumeration value="scenarios"/>
+					<xs:enumeration value="nodal"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteSoftConstraints">
+		<xs:sequence>
+			<xs:element name="con" type="ModificationDeleteSoftCon" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteSoftCon">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteScenarios">
+		<xs:sequence>
+			<xs:element name="scen" type="ModificationDeleteScenario" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfScen" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteScenario">
+		<xs:attribute name="scenIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>first stage that is to be deleted - default value: start of the scenario</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="deleteMode" default="path">
+			<xs:annotation>
+				<xs:documentation>delete just one scenario path (default) or the entire subtree</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="path"/>
+					<xs:enumeration value="subtree"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="probAdjust" use="required">
+			<xs:annotation>
+				<xs:documentation>determines whether the freed probability is to be distributed among the sibling scenarios only (default if deleteMode = "path") or all remaining scenarios in the tree (default if deleteMode = "subtree").</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="siblings"/>
+					<xs:enumeration value="allScenarios"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteNodes">
+		<xs:sequence>
+			<xs:element name="node" type="ModificationDeleteNode" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfNodes</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfNodes" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteNode">
+		<xs:attribute name="nodeId" type="xs:IDREF" use="required">
+			<xs:annotation>
+				<xs:documentation>Delete the referenced node and all its direct and indirect descendant; distribute the probability among the siblings of the node.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteParametricAnalysis">
+		<xs:sequence>
+			<xs:element name="param" type="ModificationDeleteParam" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree witih numberOfParam</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfParam" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ModificationDeleteParam">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>experiment</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationAdditions">
 		<xs:sequence>
@@ -4145,7 +4206,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required"/>
+		<xs:attribute name="id" type="xs:IDREF" use="required"/>
 		<xs:attribute name="part" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -4159,14 +4220,9 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required">
+		<xs:attribute name="id" type="xs:IDREF" use="required">
 			<xs:annotation>
-				<xs:documentation>identifies the OSNlMNode in the nonlinear expression trees</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger" use="required">
-			<xs:annotation>
-				<xs:documentation>identifies the referenced matrix within the array of matrices</xs:documentation>
+				<xs:documentation>identifies the OSnLMNode in the nonlinear expression trees</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -4174,14 +4230,9 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:string" use="required">
+		<xs:attribute name="id" type="xs:IDREF" use="required">
 			<xs:annotation>
 				<xs:documentation>identifies the OSNlTNode in the nonlinear expression trees</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="tensorIdx" type="xs:nonNegativeInteger" use="required">
-			<xs:annotation>
-				<xs:documentation>identifies the referenced tensor within the array of tensors</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -7640,6 +7691,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="tensorObj" type="UpdateableProblemComponentTensorObjective"/>
 			<xs:element name="tensorCon" type="UpdateableProblemComponentTensorConstraint"/>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
+			<xs:element name="realTimeData" type="UpdateableProblemComponentRealTimeDataItem"/>
 		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationUpdates-2016-12-26">
