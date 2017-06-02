@@ -2176,12 +2176,18 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeletions">
-		<xs:choice>
-			<xs:group ref="DeletableProblemComponent_test"/>
-			<xs:element name="disjunctions" type="ModificationDeleteDisjunctions"/>
-			<xs:element name="disjunctiveTerms" type="ModificationDeleteDisjunctiveTerms"/>
-		</xs:choice>
-		<!--	
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="DeletableProblemComponent_test">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="parametricAnalysis" type="ModificationDeleteParametricAnalysis" minOccurs="0"/>
+					<xs:element name="disjunctions" type="ModificationDeleteDisjunctions" minOccurs="0"/>
+					<xs:element name="disjunctiveTerms" type="ModificationDeleteDisjunctiveTerms" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+			<!--	
 		<xs:sequence>
 			<xs:element name="variables" type="ModificationDeleteVariables" minOccurs="0">
 				<xs:annotation>
@@ -2305,6 +2311,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 		</xs:sequence>
 -->
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteVariables">
 		<xs:annotation>
@@ -2534,6 +2541,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence>
 			<xs:element name="disjunctiveTerm" type="ModificationDeleteDisjunctiveTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="disjunctionIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfDisjunctiveTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteDisjunctiveTerm">
@@ -2660,8 +2668,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="mult" type="xs:nonNegativeInteger" default="1"/>
 		<xs:attribute name="incr" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
-	<xs:group name="DeletableProblemComponent_test">
-		<xs:choice>
+	<xs:complexType name="DeletableProblemComponent_test">
+		<xs:sequence>
 			<xs:element name="variables" type="ModificationDeleteVariables" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
@@ -2777,13 +2785,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment - delete one or more nodess from a nodalTree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="parametricAnalysis" type="ModificationDeleteParametricAnalysis" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:choice>
-	</xs:group>
+		</xs:sequence>
+	</xs:complexType>
 	<xs:complexType name="ModificationAdditions">
 		<xs:sequence>
 			<xs:element name="variables" type="Variables" minOccurs="0">
@@ -3972,10 +3975,16 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="DisjunctionDeletions">
-		<xs:sequence>
-			<xs:group ref="DeletableProblemComponent_test"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfSubst" type="xs:nonNegativeInteger" use="required"/>
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="DeletableProblemComponent_test">
+				<xs:sequence>
+					<xs:element name="parametricAnalysis" type="ModificationDeleteParametricAnalysis" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="DisjunctiveModifications">
 		<xs:annotation>
@@ -7954,6 +7963,8 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="disjunctions" type="ModificationDeleteDisjunctions" minOccurs="0"/>
+			<xs:element name="disjunctiveTerms" type="ModificationDeleteDisjunctiveTerms" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationDeleteVariables-2016-12-26">
