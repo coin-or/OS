@@ -280,11 +280,13 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+<!--			
 			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<xs:element name="distributions" type="Distributions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -329,6 +331,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+<!--	
 			<xs:element name="stochasticData" type="StochasticData-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -339,12 +342,18 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+-->
 			<xs:element name="parametricAnalysis" type="ParametricAnalysis" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="new_simulations" type="new_Simulations" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="multilevelAndStochasticProgramming" type="MultilevelAndStochasticProgramming" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -6893,6 +6902,39 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="ScenarioTree-2017-06-03">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--
+			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+-->
+			<xs:element name="scenario" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfStochasticElements" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mode" default="replace">
+			<xs:annotation>
+				<xs:documentation>scenario values can replace deterministic base values, or can be given as additive of multiplicative modifications </xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="replace"/>
+					<xs:enumeration value="add"/>
+					<xs:enumeration value="multiply"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
 	<xs:complexType name="RootScenario-2016-10-05">
 		<xs:sequence>
 			<xs:element name="changesFromCore" type="ChangesInScenario" minOccurs="0"/>
@@ -8562,7 +8604,44 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 referenced by distributionIdx and is independent from all other rv's.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="softConstraints" type="SingleSoftConstraint-2016-10-05" minOccurs="0">
+			<xs:element name="softConstraints" type="SoftConstraints-2017-06-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal - use for penalties, chance constraints and probabilistic objectives.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfRV" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="ambiguityResolution">
+			<xs:annotation>
+				<xs:documentation>default is "max" for minimization problems, "min" for maximization problems</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="any"/>
+					<xs:enumeration value="all"/>
+					<xs:enumeration value="avg"/>
+					<xs:enumeration value="max"/>
+					<xs:enumeration value="min"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ImplicitTree-2017-06-03">
+		<xs:sequence>
+			<!--		
+			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+-->
+			<xs:element name="rv" type="ImplicitTreeBlock-2017-06-03" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfRV. Each random variable or vector is
+referenced by distributionIdx and is independent from all other rv's.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="softConstraints" type="SoftConstraints-2017-06-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal - use for penalties, chance constraints and probabilistic objectives.</xs:documentation>
 				</xs:annotation>
@@ -8597,7 +8676,49 @@ referenced by distributionIdx and is independent from all other rv's.</xs:docume
 Each term adds rows to the input vector for the transformation, first the random variable or vector, followed by any references to stochEl.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="ma" type="AR-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="ma" type="MA-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfMA. Each moving average term refers to a previously set decision variable, matrix variable, etc. Each reference adds one or more rows to the input vector of the transformation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="transformation" type="ImplicitTreeStochasticTransformation-2016-10-05" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term) and transforms this into the vector of stochastic elements. Any random matrices are expanded column by column. 
+Default: identity matrix.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
+			<xs:annotation>
+				<xs:documentation>number of the stage in which the information is revealed</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="distributionIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>gives the index of the distribution in the "distributions" element</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfAR" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>autoregressive terms</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfMA" type="xs:nonNegativeInteger" default="0">
+			<xs:annotation>
+				<xs:documentation>moving average terms</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ImplicitTreeBlock-2017-06-03">
+		<xs:sequence>
+			<xs:element name="ar" type="AutoRegressiveComponent-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfAR. 
+Each term adds rows to the input vector for the transformation, first the random variable or vector, followed by any references to stochEl.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ma" type="MA-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfMA. Each moving average term refers to a previously set decision variable, matrix variable, etc. Each reference adds one or more rows to the input vector of the transformation</xs:documentation>
 				</xs:annotation>
@@ -8667,7 +8788,7 @@ Default: identity matrix.</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
-	<xs:complexType name="AR-2016-10-05">
+	<xs:complexType name="MA-2016-10-05">
 		<xs:attribute name="idx" type="xs:integer" use="required"/>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
@@ -9116,15 +9237,15 @@ default is "scalar"</xs:documentation>
 	<xs:complexType name="SoftConstraint-2016-10-05">
 		<xs:choice minOccurs="0" maxOccurs="unbounded"/>
 	</xs:complexType>
-	<xs:complexType name="SingleSoftConstraint-2016-10-05">
+	<xs:complexType name="SoftConstraints-2017-06-05">
 		<xs:sequence>
-			<xs:element name="row" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="con" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfRows</xs:documentation>
+					<xs:documentation>number must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="JointSoftConstraint-2016-10-05">
 		<xs:sequence>
@@ -9140,6 +9261,19 @@ default is "scalar"</xs:documentation>
 		</xs:sequence>
 		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" default="-1"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MultilevelAndStochasticProgramming">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element name="levelsOrTimeStages" type="TimeStages" minOccurs="0"/>
+				<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
+				<xs:choice>
+					<xs:element name="implicitTreeData" type="ImplicitTree-2017-06-03" minOccurs="0"/>
+					<xs:element name="scenarioData" type="ScenarioTree-2017-06-03" minOccurs="0"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:element name="nodalTree" type="NodalTree-2016-12-26" minOccurs="0"/>
+		</xs:choice>
 	</xs:complexType>
 	<xs:simpleType name="RefreshPointEnum">
 		<xs:restriction base="xs:string">

@@ -1466,7 +1466,6 @@ equal tensor rank</xs:documentation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element ref="empiricalContinuous"/>
 			<xs:element ref="uniform"/>
 			<xs:element ref="normal"/>
 			<xs:element ref="stdNormal"/>
@@ -1595,6 +1594,7 @@ equal tensor rank</xs:documentation>
 		<xs:sequence>
 			<xs:element name="el" type="EmpiricalDiscreteElement" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="empiricalDiscrete" type="EmpiricalDiscrete">
 		<xs:annotation>
@@ -2567,6 +2567,7 @@ according to WolframMathWorld</xs:documentation>
 		<xs:sequence>
 			<xs:element name="el" type="NonNumericalDiscreteElement" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="nonNumericalDiscrete" type="NonNumericalDiscrete">
 		<xs:annotation>
