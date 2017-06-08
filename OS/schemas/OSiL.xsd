@@ -280,7 +280,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-<!--			
+			<!--			
 			<xs:element name="timeStages" type="TimeStages" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -331,7 +331,7 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-<!--	
+			<!--	
 			<xs:element name="stochasticData" type="StochasticData-2016-10-05" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -6921,7 +6921,6 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfStochasticElements" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="mode" default="replace">
 			<xs:annotation>
 				<xs:documentation>scenario values can replace deterministic base values, or can be given as additive of multiplicative modifications </xs:documentation>
@@ -8030,6 +8029,11 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			<xs:element name="OSnLTNode" type="UpdateableProblemComponentNlTNode"/>
 			<xs:element name="realTimeData" type="UpdateableProblemComponentRealTimeDataItem"/>
 		</xs:choice>
+		<xs:attribute name="value" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>the value is read as xs:string  and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationUpdates-2016-12-26">
 		<xs:sequence>
