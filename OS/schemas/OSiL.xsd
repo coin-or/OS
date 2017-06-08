@@ -6914,6 +6914,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 -->
+			<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
 			<xs:element name="scenario" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
@@ -8716,6 +8717,7 @@ Default: identity matrix.</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="ImplicitTreeBlock-2017-06-03">
 		<xs:sequence>
+			<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
 			<xs:element name="ar" type="AutoRegressiveComponent-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfAR. 
@@ -8734,7 +8736,7 @@ Default: identity matrix.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger">
+		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>number of the stage in which the information is revealed</xs:documentation>
 			</xs:annotation>
@@ -9243,13 +9245,13 @@ default is "scalar"</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraints-2017-06-05">
 		<xs:sequence>
-			<xs:element name="con" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="softCon" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSoftCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="JointSoftConstraint-2016-10-05">
 		<xs:sequence>
@@ -9270,7 +9272,6 @@ default is "scalar"</xs:documentation>
 		<xs:choice>
 			<xs:sequence>
 				<xs:element name="levelsOrTimeStages" type="TimeStages" minOccurs="0"/>
-				<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
 				<xs:choice>
 					<xs:element name="implicitTreeData" type="ImplicitTree-2017-06-03" minOccurs="0"/>
 					<xs:element name="scenarioData" type="ScenarioTree-2017-06-03" minOccurs="0"/>
