@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org" 
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd"> 
+xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
   <instanceHeader>
 		<name>Par Inc. </name>
 		<source>Anderson, Sweeney, Williams, Camm and Martin</source>
@@ -52,37 +52,71 @@
 				<el>0.25</el>
 			</value>
 		</linearConstraintCoefficients>
-		<timeStages numberOfStages="2">
+		<multilevelAndStochasticProgramming>
+			<levelsOrTimeStages numberOfStages="2">
 			<stage>
-				<objectives numberOfEl="1">
+				<objectives numberOfObj="1">
+					<obj>
 					<el>-1</el>
+					</obj>
 				</objectives>
 			</stage>
 			<stage>
-				<variables numberOfEl="2" startIdx="0">
+				<variables numberOfVar="2" startIdx="0">
 				</variables>
-				<constraints numberOfEl="4" startIdx="0">
+				<constraints numberOfCon="4" startIdx="0">
 				</constraints>
 			</stage>
-		</timeStages>
-		<stochasticData>
-				<scenarioTree numberOfScenarios="3" numberOfStochasticElements="4">
-					<stochasticElements>
+			</levelsOrTimeStages>
+			<stochasticElements numberOfStElem="4">
 						<con idx="0" attr="ub"></con>
 						<con idx="1" attr="ub"></con>
 						<con idx="2" attr="ub"></con>
 						<con idx="3" attr="ub"></con>
-					</stochasticElements>
-					<rootScenario prob=".5" numberOfChanges="1">
-						<changesFromCore>
+			</stochasticElements>
+			<scenarioData numberOfScenarios="3">
+				<scenario stage="0" parentIdx="-1" prob=".5" baseIdx="-1" numberOfChanges="1">
+					<changesFromBase>
+						<idx>
+						<el>0</el>
+						</idx>
+						<value>
+						<el>640</el>
+						</value>
+					</changesFromBase>
+				</scenario>
+					<scenario prob=".25" numberOfChanges="4" parentIdx="0" stage="1">
+						<changesFromBase>
 							<idx>
 								<el>0</el>
 							</idx>
 							<value>
-								<el>640</el>
+								<el>600</el>
+								<el>570</el>
+								<el>670</el>
+								<el>120</el>
 							</value>
-						</changesFromCore>
-					</rootScenario>
+						</changesFromBase>
+					</scenario>
+					<scenario prob=".25" numberOfChanges="4" parentIdx="0" stage="1">
+						<changesFromBase>
+							<idx>
+								<el mult="4" incr="1">0</el>
+							</idx>
+							<value>
+								<el>660</el>
+								<el>630</el>
+								<el>750</el>
+								<el>150</el>
+							</value>
+						</changesFromBase>
+					</scenario>
+			</scenarioData>
+		</multilevelAndStochasticProgramming>
+<!--		
+		<timeStages numberOfStages="2">
+		<stochasticData>
+				<scenarioTree numberOfScenarios="3" numberOfStochasticElements="4">
 					<scenario prob=".25" numberOfChanges="4" parent="0" stage="1">
 						<changesFromParentOrBase>
 							<idx>
@@ -109,7 +143,6 @@
 							</value>
 						</changesFromParentOrBase>
 					</scenario>
-				</scenarioTree>
-		</stochasticData>
+-->
 	</instanceData>
 </osil>
