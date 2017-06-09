@@ -6153,12 +6153,12 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:annotation>
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
-				<xs:documentation>Number must agree with numberOfStElem</xs:documentation>
+				<xs:documentation>Number must agree with numberOfStochEl</xs:documentation>
 			</xs:annotation>
 			<!--			<xs:element name="stElem" type="UpdateableProblemComponent_test"/>  -->
 			<xs:group ref="UpdateableProblemComponent_test"/>
 		</xs:choice>
-		<xs:attribute name="numberOfStElem" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticElementParam">
 		<xs:annotation>
@@ -6914,7 +6914,6 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:annotation>
 			</xs:element>
 -->
-			<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
 			<xs:element name="scenario" type="Scenario-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfScenarios</xs:documentation>
@@ -8717,7 +8716,11 @@ Default: identity matrix.</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="ImplicitTreeBlock-2017-06-03">
 		<xs:sequence>
-			<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
+			<xs:element name="stochasticLocations" type="NonNegativeIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>refers back to the list of stochastic elements established previously</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="ar" type="AutoRegressiveComponent-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfAR. 
@@ -8746,7 +8749,6 @@ Default: identity matrix.</xs:documentation>
 				<xs:documentation>gives the index of the distribution in the "distributions" element</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfAR" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>autoregressive terms</xs:documentation>
@@ -8777,22 +8779,11 @@ Default: identity matrix.</xs:documentation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="AutoRegressiveComponent-2016-10-05">
-		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>experiment</xs:documentation>
-			</xs:annotation>
-			<xs:element name="stochElIdx" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfStochEl. Each index refers back to the list of stochEl in the first definition of this stochastic component</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>gives the index of a previously defined stochastic component ("stoch")</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="numberOfStochEl" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="MA-2016-10-05">
 		<xs:attribute name="idx" type="xs:integer" use="required"/>
@@ -9272,6 +9263,7 @@ default is "scalar"</xs:documentation>
 		<xs:choice>
 			<xs:sequence>
 				<xs:element name="levelsOrTimeStages" type="TimeStages" minOccurs="0"/>
+				<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
 				<xs:choice>
 					<xs:element name="implicitTreeData" type="ImplicitTree-2017-06-03" minOccurs="0"/>
 					<xs:element name="scenarioData" type="ScenarioTree-2017-06-03" minOccurs="0"/>
