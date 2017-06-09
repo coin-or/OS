@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
+	<instanceHeader>
+		<description>
+			This is a bilevel program to test an experimental extension of the OSiL schema
+		</description>
+		<source>
+			Ayalew Getachew Mersha and Stephan Dempe
+			Linear bilevel programming with upper level constraints depending on the lower level solution
+			Applied Mathematics and Computation, Volume 180, Issue 1, 1 September 2006, Pages 247-254
+		</source>
+		<fileCreator>H.I. Gassmann, J. Ma and R.K. Martin</fileCreator>
+		<licence>
+			This file is distributed under the Eclipse Public License
+		</licence>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="2">
+			<var name="x"></var>
+			<var name="y"></var>
+		</variables>
+		<objectives numberOfObjectives="2">
+			<obj maxOrMin="min" numberOfObjCoef="2" name="x-objective">
+				<coef idx="0">-1</coef>
+				<coef idx="1">-2</coef>
+			</obj>
+			<obj maxOrMin="min" numberOfObjCoef="1" name="y-objective">
+				<coef idx="1">-1</coef>
+			</obj>
+		</objectives>
+		<constraints numberOfConstraints="4">
+			<con lb="-12"/>
+			<con ub="14"/>
+			<con ub="-3"/>
+			<con ub="30"/>
+		</constraints>
+		<linearConstraintCoefficients numberOfValues="8">
+			<start>
+				<el mult="3" incr="4">0</el>
+			</start>
+			<rowIdx>
+				<el mult="4" incr="1">0</el>
+				<el mult="4" incr="1">0</el>
+			</rowIdx>
+			<value>
+				<el>2</el>
+				<el>1</el>
+				<el>-3</el>
+				<el>3</el>
+				<el>-3</el>
+				<el mult="3">1</el>
+			</value>
+		</linearConstraintCoefficients>
+		<multilevelAndStochasticProgramming>
+			<levelsOrTimeStages numberOfStages="2">
+				<stage name="x-leader">
+					<variables numberOfVar="1" startIdx="0"/>
+					<objectives numberOfObj="1" startIdx="-1"/>
+					<constraints numberOfCon="2" startIdx="0"/>
+				</stage>
+				<stage name="y-follower">
+					<variables numberOfVar="1" startIdx="1"/>
+					<objectives numberOfObj="1" startIdx="-2"/>
+					<constraints numberOfCon="2" startIdx="2"/>
+				</stage>
+			</levelsOrTimeStages>
+		</multilevelAndStochasticProgramming>
+	</instanceData>
+</osil>

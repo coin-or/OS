@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
+	<instanceHeader>
+	<name>Airline</name>
+	<description>
+		Ferguson and Dantzig's original airline allocation problem, one of the first stochastic LPs (with simple recourse)
+	</description>
+	<source>
+Allen R. Ferguson and George B. Dantzig, "The Allocation of Aircraft to Routes—An Example of Linear Programming Under Uncertain Demand", Management Science 3(1) October 1956, 45 - 73.
+	</source>
+	<fileCreator>H.I. Gassmann, J. Ma and R.K. Martin</fileCreator>
+	<licence>This file is distributed under the Eclipse Public License</licence>
+    </instanceHeader>
+    <instanceData>
+			<variables numberOfVariables="17">
+				<var lb="0" mult="17"/>
+			</variables>
+			<objectives numberOfObjectives="1">
+				<obj maxOrMin="min" numberOfObjCoef="17">
+					<coef idx="0">18</coef>
+					<coef idx="1">21</coef>
+					<coef idx="2">18</coef>
+					<coef idx="3">16</coef>
+					<coef idx="4">10</coef>
+					<coef idx="5">15</coef>
+					<coef idx="6">6</coef>
+					<coef idx="7">14</coef>
+					<coef idx="8">9</coef>
+					<coef idx="9">10</coef>
+					<coef idx="10">9</coef>
+					<coef idx="11">6</coef>
+					<coef idx="12">17</coef>
+					<coef idx="13">16</coef>
+					<coef idx="14">17</coef>
+					<coef idx="15">15</coef>
+					<coef idx="16">10</coef>
+				</obj>
+			</objectives>
+			<constraints numberOfConstraints="9">
+				<con lb="-INF" ub="10"/>
+				<con lb="-INF" ub="19"/>
+				<con lb="-INF" ub="25"/>
+				<con lb="-INF" ub="15"/>
+				<con lb="250" ub="250"/>
+				<con lb="120" ub="120"/>
+				<con lb="180" ub="180"/>
+				<con lb="90" ub="90"/>
+				<con lb="600" ub="600"/>
+			</constraints>
+			<linearConstraintCoefficients numberOfValues="34">
+				<start>
+					<el mult="18" incr="2">0</el>
+				</start>
+				<rowIdx>
+					<el>0</el>           <el>4</el>
+					<el>0</el>           <el>5</el>
+					<el>0</el>           <el>6</el>
+					<el>0</el>           <el>7</el>
+					<el>0</el>           <el>8</el>
+					<el>1</el>           <el>5</el>
+					<el>1</el>           <el>6</el>
+					<el>1</el>           <el>7</el>
+					<el>1</el>           <el>8</el>
+					<el>2</el>           <el>5</el>
+					<el>2</el>           <el>7</el>
+					<el>2</el>           <el>8</el>
+					<el>3</el>           <el>4</el>
+					<el>3</el>           <el>5</el>
+					<el>3</el>           <el>6</el>
+					<el>3</el>           <el>7</el>
+					<el>3</el>           <el>8</el>
+				</rowIdx>
+				<value>
+					<el>1</el>           <el>16</el>
+					<el>1</el>           <el>15</el>
+					<el>1</el>           <el>28</el>
+					<el>1</el>           <el>33</el>
+					<el>1</el>           <el>81</el>
+					<el>1</el>           <el>10</el>
+					<el>1</el>           <el>14</el>
+					<el>1</el>           <el>15</el>
+					<el>1</el>           <el>57</el>
+					<el>1</el>           <el>5</el>
+					<el>1</el>           <el>7</el>
+					<el>1</el>           <el>29</el>
+					<el>1</el>           <el>9</el>
+					<el>1</el>           <el>11</el>
+					<el>1</el>           <el>22</el>
+					<el>1</el>           <el>17</el>
+					<el>1</el>           <el>55</el>
+				</value>	
+			</linearConstraintCoefficients>
+			<distributions numberOfDist="5">
+				<dist>
+					<empiricalDiscrete numberOfEl="5">
+						<el prob="0.2" value="200"/>
+						<el prob="0.05" value="220"/>
+						<el prob="0.35" value="250"/>
+						<el prob="0.2" value="270"/>
+						<el prob="0.2" value="300"/>
+					</empiricalDiscrete>
+				</dist>
+				<dist>
+					<empiricalDiscrete numberOfEl="2">
+						<el prob="0.3" value="50"/>
+						<el prob="0.7" value="150"/>
+					</empiricalDiscrete>
+				</dist>
+				<dist>
+					<empiricalDiscrete numberOfEl="5">
+						<el prob="0.1" value="140"/>
+						<el prob="0.2" value="160"/>
+						<el prob="0.4" value="180"/>
+						<el prob="0.2" value="200"/>
+						<el prob="0.1" value="220"/>
+					</empiricalDiscrete>
+				</dist>
+				<dist>
+					<empiricalDiscrete numberOfEl="5">
+						<el prob="0.2" value="10"/>
+						<el prob="0.2" value="50"/>
+						<el prob="0.3" value="80"/>
+						<el prob="0.2" value="100"/>
+						<el prob="0.1" value="340"/>
+					</empiricalDiscrete>
+				</dist>
+				<dist>
+					<empiricalDiscrete numberOfEl="3">
+						<el prob="0.1" value="580"/>
+						<el prob="0.8" value="600"/>
+						<el prob="0.1" value="620"/>
+					</empiricalDiscrete>
+				</dist>
+			</distributions>
+			<multilevelAndStochasticProgramming >
+				<levelsOrTimeStages numberOfStages="2">
+					<stage>
+						<variables numberOfVar="17" startIdx="0"/>
+						<objectives numberOfObj="1" startIdx="-1"/>
+						<constraints numberOfCon="4" startIdx="0"/>
+					</stage>
+					<stage>
+						<constraints numberOfCon="5" startIdx="4"/>
+					</stage>
+				</levelsOrTimeStages>
+				<stochasticElements numberOfStochEl="5">
+					<con idx="4" attr="lbAndUb"/>
+					<con idx="5" attr="lbAndUb"/>
+					<con idx="6" attr="lbAndUb"/>
+					<con idx="7" attr="lbAndUb"/>
+					<con idx="8" attr="lbAndUb"/>
+				</stochasticElements>
+				<implicitTreeData numberOfRV="5">
+					<rv distributionIdx="0" stageIdx="1">
+						<stochasticLocations numberOfEl="1">
+							<el>0</el>
+						</stochasticLocations>
+					</rv>
+					<rv distributionIdx="1" stageIdx="1">
+						<stochasticLocations numberOfEl="1">
+							<el>1</el>
+						</stochasticLocations>
+					</rv>
+					<rv distributionIdx="2" stageIdx="1">
+						<stochasticLocations numberOfEl="1">
+							<el>2</el>
+						</stochasticLocations>
+					</rv>
+					<rv distributionIdx="3" stageIdx="1">
+						<stochasticLocations numberOfEl="1">
+							<el>3</el>
+						</stochasticLocations>
+					</rv>
+					<rv distributionIdx="4" stageIdx="1">
+						<stochasticLocations numberOfEl="1">
+							<el>4</el>
+						</stochasticLocations>
+					</rv>
+					<softConstraints numberOfSoftCon="5">
+						<softCon>
+							<linearPenalty idx="4" shortagePenalty="13"/>
+						</softCon>
+						<softCon>
+							<linearPenalty idx="5" shortagePenalty="13"/>
+						</softCon>
+						<softCon>
+							<linearPenalty idx="6" shortagePenalty="7"/>
+						</softCon>
+						<softCon>
+							<linearPenalty idx="7" shortagePenalty="7"/>
+						</softCon>
+						<softCon>
+							<linearPenalty idx="8" shortagePenalty="1"/>
+						</softCon>
+					</softConstraints>
+				</implicitTreeData>
+			</multilevelAndStochasticProgramming>
+    </instanceData>
+</osil>
+ 

@@ -68,7 +68,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trun
 				</constraints>
 			</stage>
 			</levelsOrTimeStages>
-			<stochasticElements numberOfStElem="4">
+			<stochasticElements numberOfStochEl="4">
 						<con idx="0" attr="ub"></con>
 						<con idx="1" attr="ub"></con>
 						<con idx="2" attr="ub"></con>
