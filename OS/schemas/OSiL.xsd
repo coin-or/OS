@@ -8734,7 +8734,7 @@ Each term adds rows to the input vector for the transformation, first the random
 			</xs:element>
 			<xs:element name="transformation" type="ImplicitTreeStochasticTransformation-2016-10-05" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term) and transforms this into the vector of stochastic elements. Any random matrices are expanded column by column. 
+					<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term at the very end) and transforms this into the vector of stochastic elements. Any random matrices are expanded column by column. 
 Default: identity matrix.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -8766,6 +8766,11 @@ Default: identity matrix.</xs:documentation>
 				<xs:attribute name="mtxIdx" type="xs:nonNegativeInteger" use="required">
 					<xs:annotation>
 						<xs:documentation>refers to a matrix in the "matrices" section.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="addConstant" type="xs:boolean" default="false">
+					<xs:annotation>
+						<xs:documentation>if "true", adds a column of additive constants as the very last column. Default is "false".</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
