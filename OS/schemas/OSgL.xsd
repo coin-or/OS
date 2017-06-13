@@ -2093,13 +2093,13 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:choice>
 			<xs:annotation>
 				<xs:documentation>number of "el" children must equal "dimension" after mult and incr have been considered</xs:documentation>
 			</xs:annotation>
 			<xs:element name="el" type="DoubleVectorEl" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-		</xs:sequence>
+		</xs:choice>
 		<xs:attribute name="prob" type="Probability" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MultivariateDiscrete">
@@ -2125,13 +2125,13 @@ according to WolframMathWorld</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:choice>
 			<xs:annotation>
 				<xs:documentation>number of "el" children must equal "dimension" after mult and incr have been considered</xs:documentation>
 			</xs:annotation>
 			<xs:element name="el" type="StringVectorEl" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-		</xs:sequence>
+		</xs:choice>
 		<xs:attribute name="prob" type="Probability" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonNumericMultivariateDiscrete">
