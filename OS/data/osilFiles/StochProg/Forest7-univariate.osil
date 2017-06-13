@@ -1,0 +1,905 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
+	<instanceHeader>
+		<name>FOREST7</name>
+		<description>
+			This is a seven-stage version of the forestry problem from H.I. Gassmann's PhD thesis.
+			Uncertainty relates to the percentage of forest that burns in each period.
+			This formulation uses two-point discretizations in each stage, leading to 64 scenarios.
+			In this version, the uncertainty is modeled as univariate random variables.
+		</description>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="111">
+			<var lb="0" mult="111"/>
+		</variables>
+		<objectives numberOfObjectives="1">
+			<obj maxOrMin="min" numberOfObjCoef="27">
+				<coef idx="14">-1.0</coef>
+				<coef idx="29">-0.90506</coef>
+				<coef idx="30">50.0</coef>
+				<coef idx="45">-0.81914</coef>
+				<coef idx="46">45.25</coef>
+				<coef idx="61">-0.74137</coef>
+				<coef idx="62">40.96</coef>
+				<coef idx="77">-0.67099</coef>
+				<coef idx="78">37.07</coef>
+				<coef idx="93">-0.60729</coef>
+				<coef idx="94">33.55</coef>
+				<coef idx="95">198.20335</coef>
+				<coef idx="96">222.97543</coef>
+				<coef idx="97">252.17314</coef>
+				<coef idx="98">281.02536</coef>
+				<coef idx="99">292.46676</coef>
+				<coef idx="100">296.44638</coef>
+				<coef idx="101">-159.35468</coef>
+				<coef idx="102">-177.1862</coef>
+				<coef idx="103">-198.20335</coef>
+				<coef idx="104">-222.97543</coef>
+				<coef idx="105">-252.17314</coef>
+				<coef idx="106">-281.02536</coef>
+				<coef idx="107">-292.46676</coef>
+				<coef idx="108">-296.44638</coef>
+				<coef idx="109">-0.54963</coef>
+				<coef idx="110">30.36</coef>
+			</obj>
+		</objectives>
+		<constraints numberOfConstraints="117">
+			<con mult="6" ub="0" name="BOUND1"/>
+			<con ub="0.241" lb="0.241" name="REGEN11"/>
+			<con ub="0.125" lb="0.125" name="REGEN21"/>
+			<con ub="1.404" lb="1.404" name="REGEN31"/>
+			<con ub="2.004" lb="2.004" name="REGEN41"/>
+			<con ub="9.768" lb="9.768" name="REGEN51"/>
+			<con ub="16.385" lb="16.385" name="REGEN61"/>
+			<con ub="2.815" lb="2.815" name="REGEN71"/>
+			<con ub="61.995" lb="61.995" name="REGEN81"/>
+			<con ub="0" lb="0" name="YIELD1"/>
+			<con mult="6" ub="0" name="BOUND2"/>
+			<con mult="8" ub="0" lb="0" name="REGEN2"/>
+			<con ub="0" name="FLOW12"/>
+			<con lb="0" name="FLOW22"/>
+			<con ub="0" lb="0" name="YIELD2"/>
+			<con mult="6" ub="0" name="BOUND3"/>
+			<con mult="8" ub="0" lb="0" name="REGEN3"/>
+			<con ub="0" name="FLOW13"/>
+			<con lb="0" name="FLOW23"/>
+			<con ub="0" lb="0" name="YIELD3"/>
+			<con mult="6" ub="0" name="BOUND4"/>
+			<con mult="8" ub="0" lb="0" name="REGEN4"/>
+			<con ub="0" name="FLOW14"/>
+			<con lb="0" name="FLOW24"/>
+			<con ub="0" lb="0" name="YIELD4"/>
+			<con mult="6" ub="0" name="BOUND5"/>
+			<con mult="8" ub="0" lb="0" name="REGEN5"/>
+			<con ub="0" name="FLOW15"/>
+			<con lb="0" name="FLOW25"/>
+			<con ub="0" lb="0" name="YIELD5"/>
+			<con mult="6" ub="0" name="BOUND6"/>
+			<con mult="8" ub="0" lb="0" name="REGEN6"/>
+			<con ub="0" name="FLOW12"/>
+			<con lb="0" name="FLOW26"/>
+			<con ub="0" lb="0" name="YIELD6"/>
+			<con mult="6" ub="0" name="BOUND7"/>
+			<con mult="8" ub="0" lb="0" name="REGEN7"/>
+			<con ub="0" name="FLOW17"/>
+			<con lb="0" name="FLOW27"/>
+			<con ub="0" lb="0" name="YIELD7"/>
+		</constraints>
+		<linearConstraintCoefficients numberOfValues="447">
+			<start>
+				<el mult="7" incr="6">0</el>
+				<el>39</el>
+				<el mult="7" incr="4">42</el>
+				<el mult="7" incr="6">67</el>
+				<el>106</el>
+				<el mult="7" incr="4">109</el>
+				<el mult="2" incr="1">136</el>
+				<el mult="6" incr="6">143</el>
+				<el>176</el>
+				<el mult="7" incr="4">179</el>
+				<el mult="2" incr="1">206</el>
+				<el mult="6" incr="6">213</el>
+				<el>246</el>
+				<el mult="7" incr="4">249</el>
+				<el mult="2" incr="1">276</el>
+				<el mult="6" incr="6">283</el>
+				<el>316</el>
+				<el mult="7" incr="4">319</el>
+				<el mult="2" incr="1">346</el>
+				<el mult="6" incr="6">353</el>
+				<el>386</el>
+				<el mult="7" incr="4">389</el>
+				<el mult="2" incr="1">416</el>
+				<el mult="6" incr="2">419</el>
+				<el mult="2" incr="1">430</el>
+				<el mult="6" incr="2">433</el>
+				<el mult="2" incr="1">446</el>
+			</start>
+			<rowIdx>
+				<el>0</el>
+				<el>14</el>
+				<el>21</el>
+				<el>24</el>
+				<el mult="2" incr="1">29</el>
+				<el mult="3" incr="4">21</el>
+				<el>30</el>
+				<el>1</el>
+				<el>14</el>
+				<el>2</el>
+				<el>14</el>
+				<el>21</el>
+				<el>26</el>
+				<el mult="2" incr="1">29</el>
+				<el>21</el>
+				<el>27</el>
+				<el mult="2" incr="1">29</el>
+				<el>3</el>
+				<el>14</el>
+				<el>4</el>
+				<el mult="3" incr="7">14</el>
+				<el mult="2" incr="1">29</el>
+				<el>21</el>
+				<el mult="3" incr="1">28</el>
+				<el>5</el>
+				<el>14</el>
+				<el>6</el>
+				<el mult="2" incr="1">21</el>
+				<el>21</el>
+				<el>23</el>
+				<el mult="2" incr="1">7</el>
+				<el>0</el>
+				<el>21</el>
+				<el>24</el>
+				<el>21</el>
+				<el>25</el>
+				<el>9</el>
+				<el>1</el>
+				<el>10</el>
+				<el>2</el>
+				<el>21</el>
+				<el>26</el>
+				<el>21</el>
+				<el>27</el>
+				<el>11</el>
+				<el>3</el>
+				<el>12</el>
+				<el>4</el>
+				<el>21</el>
+				<el>28</el>
+				<el>21</el>
+				<el>28</el>
+				<el>13</el>
+				<el>5</el>
+				<el mult="2" incr="1">14</el>
+				<el>31</el>
+				<el>38</el>
+				<el>41</el>
+				<el mult="2" incr="1">46</el>
+				<el mult="3" incr="4">38</el>
+				<el>47</el>
+				<el>16</el>
+				<el>31</el>
+				<el>17</el>
+				<el>31</el>
+				<el>38</el>
+				<el>43</el>
+				<el mult="2" incr="1">46</el>
+				<el>38</el>
+				<el>44</el>
+				<el mult="2" incr="1">46</el>
+				<el>18</el>
+				<el>31</el>
+				<el>19</el>
+				<el mult="3" incr="7">31</el>
+				<el mult="2" incr="1">46</el>
+				<el>38</el>
+				<el mult="3" incr="1">45</el>
+				<el>20</el>
+				<el>31</el>
+				<el>21</el>
+				<el mult="2" incr="1">38</el>
+				<el>38</el>
+				<el>40</el>
+				<el mult="2" incr="1">22</el>
+				<el>15</el>
+				<el>38</el>
+				<el>41</el>
+				<el>38</el>
+				<el>42</el>
+				<el>24</el>
+				<el>16</el>
+				<el>25</el>
+				<el>17</el>
+				<el>38</el>
+				<el>43</el>
+				<el>38</el>
+				<el>44</el>
+				<el>26</el>
+				<el>18</el>
+				<el>27</el>
+				<el>19</el>
+				<el>38</el>
+				<el>45</el>
+				<el>38</el>
+				<el>45</el>
+				<el>28</el>
+				<el>20</el>
+				<el>31</el>
+				<el mult="2" incr="1">29</el>
+				<el>29</el>
+				<el>32</el>
+				<el>48</el>
+				<el>55</el>
+				<el>58</el>
+				<el mult="2" incr="1">63</el>
+				<el mult="3" incr="4">55</el>
+				<el>64</el>
+				<el>33</el>
+				<el>48</el>
+				<el>34</el>
+				<el>48</el>
+				<el>55</el>
+				<el>60</el>
+				<el mult="2" incr="1">63</el>
+				<el>55</el>
+				<el>61</el>
+				<el mult="2" incr="1">63</el>
+				<el>35</el>
+				<el>48</el>
+				<el>36</el>
+				<el mult="3" incr="7">48</el>
+				<el mult="2" incr="1">63</el>
+				<el>55</el>
+				<el mult="3" incr="1">62</el>
+				<el>37</el>
+				<el>48</el>
+				<el>38</el>
+				<el mult="2" incr="1">55</el>
+				<el>55</el>
+				<el>57</el>
+				<el mult="2" incr="1">39</el>
+				<el>32</el>
+				<el>55</el>
+				<el>58</el>
+				<el>55</el>
+				<el>59</el>
+				<el>41</el>
+				<el>33</el>
+				<el>42</el>
+				<el>34</el>
+				<el>55</el>
+				<el>60</el>
+				<el>55</el>
+				<el>61</el>
+				<el>43</el>
+				<el>35</el>
+				<el>44</el>
+				<el>36</el>
+				<el>55</el>
+				<el>62</el>
+				<el>55</el>
+				<el>62</el>
+				<el>45</el>
+				<el>37</el>
+				<el>48</el>
+				<el mult="2" incr="1">46</el>
+				<el>46</el>
+				<el>49</el>
+				<el>65</el>
+				<el>72</el>
+				<el>75</el>
+				<el mult="2" incr="1">80</el>
+				<el mult="3" incr="4">72</el>
+				<el>81</el>
+				<el>50</el>
+				<el>65</el>
+				<el>51</el>
+				<el>65</el>
+				<el>72</el>
+				<el>77</el>
+				<el mult="2" incr="1">80</el>
+				<el>72</el>
+				<el>78</el>
+				<el mult="2" incr="1">80</el>
+				<el>52</el>
+				<el>65</el>
+				<el>53</el>
+				<el mult="3" incr="7">65</el>
+				<el mult="2" incr="1">80</el>
+				<el>72</el>
+				<el mult="3" incr="1">79</el>
+				<el>54</el>
+				<el>65</el>
+				<el>55</el>
+				<el mult="2" incr="1">72</el>
+				<el>72</el>
+				<el>74</el>
+				<el mult="2" incr="1">56</el>
+				<el>49</el>
+				<el>72</el>
+				<el>75</el>
+				<el>72</el>
+				<el>76</el>
+				<el>58</el>
+				<el>50</el>
+				<el>59</el>
+				<el>51</el>
+				<el>72</el>
+				<el>77</el>
+				<el>72</el>
+				<el>78</el>
+				<el>60</el>
+				<el>52</el>
+				<el>61</el>
+				<el>53</el>
+				<el>72</el>
+				<el>79</el>
+				<el>72</el>
+				<el>79</el>
+				<el>62</el>
+				<el>54</el>
+				<el>65</el>
+				<el mult="2" incr="1">63</el>
+				<el>63</el>
+				<el>66</el>
+				<el>82</el>
+				<el>89</el>
+				<el>92</el>
+				<el mult="2" incr="1">97</el>
+				<el mult="3" incr="4">89</el>
+				<el>98</el>
+				<el>67</el>
+				<el>82</el>
+				<el>68</el>
+				<el>82</el>
+				<el>89</el>
+				<el>94</el>
+				<el mult="2" incr="1">97</el>
+				<el>89</el>
+				<el>95</el>
+				<el mult="2" incr="1">97</el>
+				<el>69</el>
+				<el>82</el>
+				<el>70</el>
+				<el mult="3" incr="7">82</el>
+				<el mult="2" incr="1">97</el>
+				<el>89</el>
+				<el mult="3" incr="1">96</el>
+				<el>71</el>
+				<el>82</el>
+				<el>72</el>
+				<el mult="2" incr="1">89</el>
+				<el>89</el>
+				<el>91</el>
+				<el mult="2" incr="1">73</el>
+				<el>66</el>
+				<el>89</el>
+				<el>92</el>
+				<el>89</el>
+				<el>93</el>
+				<el>75</el>
+				<el>67</el>
+				<el>76</el>
+				<el>68</el>
+				<el>89</el>
+				<el>94</el>
+				<el>89</el>
+				<el>95</el>
+				<el>77</el>
+				<el>69</el>
+				<el>78</el>
+				<el>70</el>
+				<el>89</el>
+				<el>96</el>
+				<el>89</el>
+				<el>96</el>
+				<el>79</el>
+				<el>71</el>
+				<el>82</el>
+				<el mult="2" incr="1">80</el>
+				<el>80</el>
+				<el>83</el>
+				<el>99</el>
+				<el>106</el>
+				<el>109</el>
+				<el mult="2" incr="1">114</el>
+				<el mult="3" incr="4">106</el>
+				<el>115</el>
+				<el>84</el>
+				<el>99</el>
+				<el>85</el>
+				<el>99</el>
+				<el>106</el>
+				<el>111</el>
+				<el mult="2" incr="1">114</el>
+				<el>106</el>
+				<el>112</el>
+				<el mult="2" incr="1">114</el>
+				<el>86</el>
+				<el>99</el>
+				<el>87</el>
+				<el mult="3" incr="7">99</el>
+				<el mult="2" incr="1">114</el>
+				<el>106</el>
+				<el mult="3" incr="1">113</el>
+				<el>88</el>
+				<el>99</el>
+				<el>89</el>
+				<el mult="2" incr="1">106</el>
+				<el>106</el>
+				<el>108</el>
+				<el mult="2" incr="1">90</el>
+				<el>83</el>
+				<el>106</el>
+				<el>109</el>
+				<el>106</el>
+				<el>110</el>
+				<el>92</el>
+				<el>84</el>
+				<el>93</el>
+				<el>85</el>
+				<el>106</el>
+				<el>111</el>
+				<el>106</el>
+				<el>112</el>
+				<el>94</el>
+				<el>86</el>
+				<el>95</el>
+				<el>87</el>
+				<el>106</el>
+				<el>113</el>
+				<el>106</el>
+				<el>113</el>
+				<el>96</el>
+				<el>88</el>
+				<el>99</el>
+				<el mult="2" incr="1">97</el>
+				<el>97</el>
+				<el>100</el>
+				<el>116</el>
+				<el>101</el>
+				<el>116</el>
+				<el>102</el>
+				<el>116</el>
+				<el>103</el>
+				<el>116</el>
+				<el>104</el>
+				<el>116</el>
+				<el>105</el>
+				<el>116</el>
+				<el mult="3" incr="1">106</el>
+				<el>100</el>
+				<el>109</el>
+				<el>101</el>
+				<el>110</el>
+				<el>102</el>
+				<el>111</el>
+				<el>103</el>
+				<el>112</el>
+				<el>104</el>
+				<el>113</el>
+				<el>105</el>
+				<el>116</el>
+				<el mult="2" incr="1">114</el>
+				<el>114</el>
+			</rowIdx>
+			<value>
+				<el>1</el>
+				<el>16</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>14.4</el>
+				<el>17.6</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>96.3</el>
+				<el>117.7</el>
+				<el>1</el>
+				<el>107</el>
+				<el>1</el>
+				<el>217</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>195.3</el>
+				<el>238.7</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>247.5</el>
+				<el>302.5</el>
+				<el>1</el>
+				<el>275</el>
+				<el>1</el>
+				<el>298</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>268.2</el>
+				<el>327.8</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>275.4</el>
+				<el>336.6</el>
+				<el>1</el>
+				<el>306</el>
+				<el>1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el mult="2">1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el mult="2">-1</el>
+				<el>1</el>
+				<el>16</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>14.4</el>
+				<el>17.6</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>96.3</el>
+				<el>117.7</el>
+				<el>1</el>
+				<el>107</el>
+				<el>1</el>
+				<el>217</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>195.3</el>
+				<el>238.7</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>247.5</el>
+				<el>302.5</el>
+				<el>1</el>
+				<el>275</el>
+				<el>1</el>
+				<el>298</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>268.2</el>
+				<el>327.8</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>275.4</el>
+				<el>336.6</el>
+				<el>1</el>
+				<el>306</el>
+				<el>1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el mult="2">1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el mult="5">-1</el>
+				<el>1</el>
+				<el>16</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>14.4</el>
+				<el>17.6</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>96.3</el>
+				<el>117.7</el>
+				<el>1</el>
+				<el>107</el>
+				<el>1</el>
+				<el>217</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>195.3</el>
+				<el>238.7</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>247.5</el>
+				<el>302.5</el>
+				<el>1</el>
+				<el>275</el>
+				<el>1</el>
+				<el>298</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>268.2</el>
+				<el>327.8</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>275.4</el>
+				<el>336.6</el>
+				<el>1</el>
+				<el>306</el>
+				<el>1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el mult="2">1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el mult="5">-1</el>
+				<el>1</el>
+				<el>16</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>14.4</el>
+				<el>17.6</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>96.3</el>
+				<el>117.7</el>
+				<el>1</el>
+				<el>107</el>
+				<el>1</el>
+				<el>217</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>195.3</el>
+				<el>238.7</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>247.5</el>
+				<el>302.5</el>
+				<el>1</el>
+				<el>275</el>
+				<el>1</el>
+				<el>298</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>268.2</el>
+				<el>327.8</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>275.4</el>
+				<el>336.6</el>
+				<el>1</el>
+				<el>306</el>
+				<el>1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el mult="2">1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el mult="5">-1</el>
+				<el>1</el>
+				<el>16</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>14.4</el>
+				<el>17.6</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>96.3</el>
+				<el>117.7</el>
+				<el>1</el>
+				<el>107</el>
+				<el>1</el>
+				<el>217</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>195.3</el>
+				<el>238.7</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>247.5</el>
+				<el>302.5</el>
+				<el>1</el>
+				<el>275</el>
+				<el>1</el>
+				<el>298</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>268.2</el>
+				<el>327.8</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>275.4</el>
+				<el>336.6</el>
+				<el>1</el>
+				<el>306</el>
+				<el>1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el mult="2">1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el mult="5">-1</el>
+				<el>1</el>
+				<el>16</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>14.4</el>
+				<el>17.6</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>96.3</el>
+				<el>117.7</el>
+				<el>1</el>
+				<el>107</el>
+				<el>1</el>
+				<el>217</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>195.3</el>
+				<el>238.7</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>247.5</el>
+				<el>302.5</el>
+				<el>1</el>
+				<el>275</el>
+				<el>1</el>
+				<el>298</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>268.2</el>
+				<el>327.8</el>
+				<el>-.93742</el>
+				<el>.93742</el>
+				<el>275.4</el>
+				<el>336.6</el>
+				<el>1</el>
+				<el>306</el>
+				<el>1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el mult="2">1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>-6.258000000000001e-2</el>
+				<el>-.93742</el>
+				<el>1</el>
+				<el mult="5">-1</el>
+				<el>1</el>
+				<el>16</el>
+				<el>1</el>
+				<el>107</el>
+				<el>1</el>
+				<el>217</el>
+				<el>1</el>
+				<el>275</el>
+				<el>1</el>
+				<el>298</el>
+				<el>1</el>
+				<el>306</el>
+				<el mult="3">1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el>-1</el>
+				<el>1</el>
+				<el mult="5">-1</el>
+			</value>
+		</linearConstraintCoefficients>
+	</instanceData>
+</osil>

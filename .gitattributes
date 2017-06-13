@@ -247,6 +247,8 @@ OS/data/osilFiles/LP_noconstraint.osil -text
 OS/data/osilFiles/LP_unbounded.osil -text
 OS/data/osilFiles/NaNTest2.osil -text
 OS/data/osilFiles/SDPA_ex.osil -text
+OS/data/osilFiles/StochProg/Forest7-univariate.osil -text
+OS/data/osilFiles/StochProg/Forest7-vector.osil -text
 OS/data/osilFiles/StochProg/bilevel-ex1.osil -text
 OS/data/osilFiles/StochProg/chance-coffee.osil -text
 OS/data/osilFiles/StochProg/parincScen.osil -text
