@@ -8,9 +8,15 @@
 		<name>FinPlan</name>
 		<source>Birge and Louveaux, Introduction to Stochastic Programming, Springer, 1997</source>
 		<description>
-			This is the first version of the stochastic financial planning problem by John Birge, 
-			as given in the book by Birge and Louveaux. It has four stages and eight scenarios.
-			In this version the scenarios are given explicitly in pathwise form (scenarioTree)
+			In this third version of the financial planning problem, the rates are hypothesized to follow an ARMA(2,2) process of the form
+			
+			       a(t) = M1 a(t-1) + M2 a(t-2) + N0 v(t) + N1 v(t-1) + N2 v(t-2) + C
+			       
+			with M1 = [ (0.9, -0.1), (0.0, 0.9) ], M2 = [ (0.1, 0.0), (0.0, 0.1) ], N0 = transp(0.06, 0.02), N1 = transp(0.02, 0.01), N2 = trransp(-0.01, 0), C = transp(0.05, 0)
+			
+			and a(-1) = transp(1.07, 1.10), a(0) = transp(1.20, 1.06) and v(t) = +1 or -1each with prob 0.5, where v(-1) = -1 and v(0) = 1 are given.
+			
+			This version of the problem models the ARMA(2,2) process explicitly. 
 		</description>
 		<fileCreator>H.I. Gassmann, J. Ma and R.K.Martin</fileCreator>
 		<licence>This file is distributed under the Eclipse Public License</licence>
@@ -76,6 +82,18 @@
 				<el>1</el>
 			</value>
 		</linearConstraintCoefficients>
+		<distributions numberOfDist="1">
+			<dist>
+				<multivariateDiscrete numberOfScenarios="2" dimension="2">
+					<scenario prob="0.5">
+						<el>-1.25</el>		<el>-1.14</el>
+					</scenario>
+					<scenario prob="0.5">
+						<el>-1.06</el>		<el>-1.12</el>
+					</scenario>
+				</multivariateDiscrete>
+			</dist>
+		</distributions>
 		<multilevelAndStochasticProgramming>
 			<levelsOrTimeStages numberOfStages="4">
 				<stage>
@@ -120,49 +138,23 @@
 				<linearConstraintCoefficient rowIdx="3" colIdx="4"/>
 				<linearConstraintCoefficient rowIdx="3" colIdx="5"/>
 			</stochasticElements>
-			<scenarioData numberOfScenarios="8">
-				<scenario parentIdx="-1" prob="0.125" stage="0" numberOfChanges="0"/>
-				<scenario stage="3" prob="0.125" parentIdx="0" numberOfChanges="2">
-					<changesFromBase>
-						<idx>
-							<el>4</el>
-							<el>5</el>
-						</idx>
-						<value>
-							<el>-1.06</el>
-							<el>-1.12</el>
-						</value>
-					</changesFromBase>
-				</scenario>
-				<scenario stage="2" prob="0.125" parentIdx="0" numberOfChanges="2">
-					<changesFromBase>
-						<idx>
-							<el>2</el>
-							<el>3</el>
-						</idx>
-						<value>
-							<el>-1.06</el>
-							<el>-1.12</el>
-						</value>
-					</changesFromBase>
-				</scenario>
-				<scenario stage="3" prob="0.125" parentIdx="2" baseIdx="1" numberOfChanges="0"/>
-				<scenario stage="1" prob="0.125" parentIdx="0" numberOfChanges="2">
-					<changesFromBase>
-						<idx>
-							<el>0</el>
-							<el>1</el>
-						</idx>
-						<value>
-							<el>-1.06</el>
-							<el>-1.12</el>
-						</value>
-					</changesFromBase>
-				</scenario>
-				<scenario stage="3" prob="0.125" parentIdx="4" baseIdx="1" numberOfChanges="0"/>
-				<scenario stage="2" prob="0.125" parentIdx="2" baseIdx="3" numberOfChanges="0"/>
-				<scenario stage="3" prob="0.125" parentIdx="6" baseIdx="1" numberOfChanges="0"/>
-			</scenarioData>
+			<implicitTreeData numberOfRV="3">
+				<rv stageIdx="1" distributionIdx="0">
+					<stochasticLocations numberOfEl="2">
+						<el>0</el>		<el>1</el>
+					</stochasticLocations>
+				</rv>
+				<rv stageIdx="2" distributionIdx="0">
+					<stochasticLocations numberOfEl="2">
+						<el>2</el>		<el>3</el>
+					</stochasticLocations>
+				</rv>
+				<rv stageIdx="3" distributionIdx="0">
+					<stochasticLocations numberOfEl="2">
+						<el>4</el>		<el>5</el>
+					</stochasticLocations>
+				</rv>
+			</implicitTreeData>
 		</multilevelAndStochasticProgramming>
 	</instanceData>
 </osil>

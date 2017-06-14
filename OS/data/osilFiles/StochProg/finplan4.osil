@@ -8,9 +8,15 @@
 		<name>FinPlan</name>
 		<source>Birge and Louveaux, Introduction to Stochastic Programming, Springer, 1997</source>
 		<description>
-			This is the first version of the stochastic financial planning problem by John Birge, 
-			as given in the book by Birge and Louveaux. It has four stages and eight scenarios.
-			In this version the scenarios are given explicitly in pathwise form (scenarioTree)
+			In this last version of the financial planning problem, the rates are hypothesized to follow an ARMA(2,2) process of the form
+			
+			       a(t) = M1 a(t-1) + M2 a(t-2) + N0 v(t) + N1 v(t-1) + N2 v(t-2) + C
+			       
+			with M1 = [ (0.9, -0.1), (0.0, 0.9) ], M2 = [ (0.1, 0.0), (0.0, 0.1) ], N0 = transp(0.06, 0.02), N1 = transp(0.02, 0.01), N2 = trransp(-0.01, 0), C = transp(0.05, 0)
+			
+			and a(-1) = transp(1.07, 1.10), a(0) = transp(1.20, 1.06) and v(t) = +1 or -1each with prob 0.5, where v(-1) = -1 and v(0) = 1 are given.
+			
+			This version of the problem expands the data into an explicit scenario tree with eight equiprobably scenarios.. 
 		</description>
 		<fileCreator>H.I. Gassmann, J. Ma and R.K.Martin</fileCreator>
 		<licence>This file is distributed under the Eclipse Public License</licence>
@@ -61,17 +67,17 @@
 			</rowIdx>
 			<value>
 				<el>1</el>
-				<el>-1.25</el>
+				<el>-1.221</el>
 				<el>1</el>
-				<el>-1.14</el>
+				<el>-1.094</el>
 				<el>1</el>
-				<el>-1.25</el>
+				<el>-1.2295</el>
 				<el>1</el>
-				<el>-1.14</el>
+				<el>-1.1206</el>
 				<el>1</el>
-				<el>-1.25</el>
+				<el>-1.23659</el>
 				<el>1</el>
-				<el>-1.14</el>
+				<el>-1.14794</el>
 				<el>1</el>
 				<el>1</el>
 			</value>
@@ -129,39 +135,88 @@
 							<el>5</el>
 						</idx>
 						<value>
-							<el>-1.06</el>
-							<el>-1.12</el>
+							<el>-1.11659</el>
+							<el>-1.10794</el>
 						</value>
 					</changesFromBase>
 				</scenario>
-				<scenario stage="2" prob="0.125" parentIdx="0" numberOfChanges="2">
+				<scenario stage="2" prob="0.125" parentIdx="0" numberOfChanges="4">
 					<changesFromBase>
 						<idx>
-							<el>2</el>
-							<el>3</el>
+							<el mult="4" incr="1">2</el>
 						</idx>
 						<value>
-							<el>-1.06</el>
-							<el>-1.12</el>
+							<el>-1.1095</el>
+							<el>-1.0806</el>
+							<el>-1.109259</el>
+							<el>-1.09194</el>
 						</value>
 					</changesFromBase>
 				</scenario>
-				<scenario stage="3" prob="0.125" parentIdx="2" baseIdx="1" numberOfChanges="0"/>
-				<scenario stage="1" prob="0.125" parentIdx="0" numberOfChanges="2">
+				<scenario stage="3" prob="0.125" parentIdx="2" numberOfChanges="2">
 					<changesFromBase>
 						<idx>
-							<el>0</el>
-							<el>1</el>
+							<el>4</el>
+							<el>5</el>
 						</idx>
 						<value>
-							<el>-1.06</el>
-							<el>-1.12</el>
+							<el>-0.97259</el>
+							<el>-1.05194</el>
 						</value>
 					</changesFromBase>
 				</scenario>
-				<scenario stage="3" prob="0.125" parentIdx="4" baseIdx="1" numberOfChanges="0"/>
-				<scenario stage="2" prob="0.125" parentIdx="2" baseIdx="3" numberOfChanges="0"/>
-				<scenario stage="3" prob="0.125" parentIdx="6" baseIdx="1" numberOfChanges="0"/>
+				<scenario stage="1" prob="0.125" parentIdx="0" numberOfChanges="6">
+					<changesFromBase>
+						<idx>
+							<el mult="6" incr="1">0</el>
+						</idx>
+						<value>
+							<el>-1.101</el>
+							<el>-1.054</el>
+							<el>-1.0855</el>
+							<el>-1.0646</el>
+							<el>-1.12059</el>
+							<el>-1.09354</el>
+						</value>
+					</changesFromBase>
+				</scenario>
+				<scenario stage="3" prob="0.125" parentIdx="4" numberOfChanges="2">
+					<changesFromBase>
+						<idx>
+							<el>4</el>
+							<el>5</el>
+						</idx>
+						<value>
+							<el>-1.00059</el>
+							<el>-1.05354</el>
+						</value>
+					</changesFromBase>
+				</scenario>
+				<scenario stage="2" prob="0.125" parentIdx="2" numberOfChanges="4">
+					<changesFromBase>
+						<idx>
+							<el mult="4" incr="1">2</el>
+						</idx>
+						<value>
+							<el>-0.9655</el>
+							<el>-1.0246</el>
+							<el>-0.97659</el>
+							<el>-1.03754</el>
+						</value>
+					</changesFromBase>
+				</scenario>
+				<scenario stage="3" prob="0.125" parentIdx="6" numberOfChanges="2">
+					<changesFromBase>
+						<idx>
+							<el>4</el>
+							<el>5</el>
+						</idx>
+						<value>
+							<el>-0.85659</el>
+							<el>-0.99754</el>
+						</value>
+					</changesFromBase>
+				</scenario>
 			</scenarioData>
 		</multilevelAndStochasticProgramming>
 	</instanceData>

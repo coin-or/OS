@@ -252,6 +252,9 @@ OS/data/osilFiles/StochProg/Forest7-vector.osil -text
 OS/data/osilFiles/StochProg/bilevel-ex1.osil -text
 OS/data/osilFiles/StochProg/chance-coffee.osil -text
 OS/data/osilFiles/StochProg/finplan1.osil -text
+OS/data/osilFiles/StochProg/finplan2.osil -text
+OS/data/osilFiles/StochProg/finplan3.osil -text
+OS/data/osilFiles/StochProg/finplan4.osil -text
 OS/data/osilFiles/StochProg/parincScen.osil -text
 OS/data/osilFiles/StochProg/productionNodal-schema-version-2017-06-07.osil -text
 OS/data/osilFiles/StochProg/productionNodal.osil -text
