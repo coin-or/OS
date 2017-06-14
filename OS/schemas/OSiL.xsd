@@ -7011,7 +7011,8 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:attribute>
 		<xs:attribute name="baseIdx" type="xs:integer">
 			<xs:annotation>
-				<xs:documentation>gives the index of a scenario that contains the default data. The default value is parentIdx; use -1 to indicate the core.</xs:documentation>
+				<xs:documentation>gives the index of a scenario that contains default data. The default is parentIdx; 
+use -1 to indicate the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required">
