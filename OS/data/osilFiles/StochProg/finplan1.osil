@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
+-->
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\trunk-work\OS\schemas\OSiL.xsd">
+	<instanceHeader>
+		<name>FinPlan</name>
+		<source>Birge and Louveaux, Introduction to Stochastic Programming, Springer, 1997</source>
+		<description>
+			This is the first version of the stochastic financial planning problem by John Birge, 
+			as given in the book by Birge and Louveaux. It has four stages and eight scenarios.
+			In this version the scenarios are given explicitly in pathwise form (scenarioTree)
+		</description>
+		<fileCreator>H.I. Gassmann, J. Ma and R.K.Martin</fileCreator>
+		<licence>This file is distributed under the Eclipse Public License</licence>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="8">
+			<var name="Invest0Stocks" type="C" lb="0.0"/>
+			<var name="Invest0Bonds"/>
+			<var name="Invest1Stocks"/>
+			<var name="Invest1Bonds"/>
+			<var name="Invest2Stocks"/>
+			<var name="Invest2Bonds"/>
+			<var name="wealth"/>
+			<var name="short"/>
+		</variables>
+		<objectives numberOfObjectives="1">
+			<obj name="expectedWealth" maxOrMin="max" numberOfObjCoef="2">
+				<coef idx="6">1.0</coef>
+				<coef idx="7">-4.0</coef>
+			</obj>
+		</objectives>
+		<constraints numberOfConstraints="4">
+			<con name="Budget0" lb="55" ub="55"/>
+			<con name="Budget1" lb="0" ub="0"/>
+			<con name="Budget2" lb="0" ub="0"/>
+			<con name="Budget3" lb="80" ub="80"/>
+		</constraints>
+		<linearConstraintCoefficients numberOfValues="14">
+			<start>
+				<el mult="6" incr="2">0</el>
+				<el mult="3" incr="1">12</el>
+			</start>
+			<rowIdx>
+				<el>0</el>
+				<el>1</el>
+				<el>0</el>
+				<el>1</el>
+				<el>1</el>
+				<el>2</el>
+				<el>1</el>
+				<el>2</el>
+				<el>2</el>
+				<el>3</el>
+				<el>2</el>
+				<el>3</el>
+				<el>3</el>
+				<el>3</el>
+			</rowIdx>
+			<value>
+				<el>1</el>
+				<el>-1.25</el>
+				<el>1</el>
+				<el>-1.14</el>
+				<el>1</el>
+				<el>-1.25</el>
+				<el>1</el>
+				<el>-1.14</el>
+				<el>1</el>
+				<el>-1.25</el>
+				<el>1</el>
+				<el>-1.14</el>
+				<el>1</el>
+				<el>1</el>
+			</value>
+		</linearConstraintCoefficients>
+		<multilevelAndStochasticProgramming>
+			<levelsOrTimeStages numberOfStages="4">
+				<stage>
+					<variables numberOfVar="2" startIdx="0"/>
+					<constraints numberOfCon="1" startIdx="0"/>
+				</stage>
+				<stage>
+					<variables startIdx="2" numberOfVar="2"/>
+					<objectives numberOfObj="1" startIdx="-1">
+					</objectives>
+					<constraints startIdx="1" numberOfCon="1"/>
+				</stage>
+				<stage>
+					<variables numberOfVar="2">
+						<var>
+							<el>4</el>			<el>5</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="1">
+						<con>	<el>2</el>	</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="2">
+						<var>
+							<el>6</el>			<el>7</el>
+						</var>
+					</variables>
+					<objectives numberOfObj="1">
+						<obj>	<el>-1</el>	</obj>
+					</objectives>
+					<constraints numberOfCon="1">
+						<con>	<el>3</el>	</con>
+					</constraints>
+				</stage>
+			</levelsOrTimeStages>
+			<stochasticElements numberOfStElem="6">
+				<linearConstraintCoefficient rowIdx="1" colIdx="0"/>
+				<linearConstraintCoefficient rowIdx="1" colIdx="0"/>
+				<linearConstraintCoefficient rowIdx="2" colIdx="2"/>
+				<linearConstraintCoefficient rowIdx="2" colIdx="3"/>
+				<linearConstraintCoefficient rowIdx="3" colIdx="4"/>
+				<linearConstraintCoefficient rowIdx="3" colIdx="5"/>
+			</stochasticElements>
+			<scenarioData numberOfScenarios="8">
+				<scenario parentIdx="-1" prob="0.125" stage="0" numberOfChanges="0"/>
+				<scenario stage="3" prob="0.125" parentIdx="0" numberOfChanges="2">
+					<changesFromBase>
+						<idx>
+							<el>4</el>
+							<el>5</el>
+						</idx>
+						<value>
+							<el>-1.06</el>
+							<el>-1.12</el>
+						</value>
+					</changesFromBase>
+				</scenario>
+				<scenario stage="2" prob="0.125" parentIdx="0" numberOfChanges="2">
+					<changesFromBase>
+						<idx>
+							<el>2</el>
+							<el>3</el>
+						</idx>
+						<value>
+							<el>-1.06</el>
+							<el>-1.12</el>
+						</value>
+					</changesFromBase>
+				</scenario>
+				<scenario stage="3" prob="0.125" parentIdx="2" baseIdx="1" numberOfChanges="0"/>
+				<scenario stage="1" prob="0.125" parentIdx="0" numberOfChanges="2">
+					<changesFromBase>
+						<idx>
+							<el>0</el>
+							<el>1</el>
+						</idx>
+						<value>
+							<el>-1.06</el>
+							<el>-1.12</el>
+						</value>
+					</changesFromBase>
+				</scenario>
+				<scenario stage="3" prob="0.125" parentIdx="4" baseIdx="1" numberOfChanges="0"/>
+				<scenario stage="2" prob="0.125" parentIdx="2" baseIdx="3" numberOfChanges="0"/>
+				<scenario stage="3" prob="0.125" parentIdx="6" baseIdx="1" numberOfChanges="0"/>
+			</scenarioData>
+		</multilevelAndStochasticProgramming>
+	</instanceData>
+</osil>

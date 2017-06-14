@@ -251,6 +251,7 @@ OS/data/osilFiles/StochProg/Forest7-univariate.osil -text
 OS/data/osilFiles/StochProg/Forest7-vector.osil -text
 OS/data/osilFiles/StochProg/bilevel-ex1.osil -text
 OS/data/osilFiles/StochProg/chance-coffee.osil -text
+OS/data/osilFiles/StochProg/finplan1.osil -text
 OS/data/osilFiles/StochProg/parincScen.osil -text
 OS/data/osilFiles/StochProg/productionNodal-schema-version-2017-06-07.osil -text
 OS/data/osilFiles/StochProg/productionNodal.osil -text
@@ -265,7 +266,6 @@ OS/data/osilFiles/br17_new.osil -text
 OS/data/osilFiles/callBackTest.osil -text
 OS/data/osilFiles/callBackTestRowMajor.osil -text
 OS/data/osilFiles/eastborne.osil -text
-OS/data/osilFiles/finplan1.osil -text
 OS/data/osilFiles/gamstrnsport.osil -text
 OS/data/osilFiles/genAssign.osil -text
 OS/data/osilFiles/lindoapiaddins.osil -text
