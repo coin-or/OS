@@ -3,10 +3,10 @@
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
 -->
-<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\trunk-work\OS\schemas\OSiL.xsd">
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
 	<instanceHeader>
 		<name>FinPlan</name>
-		<source>Birge and Louveaux, Introduction to Stochastic Programming, Springer, 1997</source>
+		<source>Birge and Louveaux, Stochastic Programming</source>
 		<description>
 			This is the first version of the stochastic financial planning problem by John Birge, 
 			as given in the book by Birge and Louveaux. It has four stages and eight scenarios.
@@ -40,8 +40,15 @@
 		</constraints>
 		<linearConstraintCoefficients numberOfValues="14">
 			<start>
-				<el mult="6" incr="2">0</el>
-				<el mult="3" incr="1">12</el>
+				<el>0</el>
+				<el>2</el>
+				<el>4</el>
+				<el>6</el>
+				<el>8</el>
+				<el>10</el>
+				<el>12</el>
+				<el>13</el>
+				<el>14</el>
 			</start>
 			<rowIdx>
 				<el>0</el>
@@ -76,8 +83,11 @@
 				<el>1</el>
 			</value>
 		</linearConstraintCoefficients>
+		<quadraticCoefficients numberOfQuadraticTerms="1">
+			<qTerm idx="-1" idxOne="7" idxTwo="7" coef="-1.0"/>
+		</quadraticCoefficients>
 		<multilevelAndStochasticProgramming>
-			<levelsOrTimeStages numberOfStages="4">
+			<levelsOrTimeStages numberOfStages="6">
 				<stage>
 					<variables numberOfVar="2" startIdx="0"/>
 					<constraints numberOfCon="1" startIdx="0"/>
@@ -88,7 +98,13 @@
 					</objectives>
 					<constraints startIdx="1" numberOfCon="1"/>
 				</stage>
-				<stage>
+				<stage/>
+				<stage name="test">
+					<variables numberOfVar="0"/>
+					<objectives numberOfObj="0"/>
+					<constraints numberOfCon="0"/>
+				</stage>
+				<stage name="Wha'zzup?">
 					<variables numberOfVar="2">
 						<var>
 							<el>4</el>			<el>5</el>
