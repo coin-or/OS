@@ -8801,7 +8801,7 @@ A function must return a column vector of dimension equal to the number of stoch
 	<xs:complexType name="AutoRegressiveComponent-2016-10-05">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>gives the index of a previously defined stochastic component</xs:documentation>
+				<xs:documentation>gives the index of a previously defined RV</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
