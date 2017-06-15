@@ -616,6 +616,32 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfUserfunctions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="UserFunction_p">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:annotation>
+				<xs:documentation>number must agree with numArg</xs:documentation>
+			</xs:annotation>
+			<xs:element ref="ExprNode"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:ID" use="required"/>
+		<xs:attribute name="numArg" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>number of function arguments</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UserFunctions_p">
+		<xs:annotation>
+			<xs:documentation>since version 1.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the userFunction child elements must match numberOfUserFunctions</xs:documentation>
+			</xs:annotation>
+			<xs:element name="userFunction" type="UserFunction_p" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfUserfunctions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="UserVariable">
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
