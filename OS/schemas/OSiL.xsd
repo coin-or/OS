@@ -8729,7 +8729,7 @@ Each term appends rows to the input vector for the transformation.</xs:documenta
 			</xs:element>
 			<xs:element name="ma" type="MA-2016-10-05" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfMA. Each moving average term refers to a previously set decision variable, matrix variable, etc. Each reference adds one or more rows to the input vector of the transformation</xs:documentation>
+					<xs:documentation>number must agree with numberOfMA. Each moving average term refers to the values of a previously defined random variable</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="transformation" type="ImplicitTreeStochasticTransformation-2016-10-05" minOccurs="0">
@@ -8757,6 +8757,11 @@ Default: identity matrix.</xs:documentation>
 		<xs:attribute name="numberOfMA" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
 				<xs:documentation>moving average terms</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="id" type="xs:ID">
+			<xs:annotation>
+				<xs:documentation>can be used to identify the value in a subsequent MA portion of an ARMA model</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -8801,19 +8806,15 @@ A function must return a column vector of dimension equal to the number of stoch
 	<xs:complexType name="AutoRegressiveComponent-2016-10-05">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>gives the index of a previously defined RV</xs:documentation>
+				<xs:documentation>gives the index (and hence locations and values) of a previously defined RV</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="MA-2016-10-05">
-		<xs:attribute name="idx" type="xs:integer" use="required"/>
-		<xs:attribute name="type" use="required">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="var"/>
-					<xs:enumeration value="matrixVar"/>
-				</xs:restriction>
-			</xs:simpleType>
+		<xs:attribute name="id" type="xs:IDREF" use="required">
+			<xs:annotation>
+				<xs:documentation>refers to the value of a previously defined RV</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<!--SoftConstraints: proposal-->
