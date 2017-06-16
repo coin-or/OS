@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
--->
-<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\trunk-work\OS\schemas\OSiL.xsd">
 	<instanceHeader>
 		<name>FinPlan</name>
 		<source>Birge and Louveaux, Introduction to Stochastic Programming, Springer, 1997</source>
@@ -207,18 +204,67 @@
 					</matrixSum>
 				</transformation>
 			</matrix>
-			<matrix numberOfColumns="1" numberOfRows="2" name="T0">
+			<matrix numberOfColumns="2" numberOfRows="2" name="T0">
 				<constantElements numberOfValues="4">
 					<start>
 						<el mult="3" incr="2">0</el>
 					</start>
 					<index>
 						<el>0</el>			<el>1</el>
-					</index>
 						<el>0</el>			<el>1</el>
+					</index>
 					<value>
 						<el>0.06</el>		<el>0.02</el>
 						<el>1.161</el>		<el>1.074</el>
+					</value>
+				</constantElements>
+			</matrix>
+			<matrix numberOfColumns="1" numberOfRows="2" name="T1">
+				<constantElements numberOfValues="9">
+					<start>
+						<el>0</el>			<el>2</el>
+						<el mult="4" incr="2">3</el>
+					</start>
+					<index>
+						<el>0</el>			<el>1</el>
+						<el>0</el>
+						<el>0</el>			<el>1</el>
+						<el>0</el>			<el>1</el>
+						<el>0</el>			<el>1</el>
+					</index>
+					<value>
+						<el>0.06</el>		<el>0.02</el>
+						<el>0.9</el>
+						<el>-0.1</el>		<el>0.9</el>
+						<el>0.02</el>		<el>0.01</el>
+						<el>0.16</el>		<el>0.106</el>
+					</value>
+				</constantElements>
+			</matrix>
+			<matrix numberOfColumns="1" numberOfRows="2" name="T2">
+				<constantElements numberOfValues="11">
+					<start>
+						<el>0</el>			<el>2</el>			<el>3</el>
+						<el mult="3" incr="1">5</el>
+						<el mult="3" incr="1">9</el>
+					</start>
+					<index>
+						<el>0</el>			<el>1</el>
+						<el>0</el>
+						<el>0</el>			<el>1</el>
+						<el>0</el>
+						<el>1</el>
+						<el>0</el>			<el>1</el>
+						<el>0</el>
+						<el>0</el>
+					</index>
+					<value>
+						<el>0.06</el>		<el>0.02</el>
+						<el>0.9</el>
+						<el>-0.1</el>		<el>0.9</el>
+						<el mult="2">0.1</el>
+						<el>0.02</el>		<el>0.01</el>
+						<el>-0.01</el>		<el>0.1</el>
 					</value>
 				</constantElements>
 			</matrix>
@@ -276,23 +322,32 @@
 				<linearConstraintCoefficient rowIdx="3" colIdx="5"/>
 			</stochasticElements>
 			<implicitTreeData numberOfRV="3">
-				<rv stageIdx="1" distributionIdx="0">
+				<rv stageIdx="1" distributionIdx="0" id="rv0">
 					<stochasticLocations numberOfEl="2">
 						<el>0</el>		<el>1</el>
 					</stochasticLocations>
 <!-- No AR or MA terms, since the past is known with certainty. M1 a(0) + M2 a(-1) + N1 v(0) + N2 v(-1) + C is a constant vector.-->
 					<transformation type="matrix" idx="9" addConstant="true"/>
 				</rv>
-				<rv stageIdx="2" distributionIdx="0">
+				<rv stageIdx="2" distributionIdx="0" id="rv1" numberOfAR="1" numberOfMA="1">
 					<stochasticLocations numberOfEl="2">
 						<el>2</el>		<el>3</el>
 					</stochasticLocations>
 					<ar idx="0"></ar>
+					<ma id="rv0"></ma>
+<!-- The transformation matrix has 2 rows and 5 columns (1 for v(1), 2 for AR term a(0), 1 for MA term v(0) and one for the constant M2 a(0) + N2 v(0) + C. -->
+					<transformation type="matrix" idx="10" addConstant="true"/>
 				</rv>
-				<rv stageIdx="3" distributionIdx="0">
+				<rv stageIdx="3" distributionIdx="0" id="rv2" numberOfAR="2" numberOfMA="2">
 					<stochasticLocations numberOfEl="2">
 						<el>4</el>		<el>5</el>
 					</stochasticLocations>
+					<ar idx="0"></ar>
+					<ar idx="1"></ar>
+					<ma id="rv0"></ma>
+					<ma id="rv1"></ma>
+<!-- This transformation matrix has 2 rows and 9 columns (1 for v(2), 2*2 for AR terms, 2 for MA terms and one for the constant. -->
+					<transformation type="matrix" idx="11" addConstant="true"/>
 				</rv>
 			</implicitTreeData>
 		</multilevelAndStochasticProgramming>
