@@ -4088,7 +4088,7 @@ Returns the current value of the indicated objective</xs:documentation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="OSnLNode"/>
+					<xs:element ref="ExprNode"/>
 				</xs:sequence>
 				<xs:attribute name="name" type="xs:IDREF" use="required"/>
 			</xs:extension>
@@ -4114,6 +4114,117 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="arg" type="OSnLNodeArg" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeUserF">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="ExprNode"/>
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:IDREF" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="userCF" type="OSnLCNodeUserF" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLCNodeArg">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLCNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="cArg" type="OSnLCNodeArg" substitutionGroup="OSnLCNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeUserF">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="ExprNode"/>
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:IDREF" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="userMF" type="OSnLMNodeUserF" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeArg">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="mArg" type="OSnLMNodeArg" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLTNodeUserF">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="ExprNode"/>
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:IDREF" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="userTF" type="OSnLTNodeUserF" substitutionGroup="OSnLTNode">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLTNodeArg">
+		<xs:annotation>
+			<xs:documentation>since version 1.0. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLTNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>refers to a function argument; must be in the range from 0 to numArg - 1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="tArg" type="OSnLTNodeArg" substitutionGroup="OSnLTNode">
 		<xs:annotation>
 			<xs:documentation>since version 1.0. </xs:documentation>
 		</xs:annotation>
@@ -5995,6 +6106,31 @@ Returns the current value of the indicated objective</xs:documentation>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixReference" type="OSnLMNodeMatrixReference" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLMNodeStochReference">
+		<xs:annotation>
+			<xs:documentation>draft. return the current value of a set of stochastic locations or the realization of an underlying random variable </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="useRV" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>if "true", use the underlying random variable instead of stochastic vector. Default is "false".</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="lag" type="xs:nonNegativeInteger" default="0">
+					<xs:annotation>
+						<xs:documentation>use to reference past values, e.g., in an ARMA process. Default is 0.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixStochReference" type="OSnLMNodeStochReference" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>

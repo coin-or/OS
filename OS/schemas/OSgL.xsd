@@ -591,10 +591,7 @@
 		<xs:attribute name="numBlock" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UserFunction">
-		<xs:sequence maxOccurs="unbounded">
-			<xs:annotation>
-				<xs:documentation>number must agree with numArg</xs:documentation>
-			</xs:annotation>
+		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:ID" use="required"/>
@@ -614,13 +611,10 @@
 			</xs:annotation>
 			<xs:element name="userFunction" type="UserFunction" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfUserfunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfUserFunctions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UserFunction_p">
-		<xs:sequence maxOccurs="unbounded">
-			<xs:annotation>
-				<xs:documentation>number must agree with numArg</xs:documentation>
-			</xs:annotation>
+		<xs:sequence>
 			<xs:element ref="ExprNode"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:ID" use="required"/>
@@ -640,7 +634,7 @@
 			</xs:annotation>
 			<xs:element name="userFunction" type="UserFunction_p" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfUserfunctions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfUserFunctions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UserVariable">
 		<xs:sequence>

@@ -8765,36 +8765,31 @@ Default: identity matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="ImplicitTreeStochasticTransformation-2016-10-05">
-		<xs:complexContent>
-			<xs:extension base="StochasticLinearTransformation">
-				<xs:attribute name="type" use="required">
-					<xs:annotation>
-						<xs:documentation>"matrix" for linear transformation;  "userFunction" for nonlinear. </xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="matrix"/>
-							<xs:enumeration value="userFunction"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
-					<xs:annotation>
-						<xs:documentation>index of the matrix or userFunction within the relevant array.
+	<xs:complexType name="ImplicitTreeLinearTransformation-2016-10-05">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>index of the matrix defining the linear transformation.
 A matrix must have constant matrix elements.
 number of rows = number of stochastic elements.
 columns are determined by the sequence of elements of the rv, all AR terms, MA terms, plus a '1' if addConstant ="true".
-A function must return a column vector of dimension equal to the number of stochastic elements. The number of arguments is 1 + numberOfAR + numberOfMA (+1 if addConstant="true").</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-				<xs:attribute name="addConstant" type="xs:boolean" default="false">
-					<xs:annotation>
-						<xs:documentation> Default is "false".</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
-			</xs:extension>
-		</xs:complexContent>
+</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="addConstant" type="xs:boolean" default="false">
+			<xs:annotation>
+				<xs:documentation> Default is "false".</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ImplicitTreeStochasticTransformation-2016-10-05">
+		<xs:choice minOccurs="0">
+			<xs:element name="userFunction" type="OSnLMNodeUserF">
+				<xs:annotation>
+					<xs:documentation>must return a column vector of dimension equal to the number of stochastic elements.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrix" type="ImplicitTreeLinearTransformation-2016-10-05"/>
+		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="RV-2016-10-05">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
