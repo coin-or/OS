@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
+-->
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
 	<instanceHeader>
 		<name>FinPlan</name>
 		<source>Birge and Louveaux, Introduction to Stochastic Programming, Springer, 1997</source>
@@ -327,7 +330,9 @@
 						<el>0</el>		<el>1</el>
 					</stochasticLocations>
 <!-- No AR or MA terms, since the past is known with certainty. M1 a(0) + M2 a(-1) + N1 v(0) + N2 v(-1) + C is a constant vector.-->
-					<transformation type="matrix" idx="9" addConstant="true"/>
+					<transformation>
+						<matrix idx="9" addConstant="true"/>
+					</transformation>
 				</rv>
 				<rv stageIdx="2" distributionIdx="0" id="rv1" numberOfAR="1" numberOfMA="1">
 					<stochasticLocations numberOfEl="2">
@@ -336,7 +341,9 @@
 					<ar idx="0"></ar>
 					<ma id="rv0"></ma>
 <!-- The transformation matrix has 2 rows and 5 columns (1 for v(1), 2 for AR term a(0), 1 for MA term v(0) and one for the constant M2 a(0) + N2 v(0) + C. -->
-					<transformation type="matrix" idx="10" addConstant="true"/>
+					<transformation>
+						<matrix idx="10" addConstant="true"/>
+					</transformation>
 				</rv>
 				<rv stageIdx="3" distributionIdx="0" id="rv2" numberOfAR="2" numberOfMA="2">
 					<stochasticLocations numberOfEl="2">
@@ -347,7 +354,9 @@
 					<ma id="rv0"></ma>
 					<ma id="rv1"></ma>
 <!-- This transformation matrix has 2 rows and 9 columns (1 for v(2), 2*2 for AR terms, 2 for MA terms and one for the constant. -->
-					<transformation type="matrix" idx="11" addConstant="true"/>
+					<transformation>
+						<matrix idx="11" addConstant="true"/>
+					</transformation>
 				</rv>
 			</implicitTreeData>
 		</multilevelAndStochasticProgramming>
