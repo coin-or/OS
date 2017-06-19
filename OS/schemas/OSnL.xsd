@@ -6122,11 +6122,6 @@ Returns the current value of the indicated objective</xs:documentation>
 						<xs:documentation>if "true", use the underlying random variable instead of stochastic vector. Default is "false".</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="lag" type="xs:nonNegativeInteger" default="0">
-					<xs:annotation>
-						<xs:documentation>use to reference past values, e.g., in an ARMA process. Default is 0.</xs:documentation>
-					</xs:annotation>
-				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

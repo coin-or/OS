@@ -8639,7 +8639,7 @@ referenced by distributionIdx and is independent from all other rv's.</xs:docume
 				</xs:annotation>
 			</xs:element>
 -->
-			<xs:element name="rv" type="ImplicitTreeBlock-2017-06-03" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="rv" type="ImplicitTreeBlock-2017-06-19" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfRV. Each random variable or vector is
 referenced by distributionIdx and is independent from all other rv's.</xs:documentation>
@@ -8765,6 +8765,99 @@ Default: identity matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:complexType name="ImplicitTreeBlock-2017-06-19">
+		<xs:sequence>
+			<xs:element name="stochasticLocations" type="NonNegativeIntVector" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>refers back to the list of stochastic elements established previously</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="linearTransformation" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>A matrix must have constant matrix elements.
+number of rows = number of stochastic elements.
+columns are determined by the sequence of elements of the rv, all AR terms, MA terms, plus a '1' if addConstant ="true".
+</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ar" type="AutoRegressiveComponent-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>number must agree with numberOfAR. 
+Each term appends rows to the input vector for the transformation.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ma" type="MA-2016-10-05" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>number must agree with numberOfMA. Each moving average term refers to the values of a previously defined random variable</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="numberOfMA" type="xs:nonNegativeInteger" default="0">
+							<xs:annotation>
+								<xs:documentation>moving average terms</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="numberOfAR" type="xs:nonNegativeInteger" default="0">
+							<xs:annotation>
+								<xs:documentation>autoregressive terms</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+							<xs:annotation>
+								<xs:documentation>index of the matrix defining the linear transformation.
+</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="addConstant" type="xs:boolean" default="false">
+							<xs:annotation>
+								<xs:documentation> Default is "false".</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="nonlinearTransformation" type="ImplicitTreeStochasticTransformation-2017-06-19" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term at the very end) and transforms this into the vector of stochastic elements. 
+Default: identity matrix.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="stageIdx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>number of the stage in which the information is revealed</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="distributionIdx" use="required">
+			<xs:annotation>
+				<xs:documentation>gives the index of the distribution in the "distributions" element</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ImplicitTreeLinearTransformation-2017-06-19">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>index of the matrix defining the linear transformation.
+</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="addConstant" type="xs:boolean" default="false">
+			<xs:annotation>
+				<xs:documentation> Default is "false".</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ImplicitTreeStochasticTransformation-2017-06-19">
+		<xs:choice minOccurs="0">
+			<xs:element name="userFunction" type="OSnLMNodeUserF">
+				<xs:annotation>
+					<xs:documentation>must return a column vector of dimension equal to the number of stochastic elements.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
 	<xs:complexType name="ImplicitTreeLinearTransformation-2016-10-05">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
@@ -8806,9 +8899,9 @@ columns are determined by the sequence of elements of the rv, all AR terms, MA t
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="MA-2016-10-05">
-		<xs:attribute name="id" type="xs:IDREF" use="required">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
-				<xs:documentation>refers to the value of a previously defined RV</xs:documentation>
+				<xs:documentation>referencess the untransformed value of a previously defined RV</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>

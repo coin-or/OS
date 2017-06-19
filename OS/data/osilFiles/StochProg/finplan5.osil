@@ -16,7 +16,7 @@
 			
 			and a(-1) = transp(1.07, 1.10), a(0) = transp(1.20, 1.06) and v(t) = +1 or -1each with prob 0.5, where v(-1) = -1 and v(0) = 1 are given.
 			
-			This version of the problem models the ARMA(2,2) process explicitly and uses linear transformations. 
+			This version of the problem models the ARMA(2,2) process explicitly using a user-defined transformation function. 
 		</description>
 		<fileCreator>H.I. Gassmann, J. Ma and R.K.Martin</fileCreator>
 		<licence>This file is distributed under the Eclipse Public License</licence>
@@ -209,109 +209,31 @@
 					</value>
 				</constantElements>
 			</matrix>
-			<matrix numberOfColumns="1" numberOfRows="2" name="a(1)">
-				<transformation shape="constant">
-					<matrixSum>
-						<matrixTimes>
-							<matrixReference idx="0"/>
-							<matrixReference idx="6"/>
-						</matrixTimes>
-						<matrixTimes>
-							<matrixReference idx="1"/>
-							<matrixReference idx="7"/>
-						</matrixTimes>
-						<matrixScalarTimes>
-							<matrixReference idx="4"/>
-							<number value="-1"/>
-						</matrixScalarTimes>
-						<matrixReference idx="3"/>
-						<matrixReference idx="5"/>
-					</matrixSum>
-				</transformation>
-			</matrix>
-			<matrix numberOfColumns="2" numberOfRows="2" name="T0">
-				<constantElements numberOfValues="4">
+			<matrix numberOfColumns="1" numberOfRows="1" name="v(0)">
+				<constantElements numberOfValues="1">
 					<start>
-						<el mult="3" incr="2">0</el>
+						<el>0</el>
+						<el>1</el>
 					</start>
 					<index>
 						<el>0</el>
-						<el>1</el>
-						<el>0</el>
-						<el>1</el>
 					</index>
 					<value>
-						<el>0.06</el>
-						<el>0.02</el>
-						<el>1.161</el>
-						<el>1.074</el>
+						<el>1</el>
 					</value>
 				</constantElements>
 			</matrix>
-			<matrix numberOfColumns="1" numberOfRows="2" name="T1">
-				<constantElements numberOfValues="9">
+			<matrix numberOfColumns="1" numberOfRows="2" name="v(-1)">
+				<constantElements numberOfValues="1">
 					<start>
 						<el>0</el>
-						<el>2</el>
-						<el mult="4" incr="2">3</el>
+						<el>1</el>
 					</start>
 					<index>
 						<el>0</el>
-						<el>1</el>
-						<el>0</el>
-						<el>0</el>
-						<el>1</el>
-						<el>0</el>
-						<el>1</el>
-						<el>0</el>
-						<el>1</el>
 					</index>
 					<value>
-						<el>0.06</el>
-						<el>0.02</el>
-						<el>0.9</el>
-						<el>-0.1</el>
-						<el>0.9</el>
-						<el>0.02</el>
-						<el>0.01</el>
-						<el>0.16</el>
-						<el>0.106</el>
-					</value>
-				</constantElements>
-			</matrix>
-			<matrix numberOfColumns="1" numberOfRows="2" name="T2">
-				<constantElements numberOfValues="11">
-					<start>
-						<el>0</el>
-						<el>2</el>
-						<el>3</el>
-						<el mult="3" incr="1">5</el>
-						<el mult="3" incr="1">9</el>
-					</start>
-					<index>
-						<el>0</el>
-						<el>1</el>
-						<el>0</el>
-						<el>0</el>
-						<el>1</el>
-						<el>0</el>
-						<el>1</el>
-						<el>0</el>
-						<el>1</el>
-						<el>0</el>
-						<el>0</el>
-					</index>
-					<value>
-						<el>0.06</el>
-						<el>0.02</el>
-						<el>0.9</el>
-						<el>-0.1</el>
-						<el>0.9</el>
-						<el mult="2">0.1</el>
-						<el>0.02</el>
-						<el>0.01</el>
-						<el>-0.01</el>
-						<el>0.1</el>
+						<el>-1</el>
 					</value>
 				</constantElements>
 			</matrix>
@@ -324,6 +246,39 @@
 				</empiricalDiscrete>
 			</dist>
 		</distributions>
+		<userFunctions numberOfUserFunctions="1">
+			<userFunction name="ARMA-2-2" numArg="11">
+				<matrixSum>
+					<matrixTimes>
+						<!-- M1 a(t-1) -->
+						<mArg idx="0"/>
+						<mArg idx="1"/>
+					</matrixTimes>
+					<matrixTimes>
+						<!-- M2 a(t-2) -->
+						<mArg idx="2"/>
+						<mArg idx="3"/>
+					</matrixTimes>
+					<matrixTimes>
+						<!-- N0 v(t) -->
+						<mArg idx="4"/>
+						<mArg idx="5"/>
+					</matrixTimes>
+					<matrixTimes>
+						<!-- N1 v(t-1) -->
+						<mArg idx="6"/>
+						<mArg idx="7"/>
+					</matrixTimes>
+					<matrixTimes>
+						<!-- N2 v(t-2) -->
+						<mArg idx="8"/>
+						<mArg idx="9"/>
+					</matrixTimes>
+					<mArg idx="10"/>
+					<!-- drift term C -->
+				</matrixSum>
+			</userFunction>
+		</userFunctions>
 		<multilevelAndStochasticProgramming>
 			<levelsOrTimeStages numberOfStages="4">
 				<stage>
@@ -382,32 +337,72 @@
 						<el>0</el>
 						<el>1</el>
 					</stochasticLocations>
-					<!-- No AR or MA terms, since the past is known with certainty. M1 a(0) + M2 a(-1) + N1 v(0) + N2 v(-1) + C is a constant vector.-->
-					<linearTransformation idx="9" addConstant="true"/>
+					<nonlinearTransformation>
+						<userFunction name="ARMA-2-2">
+							<matrixReference idx="0"/>
+							<matrixReference idx="6"/>
+							<matrixReference idx="1"/>
+							<matrixReference idx="7"/>
+							<matrixReference idx="2"/>
+							<matrixStochReference idx="0" useRV="true"/>
+							<!-- this is v(1) -->
+							<matrixReference idx="3"/>
+							<matrixReference idx="8"/>
+							<matrixReference idx="4"/>
+							<matrixReference idx="9"/>
+							<matrixReference idx="5"/>
+						</userFunction>
+					</nonlinearTransformation>
 				</rv>
 				<rv stageIdx="2" distributionIdx="0">
 					<stochasticLocations numberOfEl="2">
 						<el>2</el>
 						<el>3</el>
 					</stochasticLocations>
-					<!-- The transformation matrix has 2 rows and 5 columns (1 for v(1), 2 for AR term a(0), 1 for MA term v(0) and one for the constant M2 a(0) + N2 v(0) + C. -->
-					<linearTransformation idx="10" numberOfAR="1" numberOfMA="1" addConstant="true">
-						<ar idx="0"/>
-						<ma idx="0"/>
-					</linearTransformation>
+					<nonlinearTransformation>
+						<userFunction name="ARMA-2-2">
+							<matrixReference idx="0"/>
+							<matrixStochReference idx="1"/>
+							<!-- this is a(1) -->
+							<matrixReference idx="1"/>
+							<matrixReference idx="6"/>
+							<matrixReference idx="2"/>
+							<matrixStochReference idx="1" useRV="true"/>
+							<!-- this is v(2) -->
+							<matrixReference idx="3"/>
+							<matrixStochReference idx="1" useRV="true"/>
+							<!-- this is v(1) -->
+							<matrixReference idx="4"/>
+							<matrixReference idx="8"/>
+							<matrixReference idx="5"/>
+						</userFunction>
+					</nonlinearTransformation>
 				</rv>
 				<rv stageIdx="3" distributionIdx="0">
 					<stochasticLocations numberOfEl="2">
 						<el>4</el>
 						<el>5</el>
 					</stochasticLocations>
-					<!-- This transformation matrix has 2 rows and 9 columns (1 for v(2), 2*2 for AR terms, 2 for MA terms and one for the constant. -->
-					<linearTransformation idx="11" numberOfAR="2" numberOfMA="2" addConstant="true">
-						<ar idx="0"/>
-						<ar idx="1"/>
-						<ma idx="0"/>
-						<ma idx="1"/>
-					</linearTransformation>
+					<nonlinearTransformation>
+						<userFunction name="ARMA-2-2">
+							<matrixReference idx="0"/>
+							<matrixStochReference idx="1"/>
+							<!-- this is a(2) -->
+							<matrixReference idx="1"/>
+							<matrixStochReference idx="0"/>
+							<!-- this is a(1) -->
+							<matrixReference idx="2"/>
+							<matrixStochReference idx="2" useRV="true"/>
+							<!-- this is v(3) -->
+							<matrixReference idx="3"/>
+							<matrixStochReference idx="1" useRV="true"/>
+							<!-- this is v(2) -->
+							<matrixReference idx="4"/>
+							<matrixStochReference idx="0" useRV="true"/>
+							<!-- this is v(1) -->
+							<matrixReference idx="5"/>
+						</userFunction>
+					</nonlinearTransformation>
 				</rv>
 			</implicitTreeData>
 		</multilevelAndStochasticProgramming>
