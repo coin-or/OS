@@ -136,12 +136,23 @@ Allen R. Ferguson and George B. Dantzig, "The Allocation of Aircraft to Routesâ€
 			<multilevelAndStochasticProgramming >
 				<levelsOrTimeStages numberOfStages="2">
 					<stage>
-						<variables numberOfVar="17" startIdx="0"/>
-						<objectives numberOfObj="1" startIdx="-1"/>
-						<constraints numberOfCon="4" startIdx="0"/>
+						<variables numberOfVar="17">
+							<var>
+								<el mult="17" incr="1">0</el>
+							</var>
+						</variables>
+						<constraints numberOfCon="4">
+							<con>
+								<el mult="4" incr="1">0</el>
+							</con>
+						</constraints>
 					</stage>
 					<stage>
-						<constraints numberOfCon="5" startIdx="4"/>
+						<constraints numberOfCon="5">
+							<con>
+								<el mult="4" incr="1">4</el>
+							</con>
+						</constraints>
 					</stage>
 				</levelsOrTimeStages>
 				<stochasticElements numberOfStochEl="5">

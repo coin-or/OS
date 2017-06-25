@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org" 
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
-  <instanceHeader>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
+	<instanceHeader>
 		<name>Par Inc. </name>
 		<source>Anderson, Sweeney, Williams, Camm and Martin</source>
 		<description> A linear production scheduling problem with random right-hand sides. This formulation uses explicit scenarios.</description>
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0" lb="0" type="C" />
-			<var name="x1" lb="0" type="C" />
+			<var name="x0" lb="0" type="C"/>
+			<var name="x1" lb="0" type="C"/>
 		</variables>
 		<objectives numberOfObjectives="1">
-			<obj name = "Par, Inc. Objective Function" 
-				maxOrMin="max"  numberOfObjCoef="2" >
+			<obj name="Par, Inc. Objective Function" maxOrMin="max" numberOfObjCoef="2">
 				<coef idx="0">10</coef>
 				<coef idx="1">9</coef>
 			</obj>
 		</objectives>
-		<constraints numberOfConstraints="4"> 
-			<con name="cutanddye" lb = "10" ub="630" />
-			<con name="sewing"  ub="600"/>
-			<con name="finishing"  ub="708"/>
-			<con  ub="135"/>
+		<constraints numberOfConstraints="4">
+			<con name="cutanddye" lb="10" ub="630"/>
+			<con name="sewing" ub="600"/>
+			<con name="finishing" ub="708"/>
+			<con ub="135"/>
 		</constraints>
 		<linearConstraintCoefficients numberOfValues="8">
 			<start>
@@ -44,7 +41,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trun
 			<value>
 				<el>0.7</el>
 				<el>0.5</el>
-				<el>1.0</el>				
+				<el>1.0</el>
 				<el>0.1</el>
 				<el>1.0</el>
 				<el>0.833333333333333333333</el>
@@ -54,66 +51,72 @@ xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trun
 		</linearConstraintCoefficients>
 		<multilevelAndStochasticProgramming>
 			<levelsOrTimeStages numberOfStages="2">
-			<stage>
-				<objectives numberOfObj="1">
-					<obj>
-					<el>-1</el>
-					</obj>
-				</objectives>
-			</stage>
-			<stage>
-				<variables numberOfVar="2" startIdx="0">
-				</variables>
-				<constraints numberOfCon="4" startIdx="0">
-				</constraints>
-			</stage>
+				<stage>
+					<objectives numberOfObj="1">
+						<obj>
+							<el>-1</el>
+						</obj>
+					</objectives>
+				</stage>
+				<stage>
+					<variables numberOfVar="2">
+						<var>
+							<el mult="2" incr="1">0</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="4">
+						<con>
+							<el mult="4" incr="1">0</el>
+						</con>
+					</constraints>
+				</stage>
 			</levelsOrTimeStages>
 			<stochasticElements numberOfStochEl="4">
-						<con idx="0" attr="ub"></con>
-						<con idx="1" attr="ub"></con>
-						<con idx="2" attr="ub"></con>
-						<con idx="3" attr="ub"></con>
+				<con idx="0" attr="ub"/>
+				<con idx="1" attr="ub"/>
+				<con idx="2" attr="ub"/>
+				<con idx="3" attr="ub"/>
 			</stochasticElements>
 			<scenarioData numberOfScenarios="3">
 				<scenario stage="0" parentIdx="-1" prob=".5" baseIdx="-1" numberOfChanges="1">
 					<changesFromBase>
 						<idx>
-						<el>0</el>
+							<el>0</el>
 						</idx>
 						<value>
-						<el>640</el>
+							<el>640</el>
 						</value>
 					</changesFromBase>
 				</scenario>
-					<scenario prob=".25" numberOfChanges="4" parentIdx="0" stage="1">
-						<changesFromBase>
-							<idx>
-								<el>0</el>
-							</idx>
-							<value>
-								<el>600</el>
-								<el>570</el>
-								<el>670</el>
-								<el>120</el>
-							</value>
-						</changesFromBase>
-					</scenario>
-					<scenario prob=".25" numberOfChanges="4" parentIdx="0" stage="1">
-						<changesFromBase>
-							<idx>
-								<el mult="4" incr="1">0</el>
-							</idx>
-							<value>
-								<el>660</el>
-								<el>630</el>
-								<el>750</el>
-								<el>150</el>
-							</value>
-						</changesFromBase>
-					</scenario>
+				<scenario prob=".25" numberOfChanges="4" parentIdx="0" stage="1">
+					<changesFromBase>
+						<idx>
+							<el>0</el>
+						</idx>
+						<value>
+							<el>600</el>
+							<el>570</el>
+							<el>670</el>
+							<el>120</el>
+						</value>
+					</changesFromBase>
+				</scenario>
+				<scenario prob=".25" numberOfChanges="4" parentIdx="0" stage="1">
+					<changesFromBase>
+						<idx>
+							<el mult="4" incr="1">0</el>
+						</idx>
+						<value>
+							<el>660</el>
+							<el>630</el>
+							<el>750</el>
+							<el>150</el>
+						</value>
+					</changesFromBase>
+				</scenario>
 			</scenarioData>
 		</multilevelAndStochasticProgramming>
-<!--		
+		<!--		
 		<timeStages numberOfStages="2">
 		<stochasticData>
 				<scenarioTree numberOfScenarios="3" numberOfStochasticElements="4">

@@ -54,14 +54,40 @@
 		<multilevelAndStochasticProgramming>
 			<levelsOrTimeStages numberOfStages="2">
 				<stage name="x-leader">
-					<variables numberOfVar="1" startIdx="0"/>
-					<objectives numberOfObj="1" startIdx="-1"/>
-					<constraints numberOfCon="2" startIdx="0"/>
+					<variables numberOfVar="1">
+						<var>
+							<el>0</el>
+						</var>
+					</variables>
+					<objectives numberOfObj="1">
+						<obj>
+							<el>-1</el>
+						</obj>
+					</objectives>
+					<constraints numberOfCon="2">
+						<con>
+							<el>0</el>
+							<el>1</el>
+						</con>
+					</constraints>					
 				</stage>
 				<stage name="y-follower">
-					<variables numberOfVar="1" startIdx="1"/>
-					<objectives numberOfObj="1" startIdx="-2"/>
-					<constraints numberOfCon="2" startIdx="2"/>
+					<variables numberOfVar="1">
+						<var>
+							<el>1</el>
+						</var>
+					</variables>
+					<objectives numberOfObj="1">
+						<obj>
+							<el>-2</el>
+						</obj>
+					</objectives>
+					<constraints numberOfCon="2">
+						<con>
+							<el>2</el>
+							<el>3</el>
+						</con>
+					</constraints>					
 				</stage>
 			</levelsOrTimeStages>
 		</multilevelAndStochasticProgramming>

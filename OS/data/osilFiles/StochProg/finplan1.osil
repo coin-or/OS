@@ -87,44 +87,60 @@
 			<qTerm idx="-1" idxOne="7" idxTwo="7" coef="-1.0"/>
 		</quadraticCoefficients>
 		<multilevelAndStochasticProgramming>
-			<levelsOrTimeStages numberOfStages="6">
+			<levelsOrTimeStages numberOfStages="4">
 				<stage>
-					<variables numberOfVar="2" startIdx="0"/>
-					<constraints numberOfCon="1" startIdx="0"/>
-				</stage>
-				<stage>
-					<variables startIdx="2" numberOfVar="2"/>
-					<objectives numberOfObj="1" startIdx="-1">
-					</objectives>
-					<constraints startIdx="1" numberOfCon="1"/>
-				</stage>
-				<stage/>
-				<stage name="test">
-					<variables numberOfVar="0"/>
-					<objectives numberOfObj="0"/>
-					<constraints numberOfCon="0"/>
-				</stage>
-				<stage name="Wha'zzup?">
 					<variables numberOfVar="2">
 						<var>
-							<el>4</el>			<el>5</el>
+							<el mult="2" incr="1">0</el>
 						</var>
 					</variables>
 					<constraints numberOfCon="1">
-						<con>	<el>2</el>	</con>
+						<con>
+							<el>0</el>
+						</con>
 					</constraints>
 				</stage>
 				<stage>
 					<variables numberOfVar="2">
 						<var>
-							<el>6</el>			<el>7</el>
+							<el mult="2" incr="1">2</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="1">
+						<con>
+							<el>1</el>
+						</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="2">
+						<var>
+							<el>4</el>
+							<el>5</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="1">
+						<con>
+							<el>2</el>
+						</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="2">
+						<var>
+							<el>6</el>
+							<el>7</el>
 						</var>
 					</variables>
 					<objectives numberOfObj="1">
-						<obj>	<el>-1</el>	</obj>
+						<obj>
+							<el>-1</el>
+						</obj>
 					</objectives>
 					<constraints numberOfCon="1">
-						<con>	<el>3</el>	</con>
+						<con>
+							<el>3</el>
+						</con>
 					</constraints>
 				</stage>
 			</levelsOrTimeStages>

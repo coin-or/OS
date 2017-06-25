@@ -5557,13 +5557,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfVar otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfVar after "mult" has been considered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageVar">
 		<xs:annotation>
@@ -5580,26 +5580,26 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfCon otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfCon after "mult" has been considered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeStageDisjunctions-2016-Dec-23">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfDisjunctions otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="disjunction" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="disjunction" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfDisjunctions after "mult" has been considered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageCon">
 		<xs:annotation>
@@ -5616,13 +5616,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfObj otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree witih numberOfObj after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageObj">
 		<xs:annotation>
@@ -5635,13 +5635,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfMatrixVar otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="matrixVar" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixVar" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree witih numberOfMatrixVar after "mult" has been considered</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageMatrixVar">
 		<xs:annotation>
@@ -5658,13 +5658,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfMatrixCon otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="matrixCon" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixCon" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>umber must agree with numberOfMatrixCon after "mult" has been cosidered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageMatrixCon">
 		<xs:annotation>
@@ -5681,13 +5681,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfMatrixObj otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="matrixObj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixObj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfMatrixObj after "mult" has been cosidered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixObj" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageMatrixObj">
 		<xs:annotation>
@@ -5700,13 +5700,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfVar otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfVar after "mult" has been cosidered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageComplexVar">
 		<xs:annotation>
@@ -5723,13 +5723,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfCon otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfCon after "mult" has been cosidered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageComplexCon">
 		<xs:annotation>
@@ -5746,13 +5746,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfObj otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfObj after "mult" has been cosidered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageComplexObj">
 		<xs:annotation>
@@ -5765,13 +5765,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfTensorVar otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="tensorVar" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfTensorVar after "mult" has been cosidered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfTensorVar" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageTensorVar">
 		<xs:annotation>
@@ -5788,13 +5788,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfTensorCon otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="tensorCon" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfTensorCon after "mult" has been cosidered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfTensorCon" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageTensorCon">
 		<xs:annotation>
@@ -5811,13 +5811,13 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>List must be empty if startIdx is used and must match numberOfTensorObj otherwise</xs:documentation>
-			</xs:annotation>
-			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="tensorObj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfTensorObj after "mult" has been cosidered.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfTensorObj" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageTensorObj">
 		<xs:annotation>
@@ -8642,7 +8642,7 @@ referenced by distributionIdx and is independent from all other rv's.</xs:docume
 			<xs:element name="rv" type="ImplicitTreeBlock-2017-06-19" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfRV. Each random variable or vector is
-referenced by distributionIdx and is independent from all other rv's.</xs:documentation>
+referenced by distributionIdx and is independent of all other rv's.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="softConstraints" type="SoftConstraints-2017-06-05" minOccurs="0">
@@ -8773,6 +8773,9 @@ Default: identity matrix.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>if neither linear nor nonlinear transformation is specified, the default is linear with an identity matrix of appropriate dimension.</xs:documentation>
+				</xs:annotation>
 				<xs:element name="linearTransformation" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>A matrix must have constant matrix elements.

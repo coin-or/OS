@@ -901,65 +901,109 @@
 				<el mult="5">-1</el>
 			</value>
 		</linearConstraintCoefficients>
-		<matrices numberOfMatrices="1">
-			<matrix numberOfColumns="2" numberOfRows="28">
-				<constantElements numberOfValues="36">
-					<start>
-						<el>0</el>
-						<el>28</el>
-						<el>36</el>
-					</start>
-					<index>
-						<el mult="28" incr="1">0</el>
-						<el mult="8" incr="1">6</el>
-					</index>
-					<value>
-						<el mult="6">-1</el>
-						<el mult="8">1</el>
-						<el mult="6">1</el>
-						<el mult="8">-1</el>
-						<el mult="8">1</el>
-					</value>
-				</constantElements>
-			</matrix>
-		</matrices>
 		<distributions numberOfDist="1">
 			<dist>
-				<empiricalDiscrete numberOfEl="2">
-					<el value="1" prob="0.6912"/>
-					<el value="0.79732" prob="0.3088"/>
-				</empiricalDiscrete>
+				<multivariateDiscrete numberOfScenarios="2" dimension="28">
+					<scenario prob="0.5">
+						<el mult="6">-1</el>
+						<el mult="8">0</el>
+						<el mult="6">1</el>
+						<el mult="8">-1</el>
+					</scenario>
+					<scenario prob="0.5">
+						<el mult="6">-0.79732</el>
+						<el mult="8">-0.20268</el>
+						<el mult="6">0.79732</el>
+						<el mult="8">-0.79732</el>
+					</scenario>
+				</multivariateDiscrete>
 			</dist>
 		</distributions>
 		<multilevelAndStochasticProgramming>
 			<levelsOrTimeStages numberOfStages="7">
 				<stage>
-					<variables numberOfVar="15" startIdx="0"/>
-					<constraints numberOfCon="15" startIdx="0"/>
+					<variables numberOfVar="15">
+						<var>
+							<el mult="15" incr="1">0</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="15">
+						<con>
+							<el mult="15" incr="1">0</el>
+						</con>
+					</constraints>
 				</stage>
 				<stage>
-					<variables numberOfVar="16" startIdx="15"/>
-					<constraints numberOfCon="17" startIdx="15"/>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">15</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">15</el>
+						</con>
+					</constraints>
 				</stage>
 				<stage>
-					<variables numberOfVar="16" startIdx="31"/>
-					<constraints numberOfCon="17" startIdx="32"/>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">31</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">32</el>
+						</con>
+					</constraints>
 				</stage>
 				<stage>
-					<variables numberOfVar="16" startIdx="47"/>
-					<constraints numberOfCon="17" startIdx="49"/>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">47</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">49</el>
+						</con>
+					</constraints>
 				</stage>
 				<stage>
-					<variables numberOfVar="16" startIdx="63"/>
-					<constraints numberOfCon="17" startIdx="66"/>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">63</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">66</el>
+						</con>
+					</constraints>
 				</stage>
 				<stage>
-					<variables numberOfVar="16" startIdx="79"/>
-					<constraints numberOfCon="17" startIdx="83"/>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">79</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">83</el>
+						</con>
+					</constraints>
 				</stage>
 				<stage>
-					<variables numberOfVar="16" startIdx="95"/>
-					<constraints numberOfCon="17" startIdx="100"/>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">95</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">100</el>
+						</con>
+					</constraints>
 				</stage>
 			</levelsOrTimeStages>
 			<stochasticElements numberOfStochEl="168">
@@ -1137,37 +1181,31 @@
 					<stochasticLocations numberOfEl="28">
 						<el mult="28" incr="1">0</el>
 					</stochasticLocations>
-					<transformation mtxIdx="0"/>
 				</rv>
 				<rv stageIdx="2" distributionIdx="0">
 					<stochasticLocations numberOfEl="28">
 						<el mult="28" incr="1">28</el>
 					</stochasticLocations>
-					<transformation mtxIdx="0"/>
 				</rv>
 				<rv stageIdx="3" distributionIdx="0">
 					<stochasticLocations numberOfEl="28">
 						<el mult="28" incr="1">56</el>
 					</stochasticLocations>
-					<transformation mtxIdx="0"/>
 				</rv>
 				<rv stageIdx="4" distributionIdx="0">
 					<stochasticLocations numberOfEl="28">
 						<el mult="28" incr="1">84</el>
 					</stochasticLocations>
-					<transformation mtxIdx="0"/>
 				</rv>
 				<rv stageIdx="5" distributionIdx="0">
 					<stochasticLocations numberOfEl="28">
 						<el mult="28" incr="1">112</el>
 					</stochasticLocations>
-					<transformation mtxIdx="0"/>
 				</rv>
 				<rv stageIdx="6" distributionIdx="0">
 					<stochasticLocations numberOfEl="28">
 						<el mult="28" incr="1">140</el>
 					</stochasticLocations>
-					<transformation mtxIdx="0"/>
 				</rv>
 			</implicitTreeData>
 		</multilevelAndStochasticProgramming>

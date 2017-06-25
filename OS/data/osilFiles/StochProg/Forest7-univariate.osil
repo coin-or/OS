@@ -6,7 +6,7 @@
 			This is a seven-stage version of the forestry problem from H.I. Gassmann's PhD thesis.
 			Uncertainty relates to the percentage of forest that burns in each period.
 			This formulation uses two-point discretizations in each stage, leading to 64 scenarios.
-			In this version, the uncertainty is modeled as univariate random variables.
+			In this version, the uncertainty is modeled as univariate random variables and nontrivial linear transformations.
 		</description>
 	</instanceHeader>
 	<instanceData>
@@ -901,5 +901,331 @@
 				<el mult="5">-1</el>
 			</value>
 		</linearConstraintCoefficients>
+		<matrices numberOfMatrices="1">
+			<matrix numberOfColumns="2" numberOfRows="28">
+				<constantElements numberOfValues="36">
+					<start>
+						<el>0</el>
+						<el>28</el>
+						<el>36</el>
+					</start>
+					<index>
+						<el mult="28" incr="1">0</el>
+						<el mult="8" incr="1">6</el>
+					</index>
+					<value>
+						<el mult="6">-1</el>
+						<el mult="8">1</el>
+						<el mult="6">1</el>
+						<el mult="8">-1</el>
+						<el mult="8">1</el>
+					</value>
+				</constantElements>
+			</matrix>
+		</matrices>
+		<distributions numberOfDist="1">
+			<dist>
+				<empiricalDiscrete numberOfEl="2">
+					<el value="1" prob="0.6912"/>
+					<el value="0.79732" prob="0.3088"/>
+				</empiricalDiscrete>
+			</dist>
+		</distributions>
+		<multilevelAndStochasticProgramming>
+			<levelsOrTimeStages numberOfStages="7">
+				<stage>
+					<variables numberOfVar="15">
+						<var>
+							<el mult="15" incr="1">0</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="15">
+						<con>
+							<el mult="15" incr="1">0</el>
+						</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">15</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">15</el>
+						</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">31</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">32</el>
+						</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">47</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">49</el>
+						</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">63</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">66</el>
+						</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">79</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">83</el>
+						</con>
+					</constraints>
+				</stage>
+				<stage>
+					<variables numberOfVar="16">
+						<var>
+							<el mult="16" incr="1">95</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="17">
+						<con>
+							<el mult="17" incr="1">100</el>
+						</con>
+					</constraints>
+				</stage>
+			</levelsOrTimeStages>
+			<stochasticElements numberOfStochEl="168">
+				<linearConstraintCoefficient rowIdx="21" colIdx="0"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="1"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="2"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="3"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="4"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="5"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="6"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="7"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="8"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="9"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="10"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="11"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="12"/>
+				<linearConstraintCoefficient rowIdx="21" colIdx="13"/>
+				<linearConstraintCoefficient rowIdx="24" colIdx="0"/>
+				<linearConstraintCoefficient rowIdx="25" colIdx="1"/>
+				<linearConstraintCoefficient rowIdx="26" colIdx="2"/>
+				<linearConstraintCoefficient rowIdx="27" colIdx="3"/>
+				<linearConstraintCoefficient rowIdx="28" colIdx="4"/>
+				<linearConstraintCoefficient rowIdx="28" colIdx="5"/>
+				<linearConstraintCoefficient rowIdx="22" colIdx="6"/>
+				<linearConstraintCoefficient rowIdx="23" colIdx="7"/>
+				<linearConstraintCoefficient rowIdx="24" colIdx="8"/>
+				<linearConstraintCoefficient rowIdx="25" colIdx="9"/>
+				<linearConstraintCoefficient rowIdx="26" colIdx="10"/>
+				<linearConstraintCoefficient rowIdx="27" colIdx="11"/>
+				<linearConstraintCoefficient rowIdx="28" colIdx="12"/>
+				<linearConstraintCoefficient rowIdx="28" colIdx="13"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="15"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="16"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="17"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="18"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="19"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="20"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="21"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="22"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="23"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="24"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="25"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="26"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="27"/>
+				<linearConstraintCoefficient rowIdx="38" colIdx="28"/>
+				<linearConstraintCoefficient rowIdx="41" colIdx="15"/>
+				<linearConstraintCoefficient rowIdx="42" colIdx="16"/>
+				<linearConstraintCoefficient rowIdx="43" colIdx="17"/>
+				<linearConstraintCoefficient rowIdx="44" colIdx="18"/>
+				<linearConstraintCoefficient rowIdx="45" colIdx="19"/>
+				<linearConstraintCoefficient rowIdx="45" colIdx="20"/>
+				<linearConstraintCoefficient rowIdx="39" colIdx="21"/>
+				<linearConstraintCoefficient rowIdx="40" colIdx="22"/>
+				<linearConstraintCoefficient rowIdx="41" colIdx="23"/>
+				<linearConstraintCoefficient rowIdx="42" colIdx="24"/>
+				<linearConstraintCoefficient rowIdx="43" colIdx="25"/>
+				<linearConstraintCoefficient rowIdx="44" colIdx="26"/>
+				<linearConstraintCoefficient rowIdx="45" colIdx="27"/>
+				<linearConstraintCoefficient rowIdx="45" colIdx="28"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="31"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="32"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="33"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="34"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="35"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="36"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="37"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="38"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="39"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="40"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="41"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="42"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="43"/>
+				<linearConstraintCoefficient rowIdx="55" colIdx="44"/>
+				<linearConstraintCoefficient rowIdx="58" colIdx="31"/>
+				<linearConstraintCoefficient rowIdx="59" colIdx="32"/>
+				<linearConstraintCoefficient rowIdx="60" colIdx="33"/>
+				<linearConstraintCoefficient rowIdx="61" colIdx="34"/>
+				<linearConstraintCoefficient rowIdx="62" colIdx="35"/>
+				<linearConstraintCoefficient rowIdx="62" colIdx="36"/>
+				<linearConstraintCoefficient rowIdx="56" colIdx="37"/>
+				<linearConstraintCoefficient rowIdx="57" colIdx="38"/>
+				<linearConstraintCoefficient rowIdx="58" colIdx="39"/>
+				<linearConstraintCoefficient rowIdx="59" colIdx="40"/>
+				<linearConstraintCoefficient rowIdx="60" colIdx="41"/>
+				<linearConstraintCoefficient rowIdx="61" colIdx="42"/>
+				<linearConstraintCoefficient rowIdx="62" colIdx="43"/>
+				<linearConstraintCoefficient rowIdx="62" colIdx="44"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="47"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="48"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="49"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="50"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="51"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="52"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="53"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="54"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="55"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="56"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="57"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="58"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="59"/>
+				<linearConstraintCoefficient rowIdx="72" colIdx="60"/>
+				<linearConstraintCoefficient rowIdx="75" colIdx="47"/>
+				<linearConstraintCoefficient rowIdx="76" colIdx="48"/>
+				<linearConstraintCoefficient rowIdx="77" colIdx="49"/>
+				<linearConstraintCoefficient rowIdx="78" colIdx="50"/>
+				<linearConstraintCoefficient rowIdx="79" colIdx="51"/>
+				<linearConstraintCoefficient rowIdx="79" colIdx="52"/>
+				<linearConstraintCoefficient rowIdx="73" colIdx="53"/>
+				<linearConstraintCoefficient rowIdx="74" colIdx="54"/>
+				<linearConstraintCoefficient rowIdx="75" colIdx="55"/>
+				<linearConstraintCoefficient rowIdx="76" colIdx="56"/>
+				<linearConstraintCoefficient rowIdx="77" colIdx="57"/>
+				<linearConstraintCoefficient rowIdx="78" colIdx="58"/>
+				<linearConstraintCoefficient rowIdx="79" colIdx="59"/>
+				<linearConstraintCoefficient rowIdx="79" colIdx="60"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="63"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="64"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="65"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="66"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="67"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="68"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="69"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="70"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="71"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="72"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="73"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="74"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="75"/>
+				<linearConstraintCoefficient rowIdx="89" colIdx="76"/>
+				<linearConstraintCoefficient rowIdx="92" colIdx="63"/>
+				<linearConstraintCoefficient rowIdx="93" colIdx="64"/>
+				<linearConstraintCoefficient rowIdx="94" colIdx="65"/>
+				<linearConstraintCoefficient rowIdx="95" colIdx="66"/>
+				<linearConstraintCoefficient rowIdx="96" colIdx="67"/>
+				<linearConstraintCoefficient rowIdx="96" colIdx="68"/>
+				<linearConstraintCoefficient rowIdx="90" colIdx="69"/>
+				<linearConstraintCoefficient rowIdx="91" colIdx="70"/>
+				<linearConstraintCoefficient rowIdx="92" colIdx="71"/>
+				<linearConstraintCoefficient rowIdx="93" colIdx="72"/>
+				<linearConstraintCoefficient rowIdx="94" colIdx="73"/>
+				<linearConstraintCoefficient rowIdx="95" colIdx="74"/>
+				<linearConstraintCoefficient rowIdx="96" colIdx="75"/>
+				<linearConstraintCoefficient rowIdx="96" colIdx="76"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="79"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="80"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="81"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="82"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="83"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="84"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="85"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="86"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="87"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="88"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="89"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="90"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="91"/>
+				<linearConstraintCoefficient rowIdx="106" colIdx="92"/>
+				<linearConstraintCoefficient rowIdx="109" colIdx="79"/>
+				<linearConstraintCoefficient rowIdx="110" colIdx="80"/>
+				<linearConstraintCoefficient rowIdx="111" colIdx="81"/>
+				<linearConstraintCoefficient rowIdx="112" colIdx="82"/>
+				<linearConstraintCoefficient rowIdx="113" colIdx="83"/>
+				<linearConstraintCoefficient rowIdx="113" colIdx="84"/>
+				<linearConstraintCoefficient rowIdx="107" colIdx="85"/>
+				<linearConstraintCoefficient rowIdx="108" colIdx="86"/>
+				<linearConstraintCoefficient rowIdx="109" colIdx="87"/>
+				<linearConstraintCoefficient rowIdx="110" colIdx="88"/>
+				<linearConstraintCoefficient rowIdx="111" colIdx="89"/>
+				<linearConstraintCoefficient rowIdx="112" colIdx="90"/>
+				<linearConstraintCoefficient rowIdx="113" colIdx="91"/>
+				<linearConstraintCoefficient rowIdx="113" colIdx="92"/>
+			</stochasticElements>
+			<implicitTreeData numberOfRV="6">
+				<rv stageIdx="1" distributionIdx="0">
+					<stochasticLocations numberOfEl="28">
+						<el mult="28" incr="1">0</el>
+					</stochasticLocations>
+					<linearTransformation idx="0"/>
+				</rv>
+				<rv stageIdx="2" distributionIdx="0">
+					<stochasticLocations numberOfEl="28">
+						<el mult="28" incr="1">28</el>
+					</stochasticLocations>
+					<linearTransformation  idx="0"/>
+				</rv>
+				<rv stageIdx="3" distributionIdx="0">
+					<stochasticLocations numberOfEl="28">
+						<el mult="28" incr="1">56</el>
+					</stochasticLocations>
+					<linearTransformation  idx="0"/>
+				</rv>
+				<rv stageIdx="4" distributionIdx="0">
+					<stochasticLocations numberOfEl="28">
+						<el mult="28" incr="1">84</el>
+					</stochasticLocations>
+					<linearTransformation  idx="0"/>
+				</rv>
+				<rv stageIdx="5" distributionIdx="0">
+					<stochasticLocations numberOfEl="28">
+						<el mult="28" incr="1">112</el>
+					</stochasticLocations>
+					<linearTransformation  idx="0"/>
+				</rv>
+				<rv stageIdx="6" distributionIdx="0">
+					<stochasticLocations numberOfEl="28">
+						<el mult="28" incr="1">140</el>
+					</stochasticLocations>
+					<linearTransformation  idx="0"/>
+				</rv>
+			</implicitTreeData>
+		</multilevelAndStochasticProgramming>
 	</instanceData>
 </osil>

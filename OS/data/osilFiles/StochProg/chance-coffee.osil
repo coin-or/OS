@@ -307,21 +307,33 @@
 		<multilevelAndStochasticProgramming>
 			<levelsOrTimeStages numberOfStages="1" eventsFollowDecisions="true">
 				<stage>
-					<variables numberOfVar="24" startIdx="0"/>
-					<objectives numberOfObj="1" startIdx="-1"/>
-					<constraints numberOfCon="26" startIdx="0"/>
+					<variables numberOfVar="24">
+						<var>
+							<el mult="24" incr="1">0</el>
+						</var>
+					</variables>
+					<objectives numberOfObj="1">
+						<obj>
+							<el>-1</el>
+						</obj>
+					</objectives>
+					<constraints numberOfCon="26">
+						<con>
+							<el mult="26" incr="1">0</el>
+						</con>
+					</constraints>
 				</stage>
 			</levelsOrTimeStages>
-					<stochasticElements numberOfStochEl="3">
-						<con idx="0" attr="lb"/>
-						<con idx="1" attr="lb"/>
-						<con idx="2" attr="lb"/>
-					</stochasticElements>
+			<stochasticElements numberOfStochEl="3">
+				<con idx="0" attr="lb"/>
+				<con idx="1" attr="lb"/>
+				<con idx="2" attr="lb"/>
+			</stochasticElements>
 			<implicitTreeData numberOfRV="1">
 				<rv stageIdx="0" distributionIdx="0">
-				<stochasticLocations numberOfEl="3">
-					<el mult="3" incr="1">0</el>
-				</stochasticLocations>
+					<stochasticLocations numberOfEl="3">
+						<el mult="3" incr="1">0</el>
+					</stochasticLocations>
 				</rv>
 				<softConstraints numberOfSoftCon="1">
 					<softCon>

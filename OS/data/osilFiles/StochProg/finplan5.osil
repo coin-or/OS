@@ -282,14 +282,28 @@
 		<multilevelAndStochasticProgramming>
 			<levelsOrTimeStages numberOfStages="4">
 				<stage>
-					<variables numberOfVar="2" startIdx="0"/>
-					<constraints numberOfCon="1" startIdx="0"/>
+					<variables numberOfVar="2">
+						<var>
+							<el mult="2" incr="1">0</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="1">
+						<con>
+							<el>0</el>
+						</con>
+					</constraints>
 				</stage>
 				<stage>
-					<variables startIdx="2" numberOfVar="2"/>
-					<objectives numberOfObj="1" startIdx="-1">
-					</objectives>
-					<constraints startIdx="1" numberOfCon="1"/>
+					<variables numberOfVar="2">
+						<var>
+							<el mult="2" incr="1">2</el>
+						</var>
+					</variables>
+					<constraints numberOfCon="1">
+						<con>
+							<el>1</el>
+						</con>
+					</constraints>
 				</stage>
 				<stage>
 					<variables numberOfVar="2">
