@@ -414,7 +414,7 @@
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="values" type="SizelessDoubleVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" use="required"/>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SparseIntVector">
 		<xs:annotation>
@@ -427,7 +427,7 @@
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="values" type="SizelessIntVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" use="required"/>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SparseNonNegativeIntVector">
 		<xs:annotation>
@@ -440,7 +440,7 @@
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="values" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" use="required"/>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SparseNegativeIntVector">
 		<xs:annotation>
@@ -453,7 +453,7 @@
 			<xs:element name="indexes" type="SizelessNonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="values" type="SizelessNegativeIntVector" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" use="required"/>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ListMatrix">
 		<xs:annotation>
@@ -1207,81 +1207,6 @@ Each nonzero is a complex-valued expression</xs:documentation>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<!-- dead code
-	<xs:complexType name="ConstantMatrix">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSMatrix"/>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:complexType name="LinearMatrixNonzeros">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence/>
-	</xs:complexType>
-	<xs:complexType name="LinearMatrixBlocks">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="block" type="LinearMatrixBlock">
-				<xs:annotation>
-					<xs:documentation>number must agree with numerOfBlocks</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="LinearMatrixBlock">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element ref="OSnLMNode"/>
-		</xs:sequence>
-		<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="GeneralMatrixBlocks">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of blocks must agree with numberOfBlocks (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-			<xs:element name="block" type="GeneralMatrixBlock"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="GeneralMatrixNonzeros">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of entries in the indexes and values child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="GeneralMatrixBlock">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element ref="OSnLMNode"/>
-		</xs:sequence>
-		<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
- end dead code -->
 	<xs:complexType name="SingleVariablePolynomial">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
@@ -3015,31 +2940,28 @@ according to WolframMathWorld</xs:documentation>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 	</xs:complexType>
+	<xs:complexType name="GeneralDistributionCDF">
+		<xs:sequence>
+			<xs:element ref="OSnLNode" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeneralDistributionPDF">
+		<xs:sequence>
+			<xs:element ref="OSnLNode" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeneralDistributionGenerator">
+		<xs:choice>
+			<xs:element name="cdf" type="GeneralDistributionCDF" minOccurs="0"/>
+			<xs:element name="pdf" type="GeneralDistributionPDF" minOccurs="0"/>
+		</xs:choice>
+	</xs:complexType>
 	<xs:complexType name="GeneralDistributionBase">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="generator" minOccurs="0">
-				<xs:complexType>
-					<xs:choice>
-						<xs:element name="cdf" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element ref="OSnLNode" minOccurs="0"/>
-								</xs:sequence>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="pdf" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element ref="OSnLNode" minOccurs="0"/>
-								</xs:sequence>
-							</xs:complexType>
-						</xs:element>
-					</xs:choice>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="generator" type="GeneralDistributionGenerator" minOccurs="0"/>
 			<xs:element name="distrParam" type="GeneralDistributionBaseParameter" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="distrName" type="xs:string" use="optional" default="unknown"/>
@@ -3904,7 +3826,7 @@ according to WolframMathWorld</xs:documentation>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="objType">
+		<xs:attribute name="objType" type="xs:string">
 			<xs:annotation>
 				<xs:documentation>use to declare a type for value, constantValue, weightValue in "obj" children</xs:documentation>
 			</xs:annotation>
@@ -3925,7 +3847,7 @@ according to WolframMathWorld</xs:documentation>
 		</xs:choice>
 		<xs:attributeGroup ref="otherOptionOrResultAttributes"/>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="conType">
+		<xs:attribute name="conType" type="xs:string">
 			<xs:annotation>
 				<xs:documentation>use to declare a type for attributes value, lbValue, ubValue in "con" children</xs:documentation>
 			</xs:annotation>

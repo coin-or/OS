@@ -140,18 +140,6 @@
 			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
-	<xs:complexType name="MaxTime">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" type="GeneralEnumerationTimeUnit" use="optional" default="second"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="OtherOption">
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-	</xs:complexType>
 	<xs:complexType name="OtherOptions">
 		<xs:sequence>
 			<xs:element name="other" type="OtherOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
@@ -168,6 +156,11 @@
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="tensors" type="Tensors" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="variables" type="VariableOption" minOccurs="0"/>
 			<xs:element name="objectives" type="ObjectiveOption" minOccurs="0"/>
 			<xs:element name="constraints" type="ConstraintOption" minOccurs="0"/>
@@ -179,6 +172,26 @@
 			<xs:element name="matrixProgramming" type="MatrixProgrammingOption" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="complexProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>speculation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tensorProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>speculation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="parametricAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>speculation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>speculation</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
@@ -312,21 +325,6 @@
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="InitConStatus">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="value" use="optional" default="unknown">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="unknown"/>
-					<xs:enumeration value="nonBinding"/>
-					<xs:enumeration value="atLb"/>
-					<xs:enumeration value="atUb"/>
-					<xs:enumeration value="tight"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-	</xs:complexType>
 	<xs:complexType name="InitDualVariableValues">
 		<xs:sequence>
 			<xs:element name="con" type="InitDualVarValue" minOccurs="0" maxOccurs="unbounded"/>
@@ -393,17 +391,6 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="InitMtxValue">
-		<xs:sequence>
-			<xs:element name="values" type="OSMatrix"/>
-		</xs:sequence>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required">
-			<xs:annotation>
-				<xs:documentation>must refer to a varReferenceMatrix</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="name" type="xs:string" use="optional"/>
-	</xs:complexType>
 	<xs:complexType name="MatrixObjectiveOption">
 		<xs:sequence>
 			<xs:element name="initialMatrixObjectiveValues" type="InitMatrixObjectiveValues" minOccurs="0"/>
@@ -430,55 +417,11 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="OtherMatrixProgrammingOption">
-		<xs:sequence>
-			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfItems</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
-		<xs:attribute name="solver" type="xs:string" use="optional"/>
-		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="optional" default="0"/>
-	</xs:complexType>
-	<xs:complexType name="SolverOption">
-		<xs:sequence>
-			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>number must agree with numberOfItems</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
-		<xs:attribute name="solver" type="xs:string" use="optional"/>
-		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger">
-			<xs:annotation>
-				<xs:documentation>Must refer to a matrix defined in the "matrices" section</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="optional" default="0"/>
-	</xs:complexType>
 	<xs:complexType name="SolverOptions">
 		<xs:sequence>
 			<xs:element name="solverOption" type="SolverOptionOrResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="OptionElementValue">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="value" type="xs:double" use="optional"/>
-		<xs:attribute name="lbValue" type="xs:double" use="optional"/>
-		<xs:attribute name="ubValue" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:simpleType name="instanceLocationEnumeration">
 		<xs:restriction base="xs:string">
