@@ -14,19 +14,19 @@
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:all>
-			<xs:element name="input" type="SimulationInput" minOccurs="0">
+			<xs:element name="input" type="old_SimulationInput" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="output" type="SimulationOutput" minOccurs="0">
+			<xs:element name="output" type="old_SimulationOutput" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:all>
 	</xs:complexType>
-	<xs:complexType name="Simulations">
+	<xs:complexType name="old_Simulations">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
@@ -34,16 +34,16 @@
 			<xs:annotation>
 				<xs:documentation>Number of the simulation child elements must match numberOfSimulations</xs:documentation>
 			</xs:annotation>
-			<xs:element name="simulation" type="Simulation" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="simulation" type="old_Simulation" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSimulations" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="SimulationInput">
+	<xs:complexType name="old_SimulationInput">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="SimulationElement" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="el" type="old_SimulationElement" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
@@ -51,12 +51,12 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="SimulationOutput">
+	<xs:complexType name="old_SimulationOutput">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="SimulationElement" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="el" type="old_SimulationElement" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
@@ -64,7 +64,7 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfElements" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="SimulationElement">
+	<xs:complexType name="old_SimulationElement">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
@@ -82,17 +82,17 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="Simulation">
+	<xs:complexType name="old_Simulation">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="uri" type="SimulationURI"/>
+			<xs:element name="uri" type="old_SimulationURI"/>
 			<xs:element name="ossl" type="OSsL"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:ID" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="SimulationURI">
+	<xs:complexType name="old_SimulationURI">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
