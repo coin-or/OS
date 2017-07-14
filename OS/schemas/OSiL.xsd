@@ -112,6 +112,11 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="simulations" type="Simulations" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:group>
 	<xs:group name="ExtensionData">
@@ -141,17 +146,12 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="parametricAnalysis" type="ParametricAnalysis" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="simulations" type="Simulations" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="multilevelAndStochasticProgramming" type="MultilevelAndStochasticProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="parametricAnalysis" type="ParametricAnalysis" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
@@ -3451,11 +3451,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:annotation>
 				<xs:documentation>Number of stages must agree with numberOfStages</xs:documentation>
 			</xs:annotation>
-			<xs:element name="stage" type="TimeStageOrLevel" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation> </xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="stage" type="TimeStageOrLevel" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfStages" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="eventsFollowDecisions" type="xs:boolean" default="false">
@@ -3909,7 +3905,7 @@ Experiment.</xs:documentation>
 					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the variables in the linking ancestor nodes.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="objectiveCoefficients" type="NodalObjectiveCoefficients" minOccurs="0">
+			<xs:element name="objectiveCoefficients" type="NodalTreeObjectiveCoefficients" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>to add objective coefficients for variables in the currrent node into previously defined objectives</xs:documentation>
 				</xs:annotation>
@@ -3924,12 +3920,12 @@ Experiment.</xs:documentation>
 					<xs:documentation>since version 1.0. The indexing is cumulative; current node indices are added after the indices of the constraints in the linking ancestor nodes.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="linearConstraintCoefficients" type="NodalLinearConstraintCoefficients" minOccurs="0">
+			<xs:element name="linearConstraintCoefficients" type="NodalTreeLinearConstraintCoefficients" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>includes matrices on and below the diagonal. Variable indices are offset by the variables in the linking ancestor nodes</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="quadraticCoefficients" type="NodalQuadraticCoefficients" minOccurs="0">
+			<xs:element name="quadraticCoefficients" type="NodalTreeQuadraticCoefficients" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g. the expression 2x + 3y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
 				</xs:annotation>
@@ -3992,20 +3988,20 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="NodalObjectiveCoefficients">
+	<xs:complexType name="NodalTreeObjectiveCoefficients">
 		<xs:sequence>
-			<xs:element name="obj" type="NodalObjective" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="NodalTreeObjective" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
-	<xs:complexType name="NodalObjective">
+	<xs:complexType name="NodalTreeObjective">
 		<xs:sequence>
 			<xs:element name="coef" type="ObjCoef" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="idx" type="xs:negativeInteger" default="-1"/>
 		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="NodalQuadraticCoefficients">
+	<xs:complexType name="NodalTreeQuadraticCoefficients">
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
@@ -4013,11 +4009,11 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:annotation>
 				<xs:documentation>Number of the qTerm child elements must agree with numberOfQuadraticTerms </xs:documentation>
 			</xs:annotation>
-			<xs:element name="qTerm" type="NodalQuadraticTerm" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="qTerm" type="NodalTreeQuadraticTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="NodalQuadraticTerm">
+	<xs:complexType name="NodalTreeQuadraticTerm">
 		<xs:annotation>
 			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
@@ -4103,13 +4099,13 @@ quadratic term</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="NodalLinearConstraintCoefficients">
+	<xs:complexType name="NodalTreeLinearConstraintCoefficients">
 		<xs:sequence>
-			<xs:element name="block" type="NodalLinearConstraintCoefficientBlock" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="block" type="NodalTreeLinearConstraintCoefficientBlock" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" default="1"/>
 	</xs:complexType>
-	<xs:complexType name="NodalLinearConstraintCoefficientBlock">
+	<xs:complexType name="NodalTreeLinearConstraintCoefficientBlock">
 		<xs:complexContent>
 			<xs:extension base="LinearConstraintCoefficients">
 				<xs:attribute name="varRefType" type="NodalTreeIndexType" use="optional" default="local">
@@ -4823,7 +4819,7 @@ To add entire coefficient blocks more efficiently</xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeModificationAddLinearConstraintBlocks">
 		<xs:sequence>
-			<xs:element name="block" type="NodalLinearConstraintCoefficientBlock" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="block" type="NodalTreeLinearConstraintCoefficientBlock" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -4857,17 +4853,17 @@ referenced by distributionIdx and is independent of all other rv's.</xs:document
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="StochasticDistributionLinearTransformation">
+	<xs:complexType name="ImplicitTreeLinearTransformation">
 		<xs:sequence>
-			<xs:element name="ar" type="AutoRegressiveComponent" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="ar" type="AutoRegressiveTerm" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfAR. 
-Each term appends rows to the input vector for the transformation.</xs:documentation>
+					<xs:documentation>Autoregressive terms. Number must agree with numberOfAR. 
+Each term refers to the value(s) of a previously defined random variable and appends one or more rows to the input vector for the linear transformation.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="ma" type="MA" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="ma" type="MovingAveragesTerm" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfMA. Each moving average term refers to the values of a previously defined random variable</xs:documentation>
+					<xs:documentation>Moving average terms. Number must agree with numberOfMA. Each term refers to the value of a previously set stochastic element and apppends one row to the input vector for the linear transformation.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -4904,7 +4900,7 @@ Each term appends rows to the input vector for the transformation.</xs:documenta
 				<xs:annotation>
 					<xs:documentation>if neither linear nor nonlinear transformation is specified, the default is linear with an identity matrix of appropriate dimension.</xs:documentation>
 				</xs:annotation>
-				<xs:element name="linearTransformation" type="StochasticDistributionLinearTransformation" minOccurs="0">
+				<xs:element name="linearTransformation" type="ImplicitTreeLinearTransformation" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>A matrix must have constant matrix elements.
 number of rows = number of stochastic elements.
@@ -4912,7 +4908,7 @@ columns are determined by the sequence of elements of the rv, all AR terms, MA t
 </xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="nonlinearTransformation" type="ImplicitTreeStochasticTransformation" minOccurs="0">
+				<xs:element name="nonlinearTransformation" type="ImplicitTreeNonlinearTransformation" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>the transformation forms a flattened column vector of current observations and autoregressive terms and moving average terms (and perhaps a constant term at the very end) and transforms this into the vector of stochastic elements. 
 Default: identity matrix.</xs:documentation>
@@ -4931,7 +4927,7 @@ Default: identity matrix.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="ImplicitTreeStochasticTransformation">
+	<xs:complexType name="ImplicitTreeNonlinearTransformation">
 		<xs:choice minOccurs="0">
 			<xs:element name="userFunction" type="OSnLMNodeUserF">
 				<xs:annotation>
@@ -4940,30 +4936,14 @@ Default: identity matrix.</xs:documentation>
 			</xs:element>
 		</xs:choice>
 	</xs:complexType>
-	<xs:complexType name="ImplicitTreeLinearTransformation">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
-			<xs:annotation>
-				<xs:documentation>index of the matrix defining the linear transformation.
-A matrix must have constant matrix elements.
-number of rows = number of stochastic elements.
-columns are determined by the sequence of elements of the rv, all AR terms, MA terms, plus a '1' if addConstant ="true".
-</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="addConstant" type="xs:boolean" default="false">
-			<xs:annotation>
-				<xs:documentation> Default is "false".</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-	</xs:complexType>
-	<xs:complexType name="AutoRegressiveComponent">
+	<xs:complexType name="AutoRegressiveTerm">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>gives the index (and hence locations and values) of a previously defined RV</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="MA">
+	<xs:complexType name="MovingAveragesTerm">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>references the untransformed value of a previously defined RV</xs:documentation>
