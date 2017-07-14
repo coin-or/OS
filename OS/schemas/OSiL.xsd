@@ -107,14 +107,14 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="externalFunctions" type="ExternalFunctions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="xmlData" type="XMLData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="simulations" type="Simulations" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -1642,7 +1642,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="constant" type="xs:double" default="0.0"/>
 		<xs:attribute name="coef" type="xs:double" default="1.0"/>
 	</xs:complexType>
-	<xs:complexType name="Simulations">
+	<xs:complexType name="ExternalFunctions">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -1658,15 +1658,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="defaultRefreshPoint" type="RefreshPointEnum" default="onInputChange" minOccurs="0"/>
-			<xs:element name="simulation" type="Simulation" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="externalFunction" type="ExternalFunction" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with  numberOfSimulations</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSimulations" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfExternalFunctions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="Simulation">
+	<xs:complexType name="ExternalFunction">
 		<xs:annotation>
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
@@ -3969,21 +3969,6 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="userFunctions" type="UserFunctions" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>finalization</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="simulations" type="Simulations" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="xmlData" type="XMLData" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>finalization</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
