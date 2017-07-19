@@ -17,7 +17,7 @@ DyLP  https://projects.coin-or.org/svn/DyLP/stable/1.10/DyLP
 SYMPHONY  https://projects.coin-or.org/svn/SYMPHONY/stable/5.6/SYMPHONY
 Bcp  https://projects.coin-or.org/svn/Bcp/stable/1.4/Bcp
 Ipopt  https://projects.coin-or.org/svn/Ipopt/stable/3.12/Ipopt
-cppad  https://projects.coin-or.org/svn/CppAD/stable/20150000
+cppad  https://projects.coin-or.org/svn/CppAD/stable/20170000
 Bonmin https://projects.coin-or.org/svn/Bonmin/stable/1.8/Bonmin
 Couenne  https://projects.coin-or.org/svn/Couenne/stable/0.5/Couenne
 examples https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/stable/1.3
