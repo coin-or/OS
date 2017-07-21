@@ -16,16 +16,19 @@
 			<xs:documentation>since version 2.3</xs:documentation>
 		</xs:annotation>
 		<xs:all>
-			<xs:element name="name" type="xs:string" minOccurs="0"/>
-			<xs:element name="source" type="xs:string" minOccurs="0"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="fileCreator" type="xs:string" minOccurs="0"/>
-			<xs:element name="licence" type="xs:string" minOccurs="0"/>
 			<xs:element name="ID" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>defines a reference for reuse in subsequent modifications. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+			<xs:element name="source" type="xs:string" minOccurs="0"/>
+			<xs:element name="description" type="xs:string" minOccurs="0"/>
+			<xs:element name="fileCreator" type="xs:string" minOccurs="0"/>
+			<xs:element name="dateTimeCreated" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="dateTimeLastModified" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="version" type="xs:string" minOccurs="0"/>
+			<xs:element name="licence" type="xs:string" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
 	<xs:simpleType name="NumericType">

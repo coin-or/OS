@@ -20,8 +20,8 @@
 				</xs:annotation>
 			</xs:element>
 			<xs:choice>
-				<xs:element name="instanceData" type="InstanceData" minOccurs="0"/>
-				<xs:element name="modifications" type="InstanceModifications" minOccurs="0">
+				<xs:element name="instanceData" type="InstanceData"/>
+				<xs:element name="modifications" type="InstanceModifications">
 					<xs:annotation>
 						<xs:documentation>experiment</xs:documentation>
 					</xs:annotation>
@@ -128,27 +128,27 @@ We use the LPSOLVE definition of SOS, which goes back to a paper by J.A.Tomlin i
 			</xs:element>
 			<xs:element name="complexProgramming" type="ComplexProgramming" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="tensorProgramming" type="TensorProgramming" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 2.0</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
+			<xs:element name="disjunctiveProgramming" type="DisjunctiveInformation" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0">
+			<xs:element name="realTimeDataProgramming" type="RealTimeData" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="multilevelAndStochasticProgramming" type="MultilevelAndStochasticProgramming" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="parametricAnalysis" type="ParametricAnalysis" minOccurs="0">
@@ -1575,7 +1575,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:sequence minOccurs="0">
 			<xs:element name="defaultURI" type="xs:anyURI" default="." minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>recommendation</xs:documentation>
+					<xs:documentation>recommendation - if defaultURI is missing, this defaults to the current file.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="uriAliases" type="RealTimeDataURIAliases" minOccurs="0">
@@ -1738,6 +1738,9 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:choice minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>if neither baseFile nor baseId  is supplied, it is up to the driver to decide what to do with this modification.</xs:documentation>
+				</xs:annotation>
 				<xs:element name="baseFile" type="ModificationBaseFile" default="this">
 					<xs:annotation>
 						<xs:documentation>reference to an OSiL file containing the base for the current modifications</xs:documentation>
