@@ -2115,7 +2115,7 @@ ExpandedMatrixBlocks* MatrixType::getBlocks(int* rowPartition, int rowPartitionS
 
     if (!processBlocks(mtxIdx, rowPartition, rowPartitionSize,
                                colPartition, colPartitionSize, rowMajor, convertTo_, symmetry_) )
-       return false;
+       return NULL;
     return expandedMatrixByBlocks.back();
 }// end of MatrixType::getBlocks
 
