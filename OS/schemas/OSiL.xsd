@@ -64,7 +64,7 @@
 			</xs:element>
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g. the expression 2x + 3y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
+					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g. the expression 4x + 5y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
@@ -194,7 +194,7 @@ J - semi-integer</xs:documentation>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section.</xs:documentation>
+				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
@@ -240,7 +240,7 @@ J - semi-integer</xs:documentation>
 		<xs:attribute name="weight" type="xs:double" use="optional"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section.</xs:documentation>
+				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
@@ -278,7 +278,7 @@ J - semi-integer</xs:documentation>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section.</xs:documentation>
+				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
@@ -454,7 +454,7 @@ quadratic term</xs:documentation>
 		<xs:sequence>
 			<xs:element name="descriptor" type="MatrixVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfDescriptiors
+					<xs:documentation>number must agree with numberOfDescriptors
 can be used, e.g., to set up Toeplitz or Cauchy matrices</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -491,7 +491,7 @@ If missing, all variables indicated  by the use of the template matrix are creat
 		</xs:attribute>
 		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains varMtx - lbMtx; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains varMtx - lbMtx; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -501,12 +501,12 @@ If missing, all variables indicated  by the use of the template matrix are creat
 		</xs:attribute>
 		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains ubMtx - varMtx; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section. Same stage for every newly created variable; default is 0; variables inherited from the core keep the stage declared in the core.</xs:documentation>
+				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created variable; default is 0; variables inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
@@ -567,7 +567,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		</xs:attribute>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section. Same stage for every newly created objective; default is 0; objectives inherited from the core keep the stage declared in the core.</xs:documentation>
+				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created objective; default is 0; objectives inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
@@ -586,7 +586,7 @@ If missing, all objectives indicated  by the use of the template matrix are crea
 		<xs:sequence>
 			<xs:element name="descriptor" type="MatrixVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfDescriptiors
+					<xs:documentation>number must agree with numberOfDescriptors
 can be used, e.g., to set up Toeplitz matrices</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -618,7 +618,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		</xs:attribute>
 		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains mtx expr - lbMtx; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains mtx expr - lbMtx; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional">
@@ -628,12 +628,12 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		</xs:attribute>
 		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains ubMtx -  mtx expr; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section. Same stage for every newly created constraint; default is 0; constraints inherited from the core keep the stage declared in the core.</xs:documentation>
+				<xs:documentation>may be overriden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created constraint; default is 0; constraints inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
@@ -737,7 +737,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section</xs:documentation>
+				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
@@ -777,7 +777,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section</xs:documentation>
+				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
@@ -801,12 +801,12 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		</xs:annotation>
 		<xs:attribute name="lbRealPart" type="xs:double" use="optional">
 			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+				<xs:documentation>real part of the lower bound</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbImaginaryPart" type="xs:double" use="optional">
 			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+				<xs:documentation>imaginary part of the lower bound</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
@@ -816,23 +816,23 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 		</xs:attribute>
 		<xs:attribute name="ubRealPart" type="xs:double" use="optional">
 			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+				<xs:documentation>real part of the upper bound</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="ubImaginaryPart" type="xs:double" use="optional">
 			<xs:annotation>
-				<xs:documentation>must be constant matrix; zero if missing</xs:documentation>
+				<xs:documentation>imaginary part of the upper bound</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains ubMtx -  mtx expr; assumed all of C if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section</xs:documentation>
+				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
@@ -908,7 +908,7 @@ If missing, all constraints indicated  by the use of the template matrix are cre
 			</xs:element>
 			<xs:element name="descriptor" type="TensorVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfDescriptiors
+					<xs:documentation>number must agree with numberOfDescriptors
 can be used to set up special tensors with properties not otherwise available</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -939,7 +939,7 @@ If missing, all variables indicated  by the use of the template tensor are creat
 		</xs:attribute>
 		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains varMtx - lbMtx; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains tensorVar - lbTensor; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="ubTensorIdx" type="xs:nonNegativeInteger" use="optional">
@@ -949,12 +949,12 @@ If missing, all variables indicated  by the use of the template tensor are creat
 		</xs:attribute>
 		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains ubMtx - varMtx; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains ubTensor - tensorVar; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section. Same stage for every newly created variable; default is 0; variables inherited from the core keep the stage declared in the core.</xs:documentation>
+				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created variable; default is 0; variables inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
@@ -994,7 +994,7 @@ If missing, all variables indicated  by the use of the template tensor are creat
 		<xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="templateTensorIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>tensor objective has a nonzero entry wherever the template rtensor does also. If templateTensorIdx missing: Completely dense tensor.</xs:documentation>
+				<xs:documentation>tensor objective has a nonzero entry wherever the template tensor does also. If templateTensorIdx missing: Completely dense tensor.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="objReferenceTensorIdx" type="xs:nonNegativeInteger" use="optional">
@@ -1016,7 +1016,7 @@ If missing, all objectives indicated  by the use of the template tensor are crea
 		</xs:attribute>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section. Same stage for every newly created objective; default is 0; objectives inherited from the core keep the stage declared in the core.</xs:documentation>
+				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created objective; default is 0; objectives inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
@@ -1040,7 +1040,7 @@ If missing, all objectives indicated  by the use of the template tensor are crea
 			</xs:element>
 			<xs:element name="descriptor" type="TensorVarOrConDescriptor" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfDescriptiors
+					<xs:documentation>number must agree with numberOfDescriptors
 can be used, e.g., to set up Toeplitz matrices</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -1066,7 +1066,7 @@ If missing, all constraints indicated  by the use of the template tensor are cre
 		</xs:attribute>
 		<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains tensor expr - lbTensor; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains tensor expr - lbTensor; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="ubTensorIdx" type="xs:nonNegativeInteger" use="optional">
@@ -1076,12 +1076,12 @@ If missing, all constraints indicated  by the use of the template tensor are cre
 		</xs:attribute>
 		<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
-				<xs:documentation>contains ubMtx -  mtx expr; assumed all R^n if missing</xs:documentation>
+				<xs:documentation>contains ubTensor - tensor expr; assumed nonbinding if missing</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overriden by information in the multilevelAndStochastic section. Same stage for every newly created constraint; default is 0; constraints inherited from the core keep the stage declared in the core.</xs:documentation>
+				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section. Same stage for every newly created constraint; default is 0; constraints inherited from the core keep the stage declared in the core.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="numberOfDescriptors" type="xs:nonNegativeInteger" default="0"/>
@@ -1261,7 +1261,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:sequence>
 					<xs:element name="direction" type="OrthantConeDirection" maxOccurs="unbounded">
 						<xs:annotation>
-							<xs:documentation>There must be (numberOfRows* NumberOfColumns) directions (after accounting for 'mult'). Row index changes fastest, then column index, then other indexes.</xs:documentation>
+							<xs:documentation>There must be (numberOfRows*numberOfColumns) directions (after accounting for "mult") --- similarly for higher order tensor spaces. Row index changes fastest, then column index, then other indexes.</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
@@ -1293,15 +1293,15 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 				<xs:sequence>
 					<xs:element name="direction" type="PolyhedralConeDirection" minOccurs="0" maxOccurs="unbounded">
 						<xs:annotation>
-							<xs:documentation>If present, the number of directions must correspond to the dimensions of the product Ax (after accounting for 'mult'). Row index changes fastest, then column index, then other indexes.</xs:documentation>
+							<xs:documentation>If present, the number of directions must correspond to the dimensions of the product Ax (after accounting for "mult"). Row index changes fastest, then column index, then other indexes.</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
 				<xs:attribute name="referenceMatrixIdx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="coneDirection" use="optional">
 					<xs:annotation>
-						<xs:documentation>'positive': Ax \ge 0; 'negativ'e: Ax \le 0; 
-'mixed': specified by 'direction' element</xs:documentation>
+						<xs:documentation>"positive": Ax \ge 0; "negative": Ax \le 0; 
+"mixed": specified by "direction" element</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -1861,7 +1861,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:choice>
 		<xs:attribute name="value" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>the value is read as xs:string  and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
+				<xs:documentation>the value is read as a string and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -1964,7 +1964,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		<xs:attribute name="numberOfQTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ModificationDeleteQTerm">
-		<xs:attribute name="idx" type="xs:integer" use="required">
+		<xs:attribute name="idx" type="xs:int" use="required">
 			<xs:annotation>
 				<xs:documentation>row index (constraint or objective)</xs:documentation>
 			</xs:annotation>
@@ -2373,7 +2373,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="softConstraints" type="ModificationDeleteSoftConstraints" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experimentt</xs:documentation>
+					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="scenarios" type="ModificationDeleteScenarios" minOccurs="0">
@@ -2383,7 +2383,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="nodes" type="ModificationDeleteNodes" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment - delete one or more nodess from a nodalTree</xs:documentation>
+					<xs:documentation>experiment - delete one or more nodes from a nodalTree</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -2402,7 +2402,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="objectives" type="Objectives" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment. To add new objectives and their coefficientss</xs:documentation>
+					<xs:documentation>experiment. To add new objectives and their coefficients</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="constraints" type="Constraints" minOccurs="0">
@@ -2707,7 +2707,7 @@ of the subtree</xs:documentation>
 		<xs:attribute name="numberOfDisjunctiveTerms" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="stage" type="xs:nonNegativeInteger" default="0">
 			<xs:annotation>
-				<xs:documentation>may be overridden by information in the multilevelAndStochastic section</xs:documentation>
+				<xs:documentation>may be overridden by information in the multilevelAndStochasticProgramming section</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -2770,7 +2770,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:choice>
 		<xs:attribute name="value" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>the value is read as xs:string  and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
+				<xs:documentation>the value is read as a string  and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -2956,7 +2956,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		</xs:annotation>
 		<xs:attribute name="id" type="xs:IDREF" use="required">
 			<xs:annotation>
-				<xs:documentation>identifies the OSNlTNode in the nonlinear expression trees</xs:documentation>
+				<xs:documentation>identifies the OSnLTNode in the nonlinear expression trees</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -3245,9 +3245,9 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				<xs:documentation>if component is not "prob", this attribute is required to pinpoint where the value is to be stored (e.g., if component="var", attr could be "lb", "ub", etc.)</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idx" type="xs:integer">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger">
 			<xs:annotation>
-				<xs:documentation>if comonent is not "prob", this attribute is required to identify the array element (e.g., variable number) where the value is to be stored.</xs:documentation>
+				<xs:documentation>if component is not "prob", this attribute is required to identify the array element (e.g., variable number) where the value is to be stored.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -3275,7 +3275,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				<xs:documentation>"var", "obj", etc.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="idx" type="xs:integer" use="required">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>identifyies the array element (e.g., variable number) where the value is to be stored.</xs:documentation>
 			</xs:annotation>
@@ -3621,7 +3621,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence minOccurs="0">
 			<xs:element name="matrixObj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfMatrixObj after "mult" has been cosidered.</xs:documentation>
+					<xs:documentation>number must agree with numberOfMatrixObj after "mult" has been considered.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3634,7 +3634,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfVar after "mult" has been cosidered.</xs:documentation>
+					<xs:documentation>number must agree with numberOfVar after "mult" has been considered.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3647,7 +3647,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence minOccurs="0">
 			<xs:element name="con" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfCon after "mult" has been cosidered.</xs:documentation>
+					<xs:documentation>number must agree with numberOfCon after "mult" has been considered.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3660,7 +3660,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence minOccurs="0">
 			<xs:element name="obj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfObj after "mult" has been cosidered.</xs:documentation>
+					<xs:documentation>number must agree with numberOfObj after "mult" has been considered.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3673,7 +3673,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence minOccurs="0">
 			<xs:element name="tensorVar" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfTensorVar after "mult" has been cosidered.</xs:documentation>
+					<xs:documentation>number must agree with numberOfTensorVar after "mult" has been considered.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3686,7 +3686,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence minOccurs="0">
 			<xs:element name="tensorCon" type="SizelessNonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfTensorCon after "mult" has been cosidered.</xs:documentation>
+					<xs:documentation>number must agree with numberOfTensorCon after "mult" has been considered.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3699,7 +3699,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence minOccurs="0">
 			<xs:element name="tensorObj" type="SizelessNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfTensorObj after "mult" has been cosidered.</xs:documentation>
+					<xs:documentation>number must agree with numberOfTensorObj after "mult" has been considered.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -3756,7 +3756,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:attribute name="numberOfScenarios" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="mode" default="replace">
 			<xs:annotation>
-				<xs:documentation>scenario values can replace deterministic base values, or can be given as additive of multiplicative modifications </xs:documentation>
+				<xs:documentation>scenario values can replace deterministic base values, or can be given as additive or multiplicative modifications </xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3771,7 +3771,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence>
 			<xs:element name="idx" type="SizelessNonNegativeIntVector">
 				<xs:annotation>
-					<xs:documentation>index refers to location within list of stochastic elements. Size of vector must agree with numberOfChanges</xs:documentation>
+					<xs:documentation>index refers to location within the list of stochastic elements. Size of vector must agree with numberOfChanges</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="value" type="SizelessDoubleVector">
@@ -3785,7 +3785,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 		<xs:sequence>
 			<xs:element name="changesFromBase" type="ChangesInScenario" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="parentIdx" type="xs:integer" use="required">
+		<xs:attribute name="parentIdx" type="xs:int" use="required">
 			<xs:annotation>
 				<xs:documentation>gives the index of the parent scenario. The root scenario has parentIdx = -1.</xs:documentation>
 			</xs:annotation>
@@ -3812,7 +3812,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseIdx" type="xs:integer">
+		<xs:attribute name="baseIdx" type="xs:int">
 			<xs:annotation>
 				<xs:documentation>gives the index of a scenario that contains the default data. The default value is parentIdx; use -1 to indicate the core.</xs:documentation>
 			</xs:annotation>
@@ -3879,7 +3879,7 @@ If the problem exhibits time structure, especially stochastic structure, then a 
 			<xs:choice minOccurs="0">
 				<xs:element name="nodeData" type="NodeData">
 					<xs:annotation>
-						<xs:documentation>nodal trees use local indexing for variables and constraints. To refer to variables or constraints in past tree nodes use the attribute 'lag'.
+						<xs:documentation>nodal trees use local indexing for variables and constraints. To refer to variables or constraints in past tree nodes use the attribute "lag".
 Experiment.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -3930,7 +3930,7 @@ Experiment.</xs:documentation>
 			</xs:element>
 			<xs:element name="quadraticCoefficients" type="NodalTreeQuadraticCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g. the expression 2x + 3y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
+					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g., the expression 4x + 5y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="nonlinearExpressions" type="NodalTreeNonlinearExpressions" minOccurs="0">
@@ -4280,7 +4280,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 	</xs:complexType>
 	<xs:complexType name="NodalTreeMatrixExpressions">
 		<xs:annotation>
-			<xs:documentation>experimental</xs:documentation>
+			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="expr" type="NodalTreeMatrixExpression" minOccurs="0" maxOccurs="unbounded">
@@ -4550,7 +4550,7 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 		</xs:choice>
 		<xs:attribute name="value" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>the value is read as xs:string  and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
+				<xs:documentation>the value is read as a string  and copied internally into integer, double or string types, as required by the meaning of the actual element.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -4696,12 +4696,12 @@ x_i1 + x_i2 + ... = 1. </xs:documentation>
 			</xs:element>
 			<xs:element name="objectiveCoefficients" type="ModificationAddObjectiveCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment. To add objective coeffficients into existing objectves</xs:documentation>
+					<xs:documentation>experiment. To add objective coeffficients into existing objectives</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="objectives" type="Objectives" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment. To add new objectives and their coefficientss</xs:documentation>
+					<xs:documentation>experiment. To add new objectives and their coefficients</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="constraints" type="Constraints" minOccurs="0">
